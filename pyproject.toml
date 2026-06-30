@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pangenome-ml-data-generation"
+version = "0.1.0"
+description = "Generate variant-centered pileup tensors from pangenome graph alignments."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [
+  { name = "Jiawei Shen" }
+]
+dependencies = [
+  "numpy",
+  "matplotlib",
+  "pysam",
+  "pybind11",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]

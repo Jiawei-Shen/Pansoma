@@ -1,0 +1,7 @@
+graph:
+  gbz: /scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.gbz
+  gfa: /scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.gfa
+
+outputs:
+  chr_component_vs_grch38: /scratch/jshen/tmp/chr_component_vs_GRCh38_summary
+

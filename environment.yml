@@ -1,0 +1,15 @@
+name: pangenome-ml-data-generation
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python>=3.9
+  - numpy
+  - matplotlib
+  - pandas
+  - pysam
+  - pybind11
+  - jq
+  - pip
+  - pip:
+      - protobuf

@@ -1,0 +1,54 @@
+sample:
+  name: HG008T_p23_BCM_IlluminaWGS_20240313
+  sequencing_type: illumina
+
+graph:
+  gbz: /scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.gbz
+  gfa: /scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.gfa
+  node_filter_base: /scratch/jshen/data/AF-Filtered_VG_Indexes/chr_component_vs_GRCh38_summary
+
+alignment_store:
+  dat: /scratch/jshen/data/HG008_GIAB/vg_giraffe_GAM/Liss_lab_BCM_Illumina-WGS_20240313/HG008-T_p23_BCM_IlluminaWGS_20240313.dat
+  idx: /scratch/jshen/data/HG008_GIAB/vg_giraffe_GAM/Liss_lab_BCM_Illumina-WGS_20240313/HG008-T_p23_BCM_IlluminaWGS_20240313.idx
+
+candidate_nodes:
+  json: /scratch/jshen/data/Pansoma/HG008_GIAB/AF_HPRC/tmp/hprc-v1.1-mc-grch38.d9.ALL_node_pos.HapMap_HG008T_AF-HPRC.json
+
+tensors:
+  output_base: /scratch/jshen/data/Pansoma/HG008_GIAB/AF_HPRC
+  output_prefix: 5ch_testing_data_INDEL
+  channels: 5
+  variant_type: indel
+  min_af: 0.08
+  min_variants: 3
+  min_allele_bq: 10.0
+  min_mapq: 10
+  max_indel_len: 50
+  shard_size: 32768
+  num_workers: 8
+  view: 0
+
+chromosomes:
+  - chr1
+  - chr2
+  - chr3
+  - chr4
+  - chr5
+  - chr6
+  - chr7
+  - chr8
+  - chr9
+  - chr10
+  - chr11
+  - chr12
+  - chr13
+  - chr14
+  - chr15
+  - chr16
+  - chr17
+  - chr18
+  - chr19
+  - chr20
+  - chr21
+  - chr22
+

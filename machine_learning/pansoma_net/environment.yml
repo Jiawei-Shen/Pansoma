@@ -1,0 +1,16 @@
+name: pansoma_net_env
+channels:
+  - nvidia
+  - pytorch
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.8
+  - pip
+  - pytorch=2.1.0
+  - torchvision=0.16.0
+  - pytorch-cuda=12.1  # Ensures CUDA support for PyTorch
+  - numpy
+  - matplotlib
+  - pillow
+  - timm=0.5.4  # Added for Transformer saved_models in PyTorch

@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Local environments
+.venv/
+env/
+*.conda
+
+# Generated data and large artifacts
+data/raw/
+data/interim/
+data/processed/
+*.dat
+*.idx
+*.npy
+*.npz
+*.pkl
+*.pickle
+*.bam
+*.bai
+*.cram
+*.crai
+*.vcf
+*.vcf.gz
+*.tbi
+*.gfa
+*.gfa.gz
+*.gbz
+*.vg
+
+# Logs and cluster output
+*.out
+*.err
+logs/
+
+# macOS / IDE
+.DS_Store
+.idea/
+
