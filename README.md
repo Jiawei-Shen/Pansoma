@@ -47,10 +47,29 @@ jq
 bgzip/tabix, usually through htslib or pysam
 ```
 
+Platform notes are in [docs/platform_support.md](docs/platform_support.md).
+In short, Linux/HPC is the recommended target for full production runs, while
+macOS is supported for development, Python utilities, and local extension
+builds. The FASTQ-to-GAM stage on any platform requires `vg` plus matching
+`.gbz`, `.min`, and `.dist` graph indexes.
+
 Build the C++ `fast_writer` extension before generating `.dat/.idx` files:
 
 ```bash
 bash scripts/build_fast_writer.sh
+```
+
+Check a local machine:
+
+```bash
+python scripts/check_environment.py
+```
+
+For a full production node where `vg` and other command-line tools must be
+available:
+
+```bash
+python scripts/check_environment.py --strict-external
 ```
 
 ## Docker

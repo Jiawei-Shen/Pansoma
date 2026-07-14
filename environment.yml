@@ -3,13 +3,15 @@ channels:
   - conda-forge
   - bioconda
 dependencies:
-  - python>=3.9
+  - python>=3.9,<3.13
   - numpy
   - matplotlib
   - pandas
   - pysam
   - pybind11
+  - setuptools
+  - wheel
   - jq
   - pip
   - pip:
-      - protobuf
+      - protobuf==3.20.3

@@ -10,8 +10,10 @@ import sys
 from collections import defaultdict
 
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-if PROJECT_ROOT not in sys.path:
-    sys.path.insert(0, PROJECT_ROOT)
+SRC_ROOT = os.path.join(PROJECT_ROOT, "src")
+for path in (PROJECT_ROOT, SRC_ROOT):
+    if path not in sys.path:
+        sys.path.insert(0, path)
 
 import vg_pb2
 import fast_writer  # Segment, BlockTable, flush_entire_buffer_parallel_dict

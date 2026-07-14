@@ -247,8 +247,10 @@ void flush_entire_buffer_parallel_dict(
         if (alen > 0) {
             // Flush only what changed; MS_ASYNC is fine unless you require per-flush durability.
             (void) msync(map_base + aoff, alen, MS_ASYNC);
-            // Drop clean pages from cache to prevent cache bloat across batches.
+            // Drop clean pages from cache to prevent cache bloat across batches when supported.
+#ifdef POSIX_FADV_DONTNEED
             (void) posix_fadvise(fd, aoff, alen, POSIX_FADV_DONTNEED);
+#endif
         }
     }
 

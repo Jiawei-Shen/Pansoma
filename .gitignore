@@ -40,3 +40,7 @@ logs/
 .DS_Store
 .idea/
 
+
+# Build outputs
+build/
+*.so
