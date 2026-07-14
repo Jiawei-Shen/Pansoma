@@ -28,6 +28,7 @@ Find nodes containing imperfect reads:
 python -u scripts/find_unperfect_nodes.py \
   /scratch/jshen/data/COLO829T/illumina/GAM/COLO829BL.gam \
   --output /scratch/jshen/data/COLO829T/illumina/GAM/unperfect_nodes_COLO829BL.pkl \
+  --output_format pickle \
   --milestone 10000000 \
   --threads 12
 ```

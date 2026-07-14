@@ -10,7 +10,16 @@ PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
-import vg_pb2
+try:
+    import vg_pb2
+except TypeError as exc:
+    if "Descriptors cannot be created directly" not in str(exc):
+        raise
+    raise SystemExit(
+        "Incompatible protobuf version. Pansoma requires protobuf==3.20.3 for "
+        "the bundled vg_pb2.py. Activate the pangenome-ml-data-generation "
+        "environment or run this command through conda run."
+    ) from exc
 import json
 import pickle
 from typing import Dict
@@ -204,7 +213,12 @@ def main():
     parser.add_argument("--max_pending", type=int, default=16, help="Max number of groups in flight (default: 16)")
     parser.add_argument("--chr", default="", help="Chromosome name to filter on (default: \"\")")
     parser.add_argument("--milestone", type=int, default=100_000_000, help="Number of reads between progress updates")
-    parser.add_argument("--output_format", choices=["json", "pickle"], default="json", help="Output format (default: json)")
+    parser.add_argument(
+        "--output_format",
+        choices=["json", "pickle"],
+        default=None,
+        help="output format (default: infer pickle from .pkl/.pickle, otherwise json)",
+    )
     parser.add_argument("--output", help="Output file name (overrides default)")
     args = parser.parse_args()
     start_time = time.perf_counter()
@@ -245,13 +259,21 @@ def main():
             print(f"  Elapsed time: {elapsed:.2f} seconds.")
             milestone += args.milestone
 
+    output_format = args.output_format
+    if output_format is None:
+        output_format = (
+            "pickle"
+            if args.output and args.output.lower().endswith((".pkl", ".pickle"))
+            else "json"
+        )
+
     output_file = args.output
     if not output_file:
-        output_file = "reads_by_node.json" if args.output_format == "json" else "reads_by_node.pkl"
+        output_file = "reads_by_node.json" if output_format == "json" else "reads_by_node.pkl"
 
-    print(f"\nSaving output to {output_file} as {args.output_format.upper()}...")
+    print(f"\nSaving output to {output_file} as {output_format.upper()}...")
 
-    if args.output_format == "json":
+    if output_format == "json":
         # Convert int keys to strings for JSON compatibility
         json_data = {str(k): v for k, v in node_to_counts.items()}
         with open(output_file, "w") as f:

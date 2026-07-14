@@ -39,6 +39,24 @@ conda env create -f environment.yml
 conda activate pangenome-ml-data-generation
 ```
 
+If the environment already exists, synchronize its dependencies with the
+repository before continuing:
+
+```bash
+conda env update -n pangenome-ml-data-generation -f environment.yml
+conda activate pangenome-ml-data-generation
+```
+
+Do not use the Conda `base` environment for Pansoma. Confirm that Python and
+the legacy VG protobuf dependency come from the project environment:
+
+```bash
+which python
+python -c "import google.protobuf; print(google.protobuf.__version__)"
+```
+
+The protobuf version must be `3.20.3`.
+
 External command-line tools are also required for the full pipeline:
 
 ```text
@@ -59,6 +77,10 @@ Build the C++ `fast_writer` extension before generating `.dat/.idx` files:
 bash scripts/build_fast_writer.sh
 ```
 
+`fast_writer` is platform- and Python-version-specific. Build it separately on
+each Linux or macOS machine; compiled `.so` files are not stored in git. The
+build script verifies the resulting import and prints its installed path.
+
 Check a local machine:
 
 ```bash
@@ -74,35 +96,40 @@ python scripts/check_environment.py --strict-external
 
 ## Docker
 
-The bundled Dockerfile is adapted from the original model repository and is focused on the PyTorch/ML environment:
+The primary container runs the complete 5-channel workflow, including `vg`
+alignment, GAM preprocessing, tensor generation, training, inference, and VCF
+output:
 
 ```text
-docker/Dockerfile.ml
-machine_learning/pansoma_net/Dockerfile
+docker/Dockerfile
 ```
 
 Build it from the repository root:
 
 ```bash
-docker build -f docker/Dockerfile.ml -t pansoma-ml .
+docker build --platform linux/amd64 -f docker/Dockerfile -t pansoma:latest .
 ```
 
-Run it with GPU support and mount the project plus data directories:
+Validate the runtime:
 
 ```bash
-docker run --gpus all -it --rm \
-  -v "$PWD":/workspace/Pansoma \
-  -v /scratch:/scratch \
-  pansoma-ml
+docker run --rm --gpus all pansoma:latest doctor
 ```
 
-Inside the container:
+The image exposes two end-to-end commands:
 
 ```bash
-cd /workspace/Pansoma
+docker run ... pansoma:latest train [inputs and training parameters]
+docker run ... pansoma:latest infer [inputs, checkpoint, and output VCF]
 ```
 
-The Dockerfile installs the ML requirements from `machine_learning/pansoma_net/requirements.txt`.
+FASTQ files are not sufficient by themselves: both commands also require
+matching `.gbz`, `.min`, `.dist`, and GFA resources, a coordinate-aware node
+map, and chromosome node filters. Training additionally requires an indexed
+truth VCF; inference requires a model checkpoint. Complete mount layouts and
+commands are documented in [docs/docker.md](docs/docker.md).
+
+The previous ML-only image remains at `docker/Dockerfile.ml` for legacy use.
 
 ## End-To-End Pipeline
 
@@ -132,6 +159,7 @@ Find graph nodes that contain imperfect read alignments:
 ```bash
 python -u scripts/find_unperfect_nodes.py sample.gam \
   --output sample.unperfect_nodes.pkl \
+  --output_format pickle \
   --milestone 10000000 \
   --threads 12
 ```
@@ -152,6 +180,19 @@ This writes:
 ```text
 sample.unperfect_nodes.dat
 sample.unperfect_nodes.idx
+```
+
+On HPC and Slurm systems, Conda shell activation may not be initialized. The
+same commands can be run without activation:
+
+```bash
+conda run --no-capture-output -n pangenome-ml-data-generation \
+  bash scripts/build_fast_writer.sh
+
+conda run --no-capture-output -n pangenome-ml-data-generation \
+  python -u scripts/build_dat_idx.py \
+    sample.gam sample.unperfect_nodes.pkl sample.unperfect_nodes \
+    --milestone 1000000 --threads 12
 ```
 
 ### 3. Graph Node Mapping
@@ -264,6 +305,7 @@ scripts/generate_testing_tensors.py        sharded tensor generation
 scripts/label_tensors.py                   truth-VCF tensor labeling
 scripts/classify_tensors.py                organize true/false tensor datasets
 scripts/visualize_tensor.py                tensor visualization
+scripts/pansoma_workflow.py                end-to-end Docker train/infer CLI
 ```
 
 ## Data Formats

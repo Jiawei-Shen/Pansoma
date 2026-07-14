@@ -3,18 +3,23 @@ set -euo pipefail
 
 export LC_ALL=C
 
-GBZ="/scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.gbz"
-GFA="/scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.gfa"
+GBZ="${GBZ:-/scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.gbz}"
+GFA="${GFA:-/scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.gfa}"
 
-OUTDIR="/scratch/jshen/tmp/chr_component_vs_GRCh38_summary"
+OUTDIR="${OUTDIR:-/scratch/jshen/tmp/chr_component_vs_GRCh38_summary}"
+CHROMOSOMES="${CHROMOSOMES:-$(seq 1 22)}"
 mkdir -p "${OUTDIR}"
 
 SUMMARY="${OUTDIR}/summary.tsv"
 
 echo -e "chr\tcomponent_total_nodes\tGRCh38_path_total_nodes\tshared_nodes\tcomponent_not_on_GRCh38\tGRCh38_not_in_component\tpct_component_on_GRCh38\tpct_component_not_on_GRCh38\tpct_extra_vs_GRCh38" > "${SUMMARY}"
 
-for c in $(seq 1 22); do
-    chr="chr${c}"
+for c in ${CHROMOSOMES}; do
+    if [[ "${c}" == chr* ]]; then
+        chr="${c}"
+    else
+        chr="chr${c}"
+    fi
     echo "Processing ${chr} ..."
 
     CHR_DIR="${OUTDIR}/${chr}"

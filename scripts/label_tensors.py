@@ -70,7 +70,8 @@ def load_node_positions(ref_json_path: str):
     pos = {}
     with open(ref_json_path, "r") as f:
         data = json.load(f)
-    for node in data.get("nodes", []):
+    nodes = data if isinstance(data, list) else data.get("nodes", [])
+    for node in nodes:
         nid_raw = node.get("node_id")
         if nid_raw is None:
             continue

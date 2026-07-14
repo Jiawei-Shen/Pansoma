@@ -15,8 +15,27 @@ for path in (PROJECT_ROOT, SRC_ROOT):
     if path not in sys.path:
         sys.path.insert(0, path)
 
-import vg_pb2
-import fast_writer  # Segment, BlockTable, flush_entire_buffer_parallel_dict
+try:
+    import vg_pb2
+except TypeError as exc:
+    if "Descriptors cannot be created directly" not in str(exc):
+        raise
+    raise SystemExit(
+        "Incompatible protobuf version. Pansoma requires protobuf==3.20.3 for "
+        "the bundled vg_pb2.py. Activate the pangenome-ml-data-generation "
+        "environment or run this command through conda run."
+    ) from exc
+
+try:
+    import fast_writer  # Segment, BlockTable, flush_entire_buffer_parallel_dict
+except ModuleNotFoundError as exc:
+    if exc.name != "fast_writer":
+        raise
+    raise SystemExit(
+        "fast_writer is not built for this Python/platform. From the Pansoma "
+        "repository root, activate the pangenome-ml-data-generation environment "
+        "and run: bash scripts/build_fast_writer.sh"
+    ) from exc
 
 # ─────────────────────────────────────────────────────────────────────────────
 # File layout
@@ -120,6 +139,9 @@ def process_alignment(raw_message, wanted_nodes, chrom_filter):
 # ─────────────────────────────────────────────────────────────────────────────
 # Output init
 def initialize_output_files(stats_path, output_prefix, alt_threshold):
+    output_dir = os.path.dirname(os.path.abspath(output_prefix))
+    os.makedirs(output_dir, exist_ok=True)
+
     with open(stats_path, "rb") as fh:
         stats_data = pickle.load(fh)
 
