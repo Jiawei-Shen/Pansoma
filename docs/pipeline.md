@@ -94,7 +94,13 @@ python -u scripts/filter_node_json.py \
 For testing-set generation across whole chromosomes, build chromosome component and GRCh38 path filters:
 
 ```bash
-bash scripts/build_chr_node_filters.sh
+cd /scratch/jshen/Github/Pansoma
+
+GBZ=/scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.gbz \
+GFA=/scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.gfa \
+OUTDIR=/scratch/jshen/Github/Pansoma/tmp/chr_component_vs_GRCh38_summary \
+CHROMOSOMES="1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22" \
+bash ./scripts/build_chr_node_filters.sh
 ```
 
 ## 4. Build, Label, And Organize Tensors

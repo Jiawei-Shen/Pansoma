@@ -3,11 +3,31 @@ set -euo pipefail
 
 export LC_ALL=C
 
-GBZ="${GBZ:-/scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.gbz}"
-GFA="${GFA:-/scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.gfa}"
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd -- "${SCRIPT_DIR}/.." && pwd)"
 
-OUTDIR="${OUTDIR:-/scratch/jshen/tmp/chr_component_vs_GRCh38_summary}"
-CHROMOSOMES="${CHROMOSOMES:-$(seq 1 22)}"
+: "${GBZ:?Set GBZ to the input .gbz path}"
+: "${GFA:?Set GFA to the matching .gfa path}"
+
+OUTDIR="${OUTDIR:-${PROJECT_ROOT}/tmp/chr_component_vs_GRCh38_summary}"
+CHROMOSOMES="${CHROMOSOMES:-1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22}"
+
+if [[ ! -f "${GBZ}" ]]; then
+    echo "ERROR: GBZ not found: ${GBZ}" >&2
+    exit 2
+fi
+if [[ ! -f "${GFA}" ]]; then
+    echo "ERROR: GFA not found: ${GFA}" >&2
+    exit 2
+fi
+
+for tool in vg jq awk sort comm; do
+    if ! command -v "${tool}" >/dev/null 2>&1; then
+        echo "ERROR: required command not found: ${tool}" >&2
+        exit 127
+    fi
+done
+
 mkdir -p "${OUTDIR}"
 
 SUMMARY="${OUTDIR}/summary.tsv"

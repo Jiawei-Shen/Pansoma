@@ -239,8 +239,19 @@ sample.unperfect_nodes.idx
 Build per-chromosome component and GRCh38 path filters:
 
 ```bash
-bash scripts/build_chr_node_filters.sh
+cd /path/to/Pansoma
+
+GBZ=/path/to/graph.gbz \
+GFA=/path/to/graph.gfa \
+OUTDIR=/path/to/chr_node_filters \
+CHROMOSOMES="1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22" \
+bash ./scripts/build_chr_node_filters.sh
 ```
+
+`GBZ` and `GFA` are required and must describe the same graph. `OUTDIR`
+contains one directory per chromosome plus `summary.tsv`. If `OUTDIR` is
+omitted, output is written under
+`tmp/chr_component_vs_GRCh38_summary` in the repository.
 
 Build or filter node JSON resources:
 
