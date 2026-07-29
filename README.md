@@ -234,19 +234,6 @@ sample.unperfect_nodes.dat
 sample.unperfect_nodes.idx
 ```
 
-On HPC and Slurm systems, Conda shell activation may not be initialized. The
-same commands can be run without activation:
-
-```bash
-conda run --no-capture-output -n pangenome-ml-data-generation \
-  bash scripts/build_fast_writer.sh
-
-conda run --no-capture-output -n pangenome-ml-data-generation \
-  python -u scripts/build_dat_idx.py \
-    sample.gam sample.unperfect_nodes.pkl sample.unperfect_nodes \
-    --milestone 1000000 --threads 12
-```
-
 ### 3. Graph Node Mapping
 
 Build per-chromosome component and GRCh38 path filters:
