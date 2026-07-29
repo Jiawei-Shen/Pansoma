@@ -2,6 +2,21 @@
 
 This document records the end-to-end data generation and modeling workflow. Script names in the old project were not always literal, so the `scripts/` folder exposes clearer entry points while legacy copies remain under `experiments/legacy/`.
 
+## 0. GBZ To GFA
+
+The tensor pipeline needs a GFA with node sequences that matches the GBZ used
+for alignment. If only the GBZ is available, export the GFA directly with
+`vg`:
+
+```bash
+vg convert -f --no-translation \
+  /scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.gbz \
+  > /scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.gfa
+```
+
+Run this once per graph. `--no-translation` keeps the internal `vg` node IDs,
+which ensures that the exported GFA is compatible with the GAM alignments.
+
 ## 1. FASTQ To GAM
 
 Use `vg giraffe` directly. HiFi/long-read data requires `vg >= 1.63`.

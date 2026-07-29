@@ -18,6 +18,9 @@ resources that must match each other:
 | Truth VCF (`.vcf` or `.vcf.gz`) | Required | No | Supervised training labels |
 | PansomaNet checkpoint | No | Required | Trained model used for inference |
 
+If a matching GFA is not already available, generate it once from the GBZ as
+shown in [Step 0 of the pipeline guide](pipeline.md#0-gbz-to-gfa).
+
 Pansoma generates these intermediate resources automatically:
 
 ```text

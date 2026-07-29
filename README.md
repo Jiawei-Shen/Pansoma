@@ -150,6 +150,21 @@ The previous ML-only image remains at `docker/Dockerfile.ml` for legacy use.
 
 Full command examples are in [docs/pipeline.md](docs/pipeline.md).
 
+### 0. GBZ To GFA
+
+If you have a GBZ graph but not its matching GFA, export one with `vg`:
+
+```bash
+vg convert -f --no-translation \
+  /path/to/graph.gbz \
+  > /path/to/graph.gfa
+```
+
+Run this once for each graph. `--no-translation` preserves the internal `vg`
+node IDs so the GFA remains compatible with alignments produced against the
+GBZ. See the official
+[`vg giraffe` graph guidance](https://github.com/vgteam/vg/wiki/Giraffe-best-practices#graphs).
+
 ### 1. FASTQ To GAM
 
 Align reads to the pangenome graph with `vg giraffe`.
