@@ -1,0 +1,11 @@
+numpy==1.26.4
+pandas>=2.0,<3
+matplotlib>=3.7,<4
+pillow>=10,<12
+pysam>=0.22,<0.25
+pybind11>=2.11,<4
+protobuf==3.20.3
+setuptools>=68
+timm==1.0.15
+tqdm>=4.66,<5
+wheel

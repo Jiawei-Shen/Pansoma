@@ -4,6 +4,14 @@ Pansoma is a research pipeline for generating machine-learning-ready variant ten
 
 The project is organized so that reproducible pipeline entry points live in `scripts/`, reusable code lives in `src/`, model code lives in `machine_learning/`, and older exploratory scripts remain available under `experiments/legacy/`.
 
+![Pansoma workflow](./figures/Pansoma_Fig1.png)
+
+## How to use Pansoma
+To use Pansoma, it follows two major stage: 1.Data preprocessing: Create Node Pile Up data. 2. Data Inference: Use the model we provided to inference.
+We also provide a model training so that you can use your own data to train Pansoma to get your Pansoma model.
+We provide a Docker that contains everything, running commands, and the step to step explanations.
+###
+
 ## Repository Layout
 
 ```text
@@ -116,6 +124,10 @@ Validate the runtime:
 docker run --rm --gpus all pansoma:latest doctor
 ```
 
+For WUSTL RIS/LSF, the image supports `/bin/bash` as the submitted command and
+keeps all Python dependencies in `/opt/venv`. A complete interactive `bsub`
+example and cluster checks are included in [docs/docker.md](docs/docker.md).
+
 The image exposes two end-to-end commands:
 
 ```bash
@@ -124,9 +136,11 @@ docker run ... pansoma:latest infer [inputs, checkpoint, and output VCF]
 ```
 
 FASTQ files are not sufficient by themselves: both commands also require
-matching `.gbz`, `.min`, `.dist`, and GFA resources, a coordinate-aware node
-map, and chromosome node filters. Training additionally requires an indexed
-truth VCF; inference requires a model checkpoint. Complete mount layouts and
+matching `.gbz`, `.min`, `.dist`, and GFA resources. Pansoma now generates the
+GRCh38 coordinate map and chromosome node filters automatically and reuses
+them through a graph-fingerprinted cache. Training additionally requires a
+truth VCF in `.vcf` or `.vcf.gz` format; compression and Tabix indexing are
+automatic. Inference requires a model checkpoint. Complete mount layouts and
 commands are documented in [docs/docker.md](docs/docker.md).
 
 The previous ML-only image remains at `docker/Dockerfile.ml` for legacy use.
@@ -137,7 +151,9 @@ Full command examples are in [docs/pipeline.md](docs/pipeline.md).
 
 ### 1. FASTQ To GAM
 
-Align reads to the pangenome graph with `vg giraffe`:
+Align reads to the pangenome graph with `vg giraffe`.
+
+Short reads (paired-end Illumina):
 
 ```bash
 GBZ=/path/to/graph.gbz \
@@ -145,12 +161,27 @@ MIN_INDEX=/path/to/graph.min \
 DIST_INDEX=/path/to/graph.dist \
 FASTQ1=/path/to/read_1.fq.gz \
 FASTQ2=/path/to/read_2.fq.gz \
-READ_TYPE=illumina \
+PLATFORM=illumina \
 OUT_GAM=/path/to/sample.gam \
 bash scripts/run_giraffe.sh
 ```
 
-Use `READ_TYPE=hifi` for PacBio HiFi and `READ_TYPE=ont` or `READ_TYPE=r10` for ONT.
+Long reads (single-end PacBio HiFi):
+
+```bash
+GBZ=/path/to/graph.gbz \
+MIN_INDEX=/path/to/graph.min \
+DIST_INDEX=/path/to/graph.dist \
+FASTQ1=/path/to/long_reads.fq.gz \
+PLATFORM=pacbio-hifi \
+OUT_GAM=/path/to/sample.gam \
+bash scripts/run_giraffe.sh
+```
+
+Use `PLATFORM=pacbio-hifi` for PacBio HiFi or `PLATFORM=ont-r10` for Oxford
+Nanopore R10. Long reads use one FASTQ file, so do not set `FASTQ2`. See the
+official [`vg giraffe` documentation](https://github.com/vgteam/vg/wiki/Giraffe-best-practices)
+for index requirements and additional options.
 
 ### 2. GAM To `.dat/.idx`
 

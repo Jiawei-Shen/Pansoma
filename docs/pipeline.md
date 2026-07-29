@@ -12,13 +12,16 @@ MIN_INDEX=/scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.min 
 DIST_INDEX=/scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.dist \
 FASTQ1=/scratch/qfu/COLO829BL_WGS/COLO829BL_1.fq.gz \
 FASTQ2=/scratch/qfu/COLO829BL_WGS/COLO829BL_2.fq.gz \
-READ_TYPE=illumina \
+PLATFORM=illumina \
+MAPPER_PRESET=default \
 THREADS=12 \
 OUT_GAM=/scratch/jshen/data/COLO829T/illumina/GAM/COLO829BL.gam \
 bash scripts/run_giraffe.sh
 ```
 
-Set `READ_TYPE=hifi` for PacBio HiFi and `READ_TYPE=ont` or `READ_TYPE=r10` for ONT.
+Set `PLATFORM=pacbio-hifi` for PacBio HiFi or `PLATFORM=ont-r10` for
+ONT R10, and provide one FASTQ without `FASTQ2`. The wrapper rejects PacBio
+CLR and ONT R9 instead of silently assigning an incompatible preset.
 
 ## 2. GAM To `.dat/.idx`
 

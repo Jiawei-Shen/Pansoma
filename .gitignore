@@ -30,6 +30,7 @@ data/processed/
 *.gfa.gz
 *.gbz
 *.vg
+*.pth
 
 # Logs and cluster output
 *.out

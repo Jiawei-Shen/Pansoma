@@ -8,7 +8,11 @@ set -euo pipefail
 #
 # Optional variables:
 #   FASTQ2      paired-end FASTQ
-#   READ_TYPE   illumina, hifi, or ont/r10
+#   PLATFORM    illumina, pacbio-hifi, or ont-r10
+#   MAPPER_PRESET
+#               illumina: default, chaining-sr, fast, or srold
+#               pacbio-hifi: hifi
+#               ont-r10: r10
 #   THREADS     default: 12
 
 : "${GBZ:?Set GBZ to the graph .gbz path}"
@@ -18,7 +22,26 @@ set -euo pipefail
 : "${OUT_GAM:?Set OUT_GAM to output .gam path}"
 
 THREADS="${THREADS:-12}"
-READ_TYPE="${READ_TYPE:-illumina}"
+PLATFORM="${PLATFORM:-}"
+MAPPER_PRESET="${MAPPER_PRESET:-}"
+
+# Backward compatibility for the unambiguous legacy values only.
+if [[ -z "${PLATFORM}" && -n "${READ_TYPE:-}" ]]; then
+  case "${READ_TYPE}" in
+    illumina) PLATFORM="illumina" ;;
+    hifi) PLATFORM="pacbio-hifi" ;;
+    r10) PLATFORM="ont-r10" ;;
+    *)
+      echo "ERROR: legacy READ_TYPE supports only illumina, hifi, or r10; use PLATFORM" >&2
+      exit 2
+      ;;
+  esac
+fi
+
+if [[ -z "${PLATFORM}" ]]; then
+  echo "ERROR: Set PLATFORM to illumina, pacbio-hifi, or ont-r10" >&2
+  exit 2
+fi
 
 mkdir -p "$(dirname "${OUT_GAM}")"
 
@@ -32,24 +55,51 @@ args=(
   -o gam
 )
 
-if [[ -n "${FASTQ2:-}" ]]; then
-  args+=( -f "${FASTQ2}" )
-fi
-
-case "${READ_TYPE}" in
+case "${PLATFORM}" in
   illumina)
+    preset="${MAPPER_PRESET:-default}"
+    case "${preset}" in
+      default|chaining-sr|fast|srold) ;;
+      *)
+        echo "ERROR: Illumina MAPPER_PRESET must be default, chaining-sr, fast, or srold" >&2
+        exit 2
+        ;;
+    esac
     ;;
-  hifi|pacbio)
-    args+=( -b hifi )
+  pacbio-hifi)
+    preset="${MAPPER_PRESET:-hifi}"
+    if [[ "${preset}" != "hifi" ]]; then
+      echo "ERROR: pacbio-hifi requires MAPPER_PRESET=hifi" >&2
+      exit 2
+    fi
+    if [[ -n "${FASTQ2:-}" ]]; then
+      echo "ERROR: pacbio-hifi accepts one FASTQ; do not set FASTQ2" >&2
+      exit 2
+    fi
     ;;
-  ont|r10)
-    args+=( -b r10 )
+  ont-r10)
+    preset="${MAPPER_PRESET:-r10}"
+    if [[ "${preset}" != "r10" ]]; then
+      echo "ERROR: ont-r10 requires MAPPER_PRESET=r10" >&2
+      exit 2
+    fi
+    if [[ -n "${FASTQ2:-}" ]]; then
+      echo "ERROR: ont-r10 accepts one FASTQ; do not set FASTQ2" >&2
+      exit 2
+    fi
     ;;
   *)
-    echo "ERROR: READ_TYPE must be illumina, hifi, pacbio, ont, or r10" >&2
+    echo "ERROR: PLATFORM must be illumina, pacbio-hifi, or ont-r10" >&2
     exit 2
     ;;
 esac
 
-"${args[@]}" > "${OUT_GAM}"
+if [[ -n "${FASTQ2:-}" ]]; then
+  args+=( -f "${FASTQ2}" )
+fi
 
+args+=( -b "${preset}" )
+
+echo "Pansoma alignment: platform=${PLATFORM} vg_preset=${preset}" >&2
+
+"${args[@]}" > "${OUT_GAM}"
