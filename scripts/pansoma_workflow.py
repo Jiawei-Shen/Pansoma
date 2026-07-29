@@ -29,15 +29,40 @@ def log(message: str) -> None:
     print(f"[pansoma] {message}", flush=True)
 
 
-def run(command: Sequence[str], *, cwd: Path = PROJECT_ROOT, env: Optional[dict] = None) -> None:
+def run(
+    command: Sequence[str],
+    *,
+    cwd: Path = PROJECT_ROOT,
+    env: Optional[dict] = None,
+    stdout_path: Optional[Path] = None,
+) -> None:
     rendered = shlex.join(str(part) for part in command)
     log(f"run: {rendered}")
-    subprocess.run(
-        [str(part) for part in command],
-        cwd=str(cwd),
-        env=env,
-        check=True,
-    )
+    if stdout_path is None:
+        subprocess.run(
+            [str(part) for part in command],
+            cwd=str(cwd),
+            env=env,
+            check=True,
+        )
+        return
+
+    stdout_path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = stdout_path.with_suffix(stdout_path.suffix + ".tmp")
+    temporary.unlink(missing_ok=True)
+    try:
+        with temporary.open("wb") as output:
+            subprocess.run(
+                [str(part) for part in command],
+                cwd=str(cwd),
+                env=env,
+                stdout=output,
+                check=True,
+            )
+        temporary.replace(stdout_path)
+    except BaseException:
+        temporary.unlink(missing_ok=True)
+        raise
 
 
 def require_file(path_text: str, label: str) -> Path:
@@ -65,12 +90,13 @@ def run_if_missing(
     *,
     cwd: Path = PROJECT_ROOT,
     env: Optional[dict] = None,
+    stdout_path: Optional[Path] = None,
 ) -> None:
     expected = list(outputs)
     if expected and all(is_complete(path) for path in expected):
         log(f"reuse {name}: {', '.join(str(path) for path in expected)}")
         return
-    run(command, cwd=cwd, env=env)
+    run(command, cwd=cwd, env=env, stdout_path=stdout_path)
     missing = [str(path) for path in expected if not is_complete(path)]
     if missing:
         raise SystemExit(f"ERROR: {name} finished without expected output(s): {', '.join(missing)}")
@@ -191,41 +217,16 @@ def common_paths(args: argparse.Namespace) -> dict[str, Path]:
     return paths
 
 
-PLATFORM_DEFAULT_PRESET = {
-    "illumina": "default",
-    "pacbio-hifi": "hifi",
-    "ont-r10": "r10",
-}
-PLATFORM_ALLOWED_PRESETS = {
-    "illumina": {"default", "chaining-sr", "fast", "srold"},
-    "pacbio-hifi": {"hifi"},
-    "ont-r10": {"r10"},
-}
-LEGACY_READ_TYPE = {
-    "illumina": "illumina",
-    "hifi": "pacbio-hifi",
-    "r10": "ont-r10",
-}
+LONG_READ_PRESETS = {"hifi", "r10"}
 
 
-def resolve_alignment_mode(args: argparse.Namespace) -> tuple[str, str]:
-    if args.platform and args.read_type:
-        raise SystemExit("ERROR: use --platform or legacy --read-type, not both")
-    platform = args.platform or LEGACY_READ_TYPE.get(args.read_type)
-    if platform is None:
+def resolve_mapper_preset(args: argparse.Namespace) -> str:
+    preset = args.mapper_preset
+    if preset in LONG_READ_PRESETS and args.fastq2:
         raise SystemExit(
-            "ERROR: --platform is required: illumina, pacbio-hifi, or ont-r10"
+            f"ERROR: vg giraffe preset {preset!r} accepts one FASTQ; omit --fastq2"
         )
-    preset = args.mapper_preset or PLATFORM_DEFAULT_PRESET[platform]
-    if preset not in PLATFORM_ALLOWED_PRESETS[platform]:
-        allowed = ", ".join(sorted(PLATFORM_ALLOWED_PRESETS[platform]))
-        raise SystemExit(
-            f"ERROR: --mapper-preset {preset!r} is incompatible with "
-            f"--platform {platform}; allowed: {allowed}"
-        )
-    if platform != "illumina" and args.fastq2:
-        raise SystemExit(f"ERROR: --platform {platform} accepts one FASTQ; omit --fastq2")
-    return platform, preset
+    return preset
 
 
 WALK_TOKEN = re.compile(r"([<>])([^<>]+)")
@@ -449,10 +450,18 @@ def enrich_candidate_node_map(
 def prepare_sample(args: argparse.Namespace) -> tuple[dict[str, Path], Path, dict[str, Path]]:
     fastq1 = require_file(args.fastq1, "FASTQ 1")
     fastq2 = require_file(args.fastq2, "FASTQ 2") if args.fastq2 else None
-    platform, mapper_preset = resolve_alignment_mode(args)
+    mapper_preset = resolve_mapper_preset(args)
     gbz = require_file(args.gbz, "GBZ graph")
     min_index = require_file(args.min_index, "minimizer index")
     dist_index = require_file(args.dist_index, "distance index")
+    zipcode_index = (
+        require_file(args.zipcode_index, "zipcode index") if args.zipcode_index else None
+    )
+    if mapper_preset in LONG_READ_PRESETS and zipcode_index is None:
+        raise SystemExit(
+            "ERROR: PacBio HiFi and ONT R10 require --zipcode-index together "
+            "with a long-read minimizer index"
+        )
     gfa = require_file(args.gfa, "GFA graph")
     paths = common_paths(args)
     filter_base, coordinate_dir, graph_id = build_graph_resources(args, paths, gbz, gfa)
@@ -464,27 +473,35 @@ def prepare_sample(args: argparse.Namespace) -> tuple[dict[str, Path], Path, dic
     raw_candidate_nodes = paths["nodes"] / f"{args.sample}.{graph_id}.candidate_nodes.raw.json"
     candidate_nodes = paths["nodes"] / f"{args.sample}.{graph_id}.candidate_nodes.json"
 
-    align_env = os.environ.copy()
-    align_env.update(
-        {
-            "GBZ": str(gbz),
-            "MIN_INDEX": str(min_index),
-            "DIST_INDEX": str(dist_index),
-            "FASTQ1": str(fastq1),
-            "PLATFORM": platform,
-            "MAPPER_PRESET": mapper_preset,
-            "THREADS": str(args.threads),
-            "OUT_GAM": str(gam),
-        }
-    )
+    align_command = [
+        "vg",
+        "giraffe",
+        "-Z",
+        str(gbz),
+        "-m",
+        str(min_index),
+        "-d",
+        str(dist_index),
+        "-f",
+        str(fastq1),
+        "-b",
+        mapper_preset,
+        "-t",
+        str(args.threads),
+        "-p",
+        "-o",
+        "gam",
+    ]
     if fastq2:
-        align_env["FASTQ2"] = str(fastq2)
+        align_command.extend(["-f", str(fastq2)])
+    if zipcode_index:
+        align_command.extend(["-z", str(zipcode_index)])
 
     run_if_missing(
         "FASTQ alignment",
-        ["bash", "scripts/run_giraffe.sh"],
+        align_command,
         [gam],
-        env=align_env,
+        stdout_path=gam,
     )
     run_if_missing(
         "imperfect-node scan",
@@ -921,6 +938,10 @@ def add_common_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--gbz", required=True, help="vg GBZ graph")
     parser.add_argument("--min-index", required=True, help="vg minimizer index (.min)")
     parser.add_argument("--dist-index", required=True, help="vg distance index (.dist)")
+    parser.add_argument(
+        "--zipcode-index",
+        help="vg zipcode index (.zipcodes); required for PacBio HiFi and ONT R10",
+    )
     parser.add_argument("--gfa", required=True, help="matching graph GFA with node sequences")
     parser.add_argument(
         "--resource-cache",
@@ -928,21 +949,11 @@ def add_common_arguments(parser: argparse.ArgumentParser) -> None:
     )
     parser.add_argument("--work-dir", required=True, help="persistent directory for all intermediates")
     parser.add_argument("--chromosomes", nargs="+", default=[f"chr{i}" for i in range(1, 23)])
-    platform_group = parser.add_mutually_exclusive_group(required=True)
-    platform_group.add_argument(
-        "--platform",
-        choices=["illumina", "pacbio-hifi", "ont-r10"],
-        help="sequencing platform",
-    )
     parser.add_argument(
         "--mapper-preset",
         choices=["default", "chaining-sr", "fast", "srold", "hifi", "r10"],
-        help="optional vg giraffe preset; defaults are selected from --platform",
-    )
-    platform_group.add_argument(
-        "--read-type",
-        choices=["illumina", "hifi", "r10"],
-        help=argparse.SUPPRESS,
+        default="default",
+        help="vg giraffe -b preset (default: default)",
     )
     parser.add_argument("--variant-type", choices=["snp", "indel", "all"], default="snp")
     parser.add_argument("--threads", type=int, default=12)

@@ -4,24 +4,23 @@ This document records the end-to-end data generation and modeling workflow. Scri
 
 ## 1. FASTQ To GAM
 
-Use `vg giraffe`. HiFi/long-read data requires a recent `vg` version, for example `vg >= 1.63`.
+Use `vg giraffe` directly. HiFi/long-read data requires `vg >= 1.63`.
 
 ```bash
-GBZ=/scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.gbz \
-MIN_INDEX=/scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.min \
-DIST_INDEX=/scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.dist \
-FASTQ1=/scratch/qfu/COLO829BL_WGS/COLO829BL_1.fq.gz \
-FASTQ2=/scratch/qfu/COLO829BL_WGS/COLO829BL_2.fq.gz \
-PLATFORM=illumina \
-MAPPER_PRESET=default \
-THREADS=12 \
-OUT_GAM=/scratch/jshen/data/COLO829T/illumina/GAM/COLO829BL.gam \
-bash scripts/run_giraffe.sh
+vg giraffe \
+  -Z /scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.gbz \
+  -m /scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.min \
+  -d /scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.dist \
+  -f /scratch/qfu/COLO829BL_WGS/COLO829BL_1.fq.gz \
+  -f /scratch/qfu/COLO829BL_WGS/COLO829BL_2.fq.gz \
+  -b default \
+  -t 12 \
+  -p \
+  > /scratch/jshen/data/COLO829T/illumina/GAM/COLO829BL.gam
 ```
 
-Set `PLATFORM=pacbio-hifi` for PacBio HiFi or `PLATFORM=ont-r10` for
-ONT R10, and provide one FASTQ without `FASTQ2`. The wrapper rejects PacBio
-CLR and ONT R9 instead of silently assigning an incompatible preset.
+For single-end long reads, use a long-read minimizer/zipcode index pair and
+select `-b hifi` for PacBio HiFi or `-b r10` for ONT R10.
 
 ## 2. GAM To `.dat/.idx`
 

@@ -13,6 +13,7 @@ resources that must match each other:
 | --- | --- | --- | --- |
 | FASTQ R1 and optional R2 | Required | Required | Sequencing reads |
 | `.gbz`, `.min`, `.dist` | Required | Required | `vg giraffe` graph indexes |
+| `.zipcodes` | Long reads | Long reads | Long-read Giraffe distance hints |
 | GFA | Required | Required | Graph node sequences |
 | Truth VCF (`.vcf` or `.vcf.gz`) | Required | No | Supervised training labels |
 | PansomaNet checkpoint | No | Required | Trained model used for inference |
@@ -114,7 +115,7 @@ docker run --rm --gpus all --shm-size=32g \
   --sample HG008T \
   --fastq1 /inputs/reads/HG008T_R1.fastq.gz \
   --fastq2 /inputs/reads/HG008T_R2.fastq.gz \
-  --platform illumina \
+  --mapper-preset default \
   --gbz /inputs/graph/hprc.gbz \
   --min-index /inputs/graph/hprc.min \
   --dist-index /inputs/graph/hprc.dist \
@@ -156,7 +157,7 @@ docker run --rm --gpus all --shm-size=32g \
   --sample HG008T \
   --fastq1 /inputs/reads/HG008T_R1.fastq.gz \
   --fastq2 /inputs/reads/HG008T_R2.fastq.gz \
-  --platform illumina \
+  --mapper-preset default \
   --gbz /inputs/graph/hprc.gbz \
   --min-index /inputs/graph/hprc.min \
   --dist-index /inputs/graph/hprc.dist \
@@ -169,24 +170,28 @@ docker run --rm --gpus all --shm-size=32g \
   --batch-size 64
 ```
 
-For long-read samples, provide one FASTQ and select the exact supported
-platform:
+For long-read samples, provide one FASTQ and select the matching native
+Giraffe preset:
 
 ```bash
 # PacBio HiFi: vg giraffe -b hifi
 pansoma infer ... \
   --fastq1 sample.hifi.fastq.gz \
-  --platform pacbio-hifi
+  --mapper-preset hifi \
+  --min-index graph.longread.withzip.min \
+  --zipcode-index graph.longread.zipcodes
 
 # ONT R10: vg giraffe -b r10
 pansoma infer ... \
   --fastq1 sample.ont-r10.fastq.gz \
-  --platform ont-r10
+  --mapper-preset r10 \
+  --min-index graph.longread.withzip.min \
+  --zipcode-index graph.longread.zipcodes
 ```
 
 Do not pass `--fastq2` for long-read data. PacBio CLR and ONT R9 are not
-accepted. Illumina can optionally select `--mapper-preset default`,
-`chaining-sr`, `fast`, or `srold`; its default is `default`.
+accepted. The workflow calls `vg giraffe` directly. Short reads use
+`--mapper-preset default` unless another native Giraffe preset is selected.
 
 Inference writes:
 

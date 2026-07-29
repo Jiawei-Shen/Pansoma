@@ -77,7 +77,8 @@ Platform notes are in [docs/platform_support.md](docs/platform_support.md).
 In short, Linux/HPC is the recommended target for full production runs, while
 macOS is supported for development, Python utilities, and local extension
 builds. The FASTQ-to-GAM stage on any platform requires `vg` plus matching
-`.gbz`, `.min`, and `.dist` graph indexes.
+`.gbz`, `.min`, and `.dist` graph indexes. Long-read Giraffe mapping also
+requires a matching `.zipcodes` index.
 
 Build the C++ `fast_writer` extension before generating `.dat/.idx` files:
 
@@ -156,32 +157,37 @@ Align reads to the pangenome graph with `vg giraffe`.
 Short reads (paired-end Illumina):
 
 ```bash
-GBZ=/path/to/graph.gbz \
-MIN_INDEX=/path/to/graph.min \
-DIST_INDEX=/path/to/graph.dist \
-FASTQ1=/path/to/read_1.fq.gz \
-FASTQ2=/path/to/read_2.fq.gz \
-PLATFORM=illumina \
-OUT_GAM=/path/to/sample.gam \
-bash scripts/run_giraffe.sh
+vg giraffe \
+  -Z /path/to/graph.gbz \
+  -m /path/to/graph.min \
+  -d /path/to/graph.dist \
+  -f /path/to/read_1.fq.gz \
+  -f /path/to/read_2.fq.gz \
+  -b default \
+  -t 12 \
+  -p \
+  > /path/to/sample.gam
 ```
 
 Long reads (single-end PacBio HiFi):
 
 ```bash
-GBZ=/path/to/graph.gbz \
-MIN_INDEX=/path/to/graph.min \
-DIST_INDEX=/path/to/graph.dist \
-FASTQ1=/path/to/long_reads.fq.gz \
-PLATFORM=pacbio-hifi \
-OUT_GAM=/path/to/sample.gam \
-bash scripts/run_giraffe.sh
+vg giraffe \
+  -Z /path/to/graph.gbz \
+  -m /path/to/graph.longread.withzip.min \
+  -z /path/to/graph.longread.zipcodes \
+  -d /path/to/graph.dist \
+  -f /path/to/long_reads.fq.gz \
+  -b hifi \
+  -t 12 \
+  -p \
+  > /path/to/sample.gam
 ```
 
-Use `PLATFORM=pacbio-hifi` for PacBio HiFi or `PLATFORM=ont-r10` for Oxford
-Nanopore R10. Long reads use one FASTQ file, so do not set `FASTQ2`. See the
+Use `-b hifi` for PacBio HiFi or `-b r10` for Oxford Nanopore R10. Long reads
+use one FASTQ file and require long-read minimizer and zipcode indexes. See the
 official [`vg giraffe` documentation](https://github.com/vgteam/vg/wiki/Giraffe-best-practices)
-for index requirements and additional options.
+for additional options.
 
 ### 2. GAM To `.dat/.idx`
 
@@ -324,7 +330,6 @@ sbatch scripts/slurm/infer_pansoma_net.sh
 ## Key Scripts
 
 ```text
-scripts/run_giraffe.sh                     FASTQ -> GAM
 scripts/find_unperfect_nodes.py            find nodes with imperfect reads
 scripts/build_fast_writer.sh               build C++ writer extension
 scripts/build_dat_idx.py                   GAM + node set -> .dat/.idx
