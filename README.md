@@ -393,6 +393,31 @@ This writes `pansoma_sample.linear.vcf.gz` and its Tabix index
 `pansoma_sample.linear.vcf.gz.tbi`. The checkpoint must be compatible with the
 5-channel Pansoma model.
 
+`--emit` controls which coordinate representations are written:
+
+- `--emit linear` writes `<out_prefix>.linear.vcf.gz`. It contains candidates
+  that can be converted from graph-node offsets to GRCh38 chromosome
+  coordinates using `--map_json`. This is the standard output for downstream
+  tools and the Step 7 PoN filter.
+- `--emit graph` writes `<out_prefix>.graph.vcf.gz`. It contains only
+  candidates that cannot be converted to linear coordinates. In this file,
+  the VCF chromosome field is the graph node ID and the position is the offset
+  within that node.
+- `--emit all` writes `<out_prefix>.all.vcf.gz`. It contains every retained
+  candidate in graph-node coordinates, including candidates that can and
+  cannot be converted to GRCh38 coordinates.
+
+Multiple outputs can be requested in one run:
+
+```bash
+--emit linear graph all
+```
+
+Each requested VCF is BGZF-compressed and receives a `.tbi` index. `linear` is
+the default when `--emit` is omitted. Both `linear` and `graph` require
+`--map_json`; `all` alone does not. Graph-coordinate VCFs should not be passed
+to conventional GRCh38 tools or the PoN filter without coordinate conversion.
+
 ### 7. Panel Of Normals Filter
 
 Download the four default GRCh38 PoNs once and create their Tabix indexes:
