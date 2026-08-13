@@ -236,7 +236,18 @@ sample.unperfect_nodes.idx
 
 ### 3. Graph Node Mapping
 
-Build per-chromosome component and GRCh38 path filters:
+This stage prepares two required inputs for tensor generation:
+
+1. Per-chromosome node-filter text files.
+2. A candidate-node JSON containing node IDs and sequences.
+
+The optional GRCh38-only JSON workflow is needed only for manual coordinate-
+based truth labeling or gnomAD AF annotation. The end-to-end `pansoma train`
+and `pansoma infer` commands create and enrich these resources automatically.
+
+#### 3.1 Required: Build Chromosome Node Filters
+
+Build the graph-component and GRCh38-path node sets for each chromosome:
 
 ```bash
 cd /path/to/Pansoma
@@ -253,19 +264,19 @@ contains one directory per chromosome plus `summary.tsv`. If `OUTDIR` is
 omitted, output is written under
 `tmp/chr_component_vs_GRCh38_summary` in the repository.
 
-Build or filter node JSON resources:
+The files consumed later by `generate_testing_tensors.py --chr_nodes` are:
 
-```bash
-python -u scripts/build_grch38_path_json.py graph.gfa '^W\tGRCh38\t0\tchr1' \
-  -o chr1.GRCh38.nodes.json
-
-python -u scripts/filter_node_json.py \
-  chr1.GRCh38.nodes.json \
-  sample.unperfect_nodes.idx \
-  chr1.filtered.nodes.json
+```text
+/path/to/chr_node_filters/chr1/chr1.component.nodes.raw.txt
+/path/to/chr_node_filters/chr1/chr1.GRCh38_path.nodes.raw.txt
 ```
 
-For whole-testing-set generation from `.idx` plus GFA:
+The remaining comparison files and `summary.tsv` are diagnostic outputs.
+
+#### 3.2 Required: Build The Candidate-Node JSON
+
+Read candidate node IDs from the sample `.idx` and retrieve their sequences
+from the matching GFA:
 
 ```bash
 python -u scripts/build_node_json.py \
@@ -273,6 +284,44 @@ python -u scripts/build_node_json.py \
   --idx sample.unperfect_nodes.idx \
   --out candidate_nodes.json
 ```
+
+Input:
+
+- `graph.gfa`: node sequences from the same graph used for alignment.
+- `sample.unperfect_nodes.idx`: candidate node IDs identified from the GAM.
+
+Output:
+
+- `candidate_nodes.json`: the `node_id` and `sequence` records required by
+  `generate_testing_tensors.py`.
+
+#### 3.3 Optional: GRCh38 Coordinates, Reference-Only Filtering, And AF
+
+Skip this subsection when using the end-to-end `pansoma train` or
+`pansoma infer` workflow. Use it only when manually labeling tensors against a
+truth VCF, restricting candidates to the GRCh38 path, or adding gnomAD AF.
+
+First, build a coordinate-aware JSON for one GRCh38 chromosome path:
+
+```bash
+python -u scripts/build_grch38_path_json.py graph.gfa '^W\tGRCh38\t0\tchr1' \
+  -o chr1.GRCh38.nodes.json
+```
+
+This output contains `node_id`, `sequence`, `grch38_position_start`, length,
+and strand. It can be passed to `label_tensors.py` as the reference-node JSON.
+
+Optionally restrict that JSON to nodes also present in the sample `.idx`:
+
+```bash
+python -u scripts/filter_node_json.py \
+  chr1.GRCh38.nodes.json \
+  sample.unperfect_nodes.idx \
+  chr1.filtered.nodes.json
+```
+
+`chr1.filtered.nodes.json` is a reference-only alternative and is not consumed
+by the default whole-graph workflow.
 
 ### 4. Tensor Generation And Labeling
 
@@ -284,7 +333,9 @@ python -u scripts/generate_testing_tensors.py \
   sample.unperfect_nodes.idx \
   tensors_chr1 \
   candidate_nodes.json \
-  --chr_nodes chr1.component.nodes.raw.txt chr1.GRCh38_path.nodes.raw.txt \
+  --chr_nodes \
+    /path/to/chr_node_filters/chr1/chr1.component.nodes.raw.txt \
+    /path/to/chr_node_filters/chr1/chr1.GRCh38_path.nodes.raw.txt \
   --num_workers 8 \
   --variant_type snp \
   --view 0 \
@@ -297,11 +348,15 @@ Label tensors against a truth VCF:
 ```bash
 python -u scripts/label_tensors.py \
   tensors_chr1/variant_summary.ndjson \
-  candidate_nodes.json \
+  chr1.GRCh38.nodes.json \
   truth.vcf.gz \
   --chr chr1 \
   --data-dir tensors_chr1
 ```
+
+Manual truth labeling requires Step 3.3 because `label_tensors.py` needs
+`grch38_position_start`. The end-to-end workflow adds these coordinates to its
+candidate-node JSON automatically.
 
 ### 5. Model Training
 
