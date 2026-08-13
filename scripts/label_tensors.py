@@ -134,8 +134,14 @@ def main():
                     help="Chromosome name for VCF fetch (e.g., chr1)")
     ap.add_argument("--data-dir", required=True,
                     help="Directory containing *data.npy; labels will be written here")
-    ap.add_argument("--unknown-label", type=int, default=-1,
-                    help="Integer label to assign when no decision can be made (default: -1)")
+    ap.add_argument(
+        "--non-linear-label",
+        "--unknown-label",
+        dest="non_linear_label",
+        type=int,
+        default=-1,
+        help="Integer label for non-linear candidates without a GRCh38 coordinate (default: -1)",
+    )
     args = ap.parse_args()
 
     vs_path = args.variant_summary_ndjson
@@ -165,7 +171,7 @@ def main():
     out_f = open(out_classified_path, "w")
 
     total_lines = 0
-    total_true = total_false = total_unknown = 0
+    total_true = total_false = total_non_linear = 0
     start = time.time()
 
     log(f"Starting classification from {vs_path}...")
@@ -197,16 +203,16 @@ def main():
             try:
                 offset, vtype, v_ref, v_alt = _parse_key(key)
             except ValueError:
-                # cannot interpret key; mark unknown
+                # The candidate cannot be placed on the linear reference.
                 genomic_pos = None
-                label_int = args.unknown_label
-                classification = "unknown"
+                label_int = args.non_linear_label
+                classification = "non_linear_candidate"
             else:
                 start_pos = node_pos.get(node_id_int)
                 if start_pos is None:
                     genomic_pos = None
-                    label_int = args.unknown_label
-                    classification = "unknown"
+                    label_int = args.non_linear_label
+                    classification = "non_linear_candidate"
                 else:
                     genomic_pos = start_pos + offset  # 1-based coordinate
 
@@ -238,10 +244,10 @@ def main():
             arr = labels_by_shard[si]
             # Grow list if needed, then assign at index
             if len(arr) <= ii:
-                arr.extend([args.unknown_label] * (ii + 1 - len(arr)))
+                arr.extend([args.non_linear_label] * (ii + 1 - len(arr)))
             arr[ii] = label_int
-            if label_int == args.unknown_label:
-                total_unknown += 1
+            if label_int == args.non_linear_label:
+                total_non_linear += 1
 
             # Write updated record
             out_rec = dict(rec)
@@ -256,7 +262,8 @@ def main():
                 rate = total_lines / dt if dt > 0 else 0.0
                 log(
                     f"Classified {total_lines:,} variants "
-                    f"(true={total_true:,}, false={total_false:,}, unknown={total_unknown:,}) "
+                    f"(true={total_true:,}, false={total_false:,}, "
+                    f"non_linear_candidates={total_non_linear:,}) "
                     f"→ {rate:.1f} variants/s"
                 )
 
@@ -269,9 +276,9 @@ def main():
     # Now write *_labels.npy for each shard, matching the detected prefix
     log("Writing shard label arrays...")
     for shard_idx, labels_list in sorted(labels_by_shard.items()):
-        # Ensure no None; replace with unknown_label if any
+        # Ensure no None; use the non-linear candidate label for missing entries.
         labels_array = np.array(
-            [lbl if lbl is not None else args.unknown_label for lbl in labels_list],
+            [lbl if lbl is not None else args.non_linear_label for lbl in labels_list],
             dtype=np.int8,
         )
 
@@ -293,7 +300,7 @@ def main():
     log(f"Total variants classified: {total_lines:,}")
     log(f"True:    {total_true:,}")
     log(f"False:   {total_false:,}")
-    log(f"Unknown: {total_unknown:,}")
+    log(f"Non-linear candidates: {total_non_linear:,}")
     log(f"Elapsed time: {format_time(elapsed)}")
 
 if __name__ == "__main__":
