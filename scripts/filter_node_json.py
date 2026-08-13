@@ -126,7 +126,7 @@ def load_index(idx_path, dat_path=None):
     return node_index
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Function for reading JSON data (Unchanged)
+# Function for reading JSON data
 # ─────────────────────────────────────────────────────────────────────────────
 def load_json_data_ids_and_map(json_filepath):
     main_json_data = {}
@@ -135,10 +135,17 @@ def load_json_data_ids_and_map(json_filepath):
     try:
         with open(json_filepath, 'r') as f_json:
             main_json_data = json.load(f_json)
-            if not isinstance(main_json_data, dict):
-                print(f"Error: Root JSON content in {json_filepath} is not an object/dictionary.", file=sys.stderr)
+            if isinstance(main_json_data, list):
+                node_list_from_json = main_json_data
+            elif isinstance(main_json_data, dict):
+                node_list_from_json = main_json_data.get("nodes")
+            else:
+                print(
+                    f"Error: Root JSON content in {json_filepath} must be a list "
+                    "or an object containing a 'nodes' list.",
+                    file=sys.stderr,
+                )
                 return None, set(), {}
-            node_list_from_json = main_json_data.get("nodes")
             if not isinstance(node_list_from_json, list):
                 print(f"Warning: 'nodes' key not found or not a list in {json_filepath}.", file=sys.stderr)
                 return main_json_data, set(), {}
@@ -190,7 +197,11 @@ def filter_json_nodes_and_write(json_filepath, idx_filepath, output_json_filepat
     chromosome_for_vcf = None
     if vcf_file:
         print(f"Using pysam for VCF queries on: {vcf_file}")
-        path_pattern = main_json_structure.get("path_name_input_pattern")
+        path_pattern = (
+            main_json_structure.get("path_name_input_pattern")
+            if isinstance(main_json_structure, dict)
+            else None
+        )
         chromosome_for_vcf = extract_chromosome_from_path_pattern(path_pattern)
         if not chromosome_for_vcf:
             print(
@@ -298,8 +309,11 @@ def filter_json_nodes_and_write(json_filepath, idx_filepath, output_json_filepat
                   file=sys.stderr)
             ultimate_filtered_nodes_list = [json_nodes_map[node_id] for node_id in common_node_ids_int]
 
-    output_json_structure = copy.deepcopy(main_json_structure)
-    output_json_structure["nodes"] = ultimate_filtered_nodes_list
+    if isinstance(main_json_structure, list):
+        output_json_structure = ultimate_filtered_nodes_list
+    else:
+        output_json_structure = copy.deepcopy(main_json_structure)
+        output_json_structure["nodes"] = ultimate_filtered_nodes_list
     num_ultimate_nodes = len(ultimate_filtered_nodes_list)
     print(f"\nStep 5: Final processing complete. {num_ultimate_nodes} nodes will be in output JSON.")
 
