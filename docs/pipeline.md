@@ -154,3 +154,22 @@ MAP_JSON=/scratch/jshen/data/Pansoma/HG008_GIAB/AF_HPRC/tmp/hprc-v1.1-mc-grch38.
 VARIANT_SUMMARY=/scratch/jshen/data/Pansoma/HG008_GIAB/AF_HPRC/5ch_testing_data_SNV_chr1/variant_summary.ndjson \
 sbatch scripts/slurm/infer_pansoma_net.sh
 ```
+
+## 7. Panel Of Normals Filter
+
+After inference, use the four indexed GRCh38 PoNs documented in the main
+README to tag recurrent germline or technical-background sites:
+
+```bash
+python -u scripts/filter_panel_of_normals.py \
+  pansoma_sample.vcf.gz \
+  pansoma_sample.pon-tagged.vcf.gz \
+  --pon \
+    /path/to/pons/gnomad.r2.1.af-ge-0.001.sites.vcf.gz \
+    /path/to/pons/dbsnp.b138.non-somatic.sites.vcf.gz \
+    /path/to/pons/1000g-pon.sites.vcf.gz \
+    /path/to/pons/CoLoRSdb.GRCh38.v1.1.0.deepvariant.glnexus.af-ge-0.001.vcf.gz
+```
+
+PoN 1/2 use exact position/REF/ALT matching. PoN 3/4 use position matching.
+Matched records are tagged by default; add `--drop-matched` to remove them.

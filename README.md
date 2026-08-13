@@ -383,6 +383,50 @@ VARIANT_SUMMARY=/path/to/variant_summary.ndjson \
 sbatch scripts/slurm/infer_pansoma_net.sh
 ```
 
+### 7. Panel Of Normals Filter
+
+Download the four default GRCh38 PoNs once and create their Tabix indexes:
+
+```bash
+mkdir -p /path/to/pons
+cd /path/to/pons
+
+curl --fail --location --remote-name \
+  https://www.bio8.cs.hku.hk/clairs-to/databases/gnomad.r2.1.af-ge-0.001.sites.vcf.gz
+curl --fail --location --remote-name \
+  https://www.bio8.cs.hku.hk/clairs-to/databases/dbsnp.b138.non-somatic.sites.vcf.gz
+curl --fail --location --remote-name \
+  https://www.bio8.cs.hku.hk/clairs-to/databases/1000g-pon.sites.vcf.gz
+curl --fail --location --remote-name \
+  https://www.bio8.cs.hku.hk/clairs-to/databases/CoLoRSdb.GRCh38.v1.1.0.deepvariant.glnexus.af-ge-0.001.vcf.gz
+
+for pon in *.vcf.gz; do
+  tabix -f -p vcf "${pon}"
+done
+```
+
+Tag inference calls that occur in the PoNs:
+
+```bash
+python -u scripts/filter_panel_of_normals.py \
+  /path/to/results/pansoma_sample.vcf.gz \
+  /path/to/results/pansoma_sample.pon-tagged.vcf.gz \
+  --pon \
+    /path/to/pons/gnomad.r2.1.af-ge-0.001.sites.vcf.gz \
+    /path/to/pons/dbsnp.b138.non-somatic.sites.vcf.gz \
+    /path/to/pons/1000g-pon.sites.vcf.gz \
+    /path/to/pons/CoLoRSdb.GRCh38.v1.1.0.deepvariant.glnexus.af-ge-0.001.vcf.gz
+```
+
+The output keeps every record and adds `FILTER=PanelOfNormals` plus a
+`PANSOMA_PON` INFO field to each match. Add `--drop-matched` to omit those
+records and produce a PoN-filtered call set instead. The script follows the
+[ClairS-TO default PoN rules](https://github.com/HKU-BAL/ClairS-TO): PoN 1
+(gnomAD) and PoN 2 (dbSNP) require exact position/REF/ALT matching, while PoN
+3 (1000G) and PoN 4 (CoLoRSdb) require position matching. Input calls and all
+four PoNs must use GRCh38 coordinates; both `chr1` and `1` contig naming are
+recognized.
+
 ## Key Scripts
 
 ```text
@@ -395,6 +439,7 @@ scripts/filter_node_json.py                filter node JSON by idx/chrom/truth V
 scripts/build_node_json.py                 candidate node JSON from idx + GFA
 scripts/generate_testing_tensors.py        sharded tensor generation
 scripts/label_tensors.py                   truth-VCF tensor labeling
+scripts/filter_panel_of_normals.py         tag/remove calls found in default PoNs
 scripts/classify_tensors.py                organize true/false tensor datasets
 scripts/visualize_tensor.py                tensor visualization
 scripts/pansoma_workflow.py                end-to-end Docker train/infer CLI
