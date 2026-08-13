@@ -21,9 +21,10 @@ BLOCK_HDR_SIZE = BLOCK_HDR_PACK.size              # 14 bytes
 # ─────────────────────────────────────────────────────────────────────────────
 def load_index(idx_path, dat_path=None):
     """
-    Read .idx produced by your new writer. Supports:
-      - NEW: per-entry 26 bytes: <I Q I I H I>
-      - OLD: per-entry 22 bytes: <I Q I I H>
+    Read .idx files produced by current and legacy writers. Supports:
+      - CURRENT: per-entry 30 bytes: <I Q I I H I I>
+      - LEGACY: per-entry 26 bytes: <I Q I I H I>
+      - LEGACY: per-entry 22 bytes: <I Q I I H>
     Returns dict[node_id] = {
         "start": offset,
         "block_size": block_size,
@@ -51,10 +52,13 @@ def load_index(idx_path, dat_path=None):
                 return {}
             entry_size = remaining // count
 
-            # old (22) vs new (26)
-            if entry_size not in (22, 26):
-                # Be generous: default to new format if not cleanly divisible
-                entry_size = 26
+            if remaining != count * entry_size or entry_size not in (22, 26, 30):
+                print(
+                    f"Error: Unsupported IDX layout in {idx_path}: "
+                    f"count={count}, remaining_bytes={remaining}, entry_size={entry_size}",
+                    file=sys.stderr,
+                )
+                return {}
 
             f.seek(4)
             for i in range(count):
@@ -63,7 +67,12 @@ def load_index(idx_path, dat_path=None):
                     print(f"Error: Truncated .idx at entry {i} in {idx_path}", file=sys.stderr)
                     return {}
 
-                if entry_size == 26:
+                if entry_size == 30:
+                    node_id, offset, block_size, n_records, flags, _max_read_len, _max_cigar_len = struct.unpack(
+                        "<I Q I I H I I", data
+                    )
+                    node_len = 0
+                elif entry_size == 26:
                     node_id, offset, block_size, n_records, flags, node_len = struct.unpack("<I Q I I H I", data)
                 else:  # 22 bytes (old)
                     node_id, offset, block_size, n_records, flags = struct.unpack("<I Q I I H", data)

@@ -236,16 +236,17 @@ sample.unperfect_nodes.idx
 
 ### 3. Graph Node Mapping
 
-This stage prepares two required inputs for tensor generation:
+This stage prepares two inputs for tensor generation:
 
-1. Per-chromosome node-filter text files.
-2. A candidate-node JSON containing node IDs and sequences.
+1. **Per-chromosome node-filter text files** define which graph nodes belong
+   to each chromosome. Tensor generation uses them to restrict processing to
+   the selected chromosome instead of scanning every candidate node.
+2. **A candidate-node JSON** connects the candidate node IDs in the sample
+   `.idx` file to their graph sequences and, where available, their GRCh38
+   coordinates. Tensor generation uses the sequence as the reference context,
+   and truth labeling uses the coordinate to query the VCF.
 
-The optional GRCh38-only JSON workflow is needed only for manual coordinate-
-based truth labeling or gnomAD AF annotation. The end-to-end `pansoma train`
-and `pansoma infer` commands create and enrich these resources automatically.
-
-#### 3.1 Required: Build Chromosome Node Filters
+#### 3.1 Build Chromosome Node Filters
 
 Build the graph-component and GRCh38-path node sets for each chromosome:
 
@@ -267,51 +268,24 @@ omitted, output is written under
 The files consumed later by `generate_testing_tensors.py --chr_nodes` are:
 
 ```text
-/path/to/chr_node_filters/chr1/chr1.component.nodes.raw.txt
-/path/to/chr_node_filters/chr1/chr1.GRCh38_path.nodes.raw.txt
+/path/to/chr_node_filters/chr*/chr*.component.nodes.raw.txt
+/path/to/chr_node_filters/chr*/chr*.GRCh38_path.nodes.raw.txt
 ```
 
-The remaining comparison files and `summary.tsv` are diagnostic outputs.
+The remaining comparison files and `summary.tsv` provide node-set statistics
+that can be used to verify the graph resources.
 
-#### 3.2 Required: Build The Candidate-Node JSON
+#### 3.2 Build And Filter The GRCh38 Path JSON
 
-Read candidate node IDs from the sample `.idx` and retrieve their sequences
-from the matching GFA:
-
-```bash
-python -u scripts/build_node_json.py \
-  --gfa graph.gfa \
-  --idx sample.unperfect_nodes.idx \
-  --out candidate_nodes.json
-```
-
-Input:
-
-- `graph.gfa`: node sequences from the same graph used for alignment.
-- `sample.unperfect_nodes.idx`: candidate node IDs identified from the GAM.
-
-Output:
-
-- `candidate_nodes.json`: the `node_id` and `sequence` records required by
-  `generate_testing_tensors.py`.
-
-#### 3.3 Optional: GRCh38 Coordinates, Reference-Only Filtering, And AF
-
-Skip this subsection when using the end-to-end `pansoma train` or
-`pansoma infer` workflow. Use it only when manually labeling tensors against a
-truth VCF, restricting candidates to the GRCh38 path, or adding gnomAD AF.
-
-First, build a coordinate-aware JSON for one GRCh38 chromosome path:
+Build a coordinate-aware JSON for the GRCh38 chromosome path:
 
 ```bash
 python -u scripts/build_grch38_path_json.py graph.gfa '^W\tGRCh38\t0\tchr1' \
   -o chr1.GRCh38.nodes.json
 ```
 
-This output contains `node_id`, `sequence`, `grch38_position_start`, length,
-and strand. It can be passed to `label_tensors.py` as the reference-node JSON.
-
-Optionally restrict that JSON to nodes also present in the sample `.idx`:
+This file contains each GRCh38-path node's ID, sequence, starting coordinate,
+length, and orientation. Filter it to nodes present in the sample `.idx`:
 
 ```bash
 python -u scripts/filter_node_json.py \
@@ -320,8 +294,26 @@ python -u scripts/filter_node_json.py \
   chr1.filtered.nodes.json
 ```
 
-`chr1.filtered.nodes.json` is a reference-only alternative and is not consumed
-by the default whole-graph workflow.
+The output `chr1.filtered.nodes.json` retains the GRCh38 coordinates for the
+sample candidate nodes and is used to enrich the final candidate-node JSON.
+
+#### 3.3 Build The Candidate-Node JSON
+
+Read all candidate node IDs from the sample `.idx`, retrieve their sequences
+from the GFA, and copy GRCh38 coordinate fields from the filtered JSON when a
+node is on the reference path:
+
+```bash
+python -u scripts/build_node_json.py \
+  --gfa graph.gfa \
+  --idx sample.unperfect_nodes.idx \
+  --input_json chr1.filtered.nodes.json \
+  --out candidate_nodes.json
+```
+
+The resulting `candidate_nodes.json` contains all candidate nodes from the
+`.idx`. Reference-path nodes retain their GRCh38 coordinates, while graph-only
+nodes retain their node IDs and sequences.
 
 ### 4. Tensor Generation And Labeling
 
@@ -348,15 +340,11 @@ Label tensors against a truth VCF:
 ```bash
 python -u scripts/label_tensors.py \
   tensors_chr1/variant_summary.ndjson \
-  chr1.GRCh38.nodes.json \
+  candidate_nodes.json \
   truth.vcf.gz \
   --chr chr1 \
   --data-dir tensors_chr1
 ```
-
-Manual truth labeling requires Step 3.3 because `label_tensors.py` needs
-`grch38_position_start`. The end-to-end workflow adds these coordinates to its
-candidate-node JSON automatically.
 
 ### 5. Model Training
 
