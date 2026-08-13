@@ -372,16 +372,26 @@ sbatch scripts/slurm/train_pansoma_net.sh
 
 ### 6. Model Inference
 
-Inference wrapper:
+Run inference directly from the repository root:
 
 ```bash
-INPUT_DIR=/path/to/tensor_shards \
-CKPT=/path/to/model.pth \
-OUT_PREFIX=/path/to/results/pansoma_sample \
-MAP_JSON=/path/to/candidate_nodes.json \
-VARIANT_SUMMARY=/path/to/variant_summary.ndjson \
-sbatch scripts/slurm/infer_pansoma_net.sh
+python -u machine_learning/pansoma_net/scripts/test_5channels_npy_pansoma.py \
+  --input_dir /path/to/tensor_shards \
+  --ckpt /path/to/model.pth \
+  --out_prefix /path/to/results/pansoma_sample \
+  --input_mode shard \
+  --map_json /path/to/candidate_nodes.json \
+  --variant_summary /path/to/tensor_shards/variant_summary.ndjson \
+  --batch_size 32 \
+  --num_workers 4 \
+  --device auto \
+  --emit linear \
+  --gpu-normalize
 ```
+
+This writes `pansoma_sample.linear.vcf.gz` and its Tabix index
+`pansoma_sample.linear.vcf.gz.tbi`. The checkpoint must be compatible with the
+5-channel Pansoma model.
 
 ### 7. Panel Of Normals Filter
 
