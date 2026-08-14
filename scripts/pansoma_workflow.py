@@ -83,6 +83,71 @@ def is_complete(path: Path) -> bool:
     return path.is_file() and path.stat().st_size > 0
 
 
+def file_signature(path_text: Optional[str]) -> Optional[dict[str, object]]:
+    if not path_text:
+        return None
+    path = Path(path_text).expanduser().resolve()
+    signature: dict[str, object] = {"path": str(path)}
+    if path.is_file():
+        stat = path.stat()
+        signature.update({"size": stat.st_size, "mtime_ns": stat.st_mtime_ns})
+    else:
+        signature["missing"] = True
+    return signature
+
+
+def inference_configuration(args: argparse.Namespace, checkpoint: Path) -> dict[str, object]:
+    """Return the result-affecting inputs used to validate inference caches."""
+    return {
+        "schema_version": 1,
+        "sample": args.sample,
+        "checkpoint": file_signature(str(checkpoint)),
+        "fastq1": file_signature(args.fastq1),
+        "fastq2": file_signature(args.fastq2),
+        "gbz": file_signature(args.gbz),
+        "min_index": file_signature(args.min_index),
+        "dist_index": file_signature(args.dist_index),
+        "zipcode_index": file_signature(args.zipcode_index),
+        "gfa": file_signature(args.gfa),
+        "chromosomes": list(args.chromosomes),
+        "mapper_preset": args.mapper_preset,
+        "variant_type": args.variant_type,
+        "min_af": args.min_af,
+        "min_variants": args.min_variants,
+        "min_allele_bq": args.min_allele_bq,
+        "min_mapq": args.min_mapq,
+        "max_indel_len": args.max_indel_len,
+        "shard_size": args.shard_size,
+        "batch_size": args.batch_size,
+        "device": args.device,
+        "min_true_prob": args.min_true_prob,
+        "min_true_prob_no_anchor": args.min_true_prob_no_anchor,
+    }
+
+
+def indexed_vcf_matches_manifest(
+    vcf: Path,
+    manifest: Path,
+    expected: dict[str, object],
+) -> bool:
+    index_ready = is_complete(Path(str(vcf) + ".tbi")) or is_complete(
+        Path(str(vcf) + ".csi")
+    )
+    if not is_complete(vcf) or not index_ready or not is_complete(manifest):
+        return False
+    try:
+        with manifest.open("r", encoding="utf-8") as handle:
+            observed = json.load(handle)
+    except (OSError, json.JSONDecodeError):
+        return False
+    return observed == expected
+
+
+def clear_indexed_vcf(vcf: Path, manifest: Path) -> None:
+    for path in (vcf, Path(str(vcf) + ".tbi"), Path(str(vcf) + ".csi"), manifest):
+        path.unlink(missing_ok=True)
+
+
 def run_if_missing(
     name: str,
     command: Sequence[str],
@@ -803,6 +868,7 @@ def train(args: argparse.Namespace) -> None:
 
 def infer(args: argparse.Namespace) -> None:
     checkpoint = require_file(args.checkpoint, "model checkpoint")
+    inference_config = inference_configuration(args, checkpoint)
     output_vcf = (
         Path(args.output_vcf).expanduser().resolve()
         if args.output_vcf
@@ -810,7 +876,9 @@ def infer(args: argparse.Namespace) -> None:
     )
     if not str(output_vcf).endswith(".vcf.gz"):
         raise SystemExit("ERROR: --output-vcf must end with .vcf.gz")
-    if is_complete(output_vcf):
+    output_manifest = Path(str(output_vcf) + ".manifest.json")
+    final_expected = {"scope": "merged", "inference": inference_config}
+    if indexed_vcf_matches_manifest(output_vcf, output_manifest, final_expected):
         log(f"reuse inference result: {output_vcf}")
         return
 
@@ -820,7 +888,14 @@ def infer(args: argparse.Namespace) -> None:
     for chromosome, tensor_dir in tensor_dirs.items():
         out_prefix = paths["results"] / f"{args.sample}.{chromosome}"
         chrom_vcf = Path(str(out_prefix) + ".linear.vcf.gz")
-        if not is_complete(chrom_vcf):
+        chrom_manifest = Path(str(chrom_vcf) + ".manifest.json")
+        chrom_expected = {
+            "scope": "chromosome",
+            "chromosome": chromosome,
+            "inference": inference_config,
+        }
+        if not indexed_vcf_matches_manifest(chrom_vcf, chrom_manifest, chrom_expected):
+            clear_indexed_vcf(chrom_vcf, chrom_manifest)
             command = [
                 PYTHON,
                 "scripts/test_5channels_npy_pansoma.py",
@@ -844,18 +919,25 @@ def infer(args: argparse.Namespace) -> None:
                 args.device,
                 "--emit",
                 "linear",
-                "--gpu-normalize",
+                "--normalize",
                 "--min_true_prob",
                 str(args.min_true_prob),
                 "--min_true_prob_no_anchor",
                 str(args.min_true_prob_no_anchor),
             ]
             run(command, cwd=ML_ROOT)
-        if not is_complete(chrom_vcf):
-            raise SystemExit(f"ERROR: inference produced no VCF for {chromosome}")
+            if not is_complete(chrom_vcf) or not is_complete(Path(str(chrom_vcf) + ".tbi")):
+                raise SystemExit(
+                    f"ERROR: inference produced no indexed VCF for {chromosome}"
+                )
+            atomic_json_dump(chrom_expected, chrom_manifest)
         per_chromosome.append(chrom_vcf)
 
+    clear_indexed_vcf(output_vcf, output_manifest)
     merge_linear_vcfs(per_chromosome, output_vcf)
+    if not is_complete(output_vcf) or not is_complete(Path(str(output_vcf) + ".tbi")):
+        raise SystemExit(f"ERROR: inference merge produced no indexed VCF: {output_vcf}")
+    atomic_json_dump(final_expected, output_manifest)
     log(f"inference VCF: {output_vcf}")
 
 

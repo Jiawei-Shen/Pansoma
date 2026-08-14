@@ -201,10 +201,13 @@ Inference writes:
 ```text
 HG008T.pansoma.vcf.gz
 HG008T.pansoma.vcf.gz.tbi
+HG008T.pansoma.vcf.gz.manifest.json
 ```
 
 Per-chromosome linear VCFs are produced first and then streamed into one
-BGZF-compressed, Tabix-indexed VCF.
+BGZF-compressed, Tabix-indexed VCF. The manifest records the checkpoint,
+inference thresholds, input resources, and tensor-generation settings used to
+produce the result.
 
 ## Restart Behavior
 
@@ -212,8 +215,10 @@ All expensive intermediate files are stored under `--work-dir`. If a command
 is restarted with the same arguments and work directory, completed GAM,
 `.pkl`, `.dat/.idx`, candidate node-map, tensor, label, and per-chromosome
 inference stages are reused. Graph resources are keyed by a GBZ/GFA
-fingerprint, and truth labels are keyed by a truth-VCF fingerprint. Use a new
-work directory when changing FASTQ inputs or tensor-generation parameters.
+fingerprint, truth labels are keyed by a truth-VCF fingerprint, and inference
+VCFs are reused only when their index and configuration manifest are complete
+and match the requested checkpoint and parameters. Use a new work directory
+when changing FASTQ inputs or tensor-generation parameters.
 
 Run command-specific help with:
 

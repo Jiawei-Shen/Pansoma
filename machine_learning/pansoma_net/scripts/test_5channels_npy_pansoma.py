@@ -6,7 +6,7 @@ Main speedups vs your original:
 1) Vectorized keep-mask on GPU (loop only over kept indices, not every sample).
 2) Faster variant_summary lookup: store as per-shard list (O(1) index), avoids (sidx,iws) tuple hashing.
 3) Avoid per-sample shard_index parsing in the hot path: precompute per-file shard_index once in Dataset.
-4) Move normalization to GPU (optional, enabled by default) to reduce DataLoader worker CPU load.
+4) Normalize on the selected CPU or CUDA device when --normalize is enabled.
 5) Use torch.inference_mode() + optional AMP autocast for faster inference on CUDA.
 
 Behavior/outputs remain the same (no PoN filtering here; only inference->join->VCF outputs),
@@ -934,7 +934,7 @@ def run_inference_and_build_vcfs(
         alt_to_ref = {}
 
     mean_dev = std_dev = None
-    if gpu_normalize and device.type == "cuda":
+    if gpu_normalize:
         mean_dev = VAL_MEAN.to(device).view(1, -1, 1, 1)
         std_dev = VAL_STD.to(device).view(1, -1, 1, 1)
 
@@ -1110,8 +1110,16 @@ def main():
                    help="Node starts in --map_json are 1-based (default: true).")
 
     # Perf toggles
-    p.add_argument("--gpu-normalize", action="store_true",
-                   help="Normalize on GPU (recommended). If not set, inputs remain raw.")
+    p.add_argument(
+        "--normalize",
+        "--gpu-normalize",
+        dest="gpu_normalize",
+        action="store_true",
+        help=(
+            "Normalize inputs on the selected device. --gpu-normalize is retained "
+            "as a backward-compatible alias."
+        ),
+    )
     p.add_argument("--amp", action="store_true",
                    help="Use CUDA autocast (fp16) during inference.")
 

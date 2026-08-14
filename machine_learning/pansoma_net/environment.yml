@@ -5,7 +5,7 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - python=3.8
+  - python=3.10
   - pip
   - pytorch=2.1.0
   - torchvision=0.16.0
@@ -13,4 +13,6 @@ dependencies:
   - numpy
   - matplotlib
   - pillow
-  - timm=0.5.4  # Added for Transformer saved_models in PyTorch
+  - timm=1.0.15
+  - tqdm
+  - pysam

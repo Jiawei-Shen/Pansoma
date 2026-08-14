@@ -24,7 +24,9 @@ PYTHON_MODULES = [
 
 ML_MODULES = [
     "torch",
+    "torchvision",
     "timm",
+    "tqdm",
 ]
 
 COMMANDS = [

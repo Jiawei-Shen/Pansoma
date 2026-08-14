@@ -39,16 +39,16 @@ compiled out there.
 ## Validate A Machine
 
 ```bash
-python scripts/check_environment.py
+python scripts/check_environment.py --ml
 ```
 
-This checks Python packages, command-line tools, and the compiled
+This checks Python and ML packages, command-line tools, and the compiled
 `fast_writer` extension. By default, missing external tools are reported as
 warnings so macOS development machines can still pass core validation. For a
 full Linux/HPC pipeline node, use:
 
 ```bash
-python scripts/check_environment.py --strict-external
+python scripts/check_environment.py --strict-external --ml
 ```
 
 ## External Tools

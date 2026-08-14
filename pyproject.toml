@@ -15,8 +15,13 @@ authors = [
 dependencies = [
   "numpy",
   "matplotlib",
+  "pillow>=10",
   "pysam",
   "pybind11",
+  "torch>=2.1",
+  "torchvision>=0.16",
+  "timm>=1.0,<2",
+  "tqdm>=4.66",
 ]
 
 [tool.setuptools.packages.find]
