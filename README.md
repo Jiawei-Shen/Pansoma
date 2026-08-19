@@ -376,9 +376,8 @@ python -u machine_learning/pansoma_net/scripts/train_5channels_npy_pansoma.py \
   --lr 0.0001 \
   --batch_size 32 \
   --num_workers 4 \
-  --loss_type focal \
-  --pos_weight 88 \
-  --gamma 2.0
+  --loss_type weighted_ce \
+  --pos_weight 88
 ```
 
 #### Optional 6-Channel Training

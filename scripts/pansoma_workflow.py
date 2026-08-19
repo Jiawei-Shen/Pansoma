@@ -1088,7 +1088,11 @@ def build_parser() -> argparse.ArgumentParser:
     train_parser.add_argument("--batch-size", type=int, default=32)
     train_parser.add_argument("--model-workers", type=int, default=4)
     train_parser.add_argument("--nproc-per-node", type=int, default=1, help="number of GPUs for DDP training")
-    train_parser.add_argument("--loss-type", choices=["focal", "weighted_ce"], default="focal")
+    train_parser.add_argument(
+        "--loss-type",
+        choices=["focal", "weighted_ce"],
+        default="weighted_ce",
+    )
     train_parser.add_argument("--pos-weight", type=float, default=88.0)
     train_parser.add_argument("--gamma", type=float, default=2.0)
     train_parser.add_argument("--training-data-ratio", type=float, default=1.0)

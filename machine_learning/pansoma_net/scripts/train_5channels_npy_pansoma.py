@@ -1111,7 +1111,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--loss_type",
         type=str,
-        default="focal",
+        default="weighted_ce",
         choices=["focal", "weighted_ce"],
     )
 
