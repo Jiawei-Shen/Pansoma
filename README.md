@@ -353,24 +353,51 @@ python -u scripts/label_tensors.py \
 
 ### 5. Model Training
 
-The current Pansoma tensors contain five channels. Arrange labeled shards under
-`train/` and `val/` before training:
+The current Pansoma tensors contain five channels. First convert the labeled
+Step 4 tensor shards into the `train/` and `val/` layout required by the
+trainer. For a quick test with one tensor directory, make a reproducible,
+label-stratified 80/20 sample split:
+
+```bash
+python -u scripts/prepare_training_shards.py \
+  --input-dir tensors_chr1 \
+  --output-dir training_dataset \
+  --val-fraction 0.2 \
+  --seed 20260818
+```
+
+The preparation script keeps binary labels `0` (false) and `1` (true), removes
+the `-1` non-linear candidates that cannot be used by the binary trainer, and
+copies large arrays in chunks. It writes a count report to
+`training_dataset/split_summary.json`.
+
+For production training, keep validation chromosomes separate instead of
+randomly splitting one chromosome. For example:
+
+```bash
+python -u scripts/prepare_training_shards.py \
+  --train-input-dir tensors_chr2 tensors_chr3 /path/to/other_training_chromosomes \
+  --val-input-dir tensors_chr1 \
+  --output-dir training_dataset
+```
+
+The resulting layout is:
 
 ```text
-/path/to/training_dataset/
+training_dataset/
 ├── train/
-│   ├── chr2_shard_00000_data.npy
-│   └── chr2_shard_00000_labels.npy
+│   ├── tensors_chr2_shard_00000_data.npy
+│   └── tensors_chr2_shard_00000_labels.npy
 └── val/
-    ├── chr1_shard_00000_data.npy
-    └── chr1_shard_00000_labels.npy
+    ├── tensors_chr1_shard_00000_data.npy
+    └── tensors_chr1_shard_00000_labels.npy
 ```
 
 Run the 5-channel trainer directly from the repository root:
 
 ```bash
 python -u machine_learning/pansoma_net/scripts/train_5channels_npy_pansoma.py \
-  --data_paths /path/to/training_dataset \
+  --data_paths training_dataset \
   --output_path /path/to/output_model \
   --epochs 70 \
   --lr 0.0001 \
@@ -379,6 +406,11 @@ python -u machine_learning/pansoma_net/scripts/train_5channels_npy_pansoma.py \
   --loss_type weighted_ce \
   --pos_weight 88
 ```
+
+The trainer writes checkpoints such as
+`/path/to/output_model/model_e067_f1_0.1784.pth`. Pass a compatible checkpoint
+from this directory to Step 6 with `--ckpt`. Inference uses the original Step 4
+tensor directory, not the filtered `training_dataset` directory.
 
 #### Optional 6-Channel Training
 
@@ -405,7 +437,7 @@ Run inference directly from the repository root:
 ```bash
 python -u machine_learning/pansoma_net/scripts/test_5channels_npy_pansoma.py \
   --input_dir /path/to/tensor_shards \
-  --ckpt /path/to/model.pth \
+  --ckpt /path/to/output_model/model_e067_f1_0.1784.pth \
   --out_prefix /path/to/results/pansoma_sample \
   --input_mode shard \
   --map_json /path/to/candidate_nodes.json \
@@ -502,6 +534,7 @@ scripts/filter_node_json.py                filter node JSON by idx/chrom/truth V
 scripts/build_node_json.py                 candidate node JSON from idx + GFA
 scripts/generate_testing_tensors.py        sharded tensor generation
 scripts/label_tensors.py                   truth-VCF tensor labeling
+scripts/prepare_training_shards.py         prepare binary train/validation shards
 scripts/filter_panel_of_normals.py         tag/remove calls found in default PoNs
 scripts/classify_tensors.py                organize true/false tensor datasets
 scripts/visualize_tensor.py                tensor visualization
