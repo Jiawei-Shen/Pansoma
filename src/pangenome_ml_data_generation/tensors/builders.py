@@ -666,6 +666,26 @@ def process_single_node_for_pileup(task_args):
         sys.stderr.write(f"Error [Node {node_id}]: {e}\n")
         return node_id, None, [], []
 
+    return build_tensors_from_segments(
+        node_id, node_sequence, aligned_read_segments,
+        min_af_threshold, min_variants_threshold, min_allele_bq_threshold,
+        variant_type_to_process, max_indel_len, worker_need_view,
+    )
+
+
+def build_tensors_from_segments(
+        node_id, node_sequence, aligned_read_segments,
+        min_af_threshold=0.05, min_variants_threshold=3,
+        min_allele_bq_threshold=10.0, variant_type_to_process='all',
+        max_indel_len=50, worker_need_view=False):
+    """Build legacy-compatible tensors from forward-oriented in-memory segments.
+
+    Shared by the packed-store reader and the indexed GAM pipeline. The caller
+    supplies quality-filtered segments in source order. Sorting/truncation below
+    deliberately retains the established tensor builder's behavior.
+    """
+    node_len = len(node_sequence)
+    aligned_read_segments = list(aligned_read_segments)
     aligned_read_segments.sort(
         key=lambda s: _non_M_length(s["cigar_ops"], variant_type_to_process),
         reverse=True

@@ -1,0 +1,190 @@
+"""Synthetic regression checks; no external graph or vg executable needed."""
+from collections import Counter
+import argparse
+from contextlib import redirect_stdout
+import gzip
+import importlib.util
+import io
+import json
+from pathlib import Path
+import struct
+import sys
+import tempfile
+import unittest
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path[:0] = [str(ROOT), str(ROOT / "src")]
+import numpy as np
+import pysam
+import vg_pb2
+from indexed_gam_pipeline.gam_reader import IndexedGam, scan_gam, varint
+from indexed_gam_pipeline.segments import raw_segments, orient
+from indexed_gam_pipeline.run import batches, build
+from pangenome_ml_data_generation.tensors.builders import build_tensors_from_segments
+
+
+def vi(value):
+    out = bytearray()
+    while value > 127:
+        out.append((value & 127) | 128)
+        value >>= 7
+    out.append(value)
+    return bytes(out)
+
+
+def alignment(nodes=(10,), reverse=False, mapq=60, mutation=True):
+    a = vg_pb2.Alignment(name="same-name", mapping_quality=mapq)
+    for nid in nodes:
+        m = a.path.mapping.add()
+        m.position.node_id = nid
+        m.position.is_reverse = reverse
+        if mutation:
+            m.edit.add(from_length=2, to_length=2)
+            m.edit.add(from_length=1, to_length=1, sequence="T")
+            m.edit.add(from_length=3, to_length=3)
+            a.sequence += "AATAAA"
+        else:
+            m.edit.add(from_length=6, to_length=6)
+            a.sequence += "AAAAAA"
+    a.quality = bytes([30] * len(a.sequence))
+    return a
+
+
+def fixture(directory):
+    path = Path(directory) / "tiny.gam"
+    # Includes distinct records sharing a name, exact duplicates, a mapping
+    # whose non-initial node is queried, and a wide cross-bin alignment.
+    rows = [alignment((10,)), alignment((10,)), alignment((10, 30)),
+            alignment((20,)), alignment((20, 1000)), alignment((30,))]
+    bins = {}
+    with pysam.BGZFile(str(path), "wb") as stream:
+        for a in rows:
+            start = stream.tell()
+            raw = a.SerializeToString()
+            stream.write(vi(2) + vi(3) + b"GAM" + vi(len(raw)) + raw)
+            stream.flush()  # Store canonical BGZF offsets at block boundaries.
+            end = stream.tell()
+            ids = [m.position.node_id for m in a.path.mapping]
+            shift = max(1, (min(ids) ^ max(ids)).bit_length())
+            number = (min(ids) >> shift) + ((1 << (64 - shift)) - 1)
+            bins.setdefault(number, []).append((start, end))
+    payload = b"GAI!" + vi(1) + vi(len(bins))
+    for number, runs in bins.items():
+        payload += vi(number) + vi(len(runs))
+        for start, end in runs:
+            payload += vi(start) + vi(end)
+    payload += vi(0)  # Query implementation does not require window speedup.
+    with gzip.open(str(path) + ".gai", "wb") as stream:
+        stream.write(payload)
+    return path, rows
+
+
+class PipelineTest(unittest.TestCase):
+    def test_index_matches_full_scan_with_duplicates_and_cross_node_reads(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path, _ = fixture(directory)
+            reader = IndexedGam(path)
+            for nodes in ({10}, {30}, {1000}, {10, 20, 30}, {999999}):
+                expected = Counter(a.SerializeToString() for a in scan_gam(path)
+                                   if any(m.position.node_id in nodes for m in a.path.mapping))
+                got = Counter(a.SerializeToString() for a in reader.fetch(nodes))
+                self.assertEqual(expected, got)
+
+    def test_bad_index_and_truncated_varint_fail(self):
+        with self.assertRaises(ValueError):
+            varint(io.BytesIO(b"\x80"))
+        with tempfile.TemporaryDirectory() as directory:
+            path, _ = fixture(directory)
+            with gzip.open(str(path) + ".gai", "wb") as stream:
+                stream.write(b"GAI!" + vi(99))
+            with self.assertRaisesRegex(ValueError, "Unsupported"):
+                IndexedGam(path)
+
+    def test_segment_read_cursor_mapq_zero_quality_and_reverse(self):
+        a = alignment((10, 20), reverse=True)
+        a.sequence = "CCCCCCAATAAA"
+        a.quality = bytes([30] * 11 + [0])
+        nid, segment = list(raw_segments(a, {20}))[0]
+        self.assertEqual(nid, 20)
+        self.assertEqual(segment["read_sequence"], "AATAAA")
+        self.assertEqual(segment["processed_quality_values"][-1], 0)
+        forward = orient(segment, 10)
+        self.assertEqual(forward["offset_on_node"], 4)
+        self.assertEqual(forward["read_sequence"], "TTTATT")
+        self.assertEqual(forward["processed_quality_values"][0], 0)
+        self.assertEqual(list(raw_segments(alignment(mapq=10), {10})), [])
+        self.assertEqual(len(list(raw_segments(alignment(mapq=11), {10}))), 1)
+        self.assertEqual(list(raw_segments(alignment(mapq=11), {10}, 12)), [])
+
+    def test_batch_ownership(self):
+        result = list(batches([10, 20, 30, 500], 2, 100))
+        self.assertEqual(result, [[10, 20], [30], [500]])
+        a = alignment((10, 20, 30))
+        got = [nid for batch in result for nid, _ in raw_segments(a, set(batch))]
+        self.assertEqual(got, [10, 20, 30])
+
+    def test_synthetic_shard_and_summary_contract(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path, _ = fixture(directory)
+            folder = Path(directory)
+            (folder / "nodes.txt").write_text("10\n20\n30\n1000\n")
+            (folder / "nodes.json").write_text(json.dumps([
+                {"node_id": n, "sequence": "aaaaaa"} for n in (10, 20, 30, 1000)]))
+            args = argparse.Namespace(command="build", gam=str(path), index=None,
+                nodes=str(folder / "nodes.txt"), node_json=str(folder / "nodes.json"),
+                gfa=None, output=str(folder / "out"), batch_nodes=2, max_node_span=100,
+                max_batch_segments=100, shard_size=2, min_mapq=10, min_af=.05,
+                min_variants=1, min_allele_bq=10., variant_type="all", max_indel_len=50)
+            with redirect_stdout(io.StringIO()):
+                build(args)
+            report = json.loads((folder / "out/run_report.json").read_text())
+            self.assertEqual(report["status"], "complete")
+            self.assertEqual(report["tensors"], 4)
+            self.assertEqual(report["shards"], 2)
+            summary = [json.loads(line) for line in
+                       (folder / "out/variant_summary.ndjson").read_text().splitlines()]
+            for i, meta in enumerate(summary):
+                self.assertEqual(meta["shard_index"], i // 2)
+                self.assertEqual(meta["index_within_shard"], i % 2)
+                tensor = np.load(folder / f"out/shard_{i // 2:05d}_data.npy")
+                self.assertEqual(tensor.shape, (2, 5, 201, 100))
+
+    def test_shared_core_matches_unchanged_legacy_dat_reader(self):
+        spec = importlib.util.spec_from_file_location("legacy_tensor", ROOT / "scripts/generate_testing_tensors.py")
+        legacy = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(legacy)
+        raw = []
+        for reverse in (False, True):
+            for mutation in (False, True):
+                raw.extend(segment for _, segment in raw_segments(
+                    alignment(reverse=reverse, mutation=mutation), {10}))
+        # Also cover insertion and deletion CIGARs in both source paths.
+        for ops, seq in (([(2, "M"), (1, "I"), (4, "M")], "AATAAAA"),
+                         ([(2, "M"), (1, "D"), (3, "M")], "AAAAA")):
+            item = dict(raw[0], cigar_ops=ops, read_sequence=seq,
+                        original_cigar_str="".join(f"{n}{op}" for n, op in ops),
+                        processed_quality_values=[30] * len(seq))
+            raw.append(item)
+        raw = raw * 3
+        R = max(len(s["read_sequence"]) for s in raw)
+        C = max(len(s["original_cigar_str"]) for s in raw)
+        layout = legacy.make_record_struct(R, C)
+        packed = legacy.BLOCK_HDR_PACK.pack(10, len(raw), 0, R, C)
+        for s in raw:
+            packed += layout.pack(s["offset_on_node"], s["read_sequence"].encode(),
+                                  bytes(s["processed_quality_values"]),
+                                  s["original_cigar_str"].encode(),
+                                  s["mapping_quality"], s["strand"].encode())
+        legacy.worker_dat_file = io.BytesIO(packed)
+        legacy.GLOBAL_NODE_SEQS = {10: "AAAAAA"}
+        expected = legacy.process_single_node_for_pileup((10, 0, len(raw), .05, 3, 10., "all", 10, 50))
+        actual = build_tensors_from_segments(10, "AAAAAA", [orient(s, 6) for s in raw])
+        self.assertGreater(len(actual[2]), 0)
+        self.assertEqual(actual[3], expected[3])
+        np.testing.assert_array_equal(np.stack(actual[2]), np.stack(expected[2]))
+        self.assertEqual(actual[2][0].shape, (5, 201, 100))
+        self.assertEqual(actual[2][0].dtype, np.int8)
+
+
+if __name__ == "__main__":
+    unittest.main()
