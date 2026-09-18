@@ -1,0 +1,45 @@
+{
+  "passed": true,
+  "candidates": [
+    {
+      "candidate_id": "577:138:INS:>A",
+      "selected_alignments": 115,
+      "node_path_groups": 4,
+      "statistics_unchanged": true,
+      "six_channel_row_multiset_unchanged": true,
+      "debug_rows_still_paired": true
+    },
+    {
+      "candidate_id": "577:138:INS:>AT",
+      "selected_alignments": 115,
+      "node_path_groups": 4,
+      "statistics_unchanged": true,
+      "six_channel_row_multiset_unchanged": true,
+      "debug_rows_still_paired": true
+    },
+    {
+      "candidate_id": "577:138:SNP:T>A",
+      "selected_alignments": 115,
+      "node_path_groups": 4,
+      "statistics_unchanged": true,
+      "six_channel_row_multiset_unchanged": true,
+      "debug_rows_still_paired": true
+    },
+    {
+      "candidate_id": "1841:0:SNP:T>C",
+      "selected_alignments": 117,
+      "node_path_groups": 1,
+      "statistics_unchanged": true,
+      "six_channel_row_multiset_unchanged": true,
+      "debug_rows_still_paired": true
+    },
+    {
+      "candidate_id": "2189:0:SNP:C>A",
+      "selected_alignments": 72,
+      "node_path_groups": 1,
+      "statistics_unchanged": true,
+      "six_channel_row_multiset_unchanged": true,
+      "debug_rows_still_paired": true
+    }
+  ]
+}

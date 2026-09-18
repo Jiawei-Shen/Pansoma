@@ -1,3 +1,28 @@
+# Node-path row grouping — 2026-09-18
+
+Added a stable final row permutation to group candidate-v2 tensors by the ordered
+node IDs and orientations visible in the candidate window. Selection still uses
+ALT/REF/other, MAPQ and record hash before applying the row cap. Each group retains
+that selection order. Full statistics, selected records, all six channel values,
+and debug row/column mappings are unchanged. Legacy output is unchanged.
+
+**23 pipeline regression tests passed**, including new tests for grouping across
+support classes, retained ALT selection under a row cap, deterministic input
+reordering, unchanged per-record six-channel rows, orientation normalization,
+repeated visits, and ignoring distant branches outside the window.
+
+Rebuilt the same three-node HG008 subset at
+`tmp/indexed_gam_candidate_v2_grouped/`. All five candidates have identical
+coverage, ALT/REF/other counts, AF, selected records and candidate columns.
+Each tensor's complete six-channel row multiset is byte-identical to its previous
+version, and every debug row remains paired with the correct tensor row.
+Group memberships were independently reconstructed from debug graph coordinates.
+The grouped PNGs replace the v2 gallery previews; bulk arrays stay server-local.
+See `samples/grouping_validation.json` for per-candidate group counts.
+No genome-scale run was performed.
+
+---
+
 # Follow-up: legacy count audit and image visualization — 2026-09-18
 
 Rebuilt legacy tensors for the same three nodes using `--variant-type all`:

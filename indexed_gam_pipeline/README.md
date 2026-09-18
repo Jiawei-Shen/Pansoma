@@ -59,9 +59,15 @@ Candidate and counting contract:
   insufficient evidence. MAPQ applies to every counted record.
 - Each record counts once per candidate. With repeated visits, choose ALT over
   REF over other, then earliest mapping. Preserve the complete alignment in its
-  single row. Full counts and AF are computed before row selection. Rows sort by
-  ALT/REF/other, descending MAPQ, then serialized-record SHA256. Duplicate records
-  remain distinct; identical ties produce identical rows.
+  single row. Full counts and AF are computed before row selection. Row selection uses
+  ALT/REF/other, descending MAPQ, then serialized-record SHA256. After selection,
+  rows are stably grouped by their candidate-oriented node path visible in the
+  tensor window, ordered lexicographically by node ID and orientation. Within
+  each path group, the selection order is retained. All six channels and debug
+  metadata move together; counts, AF and the selected record set are unchanged.
+  Distant nodes outside the window do not split groups. Repeated visible visits
+  remain in the path key. `row_groups` gives half-open row ranges and node paths;
+  `row_order` records the rule. Duplicate records remain distinct.
 
 Window and encoding contract:
 

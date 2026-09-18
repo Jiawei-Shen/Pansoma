@@ -11,6 +11,7 @@ from types import SimpleNamespace
 import numpy as np
 
 VERSION = "indexed-gam-candidate-v2"
+ROW_ORDER = "candidate-oriented visible node path; within each path retain selection order"
 CHANNELS = ["read_base", "base_quality", "event_flags", "mapping_quality",
             "alignment_operation", "row_graph_reference_base"]
 BASES = {"A": 1, "C": 2, "G": 3, "T": 4, "N": 5, "-": 6}
@@ -271,6 +272,7 @@ def make_tensor(candidate, eligible, rows=200, width=100, debug=False):
     tensor = np.zeros((6, rows, width), dtype=np.int16)
     details = []
     omitted = []
+    row_paths = []
     selected = eligible[:rows]
     for ri, (read, support, visit) in enumerate(selected):
         cols = oriented_columns(read, visit, width)
@@ -299,6 +301,17 @@ def make_tensor(candidate, eligible, rows=200, width=100, debug=False):
         row = [None] * max(0, start-len(left)) + left[-start:] if start else []
         row += center + right[:width-start-span]
         row += [None] * (width-len(row))
+        # Group only the path actually visible in this candidate window. Distant
+        # branches outside the window must not split otherwise identical groups.
+        # Keep mapping transitions (including repeated visits), but ignore offsets
+        # and insertion/gap lengths when identifying a node path.
+        path = []
+        previous_visit = None
+        for col in row:
+            if col is not None and col.visit != previous_visit:
+                path.append((col.node, col.reverse))
+                previous_visit = col.visit
+        row_paths.append(tuple(path))
         for ci, col in enumerate(row):
             if col is not None:
                 tensor[:, ri, ci] = [BASES.get(col.read, 5), col.quality,
@@ -318,8 +331,25 @@ def make_tensor(candidate, eligible, rows=200, width=100, debug=False):
                 path=[dict(node_id=v.node, start=v.start, end=v.end, reverse=v.reverse,
                            mapping_index=v.index) for v in read.visits],
                 columns=[c.graph() if c is not None else None for c in row]))
+    # Selection remains support/MAPQ/hash-based. This final stable permutation
+    # groups paths without changing which records made the row cap.
+    order = sorted(range(len(selected)), key=lambda i: row_paths[i])
+    tensor[:, :len(selected), :] = tensor[:, order, :]
+    if debug:
+        details = [details[i] for i in order]
+    new_indices = {old: new for new, old in enumerate(order)}
+    omitted = sorted((dict(item, row_index=new_indices[item["row_index"]]) for item in omitted),
+                     key=lambda item: item["row_index"])
+    groups = []
+    for ri, original in enumerate(order):
+        path = [dict(node_id=node, reverse=reverse) for node, reverse in row_paths[original]]
+        if not groups or groups[-1]["path"] != path:
+            groups.append(dict(start_row=ri, end_row=ri+1, path=path))
+        else:
+            groups[-1]["end_row"] = ri+1
     counts = Counter(s for _, s, _ in eligible)
     return tensor, dict(candidate.metadata(), tensor_format_version=VERSION,
+        row_order=ROW_ORDER, row_groups=groups,
         candidate_columns=[start, start+span], coverage=len(eligible),
         alt_count=counts["alt"], ref_count=counts["ref"], other_count=counts["other"],
         af=counts["alt"]/len(eligible) if eligible else 0,

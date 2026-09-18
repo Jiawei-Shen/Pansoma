@@ -5,7 +5,7 @@ from pathlib import Path
 
 import numpy as np
 
-from indexed_gam_pipeline.candidates import (VERSION, CHANNELS, BASES, OPS,
+from indexed_gam_pipeline.candidates import (VERSION, CHANNELS, BASES, OPS, ROW_ORDER,
                                              decode_alignment, overlap, make_tensor)
 from indexed_gam_pipeline.gam_reader import IndexedGam
 from indexed_gam_pipeline.segments import on_chromosome
@@ -33,6 +33,7 @@ def build(args):
         insertion_overlap="closed boundary [mapping.start,mapping.end]; REF requires adjacent M/X columns on both sides",
         repeated_visits="one count and row per record; ALT then REF then other, earliest mapping breaks ties",
         row_selection="ALT then REF then other; descending MAPQ then record SHA256; identical records retained",
+        row_order=ROW_ORDER,
         gai_version=reader.version, nodes=len(nodes), shards=0, tensors=0,
         unsupported_events=0, filtered_candidates=0, debug_rows=args.debug_rows)
     write_json(out / "run_report.json", manifest)
