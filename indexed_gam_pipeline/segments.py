@@ -2,6 +2,10 @@
 from collections import defaultdict
 
 
+def on_chromosome(alignment, chromosome):
+    return not chromosome or any(pos.name == chromosome for pos in alignment.refpos)
+
+
 def raw_segments(alignment, wanted, min_mapq=10):
     # Preserve the original NPU writer's >10 gate plus tensor's >= threshold.
     if alignment.mapping_quality <= 10 or alignment.mapping_quality < min_mapq:

@@ -6,14 +6,15 @@ import gzip
 import hashlib
 import json
 from pathlib import Path
+import sqlite3
 import sys
 import time
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT), str(ROOT / "src")]
 
-from indexed_gam_pipeline.gam_reader import IndexedGam, scan_gam
-from indexed_gam_pipeline.segments import raw_segments, orient
+from indexed_gam_pipeline.gam_reader import IndexedGam, build_index, scan_gam
+from indexed_gam_pipeline.segments import on_chromosome, raw_segments, orient
 
 
 def write_json(path, data):
@@ -36,14 +37,23 @@ def load_nodes(path):
     return result
 
 
+def index_gam(args):
+    output = Path(args.output)
+    if output.exists():
+        raise ValueError(f"Index output already exists: {output}")
+    report = build_index(args.gam, output)
+    print(json.dumps(dict(gam=str(Path(args.gam).resolve()), index=str(output.resolve()),
+                          **report), indent=2))
+
+
 def discover(args):
     out = new_output(args.output)
     allowed = set(load_nodes(args.chr_nodes)) if args.chr_nodes else None
-    stats = defaultdict(lambda: [0, 0])
+    stats = defaultdict(lambda: [0, 0, 0, 0])
     count = 0
     for alignment in scan_gam(args.gam, args.max_alignments):
         count += 1
-        if alignment.mapping_quality <= 5:
+        if alignment.mapping_quality <= getattr(args, "min_mapq", 5) or not on_chromosome(alignment, getattr(args, "chr", "")):
             continue
         for mapping in alignment.path.mapping:
             nid = mapping.position.node_id
@@ -52,18 +62,27 @@ def discover(args):
             imperfect = any(e.from_length != e.to_length or e.sequence
                             for e in mapping.edit)
             stats[nid][int(imperfect)] += 1
+            stats[nid][2] = max(stats[nid][2], sum(e.to_length for e in mapping.edit))
+            cigar_length = sum(len(str(e.from_length if e.from_length == e.to_length
+                                       or e.to_length == 0 else e.to_length)) + 1
+                               for e in mapping.edit
+                               if e.from_length == e.to_length or not e.from_length or not e.to_length)
+            stats[nid][3] = max(stats[nid][3], cigar_length)
         if count % 100000 == 0:
             print(f"Scanned {count:,} alignments; {len(stats):,} nodes", flush=True)
-    selected = sorted(nid for nid, (p, n) in stats.items()
+    selected = sorted(nid for nid, (p, n, _, _) in stats.items()
                       if n >= 1 and n / (p + n) > args.node_alt)
     if args.max_nodes:
         selected = selected[:args.max_nodes]
     (out / "target_nodes.txt").write_text("".join(f"{n}\n" for n in selected))
     write_json(out / "node_stats.json", {
-        str(n): {"perfect": p, "not_perfect": q} for n, (p, q) in stats.items()})
+        str(n): {"perfect": p, "not_perfect": q,
+                 "max_read_length": r, "max_cigar_length": c}
+        for n, (p, q, r, c) in stats.items()})
     report = dict(gam=str(Path(args.gam).resolve()), alignments_scanned=count,
                   nodes_observed=len(stats), nodes_selected=len(selected),
                   node_alt=args.node_alt,
+                  chromosome=getattr(args, "chr", ""),
                   exploratory=bool(args.max_alignments or args.max_nodes),
                   max_alignments=args.max_alignments, max_nodes=args.max_nodes)
     write_json(out / "discovery_report.json", report)
@@ -88,6 +107,8 @@ def validate(args):
     indexed = Counter()
     indexed_segments = defaultdict(Counter)
     for alignment in reader.fetch(nodes, metrics):
+        if not on_chromosome(alignment, getattr(args, "chr", "")):
+            continue
         indexed[digest(alignment)] += 1
         for nid, segment in raw_segments(alignment, nodes):
             indexed_segments[nid][segment_digest(segment)] += 1
@@ -99,7 +120,8 @@ def validate(args):
     start = time.monotonic()
     for alignment in scan_gam(args.gam):
         scanned += 1
-        if any(m.position.node_id in nodes for m in alignment.path.mapping):
+        if on_chromosome(alignment, getattr(args, "chr", "")) and any(
+                m.position.node_id in nodes for m in alignment.path.mapping):
             expected[digest(alignment)] += 1
             for nid, segment in raw_segments(alignment, nodes):
                 expected_segments[nid][segment_digest(segment)] += 1
@@ -108,6 +130,7 @@ def validate(args):
     ok = indexed == expected and indexed_segments == expected_segments
     report = dict(passed=ok, gam=str(Path(args.gam).resolve()),
                   gai_version=reader.version, target_nodes=len(nodes),
+                  chromosome=getattr(args, "chr", ""),
                   sequential_alignments=scanned,
                   indexed_query=metrics,
                   expected_alignments=sum(expected.values()),
@@ -139,6 +162,18 @@ def node_records(args, nodes):
                 records[nid] = dict(record)
                 if records[nid].get("sequence"):
                     records[nid]["sequence"] = records[nid]["sequence"].upper()
+    if getattr(args, "node_sqlite", None):
+        uri = Path(args.node_sqlite).resolve().as_uri() + "?mode=ro"
+        with sqlite3.connect(uri, uri=True) as connection:
+            for nid in nodes:
+                row = connection.execute(
+                    "SELECT seq FROM nodes WHERE node_id = ?", (str(nid),)).fetchone()
+                if row and row[0] and row[0] != "*":
+                    sequence = row[0].upper()
+                    rec = records.setdefault(nid, {"node_id": str(nid)})
+                    if rec.get("sequence") and rec["sequence"] != sequence:
+                        raise ValueError(f"SQLite/JSON sequence mismatch at node {nid}")
+                    rec["sequence"] = sequence
     if args.gfa:
         opener = gzip.open if args.gfa.endswith(".gz") else open
         with opener(args.gfa, "rt") as stream:
@@ -169,7 +204,7 @@ def batches(nodes, size, max_span):
         yield batch
 
 
-def build(args):
+def build_legacy(args):
     import numpy as np
     from pangenome_ml_data_generation.tensors.builders import build_tensors_from_segments
 
@@ -182,7 +217,8 @@ def build(args):
     tensors, metadata = [], []
     shard = total = 0
     manifest = dict(status="running", arguments=vars(args), nodes=len(nodes),
-                    gai_version=reader.version, shape=[5, 201, 100], dtype="int8")
+                    gai_version=reader.version, tensor_format_version="indexed-gam-legacy-v1",
+                    shape=[5, 201, 100], dtype="int8")
     write_json(out / "run_report.json", manifest)
     with (out / "variant_summary.ndjson").open("w") as summary:
         def flush():
@@ -204,6 +240,8 @@ def build(args):
             metrics = {}
             segment_count = 0
             for alignment in reader.fetch(wanted, metrics):
+                if not on_chromosome(alignment, getattr(args, "chr", "")):
+                    continue
                 for nid, segment in raw_segments(alignment, wanted, args.min_mapq):
                     segments[nid].append(orient(segment, len(records[nid]["sequence"])))
                     segment_count += 1
@@ -228,6 +266,16 @@ def build(args):
     print(json.dumps(manifest, indent=2))
 
 
+def build(args):
+    if getattr(args, "format", "candidate-v2") == "legacy":
+        return build_legacy(args)
+    from indexed_gam_pipeline.build_v2 import build as candidate_build
+    for key, default in (("rows", 200), ("width", 100), ("debug_rows", False)):
+        if not hasattr(args, key):
+            setattr(args, key, default)
+    return candidate_build(args)
+
+
 def positive(value):
     number = int(value)
     if number <= 0:
@@ -245,20 +293,29 @@ def fraction(value):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
-    for name in ("discover", "validate", "build"):
+    for name in ("index", "discover", "validate", "build"):
         sub = commands.add_parser(name)
         sub.add_argument("--gam", required=True)
-        sub.add_argument("--output", required=True, help="New or empty output directory")
+        if name != "index":
+            sub.add_argument("--chr", default="", help="Match Alignment.refpos.name, as in the original GAM pipeline")
+        sub.add_argument("--output", required=True,
+                         help="New .gai file for index; new or empty directory otherwise")
         if name == "discover":
+            sub.add_argument("--min-mapq", type=int, default=5, help="Exclusive MAPQ threshold")
             sub.add_argument("--node-alt", type=fraction, default=0.05)
             sub.add_argument("--chr-nodes", help="Optional node whitelist text file")
             sub.add_argument("--max-alignments", type=positive, help="Exploratory partial scan ONLY")
             sub.add_argument("--max-nodes", type=positive, help="Limit selected nodes for smoke testing")
-        else:
+        elif name != "index":
             sub.add_argument("--nodes", required=True)
             sub.add_argument("--index", help="Default: GAM path + .gai")
         if name == "build":
+            sub.add_argument("--format", choices=("candidate-v2", "legacy"), default="candidate-v2")
+            sub.add_argument("--rows", type=positive, default=200)
+            sub.add_argument("--width", type=positive, default=100)
+            sub.add_argument("--debug-rows", action="store_true", help="Include row paths and column graph coordinates")
             sub.add_argument("--gfa", help="Matching GFA with original vg node IDs")
+            sub.add_argument("--node-sqlite", help="Matching graph node SQLite index (nodes.node_id, nodes.seq)")
             sub.add_argument("--node-json", help="node_id/sequence records, optionally with coordinates")
             sub.add_argument("--batch-nodes", type=positive, default=128)
             sub.add_argument("--max-node-span", type=positive, default=10000)
@@ -271,10 +328,11 @@ def main():
             sub.add_argument("--max-indel-len", type=positive, default=50)
             sub.add_argument("--variant-type", choices=("snp", "indel", "all"), default="all")
     args = parser.parse_args()
-    if args.command == "build" and not (args.gfa or args.node_json):
-        parser.error("build requires --gfa or --node-json")
+    if args.command == "build" and not (args.gfa or args.node_json or args.node_sqlite):
+        parser.error("build requires --gfa, --node-sqlite, or --node-json")
     try:
-        {"discover": discover, "validate": validate, "build": build}[args.command](args)
+        {"index": index_gam, "discover": discover,
+         "validate": validate, "build": build}[args.command](args)
     except (ValueError, OSError, KeyError) as exc:
         parser.exit(1, f"Error: {exc}\n")
 

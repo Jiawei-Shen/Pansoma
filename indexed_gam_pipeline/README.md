@@ -1,3 +1,146 @@
+# Indexed GAM candidate-centered tensors (v2)
+
+`build` now defaults to `--format candidate-v2`: one alignment per row,
+shape `(6, 200, 100)`, `int16`, with no reference row. Select `--format legacy`
+for the original `(5, 201, 100)` int8 tensors and existing checkpoints.
+Six-channel v2 is a new encoding and **cannot be consumed directly by existing
+five-channel checkpoints** (nor by an arbitrary older six-channel model).
+
+```bash
+python indexed_gam_pipeline/run.py build \
+  --gam tmp/HG008_pacbio_test.sorted.gam \
+  --index tmp/indexed_gam_current/rebuilt.gai \
+  --nodes tmp/indexed_gam_current/known_nodes.txt \
+  --node-sqlite /scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.GRCh38_CHM13_node_index.sqlite \
+  --output tmp/my_candidate_v2_run --batch-nodes 3 --debug-rows
+```
+
+Use a new output directory. `discover` retains imperfect-mapping node selection;
+its exclusive MAPQ threshold is configurable with `--min-mapq` (default 5).
+Build also retains its exclusive MAPQ threshold (default 10), chromosome filter,
+minimum ALT count/AF/BQ, variant type, batching, and shard size. Graph sequences
+must cover **all visited context nodes**, not just the target-node list. SQLite is
+recommended; GFA and JSON are supported. Queries merge indexed intervals and
+retain distinct records, including byte-identical records and same-name mates.
+An alignment can be fetched in multiple batches, but candidates belong to exactly
+one target-node batch. `--max-batch-segments` bounds complete alignment records
+in v2; long reads can still require substantial memory. No genome-scale performance
+or memory claim is made.
+
+Candidate and counting contract:
+
+- Candidates come directly from edits: equal lengths with empty sequence are
+  matches; replacements of equal length yield individual SNPs; insertions and
+  deletions are supported through 50 bp inclusive. Adjacent I or D edits are
+  merged before applying the length limit. No realignment against read bases is
+  used to discover candidates.
+- Coordinates are zero-based on the forward node. Reverse mappings use oriented
+  offsets and reverse-complement both alleles; identity is exact node, forward
+  position, REF, ALT and event type. Repeat-shift equivalence and equivalence
+  across nodes are not asserted. Graph-path-only variants are outside scope.
+- Oversized events and unequal positive-length replacements are written in full
+  to `unsupported_events.ndjson`; they never become supported candidate ALTs.
+  This log includes non-target context events and identifies batch/record indices
+  and `in_target_nodes`; a contextual event can recur in different query batches.
+  Complex context is marked operation C using ordered replacement slots, with
+  tail gaps for unequal lengths. It is not represented as a normalized CIGAR.
+- SNP/deletion coverage requires intersection with the affected reference
+  interval, including deletion spans. Partial interval overlap counts as coverage
+  but cannot establish REF. Insertion coverage includes either endpoint of a
+  consumed mapping interval (`start <= boundary <= end`), including terminal
+  boundaries and spanning deletions. There is no additional minimum flank rule.
+- Insertion REF requires adjacent M/X reference columns on both sides of the
+  boundary and no insertion at that boundary; neighbors can belong to different
+  nodes at a true node edge, but not at an interior partial-mapping endpoint. A terminal boundary with no inserted sequence is **other**, not REF.
+  Exact edit ALT support requires minimum BQ: SNP BQ, mean insertion BQ, or
+  minimum available adjacent read BQ for deletions. Absent qualities are -1.
+  Low-BQ ALT observations remain in coverage as other. REF counts require the
+  complete affected reference allele; other includes alternate alleles and
+  insufficient evidence. MAPQ applies to every counted record.
+- Each record counts once per candidate. With repeated visits, choose ALT over
+  REF over other, then earliest mapping. Preserve the complete alignment in its
+  single row. Full counts and AF are computed before row selection. Rows sort by
+  ALT/REF/other, descending MAPQ, then serialized-record SHA256. Duplicate records
+  remain distinct; identical ties produce identical rows.
+
+Window and encoding contract:
+
+| Channel (1-based) | Meaning |
+|---|---|
+| 1 | Actual read bases |
+| 2 | Base qualities |
+| 3 | Bit flags: difference/event = 1; candidate region = 2 |
+| 4 | Mapping quality (saturated at int16 maximum) |
+| 5 | Alignment operation |
+| 6 | That row's graph-reference bases |
+
+Base encoding: padding=0, A=1, C=2, G=3, T=4, N/unknown=5, alignment gap=6.
+Operation encoding: padding=0, M=1, X=2, I=3, D=4, C=5, G=6
+(G is an aligned absence in the shared insertion block). Quality is -1 when
+there is no read base or no recorded quality; ordinary padding is 0. Unused rows
+are all zero. In occupied rows the candidate flag marks the entire central range,
+including missing coverage. Missing insertion coverage keeps read padding but
+reference-gap channel values. Metadata disambiguates the candidate region.
+
+Each row follows all ordered mappings, using only consumed node slices, reversing
+sequence, quality order and context together when its anchor mapping is reversed.
+Node boundaries add no padding. Branches may differ: outside the shared anchor,
+columns describe candidate-relative context, not a common graph coordinate.
+Matched alternative graph nodes supply real reference bases. Context insertions
+stay within their row's path. For deletions, internal context insertions are
+retained in that row's central region; other rows pad spare central slots.
+If that entire central region exceeds the requested width, construction fails
+explicitly rather than dropping affected reference bases.
+
+Insertion candidates share a block equal to the longest observed boundary allele
+up to 50 bp (at least the candidate length). Alleles are left-aligned with trailing
+alignment gaps; insufficient boundary evidence uses padding. Oversized other
+insertion alleles remain other and are reported unsupported; any omitted columns
+in their tensor depiction are reported in `omitted_context`, never treated as a
+shorter supported allele. The candidate region is centered and consumes width;
+outer context is trimmed. `candidate_columns=[start,end)` specifies its full range.
+`--rows` and `--width` default to 200 and 100; width must accommodate the configured
+maximum INDEL size.
+
+Outputs: NPY shards `(N,6,rows,width)`, `variant_summary.ndjson`,
+`filtered_candidates.ndjson`, `unsupported_events.ndjson`, `target_nodes.txt`,
+`manifest.json` and matching `run_report.json`. The schema is version 2 and format
+is `indexed-gam-candidate-v2`. Summaries carry candidate identity/alleles, full
+ALT/REF/other/coverage/AF, selected counts, parameters and shard coordinates.
+`--debug-rows` adds original ordered mapping intervals, chosen visit, record hash,
+orientation, and column-to-node offsets/boundaries for every selected row.
+Generated real-data artifacts remain in ignored `tmp/`; the sample manifest
+records provenance and checksums without adding bulk data to Git.
+
+Export paired text rows (`.` padding, `-` gap) with:
+
+```bash
+python indexed_gam_pipeline/inspect_tensor.py tmp/my_candidate_v2_run tmp/my_candidate_v2_run/paired_rows.txt
+```
+
+Run regression tests with:
+
+```bash
+python -m unittest discover -s indexed_gam_pipeline/tests -v
+```
+
+Image visualization supports both formats through the existing CLI:
+
+```bash
+python scripts/visualize_tensor.py tmp/my_candidate_v2_run/shard_00000_data.npy --all-samples --output-dir tmp/my_candidate_v2_run/images
+```
+
+V2 format and candidate intervals are loaded from the adjacent manifest and
+summary; use `--format candidate-v2` for standalone arrays. The six panels retain
+row zero as an alignment, show distinct gaps/padding, mark the entire candidate
+range, and display the actual per-row reference channel. Existing five-channel
+rendering remains available. See [the portable comparison gallery](samples/README.md)
+for real-data PNGs, old/new counts, and the verified BQ-policy difference.
+
+The historical documentation below describes **legacy mode**.
+
+---
+
 # Indexed GAM → node pileup → tensors
 
 独立的新 pipeline。输入 sorted GAM 和对应 `.gai`，先确定目标 nodes，再按批
@@ -28,6 +171,7 @@ flowchart TD
 | `gam_reader.py` | 解析 GAI v0/v1、BGZF seek、精确 node 过滤 |
 | `segments.py` | mapping 拆分、质量过滤、负链转换 |
 | `tests/test_pipeline.py` | 索引读取与原 tensor 算法的合成回归检查 |
+| `samples/` | HG008 三节点真实 5-channel tensor、summary、节点和校验清单 |
 | `LOCAL_TEST_REPORT.md` | 本次真实 GAM 本地测试记录 |
 
 共享 tensor 核心位于
@@ -44,7 +188,8 @@ conda activate pangenome-ml-data-generation
 python indexed_gam_pipeline/run.py --help
 ```
 
-需要 Python、NumPy、pysam 和 `protobuf==3.20.3`，复用仓库的 `vg_pb2.py`。
+需要 Python、NumPy、pysam 和 protobuf。此目录内的 `vg_pb2.py` 由
+`cpp/proto/vg.proto` 用 protoc 3.20.3 生成，可使用当前 protobuf C 实现。
 GAM 必须为带 `GAM` tag 的 BGZF GAM，`.gai` 必须对应这份 GAM。
 文件名/索引范围校验不能证明两者来自同一次排序；不要复用另一份 GAM 的索引。
 不支持 GAF。第一版采用单进程、顺序批处理，便于结果核对。
@@ -91,13 +236,18 @@ python indexed_gam_pipeline/run.py discover \
 ```
 
 可加 `--chr-nodes /path/to/chr1.component.nodes.raw.txt` 限制目标 node 集合。
+也可用 `--chr chr1` 按 GAM `Alignment.refpos.name` 过滤，与原发现及
+`.dat/.idx` 构建命令的 chromosome 语义相同；同一 `--chr` 应传给
+`discover`、`validate` 和 `build`。
 已有确定的 node 清单时可直接跳到第二步。清单格式为每行一个正整数 node ID。
 统计输出包括 `node_stats.json`、`target_nodes.txt`、`discovery_report.json`。
+`node_stats.json` 保留旧发现阶段的四字段 schema：`perfect`、
+`not_perfect`、`max_read_length`、`max_cigar_length`。
 
 ### 2. 直接生成 tensors
 
 ```bash
-python indexed_gam_pipeline/run.py build \
+python indexed_gam_pipeline/run.py build --format legacy \
   --gam /path/to/sample.sorted.gam \
   --nodes /path/to/run/discovery/target_nodes.txt \
   --gfa /path/to/matching_graph.gfa \
@@ -113,7 +263,14 @@ python indexed_gam_pipeline/run.py build \
   --shard-size 4096
 ```
 
-`--gfa` 和 `--node-json` 至少提供一个；两者支持 gzip。
+`--gfa`、`--node-sqlite` 和 `--node-json` 至少提供一个。
+`--node-sqlite` 读取匹配图的 `nodes(node_id, seq)` 表，适合已有 GFA
+节点索引、无需重新扫描大型 GFA 的场景；SQLite 与 JSON 序列冲突时会报错。
+GFA 与 JSON 支持 gzip。
+
+这条路径仍使用原 `build_dat_idx.py` 的 segment 字段语义：node 内 offset、
+read sequence、原始 Phred BQ、M/X/I/D CIGAR、strand 和 alignment MAPQ。
+GAM/GAI 查询直接填充这些内存字段，再调用原 tensor 核心；不写 `.dat/.idx`。
 只有 GFA 时也能生成 tensors，但不会自动计算 GRCh38 坐标。
 JSON 格式沿用原流程：记录列表或 `{"nodes": [...]}`，每条包含 `node_id`、
 `sequence`，已有的坐标字段原样保留。JSON 可以只覆盖参考路径 nodes，其他
@@ -121,6 +278,16 @@ JSON 格式沿用原流程：记录列表或 `{"nodes": [...]}`，每条包含 `
 若 JSON 已覆盖全部目标 nodes，可以省略 GFA。
 
 默认读取 `<gam>.gai`，非默认位置可用 `--index /path/to/index.gai`。
+若 `.gai` 来自另一版 sorted GAM，可从当前 GAM 重建索引：
+
+```bash
+python indexed_gam_pipeline/run.py index \
+  --gam /path/to/sample.sorted.gam \
+  --output /path/to/sample.rebuilt.gai
+```
+
+`index` 只写新的 GAI 文件，不覆盖已有文件；后续 `build` / `validate`
+使用 `--index /path/to/sample.rebuilt.gai`。索引会扫描完整 GAM。
 
 输出：
 
@@ -137,6 +304,12 @@ tensors/
 reads，窗口宽度 100。五通道及 summary 的 `shard_index`、
 `index_within_shard` 字段保持原格式。`run_report.json` 的 `status=complete`
 表示成功；中途失败时保留 `running`，不要把这种目录用于下游。
+
+五通道顺序为 base、base quality、mismatch flag、mapping quality、CIGAR。
+`samples/hg008_3nodes_data.npy.gz` 保存三个真实 SNV tensor，可用
+`numpy.load(io.BytesIO(gzip.open(path, 'rb').read()))` 读取；对应的 summary、
+node records 和行顺序无关的 SHA-256 位于 `samples/`。样本每个 tensor 的
+完整 read 行多重集合与旧 NPU 输出逐字节一致，read 行顺序可能不同。
 
 ### 3. 沿用现有 labeling / inference
 

@@ -1,0 +1,23 @@
+[
+  {
+    "node_id": "577",
+    "grch38_position_start": 860041,
+    "strand_in_path": "+",
+    "length": 152,
+    "sequence": "GCTTCATTTCATTCCACAATTTCCTGTGTACTGTTTATTACAAGAAGAAAAAATTTCCTGCCATACAAAATGCTCCATGCAGGTAGAACCAGGAATCTAAAGAAACCTGAGGAAGGTGCTAGAATCATCACTACCATCTTTTTTTTTTTTTT"
+  },
+  {
+    "node_id": "1841",
+    "grch38_position_start": 813107,
+    "strand_in_path": "+",
+    "length": 1,
+    "sequence": "T"
+  },
+  {
+    "node_id": "2189",
+    "grch38_position_start": 798049,
+    "strand_in_path": "+",
+    "length": 1,
+    "sequence": "C"
+  }
+]

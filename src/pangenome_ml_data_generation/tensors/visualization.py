@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Visualize one 5-channel pileup tensor stored in an NPY file or shard."""
+"""Render legacy five-channel and versioned candidate-v2 six-channel tensors."""
 
 import argparse
 import json
+from pathlib import Path
 import os
 import re
 import sys
@@ -19,7 +20,7 @@ import numpy as np
 
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_DIR = os.path.dirname(SCRIPT_DIR)
+PROJECT_DIR = str(Path(__file__).resolve().parents[3])
 DEFAULT_OUTPUT_ROOT = os.path.join(PROJECT_DIR, "tensor_figures")
 BASE_LABELS = {
     0: "Padding",
@@ -264,13 +265,146 @@ def plot_continuous_track(
     colorbar.ax.tick_params(labelsize=14, length=3, colors="#475467")
 
 
+
+V2_VERSION = "indexed-gam-candidate-v2"
+V2_BASE_LABELS = {0: "Padding", 1: "A", 2: "C", 3: "G", 4: "T", 5: "N", 6: "Gap"}
+V2_BASE_COLORS = {0: "#ffffff", 1: "#4daf4a", 2: "#377eb8", 3: "#ffb000",
+                  4: "#e41a1c", 5: "#bdbdbd", 6: "#484858"}
+V2_OP_LABELS = {0: "Padding", 1: "M", 2: "X", 3: "I", 4: "D", 5: "Complex", 6: "No insertion"}
+V2_OP_COLORS = {0: "#ffffff", 1: "#5ba66c", 2: "#d62828", 3: "#9655c7",
+                4: "#d9534f", 5: "#efb04c", 6: "#484858"}
+V2_FLAG_LABELS = {-1: "Padding", 0: "No event", 1: "Event", 2: "Candidate", 3: "Candidate + event"}
+V2_FLAG_COLORS = {-1: "#ffffff", 0: "#d9ead3", 1: "#cc0000", 2: "#6baed6", 3: "#88419d"}
+
+
+def resolve_format(tensor, metadata=None, tensor_format="auto"):
+    version = (metadata or {}).get("tensor_format_version")
+    if tensor_format == "auto":
+        if version == V2_VERSION:
+            tensor_format = "candidate-v2"
+        elif version in (None, "indexed-gam-legacy-v1") and tensor.shape[0] == 5:
+            tensor_format = "legacy"
+        else:
+            raise ValueError("Six-channel format is ambiguous: supply its v2 manifest/summary or --format candidate-v2")
+    expected = 6 if tensor_format == "candidate-v2" else 5
+    if tensor.ndim != 3 or tensor.shape[0] != expected:
+        raise ValueError(f"{tensor_format} expects {expected} channels; got {tensor.shape}")
+    if version is not None and version != (V2_VERSION if expected == 6 else "indexed-gam-legacy-v1"):
+        raise ValueError("Selected tensor format conflicts with metadata version")
+    return tensor_format
+
+
+def prepare_candidate_view(tensor, show_all_rows=False, metadata=None):
+    """Use all channels to find occupied rows: deletion-only row zero is a read."""
+    active = np.flatnonzero(np.any(tensor != 0, axis=(0, 2)))
+    count = int(active[-1]+1) if active.size else 0
+    if metadata and "selected_alignments" in metadata and metadata["selected_alignments"] != count:
+        raise ValueError("selected_alignments disagrees with occupied tensor rows")
+    view = tensor if show_all_rows else tensor[:, :max(1, count), :]
+    marked = np.flatnonzero(np.any((tensor[2] & 2) != 0, axis=0))
+    region = [int(marked[0]), int(marked[-1]+1)] if marked.size else None
+    if metadata and "candidate_columns" in metadata:
+        supplied = list(metadata["candidate_columns"])
+        if supplied != region:
+            raise ValueError("candidate_columns disagrees with tensor candidate flags")
+        region = supplied
+    return view, region
+
+
+def visualize_candidate_tensor(tensor, out_path, title, show_all_rows=False,
+                               marker_column=None, metadata=None, hide_marker=False):
+    configure_style()
+    view, region = prepare_candidate_view(tensor, show_all_rows, metadata)
+    fig = plt.figure(figsize=(17, 15), layout="constrained")
+    grid = GridSpec(6, 2, figure=fig, width_ratios=(1, .21), hspace=.12)
+    axes = [fig.add_subplot(grid[i, 0]) for i in range(6)]
+    legends = [fig.add_subplot(grid[i, 1]) for i in range(6)]
+    plot_discrete_track(axes[0], legends[0], view[0], V2_BASE_LABELS, V2_BASE_COLORS)
+    plot_discrete_track(axes[5], legends[5], view[5], V2_BASE_LABELS, V2_BASE_COLORS)
+    flags = np.where((view[4] == 0) & (view[2] == 0), -1, view[2])
+    plot_discrete_track(axes[2], legends[2], flags, V2_FLAG_LABELS, V2_FLAG_COLORS)
+    plot_discrete_track(axes[4], legends[4], view[4], V2_OP_LABELS, V2_OP_COLORS)
+    for channel, minimum_max in ((1, 40), (3, 60)):
+        # White is missing coverage. Gray BQ cells have no read base/quality;
+        # actual BQ=0 remains a valid colored observation, including row zero.
+        mask = view[0] == 0 if channel == 1 else view[4] == 0
+        values = np.ma.masked_where(mask, view[channel])
+        cmap = QUALITY_CMAP.copy()
+        cmap.set_bad("#ffffff")
+        cmap.set_under("#777777")
+        maximum = max(minimum_max, int(view[channel].max()))
+        image = axes[channel].imshow(values, cmap=cmap, vmin=0, vmax=maximum,
+                                     interpolation="nearest", aspect="auto")
+        legends[channel].axis("off")
+        bar = legends[channel].inset_axes((.03, .12, .12, .75))
+        fig.colorbar(image, cax=bar)
+        if channel == 1:
+            legends[channel].text(.27, .25, "Gray: no read\nbase / quality", fontsize=11)
+    titles = ["1  Read bases", "2  Base qualities", "3  Event / candidate flags",
+              "4  Mapping qualities", "5  Alignment operations", "6  Per-read graph-reference bases"]
+    for channel, ax in enumerate(axes):
+        ax.set_title(titles[channel], loc="left", fontsize=16)
+        ax.set_ylabel("Alignment row", fontsize=13)
+        ax.set_xlim(-.5, view.shape[2]-.5)
+        if region and not hide_marker:
+            ax.axvspan(region[0]-.5, region[1]-.5, facecolor="none", edgecolor="#111111", linewidth=1.2)
+        if marker_column is not None:
+            ax.axvline(marker_column, color="#111111", linestyle="--", linewidth=.8)
+        if channel < 5:
+            ax.tick_params(labelbottom=False)
+    axes[-1].set_xlabel("Tensor column (candidate-relative context; branches may differ)", fontsize=13)
+    caption = "candidate-v2 | no dedicated reference row"
+    if region:
+        caption += f" | candidate columns [{region[0]}, {region[1]})"
+    if metadata and "coverage" in metadata:
+        caption += (f"\nCoverage {metadata['coverage']} | ALT/REF/other "
+                    f"{metadata['alt_count']}/{metadata['ref_count']}/{metadata['other_count']}"
+                    f" | AF {metadata['af']:.4f} | selected {metadata['selected_alignments']}")
+    fig.suptitle(title+"\n"+caption, fontsize=16)
+    os.makedirs(os.path.dirname(os.path.abspath(out_path)), exist_ok=True)
+    fig.savefig(out_path, dpi=150, facecolor="white")
+    plt.close(fig)
+    return view.shape[1]
+
+
+def load_metadata(npy_path, manifest_path=None, summary_path=None, shard_index=None):
+    parent = Path(npy_path).parent
+    manifest_file = Path(manifest_path) if manifest_path else parent / "manifest.json"
+    manifest = json.loads(manifest_file.read_text()) if manifest_file.exists() else {}
+    if manifest_path and not manifest_file.exists():
+        raise ValueError(f"Manifest does not exist: {manifest_path}")
+    summary_file = Path(summary_path) if summary_path else parent / "variant_summary.ndjson"
+    records = {}
+    if summary_file.exists():
+        if shard_index is None:
+            shard_index = infer_shard_index(npy_path)
+        with summary_file.open() as stream:
+            for line in stream:
+                if line.strip():
+                    record = json.loads(line)
+                    if record.get("shard_index") == shard_index:
+                        index = record["index_within_shard"]
+                        if index in records:
+                            raise ValueError(f"Duplicate summary index {index} in shard {shard_index}")
+                        records[index] = record
+    elif summary_path:
+        raise ValueError(f"Summary does not exist: {summary_path}")
+    return manifest, records
+
+
 def visualize_tensor(
     tensor: np.ndarray,
     out_path: str,
     title: str,
     show_all_rows: bool,
     marker_column: Optional[int],
+    metadata=None,
+    tensor_format="auto",
+    hide_marker=False,
 ) -> int:
+    if resolve_format(tensor, metadata, tensor_format) == "candidate-v2":
+        return visualize_candidate_tensor(tensor, out_path, title, show_all_rows,
+                                          marker_column, metadata, hide_marker)
     if tensor.ndim != 3 or tensor.shape[0] != 5:
         raise ValueError(f"expected a 5-channel (5, H, W) tensor, got shape {tensor.shape}")
 
@@ -329,9 +463,9 @@ def visualize_tensor(
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Visualize one five-channel pileup tensor from a .npy tensor or shard."
+        description="Visualize legacy five-channel or candidate-v2 six-channel NPY tensors."
     )
-    parser.add_argument("npy_path", help="Input .npy path: (N,5,H,W) shard or (5,H,W) tensor.")
+    parser.add_argument("npy_path", help="Input .npy path: (N,C,H,W) shard or (C,H,W) tensor.")
     parser.add_argument(
         "-i", "--sample-index", type=int, default=0, help="Sample index within a shard (default: 0)."
     )
@@ -356,7 +490,7 @@ def main() -> None:
     )
     parser.add_argument(
         "--summary-path",
-        help="Classified NDJSON path for --classification. Default: beside the input NPY.",
+        help="Candidate or classified NDJSON metadata; default: beside input NPY.",
     )
     parser.add_argument(
         "--max-samples",
@@ -371,8 +505,11 @@ def main() -> None:
     parser.add_argument(
         "--marker-column",
         type=int,
-        help="Column to mark; use -1 to hide. Default: infer from mismatch flag 5, else midpoint.",
+        help="Extra column marker; -1 hides markers. Default: full v2 candidate range or legacy center.",
     )
+    parser.add_argument("--format", choices=("auto", "legacy", "candidate-v2"), default="auto")
+    parser.add_argument("--manifest-path", help="Format manifest; default: manifest.json beside input")
+    parser.add_argument("--shard-index", type=int, help="Metadata shard index for nonstandard filenames")
     parser.add_argument("--title", help="Optional figure title.")
     args = parser.parse_args()
 
@@ -398,8 +535,6 @@ def main() -> None:
         parser.error("--classification cannot be combined with --all-samples")
     if (args.all_samples or args.classification) and args.output:
         parser.error("--output cannot be combined with batch rendering; use --output-dir")
-    if args.summary_path and not args.classification:
-        parser.error("--summary-path requires --classification")
     if args.max_samples is not None and not (args.all_samples or args.classification):
         parser.error("--max-samples requires --all-samples or --classification")
     if args.max_samples is not None and args.max_samples <= 0:
@@ -441,6 +576,10 @@ def main() -> None:
     else:
         sample_indices = [args.sample_index]
 
+    try:
+        manifest, records = load_metadata(path, args.manifest_path, args.summary_path, args.shard_index)
+    except (OSError, ValueError) as exc:
+        parser.error(str(exc))
     total_to_render = len(sample_indices)
     if args.all_samples or args.classification:
         print(f"Rendering {total_to_render} figures to: {os.path.abspath(output_dir)}")
@@ -456,11 +595,16 @@ def main() -> None:
             args.output or os.path.join(output_dir, f"{basename}{sample_suffix}.png")
         )
         classification_prefix = f"{args.classification} / " if args.classification else ""
-        figure_title = args.title or f"{basename} / {classification_prefix}sample {sample_index:05d}"
-        marker_column = (
-            infer_marker_column(tensor) if args.marker_column is None else args.marker_column
-        )
-        marker_column = None if marker_column < 0 else marker_column
+        metadata = dict(manifest, **records.get(sample_index, {}))
+        figure_title = args.title or metadata.get("candidate_id") or f"{basename} / {classification_prefix}sample {sample_index:05d}"
+        try:
+            tensor_format = resolve_format(tensor, metadata, args.format)
+        except ValueError as exc:
+            parser.error(str(exc))
+        marker_column = args.marker_column
+        if marker_column is None and tensor_format == "legacy":
+            marker_column = infer_marker_column(tensor)
+        marker_column = None if marker_column is not None and marker_column < 0 else marker_column
         if marker_column is not None and marker_column >= tensor.shape[2]:
             sys.exit(
                 f"Error: marker column {marker_column} is outside width 0..{tensor.shape[2] - 1}"
@@ -469,6 +613,7 @@ def main() -> None:
         try:
             displayed_rows = visualize_tensor(
                 tensor, output, figure_title, args.show_all_rows, marker_column,
+                metadata=metadata, tensor_format=tensor_format, hide_marker=args.marker_column == -1,
             )
         except ValueError as exc:
             sys.exit(f"Error: {exc}")
@@ -480,8 +625,9 @@ def main() -> None:
             print(f"Rendered {rendered}/{total_to_render}")
 
     print(f"Input shape: {array.shape}; dtype: {array.dtype}")
+    print("Candidate-v2 quality scales use observed maxima (at least BQ 40 / MAPQ 60).")
     print(
-        f"Quality color scale: 0-{QUALITY_COLOR_SCALE_MAX}; "
+        f"Legacy quality color scale: 0-{QUALITY_COLOR_SCALE_MAX}; "
         f"displayed colorbars: base 0-{BASE_QUALITY_DISPLAY_MAX}, "
         f"mapping 0-{MAPPING_QUALITY_DISPLAY_MAX}"
     )

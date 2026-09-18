@@ -11,7 +11,7 @@ import io
 from pathlib import Path
 
 import pysam
-import vg_pb2
+from indexed_gam_pipeline import vg_pb2
 
 
 def varint(stream, allow_eof=False):
@@ -54,6 +54,48 @@ def decode(raw):
     alignment = vg_pb2.Alignment()
     alignment.ParseFromString(raw)
     return alignment
+
+
+def encode_varint(value):
+    out = bytearray()
+    while value > 127:
+        out.append((value & 127) | 128)
+        value >>= 7
+    out.append(value)
+    return bytes(out)
+
+
+def build_index(gam, output):
+    """Create a GAI v1 from complete BGZF GAM groups and their node spans."""
+    bins = {}
+    groups = alignments = 0
+    with pysam.BGZFile(str(gam), "rb") as stream:
+        while True:
+            start = stream.tell()
+            messages = group(stream)
+            if messages is None:
+                break
+            end = stream.tell()
+            node_ids = [m.position.node_id for raw in messages
+                        for m in decode(raw).path.mapping if m.position.node_id > 0]
+            alignments += len(messages)
+            groups += 1
+            if not node_ids:
+                continue
+            lo, hi = min(node_ids), max(node_ids)
+            shift = max(1, (lo ^ hi).bit_length())
+            if shift > 64:
+                raise ValueError("Node ID exceeds uint64")
+            number = (lo >> shift) + (1 << (64 - shift)) - 1
+            bins.setdefault(number, []).append((start, end))
+    with gzip.open(output, "wb") as stream:
+        stream.write(b"GAI!" + encode_varint(1) + encode_varint(len(bins)))
+        for number, runs in sorted(bins.items()):
+            stream.write(encode_varint(number) + encode_varint(len(runs)))
+            for start, end in runs:
+                stream.write(encode_varint(start) + encode_varint(end))
+        stream.write(encode_varint(0))
+    return {"groups": groups, "alignments": alignments, "bins": len(bins)}
 
 
 def scan_gam(path, max_alignments=None):
