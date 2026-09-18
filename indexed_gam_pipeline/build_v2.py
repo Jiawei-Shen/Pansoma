@@ -1,6 +1,9 @@
 """Bounded node batches, complete records, and versioned candidate tensor outputs."""
 from collections import Counter, defaultdict
+from contextlib import ExitStack, closing
+import sqlite3
 import json
+import time
 from pathlib import Path
 
 import numpy as np
@@ -12,6 +15,19 @@ from indexed_gam_pipeline.segments import on_chromosome
 
 
 def build(args):
+    start = time.perf_counter()
+    _dispatch(args)
+    # Include initial cache hashing, helper startup and shutdown in wall time.
+    out = Path(args.output)
+    manifest = json.loads((out / "manifest.json").read_text())
+    manifest["timing"]["total_wall_seconds"] = time.perf_counter() - start
+    from indexed_gam_pipeline.run import write_json
+    write_json(out / "manifest.json", manifest)
+    write_json(out / "run_report.json", manifest)
+    print(json.dumps({"timing": manifest["timing"]}))
+
+
+def _dispatch(args):
     if getattr(args, "format", "candidate-v4") == "candidate-v4":
         from indexed_gam_pipeline.gbz_counts import GBZCounts
         if not all(getattr(args, key, None) for key in ("gbz", "gbz_query", "occurrence_cache")):
@@ -28,13 +44,25 @@ def build(args):
 
 
 def _build(args, walk_lookup):
+    # Keep one read snapshot and page cache for the entire build. Reopening the
+    # graph database per batch incurs expensive lock/I/O cycles on shared storage.
+    with ExitStack() as stack:
+        connection = None
+        if getattr(args, "node_sqlite", None):
+            uri = Path(args.node_sqlite).resolve().as_uri() + "?mode=ro"
+            connection = stack.enter_context(closing(sqlite3.connect(uri, uri=True)))
+            connection.execute("BEGIN")
+        return _build_impl(args, walk_lookup, connection)
+
+
+def _build_impl(args, walk_lookup, sequence_connection):
     from indexed_gam_pipeline.run import load_nodes, node_records, batches, new_output, write_json
     if not 1 <= args.max_indel_len <= 50:
         raise ValueError("--max-indel-len must be in [1,50]")
     if args.width < args.max_indel_len:
         raise ValueError("--width must accommodate --max-indel-len")
     nodes = load_nodes(args.nodes)
-    reader = IndexedGam(args.gam, args.index)
+    reader = IndexedGam(args.gam, args.index, cache_bytes=getattr(args, "gam_cache_mb", 64) * 1024 * 1024)
     out = new_output(args.output)
     (out / "target_nodes.txt").write_text("".join(f"{n}\n" for n in nodes))
     parameters = {k: getattr(args, k) for k in ("min_mapq", "min_af", "min_variants",
@@ -74,6 +102,7 @@ def _build(args, walk_lookup):
             "missing_node_or_sequence_mismatch": "error"}
     write_json(out / "run_report.json", manifest)
     write_json(out / "manifest.json", manifest)
+    timings = defaultdict(float)
     tensors, metadata = [], []
     with (out / "variant_summary.ndjson").open("w") as summary, \
          (out / "unsupported_events.ndjson").open("w") as unsupported, \
@@ -96,6 +125,7 @@ def _build(args, walk_lookup):
             metrics = {}
             alignments = []
             context_nodes = set(wanted)
+            phase_start = time.perf_counter()
             for alignment in reader.fetch(wanted, metrics):
                 if alignment.mapping_quality <= args.min_mapq or not on_chromosome(alignment, getattr(args, "chr", "")):
                     continue
@@ -103,12 +133,18 @@ def _build(args, walk_lookup):
                 context_nodes.update(m.position.node_id for m in alignment.path.mapping)
                 if len(alignments) > args.max_batch_segments:
                     raise ValueError("Complete-alignment batch limit exceeded; reduce --batch-nodes")
+            timings["gam_fetch_seconds"] += time.perf_counter() - phase_start
+            phase_start = time.perf_counter()
             print(f"Batch {bi}: retrieved {len(alignments)} alignments; loading {len(context_nodes)} graph nodes", flush=True)
-            records = node_records(args, context_nodes)
+            records = node_records(args, context_nodes, sqlite_connection=sequence_connection)
             print(f"Batch {bi}: graph loaded; decoding original edits", flush=True)
             sequences = {n: r["sequence"] for n, r in records.items()}
+            timings["graph_sequences_seconds"] += time.perf_counter() - phase_start
+            phase_start = time.perf_counter()
             walk_counts = (walk_lookup.get_counts(context_nodes, sequences) if is_gbz else
                            walk_lookup.get_counts(context_nodes) if walk_lookup is not None else None)
+            timings["occurrence_seconds"] += time.perf_counter() - phase_start
+            phase_start = time.perf_counter()
             reads, candidates = [], set()
             by_node = defaultdict(list)
             for ai, alignment in enumerate(alignments):
@@ -122,6 +158,8 @@ def _build(args, walk_lookup):
                         in_target_nodes=event["node_id"] in wanted,
                         batch_index=bi, record_index=ai, read_name=read.name)) + "\n")
                     manifest["unsupported_events"] += 1
+            timings["decode_edits_seconds"] += time.perf_counter() - phase_start
+            phase_start = time.perf_counter()
             print(f"Batch {bi}: counting {len(candidates)} candidates", flush=True)
             for candidate in sorted(candidates):
                 eligible = []
@@ -153,11 +191,18 @@ def _build(args, walk_lookup):
                 if getattr(args, "max_tensors", None) is not None and manifest["tensors"] + len(tensors) >= args.max_tensors:
                     flush()
                     break
+            timings["candidate_tensors_and_shard_writes_seconds"] += time.perf_counter() - phase_start
             print(f"Batch {bi}: {len(batch)} target nodes, {len(reads)} complete alignments, "
                   f"{len(context_nodes)} context nodes, {len(candidates)} candidates", flush=True)
             if getattr(args, "max_tensors", None) is not None and manifest["tensors"] >= args.max_tensors:
                 break
+        phase_start = time.perf_counter()
         flush()
+        timings["candidate_tensors_and_shard_writes_seconds"] += time.perf_counter() - phase_start
+    manifest["timing"] = dict(timings)
+    if is_gbz:
+        manifest["occurrence_performance"] = walk_lookup.performance
+    manifest["gam_group_cache"] = reader.cache_stats
     manifest["status"] = "complete"
     if is_gbz:
         manifest["occurrence_lookup"] = dict(path=str(walk_lookup.path), **walk_lookup.metadata)

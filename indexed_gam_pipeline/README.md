@@ -4,7 +4,8 @@
 Channel 7 is `node_distinct_gbwt_path_count`: the number of distinct physical
 GBWT paths visiting the column's node, including reference and haplotype paths.
 Repeated visits, both node orientations, and a path's reverse-complement copy
-count once. This is a path count, not a count of unique biological haplotypes:
+count once. A single forward-node search covers both orientations because the
+GBWT is bidirectional; physical path IDs are deduplicated. This is a path count, not a count of unique biological haplotypes:
 fragmented paths can belong to the same sample/haplotype. Counts are unscaled.
 The first six channels, row selection, and candidate statistics retain v3 semantics.
 
@@ -55,6 +56,31 @@ GBZ_QUERY=tmp/gbz_node_counts GBZ_TOOL=/scratch/jshen/Github/gbz-tool/gbztool \
 
 See the [100-example gallery](samples/colo829t_100/README.md) for corrected tensors,
 images, independent query comparisons, and measured generation time.
+
+## Runtime controls and measurements
+
+Candidate builds record `timing` in `manifest.json` and `run_report.json`: total
+wall time, GAM fetching, graph sequence lookup, occurrence lookup, edit decoding,
+and candidate construction/shard writing. Total time includes initial occurrence
+cache hashing and helper startup/shutdown. `occurrence_performance` separates
+cache setup and helper startup (startup is also included in occurrence lookup).
+Rendering and node discovery are separate operations.
+
+The reader reuses GAM groups with an LRU cache and node-to-record lookup, keeping
+original record order and duplicate records. `--gam-cache-mb 64` is the default;
+`0` disables it. The budget covers retained serialized records, node lookup data,
+and bookkeeping, not total process memory or a single transient group. Tensor
+shards and the loaded GBZ require additional memory. Cache counters and peak
+accounted bytes are recorded as `gam_group_cache`.
+
+Graph SQLite requests use bounded batches and one read connection/transaction
+for the whole build, avoiding repeated database-open and lock cycles on shared
+storage. The connection closes when the build finishes or fails.
+Reuse `--occurrence-cache` across runs of the same GBZ: fully cached requests do
+not load the GBZ helper. Uncached nodes require loading it once per process.
+
+Measured before/after results are recorded in the gallery's `performance.json`.
+These are 1,000-tensor sample measurements, not a whole-genome runtime estimate.
 
 ---
 

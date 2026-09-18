@@ -6,6 +6,8 @@ is intentionally unnecessary here), merge their virtual-offset runs, then
 filter complete Alignment messages by exact node membership.
 """
 import bisect
+from collections import OrderedDict, defaultdict
+import sys
 import gzip
 import io
 from pathlib import Path
@@ -114,9 +116,18 @@ def scan_gam(path, max_alignments=None):
 
 
 class IndexedGam:
-    def __init__(self, gam, index=None):
+    def __init__(self, gam, index=None, cache_bytes=64 * 1024 * 1024):
         self.gam = Path(gam)
         self.index = Path(index or str(gam) + ".gai")
+        if cache_bytes < 0:
+            raise ValueError("GAM cache size must be nonnegative")
+        self.cache_limit = cache_bytes
+        self._groups = OrderedDict()
+        self._cache_bytes = 0
+        stat = self.gam.stat()
+        self._source_stamp = (stat.st_size, stat.st_mtime_ns)
+        self.cache_stats = dict(group_hits=0, group_misses=0, indexed_records=0,
+                                peak_accounted_bytes=0, limit_bytes=cache_bytes)
         with gzip.open(self.index, "rb") as stream:
             data = io.BytesIO(stream.read())
         magic = data.read(4)
@@ -169,7 +180,47 @@ class IndexedGam:
                 merged.append((start, end))
         return merged
 
+    def _indexed_group(self, stream, metrics):
+        start = stream.tell()
+        cached = self._groups.get(start)
+        if cached is not None:
+            self._groups.move_to_end(start)
+            self.cache_stats['group_hits'] += 1
+            end, messages, postings, _ = cached
+            stream.seek(end)
+            return messages, postings
+        self.cache_stats['group_misses'] += 1
+        messages = group(stream)
+        if messages is None:
+            raise ValueError("GAI run extends past GAM EOF")
+        postings = defaultdict(list)
+        for i, raw in enumerate(messages):
+            alignment = decode(raw)
+            metrics['decoded_alignments'] += 1
+            for node in {m.position.node_id for m in alignment.path.mapping}:
+                postings[node].append(i)
+        postings = {node: tuple(indices) for node, indices in postings.items()}
+        self.cache_stats['indexed_records'] += len(messages)
+        # Account for containers, raw protobuf bytes, keys and every posting int.
+        # Shared integers are overcounted; leave an allowance for LRU bookkeeping.
+        size = (512 + sys.getsizeof(messages) + sum(map(sys.getsizeof, messages))
+                + sys.getsizeof(postings)
+                + sum(sys.getsizeof(n) + sys.getsizeof(ids) + sum(map(sys.getsizeof, ids))
+                      for n, ids in postings.items()))
+        if size <= self.cache_limit:
+            while self._groups and self._cache_bytes + size > self.cache_limit:
+                _, evicted = self._groups.popitem(last=False)
+                self._cache_bytes -= evicted[3]
+            self._groups[start] = (stream.tell(), messages, postings, size)
+            self._cache_bytes += size
+            self.cache_stats['peak_accounted_bytes'] = max(
+                self.cache_stats['peak_accounted_bytes'], self._cache_bytes)
+        return messages, postings
+
     def fetch(self, nodes, metrics=None):
+        stat = self.gam.stat()
+        if (stat.st_size, stat.st_mtime_ns) != self._source_stamp:
+            raise ValueError("GAM changed after opening its index")
         wanted = set(nodes)
         ranges = self.ranges(wanted)
         if metrics is None:
@@ -180,6 +231,17 @@ class IndexedGam:
             for start, end in ranges:
                 stream.seek(start)
                 while stream.tell() < end:
+                    if self.cache_limit:
+                        messages, postings = self._indexed_group(stream, metrics)
+                        metrics['groups'] += 1
+                        # Original record positions preserve order and duplicate records;
+                        # a multi-node match still returns one alignment per record.
+                        selected = sorted({i for n in wanted for i in postings.get(n, ())})
+                        for i in selected:
+                            metrics['decoded_alignments'] += 1
+                            metrics['returned_alignments'] += 1
+                            yield decode(messages[i])
+                        continue
                     messages = group(stream)
                     if messages is None:
                         raise ValueError("GAI run extends past GAM EOF")

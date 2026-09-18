@@ -82,6 +82,45 @@ def fixture(directory):
 
 
 class PipelineTest(unittest.TestCase):
+    def test_group_cache_preserves_order_duplicates_and_is_bounded(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path, _ = fixture(directory)
+            for limit in (0, 1, 2048, 64 * 1024 * 1024):
+                reader = IndexedGam(path, cache_bytes=limit)
+                uncached = IndexedGam(path, cache_bytes=0)
+                for nodes in ({10,30}, {20,1000}, {10}, {10,20,30,1000}, {10,30}):
+                    expected = [a.SerializeToString() for a in uncached.fetch(nodes)]
+                    actual = list(reader.fetch(nodes))
+                    self.assertEqual([a.SerializeToString() for a in actual], expected)
+                    # Callers cannot mutate a cached record or its node index.
+                    if actual:
+                        actual[0].path.mapping[0].position.node_id = 99999
+                    self.assertEqual([a.SerializeToString() for a in reader.fetch(nodes)],expected)
+                self.assertLessEqual(reader.cache_stats['peak_accounted_bytes'],limit)
+                if limit == 64 * 1024 * 1024:
+                    self.assertGreater(reader.cache_stats['group_hits'],0)
+                    self.assertEqual(reader.cache_stats['indexed_records'],6)
+            with self.assertRaisesRegex(ValueError,'nonnegative'):
+                IndexedGam(path,cache_bytes=-1)
+            reader = IndexedGam(path)
+            with path.open('ab') as stream:
+                stream.write(b'changed')
+            with self.assertRaisesRegex(ValueError,'GAM changed'):
+                list(reader.fetch({10}))
+
+    def test_graph_sqlite_batched_queries_and_missing_nodes(self):
+        with tempfile.TemporaryDirectory() as directory:
+            db = Path(directory)/'graph.sqlite'
+            with sqlite3.connect(db) as c:
+                c.execute('CREATE TABLE nodes (node_id INTEGER PRIMARY KEY, seq TEXT)')
+                c.executemany('INSERT INTO nodes VALUES (?,?)',[(n,'ac') for n in range(1,1002)])
+            args = argparse.Namespace(node_json=None,node_sqlite=str(db),gfa=None)
+            records = node_records(args,set(range(1,1002)))
+            self.assertEqual(len(records),1001)
+            self.assertTrue(all(r['sequence']=='AC' for r in records.values()))
+            with self.assertRaisesRegex(ValueError,'Missing graph sequences'):
+                node_records(args,{1,1002})
+
     def test_discovery_preserves_writer_statistics_schema(self):
         with tempfile.TemporaryDirectory() as directory:
             path, _ = fixture(directory)
