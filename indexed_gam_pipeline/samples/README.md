@@ -34,6 +34,19 @@ AF-only differences in the matching cases are legacy rounding to four decimals.
 These formats intentionally differ in shape, encoding, context and row order;
 whole-tensor element equality is not expected.
 
+## Node-path grouping
+
+The v2 previews now group rows by the ordered node path visible in each candidate
+window, normalized to the candidate orientation. Identical paths are contiguous;
+within a group, ALT/REF/other and quality-based selection order is retained.
+Grouping happens after row selection and permutes all six channels together.
+No reads, base values, counts or AF values change. The compact summary includes
+`row_groups` with half-open row ranges and their node paths.
+
+[Real-data grouping checks](grouping_validation.json) confirmed identical
+six-channel row multisets, record/column-map pairing and full statistics for all
+five tensors. Nodes outside the displayed window do not fragment the groups.
+
 ## Reading the images
 
 V2 has six panels in channel order: read bases, base qualities, event/candidate
@@ -57,8 +70,8 @@ these images and visualization tests used the existing
 (NumPy 1.26.4, Matplotlib 3.10.8). No packages were installed or downgraded.
 
 ```bash
-python scripts/visualize_tensor.py tmp/indexed_gam_candidate_v2_verified/shard_00000_data.npy \
-  --all-samples --output-dir tmp/indexed_gam_candidate_v2_verified/images
+python scripts/visualize_tensor.py tmp/indexed_gam_candidate_v2_grouped/shard_00000_data.npy \
+  --all-samples --output-dir tmp/indexed_gam_candidate_v2_grouped/images
 ```
 
 The visualizer loads adjacent `manifest.json` and `variant_summary.ndjson`.

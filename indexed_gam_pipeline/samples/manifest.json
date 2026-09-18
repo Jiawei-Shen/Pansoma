@@ -47,7 +47,7 @@
     "tensor_format_version": "indexed-gam-candidate-v2",
     "generated_date": "2026-09-18",
     "local_only": true,
-    "output_directory": "tmp/indexed_gam_candidate_v2_verified",
+    "output_directory": "tmp/indexed_gam_candidate_v2_grouped",
     "source_gam": {
       "path": "tmp/HG008_pacbio_test.sorted.gam",
       "size_bytes": 144299645,
@@ -105,33 +105,34 @@
         "unused rows all zero",
         "all non-gap reference columns match oriented graph sequence"
       ],
-      "full_genome_run": false
+      "full_genome_run": false,
+      "note": "Reference-base inspection was performed before grouping; grouping audit proves byte-identical six-channel rows and paired debug mappings."
     },
     "artifacts": [
       {
-        "path": "tmp/indexed_gam_candidate_v2_verified/shard_00000_data.npy",
+        "path": "tmp/indexed_gam_candidate_v2_grouped/shard_00000_data.npy",
         "size_bytes": 1200128,
-        "sha256": "a649cbd0405eac740f7296f3ae98e46f7653d49a7f45bf105a4060f7f138cf05"
+        "sha256": "091cc94403f688ffc5da6318518d975618617fe1efa9c2123c3f4db19bb3ebf6"
       },
       {
-        "path": "tmp/indexed_gam_candidate_v2_verified/variant_summary.ndjson",
-        "size_bytes": 23535386,
-        "sha256": "5f5b77944b2d8cbbffc8eb0be54daf9eff1847c0dd2ab000f7f911fac1b08fa1"
+        "path": "tmp/indexed_gam_candidate_v2_grouped/variant_summary.ndjson",
+        "size_bytes": 23542099,
+        "sha256": "b8bbd47e5b8ef5bd0198a6446aea48585daffe0b8860aab366120b3bfd90bf25"
       },
       {
-        "path": "tmp/indexed_gam_candidate_v2_verified/manifest.json",
-        "size_bytes": 2348,
-        "sha256": "ee9d97a23a41480f39d24bef8f68c7452f755d99f2bccd27ccb29b418564ab99"
+        "path": "tmp/indexed_gam_candidate_v2_grouped/manifest.json",
+        "size_bytes": 2443,
+        "sha256": "5e53871c444cdbd7d0ac5d8c0937a45d6b66646af1ccc02922f8109254fdfd40"
       },
       {
-        "path": "tmp/indexed_gam_candidate_v2_verified/paired_rows.txt",
-        "size_bytes": 8133,
-        "sha256": "75baebf1b9bcd32fe48cc1463c375a5400b5e12de6ed98c97a6a6ae5bdb8da18"
+        "path": "tmp/indexed_gam_candidate_v2_grouped/paired_rows.txt",
+        "size_bytes": 8127,
+        "sha256": "9d5985abbcd40fed220f0bb674a2b2079a5e419e2ff7b6fad3e4ceecb1e69381"
       },
       {
-        "path": "tmp/indexed_gam_candidate_v2_verified/inspection_report.json",
-        "size_bytes": 401,
-        "sha256": "fde0b69ab5f6797a5c8e2a3d4f78cccf435762d39ba7954e479d9b8b201867b7"
+        "path": "tmp/indexed_gam_candidate_v2_grouped/grouping_validation.json",
+        "size_bytes": 1244,
+        "sha256": "9c605dd2c07cd8285db447273bd33a0b126f0a044c9f41843480e4415673e6a8"
       }
     ],
     "variants": [
@@ -249,8 +250,8 @@
       },
       {
         "path": "images/577_ins_AT_v2.png",
-        "size_bytes": 259792,
-        "sha256": "01c5e2912adfe5eab8222962d0583876f3f270b6f98761fc592c026f06723985"
+        "size_bytes": 254898,
+        "sha256": "8ec64970fd5a4037837d49ee61e1be1befbc7a566ec148cc67de049a0cefea0f"
       },
       {
         "path": "images/577_ins_A_legacy.png",
@@ -259,8 +260,8 @@
       },
       {
         "path": "images/577_ins_A_v2.png",
-        "size_bytes": 259379,
-        "sha256": "c95a9b72ad3a2fa77d8043ccaa2630478d723297b21022dffdadf68464d083e2"
+        "size_bytes": 254407,
+        "sha256": "bb773791b8fbf8b3b03873b66bc7dc468361eb14d70dcf2b05a97c58f20301a5"
       },
       {
         "path": "images/577_snp_T_A_legacy.png",
@@ -269,11 +270,58 @@
       },
       {
         "path": "images/577_snp_T_A_v2.png",
-        "size_bytes": 263003,
-        "sha256": "32b1c3461377de32e1ec6252701e571870364d597b6146d6ba6cba03fe319c41"
+        "size_bytes": 256809,
+        "sha256": "78a8279c9095fea43e539c14f509b2572c731729a5770069f92c99fd741af2bc"
       }
     ],
     "comparison_report": "legacy_comparison.json",
-    "portable_summary": "hg008_candidate_v2_summary.ndjson"
+    "portable_summary": "hg008_candidate_v2_summary.ndjson",
+    "previous_output_directory": "tmp/indexed_gam_candidate_v2_verified",
+    "row_order": "candidate-oriented visible node path; within each path retain selection order",
+    "grouping_verification": {
+      "passed": true,
+      "candidates": [
+        {
+          "candidate_id": "577:138:INS:>A",
+          "selected_alignments": 115,
+          "node_path_groups": 4,
+          "statistics_unchanged": true,
+          "six_channel_row_multiset_unchanged": true,
+          "debug_rows_still_paired": true
+        },
+        {
+          "candidate_id": "577:138:INS:>AT",
+          "selected_alignments": 115,
+          "node_path_groups": 4,
+          "statistics_unchanged": true,
+          "six_channel_row_multiset_unchanged": true,
+          "debug_rows_still_paired": true
+        },
+        {
+          "candidate_id": "577:138:SNP:T>A",
+          "selected_alignments": 115,
+          "node_path_groups": 4,
+          "statistics_unchanged": true,
+          "six_channel_row_multiset_unchanged": true,
+          "debug_rows_still_paired": true
+        },
+        {
+          "candidate_id": "1841:0:SNP:T>C",
+          "selected_alignments": 117,
+          "node_path_groups": 1,
+          "statistics_unchanged": true,
+          "six_channel_row_multiset_unchanged": true,
+          "debug_rows_still_paired": true
+        },
+        {
+          "candidate_id": "2189:0:SNP:C>A",
+          "selected_alignments": 72,
+          "node_path_groups": 1,
+          "statistics_unchanged": true,
+          "six_channel_row_multiset_unchanged": true,
+          "debug_rows_still_paired": true
+        }
+      ]
+    }
   }
 }

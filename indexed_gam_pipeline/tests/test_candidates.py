@@ -155,6 +155,7 @@ class CandidatesTest(unittest.TestCase):
         self.assertEqual(m["alt_count"],2)
         self.assertEqual(m["rows"][0]["anchor_mapping_index"],2)
         self.assertEqual(len(m["rows"][0]["path"]),3)
+        self.assertEqual([n["node_id"] for n in m["row_groups"][0]["path"]],[1,2,1])
 
     def test_adjacent_edits_limits_and_central_context_insertions(self):
         seq = {1: "A"*60}
@@ -209,6 +210,44 @@ class CandidatesTest(unittest.TestCase):
         _,m=make_tensor(c,eligible(c,[r]))
         self.assertEqual(m["coverage"],1)
         self.assertEqual(m["other_count"],1)
+
+    def test_node_path_grouping_preserves_selection_counts_and_channels(self):
+        seq={1:"AC",2:"GG",3:"TT"}
+        rows=[]
+        for branch,base in ((3,"T"),(2,"C"),(2,"T"),(3,"C")):
+            edits=[(1,1,""),(1,1,"T")] if base=="T" else [(2,2,"")]
+            rows.append(read([(branch,0,False,[(2,2,"")]),(1,0,False,edits)],seq))
+        c=Candidate(1,1,"C","T","SNP")
+        e=eligible(c,rows)
+        x,m=make_tensor(c,e,rows=6,width=9,debug=True)
+        self.assertEqual([r["support"] for r in m["rows"]],["alt","ref","alt","ref"])
+        self.assertEqual([(g["start_row"],g["end_row"]) for g in m["row_groups"]],[(0,2),(2,4)])
+        self.assertEqual([g["path"][0]["node_id"] for g in m["row_groups"]],[2,3])
+        self.assertEqual((m["coverage"],m["alt_count"],m["ref_count"],m["af"]),(4,2,2,.5))
+        self.assertFalse(x[:,4:].any())
+        # All six channels and debug column maps travel with their record.
+        for ri,detail in enumerate(m["rows"]):
+            original=next(item for item in e if item[0].digest==detail["record_sha256"])
+            single,meta=make_tensor(c,[original],rows=1,width=9,debug=True)
+            np.testing.assert_array_equal(x[:,ri],single[:,0])
+            self.assertEqual(detail["columns"],meta["rows"][0]["columns"])
+        capped,small=make_tensor(c,e,rows=2,width=9,debug=True)
+        self.assertEqual(small["selected_counts"],{"alt":2})
+        self.assertEqual(small["coverage"],4)
+        self.assertEqual(small["af"],.5)
+        shuffled,_=make_tensor(c,list(reversed(e)),rows=6,width=9)
+        np.testing.assert_array_equal(x,shuffled)
+
+    def test_node_group_key_ignores_distant_branches_and_normalizes_strand(self):
+        seq={1:"AC",2:"G"*20,3:"TT",4:"AA"}
+        a=read([(3,0,False,[(2,2,"")]),(2,0,False,[(20,20,"")]),
+                (1,0,False,[(1,1,""),(1,1,"T")])],seq)
+        b=read([(1,0,True,[(1,1,"A"),(1,1,"")]),(2,0,True,[(20,20,"")]),
+                (4,0,True,[(2,2,"")])],seq)
+        c=a.observations[0].candidate
+        _,m=make_tensor(c,eligible(c,[a,b]),width=9,debug=True)
+        self.assertEqual(len(m["row_groups"]),1)
+        self.assertEqual(m["row_groups"][0]["path"],[{"node_id":2,"reverse":False},{"node_id":1,"reverse":False}])
 
     def test_synthetic_shards_summary_manifest(self):
         with tempfile.TemporaryDirectory() as directory:
