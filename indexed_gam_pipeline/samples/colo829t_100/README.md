@@ -1,5 +1,10 @@
 # COLO829T: 100 inspectable candidate-v4 examples
 
+**Post-optimization retest:** 1,000 tensors passed the independent audit; all 100
+regenerated images matched these PNGs pixel for pixel. [Recorded results](retest.json)
+and the [complete pipeline guide](../../CURRENT_PIPELINE.md) include the latest
+120.84-second build measurement and its graph-read bottleneck.
+
 These 100 examples were selected from a 1,000-tensor run on `COLO829T_3M.sorted.gam`.
 The set contains 70 SNPs, 20 insertions, and 10 deletions. Within each type,
 selection favors higher coverage and distinct graph node IDs. This is an
