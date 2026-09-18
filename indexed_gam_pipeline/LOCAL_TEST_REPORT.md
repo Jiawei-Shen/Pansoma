@@ -1,3 +1,44 @@
+# Ten-example validation and timing — 2026-09-18
+
+Expanded the checked HG008 set to **10 real examples across 8 nodes**: 6 SNPs,
+2 insertions and 2 deletions. Full six-channel PNGs, an overview image, compact
+summaries, provenance, image checksums and validation reports are available in
+[samples/TEN_EXAMPLES.md](samples/TEN_EXAMPLES.md).
+
+All 10 passed: independent raw-mapping coverage and original record multiset,
+shape/dtype, count sums/AF, gap qualities, candidate flags, insertion reference
+gaps, unused-row padding, oriented reference bases and node-path group membership.
+Checked **1,113 occupied rows and 110,503 reference columns**. The validation
+query decoded all 10,000 records of the small HG008 test GAM and returned 650
+records overlapping the eight target nodes. No genome-scale run was performed.
+The additional builds logged 103 unsupported context-event observations, none
+on selected target nodes; those events were not promoted to candidates.
+
+Legacy outputs were rebuilt for the five added target nodes. All coverages match;
+8/10 ALT/REF/other sets match exactly. Node 2189 differs by one BQ-3 ALT observation;
+node 67337 differs by two BQ-3 observations. All are MAPQ 60 and remain in coverage
+as other in v2. The independent original-edit audit matches all six SNPs under
+the respective mean-BQ legacy and per-observation-BQ v2 policies. Full evidence
+is recorded in `samples/ten_examples_legacy_comparison.json`.
+
+**23 pipeline tests passed**, including a new check that the example validator
+accepts valid fixtures and rejects a corrupted reference channel. The existing
+5 image-rendering regressions remain unchanged; all 10 newly rendered PNGs
+passed image-integrity checks and were reviewed in the overview.
+
+Measured one real single-candidate build at node 62170: **8.8219 s end to end**,
+**0.0529 s tensor assembly including grouping**, with 106 alignments, 1,138 graph
+context nodes and debug metadata enabled. This was a warm-cache-capable run after
+related jobs, not a cold-cache or whole-genome benchmark. The measurement is saved
+in `samples/single_tensor_timing.json`.
+
+Combined server-local arrays/debug files: `tmp/indexed_gam_ten_examples/combined/`.
+The portable update contains images and small reports, not the bulk source data
+or new tensor shards. The combined manifest retains all original build arguments
+and each example's source output location.
+
+---
+
 # Node-path row grouping — 2026-09-18
 
 Added a stable final row permutation to group candidate-v2 tensors by the ordered

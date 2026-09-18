@@ -1,5 +1,7 @@
 # HG008 legacy / candidate-v2 comparison
 
+**Latest update: [10 checked examples with grouped-row PNGs](TEN_EXAMPLES.md).**
+
 These PNGs are ready to view on a laptop; no GAM, graph database or new tensor
 shards are required. Open the image links below, or browse `images/`.
 Both formats were built from the same 10,000-alignment HG008 test GAM, matching

@@ -1,0 +1,123 @@
+{
+  "passed": true,
+  "examples": 10,
+  "event_types": {
+    "INS": 2,
+    "SNP": 6,
+    "DEL": 2
+  },
+  "reference_columns_checked": 110503,
+  "selected_rows_checked": 1113,
+  "indexed_query": {
+    "runs": 1,
+    "groups": 10,
+    "decoded_alignments": 10000,
+    "returned_alignments": 650
+  },
+  "source_gam": "tmp/HG008_pacbio_test.sorted.gam",
+  "source_index": "tmp/indexed_gam_current/rebuilt.gai",
+  "graph_node_sqlite": "/scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.GRCh38_CHM13_node_index.sqlite",
+  "checks": [
+    "shard/manifest shape and dtype",
+    "counts and AF",
+    "independent raw-mapping coverage",
+    "selected records versus original GAM multiset",
+    "padding and gap qualities",
+    "candidate flags and insertion reference gaps",
+    "oriented graph-reference bases",
+    "node-path sorting and group memberships"
+  ],
+  "candidates": [
+    {
+      "candidate_id": "577:138:INS:>A",
+      "event_type": "INS",
+      "coverage": 115,
+      "selected_alignments": 115,
+      "node_path_groups": 4,
+      "reference_columns_checked": 11153,
+      "passed": true
+    },
+    {
+      "candidate_id": "577:138:INS:>AT",
+      "event_type": "INS",
+      "coverage": 115,
+      "selected_alignments": 115,
+      "node_path_groups": 4,
+      "reference_columns_checked": 11153,
+      "passed": true
+    },
+    {
+      "candidate_id": "577:138:SNP:T>A",
+      "event_type": "SNP",
+      "coverage": 115,
+      "selected_alignments": 115,
+      "node_path_groups": 4,
+      "reference_columns_checked": 11465,
+      "passed": true
+    },
+    {
+      "candidate_id": "1841:0:SNP:T>C",
+      "event_type": "SNP",
+      "coverage": 117,
+      "selected_alignments": 117,
+      "node_path_groups": 1,
+      "reference_columns_checked": 11687,
+      "passed": true
+    },
+    {
+      "candidate_id": "2189:0:SNP:C>A",
+      "event_type": "SNP",
+      "coverage": 72,
+      "selected_alignments": 72,
+      "node_path_groups": 1,
+      "reference_columns_checked": 7168,
+      "passed": true
+    },
+    {
+      "candidate_id": "709:0:DEL:A>",
+      "event_type": "DEL",
+      "coverage": 125,
+      "selected_alignments": 125,
+      "node_path_groups": 1,
+      "reference_columns_checked": 12500,
+      "passed": true
+    },
+    {
+      "candidate_id": "711:0:DEL:T>",
+      "event_type": "DEL",
+      "coverage": 133,
+      "selected_alignments": 133,
+      "node_path_groups": 3,
+      "reference_columns_checked": 13296,
+      "passed": true
+    },
+    {
+      "candidate_id": "40189:0:SNP:C>T",
+      "event_type": "SNP",
+      "coverage": 101,
+      "selected_alignments": 101,
+      "node_path_groups": 1,
+      "reference_columns_checked": 10094,
+      "passed": true
+    },
+    {
+      "candidate_id": "67337:0:SNP:A>C",
+      "event_type": "SNP",
+      "coverage": 114,
+      "selected_alignments": 114,
+      "node_path_groups": 1,
+      "reference_columns_checked": 11390,
+      "passed": true
+    },
+    {
+      "candidate_id": "62170:0:SNP:C>T",
+      "event_type": "SNP",
+      "coverage": 106,
+      "selected_alignments": 106,
+      "node_path_groups": 1,
+      "reference_columns_checked": 10597,
+      "passed": true
+    }
+  ],
+  "full_genome_run": false
+}

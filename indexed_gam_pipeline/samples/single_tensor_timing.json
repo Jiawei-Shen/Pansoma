@@ -1,0 +1,15 @@
+{
+  "total_build_seconds": 8.821903642266989,
+  "tensor_assembly_seconds": [
+    0.05294480547308922
+  ],
+  "tensors": 1,
+  "candidate_node": 62170,
+  "shape": [
+    6,
+    200,
+    100
+  ],
+  "debug_rows": true,
+  "note": "One real-data single-candidate build after related runs; filesystem caches may be warm. Total includes query, graph loading, edit decoding, counting, tensor construction and output writing. Not a genome-scale throughput estimate."
+}

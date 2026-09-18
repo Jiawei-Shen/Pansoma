@@ -274,3 +274,20 @@ class CandidatesTest(unittest.TestCase):
                 self.assertEqual(str(x.dtype),manifest["dtype"])
                 self.assertEqual(meta["selected_alignments"],min(2,meta["coverage"]))
                 self.assertEqual(meta["coverage"],meta["alt_count"]+meta["ref_count"]+meta["other_count"])
+            # The standalone real-example auditor must also reject corrupted
+            # reference channels, not merely accept self-consistent metadata.
+            import sqlite3
+            from indexed_gam_pipeline.validate_examples import validate
+            db=folder/"graph.sqlite"
+            with sqlite3.connect(db) as connection:
+                connection.execute("CREATE TABLE nodes (node_id TEXT PRIMARY KEY, seq TEXT)")
+                connection.executemany("INSERT INTO nodes VALUES (?, ?)",[(str(n),"AAAAAA") for n in (10,20,30,1000)])
+            audit=validate(folder/"out",str(path),None,str(db))
+            self.assertTrue(audit["passed"])
+            self.assertEqual(audit["examples"],4)
+            shard=folder/"out/shard_00000_data.npy"
+            corrupted=np.load(shard)
+            corrupted[0,5,0,49]=BASES["C"]
+            np.save(shard,corrupted)
+            with self.assertRaisesRegex(ValueError,"graph base"):
+                validate(folder/"out",str(path),None,str(db))
