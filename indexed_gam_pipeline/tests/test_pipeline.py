@@ -3,11 +3,13 @@ from collections import Counter
 import argparse
 from contextlib import redirect_stdout
 import gzip
+import hashlib
 import importlib.util
 import io
 import json
 from pathlib import Path
 import struct
+import sqlite3
 import sys
 import tempfile
 import unittest
@@ -16,10 +18,10 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path[:0] = [str(ROOT), str(ROOT / "src")]
 import numpy as np
 import pysam
-import vg_pb2
-from indexed_gam_pipeline.gam_reader import IndexedGam, scan_gam, varint
-from indexed_gam_pipeline.segments import raw_segments, orient
-from indexed_gam_pipeline.run import batches, build
+from indexed_gam_pipeline import vg_pb2
+from indexed_gam_pipeline.gam_reader import IndexedGam, build_index, scan_gam, varint
+from indexed_gam_pipeline.segments import on_chromosome, raw_segments, orient
+from indexed_gam_pipeline.run import batches, build, discover, node_records
 from pangenome_ml_data_generation.tensors.builders import build_tensors_from_segments
 
 
@@ -80,6 +82,76 @@ def fixture(directory):
 
 
 class PipelineTest(unittest.TestCase):
+    def test_discovery_preserves_writer_statistics_schema(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path, _ = fixture(directory)
+            output = Path(directory) / "discovery"
+            args = argparse.Namespace(gam=str(path), output=str(output),
+                                      chr="", chr_nodes=None, node_alt=.05,
+                                      max_alignments=None, max_nodes=None)
+            with redirect_stdout(io.StringIO()):
+                discover(args)
+            stats = json.loads((output / "node_stats.json").read_text())
+            self.assertEqual(stats["10"], {"perfect": 0, "not_perfect": 3,
+                                           "max_read_length": 6,
+                                           "max_cigar_length": 6})
+            self.assertIn("10", (output / "target_nodes.txt").read_text().splitlines())
+
+    def test_bundled_hg008_sample_channels_and_rows(self):
+        folder = ROOT / "indexed_gam_pipeline" / "samples"
+        manifest = json.loads((folder / "manifest.json").read_text())
+        with gzip.open(folder / "hg008_3nodes_data.npy.gz", "rb") as stream:
+            tensors = np.load(io.BytesIO(stream.read()))
+        summary = [json.loads(line) for line in
+                   (folder / "hg008_3nodes_summary.ndjson").read_text().splitlines()]
+        self.assertEqual(tensors.shape, tuple(manifest["shape"]))
+        self.assertEqual(str(tensors.dtype), manifest["dtype"])
+        self.assertEqual(len(summary), len(tensors))
+        for tensor, meta, expected in zip(tensors, summary, manifest["variants"]):
+            self.assertEqual((meta["node_id"], meta["variant_key"]),
+                             (expected["node_id"], expected["variant_key"]))
+            rows = sorted(tensor[:, row, :].tobytes() for row in range(1, 201))
+            self.assertEqual(hashlib.sha256(b"".join(rows)).hexdigest(),
+                             expected["canonical_read_rows_sha256"])
+            self.assertEqual(hashlib.sha256(tensor[:, 0, :].tobytes()).hexdigest(),
+                             expected["reference_row_sha256"])
+            # SNV center: reference base, ALT read base, BQ, mismatch flag,
+            # MAPQ and X CIGAR code occupy the expected five channels.
+            center = 50
+            encoding = {"A": 20, "C": 30, "G": 50, "T": 70}
+            self.assertEqual(int(tensor[0, 0, center]), encoding[meta["v_ref"]])
+            self.assertEqual(int(tensor[0, 1, center]), encoding[meta["v_alt"]])
+            self.assertGreater(int(tensor[1, 1, center]), 0)
+            self.assertEqual(int(tensor[2, 1, center]), 5)
+            self.assertGreater(int(tensor[3, 1, center]), 0)
+            self.assertEqual(int(tensor[4, 1, center]), 90)
+
+    def test_rebuilt_index_matches_full_scan(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path, _ = fixture(directory)
+            index = Path(directory) / "rebuilt.gai"
+            report = build_index(path, index)
+            self.assertEqual(report["alignments"], 6)
+            nodes = {10, 30, 1000}
+            expected = Counter(a.SerializeToString() for a in scan_gam(path)
+                               if any(m.position.node_id in nodes for m in a.path.mapping))
+            actual = Counter(a.SerializeToString() for a in IndexedGam(path, index).fetch(nodes))
+            self.assertEqual(actual, expected)
+
+    def test_graph_sqlite_supplies_sequences_and_checks_json(self):
+        with tempfile.TemporaryDirectory() as directory:
+            folder = Path(directory)
+            db = folder / "graph.sqlite"
+            with sqlite3.connect(db) as connection:
+                connection.execute("CREATE TABLE nodes (node_id TEXT PRIMARY KEY, seq TEXT)")
+                connection.execute("INSERT INTO nodes VALUES ('10', 'AAAAAA')")
+            args = argparse.Namespace(node_json=None, node_sqlite=str(db), gfa=None)
+            self.assertEqual(node_records(args, {10})[10]["sequence"], "AAAAAA")
+            (folder / "nodes.json").write_text('[{"node_id": "10", "sequence": "CCCCCC"}]')
+            args.node_json = str(folder / "nodes.json")
+            with self.assertRaisesRegex(ValueError, "SQLite/JSON sequence mismatch"):
+                node_records(args, {10})
+
     def test_index_matches_full_scan_with_duplicates_and_cross_node_reads(self):
         with tempfile.TemporaryDirectory() as directory:
             path, _ = fixture(directory)
@@ -89,6 +161,16 @@ class PipelineTest(unittest.TestCase):
                                    if any(m.position.node_id in nodes for m in a.path.mapping))
                 got = Counter(a.SerializeToString() for a in reader.fetch(nodes))
                 self.assertEqual(expected, got)
+
+    def test_overlapping_index_runs_are_merged(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path, _ = fixture(directory)
+            reader = IndexedGam(path)
+            original = list(reader.fetch({10,20,30}))
+            # Redundant and overlapping runs in separate bins must not multiply records.
+            reader.bins += list(reader.bins)
+            self.assertEqual(Counter(a.SerializeToString() for a in reader.fetch({10,20,30})),
+                             Counter(a.SerializeToString() for a in original))
 
     def test_bad_index_and_truncated_varint_fail(self):
         with self.assertRaises(ValueError):
@@ -102,6 +184,10 @@ class PipelineTest(unittest.TestCase):
 
     def test_segment_read_cursor_mapq_zero_quality_and_reverse(self):
         a = alignment((10, 20), reverse=True)
+        self.assertFalse(on_chromosome(a, "chr1"))
+        a.refpos.add(name="chr1")
+        self.assertTrue(on_chromosome(a, "chr1"))
+        self.assertFalse(on_chromosome(a, "chr2"))
         a.sequence = "CCCCCCAATAAA"
         a.quality = bytes([30] * 11 + [0])
         nid, segment = list(raw_segments(a, {20}))[0]
@@ -130,7 +216,7 @@ class PipelineTest(unittest.TestCase):
             (folder / "nodes.txt").write_text("10\n20\n30\n1000\n")
             (folder / "nodes.json").write_text(json.dumps([
                 {"node_id": n, "sequence": "aaaaaa"} for n in (10, 20, 30, 1000)]))
-            args = argparse.Namespace(command="build", gam=str(path), index=None,
+            args = argparse.Namespace(command="build", format="legacy", gam=str(path), index=None,
                 nodes=str(folder / "nodes.txt"), node_json=str(folder / "nodes.json"),
                 gfa=None, output=str(folder / "out"), batch_nodes=2, max_node_span=100,
                 max_batch_segments=100, shard_size=2, min_mapq=10, min_af=.05,

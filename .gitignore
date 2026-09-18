@@ -46,3 +46,7 @@ logs/
 # Build outputs
 build/
 *.so
+
+# Indexed GAM inputs and generated query indexes
+*.gam
+*.gai
