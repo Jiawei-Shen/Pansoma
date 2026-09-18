@@ -12,7 +12,7 @@ BASES = {0: ".", 1: "A", 2: "C", 3: "G", 4: "T", 5: "N", 6: "-"}
 def export(folder, output, per_class=3):
     folder, output = Path(folder), Path(output)
     manifest = json.loads((folder / "manifest.json").read_text())
-    if manifest["tensor_format_version"] not in ("indexed-gam-candidate-v2", "indexed-gam-candidate-v3"):
+    if manifest["tensor_format_version"] not in ("indexed-gam-candidate-v2", "indexed-gam-candidate-v3", "indexed-gam-candidate-v4"):
         raise ValueError("Only candidate-v2/v3 tensors are supported")
     lines = ["# '.' = padding; '-' = alignment gap; '^' = candidate region"]
     for line in (folder / "variant_summary.ndjson").read_text().splitlines():

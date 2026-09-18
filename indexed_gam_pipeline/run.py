@@ -310,7 +310,10 @@ def main():
             sub.add_argument("--nodes", required=True)
             sub.add_argument("--index", help="Default: GAM path + .gai")
         if name == "build":
-            sub.add_argument("--format", choices=("candidate-v3", "candidate-v2", "legacy"), default="candidate-v3")
+            sub.add_argument("--format", choices=("candidate-v4", "candidate-v3", "candidate-v2", "legacy"), default="candidate-v4")
+            sub.add_argument("--gbz", help="Matching GBZ graph for candidate-v4 occurrences")
+            sub.add_argument("--gbz-query", help="Compiled gbz_node_counts helper")
+            sub.add_argument("--occurrence-cache", help="Reusable GBZ occurrence SQLite cache")
             sub.add_argument("--walk-counts", help="Reusable SQLite node-to-distinct-W-count cache; required for candidate-v3")
             sub.add_argument("--rows", type=positive, default=200)
             sub.add_argument("--width", type=positive, default=100)

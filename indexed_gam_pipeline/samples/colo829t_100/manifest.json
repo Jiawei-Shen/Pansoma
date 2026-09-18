@@ -1,8 +1,8 @@
 {
-  "format": "indexed-gam-candidate-v3",
+  "format": "indexed-gam-candidate-v4",
   "source_gam": "/scratch/jshen/data/COLO829T/illumina/GAM/COLO829T_3M.sorted.gam",
-  "source_graph": "/scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.gfa",
-  "source_graph_sha256": "d150def5ad83987b0934037ebb097e392df980a7976e8f4fa5ac32f8eb434d68",
+  "source_graph": "/scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.gbz",
+  "source_graph_sha256": "d6fd0ad2f46c0355f0dc61813d27448e9b6c802ddcef6a4a29fbcf2322467415",
   "source_run_tensors": 1000,
   "selected_examples": 100,
   "selection": "70 SNP, 20 INS, 10 DEL; prefer higher coverage and distinct node IDs within each event type",
@@ -20,7 +20,7 @@
     "mapping_quality",
     "alignment_operation",
     "row_graph_reference_base",
-    "node_distinct_w_record_count"
+    "node_distinct_gbwt_path_count"
   ],
   "build_parameters": {
     "min_mapq": 10,
@@ -135,8 +135,59 @@
     971
   ],
   "timing": {
-    "tensor_generation_wall_seconds": 141.25,
-    "image_generation_wall_seconds": 389.34,
-    "discovery_excluded": true
+    "tensor_generation_wall_seconds": 245.7562512382865,
+    "includes_initial_cache_hash_and_gbz_load": true,
+    "image_generation_wall_seconds": 38.2094321846962,
+    "images_rendered": 100,
+    "render_workers": 4,
+    "discovery_excluded": true,
+    "debug_rows_enabled": true
+  },
+  "occurrence_lookup": {
+    "path": "/scratch/jshen/Github/Pansoma/tmp/hprc_gbwt_counts.sqlite",
+    "metric": "distinct-gbwt-paths-v1",
+    "source": {
+      "path": "/scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.gbz",
+      "size": 4419285240,
+      "mtime_ns": 1688700156000000000
+    },
+    "source_sha256": "d6fd0ad2f46c0355f0dc61813d27448e9b6c802ddcef6a4a29fbcf2322467415",
+    "counting": "distinct GBWT path IDs visiting either node orientation; repeated visits and reverse-complement copies counted once; includes reference, haplotype and generic paths",
+    "index": {
+      "bidirectional": true,
+      "indexed_paths": 44624788,
+      "metric": "distinct-gbwt-paths-v1",
+      "protocol_version": 1
+    }
+  },
+  "source_build_arguments": {
+    "command": "build",
+    "gam": "/scratch/jshen/data/COLO829T/illumina/GAM/COLO829T_3M.sorted.gam",
+    "chr": "",
+    "output": "tmp/colo829t_1000_v4",
+    "nodes": "tmp/colo829t_1000_nodes.txt",
+    "index": null,
+    "format": "candidate-v4",
+    "walk_counts": "tmp/hprc_distinct_w_counts.sqlite",
+    "rows": 200,
+    "width": 100,
+    "debug_rows": true,
+    "gfa": null,
+    "node_sqlite": "/scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.GRCh38_CHM13_node_index.sqlite",
+    "node_json": null,
+    "batch_nodes": 32,
+    "max_node_span": 10000,
+    "max_batch_segments": 1000000,
+    "shard_size": 1000,
+    "max_tensors": 1000,
+    "min_mapq": 10,
+    "min_af": 0.05,
+    "min_variants": 1,
+    "min_allele_bq": 10,
+    "max_indel_len": 50,
+    "variant_type": "all",
+    "gbz": "/scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.gbz",
+    "gbz_query": "tmp/gbz_node_counts",
+    "occurrence_cache": "tmp/hprc_gbwt_counts.sqlite"
   }
 }

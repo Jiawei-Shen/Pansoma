@@ -1,4 +1,4 @@
-# COLO829T: 100 inspectable candidate-v3 examples
+# COLO829T: 100 inspectable candidate-v4 examples
 
 These 100 examples were selected from a 1,000-tensor run on `COLO829T_3M.sorted.gam`.
 The set contains 70 SNPs, 20 insertions, and 10 deletions. Within each type,
@@ -16,9 +16,33 @@ with gzip.open("tensors_100.npy.gz", "rb") as f:
 
 Rows in `summary.ndjson` and the tensor array use the table index below.
 The `source_index` field points to the original 1,000-tensor shard.
-The 1,000-tensor generation took **141.25 seconds**; rendering 1,000 PNGs
-with four workers took **389.34 seconds**. The 300,000-read exploratory
-node-discovery pass is excluded from those timings.
+The corrected 1,000-tensor generation took **245.76 seconds**, including initial
+GBZ hashing/loading and cache creation, with debug row metadata enabled.
+Rendering these **100 PNGs** with four workers took **38.21 seconds**.
+Node discovery is excluded. Exact timings and build arguments are in `manifest.json`.
+
+Channel 7 now counts distinct GBWT paths in **hprc-v1.1-mc-grch38.d9.gbz**.
+Repeated visits and reverse-complement copies count once; this includes reference
+paths. The old GFA W-record counts undercounted the paths available in this GBZ.
+Among 368 candidate nodes in the 1,000-tensor run, the median is **90** and only
+**one** node has count 1 (range 1–91). The first six channels are unchanged.
+
+The [occurrence audit](occurrence_audit.json) checks all **109,800 occupied cells**
+across 1,000 tensors and compares six nodes independently against `gbz-tool`:
+
+| Node ID | Correct GBWT path count |
+|---:|---:|
+| 233 | 91 |
+| 2753 | 86 |
+| 2758 | 42 |
+| 15395 | 1 |
+| 38702 | 90 |
+| 51182 | 24 |
+
+The saved 100 examples also passed the independent GAM/graph auditor (coverage,
+source records, graph bases, row grouping, padding, and occurrence values).
+These node IDs refer specifically to the d9 graph: node 2753 is 114 bases and
+node 51182 is `C`. Counts from a graph with different node sequences do not apply.
 
 | # | Candidate | Coverage | ALT/REF/other | Image |
 |---:|---|---:|---:|---|

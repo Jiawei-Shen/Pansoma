@@ -119,16 +119,17 @@ def main():
     if len(versions) != 1:
         raise ValueError('Comparison requires one candidate tensor format')
     report['tensor_format_version'] = next(iter(versions))
-    if report['tensor_format_version'] == 'indexed-gam-candidate-v3':
-        # Keep v2 reports backward compatible while labeling v3 evidence accurately.
+    if report['tensor_format_version'] in ('indexed-gam-candidate-v3', 'indexed-gam-candidate-v4'):
+        target_version = report['tensor_format_version'].rsplit('-', 1)[-1]
+        # Keep v2 reports backward compatible while labeling the current format accurately.
         def relabel(value):
             if isinstance(value, dict):
-                return {k.replace('v2', 'v3'): relabel(v) for k, v in value.items()}
+                return {k.replace('v2', target_version): relabel(v) for k, v in value.items()}
             if isinstance(value, list):
                 return [relabel(v) for v in value]
             return value
         report = relabel(report)
-        report['note'] = report['note'].replace('v2', 'v3')
+        report['note'] = report['note'].replace('v2', target_version)
     Path(args.output).write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(report,indent=2))
     if not report['raw_snp_audits_passed']:
