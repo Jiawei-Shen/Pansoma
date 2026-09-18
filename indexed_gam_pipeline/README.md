@@ -1,5 +1,8 @@
 # Seven-channel candidate tensors (v4): GBZ node occurrences
 
+See [Current pipeline: inputs through validation and images](CURRENT_PIPELINE.md)
+for the complete workflow, exact test commands, and latest rerun evidence.
+
 `build` defaults to **candidate-v4**, shape `(7,200,100)`, `int32`.
 Channel 7 is `node_distinct_gbwt_path_count`: the number of distinct physical
 GBWT paths visiting the column's node, including reference and haplotype paths.

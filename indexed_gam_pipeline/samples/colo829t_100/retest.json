@@ -1,0 +1,966 @@
+{
+  "status": "passed",
+  "recorded_utc": "2026-09-18T22:15:15.113671+00:00",
+  "implementation_commit": "dd8b41fb862e60bb8de3de588025924ad7149091",
+  "scope": "Post-optimization rerun: separate 300000-alignment discovery test, fixed-node 1000-tensor CLI build, independent audit of all 1000, and 100 published-gallery image reproductions. Not a whole-genome validation.",
+  "environments": {
+    "build": {
+      "python": "3.11.3 (main, Apr 19 2023, 23:54:32) [GCC 11.2.0]",
+      "executable": "/wanglab/jshen/anaconda3/bin/python",
+      "numpy": "2.3.2",
+      "pysam": "0.23.0",
+      "protobuf": "5.29.3"
+    },
+    "render": {
+      "executable": "/wanglab/jshen/anaconda3/envs/hunyuanvideo15/bin/python",
+      "python": "3.10.19 | packaged by conda-forge | (main, Jan 26 2026, 23:45:08) [GCC 14.3.0]",
+      "numpy": "1.26.4",
+      "matplotlib": "3.10.8",
+      "pillow": "12.1.1"
+    }
+  },
+  "inputs": {
+    "gam": {
+      "path": "/scratch/jshen/data/COLO829T/illumina/GAM/COLO829T_3M.sorted.gam",
+      "size_bytes": 635850660,
+      "mtime_ns": 1789676186000000000
+    },
+    "gai": {
+      "path": "/scratch/jshen/data/COLO829T/illumina/GAM/COLO829T_3M.sorted.gam.gai",
+      "size_bytes": 399061,
+      "mtime_ns": 1789676185000000000
+    },
+    "node_sqlite": {
+      "path": "/scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.GRCh38_CHM13_node_index.sqlite",
+      "size_bytes": 1867472896,
+      "mtime_ns": 1781141442000000000
+    },
+    "gbz": {
+      "path": "/scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.gbz",
+      "size": 4419285240,
+      "mtime_ns": 1688700156000000000
+    },
+    "gbz_sha256": "d6fd0ad2f46c0355f0dc61813d27448e9b6c802ddcef6a4a29fbcf2322467415",
+    "benchmark_nodes": {
+      "path": "indexed_gam_pipeline/samples/colo829t_100/benchmark_nodes.txt",
+      "count": 3000,
+      "sha256": "df7bf841b2a718107581c5740dc4c26c03b8ba1c99b155f06cb13db13290e1f2",
+      "selection": "Frozen historical benchmark targets; not the first 3000 current discovery targets"
+    }
+  },
+  "discovery": {
+    "report": {
+      "gam": "/scratch/jshen/data/COLO829T/illumina/GAM/COLO829T_3M.sorted.gam",
+      "alignments_scanned": 300000,
+      "nodes_observed": 656362,
+      "nodes_selected": 47847,
+      "node_alt": 0.05,
+      "chromosome": "",
+      "exploratory": true,
+      "max_alignments": 300000,
+      "max_nodes": null
+    },
+    "target_ids_match_previous_discovery": true,
+    "command": [
+      "/wanglab/jshen/anaconda3/bin/python",
+      "indexed_gam_pipeline/run.py",
+      "discover",
+      "--gam",
+      "/scratch/jshen/data/COLO829T/illumina/GAM/COLO829T_3M.sorted.gam",
+      "--output",
+      "tmp/colo_final_retest_discovery",
+      "--max-alignments",
+      "300000",
+      "--min-mapq",
+      "5",
+      "--node-alt",
+      "0.05"
+    ]
+  },
+  "build": {
+    "command": [
+      "/wanglab/jshen/anaconda3/bin/python",
+      "indexed_gam_pipeline/run.py",
+      "build",
+      "--gam",
+      "/scratch/jshen/data/COLO829T/illumina/GAM/COLO829T_3M.sorted.gam",
+      "--output",
+      "tmp/colo_final_retest_build",
+      "--nodes",
+      "tmp/colo829t_1000_nodes.txt",
+      "--format",
+      "candidate-v4",
+      "--gbz",
+      "/scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.gbz",
+      "--gbz-query",
+      "tmp/gbz_node_counts",
+      "--occurrence-cache",
+      "tmp/hprc_gbwt_counts.sqlite",
+      "--rows",
+      "200",
+      "--width",
+      "100",
+      "--debug-rows",
+      "--node-sqlite",
+      "/scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.GRCh38_CHM13_node_index.sqlite",
+      "--gam-cache-mb",
+      "64",
+      "--batch-nodes",
+      "32",
+      "--max-node-span",
+      "10000",
+      "--max-batch-segments",
+      "1000000",
+      "--shard-size",
+      "1000",
+      "--max-tensors",
+      "1000",
+      "--min-mapq",
+      "10",
+      "--min-af",
+      "0.05",
+      "--min-variants",
+      "1",
+      "--min-allele-bq",
+      "10.0",
+      "--max-indel-len",
+      "50",
+      "--variant-type",
+      "all"
+    ],
+    "manifest": {
+      "schema_version": 4,
+      "tensor_format_version": "indexed-gam-candidate-v4",
+      "status": "complete",
+      "arguments": {
+        "command": "build",
+        "gam": "/scratch/jshen/data/COLO829T/illumina/GAM/COLO829T_3M.sorted.gam",
+        "chr": "",
+        "output": "tmp/colo_final_retest_build",
+        "nodes": "tmp/colo829t_1000_nodes.txt",
+        "index": null,
+        "format": "candidate-v4",
+        "gbz": "/scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.gbz",
+        "gbz_query": "tmp/gbz_node_counts",
+        "occurrence_cache": "tmp/hprc_gbwt_counts.sqlite",
+        "walk_counts": null,
+        "rows": 200,
+        "width": 100,
+        "debug_rows": true,
+        "gfa": null,
+        "node_sqlite": "/scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.GRCh38_CHM13_node_index.sqlite",
+        "node_json": null,
+        "gam_cache_mb": 64,
+        "batch_nodes": 32,
+        "max_node_span": 10000,
+        "max_batch_segments": 1000000,
+        "shard_size": 1000,
+        "max_tensors": 1000,
+        "min_mapq": 10,
+        "min_af": 0.05,
+        "min_variants": 1,
+        "min_allele_bq": 10.0,
+        "max_indel_len": 50,
+        "variant_type": "all"
+      },
+      "parameters": {
+        "min_mapq": 10,
+        "min_af": 0.05,
+        "min_variants": 1,
+        "min_allele_bq": 10.0,
+        "max_indel_len": 50,
+        "variant_type": "all",
+        "rows": 200,
+        "width": 100
+      },
+      "shape": [
+        7,
+        200,
+        100
+      ],
+      "dtype": "int32",
+      "channels": [
+        "read_base",
+        "base_quality",
+        "event_flags",
+        "mapping_quality",
+        "alignment_operation",
+        "row_graph_reference_base",
+        "node_distinct_gbwt_path_count"
+      ],
+      "encodings": {
+        "bases": {
+          "A": 1,
+          "C": 2,
+          "G": 3,
+          "T": 4,
+          "N": 5,
+          "-": 6
+        },
+        "padding": 0,
+        "quality_without_read_base": -1,
+        "missing_quality": -1,
+        "operations": {
+          "M": 1,
+          "X": 2,
+          "I": 3,
+          "D": 4,
+          "C": 5,
+          "G": 6
+        },
+        "event_flags": {
+          "difference": 1,
+          "candidate_region": 2
+        },
+        "node_distinct_gbwt_path_count": {
+          "value": "exact distinct GBWT path count; either orientation; repeated visits counted once",
+          "padding_and_missing_coverage": 0,
+          "insertion_and_gap": "count of the row's anchor node",
+          "missing_node_or_sequence_mismatch": "error"
+        }
+      },
+      "coordinates": "zero-based forward node; half-open intervals and candidate_columns",
+      "normalization": "exact forward node/position/alleles; no repeat or cross-node normalization",
+      "insertion_overlap": "closed boundary [mapping.start,mapping.end]; REF requires adjacent M/X columns on both sides",
+      "repeated_visits": "one count and row per record; ALT then REF then other, earliest mapping breaks ties",
+      "row_selection": "ALT then REF then other; descending MAPQ then record SHA256; identical records retained",
+      "row_order": "candidate-oriented visible node path; within each path retain selection order",
+      "gai_version": 1,
+      "nodes": 3000,
+      "shards": 1,
+      "tensors": 1000,
+      "unsupported_events": 53,
+      "filtered_candidates": 877,
+      "debug_rows": true,
+      "occurrence_lookup": {
+        "path": "/scratch/jshen/Github/Pansoma/tmp/hprc_gbwt_counts.sqlite",
+        "metric": "distinct-gbwt-paths-v1",
+        "source": {
+          "path": "/scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.gbz",
+          "size": 4419285240,
+          "mtime_ns": 1688700156000000000
+        },
+        "source_sha256": "d6fd0ad2f46c0355f0dc61813d27448e9b6c802ddcef6a4a29fbcf2322467415",
+        "counting": "distinct GBWT path IDs visiting either node orientation; repeated visits and reverse-complement copies counted once; includes reference, haplotype and generic paths",
+        "index": {
+          "bidirectional": true,
+          "indexed_paths": 44624788,
+          "metric": "distinct-gbwt-paths-v1",
+          "protocol_version": 1
+        }
+      },
+      "timing": {
+        "gam_fetch_seconds": 2.8955174051225185,
+        "graph_sequences_seconds": 107.63437663763762,
+        "occurrence_seconds": 1.392110150307417,
+        "decode_edits_seconds": 0.7101835273206234,
+        "candidate_tensors_and_shard_writes_seconds": 5.677487414330244,
+        "total_wall_seconds": 120.84313157200813
+      },
+      "occurrence_performance": {
+        "cache_setup_seconds": 0.4835222400724888,
+        "helper_startup_seconds": 0.0,
+        "cache_hits": 1938,
+        "cache_misses": 0
+      },
+      "gam_group_cache": {
+        "group_hits": 1249,
+        "group_misses": 43,
+        "indexed_records": 43000,
+        "peak_accounted_bytes": 58029482,
+        "limit_bytes": 67108864
+      }
+    }
+  },
+  "independent_audit": {
+    "passed": true,
+    "examples": 1000,
+    "event_types": {
+      "SNP": 876,
+      "INS": 114,
+      "DEL": 10
+    },
+    "reference_columns_checked": 104620,
+    "selected_rows_checked": 1427,
+    "indexed_query": {
+      "runs": 18,
+      "groups": 43,
+      "decoded_alignments": 43889,
+      "returned_alignments": 889
+    },
+    "source_gam": "/scratch/jshen/data/COLO829T/illumina/GAM/COLO829T_3M.sorted.gam",
+    "source_index": null,
+    "graph_node_sqlite": "/scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.GRCh38_CHM13_node_index.sqlite",
+    "checks": [
+      "shard/manifest shape and dtype",
+      "counts and AF",
+      "independent raw-mapping coverage",
+      "selected records versus original GAM multiset",
+      "padding and gap qualities",
+      "candidate flags and insertion reference gaps",
+      "oriented graph-reference bases",
+      "node-path sorting and group memberships"
+    ],
+    "walk_counts_checked": true,
+    "walk_count_cache": null,
+    "gbz": "/scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.gbz",
+    "occurrence_cache": "tmp/hprc_gbwt_counts.sqlite",
+    "full_genome_run": false
+  },
+  "occurrence_cells_checked": 109800,
+  "comparison": {
+    "files": {
+      "shard_00000_data.npy": {
+        "sha256": "2a20d795250eacb51e1a62b50c289e2c67401b10e2bff6622184de29a6431e2c",
+        "reference_sha256": "2a20d795250eacb51e1a62b50c289e2c67401b10e2bff6622184de29a6431e2c",
+        "byte_identical": true,
+        "semantically_equal": true
+      },
+      "variant_summary.ndjson": {
+        "sha256": "c0b28e48f0db20d5de777adeed8451e58f0e7b033d53476567fab2fcd208f24d",
+        "reference_sha256": "78b7cfa575a5e766ef15f713738a7749ae0c08db9d9190f2dd9ba32d424e62c9",
+        "byte_identical": false,
+        "semantically_equal": true
+      },
+      "filtered_candidates.ndjson": {
+        "sha256": "2d33081e112e027d182c49ab27075dde1a323dd6900153210395d136d8f20c04",
+        "reference_sha256": "2d33081e112e027d182c49ab27075dde1a323dd6900153210395d136d8f20c04",
+        "byte_identical": true,
+        "semantically_equal": true
+      },
+      "unsupported_events.ndjson": {
+        "sha256": "0511df1fe3c3e3224100cf1a6ad4c005ef940aba92234233494c2cfdce8a8783",
+        "reference_sha256": "0511df1fe3c3e3224100cf1a6ad4c005ef940aba92234233494c2cfdce8a8783",
+        "byte_identical": true,
+        "semantically_equal": true
+      }
+    },
+    "retained_100_tensor_values_identical": true,
+    "note": "CLI writes min_allele_bq as 10.0; prior programmatic benchmark wrote 10. Parsed summaries are equal."
+  },
+  "regression_tests": {
+    "pipeline": 33,
+    "visualization": 7,
+    "total": 40,
+    "passed": true,
+    "commands": [
+      "GBZ_QUERY=tmp/gbz_node_counts GBZ_TOOL=/scratch/jshen/Github/gbz-tool/gbztool python -m unittest discover -s indexed_gam_pipeline/tests -v",
+      "MPLBACKEND=Agg MPLCONFIGDIR=/tmp/pansoma_matplotlib /wanglab/jshen/anaconda3/envs/hunyuanvideo15/bin/python -m unittest discover -s tests -p test_tensor_visualization.py -v"
+    ]
+  },
+  "images": {
+    "images": 100,
+    "wall_seconds": 53.2028674967587,
+    "workers": 4,
+    "all_pngs_valid": true,
+    "all_pixels_equal_to_published": true,
+    "files": [
+      {
+        "image": "sample_000.png",
+        "source_index": 1,
+        "pixels_equal_to_published": true,
+        "sha256": "331886832ed4ded760be4272ab97d3528fa8c16f7980cc5bc1cbcaa2aa261528"
+      },
+      {
+        "image": "sample_001.png",
+        "source_index": 2,
+        "pixels_equal_to_published": true,
+        "sha256": "26c7e6568b38b4761127b640f0d34362ba363485e52440afb782628a8653ae25"
+      },
+      {
+        "image": "sample_002.png",
+        "source_index": 3,
+        "pixels_equal_to_published": true,
+        "sha256": "08eade39b2bdcc25fb2fa0a6157c98d9d4a6fc29eb4fa86b949b91b417f38ccb"
+      },
+      {
+        "image": "sample_003.png",
+        "source_index": 11,
+        "pixels_equal_to_published": true,
+        "sha256": "b50c4493fe2da4fae37e45a2734885a138021049d1e903f3a804e2f0c0d3eb47"
+      },
+      {
+        "image": "sample_004.png",
+        "source_index": 15,
+        "pixels_equal_to_published": true,
+        "sha256": "0b402383ab44676d1190bcfcd66f4bf40fa7e4a258783a21c75439420b601717"
+      },
+      {
+        "image": "sample_005.png",
+        "source_index": 18,
+        "pixels_equal_to_published": true,
+        "sha256": "682db850f5e3cfb2152d234604c50dc476747dd73a2da099f598a40a5b38d43a"
+      },
+      {
+        "image": "sample_006.png",
+        "source_index": 33,
+        "pixels_equal_to_published": true,
+        "sha256": "b0b2bd46032903241874b444fee71b9126da124e002b45fbeca18ba7ca963cf2"
+      },
+      {
+        "image": "sample_007.png",
+        "source_index": 37,
+        "pixels_equal_to_published": true,
+        "sha256": "53efe7c205471533228ca2c94f1a4840dcf56ae94cbb3f5e7a5075531b31da82"
+      },
+      {
+        "image": "sample_008.png",
+        "source_index": 42,
+        "pixels_equal_to_published": true,
+        "sha256": "0375a67d5dcdbc674034e1b1d69a088d3f1c4bcffa8e0c299580ea1676664781"
+      },
+      {
+        "image": "sample_009.png",
+        "source_index": 43,
+        "pixels_equal_to_published": true,
+        "sha256": "039a65ed43f4ffd579caef2208f08e244b13a2fba9e866a8919e66a19ebd57f1"
+      },
+      {
+        "image": "sample_010.png",
+        "source_index": 46,
+        "pixels_equal_to_published": true,
+        "sha256": "ef8f40bf9852d61e91e1b6d7de66f1343b54a9fb7167840e7acbe22ed34ad13b"
+      },
+      {
+        "image": "sample_011.png",
+        "source_index": 47,
+        "pixels_equal_to_published": true,
+        "sha256": "fbfd03a7591efe8141ffd87ac82b2fe32c85366c2fcd51e2294df1b2bb7dc6e9"
+      },
+      {
+        "image": "sample_012.png",
+        "source_index": 48,
+        "pixels_equal_to_published": true,
+        "sha256": "0001bb978c9a618d6c8223f4721a7e67bf6681da1c8b49e1c22d474bcde89b7c"
+      },
+      {
+        "image": "sample_013.png",
+        "source_index": 50,
+        "pixels_equal_to_published": true,
+        "sha256": "8e4c5e640703872d64d42534e941879bdb465b14d7378b62b1c38ed48280ef9b"
+      },
+      {
+        "image": "sample_014.png",
+        "source_index": 51,
+        "pixels_equal_to_published": true,
+        "sha256": "ca64d99ecf2eba8569a562478f5da18e9e51bcb761d2c1a0c13d5d2c43644b67"
+      },
+      {
+        "image": "sample_015.png",
+        "source_index": 52,
+        "pixels_equal_to_published": true,
+        "sha256": "087790f29c27963a5683db3c1f8829b9216491e08cce0e37610ffd3d1056269d"
+      },
+      {
+        "image": "sample_016.png",
+        "source_index": 66,
+        "pixels_equal_to_published": true,
+        "sha256": "7820c4e1b4616cd9edd27cefebfba30461582dfa74dec3aaa76121b90d3a9f65"
+      },
+      {
+        "image": "sample_017.png",
+        "source_index": 67,
+        "pixels_equal_to_published": true,
+        "sha256": "580105c100aed08f42d70059a2637f730ef02b9335fe95bfb4b4b08f079fd3ee"
+      },
+      {
+        "image": "sample_018.png",
+        "source_index": 74,
+        "pixels_equal_to_published": true,
+        "sha256": "92091f1e169f56af89884d0fbd14dd1e74ca2ea01f1de9c8a60dc273f15e21e6"
+      },
+      {
+        "image": "sample_019.png",
+        "source_index": 80,
+        "pixels_equal_to_published": true,
+        "sha256": "e68e24522e08a9ee65524e433dfd2554cd57afdb182d9e3393cbea67d9751c46"
+      },
+      {
+        "image": "sample_020.png",
+        "source_index": 83,
+        "pixels_equal_to_published": true,
+        "sha256": "1620013cbcfc5407a34fa25a9f56f757f2eb643645816531f6579b965f5a6f76"
+      },
+      {
+        "image": "sample_021.png",
+        "source_index": 84,
+        "pixels_equal_to_published": true,
+        "sha256": "79282510a8a61b4ebcdb502648ba1771a8ccd7e56eba770d26cbf27a191ba129"
+      },
+      {
+        "image": "sample_022.png",
+        "source_index": 85,
+        "pixels_equal_to_published": true,
+        "sha256": "9b102620a7c92ed3548638730208d12bd1a598ed31516a6bde3bcbb3d7f8f33d"
+      },
+      {
+        "image": "sample_023.png",
+        "source_index": 86,
+        "pixels_equal_to_published": true,
+        "sha256": "78f8d91532e0916a7fd4d34e0d04886838253af038704238b2992aeac2a4d65b"
+      },
+      {
+        "image": "sample_024.png",
+        "source_index": 89,
+        "pixels_equal_to_published": true,
+        "sha256": "94a4f3cf225f13427681215a45bc770da0d537841a13c17cf92583c3e8d2f1d8"
+      },
+      {
+        "image": "sample_025.png",
+        "source_index": 91,
+        "pixels_equal_to_published": true,
+        "sha256": "bc3ac6b972cd720c790d4c4ee96da2342570a6b05c7250d7db75e2577bbda35e"
+      },
+      {
+        "image": "sample_026.png",
+        "source_index": 95,
+        "pixels_equal_to_published": true,
+        "sha256": "85f6c3be7bcf3501b854775ca35eb62638064896cae82797b62f8c1481ed2bf4"
+      },
+      {
+        "image": "sample_027.png",
+        "source_index": 114,
+        "pixels_equal_to_published": true,
+        "sha256": "7a6e5e09101861e322961c1b10d069df90b3951a603b60a11b42914875d62ceb"
+      },
+      {
+        "image": "sample_028.png",
+        "source_index": 115,
+        "pixels_equal_to_published": true,
+        "sha256": "ce51c4a279e4bb2c7053089a5309b11e3ea3aaf2104d11199cd0e13842018bbe"
+      },
+      {
+        "image": "sample_029.png",
+        "source_index": 117,
+        "pixels_equal_to_published": true,
+        "sha256": "43f94ec9a44e19b557c967f3a7225d149c5d8781316480ec7f636f0fd1385ae5"
+      },
+      {
+        "image": "sample_030.png",
+        "source_index": 118,
+        "pixels_equal_to_published": true,
+        "sha256": "2505c079f5da38d2b2f697b262a7fedbf30094cdc8f09d43cdbdd240dd0f25b7"
+      },
+      {
+        "image": "sample_031.png",
+        "source_index": 126,
+        "pixels_equal_to_published": true,
+        "sha256": "49f8f07f70da3c20768be3a3709e2be00b441845b37c6107c4b724dbb2f392d0"
+      },
+      {
+        "image": "sample_032.png",
+        "source_index": 128,
+        "pixels_equal_to_published": true,
+        "sha256": "105c47313dda89430b7d1afb1b2be39dd0b88630f7214f4fdba476a52f516069"
+      },
+      {
+        "image": "sample_033.png",
+        "source_index": 139,
+        "pixels_equal_to_published": true,
+        "sha256": "5763ee975665af03d33c2e9e0b29a8fb6d9ac01845ecba2e96b5f4387d2524bf"
+      },
+      {
+        "image": "sample_034.png",
+        "source_index": 148,
+        "pixels_equal_to_published": true,
+        "sha256": "86e132c75ec9c009a1e422dddc398d0063928ccddf0a43d02bc13fd0ae062686"
+      },
+      {
+        "image": "sample_035.png",
+        "source_index": 149,
+        "pixels_equal_to_published": true,
+        "sha256": "ff5cdf69a04a0cb702170243a9f1b43579fa40a8aadaf12235dc3cba053f2db0"
+      },
+      {
+        "image": "sample_036.png",
+        "source_index": 151,
+        "pixels_equal_to_published": true,
+        "sha256": "efa1fa7eadd16b252a263f258ca5e64b3bc95fb6519ff66a2ae762dc6839f2e7"
+      },
+      {
+        "image": "sample_037.png",
+        "source_index": 158,
+        "pixels_equal_to_published": true,
+        "sha256": "2795dcfbe5c47301fc41911dfc191b998ad30d0aaa5681cefba11d37af5b74e3"
+      },
+      {
+        "image": "sample_038.png",
+        "source_index": 160,
+        "pixels_equal_to_published": true,
+        "sha256": "d15e984a4ca1a46d9b54c0ce640a42b8da53fcc3c3df32e75e689d658fc6a010"
+      },
+      {
+        "image": "sample_039.png",
+        "source_index": 161,
+        "pixels_equal_to_published": true,
+        "sha256": "ca8463744a29857478dd0c6556a93a3f41c1ad1fe5efbdb8a6f47ac4f7b7647f"
+      },
+      {
+        "image": "sample_040.png",
+        "source_index": 162,
+        "pixels_equal_to_published": true,
+        "sha256": "bea1866c1b44e011d0d099c820b644de25707bce3ee5cbe0dcafb5a657390fcb"
+      },
+      {
+        "image": "sample_041.png",
+        "source_index": 169,
+        "pixels_equal_to_published": true,
+        "sha256": "15551256944ddfc7eda8907bb74720b5999c3267f8eaf4e946c75f36347bced6"
+      },
+      {
+        "image": "sample_042.png",
+        "source_index": 170,
+        "pixels_equal_to_published": true,
+        "sha256": "bec8ecf0cff7d18e45b1a68b9f3ee8622c38276b8761d8291c9d2f63e97373f5"
+      },
+      {
+        "image": "sample_043.png",
+        "source_index": 203,
+        "pixels_equal_to_published": true,
+        "sha256": "e199a7daf926ab5125c087d47550e7a7de0c2e38c4bd61640f198e934a9a5716"
+      },
+      {
+        "image": "sample_044.png",
+        "source_index": 215,
+        "pixels_equal_to_published": true,
+        "sha256": "3594cfb5f38d12772b529a7667a1a750878e1e1e37c8e3bc180e7d1b252effd4"
+      },
+      {
+        "image": "sample_045.png",
+        "source_index": 221,
+        "pixels_equal_to_published": true,
+        "sha256": "e36ec813f23c2de5fc7ee1b428d15e52fc390024b8589deedec81b110352feb7"
+      },
+      {
+        "image": "sample_046.png",
+        "source_index": 223,
+        "pixels_equal_to_published": true,
+        "sha256": "13a3b640cb23c8989f5fadce40775d1b366bab0bcf64479b05052caa1f7e1c3b"
+      },
+      {
+        "image": "sample_047.png",
+        "source_index": 227,
+        "pixels_equal_to_published": true,
+        "sha256": "e64fe26cb6d4a92ad151e7f9abbf38fb5a34672b53919f5931b23f5adea317ac"
+      },
+      {
+        "image": "sample_048.png",
+        "source_index": 228,
+        "pixels_equal_to_published": true,
+        "sha256": "50768862361a1446ce488cdd8d154f641ef3736f0ba8937b3b94e3729254a1e3"
+      },
+      {
+        "image": "sample_049.png",
+        "source_index": 235,
+        "pixels_equal_to_published": true,
+        "sha256": "cc7ceeec8f80c6954b085239e7c618028eac129967a159d1c127655c020cc63b"
+      },
+      {
+        "image": "sample_050.png",
+        "source_index": 239,
+        "pixels_equal_to_published": true,
+        "sha256": "436b5e4ae311bb606c00d273c07d757da8a68ea0f7a9bdef0728d5aacdc92a24"
+      },
+      {
+        "image": "sample_051.png",
+        "source_index": 241,
+        "pixels_equal_to_published": true,
+        "sha256": "a4dbd78672b7f50c2c6e8d48d6ec95b5b4937d3a2db74035f275d0b81082c5a8"
+      },
+      {
+        "image": "sample_052.png",
+        "source_index": 247,
+        "pixels_equal_to_published": true,
+        "sha256": "fda46a7e59e9b62f023cfaf88a7827b5ebeb81cffdc6aef3d05061fee0c307f6"
+      },
+      {
+        "image": "sample_053.png",
+        "source_index": 248,
+        "pixels_equal_to_published": true,
+        "sha256": "d914f488b55dc2f0e26e9a57050a55aef0941f30f7b19fce269ced4af33ecd8e"
+      },
+      {
+        "image": "sample_054.png",
+        "source_index": 262,
+        "pixels_equal_to_published": true,
+        "sha256": "59cbe098bd8ce58d667bc5253c94dbd0f25803a2425c7881abd3bcf85cf751e9"
+      },
+      {
+        "image": "sample_055.png",
+        "source_index": 275,
+        "pixels_equal_to_published": true,
+        "sha256": "658d71b486ff085828b2ba7b959877277a5e078b6cef689c08f41741e6d0b7cf"
+      },
+      {
+        "image": "sample_056.png",
+        "source_index": 283,
+        "pixels_equal_to_published": true,
+        "sha256": "588fd9f1dd808c55c409d2442a354f2cc6be90fbe2e845524d7d8831bbebde07"
+      },
+      {
+        "image": "sample_057.png",
+        "source_index": 285,
+        "pixels_equal_to_published": true,
+        "sha256": "503c6434f9d24b42e085b7f4e4a30346bc8ffbd5b165d8f9ffbb50f201b8e479"
+      },
+      {
+        "image": "sample_058.png",
+        "source_index": 303,
+        "pixels_equal_to_published": true,
+        "sha256": "70071d297dba080ce66a908912a5e70ccb023f8f1fb24bc2611cbe6f74152416"
+      },
+      {
+        "image": "sample_059.png",
+        "source_index": 315,
+        "pixels_equal_to_published": true,
+        "sha256": "1eefe038d192e778e083d1cfb0eca24f45778086c58c41604c231d91c28036ea"
+      },
+      {
+        "image": "sample_060.png",
+        "source_index": 335,
+        "pixels_equal_to_published": true,
+        "sha256": "b06fa337aaaa2aa7372f150355d7330584540883a8c57df1e1d15a33410a4b42"
+      },
+      {
+        "image": "sample_061.png",
+        "source_index": 339,
+        "pixels_equal_to_published": true,
+        "sha256": "de8dc715fa1e31ec8557c074222e58249eb1045d2cc0ab6fd33c6f6421119641"
+      },
+      {
+        "image": "sample_062.png",
+        "source_index": 343,
+        "pixels_equal_to_published": true,
+        "sha256": "93ef8bffce8c34f85e6e73e9c83defb5690edb17ec47c32b8d407cc676db0f39"
+      },
+      {
+        "image": "sample_063.png",
+        "source_index": 350,
+        "pixels_equal_to_published": true,
+        "sha256": "0b5f160491471eb2900c003d16d79caab1ba0d733b46de9a414483540cf950c8"
+      },
+      {
+        "image": "sample_064.png",
+        "source_index": 351,
+        "pixels_equal_to_published": true,
+        "sha256": "72800b1be039b9e4b6f1ae66e8bc633b0875403a249624c95aa33dcd41e61966"
+      },
+      {
+        "image": "sample_065.png",
+        "source_index": 361,
+        "pixels_equal_to_published": true,
+        "sha256": "4899f2c8bda2bb4a58c46f00ea11e015a1fe1efb5d835f5a43f096f50c5795be"
+      },
+      {
+        "image": "sample_066.png",
+        "source_index": 366,
+        "pixels_equal_to_published": true,
+        "sha256": "00ad98bc3e2fe89e284bb9b1b6c995bca5623a7c1be3e59c5ff9ecdd269ced1f"
+      },
+      {
+        "image": "sample_067.png",
+        "source_index": 371,
+        "pixels_equal_to_published": true,
+        "sha256": "e3279152f4d3512e680076c4b50f7cec686dbc657113f2183d9f6a6e8fa6d61e"
+      },
+      {
+        "image": "sample_068.png",
+        "source_index": 378,
+        "pixels_equal_to_published": true,
+        "sha256": "a6f21651313b2919d2aeb0b00faaf86a9e1a27de7b6c40766ee0c9c6b934085e"
+      },
+      {
+        "image": "sample_069.png",
+        "source_index": 484,
+        "pixels_equal_to_published": true,
+        "sha256": "e4acd2e390018f114ddd7011dd64c4a7829001cd432ad89f51e95e7f892952a6"
+      },
+      {
+        "image": "sample_070.png",
+        "source_index": 485,
+        "pixels_equal_to_published": true,
+        "sha256": "7130cbd1750e2e00da105cded6461021a7cb4cfea6e4ef943369cd3ac94dafbd"
+      },
+      {
+        "image": "sample_071.png",
+        "source_index": 537,
+        "pixels_equal_to_published": true,
+        "sha256": "ccac27fe47cb7f83a82b158bf978dd6374c5ad80ac1459b2a8b96bf43bafe685"
+      },
+      {
+        "image": "sample_072.png",
+        "source_index": 601,
+        "pixels_equal_to_published": true,
+        "sha256": "a79b00389a210109b2d7b5f69f2534207f26b8d4f9db3a3a9f5fd0db896ef3d5"
+      },
+      {
+        "image": "sample_073.png",
+        "source_index": 604,
+        "pixels_equal_to_published": true,
+        "sha256": "a7e537661712a8d4d18c104629a6c28a1415c43ca210891cb88a1d0e61e2a258"
+      },
+      {
+        "image": "sample_074.png",
+        "source_index": 619,
+        "pixels_equal_to_published": true,
+        "sha256": "791bb07f1eeff9fb70bd2a77d5c27d31cf8f41cd08b8530b386415c5d6d90f94"
+      },
+      {
+        "image": "sample_075.png",
+        "source_index": 626,
+        "pixels_equal_to_published": true,
+        "sha256": "c99c0f79e697f90f5c37b8d8b0e574708748189311326fceda09dd7ec125993e"
+      },
+      {
+        "image": "sample_076.png",
+        "source_index": 628,
+        "pixels_equal_to_published": true,
+        "sha256": "ef5684b7abef86270ffa8f2a85061474ef193376fa3ffe5f529098dcf1206ac2"
+      },
+      {
+        "image": "sample_077.png",
+        "source_index": 637,
+        "pixels_equal_to_published": true,
+        "sha256": "5bd49fbaf5bc9d3dfa9c240aca265b3e192c5407c845d62650307c79b954d898"
+      },
+      {
+        "image": "sample_078.png",
+        "source_index": 667,
+        "pixels_equal_to_published": true,
+        "sha256": "7df1d6bb8a0f4e39bbca05e348a43daa504d1b7c131fd4dd50716b6f417e6e58"
+      },
+      {
+        "image": "sample_079.png",
+        "source_index": 668,
+        "pixels_equal_to_published": true,
+        "sha256": "42af56782e38e87210bceca93c7501496a8ee268e404f4360d8810a5ae7e51f3"
+      },
+      {
+        "image": "sample_080.png",
+        "source_index": 674,
+        "pixels_equal_to_published": true,
+        "sha256": "60d520b3f2af4148631f44df90b1a12cc382a33cba63b92956ab0528d368bfa6"
+      },
+      {
+        "image": "sample_081.png",
+        "source_index": 676,
+        "pixels_equal_to_published": true,
+        "sha256": "d5baf0471ac65bc54814eaacf48fbbdaaa6d10243324212992fe9f8af67542b9"
+      },
+      {
+        "image": "sample_082.png",
+        "source_index": 679,
+        "pixels_equal_to_published": true,
+        "sha256": "4b4f194c6b93fcfc70f9f3e39224c3e37f403c79e4bfb60147e6b518b72ae0b3"
+      },
+      {
+        "image": "sample_083.png",
+        "source_index": 689,
+        "pixels_equal_to_published": true,
+        "sha256": "e75a5a88fc27b1dfc96692ee5cd5903832a76af50835c94873d5f9c72ec3994d"
+      },
+      {
+        "image": "sample_084.png",
+        "source_index": 711,
+        "pixels_equal_to_published": true,
+        "sha256": "ec3438e75458f39a898f6a8c6138927735a98804def9c02ce35c307488f06b01"
+      },
+      {
+        "image": "sample_085.png",
+        "source_index": 729,
+        "pixels_equal_to_published": true,
+        "sha256": "2f2e6b71f4c8554dfe2b1cdc5917e6aea570ef1a3db9dcb17bc305fa4a4e9c12"
+      },
+      {
+        "image": "sample_086.png",
+        "source_index": 762,
+        "pixels_equal_to_published": true,
+        "sha256": "b023038fea4416fc954821def655671eacb78fb71fc8848229f9982f77f5f8f8"
+      },
+      {
+        "image": "sample_087.png",
+        "source_index": 763,
+        "pixels_equal_to_published": true,
+        "sha256": "32e7116a5075eac5fd081a18818c56d3926a216565279711841a00981ad17189"
+      },
+      {
+        "image": "sample_088.png",
+        "source_index": 777,
+        "pixels_equal_to_published": true,
+        "sha256": "ca5b3e61a282be7ab7d4fbe859914e77eaa819574b2b7220d1cdfce1f2ea91ca"
+      },
+      {
+        "image": "sample_089.png",
+        "source_index": 782,
+        "pixels_equal_to_published": true,
+        "sha256": "f6616650fb02a83c12257b5703b34723a308a75079846bfe53c30f9f0bb049e7"
+      },
+      {
+        "image": "sample_090.png",
+        "source_index": 801,
+        "pixels_equal_to_published": true,
+        "sha256": "1c7aeac4a429f0637dfcc1dc6e2dc3b9237b37501ee19a7af2e3f0fe75246d0e"
+      },
+      {
+        "image": "sample_091.png",
+        "source_index": 804,
+        "pixels_equal_to_published": true,
+        "sha256": "293f11751d3fee9f3a4f53a3a89bca2c5ac35b6bd68133b7b0e02a5c50a3bf47"
+      },
+      {
+        "image": "sample_092.png",
+        "source_index": 805,
+        "pixels_equal_to_published": true,
+        "sha256": "0b62d03fd615e7773691767380729616e26ad0f95530d645fb49e8700daccfd0"
+      },
+      {
+        "image": "sample_093.png",
+        "source_index": 820,
+        "pixels_equal_to_published": true,
+        "sha256": "bdcf4bbed8f66eb29789122f9fd859e6da92a83170e4ee4197a852dc620736c4"
+      },
+      {
+        "image": "sample_094.png",
+        "source_index": 839,
+        "pixels_equal_to_published": true,
+        "sha256": "c49291d07efa59d32e46629f6e4bec5546ec75cd3577a876d69998bc34298da0"
+      },
+      {
+        "image": "sample_095.png",
+        "source_index": 881,
+        "pixels_equal_to_published": true,
+        "sha256": "b2ba103ef2dee44012deafeb5c90eda161d04fa21f0f118be28ec3a8a8e01bb1"
+      },
+      {
+        "image": "sample_096.png",
+        "source_index": 885,
+        "pixels_equal_to_published": true,
+        "sha256": "c7b579cc6b1beefeb3342462e6060dc76ec183b0d989bd945fb2026349ac0dea"
+      },
+      {
+        "image": "sample_097.png",
+        "source_index": 898,
+        "pixels_equal_to_published": true,
+        "sha256": "a2f11e9fca8a772f3e2a160f6ead8090a13b7000789abfe28722170e2b72a134"
+      },
+      {
+        "image": "sample_098.png",
+        "source_index": 919,
+        "pixels_equal_to_published": true,
+        "sha256": "35dc952bd3d23effd98b05878fa8aa9930f914d105030721348247e895b0a247"
+      },
+      {
+        "image": "sample_099.png",
+        "source_index": 971,
+        "pixels_equal_to_published": true,
+        "sha256": "6a9f975c4332ec4eeed48f072c5120363e2a17301a4523eacad9d787d727cba0"
+      }
+    ]
+  },
+  "timing_notes": [
+    "The build reused the occurrence cache; no GBZ helper startup was needed.",
+    "This rerun took 120.84 s, including 107.63 s in graph sequence reads. Previous warmed-storage runs reached 8.16 s; the latter is not an upper bound.",
+    "Discovery, independent auditing, tests, and rendering are excluded from build timing. Rendering 100 images (including PNG verification and pixel comparisons) took 53.20 s.",
+    "The graph-read delay is localized by stage measurements; storage/cache variation is an explanation, not an independently isolated diagnosis."
+  ]
+}
