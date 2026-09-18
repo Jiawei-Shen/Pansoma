@@ -1,0 +1,477 @@
+{
+  "legacy_summary": "tmp/indexed_gam_ten_examples/combined/legacy_summary.ndjson",
+  "v2_summary": "tmp/indexed_gam_ten_examples/combined/variant_summary.ndjson",
+  "comparisons": [
+    {
+      "identity": [
+        577,
+        138,
+        "INS",
+        "",
+        "A"
+      ],
+      "matched": true,
+      "legacy": {
+        "coverage": 115,
+        "alt": 14,
+        "ref": 92,
+        "other": 9,
+        "af": 0.1217,
+        "variant_key": "137_I_C_CA"
+      },
+      "candidate_v2": {
+        "coverage": 115,
+        "alt": 14,
+        "ref": 92,
+        "other": 9,
+        "af": 0.12173913043478261,
+        "candidate_id": "577:138:INS:>A"
+      },
+      "count_deltas_v2_minus_legacy": {
+        "coverage": 0,
+        "alt": 0,
+        "ref": 0,
+        "other": 0
+      },
+      "af_equal_at_legacy_precision": true
+    },
+    {
+      "identity": [
+        577,
+        138,
+        "INS",
+        "",
+        "AT"
+      ],
+      "matched": true,
+      "legacy": {
+        "coverage": 115,
+        "alt": 8,
+        "ref": 92,
+        "other": 15,
+        "af": 0.0696,
+        "variant_key": "137_I_C_CAT"
+      },
+      "candidate_v2": {
+        "coverage": 115,
+        "alt": 8,
+        "ref": 92,
+        "other": 15,
+        "af": 0.06956521739130435,
+        "candidate_id": "577:138:INS:>AT"
+      },
+      "count_deltas_v2_minus_legacy": {
+        "coverage": 0,
+        "alt": 0,
+        "ref": 0,
+        "other": 0
+      },
+      "af_equal_at_legacy_precision": true
+    },
+    {
+      "identity": [
+        577,
+        138,
+        "SNP",
+        "T",
+        "A"
+      ],
+      "matched": true,
+      "legacy": {
+        "coverage": 115,
+        "alt": 92,
+        "ref": 23,
+        "other": 0,
+        "af": 0.8,
+        "variant_key": "138_X_T_A"
+      },
+      "candidate_v2": {
+        "coverage": 115,
+        "alt": 92,
+        "ref": 23,
+        "other": 0,
+        "af": 0.8,
+        "candidate_id": "577:138:SNP:T>A"
+      },
+      "count_deltas_v2_minus_legacy": {
+        "coverage": 0,
+        "alt": 0,
+        "ref": 0,
+        "other": 0
+      },
+      "af_equal_at_legacy_precision": true,
+      "raw_snp_audit": {
+        "coverage": 115,
+        "legacy": {
+          "alt": 92,
+          "ref": 23
+        },
+        "candidate_v2": {
+          "alt": 92,
+          "ref": 23
+        },
+        "changed_observations": [],
+        "v2_matches_raw_edits": true,
+        "legacy_matches_raw_bases": true
+      }
+    },
+    {
+      "identity": [
+        709,
+        0,
+        "DEL",
+        "A",
+        ""
+      ],
+      "matched": true,
+      "legacy": {
+        "coverage": 125,
+        "alt": 125,
+        "ref": 0,
+        "other": 0,
+        "af": 1.0,
+        "variant_key": "0_D_A_*"
+      },
+      "candidate_v2": {
+        "coverage": 125,
+        "alt": 125,
+        "ref": 0,
+        "other": 0,
+        "af": 1.0,
+        "candidate_id": "709:0:DEL:A>"
+      },
+      "count_deltas_v2_minus_legacy": {
+        "coverage": 0,
+        "alt": 0,
+        "ref": 0,
+        "other": 0
+      },
+      "af_equal_at_legacy_precision": true
+    },
+    {
+      "identity": [
+        711,
+        0,
+        "DEL",
+        "T",
+        ""
+      ],
+      "matched": true,
+      "legacy": {
+        "coverage": 133,
+        "alt": 113,
+        "ref": 20,
+        "other": 0,
+        "af": 0.8496,
+        "variant_key": "0_D_T_*"
+      },
+      "candidate_v2": {
+        "coverage": 133,
+        "alt": 113,
+        "ref": 20,
+        "other": 0,
+        "af": 0.849624060150376,
+        "candidate_id": "711:0:DEL:T>"
+      },
+      "count_deltas_v2_minus_legacy": {
+        "coverage": 0,
+        "alt": 0,
+        "ref": 0,
+        "other": 0
+      },
+      "af_equal_at_legacy_precision": true
+    },
+    {
+      "identity": [
+        1841,
+        0,
+        "SNP",
+        "T",
+        "C"
+      ],
+      "matched": true,
+      "legacy": {
+        "coverage": 117,
+        "alt": 117,
+        "ref": 0,
+        "other": 0,
+        "af": 1.0,
+        "variant_key": "0_X_T_C"
+      },
+      "candidate_v2": {
+        "coverage": 117,
+        "alt": 117,
+        "ref": 0,
+        "other": 0,
+        "af": 1.0,
+        "candidate_id": "1841:0:SNP:T>C"
+      },
+      "count_deltas_v2_minus_legacy": {
+        "coverage": 0,
+        "alt": 0,
+        "ref": 0,
+        "other": 0
+      },
+      "af_equal_at_legacy_precision": true,
+      "raw_snp_audit": {
+        "coverage": 117,
+        "legacy": {
+          "alt": 117
+        },
+        "candidate_v2": {
+          "alt": 117
+        },
+        "changed_observations": [],
+        "v2_matches_raw_edits": true,
+        "legacy_matches_raw_bases": true
+      }
+    },
+    {
+      "identity": [
+        2189,
+        0,
+        "SNP",
+        "C",
+        "A"
+      ],
+      "matched": true,
+      "legacy": {
+        "coverage": 72,
+        "alt": 71,
+        "ref": 0,
+        "other": 1,
+        "af": 0.9861,
+        "variant_key": "0_X_C_A"
+      },
+      "candidate_v2": {
+        "coverage": 72,
+        "alt": 70,
+        "ref": 0,
+        "other": 2,
+        "af": 0.9722222222222222,
+        "candidate_id": "2189:0:SNP:C>A"
+      },
+      "count_deltas_v2_minus_legacy": {
+        "coverage": 0,
+        "alt": -1,
+        "ref": 0,
+        "other": 1
+      },
+      "af_equal_at_legacy_precision": false,
+      "raw_snp_audit": {
+        "coverage": 72,
+        "legacy": {
+          "alt": 71,
+          "other": 1
+        },
+        "candidate_v2": {
+          "alt": 70,
+          "other": 2
+        },
+        "changed_observations": [
+          {
+            "legacy": "alt",
+            "candidate_v2": "other",
+            "forward_base": "A",
+            "base_quality": 3,
+            "operation": "X",
+            "mapping_index": 202,
+            "edit_index": 0,
+            "mapping_reverse": true,
+            "edit": {
+              "from_length": 1,
+              "to_length": 1,
+              "sequence": "T"
+            },
+            "read_name": "m84039_240114_012401_s1/24708040/ccs",
+            "mapping_quality": 60,
+            "record_sha256": "ea9ab58f59f03c700747640752bcc328ca0ee210f6fc00d3737b8623e9338857",
+            "visits": 1
+          }
+        ],
+        "v2_matches_raw_edits": true,
+        "legacy_matches_raw_bases": true
+      }
+    },
+    {
+      "identity": [
+        40189,
+        0,
+        "SNP",
+        "C",
+        "T"
+      ],
+      "matched": true,
+      "legacy": {
+        "coverage": 101,
+        "alt": 100,
+        "ref": 1,
+        "other": 0,
+        "af": 0.9901,
+        "variant_key": "0_X_C_T"
+      },
+      "candidate_v2": {
+        "coverage": 101,
+        "alt": 100,
+        "ref": 1,
+        "other": 0,
+        "af": 0.9900990099009901,
+        "candidate_id": "40189:0:SNP:C>T"
+      },
+      "count_deltas_v2_minus_legacy": {
+        "coverage": 0,
+        "alt": 0,
+        "ref": 0,
+        "other": 0
+      },
+      "af_equal_at_legacy_precision": true,
+      "raw_snp_audit": {
+        "coverage": 101,
+        "legacy": {
+          "alt": 100,
+          "ref": 1
+        },
+        "candidate_v2": {
+          "alt": 100,
+          "ref": 1
+        },
+        "changed_observations": [],
+        "v2_matches_raw_edits": true,
+        "legacy_matches_raw_bases": true
+      }
+    },
+    {
+      "identity": [
+        62170,
+        0,
+        "SNP",
+        "C",
+        "T"
+      ],
+      "matched": true,
+      "legacy": {
+        "coverage": 106,
+        "alt": 106,
+        "ref": 0,
+        "other": 0,
+        "af": 1.0,
+        "variant_key": "0_X_C_T"
+      },
+      "candidate_v2": {
+        "coverage": 106,
+        "alt": 106,
+        "ref": 0,
+        "other": 0,
+        "af": 1.0,
+        "candidate_id": "62170:0:SNP:C>T"
+      },
+      "count_deltas_v2_minus_legacy": {
+        "coverage": 0,
+        "alt": 0,
+        "ref": 0,
+        "other": 0
+      },
+      "af_equal_at_legacy_precision": true,
+      "raw_snp_audit": {
+        "coverage": 106,
+        "legacy": {
+          "alt": 106
+        },
+        "candidate_v2": {
+          "alt": 106
+        },
+        "changed_observations": [],
+        "v2_matches_raw_edits": true,
+        "legacy_matches_raw_bases": true
+      }
+    },
+    {
+      "identity": [
+        67337,
+        0,
+        "SNP",
+        "A",
+        "C"
+      ],
+      "matched": true,
+      "legacy": {
+        "coverage": 114,
+        "alt": 113,
+        "ref": 0,
+        "other": 1,
+        "af": 0.9912,
+        "variant_key": "0_X_A_C"
+      },
+      "candidate_v2": {
+        "coverage": 114,
+        "alt": 111,
+        "ref": 0,
+        "other": 3,
+        "af": 0.9736842105263158,
+        "candidate_id": "67337:0:SNP:A>C"
+      },
+      "count_deltas_v2_minus_legacy": {
+        "coverage": 0,
+        "alt": -2,
+        "ref": 0,
+        "other": 2
+      },
+      "af_equal_at_legacy_precision": false,
+      "raw_snp_audit": {
+        "coverage": 114,
+        "legacy": {
+          "alt": 113,
+          "other": 1
+        },
+        "candidate_v2": {
+          "alt": 111,
+          "other": 3
+        },
+        "changed_observations": [
+          {
+            "legacy": "alt",
+            "candidate_v2": "other",
+            "forward_base": "C",
+            "base_quality": 3,
+            "operation": "X",
+            "mapping_index": 349,
+            "edit_index": 0,
+            "mapping_reverse": true,
+            "edit": {
+              "from_length": 1,
+              "to_length": 1,
+              "sequence": "G"
+            },
+            "read_name": "m84039_240114_012401_s1/243468268/ccs",
+            "mapping_quality": 60,
+            "record_sha256": "d38d088161071c9d7f4af6ff73d2c4d79758a5ac8c3d69ba6b6824bf60598f4f",
+            "visits": 1
+          },
+          {
+            "legacy": "alt",
+            "candidate_v2": "other",
+            "forward_base": "C",
+            "base_quality": 3,
+            "operation": "X",
+            "mapping_index": 119,
+            "edit_index": 0,
+            "mapping_reverse": true,
+            "edit": {
+              "from_length": 1,
+              "to_length": 1,
+              "sequence": "G"
+            },
+            "read_name": "m84039_240114_012401_s1/105713317/ccs",
+            "mapping_quality": 60,
+            "record_sha256": "bec377a4bdaca11dd53d73d9a8aebbc1dea363749b477a2a8b0c30651f32b54c",
+            "visits": 1
+          }
+        ],
+        "v2_matches_raw_edits": true,
+        "legacy_matches_raw_bases": true
+      }
+    }
+  ],
+  "raw_snp_audits_passed": true,
+  "note": "Legacy minimum BQ filters mean ALT BQ; v2 applies minimum BQ per ALT observation. Legacy AF is rounded to four decimals."
+}

@@ -323,5 +323,11 @@
         }
       ]
     }
+  },
+  "ten_example_validation": {
+    "manifest": "ten_examples_manifest.json",
+    "gallery": "TEN_EXAMPLES.md",
+    "examples": 10,
+    "passed": true
   }
 }
