@@ -21,7 +21,7 @@ def check(condition, message):
         raise ValueError(message)
 
 
-def validate(folder, gam, index, node_sqlite, walk_counts=None):
+def validate(folder, gam, index, node_sqlite, walk_counts=None, gbz=None, gbz_query=None, occurrence_cache=None):
     folder=Path(folder)
     manifest=json.loads((folder/'manifest.json').read_text())
     metadata=[json.loads(s) for s in (folder/'variant_summary.ndjson').read_text().splitlines()]
@@ -34,6 +34,11 @@ def validate(folder, gam, index, node_sqlite, walk_counts=None):
         check(walk_counts is not None, 'V3 validation requires --walk-counts')
         with WalkCounts(walk_counts) as lookup:
             expected_walks = lookup.get_counts(graph_nodes)
+    if manifest['tensor_format_version'] == 'indexed-gam-candidate-v4':
+        from indexed_gam_pipeline.gbz_counts import GBZCounts
+        check(all((gbz, gbz_query, occurrence_cache)), 'V4 validation requires GBZ, helper and cache')
+        with GBZCounts(gbz, gbz_query, occurrence_cache) as lookup:
+            expected_walks = lookup.get_counts(graph_nodes, {n:r['sequence'] for n,r in records.items()})
     covered={m['candidate_id']:Counter() for m in metadata}
     query={}
     # Independently count record overlap from original mapping intervals. This
@@ -65,7 +70,7 @@ def validate(folder, gam, index, node_sqlite, walk_counts=None):
                 covered[meta['candidate_id']][digest]+=1
     results=[]
     for meta in metadata:
-        x=np.load(folder/f"shard_{meta['shard_index']:05d}_data.npy")[meta['index_within_shard']]
+        x=np.load(folder/f"shard_{meta['shard_index']:05d}_data.npy", mmap_mode="r")[meta['index_within_shard']]
         label=meta['candidate_id']
         n=meta['selected_alignments']
         check(list(x.shape)==manifest['shape'] and str(x.dtype)==manifest['dtype'],f'{label}: tensor shape/dtype')
@@ -125,7 +130,7 @@ def validate(folder, gam, index, node_sqlite, walk_counts=None):
                 'selected records versus original GAM multiset','padding and gap qualities',
                 'candidate flags and insertion reference gaps','oriented graph-reference bases',
                 'node-path sorting and group memberships'],
-        walk_counts_checked=expected_walks is not None, walk_count_cache=walk_counts,
+        walk_counts_checked=expected_walks is not None, walk_count_cache=walk_counts, gbz=gbz, occurrence_cache=occurrence_cache,
         candidates=results,full_genome_run=False)
 
 
@@ -136,8 +141,11 @@ if __name__=='__main__':
     parser.add_argument('--index')
     parser.add_argument('--node-sqlite',required=True)
     parser.add_argument('--walk-counts')
+    parser.add_argument('--gbz')
+    parser.add_argument('--gbz-query')
+    parser.add_argument('--occurrence-cache')
     parser.add_argument('--output',required=True)
     args=parser.parse_args()
-    report=validate(args.folder,args.gam,args.index,args.node_sqlite,args.walk_counts)
+    report=validate(args.folder,args.gam,args.index,args.node_sqlite,args.walk_counts,args.gbz,args.gbz_query,args.occurrence_cache)
     Path(args.output).write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(report,indent=2))

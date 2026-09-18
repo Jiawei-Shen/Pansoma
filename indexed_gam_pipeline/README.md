@@ -1,6 +1,66 @@
+# Seven-channel candidate tensors (v4): GBZ node occurrences
+
+`build` defaults to **candidate-v4**, shape `(7,200,100)`, `int32`.
+Channel 7 is `node_distinct_gbwt_path_count`: the number of distinct physical
+GBWT paths visiting the column's node, including reference and haplotype paths.
+Repeated visits, both node orientations, and a path's reverse-complement copy
+count once. This is a path count, not a count of unique biological haplotypes:
+fragmented paths can belong to the same sample/haplotype. Counts are unscaled.
+The first six channels, row selection, and candidate statistics retain v3 semantics.
+
+The previous GFA W-record metric missed paths available in our GBZ. For example,
+on **hprc-v1.1-mc-grch38.d9**, node 2753 has 86 GBWT paths (old W count 1), and
+51182 has 24 (old W count 0), independently checked with `gbz-tool find-batch`.
+Node IDs are graph-specific: this graph has a 114-base node 2753 and a `C` at
+51182. Queries returning a 10-base node 2753 and `G` at 51182 use different node
+identities and cannot supply counts for these GAM alignments.
+
+Compile the helper using the dependencies installed by gbz-tool (gbwtgraph,
+gbwt, sdsl, handlegraph, divsufsort, and nlohmann/json; C++17 and OpenMP required):
+
+```bash
+python indexed_gam_pipeline/build_gbz_query.py \
+  --deps /scratch/jshen/Github/gbz-tool/dependency --output tmp/gbz_node_counts
+python indexed_gam_pipeline/run.py build --format candidate-v4 \
+  --gam /scratch/jshen/data/COLO829T/illumina/GAM/COLO829T_3M.sorted.gam \
+  --nodes tmp/colo829t_1000_nodes.txt \
+  --node-sqlite /scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.GRCh38_CHM13_node_index.sqlite \
+  --gbz /scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.gbz \
+  --gbz-query tmp/gbz_node_counts --occurrence-cache tmp/hprc_gbwt_counts.sqlite \
+  --output tmp/my_candidate_v4_run --max-tensors 1000 --debug-rows
+python scripts/visualize_tensor.py tmp/my_candidate_v4_run/shard_00000_data.npy \
+  --all-samples --output-dir tmp/my_candidate_v4_run/images
+```
+
+The helper loads the GBZ once per build when uncached nodes are needed. SQLite
+stores node counts and forward sequences, graph path/size/mtime, initial SHA-256,
+and the counting definition. A changed source fingerprint, old GFA cache, missing
+GBZ node, or sequence disagreement with the tensor graph fails explicitly. Source
+SHA-256 is recorded at cache creation; size/mtime are checked on reuse. Use one
+writer per cache. No GFA fallback or missing-node zero is used.
+
+For insertions and aligned insertion-gap slots, the count comes from the anchor
+node; deletions use their mapped node. Missing coverage and padding remain zero.
+Manifests and summaries carry `indexed-gam-candidate-v4` / schema 4. Standalone
+arrays require `--format candidate-v4` so the image legend identifies GBWT paths.
+The debug auditor accepts `--gbz`, `--gbz-query`, and `--occurrence-cache`.
+Older v3 files retain their explicit GFA meaning and remain readable.
+
+Regression tests, including a real tiny GBZ with repeated and reverse visits:
+
+```bash
+GBZ_QUERY=tmp/gbz_node_counts GBZ_TOOL=/scratch/jshen/Github/gbz-tool/gbztool \
+  python -m unittest discover -s indexed_gam_pipeline/tests -q
+```
+
+See the [100-example gallery](samples/colo829t_100/README.md) for corrected tensors,
+images, independent query comparisons, and measured generation time.
+
+---
+
 # Seven-channel candidate tensors (v3): cached graph walk counts
 
-`build` now defaults to **`--format candidate-v3`**, shape `(7,200,100)`, `int32`.
+The retained **`--format candidate-v3`** uses shape `(7,200,100)`, `int32`.
 The first six channels and node-path row grouping retain v2 semantics. Channel 7
 contains the **exact number of distinct GFA W records visiting the column's node**.
 It is a graph feature, independent of GAM read coverage. Existing six-channel and

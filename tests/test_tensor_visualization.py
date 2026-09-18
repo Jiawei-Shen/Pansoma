@@ -88,6 +88,25 @@ class VisualizationTest(unittest.TestCase):
             with Image.open(output) as image:
                 image.verify()
 
+    def test_v4_explicit_format_and_gbwt_legend(self):
+        x,m=example()
+        x=np.concatenate([x.astype(np.int32),np.full_like(x[:1],86)],axis=0)
+        x[6][x[4]==0]=0
+        m=dict(m,tensor_format_version=v.V4_VERSION)
+        self.assertEqual(v.resolve_format(x,m),"candidate-v4")
+        with self.assertRaisesRegex(ValueError,"conflicts"):
+            v.resolve_format(x,m,"candidate-v3")
+        with tempfile.TemporaryDirectory() as d:
+            real_close=v.plt.close
+            with patch.object(v.plt,"close"):
+                v.visualize_tensor(x,str(Path(d)/"v4.png"),"V4",False,None,tensor_format="candidate-v4")
+                fig=v.plt.gcf()
+                labels=[t.get_text() for ax in fig.axes for t in ax.texts]
+                self.assertIn("candidate-v4",fig._suptitle.get_text())
+                self.assertIn("Distinct GBWT\npaths",labels)
+                self.assertNotIn("Distinct GFA\nW records",labels)
+                real_close(fig)
+
     def test_legacy_still_renders_five_channels(self):
         x=np.zeros((5,3,4),dtype=np.int8)
         x[0,:2]=20

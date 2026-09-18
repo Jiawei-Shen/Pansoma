@@ -12,6 +12,12 @@ from indexed_gam_pipeline.segments import on_chromosome
 
 
 def build(args):
+    if getattr(args, "format", "candidate-v4") == "candidate-v4":
+        from indexed_gam_pipeline.gbz_counts import GBZCounts
+        if not all(getattr(args, key, None) for key in ("gbz", "gbz_query", "occurrence_cache")):
+            raise ValueError("candidate-v4 requires --gbz, --gbz-query and --occurrence-cache")
+        with GBZCounts(args.gbz, args.gbz_query, args.occurrence_cache) as lookup:
+            return _build(args, lookup)
     if getattr(args, "format", "candidate-v3") == "candidate-v3":
         from indexed_gam_pipeline.walk_counts import WalkCounts
         if not getattr(args, "walk_counts", None):
@@ -33,9 +39,13 @@ def _build(args, walk_lookup):
     (out / "target_nodes.txt").write_text("".join(f"{n}\n" for n in nodes))
     parameters = {k: getattr(args, k) for k in ("min_mapq", "min_af", "min_variants",
         "min_allele_bq", "max_indel_len", "variant_type", "rows", "width")}
-    schema = 3 if walk_lookup is not None else 2
+    is_gbz = getattr(args, "format", "candidate-v4") == "candidate-v4"
+    schema = 4 if is_gbz else (3 if walk_lookup is not None else 2)
     channels = V3_CHANNELS if walk_lookup is not None else CHANNELS
     version = V3_VERSION if walk_lookup is not None else VERSION
+    if is_gbz:
+        channels = CHANNELS + ["node_distinct_gbwt_path_count"]
+        version = "indexed-gam-candidate-v4"
     manifest = dict(schema_version=schema, tensor_format_version=version, status="running",
         arguments=vars(args), parameters=parameters, shape=[len(channels), args.rows, args.width],
         dtype="int32" if walk_lookup is not None else "int16", channels=channels, encodings=dict(bases=BASES, padding=0,
@@ -49,12 +59,19 @@ def _build(args, walk_lookup):
         row_order=ROW_ORDER,
         gai_version=reader.version, nodes=len(nodes), shards=0, tensors=0,
         unsupported_events=0, filtered_candidates=0, debug_rows=args.debug_rows)
-    if walk_lookup is not None:
+    if walk_lookup is not None and not is_gbz:
         manifest["walk_count_lookup"] = dict(path=str(walk_lookup.path), **walk_lookup.metadata)
         manifest["encodings"]["node_distinct_w_record_count"] = {
             "value": "exact raw count, not normalized or clipped", "padding": 0,
             "node_absent_from_W": 0, "insertion_and_gap": "count of the row's anchor node",
             "missing_coverage": 0}
+    if is_gbz:
+        manifest["occurrence_lookup"] = dict(path=str(walk_lookup.path), **walk_lookup.metadata)
+        manifest["encodings"]["node_distinct_gbwt_path_count"] = {
+            "value": "exact distinct GBWT path count; either orientation; repeated visits counted once",
+            "padding_and_missing_coverage": 0,
+            "insertion_and_gap": "count of the row's anchor node",
+            "missing_node_or_sequence_mismatch": "error"}
     write_json(out / "run_report.json", manifest)
     write_json(out / "manifest.json", manifest)
     tensors, metadata = [], []
@@ -90,7 +107,8 @@ def _build(args, walk_lookup):
             records = node_records(args, context_nodes)
             print(f"Batch {bi}: graph loaded; decoding original edits", flush=True)
             sequences = {n: r["sequence"] for n, r in records.items()}
-            walk_counts = walk_lookup.get_counts(context_nodes) if walk_lookup is not None else None
+            walk_counts = (walk_lookup.get_counts(context_nodes, sequences) if is_gbz else
+                           walk_lookup.get_counts(context_nodes) if walk_lookup is not None else None)
             reads, candidates = [], set()
             by_node = defaultdict(list)
             for ai, alignment in enumerate(alignments):
@@ -127,6 +145,7 @@ def _build(args, walk_lookup):
                     manifest["filtered_candidates"] += 1
                     continue
                 tensor, meta = make_tensor(candidate, eligible, args.rows, args.width, args.debug_rows, node_walk_counts=walk_counts)
+                meta["tensor_format_version"] = version
                 tensors.append(tensor)
                 metadata.append(meta)
                 if len(tensors) >= args.shard_size:
@@ -140,6 +159,8 @@ def _build(args, walk_lookup):
                 break
         flush()
     manifest["status"] = "complete"
+    if is_gbz:
+        manifest["occurrence_lookup"] = dict(path=str(walk_lookup.path), **walk_lookup.metadata)
     write_json(out / "run_report.json", manifest)
     write_json(out / "manifest.json", manifest)
     print(json.dumps(manifest, indent=2))
