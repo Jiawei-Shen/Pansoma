@@ -67,6 +67,27 @@ class VisualizationTest(unittest.TestCase):
                 im.verify()
             self.assertGreater(output.stat().st_size,1000)
 
+    def test_v3_walk_count_panel_and_valid_zero_versus_padding(self):
+        x,m=example()
+        walks=np.array([[2,2,0,0],[10,10,10,10],[0,0,0,0]],dtype=np.int32)
+        seven=np.concatenate([x.astype(np.int32),walks[None]],axis=0)
+        m=dict(m,tensor_format_version=v.V3_VERSION)
+        self.assertEqual(v.resolve_format(seven,m),"candidate-v3")
+        with tempfile.TemporaryDirectory() as d:
+            output=Path(d)/"v3.png"
+            real_close=v.plt.close
+            with patch.object(v.plt,"close"):
+                v.visualize_tensor(seven,str(output),"V3",False,None,metadata=m)
+                fig=v.plt.gcf()
+                values=fig.axes[6].images[0].get_array()
+                self.assertEqual(int(values[0,0]),2)
+                self.assertTrue(values.mask[0,2])
+                self.assertFalse(values.mask[0,3])  # Known node with zero W count.
+                self.assertEqual(int(values[0,3]),0)
+                real_close(fig)
+            with Image.open(output) as image:
+                image.verify()
+
     def test_legacy_still_renders_five_channels(self):
         x=np.zeros((5,3,4),dtype=np.int8)
         x[0,:2]=20

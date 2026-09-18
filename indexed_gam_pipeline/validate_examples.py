@@ -21,13 +21,19 @@ def check(condition, message):
         raise ValueError(message)
 
 
-def validate(folder, gam, index, node_sqlite):
+def validate(folder, gam, index, node_sqlite, walk_counts=None):
     folder=Path(folder)
     manifest=json.loads((folder/'manifest.json').read_text())
     metadata=[json.loads(s) for s in (folder/'variant_summary.ndjson').read_text().splitlines()]
     targets={m['node_id'] for m in metadata}
-    graph_nodes=targets | {c['node_id'] for m in metadata for row in m['rows'] for c in row['columns'] if c and 'offset' in c}
+    graph_nodes=targets | {c['node_id'] for m in metadata for row in m['rows'] for c in row['columns'] if c}
     records=node_records(argparse.Namespace(node_json=None,gfa=None,node_sqlite=node_sqlite),graph_nodes)
+    expected_walks = None
+    if manifest['tensor_format_version'] == 'indexed-gam-candidate-v3':
+        from indexed_gam_pipeline.walk_counts import WalkCounts
+        check(walk_counts is not None, 'V3 validation requires --walk-counts')
+        with WalkCounts(walk_counts) as lookup:
+            expected_walks = lookup.get_counts(graph_nodes)
     covered={m['candidate_id']:Counter() for m in metadata}
     query={}
     # Independently count record overlap from original mapping intervals. This
@@ -84,7 +90,11 @@ def validate(folder, gam, index, node_sqlite):
             path=[]; previous=None
             for ci,col in enumerate(row['columns']):
                 if col is None:
+                    if expected_walks is not None:
+                        check(int(x[6,ri,ci]) == 0, f'{label}: padded walk count')
                     continue
+                if expected_walks is not None:
+                    check(int(x[6,ri,ci]) == expected_walks[col['node_id']], f'{label}: walk count at row {ri}, column {ci}')
                 if col['mapping_index'] != previous:
                     path.append((col['node_id'],col['reverse']))
                     previous=col['mapping_index']
@@ -115,6 +125,7 @@ def validate(folder, gam, index, node_sqlite):
                 'selected records versus original GAM multiset','padding and gap qualities',
                 'candidate flags and insertion reference gaps','oriented graph-reference bases',
                 'node-path sorting and group memberships'],
+        walk_counts_checked=expected_walks is not None, walk_count_cache=walk_counts,
         candidates=results,full_genome_run=False)
 
 
@@ -124,8 +135,9 @@ if __name__=='__main__':
     parser.add_argument('--gam',required=True)
     parser.add_argument('--index')
     parser.add_argument('--node-sqlite',required=True)
+    parser.add_argument('--walk-counts')
     parser.add_argument('--output',required=True)
     args=parser.parse_args()
-    report=validate(args.folder,args.gam,args.index,args.node_sqlite)
+    report=validate(args.folder,args.gam,args.index,args.node_sqlite,args.walk_counts)
     Path(args.output).write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(report,indent=2))

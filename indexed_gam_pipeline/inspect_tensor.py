@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Export inspectable paired read/reference rows from a candidate-v2 output folder."""
+"""Export inspectable paired read/reference rows from a candidate-v2/v3 output folder."""
 import argparse
 import json
 from pathlib import Path
@@ -12,8 +12,8 @@ BASES = {0: ".", 1: "A", 2: "C", 3: "G", 4: "T", 5: "N", 6: "-"}
 def export(folder, output, per_class=3):
     folder, output = Path(folder), Path(output)
     manifest = json.loads((folder / "manifest.json").read_text())
-    if manifest["tensor_format_version"] != "indexed-gam-candidate-v2":
-        raise ValueError("Only candidate-v2 tensors are supported")
+    if manifest["tensor_format_version"] not in ("indexed-gam-candidate-v2", "indexed-gam-candidate-v3"):
+        raise ValueError("Only candidate-v2/v3 tensors are supported")
     lines = ["# '.' = padding; '-' = alignment gap; '^' = candidate region"]
     for line in (folder / "variant_summary.ndjson").read_text().splitlines():
         meta = json.loads(line)
@@ -31,6 +31,8 @@ def export(folder, output, per_class=3):
             lines.append(f"row={ri} support={support}")
             lines.append("read   " + "".join(BASES[int(b)] for b in tensor[0,ri]))
             lines.append("graph  " + "".join(BASES[int(b)] for b in tensor[5,ri]))
+            if tensor.shape[0] == 7:
+                lines.append("walks  " + " ".join(str(int(c)) for c in tensor[6,ri]))
     output.write_text("\n".join(lines)+"\n")
 
 

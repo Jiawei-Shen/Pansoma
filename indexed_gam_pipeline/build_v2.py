@@ -5,16 +5,26 @@ from pathlib import Path
 
 import numpy as np
 
-from indexed_gam_pipeline.candidates import (VERSION, CHANNELS, BASES, OPS, ROW_ORDER,
+from indexed_gam_pipeline.candidates import (VERSION, CHANNELS, V3_VERSION, V3_CHANNELS, BASES, OPS, ROW_ORDER,
                                              decode_alignment, overlap, make_tensor)
 from indexed_gam_pipeline.gam_reader import IndexedGam
 from indexed_gam_pipeline.segments import on_chromosome
 
 
 def build(args):
+    if getattr(args, "format", "candidate-v3") == "candidate-v3":
+        from indexed_gam_pipeline.walk_counts import WalkCounts
+        if not getattr(args, "walk_counts", None):
+            raise ValueError("candidate-v3 requires --walk-counts; build the cache once with walk_counts.py")
+        with WalkCounts(args.walk_counts) as lookup:
+            return _build(args, lookup)
+    return _build(args, None)
+
+
+def _build(args, walk_lookup):
     from indexed_gam_pipeline.run import load_nodes, node_records, batches, new_output, write_json
     if not 1 <= args.max_indel_len <= 50:
-        raise ValueError("candidate-v2 --max-indel-len must be in [1,50]")
+        raise ValueError("--max-indel-len must be in [1,50]")
     if args.width < args.max_indel_len:
         raise ValueError("--width must accommodate --max-indel-len")
     nodes = load_nodes(args.nodes)
@@ -23,9 +33,12 @@ def build(args):
     (out / "target_nodes.txt").write_text("".join(f"{n}\n" for n in nodes))
     parameters = {k: getattr(args, k) for k in ("min_mapq", "min_af", "min_variants",
         "min_allele_bq", "max_indel_len", "variant_type", "rows", "width")}
-    manifest = dict(schema_version=2, tensor_format_version=VERSION, status="running",
-        arguments=vars(args), parameters=parameters, shape=[6, args.rows, args.width],
-        dtype="int16", channels=CHANNELS, encodings=dict(bases=BASES, padding=0,
+    schema = 3 if walk_lookup is not None else 2
+    channels = V3_CHANNELS if walk_lookup is not None else CHANNELS
+    version = V3_VERSION if walk_lookup is not None else VERSION
+    manifest = dict(schema_version=schema, tensor_format_version=version, status="running",
+        arguments=vars(args), parameters=parameters, shape=[len(channels), args.rows, args.width],
+        dtype="int32" if walk_lookup is not None else "int16", channels=channels, encodings=dict(bases=BASES, padding=0,
         quality_without_read_base=-1, missing_quality=-1, operations=OPS,
         event_flags={"difference": 1, "candidate_region": 2}),
         coordinates="zero-based forward node; half-open intervals and candidate_columns",
@@ -36,6 +49,12 @@ def build(args):
         row_order=ROW_ORDER,
         gai_version=reader.version, nodes=len(nodes), shards=0, tensors=0,
         unsupported_events=0, filtered_candidates=0, debug_rows=args.debug_rows)
+    if walk_lookup is not None:
+        manifest["walk_count_lookup"] = dict(path=str(walk_lookup.path), **walk_lookup.metadata)
+        manifest["encodings"]["node_distinct_w_record_count"] = {
+            "value": "exact raw count, not normalized or clipped", "padding": 0,
+            "node_absent_from_W": 0, "insertion_and_gap": "count of the row's anchor node",
+            "missing_coverage": 0}
     write_json(out / "run_report.json", manifest)
     write_json(out / "manifest.json", manifest)
     tensors, metadata = [], []
@@ -48,7 +67,7 @@ def build(args):
             shard = manifest["shards"]
             np.save(out / f"shard_{shard:05d}_data.npy", np.stack(tensors))
             for index, meta in enumerate(metadata):
-                summary.write(json.dumps(dict(meta, schema_version=2, channels=CHANNELS,
+                summary.write(json.dumps(dict(meta, schema_version=schema, channels=channels,
                     parameters=parameters, shard_index=shard, index_within_shard=index)) + "\n")
             manifest["shards"] += 1
             manifest["tensors"] += len(tensors)
@@ -71,6 +90,7 @@ def build(args):
             records = node_records(args, context_nodes)
             print(f"Batch {bi}: graph loaded; decoding original edits", flush=True)
             sequences = {n: r["sequence"] for n, r in records.items()}
+            walk_counts = walk_lookup.get_counts(context_nodes) if walk_lookup is not None else None
             reads, candidates = [], set()
             by_node = defaultdict(list)
             for ai, alignment in enumerate(alignments):
@@ -106,13 +126,18 @@ def build(args):
                         other_count=counts["other"], af=af)) + "\n")
                     manifest["filtered_candidates"] += 1
                     continue
-                tensor, meta = make_tensor(candidate, eligible, args.rows, args.width, args.debug_rows)
+                tensor, meta = make_tensor(candidate, eligible, args.rows, args.width, args.debug_rows, node_walk_counts=walk_counts)
                 tensors.append(tensor)
                 metadata.append(meta)
                 if len(tensors) >= args.shard_size:
                     flush()
+                if getattr(args, "max_tensors", None) is not None and manifest["tensors"] + len(tensors) >= args.max_tensors:
+                    flush()
+                    break
             print(f"Batch {bi}: {len(batch)} target nodes, {len(reads)} complete alignments, "
                   f"{len(context_nodes)} context nodes, {len(candidates)} candidates", flush=True)
+            if getattr(args, "max_tensors", None) is not None and manifest["tensors"] >= args.max_tensors:
+                break
         flush()
     manifest["status"] = "complete"
     write_json(out / "run_report.json", manifest)

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render legacy five-channel and versioned candidate-v2 six-channel tensors."""
+"""Render legacy five-channel and versioned candidate-v2/v3 six/seven-channel tensors."""
 
 import argparse
 import json
@@ -267,6 +267,7 @@ def plot_continuous_track(
 
 
 V2_VERSION = "indexed-gam-candidate-v2"
+V3_VERSION = "indexed-gam-candidate-v3"
 V2_BASE_LABELS = {0: "Padding", 1: "A", 2: "C", 3: "G", 4: "T", 5: "N", 6: "Gap"}
 V2_BASE_COLORS = {0: "#ffffff", 1: "#4daf4a", 2: "#377eb8", 3: "#ffb000",
                   4: "#e41a1c", 5: "#bdbdbd", 6: "#484858"}
@@ -280,16 +281,16 @@ V2_FLAG_COLORS = {-1: "#ffffff", 0: "#d9ead3", 1: "#cc0000", 2: "#6baed6", 3: "#
 def resolve_format(tensor, metadata=None, tensor_format="auto"):
     version = (metadata or {}).get("tensor_format_version")
     if tensor_format == "auto":
-        if version == V2_VERSION:
-            tensor_format = "candidate-v2"
+        if version in (V2_VERSION, V3_VERSION):
+            tensor_format = "candidate-v3" if version == V3_VERSION else "candidate-v2"
         elif version in (None, "indexed-gam-legacy-v1") and tensor.shape[0] == 5:
             tensor_format = "legacy"
         else:
-            raise ValueError("Six-channel format is ambiguous: supply its v2 manifest/summary or --format candidate-v2")
-    expected = 6 if tensor_format == "candidate-v2" else 5
+            raise ValueError("Candidate format is ambiguous: supply its v2/v3 manifest/summary or an explicit --format")
+    expected = {"candidate-v3": 7, "candidate-v2": 6, "legacy": 5}[tensor_format]
     if tensor.ndim != 3 or tensor.shape[0] != expected:
         raise ValueError(f"{tensor_format} expects {expected} channels; got {tensor.shape}")
-    if version is not None and version != (V2_VERSION if expected == 6 else "indexed-gam-legacy-v1"):
+    if version is not None and version != ({7: V3_VERSION, 6: V2_VERSION, 5: "indexed-gam-legacy-v1"}[expected]):
         raise ValueError("Selected tensor format conflicts with metadata version")
     return tensor_format
 
@@ -315,10 +316,11 @@ def visualize_candidate_tensor(tensor, out_path, title, show_all_rows=False,
                                marker_column=None, metadata=None, hide_marker=False):
     configure_style()
     view, region = prepare_candidate_view(tensor, show_all_rows, metadata)
-    fig = plt.figure(figsize=(17, 15), layout="constrained")
-    grid = GridSpec(6, 2, figure=fig, width_ratios=(1, .21), hspace=.12)
-    axes = [fig.add_subplot(grid[i, 0]) for i in range(6)]
-    legends = [fig.add_subplot(grid[i, 1]) for i in range(6)]
+    channels = tensor.shape[0]
+    fig = plt.figure(figsize=(17, 17 if channels == 7 else 15), layout="constrained")
+    grid = GridSpec(channels, 2, figure=fig, width_ratios=(1, .21), hspace=.12)
+    axes = [fig.add_subplot(grid[i, 0]) for i in range(channels)]
+    legends = [fig.add_subplot(grid[i, 1]) for i in range(channels)]
     plot_discrete_track(axes[0], legends[0], view[0], V2_BASE_LABELS, V2_BASE_COLORS)
     plot_discrete_track(axes[5], legends[5], view[5], V2_BASE_LABELS, V2_BASE_COLORS)
     flags = np.where((view[4] == 0) & (view[2] == 0), -1, view[2])
@@ -340,8 +342,19 @@ def visualize_candidate_tensor(tensor, out_path, title, show_all_rows=False,
         fig.colorbar(image, cax=bar)
         if channel == 1:
             legends[channel].text(.27, .25, "Gray: no read\nbase / quality", fontsize=11)
+    if channels == 7:
+        values = np.ma.masked_where(view[4] == 0, view[6])
+        cmap = plt.get_cmap("viridis").copy()
+        cmap.set_bad("#ffffff")
+        image = axes[6].imshow(values, cmap=cmap, vmin=0, vmax=max(1, int(view[6].max())),
+                               interpolation="nearest", aspect="auto")
+        legends[6].axis("off")
+        bar = legends[6].inset_axes((.03, .12, .12, .75))
+        fig.colorbar(image, cax=bar)
+        legends[6].text(.27, .25, "Distinct GFA\nW records", fontsize=11)
     titles = ["1  Read bases", "2  Base qualities", "3  Event / candidate flags",
-              "4  Mapping qualities", "5  Alignment operations", "6  Per-read graph-reference bases"]
+              "4  Mapping qualities", "5  Alignment operations", "6  Per-read graph-reference bases",
+              "7  Node walk count"]
     for channel, ax in enumerate(axes):
         ax.set_title(titles[channel], loc="left", fontsize=16)
         ax.set_ylabel("Alignment row", fontsize=13)
@@ -350,10 +363,10 @@ def visualize_candidate_tensor(tensor, out_path, title, show_all_rows=False,
             ax.axvspan(region[0]-.5, region[1]-.5, facecolor="none", edgecolor="#111111", linewidth=1.2)
         if marker_column is not None:
             ax.axvline(marker_column, color="#111111", linestyle="--", linewidth=.8)
-        if channel < 5:
+        if channel < channels-1:
             ax.tick_params(labelbottom=False)
     axes[-1].set_xlabel("Tensor column (candidate-relative context; branches may differ)", fontsize=13)
-    caption = "candidate-v2 | no dedicated reference row"
+    caption = f"candidate-v{3 if channels == 7 else 2} | no dedicated reference row"
     if region:
         caption += f" | candidate columns [{region[0]}, {region[1]})"
     if metadata and "coverage" in metadata:
@@ -402,7 +415,7 @@ def visualize_tensor(
     tensor_format="auto",
     hide_marker=False,
 ) -> int:
-    if resolve_format(tensor, metadata, tensor_format) == "candidate-v2":
+    if resolve_format(tensor, metadata, tensor_format) in ("candidate-v2", "candidate-v3"):
         return visualize_candidate_tensor(tensor, out_path, title, show_all_rows,
                                           marker_column, metadata, hide_marker)
     if tensor.ndim != 3 or tensor.shape[0] != 5:
@@ -463,7 +476,7 @@ def visualize_tensor(
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Visualize legacy five-channel or candidate-v2 six-channel NPY tensors."
+        description="Visualize legacy five-channel or candidate-v2/v3 six/seven-channel NPY tensors."
     )
     parser.add_argument("npy_path", help="Input .npy path: (N,C,H,W) shard or (C,H,W) tensor.")
     parser.add_argument(
@@ -505,9 +518,9 @@ def main() -> None:
     parser.add_argument(
         "--marker-column",
         type=int,
-        help="Extra column marker; -1 hides markers. Default: full v2 candidate range or legacy center.",
+        help="Extra column marker; -1 hides markers. Default: full candidate range or legacy center.",
     )
-    parser.add_argument("--format", choices=("auto", "legacy", "candidate-v2"), default="auto")
+    parser.add_argument("--format", choices=("auto", "legacy", "candidate-v2", "candidate-v3"), default="auto")
     parser.add_argument("--manifest-path", help="Format manifest; default: manifest.json beside input")
     parser.add_argument("--shard-index", type=int, help="Metadata shard index for nonstandard filenames")
     parser.add_argument("--title", help="Optional figure title.")
@@ -625,7 +638,7 @@ def main() -> None:
             print(f"Rendered {rendered}/{total_to_render}")
 
     print(f"Input shape: {array.shape}; dtype: {array.dtype}")
-    print("Candidate-v2 quality scales use observed maxima (at least BQ 40 / MAPQ 60).")
+    print("Candidate-v2/v3 quality scales use observed maxima (at least BQ 40 / MAPQ 60).")
     print(
         f"Legacy quality color scale: 0-{QUALITY_COLOR_SCALE_MAX}; "
         f"displayed colorbars: base 0-{BASE_QUALITY_DISPLAY_MAX}, "

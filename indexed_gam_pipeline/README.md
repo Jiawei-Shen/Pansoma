@@ -1,13 +1,86 @@
+# Seven-channel candidate tensors (v3): cached graph walk counts
+
+`build` now defaults to **`--format candidate-v3`**, shape `(7,200,100)`, `int32`.
+The first six channels and node-path row grouping retain v2 semantics. Channel 7
+contains the **exact number of distinct GFA W records visiting the column's node**.
+It is a graph feature, independent of GAM read coverage. Existing six-channel and
+five-channel checkpoints require their corresponding older formats or retraining.
+Use `--format candidate-v2` for six channels or `--format legacy` for five.
+
+Build the reusable lookup once (plain or gzip-compressed GFA):
+
+```bash
+python indexed_gam_pipeline/walk_counts.py \
+  --gfa /scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.gfa \
+  --output tmp/hprc_distinct_w_counts.sqlite
+```
+
+Then query the cache during tensor builds:
+
+```bash
+python indexed_gam_pipeline/run.py build --format candidate-v3 \
+  --gam tmp/HG008_pacbio_test.sorted.gam --index tmp/indexed_gam_current/rebuilt.gai \
+  --nodes tmp/indexed_gam_ten_examples/combined/target_nodes.txt \
+  --node-sqlite /scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.GRCh38_CHM13_node_index.sqlite \
+  --walk-counts tmp/hprc_distinct_w_counts.sqlite \
+  --output tmp/my_candidate_v3_run --batch-nodes 3 --debug-rows
+python scripts/visualize_tensor.py tmp/my_candidate_v3_run/shard_00000_data.npy \
+  --all-samples --output-dir tmp/my_candidate_v3_run/images
+```
+
+The cache builder makes one sequential pass over the GFA. For each W record it
+collects distinct positive numeric vg node IDs, ignoring traversal orientation
+and repeated visits within that record. W identity uses its first seven fields
+(type, sample, haplotype, sequence ID, start, end, walk); exact duplicates count
+once, while different intervals are distinct W records. Optional tags do not
+create additional walks. S/L/P records do not contribute. Malformed walks, missing
+walk strings and graphs without W records fail explicitly.
+
+Counts accumulate in a disk-backed vector for normal vg IDs and a sparse table
+for unusually large IDs, then are persisted in an indexed SQLite table. Tensor
+batches query only their context-node IDs; they never rescan the GFA. The cache
+records the source path, file size/mtime, SHA-256 of uncompressed GFA content,
+record counts and construction time. Changed source size/mtime invalidates it.
+Incomplete caches are not published, and existing cache files are not overwritten.
+For a relocated cache, original source size/mtime is checked only when that source
+path remains available; ensure that the cache matches the graph used for alignment.
+
+Channel 7 conventions:
+
+- Reference bases and deletions use their own mapped node's count.
+- Inserted bases and shared aligned insertion-gap slots use their boundary node's
+  count, including context insertions on other branches.
+- Missing coverage and unused rows have count 0. A real mapped node absent from
+  all W records also has count 0; other channels distinguish it from padding.
+- Counts are raw integers, never normalized or clipped. `int32` preserves counts
+  above the previous format's int16 maximum. Out-of-range counts fail explicitly.
+- Reverse orientation does not alter the count. All seven channels are permuted
+  together when grouping rows by node path. Candidate statistics and row selection
+  do not depend on this feature.
+
+The format identifier is `indexed-gam-candidate-v3`, schema version 3. Manifests
+include channel definitions, encodings and full walk-cache provenance. The image
+visualizer auto-detects v3 from metadata and draws a seventh count panel; use
+`--format candidate-v3` for standalone arrays without a manifest. The debug auditor
+`validate_examples.py` accepts `--walk-counts` to verify every occupied count cell.
+The cache, full GFA and generated tensor shards remain outside Git.
+The [COLO829T 100-example gallery](samples/colo829t_100/README.md) includes
+matching PNGs, a compressed tensor subset, metadata, and measured run times.
+
+The following documentation describes the retained six-channel v2 format.
+
+---
+
 # Indexed GAM candidate-centered tensors (v2)
 
-`build` now defaults to `--format candidate-v2`: one alignment per row,
+Select `--format candidate-v2` for the retained six-channel version: one alignment per row,
 shape `(6, 200, 100)`, `int16`, with no reference row. Select `--format legacy`
 for the original `(5, 201, 100)` int8 tensors and existing checkpoints.
 Six-channel v2 is a new encoding and **cannot be consumed directly by existing
 five-channel checkpoints** (nor by an arbitrary older six-channel model).
 
 ```bash
-python indexed_gam_pipeline/run.py build \
+python indexed_gam_pipeline/run.py build --format candidate-v2 \
   --gam tmp/HG008_pacbio_test.sorted.gam \
   --index tmp/indexed_gam_current/rebuilt.gai \
   --nodes tmp/indexed_gam_current/known_nodes.txt \

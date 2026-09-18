@@ -11,9 +11,11 @@ from types import SimpleNamespace
 import numpy as np
 
 VERSION = "indexed-gam-candidate-v2"
+V3_VERSION = "indexed-gam-candidate-v3"
 ROW_ORDER = "candidate-oriented visible node path; within each path retain selection order"
 CHANNELS = ["read_base", "base_quality", "event_flags", "mapping_quality",
             "alignment_operation", "row_graph_reference_base"]
+V3_CHANNELS = CHANNELS + ["node_distinct_w_record_count"]
 BASES = {"A": 1, "C": 2, "G": 3, "T": 4, "N": 5, "-": 6}
 OPS = {"M": 1, "X": 2, "I": 3, "D": 4, "C": 5, "G": 6}
 COMPLEMENT = str.maketrans("ACGTNacgtn", "TGCANtgcan")
@@ -254,7 +256,7 @@ def split_columns(cols, visit, candidate):
     return cols[:cut], [], cols[cut:]
 
 
-def make_tensor(candidate, eligible, rows=200, width=100, debug=False):
+def make_tensor(candidate, eligible, rows=200, width=100, debug=False, node_walk_counts=None):
     """Select deterministically only after full-record coverage/support counting."""
     eligible = sorted(eligible, key=lambda x: (dict(alt=0, ref=1, other=2)[x[1]],
                                               -x[0].mapq, x[0].digest))
@@ -269,7 +271,11 @@ def make_tensor(candidate, eligible, rows=200, width=100, debug=False):
     if span > width:
         raise ValueError("Tensor width cannot preserve complete candidate region")
     start = (width - span) // 2
-    tensor = np.zeros((6, rows, width), dtype=np.int16)
+    with_walks = node_walk_counts is not None
+    if with_walks and any(not isinstance(count, (int, np.integer)) or not 0 <= count <= np.iinfo(np.int32).max
+                          for count in node_walk_counts.values()):
+        raise ValueError("Node walk counts must be nonnegative int32 integers")
+    tensor = np.zeros((7 if with_walks else 6, rows, width), dtype=np.int32 if with_walks else np.int16)
     details = []
     omitted = []
     row_paths = []
@@ -314,9 +320,11 @@ def make_tensor(candidate, eligible, rows=200, width=100, debug=False):
         row_paths.append(tuple(path))
         for ci, col in enumerate(row):
             if col is not None:
-                tensor[:, ri, ci] = [BASES.get(col.read, 5), col.quality,
+                tensor[:6, ri, ci] = [BASES.get(col.read, 5), col.quality,
                     int(col.op in ("I", "D", "C") or (col.op == "X" and col.read != col.ref)) | (2 if start <= ci < start+span else 0),
                     min(32767, read.mapq), OPS[col.op], BASES.get(col.ref, 5)]
+                if with_walks:
+                    tensor[6, ri, ci] = node_walk_counts[col.node]
             elif start <= ci < start+span:
                 tensor[2, ri, ci] = 2
                 if candidate.kind == "INS":
@@ -348,7 +356,7 @@ def make_tensor(candidate, eligible, rows=200, width=100, debug=False):
         else:
             groups[-1]["end_row"] = ri+1
     counts = Counter(s for _, s, _ in eligible)
-    return tensor, dict(candidate.metadata(), tensor_format_version=VERSION,
+    return tensor, dict(candidate.metadata(), tensor_format_version=V3_VERSION if with_walks else VERSION,
         row_order=ROW_ORDER, row_groups=groups,
         candidate_columns=[start, start+span], coverage=len(eligible),
         alt_count=counts["alt"], ref_count=counts["ref"], other_count=counts["other"],

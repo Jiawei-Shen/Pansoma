@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compare saved legacy/v2 summaries; independently audit SNP counts in source GAM."""
+"""Compare saved legacy/candidate (v2 or v3) summaries; independently audit SNP counts in source GAM."""
 import argparse
 from collections import Counter
 import hashlib
@@ -66,7 +66,7 @@ def audit_snp(alignment, candidate, node_length, min_bq):
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--legacy',required=True,help='Legacy summary NDJSON')
-    parser.add_argument('--v2',required=True,help='V2 summary NDJSON')
+    parser.add_argument('--candidate', '--v2', dest='v2', required=True, help='Candidate v2/v3 summary NDJSON (--v2 retained as an alias)')
     parser.add_argument('--gam',required=True)
     parser.add_argument('--index')
     parser.add_argument('--node-sqlite',required=True)
@@ -115,6 +115,20 @@ def main():
         raw_snp_audits_passed=all(c['raw_snp_audit']['v2_matches_raw_edits'] and c['raw_snp_audit']['legacy_matches_raw_bases']
                                 for c in comparisons if 'raw_snp_audit' in c),
         note='Legacy minimum BQ filters mean ALT BQ; v2 applies minimum BQ per ALT observation. Legacy AF is rounded to four decimals.')
+    versions = {m['tensor_format_version'] for m in new.values()}
+    if len(versions) != 1:
+        raise ValueError('Comparison requires one candidate tensor format')
+    report['tensor_format_version'] = next(iter(versions))
+    if report['tensor_format_version'] == 'indexed-gam-candidate-v3':
+        # Keep v2 reports backward compatible while labeling v3 evidence accurately.
+        def relabel(value):
+            if isinstance(value, dict):
+                return {k.replace('v2', 'v3'): relabel(v) for k, v in value.items()}
+            if isinstance(value, list):
+                return [relabel(v) for v in value]
+            return value
+        report = relabel(report)
+        report['note'] = report['note'].replace('v2', 'v3')
     Path(args.output).write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(report,indent=2))
     if not report['raw_snp_audits_passed']:
