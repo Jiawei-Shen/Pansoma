@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 import sqlite3
 import subprocess
+import time
 
 METRIC = 'distinct-gbwt-paths-v1'
 
@@ -15,6 +16,8 @@ def fingerprint(path):
 
 class GBZCounts:
     def __init__(self, gbz, helper, cache):
+        start = time.perf_counter()
+        self.performance = dict(cache_setup_seconds=0., helper_startup_seconds=0., cache_hits=0, cache_misses=0)
         self.source = Path(gbz).resolve()
         self.helper = str(Path(helper).resolve())
         self.path = Path(cache).resolve()
@@ -48,14 +51,18 @@ class GBZCounts:
             self.db.close()
             raise
 
+        self.performance["cache_setup_seconds"] = time.perf_counter() - start
+
     def _start(self):
         if self.process is not None:
             return
+        start = time.perf_counter()
         self.process = subprocess.Popen([self.helper, str(self.source)], stdin=subprocess.PIPE,
             stdout=subprocess.PIPE, text=True, bufsize=1)
         line = self.process.stdout.readline()
         if not line:
             raise ValueError('GBZ query helper failed to load the graph; see stderr')
+        self.performance['helper_startup_seconds'] += time.perf_counter() - start
         header = json.loads(line)
         if header.get('protocol_version') != 1 or header.get('metric') != METRIC:
             raise ValueError('Unsupported GBZ query helper protocol/metric')
@@ -70,6 +77,7 @@ class GBZCounts:
         for node in sorted(set(map(int, nodes))):
             row = self.db.execute('SELECT count, sequence FROM gbz_counts WHERE node_id=?', (node,)).fetchone()
             if row is None:
+                self.performance["cache_misses"] += 1
                 self._start()
                 self.process.stdin.write(json.dumps({'node_id': node}) + '\n')
                 self.process.stdin.flush()
@@ -83,6 +91,8 @@ class GBZCounts:
                 if not isinstance(row[0], int) or not 0 <= row[0] <= 2147483647:
                     raise ValueError(f'Invalid GBZ path count at node {node}')
                 self.db.execute('INSERT INTO gbz_counts VALUES (?, ?, ?)', (node, *row))
+            else:
+                self.performance["cache_hits"] += 1
             count, sequence = row
             if not isinstance(count, int) or not 0 <= count <= 2147483647:
                 raise ValueError(f'Invalid cached GBZ path count at node {node}')

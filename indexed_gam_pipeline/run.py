@@ -2,6 +2,7 @@
 """Discover nodes, validate indexed reads, or build tensors directly from GAM."""
 import argparse
 from collections import Counter, defaultdict
+from contextlib import closing, nullcontext
 import gzip
 import hashlib
 import json
@@ -148,7 +149,7 @@ def validate(args):
         raise ValueError("Indexed GAM retrieval differs from independent full scan")
 
 
-def node_records(args, nodes):
+def node_records(args, nodes, sqlite_connection=None):
     records = {}
     if args.node_json:
         opener = gzip.open if args.node_json.endswith(".gz") else open
@@ -164,16 +165,26 @@ def node_records(args, nodes):
                     records[nid]["sequence"] = records[nid]["sequence"].upper()
     if getattr(args, "node_sqlite", None):
         uri = Path(args.node_sqlite).resolve().as_uri() + "?mode=ro"
-        with sqlite3.connect(uri, uri=True) as connection:
-            for nid in nodes:
-                row = connection.execute(
-                    "SELECT seq FROM nodes WHERE node_id = ?", (str(nid),)).fetchone()
-                if row and row[0] and row[0] != "*":
-                    sequence = row[0].upper()
-                    rec = records.setdefault(nid, {"node_id": str(nid)})
-                    if rec.get("sequence") and rec["sequence"] != sequence:
-                        raise ValueError(f"SQLite/JSON sequence mismatch at node {nid}")
-                    rec["sequence"] = sequence
+        manager = closing(sqlite3.connect(uri, uri=True)) if sqlite_connection is None else nullcontext(sqlite_connection)
+        with manager as connection:
+            # One read transaction avoids a filesystem lock cycle per node on
+            # shared storage; bounded IN queries also amortize SQL execution.
+            if sqlite_connection is None:
+                connection.execute("BEGIN")
+            ordered = sorted(nodes)
+            for offset in range(0, len(ordered), 900):
+                batch = ordered[offset:offset + 900]
+                placeholders = ",".join("?" for _ in batch)
+                for node_id, seq in connection.execute(
+                        f"SELECT node_id, seq FROM nodes WHERE node_id IN ({placeholders})",
+                        [str(n) for n in batch]):
+                    if seq and seq != "*":
+                        nid = int(node_id)
+                        sequence = seq.upper()
+                        rec = records.setdefault(nid, {"node_id": str(nid)})
+                        if rec.get("sequence") and rec["sequence"] != sequence:
+                            raise ValueError(f"SQLite/JSON sequence mismatch at node {nid}")
+                        rec["sequence"] = sequence
     if args.gfa:
         opener = gzip.open if args.gfa.endswith(".gz") else open
         with opener(args.gfa, "rt") as stream:
@@ -321,6 +332,8 @@ def main():
             sub.add_argument("--gfa", help="Matching GFA with original vg node IDs")
             sub.add_argument("--node-sqlite", help="Matching graph node SQLite index (nodes.node_id, nodes.seq)")
             sub.add_argument("--node-json", help="node_id/sequence records, optionally with coordinates")
+            sub.add_argument("--gam-cache-mb", type=int, default=64,
+                             help="Bounded GAM group cache in MiB; 0 disables reuse (default: 64)")
             sub.add_argument("--batch-nodes", type=positive, default=128)
             sub.add_argument("--max-node-span", type=positive, default=10000)
             sub.add_argument("--max-batch-segments", type=positive, default=1000000)

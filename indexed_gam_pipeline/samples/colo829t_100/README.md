@@ -44,6 +44,22 @@ source records, graph bases, row grouping, padding, and occurrence values).
 These node IDs refer specifically to the d9 graph: node 2753 is 114 bases and
 node 51182 is `C`. Counts from a graph with different node sequences do not apply.
 
+## Runtime after optimization
+
+The same 1,000 tensors now take **8.16 seconds with the occurrence cache
+populated** (original-code repeat: 22.67 seconds), or **99.82 seconds with a
+fresh occurrence cache**, including GBZ hashing/loading. Rendering 100 images
+was previously measured at 38.21 seconds and was not repeated for this change.
+
+The build uses a 64 MiB bounded GAM group cache, batched graph queries through
+one persistent read connection, and one orientation search in the bidirectional
+GBWT. All tensor, summary, filtering, and unsupported-event files are byte-identical
+to the original output; all 1,938 queried node counts/sequences also match.
+
+[Full timing breakdown and intermediate runs](performance.json). Storage timings
+vary; these sample results are not a whole-genome runtime estimate. The original
+file-generation timings above are retained as provenance.
+
 | # | Candidate | Coverage | ALT/REF/other | Image |
 |---:|---|---:|---:|---|
 | 0 | `2753:4:SNP:G>C` | 4 | 2/2/0 | [PNG](images/sample_000.png) |

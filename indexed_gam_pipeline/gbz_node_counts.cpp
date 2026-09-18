@@ -26,13 +26,14 @@ int main(int argc, char** argv) {
             if (node == 0 || !gbz.graph.has_node(node))
                 throw std::runtime_error("node missing from GBZ: " + std::to_string(node));
             std::set<gbwt::size_type> paths;
-            // GBWT stores both a path and its reverse complement. Strip that
-            // orientation bit and deduplicate repeated visits and both searches.
-            for (bool reverse : {false, true}) {
-                auto state = gbz.index.find(gbwt::Node::encode(node, reverse));
-                for (auto sequence : gbz.index.locate(state))
-                    paths.insert(gbwt::Path::id(sequence));
-            }
+            // In a bidirectional GBWT, a reverse node visit appears as a
+            // forward visit in the reverse-complement copy of the same path.
+            // One orientation search therefore covers all physical paths.
+            // Strip the sequence orientation bit: mixed-orientation visits and
+            // repeated occurrences in one path must still count only once.
+            auto state = gbz.index.find(gbwt::Node::encode(node, false));
+            for (auto sequence : gbz.index.locate(state))
+                paths.insert(gbwt::Path::id(sequence));
             std::cout << json({{"node_id", node}, {"count", paths.size()},
                 {"sequence", gbz.graph.get_sequence(gbz.graph.get_handle(node, false))}}).dump()
                 << std::endl;
