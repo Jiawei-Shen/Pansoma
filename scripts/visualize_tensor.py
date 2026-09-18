@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""CLI for the shared legacy / candidate-v2 tensor image visualizer."""
+"""CLI for the shared legacy / candidate-v2/v3 tensor image visualizer."""
 from pathlib import Path
 import sys
 

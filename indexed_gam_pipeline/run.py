@@ -267,7 +267,7 @@ def build_legacy(args):
 
 
 def build(args):
-    if getattr(args, "format", "candidate-v2") == "legacy":
+    if getattr(args, "format", "candidate-v3") == "legacy":
         return build_legacy(args)
     from indexed_gam_pipeline.build_v2 import build as candidate_build
     for key, default in (("rows", 200), ("width", 100), ("debug_rows", False)):
@@ -310,7 +310,8 @@ def main():
             sub.add_argument("--nodes", required=True)
             sub.add_argument("--index", help="Default: GAM path + .gai")
         if name == "build":
-            sub.add_argument("--format", choices=("candidate-v2", "legacy"), default="candidate-v2")
+            sub.add_argument("--format", choices=("candidate-v3", "candidate-v2", "legacy"), default="candidate-v3")
+            sub.add_argument("--walk-counts", help="Reusable SQLite node-to-distinct-W-count cache; required for candidate-v3")
             sub.add_argument("--rows", type=positive, default=200)
             sub.add_argument("--width", type=positive, default=100)
             sub.add_argument("--debug-rows", action="store_true", help="Include row paths and column graph coordinates")
@@ -321,6 +322,8 @@ def main():
             sub.add_argument("--max-node-span", type=positive, default=10000)
             sub.add_argument("--max-batch-segments", type=positive, default=1000000)
             sub.add_argument("--shard-size", type=positive, default=4096)
+            sub.add_argument("--max-tensors", type=positive,
+                             help="Stop after writing this many tensors (for bounded test runs)")
             sub.add_argument("--min-mapq", type=int, default=10)
             sub.add_argument("--min-af", type=fraction, default=0.05)
             sub.add_argument("--min-variants", type=positive, default=3)
