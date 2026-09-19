@@ -28,6 +28,26 @@ flowchart TD
     Save --> PNG[Render inspection PNGs]
 ```
 
+## Selected vg executable
+
+As of 2026-09-19, use **`/scratch/jshen/bin/vg_v1.77.0`** (verified as
+`vg version v1.77.0 "Ruby"`) for vg commands, replacing the previous local vg.
+On this machine it is a symlink to `/scratch/jshen/bin/vg`.
+
+```bash
+source scripts/use_vg.sh
+vg version
+# Explicit invocation is also supported:
+/scratch/jshen/bin/vg_v1.77.0 version
+```
+
+Source this after activating Conda so bare `vg` commands in upstream alignment
+and graph-extraction scripts resolve to the selected binary. The activation
+script verifies that resolution and sets `PANSOMA_VG` to the explicit path.
+The v4 tensor builder reads GAM/GAI in Python and queries GBZ through its compiled
+helper; neither stage invokes the vg executable. Earlier benchmark records
+retain their original provenance.
+
 ## 1. Inputs and graph identity
 
 The starting input is an already graph-aligned, sorted BGZF GAM. Mapping and

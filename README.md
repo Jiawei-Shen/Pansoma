@@ -1,5 +1,9 @@
 # Pansoma
 
+For the current cluster workspace, select the requested vg v1.77.0 after activating
+Conda: `source scripts/use_vg.sh`. This selects `/scratch/jshen/bin/vg_v1.77.0`
+for the existing `vg` commands.
+
 Pansoma is a research pipeline for generating machine-learning-ready variant tensors from pangenome graph alignments. It takes sequencing reads aligned to a pangenome graph, extracts graph-node pileups around candidate variants, writes sharded NumPy tensors, labels them against truth sets when available, and provides bundled model training and inference code.
 
 The project is organized so that reproducible pipeline entry points live in `scripts/`, reusable code lives in `src/`, model code lives in `machine_learning/`, and older exploratory scripts remain available under `experiments/legacy/`.
