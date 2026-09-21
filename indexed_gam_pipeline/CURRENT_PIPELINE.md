@@ -360,3 +360,29 @@ The measured HG008 comparison and production-mode follow-up are recorded in
 [runs/hg008_candidate_optimization.md](runs/hg008_candidate_optimization.md).
 Performance measurements with `--debug-rows` include large per-column metadata;
 use the separate no-debug comparison when choosing a production worker count.
+
+## Alternative GAM retrieval and independent partition benchmark
+
+`build --gam-reader vg --vg /scratch/jshen/bin/vg_v1.77.0` uses VG `find`
+for each node batch, then parses the returned full alignment records and filters
+against the exact target node set. The default remains `--gam-reader python`.
+The VG backend requires the adjacent `.gam.gai`; it rejects a different explicit
+index path rather than silently ignoring it. Temporary GAM transport is stored
+under `TMPDIR` (or the system temporary directory), bounds retained Python
+memory, and is removed when the fetch finishes or fails. VG failure is fatal.
+Neither backend changes edit decoding, candidate identity, support filtering,
+row selection, window encoding or the tensor channels.
+
+`benchmark_partition_reader.py` performs two separate treatments against the
+saved early-ALT-only HG008 baseline: (1) independent Python builders on the first
+and second contiguous halves, and (2) one builder using VG. Both enable only
+`--early-alt-filter`, with `--node-index-cache-nodes 0 --workers 1`. Two Python
+builders divide the total 8 GiB GAM-cache budget (4 GiB each); their decoded
+objects and other buffers can still increase combined process memory. The
+benchmark uses separate GBWT caches/output directories, merges partitions in
+node order, repacks NPY shards at 2,048 tensors, and adjusts only shard-location
+fields in the summary. Tensor files and full summaries must match the saved
+baseline byte-for-byte. This is a bounded two-batch comparison using debug rows
+for compatibility with that baseline, not a full-genome speed forecast.
+
+Results: [HG008 partition and reader comparison](runs/hg008_partition_reader.md).
