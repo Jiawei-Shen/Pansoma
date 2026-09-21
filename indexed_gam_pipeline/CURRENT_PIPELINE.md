@@ -317,3 +317,41 @@ Implementation entry points: [run.py](run.py), [gam_reader.py](gam_reader.py),
 [build_v2.py](build_v2.py) (also implements v4), [candidates.py](candidates.py),
 [gbz_counts.py](gbz_counts.py), [gbz_node_counts.cpp](gbz_node_counts.cpp), and
 [the visualizer](../src/pangenome_ml_data_generation/tensors/visualization.py).
+
+## Bounded candidate optimizations (2026-09-21)
+
+The HG008 performance comparison uses `benchmark_candidates.py` with 1,024
+fixed discovery nodes, unchanged candidate-v4 `(7, 200, 101)` encoding, and
+2,048-tensor shards (partial final shard allowed). The original full job 362252
+is stopped with SIGSTOP; it is not resumed by this benchmark.
+
+Optional builder settings (disabled by default pending performance evaluation):
+
+- `--early-alt-filter`: scan qualified observations once per batch and count
+  each exact candidate at most once per GAM record. This is an upper bound on
+  final ALT support, so a bound below `--min-variants` safely excludes the
+  candidate. Repeated visits do not add votes; duplicate records remain separate.
+  Early rejection records explicitly use `alt_support_upper_bound` and
+  `coverage_not_evaluated: true`; they do not claim to have evaluated coverage,
+  REF/other counts, or AF. Surviving candidates retain all original filters.
+- `--node-index-cache-nodes 1000 --node-index-cache-mb 64`: batch-scoped FIFO
+  indices reference matching visits and ALT observations. Access does not renew
+  an entry. At most 1,000 node entries are retained across workers, additionally
+  bounded by an estimated container budget of 64 MiB total. Oversized nodes use
+  the original scan. Estimates exclude the decoded reads themselves and are not
+  a process RSS limit. Indices are cleared between batches.
+- `--workers 2`: Linux fork processes share the parent's decoded batch initially
+  through copy-on-write. The parent alone performs GAM/graph/GBZ access and shard
+  writing. Each worker has at most 500 index entries and a 32 MiB estimated index
+  budget. Tasks hold at most 16 candidates, with at most two submitted tasks at
+  once; results are consumed in original candidate order. Python reference-count
+  updates can dirty shared pages, so actual combined memory is measured using
+  process-tree PSS in addition to RSS. Pools are released after each batch.
+
+Anchor lookup, visible-window construction, mismatch ranking, grouping, and row
+sampling are unchanged. The benchmark compares original code before and after
+three optimized configurations to expose storage/cache drift. It checks every
+NPY and the complete candidate summary with SHA-256, then audits the two-worker
+output against source alignments. An external sampler checks process memory every
+five seconds and records its own sampling time; no repeated traversal of Python
+caches is added to the candidate loop.
