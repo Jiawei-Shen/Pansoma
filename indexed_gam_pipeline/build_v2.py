@@ -66,7 +66,11 @@ def _build_impl(args, walk_lookup, sequence_connection):
     if getattr(args, "node_index_cache_mb", 64) < 0:
         raise ValueError("--node-index-cache-mb must be nonnegative")
     nodes = load_nodes(args.nodes)
-    reader = IndexedGam(args.gam, args.index, cache_bytes=getattr(args, "gam_cache_mb", 64) * 1024 * 1024)
+    if getattr(args, 'gam_reader', 'python') == 'vg':
+        from indexed_gam_pipeline.vg_reader import VgGam
+        reader = VgGam(args.gam, args.index, getattr(args, 'vg', '/scratch/jshen/bin/vg_v1.77.0'))
+    else:
+        reader = IndexedGam(args.gam, args.index, cache_bytes=getattr(args, "gam_cache_mb", 64) * 1024 * 1024)
     out = new_output(args.output)
     (out / "target_nodes.txt").write_text("".join(f"{n}\n" for n in nodes))
     parameters = {k: getattr(args, k) for k in ("min_mapq", "min_af", "min_variants",
