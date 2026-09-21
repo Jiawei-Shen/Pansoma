@@ -71,3 +71,20 @@ uses 512-node batches with an 8 GiB GAM cache as in the verified 100-example tes
 `.building_tensors_window101` and validates before publishing into the original
 output directory. Previous failures and tests are retained separately. Automatic
 restart from a partial tensor build is still not implemented.
+
+## Full continuation submission
+
+Full build resumed as Slurm **362252** on `tsingtao`, source commit **91ece2c**,
+4 CPUs, 128 GiB requested RAM, 14-day limit. At startup vg version verification
+completed and full tensor building entered `running`. This is submission/startup
+confirmation, not a completion claim.
+
+Current run directory:
+`/scratch/jshen/data/HG008_GIAB/pansoma_v2_tensors/Liss_lab_PacBio_Revio_20240125/run/full_window101_20260921T173318Z`
+
+`run/active_run.json` points to this job and its current `status.json`; the old
+`run/status.json` remains the historical failed job record. New tensors are
+built in `.building_tensors_window101/` and are only published to the requested
+output directory after full structural validation. The full shard shape is
+`(2048,7,200,101)`, with a smaller final shard permitted. Full discovery is reused;
+all 16,560,350 selected nodes are passed to the builder with no max-tensors limit.
