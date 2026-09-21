@@ -47,13 +47,16 @@ def main():
     p.add_argument('--prior-run',type=Path,required=True)
     p.add_argument('--verified-test',type=Path,required=True)
     p.add_argument('--output',type=Path,required=True)
+    p.add_argument('--production-comparison',action='store_true',help='Compare indexed workers without debug row metadata')
+    p.add_argument('--reference-output',type=Path,help='Require production tensor hashes to match audited debug output')
     args=p.parse_args();prior=args.prior_run.resolve();test=args.verified_test.resolve();out=args.output.resolve()
     cfg=json.loads((prior/'config.json').read_text());out.mkdir(parents=True,exist_ok=True)
     with (prior/'discovery/target_nodes.txt').open() as stream:
         nodes=[next(stream).strip() for _ in range(1024)]
     (out/'nodes.txt').write_text('\n'.join(nodes)+'\n')
     report=dict(status='running',nodes=1024,width=101,shard_size=2048,steps=[],
-                original_full_job='362252 remains SIGSTOP; benchmark does not resume it')
+                original_full_job='362252 remains SIGSTOP; benchmark does not resume it',
+                debug_rows=not args.production_comparison)
     def save():write_json(out/'status.json',report)
     def run(name,command):
         item=dict(name=name,status='running',started_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),command=list(map(str,command)))
@@ -74,6 +77,9 @@ def main():
     cases=[('baseline_before',False,0,1),('early_alt_only',True,0,1),
            ('indexed_one_worker',True,1000,1),('indexed_two_workers',True,1000,2),
            ('baseline_after',False,0,1)]
+    if args.production_comparison:
+        if args.reference_output is None:p.error('--production-comparison requires --reference-output')
+        cases=[('production_one_worker',True,1000,1),('production_two_workers',True,1000,2)]
     baseline_source=test/'source'
     try:
         save()
@@ -86,7 +92,8 @@ def main():
                 '--occurrence-cache',cache,'--output',out/name,'--batch-nodes','512','--max-node-span','10000',
                 '--gam-cache-mb','8192','--max-batch-segments','20000','--shard-size','2048',
                 '--rows','200','--width','101','--min-mapq','10','--min-af','0.05','--min-variants','3',
-                '--min-allele-bq','10','--max-indel-len','50','--variant-type','all','--debug-rows']
+                '--min-allele-bq','10','--max-indel-len','50','--variant-type','all']
+            if not args.production_comparison:cmd.append('--debug-rows')
             if not name.startswith('baseline'):
                 cmd+=['--workers',str(workers),'--node-index-cache-nodes',str(index_nodes),'--node-index-cache-mb','64']
                 if early:cmd.append('--early-alt-filter')
@@ -97,12 +104,17 @@ def main():
             item['worker_summed_timing']=m.get('candidate_worker_summed_timing')
             files=sorted((out/name).glob('shard_*_data.npy'))+[out/name/'variant_summary.ndjson']
             item['output_sha256']={f.name:digest_file(f) for f in files}
-            if name!='baseline_before':
+            if args.production_comparison:
+                reference={f.name:digest_file(f) for f in args.reference_output.glob('shard_*_data.npy')}
+                actual={k:v for k,v in item['output_sha256'].items() if k.endswith('.npy')}
+                if not reference or reference!=actual:raise RuntimeError('Production tensors differ from audited debug tensors')
+                item['tensors_equal_to_audited_debug_output']=True
+            if len(report['steps'])>1:
                 if item['output_sha256']!=report['steps'][0]['output_sha256']:
                     raise RuntimeError(name+' tensors or complete candidate metadata differ from baseline')
                 item['bitwise_equal_to_baseline']=True
             save()
-        run('source_audit',[sys.executable,ROOT/'indexed_gam_pipeline/validate_examples.py',out/'indexed_two_workers',
+        if not args.production_comparison:run('source_audit',[sys.executable,ROOT/'indexed_gam_pipeline/validate_examples.py',out/'indexed_two_workers',
             '--gam',cfg['gam'],'--index',cfg['index'],'--node-sqlite',prior/'all_graph_nodes.sqlite',
             '--gbz',cfg['gbz'],'--gbz-query',cfg['gbz_query'],'--occurrence-cache',out/'indexed_two_workers_gbwt.sqlite',
             '--output',out/'source_audit.json'])
