@@ -201,7 +201,7 @@ def boundary_evidence(left, right, visit, boundary):
     return before and after
 
 
-def overlap(read, candidate, min_bq):
+def overlap(read, candidate, min_bq, node_index=None):
     """One count per record. Repeated visits: ALT > REF > other; first visit wins ties.
 
     Insertion coverage is closed-boundary overlap [start,end], including terminal
@@ -209,7 +209,7 @@ def overlap(read, candidate, min_bq):
     on both sides, with no insertion/replacement/deletion at the boundary.
     """
     choices = []
-    for visit in read.visits:
+    for visit in (node_index[0] if node_index is not None else read.visits):
         if visit.node != candidate.node or visit.first == visit.last:
             continue
         if candidate.kind == "INS":
@@ -218,8 +218,10 @@ def overlap(read, candidate, min_bq):
             covered = visit.start < candidate.end and visit.end > candidate.start
         if not covered:
             continue
-        exact = any(o.visit == visit.index and o.candidate == candidate and o.quality >= min_bq
-                    for o in read.observations)
+        exact = (node_index[1].get((visit.index,candidate), float("-inf")) >= min_bq
+                 if node_index is not None else
+                 any(o.visit == visit.index and o.candidate == candidate and o.quality >= min_bq
+                     for o in read.observations))
         cols = oriented_columns(read, visit, 1)
         local = [c for c in cols if c.visit == visit.index]
         support = "other"
