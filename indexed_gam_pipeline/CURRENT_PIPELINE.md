@@ -190,11 +190,25 @@ quota. Counts and AF use all eligible records before sampling; duplicate records
 remain separate. The seven-channel format stays v4; the row-selection revision
 is recorded separately and must match between model training and inference.
 
-The candidate interval
-is centered as a complete block. Insertions reserve a shared block and use gap
-slots for supported absence; missing evidence stays padding. Context follows
+Window revision `anchor-centered-columns-v1` fixes the candidate start/boundary
+at column `width//2` (50 for width 100). Each record contributes the preceding
+50 alignment columns and the next 50, including the anchor. Long I/D events
+are cropped at the window edge; the complete event need not fit. No maximum
+insertion from another record expands the shared window. For INS, shorter
+alleles reserve up to the visible target insertion length, using G slots only
+with boundary evidence; missing evidence stays all-zero padding. For DEL,
+each deleted graph base remains a D column with its original reference base.
+Partial mappings starting after the candidate anchor retain missing positions
+before their first covered base. Context follows
 each alignment's own graph traversal, so rows can have different neighboring
 nodes. A reverse anchor reverses/complements the row into candidate orientation.
+Candidate flags are determined per row from node/offset/boundary and mapping
+visit, not from a shared rectangular candidate block. `candidate_columns` is
+the nominal clipped target interval; actual flags can extend past it when a
+row has additional insertion bases within a deletion. `omitted_context`
+records central columns cropped by the right window boundary. The window
+revision is saved in both manifest and per-candidate metadata; historical
+v4 tensors without this revision use the old shared-block layout.
 
 | Channel (1-based) | Meaning |
 |---|---|
@@ -208,8 +222,8 @@ nodes. A reverse anchor reverses/complements the row into candidate orientation.
 
 Deletions keep their mapped node's count. Insertions and aligned insertion-gap
 slots use their anchor node's count. Missing coverage and unused rows have zero
-occurrence. Candidate-region flags can still mark a central slot without coverage;
-use the operation/metadata to distinguish padding from aligned evidence.
+occurrence. All seven channels of missing evidence are zero in this window
+revision. D and supported G columns remain distinct from missing evidence.
 
 Grouping takes place before sampling. All seven channels and row metadata
 follow the same selected record order; no second sorting occurs after sampling.

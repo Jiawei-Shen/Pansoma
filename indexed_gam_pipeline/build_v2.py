@@ -8,7 +8,7 @@ from pathlib import Path
 
 import numpy as np
 
-from indexed_gam_pipeline.candidates import (VERSION, CHANNELS, V3_VERSION, V3_CHANNELS, BASES, OPS, ROW_ORDER, ROW_SELECTION_VERSION,
+from indexed_gam_pipeline.candidates import (VERSION, CHANNELS, V3_VERSION, V3_CHANNELS, BASES, OPS, ROW_ORDER, ROW_SELECTION_VERSION, WINDOW_ENCODING_VERSION,
                                              decode_alignment, overlap, make_tensor)
 from indexed_gam_pipeline.gam_reader import IndexedGam
 from indexed_gam_pipeline.segments import on_chromosome
@@ -84,6 +84,7 @@ def _build_impl(args, walk_lookup, sequence_connection):
         insertion_overlap="closed boundary [mapping.start,mapping.end]; REF requires adjacent M/X columns on both sides",
         repeated_visits="one count and row per record; ALT then REF then other, earliest mapping breaks ties",
         row_selection=ROW_ORDER, row_selection_version=ROW_SELECTION_VERSION,
+        window_encoding_version=WINDOW_ENCODING_VERSION,
         row_order=ROW_ORDER,
         gai_version=reader.version, nodes=len(nodes), shards=0, tensors=0,
         unsupported_events=0, filtered_candidates=0, debug_rows=args.debug_rows)

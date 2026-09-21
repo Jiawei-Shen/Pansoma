@@ -40,6 +40,52 @@ def eligible(candidate, reads):
 
 
 class CandidatesTest(unittest.TestCase):
+    def test_anchor_window_long_deletion_and_background_insertion(self):
+        seq={1:'A'*200}
+        candidate=Candidate(1,60,'A'*40,'','DEL')
+        alt=read([(1,0,False,[(60,60,''),(40,0,''),(100,100,'')])],seq)
+        other=read([(1,0,False,[(65,65,''),(0,150,'T'*150),(135,135,'')])],seq)
+        x,m=make_tensor(candidate,eligible(candidate,[alt,other]),rows=3,width=100,debug=True,
+                        node_walk_counts={1:90})
+        self.assertEqual(x.shape,(7,3,100))
+        self.assertEqual(m['anchor_column'],50)
+        self.assertEqual(m['coverage'],2)
+        self.assertEqual(m['alt_count'],1)
+        for ri,row in enumerate(m['rows']):
+            self.assertEqual(row['columns'][50]['offset'],60)
+            if row['record_sha256']==other.digest:
+                self.assertTrue(np.all(x[4,ri,55:]==OPS['I']))
+                self.assertEqual(row['window_mismatch_bp'],45)
+                self.assertGreater(row['omitted_central_context_columns'],0)
+            else:
+                self.assertTrue(np.all(x[4,ri,50:90]==OPS['D']))
+                self.assertTrue(np.all(x[0,ri,50:90]==BASES['-']))
+        self.assertFalse(x[:,2].any())
+        # A 100-bp DEL can be displayed even though production discovery's
+        # small-indel filter currently only emits candidates up to 50 bp.
+        a=alignment([(1,0,False,[(60,60,''),(100,0,''),(40,40,'')])],seq)
+        r,_=decode_alignment(a,seq,max_indel=100)
+        c=Candidate(1,60,'A'*100,'','DEL')
+        x,m=make_tensor(c,eligible(c,[r]),width=100)
+        self.assertTrue(np.all(x[4,0,50:]==OPS['D']))
+        self.assertEqual(m['candidate_columns'],[50,100])
+
+    def test_anchor_window_long_insertion_reverse_and_partial_coverage(self):
+        seq={1:'A'*120}
+        f=read([(1,0,False,[(60,60,''),(0,150,'C'*150),(60,60,'')])],seq)
+        r=read([(1,0,True,[(60,60,''),(0,150,'G'*150),(60,60,'')])],seq)
+        candidate=Candidate(1,60,'','C'*30,'INS')
+        xf,m=make_tensor(candidate,eligible(candidate,[f]),width=100)
+        xr,_=make_tensor(candidate,eligible(candidate,[r]),width=100)
+        np.testing.assert_array_equal(xf,xr)
+        self.assertTrue(np.all(xf[4,0,50:]==OPS['I']))
+        self.assertEqual(m['window_mismatch_bp'],[50])
+        partial=read([(1,65,False,[(20,20,'')])],seq)
+        c=Candidate(1,60,'A'*20,'','DEL')
+        x,m=make_tensor(c,eligible(c,[partial]),width=100,debug=True)
+        self.assertFalse(x[:,0,50:55].any())
+        self.assertEqual(m['rows'][0]['columns'][55]['offset'],65)
+
     def test_window_edit_bp_excludes_distant_edits_and_counts_indel_bases(self):
         seq = {1: 'A'*60}
         candidate = Candidate(1, 30, 'A', 'T', 'SNP')
@@ -149,14 +195,15 @@ class CandidatesTest(unittest.TestCase):
         self.assertEqual((m["coverage"],m["alt_count"],m["ref_count"],m["other_count"]),(4,1,1,2))
         self.assertEqual(hi-lo,2)
         self.assertEqual(x[0,0,lo:hi].tolist(),[BASES["T"],BASES["A"]])
-        self.assertTrue(np.all(x[5,:4,lo:hi] == 6))
-        self.assertTrue(np.all(x[2,:4,lo:hi] & 2))
         for row, detail in enumerate(m["rows"]):
             if detail["record_sha256"] == b.digest:
                 self.assertEqual(x[0,row,lo:hi].tolist(),[6,6])
                 self.assertEqual(x[1,row,lo],-1)
             if detail["record_sha256"] == terminal.digest:
-                self.assertTrue(np.all(x[0,row,lo:hi] == 0))
+                self.assertFalse(x[:,row,lo:hi].any())
+            else:
+                self.assertTrue(np.all(x[5,row,lo:hi] == 6))
+                self.assertTrue(np.all(x[2,row,lo:hi] & 2))
             if detail["record_sha256"] == d.digest:
                 self.assertEqual(x[0,row,lo:hi].tolist(),[BASES["G"],6])
 
@@ -212,9 +259,9 @@ class CandidatesTest(unittest.TestCase):
         c = alt.observations[0].candidate
         x,m = make_tensor(c,eligible(c,[alt,other]),width=12,debug=True)
         lo,hi = m["candidate_columns"]
-        self.assertEqual(hi-lo,6)
-        self.assertEqual(x[0,1,lo:hi].tolist(),[BASES[b] for b in "CTTGTA"])
-        self.assertEqual(x[5,1,lo:hi].tolist(),[BASES[b] for b in "C--GTA"])
+        self.assertEqual(hi-lo,4)
+        self.assertEqual(x[0,1,lo:lo+6].tolist(),[BASES[b] for b in "CTTGTA"])
+        self.assertEqual(x[5,1,lo:lo+6].tolist(),[BASES[b] for b in "C--GTA"])
         self.assertEqual(m["other_count"],1)
 
     def test_insertion_node_edges_and_context_branch_insertions(self):

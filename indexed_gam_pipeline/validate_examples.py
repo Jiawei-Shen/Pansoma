@@ -85,8 +85,10 @@ def validate(folder, gam, index, node_sqlite, walk_counts=None, gbz=None, gbz_qu
             check(selected==covered[label],f'{label}: full source record multiset')
         check(Counter(row['support'] for row in meta['rows'])==Counter(meta['selected_counts']),f'{label}: selected support counts')
         lo,hi=meta['candidate_columns']
-        check(bool(np.all(x[2,:n,lo:hi]&2)),f'{label}: full candidate flags')
-        if meta['event_type']=='INS':
+        anchor_window = meta.get('window_encoding_version') == 'anchor-centered-columns-v1'
+        if not anchor_window:
+            check(bool(np.all(x[2,:n,lo:hi]&2)),f'{label}: full candidate flags')
+        if meta['event_type']=='INS' and not anchor_window:
             check(bool(np.all(x[5,:n,lo:hi]==6)),f'{label}: insertion reference gaps')
         check(bool(np.all(x[1,:n][x[0,:n]==6]==-1)),f'{label}: gap quality')
         actual_paths=[]
@@ -95,9 +97,23 @@ def validate(folder, gam, index, node_sqlite, walk_counts=None, gbz=None, gbz_qu
             path=[]; previous=None
             for ci,col in enumerate(row['columns']):
                 if col is None:
+                    if anchor_window:
+                        check(not x[:,ri,ci].any(),f'{label}: all-zero missing evidence')
                     if expected_walks is not None:
                         check(int(x[6,ri,ci]) == 0, f'{label}: padded walk count')
                     continue
+                if anchor_window:
+                    anchored = col['mapping_index'] == row['anchor_mapping_index']
+                    boundary = 'boundary' in col
+                    pos = col.get('boundary', col.get('offset'))
+                    if meta['event_type'] == 'INS':
+                        expected_flag = anchored and boundary and pos == meta['start']
+                    else:
+                        expected_flag = anchored and (meta['start'] < pos < meta['end'] if boundary
+                                                      else meta['start'] <= pos < meta['end'])
+                    check(bool(x[2,ri,ci]&2)==expected_flag,f'{label}: per-row candidate flags')
+                    if ci == meta['anchor_column'] and not boundary:
+                        check(anchored and pos == meta['start'],f'{label}: anchor coordinate')
                 if expected_walks is not None:
                     check(int(x[6,ri,ci]) == expected_walks[col['node_id']], f'{label}: walk count at row {ri}, column {ci}')
                 if col['mapping_index'] != previous:
