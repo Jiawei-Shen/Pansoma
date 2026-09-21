@@ -126,3 +126,46 @@ The full HPRC unified index has **not** been built or benchmarked as part of the
 fixture checks. No full-data speedup is claimed yet. Previously submitted HG008
 jobs 362277/362278 keep their frozen legacy pipeline; this change does not migrate
 or restart those jobs.
+
+## Full run with 20 Python processes and reused discovery
+
+`prepare_unified_run.py` freezes the source and executables, verifies the original
+GAM/GAI/GBZ fingerprints, and streams the existing sorted candidate-node list into
+20 disjoint contiguous partitions. It never rescans the GAM for discovery.
+
+```bash
+python -m indexed_gam_pipeline.prepare_unified_run \
+  --prior-config /path/to/previous/comparison_config.json \
+  --output /path/to/new_run --processes 20 \
+  --builder tmp/gbz_graph_index --query tmp/gbz_node_counts
+sbatch --partition=general --nodes=1 --ntasks=1 --cpus-per-task=20 \
+  --mem=400G --time=14-00:00:00 \
+  --output=/path/to/new_run/slurm-%j.out \
+  --error=/path/to/new_run/slurm-%j.err /path/to/new_run/run.sh
+```
+
+The job performs, in order: source/partition verification; all-node unified GBZ
+index creation; independent GBWT search/locate count checks at known nodes and
+partition starts; 20 concurrent real-GAM preflight builds (32 target nodes per
+partition, at most 8 tensors each); full 20-process build and shard validation.
+A failed stage prevents the full build. No full-output comparison or shard merge
+is performed. Full outputs are `python/part_0/` through `python/part_19/`.
+All builders enable the ALT-support upper-bound filter and disable the optional
+node-index cache. Each has an 8 GiB GAM cache, one candidate worker, and native
+math/OpenMP thread counts set to one to avoid nested oversubscription.
+
+Timing/memory records:
+
+- `status.json`: job stages, wall time, terminal state, sampled peak tree RSS.
+- `graph_index_report.json`: offline index phase timings and source fingerprint.
+- `memory.ndjson`: every 30 seconds, current stage, per-process RSS/high-water RSS,
+  and summed process-tree RSS. This is not PSS; shared pages can be counted twice,
+  and short peaks between samples may be missed. No expensive heap/PSS scan.
+- `python/status.json`: each partition's command, status, validation and timings.
+- `python/part_N/batch_timing.ndjson`: batch/stage times, progress, filtering counts.
+- `python/part_N.resources.txt`: GNU time wall/CPU time, peak RSS and I/O counters.
+- `job.resources.txt`: GNU time resources for the whole controller/children run.
+- Slurm accounting supplies allocation-level memory/time statistics after exit.
+
+Controller tests include an actual 20-process build on a synthetic GAM using one
+shared SQLite index; partition tests ensure full coverage without duplicates.
