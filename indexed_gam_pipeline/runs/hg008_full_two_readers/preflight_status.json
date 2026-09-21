@@ -1,0 +1,49 @@
+{
+  "status": "complete",
+  "mode": "preflight",
+  "job_id": "362275",
+  "started_unix": 1790022031.0590575,
+  "stages": [
+    {
+      "name": "validate_reused_serial_reference",
+      "status": "complete",
+      "wall_seconds": 0.04278948903083801
+    },
+    {
+      "name": "python_two_partitions",
+      "status": "complete",
+      "wall_seconds": 188.89718868210912
+    },
+    {
+      "name": "python_merge",
+      "status": "complete",
+      "wall_seconds": 0.540247205644846
+    },
+    {
+      "name": "vg_two_partitions",
+      "status": "complete",
+      "wall_seconds": 150.8397762812674
+    },
+    {
+      "name": "vg_merge",
+      "status": "complete",
+      "wall_seconds": 0.5444372706115246
+    }
+  ],
+  "elapsed_seconds": 341.48213479295373,
+  "reference": {
+    "tensors": 46,
+    "tensor_sha256": "6393e132571fc3271dd20dc95335579f6eb33e9550b5272a95cfc0f5f9ababe2",
+    "metadata_sha256": "eb6c13b636d231f6eb0901b494fb4e6d3bd6d39d249d66aac6495b911fc25a60"
+  },
+  "python": {
+    "tensors": 46,
+    "tensor_sha256": "6393e132571fc3271dd20dc95335579f6eb33e9550b5272a95cfc0f5f9ababe2",
+    "metadata_sha256": "eb6c13b636d231f6eb0901b494fb4e6d3bd6d39d249d66aac6495b911fc25a60"
+  },
+  "vg": {
+    "tensors": 46,
+    "tensor_sha256": "6393e132571fc3271dd20dc95335579f6eb33e9550b5272a95cfc0f5f9ababe2",
+    "metadata_sha256": "eb6c13b636d231f6eb0901b494fb4e6d3bd6d39d249d66aac6495b911fc25a60"
+  }
+}

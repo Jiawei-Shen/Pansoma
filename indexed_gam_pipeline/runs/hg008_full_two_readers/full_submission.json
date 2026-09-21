@@ -1,0 +1,36 @@
+{
+  "jobs": {
+    "python": "362277",
+    "vg": "362278"
+  },
+  "commands": {
+    "python": [
+      "sbatch",
+      "--parsable",
+      "--job-name=hg008_full_python",
+      "--partition=general",
+      "--nodes=1",
+      "--ntasks=1",
+      "--cpus-per-task=4",
+      "--mem=128G",
+      "--time=14-00:00:00",
+      "--output=/scratch/jshen/data/HG008_GIAB/pansoma_v2_tensors/Liss_lab_PacBio_Revio_20240125/run/full_reader_comparison_20260921T202021Z/python-%j.log",
+      "--error=/scratch/jshen/data/HG008_GIAB/pansoma_v2_tensors/Liss_lab_PacBio_Revio_20240125/run/full_reader_comparison_20260921T202021Z/python-%j.log",
+      "/scratch/jshen/data/HG008_GIAB/pansoma_v2_tensors/Liss_lab_PacBio_Revio_20240125/run/full_reader_comparison_20260921T202021Z/python.sh"
+    ],
+    "vg": [
+      "sbatch",
+      "--parsable",
+      "--job-name=hg008_full_vg",
+      "--partition=general",
+      "--nodes=1",
+      "--ntasks=1",
+      "--cpus-per-task=4",
+      "--mem=128G",
+      "--time=14-00:00:00",
+      "--output=/scratch/jshen/data/HG008_GIAB/pansoma_v2_tensors/Liss_lab_PacBio_Revio_20240125/run/full_reader_comparison_20260921T202021Z/vg-%j.log",
+      "--error=/scratch/jshen/data/HG008_GIAB/pansoma_v2_tensors/Liss_lab_PacBio_Revio_20240125/run/full_reader_comparison_20260921T202021Z/vg-%j.log",
+      "/scratch/jshen/data/HG008_GIAB/pansoma_v2_tensors/Liss_lab_PacBio_Revio_20240125/run/full_reader_comparison_20260921T202021Z/vg.sh"
+    ]
+  }
+}
