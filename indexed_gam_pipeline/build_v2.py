@@ -119,8 +119,13 @@ def _build_impl(args, walk_lookup, sequence_connection):
             manifest["tensors"] += len(tensors)
             tensors.clear()
             metadata.clear()
+            summary.flush()
+            manifest["timing"] = dict(timings)
+            write_json(out / "manifest.json", manifest)
+            write_json(out / "run_report.json", manifest)
 
         for bi, batch in enumerate(batches(nodes, args.batch_nodes, args.max_node_span), 1):
+            batch_started = time.perf_counter()
             wanted = set(batch)
             metrics = {}
             alignments = []
@@ -192,6 +197,12 @@ def _build_impl(args, walk_lookup, sequence_connection):
                     flush()
                     break
             timings["candidate_tensors_and_shard_writes_seconds"] += time.perf_counter() - phase_start
+            with (out / "batch_timing.ndjson").open("a") as batch_log:
+                batch_log.write(json.dumps(dict(batch=bi, first_node=batch[0], last_node=batch[-1],
+                    target_nodes=len(batch), alignments=len(reads), context_nodes=len(context_nodes),
+                    candidates=len(candidates), tensors_written=manifest["tensors"],
+                    tensors_buffered=len(tensors), elapsed_seconds=time.perf_counter()-batch_started,
+                    cumulative_stage_seconds=dict(timings), gam_query=metrics)) + "\n")
             print(f"Batch {bi}: {len(batch)} target nodes, {len(reads)} complete alignments, "
                   f"{len(context_nodes)} context nodes, {len(candidates)} candidates", flush=True)
             if getattr(args, "max_tensors", None) is not None and manifest["tensors"] >= args.max_tensors:
