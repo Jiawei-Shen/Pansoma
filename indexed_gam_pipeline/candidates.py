@@ -257,22 +257,55 @@ def split_columns(cols, visit, candidate):
     return cols[:cut], [], cols[cut:]
 
 
+
+WINDOW_ENCODING_VERSION = "anchor-centered-columns-v1"
+
+
+def anchor_window(read, visit, candidate, width):
+    """Anchor at width//2; crop alignment columns without expanding a shared block.
+
+    Reference-consuming edits (including D) have one column per graph base.
+    Insertion bases have one column each. INS absence uses G only with boundary
+    evidence; all genuinely missing evidence stays None (seven-channel zeros).
+    """
+    anchor = width // 2
+    cols = oriented_columns(read, visit, width)
+    left, center, right = split_columns(cols, visit, candidate)
+    if candidate.kind == "INS":
+        evidence = bool(center) or boundary_evidence(left, right, visit, candidate.start)
+        slots = min(len(candidate.alt), width-anchor)
+        if len(center) < slots:
+            gap = Column("-", "-", -1, "G", candidate.node, candidate.start,
+                         False, visit.index, True)
+            center = center + [gap if evidence else None] * (slots-len(center))
+        missing = 0
+    else:
+        # Partial coverage starts after the anchor: do not shift its first base
+        # onto the missing anchor. At most width columns of missing data matter.
+        covered = [c.pos for c in center if c is not None and not c.boundary]
+        missing = min(width, max(0, min(covered)-candidate.start)) if covered else 0
+    row = [None]*max(0, anchor-len(left)) + left[-anchor:] if anchor else []
+    tail = [None]*missing + center + right
+    row += tail[:width-anchor]
+    row += [None]*(width-len(row))
+    cropped = max(0, missing+len(center)-(width-anchor))
+    return row, cropped
+
+
+def in_candidate(col, visit, candidate):
+    if col is None or col.visit != visit.index:
+        return False
+    if candidate.kind == "INS":
+        return col.boundary and col.pos == candidate.start
+    return (candidate.start <= col.pos < candidate.end if not col.boundary else
+            candidate.start < col.pos < candidate.end)
+
+
 def make_tensor(candidate, eligible, rows=200, width=100, debug=False, node_walk_counts=None):
     """Select deterministically only after full-record coverage/support counting."""
     if rows < 1 or width < 1:
         raise ValueError("Tensor rows and width must be positive")
-    span = max(1, len(candidate.alt) if candidate.kind == "INS" else len(candidate.ref))
-    if candidate.kind == "INS":
-        # Left-align insertion alleles; reserve up to the supported event limit.
-        span = max([span] + [min(50, len(split_columns(oriented_columns(r, v, 1), v, candidate)[1]))
-                             for r, _, v in eligible])
-    if candidate.kind == "DEL":
-        span += max([0] + [sum(c.boundary for c in split_columns(oriented_columns(r, v, 1), v, candidate)[1])
-                           for r, _, v in eligible])
-    if span > width:
-        raise ValueError(f"Tensor width cannot preserve complete candidate region: "
-                         f"candidate={candidate.metadata()['candidate_id']}, required_columns={span}, width={width}")
-    start = (width - span) // 2
+    start = width // 2
     with_walks = node_walk_counts is not None
     if with_walks and any(not isinstance(count, (int, np.integer)) or not 0 <= count <= np.iinfo(np.int32).max
                           for count in node_walk_counts.values()):
@@ -282,32 +315,7 @@ def make_tensor(candidate, eligible, rows=200, width=100, debug=False, node_walk
     omitted = []
     windows = []
     for read, support, visit in eligible:
-        cols = oriented_columns(read, visit, width)
-        left, center, right = split_columns(cols, visit, candidate)
-        overflow = 0
-        if candidate.kind == "INS":
-            overflow = max(0, len(center)-span)
-            center = center[:span]
-            # Gap slots are known aligned absence only with boundary evidence.
-            evidence = bool(center) or boundary_evidence(left, right, visit, candidate.start)
-            gap = Column("-", "-", -1, "G", candidate.node, candidate.start, False, visit.index, True)
-            center += [gap if evidence else None] * (span - len(center))
-        else:
-            by_pos = {c.pos: c for c in center if not c.boundary}
-            insertions = {}
-            for col in center:
-                if col.boundary:
-                    insertions.setdefault(col.pos, []).append(col)
-            center = []
-            for p in range(candidate.start, candidate.end):
-                center.extend(insertions.get(p, []))
-                center.append(by_pos.get(p))
-            # Row-specific context insertions stay on this row; unused central
-            # slots are padding and never imply an insertion on another path.
-            center += [None] * (span-len(center))
-        row = [None] * max(0, start-len(left)) + left[-start:] if start else []
-        row += center + right[:width-start-span]
-        row += [None] * (width-len(row))
+        row, overflow = anchor_window(read, visit, candidate, width)
         # Group only the path actually visible in this candidate window. Distant
         # branches outside the window must not split otherwise identical groups.
         # Keep mapping transitions (including repeated visits), but ignore offsets
@@ -345,17 +353,13 @@ def make_tensor(candidate, eligible, rows=200, width=100, debug=False, node_walk
         for ci, col in enumerate(row):
             if col is not None:
                 tensor[:6, ri, ci] = [BASES.get(col.read, 5), col.quality,
-                    int(col.op in ("I", "D", "C") or (col.op == "X" and col.read != col.ref)) | (2 if start <= ci < start+span else 0),
+                    int(col.op in ("I", "D", "C") or (col.op == "X" and col.read != col.ref)) | (2 if in_candidate(col, visit, candidate) else 0),
                     min(32767, read.mapq), OPS[col.op], BASES.get(col.ref, 5)]
                 if with_walks:
                     tensor[6, ri, ci] = node_walk_counts[col.node]
-            elif start <= ci < start+span:
-                tensor[2, ri, ci] = 2
-                if candidate.kind == "INS":
-                    tensor[5, ri, ci] = BASES["-"]
         if overflow:
             omitted.append(dict(row_index=ri, omitted_columns=overflow,
-                                reason="unsupported_insertion_allele_exceeds_shared_block"))
+                                reason="candidate_region_extends_beyond_anchor_window"))
         if debug:
             details.append(dict(read_name=read.name, record_sha256=read.digest, support=support,
                 anchor_mapping_index=visit.index, reversed_for_candidate=visit.reverse,
@@ -368,7 +372,9 @@ def make_tensor(candidate, eligible, rows=200, width=100, debug=False, node_walk
     return tensor, dict(candidate.metadata(), tensor_format_version=V3_VERSION if with_walks else VERSION,
         row_order=ROW_ORDER, row_groups=groups, row_selection_version=ROW_SELECTION_VERSION,
         selected_grouped_ranks=sample_indices, window_mismatch_bp=[w[5] for w in chosen],
-        candidate_columns=[start, start+span], coverage=len(eligible),
+        window_encoding_version=WINDOW_ENCODING_VERSION, anchor_column=start,
+        candidate_columns=[start, min(width, start+max(1,len(candidate.alt) if candidate.kind=="INS" else len(candidate.ref)))],
+        coverage=len(eligible),
         alt_count=counts["alt"], ref_count=counts["ref"], other_count=counts["other"],
         af=counts["alt"]/len(eligible) if eligible else 0,
         selected_alignments=len(selected), omitted_context=omitted, selected_counts=dict(Counter(s for _, s, _ in selected)),
