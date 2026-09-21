@@ -332,6 +332,8 @@ def main():
             sub.add_argument("--gfa", help="Matching GFA with original vg node IDs")
             sub.add_argument("--node-sqlite", help="Matching graph node SQLite index (nodes.node_id, nodes.seq)")
             sub.add_argument("--node-json", help="node_id/sequence records, optionally with coordinates")
+            sub.add_argument("--gam-reader", choices=("python", "vg"), default="python", help="Candidate builder GAM retrieval backend")
+            sub.add_argument("--vg", default="/scratch/jshen/bin/vg_v1.77.0", help="Executable for --gam-reader vg")
             sub.add_argument("--gam-cache-mb", type=int, default=64,
                              help="Bounded GAM group cache in MiB; 0 disables reuse (default: 64)")
             sub.add_argument("--workers", type=positive, default=1, help="Candidate compute processes; shared parent GAM cache")
