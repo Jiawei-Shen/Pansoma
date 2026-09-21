@@ -61,6 +61,10 @@ def _build_impl(args, walk_lookup, sequence_connection):
         raise ValueError("--max-indel-len must be in [1,50]")
     if args.width < args.max_indel_len:
         raise ValueError("--width must accommodate --max-indel-len")
+    if not 0 <= getattr(args, "node_index_cache_nodes", 0) <= 1000:
+        raise ValueError("--node-index-cache-nodes must be in [0,1000]")
+    if getattr(args, "node_index_cache_mb", 64) < 0:
+        raise ValueError("--node-index-cache-mb must be nonnegative")
     nodes = load_nodes(args.nodes)
     reader = IndexedGam(args.gam, args.index, cache_bytes=getattr(args, "gam_cache_mb", 64) * 1024 * 1024)
     out = new_output(args.output)
@@ -104,6 +108,11 @@ def _build_impl(args, walk_lookup, sequence_connection):
     write_json(out / "run_report.json", manifest)
     write_json(out / "manifest.json", manifest)
     timings = defaultdict(float)
+    worker_timings = Counter()
+    manifest['candidate_optimization'] = dict(early_alt_filter=getattr(args,'early_alt_filter',False),
+        workers=getattr(args,'workers',1), node_index_cache_nodes=getattr(args,'node_index_cache_nodes',0),
+        node_index_cache_mb=getattr(args,'node_index_cache_mb',64), early_rejected=0,
+        memory_policy='Single parent GAM/GBZ cache; batch-scoped fork workers; total node FIFO cap shared by budget division')
     tensors, metadata = [], []
     with (out / "variant_summary.ndjson").open("w") as summary, \
          (out / "unsupported_events.ndjson").open("w") as unsupported, \
@@ -167,43 +176,51 @@ def _build_impl(args, walk_lookup, sequence_connection):
             timings["decode_edits_seconds"] += time.perf_counter() - phase_start
             phase_start = time.perf_counter()
             print(f"Batch {bi}: counting {len(candidates)} candidates", flush=True)
+            from indexed_gam_pipeline.candidate_work import alt_support_bounds, candidate_results
+            tasks=[];kept=defaultdict(list)
+            t=time.perf_counter()
+            bounds=alt_support_bounds(reads,candidates,args.min_allele_bq) if getattr(args,'early_alt_filter',False) else None
             for candidate in sorted(candidates):
-                eligible = []
-                for read in by_node[candidate.node]:
-                    hit = overlap(read, candidate, args.min_allele_bq)
-                    if hit is not None:
-                        eligible.append((read, *hit))
-                counts = Counter(s for _, s, _ in eligible)
-                af = counts["alt"] / len(eligible) if eligible else 0
-                reasons = []
-                if counts["alt"] < args.min_variants:
-                    reasons.append("min_variants")
-                if af < args.min_af:
-                    reasons.append("min_af")
-                if args.variant_type != "all" and (candidate.kind == "SNP") != (args.variant_type == "snp"):
-                    reasons.append("variant_type")
-                if reasons:
-                    filtered.write(json.dumps(dict(candidate.metadata(), reasons=reasons,
-                        coverage=len(eligible), alt_count=counts["alt"], ref_count=counts["ref"],
-                        other_count=counts["other"], af=af)) + "\n")
-                    manifest["filtered_candidates"] += 1
-                    continue
-                tensor, meta = make_tensor(candidate, eligible, args.rows, args.width, args.debug_rows, node_walk_counts=walk_counts)
-                meta["tensor_format_version"] = version
-                tensors.append(tensor)
-                metadata.append(meta)
-                if len(tensors) >= args.shard_size:
-                    flush()
-                if getattr(args, "max_tensors", None) is not None and manifest["tensors"] + len(tensors) >= args.max_tensors:
-                    flush()
-                    break
+                if bounds is not None and bounds[candidate] < args.min_variants:
+                    filtered.write(json.dumps(dict(candidate.metadata(), reasons=['min_variants'],
+                        alt_support_upper_bound=bounds[candidate], coverage_not_evaluated=True))+'\n')
+                    manifest['filtered_candidates']+=1
+                    manifest['candidate_optimization']['early_rejected']+=1
+                else:
+                    kept[candidate.node].append(candidate)
+            prefilter_seconds=time.perf_counter()-t
+            for node,items in kept.items():
+                for offset in range(0,len(items),16):
+                    tasks.append((node,items[offset:offset+16]))
+            batch_worker_timings=Counter();cache_peaks=dict(nodes_per_worker=0,estimated_bytes_per_worker=0)
+            stop=False
+            with candidate_results(tasks,by_node,args,walk_counts) as completed:
+                for results,compute_times,cache_stats in completed:
+                    batch_worker_timings.update(compute_times)
+                    cache_peaks['nodes_per_worker']=max(cache_peaks['nodes_per_worker'],cache_stats['peak_nodes'])
+                    cache_peaks['estimated_bytes_per_worker']=max(cache_peaks['estimated_bytes_per_worker'],cache_stats['peak_estimated_bytes'])
+                    for tensor,meta in results:
+                        if tensor is None:
+                            filtered.write(json.dumps(meta)+'\n')
+                            manifest['filtered_candidates']+=1
+                            continue
+                        meta['tensor_format_version']=version
+                        tensors.append(tensor);metadata.append(meta)
+                        if len(tensors)>=args.shard_size:flush()
+                        if getattr(args,'max_tensors',None) is not None and manifest['tensors']+len(tensors)>=args.max_tensors:
+                            flush();stop=True;break
+                    if stop:break
+            worker_timings.update(batch_worker_timings)
+            manifest['candidate_worker_summed_timing']=dict(worker_timings)
             timings["candidate_tensors_and_shard_writes_seconds"] += time.perf_counter() - phase_start
             with (out / "batch_timing.ndjson").open("a") as batch_log:
                 batch_log.write(json.dumps(dict(batch=bi, first_node=batch[0], last_node=batch[-1],
                     target_nodes=len(batch), alignments=len(reads), context_nodes=len(context_nodes),
                     candidates=len(candidates), tensors_written=manifest["tensors"],
                     tensors_buffered=len(tensors), elapsed_seconds=time.perf_counter()-batch_started,
-                    cumulative_stage_seconds=dict(timings), gam_query=metrics)) + "\n")
+                    cumulative_stage_seconds=dict(timings), gam_query=metrics,
+                    prefilter_seconds=prefilter_seconds, candidate_worker_summed_timing=dict(batch_worker_timings),
+                    node_index_cache_peaks=cache_peaks)) + "\n")
             print(f"Batch {bi}: {len(batch)} target nodes, {len(reads)} complete alignments, "
                   f"{len(context_nodes)} context nodes, {len(candidates)} candidates", flush=True)
             if getattr(args, "max_tensors", None) is not None and manifest["tensors"] >= args.max_tensors:

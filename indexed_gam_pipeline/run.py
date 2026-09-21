@@ -334,6 +334,10 @@ def main():
             sub.add_argument("--node-json", help="node_id/sequence records, optionally with coordinates")
             sub.add_argument("--gam-cache-mb", type=int, default=64,
                              help="Bounded GAM group cache in MiB; 0 disables reuse (default: 64)")
+            sub.add_argument("--workers", type=positive, default=1, help="Candidate compute processes; shared parent GAM cache")
+            sub.add_argument("--early-alt-filter", action="store_true", help="Safely reject candidates below ALT support bound before overlap counting")
+            sub.add_argument("--node-index-cache-nodes", type=int, default=0, help="FIFO node index cap across workers, 0 disables, maximum 1000")
+            sub.add_argument("--node-index-cache-mb", type=int, default=64, help="Total estimated index container budget across workers")
             sub.add_argument("--batch-nodes", type=positive, default=128)
             sub.add_argument("--max-node-span", type=positive, default=10000)
             sub.add_argument("--max-batch-segments", type=positive, default=1000000)
