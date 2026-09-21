@@ -1,0 +1,17 @@
+{
+  "runs": 47,
+  "compressed_span_bytes": 934883767,
+  "note": "Same ranges; OS cache uncontrolled. CPU versus wall helps distinguish execution from wait/descheduling, not disk latency alone.",
+  "bgzf_only": {
+    "wall_seconds": 49.43344699405134,
+    "cpu_seconds": 23.020300075999998,
+    "groups": 66,
+    "records": 66000,
+    "payload_bytes": 3829019863
+  },
+  "compressed_read_after_bgzf": {
+    "wall_seconds": 3.517263252288103,
+    "cpu_seconds": 0.581040637000001,
+    "bytes": 934883767
+  }
+}
