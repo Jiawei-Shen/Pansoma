@@ -386,3 +386,39 @@ baseline byte-for-byte. This is a bounded two-batch comparison using debug rows
 for compatibility with that baseline, not a full-genome speed forecast.
 
 Results: [HG008 partition and reader comparison](runs/hg008_partition_reader.md).
+
+## Whole-HG008 two-reader comparison
+
+`full_reader_comparison.py` runs two independent contiguous partitions for each
+backend. Every builder uses only early ALT filtering (`--early-alt-filter`), no
+candidate node cache (`--node-index-cache-nodes 0`), and one internal candidate
+worker (`--workers 1`). There are two builder processes per backend, not nested
+candidate pools. Each Python builder gets its own **8 GiB** group cache; the VG
+backend does not use that cache. The candidate-index optimization remains off.
+Each backend therefore has a 16 GiB total GAM-cache budget when using Python,
+plus decoded-read, graph/helper and shard-buffer memory.
+
+Full input: 16,560,350 previously discovered nodes, split into 8,280,175 nodes
+per process. Partition 0 spans IDs 128–29,829,066 (16,193 batches); partition 1
+spans 29,829,077–60,118,238 (16,191 batches). The split creates one extra batch
+relative to the unsplit traversal. Both backends use the same partition files.
+Full GAM discovery and the complete graph sequence index are reused, with input
+fingerprints verified. No max-node, max-read or max-tensor limit is added.
+
+A preflight compares 128 nodes from each actual half against a serial Python
+reference, checks both backend/process outputs and exercises final merging.
+Full launches require the preflight to succeed and recheck prepared source and
+input fingerprints. Each process has a separate GBWT SQLite cache and output
+directory. Worker failure stops its peer and records a failed run; SIGTERM/SIGINT
+also trigger cleanup of the owned child process groups. The two backend runs
+have separate output trees and must not write to the old stopped run.
+
+Per-part batch timings, manifests, resource reports and controller status are
+retained. Full runs disable debug rows and the external PSS sampler. Per the
+user's simplification, the launched wrapper calls only `run_builders`: each
+process writes its own 2,048-tensor NPY shards, with a permitted partial final
+shard. There is no full-output cross-comparison job and no merge/repacking stage.
+Basic per-part shape/count validation remains. The comparison and merge modes
+in the generic helper are not used by these submitted jobs.
+
+Launch details: [HG008 full two-reader run](runs/hg008_full_two_readers.md).
