@@ -110,7 +110,35 @@ def validate(folder, gam, index, node_sqlite, walk_counts=None, gbz=None, gbz_qu
                     check(int(x[5,ri,ci])==BASES.get(base,5),f'{label}: graph base at row {ri}, column {ci}')
                     checked+=1
             actual_paths.append(tuple(path))
-        check(actual_paths==sorted(actual_paths),f'{label}: node-path sorting')
+        if meta.get('row_selection_version') == 'window-edit-bp-group-uniform-v1':
+            audit = meta['selection_audit']
+            check(Counter(a['record_sha256'] for a in audit)==covered[label],
+                  f'{label}: all preselection records')
+            ordered_groups = {}
+            for a in sorted(audit, key=lambda a: (-a['window_mismatch_bp'],
+                    -a['mapping_quality'], a['record_sha256'], a['anchor_mapping_index'])):
+                key = tuple(tuple(p) for p in a['path'])
+                ordered_groups.setdefault(key, []).append(a)
+            ranked = [a for group in ordered_groups.values() for a in group]
+            k = min(manifest['shape'][1], len(ranked))
+            indices = ([len(ranked)//2] if k == 1 else
+                       [i*(len(ranked)-1)//(k-1) for i in range(k)] if k else [])
+            check(meta['selected_grouped_ranks']==indices, f'{label}: uniform sampling ranks')
+            check(n==k, f'{label}: sampled depth')
+            for ri, idx in enumerate(indices):
+                a = ranked[idx]
+                row = meta['rows'][ri]
+                check(row['record_sha256']==a['record_sha256'] and
+                      row['anchor_mapping_index']==a['anchor_mapping_index'] and
+                      row['support']==a['support'], f'{label}: sampled record ordering')
+                check(actual_paths[ri]==tuple(tuple(p) for p in a['path']),
+                      f'{label}: sampled path')
+                mismatch = int(np.count_nonzero((x[0,ri] != 0) & (x[5,ri] != 0) &
+                                               (x[0,ri] != x[5,ri]) & (x[4,ri] != 6)))
+                check(mismatch==a['window_mismatch_bp']==row['window_mismatch_bp']==
+                      meta['window_mismatch_bp'][ri], f'{label}: visible edit bp count')
+        else:
+            check(actual_paths==sorted(actual_paths),f'{label}: node-path sorting')
         next_row=0
         for group in meta['row_groups']:
             check(group['start_row']==next_row and group['end_row']>next_row,f'{label}: group boundaries')
@@ -129,7 +157,9 @@ def validate(folder, gam, index, node_sqlite, walk_counts=None, gbz=None, gbz_qu
         checks=['shard/manifest shape and dtype','counts and AF','independent raw-mapping coverage',
                 'selected records versus original GAM multiset','padding and gap qualities',
                 'candidate flags and insertion reference gaps','oriented graph-reference bases',
-                'node-path sorting and group memberships'],
+                'node-path ordering and group memberships',
+                *(['window edit bp and uniform sampling from recorded preselection windows']
+                  if manifest.get('row_selection_version') else [])],
         walk_counts_checked=expected_walks is not None, walk_count_cache=walk_counts, gbz=gbz, occurrence_cache=occurrence_cache,
         candidates=results,full_genome_run=False)
 
