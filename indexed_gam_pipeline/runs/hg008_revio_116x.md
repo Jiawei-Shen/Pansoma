@@ -4,6 +4,13 @@ Input: `/scratch/jshen/data/HG008_GIAB/raw_sequencing_data/Liss_lab_PacBio_Revio
 
 Output: `/scratch/jshen/data/HG008_GIAB/pansoma_v2_tensors/Liss_lab_PacBio_Revio_20240125`
 
+Submitted as Slurm job **362229**, started on `maotai` at
+2026-09-21 01:59:23 UTC (September 20, 20:59:23 America/Chicago).
+Allocation: general partition, 4 CPUs, 256 GiB requested RAM, 14-day wall limit.
+Source snapshot revision: `70dc006`; copied Python files and the native helper
+have SHA256 hashes in `run/source_provenance.json`. This records submission,
+not completion: consult `run/status.json` for the actual final state and times.
+
 User-confirmed format: candidate-v4, seven channels, `int32`. Full NPY shards
 contain `(2048, 7, 200, 100)`; only the last shard can be smaller. No exploratory
 read/node/tensor limits apply to the production discovery/build. Candidate
