@@ -16,20 +16,30 @@ from indexed_gam_pipeline.benchmark_candidates import process_memory,digest_file
 from indexed_gam_pipeline.full_run import write_json,validate_shards
 
 
-def merge_parts(parts,dest):
+def merge_parts(parts,dest,shard_size=2048):
     """Join contiguous partitions, repack shards, stream metadata in candidate order."""
     dest.mkdir()
     manifests=[json.loads((p/'manifest.json').read_text()) for p in parts]
-    total=sum(m['tensors'] for m in manifests);size=2048
-    arrays=[np.load(f,mmap_mode='r',allow_pickle=False) for p in parts for f in sorted(p.glob('shard_*_data.npy'))]
+    total=sum(m['tensors'] for m in manifests);size=shard_size
+    # Open one source shard at a time: full runs can contain thousands of shards.
     position=0;output=None
-    for arr in arrays:
-        for tensor in arr:
-            if position%size==0:
-                output=np.lib.format.open_memmap(dest/f'shard_{position//size:05d}_data.npy',mode='w+',dtype=np.int32,
-                    shape=(min(size,total-position),7,200,101))
-            output[position%size]=tensor;position+=1
-            if position%size==0 or position==total:output.flush();output=None
+    for part in parts:
+        for source in sorted(part.glob('shard_*_data.npy')):
+            arr=np.load(source,mmap_mode='r',allow_pickle=False)
+            if position%size==0 and len(arr)==min(size,total-position):
+                os.link(source,dest/f'shard_{position//size:05d}_data.npy')
+                position+=len(arr)
+            else:
+                offset=0
+                while offset<len(arr):
+                    if position%size==0:
+                        output=np.lib.format.open_memmap(dest/f'shard_{position//size:05d}_data.npy',mode='w+',dtype=np.int32,
+                            shape=(min(size,total-position),7,200,101))
+                    count=min(len(arr)-offset,len(output)-position%size)
+                    output[position%size:position%size+count]=arr[offset:offset+count]
+                    position+=count;offset+=count
+                    if position%size==0 or position==total:output.flush();output=None
+            del arr
     i=0
     with (dest/'variant_summary.ndjson').open('w') as target:
         for part in parts:
@@ -40,6 +50,14 @@ def merge_parts(parts,dest):
     if i!=total:raise ValueError('Partition count mismatch')
     manifest=dict(manifests[0],tensors=total,shards=(total+size-1)//size,nodes=sum(m['nodes'] for m in manifests),
                   partition_sources=list(map(str,parts)),timing={},merged_contiguous_partitions=True)
+    for key in ('filtered_candidates','unsupported_events'):
+        if all(key in m for m in manifests):manifest[key]=sum(m[key] for m in manifests)
+    for key in ('gam_group_cache','occurrence_performance','candidate_worker_summed_timing','candidate_optimization'):
+        manifest.pop(key,None)
+    manifest['partition_manifests']=[str(p/'manifest.json') for p in parts]
+    manifest['partition_timings']=[m.get('timing',{}) for m in manifests]
+    if 'arguments' in manifest:
+        manifest['arguments']=dict(manifest['arguments'],output=str(dest),nodes=None)
     write_json(dest/'manifest.json',manifest)
     return validate_shards(dest,size,width=101)
 
