@@ -20,8 +20,8 @@ class FullRunTests(unittest.TestCase):
     def test_shard_validation_checks_partial_last_shard_and_metadata(self):
         with tempfile.TemporaryDirectory() as d:
             p=Path(d)
-            np.save(p/'shard_00000_data.npy',np.zeros((2,7,200,100),dtype=np.int32))
-            np.save(p/'shard_00001_data.npy',np.zeros((1,7,200,100),dtype=np.int32))
+            np.save(p/'shard_00000_data.npy',np.zeros((2,7,200,101),dtype=np.int32))
+            np.save(p/'shard_00001_data.npy',np.zeros((1,7,200,101),dtype=np.int32))
             version='indexed-gam-candidate-v4'
             (p/'manifest.json').write_text(json.dumps(dict(status='complete',tensor_format_version=version,shards=2,tensors=3)))
             rows=[dict(shard_index=s,index_within_shard=i,coverage=3,alt_count=3,ref_count=0,other_count=0,af=1.,selected_alignments=3,tensor_format_version=version,event_type='SNP') for s,n in enumerate((2,1)) for i in range(n)]

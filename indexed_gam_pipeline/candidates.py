@@ -301,7 +301,7 @@ def in_candidate(col, visit, candidate):
             candidate.start < col.pos < candidate.end)
 
 
-def make_tensor(candidate, eligible, rows=200, width=100, debug=False, node_walk_counts=None):
+def make_tensor(candidate, eligible, rows=200, width=101, debug=False, node_walk_counts=None):
     """Select deterministically only after full-record coverage/support counting."""
     if rows < 1 or width < 1:
         raise ValueError("Tensor rows and width must be positive")

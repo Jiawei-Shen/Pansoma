@@ -68,7 +68,7 @@ def graph_index(gfa, output):
     return count
 
 
-def validate_shards(folder, shard_size):
+def validate_shards(folder, shard_size, width=101):
     folder = Path(folder)
     manifest = json.loads((folder / 'manifest.json').read_text())
     if manifest['status'] != 'complete' or manifest['tensor_format_version'] != 'indexed-gam-candidate-v4':
@@ -80,7 +80,7 @@ def validate_shards(folder, shard_size):
     for i in range(expected):
         path = folder / f'shard_{i:05d}_data.npy'
         x = np.load(path, mmap_mode='r', allow_pickle=False)
-        if x.ndim != 4 or x.shape[1:] != (7, 200, 100) or x.dtype != np.int32:
+        if x.ndim != 4 or x.shape[1:] != (7, 200, width) or x.dtype != np.int32:
             raise ValueError(f'Unexpected shard shape/dtype: {path}')
         if not 0 < len(x) <= shard_size or (i < expected-1 and len(x) != shard_size):
             raise ValueError(f'Invalid shard length: {path}')
@@ -107,7 +107,7 @@ def validate_shards(folder, shard_size):
     if seen != sizes or sum(sizes) != manifest['tensors']:
         raise ValueError('Summary, shard, and manifest tensor counts differ')
     report = dict(passed=True, tensors=sum(sizes), shards=expected, shard_size=shard_size,
-        last_shard_tensors=sizes[-1] if sizes else 0, shape_per_tensor=[7,200,100],
+        last_shard_tensors=sizes[-1] if sizes else 0, shape_per_tensor=[7,200,width],
         dtype='int32', event_types=dict(events),
         scope='Every NPY header/file size and every summary record; independent source audit performed on the preflight tensors')
     write_json(folder / 'validation_report.json', report)
@@ -165,7 +165,7 @@ def main():
             '--occurrence-cache',cache,'--output',dest,'--batch-nodes',str(cfg['batch_nodes']),
             '--max-node-span','10000','--gam-cache-mb',str(cfg['gam_cache_mb']),
             '--max-batch-segments','20000','--shard-size',str(8 if smoke else cfg['shard_size']),
-            '--rows','200','--width','100','--min-mapq','10','--min-af','0.05',
+            '--rows','200','--width','101','--min-mapq','10','--min-af','0.05',
             '--min-variants','3','--min-allele-bq','10','--max-indel-len','50','--variant-type','all']
         if smoke:command.extend(['--max-tensors','8','--debug-rows'])
         return command

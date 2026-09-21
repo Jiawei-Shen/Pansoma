@@ -40,6 +40,16 @@ def eligible(candidate, reads):
 
 
 class CandidatesTest(unittest.TestCase):
+    def test_default_101_columns_has_50_flanking_columns(self):
+        seq={1:'A'*200}
+        r=read([(1,0,False,[(100,100,''),(1,1,'T'),(99,99,'')])],seq)
+        c=r.observations[0].candidate
+        x,m=make_tensor(c,eligible(c,[r]),debug=True,node_walk_counts={1:90})
+        self.assertEqual(x.shape,(7,200,101))
+        self.assertEqual(m['anchor_column'],50)
+        self.assertEqual(m['candidate_columns'],[50,51])
+        self.assertEqual([p['offset'] for p in m['rows'][0]['columns']],list(range(50,151)))
+
     def test_anchor_window_long_deletion_and_background_insertion(self):
         seq={1:'A'*200}
         candidate=Candidate(1,60,'A'*40,'','DEL')

@@ -281,7 +281,7 @@ def build(args):
     if getattr(args, "format", "candidate-v3") == "legacy":
         return build_legacy(args)
     from indexed_gam_pipeline.build_v2 import build as candidate_build
-    for key, default in (("rows", 200), ("width", 100), ("debug_rows", False)):
+    for key, default in (("rows", 200), ("width", 101), ("debug_rows", False)):
         if not hasattr(args, key):
             setattr(args, key, default)
     return candidate_build(args)
@@ -327,7 +327,7 @@ def main():
             sub.add_argument("--occurrence-cache", help="Reusable GBZ occurrence SQLite cache")
             sub.add_argument("--walk-counts", help="Reusable SQLite node-to-distinct-W-count cache; required for candidate-v3")
             sub.add_argument("--rows", type=positive, default=200)
-            sub.add_argument("--width", type=positive, default=100)
+            sub.add_argument("--width", type=positive, default=101)
             sub.add_argument("--debug-rows", action="store_true", help="Include row paths and column graph coordinates")
             sub.add_argument("--gfa", help="Matching GFA with original vg node IDs")
             sub.add_argument("--node-sqlite", help="Matching graph node SQLite index (nodes.node_id, nodes.seq)")
