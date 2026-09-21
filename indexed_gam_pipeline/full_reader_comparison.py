@@ -46,7 +46,7 @@ def run_builders(config,folder,nodefiles,backend):
     for i,nodes in enumerate(nodefiles):
         cache=folder/f'gbwt_{i}.sqlite';shutil.copyfile(config['seed_cache'],cache)
         part=folder/f'part_{i}';parts.append(part)
-        commands.append(build_command(config,nodes,part,cache,backend,8192//len(nodefiles)))
+        commands.append(build_command(config,nodes,part,cache,backend,config.get('params',{}).get('gam_cache_mb_per_process',8192)))
     start=time.perf_counter();ledger=dict(status='running',backend=backend,job_id=os.environ.get('SLURM_JOB_ID'),
         commands=commands,processes=[],started_unix=time.time(),memory_sampler=False)
     def save():
@@ -124,7 +124,13 @@ def main():
         if a.mode=='preflight':
             files=[Path(x['preflight_file']) for x in config['parts']]
             union=root/'preflight_all_nodes.txt';union.write_text(''.join(f.read_text() for f in files))
-            reference=stage('serial_python_reference',lambda:run_builders(config,root/'preflight_reference',[union],'python'))
+            if config.get('preflight_reference'):
+                reference=[Path(config['preflight_reference'])]
+                stage('validate_reused_serial_reference',lambda:validate_shards(reference[0],2048,width=101))
+                if (reference[0]/'target_nodes.txt').read_text()!=union.read_text():raise ValueError('Reference nodes differ')
+                if logical_hash(reference)!=config['preflight_reference_hash']:raise ValueError('Reference changed')
+            else:
+                reference=stage('serial_python_reference',lambda:run_builders(config,root/'preflight_reference',[union],'python'))
             expected=logical_hash(reference)
             if not expected['tensors']:raise ValueError('Preflight produced no tensors')
             ledger['reference']=expected
