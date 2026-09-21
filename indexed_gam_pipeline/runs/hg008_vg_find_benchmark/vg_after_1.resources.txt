@@ -1,0 +1,23 @@
+	Command being timed: "/scratch/jshen/bin/vg_v1.77.0 find -l /scratch/jshen/data/HG008_GIAB/raw_sequencing_data/Liss_lab_PacBio_Revio_20240125/HG008-T_PacBio-HiFi-Revio_20240125_116x.AF-HPRC.sorted.gam -o 128:2430"
+	User time (seconds): 2.40
+	System time (seconds): 0.06
+	Percent of CPU this job got: 31%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:07.87
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 67892
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 202
+	Minor (reclaiming a frame) page faults: 13121
+	Voluntary context switches: 1072
+	Involuntary context switches: 236
+	Swaps: 0
+	File system inputs: 116098
+	File system outputs: 16334
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

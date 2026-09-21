@@ -1,0 +1,68 @@
+{
+  "source_sha256": "d9fa41156b7017564d2002b20c36fc559f09bdf9bb4c860cd4127ab3aca9a4fc",
+  "batches": [
+    {
+      "batch": 1,
+      "wall_seconds": 101.8669436359778,
+      "consumer_seconds": 0.1019809702411294,
+      "metrics": {
+        "runs": 47,
+        "groups": 66,
+        "decoded_alignments": 66612,
+        "returned_alignments": 612
+      },
+      "returned": 612,
+      "passed_mapq": 612,
+      "ordered_record_sha256": "7489bfe4ed7a4cef1df5634f5d0b67eb04deec11cbb58ed99e16cdf786be1c45",
+      "cumulative_profile": {
+        "bgzf_group_read_seconds": 68.27888515405357,
+        "protobuf_decode_seconds": 8.242442823946476,
+        "node_membership_and_postings_seconds": 20.191986757330596,
+        "freeze_postings_seconds": 0.6094517307356,
+        "cache_accounting_seconds": 3.964685163460672,
+        "raw_bytes": 3829019863,
+        "postings_entries": 36573703,
+        "node_keys": 521717
+      },
+      "cache": {
+        "group_hits": 0,
+        "group_misses": 66,
+        "indexed_records": 66000,
+        "peak_accounted_bytes": 5204194223,
+        "limit_bytes": 8589934592
+      }
+    },
+    {
+      "batch": 2,
+      "wall_seconds": 0.1825645538046956,
+      "consumer_seconds": 0.0996318431571126,
+      "metrics": {
+        "runs": 47,
+        "groups": 66,
+        "decoded_alignments": 549,
+        "returned_alignments": 549
+      },
+      "returned": 549,
+      "passed_mapq": 190,
+      "ordered_record_sha256": "57741d6b13dc0b9dc9a1a4344ee4187d80d5a1a64783c7dc0dd27b807cc65f98",
+      "cumulative_profile": {
+        "bgzf_group_read_seconds": 68.27888515405357,
+        "protobuf_decode_seconds": 8.242442823946476,
+        "node_membership_and_postings_seconds": 20.191986757330596,
+        "freeze_postings_seconds": 0.6094517307356,
+        "cache_accounting_seconds": 3.964685163460672,
+        "raw_bytes": 3829019863,
+        "postings_entries": 36573703,
+        "node_keys": 521717
+      },
+      "cache": {
+        "group_hits": 66,
+        "group_misses": 66,
+        "indexed_records": 66000,
+        "peak_accounted_bytes": 5204194223,
+        "limit_bytes": 8589934592
+      }
+    }
+  ],
+  "note": "Cold application cache; OS/storage cache not controlled. Production source unchanged. Per-record profiling adds overhead."
+}
