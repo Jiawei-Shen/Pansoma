@@ -330,6 +330,7 @@ def main():
             sub.add_argument("--width", type=positive, default=101)
             sub.add_argument("--debug-rows", action="store_true", help="Include row paths and column graph coordinates")
             sub.add_argument("--gfa", help="Matching GFA with original vg node IDs")
+            sub.add_argument("--graph-index", help="Unified GBZ sequence and distinct path index")
             sub.add_argument("--node-sqlite", help="Matching graph node SQLite index (nodes.node_id, nodes.seq)")
             sub.add_argument("--node-json", help="node_id/sequence records, optionally with coordinates")
             sub.add_argument("--gam-reader", choices=("python", "vg"), default="python", help="Candidate builder GAM retrieval backend")
@@ -353,8 +354,8 @@ def main():
             sub.add_argument("--max-indel-len", type=positive, default=50)
             sub.add_argument("--variant-type", choices=("snp", "indel", "all"), default="all")
     args = parser.parse_args()
-    if args.command == "build" and not (args.gfa or args.node_json or args.node_sqlite):
-        parser.error("build requires --gfa, --node-sqlite, or --node-json")
+    if args.command == "build" and not (args.gfa or args.node_json or args.node_sqlite or args.graph_index):
+        parser.error("build requires --graph-index (or a legacy sequence source)")
     try:
         {"index": index_gam, "discover": discover,
          "validate": validate, "build": build}[args.command](args)

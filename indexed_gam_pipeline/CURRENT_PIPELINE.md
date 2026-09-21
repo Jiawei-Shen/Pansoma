@@ -1,5 +1,12 @@
 # Current tensor-building pipeline
 
+## Unified GBZ index update
+
+New runs can use a single GBZ-derived sequence/count SQLite index via `--graph-index`.
+See [build, migration, timing, and validation](UNIFIED_GRAPH_INDEX.md).
+The legacy commands below remain available for existing run snapshots.
+
+
 Recorded against implementation commit **dd8b41f**. The default format is
 **`indexed-gam-candidate-v4`**, schema 4. The latest rerun results are in
 [samples/colo829t_100/retest.json](samples/colo829t_100/retest.json), and previous

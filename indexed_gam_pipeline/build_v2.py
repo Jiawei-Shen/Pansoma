@@ -28,6 +28,14 @@ def build(args):
 
 
 def _dispatch(args):
+    if getattr(args, "graph_index", None):
+        from indexed_gam_pipeline.graph_index import GraphIndex
+        if getattr(args, "format", "candidate-v4") != "candidate-v4":
+            raise ValueError("--graph-index requires candidate-v4")
+        if any(getattr(args, key, None) for key in ("node_sqlite", "node_json", "gfa", "gbz", "gbz_query", "occurrence_cache", "walk_counts")):
+            raise ValueError("--graph-index replaces legacy sequence and occurrence inputs")
+        with GraphIndex(args.graph_index) as lookup:
+            return _build(args, lookup)
     if getattr(args, "format", "candidate-v4") == "candidate-v4":
         from indexed_gam_pipeline.gbz_counts import GBZCounts
         if not all(getattr(args, key, None) for key in ("gbz", "gbz_query", "occurrence_cache")):
@@ -155,14 +163,20 @@ def _build_impl(args, walk_lookup, sequence_connection):
             timings["gam_fetch_seconds"] += time.perf_counter() - phase_start
             phase_start = time.perf_counter()
             print(f"Batch {bi}: retrieved {len(alignments)} alignments; loading {len(context_nodes)} graph nodes", flush=True)
-            records = node_records(args, context_nodes, sqlite_connection=sequence_connection)
+            if getattr(args, "graph_index", None):
+                records = walk_lookup.get_nodes(context_nodes)
+                sequences = {n: r["sequence"] for n, r in records.items()}
+                walk_counts = {n: r["distinct_path_count"] for n, r in records.items()}
+                timings["graph_index_seconds"] += time.perf_counter() - phase_start
+            else:
+                records = node_records(args, context_nodes, sqlite_connection=sequence_connection)
+                sequences = {n: r["sequence"] for n, r in records.items()}
+                timings["graph_sequences_seconds"] += time.perf_counter() - phase_start
+                phase_start = time.perf_counter()
+                walk_counts = (walk_lookup.get_counts(context_nodes, sequences) if is_gbz else
+                               walk_lookup.get_counts(context_nodes) if walk_lookup is not None else None)
+                timings["occurrence_seconds"] += time.perf_counter() - phase_start
             print(f"Batch {bi}: graph loaded; decoding original edits", flush=True)
-            sequences = {n: r["sequence"] for n, r in records.items()}
-            timings["graph_sequences_seconds"] += time.perf_counter() - phase_start
-            phase_start = time.perf_counter()
-            walk_counts = (walk_lookup.get_counts(context_nodes, sequences) if is_gbz else
-                           walk_lookup.get_counts(context_nodes) if walk_lookup is not None else None)
-            timings["occurrence_seconds"] += time.perf_counter() - phase_start
             phase_start = time.perf_counter()
             reads, candidates = [], set()
             by_node = defaultdict(list)

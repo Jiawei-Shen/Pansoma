@@ -20,7 +20,10 @@ from indexed_gam_pipeline.benchmark_candidates import digest_file
 
 
 def verify_inputs(config):
-    if stamp(config['graph_index']['path'])!=config['graph_index']:raise ValueError('Graph index changed')
+    expected = config['graph_index']
+    selected = config['config'].get('unified_graph_index', expected['path'])
+    if stamp(selected) != expected:
+        raise ValueError('Graph index changed or provenance does not match selected index')
     for key,value in config['inputs'].items():
         if stamp(config['config'][key])!=value:raise ValueError('Input changed: '+key)
     for part in config['parts']:
@@ -31,9 +34,10 @@ def verify_inputs(config):
 
 def build_command(config,nodes,dest,cache,backend,cache_mb=4096):
     c=config['config'];prior=Path(config['prior_run'])
+    graph_args = (['--graph-index', c['unified_graph_index']] if c.get('unified_graph_index') else
+        ['--node-sqlite',prior/'all_graph_nodes.sqlite','--gbz',c['gbz'],'--gbz-query',c['gbz_query'],'--occurrence-cache',cache])
     return list(map(str,[sys.executable,ROOT/'indexed_gam_pipeline/run.py','build','--format','candidate-v4',
-        '--gam',c['gam'],'--index',c['index'],'--nodes',nodes,'--node-sqlite',prior/'all_graph_nodes.sqlite',
-        '--gbz',c['gbz'],'--gbz-query',c['gbz_query'],'--occurrence-cache',cache,'--output',dest,
+        '--gam',c['gam'],'--index',c['index'],'--nodes',nodes,*graph_args,'--output',dest,
         '--gam-reader',backend,'--vg',c['vg'],'--batch-nodes','512','--max-node-span','10000',
         '--gam-cache-mb',cache_mb,'--max-batch-segments','20000','--shard-size','2048','--rows','200','--width','101',
         '--min-mapq','10','--min-af','0.05','--min-variants','3','--min-allele-bq','10','--max-indel-len','50',
@@ -44,7 +48,9 @@ def run_builders(config,folder,nodefiles,backend):
     folder.mkdir(exist_ok=False);parts=[];commands=[]
     # Separate SQLite caches and files: no writes shared by independent builders.
     for i,nodes in enumerate(nodefiles):
-        cache=folder/f'gbwt_{i}.sqlite';shutil.copyfile(config['seed_cache'],cache)
+        cache=folder/f'gbwt_{i}.sqlite'
+        if not config.get('config', {}).get('unified_graph_index'):
+            shutil.copyfile(config['seed_cache'],cache)
         part=folder/f'part_{i}';parts.append(part)
         commands.append(build_command(config,nodes,part,cache,backend,config.get('params',{}).get('gam_cache_mb_per_process',8192)))
     start=time.perf_counter();ledger=dict(status='running',backend=backend,job_id=os.environ.get('SLURM_JOB_ID'),

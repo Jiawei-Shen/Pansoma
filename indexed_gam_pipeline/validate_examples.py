@@ -21,20 +21,28 @@ def check(condition, message):
         raise ValueError(message)
 
 
-def validate(folder, gam, index, node_sqlite, walk_counts=None, gbz=None, gbz_query=None, occurrence_cache=None):
+def validate(folder, gam, index, node_sqlite=None, walk_counts=None, gbz=None, gbz_query=None, occurrence_cache=None, graph_index=None):
     folder=Path(folder)
     manifest=json.loads((folder/'manifest.json').read_text())
     metadata=[json.loads(s) for s in (folder/'variant_summary.ndjson').read_text().splitlines()]
     targets={m['node_id'] for m in metadata}
     graph_nodes=targets | {c['node_id'] for m in metadata for row in m['rows'] for c in row['columns'] if c}
-    records=node_records(argparse.Namespace(node_json=None,gfa=None,node_sqlite=node_sqlite),graph_nodes)
     expected_walks = None
+    if graph_index:
+        from indexed_gam_pipeline.graph_index import GraphIndex
+        check(not node_sqlite, 'Choose graph-index or node-sqlite')
+        with GraphIndex(graph_index) as lookup:
+            records = lookup.get_nodes(graph_nodes)
+        expected_walks = {n:r['distinct_path_count'] for n,r in records.items()}
+    else:
+        check(node_sqlite is not None, 'Validation requires graph-index or node-sqlite')
+        records=node_records(argparse.Namespace(node_json=None,gfa=None,node_sqlite=node_sqlite),graph_nodes)
     if manifest['tensor_format_version'] == 'indexed-gam-candidate-v3':
         from indexed_gam_pipeline.walk_counts import WalkCounts
         check(walk_counts is not None, 'V3 validation requires --walk-counts')
         with WalkCounts(walk_counts) as lookup:
             expected_walks = lookup.get_counts(graph_nodes)
-    if manifest['tensor_format_version'] == 'indexed-gam-candidate-v4':
+    if manifest['tensor_format_version'] == 'indexed-gam-candidate-v4' and (not graph_index or gbz):
         from indexed_gam_pipeline.gbz_counts import GBZCounts
         check(all((gbz, gbz_query, occurrence_cache)), 'V4 validation requires GBZ, helper and cache')
         with GBZCounts(gbz, gbz_query, occurrence_cache) as lookup:
@@ -169,7 +177,7 @@ def validate(folder, gam, index, node_sqlite, walk_counts=None, gbz=None, gbz_qu
     return dict(passed=True,examples=len(results),event_types=dict(Counter(r['event_type'] for r in results)),
         reference_columns_checked=sum(r['reference_columns_checked'] for r in results),
         selected_rows_checked=sum(r['selected_alignments'] for r in results),
-        indexed_query=query,source_gam=gam,source_index=index,graph_node_sqlite=node_sqlite,
+        indexed_query=query,source_gam=gam,source_index=index,graph_node_sqlite=node_sqlite,graph_index=graph_index,
         checks=['shard/manifest shape and dtype','counts and AF','independent raw-mapping coverage',
                 'selected records versus original GAM multiset','padding and gap qualities',
                 'candidate flags and insertion reference gaps','oriented graph-reference bases',
@@ -185,13 +193,14 @@ if __name__=='__main__':
     parser.add_argument('folder')
     parser.add_argument('--gam',required=True)
     parser.add_argument('--index')
-    parser.add_argument('--node-sqlite',required=True)
+    parser.add_argument('--node-sqlite')
+    parser.add_argument('--graph-index')
     parser.add_argument('--walk-counts')
     parser.add_argument('--gbz')
     parser.add_argument('--gbz-query')
     parser.add_argument('--occurrence-cache')
     parser.add_argument('--output',required=True)
     args=parser.parse_args()
-    report=validate(args.folder,args.gam,args.index,args.node_sqlite,args.walk_counts,args.gbz,args.gbz_query,args.occurrence_cache)
+    report=validate(args.folder,args.gam,args.index,args.node_sqlite,args.walk_counts,args.gbz,args.gbz_query,args.occurrence_cache,args.graph_index)
     Path(args.output).write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(report,indent=2))
