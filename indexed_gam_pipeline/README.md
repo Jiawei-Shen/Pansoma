@@ -1,5 +1,12 @@
 # Seven-channel candidate tensors (v4): GBZ node occurrences
 
+## Unified GBZ index update
+
+New runs can use a single GBZ-derived sequence/count SQLite index via `--graph-index`.
+See [build, migration, timing, and validation](UNIFIED_GRAPH_INDEX.md).
+The legacy commands below remain available for existing run snapshots.
+
+
 See [Current pipeline: inputs through validation and images](CURRENT_PIPELINE.md)
 for the complete workflow, exact test commands, and latest rerun evidence.
 

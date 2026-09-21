@@ -124,7 +124,7 @@ def main():
     work.mkdir(parents=True, exist_ok=True)
     ledger = dict(status='running', started_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),
         slurm_job_id=os.environ.get('SLURM_JOB_ID'), config=cfg, steps=[],
-        inputs={key:stamp(cfg[key]) for key in ('gam','index','gfa','gbz')})
+        inputs={key:stamp(cfg[key]) for key in ('gam','index','gbz') + (() if cfg.get('unified_graph_index') else ('gfa',))})
     started = time.perf_counter()
     def save():
         ledger['elapsed_seconds'] = time.perf_counter()-started
@@ -159,10 +159,23 @@ def main():
     db = work/'all_graph_nodes.sqlite'
     cache = work/'gbwt_counts.sqlite'
     targets = work/'discovery/target_nodes.txt'
+    unified = cfg.get('unified_graph_index')
+    graph_args = (['--graph-index', unified] if unified else
+        ['--node-sqlite',db,'--gbz',cfg['gbz'],'--gbz-query',cfg['gbz_query'],'--occurrence-cache',cache])
+    def prepare_unified():
+        from indexed_gam_pipeline.build_graph_index import build_index
+        from indexed_gam_pipeline.graph_index import GraphIndex
+        if not Path(unified).exists():
+            build_index(cfg['gbz'], unified, cfg['gbz_index_builder'])
+        with GraphIndex(unified) as lookup:
+            source = lookup.metadata['source']
+            if any(source[k] != stamp(cfg['gbz'])[k] for k in ('path','size','mtime_ns')):
+                raise ValueError('Unified index was built from a different GBZ')
+        ledger['inputs']['unified_graph_index'] = stamp(unified)
+
     def build_command(dest, smoke=False):
         command = [py,cli,'build','--format','candidate-v4','--gam',cfg['gam'],'--index',cfg['index'],
-            '--nodes',cfg['preflight_nodes'] if smoke else targets,'--node-sqlite',db,'--gbz',cfg['gbz'],'--gbz-query',cfg['gbz_query'],
-            '--occurrence-cache',cache,'--output',dest,'--batch-nodes',str(cfg['batch_nodes']),
+            '--nodes',cfg['preflight_nodes'] if smoke else targets,*graph_args,'--output',dest,'--batch-nodes',str(cfg['batch_nodes']),
             '--max-node-span','10000','--gam-cache-mb',str(cfg['gam_cache_mb']),
             '--max-batch-segments','20000','--shard-size',str(8 if smoke else cfg['shard_size']),
             '--rows','200','--width','101','--min-mapq','10','--min-af','0.05',
@@ -172,14 +185,16 @@ def main():
     try:
         save()
         stage('vg_version',[cfg['vg'],'version'])
-        stage('graph_sequence_index',function=lambda:graph_index(cfg['gfa'],db))
+        if unified:
+            stage('unified_graph_index',function=prepare_unified)
+        else:
+            stage('graph_sequence_index',function=lambda:graph_index(cfg['gfa'],db))
         stage('preflight_build',build_command(work/'preflight',True))
         preflight = json.loads((work/'preflight/manifest.json').read_text())
         if preflight.get('status') != 'complete' or preflight.get('tensors', 0) == 0:
             raise ValueError('Preflight must produce at least one completed tensor')
         stage('preflight_source_audit',[py,ROOT/'indexed_gam_pipeline/validate_examples.py',work/'preflight',
-            '--gam',cfg['gam'],'--index',cfg['index'],'--node-sqlite',db,'--gbz',cfg['gbz'],
-            '--gbz-query',cfg['gbz_query'],'--occurrence-cache',cache,'--output',work/'preflight_audit.json'])
+            '--gam',cfg['gam'],'--index',cfg['index'],*graph_args,'--output',work/'preflight_audit.json'])
         stage('discovery',[py,cli,'discover','--gam',cfg['gam'],'--output',work/'discovery',
             '--min-mapq','5','--node-alt','0.05'])
         if stamp(cfg['gam']) != ledger['inputs']['gam'] or stamp(cfg['index']) != ledger['inputs']['index']:
