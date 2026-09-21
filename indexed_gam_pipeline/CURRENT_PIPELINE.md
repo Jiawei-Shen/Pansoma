@@ -325,7 +325,7 @@ fixed discovery nodes, unchanged candidate-v4 `(7, 200, 101)` encoding, and
 2,048-tensor shards (partial final shard allowed). The original full job 362252
 is stopped with SIGSTOP; it is not resumed by this benchmark.
 
-Optional builder settings (disabled by default pending performance evaluation):
+Optional builder settings (enable explicitly; the CLI defaults remain compatible):
 
 - `--early-alt-filter`: scan qualified observations once per batch and count
   each exact candidate at most once per GAM record. This is an upper bound on
@@ -355,3 +355,8 @@ NPY and the complete candidate summary with SHA-256, then audits the two-worker
 output against source alignments. An external sampler checks process memory every
 five seconds and records its own sampling time; no repeated traversal of Python
 caches is added to the candidate loop.
+
+The measured HG008 comparison and production-mode follow-up are recorded in
+[runs/hg008_candidate_optimization.md](runs/hg008_candidate_optimization.md).
+Performance measurements with `--debug-rows` include large per-column metadata;
+use the separate no-debug comparison when choosing a production worker count.
