@@ -12,7 +12,8 @@ import numpy as np
 
 VERSION = "indexed-gam-candidate-v2"
 V3_VERSION = "indexed-gam-candidate-v3"
-ROW_ORDER = "candidate-oriented visible node path; within each path retain selection order"
+ROW_SELECTION_VERSION = "window-edit-bp-group-uniform-v1"
+ROW_ORDER = "descending visible-window substitution+insertion+deletion bp; stable visible-node-path groups in first-occurrence order; uniform ordered sampling"
 CHANNELS = ["read_base", "base_quality", "event_flags", "mapping_quality",
             "alignment_operation", "row_graph_reference_base"]
 V3_CHANNELS = CHANNELS + ["node_distinct_w_record_count"]
@@ -258,8 +259,8 @@ def split_columns(cols, visit, candidate):
 
 def make_tensor(candidate, eligible, rows=200, width=100, debug=False, node_walk_counts=None):
     """Select deterministically only after full-record coverage/support counting."""
-    eligible = sorted(eligible, key=lambda x: (dict(alt=0, ref=1, other=2)[x[1]],
-                                              -x[0].mapq, x[0].digest))
+    if rows < 1 or width < 1:
+        raise ValueError("Tensor rows and width must be positive")
     span = max(1, len(candidate.alt) if candidate.kind == "INS" else len(candidate.ref))
     if candidate.kind == "INS":
         # Left-align insertion alleles; reserve up to the supported event limit.
@@ -269,7 +270,8 @@ def make_tensor(candidate, eligible, rows=200, width=100, debug=False, node_walk
         span += max([0] + [sum(c.boundary for c in split_columns(oriented_columns(r, v, 1), v, candidate)[1])
                            for r, _, v in eligible])
     if span > width:
-        raise ValueError("Tensor width cannot preserve complete candidate region")
+        raise ValueError(f"Tensor width cannot preserve complete candidate region: "
+                         f"candidate={candidate.metadata()['candidate_id']}, required_columns={span}, width={width}")
     start = (width - span) // 2
     with_walks = node_walk_counts is not None
     if with_walks and any(not isinstance(count, (int, np.integer)) or not 0 <= count <= np.iinfo(np.int32).max
@@ -278,9 +280,8 @@ def make_tensor(candidate, eligible, rows=200, width=100, debug=False, node_walk
     tensor = np.zeros((7 if with_walks else 6, rows, width), dtype=np.int32 if with_walks else np.int16)
     details = []
     omitted = []
-    row_paths = []
-    selected = eligible[:rows]
-    for ri, (read, support, visit) in enumerate(selected):
+    windows = []
+    for read, support, visit in eligible:
         cols = oriented_columns(read, visit, width)
         left, center, right = split_columns(cols, visit, candidate)
         overflow = 0
@@ -317,7 +318,30 @@ def make_tensor(candidate, eligible, rows=200, width=100, debug=False, node_walk
             if col is not None and col.visit != previous_visit:
                 path.append((col.node, col.reverse))
                 previous_visit = col.visit
-        row_paths.append(tuple(path))
+        mismatch = sum(c is not None and c.op != "G" and c.read != c.ref for c in row)
+        windows.append((read, support, visit, row, tuple(path), mismatch, overflow))
+    # Rank all eligible records, then group stably BEFORE the depth limit.
+    windows.sort(key=lambda w: (-w[5], -w[0].mapq, w[0].digest, w[2].index))
+    path_groups = {}
+    for window in windows:
+        path_groups.setdefault(window[4], []).append(window)
+    ordered = [window for group in path_groups.values() for window in group]
+    n_selected = min(rows, len(ordered))
+    if n_selected == 1:
+        sample_indices = [len(ordered) // 2]
+    elif n_selected:
+        sample_indices = [i * (len(ordered)-1) // (n_selected-1) for i in range(n_selected)]
+    else:
+        sample_indices = []
+    chosen = [ordered[i] for i in sample_indices]
+    selected = [(w[0], w[1], w[2]) for w in chosen]
+    groups = []
+    for ri, (read, support, visit, row, path_key, mismatch, overflow) in enumerate(chosen):
+        path = [dict(node_id=node, reverse=reverse) for node, reverse in path_key]
+        if not groups or groups[-1]["path"] != path:
+            groups.append(dict(start_row=ri, end_row=ri+1, path=path))
+        else:
+            groups[-1]["end_row"] = ri+1
         for ci, col in enumerate(row):
             if col is not None:
                 tensor[:6, ri, ci] = [BASES.get(col.read, 5), col.quality,
@@ -335,31 +359,20 @@ def make_tensor(candidate, eligible, rows=200, width=100, debug=False, node_walk
         if debug:
             details.append(dict(read_name=read.name, record_sha256=read.digest, support=support,
                 anchor_mapping_index=visit.index, reversed_for_candidate=visit.reverse,
+                window_mismatch_bp=mismatch, grouped_rank=sample_indices[ri],
                 omitted_central_context_columns=overflow,
                 path=[dict(node_id=v.node, start=v.start, end=v.end, reverse=v.reverse,
                            mapping_index=v.index) for v in read.visits],
                 columns=[c.graph() if c is not None else None for c in row]))
-    # Selection remains support/MAPQ/hash-based. This final stable permutation
-    # groups paths without changing which records made the row cap.
-    order = sorted(range(len(selected)), key=lambda i: row_paths[i])
-    tensor[:, :len(selected), :] = tensor[:, order, :]
-    if debug:
-        details = [details[i] for i in order]
-    new_indices = {old: new for new, old in enumerate(order)}
-    omitted = sorted((dict(item, row_index=new_indices[item["row_index"]]) for item in omitted),
-                     key=lambda item: item["row_index"])
-    groups = []
-    for ri, original in enumerate(order):
-        path = [dict(node_id=node, reverse=reverse) for node, reverse in row_paths[original]]
-        if not groups or groups[-1]["path"] != path:
-            groups.append(dict(start_row=ri, end_row=ri+1, path=path))
-        else:
-            groups[-1]["end_row"] = ri+1
     counts = Counter(s for _, s, _ in eligible)
     return tensor, dict(candidate.metadata(), tensor_format_version=V3_VERSION if with_walks else VERSION,
-        row_order=ROW_ORDER, row_groups=groups,
+        row_order=ROW_ORDER, row_groups=groups, row_selection_version=ROW_SELECTION_VERSION,
+        selected_grouped_ranks=sample_indices, window_mismatch_bp=[w[5] for w in chosen],
         candidate_columns=[start, start+span], coverage=len(eligible),
         alt_count=counts["alt"], ref_count=counts["ref"], other_count=counts["other"],
         af=counts["alt"]/len(eligible) if eligible else 0,
         selected_alignments=len(selected), omitted_context=omitted, selected_counts=dict(Counter(s for _, s, _ in selected)),
-        **({"rows": details} if debug else {}))
+        **({"rows": details, "selection_audit": [dict(record_sha256=w[0].digest,
+            mapping_quality=w[0].mapq, anchor_mapping_index=w[2].index,
+            window_mismatch_bp=w[5], support=w[1],
+            path=[list(p) for p in w[4]]) for w in windows]} if debug else {}))

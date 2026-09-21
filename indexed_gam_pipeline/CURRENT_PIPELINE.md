@@ -176,8 +176,21 @@ set to 1 to reproduce this low-support inspection set.
 Each tensor is **(7, 200, 100), int32**: channels × alignment rows × columns.
 There is no dedicated reference row.
 
-Rows are selected deterministically: ALT, then REF, then other, followed by
-higher MAPQ and record SHA-256. At most 200 are retained. The candidate interval
+Row selection revision `window-edit-bp-group-uniform-v1` first prepares the
+visible window for every eligible record. It counts differing read/reference
+bases (substitutions, inserted bases and deleted bases); padding and aligned
+absence-of-insertion gaps do not count. Edits outside the rendered window and
+already omitted insertion columns do not count. Sort by decreasing edit bp,
+then decreasing MAPQ, record SHA-256 and anchor mapping index. Stably group by
+the visible, candidate-oriented node path; groups follow their first occurrence
+in this sorted list and each group retains the edit-bp order. Only then sample
+up to 200 rows, keeping order, at indices `floor(i*(N-1)/(K-1))` for K > 1;
+for K = 1 take index `N//2`. There is no ALT-first selection or minimum group
+quota. Counts and AF use all eligible records before sampling; duplicate records
+remain separate. The seven-channel format stays v4; the row-selection revision
+is recorded separately and must match between model training and inference.
+
+The candidate interval
 is centered as a complete block. Insertions reserve a shared block and use gap
 slots for supported absence; missing evidence stays padding. Context follows
 each alignment's own graph traversal, so rows can have different neighboring
@@ -198,9 +211,8 @@ slots use their anchor node's count. Missing coverage and unused rows have zero
 occurrence. Candidate-region flags can still mark a central slot without coverage;
 use the operation/metadata to distinguish padding from aligned evidence.
 
-Finally, selected rows are stably grouped by the visible sequence of oriented
-node IDs. All seven channels move together. This changes presentation order,
-not row selection, coverage, or AF.
+Grouping takes place before sampling. All seven channels and row metadata
+follow the same selected record order; no second sorting occurs after sampling.
 
 ## 8. Save, audit, and render
 

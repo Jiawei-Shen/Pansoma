@@ -40,6 +40,47 @@ def eligible(candidate, reads):
 
 
 class CandidatesTest(unittest.TestCase):
+    def test_window_edit_bp_excludes_distant_edits_and_counts_indel_bases(self):
+        seq = {1: 'A'*60}
+        candidate = Candidate(1, 30, 'A', 'T', 'SNP')
+        specs = [
+            [(10,10,'T'*10),(20,20,''),(1,1,'T'),(29,29,'')],
+            [(28,28,''),(0,2,'GG'),(2,2,''),(1,1,'T'),(29,29,'')],
+            [(28,28,''),(2,0,''),(1,1,'T'),(29,29,'')],
+            [(29,29,''),(1,1,'C'),(1,1,'T'),(29,29,'')],
+        ]
+        reads = [decode_alignment(alignment([(1,0,False,edits)],seq,name=str(i)),seq)[0]
+                 for i, edits in enumerate(specs)]
+        _, meta = make_tensor(candidate, eligible(candidate, reads), width=11, debug=True)
+        scores = {row['read_name']:row['window_mismatch_bp'] for row in meta['rows']}
+        self.assertEqual(scores, {'0':1,'1':3,'2':3,'3':2})
+        self.assertEqual(meta['window_mismatch_bp'], [3,3,2,1])
+
+    def test_group_before_uniform_200_sampling_and_keep_seven_channels(self):
+        seq = {1:'AC',2:'GG',3:'TT'}
+        reads = []
+        for i in range(401):
+            branch = 3 if i % 2 else 2
+            # Branch 3 has the highest score, so it must precede path 2.
+            first = [(1,1,'A'),(1,1,'')] if branch == 3 else [(2,2,'')]
+            a = alignment([(branch,0,False,first),(1,0,False,[(1,1,''),(1,1,'T')])],
+                          seq,name=f'read-{i:04d}')
+            reads.append(decode_alignment(a,seq)[0])
+        c = Candidate(1,1,'C','T','SNP')
+        e = eligible(c, reads)
+        full, all_meta = make_tensor(c,e,rows=401,width=9,debug=True,node_walk_counts={1:90,2:3,3:7})
+        x, meta = make_tensor(c,list(reversed(e)),rows=200,width=9,debug=True,
+                              node_walk_counts={1:90,2:3,3:7})
+        indices = [i*400//199 for i in range(200)]
+        np.testing.assert_array_equal(x, full[:,indices,:])
+        self.assertEqual(meta['selected_grouped_ranks'],indices)
+        self.assertEqual([g['path'][0]['node_id'] for g in meta['row_groups']],[3,2])
+        self.assertEqual(meta['coverage'],401)
+        self.assertEqual(meta['alt_count'],401)
+        self.assertEqual(meta['selected_alignments'],200)
+        self.assertEqual([r['record_sha256'] for r in meta['rows']],
+                         [all_meta['rows'][i]['record_sha256'] for i in indices])
+
     def test_edits_and_indel_limits(self):
         seq = {1: "A"*110}
         a = alignment([(1, 0, False, [(1, 1, "T"), (0, 50, "C"*50),
@@ -108,15 +149,16 @@ class CandidatesTest(unittest.TestCase):
         self.assertEqual((m["coverage"],m["alt_count"],m["ref_count"],m["other_count"]),(4,1,1,2))
         self.assertEqual(hi-lo,2)
         self.assertEqual(x[0,0,lo:hi].tolist(),[BASES["T"],BASES["A"]])
-        self.assertEqual(x[0,1,lo:hi].tolist(),[6,6])
         self.assertTrue(np.all(x[5,:4,lo:hi] == 6))
         self.assertTrue(np.all(x[2,:4,lo:hi] & 2))
         for row, detail in enumerate(m["rows"]):
+            if detail["record_sha256"] == b.digest:
+                self.assertEqual(x[0,row,lo:hi].tolist(),[6,6])
+                self.assertEqual(x[1,row,lo],-1)
             if detail["record_sha256"] == terminal.digest:
                 self.assertTrue(np.all(x[0,row,lo:hi] == 0))
             if detail["record_sha256"] == d.digest:
                 self.assertEqual(x[0,row,lo:hi].tolist(),[BASES["G"],6])
-        self.assertEqual(x[1,1,lo],-1)
 
     def test_position_coverage_deletion_spans_and_row_limits(self):
         seq={1:"ACGTAC"}
@@ -222,7 +264,7 @@ class CandidatesTest(unittest.TestCase):
         x,m=make_tensor(c,e,rows=6,width=9,debug=True)
         self.assertEqual([r["support"] for r in m["rows"]],["alt","ref","alt","ref"])
         self.assertEqual([(g["start_row"],g["end_row"]) for g in m["row_groups"]],[(0,2),(2,4)])
-        self.assertEqual([g["path"][0]["node_id"] for g in m["row_groups"]],[2,3])
+        self.assertEqual(set(g["path"][0]["node_id"] for g in m["row_groups"]),{2,3})
         self.assertEqual((m["coverage"],m["alt_count"],m["ref_count"],m["af"]),(4,2,2,.5))
         self.assertFalse(x[:,4:].any())
         # All six channels and debug column maps travel with their record.
@@ -232,7 +274,8 @@ class CandidatesTest(unittest.TestCase):
             np.testing.assert_array_equal(x[:,ri],single[:,0])
             self.assertEqual(detail["columns"],meta["rows"][0]["columns"])
         capped,small=make_tensor(c,e,rows=2,width=9,debug=True)
-        self.assertEqual(small["selected_counts"],{"alt":2})
+        self.assertEqual(small["selected_counts"],{"alt":1,"ref":1})
+        self.assertEqual(small["selected_grouped_ranks"],[0,3])
         self.assertEqual(small["coverage"],4)
         self.assertEqual(small["af"],.5)
         shuffled,_=make_tensor(c,list(reversed(e)),rows=6,width=9)
