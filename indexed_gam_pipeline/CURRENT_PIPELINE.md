@@ -173,7 +173,7 @@ set to 1 to reproduce this low-support inspection set.
 
 ## 7. Construct one tensor per passing candidate
 
-Each tensor is **(7, 200, 100), int32**: channels × alignment rows × columns.
+Each tensor is **(7, 200, 101), int32**: channels × alignment rows × columns.
 There is no dedicated reference row.
 
 Row selection revision `window-edit-bp-group-uniform-v1` first prepares the
@@ -191,8 +191,8 @@ remain separate. The seven-channel format stays v4; the row-selection revision
 is recorded separately and must match between model training and inference.
 
 Window revision `anchor-centered-columns-v1` fixes the candidate start/boundary
-at column `width//2` (50 for width 100). Each record contributes the preceding
-50 alignment columns and the next 50, including the anchor. Long I/D events
+at column `width//2` (50 for width 101). Each record contributes the preceding
+50 alignment columns, the anchor and the following 50 columns. Long I/D events
 are cropped at the window edge; the complete event need not fit. No maximum
 insertion from another record expands the shared window. For INS, shorter
 alleles reserve up to the visible target insertion length, using G slots only
@@ -295,7 +295,7 @@ python indexed_gam_pipeline/run.py build --format candidate-v4 \
   --gbz /scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.gbz \
   --gbz-query tmp/gbz_node_counts --occurrence-cache tmp/hprc_gbwt_counts.sqlite \
   --output tmp/new_build --batch-nodes 32 --max-node-span 10000 --gam-cache-mb 64 \
-  --shard-size 1000 --max-tensors 1000 --rows 200 --width 100 \
+  --shard-size 1000 --max-tensors 1000 --rows 200 --width 101 \
   --min-mapq 10 --min-af 0.05 --min-variants 1 --min-allele-bq 10 \
   --max-indel-len 50 --variant-type all --debug-rows
 
