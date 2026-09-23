@@ -107,6 +107,70 @@ class VisualizationTest(unittest.TestCase):
                 self.assertNotIn("Distinct GFA\nW records",labels)
                 real_close(fig)
 
+    def test_int8_v4_renders_scaled_counts(self):
+        x,m=example()
+        x=np.concatenate([x.astype(np.int32),np.full_like(x[:1],86)],axis=0)
+        x = np.clip(x, -1, 127).astype(np.int8)
+        x[6] = 82
+        x[6][x[4]==0]=0
+        m=dict(m,tensor_format_version=v.V4_VERSION, tensor_storage_version="int8-count-div4-v1")
+        self.assertEqual(v.resolve_format(x,m),"candidate-v4")
+        with self.assertRaisesRegex(ValueError,"conflicts"):
+            v.resolve_format(x,m,"candidate-v3")
+        with tempfile.TemporaryDirectory() as d:
+            real_close=v.plt.close
+            with patch.object(v.plt,"close"):
+                v.visualize_tensor(x,str(Path(d)/"v4.png"),"V4",False,None,tensor_format="candidate-v4", metadata=m)
+                fig=v.plt.gcf()
+                self.assertEqual(int(fig.axes[6].images[0].get_array().max()), 82)
+                labels=[t.get_text() for ax in fig.axes for t in ax.texts]
+                self.assertIn("candidate-v4",fig._suptitle.get_text())
+                self.assertIn("Distinct GBWT\npaths\n// 4 (cap 127)",labels)
+                self.assertNotIn("Distinct GFA\nW records",labels)
+                real_close(fig)
+
+    def test_v5_alt_stripe_log_counts_and_strand_panels(self):
+        x,m=example()
+        x=x.astype(np.int8)
+        evidence=x[0]!=0
+        stripe=np.zeros_like(x[0]); stripe[:, 1:3]=[[4, 1]]*3; stripe[~evidence]=0   # candidate INS ">TA" at columns 1-2
+        counts=np.where(evidence, 91, 0).astype(np.int8)                             # 90 paths -> 91 on the log scale
+        strand=np.where(evidence, [[1],[2],[0]], 0).astype(np.int8)
+        v5=np.concatenate([x[:2], stripe[None], x[3:6], counts[None], strand[None]], axis=0)
+        v5[2][~evidence]=0
+        m=dict(m, tensor_format_version=v.V5_VERSION, tensor_storage_version=v.V5_LOG_STORAGE, candidate_columns=[1,3])
+        self.assertEqual(v.resolve_format(v5,m),"candidate-v5")
+        self.assertEqual(v.resolve_format(np.zeros((8,3,4),dtype=np.int8),tensor_format="candidate-v5"),"candidate-v5")
+        with self.assertRaisesRegex(ValueError,"8 channels"):
+            v.resolve_format(x,dict(m))
+        view,region=v.prepare_candidate_view(v5,metadata=m)
+        self.assertEqual((view.shape,region),((8,2,4),[1,3]))
+        # A stripe that ends early (no evidence in a trailing candidate column) is still accepted.
+        short=v5.copy(); short[2,:,2]=0
+        self.assertEqual(v.prepare_candidate_view(short,metadata=m)[1],[1,3])
+        with self.assertRaisesRegex(ValueError,"candidate_columns"):
+            v.prepare_candidate_view(v5,metadata=dict(m,candidate_columns=[2,3]))
+        with tempfile.TemporaryDirectory() as d:
+            output=Path(d)/"v5.png"
+            real_close=v.plt.close
+            with patch.object(v.plt,"close"):
+                self.assertEqual(v.visualize_tensor(v5,str(output),"V5",False,None,metadata=m),2)
+                fig=v.plt.gcf()
+                panels=[ax for ax in fig.axes if ax.images]
+                self.assertEqual(len(panels),8)
+                np.testing.assert_array_equal(panels[2].images[0].get_array(),v5[2,:2])   # ALT stripe in base palette
+                np.testing.assert_array_equal(panels[7].images[0].get_array(),v5[7,:2])   # strand
+                self.assertEqual(int(panels[6].images[0].get_array().max()),91)
+                labels=[t.get_text() for ax in fig.axes for t in ax.texts]
+                self.assertIn("Distinct GBWT\npaths\nlog scale; ticks\nshow counts",labels)
+                titles=[ax.get_title(loc="left") for ax in panels]
+                self.assertIn("3  Candidate ALT (same for every row)",titles)
+                self.assertIn("8  Read strand (vs. candidate node forward)",titles)
+                self.assertIn("candidate-v5",fig._suptitle.get_text())
+                real_close(fig)
+            with Image.open(output) as image:
+                image.verify()
+
     def test_legacy_still_renders_five_channels(self):
         x=np.zeros((5,3,4),dtype=np.int8)
         x[0,:2]=20
