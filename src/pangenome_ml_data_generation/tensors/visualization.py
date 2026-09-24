@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render legacy five-channel and versioned candidate-v2/v3/v4/v5 six/seven/eight-channel tensors."""
+"""Render legacy five-channel and versioned candidate-v2/v3/v4/v5/v6 six/seven/eight-channel tensors."""
 
 import argparse
 import json
@@ -270,11 +270,13 @@ V2_VERSION = "indexed-gam-candidate-v2"
 V4_VERSION = "indexed-gam-candidate-v4"
 V3_VERSION = "indexed-gam-candidate-v3"
 V5_VERSION = "indexed-gam-candidate-v5"
+V6_VERSION = "indexed-gam-candidate-v6"
 V5_LOG_STORAGE = "int8-count-log2x14-v1"
+V6_LINEAR_STORAGE = "int8-count-linear100-log2-v1"
 V5_LOG_SCALE = 14
 CANDIDATE_VERSIONS = {"candidate-v2": V2_VERSION, "candidate-v3": V3_VERSION,
-                      "candidate-v4": V4_VERSION, "candidate-v5": V5_VERSION}
-CANDIDATE_CHANNELS = {"candidate-v2": 6, "candidate-v3": 7, "candidate-v4": 7, "candidate-v5": 8}
+                      "candidate-v4": V4_VERSION, "candidate-v5": V5_VERSION, "candidate-v6": V6_VERSION}
+CANDIDATE_CHANNELS = {"candidate-v2": 6, "candidate-v3": 7, "candidate-v4": 7, "candidate-v5": 8, "candidate-v6": 8}
 STRAND_LABELS = {0: "Padding", 1: "Forward", 2: "Reverse"}
 STRAND_COLORS = {0: "#ffffff", 1: "#1b9e77", 2: "#d95f02"}
 V2_BASE_LABELS = {0: "Padding", 1: "A", 2: "C", 3: "G", 4: "T", 5: "N", 6: "Gap"}
@@ -295,7 +297,7 @@ def resolve_format(tensor, metadata=None, tensor_format="auto"):
         elif version in (None, "indexed-gam-legacy-v1") and tensor.shape[0] == 5:
             tensor_format = "legacy"
         else:
-            raise ValueError("Candidate format is ambiguous: supply its v2/v3/v4/v5 manifest/summary or an explicit --format")
+            raise ValueError("Candidate format is ambiguous: supply its v2/v3/v4/v5/v6 manifest/summary or an explicit --format")
     expected = dict(CANDIDATE_CHANNELS, legacy=5)[tensor_format]
     if tensor.ndim != 3 or tensor.shape[0] != expected:
         raise ValueError(f"{tensor_format} expects {expected} channels; got {tensor.shape}")
@@ -305,8 +307,13 @@ def resolve_format(tensor, metadata=None, tensor_format="auto"):
 
 
 def is_v5(tensor, metadata=None):
+    """Eight-channel layout (v5 and v6: channel 2 is base-coded, 6 = path count, 7 = strand)."""
     version = (metadata or {}).get("tensor_format_version")
-    return version == V5_VERSION or (version is None and tensor.shape[0] == 8)
+    return version in (V5_VERSION, V6_VERSION) or (version is None and tensor.shape[0] == 8)
+
+
+def is_v6(metadata=None):
+    return (metadata or {}).get("tensor_format_version") == V6_VERSION
 
 
 def prepare_candidate_view(tensor, show_all_rows=False, metadata=None):
@@ -341,7 +348,15 @@ def path_count_colorbar(fig, ax, side_ax, values, storage_version):
     side_ax.axis("off")
     bar = side_ax.inset_axes((.03, .12, .12, .75))
     colorbar = fig.colorbar(image, cax=bar)
-    if storage_version == V5_LOG_STORAGE:
+    if storage_version == V6_LINEAR_STORAGE:
+        # exact up to 100; above, value k means a count in (99 + 2**(k-101), 99 + 2**(k-100)]
+        ticks = [(c, str(c)) for c in (1, 25, 50, 75, 90, 100) if c <= top]
+        if top > 100:
+            ticks.append((top, f"≤{99 + 2 ** (top - 100)}"))
+        colorbar.set_ticks([t for t, _ in ticks])
+        colorbar.set_ticklabels([label for _, label in ticks])
+        colorbar.ax.tick_params(labelsize=10)
+    elif storage_version == V5_LOG_STORAGE:
         encode = lambda c: int(np.floor(V5_LOG_SCALE * np.log2(c + 1) + .5))  # noqa: E731
         ticks = [(encode(c), str(c)) for c in (1, 2, 4, 8, 16, 32, 64, 128, 256, 512) if encode(c) <= top]
         if not ticks or top - ticks[-1][0] >= 6:  # label the observed maximum with its decoded count
@@ -391,17 +406,22 @@ def visualize_candidate_tensor(tensor, out_path, title, show_all_rows=False,
         values = np.ma.masked_where(view[4] == 0, view[6])
         storage = (metadata or {}).get("tensor_storage_version")
         version = (metadata or {}).get("tensor_format_version")
-        path_count_colorbar(fig, axes[6], legends[6], values, V5_LOG_STORAGE if v5 else storage)
+        path_count_colorbar(fig, axes[6], legends[6], values,
+                            storage if is_v6(metadata) and storage else V5_LOG_STORAGE if v5 else storage)
         count_label = ("Distinct GBWT\npaths" if v5 or version == V4_VERSION else "Distinct GFA\nW records")
         if storage == "int8-count-div4-v1":
             count_label += "\n// 4 (cap 127)"
+        elif storage == V6_LINEAR_STORAGE:
+            count_label += "\nexact <= 100,\nlog2 above"
         elif v5:
             count_label += "\nlog scale; ticks\nshow counts"
         legends[6].text(.27, .25, count_label, fontsize=11)
     if v5:
         plot_discrete_track(axes[7], legends[7], view[7], STRAND_LABELS, STRAND_COLORS)
+    v6 = is_v6(metadata)
     titles = ["1  Read bases", "2  Base qualities",
-              "3  Candidate ALT (same for every row)" if v5 else "3  Event / candidate flags",
+              ("3  Site allele carried by each read (A1, A2, ... or REF; blank = OTHER)" if v6
+               else "3  Candidate ALT (same for every row)" if v5 else "3  Event / candidate flags"),
               "4  Mapping qualities", "5  Alignment operations", "6  Per-read graph-reference bases",
               "7  Node distinct path count" if v5 else "7  Node walk count",
               "8  Read strand (vs. candidate node forward)"]
@@ -413,6 +433,13 @@ def visualize_candidate_tensor(tensor, out_path, title, show_all_rows=False,
             ax.axvspan(region[0]-.5, region[1]-.5, facecolor="none", edgecolor="#111111", linewidth=1.2)
         if marker_column is not None:
             ax.axvline(marker_column, color="#111111", linestyle="--", linewidth=.8)
+        if v6:  # row blocks: A1, A2, ..., REF, OTHER
+            for group in metadata.get("row_groups", []):
+                if group["start_row"]:
+                    ax.axhline(group["start_row"] - .5, color="#111111", linewidth=1.1)
+                if channel in (0, 2):
+                    ax.text(-1.2, (group["start_row"] + group["end_row"] - 1) / 2, group["allele"], ha="right",
+                            va="center", fontsize=11, fontweight="bold", clip_on=False)
         if channel < channels-1:
             ax.tick_params(labelbottom=False)
     axes[-1].set_xlabel("Tensor column (candidate-relative context; branches may differ)", fontsize=13)
@@ -420,7 +447,15 @@ def visualize_candidate_tensor(tensor, out_path, title, show_all_rows=False,
     caption = version.removeprefix("indexed-gam-") + " | no dedicated reference row"
     if region:
         caption += f" | candidate columns [{region[0]}, {region[1]})"
-    if metadata and "coverage" in metadata:
+    if v6:
+        alleles = metadata.get("alleles") or [dict(metadata, label="A1")]
+        caption += "\n" + " | ".join(
+            f"{a['label']} {a['event_type']} {a['ref'] or '-'}>{a['alt'] or '-'} AF {a['af']:.3f} ({a['alt_count']}/{a['coverage']})"
+            for a in alleles)
+        counts = metadata["site_counts"]
+        caption += (f"\nSite coverage {metadata['site_coverage']} ("
+                    + ", ".join(f"{k} {v}" for k, v in counts.items()) + f") | selected {metadata['selected_alignments']}")
+    elif metadata and "coverage" in metadata:
         caption += (f"\nCoverage {metadata['coverage']} | ALT/REF/other "
                     f"{metadata['alt_count']}/{metadata['ref_count']}/{metadata['other_count']}"
                     f" | AF {metadata['af']:.4f} | selected {metadata['selected_alignments']}")
@@ -573,7 +608,7 @@ def main() -> None:
         type=int,
         help="Extra column marker; -1 hides markers. Default: full candidate range or legacy center.",
     )
-    parser.add_argument("--format", choices=("auto", "legacy", "candidate-v2", "candidate-v3", "candidate-v4", "candidate-v5"), default="auto")
+    parser.add_argument("--format", choices=("auto", "legacy", "candidate-v2", "candidate-v3", "candidate-v4", "candidate-v5", "candidate-v6"), default="auto")
     parser.add_argument("--manifest-path", help="Format manifest; default: manifest.json beside input")
     parser.add_argument("--shard-index", type=int, help="Metadata shard index for nonstandard filenames")
     parser.add_argument("--title", help="Optional figure title.")

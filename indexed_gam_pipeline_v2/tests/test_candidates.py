@@ -1,4 +1,5 @@
 """Edit decoding, candidate identity, support counting, window encoding and row selection."""
+import random
 import unittest
 
 import numpy as np
@@ -8,6 +9,12 @@ from indexed_gam_pipeline_v2.candidates import (BASES, OPS, Candidate, alt_suppo
                                                 encode_count, make_tensor, overlap, rc)
 
 COUNTS = {n: 90 for n in range(1, 10)}
+
+
+def plain(length, seed=0):
+    """A fixed pseudo-random sequence: indels in it do not left-shift unless a test wants them to."""
+    rng = random.Random(seed)
+    return "".join(rng.choice("ACGT") for _ in range(length))
 
 
 def read(specs, sequences, **kwargs):
@@ -152,7 +159,8 @@ class SupportTest(unittest.TestCase):
         _, m = tensor(c, [r, r], debug=True)
         self.assertEqual((m["coverage"], m["alt_count"]), (2, 2))
         self.assertEqual(m["rows"][0]["anchor_mapping_index"], 2)
-        self.assertEqual([n["node_id"] for n in m["row_groups"][0]["path"]], [1, 2, 1])
+        self.assertEqual([v["node_id"] for v in m["rows"][0]["path"]], [1, 2, 1])
+        self.assertEqual(m["row_groups"], [dict(start_row=0, end_row=2, allele="A1")])
 
     def test_low_quality_alt_is_other(self):
         seq = {1: "C"}
@@ -196,8 +204,9 @@ class WindowTest(unittest.TestCase):
         self.assertEqual([p["offset"] for p in m["rows"][0]["columns"]], list(range(50, 151)))
 
     def test_long_deletion_and_background_insertion(self):
-        seq = {1: "A" * 200}
-        candidate = Candidate(1, 60, "A" * 40, "", "DEL")
+        seq = {1: plain(200, 3)}
+        self.assertNotEqual(seq[1][59], seq[1][99])  # the deletion stays at 60
+        candidate = Candidate(1, 60, seq[1][60:100], "", "DEL")
         alt = read([(1, 0, False, [(60, 60, ""), (40, 0, ""), (100, 100, "")])], seq)
         other = read([(1, 0, False, [(65, 65, ""), (0, 150, "T" * 150), (135, 135, "")])], seq)
         x, m = tensor(candidate, [alt, other], rows=3, width=100, debug=True)
@@ -222,45 +231,54 @@ class WindowTest(unittest.TestCase):
         xr, _ = tensor(candidate, [r], width=100)
         np.testing.assert_array_equal(xf[:7], xr[:7])  # everything but strand is orientation-invariant
         self.assertTrue(np.all(xf[7, 0][xf[0, 0] != 0] == 1) and np.all(xr[7, 0][xr[0, 0] != 0] == 2))
-        self.assertTrue(np.all(xf[4, 0, 50:] == OPS["I"]))
-        self.assertEqual(m["window_mismatch_bp"], [50])
+        # The record's own 150-bp insertion fills the 30 slots of the site; the rest is cropped.
+        self.assertTrue(np.all(xf[4, 0, 50:80] == OPS["I"]) and np.all(xf[4, 0, 80:] == OPS["M"]))
+        self.assertEqual(m["window_mismatch_bp"], [30])
+        self.assertEqual(m["omitted_context"][0]["cropped_inserted_bases"], 120)
         partial = read([(1, 65, False, [(20, 20, "")])], seq)
         x, m = tensor(Candidate(1, 60, "A" * 20, "", "DEL"), [partial], width=100, debug=True)
         self.assertFalse(x[:, 0, 50:55].any())
         self.assertEqual(m["rows"][0]["columns"][55]["offset"], 65)
 
     def test_window_edit_bp_counts_only_visible_edits(self):
-        seq = {1: "A" * 60}
-        candidate = Candidate(1, 30, "A", "T", "SNP")
+        seq = {1: "ACGT" * 15}
+        candidate = Candidate(1, 30, "G", "T", "SNP")
         specs = [[(10, 10, "T" * 10), (20, 20, ""), (1, 1, "T"), (29, 29, "")],
                  [(28, 28, ""), (0, 2, "GG"), (2, 2, ""), (1, 1, "T"), (29, 29, "")],
                  [(28, 28, ""), (2, 0, ""), (1, 1, "T"), (29, 29, "")],
-                 [(29, 29, ""), (1, 1, "C"), (1, 1, "T"), (29, 29, "")]]
+                 [(29, 29, ""), (1, 1, "A"), (1, 1, "T"), (29, 29, "")]]
         reads = [read([(1, 0, False, edits)], seq, name=str(i)) for i, edits in enumerate(specs)]
         _, meta = tensor(candidate, reads, width=11, debug=True)
         self.assertEqual({row["read_name"]: row["window_mismatch_bp"] for row in meta["rows"]},
                          {"0": 1, "1": 3, "2": 3, "3": 2})
-        self.assertEqual(meta["window_mismatch_bp"], [3, 3, 2, 1])
+        self.assertEqual(sorted(meta["window_mismatch_bp"]), [1, 2, 3, 3])
 
-    def test_group_before_uniform_sampling(self):
+    def test_allele_blocks_then_uniform_sampling(self):
         seq = {1: "AC", 2: "GG", 3: "TT"}
         reads = []
         for i in range(401):
             branch = 3 if i % 2 else 2
             first = [(1, 1, "A"), (1, 1, "")] if branch == 3 else [(2, 2, "")]
-            reads.append(read([(branch, 0, False, first), (1, 0, False, [(1, 1, ""), (1, 1, "T")])], seq, name=f"read-{i:04d}"))
+            last = [(1, 1, ""), (1, 1, "T")] if i % 3 else [(2, 2, "")]
+            reads.append(read([(branch, 0, False, first), (1, 0, False, last)], seq, name=f"read-{i:04d}"))
         c = Candidate(1, 1, "C", "T", "SNP")
         e = eligible(c, reads)
         counts = {1: 90, 2: 3, 3: 7}
         full, all_meta = make_tensor(c, e, counts, rows=401, width=9, debug=True)
         x, meta = make_tensor(c, list(reversed(e)), counts, rows=200, width=9, debug=True)
+        # Blocks A1 then REF, each by record hash; uniform sampling over that order.
+        ranked = sorted(all_meta["selection_audit"], key=lambda a: (a["site_allele"] != "A1", a["record_sha256"]))
         indices = [i * 400 // 199 for i in range(200)]
-        np.testing.assert_array_equal(x, full[:, indices, :])
-        self.assertEqual(meta["selected_grouped_ranks"], indices)
-        self.assertEqual([g["path"][0]["node_id"] for g in meta["row_groups"]], [3, 2])
-        self.assertEqual((meta["coverage"], meta["alt_count"], meta["selected_alignments"]), (401, 401, 200))
-        self.assertEqual([r["record_sha256"] for r in meta["rows"]],
-                         [all_meta["rows"][i]["record_sha256"] for i in indices])
+        self.assertEqual(sorted(meta["selected_ranks"]), indices)
+        self.assertEqual([ranked[r]["record_sha256"] for r in meta["selected_ranks"]],
+                         [r["record_sha256"] for r in meta["rows"]])
+        self.assertEqual([g["allele"] for g in meta["row_groups"]], ["A1", "REF"])
+        alt = sum(a["site_allele"] == "A1" for a in ranked)
+        self.assertEqual(meta["selected_counts"], {"A1": sum(i < alt for i in indices), "REF": sum(i >= alt for i in indices)})
+        self.assertEqual((meta["coverage"], meta["alt_count"], meta["site_coverage"], meta["selected_alignments"]),
+                         (401, alt, 401, 200))
+        again, _ = make_tensor(c, e, counts, rows=200, width=9)
+        np.testing.assert_array_equal(x, again)  # independent of record order
 
     def test_multinode_branches_and_per_row_reference(self):
         seq = {1: "AACG", 2: "TT", 3: "GC", 4: "AT"}
@@ -316,12 +334,13 @@ class WindowTest(unittest.TestCase):
                 self.assertFalse(x[:, row, lo:hi].any())
             else:
                 self.assertTrue(np.all(x[5, row, lo:hi] == 6))
-                self.assertEqual(x[2, row, lo:hi].tolist(), [BASES["T"], BASES["A"]])
+                expected = {"A1": [BASES["T"], BASES["A"]], "REF": [6, 6], "OTHER": [0, 0]}[detail["site_allele"]]
+                self.assertEqual(x[2, row, lo:hi].tolist(), expected)
             if detail["record_sha256"] == d.digest:
                 self.assertEqual(x[0, row, lo:hi].tolist(), [BASES["G"], 6])
 
     def test_central_context_insertions_within_deletion(self):
-        seq = {1: "ACGTAC"}
+        seq = {1: "GCGTAC"}
         alt = read([(1, 0, False, [(1, 1, ""), (4, 0, ""), (1, 1, "")])], seq)
         other = read([(1, 0, False, [(2, 2, ""), (0, 2, "TT"), (4, 4, "")])], seq)
         c = alt.observations[0].candidate
@@ -332,7 +351,7 @@ class WindowTest(unittest.TestCase):
         self.assertEqual(x[5, 1, lo:lo + 6].tolist(), [BASES[b] for b in "C--GTA"])
         self.assertEqual(m["other_count"], 1)
 
-    def test_node_path_grouping_preserves_counts_and_channels(self):
+    def test_rows_equal_single_record_rows_and_blocks_keep_counts(self):
         seq = {1: "AC", 2: "GG", 3: "TT"}
         rows = []
         for branch, base in ((3, "T"), (2, "C"), (2, "T"), (3, "C")):
@@ -341,8 +360,8 @@ class WindowTest(unittest.TestCase):
         c = Candidate(1, 1, "C", "T", "SNP")
         e = eligible(c, rows)
         x, m = make_tensor(c, e, COUNTS, rows=6, width=9, debug=True)
-        self.assertEqual([r["support"] for r in m["rows"]], ["alt", "ref", "alt", "ref"])
-        self.assertEqual([(g["start_row"], g["end_row"]) for g in m["row_groups"]], [(0, 2), (2, 4)])
+        self.assertEqual([r["site_allele"] for r in m["rows"]], ["A1", "A1", "REF", "REF"])
+        self.assertEqual(m["row_groups"], [dict(start_row=0, end_row=2, allele="A1"), dict(start_row=2, end_row=4, allele="REF")])
         self.assertEqual((m["coverage"], m["alt_count"], m["ref_count"], m["af"]), (4, 2, 2, .5))
         self.assertFalse(x[:, 4:].any())
         for ri, detail in enumerate(m["rows"]):
@@ -351,17 +370,35 @@ class WindowTest(unittest.TestCase):
             np.testing.assert_array_equal(x[:, ri], single[:, 0])
             self.assertEqual(detail["columns"], meta["rows"][0]["columns"])
         _, small = make_tensor(c, e, COUNTS, rows=2, width=9, debug=True)
-        self.assertEqual((small["selected_counts"], small["selected_grouped_ranks"], small["af"]), ({"alt": 1, "ref": 1}, [0, 3], .5))
+        self.assertEqual((small["selected_counts"], sorted(small["selected_ranks"]), small["af"]),
+                         ({"A1": 1, "REF": 1}, [0, 3], .5))
         shuffled, _ = make_tensor(c, list(reversed(e)), COUNTS, rows=6, width=9)
         np.testing.assert_array_equal(x, shuffled)
 
-    def test_group_key_ignores_distant_branches_and_normalizes_strand(self):
-        seq = {1: "AC", 2: "G" * 20, 3: "TT", 4: "AA"}
-        a = read([(3, 0, False, [(2, 2, "")]), (2, 0, False, [(20, 20, "")]), (1, 0, False, [(1, 1, ""), (1, 1, "T")])], seq)
-        b = read([(1, 0, True, [(1, 1, "A"), (1, 1, "")]), (2, 0, True, [(20, 20, "")]), (4, 0, True, [(2, 2, "")])], seq)
-        c = a.observations[0].candidate
-        _, m = tensor(c, [a, b], width=9, debug=True)
-        self.assertEqual(m["row_groups"], [dict(start_row=0, end_row=2, path=[dict(node_id=2, reverse=False), dict(node_id=1, reverse=False)])])
+    def test_similar_records_are_adjacent_and_identical_ones_ordered_by_strand(self):
+        seq = {1: plain(60, 5)}
+        s1 = seq[1]
+        snv = Candidate(1, 30, s1[30], "ACGT"[("ACGT".index(s1[30]) + 1) % 4], "SNP")
+        reads = []
+        for i in range(24):
+            flank = i % 3 == 0          # a shared 2-bp insertion 10 bp left of the site
+            reverse = i % 2 == 1
+            edits = ([(20, 20, ""), (0, 2, "CC")] if flank else [(20, 20, "")]) + [(10, 10, ""), (1, 1, snv.alt), (29, 29, "")]
+            spec = [(1, 0, False, edits)]
+            if reverse:
+                from test_left_align import mirror
+                spec = mirror(spec, seq)
+            reads.append(read(spec, seq, name=f"r{i:02d}"))
+        self.assertTrue(all(snv in {o.candidate for o in r.observations} for r in reads))
+        x, m = tensor(snv, reads, rows=30, width=41, debug=True)
+        with_flank = [bool((x[4, ri] == OPS["I"]).any()) for ri in range(len(reads))]
+        first = with_flank.index(True)
+        self.assertEqual(with_flank, [False] * first + [True] * 8 + [False] * (24 - 8 - first))  # one contiguous run
+        # identical rows: forward strand first, then reverse; each by record hash
+        for flag in (True, False):
+            run = [r for ri, r in enumerate(m["rows"]) if with_flank[ri] == flag]
+            key = [(r["reversed_for_candidate"], r["record_sha256"]) for r in run]
+            self.assertEqual(key, sorted(key))
 
 
 class CandidateAltAndStrandTest(unittest.TestCase):
@@ -380,17 +417,17 @@ class CandidateAltAndStrandTest(unittest.TestCase):
         by_name = {row["read_name"]: ri for ri, row in enumerate(m["rows"])}
         for name, ri in by_name.items():
             stripe = [0] * 9
-            stripe[anchor] = BASES["T"]
-            self.assertEqual(x[2, ri].tolist(), stripe, name)  # identical question in every row
+            stripe[anchor] = {"alt": BASES["T"], "rev": BASES["T"], "ref": BASES["G"], "other": 0}[name]
+            self.assertEqual(x[2, ri].tolist(), stripe, name)  # the allele this record carries
             evidence = x[0, ri] != 0
             self.assertTrue(np.all(x[7, ri][evidence] == (2 if name == "rev" else 1)), name)
             self.assertFalse(x[7, ri][~evidence].any(), name)
         matches_alt = {name: bool(x[0, ri, anchor] == x[2, ri, anchor]) for name, ri in by_name.items()}
         matches_ref = {name: bool(x[0, ri, anchor] == x[5, ri, anchor]) for name, ri in by_name.items()}
-        self.assertEqual(matches_alt, dict(alt=True, rev=True, ref=False, other=False))
+        self.assertEqual(matches_alt, dict(alt=True, rev=True, ref=True, other=False))  # read base == own allele
         self.assertEqual(matches_ref, dict(alt=False, rev=False, ref=True, other=False))
-        self.assertEqual({row["read_name"]: row["support"] for row in m["rows"]},
-                         dict(alt="alt", rev="alt", ref="ref", other="other"))
+        self.assertEqual({row["read_name"]: row["site_allele"] for row in m["rows"]},
+                         dict(alt="A1", rev="A1", ref="REF", other="OTHER"))
         self.assertFalse(x[:, 4:].any())  # unused rows stay zero in all eight channels
 
     def test_insertion_and_deletion_stripes(self):
@@ -409,10 +446,11 @@ class CandidateAltAndStrandTest(unittest.TestCase):
             if row["read_name"] == "terminal":  # no boundary evidence: no cells, so no stripe
                 self.assertFalse(x[:, ri, lo:hi].any())
                 continue
-            self.assertEqual(x[2, ri, lo:hi].tolist(), [BASES["T"], BASES["A"]], row["read_name"])
+            expected = {"ins": [BASES["T"], BASES["A"]], "ref": [6, 6], "other-ins": [0, 0]}[row["read_name"]]
+            self.assertEqual(x[2, ri, lo:hi].tolist(), expected, row["read_name"])
             exact = bool(np.all(x[0, ri, lo:hi] == x[2, ri, lo:hi]))
-            self.assertEqual(exact, row["read_name"] == "ins", row["read_name"])
-        seq = {1: "ACGTAC"}
+            self.assertEqual(exact, row["read_name"] in ("ins", "ref"), row["read_name"])
+        seq = {1: "GCGTAC"}
         alt = read([(1, 0, False, [(1, 1, ""), (4, 0, ""), (1, 1, "")])], seq, name="del")
         ref = read([(1, 0, False, [(6, 6, "")])], seq, name="ref")
         c = alt.observations[0].candidate
@@ -421,12 +459,14 @@ class CandidateAltAndStrandTest(unittest.TestCase):
         lo, hi = m["candidate_columns"]
         self.assertEqual(hi - lo, 4)
         for ri, row in enumerate(m["rows"]):
-            self.assertEqual(x[2, ri, lo:hi].tolist(), [6, 6, 6, 6])
+            expected = [6, 6, 6, 6] if row["read_name"] == "del" else [BASES[b] for b in "CGTA"]
+            self.assertEqual(x[2, ri, lo:hi].tolist(), expected)
             self.assertEqual(x[5, ri, lo:hi].tolist(), [BASES[b] for b in "CGTA"])  # REF stays readable in channel 5
-            self.assertEqual(bool(np.all(x[0, ri, lo:hi] == x[2, ri, lo:hi])), row["read_name"] == "del")
+            self.assertTrue(np.all(x[0, ri, lo:hi] == x[2, ri, lo:hi]))  # each record reads its own allele
         # A long deletion is cropped at the window edge together with its stripe.
-        seq = {1: "A" * 200}
-        c = Candidate(1, 60, "A" * 60, "", "DEL")
+        seq = {1: plain(200, 7)}
+        self.assertNotEqual(seq[1][59], seq[1][119])
+        c = Candidate(1, 60, seq[1][60:120], "", "DEL")
         r = decode_alignment(spec_alignment([(1, 0, False, [(60, 60, ""), (60, 0, ""), (80, 80, "")])], seq), seq, max_indel=60)[0]
         x, m = tensor(c, [r], width=100)
         self.assertEqual(m["candidate_columns"], [50, 100])
@@ -438,8 +478,9 @@ class StorageTest(unittest.TestCase):
         seq = {1: "ACA"}
         r = read([(1, 0, False, [(1, 1, ""), (1, 1, "T"), (1, 1, "")])], seq)
         c = r.observations[0].candidate
-        expected = {0: 0, 1: 14, 2: 22, 3: 28, 4: 33, 5: 36, 7: 42, 8: 44, 15: 56, 16: 57, 45: 77,
-                    89: 91, 90: 91, 127: 98, 331: 117, 523: 126, 524: 127, 550: 127, 40000: 127}
+        expected = {0: 0, 1: 1, 2: 2, 3: 3, 45: 45, 88: 88, 89: 89, 90: 90, 100: 100, 101: 101, 102: 102,
+                    103: 102, 104: 103, 107: 103, 108: 104, 331: 108, 2 ** 26 + 99: 126, 2 ** 26 + 100: 127,
+                    2 ** 31 - 1: 127}
         for count, code in expected.items():
             with self.subTest(count=count):
                 self.assertEqual(encode_count(count), code)
@@ -448,7 +489,7 @@ class StorageTest(unittest.TestCase):
                 np.testing.assert_array_equal(x[6, 0], [0, code, code, code, 0])
                 self.assertFalse(x[:, 1].any())
                 self.assertEqual((m["coverage"], m["alt_count"], m["af"]), (1, 1, 1.0))
-        self.assertEqual(len({encode_count(c) for c in range(1, 20)}), 19)  # small counts stay distinct
+        self.assertEqual(len({encode_count(c) for c in range(1, 101)}), 100)  # every count up to 100 is exact
         for count in range(1, 3000):
             self.assertLessEqual(encode_count(count), encode_count(count + 1))  # monotonic
         with self.assertRaisesRegex(ValueError, "int32"):
