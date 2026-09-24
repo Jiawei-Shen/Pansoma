@@ -33,23 +33,25 @@ import time
 import numpy as np
 
 from indexed_gam_pipeline_v2.candidates import (FORMAT_VERSION, SCHEMA_VERSION, STORAGE_VERSION,
-    ROW_SELECTION_VERSION, WINDOW_ENCODING_VERSION, ROW_ORDER, CHANNELS, BASES, OPS, STRAND, COUNT_LOG_SCALE,
-    NodeReads, decode_alignment, alt_support_bounds, exact_coverage, make_tensor)
+    ROW_SELECTION_VERSION, WINDOW_ENCODING_VERSION, ROW_ORDER, CHANNELS, BASES, OPS, STRAND, COUNT_LINEAR_MAX,
+    NodeReads, decode_alignment, alt_support_bounds, exact_coverage, make_site_tensor)
 from indexed_gam_pipeline_v2.common import batches, load_nodes, new_output, on_chromosome, write_json
 from indexed_gam_pipeline_v2.gam_reader import IndexedGam
 from indexed_gam_pipeline_v2.graph_index import GraphIndex
 
 KIND = {"SNP": "SNV", "INS": "INDEL", "DEL": "INDEL"}
-SITE_UNIT = "site-v1"
+SITE_UNIT = "site-v2"
 DEFAULT_MAX_NODE_READS = 800
 PARAMETERS = ("min_mapq", "min_af", "min_variants", "min_allele_bq", "max_indel_len",
               "variant_type", "rows", "width", "max_node_reads", "candidate_unit", "early_af_filter")
 ALLELE_FIELDS = ("candidate_id", "start", "end", "ref", "alt", "event_type", "event_length",
                  "coverage", "alt_count", "ref_count", "other_count", "af")
-SITE_DEFINITION = ("one tensor per (node, start, SNV|INDEL); INS and DEL at one start share an INDEL site; "
-                   "every allele is filtered on its own; passing alleles are listed in alleles[] by ALT count "
-                   "(ties: candidate order) and the tensor is the first (representative) allele's tensor; "
-                   "no repeat/left normalization")
+SITE_DEFINITION = ("one tensor per (node, start, SNV|INDEL) after indel left-normalization; INS and DEL at one "
+                   "start share an INDEL site; every allele is filtered on its own; passing alleles are listed in "
+                   "alleles[] by ALT count (ties: candidate order) as A1, A2, ...; every record covering any passing "
+                   "allele is a row, labeled with the allele it carries (or REF/OTHER), and channel 2 spells that "
+                   "allele over the site layout (longest insertion's slots + longest deletion's span); top-level "
+                   "counts/AF are A1's (the representative)")
 READ_CAP_RULE = ("records on a target node ordered by SHA-256 of the serialized GAM record; the first N are used "
                  "for support counting and rows of every candidate on that node; applied after both prefilters")
 
@@ -136,8 +138,8 @@ def evaluate_unit(alleles, node_reads, args, path_counts):
     Returns (rejected allele records, tensor, metadata); tensor and metadata are None
     when no allele passes. An allele unit holds one allele. A site unit holds every
     prefiltered allele of one (node, start, SNV|INDEL): each allele is filtered exactly
-    as on its own, passing alleles are ranked by ALT count (ties: candidate order), and
-    the first one's tensor is the site's tensor — byte-identical to that allele's own.
+    as on its own, passing alleles are ranked by ALT count (ties: candidate order) and all
+    of them go into one site tensor (make_site_tensor), the first as representative.
     """
     site = args.candidate_unit == "site"
     extra = dict(site_id=site_id(alleles[0])) if site else {}
@@ -147,10 +149,11 @@ def evaluate_unit(alleles, node_reads, args, path_counts):
     passing = sorted((e for e in evaluated if not e[3]), key=lambda e: (-e[2]["alt_count"], e[0]))
     if not passing:
         return rejected, None, None
-    candidate, eligible, _, _ = passing[0]
-    tensor, meta = make_tensor(candidate, eligible, path_counts, args.rows, args.width, args.debug_rows)
+    tensor, meta = make_site_tensor([c for c, _, _, _ in passing], [e for _, e, _, _ in passing], path_counts,
+                                    args.rows, args.width, args.debug_rows)
     if site:
-        listed = [{k: dict(c.metadata(), **summary)[k] for k in ALLELE_FIELDS} for c, _, summary, _ in passing]
+        listed = [dict({k: dict(c.metadata(), **summary)[k] for k in ALLELE_FIELDS}, label=f"A{i + 1}")
+                  for i, (c, _, summary, _) in enumerate(passing)]
         meta.update(sample_unit=SITE_UNIT, site_id=extra["site_id"], alleles=listed, allele_count=len(listed),
                     second_allele_af=listed[1]["af"] if len(listed) > 1 else 0.0)
     return rejected, tensor, meta
@@ -233,10 +236,11 @@ def build(args):
             encodings=dict(bases=BASES, padding=0, quality_without_read_base=-1, missing_quality=-1,
                 base_quality="clip(raw quality, -1, 127)", mapping_quality="clip(raw MAPQ, -1, 127)",
                 operations=OPS,
-                candidate_alt="ALT base of each candidate-region column (bases encoding; DEL columns = 6), "
-                              "identical in every row; 0 outside the region or without evidence",
-                node_distinct_gbwt_path_count=f"min(127, floor({COUNT_LOG_SCALE} * log2(count + 1) + 0.5)); "
-                                              f"count ~ 2 ** (value / {COUNT_LOG_SCALE}) - 1; "
+                site_allele="per row: the site allele the record carries (A1..Ak or REF) spelled over the "
+                            "site layout columns (bases encoding, gaps = 6); 0 for OTHER records, outside "
+                            "the site and without evidence",
+                node_distinct_gbwt_path_count=f"count if count <= {COUNT_LINEAR_MAX}, else "
+                                              f"min(127, {COUNT_LINEAR_MAX} + ceil(log2(count - {COUNT_LINEAR_MAX - 1}))); "
                                               "insertion and gap columns use the anchor node",
                 strand=dict(STRAND, definition="anchor mapping orientation relative to the candidate node's "
                                                "forward strand; one value per row")),

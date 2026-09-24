@@ -239,8 +239,19 @@ def validate_shards(folder, shard_size):
             seen[shard] += 1
             if m["coverage"] != sum(m[k] for k in ("alt_count", "ref_count", "other_count")):
                 raise ValueError("Candidate coverage mismatch: " + str(folder))
-            if m["af"] != m["alt_count"] / m["coverage"] or m["selected_alignments"] != min(shape[1], m["coverage"]):
+            if m["af"] != m["alt_count"] / m["coverage"] or m["selected_alignments"] != min(shape[1], m["site_coverage"]):
                 raise ValueError("Candidate AF/row count mismatch: " + str(folder))
+            # Rows: blocks A1..Ak, REF, OTHER in that order, contiguous, matching the site counts.
+            blocks = list(m["allele_labels"]) + ["REF", "OTHER"]
+            groups, n = m["row_groups"], m["selected_alignments"]
+            if (sum(m["site_counts"].values()) != m["site_coverage"] or sum(m["selected_counts"].values()) != n
+                    or [g["allele"] for g in groups] != sorted((g["allele"] for g in groups), key=blocks.index)
+                    or [(g["start_row"], g["end_row"]) for g in groups] != [
+                        (sum(g2["end_row"] - g2["start_row"] for g2 in groups[:i]),
+                         sum(g2["end_row"] - g2["start_row"] for g2 in groups[:i + 1])) for i in range(len(groups))]
+                    or (groups and groups[-1]["end_row"] != n)
+                    or any(m["selected_counts"].get(g["allele"]) != g["end_row"] - g["start_row"] for g in groups)):
+                raise ValueError("Site row blocks and counts disagree: " + str(folder))
             if (m.get("sample_unit") == SITE_UNIT) != site_mode:
                 raise ValueError("Summary record and manifest disagree on the sample unit: " + str(folder))
             if site_mode:
@@ -252,6 +263,9 @@ def validate_shards(folder, shard_size):
                         or any(a["alt_count"] < b["alt_count"] for a, b in zip(alleles, alleles[1:]))
                         or any(a["start"] != m["start"] or KIND[a["event_type"]] != kind for a in alleles)):
                     raise ValueError(f"Site allele list mismatch at {m['site_id']}: {folder}")
+                if [a["label"] for a in alleles] != list(m["allele_labels"]) or any(
+                        m["allele_labels"][a["label"]] != a["candidate_id"] for a in alleles):
+                    raise ValueError(f"Site allele labels mismatch at {m['site_id']}: {folder}")
                 if m["site_id"] in sites:
                     raise ValueError(f"Duplicate site {m['site_id']}: {folder}")
                 sites.add(m["site_id"])

@@ -1,23 +1,29 @@
-"""Candidate model: decode GAM edits, count allele support, encode one tensor per candidate.
+"""Candidate model: decode GAM edits, count allele support, encode one tensor per site.
 
-All coordinates are zero-based on the *forward* strand of a node. Candidate
-identity is the exact tuple (node, forward interval, REF, ALT, kind); there is
-no left-normalization and no merging across nodes.
+All coordinates are zero-based on the *forward* strand of a node. Indels are
+left-normalized while decoding (left_align_indels): every insertion/deletion moves to its
+leftmost equivalent position on the node's forward strand (across short nodes of one
+orientation), so forward- and reverse-strand reads report a repeat indel identically.
+Candidate identity is then the exact tuple (node, forward interval, REF, ALT, kind).
 
 Tensor layout is (8, rows, width) int8. Every row is oriented to the forward strand of
-the candidate node and the candidate starts at column width // 2. Cells without
-evidence are 0 in every channel.
+the site's node; the site (SiteLayout: insertion slots for the longest INS allele, then the
+graph bases of the longest DEL allele / the SNV base) starts at column width // 2 in every
+row. Cells without evidence are 0 in every channel.
     0 read base        A=1 C=2 G=3 T=4 N=5 gap=6
     1 base quality     clip(q, -1, 127); -1 = missing quality or no read base
-    2 candidate ALT    the candidate ALT base of that column (same encoding as 0; DEL columns = 6),
-                       identical for every row, only inside the candidate region
+    2 site allele      per row: the site allele this record carries, spelled over the site
+                       columns (same encoding as 0; gaps = 6): an ALT's bases, or the REF
+                       allele (slot gaps + graph bases); 0 for OTHER records and outside the site
     3 mapping quality  clip(MAPQ, -1, 127)
     4 operation        M=1 X=2 I=3 D=4 complex=5 aligned-no-insertion gap=6
     5 graph base       the graph reference base under this row/column, same encoding as 0
-    6 path count       floor(14 * log2(distinct GBWT paths of the column's node + 1) + 0.5), max 127
+    6 path count       distinct GBWT paths of the column's node: exact up to 100, then
+                       100 + ceil(log2(count - 99)) (331 -> 108), max 127
     7 strand           1 = read sequenced on the candidate node's forward strand, 2 = reverse (row-level)
 
-"Row matches REF" is channel 0 == channel 5; "row matches ALT" is channel 0 == channel 2.
+Rows come in blocks A1 (best-supported ALT), A2, ..., REF, OTHER; inside a block similar
+records are adjacent (similarity_order). "Row matches REF" is channel 0 == channel 5.
 """
 from collections import Counter, defaultdict
 from bisect import bisect_left
@@ -28,19 +34,19 @@ from types import SimpleNamespace
 
 import numpy as np
 
-FORMAT_VERSION = "indexed-gam-candidate-v5"
-SCHEMA_VERSION = 5
-STORAGE_VERSION = "int8-count-log2x14-v1"
-ROW_SELECTION_VERSION = "window-edit-bp-group-uniform-v1"
-WINDOW_ENCODING_VERSION = "anchor-centered-columns-v1"
-ROW_ORDER = ("descending visible-window substitution+insertion+deletion bp; stable "
-             "visible-node-path groups in first-occurrence order; uniform ordered sampling")
-CHANNELS = ["read_base", "base_quality", "candidate_alt", "mapping_quality", "alignment_operation",
+FORMAT_VERSION = "indexed-gam-candidate-v6"
+SCHEMA_VERSION = 6
+STORAGE_VERSION = "int8-count-linear100-log2-v1"
+ROW_SELECTION_VERSION = "site-allele-blocks-uniform-similarity-v1"
+WINDOW_ENCODING_VERSION = "site-layout-columns-v1"
+ROW_ORDER = ("site-allele blocks A1..Ak, REF, OTHER (each by record hash), uniform ordered sampling, then "
+             "average-linkage similarity order of window events inside each block (identical rows: strand, hash)")
+CHANNELS = ["read_base", "base_quality", "site_allele", "mapping_quality", "alignment_operation",
             "row_graph_reference_base", "node_distinct_gbwt_path_count", "strand"]
 BASES = {"A": 1, "C": 2, "G": 3, "T": 4, "N": 5, "-": 6}
 OPS = {"M": 1, "X": 2, "I": 3, "D": 4, "C": 5, "G": 6}
 STRAND = {"forward": 1, "reverse": 2}
-COUNT_LOG_SCALE = 14
+COUNT_LINEAR_MAX = 100
 COMPLEMENT = str.maketrans("ACGTNacgtn", "TGCANtgcan")
 
 
@@ -54,16 +60,21 @@ def int8_quality(value):
 
 
 def encode_count(value):
-    """int8 log scale for path counts: floor(14 * log2(count + 1) + 0.5), saturating at 127.
+    """int8 path counts: exact up to 100, then 100 + ceil(log2(count - 99)), saturating at 127.
 
-    Every count from 1 to 19 gets its own level (14, 22, 28, 33, ...); 90 -> 91, 331 -> 117,
-    counts >= 524 -> 127. Invert with 2 ** (value / 14) - 1. Real nodes always have at least
-    one path, so 0 only ever means "no evidence".
+    On HPRC v1.1 d9, 99.3 % of nodes have <= 100 paths (57 % have 85-90, near every
+    haplotype), so those keep their exact count; the rest (repeat nodes revisited by
+    one haplotype, max 331) are compressed: 101 -> 101, 102-103 -> 102, 104-107 -> 103,
+    ..., 331 -> 108. Invert: value <= 100 is the count; value k > 100 means a count in
+    (99 + 2 ** (k - 101), 99 + 2 ** (k - 100)]. Real nodes always have at least one
+    path, so 0 only ever means "no evidence".
     """
     value = int(value)
     if value < 0:
         raise ValueError("Path counts must be nonnegative")
-    return min(127, math.floor(COUNT_LOG_SCALE * math.log2(value + 1) + 0.5))
+    if value <= COUNT_LINEAR_MAX:
+        return value
+    return min(127, COUNT_LINEAR_MAX + (value - COUNT_LINEAR_MAX).bit_length())  # = ceil(log2(value - 99))
 
 
 def candidate_alt_codes(candidate):
@@ -171,7 +182,7 @@ class Read:
         return self._alt_quality.get((visit_index, candidate))
 
 
-def decode_alignment(alignment, sequences, max_indel=50, target_nodes=None):
+def decode_alignment(alignment, sequences, max_indel=50, target_nodes=None, left_align=True):
     """Walk every edit of every mapping, producing columns, visits and candidate observations.
 
     Adjacent insertion (or deletion) edits within one mapping are merged before the
@@ -225,26 +236,15 @@ def decode_alignment(alignment, sequences, max_indel=50, target_nodes=None):
             pos = len(forward) - cursor - f if reverse else cursor
             cref, calt = (rc(ref), rc(alt)) if reverse else (ref, alt)
             qs = list(qualities[read_cursor:read_cursor + t]) if qualities else [-1] * t
-            quality = sum(qs) / len(qs) if qs else -1
-            if op == "D":  # a deletion has no bases: use the nearest read bases' quality
-                flank = [qualities[q] for q in (read_cursor - 1, read_cursor)
-                         if qualities and 0 <= q < len(qualities)]
-                quality = min(flank) if flank else -1
             if op == "X" and observe:
                 for k, (r, a) in enumerate(zip(cref, calt)):
                     if r != a and r.upper() != "N" and a.upper() != "N":
                         q = qs[f - 1 - k if reverse else k]
                         observations.append(Observation(Candidate(nid, pos + k, r, a, "SNP"), mi, q))
-            elif op in ("I", "D"):
+            elif op in ("I", "D") and max(f, t) > max_indel:
                 candidate = Candidate(nid, pos, cref, calt, "INS" if op == "I" else "DEL")
-                anchor = forward[max(0, pos - 1):max(0, pos - 1) + 1]  # forward-node anchor base
-                ambiguous = ("N" in cref.upper() or "N" in calt.upper()
-                             or (op == "I" and anchor.upper() == "N"))
-                if max(f, t) > max_indel:
-                    unsupported.append(dict(candidate.metadata(), mapping_index=mi, edit_index=ei,
-                                            reason="indel_exceeds_limit"))
-                elif observe and not ambiguous:
-                    observations.append(Observation(candidate, mi, quality))
+                unsupported.append(dict(candidate.metadata(), mapping_index=mi, edit_index=ei,
+                                        reason="indel_exceeds_limit"))
             elif op == "C":
                 unsupported.append(dict(node_id=nid, start=pos, ref=cref, alt=calt,
                                         mapping_index=mi, edit_index=ei,
@@ -261,8 +261,185 @@ def decode_alignment(alignment, sequences, max_indel=50, target_nodes=None):
         visits.append(Visit(nid, lo, hi, reverse, mi, first, len(columns), len(forward)))
     if read_cursor != len(sequence):
         raise ValueError("GAM edits do not consume the complete read sequence")
+    if left_align:
+        left_align_indels(columns, visits, max_indel)
+    observations += indel_observations(columns, visits, sequences, max_indel, target_nodes)
     digest = hashlib.sha256(alignment.SerializeToString(deterministic=True)).hexdigest()
     return Read(alignment.name, digest, alignment.mapping_quality, columns, visits, observations), unsupported
+
+
+# --- indel normalization --------------------------------------------------------
+
+ACGT = frozenset("ACGT")
+
+
+def indel_runs(columns, lo=0, hi=None, join_insertions=False):
+    """(start, end, op) of every maximal run of I (inserted) or D columns of one mapping in columns[lo:hi].
+
+    With `join_insertions`, inserted bases that continue across a mapping boundary (same
+    orientation) form one run: the read carries them as one contiguous insertion.
+    """
+    hi = len(columns) if hi is None else hi
+    runs, i = [], lo
+    while i < hi:
+        c = columns[i]
+        if c.op in ("I", "D"):
+            j = i + 1
+            while j < hi and columns[j].op == c.op and (columns[j].visit == c.visit or (
+                    join_insertions and c.op == "I" and columns[j].reverse == c.reverse)):
+                j += 1
+            runs.append((i, j, c.op))
+            i = j
+        else:
+            i += 1
+    return runs
+
+
+def _shiftable(neighbour, reverse):
+    """A matched graph base the indel may move across: M, read == graph base, A/C/G/T, same orientation."""
+    return (neighbour.op == "M" and not neighbour.boundary and neighbour.reverse == reverse
+            and neighbour.read == neighbour.ref and neighbour.read in ACGT)
+
+
+def left_align_indels(columns, visits, max_indel):
+    """Move every candidate-sized indel to its leftmost equivalent position on the forward strand.
+
+    vg places a gap at one end of a repeat in *read* orientation, so forward- and reverse-
+    strand reads put the same repeat indel at opposite ends in forward node coordinates.
+    Here each insertion or deletion of at most `max_indel` bases, without N, is shifted one
+    base at a time towards lower forward coordinates while the matched base it passes equals
+    the indel's last forward base (the classic left-normalization). Read bases and qualities
+    keep their order and every reference base keeps its column, so the read, its alignment
+    span and every non-shifted column are unchanged; only which columns are I/D vs M moves.
+
+    Shifts cross node boundaries within a run of mappings of one orientation; a deletion
+    longer than 1 bp stops at a node boundary (candidates are per node). Inserted bases that
+    continue across a mapping boundary are one insertion, and an indel that runs into another
+    of the same kind merges with it (one event) and keeps moving. Finally every insertion is
+    attached to the graph base that follows it on the forward strand, so an insertion
+    between two nodes is always (next node, offset of its first base). `visits`
+    get their column ranges updated in place; their graph intervals do not change.
+    """
+    runs = [r for r in indel_runs(columns, join_insertions=True) if r[1] - r[0] <= max_indel
+            and not any("N" in (columns[k].read if r[2] == "I" else columns[k].ref).upper() for k in range(r[0], r[1]))]
+    # Forward-strand runs move to lower read indices, reverse-strand runs to higher ones;
+    # process each in the direction it moves so a run only ever meets already-final ones.
+    forward = sorted((r for r in runs if not columns[r[0]].reverse), key=lambda r: r[0])
+    reverse = sorted((r for r in runs if columns[r[0]].reverse), key=lambda r: -r[0])
+    for s, e, op in forward + reverse:
+        rev = columns[s].reverse
+        while True:
+            k = e if rev else s - 1  # the column on the forward-left side
+            if not 0 <= k < len(columns):
+                break
+            nb = columns[k]
+            if nb.op == op and nb.reverse == rev and (op == "I" or nb.visit == columns[s].visit):
+                # An adjacent indel of the same kind is the same event: merge, then keep moving.
+                j = k
+                while 0 <= j + (1 if rev else -1) < len(columns):
+                    c = columns[j + (1 if rev else -1)]
+                    if c.op != op or c.reverse != rev or (op == "D" and c.visit != nb.visit):
+                        break
+                    j += 1 if rev else -1
+                lo, hi = (s, j + 1) if rev else (j, e)
+                merged = columns[lo:hi]
+                if hi - lo > max_indel or any("N" in (c.read if op == "I" else c.ref).upper() for c in merged):
+                    break
+                s, e = lo, hi
+                continue
+            if not _shiftable(nb, rev):
+                break
+            if op == "I":
+                edge = columns[s] if rev else columns[e - 1]  # the insertion's last forward base
+                if nb.read != edge.read:
+                    break
+                bases = ([(c.read, c.quality) for c in columns[s + 1:e]] + [(nb.read, nb.quality)] if rev
+                         else [(nb.read, nb.quality)] + [(c.read, c.quality) for c in columns[s:e - 1]])
+                inserted = [Column(b, "-", q, "I", nb.node, nb.pos, nb.reverse, nb.visit, True) for b, q in bases]
+                matched = Column(edge.read, nb.ref, edge.quality, "M", nb.node, nb.pos, nb.reverse, nb.visit, False)
+                if rev:
+                    columns[s:e + 1] = [matched] + inserted
+                    s, e = s + 1, e + 1
+                else:
+                    columns[s - 1:e] = inserted + [matched]
+                    s, e = s - 1, e - 1
+            else:
+                edge = columns[s] if rev else columns[e - 1]  # the deletion's last forward base
+                if nb.ref != edge.ref or (e - s > 1 and nb.visit != edge.visit):
+                    break
+                gap = Column("-", nb.ref, -1, "D", nb.node, nb.pos, nb.reverse, nb.visit, False)
+                base = Column(nb.read, edge.ref, nb.quality, "M", edge.node, edge.pos, edge.reverse, edge.visit, False)
+                columns[k] = gap
+                if rev:
+                    columns[s] = base
+                    s, e = s + 1, e + 1
+                else:
+                    columns[e - 1] = base
+                    s, e = s - 1, e - 1
+        if op == "I":
+            # Attach to the following forward base (the next read column on the forward strand);
+            # at a read end without one, keep the whole insertion where its first forward base is.
+            k = s - 1 if rev else e
+            if 0 <= k < len(columns) and not columns[k].boundary and columns[k].reverse == rev:
+                owner = columns[k]
+            else:
+                owner = columns[e - 1] if rev else columns[s]
+            columns[s:e] = [Column(c.read, c.ref, c.quality, c.op, owner.node, owner.pos, c.reverse, owner.visit, True)
+                            for c in columns[s:e]]
+    spans = {}
+    for i, c in enumerate(columns):
+        spans.setdefault(c.visit, [i, i])[1] = i + 1
+    edge = 0
+    for visit in visits:  # mappings emptied by moving their only (inserted) columns keep an empty range
+        visit.first, visit.last = spans.get(visit.index, (edge, edge))
+        edge = visit.last
+
+
+def _read_base_quality(columns, i, step):
+    """Quality of the nearest column holding a read base from index i in direction step (None: read edge)."""
+    while 0 <= i < len(columns):
+        if columns[i].read != "-":
+            return None if columns[i].quality == -1 else columns[i].quality
+        i += step
+    return None
+
+
+def indel_observations(columns, visits, sequences, max_indel, target_nodes=None):
+    """INS/DEL observations from the (normalized) columns of the target-node visits.
+
+    Same rules as decoding: at most `max_indel` bases, no N in the alleles or in the base
+    before an insertion (base 0 at a node start); an insertion's quality is its bases'
+    mean, a deletion's the lower quality of the nearest read bases on either side.
+    """
+    observations = []
+    for visit in visits:
+        if visit.first == visit.last or (target_nodes is not None and visit.node not in target_nodes):
+            continue
+        forward = sequences[visit.node]
+        for s, e, op in indel_runs(columns, visit.first, visit.last):
+            if e - s > max_indel:
+                continue
+            first = columns[s]
+            if op == "I":
+                inserted = "".join(c.read for c in columns[s:e])
+                alt = rc(inserted) if first.reverse else inserted
+                pos = first.pos
+                anchor = forward[max(0, pos - 1):max(0, pos - 1) + 1]
+                if "N" in alt.upper() or anchor.upper() == "N":
+                    continue
+                quality = sum(c.quality for c in columns[s:e]) / (e - s)
+                candidate = Candidate(visit.node, pos, "", alt, "INS")
+            else:
+                pos = min(c.pos for c in columns[s:e])
+                ref = forward[pos:pos + e - s]
+                if "N" in ref.upper():
+                    continue
+                flank = [q for q in (_read_base_quality(columns, s - 1, -1), _read_base_quality(columns, e, 1))
+                         if q is not None]
+                quality = min(flank) if flank else -1
+                candidate = Candidate(visit.node, pos, ref, "", "DEL")
+            observations.append(Observation(candidate, visit.index, quality))
+    return observations
 
 
 # --- support counting -----------------------------------------------------------
@@ -282,6 +459,18 @@ def boundary_evidence(left, right, visit, boundary):
     before = l.pos == boundary - 1 if l.visit == visit.index else boundary == 0
     after = r.pos == boundary if r.visit == visit.index else boundary == visit.node_length
     return before and after
+
+
+def aligned_across(left, right, visit, boundary):
+    """The record is aligned across the boundary without inserting there: the insertion REF
+    rule (boundary_evidence), or a matched/mismatched base followed by a deletion starting at it."""
+    if boundary_evidence(left, right, visit, boundary):
+        return True
+    if not left or not right:
+        return False
+    l, r = left[-1], right[0]
+    return (r.op == "D" and r.visit == visit.index and r.pos == boundary and l.op in ("M", "X")
+            and (l.pos == boundary - 1 if l.visit == visit.index else boundary == 0))
 
 
 def split_columns(cols, visit, candidate):
@@ -474,46 +663,105 @@ def exact_coverage(candidates, reads):
 
 # --- window encoding --------------------------------------------------------------
 
-def anchor_window(read, visit, candidate, width):
-    """Crop this record's columns so the candidate starts at column width // 2.
+@dataclass(frozen=True)
+class SiteLayout:
+    """The columns a site occupies from the anchor column on.
 
-    Returns (row, cropped): `row` has exactly `width` entries (Column or None for
-    missing evidence); `cropped` counts central columns lost past the right edge.
-    INS rows without the insertion reserve gap ("G") slots only when both flanks
-    are present; DEL rows keep one "D" column per deleted graph base.
+    `insertion_slots` inserted-base slots at boundary `start` (the longest INS allele),
+    then the `span` graph bases [start, start + span) (the longest DEL allele, or the SNV
+    base); `reference` is the graph sequence of that span. Every row of the site's tensor
+    uses the same layout, so rows carrying alleles of different lengths stay aligned.
     """
-    return view_window(VisitView(read, visit, width), candidate, width)
+    node: int
+    start: int
+    insertion_slots: int
+    span: int
+    reference: str
+
+    @classmethod
+    def of(cls, alleles):
+        first = alleles[0]
+        if any((a.node, a.start) != (first.node, first.start) for a in alleles):
+            raise ValueError("Site alleles must share node and start")
+        insertions = [len(a.alt) for a in alleles if a.kind == "INS"]
+        spanned = max((a for a in alleles if a.kind != "INS"), key=lambda a: len(a.ref), default=None)
+        return cls(first.node, first.start, max(insertions, default=0),
+                   len(spanned.ref) if spanned else 0, spanned.ref if spanned else "")
+
+    @property
+    def columns(self):
+        return self.insertion_slots + self.span
+
+    def allele_codes(self, allele):
+        """Channel-2 codes of one allele over the site columns (bases encoding; gap = 6).
+
+        INS: its bases in the slots (gap-padded), then the graph bases. DEL: gaps over
+        its deleted bases, graph bases for the rest of the span. SNV: the ALT base.
+        None (REF): gaps in the slots, the graph bases over the span.
+        """
+        gap = BASES["-"]
+        slots = [gap] * self.insertion_slots
+        span = [BASES.get(b, 5) for b in self.reference]
+        if allele is not None and allele.kind == "INS":
+            slots = [BASES.get(b, 5) for b in allele.alt] + slots[len(allele.alt):]
+        elif allele is not None and allele.kind == "DEL":
+            span = [gap] * len(allele.ref) + span[len(allele.ref):]
+        elif allele is not None:
+            span = [BASES.get(b, 5) for b in allele.alt]
+        return slots + span
 
 
-def view_window(view, candidate, width):
-    """anchor_window() on a prebuilt VisitView (needs view.context >= width)."""
+def anchor_window(read, visit, candidate, width):
+    """Crop this record's columns so the candidate starts at column width // 2 (one-allele site)."""
+    return site_window(VisitView(read, visit, width), SiteLayout.of([candidate]), width)[:2]
+
+
+def site_window(view, layout, width):
+    """(row, cropped, cropped_inserted): this record's window over one site.
+
+    `row` has exactly `width` entries (Column or None for missing evidence). Up to
+    width // 2 left-flank columns end at the site; the site starts at column width // 2:
+    the record's own inserted bases at the boundary fill the insertion slots (padded with
+    "G" no-insertion gaps when both flanks are aligned M/X, else left empty; bases beyond
+    the slots are cropped and counted in `cropped_inserted`; aligned_across decides "both
+    flanks"), then its columns over the
+    span (deleted bases keep one "D" column each; coverage starting inside the span keeps
+    its true offset), then the right flank. With no insertion slots, an insertion at the
+    boundary stays in the left flank. `cropped` counts site columns lost past the right edge.
+    """
     if view.context < width:
         raise ValueError("VisitView context is narrower than the window")
     anchor = width // 2
     cols, visit = view.cols, view.visit
-    i, j = view.block(candidate)
+    i, j = view.block(Candidate(layout.node, layout.start, "", "", "INS"))
+    ri, rj = (view.block(Candidate(layout.node, layout.start, layout.reference, "", "DEL")) if layout.span
+              else (j, j))
+    left_end = i if layout.insertion_slots else ri
     # Only the last `anchor` left columns and the first `width - anchor` right columns can
     # appear in the row (keep >= 1 on each side for the insertion flank check).
-    left, center, right = cols[max(0, i - max(anchor, 1)):i], cols[i:j], cols[j:j + width - anchor]
-    central_length = len(center)
-    if candidate.kind == "INS":
-        evidence = bool(center) or boundary_evidence(left, right, visit, candidate.start)
-        slots = min(len(candidate.alt), width - anchor)
-        if len(center) < slots:
-            gap = Column("-", "-", -1, "G", candidate.node, candidate.start, False, visit.index, True)
-            center = center + [gap if evidence else None] * (slots - len(center))
-        central_length = max(central_length, slots)
-        missing = 0
-    else:
+    left = cols[max(0, left_end - max(anchor, 1)):left_end]
+    inserted, cropped_inserted, extent = [], 0, 0
+    if layout.insertion_slots:
+        own = cols[i:j]
+        evidence = bool(own) or aligned_across(left, cols[j:j + 1], visit, layout.start)
+        kept = own[:layout.insertion_slots]  # bases beyond the site's longest insertion are cropped
+        cropped_inserted = len(own) - len(kept)
+        gap = Column("-", "-", -1, "G", layout.node, layout.start, False, visit.index, True)
+        inserted = kept + [gap if evidence else None] * (layout.insertion_slots - len(kept))
+        extent = max(len(kept), min(layout.insertion_slots, width - anchor))  # columns that count as cropped
+    spanned, missing = [], 0
+    if layout.span:
+        spanned = cols[ri:rj]
         # Coverage starting after the anchor keeps its true offset: pad the missing start.
-        covered = [c.pos for c in center if c is not None and not c.boundary]
-        missing = min(width, max(0, min(covered) - candidate.start)) if covered else 0
+        covered = [c.pos for c in spanned if not c.boundary]
+        missing = min(width, max(0, min(covered) - layout.start)) if covered else 0
+    right = cols[rj:rj + width - anchor]
     row = [None] * max(0, anchor - len(left)) + left[-anchor:] if anchor else []
-    tail = [None] * missing + center + right
+    tail = inserted + [None] * missing + spanned + right
     row += tail[:width - anchor]
     row += [None] * (width - len(row))
-    cropped = max(0, missing + central_length - (width - anchor))
-    return row, cropped
+    cropped = max(0, extent + missing + len(spanned) - (width - anchor))
+    return row, cropped, cropped_inserted
 
 
 BASE_CODES = np.full(256, BASES["N"], dtype=np.int64)  # any other character encodes as N, like BASES.get(x, 5)
@@ -524,9 +772,12 @@ for _op, _code in OPS.items():
     OP_CODES[ord(_op)] = _code
 
 
-def fill_rows(tensor, chosen, alt_stripe, path_counts, width):
-    """Write the selected window rows into `tensor` (all eight channels, cells with a column only)."""
-    flat = [col for w in chosen for col in w[3]]
+def fill_rows(tensor, rows, stripes, path_counts, width):
+    """Write window rows into `tensor` (all eight channels, cells with a column only).
+
+    rows = [(read, anchor Visit, row columns)]; stripes = (len(rows), width) channel-2 codes.
+    """
+    flat = [col for _, _, row in rows for col in row]
     cells = np.flatnonzero(np.fromiter((c is not None for c in flat), dtype=bool, count=len(flat)))
     if not len(cells):
         return
@@ -550,91 +801,206 @@ def fill_rows(tensor, chosen, alt_stripe, path_counts, width):
         if not isinstance(count, (int, np.integer)) or not 0 <= count <= np.iinfo(np.int32).max:
             raise ValueError("Node path counts must be nonnegative int32 integers")
         codes.append(encode_count(count))
-    stripe = np.zeros(width, dtype=np.int64)
-    for column, code in alt_stripe.items():
-        stripe[column] = code
-    mapq = np.array([int8_quality(w[0].mapq) for w in chosen], dtype=np.int64)
-    strand = np.array([STRAND["reverse"] if w[2].reverse else STRAND["forward"] for w in chosen], dtype=np.int64)
+    mapq = np.array([int8_quality(read.mapq) for read, _, _ in rows], dtype=np.int64)
+    strand = np.array([STRAND["reverse"] if visit.reverse else STRAND["forward"] for _, visit, _ in rows],
+                      dtype=np.int64)
     quality = np.clip(np.array([c.quality for c in cols], dtype=np.int64), -1, 127)
-    tensor[:, ri, ci] = np.stack([chars([c.read for c in cols], BASE_CODES), quality, stripe[ci], mapq[ri], ops,
+    tensor[:, ri, ci] = np.stack([chars([c.read for c in cols], BASE_CODES), quality, stripes[ri, ci], mapq[ri], ops,
                                   chars([c.ref for c in cols], BASE_CODES), np.array(codes, dtype=np.int64)[where],
                                   strand[ri]])
 
 
-def make_tensor(candidate, eligible, path_counts, rows=200, width=101, debug=False):
-    """Encode one candidate from `eligible` = [(read, support, anchor Visit or VisitView)].
+# --- row order ------------------------------------------------------------------
 
-    Every eligible record is windowed and ranked (descending visible edit bp, then
-    MAPQ, record hash, mapping index), grouped stably by its visible node path, and
-    only then uniformly sampled down to `rows`. Coverage/AF use all eligible records.
+def window_events(row):
+    """({event: first column}, (first, last) covered column) of one window row.
+
+    Events are what distinguishes records in graph coordinates: every column that is not
+    a plain match (mismatch base, inserted base, deletion, complex), keyed by (node,
+    position, boundary, op, read base), and every node transition of the visible path.
+    """
+    events, previous, covered = {}, None, [i for i, c in enumerate(row) if c is not None]
+    for ci, col in enumerate(row):
+        if col is None:
+            continue
+        if previous is not None and (col.node, col.reverse) != previous[:2] and col.visit != previous[2]:
+            events.setdefault(("path", previous[0], previous[1], col.node, col.reverse), ci)
+        previous = (col.node, col.reverse, col.visit)
+        if not (col.op in ("M", "G") and col.read == col.ref):
+            events.setdefault((col.node, col.pos, col.boundary, col.op, col.read), ci)
+    return events, (covered[0], covered[-1]) if covered else (0, -1)
+
+
+def similarity_order(items):
+    """Order window rows so similar records are adjacent; `items` = [(events, covered, tie_key)].
+
+    Distance = number of events one record has and the other lacks although it covers that
+    column (both ways). Uncovered columns are unknown, not different, and an event only one
+    record has shifts that record's distance to all others equally, so it does not decide
+    who is nearest. Average-linkage clustering; rows follow the tree's leaves with the larger
+    subtree first (ties: smaller tie_key). Runs of rows with identical events are finally
+    ordered by tie_key (strand, then record hash). Deterministic; no threshold.
+    """
+    n = len(items)
+    if n < 3:
+        order = sorted(range(n), key=lambda k: items[k][2])
+    else:
+        from scipy.cluster.hierarchy import linkage
+        vocabulary = {}
+        for events, _, _ in items:
+            for key, ci in events.items():
+                vocabulary[key] = min(ci, vocabulary.get(key, ci))
+        keys = list(vocabulary)
+        index = {key: f for f, key in enumerate(keys)}
+        has = np.zeros((n, len(keys)))
+        for r, (events, _, _) in enumerate(items):
+            has[r, [index[k] for k in events]] = 1
+        where = np.array([vocabulary[k] for k in keys])
+        lo = np.array([c[0] for _, c, _ in items])[:, None]
+        hi = np.array([c[1] for _, c, _ in items])[:, None]
+        covers = np.maximum(((lo <= where) & (where <= hi)).astype(float), has)
+        distance = has @ covers.T + covers @ has.T - 2 * has @ has.T
+        condensed = distance[np.triu_indices(n, 1)]
+        tree = linkage(condensed, method="average")
+        rank = sorted(range(n), key=lambda k: items[k][2])
+        first = {leaf: position for position, leaf in enumerate(rank)}
+        members = {k: [k] for k in range(n)}
+        for c, (a, b, _, _) in enumerate(tree, start=n):
+            a, b = members.pop(int(a)), members.pop(int(b))
+            if (len(b), -min(first[k] for k in b)) > (len(a), -min(first[k] for k in a)):
+                a, b = b, a
+            members[c] = a + b
+        order = members[2 * n - 2]
+    ordered, run = [], []
+    for k in order + [None]:
+        if run and (k is None or set(items[k][0]) != set(items[run[0]][0])):
+            ordered += sorted(run, key=lambda r: items[r][2])
+            run = []
+        if k is not None:
+            run.append(k)
+    return ordered
+
+
+# --- site tensors ---------------------------------------------------------------
+
+REF_LABEL, OTHER_LABEL = "REF", "OTHER"
+
+
+def site_labels(alleles, eligible_by_allele):
+    """[(read, label, anchor)] in record order: one label per record over all site alleles.
+
+    A record is allele A<k> for the first (best-supported) allele it carries, REF if it
+    matches the reference for every allele it covers, otherwise OTHER. The anchor visit is
+    that allele's anchor (REF/OTHER: the first covered allele's).
+    """
+    seen, order = {}, []
+    for k, eligible in enumerate(eligible_by_allele):
+        occurrence = Counter()
+        for read, support, anchor in eligible:
+            key = (id(read), occurrence[id(read)])  # the same record listed twice is two records
+            occurrence[id(read)] += 1
+            if key not in seen:
+                seen[key] = (read, [])
+                order.append(key)
+            seen[key][1].append((k, support, anchor))
+    result = []
+    for key in order:
+        read, hits = seen[key]
+        alt = next(((k, anchor) for k, support, anchor in sorted(hits, key=lambda h: h[0]) if support == "alt"), None)
+        if alt is not None:
+            label, anchor = f"A{alt[0] + 1}", alt[1]
+        else:
+            label = REF_LABEL if all(support == "ref" for _, support, _ in hits) else OTHER_LABEL
+            anchor = min(hits, key=lambda h: h[0])[2]
+        result.append((read, label, anchor))
+    return result
+
+
+def make_site_tensor(alleles, eligible_by_allele, path_counts, rows=200, width=101, debug=False):
+    """Encode one site: `alleles` in rank order (tensor representative first), each with its
+    `eligible` = [(read, support, anchor Visit or VisitView)].
+
+    Rows: every record eligible for any allele is labeled (site_labels), windowed over the
+    site layout and put in blocks A1, A2, ..., REF, OTHER, each ordered by record hash;
+    the concatenation is uniformly sampled down to `rows` (keeps each block's share), then
+    each block is ordered by similarity (similarity_order). Channel 2 of a row spells the
+    site allele that row carries (SiteLayout.allele_codes; OTHER rows 0).
     """
     if rows < 1 or width < 1:
         raise ValueError("Tensor rows and width must be positive")
-    start = width // 2
-    # The candidate region is the same columns in every row: [start, start + allele length).
-    alt_stripe = {start + k: code for k, code in enumerate(candidate_alt_codes(candidate)) if start + k < width}
-    tensor = np.zeros((len(CHANNELS), rows, width), dtype=np.int8)
+    layout = SiteLayout.of(alleles)
+    anchor_column = width // 2
+    labels = [f"A{k + 1}" for k in range(len(alleles))]
+    codes = {label: layout.allele_codes(allele) for label, allele in zip(labels, alleles)}
+    codes[REF_LABEL] = layout.allele_codes(None)
+    blocks = labels + [REF_LABEL, OTHER_LABEL]
     windows = []
-    for read, support, anchor in eligible:
+    for read, label, anchor in site_labels(alleles, eligible_by_allele):
         view = anchor if isinstance(anchor, VisitView) and anchor.context >= width else VisitView(
             read, anchor.visit if isinstance(anchor, VisitView) else anchor, width)
-        visit = view.visit
-        row, overflow = view_window(view, candidate, width)
-        # Group key: the node path actually visible in this window (mapping transitions
-        # only; offsets and insertion lengths are ignored).
-        path, previous_visit = [], None
-        for col in row:
-            if col is not None and col.visit != previous_visit:
-                path.append((col.node, col.reverse))
-                previous_visit = col.visit
+        row, cropped, cropped_inserted = site_window(view, layout, width)
         mismatch = sum(c is not None and c.op != "G" and c.read != c.ref for c in row)
-        windows.append((read, support, visit, row, tuple(path), mismatch, overflow))
-    windows.sort(key=lambda w: (-w[5], -w[0].mapq, w[0].digest, w[2].index))
-    path_groups = {}
-    for window in windows:
-        path_groups.setdefault(window[4], []).append(window)
-    ordered = [window for group in path_groups.values() for window in group]
-    n_selected = min(rows, len(ordered))
+        windows.append(dict(read=read, label=label, visit=view.visit, row=row, cropped=cropped,
+                            cropped_inserted=cropped_inserted, mismatch=mismatch,
+                            tie=(view.visit.reverse, read.digest, view.visit.index)))
+    ranked = sorted(windows, key=lambda w: (blocks.index(w["label"]), w["tie"][1], w["tie"][2]))
+    n_selected = min(rows, len(ranked))
     if n_selected == 1:
-        sample_indices = [len(ordered) // 2]
+        sample_indices = [len(ranked) // 2]
     elif n_selected:
-        sample_indices = [i * (len(ordered) - 1) // (n_selected - 1) for i in range(n_selected)]
+        sample_indices = [i * (len(ranked) - 1) // (n_selected - 1) for i in range(n_selected)]
     else:
         sample_indices = []
-    chosen = [ordered[i] for i in sample_indices]
-    groups, omitted, details = [], [], []
-    for ri, (read, support, visit, row, path_key, mismatch, overflow) in enumerate(chosen):
-        path = [dict(node_id=node, reverse=reverse) for node, reverse in path_key]
-        if not groups or groups[-1]["path"] != path:
-            groups.append(dict(start_row=ri, end_row=ri + 1, path=path))
-        else:
-            groups[-1]["end_row"] = ri + 1
-        if overflow:
-            omitted.append(dict(row_index=ri, omitted_columns=overflow,
-                                reason="candidate_region_extends_beyond_anchor_window"))
-        if debug:
-            details.append(dict(read_name=read.name, record_sha256=read.digest, support=support,
-                anchor_mapping_index=visit.index, reversed_for_candidate=visit.reverse,
-                window_mismatch_bp=mismatch, grouped_rank=sample_indices[ri],
-                omitted_central_context_columns=overflow,
-                path=[dict(node_id=v.node, start=v.start, end=v.end, reverse=v.reverse,
-                           mapping_index=v.index) for v in read.visits],
-                columns=[c.graph() if c is not None else None for c in row]))
-    fill_rows(tensor, chosen, alt_stripe, path_counts, width)
-    counts = Counter(s for _, s, _ in eligible)
-    selected_counts = Counter(w[1] for w in chosen)
-    candidate_span = max(1, len(candidate.alt) if candidate.kind == "INS" else len(candidate.ref))
-    meta = dict(candidate.metadata(), tensor_storage_version=STORAGE_VERSION,
+    sampled = [(i, ranked[i]) for i in sample_indices]
+    chosen, ranks, groups = [], [], []
+    for label in blocks:
+        block = [(i, w) for i, w in sampled if w["label"] == label]
+        if not block:
+            continue
+        order = similarity_order([(*window_events(w["row"]), w["tie"]) for _, w in block])
+        groups.append(dict(start_row=len(chosen), end_row=len(chosen) + len(block), allele=label))
+        chosen += [block[k][1] for k in order]
+        ranks += [block[k][0] for k in order]
+    tensor = np.zeros((len(CHANNELS), rows, width), dtype=np.int8)
+    stripes = np.zeros((len(chosen), width), dtype=np.int64)
+    for ri, w in enumerate(chosen):
+        for k, code in enumerate(codes.get(w["label"], ())):
+            if anchor_column + k < width:
+                stripes[ri, anchor_column + k] = code
+    fill_rows(tensor, [(w["read"], w["visit"], w["row"]) for w in chosen], stripes, path_counts, width)
+    omitted = [dict(row_index=ri, omitted_columns=w["cropped"], cropped_inserted_bases=w["cropped_inserted"],
+                    reason="site_extends_beyond_window_or_insertion_longer_than_slots")
+               for ri, w in enumerate(chosen) if w["cropped"] or w["cropped_inserted"]]
+    representative = alleles[0]
+    first = [(r, s, a) for r, s, a in eligible_by_allele[0]]
+    counts = Counter(s for _, s, _ in first)
+    site_counts = Counter(w["label"] for w in windows)
+    meta = dict(representative.metadata(), tensor_storage_version=STORAGE_VERSION,
         tensor_format_version=FORMAT_VERSION, row_order=ROW_ORDER, row_groups=groups,
-        row_selection_version=ROW_SELECTION_VERSION, selected_grouped_ranks=sample_indices,
-        window_mismatch_bp=[w[5] for w in chosen], window_encoding_version=WINDOW_ENCODING_VERSION,
-        anchor_column=start, candidate_columns=[start, min(width, start + candidate_span)],
-        coverage=len(eligible), alt_count=counts["alt"], ref_count=counts["ref"],
-        other_count=counts["other"], af=counts["alt"] / len(eligible) if eligible else 0,
-        selected_alignments=len(chosen), omitted_context=omitted, selected_counts=dict(selected_counts))
+        row_selection_version=ROW_SELECTION_VERSION, selected_ranks=ranks,
+        window_mismatch_bp=[w["mismatch"] for w in chosen], window_encoding_version=WINDOW_ENCODING_VERSION,
+        anchor_column=anchor_column, candidate_columns=[anchor_column, min(width, anchor_column + layout.columns)],
+        site_layout=dict(insertion_slots=layout.insertion_slots, span=layout.span, reference=layout.reference),
+        allele_labels={label: allele.metadata()["candidate_id"] for label, allele in zip(labels, alleles)},
+        coverage=len(first), alt_count=counts["alt"], ref_count=counts["ref"],
+        other_count=counts["other"], af=counts["alt"] / len(first) if first else 0,
+        site_coverage=len(windows), site_counts={b: site_counts[b] for b in blocks if site_counts[b]},
+        selected_alignments=len(chosen), omitted_context=omitted,
+        selected_counts={b: sum(w["label"] == b for w in chosen) for b in blocks if any(w["label"] == b for w in chosen)})
     if debug:
-        meta["rows"] = details
-        meta["selection_audit"] = [dict(record_sha256=w[0].digest, mapping_quality=w[0].mapq,
-            anchor_mapping_index=w[2].index, window_mismatch_bp=w[5], support=w[1],
-            path=[list(p) for p in w[4]]) for w in windows]
+        meta["rows"] = [dict(read_name=w["read"].name, record_sha256=w["read"].digest, site_allele=w["label"],
+            anchor_mapping_index=w["visit"].index, reversed_for_candidate=w["visit"].reverse,
+            window_mismatch_bp=w["mismatch"], selected_rank=ranks[ri],
+            omitted_central_context_columns=w["cropped"], cropped_inserted_bases=w["cropped_inserted"],
+            path=[dict(node_id=v.node, start=v.start, end=v.end, reverse=v.reverse,
+                       mapping_index=v.index) for v in w["read"].visits],
+            columns=[c.graph() if c is not None else None for c in w["row"]]) for ri, w in enumerate(chosen)]
+        meta["selection_audit"] = [dict(record_sha256=w["read"].digest, mapping_quality=w["read"].mapq,
+            anchor_mapping_index=w["visit"].index, reversed_for_candidate=w["visit"].reverse,
+            window_mismatch_bp=w["mismatch"], site_allele=w["label"]) for w in windows]
     return tensor, meta
+
+
+def make_tensor(candidate, eligible, path_counts, rows=200, width=101, debug=False):
+    """One-allele site tensor: `eligible` = [(read, support, anchor Visit or VisitView)]."""
+    return make_site_tensor([candidate], [eligible], path_counts, rows, width, debug)

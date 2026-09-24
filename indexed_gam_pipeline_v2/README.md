@@ -7,18 +7,21 @@ all passing alleles listed in its summary record — shape `(8, 200, 101)`, `int
 This is a cleaned-up rewrite of `indexed_gam_pipeline/` (v1) with about half of the
 code and none of the experimental or superseded paths. Decoding, support counting,
 row selection and window encoding are unchanged and were verified **byte-identical**
-to v1 on real HG008 PacBio data. On top of that, v2 defines tensor format
-**`indexed-gam-candidate-v5`**: a candidate-ALT channel replaces the flag channel,
-path counts use an int8 log scale, and a strand channel is added (section 7;
-rationale in section 8). Candidate handling follows the 2026-09-23 changes made to
+to v1 on real HG008 PacBio data. On top of that, v2 defined tensor format
+`indexed-gam-candidate-v5` (a candidate-ALT channel instead of flags, int8 log path
+counts, a strand channel) and now **`indexed-gam-candidate-v6`**: indels are
+left-normalized while decoding (both strands report a repeat indel identically), a site
+tensor holds every passing allele with channel 2 spelling the allele *each row* carries
+over a common site layout, and rows are grouped by allele and ordered by similarity
+(section 7; rationale in section 8). Candidate handling follows the 2026-09-23 changes made to
 v1 (session `d969188c`): site units, a per-node read cap of 800 and an AF upper-bound
 prefilter (section 7 "Candidates, prefilters and sites"). Channels 0/1/3/4/5,
-summaries and audit files are still identical to v1 (section 9). v1 is left
+summaries and audit files were identical to v1 up to v5 (section 9). v1 is left
 untouched for reference and for the frozen production runs that still point at it.
 
 ```
 v1: 25 modules ≈ 4,250 lines + 14 test files ≈ 1,840 lines (91 tests)
-v2: 10 modules ≈ 2,200 lines +  7 test files ≈ 1,450 lines (54 tests, ~7 s)
+v2: 10 modules ≈ 3,000 lines + 10 test files ≈ 2,050 lines (67 tests, ~75 s)
 ```
 
 ---
@@ -70,8 +73,8 @@ flowchart TD
         G["2 graph lookup: sequence + path count<br/>for target and every visited context node"]
         D["3 decode every edit → columns, visits,<br/>candidate observations on target nodes"]
         P["4 prefilters on all records: ALT bound < min_variants,<br/>ALT bound / exact coverage < AF threshold"]
-        C["5 per site: cap node records at 800 (by digest), count ALT / REF / other<br/>for every allele, filter, pick the representative (max ALT)"]
-        T["6 make_tensor for the representative: anchor window, rank, group,<br/>sample 200 rows, fill 8 channels"]
+        C["5 per site: cap node records at 800 (by digest), count ALT / REF / other<br/>for every allele, filter, rank passing alleles A1, A2, ... by ALT count"]
+        T["6 make_site_tensor: label every covering record A1.. / REF / OTHER, window over the<br/>site layout, blocks + uniform sampling to 200 rows, similarity order, fill 8 channels"]
         W["7 buffer → shard_XXXXX_data.npy + variant_summary.ndjson"]
         F --> G --> D --> P --> C --> T --> W
     end
@@ -166,16 +169,19 @@ in the index and copied into every tensor manifest.
 
 ### `validate_examples.py FOLDER --gam GAM --graph-index SQLITE --output report.json`
 
-Requires `--debug-rows`. Recounts coverage from raw mapping intervals, re-derives
-ranking/grouping/sampling from the recorded audit, and checks every selected
-column's graph base, path count, candidate flag and padding.
+Requires `--debug-rows`. Recounts every site allele's (and the site's) coverage from raw
+mapping intervals, re-derives the site layout from the alleles and the graph sequence, the
+allele blocks and the uniform sampling from the recorded audit, and checks every selected
+column's graph base, path count, site-allele code (re-derived from the row's label), strand
+and padding. (The similarity order inside a block is covered by unit tests.)
 
 ### `inspect_tensor.py FOLDER out.txt [--per-class 3]`
 
 ### Rendering PNGs
 
-`scripts/visualize_tensor.py` (shared with the older formats) renders v5 tensors as
-eight panels; it reads `manifest.json`/`variant_summary.ndjson` beside the shard.
+`scripts/visualize_tensor.py` (shared with the older formats) renders v5/v6 tensors as
+eight panels; it reads `manifest.json`/`variant_summary.ndjson` beside the shard. For v6 it
+draws the allele blocks (A1, A2, ..., REF, OTHER) and lists every site allele with its AF.
 The base conda environment's matplotlib has a NumPy ABI conflict, so use the
 interpreter below:
 
@@ -286,11 +292,29 @@ Knobs, in order of effect:
 ## 7. Tensor semantics (what the numbers mean)
 
 **Candidate identity** is `(node, forward start, REF, ALT, kind)` with `kind ∈ {SNP, INS, DEL}`
-in zero-based forward-node coordinates. Reverse-strand mappings are converted;
-there is no left-normalization and no merging across nodes. Adjacent I (or D)
+in zero-based forward-node coordinates. Reverse-strand mappings are converted. Adjacent I (or D)
 edits in one mapping are merged before the `--max-indel-len` check. Candidates
 containing `N`, and insertions anchored on `N`, are context only. Indels longer
 than the limit and complex replacements are logged to `unsupported_events.ndjson`.
+
+**Indel left-normalization** (v6, `candidates.left_align_indels`, applied while decoding). vg
+places a gap at one end of a repeat in *read* orientation, so in forward node coordinates
+forward- and reverse-strand reads put the same repeat indel at opposite ends — often on
+different nodes of a repeat chopped into short nodes — and v5 kept them as two candidates,
+each supported by one strand only (14 of 33 INS examples in `examples/hg008_pacbio_v5/`
+had every ALT row on one strand). Now every indel of at most `--max-indel-len` bases without
+`N` is shifted one base at a time to lower forward coordinates while the matched base it
+passes equals its last forward base (the VCF / `bcftools norm` convention; an insertion
+rotates, e.g. +AT at the right end of `CATATG` becomes +AT after the `C`). It crosses node
+boundaries within a run of same-orientation mappings; a deletion longer than 1 bp stops at
+a node boundary (candidates are per node); a mismatch, another indel of a different kind,
+an orientation change or `N` stops it; an adjacent indel of the same kind merges with it,
+and inserted bases continuing across a mapping boundary are one insertion. Every insertion
+is finally attached to the graph base that follows it on the forward strand, so an
+insertion between nodes is always `(next node, its first offset)`. Read bases, qualities,
+graph positions and visit intervals are unchanged — only which columns are I/D vs M moves
+— so both strands' reports of one molecule give identical candidates and columns
+(`tests/test_left_align.py`). Flank insertions still take their own columns (unchanged).
 
 **Candidates, prefilters and sites** (ported 2026-09-23 from v1 session `d969188c`, where
 they were designed and tested on the slowest HG008 recovery tasks). Every allele is still
@@ -318,14 +342,15 @@ tensor stands for:
 4. *Sites* (`--candidate-unit site`, default) — surviving alleles are grouped by
    `(node, start, SNV|INDEL)`; INS and DEL at one start share an INDEL site, SNV and
    INDEL sites stay separate outputs. Every allele is filtered exactly as on its own;
-   the passing alleles are ranked by ALT count (ties: candidate order) and the first —
-   the *representative* — supplies the site's tensor, byte-identical to that allele's
-   own tensor (its ALT is what channel 2 shows). Reason: the tensor carries the reads,
-   not the allele, so same-position SNV tensors were identical (620/620 checked in v1
-   HG008 output) and could receive contradictory labels. **Label by `site_id`**; the
-   truth ALT need not be the representative — check `alleles[]`. `--candidate-unit
-   allele` restores one tensor per allele. No repeat/left normalization is done, so
-   STR deletions with different start positions remain different sites.
+   the passing alleles are ranked by ALT count (ties: candidate order) as `A1`, `A2`, ...
+   and **all of them are in the site's one tensor** (v6): every record covering any passing
+   allele is a row, labeled with the allele it carries (the first by rank), `REF` when it
+   matches the reference for every allele it covers, else `OTHER`. The top-level counts/AF
+   are A1's (the *representative*). Reason: the tensor carries the reads, not the allele,
+   so same-position SNV tensors were identical (620/620 checked in v1 HG008 output) and
+   could receive contradictory labels. **Label by `site_id`** and `alleles[]`; the truth ALT
+   need not be A1. `--candidate-unit allele` gives one tensor per allele (a one-allele
+   site). With left-normalization, STR alleles of one repeat share a start and hence a site.
 
 **Support.** For each candidate, every record whose mapping covers it counts once:
 `alt` if it has an exact observation with base quality ≥ `--min-allele-bq`
@@ -335,31 +360,54 @@ sides of the boundary); otherwise `other`. Repeated visits: ALT > REF > other,
 earliest mapping wins. `coverage = alt + ref + other`, `AF = alt / coverage`.
 Filters: `alt ≥ --min-variants`, `AF ≥ threshold`, `--variant-type`.
 
-**Rows.** Every eligible record is windowed with the candidate start pinned at
-column 50 (`anchor-centered-columns-v1`), ranked by visible edit bp ↓, MAPQ ↓,
-record SHA-256, mapping index; grouped stably by the visible node path; then
-uniformly sampled to 200 rows (`window-edit-bp-group-uniform-v1`). Rows of one
-group are contiguous; `row_groups` in the summary gives their boundaries.
+**Site layout** (`site-layout-columns-v1`). A site occupies the columns from 50 on:
+`insertion_slots` = the longest INS allele's length, then `span` = the graph bases of the
+longest DEL allele (or the SNV base); `site_layout` and `candidate_columns` in the summary.
+Every row uses the same layout: a record's own inserted bases at the boundary fill the slots
+(padded with "no insertion" gaps, op 6, when it is aligned across the boundary — M/X on
+both sides, or a deletion starting there — else left empty; bases beyond the slots are
+cropped and counted in `omitted_context[].cropped_inserted_bases`), then its columns over
+the span, then the right flank. So rows carrying alleles of different lengths stay aligned
+after the site. Without insertion slots an insertion at the boundary stays in the left flank.
 
-**Channels** (`indexed-gam-candidate-v5`, all `int8`; a cell without evidence is 0 in every channel):
+**Rows** (`site-allele-blocks-uniform-similarity-v1`). Rows come in blocks `A1, A2, ..., REF,
+OTHER`. The records are ordered by block, then record SHA-256, and uniformly sampled to 200
+rows over that order (each block keeps its share; `selected_ranks` are the sampled ranks).
+Inside each block the sampled rows are ordered by similarity: a record's *events* are every
+non-match column of its window (mismatch base, inserted base, deletion, complex), keyed by
+graph position and read base, plus every node transition of its visible path; the distance
+of two records counts the events one has and the other lacks although it covers that column
+(both ways; uncovered columns are unknown, not different). Average-linkage clustering orders
+the rows along the tree's leaves (larger subtree first), so e.g. records sharing a flank
+insertion or a nearby heterozygous SNP are adjacent — without a threshold: an event only one
+record has shifts its distance to all others equally and so decides nothing. Runs of rows
+with identical events are ordered forward strand first, then by record hash. `row_groups`
+gives the blocks (`start_row, end_row, allele`). Deterministic and independent of record order.
+
+**Channels** (`indexed-gam-candidate-v6`, all `int8`; a cell without evidence is 0 in every channel):
 
 | # | Channel | Encoding |
 |---|---|---|
 | 0 | read base | A=1 C=2 G=3 T=4 N=5 gap=6 |
 | 1 | base quality | clip(q, −1, 127); −1 = no read base / no quality |
-| 2 | candidate ALT | the candidate's ALT base at that column (encoding of channel 0; DEL columns = 6), identical in every row, only in the candidate region `[50, 50 + allele length)` |
+| 2 | site allele | per row, over the site columns only: the allele this record carries (encoding of channel 0, gaps = 6) — an INS allele's bases in the slots (gap-padded) then the span's graph bases; a DEL allele's gaps over its deleted bases then the rest of the span; an SNV's ALT base; REF = slot gaps + the span's graph bases; `OTHER` rows 0 |
 | 3 | MAPQ | clip(MAPQ, −1, 127) |
 | 4 | operation | M=1 X=2 I=3 D=4 complex=5 aligned-no-insertion gap=6 |
 | 5 | graph base | the graph reference base under that row/column, encoding as channel 0 |
-| 6 | path count | `floor(14·log2(distinct GBWT paths of the column's node + 1) + 0.5)`, max 127; insertion/gap columns use the anchor node |
+| 6 | path count | distinct GBWT paths of the column's node: the count itself up to 100, then `100 + ceil(log2(count − 99))` (331 → 108), max 127 (`int8-count-linear100-log2-v1`); insertion/gap columns use the anchor node |
 | 7 | strand | 1 = read sequenced on the candidate node's forward strand, 2 = reverse; one value per row |
 
-Reading the channels: **row matches REF** ⇔ channel 0 == channel 5; **row matches
-ALT** ⇔ channel 0 == channel 2 (per column, so a different insertion at the same
-boundary fails on some column). The REF allele of an SNP/DEL is channel 5 at the
-candidate columns; an INS has an empty REF. Path-count levels: 1→14, 2→22, 3→28,
-4→33, 8→44, 45→77, 90→91, 331→117, ≥524→127 (`count ≈ 2^(value/14) − 1`); every
-real node has ≥1 path, so 0 is unambiguously "no evidence". Strand is the anchor
+Reading the channels: **row matches REF** ⇔ channel 0 == channel 5; channel 2 is the
+pipeline's call of which site allele each record carries (blank for OTHER), so blocks and
+their strand mix (channel 7) can be read directly. The REF allele of an SNP/DEL is
+channel 5 at the site columns; an INS has an empty REF. Path counts are exact up to 100
+(v6): on HPRC v1.1 d9 99.29 % of the 60.1 M nodes have ≤ 100 paths and 57 % have 85–90, which
+v5's `floor(14·log2(count+1)+0.5)` collapsed (88, 89, 90 and 91 all → 91, i.e. "missing
+from one or two haplotypes" looked like "in every haplotype"); above 100 (repeat nodes
+revisited by one haplotype) 101→101, 102–103→102, 104–107→103, …, 331→108; a value k > 100
+means a count in (99 + 2^(k−101), 99 + 2^(k−100)]. Every real node has ≥1 path, so 0 is
+unambiguously "no evidence". (A graph with more than ~100 haplotypes, e.g. HPRC v2, would
+put most nodes in the log range again — revisit the encoding, or store counts as int16, then.) Strand is the anchor
 mapping's `is_reverse` relative to the candidate node's forward strand — the same
 frame as channels 2 and 5, so an allele/strand imbalance is consistent no matter
 how the node is oriented against the linear reference. Insertions and gap slots
@@ -367,12 +415,14 @@ take their **anchor** node's count; deletions keep their mapped node's count.
 
 **Files.** `variant_summary.ndjson` has one record per tensor: `candidate_id`,
 `node_id`, `start`, `end`, `ref`, `alt`, `event_type`, `coverage`, `alt_count`,
-`ref_count`, `other_count`, `af` (all of the representative allele),
-`selected_alignments`, `row_groups`, `candidate_columns`, `omitted_context`,
+`ref_count`, `other_count`, `af` (all of the representative allele A1),
+`site_coverage`, `site_counts` (records per block), `selected_alignments`, `selected_counts`,
+`row_groups`, `selected_ranks`, `site_layout`, `allele_labels` (`A1` → candidate id, ...),
+`candidate_columns`, `omitted_context`,
 versions, `parameters` (incl. `max_node_reads`, `candidate_unit`, `early_af_filter`),
-`shard_index`, `index_within_shard`; in site mode also `sample_unit: "site-v1"`,
+`shard_index`, `index_within_shard`; in site mode also `sample_unit: "site-v2"`,
 `site_id` (`"node:start:SNV|INDEL"`), `alleles[]` (every passing allele by ALT count:
-`candidate_id, start, end, ref, alt, event_type, event_length, coverage, alt_count,
+`label, candidate_id, start, end, ref, alt, event_type, event_length, coverage, alt_count,
 ref_count, other_count, af`), `allele_count` and `second_allele_af` (0 when single;
 two high-AF alleles at one site usually indicate a mapping artifact).
 `filtered_candidates.ndjson` holds every rejected allele (with `site_id` in site mode);
@@ -402,6 +452,16 @@ exactly. Everything below was removed or simplified:
 | `run_report.json` | was an exact copy of `manifest.json`; nothing read it |
 | prose fields in the manifest (`coordinates`, `normalization`, `insertion_overlap`, …) | documentation, now in this README |
 | `max_cigar_length` in `node_stats.json` | unused statistic |
+
+### Tensor format v6 (2026-09-23)
+
+Three changes after reviewing 100 rendered v5 production tensors (`examples/hg008_pacbio_v5/`):
+
+| Change | Why |
+|---|---|
+| **Indel left-normalization** while decoding (section 7) | Forward and reverse reads placed one repeat indel at opposite ends of the repeat (vg aligns gaps to one end in read orientation), so v5 split it into two candidates with one-strand support: the AF was underestimated (e.g. an INS in a poly-A: 25 ALT rows all reverse, 28 forward "other" rows carrying the same insertion elsewhere, AF 0.22 instead of ≈0.46), weak halves could fail the filters, a real variant looked like a strand-bias artifact, and positions did not match left-normalized truth VCFs. The old `.dat/.idx` pipeline had no normalization either. |
+| **Channel 2: per-row site allele** over a common **site layout** (all passing alleles in one tensor) | One tensor per site now shows every allele: each row spells the allele it carries (or REF, blank for OTHER), the site region is as wide as the longest insertion + longest deletion, so rows with different allele lengths stay aligned. Multi-allelic STR sites (2.5 % of v5 INDEL sites, more after normalization) show their allele distribution; labels no longer depend on which allele was the representative. |
+| **Rows: allele blocks, then similarity order** | v5 ranked by visible edit bp and grouped by node path, which for a variant absent from the graph never separated ALT from REF (47.5 % of tensors had one path group), so ALT/REF/other and similar reads alternated. Now blocks A1.., REF, OTHER, and inside each block records sharing events (a flank insertion, a nearby het SNP, a branch) are adjacent; identical records forward strand first. |
 
 ### Tensor format v5 (2026-09-23)
 

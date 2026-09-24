@@ -10,7 +10,7 @@ import numpy as np
 
 from fixtures import build_args, graph_fixture, spec_alignment, write_gam  # noqa: F401  (sets sys.path)
 from indexed_gam_pipeline_v2.build import build, capped_reads, candidate_units
-from indexed_gam_pipeline_v2.candidates import Candidate, decode_alignment, exact_coverage, overlap
+from indexed_gam_pipeline_v2.candidates import BASES, Candidate, decode_alignment, exact_coverage, overlap
 from indexed_gam_pipeline_v2.orchestrate import build_command, validate_shards
 from indexed_gam_pipeline_v2.validate_examples import validate
 
@@ -18,15 +18,15 @@ SEQ = {10: "ACGTACGTAC", 20: "TTGCAAGGCT"}
 
 
 def site_rows():
-    """Node 10: position 4 A>C x4, A>G x3, A>T x1; 1-bp DEL at 7 x3 and INS GG at 7 x2 (11 reads).
-    Node 20: position 3 C>A x3 (5 reads)."""
+    """Node 10: position 4 A>C x4, A>G x3, A>T x1; 1-bp DEL at 7 x3 and INS TT at 7 x2 (11 reads;
+    neither indel can left-shift: the base before position 7 is G). Node 20: position 3 C>A x3 (5 reads)."""
     snv = ["C"] * 4 + ["G"] * 3 + ["T"] + [None] * 3
     indel = {0: "D", 4: "D", 8: "D", 1: "I", 9: "I"}
     rows = []
     for i, base in enumerate(snv):
         edits = [(4, 4, ""), (1, 1, base or "")]
         edits += {"D": [(2, 2, ""), (1, 0, ""), (2, 2, "")],
-                  "I": [(2, 2, ""), (0, 2, "GG"), (3, 3, "")]}.get(indel.get(i), [(5, 5, "")])
+                  "I": [(2, 2, ""), (0, 2, "TT"), (3, 3, "")]}.get(indel.get(i), [(5, 5, "")])
         rows.append(spec_alignment([(10, 0, False, edits)], SEQ, name=f"n10_{i}"))
     for i in range(5):
         edits = [(3, 3, ""), (1, 1, "A"), (6, 6, "")] if i < 3 else [(10, 10, "")]
@@ -151,7 +151,7 @@ class ReadCapTest(unittest.TestCase):
             manifest = json.loads((root / "cap5/manifest.json").read_text())
             manifest["parameters"]["max_node_reads"] = 0
             (root / "cap5/manifest.json").write_text(json.dumps(manifest))
-            with self.assertRaisesRegex(ValueError, "independent source coverage"):
+            with self.assertRaisesRegex(ValueError, "independent (representative|site) coverage"):
                 validate(root / "cap5", str(gam), None, str(graph))
 
 
@@ -186,7 +186,7 @@ class EarlyAfFilterTest(unittest.TestCase):
 
 
 class SiteTest(unittest.TestCase):
-    def test_one_tensor_per_site_equal_to_its_representative_allele_tensor(self):
+    def test_site_tensor_holds_every_passing_allele_one_allele_sites_equal_allele_units(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             common = dict(snv_min_af=.2, indel_min_af=.1, min_variants=2)
@@ -202,16 +202,34 @@ class SiteTest(unittest.TestCase):
                 self.assertEqual(len(ameta), sum(map(len, expected.values())))
                 by_id = {m["candidate_id"]: (atensor[i], m) for i, m in enumerate(ameta)}
                 for i, m in enumerate(smeta):
-                    self.assertEqual((m["sample_unit"], m["allele_count"]), ("site-v1", len(m["alleles"])))
+                    self.assertEqual((m["sample_unit"], m["allele_count"]), ("site-v2", len(m["alleles"])))
                     self.assertEqual(m["candidate_id"], m["alleles"][0]["candidate_id"])
                     tensor, allele_meta = by_id[m["candidate_id"]]
-                    np.testing.assert_array_equal(stensor[i], tensor)  # incl. the channel-2 ALT stripe
                     site_only = ("sample_unit", "site_id", "alleles", "allele_count", "second_allele_af",
-                                 "index_within_shard", "parameters")
-                    self.assertEqual(without(m, *site_only), without(allele_meta, *site_only))
+                                 "index_within_shard", "parameters", "shard_index")
+                    if len(m["alleles"]) == 1:  # a one-allele site is exactly that allele's tensor
+                        np.testing.assert_array_equal(stensor[i], tensor)
+                        self.assertEqual(without(m, *site_only), without(allele_meta, *site_only))
+                    else:  # every passing allele is in the site tensor; top-level counts are A1's
+                        for k in ("candidate_id", "coverage", "alt_count", "ref_count", "other_count", "af"):
+                            self.assertEqual(m[k], allele_meta[k])
+                        self.assertEqual(list(m["allele_labels"]), [a["label"] for a in m["alleles"]])
+                        self.assertEqual(m["site_counts"]["A1"], m["alleles"][0]["alt_count"])
+                        self.assertGreater(m["site_counts"]["A2"], 0)
+                        self.assertGreaterEqual(m["site_coverage"], m["coverage"])
+                        for g in m["row_groups"]:  # each block spells its own allele in channel 2
+                            label = g["allele"]
+                            if label.startswith("A"):
+                                carried = m["alleles"][int(label[1:]) - 1]
+                                rows = stensor[i][:, g["start_row"]:g["end_row"]]
+                                lo, hi = m["candidate_columns"]
+                                cells = rows[0, :, lo:hi] != 0
+                                if carried["event_type"] == "SNP":
+                                    self.assertTrue(np.all(rows[2, :, lo][cells[:, 0]] == BASES[carried["alt"]]))
+                                self.assertTrue(np.all(rows[2, :, lo:hi][cells] == rows[0, :, lo:hi][cells]))
                     self.assertEqual(m["second_allele_af"], m["alleles"][1]["af"] if len(m["alleles"]) > 1 else 0.0)
                     for a in m["alleles"]:
-                        self.assertEqual(a, {k: by_id[a["candidate_id"]][1][k] for k in a})
+                        self.assertEqual(without(a, "label"), {k: by_id[a["candidate_id"]][1][k] for k in a if k != "label"})
                 # Every allele appears exactly once: in some site's alleles[] or in the filtered log.
                 site_ids = [a["candidate_id"] for m in smeta for a in m["alleles"]] + \
                            [m["candidate_id"] for m in filtered(site / kind)]
@@ -223,10 +241,59 @@ class SiteTest(unittest.TestCase):
                 self.assertIsNone(validate_shards(allele / kind, 2048)["sites"])
             snv = {m["site_id"]: m for m in records(site / "SNV")[0]}
             self.assertEqual([(a["alt"], a["alt_count"]) for a in snv["10:4:SNV"]["alleles"]], [("C", 4), ("G", 3)])
-            self.assertEqual(json.loads((site / "SNV/manifest.json").read_text())["sample_unit"], "site-v1")
+            self.assertEqual(json.loads((site / "SNV/manifest.json").read_text())["sample_unit"], "site-v2")
             # A>T (1 read) fails min_variants in the prefilter and carries its site id.
             (a_t,) = [m for m in filtered(site / "SNV") if m["candidate_id"] == "10:4:SNP:A>T"]
             self.assertEqual((a_t["reasons"], a_t["site_id"]), (["min_variants"], "10:4:SNV"))
+
+    def test_multiallelic_debug_build_passes_the_independent_audit(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            out = run(root, "debug", site_rows, snv_min_af=.2, indel_min_af=.1, min_variants=2, debug_rows=True, rows=7)
+            gam = root / "site_rows.gam"
+            for kind in ("SNV", "INDEL"):
+                report = validate(out / kind, str(gam), None, str(root / "graph.sqlite"))
+                self.assertTrue(report["passed"])
+                self.assertTrue(any(r["alleles"] > 1 for r in report["candidates"]), kind)
+            # A tampered site-allele cell is caught.
+            (meta,) = [m for m in records(out / "INDEL")[0] if m["allele_count"] > 1]
+            shard = out / "INDEL" / f"shard_{meta['shard_index']:05d}_data.npy"
+            x = np.load(shard)
+            row = next(r for r in range(meta["selected_alignments"])
+                       if x[meta["index_within_shard"], 0, r, meta["anchor_column"]])  # a cell with evidence
+            x[meta["index_within_shard"], 2, row, meta["anchor_column"]] += 1
+            np.save(shard, x)
+            with self.assertRaisesRegex(ValueError, "site allele channel"):
+                validate(out / "INDEL", str(gam), None, str(root / "graph.sqlite"))
+
+    def test_mixed_indel_site_layout_keeps_flanks_aligned(self):
+        seq = {1: "GCATGACTGA"}
+        ins = [(4, 4, ""), (0, 3, "CCC"), (6, 6, "")]
+        short = [(4, 4, ""), (0, 1, "C"), (6, 6, "")]
+        long = [(4, 4, ""), (0, 5, "CCCCC"), (6, 6, "")]
+        dele = [(4, 4, ""), (2, 0, ""), (4, 4, "")]
+        ref = [(10, 10, "")]
+        reads = [decode_alignment(spec_alignment([(1, 0, False, e)], seq, name=n), seq)[0]
+                 for n, e in (("ins", ins), ("short", short), ("long", long), ("del", dele), ("ref", ref))]
+        from indexed_gam_pipeline_v2.candidates import NodeReads, SiteLayout, make_site_tensor
+        a1, a2 = Candidate(1, 4, "", "CCC", "INS"), Candidate(1, 4, "GA", "", "DEL")
+        self.assertEqual(SiteLayout.of([a1, a2]), SiteLayout(1, 4, 3, 2, "GA"))
+        node = NodeReads(1, reads, 15)
+        x, m = make_site_tensor([a1, a2], [node.eligible(a1, 10), node.eligible(a2, 10)], {1: 5}, rows=6, width=15,
+                                debug=True)
+        rows = {r["read_name"]: (i, r) for i, r in enumerate(m["rows"])}
+        self.assertEqual({n: r["site_allele"] for n, (_, r) in rows.items()},
+                         dict(ins="A1", short="OTHER", long="OTHER", ref="REF", **{"del": "A2"}))
+        lo, hi = m["candidate_columns"]
+        self.assertEqual((lo, hi), (7, 12))  # 3 insertion slots + 2 spanned bases
+        for name, (ri, r) in rows.items():
+            channel = "".join(".ACGTN-"[v] for v in x[2, ri, lo:hi])
+            expected = {"A1": "CCCGA", "A2": "-----", "REF": "---GA", "OTHER": "....."}[r["site_allele"]]
+            self.assertEqual(channel, expected, name)
+            # the right flank (graph bases after the span) sits at the same columns in every row
+            self.assertEqual("".join(".ACGTN-"[v] for v in x[5, ri, hi:hi + 3]), "CTG", name)
+        self.assertEqual(rows["long"][1]["cropped_inserted_bases"], 2)
+        self.assertEqual(x[0, rows["short"][0], lo:lo + 3].tolist(), [BASES["C"], 6, 6])
 
     def test_units_group_ins_and_del_but_not_snv(self):
         c = [Candidate(1, 5, "", "G", "INS"), Candidate(1, 5, "A", "", "DEL"), Candidate(1, 5, "A", "C", "SNP"),
@@ -242,6 +309,7 @@ class SiteTest(unittest.TestCase):
             first, second = (json.loads(line) for line in original.splitlines())
             for tamper, message in ((dict(second, site_id=first["site_id"], node_id=first["node_id"], start=first["start"],
                                           alleles=first["alleles"], allele_count=first["allele_count"],
+                                          allele_labels=first["allele_labels"],
                                           candidate_id=first["candidate_id"]), "Duplicate site"),
                                     (dict(second, allele_count=2), "allele list mismatch")):
                 (folder / "variant_summary.ndjson").write_text(json.dumps(first) + "\n" + json.dumps(tamper) + "\n")
