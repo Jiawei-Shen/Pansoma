@@ -10,15 +10,18 @@ from indexed_gam_pipeline.benchmark_partition_reader import merge_parts
 from indexed_gam_pipeline.full_reader_comparison import logical_hash,run_builders
 
 class FullComparisonTests(unittest.TestCase):
-    def part(self,root,name,values):
+    def part(self,root,name,values,dtype=np.int32):
         p=root/name;p.mkdir();n=len(values);summary=[]
         for i,v in enumerate(values):
             summary.append(dict(candidate_id=str(v),coverage=1,alt_count=1,ref_count=0,other_count=0,af=1.,selected_alignments=1,
                 event_type='SNP',tensor_format_version='indexed-gam-candidate-v4',shard_index=i//2,index_within_shard=i%2))
         for i in range(0,n,2):
-            np.save(p/f'shard_{i//2:05d}_data.npy',np.stack([np.full((7,200,101),v,dtype=np.int32) for v in values[i:i+2]]))
+            np.save(p/f'shard_{i//2:05d}_data.npy',np.stack([np.full((7,200,101),v,dtype=dtype) for v in values[i:i+2]]))
         (p/'variant_summary.ndjson').write_text(''.join(json.dumps(x)+'\n' for x in summary))
-        (p/'manifest.json').write_text(json.dumps(dict(status='complete',tensor_format_version='indexed-gam-candidate-v4',tensors=n,shards=(n+1)//2,nodes=n)))
+        manifest=dict(status='complete',tensor_format_version='indexed-gam-candidate-v4',tensors=n,shards=(n+1)//2,nodes=n,dtype=np.dtype(dtype).name)
+        if dtype == np.int8:
+            manifest['tensor_storage_version']='int8-count-div4-v1'
+        (p/'manifest.json').write_text(json.dumps(manifest))
         return p
     def test_merge_partial_boundary_and_zero_part(self):
         with tempfile.TemporaryDirectory() as d:
@@ -29,6 +32,19 @@ class FullComparisonTests(unittest.TestCase):
                 self.assertEqual(logical_hash(parts),logical_hash([result]))
                 if values[0] and len(values[0])>=2:
                     self.assertEqual((parts[0]/'shard_00000_data.npy').stat().st_ino,(result/'shard_00000_data.npy').stat().st_ino)
+    def test_int8_merge_preserves_dtype_and_rejects_mixed_storage(self):
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d)
+            parts=[self.part(root,'a',[1,2,3],np.int8),self.part(root,'b',[126,127],np.int8)]
+            dest=root/'merged';report=merge_parts(parts,dest,shard_size=2)
+            self.assertEqual(report['dtype'],'int8')
+            self.assertEqual(logical_hash(parts),logical_hash([dest]))
+            for path in dest.glob('*.npy'):
+                self.assertEqual(np.load(path).dtype,np.int8)
+            legacy=self.part(root,'legacy',[1],np.int32)
+            with self.assertRaisesRegex(ValueError,'incompatible'):
+                merge_parts([parts[0],legacy],root/'mixed',shard_size=2)
+
     def test_failed_worker_stops_peer_and_records_failure(self):
         with tempfile.TemporaryDirectory() as d:
             root=Path(d);seed=root/'seed';seed.write_bytes(b'cache')

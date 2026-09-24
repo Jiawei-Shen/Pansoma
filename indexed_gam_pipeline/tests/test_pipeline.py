@@ -211,6 +211,56 @@ class PipelineTest(unittest.TestCase):
             self.assertEqual(Counter(a.SerializeToString() for a in reader.fetch({10,20,30})),
                              Counter(a.SerializeToString() for a in original))
 
+    def test_equivalent_bgzf_eof_offset_is_accepted(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path, _ = fixture(directory)
+            reader = IndexedGam(path)
+            expected = Counter(a.SerializeToString() for a in reader.fetch({30}))
+
+            # The same logical EOF can be encoded at the end of the final data
+            # block or at offset zero in the following BGZF EOF block.
+            data = path.read_bytes()
+            blocks = []
+            offset = 0
+            while offset < len(data):
+                size = struct.unpack_from("<H", data, offset + 16)[0] + 1
+                uncompressed_size = struct.unpack_from("<I", data, offset + size - 4)[0]
+                blocks.append((offset, size, uncompressed_size))
+                offset += size
+            eof_block, _, eof_size = blocks[-1]
+            data_block, _, data_size = blocks[-2]
+            self.assertEqual(eof_size, 0)
+            canonical_eof = eof_block << 16
+            alternate_eof = (data_block << 16) | data_size
+
+            changed = False
+            for _, _, runs in reader.bins:
+                for i, (start, end) in enumerate(runs):
+                    if end == canonical_eof:
+                        runs[i] = (start, alternate_eof)
+                        changed = True
+            self.assertTrue(changed)
+            self.assertNotEqual(canonical_eof, alternate_eof)
+            self.assertEqual(Counter(a.SerializeToString() for a in reader.fetch({30})),
+                             expected)
+
+    def test_true_mid_group_index_end_is_rejected(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path, _ = fixture(directory)
+            reader = IndexedGam(path)
+            changed = False
+            for _, _, runs in reader.bins:
+                for i, (start, end) in enumerate(runs):
+                    if start < end:
+                        runs[i] = (start, start + 1)
+                        changed = True
+                        break
+                if changed:
+                    break
+            self.assertTrue(changed)
+            with self.assertRaisesRegex(ValueError, "group boundary"):
+                list(reader.fetch({10, 20, 30, 1000}))
+
     def test_bad_index_and_truncated_varint_fail(self):
         with self.assertRaises(ValueError):
             varint(io.BytesIO(b"\x80"))

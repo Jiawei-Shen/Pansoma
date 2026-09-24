@@ -161,6 +161,18 @@ nodes. Ordinary GAM match edits are not rescanned to invent SNP candidates.
 
 ## 6. Count support and filter
 
+Candidate discovery excludes SNVs with `N` in either REF or ALT, insertions
+containing `N` or anchored on `N`, and deletions containing `N`, matching the
+legacy DAT/IDX filter. Insertion anchors use the preceding forward-node base
+(base zero at the node start), consistently for both read strands. These edits
+remain in alignment context; only their candidate observations are suppressed.
+
+The builder retains candidate observations only on the current batch's target
+nodes. Full read columns, mapping visits, and unsupported-event audit records
+are preserved, including context outside those nodes. After each alignment has
+been decoded, its original protobuf entry is released; all graph sequences have
+already been loaded. This does not introduce a cross-batch decoded-read cache.
+
 Every eligible overlapping alignment record contributes once per candidate.
 Repeated visits in one record resolve to ALT, then REF, then other; the earliest
 mapping wins ties.
@@ -180,7 +192,10 @@ set to 1 to reproduce this low-support inspection set.
 
 ## 7. Construct one tensor per passing candidate
 
-Each tensor is **(7, 200, 101), int32**: channels × alignment rows × columns.
+Each tensor is **(7, 200, 101), int8**: channels × alignment rows × columns.
+The manifest storage version is `int8-count-div4-v1`. Each tensor payload uses
+141,400 bytes, one quarter of the former int32 representation. Candidate filters
+and support counts use the original values before storage conversion.
 There is no dedicated reference row.
 
 Row selection revision `window-edit-bp-group-uniform-v1` first prepares the
@@ -220,12 +235,12 @@ v4 tensors without this revision use the old shared-block layout.
 | Channel (1-based) | Meaning |
 |---|---|
 | 1 | Read base: A=1, C=2, G=3, T=4, N=5, gap=6; padding=0 |
-| 2 | Base quality; -1 for missing quality or no read base |
+| 2 | Base quality clipped to -1–127; -1 for missing quality or no read base |
 | 3 | Flags: value 1 = difference; 2 = candidate region; 3 = both |
-| 4 | Alignment MAPQ, present on aligned gaps too; capped at 32767 |
+| 4 | Alignment MAPQ, present on aligned gaps too; clipped to -1–127 |
 | 5 | Operation: M=1, X=2, I=3, D=4, complex=5, aligned no-insertion gap=6 |
 | 6 | Graph-reference base for that row and column, with the same base encoding |
-| 7 | Raw distinct GBWT path count of that column's node |
+| 7 | min(distinct GBWT path count of that column's node // 4, 127) |
 
 Deletions keep their mapped node's count. Insertions and aligned insertion-gap
 slots use their anchor node's count. Missing coverage and unused rows have zero
@@ -367,6 +382,39 @@ The measured HG008 comparison and production-mode follow-up are recorded in
 [runs/hg008_candidate_optimization.md](runs/hg008_candidate_optimization.md).
 Performance measurements with `--debug-rows` include large per-column metadata;
 use the separate no-debug comparison when choosing a production worker count.
+
+## Site units, AF prefilter and read cap (2026-09-22)
+
+These are CLI defaults; `build_command` also writes them explicitly for frozen runs.
+
+- **Site units** (`--candidate-unit site`, default). A candidate allele is still the
+  exact `(node, start, ref, alt, kind)` edit, and every allele is filtered exactly as
+  before. Passing alleles are then grouped per `(node, start, SNV|INDEL)`: INS and
+  DEL at one start share an indel site; SNV and indel sites stay separate outputs.
+  One tensor is written per site: the tensor of the allele with the highest ALT
+  count (ties by allele order), byte-identical to that allele's legacy tensor.
+  `variant_summary.ndjson` keeps the representative's fields and adds `site_id`,
+  `sample_unit: site-v1`, `alleles[]` (all passing alleles by ALT count with
+  coverage/counts/AF), `allele_count` and `second_allele_af`. Failing alleles are
+  in `filtered_candidates.ndjson` with `site_id`; each allele appears exactly once
+  across `alleles[]` and the filtered log. Reason: the seven channels carry no
+  allele identity, so same-position SNV tensors were byte-identical (620/620 in
+  HG008 tasks 10/12/13) and could receive contradictory labels. Label by site;
+  the truth ALT need not be the representative. `--candidate-unit allele` restores
+  one tensor per allele. No repeat/left normalization is performed yet.
+- **AF prefilter** (`--early-af-filter`, default; `--no-early-af-filter` disables).
+  ALT support upper bound (one vote per record, allele BQ) divided by exact
+  coverage. Coverage uses only visit intervals: a record counts once when a
+  non-empty visit to the node covers the candidate, the same test `overlap()` uses,
+  so without a read cap the accepted outputs are unchanged. Rejections carry
+  `reasons: [min_af]`, `af_upper_bound`, `coverage` and `support_not_evaluated`.
+- **Per-node read cap** (`--max-node-reads 800`, default; 0 disables). Applied after
+  both prefilters, before support counting and row selection: records on a target
+  node are ordered by the SHA-256 of the serialized GAM record and the first 800
+  are used for every candidate on that node. Only nodes deeper than 800 change;
+  their AF/support become estimates on those records.
+The order is: decode, ALT-count prefilter, AF prefilter (all records), site
+grouping, read cap, full support/AF re-check per allele, representative tensor.
 
 ## Alternative GAM retrieval and independent partition benchmark
 

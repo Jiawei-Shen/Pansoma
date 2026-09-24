@@ -74,7 +74,7 @@ contiguous candidate-node partitions and output directories, and share this inde
 through **read-only connections**. No occurrence caches need copying. Each batch
 collects all nodes in its retrieved reads, queries sequences and counts together
 (in chunks of 900 IDs), decodes edits, applies the ALT upper-bound filter, builds
-candidate windows, orders/selects reads, then writes `(2048,7,200,101)` int32 full
+candidate windows, orders/selects reads, then writes `(2048,7,200,101)` int8 full
 shards (the last shard may be shorter).
 
 Missing graph nodes fail explicitly; they do not silently become count zero.

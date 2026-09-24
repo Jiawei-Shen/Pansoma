@@ -9,6 +9,7 @@ import hashlib
 from types import SimpleNamespace
 
 import numpy as np
+from indexed_gam_pipeline.tensor_storage import STORAGE_VERSION, int8_quality, encode_count
 
 VERSION = "indexed-gam-candidate-v2"
 V3_VERSION = "indexed-gam-candidate-v3"
@@ -98,13 +99,20 @@ class Read:
     observations: list
 
 
-def decode_alignment(alignment, sequences, max_indel=50):
+def decode_alignment(alignment, sequences, max_indel=50, mode="full", target_nodes=None):
     """Consume original edits, retaining every mapping and both cursors.
 
     Complex replacements use explicitly marked C slots (ordered zip, gaps at
     the tail), solely for context; they never become supported candidates.
+    When target_nodes is supplied, retain candidate observations only for those
+    nodes. Complete columns, visits and unsupported-event auditing are unchanged.
     """
     columns, visits, observations, unsupported = [], [], [], []
+    if mode not in ('full', 'window'):
+        raise ValueError('Decode mode must be full or window')
+    if mode == 'window':
+        from indexed_gam_pipeline.edit_columns import EditColumns
+        columns = EditColumns()
     read_cursor = 0
     sequence = alignment.sequence.upper()
     qualities = alignment.quality
@@ -112,6 +120,7 @@ def decode_alignment(alignment, sequences, max_indel=50):
         raise ValueError("Read quality length differs from sequence length")
     for mi, mapping in enumerate(alignment.path.mapping):
         nid = mapping.position.node_id
+        observe = target_nodes is None or nid in target_nodes
         forward = sequences[nid]
         reverse = mapping.position.is_reverse
         reference = rc(forward) if reverse else forward
@@ -153,28 +162,37 @@ def decode_alignment(alignment, sequences, max_indel=50):
                 flank = [qualities[q] for q in (read_cursor - 1, read_cursor)
                          if qualities and 0 <= q < len(qualities)]
                 quality = min(flank) if flank else -1
-            if op == "X":
+            if op == "X" and observe:
                 for k, (r, a) in enumerate(zip(cref, calt)):
-                    if r != a:
+                    if r != a and r.upper() != "N" and a.upper() != "N":
                         q = qs[f - 1 - k if reverse else k]
                         observations.append(Observation(Candidate(nid, pos+k, r, a, "SNP"), mi, q))
             elif op in ("I", "D"):
                 candidate = Candidate(nid, pos, cref, calt, "INS" if op == "I" else "DEL")
-                if max(f, t) <= min(50, max_indel):
-                    observations.append(Observation(candidate, mi, quality))
-                else:
+                # Match legacy discovery: ambiguous alleles (and insertion
+                # anchors) are context only, never variant candidates. Use the
+                # forward-node anchor so both read strands make the same call.
+                anchor = forward[max(0, pos - 1):max(0, pos - 1) + 1]
+                ambiguous = ("N" in cref.upper() or "N" in calt.upper()
+                             or (op == "I" and anchor.upper() == "N"))
+                if max(f, t) > min(50, max_indel):
                     unsupported.append(dict(candidate.metadata(), mapping_index=mi, edit_index=ei,
                                             reason="indel_exceeds_limit"))
+                elif observe and not ambiguous:
+                    observations.append(Observation(candidate, mi, quality))
             elif op == "C":
                 unsupported.append(dict(node_id=nid, start=pos, ref=cref, alt=calt,
                                         mapping_index=mi, edit_index=ei,
                                         reason="complex_replacement_not_supported"))
-            for k in range(max(f, t)):
-                is_boundary = k >= f
-                p = cursor + min(k, f)
-                p = len(forward) - p - (0 if is_boundary else 1) if reverse else p
-                columns.append(Column(alt[k] if k < t else "-", ref[k] if k < f else "-",
-                                      qs[k] if k < t else -1, op, nid, p, reverse, mi, is_boundary))
+            if mode == 'window':
+                columns.add(ref, alt, qs, op, nid, cursor, reverse, mi, len(forward))
+            else:
+                for k in range(max(f, t)):
+                    is_boundary = k >= f
+                    p = cursor + min(k, f)
+                    p = len(forward) - p - (0 if is_boundary else 1) if reverse else p
+                    columns.append(Column(alt[k] if k < t else "-", ref[k] if k < f else "-",
+                                          qs[k] if k < t else -1, op, nid, p, reverse, mi, is_boundary))
             cursor += f
             read_cursor += t
         lo, hi = (len(forward)-cursor, len(forward)-initial) if reverse else (initial, cursor)
@@ -186,6 +204,8 @@ def decode_alignment(alignment, sequences, max_indel=50):
 
 
 def oriented_columns(read, visit, context=None):
+    if hasattr(read.columns, 'view'):
+        return read.columns.view(visit, context)
     columns = read.columns if context is None else read.columns[
         max(0, visit.first-context):visit.last+context]
     return [c.flipped() for c in reversed(columns)] if visit.reverse else columns
@@ -223,7 +243,8 @@ def overlap(read, candidate, min_bq, node_index=None):
                  any(o.visit == visit.index and o.candidate == candidate and o.quality >= min_bq
                      for o in read.observations))
         cols = oriented_columns(read, visit, 1)
-        local = [c for c in cols if c.visit == visit.index]
+        lazy = hasattr(cols, 'split')
+        local = None if lazy else [c for c in cols if c.visit == visit.index]
         support = "other"
         if exact:
             support = "alt"
@@ -232,11 +253,15 @@ def overlap(read, candidate, min_bq, node_index=None):
             if not middle and boundary_evidence(left, right, visit, candidate.start):
                 support = "ref"
         else:
-            affected = [c for c in local if not c.boundary and candidate.start <= c.pos < candidate.end]
-            inserted = any(c.boundary and candidate.start < c.pos < candidate.end for c in local)
-            if (len(affected) == len(candidate.ref) and not inserted
+            if lazy:
+                if cols.reference_support(visit, candidate):
+                    support = 'ref'
+            else:
+                affected = [c for c in local if not c.boundary and candidate.start <= c.pos < candidate.end]
+                inserted = any(c.boundary and candidate.start < c.pos < candidate.end for c in local)
+                if (len(affected) == len(candidate.ref) and not inserted
                     and all(c.op in ("M", "X") and c.read == c.ref for c in affected)):
-                support = "ref"
+                    support = "ref"
         choices.append((dict(alt=0, ref=1, other=2)[support], visit.index, support, visit))
     if not choices:
         return None
@@ -246,6 +271,8 @@ def overlap(read, candidate, min_bq, node_index=None):
 
 def split_columns(cols, visit, candidate):
     """Separate candidate insertion boundary or reference interval from row context."""
+    if hasattr(cols, 'split'):
+        return cols.split(visit, candidate)
     indices = [i for i, c in enumerate(cols) if c.visit == visit.index and
                ((c.boundary and c.pos == candidate.start) if candidate.kind == "INS" else
                 (not c.boundary and candidate.start <= c.pos < candidate.end))]
@@ -273,6 +300,13 @@ def anchor_window(read, visit, candidate, width):
     anchor = width // 2
     cols = oriented_columns(read, visit, width)
     left, center, right = split_columns(cols, visit, candidate)
+    # Preserve full central length for overflow metadata, materializing only
+    # the prefix that can appear in the final tensor window.
+    central_length = len(center)
+    if hasattr(cols, 'split'):
+        left = list(left[-max(anchor, 1):])
+        center = list(center[:max(width, 1)])
+        right = list(right[:max(width, 1)])
     if candidate.kind == "INS":
         evidence = bool(center) or boundary_evidence(left, right, visit, candidate.start)
         slots = min(len(candidate.alt), width-anchor)
@@ -280,6 +314,7 @@ def anchor_window(read, visit, candidate, width):
             gap = Column("-", "-", -1, "G", candidate.node, candidate.start,
                          False, visit.index, True)
             center = center + [gap if evidence else None] * (slots-len(center))
+        central_length = max(central_length, slots)
         missing = 0
     else:
         # Partial coverage starts after the anchor: do not shift its first base
@@ -290,7 +325,7 @@ def anchor_window(read, visit, candidate, width):
     tail = [None]*missing + center + right
     row += tail[:width-anchor]
     row += [None]*(width-len(row))
-    cropped = max(0, missing+len(center)-(width-anchor))
+    cropped = max(0, missing+central_length-(width-anchor))
     return row, cropped
 
 
@@ -312,7 +347,7 @@ def make_tensor(candidate, eligible, rows=200, width=101, debug=False, node_walk
     if with_walks and any(not isinstance(count, (int, np.integer)) or not 0 <= count <= np.iinfo(np.int32).max
                           for count in node_walk_counts.values()):
         raise ValueError("Node walk counts must be nonnegative int32 integers")
-    tensor = np.zeros((7 if with_walks else 6, rows, width), dtype=np.int32 if with_walks else np.int16)
+    tensor = np.zeros((7 if with_walks else 6, rows, width), dtype=np.int8)
     details = []
     omitted = []
     windows = []
@@ -354,11 +389,11 @@ def make_tensor(candidate, eligible, rows=200, width=101, debug=False, node_walk
             groups[-1]["end_row"] = ri+1
         for ci, col in enumerate(row):
             if col is not None:
-                tensor[:6, ri, ci] = [BASES.get(col.read, 5), col.quality,
+                tensor[:6, ri, ci] = [BASES.get(col.read, 5), int8_quality(col.quality),
                     int(col.op in ("I", "D", "C") or (col.op == "X" and col.read != col.ref)) | (2 if in_candidate(col, visit, candidate) else 0),
-                    min(32767, read.mapq), OPS[col.op], BASES.get(col.ref, 5)]
+                    int8_quality(read.mapq), OPS[col.op], BASES.get(col.ref, 5)]
                 if with_walks:
-                    tensor[6, ri, ci] = node_walk_counts[col.node]
+                    tensor[6, ri, ci] = encode_count(node_walk_counts[col.node])
         if overflow:
             omitted.append(dict(row_index=ri, omitted_columns=overflow,
                                 reason="candidate_region_extends_beyond_anchor_window"))
@@ -371,7 +406,7 @@ def make_tensor(candidate, eligible, rows=200, width=101, debug=False, node_walk
                            mapping_index=v.index) for v in read.visits],
                 columns=[c.graph() if c is not None else None for c in row]))
     counts = Counter(s for _, s, _ in eligible)
-    return tensor, dict(candidate.metadata(), tensor_format_version=V3_VERSION if with_walks else VERSION,
+    return tensor, dict(candidate.metadata(), tensor_storage_version=STORAGE_VERSION, tensor_format_version=V3_VERSION if with_walks else VERSION,
         row_order=ROW_ORDER, row_groups=groups, row_selection_version=ROW_SELECTION_VERSION,
         selected_grouped_ranks=sample_indices, window_mismatch_bp=[w[5] for w in chosen],
         window_encoding_version=WINDOW_ENCODING_VERSION, anchor_column=start,

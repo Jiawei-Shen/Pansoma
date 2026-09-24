@@ -14,18 +14,26 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
 from indexed_gam_pipeline.benchmark_candidates import process_memory,digest_file
 from indexed_gam_pipeline.full_run import write_json,validate_shards
+from indexed_gam_pipeline.tensor_storage import manifest_dtype
 
 
 def merge_parts(parts,dest,shard_size=2048):
     """Join contiguous partitions, repack shards, stream metadata in candidate order."""
-    dest.mkdir()
     manifests=[json.loads((p/'manifest.json').read_text()) for p in parts]
+    if not manifests:
+        raise ValueError('No partitions to merge')
+    dtype=manifest_dtype(manifests[0])
+    if any(manifest_dtype(m) != dtype or m.get('tensor_storage_version') != manifests[0].get('tensor_storage_version') or m.get('encodings') != manifests[0].get('encodings') for m in manifests):
+        raise ValueError('Cannot merge incompatible tensor storage encodings')
+    dest.mkdir()
     total=sum(m['tensors'] for m in manifests);size=shard_size
     # Open one source shard at a time: full runs can contain thousands of shards.
     position=0;output=None
     for part in parts:
         for source in sorted(part.glob('shard_*_data.npy')):
             arr=np.load(source,mmap_mode='r',allow_pickle=False)
+            if arr.dtype != dtype:
+                raise ValueError('Shard dtype differs from manifest')
             if position%size==0 and len(arr)==min(size,total-position):
                 os.link(source,dest/f'shard_{position//size:05d}_data.npy')
                 position+=len(arr)
@@ -33,7 +41,7 @@ def merge_parts(parts,dest,shard_size=2048):
                 offset=0
                 while offset<len(arr):
                     if position%size==0:
-                        output=np.lib.format.open_memmap(dest/f'shard_{position//size:05d}_data.npy',mode='w+',dtype=np.int32,
+                        output=np.lib.format.open_memmap(dest/f'shard_{position//size:05d}_data.npy',mode='w+',dtype=dtype,
                             shape=(min(size,total-position),7,200,101))
                     count=min(len(arr)-offset,len(output)-position%size)
                     output[position%size:position%size+count]=arr[offset:offset+count]

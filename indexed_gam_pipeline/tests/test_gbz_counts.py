@@ -68,7 +68,7 @@ class CacheTests(unittest.TestCase):
                 x = np.load(root/f"out/shard_{meta['shard_index']:05d}_data.npy")[meta['index_within_shard']]
                 for ri,row in enumerate(meta['rows']):
                     for ci,col in enumerate(row['columns']):
-                        self.assertEqual(x[6,ri,ci],86 if col else 0)
+                        self.assertEqual(x[6,ri,ci],21 if col else 0)
 
     def test_reject_old_gfa_cache(self):
         import sqlite3

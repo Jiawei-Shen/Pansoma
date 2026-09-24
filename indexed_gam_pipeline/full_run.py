@@ -17,6 +17,8 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+from indexed_gam_pipeline.tensor_storage import manifest_dtype
+
 
 def write_json(path, value):
     path = Path(path)
@@ -73,6 +75,7 @@ def validate_shards(folder, shard_size, width=101):
     manifest = json.loads((folder / 'manifest.json').read_text())
     if manifest['status'] != 'complete' or manifest['tensor_format_version'] != 'indexed-gam-candidate-v4':
         raise ValueError('Incomplete or unexpected tensor format')
+    dtype = manifest_dtype(manifest)
     expected = manifest['shards']
     if len(list(folder.glob('shard_*_data.npy'))) != expected:
         raise ValueError('Shard file count mismatch')
@@ -80,7 +83,7 @@ def validate_shards(folder, shard_size, width=101):
     for i in range(expected):
         path = folder / f'shard_{i:05d}_data.npy'
         x = np.load(path, mmap_mode='r', allow_pickle=False)
-        if x.ndim != 4 or x.shape[1:] != (7, 200, width) or x.dtype != np.int32:
+        if x.ndim != 4 or x.shape[1:] != (7, 200, width) or x.dtype != dtype:
             raise ValueError(f'Unexpected shard shape/dtype: {path}')
         if not 0 < len(x) <= shard_size or (i < expected-1 and len(x) != shard_size):
             raise ValueError(f'Invalid shard length: {path}')
@@ -90,6 +93,7 @@ def validate_shards(folder, shard_size, width=101):
         del x
     seen = [0] * expected
     events = Counter()
+    sites = set()
     with (folder / 'variant_summary.ndjson').open() as stream:
         for line in stream:
             m = json.loads(line)
@@ -103,12 +107,24 @@ def validate_shards(folder, shard_size, width=101):
                 raise ValueError('Candidate AF/row count mismatch')
             if m['tensor_format_version'] != 'indexed-gam-candidate-v4':
                 raise ValueError('Summary format mismatch')
+            if m.get('sample_unit') == 'site-v1':
+                alleles = m['alleles']
+                kind = 'SNV' if m['event_type'] == 'SNP' else 'INDEL'
+                if (m['site_id'] != f"{m['node_id']}:{m['start']}:{kind}" or not alleles
+                        or m['allele_count'] != len(alleles) or alleles[0]['candidate_id'] != m['candidate_id']
+                        or any(a['alt_count'] < b['alt_count'] for a, b in zip(alleles, alleles[1:]))
+                        or any(a['start'] != m['start'] or ('SNV' if a['event_type'] == 'SNP' else 'INDEL') != kind
+                               for a in alleles)):
+                    raise ValueError('Site allele list mismatch')
+                if m['site_id'] in sites:
+                    raise ValueError('Duplicate site in one output')
+                sites.add(m['site_id'])
             events[m['event_type']] += 1
     if seen != sizes or sum(sizes) != manifest['tensors']:
         raise ValueError('Summary, shard, and manifest tensor counts differ')
     report = dict(passed=True, tensors=sum(sizes), shards=expected, shard_size=shard_size,
         last_shard_tensors=sizes[-1] if sizes else 0, shape_per_tensor=[7,200,width],
-        dtype='int32', event_types=dict(events),
+        dtype=str(dtype), event_types=dict(events), sites=len(sites),
         scope='Every NPY header/file size and every summary record; independent source audit performed on the preflight tensors')
     write_json(folder / 'validation_report.json', report)
     return report

@@ -10,14 +10,19 @@ The legacy commands below remain available for existing run snapshots.
 See [Current pipeline: inputs through validation and images](CURRENT_PIPELINE.md)
 for the complete workflow, exact test commands, and latest rerun evidence.
 
-`build` defaults to **candidate-v4**, shape `(7,200,100)`, `int32`.
-Channel 7 is `node_distinct_gbwt_path_count`: the number of distinct physical
+`build` defaults to **candidate-v4**, shape `(7,200,101)`, `int8`.
+New manifests identify storage as `int8-count-div4-v1`. Historical int32 v4
+shards remain readable; merging different storage encodings is rejected.
+Division and clipping affect tensor storage only, not candidate filters or support counts.
+
+Channel 7 stores `min(node_distinct_gbwt_path_count // 4, 127)`, where the raw count is the number of distinct physical
 GBWT paths visiting the column's node, including reference and haplotype paths.
 Repeated visits, both node orientations, and a path's reverse-complement copy
 count once. A single forward-node search covers both orientations because the
 GBWT is bidirectional; physical path IDs are deduplicated. This is a path count, not a count of unique biological haplotypes:
-fragmented paths can belong to the same sample/haplotype. Counts are unscaled.
-The first six channels, row selection, and candidate statistics retain v3 semantics.
+fragmented paths can belong to the same sample/haplotype. Tensor counts are floor-divided by 4; values above 127 after division saturate at 127.
+Missing quality remains -1; BQ/MAPQ are capped at 127. Row selection and
+candidate statistics retain v3 semantics.
 
 The previous GFA W-record metric missed paths available in our GBZ. For example,
 on **hprc-v1.1-mc-grch38.d9**, node 2753 has 86 GBWT paths (old W count 1), and
@@ -96,7 +101,7 @@ These are 1,000-tensor sample measurements, not a whole-genome runtime estimate.
 
 # Seven-channel candidate tensors (v3): cached graph walk counts
 
-The retained **`--format candidate-v3`** uses shape `(7,200,100)`, `int32`.
+The retained **`--format candidate-v3`** uses shape `(7,200,101)`, `int8`.
 The first six channels and node-path row grouping retain v2 semantics. Channel 7
 contains the **exact number of distinct GFA W records visiting the column's node**.
 It is a graph feature, independent of GAM read coverage. Existing six-channel and
@@ -148,8 +153,8 @@ Channel 7 conventions:
   count, including context insertions on other branches.
 - Missing coverage and unused rows have count 0. A real mapped node absent from
   all W records also has count 0; other channels distinguish it from padding.
-- Counts are raw integers, never normalized or clipped. `int32` preserves counts
-  above the previous format's int16 maximum. Out-of-range counts fail explicitly.
+- The index retains exact counts; tensor channel 7 stores `min(count // 4, 127)`.
+  Invalid raw counts outside nonnegative int32 range fail explicitly.
 - Reverse orientation does not alter the count. All seven channels are permuted
   together when grouping rows by node path. Candidate statistics and row selection
   do not depend on this feature.
@@ -170,7 +175,7 @@ The following documentation describes the retained six-channel v2 format.
 # Indexed GAM candidate-centered tensors (v2)
 
 Select `--format candidate-v2` for the retained six-channel version: one alignment per row,
-shape `(6, 200, 100)`, `int16`, with no reference row. Select `--format legacy`
+shape `(6, 200, 101)`, `int8`, with no reference row. Select `--format legacy`
 for the original `(5, 201, 100)` int8 tensors and existing checkpoints.
 Six-channel v2 is a new encoding and **cannot be consumed directly by existing
 five-channel checkpoints** (nor by an arbitrary older six-channel model).
@@ -245,14 +250,14 @@ Window and encoding contract:
 | 1 | Actual read bases |
 | 2 | Base qualities |
 | 3 | Bit flags: difference/event = 1; candidate region = 2 |
-| 4 | Mapping quality (saturated at int16 maximum) |
+| 4 | Mapping quality (clipped to -1–127) |
 | 5 | Alignment operation |
 | 6 | That row's graph-reference bases |
 
 Base encoding: padding=0, A=1, C=2, G=3, T=4, N/unknown=5, alignment gap=6.
 Operation encoding: padding=0, M=1, X=2, I=3, D=4, C=5, G=6
-(G is an aligned absence in the shared insertion block). Quality is -1 when
-there is no read base or no recorded quality; ordinary padding is 0. Unused rows
+(G is an aligned absence in the shared insertion block). Quality is clipped to -1–127; missing quality and positions without a read
+base store -1; ordinary padding stores 0. Unused rows
 are all zero. In occupied rows the candidate flag marks the entire central range,
 including missing coverage. Missing insertion coverage keeps read padding but
 reference-gap channel values. Metadata disambiguates the candidate region.
@@ -527,3 +532,24 @@ python scripts/label_tensors.py \
 GAI 格式依据 vg 官方
 [`stream_index.cpp`](https://github.com/vgteam/vg/blob/d08602f3855d5eb5ca406a388b01d2cd12c002d5/src/stream_index.cpp)
 的序列化定义与 bin-prefix 规则实现。
+# Automatic read-length decoding
+
+Candidate builds retain two equivalent decoding implementations. The default
+`--decode-mode auto` samples the first ten **unfiltered records at the start of
+the input GAM**, before indexed node queries. Their arithmetic mean sequence
+length selects `full` below 1,000 bp and `window` at or above 1,000 bp. Fewer
+than ten records use all available records; an empty input selects `full`.
+The policy is fixed for the build and recorded in `manifest.json` under
+`decode_policy`, including the sample lengths. Both GAM readers use the same
+sampling rule. Explicit `--decode-mode full` or `--decode-mode window` skips
+sampling and permits controlled comparisons.
+
+`full` retains the original per-base Column expansion. `window` stores complete
+mapping/edit intervals and discovers the same candidates, but computes reference
+support from intervals and materializes only columns needed near a candidate.
+It preserves cross-node context, reverse mappings, repeated visits, insertion
+boundary evidence, complex replacement context, row selection and record hashes.
+The edge edit is cropped even when it is a very long match or insertion. Window
+sizes count alignment columns, not read-only base positions. This does not avoid
+GAM decompression or protobuf parsing. Edit intervals and quality slices still
+occupy memory, and dense candidates may repeatedly expand overlapping windows.
