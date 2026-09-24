@@ -24,6 +24,8 @@ rng = random.Random(5)
 CHR1 = "ACGTTTTTGCAACACACGTAGGCT" + "".join(rng.choice("ACGT") for _ in range(56))
 PIECES = [(1, 5, False), (2, 7, True), (3, 12, False), (4, 20, True), (5, 16, False), (6, 20, False)]
 CHR2 = "GATTACAGATTACA"
+# chr3: nodes 10 and 11 both reverse-oriented on the reference walk (<10<11).
+CHR3 = "".join(rng.choice("ACGT") for _ in range(30))
 
 
 def graph_files(directory):
@@ -36,13 +38,14 @@ def graph_files(directory):
         walk += ("<" if reverse else ">") + str(node)
         cursor += length
     assert cursor == len(CHR1)
-    segments += [(7, "GG"), (8, CHR2[:7]), (9, CHR2[7:])]
+    segments += [(7, "GG"), (8, CHR2[:7]), (9, CHR2[7:]), (10, rc(CHR3[:12])), (11, rc(CHR3[12:]))]
     lines = ["H\tVN:Z:1.1"] + [f"S\t{n}\t{s}" for n, s in segments]
     lines += [f"W\tGRCh38\t0\tchr1\t0\t{len(CHR1)}\t{walk}",
               f"W\tGRCh38\t0\tchr2\t0\t{len(CHR2) + 7}\t>8>9>8",
-              "W\tHG1\t1\tctg1\t0\t9\t>1>7>3"]
+              "W\tHG1\t1\tctg1\t0\t9\t>1>7>3",
+              f"W\tGRCh38\t0\tchr3\t0\t{len(CHR3)}\t<10<11"]
     (directory / "g.gfa").write_text("\n".join(lines) + "\n")
-    (directory / "g.fa").write_text(f">chr1\n{CHR1}\n>chr2\n{CHR2}{CHR2[:7]}\n")
+    (directory / "g.fa").write_text(f">chr1\n{CHR1}\n>chr2\n{CHR2}{CHR2[:7]}\n>chr3\n{CHR3}\n")
     pysam.faidx(str(directory / "g.fa"))
     return directory / "g.gfa", directory / "g.fa"
 
@@ -62,8 +65,8 @@ class ReferencePathTest(unittest.TestCase):
             gfa, _ = graph_files(tmp)
             meta = scan(gfa, Path(tmp) / "rp")
             path = ReferencePath(Path(tmp) / "rp")
-            self.assertEqual((meta["walks"], meta["ambiguous_reference_nodes"]), (3, 1))  # node 8 visited twice
-            self.assertEqual(path.contigs, ["chr1", "chr2"])
+            self.assertEqual((meta["walks"], meta["ambiguous_reference_nodes"]), (4, 1))  # node 8 visited twice
+            self.assertEqual(path.contigs, ["chr1", "chr2", "chr3"])
             self.assertEqual(int(path.chrom[7]), -1)
             locator = Locator(path)
             sequences = dict(line.split("\t")[1:3] for line in Path(gfa).read_text().splitlines() if line[0] == "S")
@@ -101,13 +104,56 @@ class ReferencePathTest(unittest.TestCase):
                 (components / chrom / f"{chrom}.component.nodes.raw.txt").write_text("\n".join(map(str, nodes)) + "\n")
             blocks, meta = chr_index.build(components, Path(tmp) / "rp", Path(tmp) / "idx.chr_node_ranges",
                                            autosomes=("chr1", "chr2"))
-            self.assertEqual([(b["chrom"], b["first_node"], b["last_node"]) for b in blocks], [("chr1", 1, 7), ("chr2", 8, 9)])
-            self.assertEqual(meta["walk_check"]["total"], 3)
+            self.assertEqual([(b["chrom"], b["first_node"], b["last_node"]) for b in blocks],
+                             [("chr1", 1, 7), ("chr2", 8, 9), ("unplaced", 10, 11)])  # chr3 is not in this test's autosomes
+            self.assertEqual(meta["walk_check"]["total"], 4)
             index = chr_index.ChrIndex(Path(tmp) / "idx.chr_node_ranges.tsv")
-            self.assertEqual(index.names_of([7, 8, 10]), ["chr1", "chr2", None])
+            self.assertEqual(index.names_of([7, 8, 10, 12]), ["chr1", "chr2", "unplaced", None])
             (components / "chr1" / "chr1.component.nodes.raw.txt").write_text("1\n2\n4\n")
             with self.assertRaisesRegex(ValueError, "not one contiguous"):
                 chr_index.build(components, Path(tmp) / "rp", Path(tmp) / "bad", autosomes=("chr1", "chr2"))
+
+
+class CrossNodeDeletionTest(unittest.TestCase):
+    """Truth keys of deletions over node junctions equal the v6 builder's candidate_id (Candidate.path)."""
+
+    def decoded(self, gfa, specs):
+        from fixtures import spec_alignment
+        from indexed_gam_pipeline_v2.candidates import decode_alignment
+        sequences = {int(l.split("\t")[1]): l.split("\t")[2] for l in Path(gfa).read_text().splitlines() if l[0] == "S"}
+        read, _ = decode_alignment(spec_alignment(specs, sequences), sequences)
+        (obs,) = [o for o in read.observations if o.candidate.kind == "DEL"]
+        return obs.candidate.metadata()
+
+    def test_forward_and_reverse_node_pairs(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            gfa, _ = graph_files(tmp)
+            scan(gfa, Path(tmp) / "rp")
+            path = ReferencePath(Path(tmp) / "rp")
+            locator = Locator(path)
+            cases = [
+                # chr1 nodes 5 (>, linear 44..60) and 6 (>, 60..80): delete linear 58..62.
+                ("chr1", CHR1, 58, 4, [(5, 10, False, [(4, 4, ""), (2, 0, "")]), (6, 0, False, [(2, 0, ""), (6, 6, "")])]),
+                # chr3 nodes 10 (<, linear 0..12) and 11 (<, 12..30), read along the walk: delete linear 10..14.
+                ("chr3", CHR3, 10, 4, [(10, 6, True, [(4, 4, ""), (2, 0, "")]), (11, 0, True, [(2, 0, ""), (6, 6, "")])]),
+            ]
+            for chrom, genome, pos, m, specs in cases:
+                with self.subTest(chrom=chrom):
+                    meta = self.decoded(gfa, specs)
+                    keys = {k for p in placements(genome, pos, genome[pos:pos + m], "", "DEL")
+                            for k in locator.keys(chrom, *p, "DEL")}
+                    self.assertIn(meta["candidate_id"], keys)
+                    lin = path.linear(meta["node_id"], meta["start"], meta["ref"], meta["alt"], "DEL", meta["path"])
+                    self.assertIn((lin["pos0"], lin["ref"]),
+                                  [(p[0], p[1]) for p in placements(genome, pos, genome[pos:pos + m], "", "DEL")])
+                    self.assertEqual(lin["chrom"], chrom)
+            # The reverse pair is keyed on its forward-first node (11, the linear right one), REF reverse-complemented.
+            self.assertEqual(locator.keys("chr3", 10, CHR3[10:14], "", "DEL"), [f"11:16:DEL:{rc(CHR3[10:14])}>@10"])
+            self.assertEqual(locator.keys("chr1", 58, CHR1[58:62], "", "DEL"), [f"5:14:DEL:{CHR1[58:62]}>@6"])
+            # Mixed orientation (node 1 >, node 2 <): no key, and linear() refuses such a path.
+            self.assertEqual(locator.keys("chr1", 4, "TT", "", "DEL"), [])
+            self.assertIsNone(path.linear(1, 4, "TT", "", "DEL", [[2, 6, 7]]))
+            self.assertIsNone(path.linear(5, 14, "ACGT", "", "DEL", [[3, 0, 2]]))  # not the neighbouring node
 
 
 class TruthLabelTest(unittest.TestCase):
@@ -192,6 +238,23 @@ class TruthLabelTest(unittest.TestCase):
             summary = recall(somatic, matched["somatic"], {}, tmp)
             self.assertEqual(summary["status"], {"tensor_representative": 1, "tensor_non_representative_allele": 1})
             self.assertTrue((tmp / "somatic.recall.tsv").exists())
+
+    def test_insertion_near_span_covers_the_whole_repeat(self):
+        """An insertion in a long homopolymer is 'near' anywhere in the run, not only at its leftmost placement
+        (regression: residual edits at the run's right end were labelled non)."""
+        class NoKeys:
+            def keys(self, *args):
+                return []
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            (tmp / "g.fa").write_text(">chr1\nGC" + "A" * 30 + "GTCAGTCAGTCAGTCAGT\n")
+            pysam.faidx(str(tmp / "g.fa"))
+            (tmp / "b.bed").write_text("chr1\t0\t50\n")
+            vcf = write_vcf(tmp / "t.vcf", [(2, "C", "CA", "PASS", "0|1")])
+            truth = TruthSet("somatic", vcf, tmp / "b.bed", tmp / "g.fa", NoKeys(), chromosomes=("chr1",))
+            self.assertEqual(truth.alleles[0]["placements"], 31)  # boundaries 2..32
+            self.assertTrue(truth.near("chr1", 31, 33))            # right end of the run, 29 bp from the left one
+            self.assertFalse(truth.near("chr1", 44, 45))           # 12 bp past the run
 
     def test_bed_intersection_and_containment(self):
         a = Bed({"chr1": [(0, 10), (8, 20), (30, 40)]})
