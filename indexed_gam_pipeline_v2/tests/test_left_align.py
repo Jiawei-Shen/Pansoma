@@ -79,9 +79,9 @@ class LeftAlignTest(unittest.TestCase):
         # another indel directly left
         read = decode([(1, 0, False, [(3, 3, ""), (1, 0, ""), (0, 1, "A"), (2, 2, "")])], sequences)
         self.assertEqual(candidates(read), [Candidate(1, 1, "A", "", "DEL"), Candidate(1, 2, "", "A", "INS")])
-        # a 2-bp deletion stops at a node boundary; a 1-bp deletion crosses it
+        # deletions of any length cross node boundaries
         read = decode([(2, 0, False, [(2, 2, "")]), (3, 0, False, [(2, 0, ""), (1, 1, "")])], sequences)
-        self.assertEqual(candidates(read), [Candidate(3, 0, "AA", "", "DEL")])
+        self.assertEqual(candidates(read), [Candidate(2, 0, "AA", "", "DEL")])
         read = decode([(2, 0, False, [(2, 2, "")]), (3, 0, False, [(1, 1, ""), (1, 0, ""), (1, 1, "")])], sequences)
         self.assertEqual(candidates(read), [Candidate(2, 0, "A", "", "DEL")])
         # an orientation change stops it
@@ -91,6 +91,59 @@ class LeftAlignTest(unittest.TestCase):
         read = decode([(1, 0, False, [(5, 5, ""), (0, 1, "N"), (1, 1, "")])], sequences)
         self.assertEqual(candidates(read), [])
         self.assertEqual([c.pos for c in read.columns if c.boundary], [5])
+
+    def test_indel_quality_is_strand_symmetric_under_read_direction_quality_patterns(self):
+        # HiFi-like pattern: the last base of a homopolymer in sequencing direction has a low QV.
+        sequences = {1: "GAAAAC"}
+        forward = [(1, 0, False, [(5, 5, ""), (0, 1, "A"), (1, 1, "")])]  # G AAAA +A C
+        deletion = [(1, 0, False, [(4, 4, ""), (1, 0, ""), (1, 1, "")])]  # G AAA -A C
+        for specs, low in ((forward, 5), (deletion, 4)):
+            reads = {}
+            for strand, strand_specs in (("forward", specs), ("reverse", mirror(specs, sequences))):
+                a = spec_alignment(strand_specs, sequences)
+                quality = [40] * len(a.sequence)
+                quality[low] = 5  # read index `low` = the run's last base in read order
+                a.quality = bytes(quality)
+                reads[strand] = decode_alignment(a, sequences)[0]
+            (f,), (r,) = reads["forward"].observations, reads["reverse"].observations
+            self.assertEqual(f.candidate, r.candidate)
+            self.assertEqual(f.quality, r.quality)  # both see the whole repeat, low base included
+        # outside a repeat the quality is the plain one: inserted bases / nearest flanks
+        plain = decode_alignment(spec_alignment([(1, 0, False, [(1, 1, ""), (0, 1, "T"), (5, 5, "")])], sequences),
+                                 sequences)[0]
+        self.assertEqual([o.quality for o in plain.observations], [30])
+
+    def test_deletion_across_nodes_is_one_candidate_with_its_path(self):
+        from indexed_gam_pipeline_v2.candidates import make_tensor, NodeReads
+        sequences = {1: "GCA", 2: "TG", 3: "GAT"}
+        # vg writes it as three edits: A at the end of node 1, all of node 2, G at the start of node 3
+        spec = [(1, 0, False, [(2, 2, ""), (1, 0, "")]), (2, 0, False, [(2, 0, "")]), (3, 0, False, [(1, 0, ""), (2, 2, "")])]
+        expected = Candidate(1, 2, "ATGG", "", "DEL", ((2, 0, 2), (3, 0, 1)))
+        self.assertEqual(expected.metadata()["candidate_id"], "1:2:DEL:ATGG>@2+3")
+        self.assertEqual(expected.positions(), [(1, 2), (2, 0), (2, 1), (3, 0)])
+        for strand in (spec, mirror(spec, sequences)):
+            read = decode(strand, sequences)
+            self.assertEqual(candidates(read), [expected])
+            self.assertEqual(overlap(read, expected, 10)[0], "alt")
+        ref = decode([(1, 0, False, [(3, 3, "")]), (2, 0, False, [(2, 2, "")]), (3, 0, False, [(3, 3, "")])], sequences)
+        self.assertEqual(overlap(ref, expected, 10)[0], "ref")  # matched over all three nodes, aligned neighbours
+        branch = decode([(1, 0, False, [(3, 3, "")]), (3, 0, False, [(3, 3, "")])], {**sequences})
+        self.assertEqual(overlap(branch, expected, 10)[0], "other")  # skips node 2: not the reference path
+        alt = decode(spec, sequences)
+        eligible = NodeReads(1, [alt, ref], 11).eligible(expected, 10)
+        x, m = make_tensor(expected, eligible, {1: 5, 2: 5, 3: 5}, rows=2, width=11, debug=True)
+        self.assertEqual((m["candidate_columns"], m["site_layout"]["reference"], m["path"]), ([5, 9], "ATGG", [[2, 0, 2], [3, 0, 1]]))
+        rows = {r["site_allele"]: i for i, r in enumerate(m["rows"])}
+        self.assertEqual(x[2, rows["A1"], 5:9].tolist(), [6, 6, 6, 6])
+        self.assertEqual(x[2, rows["REF"], 5:9].tolist(), [1, 4, 3, 3])  # A T G G
+
+    def test_deletion_longer_than_the_limit_only_in_total_is_not_a_candidate(self):
+        sequences = {1: "GCA", 2: "TG", 3: "GAT"}
+        spec = [(1, 0, False, [(2, 2, ""), (1, 0, "")]), (2, 0, False, [(2, 0, "")]), (3, 0, False, [(1, 0, ""), (2, 2, "")])]
+        read, unsupported = decode_alignment(spec_alignment(spec, sequences), sequences, max_indel=3)
+        self.assertEqual(candidates(read), [])  # pieces of 1, 2 and 1 bp, 4 bp in total
+        self.assertEqual([(u["reason"], u["event_length"], u["mappings"]) for u in unsupported],
+                         [("indel_exceeds_limit_across_mappings", 4, 3)])
 
     def test_disabled_keeps_vg_placement(self):
         sequences = {1: "GAAAAC"}
@@ -129,21 +182,26 @@ class LeftAlignTest(unittest.TestCase):
                 left_align_indels(again, copy.deepcopy(read.visits), 50)
                 self.assertEqual([vars_(c) for c in again], [vars_(c) for c in read.columns])
                 # leftmost: no normalized indel can move further
-                for s, e, op in indel_runs(read.columns):
+                for s, e, op in indel_runs(read.columns, join=True):
                     rev = read.columns[s].reverse
                     k = e if rev else s - 1
                     if not 0 <= k < len(read.columns):
                         continue
                     nb, edge = read.columns[k], read.columns[s] if rev else read.columns[e - 1]
                     movable = (nb.op == "M" and not nb.boundary and nb.reverse == rev and nb.read in "ACGT"
-                               and (nb.read == edge.read if op == "I" else nb.ref == edge.ref and
-                                    (e - s == 1 or nb.visit == edge.visit)))
+                               and (nb.read == edge.read if op == "I" else nb.ref == edge.ref))
                     self.assertFalse(movable and "N" not in "".join(c.read + c.ref for c in read.columns[s:e]),
                                      (s, e, op))
-                # the other strand's report of the same molecule gives the same candidates and columns
+                # the other strand's report of the same molecule gives the same candidates and columns,
+                # and every observation the same quality (qualities travel with their bases)
                 other = decode(mirror(specs, sequences), sequences)
                 self.assertEqual(candidates(other), candidates(read))
                 self.assertEqual(mirrored_columns(other), columns_of(read))
+                a.quality = bytes(rng.randint(0, 60) for _ in a.sequence)
+                b = spec_alignment(mirror(specs, sequences), sequences)
+                b.quality = a.quality[::-1]
+                observed = lambda x: sorted((o.candidate, o.quality) for o in decode_alignment(x, sequences)[0].observations)
+                self.assertEqual(observed(b), observed(a))
 
 
 class SupplementRunTest(unittest.TestCase):
@@ -187,6 +245,34 @@ class SupplementRunTest(unittest.TestCase):
             self.assertEqual((site["site_id"], site["alt_count"], site["coverage"]), ("2:0:INDEL", 6, 10))
             self.assertEqual(site["site_counts"], {"A1": 6, "REF": 4})
             self.assertEqual((root / "supplement/displaced_nodes.tsv").read_text(), "")
+
+    def test_multi_node_deletion_build_passes_the_independent_audit(self):
+        from contextlib import redirect_stdout
+        import io
+        import json
+        from pathlib import Path
+        import tempfile
+        from fixtures import build_args, graph_fixture, write_gam
+        from indexed_gam_pipeline_v2.build import build
+        from indexed_gam_pipeline_v2.validate_examples import validate
+        sequences = {1: "GCA", 2: "TG", 3: "GAT"}
+        spec = [(1, 0, False, [(2, 2, ""), (1, 0, "")]), (2, 0, False, [(2, 0, "")]), (3, 0, False, [(1, 0, ""), (2, 2, "")])]
+        ref = [(n, 0, False, [(len(s), len(s), "")]) for n, s in sequences.items()]
+        rows = [spec_alignment(spec, sequences, name=f"a{i}") for i in range(3)]
+        rows += [spec_alignment(mirror(spec, sequences), sequences, name=f"b{i}") for i in range(2)]
+        rows += [spec_alignment(ref, sequences, name=f"r{i}") for i in range(4)]
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            gam = write_gam(root / "g.gam", rows)
+            graph = graph_fixture(root / "graph.sqlite", [(n, s, 5) for n, s in sequences.items()])
+            (root / "nodes.txt").write_text("1\n2\n3\n")
+            with redirect_stdout(io.StringIO()):
+                build(build_args(gam=str(gam), graph_index=str(graph), nodes=str(root / "nodes.txt"), output=str(root / "o"),
+                                 min_variants=1, width=11, max_indel_len=5, rows=12, debug_rows=True))
+            (site,) = [json.loads(l) for l in (root / "o/variant_summary.ndjson").read_text().splitlines()]
+            self.assertEqual((site["candidate_id"], site["alt_count"], site["ref_count"]), ("1:2:DEL:ATGG>@2+3", 5, 4))
+            with redirect_stdout(io.StringIO()):
+                self.assertTrue(validate(root / "o", str(gam), None, str(graph))["passed"])
 
     def test_displaced_command_collects_tasks_and_drops_covered_nodes(self):
         import io

@@ -133,6 +133,27 @@ class SupportTest(unittest.TestCase):
         self.assertEqual(overlap(deletion, Candidate(1, 2, "", "T", "INS"), 10)[0], "other")
         self.assertEqual(overlap(before, Candidate(1, 1, "CGTA", "", "DEL"), 10)[0], "other")
 
+    def test_reference_needs_aligned_neighbours(self):
+        seq = {1: "ACGTA", 2: "CC"}
+        snv, dele = Candidate(1, 2, "G", "T", "SNP"), Candidate(1, 2, "G", "", "DEL")
+        cases = {
+            "match": ([(1, 0, False, [(5, 5, "")])], "ref"),
+            "mismatch next to it": ([(1, 0, False, [(3, 3, ""), (1, 1, "A"), (1, 1, "")])], "ref"),
+            "insertion before": ([(1, 0, False, [(2, 2, ""), (0, 1, "T"), (3, 3, "")])], "other"),
+            "insertion after": ([(1, 0, False, [(3, 3, ""), (0, 1, "T"), (2, 2, "")])], "other"),
+            "deletion after": ([(1, 0, False, [(3, 3, ""), (1, 0, ""), (1, 1, "")])], "other"),
+            "read ends at the site": ([(1, 0, False, [(3, 3, "")])], "other"),
+            "read starts at the site": ([(1, 2, False, [(3, 3, "")])], "other"),
+            "site at a node edge, next node aligned": ([(1, 0, False, [(5, 5, "")]), (2, 0, False, [(2, 2, "")])], "ref"),
+        }
+        for name, (specs, expected) in cases.items():
+            for candidate in (snv, dele):
+                with self.subTest(case=name, kind=candidate.kind):
+                    self.assertEqual(overlap(read(specs, seq), candidate, 10)[0], expected)
+        edge = Candidate(1, 4, "A", "C", "SNP")  # last base of node 1
+        self.assertEqual(overlap(read([(1, 0, False, [(5, 5, "")]), (2, 0, False, [(2, 2, "")])], seq), edge, 10)[0], "ref")
+        self.assertEqual(overlap(read([(1, 0, False, [(5, 5, "")])], seq), edge, 10)[0], "other")
+
     def test_insertion_boundaries_and_node_edges(self):
         seq = {1: "AC", 2: "GT", 3: "TA"}
         c = Candidate(1, 2, "", "T", "INS")
@@ -254,16 +275,17 @@ class WindowTest(unittest.TestCase):
         self.assertEqual(sorted(meta["window_mismatch_bp"]), [1, 2, 3, 3])
 
     def test_allele_blocks_then_uniform_sampling(self):
-        seq = {1: "AC", 2: "GG", 3: "TT"}
+        seq = {1: "AC", 2: "GG", 3: "TT", 4: "AT"}  # node 4 follows the site, so REF reads have a right neighbour
         reads = []
         for i in range(401):
             branch = 3 if i % 2 else 2
             first = [(1, 1, "A"), (1, 1, "")] if branch == 3 else [(2, 2, "")]
             last = [(1, 1, ""), (1, 1, "T")] if i % 3 else [(2, 2, "")]
-            reads.append(read([(branch, 0, False, first), (1, 0, False, last)], seq, name=f"read-{i:04d}"))
+            reads.append(read([(branch, 0, False, first), (1, 0, False, last), (4, 0, False, [(2, 2, "")])], seq,
+                              name=f"read-{i:04d}"))
         c = Candidate(1, 1, "C", "T", "SNP")
         e = eligible(c, reads)
-        counts = {1: 90, 2: 3, 3: 7}
+        counts = {1: 90, 2: 3, 3: 7, 4: 90}
         full, all_meta = make_tensor(c, e, counts, rows=401, width=9, debug=True)
         x, meta = make_tensor(c, list(reversed(e)), counts, rows=200, width=9, debug=True)
         # Blocks A1 then REF, each by record hash; uniform sampling over that order.
@@ -352,11 +374,11 @@ class WindowTest(unittest.TestCase):
         self.assertEqual(m["other_count"], 1)
 
     def test_rows_equal_single_record_rows_and_blocks_keep_counts(self):
-        seq = {1: "AC", 2: "GG", 3: "TT"}
+        seq = {1: "AC", 2: "GG", 3: "TT", 4: "AT"}
         rows = []
         for branch, base in ((3, "T"), (2, "C"), (2, "T"), (3, "C")):
             edits = [(1, 1, ""), (1, 1, "T")] if base == "T" else [(2, 2, "")]
-            rows.append(read([(branch, 0, False, [(2, 2, "")]), (1, 0, False, edits)], seq))
+            rows.append(read([(branch, 0, False, [(2, 2, "")]), (1, 0, False, edits), (4, 0, False, [(2, 2, "")])], seq))
         c = Candidate(1, 1, "C", "T", "SNP")
         e = eligible(c, rows)
         x, m = make_tensor(c, e, COUNTS, rows=6, width=9, debug=True)

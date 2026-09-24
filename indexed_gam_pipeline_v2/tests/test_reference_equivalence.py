@@ -1,11 +1,13 @@
-"""The indexed VisitView/NodeReads path equals the frozen reference implementation exactly.
+"""The indexed VisitView/NodeReads path against the frozen v5 implementation.
 
 Random multi-mapping records (both orientations, repeated node visits, M/X/I/D/complex
 edits, N bases, partial node coverage, missing or varied qualities) are decoded, then every
-observed and probed candidate is classified and windowed by both implementations at
-several widths. Support, anchor visit and window rows must match. (Tensors themselves are
-format v6 now; windows differ from the frozen v5 code only where a record's own insertion
-is longer than the candidate's, which v6 crops to the site's slots, so those are skipped.)
+observed and probed candidate is classified and windowed by both implementations at several
+widths. ALT and the anchor visit must match v5; REF may differ only as v6 intends: an
+SNV/DEL needs aligned neighbouring bases (checked independently here), and a deletion over
+several nodes can now be REF. Windows differ from v5 only where a record's own insertion is
+longer than the candidate's (cropped to the site's slots) or a deletion starts at the
+insertion boundary; those are skipped. The scan fallback must give the same answers.
 """
 import random
 import unittest
@@ -17,7 +19,7 @@ from fixtures import spec_alignment  # noqa: F401  (sets sys.path)
 import reference_candidates as reference
 from indexed_gam_pipeline_v2 import candidates
 from indexed_gam_pipeline_v2.candidates import (Candidate, NodeReads, anchor_window, decode_alignment, make_tensor,
-                                                overlap)
+                                                oriented_columns, overlap)
 
 BASES = "ACGT"
 
@@ -80,6 +82,22 @@ def probes(reads, sequences):
     return sorted(found)
 
 
+def aligned_neighbours(read, visit, candidate):
+    """Independent check of v6's extra REF condition for a one-node SNV/DEL: the columns right before
+    and after the interval (candidate orientation) are M/X graph neighbours, no inserted base at either end."""
+    cols = oriented_columns(read, visit, 3 + len(candidate.ref))
+    own = [k for k, c in enumerate(cols) if c.visit == visit.index and not c.boundary
+           and candidate.start <= c.pos < candidate.end]
+    if not own or own[0] == 0 or own[-1] + 1 >= len(cols):
+        return False
+    before, after = cols[own[0] - 1], cols[own[-1] + 1]
+    if before.boundary or after.boundary or before.op not in "MX" or after.op not in "MX":
+        return False
+    ok_before = before.pos == candidate.start - 1 if before.visit == visit.index else candidate.start == 0
+    ok_after = after.pos == candidate.end if after.visit == visit.index else candidate.end == visit.node_length
+    return ok_before and ok_after
+
+
 def v6_insertion_window_differs(read, visit, candidate):
     """Where v6 deliberately differs from v5 for an insertion: the record inserts more bases at the
     boundary than the candidate has (cropped to the slots), or a deletion starts right at the
@@ -95,21 +113,31 @@ class ReferenceEquivalenceTest(unittest.TestCase):
         counts = {n: rng.choice([1, 2, 90, 600]) for n in sequences}
         for candidate in probes(reads, sequences):
             for min_bq in (0, 10, 40):
-                expected = [(r, *reference.overlap(r, candidate, min_bq)) for r in reads
-                            if reference.overlap(r, candidate, min_bq)]
                 for r in reads:
                     new, old = overlap(r, candidate, min_bq), reference.overlap(r, candidate, min_bq)
                     self.assertEqual(new is None, old is None, candidate)
-                    if old is not None:
-                        self.assertEqual(new[0], old[0], candidate)
-                        self.assertIs(new[1], old[1], candidate)
+                    if old is None:
+                        continue
+                    if new[0] == old[0]:
+                        if new[1] is not old[1]:  # v5's earlier REF visit lacks aligned neighbours
+                            self.assertEqual(new[0], "ref", candidate)
+                            self.assertFalse(aligned_neighbours(r, old[1], candidate), candidate)
+                    elif candidate.path:  # v5 could not see REF over several nodes
+                        self.assertEqual((old[0], new[0]), ("other", "ref"), candidate)
+                    else:  # v6 REF also needs aligned neighbours (and no inserted base at the ends)
+                        self.assertEqual((old[0], new[0]), ("ref", "other"), candidate)
+                        self.assertNotEqual(candidate.kind, "INS", candidate)
+                        self.assertFalse(aligned_neighbours(r, old[1], candidate), candidate)
+                    if (old[0], new[0]) == ("ref", "ref") and candidate.kind != "INS":
+                        self.assertTrue(aligned_neighbours(r, new[1], candidate), candidate)
+                expected = [(r, *overlap(r, candidate, min_bq)) for r in reads if overlap(r, candidate, min_bq)]
                 for width in widths:
                     node_reads = NodeReads(candidate.node, reads, width)
                     actual = node_reads.eligible(candidate, min_bq)
                     self.assertEqual([(r.name, s, v.visit) for r, s, v in actual],
                                      [(r.name, s, v) for r, s, v in expected], candidate)
                     for r, _, visit in expected:
-                        if candidate.kind == "INS" and v6_insertion_window_differs(r, visit, candidate):
+                        if candidate.path or (candidate.kind == "INS" and v6_insertion_window_differs(r, visit, candidate)):
                             continue
                         self.assertEqual(anchor_window(r, visit, candidate, width),
                                          reference.anchor_window(r, visit, candidate, width), candidate)

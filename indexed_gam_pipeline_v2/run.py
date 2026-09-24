@@ -18,7 +18,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from indexed_gam_pipeline_v2.common import load_nodes, new_output, on_chromosome, write_json
+from indexed_gam_pipeline_v2.common import load_nodes, new_output, write_json
 from indexed_gam_pipeline_v2.gam_reader import IndexedGam, build_index, scan_gam
 
 
@@ -38,7 +38,7 @@ def discover(args):
     count = 0
     for alignment in scan_gam(args.gam, args.max_alignments):
         count += 1
-        if alignment.mapping_quality <= args.min_mapq or not on_chromosome(alignment, args.chr):
+        if alignment.mapping_quality <= args.min_mapq:
             continue
         for mapping in alignment.path.mapping:
             nid = mapping.position.node_id
@@ -57,7 +57,7 @@ def discover(args):
                                          for n, (p, q, r) in stats.items()})
     report = dict(gam=str(Path(args.gam).resolve()), alignments_scanned=count, nodes_observed=len(stats),
                   nodes_selected=len(selected), min_mapq=args.min_mapq, node_alt=args.node_alt,
-                  chromosome=args.chr, exploratory=bool(args.max_alignments or args.max_nodes),
+                  exploratory=bool(args.max_alignments or args.max_nodes),
                   max_alignments=args.max_alignments, max_nodes=args.max_nodes)
     write_json(out / "discovery_report.json", report)
     print(json.dumps(report, indent=2))
@@ -74,7 +74,7 @@ def validate(args):
 
     start = time.monotonic()
     metrics = {}
-    indexed = Counter(digest(a) for a in reader.fetch(nodes, metrics) if on_chromosome(a, args.chr))
+    indexed = Counter(digest(a) for a in reader.fetch(nodes, metrics))
     indexed_seconds = time.monotonic() - start
     print(f"Indexed query: {metrics}", flush=True)
     start = time.monotonic()
@@ -82,13 +82,13 @@ def validate(args):
     scanned = 0
     for alignment in scan_gam(args.gam):
         scanned += 1
-        if on_chromosome(alignment, args.chr) and any(m.position.node_id in nodes for m in alignment.path.mapping):
+        if any(m.position.node_id in nodes for m in alignment.path.mapping):
             expected[digest(alignment)] += 1
         if scanned % 500000 == 0:
             print(f"Reference scan: {scanned:,} alignments", flush=True)
     ok = indexed == expected
     report = dict(passed=ok, gam=str(Path(args.gam).resolve()), gai_version=reader.version,
-                  target_nodes=len(nodes), chromosome=args.chr, sequential_alignments=scanned,
+                  target_nodes=len(nodes), sequential_alignments=scanned,
                   indexed_query=metrics, expected_alignments=sum(expected.values()),
                   missing_alignments=sum((expected - indexed).values()),
                   extra_alignments=sum((indexed - expected).values()),
@@ -155,6 +155,12 @@ def add_build_arguments(sub, outputs=True):
     sub.add_argument("--max-node-reads", type=nonnegative, default=800,
                      help="per target node, count support and select rows from at most N records (smallest "
                           "record SHA-256), after the prefilters; 0 = no cap")
+    sub.add_argument("--chromosomes", default="all",
+                     help="target nodes to keep, by the chromosome block of their node ID: all (default), autosome "
+                          "(chr1-22) or a comma list of --chr-index block names (e.g. chr1,chr2,chrX); applied to "
+                          "the node list before any batch")
+    sub.add_argument("--chr-index", help="node ID -> chromosome block table (tensor_postprocessing chr-index .tsv); "
+                                         "required unless --chromosomes all")
     sub.add_argument("--early-af-filter", action=argparse.BooleanOptionalAction, default=True,
                      help="before support counting, reject candidates whose ALT support bound / exact coverage "
                           "over all records is below the AF threshold (default on; exact without a read cap)")
@@ -167,8 +173,6 @@ def main(argv=None):
         sub = commands.add_parser(name)
         sub.add_argument("--gam", required=True, help="sorted BGZF GAM")
         sub.add_argument("--output", required=True, help="new .gai file for index; new or empty directory otherwise")
-        if name != "index":
-            sub.add_argument("--chr", default="", help="keep only alignments whose refpos.name equals this")
         if name == "discover":
             sub.add_argument("--min-mapq", type=int, default=5, help="exclusive MAPQ threshold")
             sub.add_argument("--node-alt", type=fraction, default=0.05, help="select nodes with imperfect fraction > this")

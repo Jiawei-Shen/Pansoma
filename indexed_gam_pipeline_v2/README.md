@@ -104,19 +104,22 @@ Key invariants:
 
 | File | Purpose |
 |---|---|
-| `common.py` | `write_json` (atomic), `stamp`, `sha256_file`, `load_nodes`, `batches`, `on_chromosome` |
+| `common.py` | `write_json` (atomic), `stamp`, `sha256_file`, `load_nodes`, `batches` |
 | `gam_reader.py` | GAI v0/v1 parsing, GAI construction (`build_index`), sequential `scan_gam`, `IndexedGam.fetch` with a bounded LRU group cache |
 | `graph_index.py` | `GraphIndex` read-only lookup; `compile`/`build` CLI for the unified GBZ index (`gbz_graph_index.cpp`) |
 | `candidates.py` | `decode_alignment` (edits → `Column`/`Visit`/`Observation`), `overlap` (ALT/REF/other per record), `NodeReads`/`VisitView` (the indexed form of `overlap` and windowing used per node), `alt_support_bounds`, `exact_coverage`, `anchor_window`, `make_tensor` |
 | `build.py` | the batch loop above: prefilters, `capped_reads`, `candidate_units` (sites), `count_support`, `evaluate_unit`; `OutputDir` (manifest + NDJSON streams + shards), split routing |
 | `run.py` | CLI: `index`, `discover`, `validate`, `build` |
-| `orchestrate.py` | Slurm-scale runs: `prepare` / `run [--resume]` / `task`, `node_costs` (cost prediction), `execute_queue`, `validate_shards`, `MemoryRecorder` |
+| `orchestrate.py` | Slurm-scale runs: `prepare` / `run [--resume]` / `finalize` / `task` / `displaced`, `node_costs` (cost prediction), `execute_queue`, `validate_shards`, `MemoryRecorder` |
+| `tensor_postprocessing/` | after the tasks: GRCh38 path coordinates, node → chromosome blocks (also used by `--chromosomes`), merge into per-chromosome shards, germline/somatic labels (own [README](tensor_postprocessing/README.md)) |
 | `validate_examples.py` | independent audit of `--debug-rows` output against the GAM and graph |
 | `inspect_tensor.py` | text dump of read/graph/path-count rows for eyeballing |
 | `vg_pb2.py` | generated protobuf bindings for `vg.proto` (do not edit) |
 | `gbz_graph_index.cpp` | native builder: one pass over every GBWT path, exports all nodes to SQLite |
 
-Import order is strictly top-down: `common` ← `gam_reader`/`graph_index` ← `candidates` ← `build` ← `run` ← `orchestrate`.
+Import order is strictly top-down: `common` ← `gam_reader`/`graph_index` ← `candidates` ← `build` ← `run` ← `orchestrate`;
+`tensor_postprocessing` only uses `common`/`graph_index` (so it serves every tensor format) and is used by `build`
+(`--chromosomes`) and `orchestrate` (`finalize`).
 
 ---
 
@@ -125,7 +128,11 @@ Import order is strictly top-down: `common` ← `gam_reader`/`graph_index` ← `
 ### `run.py build`
 
 ```
---gam GAM --nodes NODES --graph-index SQLITE --output DIR [--index GAI] [--chr NAME]
+--gam GAM --nodes NODES --graph-index SQLITE --output DIR [--index GAI]
+
+target nodes:
+  --chromosomes all|autosome|chr1,chr2,...   keep target nodes of these chromosome blocks (default all);
+  --chr-index TSV                            node ID -> block table (tensor_postprocessing chr-index), needed unless all
 
 split mode (one decoding pass, two tensor directories):
   --snv-output DIR --indel-output DIR --snv-min-af F --indel-min-af F   (requires --variant-type all)
@@ -148,6 +155,16 @@ tensor / output:
 
 `--gam-cache-mb` bounds only the retained GAM group cache. Decoded reads, graph
 records, candidate state and shard buffers are on top of it (see section 6).
+
+`--chromosomes` filters the **target nodes** by the chromosome block of their node ID
+(Minigraph-Cactus numbers each chromosome's graph as one contiguous ID interval, including
+the off-GRCh38 insertion and branch nodes; see `tensor_postprocessing/README.md`). Reads are
+not filtered: a read on a chr1 target keeps its columns on neighbouring nodes of any block.
+`autosome` removes chrX/Y/M/EBV and the unplaced contigs up front — on HG008 v5 that is
+4.4 % of the target nodes, including the 24,258 unplaced nodes behind task 979's 5.8 h tail
+and 98,691 SNV tensors. The selection (and chr-index SHA-256) is recorded in every manifest
+as `chromosome_selection`. The former `--chr` (keep reads whose `refpos.name` matches) was
+removed: vg giraffe never fills `refpos`, so it either did nothing or dropped every read.
 
 ### `run.py discover / index / validate`
 
@@ -205,7 +222,12 @@ $PY -m indexed_gam_pipeline_v2.orchestrate prepare \
     --node-stats /path/to/discovery/node_stats.json \
     --graph-index /path/to/hprc-v1.1-d9.graph.sqlite \
     --tasks 512 --processes 24 --gam-cache-mb 8192 \
-    --snv-min-af 0.06 --indel-min-af 0.08
+    --snv-min-af 0.06 --indel-min-af 0.08 \
+    --chromosomes autosome --chr-index $G/hprc-v1.1-mc-grch38.d9.chr_node_ranges.tsv \
+    --merge-shard-size 32768 --reference-path $G/hprc-v1.1-mc-grch38.d9.grch38_path \
+    --somatic-vcf ... --somatic-bed ... --germline-vcf ... --germline-bed ... \
+    --reference-fasta GRCh38.fasta --truth-dir /path/to/truth
+#    (finalize options: --merge-shard-size 0 keeps the task layout; --keep-sources keeps task_* after the merge)
 
 # 2. run under Slurm (run.sh cds into the frozen source and calls `orchestrate run`)
 sbatch --cpus-per-task=24 --mem=420G --time=14-00:00:00 \
@@ -214,13 +236,11 @@ sbatch --cpus-per-task=24 --mem=420G --time=14-00:00:00 \
 
 # 3. if the job died (OOM, time limit, node failure): resume, redoing only unfinished tasks
 sbatch ... /path/to/run_root/run.sh --resume
+#    if it died during the merge/labels: repeat only that step
+$PY -m indexed_gam_pipeline_v2.orchestrate finalize --root /path/to/run_root
 
-# 4. supplement run: sites of indels that left-normalization moved off the target nodes
-$PY -m indexed_gam_pipeline_v2.orchestrate displaced --root /path/to/run_root --output /path/to/supplement_nodes.txt
-$PY -m indexed_gam_pipeline_v2.orchestrate prepare --root /path/to/supplement_root --tensors /path/to/supplement_tensors \
-    --nodes /path/to/supplement_nodes.txt ...same options as step 1...
-sbatch ... /path/to/supplement_root/run.sh
-# (repeat step 4 on the supplement run with --exclude <earlier lists> until the list is empty)
+# (supplement tasks run automatically inside step 2/3, before finalize: see "Why a supplement run";
+#  `orchestrate displaced --root ... --output nodes.txt` lists the nodes by hand)
 ```
 
 **Why a supplement run.** Tensors are only built on discovery's target nodes, and discovery
@@ -234,8 +254,12 @@ builder lists, in `displaced_nodes.tsv`, the nodes outside its batch that a targ
 was moved onto; `orchestrate displaced` sums them over all tasks, drops the run's own nodes
 (and `--exclude` lists) and writes the node list of a supplement run. There those nodes are
 ordinary targets: all reads covering them are fetched, so counts and AF are complete, and no
-site can be built twice (a node is in one list only). The supplement's own `displaced_nodes`
-can feed another round; normalized indels cannot move further, so it converges quickly.
+site can be built twice (a node is in one list only). `orchestrate run` does this by itself
+after the tasks and before `finalize` (`prepare --supplement-rounds 3`, default; 0 = off;
+`--supplement-min-records 2`): each round becomes extra tasks of the same run
+(`parts/supplement_NN/`, appended to `config.json`, `config.supplement.rounds`), so they are
+validated, resumed, merged and labeled like the main tasks; a round's own displaced nodes feed
+the next one, and the rounds stop at an empty list (normalized indels cannot move further).
 Measured on the 98 example batches (Slurm 363680): normalized indels landed on 4,110 nodes outside
 their batch, 4,098 of them no target; the supplement run over those built 576 INDEL sites (no SNV),
 all outputs pass `validate_examples.py`, no site id occurs twice in main + supplement (7,589), and
@@ -261,8 +285,16 @@ How it works:
 * Any task failure stops the queue and terminates the running tasks (`fail fast`).
 * `--resume` re-validates every task directory, skips the complete ones, moves
   partial outputs to `incomplete/<timestamp>/` and reruns only the rest.
-* Inputs (GAM, GAI, graph index, node list) and the frozen source are fingerprinted
-  in `config.json`; `run` refuses to start if anything changed.
+* Inputs (GAM, GAI, graph index, node list, chr index, reference path, truth files) and the
+  frozen source are fingerprinted in `config.json`; `run` refuses to start if anything changed.
+* **Finalize.** When every task validated, `run` calls `finalize`: with `--merge-shard-size N`
+  (default 32,768) the task outputs are merged into `<tensors>/<kind>/<chrom>_shard_*` (chr1–22;
+  other blocks under `<tensors>/non_autosomal/`), byte-verified, then the task directories are
+  deleted (unless `--keep-sources`); with the truth options every merged tensor is labelled
+  (somatic 1, germline 2, non 0, ignore −1). Details in `tensor_postprocessing/README.md`.
+  A merged run refuses `run`/`--resume` (its task directories may be gone); `finalize` skips
+  steps that are already done, so it can be repeated after an interruption. A supplement run
+  is merged on its own, into its own tensor directory.
 
 Layout — bookkeeping under `--root`, tensors under `--tensors` (default `<root>/tensors`):
 
@@ -284,8 +316,11 @@ Layout — bookkeeping under `--root`, tensors under `--tensors` (default `<root
   ALL/task_NNNN/         everything in one directory                                    (single-output mode)
 ```
 
-Downstream code should consume `<root>/outputs.json` (or glob `<tensors>/SNV/task_*/shard_*_data.npy`
-together with the matching `variant_summary.ndjson`). Shards are never merged.
+Downstream code should consume `<root>/outputs.json`. After a merge, read
+`<tensors>/<kind>/manifest.json` (per-chromosome shard lists) and the files it names:
+`<chrom>_shard_NNNNN_data.npy` with `<chrom>_variant_summary.ndjson`, and after labelling
+`<chrom>_shard_NNNNN_labels.npy` / `<chrom>_labels.ndjson`. Without a merge, glob
+`<tensors>/SNV/task_*/shard_*_data.npy` together with the matching `variant_summary.ndjson`.
 
 ---
 
@@ -321,8 +356,9 @@ Knobs, in order of effect:
 ## 7. Tensor semantics (what the numbers mean)
 
 **Candidate identity** is `(node, forward start, REF, ALT, kind)` with `kind ∈ {SNP, INS, DEL}`
-in zero-based forward-node coordinates. Reverse-strand mappings are converted. Adjacent I (or D)
-edits in one mapping are merged before the `--max-indel-len` check. Candidates
+in zero-based forward-node coordinates, plus the further nodes of a deletion over several nodes
+(`path`, see below). Reverse-strand mappings are converted. Adjacent I (or D) edits, also over
+consecutive mappings, are merged before the `--max-indel-len` check. Candidates
 containing `N`, and insertions anchored on `N`, are context only. Indels longer
 than the limit and complex replacements are logged to `unsupported_events.ndjson`.
 
@@ -381,13 +417,33 @@ tensor stands for:
    need not be A1. `--candidate-unit allele` gives one tensor per allele (a one-allele
    site). With left-normalization, STR alleles of one repeat share a start and hence a site.
 
+**Deletions over several nodes** (v6). vg writes an indel that spans nodes as one edit per
+mapping. A run of deleted (or inserted) columns that continues across mapping boundaries in
+one orientation is now **one** event: `--max-indel-len` applies to its total length (a longer
+one is logged as `indel_exceeds_limit_across_mappings` and is no candidate — before, its
+pieces became many small "indels"; on one HG008 batch a single ~80-bp event across 54 short
+nodes gave 54 DEL sites), left-normalization moves it across nodes, and a deletion is one
+candidate on its forward-first node with `path` = `[[node, start, end], ...]` of the further
+nodes (`candidate_id` `node:start:DEL:REF>@n2+n3`; `ref` spans all nodes). vg never split an
+insertion over mappings in the HG008 data, but the same rule applies.
+
 **Support.** For each candidate, every record whose mapping covers it counts once:
-`alt` if it has an exact observation with base quality ≥ `--min-allele-bq`
-(insertion quality = mean inserted BQ, deletion quality = min flanking BQ);
-`ref` if the graph bases over the interval match (for INS: matched bases on both
-sides of the boundary); otherwise `other`. Repeated visits: ALT > REF > other,
-earliest mapping wins. `coverage = alt + ref + other`, `AF = alt / coverage`.
+`alt` if it has an exact observation with base quality ≥ `--min-allele-bq`; `ref` if it has a
+plain match (M/X, read base = graph base, no inserted base) at every graph base of REF — over
+every node of a multi-node deletion — **and aligned neighbours**: the bases right before and
+after are M/X graph neighbours (no indel, no read end next to the site; v6); for INS, no
+inserted base at the boundary and M/X bases on both sides; otherwise `other`. Repeated visits:
+ALT > REF > other, earliest mapping wins. `coverage = alt + ref + other`, `AF = alt / coverage`.
 Filters: `alt ≥ --min-variants`, `AF ≥ threshold`, `--variant-type`.
+
+**Indel base quality, strand-symmetric** (v6). HiFi base qualities in a homopolymer depend on
+the sequencing direction, and after left-normalization forward and reverse reads carry the same
+indel at opposite ends of their own run, so "the inserted bases" or "the bases next to the
+deletion" would be different read bases per strand (forward 40 vs reverse 5 on the test pattern
+— a one-strand ALT loss). An insertion's quality is the mean over the read bases of all its
+equivalent placements (its bases plus the repeat bases it could shift across); a deletion's is
+the lower of the nearest read bases outside that span (inside it when the span reaches both
+read ends). Outside repeats both reduce to the old rule (inserted-base mean, flanking minimum).
 
 **Site layout** (`site-layout-columns-v1`). A site occupies the columns from 50 on:
 `insertion_slots` = the longest INS allele's length, then `span` = the graph bases of the

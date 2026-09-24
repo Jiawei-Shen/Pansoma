@@ -174,6 +174,22 @@ class MergeTest(unittest.TestCase):
             self.assertFalse(list((tensors / "SNV").glob("chr*")))
             self.assertNotIn("merge", json.loads((root / "outputs.json").read_text()))
 
+    def test_select_nodes(self):
+        from indexed_gam_pipeline_v2.tensor_postprocessing.chr_index import select_nodes
+        with tempfile.TemporaryDirectory() as tmp:
+            table = write_chr_index(Path(tmp) / "chr.tsv")
+            nodes = [1, 50, 101, 150, 250, 999]
+            kept, report = select_nodes(nodes, "all")
+            self.assertEqual((kept.tolist(), report["nodes_kept"]), (nodes, 6))
+            kept, report = select_nodes(nodes, "autosome", table)
+            self.assertEqual((kept.tolist(), report["removed"]), ([1, 50, 101, 150], {"chrX": 1, "no_block": 1}))
+            kept, report = select_nodes(nodes, "chr2,chrX", table)
+            self.assertEqual((kept.tolist(), report["chromosomes"]), ([101, 150, 250], ["chr2", "chrX"]))
+            with self.assertRaisesRegex(ValueError, "Unknown chromosome"):
+                select_nodes(nodes, "chr3", table)
+            with self.assertRaisesRegex(ValueError, "needs --chr-index"):
+                select_nodes(nodes, "autosome")
+
     def test_chr_index_lookup(self):
         with tempfile.TemporaryDirectory() as tmp:
             index = ChrIndex(write_chr_index(Path(tmp) / "chr.tsv"))

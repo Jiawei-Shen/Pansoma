@@ -150,7 +150,7 @@ class ReferencePath:
         c = self.meta["contigs"][self.contig_index[name]]
         return slice(c["offset"], c["offset"] + c["nodes"])
 
-    def linear(self, node, start, ref, alt, kind):
+    def linear(self, node, start, ref, alt, kind, path=None):
         """GRCh38 coordinates of a node-forward candidate, or None when the node has no unique reference visit.
 
         Returns dict(chrom, pos0, ref, alt, node_reverse): pos0 is the 0-based start of the REF
@@ -164,6 +164,22 @@ class ReferencePath:
         reverse = bool(self.reverse[node])
         if kind == "INS":
             pos0 = origin + (length - start if reverse else start)
+        elif path:
+            # A deletion over several nodes (v6 `path`: further (node, start, end) in forward order)
+            # is on the reference only if those are the neighbouring reference nodes, same orientation.
+            first = len(ref) - sum(e - s for _, s, e in path)
+            spans = []
+            for n, s, e in [(node, start, start + first)] + [tuple(p) for p in path]:
+                n = int(n)
+                if (not 0 < n < len(self.visits) or self.visits[n] != 1 or int(self.chrom[n]) != contig
+                        or bool(self.reverse[n]) != reverse):
+                    return None
+                o, span = int(self.start0[n]), int(self.lengths[n])
+                spans.append((o + span - e, o + span - s) if reverse else (o + s, o + e))
+            spans.sort()
+            if any(a[1] != b[0] for a, b in zip(spans, spans[1:])):
+                return None
+            pos0 = spans[0][0]
         else:
             pos0 = origin + (length - start - len(ref) if reverse else start)
         if reverse:
@@ -195,7 +211,7 @@ def check(directory, graph_index, fasta, samples=100000, seed=20260923):
         report["graph_index_nodes"] = graph.metadata["nodes"]
         report["gfa_max_node"] = path.meta["max_node"]
         records = graph.get_nodes(set(any_nodes) | set(ref_nodes))
-        report["length_mismatches"] = sum(len(records[n]["sequence"]) != lengths[n] for n in set(any_nodes))
+        report["length_mismatches"] = int(sum(len(records[n]["sequence"]) != int(lengths[n]) for n in set(any_nodes)))
         mismatches, skipped = 0, 0
         for n in sorted(set(ref_nodes)):
             contig = path.contigs[path.chrom[n]]
@@ -205,7 +221,7 @@ def check(directory, graph_index, fasta, samples=100000, seed=20260923):
             start = int(path.start0[n])
             linear = genome.fetch(contig, start, start + int(lengths[n])).upper()
             node = records[n]["sequence"].upper()
-            mismatches += (rc(node) if path.reverse[n] else node) != linear
+            mismatches += int((rc(node) if path.reverse[n] else node) != linear)
         report.update(fasta_sequence_mismatches=mismatches, fasta_nodes_checked=len(set(ref_nodes)) - skipped,
                       fasta_contig_missing=skipped)
     report["passed"] = (report["length_mismatches"] == 0 and mismatches == 0

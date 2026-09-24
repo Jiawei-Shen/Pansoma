@@ -321,7 +321,7 @@ class OrchestratorOptionsTest(unittest.TestCase):
     def test_frozen_command_carries_unit_cap_and_prefilter_explicitly(self):
         builder = dict(rows=200, width=101, gam_cache_mb=8192, batch_nodes=512, max_node_span=10000,
                        max_batch_alignments=20000, shard_size=2048, min_mapq=10, min_af=.05, min_variants=3,
-                       min_allele_bq=10, max_indel_len=50, chr="", candidate_unit="site", max_node_reads=800,
+                       min_allele_bq=10, max_indel_len=50, chromosomes="all", candidate_unit="site", max_node_reads=800,
                        early_af_filter=True)
         config = dict(python="python", tensors="/t", variant_outputs=dict(SNV=.06, INDEL=.08), builder=builder,
                       parts=[dict(nodes_file="/n")], inputs=dict(gam=dict(path="/g"), index=dict(path="/g.gai"),

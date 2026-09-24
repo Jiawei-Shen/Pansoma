@@ -132,6 +132,39 @@ def build(components_dir, reference_path, output, graph_index=None, autosomes=AU
     return blocks, meta
 
 
+SELECTIONS = ("all", "autosome")
+
+
+def select_nodes(nodes, selection="all", table=None):
+    """Keep the nodes of the chosen chromosome blocks: (kept int64 array, report).
+
+    `selection` is "all" (no filtering, no table needed), "autosome" (chr1-22) or a
+    comma-separated list of block names from the table (e.g. "chr1,chr2,chrX").
+    """
+    nodes = np.asarray(nodes, dtype=np.int64)
+    if selection == "all":
+        return nodes, dict(selection="all", nodes_in=int(nodes.size), nodes_kept=int(nodes.size))
+    if not table:
+        raise ValueError("--chromosomes other than 'all' needs --chr-index")
+    index = ChrIndex(table)
+    if selection == "autosome":
+        wanted = [k for k, d in enumerate(index.dataset) if d == "autosome"]
+    else:
+        names = [n.strip() for n in selection.split(",") if n.strip()]
+        unknown = sorted(set(names) - set(index.names))
+        if not names or unknown:
+            raise ValueError(f"Unknown chromosome blocks {unknown}; the index has {index.names}")
+        wanted = [index.names.index(n) for n in names]
+    blocks = index.lookup(nodes)
+    keep = np.isin(blocks, wanted)
+    removed = {index.names[k] if k >= 0 else "no_block": int(n)
+               for k, n in zip(*np.unique(blocks[~keep], return_counts=True))}
+    report = dict(selection=selection, chromosomes=[index.names[k] for k in wanted],
+                  chr_index=dict(path=str(index.path), sha256=index.sha256),
+                  nodes_in=int(nodes.size), nodes_kept=int(keep.sum()), removed=removed)
+    return nodes[keep], report
+
+
 class ChrIndex:
     """Loaded block table: lookup(node IDs) -> block index (-1 = no block)."""
 

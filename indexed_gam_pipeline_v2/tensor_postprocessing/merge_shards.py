@@ -134,7 +134,7 @@ class GroupWriter:
                               source_index_within_shard=first_index + done + k)
                 if self.linear is not None:
                     record["grch38"] = self.linear(source["node_id"], source["start"], source["ref"], source["alt"],
-                                                   source["event_type"])
+                                                   source["event_type"], source.get("path"))
                 self.summary.write(json.dumps(record) + "\n")
             self.position += take
             done += take
