@@ -164,6 +164,9 @@ def add_build_arguments(sub, outputs=True):
     sub.add_argument("--early-af-filter", action=argparse.BooleanOptionalAction, default=True,
                      help="before support counting, reject candidates whose ALT support bound / exact coverage "
                           "over all records is below the AF threshold (default on; exact without a read cap)")
+    sub.add_argument("--decoder", choices=("auto", "native", "python"), default="auto",
+                     help="record decoder: auto (default) = the native C++ decoder if built and self-tested (native.py "
+                          "compile), else Python; identical outputs. PANSOMA_DECODER=native|python overrides auto")
 
 
 def main(argv=None):

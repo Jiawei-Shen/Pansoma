@@ -74,7 +74,8 @@ class BuildTest(unittest.TestCase):
             validate(self.root / "out", str(self.gam), None, str(self.graph))
 
     def test_target_node_restriction_does_not_change_outputs(self):
-        args = self.args(batch_nodes=1, max_node_span=10000, debug_rows=True, rows=4)
+        # The Python decoder, patched (tests/test_native_decoder.py covers the native one).
+        args = self.args(batch_nodes=1, max_node_span=10000, debug_rows=True, rows=4, decoder="python")
         unrestricted = lambda *a, **kw: decode_alignment(*a, **dict(kw, target_nodes=None))  # noqa: E731
         args.output = str(self.root / "baseline")
         with patch.object(build_module, "decode_alignment", unrestricted):
@@ -115,7 +116,8 @@ class SplitOutputTest(unittest.TestCase):
             common = dict(gam=str(gam), nodes=str(nodes), graph_index=str(graph), batch_nodes=5,
                           shard_size=1, min_variants=3, min_af=.05)
             split = build_args(**dict(common, output=str(root / "shared"), snv_output=str(root / "SNV"),
-                                      indel_output=str(root / "INDEL"), snv_min_af=.06, indel_min_af=.08))
+                                      indel_output=str(root / "INDEL"), snv_min_af=.06, indel_min_af=.08,
+                                      decoder="python"))  # counts calls of the (patched) Python decoder
             fetch_calls, decode_calls = [], []
             reader_fetch = build_module.IndexedGam.fetch
 
