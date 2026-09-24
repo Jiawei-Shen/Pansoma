@@ -275,7 +275,9 @@ class TruthSet:
                                              in_bed=self.bed.contains(record.chrom, lo if kind != "INS" else lo - 1,
                                                                       max(hi, lo + 1)),
                                              placements=len(places), keys=keys))
-                    spans[record.chrom].append((lo, max(hi, lo + 1) if kind != "INS" else lo + 1, tid))
+                    # Every equivalent placement counts as "the allele is here" (an INS span runs from its
+                    # leftmost to its rightmost boundary: reads may write it anywhere in the repeat).
+                    spans[record.chrom].append((lo, max(hi, lo + 1), tid))
                     for key in keys:
                         self.by_key[key].append(tid)
                     self.stats["alleles_with_keys" if keys else "alleles_without_keys"] += 1
