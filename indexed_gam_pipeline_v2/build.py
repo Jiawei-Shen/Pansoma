@@ -18,6 +18,9 @@ Outputs (per output directory):
     manifest.json               format/encoding versions, parameters, provenance, counters, timing
     batch_timing.ndjson         per-batch stage seconds and counters (shared directory only)
     target_nodes.txt            the requested node list (shared directory only)
+    displaced_nodes.tsv         node, records: nodes outside the batch that left-normalization moved
+                                an indel of a target node onto (shared directory only; see
+                                orchestrate.py displaced / the README "supplement run")
 
 With --snv-output/--indel-output the GAM is read and decoded once; SNP tensors go
 to the SNV directory and INS/DEL tensors to the INDEL directory, each with its own
@@ -290,6 +293,7 @@ def _build_batches(args, nodes, reader, graph, shared, typed, started):
         return sum(s.manifest["tensors"] + s.buffered for s in sinks.values())
 
     timings = defaultdict(float)
+    displaced = Counter()  # node outside a batch -> records whose target-node indel normalization moved there
     for bi, batch in enumerate(batches(nodes, args.batch_nodes, args.max_node_span), 1):
         batch_started = time.perf_counter()
         wanted = set(batch)
@@ -318,6 +322,9 @@ def _build_batches(args, nodes, reader, graph, shared, typed, started):
             read, rejected = decode_alignment(alignments[ai], sequences, args.max_indel_len, target_nodes=wanted)
             alignments[ai] = None  # the decoded Read owns everything we still need
             reads.append(read)
+            for source, destination in read.moves:
+                if source in wanted and destination not in wanted:
+                    displaced[destination] += 1
             for node in {v.node for v in read.visits} & wanted:
                 by_node[node].append(read)
             candidates.update(o.candidate for o in read.observations if o.candidate.node in wanted)
@@ -387,6 +394,8 @@ def _build_batches(args, nodes, reader, graph, shared, typed, started):
         alignments.clear()
         if stop:
             break
+    (shared.path / "displaced_nodes.tsv").write_text("".join(f"{n}\t{c}\n" for n, c in sorted(displaced.items())))
+    shared.manifest["displaced_nodes"] = len(displaced)
     t = time.perf_counter()
     for sink in sinks.values():
         sink.flush()

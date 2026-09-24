@@ -8,6 +8,8 @@
               predicted first when costs were recorded, else in index order; --resume skips
               tasks that already completed and validated
     task      run one task: builder subprocess, then validate its shards (used by `run`)
+    displaced after a run: the nodes left-normalization moved target indels onto that no
+              task covered, i.e. the node list of a supplement run (prepare it with --nodes)
 
 Layout under --root (bookkeeping) and --tensors (outputs; default <root>/tensors):
     <root>/source/                frozen package copy (hashes recorded in config.json)
@@ -499,6 +501,40 @@ def run(root, resume=False):
         write_json(root / "status.json", status)
 
 
+def displaced_nodes(root, output, exclude=(), min_records=2):
+    """Write the node list of a supplement run; returns a summary.
+
+    Left-normalization can move an indel from a target node onto a node that is not a
+    target of any task (tensors are only built on target nodes), so the site would be
+    missing. Every builder lists such nodes in displaced_nodes.tsv; this collects them over
+    all tasks, drops the run's own nodes and every node in `exclude` (e.g. earlier supplement
+    lists) and nodes seen in fewer than `min_records` records, and writes the rest sorted.
+    A supplement run over them (same options) builds those sites with their full read sets;
+    its own displaced_nodes can feed a further round until the list is empty.
+    """
+    root = Path(root).resolve()
+    config = read_json(root / "config.json")
+    counts = Counter()
+    for i in range(config["tasks"]):
+        outputs = task_outputs(root, config, i)
+        table = outputs.get("shared", outputs.get("ALL")) / "displaced_nodes.tsv"
+        for line in table.read_text().splitlines():
+            node, records = line.split("\t")
+            counts[int(node)] += int(records)
+    covered = [np.fromfile(str(config["inputs"]["nodes"]["path"]), dtype=np.int64, sep="\n")]
+    covered += [np.fromfile(str(path), dtype=np.int64, sep="\n") for path in exclude]
+    covered = np.unique(np.concatenate(covered))
+    nodes = np.array(sorted(n for n, c in counts.items() if c >= min_records), dtype=np.int64)
+    at = np.minimum(np.searchsorted(covered, nodes), max(len(covered) - 1, 0))
+    fresh = nodes[covered[at] != nodes] if len(covered) else nodes
+    Path(output).write_text("".join(f"{n}\n" for n in fresh.tolist()))
+    summary = dict(output=str(Path(output).resolve()), nodes=int(len(fresh)), displaced_nodes=len(counts),
+                   already_covered=int(len(nodes) - len(fresh)), below_min_records=len(counts) - int(len(nodes)),
+                   records=int(sum(counts[n] for n in fresh.tolist())))
+    print(json.dumps(summary, indent=2))
+    return summary
+
+
 def catalog_outputs(root, config):
     """outputs.json: every tensor directory of every task with its tensor count."""
     kinds = list(config["variant_outputs"] or ["ALL"])
@@ -535,6 +571,12 @@ def main(argv=None):
     r = commands.add_parser("run", help="execute all pending tasks")
     r.add_argument("--root", required=True)
     r.add_argument("--resume", action="store_true", help="skip validated tasks; set aside partial outputs and rerun them")
+    d = commands.add_parser("displaced", help="node list of a supplement run for indels normalized off the targets")
+    d.add_argument("--root", required=True)
+    d.add_argument("--output", required=True, help="node list to write (prepare a supplement run with --nodes)")
+    d.add_argument("--exclude", nargs="*", default=[], help="node lists already covered (e.g. earlier supplements)")
+    d.add_argument("--min-records", type=int, default=2,
+                   help="drop nodes seen in fewer records (default 2: on HG008 this halves the list and keeps 575 of 576 sites)")
     t = commands.add_parser("task", help="run and validate one task (used by `run`)")
     t.add_argument("--root", required=True)
     t.add_argument("--index", type=int, required=True)
@@ -543,6 +585,8 @@ def main(argv=None):
         prepare(args)
     elif args.action == "task":
         task(Path(args.root).resolve(), args.index)
+    elif args.action == "displaced":
+        displaced_nodes(args.root, args.output, args.exclude, args.min_records)
     else:
         run(args.root, args.resume)
 

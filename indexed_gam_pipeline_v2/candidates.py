@@ -157,6 +157,8 @@ class Read:
     columns: list
     visits: list
     observations: list
+    # (from node, to node) of every indel that normalization moved to another node.
+    moves: list = field(default_factory=list, repr=False, compare=False)
     # Lazily built lookups (see visits_on / alt_quality); not part of the record's identity.
     _node_visits: dict = field(default=None, repr=False, compare=False)
     _alt_quality: dict = field(default=None, repr=False, compare=False)
@@ -261,11 +263,10 @@ def decode_alignment(alignment, sequences, max_indel=50, target_nodes=None, left
         visits.append(Visit(nid, lo, hi, reverse, mi, first, len(columns), len(forward)))
     if read_cursor != len(sequence):
         raise ValueError("GAM edits do not consume the complete read sequence")
-    if left_align:
-        left_align_indels(columns, visits, max_indel)
+    moves = left_align_indels(columns, visits, max_indel) if left_align else []
     observations += indel_observations(columns, visits, sequences, max_indel, target_nodes)
     digest = hashlib.sha256(alignment.SerializeToString(deterministic=True)).hexdigest()
-    return Read(alignment.name, digest, alignment.mapping_quality, columns, visits, observations), unsupported
+    return Read(alignment.name, digest, alignment.mapping_quality, columns, visits, observations, moves), unsupported
 
 
 # --- indel normalization --------------------------------------------------------
@@ -319,6 +320,7 @@ def left_align_indels(columns, visits, max_indel):
     attached to the graph base that follows it on the forward strand, so an insertion
     between two nodes is always (next node, offset of its first base). `visits`
     get their column ranges updated in place; their graph intervals do not change.
+    Returns [(from node, to node)] for every indel that ended on another node than it started.
     """
     runs = [r for r in indel_runs(columns, join_insertions=True) if r[1] - r[0] <= max_indel
             and not any("N" in (columns[k].read if r[2] == "I" else columns[k].ref).upper() for k in range(r[0], r[1]))]
@@ -326,8 +328,10 @@ def left_align_indels(columns, visits, max_indel):
     # process each in the direction it moves so a run only ever meets already-final ones.
     forward = sorted((r for r in runs if not columns[r[0]].reverse), key=lambda r: r[0])
     reverse = sorted((r for r in runs if columns[r[0]].reverse), key=lambda r: -r[0])
+    moves = []
     for s, e, op in forward + reverse:
         rev = columns[s].reverse
+        origin = columns[s].node
         while True:
             k = e if rev else s - 1  # the column on the forward-left side
             if not 0 <= k < len(columns):
@@ -386,6 +390,8 @@ def left_align_indels(columns, visits, max_indel):
                 owner = columns[e - 1] if rev else columns[s]
             columns[s:e] = [Column(c.read, c.ref, c.quality, c.op, owner.node, owner.pos, c.reverse, owner.visit, True)
                             for c in columns[s:e]]
+        if columns[s].node != origin:
+            moves.append((origin, columns[s].node))
     spans = {}
     for i, c in enumerate(columns):
         spans.setdefault(c.visit, [i, i])[1] = i + 1
@@ -393,6 +399,7 @@ def left_align_indels(columns, visits, max_indel):
     for visit in visits:  # mappings emptied by moving their only (inserted) columns keep an empty range
         visit.first, visit.last = spans.get(visit.index, (edge, edge))
         edge = visit.last
+    return moves
 
 
 def _read_base_quality(columns, i, step):
