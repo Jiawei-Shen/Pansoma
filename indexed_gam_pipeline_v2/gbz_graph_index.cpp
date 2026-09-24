@@ -1,11 +1,16 @@
 // Offline all-node sequence + distinct logical GBWT path count index.
+// Standard C++17; every standard header is included explicitly (newer GCC / libc++ no longer
+// include <cstdint> or <string> transitively). Compiled by graph_index.py `compile`.
 #include <gbwtgraph/gbz.h>
 #include <nlohmann/json.hpp>
 #include <sqlite3.h>
 #include <chrono>
+#include <cstdint>
+#include <exception>
 #include <fstream>
 #include <iostream>
 #include <limits>
+#include <string>
 #include <unordered_map>
 #include <vector>
 #include <stdexcept>

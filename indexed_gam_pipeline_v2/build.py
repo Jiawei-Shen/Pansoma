@@ -26,6 +26,10 @@ With --snv-output/--indel-output the GAM is read and decoded once; SNP tensors g
 to the SNV directory and INS/DEL tensors to the INDEL directory, each with its own
 AF threshold, shards, summary and manifest. --output then holds the shared manifest,
 batch timings and the complete audit streams, but no shards.
+
+Records are decoded by the native decoder when it is built and passes its checks
+(--decoder auto, the default; native.py), else by candidates.decode_alignment; the
+outputs are identical and the manifest's `decoder` records which one ran and why.
 """
 from collections import Counter, defaultdict
 from copy import deepcopy
@@ -42,8 +46,9 @@ from indexed_gam_pipeline_v2.common import batches, load_nodes, new_output, writ
 from indexed_gam_pipeline_v2.tensor_postprocessing.chr_index import select_nodes
 from indexed_gam_pipeline_v2.gam_reader import IndexedGam
 from indexed_gam_pipeline_v2.graph_index import GraphIndex
+from indexed_gam_pipeline_v2.native import select_decoder
 
-KIND = {"SNP": "SNV", "INS": "INDEL", "DEL": "INDEL"}
+KIND ={"SNP": "SNV", "INS": "INDEL", "DEL": "INDEL"}
 SITE_UNIT = "site-v2"
 DEFAULT_MAX_NODE_READS = 800
 PARAMETERS = ("min_mapq", "min_af", "min_variants", "min_allele_bq", "max_indel_len",
@@ -226,10 +231,14 @@ def build(args):
                          ("max_tensors", None),
                          ("snv_output", None), ("indel_output", None), ("snv_min_af", None), ("indel_min_af", None),
                          ("max_node_reads", DEFAULT_MAX_NODE_READS), ("candidate_unit", "site"),
-                         ("early_af_filter", True)):
+                         ("early_af_filter", True), ("decoder", "auto")):
         if not hasattr(args, key):
             setattr(args, key, default)
     split = validate_args(args)
+    # The Python decoder is looked up at call time (tests patch it); it is also the native fallback.
+    decode, decoder_info = select_decoder(args.decoder, python=lambda *a, **kw: decode_alignment(*a, **kw))
+    print(f"Decoder: {decoder_info['used']}" + (f" ({decoder_info['reason']})" if "reason" in decoder_info else ""),
+          flush=True)
     # Target nodes outside the chosen chromosome blocks are dropped before any batch (their reads are
     # still context of the remaining targets).
     nodes, selection = select_nodes(load_nodes(args.nodes), args.chromosomes, args.chr_index)
@@ -260,7 +269,7 @@ def build(args):
             graph_index=dict(path=str(graph.path), **graph.metadata),
             sample_unit=SITE_UNIT if args.candidate_unit == "site" else "allele",
             **(dict(site_definition=SITE_DEFINITION) if args.candidate_unit == "site" else {}),
-            read_cap=dict(max_node_reads=args.max_node_reads, rule=READ_CAP_RULE),
+            read_cap=dict(max_node_reads=args.max_node_reads, rule=READ_CAP_RULE), decoder=decoder_info,
             nodes=len(nodes), chromosome_selection=selection, shards=0, tensors=0, filtered_candidates=0, early_rejected=0,
             early_af_rejected=0, unsupported_events=0, debug_rows=args.debug_rows, timing={})
         shared = OutputDir(args.output, manifest, args.shard_size, tensors=not split)
@@ -275,7 +284,7 @@ def build(args):
                     m["shared_output"] = str(shared.path)
                     typed[kind] = OutputDir(path, m, args.shard_size)
                 shared.save(output_layout="split", variant_outputs={k: str(v.path) for k, v in typed.items()})
-            _build_batches(args, nodes, reader, graph, shared, typed, started)
+            _build_batches(args, nodes, reader, graph, shared, typed, started, decode)
         finally:
             for sink in (shared, *typed.values()):
                 sink.close()
@@ -286,8 +295,9 @@ def build(args):
     return shared.manifest
 
 
-def _build_batches(args, nodes, reader, graph, shared, typed, started):
-    """The batch loop. `typed` is {'SNV': OutputDir, 'INDEL': OutputDir} in split mode, else empty."""
+def _build_batches(args, nodes, reader, graph, shared, typed, started, decode):
+    """The batch loop. `typed` is {'SNV': OutputDir, 'INDEL': OutputDir} in split mode, else empty;
+    `decode` is decode_alignment or a native.NativeDecoder (select_decoder)."""
     sinks = typed or {"ALL": shared}
 
     def record(stream, meta):
@@ -326,7 +336,7 @@ def _build_batches(args, nodes, reader, graph, shared, typed, started):
         t = time.perf_counter()
         reads, candidates, by_node = [], set(), defaultdict(list)
         for ai in range(len(alignments)):
-            read, rejected = decode_alignment(alignments[ai], sequences, args.max_indel_len, target_nodes=wanted)
+            read, rejected = decode(alignments[ai], sequences, args.max_indel_len, target_nodes=wanted)
             alignments[ai] = None  # the decoded Read owns everything we still need
             reads.append(read)
             for source, destination in read.moves:
@@ -408,8 +418,11 @@ def _build_batches(args, nodes, reader, graph, shared, typed, started):
         sink.flush()
     timings["candidate_tensors_and_shard_writes_seconds"] += time.perf_counter() - t
     timings["total_wall_seconds"] = time.perf_counter() - started
+    decoder = dict(shared.manifest["decoder"])
+    if hasattr(decode, "fallbacks"):  # records the native decoder raised on and Python decoded
+        decoder["native_record_fallbacks"] = decode.fallbacks
     final = dict(timing=dict(timings), gam_group_cache=reader.cache_stats,
-                 graph_index_performance=graph.performance, status="complete")
+                 graph_index_performance=graph.performance, decoder=decoder, status="complete")
     for sink in typed.values():
         sink.save(**final)
     if typed:

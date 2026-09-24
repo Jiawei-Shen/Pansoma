@@ -39,6 +39,11 @@ $PY -m indexed_gam_pipeline_v2.graph_index build \
     --gbz  /scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.gbz \
     --builder bin/gbz_graph_index --output /path/to/hprc-v1.1-d9.graph.sqlite
 
+# (once per checkout / Python version, optional) the native C++ record decoder: ~28x faster
+# decoding, identical output; without it the builder decodes in Python (needs pybind11 + a C++17 compiler)
+$PY -m indexed_gam_pipeline_v2.native compile
+$PY -m indexed_gam_pipeline_v2.native check      # available? which glibc / CPU features it needs
+
 # (once per GAM) the .gai normally comes from `vg gamsort -i`; otherwise:
 $PY indexed_gam_pipeline_v2/run.py index --gam sample.sorted.gam --output sample.sorted.gam.gai
 
@@ -108,6 +113,8 @@ Key invariants:
 | `gam_reader.py` | GAI v0/v1 parsing, GAI construction (`build_index`), sequential `scan_gam`, `IndexedGam.fetch` with a bounded LRU group cache |
 | `graph_index.py` | `GraphIndex` read-only lookup; `compile`/`build` CLI for the unified GBZ index (`gbz_graph_index.cpp`) |
 | `candidates.py` | `decode_alignment` (edits → `Column`/`Visit`/`Observation`), `overlap` (ALT/REF/other per record), `NodeReads`/`VisitView` (the indexed form of `overlap` and windowing used per node), `alt_support_bounds`, `exact_coverage`, `anchor_window`, `make_tensor` |
+| `native.py` | the optional native decoder: `compile`/`check` CLI, `select_decoder` (`--decoder`), load-time hash + self-test, `NativeDecoder` (per-record Python fallback), `ColumnArray` (columns kept in C++ arrays), `binary_requirements` |
+| `fastdecode.cpp` | C++ port of `decode_alignment` (+ left-normalization, indel observations) reading the serialized GAM record |
 | `build.py` | the batch loop above: prefilters, `capped_reads`, `candidate_units` (sites), `count_support`, `evaluate_unit`; `OutputDir` (manifest + NDJSON streams + shards), split routing |
 | `run.py` | CLI: `index`, `discover`, `validate`, `build` |
 | `orchestrate.py` | Slurm-scale runs: `prepare` / `run [--resume]` / `finalize` / `task` / `displaced`, `node_costs` (cost prediction), `execute_queue`, `validate_shards`, `MemoryRecorder` |
@@ -117,7 +124,7 @@ Key invariants:
 | `vg_pb2.py` | generated protobuf bindings for `vg.proto` (do not edit) |
 | `gbz_graph_index.cpp` | native builder: one pass over every GBWT path, exports all nodes to SQLite |
 
-Import order is strictly top-down: `common` ← `gam_reader`/`graph_index` ← `candidates` ← `build` ← `run` ← `orchestrate`;
+Import order is strictly top-down: `common` ← `gam_reader`/`graph_index` ← `candidates` ← `native` ← `build` ← `run` ← `orchestrate`;
 `tensor_postprocessing` only uses `common`/`graph_index` (so it serves every tensor format) and is used by `build`
 (`--chromosomes`) and `orchestrate` (`finalize`).
 
@@ -148,6 +155,8 @@ candidate units / speed (defaults shown; see section 7):
   --candidate-unit site      one tensor per (node, start, SNV|INDEL); 'allele' = one per allele
   --max-node-reads 800       per target node use at most 800 records (smallest SHA-256); 0 = no cap
   --early-af-filter          AF upper-bound prefilter; --no-early-af-filter disables it
+  --decoder auto             native C++ decoder if built and self-tested, else Python (identical output);
+                             native = fail if unavailable; python = never native; PANSOMA_DECODER overrides auto
 
 tensor / output:
   --rows 200  --width 101  --shard-size 2048  --max-tensors N  --debug-rows
@@ -184,6 +193,40 @@ once). Publication is atomic; an existing output is never overwritten. The
 metadata (source path/size/mtime/SHA-256, node and path totals, timings) is stored
 in the index and copied into every tensor manifest.
 
+`compile` (`--cxx`, default `$CXX` or `g++`) links libstdc++/libgcc statically when the
+toolchain has their static archives (`--no-portable`: dynamically), so the builder needs only
+glibc, libgomp and libsqlite3 at run time, and writes `<output>.build.json` with the compiler,
+flags and the glibc symbol versions / CPU extensions the binary requires. It warns when the
+binary contains AVX/BMI instructions: those come from the gbwtgraph dependencies, not from
+`gbz_graph_index.cpp` — sdsl-lite builds with `-msse4.2 -march=native` by default (its
+`Make.helper`, inherited by gbwt/gbwtgraph), which ties the builder to CPUs like the build
+host's. Our current build (`gbz-tool/dependency`) has 1,973 AVX and 696 BMI instructions and
+needs glibc ≥ 2.34. For a builder that runs anywhere: build the dependencies with generic
+flags (edit `MY_CXX_OPT_FLAGS` in sdsl-lite's `Make.helper` / CMake, e.g. `-O3 -msse4.2`
+without `-march=native`) inside an old-glibc image (manylinux2014, glibc 2.17), then `compile`
+there. The builder runs once per graph, so shipping the finished `graph.sqlite` for the
+standard graphs avoids compiling it at all.
+
+### `native.py compile | check`
+
+The optional native record decoder (`fastdecode.cpp`, a line-by-line C++ port of
+`decode_alignment`, `left_align_indels` and `indel_observations`). `compile` builds
+`_fastdecode<EXT_SUFFIX>` into the package (C++17 + pybind11 headers, `-O3`, no `-march` or
+fast-math flags; libstdc++/libgcc linked statically when possible), runs it against the Python
+decoder on 5,000 synthetic records in a fresh interpreter, and only then moves it into place
+with `_fastdecode.build.json`. `check` says whether the builder will use it and why not.
+
+The builder (`--decoder auto`) uses it only if it imports, was compiled from the
+`fastdecode.cpp` next to it (the source SHA-256 is compiled in) and reproduces the Python
+decoder on 300 synthetic records at load time; otherwise it decodes in Python. A record the
+native code raises on is decoded again in Python (so any error is the reference's) — a task
+completes whenever it would in pure Python. The manifest's `decoder` records the choice, the
+reason, the build and `native_record_fallbacks`. Columns stay in the C++ struct array
+(`ColumnArray`, ~24 bytes per column instead of a ~120-byte object) and become `Column`
+objects only where downstream code reads them (the visit windows of candidate nodes).
+Compiled modules are per Python version and platform; `orchestrate prepare` freezes the
+package, compiled module included, so compile *before* `prepare`.
+
 ### `validate_examples.py FOLDER --gam GAM --graph-index SQLITE --output report.json`
 
 Requires `--debug-rows`. Recounts every site allele's (and the site's) coverage from raw
@@ -216,6 +259,8 @@ MPLBACKEND=Agg MPLCONFIGDIR=/tmp/pansoma_matplotlib \
 # 1. prepare: freezes a copy of this package, splits the node list into contiguous tasks,
 #    predicts each task's cost from discovery's node_stats.json, fingerprints every input,
 #    writes config.json and run.sh
+#    (compile the native decoder first -- `native compile`; the frozen copy includes it, and
+#     --decoder auto|native|python is frozen into config.json like every builder option)
 $PY -m indexed_gam_pipeline_v2.orchestrate prepare \
     --root /path/to/run_root --tensors /path/to/tensors \
     --gam  /path/to/HG008.sorted.gam --nodes /path/to/discovery/target_nodes.txt \
@@ -256,7 +301,7 @@ was moved onto; `orchestrate displaced` sums them over all tasks, drops the run'
 ordinary targets: all reads covering them are fetched, so counts and AF are complete, and no
 site can be built twice (a node is in one list only). `orchestrate run` does this by itself
 after the tasks and before `finalize` (`prepare --supplement-rounds 3`, default; 0 = off;
-`--supplement-min-records 2`): each round becomes extra tasks of the same run
+`--supplement-min-records 3`, default): each round becomes extra tasks of the same run
 (`parts/supplement_NN/`, appended to `config.json`, `config.supplement.rounds`), so they are
 validated, resumed, merged and labeled like the main tasks; a round's own displaced nodes feed
 the next one, and the rounds stop at an empty list (normalized indels cannot move further).
@@ -264,7 +309,8 @@ Measured on the 98 example batches (Slurm 363680): normalized indels landed on 4
 their batch, 4,098 of them no target; the supplement run over those built 576 INDEL sites (no SNV),
 all outputs pass `validate_examples.py`, no site id occurs twice in main + supplement (7,589), and
 218 alleles exist only thanks to it. It cost +51 % CPU of those (single-batch, cold-cache) main
-builds; `--min-records 2` (default) keeps 1,876 of the 4,098 nodes and 575 of the 576 sites.
+builds; `--min-records 2` keeps 1,876 of the 4,098 nodes and 575 of the 576 sites. The default is 3
+(a site needs >= 3 ALT reads): on the full HG008 run it keeps 391,457 of the 576,809 nodes that 2 keeps.
 Afterwards 111 of the 6,028 v5 INDEL sites (1.8 %, mostly AF < 0.2) have no equivalent v6 allele:
 reads on different graph branches can normalize one indel to different places (splitting its
 support), and alleles near the AF threshold can fall below it.
@@ -538,6 +584,34 @@ exactly. Everything below was removed or simplified:
 | prose fields in the manifest (`coordinates`, `normalization`, `insertion_overlap`, …) | documentation, now in this README |
 | `max_cigar_length` in `node_stats.json` | unused statistic |
 
+### Native decoder; portable native builds (2026-09-24)
+
+Decoding was 74 % of main-task and 87 % of supplement-task time in the HG008 v6 run: pure
+Python builds one `Column` object per aligned base (~26 ms per 17.7-kb PacBio record), and a
+supplement task's sparse targets use only ~3 nodes of each record it decodes. `fastdecode.cpp`
+is a line-by-line C++ port of `decode_alignment` (+ `left_align_indels`,
+`indel_observations`) that parses the serialized record directly; `native.py` compiles,
+checks and selects it (`--decoder`, section 4) and falls back to Python per record or
+entirely, so outputs never depend on it. Verified:
+
+- 30,000 synthetic records in `tests/test_native_decoder.py` (300,000 in the standalone
+  prototype, `tmp/fastdecode_prototype/`) decode identically — every column with its value
+  types, visit, observation (quality type too), move, unsupported event and error type;
+- 4,068 real records of 4 production batches (2 main, 2 supplement) identical: 25.95 → 0.93
+  ms/record (28x), decoded-read memory 2.0–2.15 → 0.46–0.60 MiB/record;
+- the repository's builder with the run's production arguments on 2 main + 3 supplement
+  batches: all 31 output files (shards, summaries, audit streams, displaced nodes) byte-identical
+  to the frozen v6 builder with the Python decoder; decode stage 31.3 → 0.8 s and 42.2 → 1.3 s,
+  totals 88 → 47 s and 109 → 52 s (these short runs are dominated by the cold GAM fetch). From
+  the production stage shares: main tasks ~2.5x, supplement tasks ~5x faster.
+
+Compatibility: both native parts are standard C++17 with every header included explicitly and
+link libstdc++/libgcc statically when possible, so they need no particular libstdc++; the
+decoder uses no CPU extensions. Remaining limits, recorded in each `*.build.json`: glibc ≥ the
+build host's symbol versions (2.34 here — build inside manylinux2014 for 2.17), one decoder
+module per Python version, and the AVX/BMI code the gbwtgraph dependencies bring into
+`gbz_graph_index` (section 4, `graph_index.py compile`).
+
 ### Tensor format v6 (2026-09-23)
 
 Three changes after reviewing 100 rendered v5 production tensors (`examples/hg008_pacbio_v5/`):
@@ -725,13 +799,15 @@ by the frozen v5 source are byte-identical to production and pass `validate_exam
 (225 tensors, 14,315 rows, 1.42 M reference columns against the raw GAM). 100 rendered
 examples: `examples/hg008_pacbio_v5/`.
 
-Unit tests (60, ~110 s — the randomized reference-equivalence test takes ~100 s; the two
-native tests need the compiled builder and `gbztool`):
+Unit tests (98, ~2 min; the native graph-index builder test needs the compiled builder and
+`gbztool`; with the native decoder compiled the builds use it, `PANSOMA_DECODER=python` runs
+the same suite with the Python decoder — both pass):
 
 ```bash
 cd /scratch/jshen/Github/Pansoma
 python -m unittest discover -s indexed_gam_pipeline_v2/tests
-GBZ_TOOL=/scratch/jshen/Github/gbz-tool/gbztool GBZ_GRAPH_INDEX=tmp/gbz_graph_index \
+PANSOMA_DECODER=python python -m unittest discover -s indexed_gam_pipeline_v2/tests
+GBZ_TOOL=/scratch/jshen/Github/gbz-tool/gbztool GBZ_GRAPH_INDEX=tmp/native_check/gbz_graph_index \
     python -m unittest discover -s indexed_gam_pipeline_v2/tests
 ```
 

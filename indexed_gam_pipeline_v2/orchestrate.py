@@ -56,7 +56,7 @@ PACKAGE = Path(__file__).resolve().parent.name
 # run never depends on the CLI defaults of the code that later executes it.
 BUILDER_OPTIONS = ("rows", "width", "gam_cache_mb", "batch_nodes", "max_node_span", "max_batch_alignments",
                    "shard_size", "min_mapq", "min_af", "min_variants", "min_allele_bq", "max_indel_len",
-                   "chromosomes", "candidate_unit", "max_node_reads", "early_af_filter")
+                   "chromosomes", "candidate_unit", "max_node_reads", "early_af_filter", "decoder")
 LABEL_INPUTS = ("somatic_vcf", "somatic_bed", "germline_vcf", "germline_bed", "reference_fasta")
 
 
@@ -235,6 +235,8 @@ def build_command(root, config, index):
     if "chr_index" in config["inputs"]:
         command += ["--chr-index", config["inputs"]["chr_index"]["path"]]
     for key in BUILDER_OPTIONS:
+        if key not in b:  # prepared before the option existed: the builder default applies
+            continue
         if key == "early_af_filter":
             command += ["--early-af-filter" if b[key] else "--no-early-af-filter"]
         else:
@@ -570,7 +572,7 @@ def run_supplement(root, config):
         folder.mkdir(parents=True, exist_ok=True)
         with contextlib.redirect_stdout(io.StringIO()):
             summary = displaced_nodes(root, folder / "nodes.txt", [p["nodes_file"] for p in config["parts"]],
-                                      settings.get("min_records", 2))
+                                      settings.get("min_records", 3))
         first = config["tasks"]
         if summary["nodes"]:
             count = min(summary["nodes"], 4 * config["processes"])
@@ -623,7 +625,7 @@ def finalize(root, config=None):
     return report
 
 
-def displaced_nodes(root, output, exclude=(), min_records=2):
+def displaced_nodes(root, output, exclude=(), min_records=3):
     """Write the node list of a supplement run; returns a summary.
 
     Left-normalization can move an indel from a target node onto a node that is not a
@@ -690,7 +692,7 @@ def main(argv=None):
     p.add_argument("--supplement-rounds", type=int, default=3,
                    help="after the tasks, up to N rounds of supplement tasks for nodes that left-normalization moved "
                         "target-node indels onto (0 = off; see `displaced`)")
-    p.add_argument("--supplement-min-records", type=int, default=2,
+    p.add_argument("--supplement-min-records", type=int, default=3,
                    help="supplement nodes need at least this many displaced records")
     p.add_argument("--tasks", type=int, default=512)
     p.add_argument("--processes", type=int, default=32)
@@ -714,8 +716,9 @@ def main(argv=None):
     d.add_argument("--root", required=True)
     d.add_argument("--output", required=True, help="node list to write (prepare a supplement run with --nodes)")
     d.add_argument("--exclude", nargs="*", default=[], help="node lists already covered (e.g. earlier supplements)")
-    d.add_argument("--min-records", type=int, default=2,
-                   help="drop nodes seen in fewer records (default 2: on HG008 this halves the list and keeps 575 of 576 sites)")
+    d.add_argument("--min-records", type=int, default=3,
+                   help="drop nodes seen in fewer records (a site needs >= 3 ALT reads; on the full HG008 run 3 keeps "
+                        "391,457 of the 576,809 nodes that 2 keeps)")
     z = commands.add_parser("finalize", help="merge + label a completed run (what `run` does at its end)")
     z.add_argument("--root", required=True)
     t = commands.add_parser("task", help="run and validate one task (used by `run`)")
