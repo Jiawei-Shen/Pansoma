@@ -214,7 +214,36 @@ sbatch --cpus-per-task=24 --mem=420G --time=14-00:00:00 \
 
 # 3. if the job died (OOM, time limit, node failure): resume, redoing only unfinished tasks
 sbatch ... /path/to/run_root/run.sh --resume
+
+# 4. supplement run: sites of indels that left-normalization moved off the target nodes
+$PY -m indexed_gam_pipeline_v2.orchestrate displaced --root /path/to/run_root --output /path/to/supplement_nodes.txt
+$PY -m indexed_gam_pipeline_v2.orchestrate prepare --root /path/to/supplement_root --tensors /path/to/supplement_tensors \
+    --nodes /path/to/supplement_nodes.txt ...same options as step 1...
+sbatch ... /path/to/supplement_root/run.sh
+# (repeat step 4 on the supplement run with --exclude <earlier lists> until the list is empty)
 ```
+
+**Why a supplement run.** Tensors are only built on discovery's target nodes, and discovery
+chose them from vg's *raw* indel placement. Left-normalization (v6) moves some indels onto a
+neighbouring node that no task covers — typically across a homopolymer or STR chopped into
+1-bp nodes; the forward-strand left of a node need not have a lower node ID — and those sites
+would be missing (8 of the 100 examples in `examples/`, incl. INDELs at AF 0.2–0.35).
+Extending the target list instead is costly (the graph's 1-bp nodes: +160 % target nodes even
+for a 10-bp window on one side). So every
+builder lists, in `displaced_nodes.tsv`, the nodes outside its batch that a target-node indel
+was moved onto; `orchestrate displaced` sums them over all tasks, drops the run's own nodes
+(and `--exclude` lists) and writes the node list of a supplement run. There those nodes are
+ordinary targets: all reads covering them are fetched, so counts and AF are complete, and no
+site can be built twice (a node is in one list only). The supplement's own `displaced_nodes`
+can feed another round; normalized indels cannot move further, so it converges quickly.
+Measured on the 98 example batches (Slurm 363680): normalized indels landed on 4,110 nodes outside
+their batch, 4,098 of them no target; the supplement run over those built 576 INDEL sites (no SNV),
+all outputs pass `validate_examples.py`, no site id occurs twice in main + supplement (7,589), and
+218 alleles exist only thanks to it. It cost +51 % CPU of those (single-batch, cold-cache) main
+builds; `--min-records 2` (default) keeps 1,876 of the 4,098 nodes and 575 of the 576 sites.
+Afterwards 111 of the 6,028 v5 INDEL sites (1.8 %, mostly AF < 0.2) have no equivalent v6 allele:
+reads on different graph branches can normalize one indel to different places (splitting its
+support), and alleles near the AF threshold can fall below it.
 
 How it works:
 

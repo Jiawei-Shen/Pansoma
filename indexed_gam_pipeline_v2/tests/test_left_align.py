@@ -60,9 +60,13 @@ class LeftAlignTest(unittest.TestCase):
         sequences = {1: "C", 2: "AT", 3: "AT", 4: "G"}
         specs = [(1, 0, False, [(1, 1, "")]), (2, 0, False, [(2, 2, "")]), (3, 0, False, [(2, 2, ""), (0, 2, "AT")]),
                  (4, 0, False, [(1, 1, "")])]
-        for strand_specs in (specs, mirror(specs, sequences)):
+        left_end = [(1, 0, False, [(1, 1, "")]), (2, 0, False, [(0, 2, "AT"), (2, 2, "")]), (3, 0, False, [(2, 2, "")]),
+                    (4, 0, False, [(1, 1, "")])]
+        for strand_specs, moved in ((specs, [(3, 2)]), (mirror(specs, sequences), [(3, 2)]),
+                                    (mirror(left_end, sequences), [])):
             read = decode(strand_specs, sequences)
             self.assertEqual(candidates(read), [Candidate(2, 0, "", "AT", "INS")])
+            self.assertEqual(read.moves, moved)  # placed on node 3 -> moved to node 2; placed on node 2 -> stays
         # The previous node's end is the same boundary: it is attached to the next node's start.
         specs = [(1, 0, False, [(1, 1, ""), (0, 1, "G")]), (2, 0, False, [(2, 2, "")])]
         self.assertEqual(candidates(decode(specs, {1: "C", 2: "AT"})), [Candidate(2, 0, "", "G", "INS")])
@@ -140,6 +144,73 @@ class LeftAlignTest(unittest.TestCase):
                 other = decode(mirror(specs, sequences), sequences)
                 self.assertEqual(candidates(other), candidates(read))
                 self.assertEqual(mirrored_columns(other), columns_of(read))
+
+
+class SupplementRunTest(unittest.TestCase):
+    """An indel normalized off the target nodes is listed, and a supplement run over the list builds it."""
+
+    def test_displaced_indel_is_listed_and_recovered_with_both_strands(self):
+        from contextlib import redirect_stdout
+        import io
+        import json
+        from pathlib import Path
+        import tempfile
+        from fixtures import build_args, graph_fixture, write_gam
+        from indexed_gam_pipeline_v2.build import build
+        from indexed_gam_pipeline_v2 import orchestrate
+        sequences = {1: "C", 2: "AT", 3: "AT", 4: "G"}
+        # vg-like placement: forward reads at the repeat's right end (node 3), reverse reads at its
+        # left end (node 2 in forward coordinates).
+        forward = [(1, 0, False, [(1, 1, "")]), (2, 0, False, [(2, 2, "")]),
+                   (3, 0, False, [(2, 2, ""), (0, 2, "AT")]), (4, 0, False, [(1, 1, "")])]
+        left_end = [(1, 0, False, [(1, 1, "")]), (2, 0, False, [(0, 2, "AT"), (2, 2, "")]),
+                    (3, 0, False, [(2, 2, "")]), (4, 0, False, [(1, 1, "")])]
+        ref = [(n, 0, False, [(len(sequences[n]), len(sequences[n]), "")]) for n in (1, 2, 3, 4)]
+        rows = [spec_alignment(forward, sequences, name=f"f{i}") for i in range(3)]
+        rows += [spec_alignment(mirror(left_end, sequences), sequences, name=f"r{i}") for i in range(3)]
+        rows += [spec_alignment(ref, sequences, name=f"ref{i}") for i in range(4)]
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            gam = write_gam(root / "g.gam", rows)
+            graph = graph_fixture(root / "graph.sqlite", [(n, s, 5) for n, s in sequences.items()])
+            (root / "main.txt").write_text("3\n")  # vg's forward placement made only node 3 a target
+            common = dict(gam=str(gam), graph_index=str(graph), min_variants=1, min_af=.05, rows=12, width=11,
+                          max_indel_len=5, batch_nodes=4)
+            with redirect_stdout(io.StringIO()):
+                build(build_args(**common, nodes=str(root / "main.txt"), output=str(root / "main")))
+            self.assertEqual((root / "main/displaced_nodes.tsv").read_text(), "2\t3\n")
+            self.assertFalse((root / "main/variant_summary.ndjson").read_text())  # the site is not on node 3
+            (root / "supplement.txt").write_text("2\n")
+            with redirect_stdout(io.StringIO()):
+                build(build_args(**common, nodes=str(root / "supplement.txt"), output=str(root / "supplement")))
+            (site,) = [json.loads(line) for line in (root / "supplement/variant_summary.ndjson").read_text().splitlines()]
+            self.assertEqual((site["site_id"], site["alt_count"], site["coverage"]), ("2:0:INDEL", 6, 10))
+            self.assertEqual(site["site_counts"], {"A1": 6, "REF": 4})
+            self.assertEqual((root / "supplement/displaced_nodes.tsv").read_text(), "")
+
+    def test_displaced_command_collects_tasks_and_drops_covered_nodes(self):
+        import io
+        import json
+        from contextlib import redirect_stdout
+        from pathlib import Path
+        import tempfile
+        from indexed_gam_pipeline_v2 import orchestrate
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "targets.txt").write_text("5\n9\n")
+            (root / "earlier.txt").write_text("7\n")
+            config = dict(tasks=2, tensors=str(root / "tensors"), variant_outputs=dict(SNV=.06, INDEL=.08),
+                          inputs=dict(nodes=dict(path=str(root / "targets.txt"))))
+            (root / "config.json").write_text(json.dumps(config))
+            for i, table in enumerate(("4\t2\n7\t1\n", "4\t1\n9\t3\n8\t1\n")):
+                folder = root / "tensors/shared" / f"task_{i:04d}"
+                folder.mkdir(parents=True)
+                (folder / "displaced_nodes.tsv").write_text(table)
+            with redirect_stdout(io.StringIO()):
+                summary = orchestrate.displaced_nodes(root, root / "supplement.txt", [root / "earlier.txt"], 2)
+            self.assertEqual((root / "supplement.txt").read_text(), "4\n")  # 7 excluded, 9 a target, 8 < 2 records
+            self.assertEqual((summary["nodes"], summary["records"], summary["already_covered"], summary["below_min_records"]),
+                             (1, 3, 1, 2))
 
 
 def random_edits(rng, length, offset):
