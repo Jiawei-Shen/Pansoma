@@ -1,21 +1,25 @@
 """Bounded node batches, complete records, and versioned candidate tensor outputs."""
 from collections import Counter, defaultdict
-from contextlib import ExitStack, closing
+from contextlib import ExitStack, closing, nullcontext
 import sqlite3
 import json
 import time
 from pathlib import Path
 
 import numpy as np
+from indexed_gam_pipeline.tensor_storage import STORAGE_VERSION
 
 from indexed_gam_pipeline.candidates import (VERSION, CHANNELS, V3_VERSION, V3_CHANNELS, BASES, OPS, ROW_ORDER, ROW_SELECTION_VERSION, WINDOW_ENCODING_VERSION,
                                              decode_alignment, overlap, make_tensor)
 from indexed_gam_pipeline.gam_reader import IndexedGam
+from indexed_gam_pipeline.candidate_work import DEFAULT_MAX_NODE_READS, SITE_UNIT
 from indexed_gam_pipeline.segments import on_chromosome
 
 
 def build(args):
     start = time.perf_counter()
+    from indexed_gam_pipeline.split_outputs import split_enabled
+    split_enabled(args)  # Validate paths/thresholds before creating any output.
     _dispatch(args)
     # Include initial cache hashing, helper startup and shutdown in wall time.
     out = Path(args.output)
@@ -24,6 +28,11 @@ def build(args):
     from indexed_gam_pipeline.run import write_json
     write_json(out / "manifest.json", manifest)
     write_json(out / "run_report.json", manifest)
+    for folder in manifest.get('variant_outputs', {}).values():
+        child = json.loads((Path(folder)/'manifest.json').read_text())
+        child['timing']['total_wall_seconds'] = manifest['timing']['total_wall_seconds']
+        write_json(Path(folder)/'manifest.json', child)
+        write_json(Path(folder)/'run_report.json', child)
     print(json.dumps({"timing": manifest["timing"]}))
 
 
@@ -73,7 +82,13 @@ def _build_impl(args, walk_lookup, sequence_connection):
         raise ValueError("--node-index-cache-nodes must be in [0,1000]")
     if getattr(args, "node_index_cache_mb", 64) < 0:
         raise ValueError("--node-index-cache-mb must be nonnegative")
+    if getattr(args, "max_node_reads", DEFAULT_MAX_NODE_READS) < 0:
+        raise ValueError("--max-node-reads must be nonnegative")
+    if getattr(args, "candidate_unit", "site") not in ("site", "allele"):
+        raise ValueError("--candidate-unit must be site or allele")
     nodes = load_nodes(args.nodes)
+    from indexed_gam_pipeline.edit_columns import select_decode_mode
+    decode_policy = select_decode_mode(args.gam, getattr(args, 'decode_mode', 'auto'))
     if getattr(args, 'gam_reader', 'python') == 'vg':
         from indexed_gam_pipeline.vg_reader import VgGam
         reader = VgGam(args.gam, args.index, getattr(args, 'vg', '/scratch/jshen/bin/vg_v1.77.0'))
@@ -92,8 +107,10 @@ def _build_impl(args, walk_lookup, sequence_connection):
         version = "indexed-gam-candidate-v4"
     manifest = dict(schema_version=schema, tensor_format_version=version, status="running",
         arguments=vars(args), parameters=parameters, shape=[len(channels), args.rows, args.width],
-        dtype="int32" if walk_lookup is not None else "int16", channels=channels, encodings=dict(bases=BASES, padding=0,
-        quality_without_read_base=-1, missing_quality=-1, operations=OPS,
+        dtype="int8", tensor_storage_version=STORAGE_VERSION, channels=channels, encodings=dict(bases=BASES, padding=0,
+        quality_without_read_base=-1, missing_quality=-1,
+        base_quality="clip(raw quality, -1, 127); unavailable quality encodes as -1",
+        mapping_quality="clip(raw MAPQ, -1, 127)", operations=OPS,
         event_flags={"difference": 1, "candidate_region": 2}),
         coordinates="zero-based forward node; half-open intervals and candidate_columns",
         normalization="exact forward node/position/alleles; no repeat or cross-node normalization",
@@ -104,16 +121,18 @@ def _build_impl(args, walk_lookup, sequence_connection):
         row_order=ROW_ORDER,
         gai_version=reader.version, nodes=len(nodes), shards=0, tensors=0,
         unsupported_events=0, filtered_candidates=0, debug_rows=args.debug_rows)
+    manifest['decode_policy'] = decode_policy
     if walk_lookup is not None and not is_gbz:
         manifest["walk_count_lookup"] = dict(path=str(walk_lookup.path), **walk_lookup.metadata)
         manifest["encodings"]["node_distinct_w_record_count"] = {
-            "value": "exact raw count, not normalized or clipped", "padding": 0,
-            "node_absent_from_W": 0, "insertion_and_gap": "count of the row's anchor node",
+            "value": "min(exact raw count // 4, 127)", "padding": 0,
+            "divisor": 4, "maximum_encoded_value": 127, "node_absent_from_W": 0, "insertion_and_gap": "count of the row's anchor node",
             "missing_coverage": 0}
     if is_gbz:
         manifest["occurrence_lookup"] = dict(path=str(walk_lookup.path), **walk_lookup.metadata)
         manifest["encodings"]["node_distinct_gbwt_path_count"] = {
-            "value": "exact distinct GBWT path count; either orientation; repeated visits counted once",
+            "value": "min(exact distinct GBWT path count // 4, 127); either orientation; revisits counted once",
+            "divisor": 4, "maximum_encoded_value": 127, "saturation": "counts >=508 encode as 127",
             "padding_and_missing_coverage": 0,
             "insertion_and_gap": "count of the row's anchor node",
             "missing_node_or_sequence_mismatch": "error"}
@@ -123,13 +142,30 @@ def _build_impl(args, walk_lookup, sequence_connection):
     worker_timings = Counter()
     manifest['candidate_optimization'] = dict(early_alt_filter=getattr(args,'early_alt_filter',False),
         workers=getattr(args,'workers',1), node_index_cache_nodes=getattr(args,'node_index_cache_nodes',0),
-        node_index_cache_mb=getattr(args,'node_index_cache_mb',64), early_rejected=0,
+        node_index_cache_mb=getattr(args,'node_index_cache_mb',64),
+        max_node_reads=getattr(args,'max_node_reads',DEFAULT_MAX_NODE_READS),
+        max_node_reads_rule='records ordered by SHA-256 of the serialized GAM record; first N per target node',
+        early_af_filter=getattr(args,'early_af_filter',True), early_rejected=0, early_af_rejected=0,
         memory_policy='Single parent GAM/GBZ cache; batch-scoped fork workers; total node FIFO cap shared by budget division')
+    manifest['sample_unit'] = SITE_UNIT if getattr(args,'candidate_unit','site') == 'site' else 'allele'
+    if manifest['sample_unit'] == SITE_UNIT:
+        manifest['site_definition'] = ('one tensor per (node, start, SNV|INDEL); INS and DEL at one start share an '
+            'indel site; alleles passing all filters are listed in alleles[] by ALT count; the tensor is the '
+            'representative (first) allele\'s candidate tensor; no repeat normalization')
     tensors, metadata = [], []
-    with (out / "variant_summary.ndjson").open("w") as summary, \
+    from indexed_gam_pipeline.split_outputs import SplitOutputs
+    split = getattr(args, 'snv_output', None) is not None
+    with (SplitOutputs(args, manifest, timings) if split else nullcontext()) as split_outputs, \
+         (out / "variant_summary.ndjson").open("w") as summary, \
          (out / "unsupported_events.ndjson").open("w") as unsupported, \
          (out / "filtered_candidates.ndjson").open("w") as filtered:
         def flush():
+            if split_outputs is not None:
+                split_outputs.flush()
+                manifest['timing'] = dict(timings)
+                write_json(out/'manifest.json', manifest)
+                write_json(out/'run_report.json', manifest)
+                return
             if not tensors:
                 return
             shard = manifest["shards"]
@@ -181,35 +217,65 @@ def _build_impl(args, walk_lookup, sequence_connection):
             reads, candidates = [], set()
             by_node = defaultdict(list)
             for ai, alignment in enumerate(alignments):
-                read, rejected = decode_alignment(alignment, sequences, args.max_indel_len)
+                read, rejected = decode_alignment(alignment, sequences, args.max_indel_len,
+                                                  mode=decode_policy['selected'], target_nodes=wanted)
+                # All graph sequences are already loaded; the decoded Read owns
+                # its context, so release this original protobuf immediately.
+                alignments[ai] = None
+                alignment = None
                 reads.append(read)
                 for node in {v.node for v in read.visits} & wanted:
                     by_node[node].append(read)
                 candidates.update(o.candidate for o in read.observations if o.candidate.node in wanted)
                 for event in rejected:
-                    unsupported.write(json.dumps(dict(event, record_sha256=read.digest,
+                    rejected_meta = dict(event, record_sha256=read.digest,
                         in_target_nodes=event["node_id"] in wanted,
-                        batch_index=bi, record_index=ai, read_name=read.name)) + "\n")
+                        batch_index=bi, record_index=ai, read_name=read.name)
+                    unsupported.write(json.dumps(rejected_meta) + "\n")
+                    if split_outputs is not None: split_outputs.record('unsupported', rejected_meta)
                     manifest["unsupported_events"] += 1
             timings["decode_edits_seconds"] += time.perf_counter() - phase_start
             phase_start = time.perf_counter()
             print(f"Batch {bi}: counting {len(candidates)} candidates", flush=True)
-            from indexed_gam_pipeline.candidate_work import alt_support_bounds, candidate_results
+            from indexed_gam_pipeline.candidate_work import (alt_support_bounds, candidate_results,
+                exact_coverage, af_threshold, group_sites, site_id)
             tasks=[];kept=defaultdict(list)
             t=time.perf_counter()
-            bounds=alt_support_bounds(reads,candidates,args.min_allele_bq) if getattr(args,'early_alt_filter',False) else None
+            alt_filter=getattr(args,'early_alt_filter',False); af_filter=getattr(args,'early_af_filter',True)
+            sites=getattr(args,'candidate_unit','site')=='site'
+            bounds=alt_support_bounds(reads,candidates,args.min_allele_bq) if alt_filter or af_filter else None
+            # AF upper bound = ALT support bound / exact coverage, both over all records
+            # (before any --max-node-reads cap). Without a cap it only removes candidates
+            # process_node would reject for min_af.
+            coverage=(exact_coverage([c for c in candidates if not alt_filter or bounds[c]>=args.min_variants],by_node)
+                      if af_filter else None)
             for candidate in sorted(candidates):
-                if bounds is not None and bounds[candidate] < args.min_variants:
-                    filtered.write(json.dumps(dict(candidate.metadata(), reasons=['min_variants'],
-                        alt_support_upper_bound=bounds[candidate], coverage_not_evaluated=True))+'\n')
+                if alt_filter and bounds[candidate] < args.min_variants:
+                    rejected_meta = dict(candidate.metadata(), reasons=['min_variants'],
+                        alt_support_upper_bound=bounds[candidate], coverage_not_evaluated=True,
+                        **({'site_id':site_id(candidate)} if sites else {}))
+                    filtered.write(json.dumps(rejected_meta)+'\n')
+                    if split_outputs is not None: split_outputs.record('filtered', rejected_meta)
                     manifest['filtered_candidates']+=1
                     manifest['candidate_optimization']['early_rejected']+=1
+                elif coverage is not None and (coverage[candidate]==0 or
+                        bounds[candidate]/coverage[candidate] < af_threshold(candidate,args)):
+                    cov=coverage[candidate]
+                    rejected_meta = dict(candidate.metadata(), reasons=['min_af'],
+                        alt_support_upper_bound=bounds[candidate], coverage=cov,
+                        af_upper_bound=bounds[candidate]/cov if cov else 0.0, support_not_evaluated=True,
+                        **({'site_id':site_id(candidate)} if sites else {}))
+                    filtered.write(json.dumps(rejected_meta)+'\n')
+                    if split_outputs is not None: split_outputs.record('filtered', rejected_meta)
+                    manifest['filtered_candidates']+=1
+                    manifest['candidate_optimization']['early_af_rejected']+=1
                 else:
                     kept[candidate.node].append(candidate)
             prefilter_seconds=time.perf_counter()-t
             for node,items in kept.items():
-                for offset in range(0,len(items),16):
-                    tasks.append((node,items[offset:offset+16]))
+                units=group_sites(items) if sites else [(c,) for c in items]
+                for offset in range(0,len(units),16):
+                    tasks.append((node,units[offset:offset+16]))
             batch_worker_timings=Counter();cache_peaks=dict(nodes_per_worker=0,estimated_bytes_per_worker=0)
             stop=False
             with candidate_results(tasks,by_node,args,walk_counts) as completed:
@@ -220,12 +286,16 @@ def _build_impl(args, walk_lookup, sequence_connection):
                     for tensor,meta in results:
                         if tensor is None:
                             filtered.write(json.dumps(meta)+'\n')
+                            if split_outputs is not None: split_outputs.record('filtered', meta)
                             manifest['filtered_candidates']+=1
                             continue
                         meta['tensor_format_version']=version
-                        tensors.append(tensor);metadata.append(meta)
-                        if len(tensors)>=args.shard_size:flush()
-                        if getattr(args,'max_tensors',None) is not None and manifest['tensors']+len(tensors)>=args.max_tensors:
+                        if split_outputs is not None:
+                            split_outputs.append(tensor, meta)
+                        else:
+                            tensors.append(tensor);metadata.append(meta)
+                            if len(tensors)>=args.shard_size:flush()
+                        if getattr(args,'max_tensors',None) is not None and manifest['tensors']+(split_outputs.buffered if split_outputs is not None else len(tensors))>=args.max_tensors:
                             flush();stop=True;break
                     if stop:break
             worker_timings.update(batch_worker_timings)
@@ -235,12 +305,19 @@ def _build_impl(args, walk_lookup, sequence_connection):
                 batch_log.write(json.dumps(dict(batch=bi, first_node=batch[0], last_node=batch[-1],
                     target_nodes=len(batch), alignments=len(reads), context_nodes=len(context_nodes),
                     candidates=len(candidates), tensors_written=manifest["tensors"],
-                    tensors_buffered=len(tensors), elapsed_seconds=time.perf_counter()-batch_started,
+                    tensors_buffered=split_outputs.buffered if split_outputs is not None else len(tensors), elapsed_seconds=time.perf_counter()-batch_started,
                     cumulative_stage_seconds=dict(timings), gam_query=metrics,
                     prefilter_seconds=prefilter_seconds, candidate_worker_summed_timing=dict(batch_worker_timings),
                     node_index_cache_peaks=cache_peaks)) + "\n")
             print(f"Batch {bi}: {len(batch)} target nodes, {len(reads)} complete alignments, "
                   f"{len(context_nodes)} context nodes, {len(candidates)} candidates", flush=True)
+            # Release decoded reads before fetching the next batch. Otherwise
+            # the previous by_node/reads references survive the next GAM fetch
+            # and graph lookup, adding both batches to the memory peak.
+            by_node.clear()
+            reads.clear()
+            alignments.clear()
+            read = alignment = None
             if getattr(args, "max_tensors", None) is not None and manifest["tensors"] >= args.max_tensors:
                 break
         phase_start = time.perf_counter()
@@ -253,6 +330,8 @@ def _build_impl(args, walk_lookup, sequence_connection):
     manifest["status"] = "complete"
     if is_gbz:
         manifest["occurrence_lookup"] = dict(path=str(walk_lookup.path), **walk_lookup.metadata)
+    if split_outputs is not None:
+        split_outputs.finish(manifest)
     write_json(out / "run_report.json", manifest)
     write_json(out / "manifest.json", manifest)
     print(json.dumps(manifest, indent=2))

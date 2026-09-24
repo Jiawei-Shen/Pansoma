@@ -98,7 +98,7 @@ def validate(folder, gam, index, node_sqlite=None, walk_counts=None, gbz=None, g
             check(bool(np.all(x[2,:n,lo:hi]&2)),f'{label}: full candidate flags')
         if meta['event_type']=='INS' and not anchor_window:
             check(bool(np.all(x[5,:n,lo:hi]==6)),f'{label}: insertion reference gaps')
-        check(bool(np.all(x[1,:n][x[0,:n]==6]==-1)),f'{label}: gap quality')
+        check(bool(np.all(x[1,:n][x[0,:n]==6]==manifest.get('encodings', {}).get('quality_without_read_base', -1))),f'{label}: gap quality')
         actual_paths=[]
         checked=0
         for ri,row in enumerate(meta['rows']):
@@ -123,7 +123,12 @@ def validate(folder, gam, index, node_sqlite=None, walk_counts=None, gbz=None, g
                     if ci == meta['anchor_column'] and not boundary:
                         check(anchored and pos == meta['start'],f'{label}: anchor coordinate')
                 if expected_walks is not None:
-                    check(int(x[6,ri,ci]) == expected_walks[col['node_id']], f'{label}: walk count at row {ri}, column {ci}')
+                    expected_count = expected_walks[col['node_id']]
+                    if manifest.get('tensor_storage_version') == 'int8-count-div4-v1':
+                        expected_count = min(127, expected_count // 4)
+                    elif manifest['dtype'] == 'uint8':
+                        expected_count = min(255, expected_count)
+                    check(int(x[6,ri,ci]) == expected_count, f'{label}: walk count at row {ri}, column {ci}')
                 if col['mapping_index'] != previous:
                     path.append((col['node_id'],col['reverse']))
                     previous=col['mapping_index']

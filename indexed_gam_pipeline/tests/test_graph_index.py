@@ -51,7 +51,7 @@ class IndexTests(unittest.TestCase):
             (root/'nodes.json').write_text(json.dumps([dict(node_id=n,sequence='AAAAAA') for n in nodes]))
             gbz = root/'graph.gbz'; gbz.write_bytes(b'fixture')
             with GBZCounts(gbz, root/'unused', root/'counts.sqlite') as lookup:
-                lookup.db.executemany('INSERT INTO gbz_counts VALUES(?,?,?)', [(n,86,'AAAAAA') for n in nodes])
+                lookup.db.executemany('INSERT INTO gbz_counts VALUES(?,?,?)', [(n,331,'AAAAAA') for n in nodes])
                 lookup.db.commit()
             args = argparse.Namespace(command='build',format='candidate-v4',gam=str(gam),index=None,
                 nodes=str(root/'nodes.txt'),node_json=str(root/'nodes.json'),node_sqlite=None,gfa=None,
@@ -60,12 +60,14 @@ class IndexTests(unittest.TestCase):
                 shard_size=2,min_mapq=10,min_af=.05,min_variants=1,min_allele_bq=10.,
                 variant_type='all',max_indel_len=50,rows=200,width=101,debug_rows=True, early_alt_filter=True)
             with redirect_stdout(io.StringIO()): build(args)
-            fixture_index(root/'unified.sqlite', [(n,'AAAAAA',86) for n in nodes])
+            fixture_index(root/'unified.sqlite', [(n,'AAAAAA',331) for n in nodes])
             args.node_json=args.gbz=args.gbz_query=args.occurrence_cache=None
             args.graph_index=str(root/'unified.sqlite');args.output=str(root/'new')
             with redirect_stdout(io.StringIO()): build(args)
             oldfiles=list((root/'old').glob('*.npy'))
             self.assertTrue(oldfiles)
+            self.assertEqual(np.load(oldfiles[0]).dtype, np.int8)
+            self.assertEqual(int(np.load(oldfiles[0])[:,6].max()), 82)
             for old in oldfiles:
                 np.testing.assert_array_equal(np.load(old), np.load(root/'new'/old.name))
             self.assertEqual((root/'old/variant_summary.ndjson').read_text(), (root/'new/variant_summary.ndjson').read_text())

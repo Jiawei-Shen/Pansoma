@@ -77,13 +77,13 @@ class WalkCountTest(unittest.TestCase):
         six,old=make_tensor(c,e,rows=3,width=10,debug=True)
         seven,new=make_tensor(c,e,rows=3,width=10,debug=True,node_walk_counts={1:40000,2:7})
         self.assertEqual(seven.shape,(7,3,10))
-        self.assertEqual(seven.dtype,np.int32)
+        self.assertEqual(seven.dtype,np.int8)
         np.testing.assert_array_equal(seven[:6],six)
         self.assertEqual(new['row_groups'],old['row_groups'])
         self.assertEqual(new['coverage'],old['coverage'])
         for ri,row in enumerate(new['rows']):
             for ci,col in enumerate(row['columns']):
-                self.assertEqual(seven[6,ri,ci],{1:40000,2:7}[col['node_id']] if col else 0)
+                self.assertEqual(seven[6,ri,ci],{1:127,2:1}[col['node_id']] if col else 0)
         self.assertFalse(seven[:,2].any())
         with self.assertRaisesRegex(ValueError,'int32'):
             make_tensor(c,e,node_walk_counts={1:2**31,2:1})
@@ -111,7 +111,7 @@ class WalkCountTest(unittest.TestCase):
             manifest=json.loads((folder/'out/manifest.json').read_text())
             self.assertEqual(manifest['schema_version'],3)
             self.assertEqual(manifest['shape'],[7,200,100])
-            self.assertEqual(manifest['dtype'],'int32')
+            self.assertEqual(manifest['dtype'],'int8')
             summary=[json.loads(s) for s in (folder/'out/variant_summary.ndjson').read_text().splitlines()]
             self.assertEqual(len(summary),4)
             for m in summary:
@@ -119,7 +119,7 @@ class WalkCountTest(unittest.TestCase):
                 x=np.load(folder/f"out/shard_{m['shard_index']:05d}_data.npy")[m['index_within_shard']]
                 for ri,row in enumerate(m['rows']):
                     for ci,col in enumerate(row['columns']):
-                        self.assertEqual(x[6,ri,ci],(2 if col['node_id']==10 else 1) if col else 0)
+                        self.assertEqual(x[6,ri,ci],0)  # Raw counts 1 and 2 both floor-divide to zero.
             import sqlite3
             from indexed_gam_pipeline.validate_examples import validate
             graph=folder/'graph.sqlite'

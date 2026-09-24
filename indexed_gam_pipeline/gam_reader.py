@@ -58,6 +58,22 @@ def decode(raw):
     return alignment
 
 
+def equivalent_eof(stream, expected, actual):
+    """Accept alternate BGZF virtual offsets for the same logical EOF.
+
+    A BGZF block boundary can be represented as either the end offset within
+    the preceding block or offset zero in the following block.  Readers such
+    as pysam may normalize the former to the latter.  Probe both offsets so we
+    only relax exact equality when both representations are genuinely EOF.
+    """
+    stream.seek(expected)
+    expected_is_eof = not stream.read(1)
+    stream.seek(actual)
+    actual_is_eof = not stream.read(1)
+    stream.seek(actual)
+    return expected_is_eof and actual_is_eof
+
+
 def encode_varint(value):
     out = bytearray()
     while value > 127:
@@ -252,5 +268,6 @@ class IndexedGam:
                         if any(m.position.node_id in wanted for m in alignment.path.mapping):
                             metrics["returned_alignments"] += 1
                             yield alignment
-                if stream.tell() != end:
+                actual_end = stream.tell()
+                if actual_end != end and not equivalent_eof(stream, end, actual_end):
                     raise ValueError("GAI run does not end on a GAM group boundary")

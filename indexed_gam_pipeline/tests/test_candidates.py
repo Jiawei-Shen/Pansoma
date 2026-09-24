@@ -39,6 +39,35 @@ def eligible(candidate, reads):
     return [(r, *overlap(r, candidate, 10)) for r in reads if overlap(r, candidate, 10)]
 
 
+class NFilterTest(unittest.TestCase):
+    def test_legacy_n_filter_preserves_context_and_strand_equivalence(self):
+        cases = [
+            # Reference N and read N are filtered independently within an edit;
+            # the subsequent ordinary SNV must still be discovered.
+            ('NAC', [(3,3,'ANT')], [Candidate(1,2,'C','T','SNP')]),
+            ('AC', [(1,1,''),(0,2,'GN'),(1,1,'T')], [Candidate(1,1,'C','T','SNP')]),
+            ('ANC', [(1,1,''),(1,0,''),(1,1,'T')], [Candidate(1,2,'C','T','SNP')]),
+            ('NC', [(1,1,''),(0,1,'G'),(1,1,'T')], [Candidate(1,1,'C','T','SNP')]),
+            # At node start the legacy insertion anchor is base zero.
+            ('NC', [(0,1,'G'),(2,2,'')], []),
+            ('AC', [(0,1,'G'),(2,2,'')], [Candidate(1,0,'','G','INS')]),
+            # An N to the right of a valid insertion anchor must not filter it.
+            ('AN', [(1,1,''),(0,1,'G'),(1,1,'')], [Candidate(1,1,'','G','INS')]),
+            ('NA', [(2,2,''),(0,1,'G')], [Candidate(1,2,'','G','INS')]),
+        ]
+        for reference, edits, expected in cases:
+            for reverse in (False, True):
+                oriented = [(f,t,rc(s)) for f,t,s in reversed(edits)] if reverse else edits
+                for mode in ('full', 'window'):
+                    with self.subTest(reference=reference, reverse=reverse, mode=mode, edits=edits):
+                        seq = {1:reference}
+                        a = alignment([(1,0,reverse,oriented)], seq)
+                        r, unsupported = decode_alignment(a, seq, mode=mode)
+                        self.assertEqual([o.candidate for o in r.observations], expected)
+                        self.assertFalse(unsupported)
+                        self.assertEqual(len(r.columns), sum(max(f,t) for f,t,_ in edits))
+                        self.assertEqual((r.visits[0].start, r.visits[0].end), (0,len(reference)))
+
 class CandidatesTest(unittest.TestCase):
     def test_default_101_columns_has_50_flanking_columns(self):
         seq={1:'A'*200}

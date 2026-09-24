@@ -42,8 +42,13 @@ def build_command(config,nodes,dest,cache,backend,cache_mb=4096):
         '--gam-cache-mb',cache_mb,'--max-batch-segments','20000','--shard-size','2048','--rows','200','--width','101',
         '--min-mapq','10','--min-af','0.05','--min-variants','3','--min-allele-bq','10','--max-indel-len','50',
         '--variant-type','all','--early-alt-filter','--node-index-cache-nodes','0','--workers','1']))
-    if config.get('params', {}).get('max_tensors'):
-        command += ['--max-tensors', str(config['params']['max_tensors'])]
+    params = config.get('params', {})
+    # Written explicitly so frozen snapshots do not depend on CLI defaults.
+    command += ['--early-af-filter' if params.get('early_af_filter', True) else '--no-early-af-filter',
+                '--candidate-unit', params.get('candidate_unit', 'site'),
+                '--max-node-reads', str(params.get('max_node_reads', 800))]
+    if params.get('max_tensors'):
+        command += ['--max-tensors', str(params['max_tensors'])]
     return command
 
 
