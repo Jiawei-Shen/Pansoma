@@ -22,6 +22,8 @@ Layout under --root (bookkeeping) and --tensors (outputs; default <root>/tensors
     <tensors>/ALL/task_NNNN/      everything in one directory                    (single-output mode)
 """
 import argparse
+import contextlib
+import io
 from array import array
 from collections import Counter
 import json
@@ -47,13 +49,15 @@ from indexed_gam_pipeline_v2.build import KIND, SITE_UNIT
 from indexed_gam_pipeline_v2.candidates import FORMAT_VERSION, STORAGE_VERSION
 from indexed_gam_pipeline_v2.common import read_json, sha256_file, stamp, write_json
 from indexed_gam_pipeline_v2.graph_index import GraphIndex
+from indexed_gam_pipeline_v2.tensor_postprocessing.chr_index import select_nodes
 
 PACKAGE = Path(__file__).resolve().parent.name
 # Every builder option is frozen into config.json and passed explicitly, so a prepared
 # run never depends on the CLI defaults of the code that later executes it.
 BUILDER_OPTIONS = ("rows", "width", "gam_cache_mb", "batch_nodes", "max_node_span", "max_batch_alignments",
-                   "shard_size", "min_mapq", "min_af", "min_variants", "min_allele_bq", "max_indel_len", "chr",
-                   "candidate_unit", "max_node_reads", "early_af_filter")
+                   "shard_size", "min_mapq", "min_af", "min_variants", "min_allele_bq", "max_indel_len",
+                   "chromosomes", "candidate_unit", "max_node_reads", "early_af_filter")
+LABEL_INPUTS = ("somatic_vcf", "somatic_bed", "germline_vcf", "germline_bed", "reference_fasta")
 
 
 # --- prepare ------------------------------------------------------------------
@@ -100,7 +104,32 @@ def node_costs(stats_path, nodes):
     return counts[at]
 
 
+def postprocess_options(args):
+    """The finalize step (merge, then labels) frozen into config.json; its input files are fingerprinted."""
+    labels = {k: getattr(args, k) for k in LABEL_INPUTS}
+    if any(labels.values()) and not all(labels.values()):
+        raise ValueError("Labels need all of --" + ", --".join(k.replace("_", "-") for k in LABEL_INPUTS))
+    if args.merge_shard_size < 0:
+        raise ValueError("--merge-shard-size must be nonnegative (0 = no merge)")
+    if (args.merge_shard_size or args.chromosomes != "all") and not args.chr_index:
+        raise ValueError("--chr-index is needed to merge per chromosome (or use --merge-shard-size 0) "
+                         "and for --chromosomes other than all")
+    if all(labels.values()) and not (args.merge_shard_size and args.reference_path and args.truth_dir):
+        raise ValueError("Labels need the merge (--merge-shard-size > 0), --reference-path and --truth-dir")
+    inputs = {}
+    if args.reference_path:
+        inputs["reference_path"] = stamp(Path(args.reference_path) / "meta.json")
+    if all(labels.values()):
+        inputs.update({k: stamp(v) for k, v in labels.items()})
+    return dict(merge_shard_size=args.merge_shard_size, keep_sources=args.keep_sources,
+                reference_path=str(Path(args.reference_path).resolve()) if args.reference_path else None,
+                labels=dict({k: str(Path(v).resolve()) for k, v in labels.items()},
+                            truth_dir=str(Path(args.truth_dir).resolve())) if all(labels.values()) else None,
+                inputs=inputs)
+
+
 def prepare(args):
+    postprocess = postprocess_options(args)
     root = Path(args.root).resolve()
     root.mkdir(parents=True, exist_ok=False)
     if (args.snv_min_af is None) != (args.indel_min_af is None):
@@ -115,10 +144,18 @@ def prepare(args):
     package = Path(__file__).resolve().parent
     shutil.copytree(package, root / "source" / PACKAGE,
                     ignore=shutil.ignore_patterns("__pycache__", "*.pyc", "tests"))
-    parts = partition_nodes(args.nodes, root / "parts", args.tasks)
+    # --chromosomes: drop target nodes outside the chosen blocks before partitioning, so tasks
+    # stay balanced and cost predictions cover only what is built.
+    nodes, selection = select_nodes(np.fromfile(str(args.nodes), dtype=np.int64, sep="\n"),
+                                    args.chromosomes, args.chr_index)
+    nodes_file = Path(args.nodes)
+    if args.chromosomes != "all":
+        nodes_file = root / "nodes_selected.txt"
+        nodes_file.write_text("".join(f"{n}\n" for n in nodes.tolist()))
+        selection.update(nodes_file=str(nodes_file), sha256=sha256_file(nodes_file))
+    parts = partition_nodes(nodes_file, root / "parts", args.tasks)
     schedule = dict(order="task index")
     if args.node_stats:
-        nodes = np.fromfile(str(args.nodes), dtype=np.int64, sep="\n")
         costs = np.cumsum(node_costs(args.node_stats, nodes))
         end = 0
         for part in parts:
@@ -134,11 +171,16 @@ def prepare(args):
         tensors=str(tensors),
         inputs=dict(gam=stamp(args.gam), index=stamp(index),
                     graph_index=dict(stamp(args.graph_index), metadata=graph_metadata),
-                    nodes=dict(stamp(args.nodes), sha256=sha256_file(args.nodes), count=sum(p["nodes"] for p in parts))),
+                    nodes=dict(stamp(args.nodes), sha256=sha256_file(args.nodes), count=int(selection["nodes_in"])),
+                    **({"chr_index": stamp(args.chr_index)} if args.chr_index else {}),
+                    **postprocess.pop("inputs")),
+        chromosome_selection=selection,
         source_sha256={str(p.relative_to(root)): sha256_file(p) for p in sorted((root / "source").rglob("*")) if p.is_file()},
         tasks=args.tasks, processes=args.processes, schedule=schedule, parts=parts,
+        supplement=dict(max_rounds=args.supplement_rounds, min_records=args.supplement_min_records, rounds=[]),
         builder={k: getattr(args, k) for k in BUILDER_OPTIONS},
-        variant_outputs=(dict(SNV=args.snv_min_af, INDEL=args.indel_min_af) if args.snv_min_af is not None else None))
+        variant_outputs=(dict(SNV=args.snv_min_af, INDEL=args.indel_min_af) if args.snv_min_af is not None else None),
+        postprocess=postprocess)
     write_json(root / "config.json", config)
     (root / "run.sh").write_text("\n".join([
         "#!/bin/bash", "set -euo pipefail",
@@ -148,7 +190,8 @@ def prepare(args):
         "exec " + shlex.quote(sys.executable) + f" -m {PACKAGE}.orchestrate run --root " + shlex.quote(str(root)) + ' "$@"', ""]))
     (root / "run.sh").chmod(0o755)
     print(json.dumps(dict(root=str(root), tensors=str(tensors), tasks=args.tasks, processes=args.processes,
-                          nodes=config["inputs"]["nodes"]["count"], variant_outputs=config["variant_outputs"]), indent=2))
+                          nodes=int(len(nodes)), chromosome_selection={k: v for k, v in selection.items() if k != "sha256"},
+                          variant_outputs=config["variant_outputs"], postprocess=postprocess), indent=2))
     return config
 
 
@@ -189,11 +232,10 @@ def build_command(root, config, index):
                "--nodes", config["parts"][index]["nodes_file"],
                "--output", str(outputs.get("shared", outputs.get("ALL"))),
                "--variant-type", "all"]
+    if "chr_index" in config["inputs"]:
+        command += ["--chr-index", config["inputs"]["chr_index"]["path"]]
     for key in BUILDER_OPTIONS:
-        if key == "chr":
-            if b["chr"]:
-                command += ["--chr", b["chr"]]
-        elif key == "early_af_filter":
+        if key == "early_af_filter":
             command += ["--early-af-filter" if b[key] else "--no-early-af-filter"]
         else:
             command += ["--" + key.replace("_", "-"), str(b[key])]
@@ -466,6 +508,9 @@ def set_aside_partial(root, config, pending):
 def run(root, resume=False):
     root = Path(root).resolve()
     config = read_json(root / "config.json")
+    if (root / "outputs.json").exists() and "merge" in read_json(root / "outputs.json"):
+        raise ValueError("This run was already merged (task outputs may be gone); use `orchestrate finalize` "
+                         "to finish labeling instead of run/--resume")
     if int(os.environ.get("SLURM_CPUS_PER_TASK", config["processes"])) < config["processes"]:
         raise ValueError("Not enough allocated CPUs for the configured process count")
     verify(root, config)
@@ -489,9 +534,15 @@ def run(root, resume=False):
             if commands:
                 execute_queue(commands, root / "queue_status.json", config["processes"],
                               log_dir=root / "logs", cwd=root / "source", order=order)
+            config = run_supplement(root, config)
             verify(root, config)
             catalog = catalog_outputs(root, config)
             status.update(status="complete", tensors=catalog["tensors"], tensors_by_type=catalog["tensors_by_type"])
+            write_json(root / "status.json", status)
+            if config.get("postprocess"):
+                finalize(root, config)
+                status.update({k: v for k, v in read_json(root / "status.json").items() if k not in status or
+                               k in ("status", "merged", "merge_layout", "labeled")})
     except BaseException as error:
         status.update(status="failed", error=str(error))
         raise
@@ -499,6 +550,77 @@ def run(root, resume=False):
         status["elapsed_seconds"] = time.time() - status["started_unix"]
         status["peak_sampled_rss_kib"] = memory.peak_rss_kib
         write_json(root / "status.json", status)
+
+
+def run_supplement(root, config):
+    """Supplement rounds: nodes that left-normalization moved target-node indels onto and no
+    task covers become extra tasks of this run (appended to config.json), built and validated
+    like the others, so `finalize` merges and labels them together with the main tasks.
+
+    Each round lists the displaced nodes of every task so far minus every node already in a
+    task (and outside the chromosome selection), splits them into up to 4 x processes tasks and
+    runs them; it stops at an empty list or after `max_rounds`. Rounds are recorded in the
+    config, so --resume simply continues. Returns the (possibly extended) config.
+    """
+    settings = config.get("supplement") or dict(max_rounds=0, rounds=[])
+    while len(settings["rounds"]) < settings["max_rounds"] and not (
+            settings["rounds"] and settings["rounds"][-1]["nodes"] == 0):
+        number = len(settings["rounds"]) + 1
+        folder = root / "parts" / f"supplement_{number:02d}"
+        folder.mkdir(parents=True, exist_ok=True)
+        with contextlib.redirect_stdout(io.StringIO()):
+            summary = displaced_nodes(root, folder / "nodes.txt", [p["nodes_file"] for p in config["parts"]],
+                                      settings.get("min_records", 2))
+        first = config["tasks"]
+        if summary["nodes"]:
+            count = min(summary["nodes"], 4 * config["processes"])
+            parts = partition_nodes(folder / "nodes.txt", folder, count)
+            for part in parts:
+                part["supplement_round"] = number
+            config["parts"] += parts
+            config["tasks"] += count
+        settings["rounds"].append(dict(summary, round=number, first_task=first, tasks=config["tasks"] - first))
+        config["supplement"] = settings
+        write_json(root / "config.json", config)
+        print(f"SUPPLEMENT round {number}: {summary['nodes']} nodes -> {config['tasks'] - first} tasks", flush=True)
+        pending = list(range(first, config["tasks"]))  # new tasks; an interrupted round resumes via run --resume
+        if pending:
+            commands = {i: [config["python"], "-m", f"{PACKAGE}.orchestrate", "task", "--root", str(root),
+                            "--index", str(i)] for i in pending}
+            execute_queue(commands, root / f"queue_status_supplement_{number:02d}.json", config["processes"],
+                          log_dir=root / "logs", cwd=root / "source", order=pending)
+    return config
+
+
+def finalize(root, config=None):
+    """After every task validated: merge per chromosome, then label (as configured at prepare).
+
+    Each step is skipped when already done (outputs.json has `merge`; every merged directory has
+    labels.manifest.json), so an interrupted finalize can simply be repeated.
+    """
+    from indexed_gam_pipeline_v2.tensor_postprocessing.merge_shards import merge
+    from indexed_gam_pipeline_v2.tensor_postprocessing.truth_labels import label_run
+    root = Path(root).resolve()
+    config = config or read_json(root / "config.json")
+    post = config.get("postprocess") or {}
+    report = {}
+    if post.get("merge_shard_size"):
+        if "merge" not in read_json(root / "outputs.json"):
+            report["merge"] = merge(root, config["inputs"]["chr_index"]["path"], post["merge_shard_size"],
+                                    keep_sources=post["keep_sources"], workers=min(8, config["processes"]),
+                                    reference_path=post.get("reference_path"))
+        labels = post.get("labels")
+        kinds = list(config["variant_outputs"] or ["ALL"])
+        tensors = Path(config["tensors"])
+        if labels and not all((tensors / kind / "labels.manifest.json").exists() for kind in kinds):
+            report["labels"] = label_run(tensors, kinds, post["reference_path"], labels["reference_fasta"],
+                                         labels["somatic_vcf"], labels["somatic_bed"], labels["germline_vcf"],
+                                         labels["germline_bed"], labels["truth_dir"])
+            status = read_json(root / "status.json")
+            status.update(labeled=True)
+            write_json(root / "status.json", status)
+    write_json(root / "finalize_report.json", report)
+    return report
 
 
 def displaced_nodes(root, output, exclude=(), min_records=2):
@@ -521,12 +643,14 @@ def displaced_nodes(root, output, exclude=(), min_records=2):
         for line in table.read_text().splitlines():
             node, records = line.split("\t")
             counts[int(node)] += int(records)
-    covered = [np.fromfile(str(config["inputs"]["nodes"]["path"]), dtype=np.int64, sep="\n")]
+    selection = config.get("chromosome_selection") or dict(selection="all")
+    covered = [np.fromfile(str(selection.get("nodes_file", config["inputs"]["nodes"]["path"])), dtype=np.int64, sep="\n")]
     covered += [np.fromfile(str(path), dtype=np.int64, sep="\n") for path in exclude]
     covered = np.unique(np.concatenate(covered))
     nodes = np.array(sorted(n for n, c in counts.items() if c >= min_records), dtype=np.int64)
     at = np.minimum(np.searchsorted(covered, nodes), max(len(covered) - 1, 0))
     fresh = nodes[covered[at] != nodes] if len(covered) else nodes
+    fresh, _ = select_nodes(fresh, selection["selection"], config["inputs"].get("chr_index", {}).get("path"))
     Path(output).write_text("".join(f"{n}\n" for n in fresh.tolist()))
     summary = dict(output=str(Path(output).resolve()), nodes=int(len(fresh)), displaced_nodes=len(counts),
                    already_covered=int(len(nodes) - len(fresh)), below_min_records=len(counts) - int(len(nodes)),
@@ -563,11 +687,26 @@ def main(argv=None):
     p.add_argument("--index", help="default: GAM path + .gai")
     p.add_argument("--nodes", required=True, help="sorted target node list, e.g. discovery output")
     p.add_argument("--node-stats", help="discovery node_stats.json: predict task costs and run expensive tasks first")
+    p.add_argument("--supplement-rounds", type=int, default=3,
+                   help="after the tasks, up to N rounds of supplement tasks for nodes that left-normalization moved "
+                        "target-node indels onto (0 = off; see `displaced`)")
+    p.add_argument("--supplement-min-records", type=int, default=2,
+                   help="supplement nodes need at least this many displaced records")
     p.add_argument("--tasks", type=int, default=512)
     p.add_argument("--processes", type=int, default=32)
-    p.add_argument("--chr", default="")
     add_build_arguments(p, outputs=False)
     p.set_defaults(gam_cache_mb=8192)
+    f = p.add_argument_group("finalize (after every task validated): merge per chromosome, then labels")
+    f.add_argument("--merge-shard-size", type=int, default=32768,
+                   help="tensors per merged <chrom>_shard_* file (0 = keep the task layout, no merge/labels)")
+    f.add_argument("--keep-sources", action="store_true", help="keep the task_* directories after a verified merge")
+    f.add_argument("--reference-path", help="tensor_postprocessing ref-path-scan directory (GRCh38 coordinates)")
+    f.add_argument("--somatic-vcf")
+    f.add_argument("--somatic-bed")
+    f.add_argument("--germline-vcf")
+    f.add_argument("--germline-bed")
+    f.add_argument("--reference-fasta", help="GRCh38 FASTA with .fai (labels)")
+    f.add_argument("--truth-dir", help="where the truth tables (<set>.graph.tsv) are written")
     r = commands.add_parser("run", help="execute all pending tasks")
     r.add_argument("--root", required=True)
     r.add_argument("--resume", action="store_true", help="skip validated tasks; set aside partial outputs and rerun them")
@@ -577,6 +716,8 @@ def main(argv=None):
     d.add_argument("--exclude", nargs="*", default=[], help="node lists already covered (e.g. earlier supplements)")
     d.add_argument("--min-records", type=int, default=2,
                    help="drop nodes seen in fewer records (default 2: on HG008 this halves the list and keeps 575 of 576 sites)")
+    z = commands.add_parser("finalize", help="merge + label a completed run (what `run` does at its end)")
+    z.add_argument("--root", required=True)
     t = commands.add_parser("task", help="run and validate one task (used by `run`)")
     t.add_argument("--root", required=True)
     t.add_argument("--index", type=int, required=True)
@@ -585,6 +726,11 @@ def main(argv=None):
         prepare(args)
     elif args.action == "task":
         task(Path(args.root).resolve(), args.index)
+    elif args.action == "finalize":
+        root = Path(args.root).resolve()
+        config = read_json(root / "config.json")
+        verify(root, config)
+        print(json.dumps(finalize(root, config), indent=2, default=str))
     elif args.action == "displaced":
         displaced_nodes(args.root, args.output, args.exclude, args.min_records)
     else:

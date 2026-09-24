@@ -140,17 +140,45 @@ class Locator:
                     fwd = length - t if reverse else t
                     result.add(f"{node}:{fwd}:INS:>{rc(alt) if reverse else alt}")
             return sorted(result)
+        if kind == "DEL":
+            return self.deletion_keys(chrom, pos, ref)
         hit = self.at(chrom, pos)
         if hit is None:
             return []
         node, start, length, reverse = hit
-        m = len(ref)
-        if pos + m > start + length:
-            return []  # spans a node junction: never a single candidate
-        fwd = start + length - pos - m if reverse else pos - start
+        fwd = start + length - pos - 1 if reverse else pos - start
         if reverse:
             ref, alt = rc(ref), rc(alt)
         return [f"{node}:{fwd}:{kind}:{ref}>{alt}"]
+
+    def deletion_keys(self, chrom, pos, ref):
+        """Key of a deletion of linear [pos, pos + len(ref)), also across consecutive reference nodes.
+
+        Same identity as the builder's Candidate.metadata(): the nodes in forward order (their own
+        forward strand), `start` on the forward-first node, REF over all of them, and further
+        nodes as an "@n2+n3" suffix. The builder only joins deletions over mappings of one
+        orientation, so a span over nodes of mixed orientation on the reference has no key.
+        v5 (single-node deletions only) simply never matches the suffixed keys.
+        """
+        segments, x, end = [], pos, pos + len(ref)
+        while x < end:
+            hit = self.at(chrom, x)
+            if hit is None:
+                return []
+            node, start, length, reverse = hit
+            b = min(end, start + length)
+            segments.append((node, start, length, reverse, x, b))
+            x = b
+        if len({s[3] for s in segments}) != 1:
+            return []
+        reverse = segments[0][3]
+        forward = [(node, length - (b - start) if reverse else a - start, length - (a - start) if reverse else b - start)
+                   for node, start, length, _, a, b in segments]
+        if reverse:
+            forward.reverse()
+            ref = rc(ref)
+        via = "@" + "+".join(str(node) for node, _, _ in forward[1:]) if len(forward) > 1 else ""
+        return [f"{forward[0][0]}:{forward[0][1]}:DEL:{ref}>{via}"]
 
 
 class Bed:
@@ -299,7 +327,8 @@ def classify(record, somatic, germline, path, confident):
         hits[truth.name] = [(a["candidate_id"], tid) for a in alleles for tid in truth.by_key.get(a["candidate_id"], ())]
     details = {truth.name: [truth.summary(tid, cid, cid == representative) for cid, tid in hits[truth.name]]
                for truth in (somatic, germline)}
-    lin = path.linear(record["node_id"], record["start"], record["ref"], record["alt"], record["event_type"])
+    lin = path.linear(record["node_id"], record["start"], record["ref"], record["alt"], record["event_type"],
+                      record.get("path"))
     details["grch38"] = lin
     rep_somatic = [tid for cid, tid in hits[somatic.name] if cid == representative]
     rep_germline = [tid for cid, tid in hits[germline.name] if cid == representative]
@@ -409,10 +438,17 @@ def recall(truth, matched, filtered, output_dir):
     return dict(alleles=len(truth.alleles), status=dict(status), by_kind={k: dict(v) for k, v in by_kind.items()})
 
 
-def label_run(tensors, kinds, reference_path, fasta, somatic_vcf, somatic_bed, germline_vcf, germline_bed, truth_dir):
-    """Build both truth sets, label every merged autosome directory of `kinds`, write recall reports."""
+def label_run(tensors, kinds, reference_path, fasta, somatic_vcf, somatic_bed, germline_vcf, germline_bed, truth_dir,
+              recall_dir=None):
+    """Build both truth sets, label every merged autosome directory of `kinds`, write recall reports.
+
+    Truth tables (<set>.graph.tsv) depend only on the graph and the VCFs and go to `truth_dir`;
+    recall reports depend on the run and go to `recall_dir` (default: `tensors`).
+    """
     truth_dir = Path(truth_dir)
     truth_dir.mkdir(parents=True, exist_ok=True)
+    recall_dir = Path(recall_dir or tensors)
+    recall_dir.mkdir(parents=True, exist_ok=True)
     path = ReferencePath(reference_path)
     locator = Locator(path)
     somatic = TruthSet("somatic", somatic_vcf, somatic_bed, fasta, locator)
@@ -436,7 +472,7 @@ def label_run(tensors, kinds, reference_path, fasta, somatic_vcf, somatic_bed, g
     filtered = {}
     for kind in kinds:
         filtered.update(scan_filtered(Path(tensors) / kind, keys))
-    recall_report = {t.name: recall(t, matched[t.name], filtered, truth_dir) for t in (somatic, germline)}
-    write_json(truth_dir / "recall.json", recall_report)
+    recall_report = {t.name: recall(t, matched[t.name], filtered, recall_dir) for t in (somatic, germline)}
+    write_json(recall_dir / "truth_recall.json", recall_report)
     return dict(labels={k: dict(totals=r["totals"], reasons=r["reasons"]) for k, r in reports.items()},
                 recall=recall_report, truth_stats={t.name: dict(t.stats) for t in (somatic, germline)})

@@ -115,7 +115,7 @@ def graph_fixture(path, nodes):
 
 def build_args(**overrides):
     """argparse.Namespace with the run.py build defaults, tuned small for synthetic data."""
-    args = dict(command="build", gam=None, index=None, nodes=None, graph_index=None, output=None, chr="",
+    args = dict(command="build", gam=None, index=None, nodes=None, graph_index=None, output=None, chromosomes="all", chr_index=None,
                 snv_output=None, indel_output=None, snv_min_af=None, indel_min_af=None,
                 rows=200, width=101, debug_rows=False, gam_cache_mb=1, batch_nodes=2, max_node_span=100,
                 max_batch_alignments=1000, shard_size=2, max_tensors=None, min_mapq=10, min_af=0.05,

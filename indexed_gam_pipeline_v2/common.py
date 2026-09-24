@@ -59,7 +59,3 @@ def batches(nodes, size, max_span):
     if batch:
         yield batch
 
-
-def on_chromosome(alignment, chromosome):
-    """Optional filter on Alignment.refpos.name; empty chromosome accepts everything."""
-    return not chromosome or any(pos.name == chromosome for pos in alignment.refpos)

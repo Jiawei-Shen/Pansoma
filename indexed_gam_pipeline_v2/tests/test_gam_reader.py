@@ -10,7 +10,7 @@ import tempfile
 import unittest
 
 from fixtures import build_args, simple_alignment, tiny_gam, write_gam  # noqa: F401  (sets sys.path)
-from indexed_gam_pipeline_v2.common import batches, load_nodes, on_chromosome
+from indexed_gam_pipeline_v2.common import batches, load_nodes
 from indexed_gam_pipeline_v2.gam_reader import IndexedGam, build_index, encode_varint, scan_gam, varint
 from indexed_gam_pipeline_v2.run import discover, validate
 
@@ -124,12 +124,6 @@ class GamReaderTest(unittest.TestCase):
 
     def test_helpers(self):
         self.assertEqual(list(batches([10, 20, 30, 500], 2, 100)), [[10, 20], [30], [500]])
-        a = simple_alignment((10, 20), reverse=True)
-        self.assertFalse(on_chromosome(a, "chr1"))
-        self.assertTrue(on_chromosome(a, ""))
-        a.refpos.add(name="chr1")
-        self.assertTrue(on_chromosome(a, "chr1"))
-        self.assertFalse(on_chromosome(a, "chr2"))
         with tempfile.TemporaryDirectory() as directory:
             nodes = Path(directory) / "nodes.txt"
             nodes.write_text("30\n10\n10\n\n20\n")

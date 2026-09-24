@@ -23,7 +23,7 @@ if str(ROOT) not in sys.path:
 
 from indexed_gam_pipeline_v2.candidates import (BASES, FORMAT_VERSION, ROW_SELECTION_VERSION, STORAGE_VERSION,
                                                 STRAND, WINDOW_ENCODING_VERSION, encode_count, rc)
-from indexed_gam_pipeline_v2.common import on_chromosome, write_json
+from indexed_gam_pipeline_v2.common import write_json
 from indexed_gam_pipeline_v2.gam_reader import IndexedGam
 from indexed_gam_pipeline_v2.graph_index import GraphIndex
 
@@ -33,7 +33,7 @@ def check(condition, message):
         raise ValueError(message)
 
 
-def independent_coverage(gam, index, metadata, sequences, min_mapq, chromosome=""):
+def independent_coverage(gam, index, metadata, sequences, min_mapq):
     """From raw mapping intervals of every fetched record:
     ({candidate_id: Counter(record sha256)}, {node: [sha256 of every record mapped to it]}, query)."""
     covered = {m["candidate_id"]: Counter() for m in metadata}
@@ -41,7 +41,7 @@ def independent_coverage(gam, index, metadata, sequences, min_mapq, chromosome="
     targets = {m["node_id"] for m in metadata}
     query = {}
     for alignment in IndexedGam(gam, index).fetch(targets, query):
-        if alignment.mapping_quality <= min_mapq or not on_chromosome(alignment, chromosome):
+        if alignment.mapping_quality <= min_mapq:
             continue
         digest = hashlib.sha256(alignment.SerializeToString(deterministic=True)).hexdigest()
         for node in {m.position.node_id for m in alignment.path.mapping} & targets:
@@ -103,6 +103,7 @@ def validate(folder, gam, index, graph_index):
     width = manifest["shape"][2]
     anchor = width // 2
     graph_nodes = {m["node_id"] for m in metadata} | {
+        n for m in metadata for a in (m.get("alleles") or [m]) for n, _, _ in a.get("path") or []} | {
         c["node_id"] for m in metadata for row in m["rows"] for c in row["columns"] if c}
     with GraphIndex(graph_index) as lookup:
         records = lookup.get_nodes(graph_nodes)
@@ -114,8 +115,7 @@ def validate(folder, gam, index, graph_index):
         listed = m.get("alleles") or [dict(m, label="A1")]
         site_alleles[m["candidate_id"]] = {a["label"]: dict(a, node_id=m["node_id"]) for a in listed}
     everything = [a for alleles in site_alleles.values() for a in alleles.values()]
-    covered, on_node, query = independent_coverage(gam, index, everything, sequences, parameters["min_mapq"],
-                                                   manifest["arguments"].get("chr", ""))
+    covered, on_node, query = independent_coverage(gam, index, everything, sequences, parameters["min_mapq"])
     cap = parameters.get("max_node_reads", 0)
     kept = {node: cap_records(digests, cap) for node, digests in on_node.items()}
     capped_nodes = sum(k is not None for k in kept.values())
@@ -151,9 +151,14 @@ def validate(folder, gam, index, graph_index):
         slots = max((len(a["alt"]) for a in alleles.values() if a["event_type"] == "INS"), default=0)
         spanned = [a for a in alleles.values() if a["event_type"] != "INS"]
         span = max((len(a["ref"]) for a in spanned), default=0)
-        reference = sequences[meta["node_id"]][meta["start"]:meta["start"] + span]
+        def graph_ref(a):  # the graph bases a SNV/DEL allele covers, over every node of its path
+            path = a.get("path") or []
+            first = len(a["ref"]) - sum(e - s for _, s, e in path)
+            return (sequences[meta["node_id"]][a["start"]:a["start"] + first]
+                    + "".join(sequences[n][s:e] for n, s, e in path))
+        check(all(a["ref"] == graph_ref(a) for a in spanned), f"{label}: allele REF vs graph")
+        reference = max(spanned, key=lambda a: len(a["ref"]))["ref"] if spanned else ""
         check(meta["site_layout"] == dict(insertion_slots=slots, span=span, reference=reference), f"{label}: layout")
-        check(all(a["ref"] == reference[:len(a["ref"])] for a in spanned), f"{label}: allele REF vs graph")
         lo, hi = meta["candidate_columns"]
         check(lo == anchor == meta["anchor_column"] and hi == min(width, lo + slots + span), f"{label}: site columns")
         checked = 0

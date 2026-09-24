@@ -93,16 +93,26 @@ class Candidate:
     ref: str
     alt: str
     kind: str  # SNP | INS | DEL
+    # A deletion continuing onto further nodes: ((node, start, end), ...) of those nodes, in
+    # forward order; `ref` then spans all of them (the first node holds len(ref) - their bases).
+    path: tuple = ()
 
     @property
     def end(self):
         return self.start + len(self.ref)
 
+    def positions(self):
+        """(node, forward offset) of every graph base of REF, in forward order."""
+        first = len(self.ref) - sum(e - s for _, s, e in self.path)
+        return ([(self.node, self.start + k) for k in range(first)]
+                + [(node, p) for node, s, e in self.path for p in range(s, e)])
+
     def metadata(self):
-        return dict(candidate_id=f"{self.node}:{self.start}:{self.kind}:{self.ref}>{self.alt}",
+        via = "@" + "+".join(str(node) for node, _, _ in self.path) if self.path else ""
+        return dict(candidate_id=f"{self.node}:{self.start}:{self.kind}:{self.ref}>{self.alt}{via}",
                     node_id=self.node, start=self.start, end=self.end, orientation="+",
                     ref=self.ref, alt=self.alt, event_type=self.kind,
-                    event_length=max(len(self.ref), len(self.alt)))
+                    event_length=max(len(self.ref), len(self.alt)), path=[list(seg) for seg in self.path])
 
 
 @dataclass
@@ -264,7 +274,14 @@ def decode_alignment(alignment, sequences, max_indel=50, target_nodes=None, left
     if read_cursor != len(sequence):
         raise ValueError("GAM edits do not consume the complete read sequence")
     moves = left_align_indels(columns, visits, max_indel) if left_align else []
-    observations += indel_observations(columns, visits, sequences, max_indel, target_nodes)
+    observations += indel_observations(columns, sequences, max_indel, target_nodes)
+    for s, e, op in indel_runs(columns, join=True):  # joined over mappings, only the whole event is too long
+        pieces = Counter(c.visit for c in columns[s:e])
+        if e - s > max_indel and len(pieces) > 1 and max(pieces.values()) <= max_indel:
+            first = columns[e - 1 if columns[s].reverse else s]
+            unsupported.append(dict(node_id=first.node, start=first.pos, event_type="INS" if op == "I" else "DEL",
+                                    event_length=e - s, mapping_index=first.visit, mappings=len(pieces),
+                                    reason="indel_exceeds_limit_across_mappings"))
     digest = hashlib.sha256(alignment.SerializeToString(deterministic=True)).hexdigest()
     return Read(alignment.name, digest, alignment.mapping_quality, columns, visits, observations, moves), unsupported
 
@@ -274,11 +291,11 @@ def decode_alignment(alignment, sequences, max_indel=50, target_nodes=None, left
 ACGT = frozenset("ACGT")
 
 
-def indel_runs(columns, lo=0, hi=None, join_insertions=False):
+def indel_runs(columns, lo=0, hi=None, join=False):
     """(start, end, op) of every maximal run of I (inserted) or D columns of one mapping in columns[lo:hi].
 
-    With `join_insertions`, inserted bases that continue across a mapping boundary (same
-    orientation) form one run: the read carries them as one contiguous insertion.
+    With `join`, a run continues across mapping boundaries (same orientation): vg writes an
+    indel spanning several nodes as one edit per mapping, but the read carries one event.
     """
     hi = len(columns) if hi is None else hi
     runs, i = [], lo
@@ -287,7 +304,7 @@ def indel_runs(columns, lo=0, hi=None, join_insertions=False):
         if c.op in ("I", "D"):
             j = i + 1
             while j < hi and columns[j].op == c.op and (columns[j].visit == c.visit or (
-                    join_insertions and c.op == "I" and columns[j].reverse == c.reverse)):
+                    join and columns[j].reverse == c.reverse)):
                 j += 1
             runs.append((i, j, c.op))
             i = j
@@ -313,16 +330,15 @@ def left_align_indels(columns, visits, max_indel):
     keep their order and every reference base keeps its column, so the read, its alignment
     span and every non-shifted column are unchanged; only which columns are I/D vs M moves.
 
-    Shifts cross node boundaries within a run of mappings of one orientation; a deletion
-    longer than 1 bp stops at a node boundary (candidates are per node). Inserted bases that
-    continue across a mapping boundary are one insertion, and an indel that runs into another
+    Shifts cross node boundaries within a run of mappings of one orientation. An indel that
+    continues across mapping boundaries (vg writes one edit per node) is one event, and one that runs into another
     of the same kind merges with it (one event) and keeps moving. Finally every insertion is
     attached to the graph base that follows it on the forward strand, so an insertion
     between two nodes is always (next node, offset of its first base). `visits`
     get their column ranges updated in place; their graph intervals do not change.
     Returns [(from node, to node)] for every indel that ended on another node than it started.
     """
-    runs = [r for r in indel_runs(columns, join_insertions=True) if r[1] - r[0] <= max_indel
+    runs = [r for r in indel_runs(columns, join=True) if r[1] - r[0] <= max_indel
             and not any("N" in (columns[k].read if r[2] == "I" else columns[k].ref).upper() for k in range(r[0], r[1]))]
     # Forward-strand runs move to lower read indices, reverse-strand runs to higher ones;
     # process each in the direction it moves so a run only ever meets already-final ones.
@@ -337,12 +353,12 @@ def left_align_indels(columns, visits, max_indel):
             if not 0 <= k < len(columns):
                 break
             nb = columns[k]
-            if nb.op == op and nb.reverse == rev and (op == "I" or nb.visit == columns[s].visit):
+            if nb.op == op and nb.reverse == rev:
                 # An adjacent indel of the same kind is the same event: merge, then keep moving.
                 j = k
                 while 0 <= j + (1 if rev else -1) < len(columns):
                     c = columns[j + (1 if rev else -1)]
-                    if c.op != op or c.reverse != rev or (op == "D" and c.visit != nb.visit):
+                    if c.op != op or c.reverse != rev:
                         break
                     j += 1 if rev else -1
                 lo, hi = (s, j + 1) if rev else (j, e)
@@ -369,7 +385,7 @@ def left_align_indels(columns, visits, max_indel):
                     s, e = s - 1, e - 1
             else:
                 edge = columns[s] if rev else columns[e - 1]  # the deletion's last forward base
-                if nb.ref != edge.ref or (e - s > 1 and nb.visit != edge.visit):
+                if nb.ref != edge.ref:
                     break
                 gap = Column("-", nb.ref, -1, "D", nb.node, nb.pos, nb.reverse, nb.visit, False)
                 base = Column(nb.read, edge.ref, nb.quality, "M", edge.node, edge.pos, edge.reverse, edge.visit, False)
@@ -411,41 +427,77 @@ def _read_base_quality(columns, i, step):
     return None
 
 
-def indel_observations(columns, visits, sequences, max_indel, target_nodes=None):
-    """INS/DEL observations from the (normalized) columns of the target-node visits.
+def _repeat_extent(columns, s, e, op, sequences):
+    """Read indices of the matched bases a (leftmost) indel could still shift right across.
 
-    Same rules as decoding: at most `max_indel` bases, no N in the alleles or in the base
-    before an insertion (base 0 at a node start); an insertion's quality is its bases'
-    mean, a deletion's the lower quality of the nearest read bases on either side.
+    Together with the indel's own columns they are the read bases of every equivalent
+    placement of the event, the same for both strands' reports of one molecule.
+    """
+    rev = columns[s].reverse
+    ordered = list(range(e - 1, s - 1, -1)) if rev else list(range(s, e))
+    if op == "I":
+        bases = [rc(columns[k].read) if rev else columns[k].read for k in ordered]
+    else:
+        bases = [sequences[columns[k].node][columns[k].pos] for k in ordered]
+    passed, k = [], s - 1 if rev else e
+    while 0 <= k < len(columns) and _shiftable(columns[k], rev):
+        base = sequences[columns[k].node][columns[k].pos]
+        if base.upper() != bases[0].upper():
+            break
+        bases = bases[1:] + [base]
+        passed.append(k)
+        k += -1 if rev else 1
+    return passed
+
+
+def indel_observations(columns, sequences, max_indel, target_nodes=None):
+    """INS/DEL observations from the (normalized) columns: one per event, on its forward-first node.
+
+    An event is a run of inserted or deleted columns, joined over mapping boundaries; it is
+    observed when its forward-first column is on a target node. At most `max_indel` bases in
+    total, no N in the alleles or in the base before an insertion (base 0 at a node start).
+    A deletion over several nodes is one candidate with `path` = its further nodes.
+    Quality, the same for either strand's report of the molecule: an insertion's is the mean
+    over the read bases of all its equivalent placements (its bases plus the repeat bases it
+    could shift across), a deletion's the lower of the nearest read bases outside that span
+    (when the span reaches both read ends: the lowest read base inside it).
     """
     observations = []
-    for visit in visits:
-        if visit.first == visit.last or (target_nodes is not None and visit.node not in target_nodes):
+    for s, e, op in indel_runs(columns, join=True):
+        rev = columns[s].reverse
+        first = columns[e - 1 if rev else s]  # forward-first column
+        if e - s > max_indel or (target_nodes is not None and first.node not in target_nodes):
             continue
-        forward = sequences[visit.node]
-        for s, e, op in indel_runs(columns, visit.first, visit.last):
-            if e - s > max_indel:
+        passed = _repeat_extent(columns, s, e, op, sequences)
+        forward = sequences[first.node]
+        if op == "I":
+            inserted = "".join(c.read for c in columns[s:e])
+            alt = rc(inserted) if rev else inserted
+            anchor = forward[max(0, first.pos - 1):max(0, first.pos - 1) + 1]
+            if "N" in alt.upper() or anchor.upper() == "N":
                 continue
-            first = columns[s]
-            if op == "I":
-                inserted = "".join(c.read for c in columns[s:e])
-                alt = rc(inserted) if first.reverse else inserted
-                pos = first.pos
-                anchor = forward[max(0, pos - 1):max(0, pos - 1) + 1]
-                if "N" in alt.upper() or anchor.upper() == "N":
-                    continue
-                quality = sum(c.quality for c in columns[s:e]) / (e - s)
-                candidate = Candidate(visit.node, pos, "", alt, "INS")
-            else:
-                pos = min(c.pos for c in columns[s:e])
-                ref = forward[pos:pos + e - s]
-                if "N" in ref.upper():
-                    continue
-                flank = [q for q in (_read_base_quality(columns, s - 1, -1), _read_base_quality(columns, e, 1))
-                         if q is not None]
-                quality = min(flank) if flank else -1
-                candidate = Candidate(visit.node, pos, ref, "", "DEL")
-            observations.append(Observation(candidate, visit.index, quality))
+            spanned = [columns[k].quality for k in range(s, e)] + [columns[k].quality for k in passed]
+            quality = sum(spanned) / len(spanned)
+            candidate = Candidate(first.node, first.pos, "", alt, "INS")
+        else:
+            ordered = columns[s:e][::-1] if rev else columns[s:e]
+            ref = "".join(sequences[c.node][c.pos] for c in ordered)
+            if "N" in ref.upper():
+                continue
+            segments = []
+            for c in ordered:
+                if segments and segments[-1][0] == c.node and segments[-1][2] == c.pos:
+                    segments[-1][2] += 1
+                else:
+                    segments.append([c.node, c.pos, c.pos + 1])
+            right = min(passed) - 1 if rev and passed else max(passed) + 1 if passed else (s - 1 if rev else e)
+            flank = [q for q in (_read_base_quality(columns, e if rev else s - 1, 1 if rev else -1),
+                                 _read_base_quality(columns, right, -1 if rev else 1)) if q is not None]
+            if not flank:  # the repeat reaches both read ends: its own read bases are the evidence
+                flank = [columns[k].quality for k in passed if columns[k].quality != -1]
+            quality = min(flank) if flank else -1
+            candidate = Candidate(first.node, segments[0][1], ref, "", "DEL", tuple(tuple(x) for x in segments[1:]))
+        observations.append(Observation(candidate, first.visit, quality))
     return observations
 
 
@@ -546,24 +598,40 @@ class VisitView:
         return cut, cut
 
     def matches_reference(self, candidate):
-        """REF support of this visit (no ALT): the rule documented in overlap()."""
+        """REF support of this visit (no ALT): the rule documented in NodeReads.classify.
+
+        SNV/DEL: the record has a plain match (M/X, read base = graph base, no inserted base) at
+        every graph base of REF, over every node of a multi-node deletion, and aligned bases
+        (M/X) right before and after it that are its graph neighbours (the previous/next base of
+        the node, or another node at a node edge): no indel, no read end next to the site.
+        INS: no inserted base at the boundary, and aligned bases on both sides of it.
+        """
+        cols = self.cols
         if candidate.kind == "INS":
             i, j = self.block(candidate)
-            return i == j and boundary_evidence(self.cols[:i][-1:], self.cols[i:i + 1], self.visit, candidate.start)
-        if not self.indexed:
-            local = [c for c in self.cols if c.visit == self.visit.index]
-            affected = [c for c in local if not c.boundary and candidate.start <= c.pos < candidate.end]
-            inserted = any(c.boundary and candidate.start < c.pos < candidate.end for c in local)
-            return (len(affected) == len(candidate.ref) and not inserted
-                    and all(c.op in ("M", "X") and c.read == c.ref for c in affected))
-        for p in range(candidate.start, candidate.end):
-            i = self.base_at.get(p)
-            if i is None:
+            return i == j and boundary_evidence(cols[:i][-1:], cols[i:i + 1], self.visit, candidate.start)
+        if self.indexed:
+            i = self.base_at.get(candidate.start)
+        else:
+            i = next((k for k, c in enumerate(cols) if c.visit == self.visit.index and not c.boundary
+                      and c.pos == candidate.start), None)
+        expected = candidate.positions()
+        j = None if i is None else i + len(expected)
+        if i is None or i == 0 or j >= len(cols):
+            return False
+        own = len(expected) - sum(e - s for _, s, e in candidate.path)  # bases on this node: this visit's
+        for k, (c, (node, pos)) in enumerate(zip(cols[i:j], expected)):
+            if (c.boundary or (c.node, c.pos) != (node, pos) or c.op not in ("M", "X") or c.read != c.ref
+                    or (k < own and c.visit != self.visit.index)):
                 return False
-            c = self.cols[i]
-            if c.op not in ("M", "X") or c.read != c.ref:
-                return False
-        return not any(p in self.boundary_at for p in range(candidate.start + 1, candidate.end))
+        before, after, last = cols[i - 1], cols[j], cols[j - 1]
+        if before.boundary or after.boundary or before.op not in ("M", "X") or after.op not in ("M", "X"):
+            return False
+        adjacent_before = (before.pos == candidate.start - 1 if before.visit == self.visit.index
+                           else candidate.start == 0)
+        adjacent_after = (after.pos == last.pos + 1 if after.visit == last.visit
+                          else last.pos == self.read.visits[last.visit].node_length - 1)
+        return adjacent_before and adjacent_after
 
 
 class NodeReads:
@@ -589,8 +657,9 @@ class NodeReads:
 
         A record counts once even when it visits the node repeatedly: ALT beats REF beats
         other, and the earliest mapping breaks ties. ALT needs an exact observation with
-        quality >= min_bq. REF needs matching graph bases over the whole interval; for an
-        insertion, REF needs adjacent M/X columns on both sides of the boundary.
+        quality >= min_bq. REF needs a plain match at every graph base of REF plus aligned
+        neighbouring bases on both sides (VisitView.matches_reference); for an insertion,
+        REF needs adjacent M/X columns on both sides of the boundary and no inserted base.
         """
         best = None
         for visit in read.visits_on(candidate.node):
@@ -626,7 +695,7 @@ def overlap(read, candidate, min_bq):
 
     See NodeReads.classify for the rule; this single-record form returns the Visit itself.
     """
-    hit = NodeReads(candidate.node, [read], 1).classify(read, candidate, min_bq)
+    hit = NodeReads(candidate.node, [read], len(candidate.ref) + 2).classify(read, candidate, min_bq)
     return None if hit is None else (hit[0], hit[1].visit)
 
 

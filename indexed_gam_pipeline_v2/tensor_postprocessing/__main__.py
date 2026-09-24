@@ -39,6 +39,18 @@ def main(argv=None):
     p.add_argument("--spots", type=int, default=200, help="random tensors per chromosome reloaded from the sources")
     p.add_argument("--reference-path", help="ref-path-scan directory: adds GRCh38 coordinates (grch38) to every summary record")
 
+    p = commands.add_parser("label", help="germline/somatic VCF -> node keys -> labels for merged directories")
+    p.add_argument("--tensors", required=True, help="tensor root holding the merged <kind>/ directories")
+    p.add_argument("--kinds", nargs="+", default=["SNV", "INDEL"])
+    p.add_argument("--reference-path", required=True)
+    p.add_argument("--fasta", required=True, help="GRCh38 FASTA (with .fai) matching the graph's GRCh38 path")
+    p.add_argument("--somatic-vcf", required=True)
+    p.add_argument("--somatic-bed", required=True)
+    p.add_argument("--germline-vcf", required=True)
+    p.add_argument("--germline-bed", required=True)
+    p.add_argument("--truth-dir", required=True, help="where <set>.graph.tsv truth tables are written")
+    p.add_argument("--recall-dir", help="where recall reports go (default: --tensors)")
+
     args = parser.parse_args(argv)
     if args.command == "ref-path-scan":
         from indexed_gam_pipeline_v2.tensor_postprocessing.reference_path import scan
@@ -55,6 +67,10 @@ def main(argv=None):
         from indexed_gam_pipeline_v2.tensor_postprocessing.merge_shards import merge
         result = merge(args.root, args.chr_index, args.shard_size, args.keep_sources, args.workers, args.spots,
                        reference_path=args.reference_path)
+    elif args.command == "label":
+        from indexed_gam_pipeline_v2.tensor_postprocessing.truth_labels import label_run
+        result = label_run(args.tensors, args.kinds, args.reference_path, args.fasta, args.somatic_vcf,
+                           args.somatic_bed, args.germline_vcf, args.germline_bed, args.truth_dir, args.recall_dir)
     print(json.dumps(result, indent=2))
 
 

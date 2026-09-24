@@ -38,7 +38,8 @@ import numpy as np
 from indexed_gam_pipeline_v2.candidates import (FORMAT_VERSION, SCHEMA_VERSION, STORAGE_VERSION,
     ROW_SELECTION_VERSION, WINDOW_ENCODING_VERSION, ROW_ORDER, CHANNELS, BASES, OPS, STRAND, COUNT_LINEAR_MAX,
     NodeReads, decode_alignment, alt_support_bounds, exact_coverage, make_site_tensor)
-from indexed_gam_pipeline_v2.common import batches, load_nodes, new_output, on_chromosome, write_json
+from indexed_gam_pipeline_v2.common import batches, load_nodes, new_output, write_json
+from indexed_gam_pipeline_v2.tensor_postprocessing.chr_index import select_nodes
 from indexed_gam_pipeline_v2.gam_reader import IndexedGam
 from indexed_gam_pipeline_v2.graph_index import GraphIndex
 
@@ -47,7 +48,7 @@ SITE_UNIT = "site-v2"
 DEFAULT_MAX_NODE_READS = 800
 PARAMETERS = ("min_mapq", "min_af", "min_variants", "min_allele_bq", "max_indel_len",
               "variant_type", "rows", "width", "max_node_reads", "candidate_unit", "early_af_filter")
-ALLELE_FIELDS = ("candidate_id", "start", "end", "ref", "alt", "event_type", "event_length",
+ALLELE_FIELDS = ("candidate_id", "start", "end", "ref", "alt", "event_type", "event_length", "path",
                  "coverage", "alt_count", "ref_count", "other_count", "af")
 SITE_DEFINITION = ("one tensor per (node, start, SNV|INDEL) after indel left-normalization; INS and DEL at one "
                    "start share an INDEL site; every allele is filtered on its own; passing alleles are listed in "
@@ -221,14 +222,20 @@ class OutputDir:
 
 def build(args):
     started = time.perf_counter()
-    for key, default in (("index", None), ("chr", ""), ("debug_rows", False), ("max_tensors", None),
+    for key, default in (("index", None), ("chromosomes", "all"), ("chr_index", None), ("debug_rows", False),
+                         ("max_tensors", None),
                          ("snv_output", None), ("indel_output", None), ("snv_min_af", None), ("indel_min_af", None),
                          ("max_node_reads", DEFAULT_MAX_NODE_READS), ("candidate_unit", "site"),
                          ("early_af_filter", True)):
         if not hasattr(args, key):
             setattr(args, key, default)
     split = validate_args(args)
-    nodes = load_nodes(args.nodes)
+    # Target nodes outside the chosen chromosome blocks are dropped before any batch (their reads are
+    # still context of the remaining targets).
+    nodes, selection = select_nodes(load_nodes(args.nodes), args.chromosomes, args.chr_index)
+    nodes = nodes.tolist()
+    if not nodes:
+        raise ValueError(f"No target nodes left after --chromosomes {args.chromosomes}")
     reader = IndexedGam(args.gam, args.index, cache_bytes=args.gam_cache_mb * 1024 * 1024)
     parameters = {k: getattr(args, k) for k in PARAMETERS}
     typed = {}
@@ -254,7 +261,7 @@ def build(args):
             sample_unit=SITE_UNIT if args.candidate_unit == "site" else "allele",
             **(dict(site_definition=SITE_DEFINITION) if args.candidate_unit == "site" else {}),
             read_cap=dict(max_node_reads=args.max_node_reads, rule=READ_CAP_RULE),
-            nodes=len(nodes), shards=0, tensors=0, filtered_candidates=0, early_rejected=0,
+            nodes=len(nodes), chromosome_selection=selection, shards=0, tensors=0, filtered_candidates=0, early_rejected=0,
             early_af_rejected=0, unsupported_events=0, debug_rows=args.debug_rows, timing={})
         shared = OutputDir(args.output, manifest, args.shard_size, tensors=not split)
         (shared.path / "target_nodes.txt").write_text("".join(f"{n}\n" for n in nodes))
@@ -302,7 +309,7 @@ def _build_batches(args, nodes, reader, graph, shared, typed, started):
         alignments = []
         context_nodes = set(wanted)
         for alignment in reader.fetch(wanted, metrics):
-            if alignment.mapping_quality <= args.min_mapq or not on_chromosome(alignment, args.chr):
+            if alignment.mapping_quality <= args.min_mapq:
                 continue
             alignments.append(alignment)
             context_nodes.update(m.position.node_id for m in alignment.path.mapping)
