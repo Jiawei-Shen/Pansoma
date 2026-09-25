@@ -884,6 +884,27 @@ def window_events(row):
     return events, (covered[0], covered[-1]) if covered else (0, -1)
 
 
+def average_linkage(distance):
+    """UPGMA merges of a square distance matrix as rows (a, b, height, size), numbered like scipy's
+    linkage (leaves 0..n-1, the cluster made at step i is n + i); ties go to the first pair in
+    row-major order of the current clusters. The fallback for scipy trees that are not valid."""
+    n = len(distance)
+    d = np.array(distance, dtype=float)
+    np.fill_diagonal(d, np.inf)
+    ids, sizes, tree = list(range(n)), [1] * n, []
+    for step in range(n - 1):
+        i, j = np.unravel_index(int(np.argmin(d)), d.shape)
+        i, j = min(i, j), max(i, j)
+        height = d[i, j]
+        merged = (sizes[i] * d[i] + sizes[j] * d[j]) / (sizes[i] + sizes[j])
+        tree.append((min(ids[i], ids[j]), max(ids[i], ids[j]), height, sizes[i] + sizes[j]))
+        d[i, :] = d[:, i] = merged
+        d[j, :] = d[:, j] = np.inf
+        d[i, i] = np.inf
+        ids[i], sizes[i] = n + step, sizes[i] + sizes[j]
+    return np.array(tree, dtype=float).reshape(-1, 4)
+
+
 def similarity_order(items):
     """Order window rows so similar records are adjacent; `items` = [(events, covered, tie_key)].
 
@@ -898,7 +919,7 @@ def similarity_order(items):
     if n < 3:
         order = sorted(range(n), key=lambda k: items[k][2])
     else:
-        from scipy.cluster.hierarchy import linkage
+        from scipy.cluster.hierarchy import is_valid_linkage, linkage
         vocabulary = {}
         for events, _, _ in items:
             for key, ci in events.items():
@@ -915,6 +936,8 @@ def similarity_order(items):
         distance = has @ covers.T + covers @ has.T - 2 * has @ has.T
         condensed = distance[np.triu_indices(n, 1)]
         tree = linkage(condensed, method="average")
+        if not is_valid_linkage(tree):  # scipy 1.16 can merge a cluster with itself on tied distances
+            tree = average_linkage(distance)
         rank = sorted(range(n), key=lambda k: items[k][2])
         first = {leaf: position for position, leaf in enumerate(rank)}
         members = {k: [k] for k in range(n)}

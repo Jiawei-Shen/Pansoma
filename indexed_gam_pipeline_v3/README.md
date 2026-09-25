@@ -721,7 +721,7 @@ another package's) fails the suite instead of silently decoding in Python. With 
 the only skip of the first pass is the native graph-index builder test, which needs the two
 environment variables of the third line.
 
-142 tests in 13 files cover: GAI reading, cache/scan equivalence (limits 1, 2048 and 64 MiB),
+144 tests in 13 files cover: GAI reading, cache/scan equivalence (limits 1, 2048 and 64 MiB),
 refusal of cache 0 and GAI v0/v99, bin arrays against the per-bin scan, the MAPQ-filtered cache,
 the sampled fetch; deep-node builds (alone, fixed sample, other nodes unchanged, single-node limit)
 and the prepare table; decoding, N filter, limits, unsupported events, left-normalization
@@ -812,6 +812,11 @@ portability report (`tools.binary_requirements`). Test-only wrappers moved to `t
 * Every audit stream is closed before a manifest says `complete` (same bytes).
 * Deep nodes are built from a fixed sample instead of failing the run (section 4); `prepare`
   lists them from `--node-stats`; `--max-batch-alignments` defaults to 200,000 (v2: 20,000).
+* Row similarity order falls back to a deterministic UPGMA (`candidates.average_linkage`, equal
+  to scipy's tree on tie-free distances) when scipy's `linkage(method="average")` returns an
+  invalid tree: scipy 1.16.1 merged a cluster with itself on a 105-row block of tied distances
+  (HG008 Illumina task 206, `KeyError: 200`). Valid scipy trees are used as before, and an invalid
+  one always raised, so no earlier output changes.
 * The GAM reader leaves records with MAPQ ≤ `--min-mapq` out of its group index (never parsed
   twice, not cached), tests every GAI bin at once (HG008 Illumina GAI: 2.4 M bins, 0.45 s → ms per
   query) and intersects a group's nodes with the batch from the smaller side. Same records.

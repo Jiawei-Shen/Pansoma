@@ -533,3 +533,41 @@ class StorageTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class SimilarityOrderTest(unittest.TestCase):
+    """scipy's average linkage, with a fallback for the invalid trees scipy 1.16 returns on tied
+    distances (a cluster merged with itself: HG008 Illumina task 206)."""
+
+    def test_the_fallback_equals_scipy_on_tie_free_distances(self):
+        from scipy.cluster.hierarchy import linkage
+        from scipy.spatial.distance import squareform
+        from ..candidates import average_linkage
+        rng = np.random.default_rng(5)
+        for n in (3, 4, 17, 60):
+            points = rng.random((n, 3))
+            distance = np.sqrt(((points[:, None] - points[None]) ** 2).sum(-1))
+            expected = linkage(squareform(distance, checks=False), method="average")
+            actual = average_linkage(distance)
+            np.testing.assert_array_equal(actual[:, :2], expected[:, :2])
+            np.testing.assert_allclose(actual[:, 2:], expected[:, 2:])
+
+    def test_an_invalid_scipy_tree_falls_back(self):
+        from unittest.mock import patch
+        from scipy.cluster.hierarchy import is_valid_linkage
+        from .. import candidates
+        rng = random.Random(8)
+        items = []
+        for r in range(40):  # few distinct event sets: many tied distances
+            events = {("e", k): k for k in range(6) if rng.random() < 0.3}
+            items.append((events, (0, 9), (r % 2, f"{r:04d}")))
+        expected = candidates.similarity_order(items)
+        broken = np.array([[0, 1, 0.0, 2], [40, 40, 0.0, 4]] + [[0, 0, 0.0, 1]] * 37, dtype=float)
+        self.assertFalse(is_valid_linkage(broken))
+        with patch("scipy.cluster.hierarchy.linkage", return_value=broken), \
+                patch.object(candidates, "average_linkage", wraps=candidates.average_linkage) as fallback:
+            order = candidates.similarity_order(items)
+        fallback.assert_called_once()
+        self.assertEqual(sorted(order), list(range(40)))
+        self.assertTrue(is_valid_linkage(candidates.average_linkage(np.ones((40, 40)) - np.eye(40))))
+        self.assertEqual(sorted(expected), list(range(40)))
