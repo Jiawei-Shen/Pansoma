@@ -72,6 +72,22 @@ class EquivalenceTest(unittest.TestCase):
             with self.assertRaises(IndexError):
                 columns[key]
 
+    def test_column_array_keeps_only_recent_blocks(self):
+        sequences = {1: "ACGTACGTAC" * 300}  # 3000 columns = 24 blocks
+        a = spec_alignment([(1, 0, False, [(3000, 3000, "")])], sequences)
+        reference = decode_alignment(a, sequences)[0].columns
+        columns = native.decode_native(MODULE, a, sequences)[0].columns
+        self.assertEqual(list(columns), reference)  # a full walk builds every block once
+        self.assertEqual(len(columns.blocks), native.CACHED_BLOCKS)
+        self.assertEqual(list(columns.blocks), list(range(24 - native.CACHED_BLOCKS, 24)))
+        self.assertEqual(columns[0:300], reference[0:300])  # evicted blocks come back equal
+        self.assertEqual(list(columns.blocks)[-3:], [0, 1, 2])
+        recent = columns.blocks[0]
+        columns[5]  # a hit refreshes the block, no rebuild
+        self.assertEqual(list(columns.blocks)[-1], 0)
+        self.assertIs(columns.blocks[0], recent)
+        self.assertEqual(len(columns.blocks), native.CACHED_BLOCKS)
+
     def test_builds_are_identical(self):
         """Split-mode builds with --debug-rows: every shard, summary and audit stream byte for byte."""
         with tempfile.TemporaryDirectory() as tmp:

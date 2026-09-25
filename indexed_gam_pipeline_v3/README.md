@@ -247,7 +247,9 @@ again in Python (so any error is the reference's) — a task completes whenever 
 Python. The manifest's `decoder` records the choice, the reason and `native_record_fallbacks`;
 every task log has a `Decoder: native|python` line. Columns stay in the C++ struct array
 (`ColumnArray`, ~24 bytes per column instead of a ~120-byte object) and become `Column` objects
-only where downstream code reads them. Compiled modules are per Python version and platform;
+only where downstream code reads them, per block of 128 columns; each read keeps its 16 most
+recently used blocks (`CACHED_BLOCKS`), which bounds the memory of dense long-read batches
+(HG008 ONT-UL, one 2048-node batch: 41 GiB unbounded, 12.6 GiB bounded, same output). Compiled modules are per Python version and platform;
 `prepare` freezes the package, compiled module included, so compile *before* `prepare`.
 
 Portability report of the compiled module (glibc symbol versions, CPU extensions; the decoder uses
