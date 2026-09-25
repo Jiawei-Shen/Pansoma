@@ -1,22 +1,87 @@
 """GAI v1 reading (and the fixture GAI writer), indexed retrieval and the CLI helpers around them."""
+import bisect
 from collections import Counter
 from contextlib import redirect_stdout
 import gzip
 import io
 import json
 from pathlib import Path
+import random
 import struct
 import tempfile
 import unittest
 
 from .fixtures import build_args, build_index, encode_varint, simple_alignment, tiny_gam, write_gam
 from ..common import batches, load_nodes
-from ..gam_reader import IndexedGam, scan_gam, varint
+from ..gam_reader import IndexedGam, sample_key, scan_gam, varint
 from ..run import discover
 
 
 def multiset(alignments):
     return Counter(a.SerializeToString() for a in alignments)
+
+
+def scanned_ranges(bins, nodes):
+    """The per-bin bisect scan IndexedGam.ranges used before its bin arrays (the reference)."""
+    nodes = sorted(set(nodes))
+    runs = []
+    for lo, hi, offsets in bins:
+        i = bisect.bisect_left(nodes, lo)
+        if i < len(nodes) and nodes[i] <= hi:
+            runs.extend(offsets)
+    merged = []
+    for start, end in sorted(runs):
+        if merged and start <= merged[-1][1]:
+            merged[-1] = (merged[-1][0], max(end, merged[-1][1]))
+        else:
+            merged.append((start, end))
+    return merged
+
+
+class IndexedQueryTest(unittest.TestCase):
+    def test_bin_arrays_select_what_the_bin_scan_selects(self):
+        rng = random.Random(7)
+        with tempfile.TemporaryDirectory() as directory:
+            path, _ = tiny_gam(directory)
+            reader = IndexedGam(path)
+            for _ in range(200):
+                bins = [(0, 2 ** 64 - 1, [(5 << 16, 9 << 16)])] if rng.random() < 0.3 else []
+                for _ in range(rng.randint(0, 30)):
+                    lo = rng.randint(1, 5000)
+                    start = rng.randint(0, 1000) << 16
+                    bins.append((lo, lo + rng.randint(0, 300), [(start, start + (rng.randint(1, 50) << 16))]))
+                reader.bins = bins
+                nodes = {rng.randint(1, 5400) for _ in range(rng.randint(0, 20))}
+                self.assertEqual(reader.ranges(nodes), scanned_ranges(bins, nodes))
+
+    def test_min_mapq_leaves_low_quality_records_out(self):
+        with tempfile.TemporaryDirectory() as directory:
+            rows = [simple_alignment((10,) if i % 3 else (10, 30), mapq=q, name=f"r{i}")
+                    for i, q in enumerate((0, 5, 10, 11, 30, 60, 10, 61))]
+            path = write_gam(Path(directory) / "q.gam", rows)
+            full = [a.SerializeToString() for a in IndexedGam(path).fetch({10, 30})]
+            for mapq in (None, 10, 30, 100):
+                reader = IndexedGam(path, min_mapq=mapq)
+                expected = [r for r, a in zip(full, rows) if mapq is None or a.mapping_quality > mapq]
+                self.assertEqual([a.SerializeToString() for a in reader.fetch({10, 30})], expected)
+                self.assertEqual([a.SerializeToString() for a in reader.fetch({10, 30})], expected)  # cached
+
+    def test_sample_keeps_the_smallest_keys_in_file_order(self):
+        with tempfile.TemporaryDirectory() as directory:
+            rows = [simple_alignment((10,) if i % 4 else (10, 20), name=f"r{i}") for i in range(40)]
+            rows += [simple_alignment((20,), name=f"s{i}") for i in range(5)]
+            path = write_gam(Path(directory) / "s.gam", rows)
+            reader = IndexedGam(path)
+            full = [a.SerializeToString() for a in reader.fetch({10})]
+            self.assertEqual(len(full), 40)
+            for size in (1, 7, 39, 40, 100):
+                metrics = {}
+                sampled = [a.SerializeToString() for a in reader.fetch({10}, metrics, sample=size)]
+                keep = set(sorted(full, key=sample_key)[:size])
+                self.assertEqual(sampled, [r for r in full if r in keep])
+                self.assertEqual(metrics["sampled_from"], 40)
+            self.assertEqual([a.SerializeToString() for a in IndexedGam(path).fetch({10}, sample=7)],
+                             [a.SerializeToString() for a in reader.fetch({10}, sample=7)])  # cache-independent
 
 
 class GamReaderTest(unittest.TestCase):

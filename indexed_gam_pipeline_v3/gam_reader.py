@@ -8,10 +8,13 @@ complete Alignment messages by exact node membership.
 import bisect
 from collections import OrderedDict, defaultdict
 import gzip
+import hashlib
+import heapq
 import io
 from pathlib import Path
 import sys
 
+import numpy as np
 import pysam
 
 from . import vg_pb2
@@ -91,20 +94,28 @@ def equivalent_eof(stream, expected, actual):
 
 # --- indexed retrieval --------------------------------------------------------
 
+def sample_key(raw):
+    """Downsampling rank of a record: its first 8 BLAKE2b bytes (stable across runs and Pythons)."""
+    return int.from_bytes(hashlib.blake2b(raw, digest_size=8).digest(), "big")
+
+
 class IndexedGam:
     """Fetch complete alignments touching a node set, with a bounded LRU group cache.
 
     The cache retains decoded-once groups (raw protobuf bytes plus a node -> record
     posting list), so consecutive node batches that hit the same BGZF groups do not
     re-decode every record. The byte budget covers the retained group data only.
+    With `min_mapq`, records with MAPQ <= min_mapq are left out of the postings (and their
+    bytes out of the cache) when a group is first read: fetch never yields or re-parses them.
     """
 
-    def __init__(self, gam, index=None, cache_bytes=64 * 1024 * 1024):
+    def __init__(self, gam, index=None, cache_bytes=64 * 1024 * 1024, min_mapq=None):
         self.gam = Path(gam)
         self.index = Path(index or str(gam) + ".gai")
         if cache_bytes <= 0:
             raise ValueError("GAM cache size must be positive")
         self.cache_limit = cache_bytes
+        self.min_mapq = min_mapq
         self._groups = OrderedDict()
         self._cache_bytes = 0
         stat = self.gam.stat()
@@ -144,16 +155,29 @@ class IndexedGam:
         if data.read(1):
             raise ValueError("Unexpected trailing GAI data")
 
+    def _bounds(self):
+        """Bin bounds as arrays, so a query tests every bin at once (short-read GAIs have millions of
+        bins); rebuilt when self.bins is replaced or grown (the arrays keep the list they describe)."""
+        described = getattr(self, "_bound_arrays", None)
+        if described is None or described[0] is not self.bins or described[1] != len(self.bins):
+            self._bound_arrays = (self.bins, len(self.bins), np.array([b[0] for b in self.bins], dtype=np.uint64),
+                                  np.array([b[1] for b in self.bins], dtype=np.uint64))
+        return self._bound_arrays[2:]
+
     def ranges(self, nodes):
         """Merged virtual-offset runs of every bin intersecting the node set."""
-        nodes = sorted(set(nodes))
-        if not nodes:
+        nodes = np.unique(np.fromiter(nodes, dtype=np.uint64))
+        if not len(nodes):
             return []
+        # A bin [lo, hi] intersects the nodes if the first node >= lo is <= hi.
+        lo, hi = self._bounds()
+        first = np.searchsorted(nodes, lo, side="left")
+        inside = first < len(nodes)
+        hit = np.zeros(len(self.bins), dtype=bool)
+        hit[inside] = nodes[first[inside]] <= hi[inside]
         runs = []
-        for lo, hi, offsets in self.bins:
-            i = bisect.bisect_left(nodes, lo)
-            if i < len(nodes) and nodes[i] <= hi:
-                runs.extend(offsets)
+        for b in np.flatnonzero(hit).tolist():
+            runs.extend(self.bins[b][2])
         merged = []
         for start, end in sorted(runs):
             if merged and start <= merged[-1][1]:
@@ -178,7 +202,11 @@ class IndexedGam:
         postings = defaultdict(list)
         for i, raw in enumerate(messages):
             metrics["decoded_alignments"] += 1
-            for node in {m.position.node_id for m in decode(raw).path.mapping}:
+            alignment = decode(raw)
+            if self.min_mapq is not None and alignment.mapping_quality <= self.min_mapq:
+                messages[i] = b""  # never yielded; its bytes need not stay cached
+                continue
+            for node in {m.position.node_id for m in alignment.path.mapping}:
                 postings[node].append(i)
         postings = {node: tuple(indices) for node, indices in postings.items()}
         self.cache_stats["indexed_records"] += len(messages)
@@ -197,8 +225,12 @@ class IndexedGam:
                 self.cache_stats["peak_accounted_bytes"], self._cache_bytes)
         return messages, postings
 
-    def fetch(self, nodes, metrics=None):
-        """Yield every complete alignment whose path visits any of `nodes`, once per record."""
+    def fetch(self, nodes, metrics=None, sample=None):
+        """Yield every complete alignment whose path visits any of `nodes`, once per record, in file order.
+
+        sample=N: yield only the N records with the smallest sample_key (all if there are fewer),
+        still in file order; metrics gets sampled_from = the number of records they were drawn from.
+        """
         stat = self.gam.stat()
         if (stat.st_size, stat.st_mtime_ns) != self._source_stamp:
             raise ValueError("GAM changed after opening its index")
@@ -207,6 +239,32 @@ class IndexedGam:
         if metrics is None:
             metrics = {}
         metrics.update(runs=len(ranges), groups=0, decoded_alignments=0, returned_alignments=0)
+        if sample is not None:
+            yield from self._sampled(wanted, ranges, metrics, sample)
+            return
+        for raw in self._matching(wanted, ranges, metrics):
+            metrics["decoded_alignments"] += 1
+            metrics["returned_alignments"] += 1
+            yield decode(raw)
+
+    def _sampled(self, wanted, ranges, metrics, size):
+        """The `size` matching records with the smallest sample_key, in file order."""
+        kept, seen = [], 0  # max-heap on the key: (-key, -order, raw)
+        for order, raw in enumerate(self._matching(wanted, ranges, metrics)):
+            seen += 1
+            item = (-sample_key(raw), -order, raw)
+            if len(kept) < size:
+                heapq.heappush(kept, item)
+            elif item > kept[0]:
+                heapq.heapreplace(kept, item)
+        metrics["sampled_from"] = seen
+        for _, _, raw in sorted(kept, key=lambda item: -item[1]):
+            metrics["decoded_alignments"] += 1
+            metrics["returned_alignments"] += 1
+            yield decode(raw)
+
+    def _matching(self, wanted, ranges, metrics):
+        """Raw bytes of every record in `ranges` that visits a node of `wanted`, in file order."""
         # Take the cached groups of this fetch first (refreshed, held for the walk), then read the missing
         # ones. A plain LRU walk loses every hit when consecutive fetches cycle through more groups than
         # the cache holds (long reads: neighbouring batches read the same ~50 groups of ~100-270 MiB);
@@ -232,11 +290,14 @@ class IndexedGam:
                         messages, postings = entry[1], entry[2]
                     else:
                         messages, postings = self._indexed_group(stream, metrics)
-                    # Original record order; a record touching several nodes is yielded once.
-                    for i in sorted({i for n in wanted for i in postings.get(n, ())}):
-                        metrics["decoded_alignments"] += 1
-                        metrics["returned_alignments"] += 1
-                        yield decode(messages[i])
+                    # Original record order; a record touching several nodes is yielded once. The
+                    # smaller of (batch nodes, group nodes) is scanned for the intersection.
+                    if len(wanted) < len(postings):
+                        hits = [n for n in wanted if n in postings]
+                    else:
+                        hits = [n for n in postings if n in wanted]
+                    for i in sorted({i for n in hits for i in postings[n]}):
+                        yield messages[i]
                 actual_end = stream.tell()
                 if actual_end != end and not equivalent_eof(stream, end, actual_end):
                     raise ValueError("GAI run does not end on a GAM group boundary")

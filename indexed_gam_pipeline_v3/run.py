@@ -47,6 +47,8 @@ def add_build_arguments(sub, outputs=True):
     sub.add_argument("--snv-min-af", type=fraction, required=True, help="AF threshold for the SNV output")
     sub.add_argument("--indel-min-af", type=fraction, required=True, help="AF threshold for the INDEL output")
     if outputs:
+        sub.add_argument("--downsample-nodes", help="deep nodes to build from a sample (first column of a TSV, e.g. "
+                                                    "orchestrate prepare's downsample_nodes.tsv)")
         sub.add_argument("--snv-output", required=True, help="separate SNV output directory; one shared decoding pass")
         sub.add_argument("--indel-output", required=True, help="separate INDEL output directory; one shared decoding pass")
         sub.add_argument("--debug-rows", action="store_true", help="record per-row source hashes and per-column graph coordinates (needed by validate_examples.py)")
@@ -58,7 +60,12 @@ def add_build_arguments(sub, outputs=True):
                           "per target node the GAI predicts")
     sub.add_argument("--max-node-span", type=positive, default=10000,
                      help="maximum node-ID span of one batch (auto: of a 512-node batch, scaled with the size)")
-    sub.add_argument("--max-batch-alignments", type=positive, default=20000, help="fail instead of decoding a larger batch")
+    sub.add_argument("--max-batch-alignments", type=positive, default=200000,
+                     help="MAPQ-passing records of one batch: a larger batch is split (auto) or fails (fixed "
+                          "--batch-nodes); a single node over it is built from a sample (--downsample-reads)")
+    sub.add_argument("--downsample-reads", type=positive, default=10000,
+                     help="a deep node is built alone from this many MAPQ-passing records, the ones with the "
+                          "smallest hash of the record bytes (a fixed sample whatever the batching)")
     sub.add_argument("--shard-size", type=positive, default=2048, help="tensors per NPY shard")
     sub.add_argument("--min-mapq", type=int, default=10, help="exclusive: alignments with MAPQ <= this are dropped")
     sub.add_argument("--min-af", type=fraction, default=0.05, help="AF threshold (single-output mode)")
