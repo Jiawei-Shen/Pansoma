@@ -207,12 +207,31 @@ class IndexedGam:
         if metrics is None:
             metrics = {}
         metrics.update(runs=len(ranges), groups=0, decoded_alignments=0, returned_alignments=0)
+        # Take the cached groups of this fetch first (refreshed, held for the walk), then read the missing
+        # ones. A plain LRU walk loses every hit when consecutive fetches cycle through more groups than
+        # the cache holds (long reads: neighbouring batches read the same ~50 groups of ~100-270 MiB);
+        # this way the groups still cached from the previous fetch are all hits. Records are still
+        # yielded in file order, so the fetched records are unchanged.
+        pinned = {}
+        if self._groups:
+            starts = [s for s, _ in ranges]
+            for start in list(self._groups):
+                k = bisect.bisect_right(starts, start) - 1
+                if k >= 0 and start < ranges[k][1]:
+                    self._groups.move_to_end(start)
+                    pinned[start] = self._groups[start]
+                    self.cache_stats["group_hits"] += 1
         with pysam.BGZFile(str(self.gam), "rb") as stream:
             for start, end in ranges:
                 stream.seek(start)
                 while stream.tell() < end:
                     metrics["groups"] += 1
-                    messages, postings = self._indexed_group(stream, metrics)
+                    entry = pinned.pop(stream.tell(), None)  # released once used (it may have left the cache)
+                    if entry is not None:
+                        stream.seek(entry[0])
+                        messages, postings = entry[1], entry[2]
+                    else:
+                        messages, postings = self._indexed_group(stream, metrics)
                     # Original record order; a record touching several nodes is yielded once.
                     for i in sorted({i for n in wanted for i in postings.get(n, ())}):
                         metrics["decoded_alignments"] += 1

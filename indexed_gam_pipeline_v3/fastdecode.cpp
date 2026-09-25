@@ -50,7 +50,7 @@ struct VisitRec {
 
 struct EditRaw { int64_t f = 0, t = 0; std::string seq; };
 struct MappingRaw { int64_t node = 0, offset = 0; bool reverse = false; std::vector<EditRaw> edits; };
-struct AlignmentRaw { std::string sequence, quality; std::vector<MappingRaw> mappings; };
+struct AlignmentRaw { std::string sequence, quality; std::vector<MappingRaw> mappings; int64_t mapq = 0; };
 
 static uint64_t varint(const uint8_t*& p, const uint8_t* end) {
     uint64_t result = 0;
@@ -145,6 +145,7 @@ static AlignmentRaw parse_alignment(std::string_view raw) {
         int field = int(key >> 3), wire = int(key & 7);
         if (field == 1 && wire == 2) a.sequence = std::string(bytes_field(p, end));
         else if (field == 4 && wire == 2) a.quality = std::string(bytes_field(p, end));
+        else if (field == 5 && wire == 0) a.mapq = as_int32(varint(p, end));
         else if (field == 2 && wire == 2) {
             auto v = bytes_field(p, end);
             auto* q = reinterpret_cast<const uint8_t*>(v.data());
@@ -344,6 +345,14 @@ struct Decoder {
         std::vector<Col> cols;
         std::vector<VisitRec> visits;
         py::list observations, unsupported;
+        walk(a, max_indel, cols, visits, &observations, &unsupported);
+        return finish(cols, visits, max_indel, left, observations, unsupported);
+    }
+
+    // The edits of every mapping -> columns and visits (candidates.decode_alignment's walk). SNP
+    // observations and unsupported events are collected only when the lists are given.
+    void walk(const AlignmentRaw& a, int64_t max_indel, std::vector<Col>& cols, std::vector<VisitRec>& visits,
+              py::list* observations, py::list* unsupported) {
         std::string sequence = upper(a.sequence);
         const std::string& qualities = a.quality;
         bool has_q = !qualities.empty();
@@ -356,7 +365,7 @@ struct Decoder {
         for (size_t mi = 0; mi < a.mappings.size(); ++mi) {
             const MappingRaw& m = a.mappings[mi];
             int64_t nid = m.node;
-            bool observe = is_target(nid);
+            bool observe = observations != nullptr && is_target(nid);
             std::string_view forward = seq(nid);
             bool reverse = m.reverse;
             std::string reference = reverse ? rc(forward) : std::string(forward);
@@ -384,20 +393,22 @@ struct Decoder {
                 char op = (f == t && replacement.empty()) ? 'M' : (f == t) ? 'X' : (!f) ? 'I' : (!t) ? 'D' : 'C';
                 int64_t pos = reverse ? int64_t(forward.size()) - cursor - f : cursor;
                 auto q_at = [&](int64_t k) -> int { return has_q ? int(uint8_t(qualities[read_cursor + k])) : -1; };
-                if (op == 'X' && observe) {
-                    std::string cref = reverse ? rc(ref) : std::string(ref), calt = reverse ? rc(alt) : std::string(alt);
-                    for (int64_t k = 0; k < f; ++k) {
-                        char r = cref[k], b = calt[k];
-                        if (r != b && up(r) != 'N' && up(b) != 'N')
-                            observations.append(py::make_tuple("SNP", nid, pos + k, py::str(&r, 1), py::str(&b, 1),
-                                                               py::tuple(), int(mi), q_at(reverse ? f - 1 - k : k)));
+                if (op == 'X') {
+                    if (observe) {  // SNP observations only on target nodes
+                        std::string cref = reverse ? rc(ref) : std::string(ref), calt = reverse ? rc(alt) : std::string(alt);
+                        for (int64_t k = 0; k < f; ++k) {
+                            char r = cref[k], b = calt[k];
+                            if (r != b && up(r) != 'N' && up(b) != 'N')
+                                observations->append(py::make_tuple("SNP", nid, pos + k, py::str(&r, 1), py::str(&b, 1),
+                                                                    py::tuple(), int(mi), q_at(reverse ? f - 1 - k : k)));
+                        }
                     }
-                } else if ((op == 'I' || op == 'D') && std::max(f, t) > max_indel) {
+                } else if (unsupported != nullptr && (op == 'I' || op == 'D') && std::max(f, t) > max_indel) {
                     std::string cref = reverse ? rc(ref) : std::string(ref), calt = reverse ? rc(alt) : std::string(alt);
-                    unsupported.append(py::make_tuple(0, nid, pos, cref, calt, op == 'I' ? "INS" : "DEL", int(mi), ed.index));
-                } else if (op == 'C') {
+                    unsupported->append(py::make_tuple(0, nid, pos, cref, calt, op == 'I' ? "INS" : "DEL", int(mi), ed.index));
+                } else if (unsupported != nullptr && op == 'C') {
                     std::string cref = reverse ? rc(ref) : std::string(ref), calt = reverse ? rc(alt) : std::string(alt);
-                    unsupported.append(py::make_tuple(1, nid, pos, cref, calt, "", int(mi), ed.index));
+                    unsupported->append(py::make_tuple(1, nid, pos, cref, calt, "", int(mi), ed.index));
                 }
                 int64_t width = std::max(f, t), flen = int64_t(forward.size());
                 for (int64_t k = 0; k < width; ++k) {
@@ -416,7 +427,10 @@ struct Decoder {
             visits.push_back(VisitRec{nid, lo, hi, uint8_t(reverse), int32_t(mi), first, int32_t(cols.size()), flen});
         }
         if (read_cursor != int64_t(sequence.size())) throw py::value_error("GAM edits do not consume the complete read sequence");
+    }
 
+    py::tuple finish(std::vector<Col>& cols, std::vector<VisitRec>& visits, int64_t max_indel, bool left,
+                     py::list& observations, py::list& unsupported) {
         py::list moves;
         if (left)
             for (auto& mv : left_align(cols, visits, max_indel)) moves.append(py::make_tuple(mv.first, mv.second));
@@ -530,6 +544,110 @@ struct Decoder {
     }
 };
 
+// ---------------------------------------------------------------- discovery counts
+
+// Per node, in order of first appearance: mappings without / with an edit and the longest read
+// (run.discover's node_stats). add_raw applies discover's rule to vg's edits as written;
+// add_normalized first decodes the record and left-normalizes its indels exactly like the builder,
+// so an indel counts on the node the builder will see it on. A record the normalization cannot
+// decode (e.g. a node missing from `sequences`) is counted with the raw rule (`fallbacks`).
+struct Discovery {
+    struct Stat { int64_t perfect = 0, not_perfect = 0, max_len = 0; };
+    std::unordered_map<int64_t, size_t> index;
+    std::vector<int64_t> nodes;
+    std::vector<Stat> stats;
+    int64_t alignments = 0, used = 0, fallbacks = 0;
+
+    void count(int64_t node, bool imperfect, int64_t length) {
+        auto it = index.find(node);
+        size_t k;
+        if (it == index.end()) {
+            k = nodes.size();
+            index.emplace(node, k);
+            nodes.push_back(node);
+            stats.emplace_back();
+        } else k = it->second;
+        Stat& s = stats[k];
+        (imperfect ? s.not_perfect : s.perfect) += 1;
+        s.max_len = std::max(s.max_len, length);
+    }
+    void count_raw(const AlignmentRaw& a) {
+        int64_t length = int64_t(a.sequence.size());
+        for (const MappingRaw& m : a.mappings) {
+            if (!m.node) continue;
+            bool imperfect = false;
+            for (const EditRaw& e : m.edits)
+                if (e.f != e.t || !e.seq.empty()) { imperfect = true; break; }
+            count(m.node, imperfect, length);
+        }
+    }
+    static std::string_view view(py::handle raw) {
+        char* data; Py_ssize_t size;
+        if (PyBytes_AsStringAndSize(raw.ptr(), &data, &size) != 0) throw py::error_already_set();
+        return std::string_view(data, size_t(size));
+    }
+    void add_raw(py::list messages, int64_t min_mapq) {
+        for (py::handle raw : messages) {
+            ++alignments;
+            AlignmentRaw a = parse_alignment(view(raw));
+            if (a.mapq <= min_mapq) continue;
+            ++used;
+            count_raw(a);
+        }
+    }
+    void add_normalized(py::list messages, py::object sequences, int64_t min_mapq, int64_t max_indel) {
+        std::vector<Col> cols;
+        std::vector<VisitRec> visits;
+        std::vector<char> edited;
+        for (py::handle raw : messages) {
+            ++alignments;
+            AlignmentRaw a = parse_alignment(view(raw));
+            if (a.mapq <= min_mapq) continue;
+            ++used;
+            cols.clear(); visits.clear();
+            try {
+                Decoder d{sequences, py::none(), {}};
+                d.walk(a, max_indel, cols, visits, nullptr, nullptr);
+                left_align(cols, visits, max_indel);
+            } catch (const std::exception&) {
+                ++fallbacks;
+                count_raw(a);
+                continue;
+            }
+            edited.assign(visits.size(), 0);
+            for (const Col& c : cols)
+                if (c.op != 'M') edited[size_t(c.visit)] = 1;
+            int64_t length = int64_t(a.sequence.size());
+            for (size_t v = 0; v < visits.size(); ++v)
+                if (visits[v].node) count(visits[v].node, edited[v] != 0, length);
+        }
+    }
+    py::tuple result() const {
+        size_t n = nodes.size();
+        py::array_t<int64_t> node(n), perfect(n), not_perfect(n), max_len(n);
+        auto a = node.mutable_unchecked<1>(); auto b = perfect.mutable_unchecked<1>();
+        auto c = not_perfect.mutable_unchecked<1>(); auto d = max_len.mutable_unchecked<1>();
+        for (size_t k = 0; k < n; ++k) {
+            a(k) = nodes[k]; b(k) = stats[k].perfect; c(k) = stats[k].not_perfect; d(k) = stats[k].max_len;
+        }
+        py::dict counters;
+        counters["alignments"] = alignments; counters["used"] = used; counters["fallbacks"] = fallbacks;
+        return py::make_tuple(node, perfect, not_perfect, max_len, counters);
+    }
+};
+
+// Distinct node IDs visited by the records of one group (to look up their sequences).
+py::array_t<int64_t> group_nodes(py::list messages) {
+    std::vector<int64_t> out;
+    for (py::handle raw : messages)
+        for (const MappingRaw& m : parse_alignment(Discovery::view(raw)).mappings) out.push_back(m.node);
+    std::sort(out.begin(), out.end());
+    out.erase(std::unique(out.begin(), out.end()), out.end());
+    py::array_t<int64_t> result(out.size());
+    if (!out.empty()) std::memcpy(result.mutable_data(), out.data(), out.size() * sizeof(int64_t));
+    return result;
+}
+
 }  // namespace
 
 PYBIND11_MODULE(_fastdecode, m) {
@@ -541,4 +659,11 @@ PYBIND11_MODULE(_fastdecode, m) {
         return d.decode(raw, max_indel, left_align);
     }, py::arg("raw"), py::arg("sequences"), py::arg("targets"), py::arg("max_indel") = 50, py::arg("left_align") = true,
        "Decode one serialized vg Alignment: (columns, visits, observations, moves, unsupported).");
+    py::class_<Discovery>(m, "Discovery")
+        .def(py::init<>())
+        .def("add_raw", &Discovery::add_raw, py::arg("messages"), py::arg("min_mapq"))
+        .def("add_normalized", &Discovery::add_normalized, py::arg("messages"), py::arg("sequences"),
+             py::arg("min_mapq"), py::arg("max_indel") = 50)
+        .def("result", &Discovery::result, "(nodes, perfect, not_perfect, max_read_length, counters), first-appearance order");
+    m.def("group_nodes", &group_nodes, py::arg("messages"), "Sorted distinct node IDs of a group's records.");
 }

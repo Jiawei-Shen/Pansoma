@@ -189,3 +189,59 @@ class SplitOutputTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class AdaptiveBatchTest(unittest.TestCase):
+    """--batch-nodes auto changes only how targets are grouped: tensors and summaries stay identical."""
+
+    def build_af(self, root, name, **options):
+        inputs = root / (name + "_inputs")
+        inputs.mkdir()
+        gam, _ = af_gam(inputs)
+        graph = graph_fixture(inputs / "graph.sqlite", [(n, "AAAAAA", 331) for n in (10, 20, 30, 40, 50)])
+        nodes = inputs / "nodes.txt"
+        nodes.write_text("10\n20\n30\n40\n50\n")
+        args = build_args(gam=str(gam), nodes=str(nodes), graph_index=str(graph), shard_size=1, min_variants=3,
+                          output=str(root / name / "shared"), snv_output=str(root / name / "SNV"),
+                          indel_output=str(root / name / "INDEL"), snv_min_af=.06, indel_min_af=.08, **options)
+        quiet_build(args)
+        tensors = {k: files(root / name / k, names=("variant_summary.ndjson",)) for k in ("SNV", "INDEL")}
+        timing = [json.loads(l) for l in (root / name / "shared/batch_timing.ndjson").read_text().splitlines()]
+        return tensors, timing
+
+    def test_auto_batches_keep_tensors_and_record_the_plan(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            fixed, _ = self.build_af(root, "fixed", batch_nodes=1)
+            auto, timing = self.build_af(root, "auto", batch_nodes="auto")
+            self.assertEqual(fixed, auto)
+            self.assertEqual([t["target_nodes"] for t in timing], [5])
+            self.assertEqual(timing[0]["batch_plan"]["size"], 512)
+            self.assertEqual(sorted(timing[0]["batch_plan"]["bytes_per_node"]), ["1024", "2048", "512"])
+
+    def test_auto_splits_a_batch_over_the_alignment_limit_instead_of_failing(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            fixed, _ = self.build_af(root, "fixed", batch_nodes=1)
+            auto, timing = self.build_af(root, "auto", batch_nodes="auto", max_batch_alignments=60)  # 50 per node
+            self.assertEqual(fixed, auto)
+            self.assertEqual([t["target_nodes"] for t in timing], [1, 1, 1, 1, 1])
+            self.assertTrue(all(t["batch_plan"]["split"] for t in timing))
+            with self.assertRaisesRegex(ValueError, "Batch alignment limit"):
+                self.build_af(root, "strict", batch_nodes=5, max_batch_alignments=60)
+
+    def test_adaptive_batches_prefer_large_batches_only_when_they_save_reads(self):
+        class Reader:  # every node its own run of 100 blocks: no sharing, larger batches do not help
+            def __init__(self, shared):
+                self.shared = shared
+
+            def ranges(self, batch):
+                if self.shared:  # all nodes in one run: one large batch reads it once
+                    return [(0, 100 << 16)]
+                return [(n * 1000 << 16, (n * 1000 + 100) << 16) for n in batch]
+
+        nodes = list(range(1, 5001))
+        sizes = lambda shared: [len(b) for b, _ in build_module.adaptive_batches(nodes, Reader(shared), 10**9)]  # noqa: E731
+        self.assertEqual(set(sizes(False)[:-1]), {512})
+        self.assertEqual(set(sizes(True)[:-1]), {2048})
+        self.assertEqual(sum(sizes(True)), 5000)

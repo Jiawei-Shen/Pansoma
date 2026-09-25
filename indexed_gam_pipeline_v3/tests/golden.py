@@ -498,6 +498,8 @@ def run_job(package, case, decoder, work, hashseed=None):
         for name, arguments in builds:
             if "--snv-min-af" not in arguments:
                 arguments = arguments + DEFAULT_AF
+            if "--batch-nodes" not in arguments:  # v2's default, which the goldens were recorded with
+                arguments = arguments + ["--batch-nodes", "512"]
             out = tree / name
             execute([python, "-m", f"{package}.run", "build", *arguments, "--output", str(out / "shared"),
                      "--snv-output", str(out / "SNV"), "--indel-output", str(out / "INDEL"), "--decoder", decoder],

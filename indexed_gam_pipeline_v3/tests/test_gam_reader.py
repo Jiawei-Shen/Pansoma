@@ -142,7 +142,7 @@ class GamReaderTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             path, _ = tiny_gam(directory)
             output = Path(directory) / "discovery"
-            args = build_args(gam=str(path), output=str(output), min_mapq=5, node_alt=0.05, max_alignments=None)
+            args = build_args(gam=str(path), output=str(output), min_mapq=5, node_alt=0.05, max_alignments=None, raw=True)
             with redirect_stdout(io.StringIO()):
                 discover(args)
             stats = json.loads((output / "node_stats.json").read_text())
