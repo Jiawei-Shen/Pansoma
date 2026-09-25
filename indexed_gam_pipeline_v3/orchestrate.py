@@ -704,9 +704,10 @@ def make_parser():
     p.add_argument("--index", help="default: GAM path + .gai")
     p.add_argument("--nodes", required=True, help="sorted target node list, e.g. discovery output")
     p.add_argument("--node-stats", help="discovery node_stats.json: predict task costs and run expensive tasks first")
-    p.add_argument("--supplement-rounds", type=int, default=3,
+    p.add_argument("--supplement-rounds", type=int, default=0,
                    help="after the tasks, up to N rounds of supplement tasks for nodes that left-normalization moved "
-                        "target-node indels onto (0 = off)")
+                        "target-node indels onto (default 0 = off: targets from `discover --normalized` already "
+                        "contain them; use 3 with raw-rule targets)")
     p.add_argument("--supplement-min-records", type=int, default=3,
                    help="supplement nodes need at least this many displaced records")
     p.add_argument("--tasks", type=int, default=512)

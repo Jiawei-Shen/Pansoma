@@ -230,7 +230,7 @@ class EndToEndTest(unittest.TestCase):
                     "--min-variants", "1", "--width", "11", "--max-indel-len", "5", "--merge-shard-size", "0",
                     "--snv-min-af", ".05", "--indel-min-af", ".05"]
             with redirect_stdout(io.StringIO()), patch.dict(os.environ, dict(OMP_NUM_THREADS="1")):
-                orchestrate.main(argv)
+                orchestrate.main(argv + ["--supplement-rounds", "3"])  # raw-rule targets: supplement on
             with patch.dict(os.environ, dict(SLURM_CPUS_PER_TASK="1")), redirect_stdout(io.StringIO()):
                 orchestrate.run(run)
             config = json.loads((run / "config.json").read_text())
@@ -244,10 +244,10 @@ class EndToEndTest(unittest.TestCase):
             self.assertEqual((site["site_id"], site["alt_count"], site["site_counts"]), ("2:0:INDEL", 6, {"A1": 6, "REF": 4}))
             catalog = json.loads((run / "outputs.json").read_text())
             self.assertEqual([e["tensors"] for e in catalog["outputs"]["INDEL"]], [0, 0, 1])
-            # --supplement-rounds 0 keeps the plain run
+            # the default (--supplement-rounds 0, for normalized targets) keeps the plain run
             argv[2] = str(root / "plain")
             with redirect_stdout(io.StringIO()), patch.dict(os.environ, dict(OMP_NUM_THREADS="1")):
-                orchestrate.main(argv + ["--supplement-rounds", "0"])
+                orchestrate.main(argv)
             with patch.dict(os.environ, dict(SLURM_CPUS_PER_TASK="1")), redirect_stdout(io.StringIO()):
                 orchestrate.run(root / "plain")
             self.assertEqual(json.loads((root / "plain/config.json").read_text())["tasks"], 2)

@@ -2,44 +2,12 @@
 """Command line for the indexed GAM tensor pipeline.
 
     discover  scan the GAM once and select nodes with an imperfect-mapping fraction above a threshold
+              (discovery.py: parallel native scan; indels count where the builder sees them, --raw as written)
     build     build SNV and INDEL site tensors for a node list (see build.py for the outputs)
 """
 import argparse
-from collections import defaultdict
-import json
-from pathlib import Path
 
-from .common import new_output, write_json
-from .gam_reader import scan_gam
-
-
-def discover(args):
-    """Select nodes where more than `node_alt` of MAPQ-passing mappings carry an edit."""
-    out = new_output(args.output)
-    stats = defaultdict(lambda: [0, 0, 0])  # perfect, imperfect, max read length
-    count = 0
-    for alignment in scan_gam(args.gam, args.max_alignments):
-        count += 1
-        if alignment.mapping_quality <= args.min_mapq:
-            continue
-        for mapping in alignment.path.mapping:
-            nid = mapping.position.node_id
-            if not nid:
-                continue
-            imperfect = any(e.from_length != e.to_length or e.sequence for e in mapping.edit)
-            stats[nid][int(imperfect)] += 1
-            stats[nid][2] = max(stats[nid][2], len(alignment.sequence))
-        if count % 100000 == 0:
-            print(f"Scanned {count:,} alignments; {len(stats):,} nodes", flush=True)
-    selected = sorted(nid for nid, (p, n, _) in stats.items() if n >= 1 and n / (p + n) > args.node_alt)
-    (out / "target_nodes.txt").write_text("".join(f"{n}\n" for n in selected))
-    write_json(out / "node_stats.json", {str(n): dict(perfect=p, not_perfect=q, max_read_length=r)
-                                         for n, (p, q, r) in stats.items()})
-    report = dict(gam=str(Path(args.gam).resolve()), alignments_scanned=count, nodes_observed=len(stats),
-                  nodes_selected=len(selected), min_mapq=args.min_mapq, node_alt=args.node_alt,
-                  exploratory=bool(args.max_alignments), max_alignments=args.max_alignments)
-    write_json(out / "discovery_report.json", report)
-    print(json.dumps(report, indent=2))
+from .discovery import discover  # noqa: F401  (run discover; tests import it from here)
 
 
 def build(args):
@@ -61,6 +29,11 @@ def nonnegative(value):
     return number
 
 
+def batch_size(value):
+    """A positive number of target nodes per batch, or `auto` (build.adaptive_batches)."""
+    return "auto" if value == "auto" else positive(value)
+
+
 def fraction(value):
     number = float(value)
     if not 0 <= number <= 1:
@@ -80,8 +53,11 @@ def add_build_arguments(sub, outputs=True):
     sub.add_argument("--rows", type=positive, default=200)
     sub.add_argument("--width", type=positive, default=101)
     sub.add_argument("--gam-cache-mb", type=positive, default=1024, help="bounded GAM group cache in MiB (at least 1)")
-    sub.add_argument("--batch-nodes", type=positive, default=512, help="target nodes per batch")
-    sub.add_argument("--max-node-span", type=positive, default=10000, help="maximum node-ID span of one batch")
+    sub.add_argument("--batch-nodes", type=batch_size, default="auto",
+                     help="target nodes per batch; auto (default): 512/1024/2048 chosen per position by the GAM bytes "
+                          "per target node the GAI predicts")
+    sub.add_argument("--max-node-span", type=positive, default=10000,
+                     help="maximum node-ID span of one batch (auto: of a 512-node batch, scaled with the size)")
     sub.add_argument("--max-batch-alignments", type=positive, default=20000, help="fail instead of decoding a larger batch")
     sub.add_argument("--shard-size", type=positive, default=2048, help="tensors per NPY shard")
     sub.add_argument("--min-mapq", type=int, default=10, help="exclusive: alignments with MAPQ <= this are dropped")
@@ -116,7 +92,16 @@ def make_parser():
         if name == "discover":
             sub.add_argument("--min-mapq", type=int, default=5, help="exclusive MAPQ threshold")
             sub.add_argument("--node-alt", type=fraction, default=0.05, help="select nodes with imperfect fraction > this")
-            sub.add_argument("--max-alignments", type=positive, help="exploratory partial scan only")
+            sub.add_argument("--max-alignments", type=positive, help="exploratory partial scan only (sequential, raw rule)")
+            sub.add_argument("--processes", type=positive, help="parallel scan workers (default: $SLURM_CPUS_PER_TASK, else all CPUs)")
+            sub.add_argument("--index", help="GAI of the GAM, to cut it into segments (default: GAM path + .gai)")
+            sub.add_argument("--raw", action="store_true",
+                             help="count vg's edits as written (the rule before normalized discovery; needs "
+                                  "orchestrate prepare --supplement-rounds 3). Default: each indel counts after the "
+                                  "builder's left-normalization, which needs --graph-index and the native module")
+            sub.add_argument("--graph-index", help="unified graph index SQLite (node sequences; required unless --raw)")
+            sub.add_argument("--max-indel-len", type=positive, default=50,
+                             help="indels longer than this are not moved (the builder's --max-indel-len)")
         else:
             sub.add_argument("--nodes", required=True, help="target node IDs, one per line")
             sub.add_argument("--index", help="default: GAM path + .gai")

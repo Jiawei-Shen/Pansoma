@@ -315,6 +315,7 @@ class OrchestratorOptionsTest(unittest.TestCase):
                                              "--indel-min-af", ".08"])
         frozen = {k: getattr(args, k) for k in BUILDER_OPTIONS}
         self.assertEqual(frozen, dict({k: getattr(run_args, k) for k in BUILDER_OPTIONS}, gam_cache_mb=8192))
+        self.assertEqual(frozen["batch_nodes"], "auto")
         self.assertEqual((type(frozen["min_allele_bq"]), frozen["decoder"]), (int, "auto"))
         # the typed thresholds are required, so config.variant_outputs is always {SNV, INDEL}
         for missing in (["--snv-min-af", ".06"], ["--indel-min-af", ".08"]):

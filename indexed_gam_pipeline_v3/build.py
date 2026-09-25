@@ -36,7 +36,7 @@ Records are decoded by the native decoder when it is built and passes its checks
 (--decoder auto, the default; native.py), else by candidates.decode_alignment; the
 outputs are identical and the manifest's `decoder` records which one ran and why.
 """
-from collections import Counter, defaultdict
+from collections import Counter, defaultdict, deque
 from copy import deepcopy
 import json
 from pathlib import Path
@@ -82,7 +82,45 @@ def recorded(args, keys):
     return {k: LEGACY_ARGUMENTS[k] if k in LEGACY_ARGUMENTS else getattr(args, k) for k in keys}
 
 
+AUTO_SIZES = (512, 1024, 2048)  # --batch-nodes auto: the batch sizes tried at each position
+AUTO_GAIN = 0.2  # a larger batch must cut the estimated GAM bytes per target node by at least this fraction
+
+
+class BatchTooLarge(ValueError):
+    pass
+
+
+def fetch_estimate(reader, batch):
+    """Compressed GAM bytes (BGZF block distance) the fetch of `batch` reads, from the GAI alone."""
+    return sum(max(1, (end >> 16) - (start >> 16)) for start, end in reader.ranges(batch))
+
+
+def adaptive_batches(nodes, reader, max_span):
+    """--batch-nodes auto: yields (batch, plan). At each position the next 512, 1024 and 2048 target
+    nodes (node-ID span limit scaled with the size) are priced by the GAM bytes their fetch would read;
+    a larger batch is taken only if it reads at least AUTO_GAIN fewer bytes per target node than the
+    smaller choice. Where neighbouring batches share the same GAM groups (long reads, coarse GAI bins)
+    one large batch reads them once instead of several times; where they do not, batches stay small."""
+    nodes = sorted(nodes)
+    i = 0
+    while i < len(nodes):
+        best, estimates = None, {}
+        for size in AUTO_SIZES:
+            span = max_span * size // AUTO_SIZES[0]
+            j = i + 1
+            while j < len(nodes) and j - i < size and nodes[j] - nodes[i] <= span:
+                j += 1
+            per_node = fetch_estimate(reader, nodes[i:j]) / (j - i)
+            estimates[str(size)] = round(per_node, 1)
+            if best is None or per_node <= (1 - AUTO_GAIN) * best[1]:
+                best = (j, per_node, size)
+        yield nodes[i:best[0]], dict(size=best[2], bytes_per_node=estimates)
+        i = best[0]
+
+
 def validate_args(args):
+    if args.batch_nodes != "auto" and not (isinstance(args.batch_nodes, int) and args.batch_nodes >= 1):
+        raise ValueError("--batch-nodes must be a positive integer or auto")
     if not 1 <= args.max_indel_len <= 50:
         raise ValueError("--max-indel-len must be in [1, 50]")
     if args.width < args.max_indel_len:
@@ -304,20 +342,42 @@ def _build_batches(args, nodes, reader, graph, shared, typed, started, decode):
 
     timings = defaultdict(float)
     displaced = Counter()  # node outside a batch -> records whose target-node indel normalization moved there
-    for bi, batch in enumerate(batches(nodes, args.batch_nodes, args.max_node_span), 1):
+    auto = args.batch_nodes == "auto"
+    planned = (adaptive_batches(nodes, reader, args.max_node_span) if auto
+              else ((b, None) for b in batches(nodes, args.batch_nodes, args.max_node_span)))
+    queue = deque()  # auto: halves of a batch that exceeded --max-batch-alignments
+    bi = 0
+    while True:
+        if queue:
+            batch, plan = queue.popleft()
+        else:
+            item = next(planned, None)
+            if item is None:
+                break
+            batch, plan = item
         batch_started = time.perf_counter()
         wanted = set(batch)
         # 1. Fetch every complete alignment touching the batch; collect all visited nodes.
         metrics = {}
         alignments = []
         context_nodes = set(wanted)
-        for alignment in reader.fetch(wanted, metrics):
-            if alignment.mapping_quality <= args.min_mapq:
-                continue
-            alignments.append(alignment)
-            context_nodes.update(m.position.node_id for m in alignment.path.mapping)
-            if len(alignments) > args.max_batch_alignments:
-                raise ValueError("Batch alignment limit exceeded; reduce --batch-nodes or raise --max-batch-alignments")
+        try:
+            for alignment in reader.fetch(wanted, metrics):
+                if alignment.mapping_quality <= args.min_mapq:
+                    continue
+                alignments.append(alignment)
+                context_nodes.update(m.position.node_id for m in alignment.path.mapping)
+                if len(alignments) > args.max_batch_alignments:
+                    raise BatchTooLarge("Batch alignment limit exceeded; reduce --batch-nodes or raise "
+                                        "--max-batch-alignments")
+        except BatchTooLarge:
+            if not auto or len(batch) < 2:
+                raise
+            half = len(batch) // 2  # auto: retry as two halves, in order
+            queue.extendleft([(batch[half:], dict(plan, split=True)), (batch[:half], dict(plan, split=True))])
+            alignments.clear()
+            continue
+        bi += 1
         timings["gam_fetch_seconds"] += time.perf_counter() - batch_started
         # 2. Sequences and path counts for the targets and all context nodes.
         t = time.perf_counter()
@@ -388,7 +448,8 @@ def _build_batches(args, nodes, reader, graph, shared, typed, started, decode):
                 target_nodes=len(batch), alignments=len(reads), context_nodes=len(context_nodes),
                 candidates=len(candidates), tensors_written=written(),
                 elapsed_seconds=time.perf_counter() - batch_started,
-                cumulative_stage_seconds=dict(timings), gam_query=metrics)) + "\n")
+                cumulative_stage_seconds=dict(timings), gam_query=metrics,
+                **({"batch_plan": plan} if plan is not None else {}))) + "\n")
         print(f"Batch {bi}: {len(batch)} target nodes, {len(reads)} alignments, "
               f"{len(context_nodes)} context nodes, {len(candidates)} candidates, "
               f"{written()} tensors so far", flush=True)

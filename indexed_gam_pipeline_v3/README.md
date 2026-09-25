@@ -35,8 +35,10 @@ G=/scratch/jshen/data/HG008_GIAB/pansoma_v2_tensors/graph_index   # HPRC v1.1 d9
 $PY -m $P.native compile                   # prints the build info
 $PY -m $P.native check                     # available? if not, why
 
-# (once per sample) target nodes: nodes where > 5 % of MAPQ>5 mappings carry an edit
-$PY -m $P.run discover --gam sample.sorted.gam --output discovery/
+# (once per sample) target nodes: nodes where > 5 % of MAPQ>5 mappings carry an edit, counted after
+# the builder's indel left-normalization (--normalized); parallel over GAM segments (native module)
+$PY -m $P.run discover --gam sample.sorted.gam --output discovery/ --normalized \
+    --graph-index /path/to/hprc-v1.1-d9.graph.sqlite --processes 48
 
 # (whole genome, one Slurm node) prepare a run root, then submit it
 $PY -m $P.orchestrate prepare --root /path/to/run_root --tensors /path/to/tensors \
@@ -117,8 +119,9 @@ Key invariants:
 | `gam_reader.py` | protobuf stream framing (incl. the giraffe `PARAMS_JSON` / foreign-group skip), `scan_gam`, `IndexedGam`: GAI v1 bins, merged virtual-offset runs, BGZF group seek, bounded LRU group cache, `fetch` (file order, each record once) |
 | `graph_index.py` | read-only `GraphIndex` over the graph SQLite (sequence + distinct path count per node) |
 | `candidates.py` | the data path from GAM record to site tensor: `decode_alignment` (+ `left_align_indels`, `indel_runs`, `indel_observations`: the part `fastdecode.cpp` ports), `NodeReads`/`VisitView` support counting (with the scan fallback), `alt_support_bounds`, `exact_coverage`, `SiteLayout`, `make_site_tensor`, format constants |
-| `native.py`, `fastdecode.cpp` | optional C++ decoder: `compile`/`check`, load-time SHA + 300-record self-test, `select_decoder` (`--decoder`, `PANSOMA_DECODER`), `NativeDecoder` with per-record Python fallback, `ColumnArray` |
+| `native.py`, `fastdecode.cpp` | optional C++ decoder: `compile`/`check`, load-time SHA + 300-record self-test, `select_decoder` (`--decoder`, `PANSOMA_DECODER`), `NativeDecoder` with per-record Python fallback, `ColumnArray`; `Discovery` counters and `group_nodes` for `run discover` |
 | `build.py` | the per-task builder: batch loop, prefilters, `capped_reads`, `candidate_units` (sites), `count_support`, `evaluate_unit`, `OutputDir`; always shared + SNV + INDEL |
+| `discovery.py` | `run discover`: segments of the GAM cut at GAI group starts, native per-node counts (raw or `--normalized` rule) merged in first-appearance order, streamed `node_stats.json`; sequential pure-Python fallback |
 | `run.py` | builder CLI: `discover`, `build` |
 | `orchestrate.py` | whole-genome controller: `prepare` / `run [--resume]` / `task` / `finalize`, `node_costs`, `execute_queue`, `validate_shards`, supplement rounds, `read_config` (package guard), `MemoryRecorder` |
 | `tensor_postprocessing/` | node → chromosome blocks (also `--chromosomes`), per-chromosome merge, truth labels; CLI `merge`/`label` (own [README](tensor_postprocessing/README.md)) |
@@ -158,7 +161,8 @@ target nodes:
   --chr-index TSV                            node ID -> block table (tools.graph_prep chr-index), needed unless all
 
 batching / memory:
-  --batch-nodes 512  --max-node-span 10000  --max-batch-alignments 20000  --gam-cache-mb 1024 (at least 1)
+  --batch-nodes auto  --max-node-span 10000  --max-batch-alignments 20000  --gam-cache-mb 1024 (at least 1)
+  --batch-nodes N            a fixed batch size instead of auto (512/1024/2048 per position), see below
 
 candidate filters:
   --min-mapq 10 (exclusive)  --min-variants 3  --min-allele-bq 10  --max-indel-len 50 (≤50)
@@ -204,11 +208,27 @@ shared/           manifest.json (+ output_layout, variant_outputs, tensors_by_ty
 
 ### `run discover`
 
-`discover --gam G --output DIR [--min-mapq 5] [--node-alt 0.05] [--max-alignments N]` scans the GAM
-once (`--max-alignments` for an exploratory subset) and writes `target_nodes.txt`, `node_stats.json`
-(per node `perfect`, `not_perfect`, `max_read_length`; `prepare --node-stats` reads it) and
-`discovery_report.json`. A node is selected when it has ≥1 imperfect mapping and
-`imperfect / (perfect+imperfect) > --node-alt`. Needed for new samples (e.g. ONT).
+`discover --gam G --output DIR [--min-mapq 5] [--node-alt 0.05] [--processes N] [--index GAI]
+[--normalized --graph-index SQLITE [--max-indel-len 50]] [--max-alignments N]` scans the GAM once and
+writes `target_nodes.txt`, `node_stats.json` (per node `perfect`, `not_perfect`, `max_read_length`;
+`prepare --node-stats` reads it) and `discovery_report.json`. A node is selected when it has ≥1
+imperfect mapping and `imperfect / (perfect+imperfect) > --node-alt`.
+
+* **Rules.** Raw (default): a mapping is imperfect when vg's edits on it are not plain matches — the
+  rule of every earlier run. `--normalized`: each record is decoded and its indels left-normalized
+  exactly as the builder does (same C++ code, `--max-indel-len`), and a mapping is imperfect when its
+  columns contain any non-match after that, so an indel counts on the node the builder will see it
+  on. vg places repeat indels at one end in read orientation, so the raw rule misses the nodes
+  normalization moves indels onto; those came back only through supplement rounds (HG008 PacBio v6:
+  392 k nodes, 6.1 % of the tensors, but 40 % of all builder time at 2.16 s per node against 0.08 s
+  in main tasks). With normalized targets the supplement rounds are nearly empty. A record the
+  normalization cannot decode is counted with the raw rule (`normalization_fallbacks` in the report).
+* **Parallel scan.** With the native module the GAM is cut at group starts taken from its GAI into
+  4 × `--processes` contiguous segments; each worker reads its segment once with pysam and counts in
+  C++ (normalized: node sequences per group from the graph index); the counts are merged in order
+  of first appearance, so `node_stats.json` and `target_nodes.txt` are byte-identical to the
+  sequential scan (tests/test_discovery.py). Without the native module, or for `--max-alignments`
+  (exploratory, raw rule), the sequential pure-Python scan runs.
 
 ### `native compile | check`
 
@@ -237,7 +257,7 @@ none): `python -m indexed_gam_pipeline_v3.tools.binary_requirements indexed_gam_
 
 Section 5. `prepare` takes the builder options of `run build` except the outputs and
 `--debug-rows` (`--gam-cache-mb` defaults to 8192 there), plus `--root`, `--tensors`, `--nodes`,
-`--node-stats`, `--tasks 512`, `--processes 32`, `--supplement-rounds 3`,
+`--node-stats`, `--tasks 512`, `--processes 32`, `--supplement-rounds 0` (3 with raw-rule targets),
 `--supplement-min-records 3` and the finalize options (`--merge-shard-size 32768`, 0 = no merge and
 no labels; `--keep-sources`; `--reference-path`; `--somatic-vcf --somatic-bed --germline-vcf
 --germline-bed --reference-fasta --truth-dir`, all or none). `run [--resume]` executes the tasks,
@@ -355,7 +375,8 @@ records (default 3: a site needs ≥ 3 ALT reads), and builds the rest as extra 
 `supplement.rounds` before they run). There those nodes are ordinary targets: all reads covering
 them are fetched, so counts and AF are complete, and no site can be built twice (a node is in one
 list only). A round's own displaced nodes feed the next one; the rounds stop at an empty list or
-after `--supplement-rounds` (default 3; 0 = off). A round has
+after `--supplement-rounds` (default 0 = off, for targets from `discover --normalized`, which already
+contain these nodes; use 3 with raw-rule targets). A round has
 `min(nodes, supplement.max_tasks)` tasks; `max_tasks` is fixed at prepare as 4 × `processes`, so
 lowering `processes` in a recovery does not move supplement task boundaries. Measured on 98
 example batches: normalized indels landed on 4,110 nodes outside their batch; the supplement built
@@ -441,11 +462,20 @@ Knobs, in order of effect:
 1. `--processes` (orchestrator): total ≈ processes × per-process peak. 32 × ~20 GiB
    exceeded a 420 GiB allocation on HG008; 20–24 is the safe range there.
 2. `--batch-nodes` / `--max-node-span`: fewer target nodes per batch → fewer reads
-   decoded at once (long reads still bring in their full length).
+   decoded at once (long reads still bring in their full length). `auto` (the default)
+   prices the next 512, 1024 and 2048 target nodes by the compressed GAM bytes their fetch
+   reads (from the GAI alone; the node-ID span limit scales with the size) and takes a larger
+   batch only when it reads ≥ 20 % fewer bytes per target node. With long reads neighbouring
+   batches read the same GAM groups: on the HG008 ONT-UL GAM (≈ 100 MiB groups, every 512-node
+   batch reading ~53 of them with no cache hits between batches) 2048-node batches cut the time
+   per node 4.9x (146 → 30 s per 1,000 nodes; 4096: 8x). A batch that exceeds
+   `--max-batch-alignments` is split in halves and retried instead of failing. Tensors and
+   summaries do not depend on the grouping; audit-stream order and batch_timing rows do
+   (each row records its `batch_plan`).
 3. `--gam-cache-mb`: trades re-decoding of BGZF groups for memory; 8 GiB is plenty,
    1 GiB costs little time on PacBio data.
-4. `--max-batch-alignments`: a hard stop, not a limiter — the build fails instead of
-   decoding an unexpectedly huge batch.
+4. `--max-batch-alignments`: a hard stop, not a limiter — with a fixed `--batch-nodes` the
+   build fails instead of decoding an unexpectedly huge batch (with `auto` the batch is split).
 
 ---
 
