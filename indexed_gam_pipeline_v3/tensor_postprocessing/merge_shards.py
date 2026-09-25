@@ -26,11 +26,17 @@ hidden `.merging/` directory first and published only after verification:
   * counts per chromosome add up to outputs.json; shard headers, lengths and file sizes agree;
   * an independent spot check reloads random tensors from the source task shards.
 Sources are deleted only when `keep_sources` is False and every kind verified.
+
+The copy runs in parallel (`workers` processes): every (kind, chromosome) group is one job that
+reads its records' rows with plain sequential file reads and appends them to its shards, and the
+audit streams are copied in slices straight to their offsets in the concatenated file. The
+bytes are those of a sequential copy.
 """
 from collections import Counter
 from concurrent.futures import ProcessPoolExecutor
 from datetime import datetime, timezone
 import hashlib
+import io
 import json
 from pathlib import Path
 import random
@@ -86,13 +92,38 @@ def data_sha256(path):
     return digest.hexdigest()
 
 
+def npy_header(shape):
+    """The .npy header bytes of an int8 C-order array (what np.lib.format.open_memmap writes)."""
+    buffer = io.BytesIO()
+    np.lib.format.write_array_header_1_0(buffer, dict(descr=np.lib.format.dtype_to_descr(np.dtype(np.int8)),
+                                                      fortran_order=False, shape=tuple(shape)))
+    return buffer.getvalue()
+
+
+def read_rows(path, start, stop, shape):
+    """Rows [start, stop) of an int8 .npy shard with one sequential read (no memory map)."""
+    header = np.load(path, mmap_mode="r")  # parses the header only
+    offset, row = header.offset, header.itemsize * int(np.prod(header.shape[1:], dtype=np.int64))
+    if header.dtype != np.int8 or list(header.shape[1:]) != list(shape) or not 0 <= start <= stop <= len(header):
+        raise ValueError(f"{path}: shape/dtype")
+    del header
+    rows = np.empty((stop - start,) + tuple(shape), dtype=np.int8)
+    if not rows.size:
+        return rows
+    with open(path, "rb") as stream:
+        stream.seek(offset + start * row)
+        if stream.readinto(memoryview(rows).cast("B")) != rows.nbytes:
+            raise ValueError(f"Truncated shard: {path}")
+    return rows
+
+
 class GroupWriter:
     """Fills <group>_shard_*.npy files of exactly `shard_size` tensors (last one shorter) and the summary."""
 
     def __init__(self, directory, group, total, shard_size, shape, linear=None):
         self.directory, self.group, self.shape, self.linear = Path(directory), group, tuple(shape), linear
         self.sizes = [shard_size] * (total // shard_size) + ([total % shard_size] if total % shard_size else [])
-        self.shard, self.position, self.array, self.hasher = -1, 0, None, None
+        self.shard, self.position, self.stream, self.hasher = -1, 0, None, None
         self.summary = (self.directory / summary_name(group)).open("w")
         self.summary_hash = hashlib.sha256()
         self.shards = []
@@ -102,16 +133,16 @@ class GroupWriter:
         self.shard += 1
         if self.shard >= len(self.sizes):
             raise ValueError(f"More tensors than planned for {self.group}")
-        self.array = np.lib.format.open_memmap(self.directory / shard_name(self.group, self.shard), mode="w+",
-                                               dtype=np.int8, shape=(self.sizes[self.shard],) + self.shape)
+        self.stream = open(self.directory / shard_name(self.group, self.shard), "wb")
+        self.stream.write(npy_header((self.sizes[self.shard],) + self.shape))
         self.position, self.hasher = 0, hashlib.sha256()
 
     def _close_shard(self):
-        if self.array is not None:
-            if self.position != len(self.array):
+        if self.stream is not None:
+            if self.position != self.sizes[self.shard]:
                 raise ValueError(f"Shard {self.group}/{self.shard} was not filled")
-            self.array.flush()
-            self.array = None
+            self.stream.close()
+            self.stream = None
             self.shards.append(dict(file=shard_name(self.group, self.shard), tensors=self.sizes[self.shard],
                                     sha256=self.hasher.hexdigest()))
 
@@ -119,12 +150,12 @@ class GroupWriter:
         """Append source tensors block[i] with their summary records (dicts) in order."""
         done = 0
         while done < len(block):
-            if self.array is None or self.position == len(self.array):
+            if self.stream is None or self.position == self.sizes[self.shard]:
                 self._next()
-            take = min(len(block) - done, len(self.array) - self.position)
-            chunk = np.ascontiguousarray(block[done:done + take])
-            self.array[self.position:self.position + take] = chunk
-            self.hasher.update(memoryview(chunk).cast("B"))
+            take = min(len(block) - done, self.sizes[self.shard] - self.position)
+            chunk = memoryview(np.ascontiguousarray(block[done:done + take])).cast("B")
+            self.stream.write(chunk)
+            self.hasher.update(chunk)
             for k in range(take):
                 source = records[done + k]
                 self.summary_hash.update((stripped(source) + "\n").encode())
@@ -148,77 +179,136 @@ class GroupWriter:
                     summary_sha256_stripped=self.summary_hash.hexdigest())
 
 
-def plan_kind(sources, index):
+def scan_source(source, reference, first_task, index):
+    """One task directory: complete, manifest agreeing with the reference; the group of every record."""
+    folder = Path(source["path"])
+    manifest = read_json(folder / "manifest.json")
+    if manifest.get("status") != "complete":
+        raise ValueError(f"Incomplete task output: {folder}")
+    mismatch = [k for k in SHARED_KEYS if manifest.get(k) != reference.get(k)]
+    if mismatch:
+        raise ValueError(f"{folder}: manifest differs from task {first_task} in {mismatch}")
+    if manifest["tensors"] != source["tensors"] or manifest["shards"] != source["shards"]:
+        raise ValueError(f"{folder}: manifest counts disagree with outputs.json")
+    with (folder / "variant_summary.ndjson").open("rb") as stream:
+        nodes = np.array([int(NODE.search(line).group(1)) for line in stream], dtype=np.int64)
+    if len(nodes) != source["tensors"]:
+        raise ValueError(f"{folder}: summary has {len(nodes)} records, manifest {source['tensors']}")
+    k = index.lookup(nodes)
+    if (k < 0).any():
+        raise ValueError(f"{folder}: nodes outside every chromosome block, e.g. {nodes[k < 0][:5].tolist()}")
+    return k
+
+
+def plan_kind(sources, index, pool=None):
     """Reference manifest, per-source group arrays and per-group totals; checks manifests agree."""
-    reference, groups, totals = None, [], Counter()
-    for source in sources:
-        folder = Path(source["path"])
-        manifest = read_json(folder / "manifest.json")
-        if manifest.get("status") != "complete":
-            raise ValueError(f"Incomplete task output: {folder}")
-        if reference is None:
-            reference = manifest
-        mismatch = [k for k in SHARED_KEYS if manifest.get(k) != reference.get(k)]
-        if mismatch:
-            raise ValueError(f"{folder}: manifest differs from task {sources[0]['task']} in {mismatch}")
-        if manifest["tensors"] != source["tensors"] or manifest["shards"] != source["shards"]:
-            raise ValueError(f"{folder}: manifest counts disagree with outputs.json")
-        with (folder / "variant_summary.ndjson").open("rb") as stream:
-            nodes = np.array([int(NODE.search(line).group(1)) for line in stream], dtype=np.int64)
-        if len(nodes) != source["tensors"]:
-            raise ValueError(f"{folder}: summary has {len(nodes)} records, manifest {source['tensors']}")
-        k = index.lookup(nodes)
-        if (k < 0).any():
-            raise ValueError(f"{folder}: nodes outside every chromosome block, e.g. {nodes[k < 0][:5].tolist()}")
-        groups.append(k)
-        totals.update(Counter(k.tolist()))
-    if reference is None:
+    if not sources:
         raise ValueError("No task outputs to merge")
+    first = Path(sources[0]["path"])
+    reference = read_json(first / "manifest.json")
+    if reference.get("status") != "complete":
+        raise ValueError(f"Incomplete task output: {first}")
+    jobs = [(s, reference, sources[0]["task"], index) for s in sources]
+    groups = list(pool.map(scan_source, *zip(*jobs), chunksize=max(1, len(jobs) // 64)) if pool
+                  else map(scan_source, *zip(*jobs)))
+    totals = Counter()
+    for k in groups:
+        totals.update(Counter(k.tolist()))
     if reference["dtype"] != "int8":
         raise ValueError("Only int8 tensors are supported")
     return reference, groups, totals
 
 
-def write_kind(kind, sources, index, shard_size, directories, reference_path=None):
-    """Copy every source tensor of one kind into its group's writer; returns per-group results."""
-    reference, groups, totals = plan_kind(sources, index)
-    shape = reference["shape"]
+def write_group(directory, group, total, shard_size, shape, reference_path, parts):
+    """Copy one group's records, `parts` = [(source, sorted record positions of the group)] in task
+    order, into its shards and summary; the group's result."""
     linear = None
     if reference_path is not None:
         from .reference_path import ReferencePath
         linear = ReferencePath(reference_path).linear
-    writers = {k: GroupWriter(directories[index.dataset[k]], index.names[k], n, shard_size, shape, linear)
-               for k, n in sorted(totals.items())}
-    for source, ks in zip(sources, groups):
+    writer = GroupWriter(directory, group, total, shard_size, shape, linear)
+    for source, positions in parts:
         folder = Path(source["path"])
         with (folder / "variant_summary.ndjson").open() as stream:
-            records = [json.loads(line) for line in stream]
-        position = 0
+            lines = stream.readlines()
+        start = 0
         for shard in range(source["shards"]):
-            data = np.load(folder / f"shard_{shard:05d}_data.npy", mmap_mode="r")
-            if data.dtype != np.int8 or list(data.shape[1:]) != shape:
+            path = folder / f"shard_{shard:05d}_data.npy"
+            header = np.load(path, mmap_mode="r")
+            if header.dtype != np.int8 or list(header.shape[1:]) != list(shape):
                 raise ValueError(f"{folder}: shard {shard} shape/dtype")
-            n = len(data)
-            chunk_records, chunk_groups = records[position:position + n], ks[position:position + n]
-            if len(chunk_records) != n or any(r["shard_index"] != shard or r["index_within_shard"] != i
-                                              for i, r in enumerate(chunk_records)):
-                raise ValueError(f"{folder}: summary positions disagree with shard {shard}")
-            cuts = [0] + (np.flatnonzero(np.diff(chunk_groups)) + 1).tolist() + [n]
+            n = len(header)
+            del header
+            lo, hi = np.searchsorted(positions, [start, start + n])
+            local = positions[lo:hi] - start
+            cuts = [0] + (np.flatnonzero(np.diff(local) != 1) + 1).tolist() + [len(local)]
             for a, b in zip(cuts, cuts[1:]):
-                writers[int(chunk_groups[a])].write(data[a:b], chunk_records[a:b], source["task"], shard, a)
-            position += n
-            del data
-        if position != len(records):
+                if a == b:
+                    continue
+                first, last = int(local[a]), int(local[b - 1]) + 1
+                records = [json.loads(line) for line in lines[start + first:start + last]]
+                if len(records) != last - first or any(r["shard_index"] != shard or r["index_within_shard"] != i
+                                                      for i, r in zip(range(first, last), records)):
+                    raise ValueError(f"{folder}: summary positions disagree with shard {shard}")
+                writer.write(read_rows(path, first, last, shape), records, source["task"], shard, first)
+            start += n
+        if start != len(lines):
             raise ValueError(f"{folder}: summary has records beyond the last shard")
-    results = {index.names[k]: dict(w.close(), dataset=index.dataset[k]) for k, w in writers.items()}
-    for stream in AUDIT_STREAMS:
-        with (directories["autosome"] / f"{stream}.ndjson").open("wb") as target:
-            for source in sources:
-                path = Path(source["path"]) / f"{stream}.ndjson"
-                if path.exists():
-                    with path.open("rb") as handle:
-                        shutil.copyfileobj(handle, target, 16 << 20)
-    return reference, results
+    return writer.close()
+
+
+def copy_slice(target, offset, paths):
+    """Write the files `paths`, concatenated, into `target` from byte `offset` on."""
+    with open(target, "r+b") as out:
+        out.seek(offset)
+        for path in paths:
+            with open(path, "rb") as handle:
+                shutil.copyfileobj(handle, out, 16 << 20)
+
+
+def stream_slices(target, paths, parts):
+    """copy_slice jobs that together write the concatenation of `paths` into a presized `target`."""
+    paths = [Path(p) for p in paths if Path(p).exists()]
+    sizes = [p.stat().st_size for p in paths]
+    with open(target, "wb") as out:
+        out.truncate(sum(sizes))
+    jobs, offset, step = [], 0, max(1, -(-sum(sizes) // max(1, parts)))
+    batch, batch_offset, batch_bytes = [], 0, 0
+    for path, size in zip(paths, sizes):
+        if not batch:
+            batch_offset = offset
+        batch.append(path)
+        batch_bytes += size
+        offset += size
+        if batch_bytes >= step:
+            jobs.append((target, batch_offset, batch))
+            batch, batch_bytes = [], 0
+    if batch:
+        jobs.append((target, batch_offset, batch))
+    return jobs
+
+
+def write_kinds(sources_of, index, shard_size, work, reference_path, pool, workers):
+    """Every (kind, group) and every audit-stream slice as one pool job, largest first;
+    {kind: (reference manifest, {group name: result})}."""
+    planned = {kind: plan_kind(sources, index, pool) for kind, sources in sources_of.items()}
+    jobs = []  # (bytes, kind, name, function, arguments)
+    for kind, (reference, groups, totals) in planned.items():
+        shape, row = reference["shape"], int(np.prod(reference["shape"]))
+        for k, total in sorted(totals.items()):
+            parts = [(s, np.flatnonzero(g == k)) for s, g in zip(sources_of[kind], groups) if (g == k).any()]
+            jobs.append((total * row, kind, k, write_group,
+                         (work[kind][index.dataset[k]], index.names[k], total, shard_size, shape, reference_path, parts)))
+        for stream in AUDIT_STREAMS:
+            paths = [Path(s["path"]) / f"{stream}.ndjson" for s in sources_of[kind]]
+            for target, offset, batch in stream_slices(work[kind]["autosome"] / f"{stream}.ndjson", paths, workers):
+                jobs.append((sum(p.stat().st_size for p in batch), kind, None, copy_slice, (target, offset, batch)))
+    futures = [(kind, k, pool.submit(function, *arguments))
+               for _, kind, k, function, arguments in sorted(jobs, key=lambda j: -j[0])]
+    done = {(kind, k): future.result() for kind, k, future in futures}
+    return {kind: (reference, {index.names[k]: dict(done[kind, k], dataset=index.dataset[k])
+                               for k in sorted(totals)})
+            for kind, (reference, _, totals) in planned.items()}
 
 
 def verify_summary(directory, group, result):
@@ -280,12 +370,10 @@ def merge(root, chr_index, shard_size=DEFAULT_SHARD_SIZE, keep_sources=False, wo
                 shutil.rmtree(work[d])  # leftovers of an interrupted merge are ours to discard
             work[d].mkdir(parents=True)
         plans[kind] = (final, work)
-    # 1. Copy (kinds in parallel: they read and write disjoint files).
-    with ProcessPoolExecutor(max_workers=max(1, min(workers, len(sources_of)))) as pool:
-        futures = {kind: pool.submit(write_kind, kind, sources_of[kind], index, shard_size, plans[kind][1],
-                                     reference_path)
-                   for kind in sources_of}
-        written = {kind: f.result() for kind, f in futures.items()}
+    # 1. Copy: every (kind, chromosome) group and every audit-stream slice is one parallel job.
+    with ProcessPoolExecutor(max_workers=max(1, workers)) as pool:
+        written = write_kinds(sources_of, index, shard_size, {kind: plans[kind][1] for kind in sources_of},
+                              reference_path, pool, workers)
     copy_seconds = time.perf_counter() - started
     # 2. Verify every shard from disk, every summary, the totals, and a spot check.
     t = time.perf_counter()

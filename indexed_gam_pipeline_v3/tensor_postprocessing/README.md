@@ -190,7 +190,12 @@ f85306df0ec60ab3d36ad44a93cc471044428b35bd28dbaf4709212bd355d9bc  truth_labels.p
 
 What changed in the copy:
 
-* `merge_shards.py`, `truth_labels.py`: import lines only (package-relative).
+* `merge_shards.py`: import lines, and since 2026-09-25 the parallel copy: one job per (kind,
+  chromosome) group, rows read and shards written with plain sequential file I/O instead of memory
+  maps, audit streams copied in slices to their offsets. Same bytes (goldens, a real 20-task merge);
+  HG008 Illumina chr22 tasks: copy 227 → 101 s with 8 workers. The resync diff below therefore shows
+  these changes for `merge_shards.py`.
+* `truth_labels.py`: import lines only (package-relative).
 * `chr_index.py`, `reference_path.py`: lines are only removed, apart from one narrowed
   `from ..common import read_json` line each. The graph-prep code moved verbatim to
   `tools/graph_prep.py` (reference_path `SEPARATORS`, `AWK`, `parse_walk`, `scan`, `check`;
