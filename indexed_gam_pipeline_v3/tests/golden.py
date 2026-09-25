@@ -485,7 +485,7 @@ def run_job(package, case, decoder, work, hashseed=None):
     python = sys.executable
     if case == "O1":
         tree = directory / "run"
-        prepare = mini_world(inputs, tree)
+        prepare = mini_world(inputs, tree) + ["--max-batch-alignments", "20000"]  # v2's default (v3's is 200000)
         freeze_times(inputs)
         env.update(SLURM_CPUS_PER_TASK="2", **({"PANSOMA_DECODER": "python"} if decoder == "python" else {}))
         execute([python, "-m", f"{package}.orchestrate", "prepare", *prepare], REPO, env)
@@ -500,6 +500,8 @@ def run_job(package, case, decoder, work, hashseed=None):
                 arguments = arguments + DEFAULT_AF
             if "--batch-nodes" not in arguments:  # v2's default, which the goldens were recorded with
                 arguments = arguments + ["--batch-nodes", "512"]
+            if "--max-batch-alignments" not in arguments:  # v2's default (v3's is 200000)
+                arguments = arguments + ["--max-batch-alignments", "20000"]
             out = tree / name
             execute([python, "-m", f"{package}.run", "build", *arguments, "--output", str(out / "shared"),
                      "--snv-output", str(out / "SNV"), "--indel-output", str(out / "INDEL"), "--decoder", decoder],

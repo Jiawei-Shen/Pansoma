@@ -169,7 +169,7 @@ def build_args(**overrides):
                 rows=200, width=101, debug_rows=False, gam_cache_mb=1, batch_nodes=2, max_node_span=100,
                 max_batch_alignments=1000, shard_size=2, min_mapq=10, min_af=0.05,
                 min_variants=1, min_allele_bq=10.0, max_indel_len=50,
-                max_node_reads=800, early_af_filter=True, decoder="auto")
+                max_node_reads=800, early_af_filter=True, decoder="auto", downsample_reads=10000, downsample_nodes=None)
     args.update(overrides)
     return argparse.Namespace(**args)
 

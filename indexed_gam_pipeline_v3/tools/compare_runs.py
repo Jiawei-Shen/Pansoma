@@ -34,9 +34,11 @@ import sys
 
 IGNORED_DIRS = ("source", "logs", "incomplete")
 IGNORED_NAMES = ("memory.ndjson", "queue_status*.json", "finalize_report.json", "run.sh", "*.tmp")
-TIMING_ROW = ("elapsed_seconds", "cumulative_stage_seconds")
+# Performance counters (GAM query and group cache statistics) are masked like timings: they describe
+# how the reader got the records, not the outputs.
+TIMING_ROW = ("elapsed_seconds", "cumulative_stage_seconds", "gam_query")
 MANIFEST_MASKS = ("timing", "graph_index_performance", "decoder", "created", "arguments.decoder",
-                  "sources.outputs_json_sha256")
+                  "sources.outputs_json_sha256", "gam_group_cache")
 OUTPUTS_MASKS = ("merge.created", "merge.copy_seconds", "merge.verify_seconds")
 STATUS_KEYS = ("status", "tasks", "processes", "tensors", "tensors_by_type", "merged", "merge_layout", "labeled")
 CONFIG_KEYS = ("tensors", "chromosome_selection", "tasks", "processes", "schedule", "parts", "supplement",

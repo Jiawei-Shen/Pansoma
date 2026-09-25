@@ -116,7 +116,7 @@ Key invariants:
 |---|---|
 | `common.py` | `write_json` (atomic, `indent=2` plus newline), `read_json`, `stamp`, `sha256_file`, `new_output`, `load_nodes`, `batches` |
 | `vg_pb2.py` | generated protobuf bindings for `vg.proto` (do not edit or regenerate; its deterministic serialization defines record digests and the read cap) |
-| `gam_reader.py` | protobuf stream framing (incl. the giraffe `PARAMS_JSON` / foreign-group skip), `scan_gam`, `IndexedGam`: GAI v1 bins, merged virtual-offset runs, BGZF group seek, bounded LRU group cache, `fetch` (file order, each record once) |
+| `gam_reader.py` | protobuf stream framing (incl. the giraffe `PARAMS_JSON` / foreign-group skip), `scan_gam`, `IndexedGam`: GAI v1 bins (tested all at once as arrays), merged virtual-offset runs, BGZF group seek, bounded LRU group cache without records under `--min-mapq`, `fetch` (file order, each record once; `sample=N`: the N records with the smallest `sample_key`) |
 | `graph_index.py` | read-only `GraphIndex` over the graph SQLite (sequence + distinct path count per node) |
 | `candidates.py` | the data path from GAM record to site tensor: `decode_alignment` (+ `left_align_indels`, `indel_runs`, `indel_observations`: the part `fastdecode.cpp` ports), `NodeReads`/`VisitView` support counting (with the scan fallback), `alt_support_bounds`, `exact_coverage`, `SiteLayout`, `make_site_tensor`, format constants |
 | `native.py`, `fastdecode.cpp` | optional C++ decoder: `compile`/`check`, load-time SHA + 300-record self-test, `select_decoder` (`--decoder`, `PANSOMA_DECODER`), `NativeDecoder` with per-record Python fallback, `ColumnArray`; `Discovery` counters and `group_nodes` for `run discover` |
@@ -161,8 +161,11 @@ target nodes:
   --chr-index TSV                            node ID -> block table (tools.graph_prep chr-index), needed unless all
 
 batching / memory:
-  --batch-nodes auto  --max-node-span 10000  --max-batch-alignments 20000  --gam-cache-mb 1024 (at least 1)
+  --batch-nodes auto  --max-node-span 10000  --max-batch-alignments 200000  --gam-cache-mb 1024 (at least 1)
   --batch-nodes N            a fixed batch size instead of auto (512/1024/2048 per position), see below
+  --downsample-nodes TSV     deep nodes (first column; orchestrate prepare writes downsample_nodes.tsv)
+  --downsample-reads 10000   a deep node, or a single node over --max-batch-alignments, is built alone
+                             from this many MAPQ-passing records (smallest hash of the record bytes)
 
 candidate filters:
   --min-mapq 10 (exclusive)  --min-variants 3  --min-allele-bq 10  --max-indel-len 50 (≤50)
@@ -203,8 +206,24 @@ SNV/ and INDEL/   shard_XXXXX_data.npy (n, 8, rows, width) int8, variant_summary
                   unsupported_events.ndjson, manifest.json
 shared/           manifest.json (+ output_layout, variant_outputs, tensors_by_type), every audit record
                   (filtered_candidates / unsupported_events), batch_timing.ndjson, target_nodes.txt,
-                  displaced_nodes.tsv (no shards)
+                  displaced_nodes.tsv, downsampled_nodes.tsv (only if a node was sampled; no shards)
 ```
+
+**Deep nodes.** A node with far more reads than the rest of the sample (collapsed satellites, rDNA:
+on HG008 Illumina WGS the median target has 220 MAPQ>5 mappings, 683 have more than 10,000 and one
+5.4 million) is built alone in its batch from a fixed sample: the `--downsample-reads` MAPQ-passing
+records with the smallest BLAKE2b key of their bytes, so the same records whatever the batching or
+process count, uniform with respect to the alleles they carry (AF is unbiased), read once. The
+node's sites get `downsampled_from` (the records sampled from) in their summary; the shared
+directory lists every sampled node in `downsampled_nodes.tsv` (node, records, kept, reason) and the
+manifests record `downsample` (the table and its SHA-256, the sample size). Deep nodes come from
+`--downsample-nodes` (`orchestrate prepare --node-stats` writes it: discovery `perfect +
+not_perfect` > `--downsample-reads`); a single node that alone exceeds `--max-batch-alignments`
+is sampled the same way (reason `max_batch_alignments`), so one node never fails a run. Every
+other node is built from all its records. `orchestrate run` gathers the tasks' tables into
+`<root>/downsampled_nodes.tsv` (with a `task` column; `outputs.json` counts them) before the merge,
+which may delete the task directories. PacBio and ONT HG008 have no node over 10,000 (maxima
+7,023 and 3,181).
 
 ### `run discover`
 
@@ -331,7 +350,8 @@ scripts/visualize_tensor.py SHARD -i 0 -o figure.png`.
 3. applies `--chromosomes` to the node list (`<root>/nodes_selected.txt`), splits it into `--tasks`
    contiguous, near-equal node lists (`parts/nodes_NNNN.txt`) and, with `--node-stats`, records
    each task's `predicted_cost` (Σ discovery `not_perfect` over its nodes; reading the 6 GB HG008
-   file takes ~1 min and ~7 GB);
+   file takes ~1 min and ~7 GB) and writes `downsample_nodes.tsv` (node, mappings) of the targets
+   with more than `--downsample-reads` discovery mappings (section 4 "Deep nodes");
 4. fingerprints every input (GAM, GAI, graph index, node list, chr index, reference path, truth
    files) and writes `config.json` and `run.sh` (`cd <root>/source && exec <python> -m
    indexed_gam_pipeline_v3.orchestrate run --root <root> "$@"`). It prints a summary including
@@ -342,7 +362,9 @@ scripts/visualize_tensor.py SHARD -i 0 -o figure.png`.
 (`max_rounds`, `min_records`, `max_tasks`, `rounds`), `builder` (every builder option, passed
 explicitly to each task, so a run never depends on the CLI defaults of the code that executes it),
 `native_decoder` (`available`, `reason`; `available` null under `--decoder python`),
-`variant_outputs` ({SNV: AF, INDEL: AF}) and `postprocess`.
+`downsample` (`reads`, `nodes`, `rule`, and with deep nodes `mappings`, `nodes_file`, `sha256`;
+`verify` checks the table like the partitions), `variant_outputs` ({SNV: AF, INDEL: AF}) and
+`postprocess`.
 
 **run** (`sbatch <root>/run.sh`, or `bash <root>/run.sh [--resume]`):
 1. refuses a merged root, fewer allocated CPUs (`SLURM_CPUS_PER_TASK`) than `processes`, and any
@@ -476,8 +498,12 @@ Knobs, in order of effect:
    (each row records its `batch_plan`).
 3. `--gam-cache-mb`: trades re-decoding of BGZF groups for memory; 8 GiB is plenty,
    1 GiB costs little time on PacBio data.
-4. `--max-batch-alignments`: a hard stop, not a limiter — with a fixed `--batch-nodes` the
-   build fails instead of decoding an unexpectedly huge batch (with `auto` the batch is split).
+4. `--max-batch-alignments` (200,000 MAPQ-passing records): a hard stop, not a limiter — with a
+   fixed `--batch-nodes` a multi-node batch over it fails, with `auto` it is split; a single node
+   over it is built from a sample (`--downsample-reads`). It counts records, so it binds short
+   reads: HG008 Illumina 1024-node batches hold 25–92 k records at 2.6–6.4 GiB, while no PacBio
+   or ONT batch ever held more than 7,359 / 3,352 (v2's 20,000 split every Illumina batch and
+   failed every fixed size, 256 included).
 
 ---
 
@@ -668,6 +694,10 @@ statistics, stage timings and counters (`tensors`, `shards`, `filtered_candidate
   manifests `complete`, shared totals, shared `complete` — so a `complete` manifest never has an
   unclosed audit stream (v2 closed the streams after the saves; the bytes are the same).
 * The only manifest change is volatile provenance: `decoder` no longer has a `build` entry.
+* `compare_runs` masks the GAM query and group-cache counters (`batch_timing` `gam_query`, manifest
+  `gam_group_cache`) like timings: they say how the reader found the records, not what was built.
+  The goldens were recorded again from the unchanged v2 (`d0d25d6`) with these masks when v3's
+  reader stopped re-parsing low-MAPQ records (2026-09-25); every other fingerprint was unchanged.
 
 ---
 
@@ -691,8 +721,10 @@ another package's) fails the suite instead of silently decoding in Python. With 
 the only skip of the first pass is the native graph-index builder test, which needs the two
 environment variables of the third line.
 
-122 tests in 12 files cover: GAI reading, cache/scan equivalence (limits 1, 2048 and 64 MiB),
-refusal of cache 0 and GAI v0/v99; decoding, N filter, limits, unsupported events, left-normalization
+142 tests in 13 files cover: GAI reading, cache/scan equivalence (limits 1, 2048 and 64 MiB),
+refusal of cache 0 and GAI v0/v99, bin arrays against the per-bin scan, the MAPQ-filtered cache,
+the sampled fetch; deep-node builds (alone, fixed sample, other nodes unchanged, single-node limit)
+and the prepare table; decoding, N filter, limits, unsupported events, left-normalization
 (strand symmetry, idempotence, cross-node insertions and deletions); support rules, windows, blocks
 and sampling, similarity order, stripes/strand, storage encodings; `NodeReads`/`VisitView` against
 per-record classification on random records at widths 1–101, the forced scan fallback and the
@@ -733,8 +765,10 @@ $PY -m indexed_gam_pipeline_v3.tests.golden check [--decoder python|native] [--c
 | O1 | mini world | 3 tasks, 2 processes, node stats, autosome selection, supplement rounds, merge, labels |
 
 The goldens are v2's outputs and are never re-recorded from v3. When a deliberate change to the
-outputs is made in v2 and ported, record them again from the changed v2 (section 10, "Working next
-to v2"). A change of a fixture generator fails the input-hash check with the same hint.
+outputs is made in v2 and ported, or `compare_runs` masks change, record them again from v2
+(section 10, "Working next to v2"). A change of a fixture generator fails the input-hash check with
+the same hint. The harness pins v2's defaults where a case leaves them out (`--batch-nodes 512`,
+`--max-batch-alignments 20000`).
 
 ---
 
@@ -776,6 +810,11 @@ portability report (`tools.binary_requirements`). Test-only wrappers moved to `t
 * The queue ledger is written on task start/end instead of every 0.5 s poll.
 * `native compile` prints its build info instead of writing `_fastdecode.build.json`.
 * Every audit stream is closed before a manifest says `complete` (same bytes).
+* Deep nodes are built from a fixed sample instead of failing the run (section 4); `prepare`
+  lists them from `--node-stats`; `--max-batch-alignments` defaults to 200,000 (v2: 20,000).
+* The GAM reader leaves records with MAPQ ≤ `--min-mapq` out of its group index (never parsed
+  twice, not cached), tests every GAI bin at once (HG008 Illumina GAI: 2.4 M bins, 0.45 s → ms per
+  query) and intersects a group's nodes with the batch from the smaller side. Same records.
 
 **Working next to v2.**
 * Roots prepared by v2 (the v5 and v6 runs, e2e_v2): operate them with v2's checkout

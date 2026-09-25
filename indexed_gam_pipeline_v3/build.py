@@ -26,11 +26,17 @@ to the INDEL directory, each with its own AF threshold (--snv-min-af, --indel-mi
         unsupported_events.ndjson   event_type is SNP, INS or DEL)
         batch_timing.ndjson         per-batch stage seconds and counters
         target_nodes.txt            the requested node list after --chromosomes
+        downsampled_nodes.tsv       node, records, kept, reason: nodes built from a sample (only if any)
         displaced_nodes.tsv         node, records: nodes outside the batch that left-normalization moved
                                     an indel of a target node onto (orchestrate.py builds them in
                                     supplement rounds; see the README "supplement run")
 
 Every stream is closed before any manifest is saved with status "complete".
+
+Deep nodes (--downsample-nodes, from discovery's node_stats; or a single node over
+--max-batch-alignments) are built alone in their batch from the --downsample-reads MAPQ-passing
+records with the smallest sample key (a hash of the record bytes): a fixed sample, whatever the
+batching, whose sites carry `downsampled_from` (the records they were drawn from).
 
 Records are decoded by the native decoder when it is built and passes its checks
 (--decoder auto, the default; native.py), else by candidates.decode_alignment; the
@@ -47,7 +53,7 @@ import numpy as np
 from .candidates import (FORMAT_VERSION, SCHEMA_VERSION, STORAGE_VERSION,
     ROW_SELECTION_VERSION, WINDOW_ENCODING_VERSION, ROW_ORDER, CHANNELS, BASES, OPS, STRAND, COUNT_LINEAR_MAX,
     NodeReads, decode_alignment, alt_support_bounds, exact_coverage, make_site_tensor)
-from .common import batches, load_nodes, new_output, write_json
+from .common import batches, load_nodes, new_output, sha256_file, write_json
 from .tensor_postprocessing.chr_index import select_nodes
 from .gam_reader import IndexedGam
 from .graph_index import GraphIndex
@@ -118,9 +124,43 @@ def adaptive_batches(nodes, reader, max_span):
         i = best[0]
 
 
+def planned_batches(nodes, reader, args, deep):
+    """(batch, plan) in node order: every deep node alone (plan downsample=True), the runs of other
+    nodes between them batched by --batch-nodes (auto: adaptive_batches; plan None for a fixed size)."""
+    run = []
+
+    def flush():
+        if run:
+            yield from (adaptive_batches(run, reader, args.max_node_span) if args.batch_nodes == "auto"
+                        else ((b, None) for b in batches(run, args.batch_nodes, args.max_node_span)))
+            run.clear()
+
+    for node in nodes:
+        if node in deep:
+            yield from flush()
+            yield [node], dict(downsample=True, reason="node_stats")
+        else:
+            run.append(node)
+    yield from flush()
+
+
+def load_deep_nodes(path):
+    """Node IDs of a --downsample-nodes file (first column; '#' lines and a header are skipped)."""
+    if path is None:
+        return set()
+    deep = set()
+    for line in Path(path).read_text().splitlines():
+        field = line.split("\t", 1)[0].strip()
+        if field and field.isdigit():
+            deep.add(int(field))
+    return deep
+
+
 def validate_args(args):
     if args.batch_nodes != "auto" and not (isinstance(args.batch_nodes, int) and args.batch_nodes >= 1):
         raise ValueError("--batch-nodes must be a positive integer or auto")
+    if args.downsample_reads < 1:
+        raise ValueError("--downsample-reads must be positive")
     if not 1 <= args.max_indel_len <= 50:
         raise ValueError("--max-indel-len must be in [1, 50]")
     if args.width < args.max_indel_len:
@@ -279,7 +319,7 @@ def build(args):
     nodes = nodes.tolist()
     if not nodes:
         raise ValueError(f"No target nodes left after --chromosomes {args.chromosomes}")
-    reader = IndexedGam(args.gam, args.index, cache_bytes=args.gam_cache_mb * 1024 * 1024)
+    reader = IndexedGam(args.gam, args.index, cache_bytes=args.gam_cache_mb * 1024 * 1024, min_mapq=args.min_mapq)
     parameters = recorded(args, PARAMETERS)
     typed = {}
     with GraphIndex(args.graph_index) as graph:
@@ -305,6 +345,9 @@ def build(args):
             read_cap=dict(max_node_reads=args.max_node_reads, rule=READ_CAP_RULE), decoder=decoder_info,
             nodes=len(nodes), chromosome_selection=selection, shards=0, tensors=0, filtered_candidates=0, early_rejected=0,
             early_af_rejected=0, unsupported_events=0, debug_rows=args.debug_rows, timing={})
+        if args.downsample_nodes:  # recorded only when used, so manifests of other runs are unchanged
+            manifest["downsample"] = dict(nodes_file=str(Path(args.downsample_nodes).resolve()),
+                                          sha256=sha256_file(args.downsample_nodes), reads=args.downsample_reads)
         shared = OutputDir(args.output, manifest, args.shard_size, tensors=False)
         (shared.path / "target_nodes.txt").write_text("".join(f"{n}\n" for n in nodes))
         try:
@@ -343,9 +386,9 @@ def _build_batches(args, nodes, reader, graph, shared, typed, started, decode):
     timings = defaultdict(float)
     displaced = Counter()  # node outside a batch -> records whose target-node indel normalization moved there
     auto = args.batch_nodes == "auto"
-    planned = (adaptive_batches(nodes, reader, args.max_node_span) if auto
-              else ((b, None) for b in batches(nodes, args.batch_nodes, args.max_node_span)))
-    queue = deque()  # auto: halves of a batch that exceeded --max-batch-alignments
+    planned = planned_batches(nodes, reader, args, load_deep_nodes(args.downsample_nodes))
+    downsampled = {}  # node -> (records sampled from, records kept, reason)
+    queue = deque()  # auto: halves of a batch that exceeded --max-batch-alignments; a single node to sample
     bi = 0
     while True:
         if queue:
@@ -361,22 +404,28 @@ def _build_batches(args, nodes, reader, graph, shared, typed, started, decode):
         metrics = {}
         alignments = []
         context_nodes = set(wanted)
+        sample = args.downsample_reads if plan is not None and plan.get("downsample") else None
         try:
-            for alignment in reader.fetch(wanted, metrics):
+            for alignment in reader.fetch(wanted, metrics, sample=sample):
                 if alignment.mapping_quality <= args.min_mapq:
                     continue
                 alignments.append(alignment)
                 context_nodes.update(m.position.node_id for m in alignment.path.mapping)
-                if len(alignments) > args.max_batch_alignments:
+                if sample is None and len(alignments) > args.max_batch_alignments:  # a sample has its own bound
                     raise BatchTooLarge("Batch alignment limit exceeded; reduce --batch-nodes or raise "
                                         "--max-batch-alignments")
         except BatchTooLarge:
+            alignments.clear()
+            if len(batch) == 1 and sample is None:  # one node never fails the run: build it from a sample
+                queue.appendleft((batch, dict(plan or {}, downsample=True, reason="max_batch_alignments")))
+                continue
             if not auto or len(batch) < 2:
                 raise
             half = len(batch) // 2  # auto: retry as two halves, in order
             queue.extendleft([(batch[half:], dict(plan, split=True)), (batch[:half], dict(plan, split=True))])
-            alignments.clear()
             continue
+        if sample is not None and metrics["sampled_from"] > sample:
+            downsampled[batch[0]] = (metrics["sampled_from"], len(alignments), plan["reason"])
         bi += 1
         timings["gam_fetch_seconds"] += time.perf_counter() - batch_started
         # 2. Sequences and path counts for the targets and all context nodes.
@@ -440,6 +489,8 @@ def _build_batches(args, nodes, reader, graph, shared, typed, started, decode):
                 record("filtered", rejection)
             if tensor is None:
                 continue
+            if node in downsampled:
+                meta["downsampled_from"] = downsampled[node][0]
             sinks[KIND[meta["event_type"]]].add(tensor, meta)
         timings["candidate_tensors_and_shard_writes_seconds"] += time.perf_counter() - t
         shared.save(timing=dict(timings))
@@ -460,6 +511,11 @@ def _build_batches(args, nodes, reader, graph, shared, typed, started, decode):
         alignments.clear()
     (shared.path / "displaced_nodes.tsv").write_text("".join(f"{n}\t{c}\n" for n, c in sorted(displaced.items())))
     shared.manifest["displaced_nodes"] = len(displaced)
+    if downsampled:
+        (shared.path / "downsampled_nodes.tsv").write_text("node\trecords\tkept\treason\n" + "".join(
+            f"{n}\t{a}\t{k}\t{r}\n" for n, (a, k, r) in sorted(downsampled.items())))
+        shared.manifest["downsampled_nodes"] = len(downsampled)
+        shared.manifest.setdefault("downsample", dict(reads=args.downsample_reads))
     t = time.perf_counter()
     for sink in sinks.values():
         sink.flush()

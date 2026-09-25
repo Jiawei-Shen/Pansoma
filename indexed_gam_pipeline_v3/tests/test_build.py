@@ -245,3 +245,81 @@ class AdaptiveBatchTest(unittest.TestCase):
         self.assertEqual(set(sizes(False)[:-1]), {512})
         self.assertEqual(set(sizes(True)[:-1]), {2048})
         self.assertEqual(sum(sizes(True)), 5000)
+
+
+class DownsampleTest(unittest.TestCase):
+    """Deep nodes are built alone from a fixed sample; every other node's tensors are unchanged."""
+
+    def build_af(self, root, name, deep=(), **options):
+        inputs = root / (name + "_inputs")
+        inputs.mkdir()
+        gam, _ = af_gam(inputs)
+        graph = graph_fixture(inputs / "graph.sqlite", [(n, "AAAAAA", 331) for n in (10, 20, 30, 40, 50)])
+        nodes = inputs / "nodes.txt"
+        nodes.write_text("10\n20\n30\n40\n50\n")
+        if deep:
+            (inputs / "deep.tsv").write_text("node\tmappings\n" + "".join(f"{n}\t50\n" for n in deep))
+        options = dict(dict(batch_nodes=2, min_variants=1, snv_min_af=.01, indel_min_af=.01), **options)
+        args = build_args(gam=str(gam), nodes=str(nodes), graph_index=str(graph), shard_size=1,
+                          output=str(root / name / "shared"), snv_output=str(root / name / "SNV"),
+                          indel_output=str(root / name / "INDEL"),
+                          downsample_nodes=str(inputs / "deep.tsv") if deep else None, **options)
+        quiet_build(args)
+        return root / name
+
+    @staticmethod
+    def sites(folder):
+        """{site_id: (summary without shard fields, tensor bytes)} of both typed outputs."""
+        found = {}
+        for kind in ("SNV", "INDEL"):
+            for line in (folder / kind / "variant_summary.ndjson").read_text().splitlines():
+                meta = json.loads(line)
+                shard = np.load(folder / kind / f"shard_{meta['shard_index']:05d}_data.npy")
+                tensor = shard[meta["index_within_shard"]].tobytes()
+                found[meta["site_id"]] = ({k: v for k, v in meta.items() if k not in ("shard_index", "index_within_shard")},
+                                          tensor)
+        return found
+
+    def test_a_deep_node_within_the_sample_size_is_built_alone_and_unchanged(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            plain = self.sites(self.build_af(root, "plain"))
+            out = self.build_af(root, "deep", deep=(30,), downsample_reads=100)
+            self.assertEqual(self.sites(out), plain)
+            timing = [json.loads(l) for l in (out / "shared/batch_timing.ndjson").read_text().splitlines()]
+            self.assertEqual([(t["first_node"], t["target_nodes"]) for t in timing], [(10, 2), (30, 1), (40, 2)])
+            self.assertEqual(timing[1]["batch_plan"], dict(downsample=True, reason="node_stats"))
+            self.assertFalse((out / "shared/downsampled_nodes.tsv").exists())
+            manifest = json.loads((out / "shared/manifest.json").read_text())
+            self.assertEqual(manifest["downsample"]["reads"], 100)
+            self.assertNotIn("downsampled_nodes", manifest)
+
+    def test_a_deep_node_is_built_from_a_fixed_sample(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            plain = self.sites(self.build_af(root, "plain"))
+            fixed = self.build_af(root, "deep", deep=(30,), downsample_reads=40)
+            auto = self.build_af(root, "auto", deep=(30,), downsample_reads=40, batch_nodes="auto")
+            sites = self.sites(fixed)
+            self.assertEqual(sites, self.sites(auto))  # the sample does not depend on the batching
+            deep = {k: v for k, v in sites.items() if v[0]["node_id"] == 30}
+            self.assertTrue(deep)
+            for meta, _ in deep.values():
+                self.assertEqual(meta["downsampled_from"], 50)
+                self.assertTrue(all(a["coverage"] <= 40 for a in meta["alleles"]))
+            self.assertEqual({k: v for k, v in sites.items() if k not in deep},
+                             {k: v for k, v in plain.items() if v[0]["node_id"] != 30})
+            self.assertEqual((fixed / "shared/downsampled_nodes.tsv").read_text(),
+                             "node\trecords\tkept\treason\n30\t50\t40\tnode_stats\n")
+            self.assertEqual(json.loads((fixed / "shared/manifest.json").read_text())["downsampled_nodes"], 1)
+
+    def test_a_single_node_over_the_batch_limit_is_sampled_instead_of_failing(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            for batch_nodes in (1, "auto"):
+                out = self.build_af(root, f"limit{batch_nodes}", batch_nodes=batch_nodes, max_batch_alignments=45,
+                                    downsample_reads=30)
+                rows = (out / "shared/downsampled_nodes.tsv").read_text().splitlines()
+                self.assertEqual(rows[1:], [f"{n}\t50\t30\tmax_batch_alignments" for n in (10, 20, 30, 40, 50)])
+            with self.assertRaisesRegex(ValueError, "Batch alignment limit"):  # a fixed multi-node batch still fails
+                self.build_af(root, "strict", batch_nodes=2, max_batch_alignments=45)
