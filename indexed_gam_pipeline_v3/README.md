@@ -812,6 +812,10 @@ portability report (`tools.binary_requirements`). Test-only wrappers moved to `t
 * Every audit stream is closed before a manifest says `complete` (same bytes).
 * Deep nodes are built from a fixed sample instead of failing the run (section 4); `prepare`
   lists them from `--node-stats`; `--max-batch-alignments` defaults to 200,000 (v2: 20,000).
+* `tensor_postprocessing.merge` copies in parallel: every (kind, chromosome) group and every slice of
+  the audit streams is one job of `workers` processes, with sequential file reads and writes
+  instead of memory maps. Same bytes; the single-process copy of HG008 Illumina (833 GB of
+  tensors plus 258 GB of audit streams) waited on one I/O stream at ~150 MB/s.
 * Row similarity order falls back to a deterministic UPGMA (`candidates.average_linkage`, equal
   to scipy's tree on tie-free distances) when scipy's `linkage(method="average")` returns an
   invalid tree: scipy 1.16.1 merged a cluster with itself on a 105-row block of tied distances

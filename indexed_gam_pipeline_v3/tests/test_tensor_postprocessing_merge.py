@@ -8,8 +8,8 @@ import unittest
 import numpy as np
 
 from ..tensor_postprocessing.chr_index import FIELDS, ChrIndex
-from ..tensor_postprocessing.merge_shards import (LAYOUT, merge, verify_shard,
-                                                              verify_summary)
+from ..tensor_postprocessing.merge_shards import (LAYOUT, merge, npy_header, read_rows, stream_slices,
+                                                   verify_shard, verify_summary)
 
 SHAPE = [8, 4, 5]
 BLOCKS = [dict(chrom="chr1", first_node=1, last_node=100, nodes=100, dataset="autosome", source="t"),
@@ -193,3 +193,54 @@ class MergeTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ParallelCopyTest(unittest.TestCase):
+    """The parallel copy writes the bytes of the sequential one."""
+
+    def test_npy_header_and_row_reads_match_numpy(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            for shape in ((1, 8, 4, 5), (32768, 8, 200, 101), (7, 3)):
+                path = Path(tmp) / "m.npy"
+                np.lib.format.open_memmap(path, mode="w+", dtype=np.int8, shape=shape).flush()
+                header = npy_header(shape)
+                self.assertEqual(path.read_bytes()[:len(header)], header)
+                self.assertEqual(path.stat().st_size, len(header) + int(np.prod(shape)))
+            data = np.random.default_rng(2).integers(-1, 127, size=(9, 8, 4, 5), dtype=np.int8)
+            np.save(Path(tmp) / "s.npy", data)
+            for a, b in ((0, 9), (2, 5), (8, 9), (4, 4)):
+                np.testing.assert_array_equal(read_rows(Path(tmp) / "s.npy", a, b, [8, 4, 5]), data[a:b])
+            with self.assertRaisesRegex(ValueError, "shape/dtype"):
+                read_rows(Path(tmp) / "s.npy", 0, 10, [8, 4, 5])
+
+    def test_stream_slices_tile_the_concatenation(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            paths = []
+            for i, size in enumerate((5, 0, 17, 3, 40, 1)):
+                path = Path(tmp) / f"s{i}.ndjson"
+                path.write_bytes(bytes([65 + i]) * size)
+                paths.append(path)
+            paths.insert(3, Path(tmp) / "missing.ndjson")
+            for parts in (1, 2, 4, 50):
+                target = Path(tmp) / f"out{parts}.ndjson"
+                jobs = stream_slices(target, paths, parts)
+                self.assertLessEqual(len(jobs), max(1, parts))
+                for _, offset, batch in jobs:
+                    with open(target, "r+b") as out:
+                        out.seek(offset)
+                        for p in batch:
+                            out.write(p.read_bytes())
+                self.assertEqual(target.read_bytes(), b"".join(p.read_bytes() for p in paths if p.exists()))
+
+    def test_worker_count_does_not_change_the_bytes(self):
+        trees = {}
+        for workers in (1, 4):
+            with tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                tensors, _ = fake_run(root)
+                merge(root, write_chr_index(root / "chr.tsv"), shard_size=4, workers=workers, spots=50,
+                      keep_sources=True)
+                trees[workers] = {str(p.relative_to(root)): p.read_bytes() for p in sorted(root.rglob("*"))
+                                  if p.is_file() and "task_" not in str(p) and p.suffix in (".npy", ".ndjson")}
+        self.assertTrue(any(k.endswith("_data.npy") for k in trees[1]))
+        self.assertEqual(trees[1], trees[4])
