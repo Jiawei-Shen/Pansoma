@@ -13,7 +13,10 @@ task completes whenever it would complete in pure Python. The output is identica
 
 Decoded columns stay in the C++ struct array (ColumnArray, ~24 bytes per column instead of a
 ~120-byte Column object); candidates.Column objects are made only where downstream code reads
-them (the visit windows of candidate nodes), in cached 128-column blocks.
+them (the visit windows of candidate nodes), per block of 128 consecutive columns. Each read keeps
+only its CACHED_BLOCKS most recently used blocks: sites are visited in node order, so older windows
+are not read again, and an unbounded cache would hold (reads x batch span) Column objects -- on
+HG008 ONT-UL, 174 of 179 million columns (41 GiB) in one 2048-node batch; bounded, 12.6 GiB.
 
 Build once per checkout and Python version, before `orchestrate prepare` (which freezes the
 package, compiled module included, and reports whether the tasks will use it):
@@ -28,6 +31,7 @@ versions and CPU extensions a compiled module requires are reported by
 `python -m <package>.tools.binary_requirements <module>`.
 """
 import argparse
+from collections import OrderedDict
 import hashlib
 import importlib
 import importlib.util
@@ -49,6 +53,7 @@ SOURCE = HERE / "fastdecode.cpp"
 MODULE = "_fastdecode"
 CHOICES = ("auto", "native", "python")
 BLOCK = 128
+CACHED_BLOCKS = 16  # per read; see the module docstring
 SELF_TEST_CASES = 300
 
 
@@ -58,25 +63,31 @@ class ColumnArray:
     """Read.columns backed by the C++ struct array; candidates.Column objects on access.
 
     Supports len(), indexing, slicing, iteration and == like the list it replaces. Column
-    objects are built per 128-column block and cached, so overlapping visit windows share them.
+    objects are built per 128-column block; the CACHED_BLOCKS most recently used blocks are kept,
+    so overlapping windows of neighbouring nodes share them. An evicted block is rebuilt from the
+    array (equal Column values), so the output does not depend on the cache size.
     """
     __slots__ = ("array", "n", "blocks")
 
     def __init__(self, array):
-        self.array, self.n, self.blocks = array, len(array), {}
+        self.array, self.n, self.blocks = array, len(array), OrderedDict()
 
     def __len__(self):
         return self.n
 
     def _block(self, b):
         cols = self.blocks.get(b)
-        if cols is None:
+        if cols is not None:
+            self.blocks.move_to_end(b)
+        else:
             a = self.array[b * BLOCK:(b + 1) * BLOCK]
             cols = self.blocks[b] = [
                 Column(r, f, q, o, node, pos, rev, visit, bound) for r, f, q, o, node, pos, rev, visit, bound in zip(
                     a["read"].tobytes().decode("latin-1"), a["ref"].tobytes().decode("latin-1"), a["quality"].tolist(),
                     a["op"].tobytes().decode("latin-1"), a["node"].tolist(), a["pos"].tolist(),
                     a["reverse"].astype(bool).tolist(), a["visit"].tolist(), a["boundary"].astype(bool).tolist())]
+            if len(self.blocks) > CACHED_BLOCKS:
+                self.blocks.popitem(last=False)
         return cols
 
     def __getitem__(self, key):
