@@ -9,17 +9,18 @@
 3. Node keys. Each placement is converted, through the GRCh38 path (reference_path), into
    the builder's candidate identity `node:start:KIND:REF>ALT` in node-forward coordinates:
    reverse-oriented nodes flip the position and reverse-complement the bases; an insertion
-   at a node junction gets a key on both nodes; a deletion must fit inside one node; nodes
-   the reference visits more than once give no key.
+   at a node junction gets a key on both nodes; a deletion over consecutive reference nodes of
+   one orientation gets the builder's multi-node key (`node:start:DEL:REF>@n2+n3`); nodes the
+   reference visits more than once give no key.
 4. Labels. A tensor's representative allele (its candidate_id) is looked up:
 
-       1 somatic    representative allele is a somatic truth allele
-       2 germline   representative allele is a germline truth allele (FILTER PASS/., inside the germline BED)
+       1 somatic    representative allele is a somatic truth allele with FILTER PASS/. (inside or outside the BED)
+       2 germline   representative allele is a germline truth allele with FILTER PASS/. (inside or outside the BED)
        0 non        on a unique GRCh38 node, inside somatic BED ∩ germline BED, no truth allele at the site,
                     and no truth allele (any set, any filter) within NEAR_BP
       -1 ignore     everything else, with a reason (outside the confident region, not on a unique GRCh38 node,
-                    near a truth allele with a different allele, filtered germline record, or the truth allele
-                    is a non-representative allele of the site)
+                    near a truth allele with a different allele, filtered somatic or germline record, or the
+                    truth allele is a non-representative allele of the site)
 
 Outputs next to the merged shards (per chromosome, same order as <chrom>_variant_summary.ndjson):
 <chrom>_shard_NNNNN_labels.npy (int8) and <chrom>_labels.ndjson; labels.manifest.json;

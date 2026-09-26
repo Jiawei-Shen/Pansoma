@@ -57,7 +57,7 @@ The same table drives the builder's `--chromosomes all|autosome|chr1,chr2,...`
 ## In a whole-genome run
 
 `orchestrate prepare` freezes the options below into `config.json`; `orchestrate run` calls
-`orchestrate finalize` (merge, then labels) when every task, supplement tasks included, validated.
+`orchestrate finalize` (merge, then labels) when every task validated.
 `finalize` can also be run on its own and skips finished steps.
 
 ```
@@ -84,13 +84,12 @@ Input: `<root>/outputs.json` of a completed `orchestrate run`. Output per kind (
 <root>/batch_timing.ndjson                        every task's batch timings
 ```
 
-Records keep source order: task index, then shard, then index within the shard. Supplement tasks
-are tasks of the same run with the next indices, so **one merge covers the main and the supplement
-tasks**, and a chromosome's merged shards hold the main tasks' tensors in node order followed by the
-supplement tasks' tensors (round 1, then round 2, ...; each round in node order). A merged file is
-therefore not globally node-sorted; use `node_id` (or `grch38`) when position order matters. (The
-module docstring of `merge_shards.py` still says "node-sorted" and "SNV, INDEL, or ALL"; the file is
-kept byte-identical to its source apart from import lines, see "Provenance" below.)
+Records keep source order: task index, then shard, then index within the shard. The tasks of one
+run cover contiguous node ranges in order, so its merged shards are node-sorted; a merge over tasks
+of two node lists (e.g. a run followed by extra tasks for nodes added later) holds the first list's
+tensors followed by the second's. Use `node_id` (or `grch38`) when position order matters.
+Merges of runs made with v2 (PacBio v6: main tasks, then three supplement rounds) are ordered the
+same way, round after round.
 `grch38` is null when the node has no unique GRCh38 visit (alternative branches); `pos0` is the
 0-based REF start (INS: the boundary between `pos0 - 1` and `pos0`), bases on the contig's forward
 strand, no anchor base.
@@ -145,7 +144,7 @@ to `--recall-dir` (default: the tensor directory).
 ## HG008 PacBio commands
 
 ```bash
-G=/scratch/jshen/data/HG008_GIAB/pansoma_v2_tensors/graph_index
+G=/scratch/jshen/data/pansoma_v2_tensors/graph_index
 P="python -m indexed_gam_pipeline_v3"
 # once per graph (the existing files under $G were made by the same code and are still valid)
 $P.tools.graph_prep ref-path-scan \
@@ -168,60 +167,30 @@ $P.tensor_postprocessing label --tensors <tensors dir> \
     --somatic-bed  /scratch/jshen/data/HG008_GIAB/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_all.bed \
     --germline-vcf /scratch/jshen/data/HG008_GIAB/dipcall_HG008N_GRCh38/HG008N_GRCh38_dipcall.dip.vcf.gz \
     --germline-bed /scratch/jshen/data/HG008_GIAB/dipcall_HG008N_GRCh38/HG008N_GRCh38_dipcall.dip.bed \
-    --truth-dir /scratch/jshen/data/HG008_GIAB/pansoma_v2_tensors/truth
+    --truth-dir /scratch/jshen/data/pansoma_v2_tensors/truth
 ```
 
 Measured on HG008 (2026-09-23): ref-path-scan 7.4 min / 4.2 GB (49,092,514 GRCh38 nodes, none
 visited twice); ref-path-check 0 length and 0 sequence mismatches; chr-index 29 s.
 
-## Provenance and resync
+## History
 
 This directory was copied from `indexed_gam_pipeline_v2/tensor_postprocessing` at git commit
-`d0d25d6` (`git archive`, never from a working tree). sha256 of the source files at that commit:
+`d0d25d6` (`git archive`; `git show d0d25d6:indexed_gam_pipeline_v2/tensor_postprocessing/<file>`
+shows the originals). v2 was retired on 2026-09-26 and removed from the repository in `9d61016`;
+this copy is now the only one. Changes since the copy:
 
-```
-963fbb1212c4d08997b1848bb594f5e24f3b7a20f8ce61f4e7406a1c952b8253  __init__.py
-469f14e3aff01115ebc30993bdd6a53eb9b623c32602ccc2135a6b40c6602443  __main__.py
-dfb4b893df838042843945848acf1b94d81c22ce2a142aafffdd52db7e8bedd7  chr_index.py
-fcb4c7319389bd0bc09af046707e990f58c2addf7fec99fc3ff6c37cd44fabfa  merge_shards.py
-4d7104b8c4177cffbd3ac627d220a09cd6d74236be399d14bb868bccabe93939  reference_path.py
-f85306df0ec60ab3d36ad44a93cc471044428b35bd28dbaf4709212bd355d9bc  truth_labels.py
-```
+* `chr_index.py`, `reference_path.py`: the graph-prep code moved verbatim to `tools/graph_prep.py`
+  (reference_path `SEPARATORS`, `AWK`, `parse_walk`, `scan`, `check`; chr_index `VERSION` (there
+  `CHR_INDEX_VERSION`), `NAMED_GROUPS`, `UNPLACED`, `group_of`, `component_block`, `build`); the
+  unused `SELECTIONS`, `ChrIndex.is_autosome` and `ReferencePath.unique` were dropped.
+* `__main__.py`: `merge` and `label` only, no module-search-path block.
+* `merge_shards.py` (`8367f73`, 2026-09-25): the parallel copy: one job per (kind, chromosome)
+  group, rows read and shards written with plain sequential file I/O instead of memory maps, audit
+  streams copied in slices to their offsets. Same bytes (goldens, a real 20-task merge); HG008
+  Illumina chr22 tasks: copy 227 → 101 s with 8 workers.
+* `truth_labels.py` (`ba1dec2`, 2026-09-26, from v2 `5e82150`): truth-labels-v2 — labels 1 and 2
+  need a PASS truth allele, and the BEDs only bound the confident region for label 0.
 
-What changed in the copy:
-
-* `merge_shards.py`: import lines, and since 2026-09-25 the parallel copy: one job per (kind,
-  chromosome) group, rows read and shards written with plain sequential file I/O instead of memory
-  maps, audit streams copied in slices to their offsets. Same bytes (goldens, a real 20-task merge);
-  HG008 Illumina chr22 tasks: copy 227 → 101 s with 8 workers. The resync diff below therefore shows
-  these changes for `merge_shards.py`.
-* `truth_labels.py`: import lines only (package-relative); ported the truth-labels-v2 rule change of
-  v2 `5e82150` (2026-09-26: 1/2 need a PASS truth allele, BEDs only bound the confident region).
-* `chr_index.py`, `reference_path.py`: lines are only removed, apart from one narrowed
-  `from ..common import read_json` line each. The graph-prep code moved verbatim to
-  `tools/graph_prep.py` (reference_path `SEPARATORS`, `AWK`, `parse_walk`, `scan`, `check`;
-  chr_index `VERSION` (there `CHR_INDEX_VERSION`), `NAMED_GROUPS`, `UNPLACED`, `group_of`,
-  `component_block`, `build`); the unused `SELECTIONS`, `ChrIndex.is_autosome` and
-  `ReferencePath.unique` were dropped.
-* `__main__.py`: `merge` and `label` only (the graph-prep subcommands moved to `tools/graph_prep.py`),
-  no module-search-path block; `__init__.py`: docstring.
-
-The v2 copy is maintained separately. Before porting a v2 change, check what changed there and
-diff it against this copy with the import lines normalized (empty output = in sync):
-
-```bash
-cd /scratch/jshen/Github/Pansoma
-git log --oneline d0d25d6.. -- indexed_gam_pipeline_v2/tensor_postprocessing   # committed changes
-git diff d0d25d6 -- indexed_gam_pipeline_v2/tensor_postprocessing               # plus uncommitted ones
-for f in merge_shards.py truth_labels.py; do
-  diff <(sed -e 's/from indexed_gam_pipeline_v2\.tensor_postprocessing\./from ./' \
-             -e 's/from indexed_gam_pipeline_v2\./from ../' indexed_gam_pipeline_v2/tensor_postprocessing/$f) \
-       indexed_gam_pipeline_v3/tensor_postprocessing/$f
-done
-```
-
-(For `chr_index.py` and `reference_path.py` the same diff lists the moved and dropped
-definitions as removals.) Port a change deliberately, then re-run the v3 suite and goldens. A
-change to label rules or merged bytes also changes v3's outputs against the recorded goldens; that
-needs a new recording from the changed v2 (`python -m indexed_gam_pipeline_v3.tests.golden record
---package indexed_gam_pipeline_v2`, see the main README, "Working next to v2").
+A change to label rules or merged bytes changes the goldens (`tests/golden_hashes.json`); record
+them again from the committed change (main README, section 9).

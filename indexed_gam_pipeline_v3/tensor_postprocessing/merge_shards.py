@@ -2,7 +2,7 @@
 
 Input: <root>/outputs.json of a completed `orchestrate run` (every typed task directory
 task_NNNN/ with shard_XXXXX_data.npy, variant_summary.ndjson, manifest.json and the audit
-streams). Output, per tensor kind (SNV, INDEL, or ALL):
+streams). Output, per tensor kind (SNV, INDEL):
 
     <tensors>/<kind>/<chrom>_shard_NNNNN_data.npy      chr1..chr22; `shard_size` tensors, last one shorter
     <tensors>/<kind>/<chrom>_variant_summary.ndjson    source records in source order; shard_index /
@@ -17,7 +17,7 @@ streams). Output, per tensor kind (SNV, INDEL, or ALL):
     <tensors>/non_autosomal/<kind>/...                 same layout for chrX, chrY, chrM, chrEBV, unplaced
     <root>/batch_timing.ndjson                         shared batch timings of every task (split runs)
 
-Records keep their source order (task, shard, index), so shards stay node-sorted. The
+Records keep their source order (task, shard, index), so shards are node-sorted when the tasks are. The
 chromosome of a tensor is the block of its node (chr_index). Everything is written to a
 hidden `.merging/` directory first and published only after verification:
   * every output shard's data bytes hash (SHA-256, re-read from disk) equal the hash of the
