@@ -46,7 +46,6 @@ logs/
 # Build outputs
 build/
 *.so
-indexed_gam_pipeline_v2/_fastdecode.build.json
 
 # Indexed GAM inputs and generated query indexes
 *.gam
