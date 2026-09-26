@@ -1,5 +1,6 @@
-"""Discovery: the parallel native scan equals the sequential Python scan (raw rule), node_stats.json
-keeps its exact format, segments tile the GAM, and the normalized rule equals the Python decoder."""
+"""Discovery: counts equal a plain-Python reference of the rule (records decoded and left-normalized
+with candidates.decode_alignment), do not depend on the process count, node_stats.json keeps its
+exact format, and segments tile the GAM."""
 from contextlib import redirect_stdout
 import io
 import json
@@ -11,7 +12,7 @@ import unittest
 import numpy as np
 import pysam
 
-from .fixtures import af_gam, build_index, encode_varint, graph_fixture, spec_alignment, tiny_gam
+from .fixtures import af_gam, build_index, encode_varint, graph_fixture, spec_alignment
 from .. import discovery, native
 from ..candidates import decode_alignment
 from ..common import write_json
@@ -64,7 +65,7 @@ def reference_counts(records, sequences, min_mapq, max_indel, normalized):
         if normalized:
             try:
                 read, _ = decode_alignment(a, sequences, max_indel)
-            except Exception:  # noqa: BLE001 -- counted with the raw rule, like the native code
+            except Exception:  # noqa: BLE001 -- counted from the edits as written, like the native code
                 fallbacks += 1
             else:
                 edited = [False] * len(read.visits)
@@ -107,26 +108,30 @@ class NodeStatsFormatTest(unittest.TestCase):
                 self.assertEqual(a.read_bytes(), b.read_bytes())
 
 
+def world_gam(tmp, seed, cases, per_group):
+    """A grouped GAM of synthetic records and a graph index holding their node sequences."""
+    sequences, records = synthetic_world(seed, cases)
+    gam = write_grouped_gam(Path(tmp) / f"world{seed}.gam", records, per_group)
+    graph = graph_fixture(Path(tmp) / f"world{seed}.sqlite", [(n, s, 1) for n, s in sequences.items()])
+    return gam, graph, sequences, records
+
+
 @needs_module
 class ParallelScanTest(unittest.TestCase):
-    def test_parallel_native_equals_sequential_python(self):
-        sequences, records = synthetic_world(11, 400)
+    def test_counts_equal_the_reference_for_any_process_count(self):
         with tempfile.TemporaryDirectory() as tmp:
-            gams = [tiny_gam(tmp)[0], af_gam(tmp)[0],
-                    write_grouped_gam(Path(tmp) / "grouped.gam", records, 7)]
-            for gam in gams:
-                expected = discovery.python_counts(gam, 5)
-                for processes in (1, 2, 3):
-                    with self.subTest(gam=gam.name, processes=processes):
-                        actual = discovery.native_counts(gam, None, processes, min_mapq=5)
-                        assert_counts(self, actual, expected[:4])
-                        self.assertEqual(actual[4]["alignments"], expected[4]["alignments"])
-                        self.assertEqual(actual[4]["used"], expected[4]["used"])
+            gam, graph, sequences, records = world_gam(tmp, 11, 400, 7)
+            expected, fallbacks = reference_counts(records, sequences, 5, 50, True)
+            for processes in (1, 2, 3):
+                with self.subTest(processes=processes):
+                    actual = discovery.native_counts(gam, None, processes, str(graph), 5, 50)
+                    assert_counts(self, actual, expected)
+                    self.assertEqual(actual[4]["fallbacks"], fallbacks)
+                    self.assertEqual(actual[4]["alignments"], len(records))
 
     def test_segments_tile_the_gam(self):
-        _, records = synthetic_world(5, 300)
         with tempfile.TemporaryDirectory() as tmp:
-            gam = write_grouped_gam(Path(tmp) / "g.gam", records, 3)
+            gam, graph, _, _ = world_gam(tmp, 5, 300, 3)
             with pysam.BGZFile(str(gam), "rb") as stream:
                 total = 0
                 while (messages := group(stream)) is not None:
@@ -136,23 +141,24 @@ class ParallelScanTest(unittest.TestCase):
                 self.assertEqual(cuts[0][0], 0)
                 self.assertIsNone(cuts[-1][1])
                 self.assertTrue(all(a[1] == b[0] for a, b in zip(cuts, cuts[1:])))
-                seen = sum(discovery._scan_segment((str(gam), c, False, -1, 50, None))[4]["alignments"] for c in cuts)
+                seen = sum(discovery._scan_segment((str(gam), c, -1, 50, str(graph)))[4]["alignments"] for c in cuts)
                 self.assertEqual(seen, total)
 
     def test_discover_command_outputs(self):
         with tempfile.TemporaryDirectory() as tmp:
-            gam, _ = af_gam(tmp)
+            gam, graph, _, _ = world_gam(tmp, 3, 200, 5)
             outputs = {}
-            for name, extra in (("python", dict(max_alignments=10**9)), ("native", dict(processes=2))):
-                fields = dict(gam=str(gam), output=str(Path(tmp) / name), min_mapq=5, node_alt=0.05,
-                              max_alignments=None, processes=None, raw=True)
-                args = type("Args", (), dict(fields, **extra))()
+            for processes in (1, 3):
+                out = Path(tmp) / f"p{processes}"
+                args = type("Args", (), dict(gam=str(gam), output=str(out), min_mapq=5, node_alt=0.05,
+                                             graph_index=str(graph), processes=processes))()
                 with redirect_stdout(io.StringIO()):
                     discovery.discover(args)
-                outputs[name] = {f: (Path(tmp) / name / f).read_bytes() for f in ("node_stats.json", "target_nodes.txt")}
-                report = json.loads((Path(tmp) / name / "discovery_report.json").read_text())
-                self.assertEqual(report["engine"], name)
-            self.assertEqual(outputs["python"], outputs["native"])
+                outputs[processes] = {f: (out / f).read_bytes() for f in ("node_stats.json", "target_nodes.txt")}
+                report = json.loads((out / "discovery_report.json").read_text())
+                self.assertEqual((report["rule"], report["processes"]), ("normalized", processes))
+            self.assertEqual(outputs[1], outputs[3])
+            self.assertTrue(outputs[1]["target_nodes.txt"])
 
 
 @needs_module
@@ -174,7 +180,7 @@ class NormalizedRuleTest(unittest.TestCase):
             graph = graph_fixture(Path(tmp) / "graph.sqlite", [(n, s, 1) for n, s in sequences.items()])
             expected, fallbacks = reference_counts(records, sequences, 5, 50, True)
             for processes in (1, 3):
-                actual = discovery.native_counts(gam, None, processes, True, 5, 50, str(graph))
+                actual = discovery.native_counts(gam, None, processes, str(graph), 5, 50)
                 assert_counts(self, actual, expected)
                 self.assertEqual(actual[4]["fallbacks"], fallbacks)
 
@@ -183,28 +189,20 @@ class NormalizedRuleTest(unittest.TestCase):
         # vg put the 1-bp deletion of the A run on node 3; left-normalized it belongs to node 1
         a = spec_alignment([(1, 0, False, [(2, 2, "")]), (2, 0, False, [(1, 1, "")]),
                             (3, 0, False, [(1, 0, ""), (1, 1, "")])], sequences)
-        raw, normalized = MODULE.Discovery(), MODULE.Discovery()
-        raw.add_raw([a.SerializeToString()], 5)
+        normalized = MODULE.Discovery()
         normalized.add_normalized([a.SerializeToString()], sequences, 5, 50)
         as_dict = lambda r: {int(n): (int(p), int(q)) for n, p, q in zip(r[0], r[1], r[2])}  # noqa: E731
-        self.assertEqual(as_dict(raw.result()), {1: (1, 0), 2: (1, 0), 3: (0, 1)})
+        self.assertEqual(as_dict(reference_counts([a], sequences, 5, 50, False)[0]), {1: (1, 0), 2: (1, 0), 3: (0, 1)})
         self.assertEqual(as_dict(normalized.result()), {1: (0, 1), 2: (1, 0), 3: (1, 0)})
 
 
-class NormalizedDefaultTest(unittest.TestCase):
-    def test_discover_defaults_to_normalized_and_needs_a_graph_index(self):
+class DiscoverArgumentsTest(unittest.TestCase):
+    def test_discover_needs_a_graph_index(self):
         with tempfile.TemporaryDirectory() as tmp:
             gam, _ = af_gam(tmp)
             args = type("Args", (), dict(gam=str(gam), output=str(Path(tmp) / "d"), min_mapq=5, node_alt=0.05))()
             with self.assertRaisesRegex(ValueError, "--graph-index"):
                 discovery.discover(args)
-            if MODULE is not None:
-                graph = graph_fixture(Path(tmp) / "graph.sqlite", [(n, "AAAAAA", 1) for n in (10, 20, 30, 40, 50)])
-                args.graph_index, args.processes = str(graph), 2
-                with redirect_stdout(io.StringIO()):
-                    discovery.discover(args)
-                report = json.loads((Path(tmp) / "d" / "discovery_report.json").read_text())
-                self.assertEqual((report["rule"], report["engine"]), ("normalized", "native"))
 
 
 if __name__ == "__main__":

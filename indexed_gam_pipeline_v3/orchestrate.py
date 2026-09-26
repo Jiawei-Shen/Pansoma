@@ -13,7 +13,7 @@
 
 Layout under --root (bookkeeping) and --tensors (outputs; default <root>/tensors):
     <root>/source/                frozen package copy without tests/ and tools/ (hashes recorded in config.json)
-    <root>/parts/nodes_NNNN.txt   node list of each task (supplement rounds: parts/supplement_NN/)
+    <root>/parts/nodes_NNNN.txt   node list of each task
     <root>/logs/task_NNNN.log     builder stdout/stderr; task_NNNN.resources.txt from /usr/bin/time -v
     <root>/queue_status.json, status.json, memory.ndjson, outputs.json
     <tensors>/shared/task_NNNN/   per-task shared manifest, batch timings, audit streams
@@ -217,10 +217,6 @@ def prepare(args):
         chromosome_selection=selection,
         source_sha256={str(p.relative_to(root)): sha256_file(p) for p in sorted((root / "source").rglob("*")) if p.is_file()},
         tasks=args.tasks, processes=args.processes, schedule=schedule, parts=parts,
-        # max_tasks is frozen here (not derived from processes at run time), so a hand-lowered
-        # processes after an out-of-memory failure does not move supplement task boundaries.
-        supplement=dict(max_rounds=args.supplement_rounds, min_records=args.supplement_min_records,
-                        max_tasks=4 * args.processes, rounds=[]),
         builder={k: getattr(args, k) for k in BUILDER_OPTIONS},
         downsample=downsample,
         native_decoder=native_decoder,
@@ -582,8 +578,7 @@ def run(root, resume=False):
             if commands:
                 execute_queue(commands, root / "queue_status.json", config["processes"],
                               log_dir=root / "logs", cwd=root / "source", order=order)
-            config = run_supplement(root, config)
-            verify(root, config)
+            verify(root, config)  # nothing the tasks depend on changed while they ran
             catalog = catalog_outputs(root, config)
             status.update(status="complete", tensors=catalog["tensors"], tensors_by_type=catalog["tensors_by_type"])
             write_json(root / "status.json", status)
@@ -597,46 +592,6 @@ def run(root, resume=False):
         status["elapsed_seconds"] = time.time() - status["started_unix"]
         status["peak_sampled_rss_kib"] = memory.peak_rss_kib
         write_json(root / "status.json", status)
-
-
-def run_supplement(root, config):
-    """Supplement rounds: nodes that left-normalization moved target-node indels onto and no
-    task covers become extra tasks of this run (appended to config.json), built and validated
-    like the others, so `finalize` merges and labels them together with the main tasks.
-
-    Each round lists the displaced nodes of every task so far minus every node already in a
-    task (and outside the chromosome selection), splits them into up to supplement.max_tasks
-    tasks (4 x processes, frozen at prepare) and runs them; it stops at an empty list or after
-    `max_rounds`. Rounds are recorded in the config, so --resume simply continues. Returns the
-    (possibly extended) config.
-    """
-    settings = config["supplement"]
-    while len(settings["rounds"]) < settings["max_rounds"] and not (
-            settings["rounds"] and settings["rounds"][-1]["nodes"] == 0):
-        number = len(settings["rounds"]) + 1
-        folder = root / "parts" / f"supplement_{number:02d}"
-        folder.mkdir(parents=True, exist_ok=True)
-        summary = displaced_nodes(root, folder / "nodes.txt", [p["nodes_file"] for p in config["parts"]],
-                                  settings["min_records"])
-        first = config["tasks"]
-        if summary["nodes"]:
-            count = min(summary["nodes"], settings["max_tasks"])
-            parts = partition_nodes(folder / "nodes.txt", folder, count)
-            for part in parts:
-                part["supplement_round"] = number
-            config["parts"] += parts
-            config["tasks"] += count
-        settings["rounds"].append(dict(summary, round=number, first_task=first, tasks=config["tasks"] - first))
-        config["supplement"] = settings
-        write_json(root / "config.json", config)
-        print(f"SUPPLEMENT round {number}: {summary['nodes']} nodes -> {config['tasks'] - first} tasks", flush=True)
-        pending = list(range(first, config["tasks"]))  # new tasks; an interrupted round resumes via run --resume
-        if pending:
-            commands = {i: [config["python"], "-m", f"{PACKAGE}.orchestrate", "task", "--root", str(root),
-                            "--index", str(i)] for i in pending}
-            execute_queue(commands, root / f"queue_status_supplement_{number:02d}.json", config["processes"],
-                          log_dir=root / "logs", cwd=root / "source", order=pending)
-    return config
 
 
 def finalize(root, config=None):
@@ -668,40 +623,6 @@ def finalize(root, config=None):
             status.update(labeled=True)
             write_json(root / "status.json", status)
     return report
-
-
-def displaced_nodes(root, output, exclude=(), min_records=3):
-    """Write the node list of a supplement run; returns a summary.
-
-    Left-normalization can move an indel from a target node onto a node that is not a
-    target of any task (tensors are only built on target nodes), so the site would be
-    missing. Every builder lists such nodes in displaced_nodes.tsv; this collects them over
-    all tasks, drops the run's own nodes and every node in `exclude` (e.g. earlier supplement
-    lists) and nodes seen in fewer than `min_records` records, and writes the rest sorted.
-    A supplement run over them (same options) builds those sites with their full read sets;
-    its own displaced_nodes can feed a further round until the list is empty.
-    """
-    root = Path(root).resolve()
-    config = read_config(root)
-    counts = Counter()
-    for i in range(config["tasks"]):
-        table = task_outputs(root, config, i)["shared"] / "displaced_nodes.tsv"
-        for line in table.read_text().splitlines():
-            node, records = line.split("\t")
-            counts[int(node)] += int(records)
-    selection = config["chromosome_selection"]
-    covered = [np.fromfile(str(selection.get("nodes_file", config["inputs"]["nodes"]["path"])), dtype=np.int64, sep="\n")]
-    covered += [np.fromfile(str(path), dtype=np.int64, sep="\n") for path in exclude]
-    covered = np.unique(np.concatenate(covered))
-    nodes = np.array(sorted(n for n, c in counts.items() if c >= min_records), dtype=np.int64)
-    at = np.minimum(np.searchsorted(covered, nodes), max(len(covered) - 1, 0))
-    fresh = nodes[covered[at] != nodes] if len(covered) else nodes
-    fresh, _ = select_nodes(fresh, selection["selection"], config["inputs"].get("chr_index", {}).get("path"))
-    Path(output).write_text("".join(f"{n}\n" for n in fresh.tolist()))
-    summary = dict(output=str(Path(output).resolve()), nodes=int(len(fresh)), displaced_nodes=len(counts),
-                   already_covered=int(len(nodes) - len(fresh)), below_min_records=len(counts) - int(len(nodes)),
-                   records=int(sum(counts[n] for n in fresh.tolist())))
-    return summary
 
 
 def catalog_outputs(root, config):
@@ -740,12 +661,6 @@ def make_parser():
     p.add_argument("--index", help="default: GAM path + .gai")
     p.add_argument("--nodes", required=True, help="sorted target node list, e.g. discovery output")
     p.add_argument("--node-stats", help="discovery node_stats.json: predict task costs and run expensive tasks first")
-    p.add_argument("--supplement-rounds", type=int, default=0,
-                   help="after the tasks, up to N rounds of supplement tasks for nodes that left-normalization moved "
-                        "target-node indels onto (default 0 = off: targets from `discover --normalized` already "
-                        "contain them; use 3 with raw-rule targets)")
-    p.add_argument("--supplement-min-records", type=int, default=3,
-                   help="supplement nodes need at least this many displaced records")
     p.add_argument("--tasks", type=int, default=512)
     p.add_argument("--processes", type=int, default=32)
     add_build_arguments(p, outputs=False)

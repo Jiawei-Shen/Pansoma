@@ -1,6 +1,6 @@
 """Byte and normalized comparison of two run roots, task directories or build directories.
 
-Standard library only (imports no pipeline module), so it fingerprints v2 and v3 outputs alike:
+Standard library only (imports no pipeline module), so it fingerprints outputs of any package version:
 
     python -m indexed_gam_pipeline_v3.tools.compare_runs A B [--mask DOTTED.KEY ...] [--report FILE]
 
@@ -9,17 +9,17 @@ exits 1 on any difference. A file present in only one tree is a difference. File
     ignored       anything under source/, logs/ or incomplete/; memory.ndjson, queue_status*.json,
                   finalize_report.json, run.sh, *.tmp
     batch_timing.ndjson
-                  every row without elapsed_seconds and cumulative_stage_seconds, row order kept
+                  every row without elapsed_seconds, cumulative_stage_seconds and gam_query, row order kept
     manifest.json, labels.manifest.json
                   the whole JSON, key order kept, the anchor path replaced by <ROOT>, without timing,
-                  graph_index_performance, decoder, created, arguments.decoder, sources.outputs_json_sha256
+                  graph_index_performance, decoder, created, arguments.decoder, sources.outputs_json_sha256,
+                  gam_group_cache
     outputs.json, outputs.pre_merge.json
                   <ROOT>-normalized, without merge.created, merge.copy_seconds, merge.verify_seconds
     status.json   projected to status, tasks, processes, tensors, tensors_by_type, merged, merge_layout, labeled
     config.json   projected to tensors, chromosome_selection, tasks, processes, schedule, parts,
-                  supplement.rounds, variant_outputs, postprocess and builder without candidate_unit
-                  (<ROOT>-normalized)
-    everything else (shards, labels, summaries, audit streams, displaced/target/part node lists,
+                  variant_outputs, postprocess and builder without candidate_unit (<ROOT>-normalized)
+    everything else (shards, labels, summaries, audit streams, target/part node lists,
                   validation reports, truth tables, recall reports, ...): raw bytes
 
 --mask removes further dotted keys from every JSON file of the manifest, outputs, status and config
@@ -41,7 +41,7 @@ MANIFEST_MASKS = ("timing", "graph_index_performance", "decoder", "created", "ar
                   "sources.outputs_json_sha256", "gam_group_cache")
 OUTPUTS_MASKS = ("merge.created", "merge.copy_seconds", "merge.verify_seconds")
 STATUS_KEYS = ("status", "tasks", "processes", "tensors", "tensors_by_type", "merged", "merge_layout", "labeled")
-CONFIG_KEYS = ("tensors", "chromosome_selection", "tasks", "processes", "schedule", "parts", "supplement",
+CONFIG_KEYS = ("tensors", "chromosome_selection", "tasks", "processes", "schedule", "parts",
                "variant_outputs", "postprocess", "builder")
 ANCHOR = "<ROOT>"
 
@@ -85,8 +85,6 @@ def normalized_json(path, kind, anchors=(), masks=()):
         value = {k: v for k, v in value.items() if k in STATUS_KEYS}
     elif kind == "config":
         value = {k: v for k, v in value.items() if k in CONFIG_KEYS}
-        if isinstance(value.get("supplement"), dict):
-            value["supplement"] = {"rounds": value["supplement"].get("rounds")}
         if isinstance(value.get("builder"), dict):
             value["builder"] = {k: v for k, v in value["builder"].items() if k != "candidate_unit"}
     defaults = dict(manifest=MANIFEST_MASKS, outputs=OUTPUTS_MASKS).get(kind, ())

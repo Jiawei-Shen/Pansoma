@@ -204,19 +204,24 @@ class GamReaderTest(unittest.TestCase):
                 load_nodes(nodes)
 
     def test_discover_selects_imperfect_nodes(self):
+        from .fixtures import graph_fixture
+        from .. import native
+        if native.load()[0] is None:
+            self.skipTest("discover needs the native module")
         with tempfile.TemporaryDirectory() as directory:
             path, _ = tiny_gam(directory)
+            graph = graph_fixture(Path(directory) / "graph.sqlite", [(n, "AAAAAA", 1) for n in (10, 20, 30, 1000)])
             output = Path(directory) / "discovery"
-            args = build_args(gam=str(path), output=str(output), min_mapq=5, node_alt=0.05, max_alignments=None, raw=True)
+            args = build_args(gam=str(path), output=str(output), min_mapq=5, node_alt=0.05, graph_index=str(graph),
+                              processes=2)
             with redirect_stdout(io.StringIO()):
                 discover(args)
             stats = json.loads((output / "node_stats.json").read_text())
             self.assertEqual(stats["10"], dict(perfect=0, not_perfect=3, max_read_length=12))
             self.assertEqual((output / "target_nodes.txt").read_text().split(), ["10", "20", "30", "1000"])
             report = json.loads((output / "discovery_report.json").read_text())
-            self.assertEqual((report["alignments_scanned"], report["nodes_selected"], report["exploratory"]),
-                             (6, 4, False))
-            self.assertNotIn("max_nodes", report)
+            self.assertEqual((report["alignments_scanned"], report["nodes_selected"], report["rule"]),
+                             (6, 4, "normalized"))
 
 
 if __name__ == "__main__":

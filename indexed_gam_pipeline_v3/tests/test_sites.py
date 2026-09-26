@@ -152,7 +152,7 @@ class EarlyAfFilterTest(unittest.TestCase):
 
 class SiteTest(unittest.TestCase):
     def test_site_tensor_holds_every_passing_allele(self):
-        # (v2's one-allele-site == allele-unit comparison is frozen as golden G3: v2's bytes for this build.)
+        # (the bytes of this build are frozen as golden G3.)
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             site = run(root, "site", site_rows, snv_min_af=.2, indel_min_af=.1, min_variants=2)
@@ -274,12 +274,12 @@ class SiteTest(unittest.TestCase):
 
 
 class OrchestratorOptionsTest(unittest.TestCase):
-    # tmp/v3_verification/e2e_v2 config.builder (v2 also froze candidate_unit="site"); min_allele_bq is the int 10
+    # a production-shaped config.builder; min_allele_bq is the int 10 (argparse default of a float option)
     E2E_BUILDER = dict(rows=200, width=101, gam_cache_mb=6144, batch_nodes=512, max_node_span=10000,
                        max_batch_alignments=20000, shard_size=2048, min_mapq=10, min_af=0.05, min_variants=3,
                        min_allele_bq=10, max_indel_len=50, chromosomes="autosome", max_node_reads=800,
                        early_af_filter=True, decoder="auto")
-    V2_ARGUMENTS = ["command", "gam", "output", "nodes", "index", "graph_index", "snv_min_af", "indel_min_af",
+    MANIFEST_ARGUMENTS = ["command", "gam", "output", "nodes", "index", "graph_index", "snv_min_af", "indel_min_af",
                     "snv_output", "indel_output", "debug_rows", "max_tensors", "variant_type", "rows", "width",
                     "gam_cache_mb", "batch_nodes", "max_node_span", "max_batch_alignments", "shard_size", "min_mapq",
                     "min_af", "min_variants", "min_allele_bq", "max_indel_len", "candidate_unit", "max_node_reads",
@@ -323,8 +323,9 @@ class OrchestratorOptionsTest(unittest.TestCase):
                     self.assertRaises(SystemExit):
                 prepare_parser().parse_args(base + missing)
 
-    def test_parameters_and_arguments_bytes_equal_v2(self):
-        """config.builder -> build_command (str round trip) -> run parser -> recorded(): e2e_v2's exact bytes."""
+    def test_parameters_and_arguments_bytes_are_the_manifest_format(self):
+        """config.builder -> build_command (str round trip) -> run parser -> recorded(): the manifest's exact bytes
+        (the key tables every HG008 dataset was written with)."""
         command = build_command(Path("/root"), self.config(), 0)
         self.assertEqual(command[1:4], ["-m", f"{PACKAGE}.run", "build"])
         args = make_parser().parse_args(command[3:])
@@ -342,7 +343,7 @@ class OrchestratorOptionsTest(unittest.TestCase):
                          '"variant_type": "indel", "rows": 200, "width": 101, "max_node_reads": 800, '
                          '"candidate_unit": "site", "early_af_filter": true}')
         arguments = recorded(args, ARGUMENTS)
-        self.assertEqual(list(ARGUMENTS), self.V2_ARGUMENTS)
+        self.assertEqual(list(ARGUMENTS), self.MANIFEST_ARGUMENTS)
         self.assertEqual(json.dumps(arguments), '{"command": "build", "gam": "/g", "output": "/t/shared/task_0000", '
                          '"nodes": "/n", "index": "/g.gai", "graph_index": "/x", "snv_min_af": 0.06, "indel_min_af": 0.08, '
                          '"snv_output": "/t/SNV/task_0000", "indel_output": "/t/INDEL/task_0000", "debug_rows": false, '
@@ -351,7 +352,7 @@ class OrchestratorOptionsTest(unittest.TestCase):
                          '"min_mapq": 10, "min_af": 0.05, "min_variants": 3, "min_allele_bq": 10.0, "max_indel_len": 50, '
                          '"candidate_unit": "site", "max_node_reads": 800, "chromosomes": "autosome", '
                          '"chr_index": "/c.tsv", "early_af_filter": true, "decoder": "auto"}')
-        # A standalone build without --min-allele-bq records v2's int default.
+        # A standalone build without --min-allele-bq records the int default.
         args = make_parser().parse_args(["build", "--gam", "g", "--output", "o", "--nodes", "n", "--graph-index", "x",
                                          "--snv-output", "s", "--indel-output", "i", "--snv-min-af", ".1",
                                          "--indel-min-af", ".1"])
