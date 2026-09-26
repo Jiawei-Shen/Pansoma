@@ -854,7 +854,11 @@ leaves them out.
     confident region);
   * truth-labels-v3: −1 only where a tumor-only caller can drop the tensors too (no GRCh38 position,
     outside the BED); tensors next to a truth allele and HET-filtered germline alleles are 0, GAP-filtered
-    germline alleles 2.
+    germline alleles 2;
+  * truth-labels-v4: partial matches take the truth label and are marked in labels.ndjson (A1 overlaps a
+    truth allele at the same place, or another allele of the site, by more than 60 %; somatic truths also by
+    read haplotype, which catches graph-branch residual edits); off-reference nodes are placed between their
+    reference neighbours by node ID and labelled like the rest.
 
 Runs made with v3: HG008 ONT-UL and Illumina WGS (`/scratch/jshen/data/pansoma_v2_tensors/<sample>/v3_run`,
 `v3_tensors`).

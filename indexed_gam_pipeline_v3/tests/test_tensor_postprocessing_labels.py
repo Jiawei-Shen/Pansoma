@@ -13,7 +13,7 @@ import pysam
 from .fixtures import CHR1, CHR2, CHR3, graph_files, graph_fixture, write_vcf
 from ..tensor_postprocessing.chr_index import AUTOSOMES, ChrIndex
 from ..tensor_postprocessing.reference_path import ReferencePath, rc
-from ..tensor_postprocessing.truth_labels import (Bed, LABELS, Locator, TruthSet,
+from ..tensor_postprocessing.truth_labels import (Bed, LABELS, Locator, TruthSet, allele_overlap, anchor, haplotype_overlap,
                                                                         label_directory, placements, recall,
                                                                         split_alleles)
 from ..tools import graph_prep
@@ -202,6 +202,7 @@ class TruthLabelTest(unittest.TestCase):
             s_alt = "A" if CHR1[60] != "A" else "C"
             somatic_vcf = write_vcf(tmp / "somatic.vcf", [(3, "GT", "G", "PASS", "0|1"),
                                                           (31, CHR1[30], "A" if CHR1[30] != "A" else "C", "PASS", "0|1"),
+                                                          (38, CHR1[37], CHR1[37] + "GGGGG", "PASS", "0|1"),  # INS at 38
                                                           (61, CHR1[60], s_alt, "LowQual", "0|1")])
             g_alt = "A" if CHR1[45] != "A" else "C"
             f_alt = "A" if CHR1[50] != "A" else "C"
@@ -211,6 +212,7 @@ class TruthLabelTest(unittest.TestCase):
             germline_vcf = write_vcf(tmp / "germline.vcf", [(46, CHR1[45], g_alt, "PASS", "1|1"),
                                                             (51, CHR1[50], f_alt, "GAP1", "1|."),
                                                             (56, CHR1[55], h_alt, "HET1", "1|0"),
+                                                            (63, CHR1[62:66], CHR1[62], "PASS", "0|1"),  # DEL 63..66
                                                             (73, CHR1[72], o_alt, "PASS", "0|1"),  # outside germline BED
                                                             (78, CHR1[77], i_alt, "HET2", "0|1")])
             (tmp / "somatic.bed").write_text("chr1\t0\t80\n")
@@ -218,7 +220,7 @@ class TruthLabelTest(unittest.TestCase):
             somatic = TruthSet("somatic", somatic_vcf, tmp / "somatic.bed", fasta, locator, chromosomes=("chr1",))
             germline = TruthSet("germline", germline_vcf, tmp / "germline.bed", fasta, locator, chromosomes=("chr1",))
             # The DEL has five placements across nodes 1 and 2; all four single-node ones are keys.
-            (deletion, snv, _) = somatic.alleles
+            (deletion, snv, _, _) = somatic.alleles
             self.assertEqual(deletion["placements"], 5)
             self.assertEqual(deletion["keys"], sorted(["1:3:DEL:T>", "1:4:DEL:T>", "2:4:DEL:A>", "2:5:DEL:A>", "2:6:DEL:A>"]))
             confident = somatic.bed.intersect(germline.bed)
@@ -243,8 +245,14 @@ class TruthLabelTest(unittest.TestCase):
                 ("germline_het_outside", candidate(77, i_alt), [], -1, "outside_confident_region"),
                 ("germline_outside_bed", candidate(72, o_alt), [], 2, "representative_allele_is_germline_truth"),
                 ("somatic_filtered", candidate(60, s_alt), [], -1, "somatic_truth_filtered"),
-                ("other_allele", candidate(30, snv_alt), [candidate(30, snv["alt"])], -1,
-                 "truth_matches_non_representative_allele"),
+                ("other_allele", candidate(30, snv_alt), [candidate(30, snv["alt"])], 0,
+                 "truth_matches_non_representative_allele"),     # A1, another base, overlaps the truth SNV by 0
+                ("allele_partial", candidate(38, "GGGG", "INS", ""), [candidate(38, "GGGGG", "INS", "")], 1,
+                 "allele_partial_somatic_truth"),                # A1 +GGGG vs the truth +GGGGG (A2): 80 %
+                ("residual_partial", candidate(38, "GGGG", "INS", ""), [], 1, "residual_partial_somatic_truth"),
+                ("far_insertion", candidate(48, "GGGG", "INS", ""), [], 0, "near_truth_allele_mismatch"),
+                ("germline_residual", candidate(64, "", "DEL", CHR1[64:66]), [], 2,
+                 "residual_partial_germline_truth"),             # DEL 64..66 inside the germline DEL 63..66: 2/3
                 ("near", candidate(33, other(33)), [], 0, "near_truth_allele_mismatch"),
                 ("non", candidate(18, other(18)), [], 0, "confident_no_truth_allele"),
                 ("outside", candidate(75, other(75)), [], -1, "outside_confident_region"),
@@ -269,11 +277,43 @@ class TruthLabelTest(unittest.TestCase):
             for (name, _, _, value, reason), line in zip(cases, lines):
                 self.assertEqual((line["label"], line["reason"]), (value, reason), name)
             self.assertEqual(lines[0]["somatic"][0]["vcf_pos"], 3)
-            self.assertEqual(report["totals"], {"somatic": 1, "germline": 3, "ignore": 5, "non": 3})
+            self.assertEqual(report["totals"], {"somatic": 3, "germline": 4, "ignore": 4, "non": 5})
+            self.assertEqual(report["partial"], {"allele_somatic": 1, "residual_somatic": 1, "residual_germline": 1})
+            partial = {name: line["partial"] for (name, *_), line in zip(cases, lines)}
+            self.assertEqual((partial["allele_partial"], partial["residual_partial"], partial["somatic_del"]),
+                             ("allele", "residual", None))
+            self.assertEqual(lines[[c[0] for c in cases].index("allele_partial")]["overlap"], 0.8)
             self.assertEqual(LABELS, {"ignore": -1, "non": 0, "somatic": 1, "germline": 2})
             summary = recall(somatic, matched["somatic"], {}, tmp)
-            self.assertEqual(summary["status"], {"tensor_representative": 2, "tensor_non_representative_allele": 1})
+            self.assertEqual(summary["status"], {"tensor_representative": 2, "tensor_non_representative_allele": 2})
             self.assertTrue((tmp / "somatic.recall.tsv").exists())
+
+    def test_haplotype_overlap_sees_a_truth_written_differently(self):
+        rng = __import__("random").Random(3)
+        reference = "".join(rng.choice("ACGT") for _ in range(60)) + "A" * 8 + "".join(rng.choice("ACGT") for _ in range(60))
+        truth = reference[:68] + "AAA" + reference[68:]              # +AAA at the end of the A run
+        reads = [truth[i:i + 100] for i in (5, 10, 15, 20)]          # A1 reads: the truth haplotype (a branch + DEL A)
+        refs = [reference[i:i + 100] for i in (3, 8, 12)]
+        self.assertEqual(haplotype_overlap(reads, refs, reference, truth, 3), 1.0)
+        self.assertEqual(haplotype_overlap(refs + refs, refs, reference, truth, 3), 0.0)   # reference reads
+        other = [q[:10] + ("C" if q[10] != "C" else "G") + q[11:] for q in reads]          # plus another edit
+        self.assertAlmostEqual(haplotype_overlap(other, refs, reference, truth, 3), 0.75)
+        self.assertEqual(haplotype_overlap([rc(q) for q in reads], refs, reference, truth, 3, oriented=False), 1.0)
+        self.assertIsNone(haplotype_overlap(reads[:2], refs, reference, truth, 3))
+        self.assertEqual(allele_overlap("DEL", 201, "AA", "", dict(kind="DEL", ref="AAA", lo=200, hi=203)), 2 / 3)
+        self.assertEqual(allele_overlap("DEL", 210, "AA", "", dict(kind="DEL", ref="AAA", lo=200, hi=203)), 0)
+
+    def test_anchor_between_the_reference_nodes_around_an_off_reference_node(self):
+        class Path:
+            visits = np.array([0, 1, 1, 0, 0, 1, 1, 0, 1])       # nodes 3, 4, 7 off the reference
+            chrom = np.array([0, 0, 0, 0, 0, 0, 1, 0, 0])
+            start0 = np.array([0, 0, 10, 0, 0, 25, 0, 0, 5])
+            lengths = np.array([0, 10, 15, 0, 0, 5, 5, 0, 5])
+            contigs = ["chr1", "chr2"]
+        self.assertEqual(anchor(Path, 3), ("chr1", 10, 30))    # between node 2 (10..25) and node 5 (25..30)
+        self.assertEqual(anchor(Path, 4, reach=1), ("chr1", 25, 30))  # one side only: node 5
+        self.assertIsNone(anchor(Path, 4, reach=0))            # no reference node within reach
+        self.assertIsNone(anchor(Path, 7))                     # node 6 on chr2, node 8 on chr1
 
     def test_insertion_near_span_covers_the_whole_repeat(self):
         """An insertion in a long homopolymer is 'near' anywhere in the run, not only at its leftmost placement

@@ -117,21 +117,39 @@ sources are gone. A second merge of the same run is refused.
    nodes of one orientation gets the builder's multi-node key: `start` on the forward-first
    node, REF over all nodes, the further nodes as an `@n2+n3` suffix
    (`node:start:DEL:REF>@n2+n3`). A span over nodes of mixed orientation has no key (the builder
-   only joins a deletion over mappings of one orientation). The `truth_labels.py` module
-   docstring still says "a deletion must fit inside one node"; the code is the rule above.
+   only joins a deletion over mappings of one orientation).
 4. **Labels**, from the tensor's representative allele (`candidate_id`):
 
 | value | name | rule |
 |---:|---|---|
-| 1 | somatic | representative allele is a somatic truth allele with FILTER PASS/`.` (inside or outside the somatic BED) |
-| 2 | germline | representative allele is a germline truth allele with FILTER PASS/`.`, or only `GAP1`/`GAP2` (dipcall: on one assembled haplotype, the other uncalled; reason `representative_allele_is_germline_truth_gap_filtered`), inside or outside the germline BED |
-| 0 | non | every other tensor on a unique GRCh38 node inside somatic BED ∩ germline BED: no truth allele (`confident_no_truth_allele`), a different allele within 10 bp of a truth allele (`near_truth_allele_mismatch`: errors and artifacts next to real variants), a germline allele with another FILTER such as dipcall `HET1`/`HET2` (`germline_truth_filtered`) |
-| −1 | ignore | `not_on_unique_grch38_node`, `outside_confident_region`, `somatic_truth_filtered`, `truth_matches_non_representative_allele` |
+| 1 | somatic | A1 (the representative allele) is a somatic truth allele with FILTER PASS/`.` (inside or outside the somatic BED), or overlaps one by more than 60 % (partial) |
+| 2 | germline | A1 is a germline truth allele with FILTER PASS/`.` or only `GAP1`/`GAP2` (dipcall: on one assembled haplotype, the other uncalled), inside or outside the germline BED, or overlaps one by more than 60 % (partial) |
+| 0 | non | every other tensor inside somatic BED ∩ germline BED: no truth allele (`confident_no_truth_allele`), a truth allele nearby that A1 does not overlap enough (`near_truth_allele_mismatch`), the truth is another allele of the site and A1 overlaps it ≤ 60 % (`truth_matches_non_representative_allele`), a germline allele with another FILTER such as dipcall `HET1`/`HET2` (`germline_truth_filtered`) |
+| −1 | ignore | `outside_confident_region`, `not_on_unique_grch38_node` (no GRCh38 position and no reference node within 200 IDs), `somatic_truth_filtered` |
 
-Why (truth-labels-v3, 2026-09-26): a tumor-only caller meets every tensor at test time, so −1 is kept only
-for tensors it can also leave out without truth (no GRCh38 position; outside the BED it calls in) and for a
-few conflicting truth cases. v2 also set tensors next to a truth allele and filtered germline alleles to −1,
-which hid most of the negatives (HG008 PacBio SNV: 4.3 % labelled 0, 67 % −1).
+**Partial matches** (truth-labels-v4): the same event written differently by the graph alignment takes
+the truth's label, and `<chrom>_labels.ndjson` marks it with `partial`, `overlap` and `partial_truth`:
+
+* `partial: "allele"` — another allele of the site (A2, A3, ...) is the truth allele and A1 overlaps it
+  by more than 60 % (reason `allele_partial_somatic_truth` / `allele_partial_germline_truth`); e.g. A1
+  +6C next to the truth +5C (83 %), A1 DEL AA next to the truth DEL AAA (67 %).
+* `partial: "residual"` — a truth allele at the same place (the spans of their equivalent placements
+  intersect or touch) that A1 overlaps by more than 60 % (`residual_partial_somatic_truth` /
+  `residual_partial_germline_truth`). chr1:201 DEL AA overlaps chr1:200 DEL AAA; chr1:210 DEL AA does not.
+* Overlap: DEL/DEL the deleted bases in common, INS/INS the inserted bases in common at the same
+  insertion point, over the longer allele. For somatic truths also the haplotype overlap of the A1 reads
+  (the read bases of up to 20 A1 rows against GRCh38 with and without the truth allele, minus the REF
+  reads' error), so a truth written as a graph branch plus a residual edit (truth +AAA, tensor DEL A after
+  a +AAAA branch) or a skipped node plus a mismatch counts. Germline truths use the allele overlap only.
+* Off-reference nodes (no unique GRCh38 visit) are placed between the nearest reference nodes by node ID
+  (Minigraph-Cactus numbers nodes in topological order; on HG008 PacBio 86 % of the branch-node residual
+  edits of missed somatic INDELs lie within 10 bp of that interval) and labelled by the same rules
+  (`anchor` in labels.ndjson); somatic residuals on them are matched by the haplotype overlap.
+
+Why (truth-labels-v3/v4, 2026-09-26): a tumor-only caller meets every tensor at test time, so −1 is kept
+only for tensors it can also leave out without truth (outside the BED it calls in, no position) and for
+filtered somatic truth. v2 also set tensors next to a truth allele, filtered germline alleles and
+off-reference nodes to −1, which hid most of the negatives (HG008 PacBio SNV: 4.3 % labelled 0, 67 % −1).
 
 "Within 10 bp" (`NEAR_BP`) is measured against each truth allele's whole span of equivalent
 placements: an insertion in a repeat spans from its leftmost to its rightmost equivalent boundary,
@@ -198,6 +216,8 @@ this copy is now the only one. Changes since the copy:
   need a PASS truth allele, and the BEDs only bound the confident region for label 0.
 * `truth_labels.py` (2026-09-26): truth-labels-v3 — near-truth mismatches and HET-filtered germline
   alleles are 0, GAP-filtered germline alleles 2 (table above).
+* `truth_labels.py` (2026-09-26): truth-labels-v4 — partial matches (allele and residual, > 60 %
+  overlap) take the truth label; off-reference nodes are placed between their reference neighbours.
 
 A change to label rules or merged bytes changes the goldens (`tests/golden_hashes.json`); record
 them again from the committed change (main README, section 9).

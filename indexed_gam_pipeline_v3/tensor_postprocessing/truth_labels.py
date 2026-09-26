@@ -12,17 +12,26 @@
    at a node junction gets a key on both nodes; a deletion over consecutive reference nodes of
    one orientation gets the builder's multi-node key (`node:start:DEL:REF>@n2+n3`); nodes the
    reference visits more than once give no key.
-4. Labels. A tensor's representative allele (its candidate_id) is looked up:
+4. Labels. A tensor's representative allele (its candidate_id, A1) is looked up:
 
-       1 somatic    representative allele is a somatic truth allele with FILTER PASS/. (inside or outside the BED)
-       2 germline   representative allele is a germline truth allele with FILTER PASS/. or only GAP1/GAP2 (dipcall:
-                    on one assembled haplotype, the other uncalled), inside or outside the BED
-       0 non        every other tensor on a unique GRCh38 node inside somatic BED ∩ germline BED: no truth allele,
-                    a different allele within NEAR_BP of a truth allele (errors and artifacts next to real
-                    variants), or a germline allele with another FILTER (dipcall HET1/HET2)
-      -1 ignore     a filtered somatic truth allele, a truth allele that is a non-representative allele of the
-                    site, not on a unique GRCh38 node, or outside the BEDs (the last two test-time calling can
-                    drop too, without truth: -1 must not hide tensors a tumor-only caller will meet)
+       1 somatic    A1 is a somatic truth allele with FILTER PASS/. (inside or outside the BED), or overlaps one by
+                    more than MIN_OVERLAP (partial, below)
+       2 germline   A1 is a germline truth allele with FILTER PASS/. or only GAP1/GAP2 (dipcall: on one assembled
+                    haplotype, the other uncalled), inside or outside the BED, or overlaps one (partial)
+       0 non        every other tensor inside somatic BED ∩ germline BED: no truth allele, a truth allele nearby
+                    that A1 does not overlap enough (errors and artifacts next to real variants), a germline
+                    allele with another FILTER (dipcall HET1/HET2)
+      -1 ignore     a filtered somatic truth allele, outside the BEDs, or no position (no unique GRCh38 visit and
+                    no reference node within ANCHOR_REACH IDs): tensors test-time calling can drop without truth
+
+   Partial (labels.ndjson `partial`, `overlap`, `partial_truth`): the same event written differently by the
+   graph alignment. "allele": another allele of the site is the truth allele and A1 overlaps it by more than
+   MIN_OVERLAP (else 0). "residual": a truth allele at the same place (spans of equivalent placements
+   intersecting or adjacent; for an off-reference node, within NEAR_BP of the interval between its reference
+   neighbours by node ID) that A1 overlaps by more than MIN_OVERLAP. Overlap: DEL/DEL the deleted bases in
+   common, INS/INS the inserted bases in common at the same insertion point, over the longer allele; for
+   somatic truths also the haplotype overlap of the A1 reads (haplotype_overlap: a branch plus a residual
+   edit, a skipped node plus a mismatch), which is how off-reference nodes are matched.
 
 Outputs next to the merged shards (per chromosome, same order as <chrom>_variant_summary.ndjson):
 <chrom>_shard_NNNNN_labels.npy (int8) and <chrom>_labels.ndjson; labels.manifest.json;
@@ -40,12 +49,18 @@ from ..common import read_json, sha256_file, write_json
 from .chr_index import AUTOSOMES
 from .reference_path import ReferencePath, rc
 
-VERSION = "truth-labels-v3"  # v3: near-truth mismatches and HET-filtered germline alleles are 0, GAP-filtered germline 2
+VERSION = "truth-labels-v4"  # v4: partial matches (overlap > MIN_OVERLAP) take the truth label; off-reference nodes
+# are placed between their reference neighbours. v3: near-truth mismatches and HET-filtered germline alleles 0.
 # dipcall FILTER values of a germline allele present on one assembled haplotype while the other is uncalled: the
 # allele is in the normal genome (zygosity unknown), so it counts as germline truth.
 GAP_FILTERS = frozenset({"GAP1", "GAP2"})
 LABELS = {"ignore": -1, "non": 0, "somatic": 1, "germline": 2}
 NEAR_BP = 10
+MIN_OVERLAP = 0.6  # a tensor overlapping a truth allele by more than this counts as that truth (partial)
+ANCHOR_REACH = 200  # node IDs searched on each side for the reference nodes around an off-reference node
+EVIDENCE_ROWS = 20  # A1 reads (and half as many REF reads) compared with the haplotypes
+MIN_EVIDENCE_BASES = 30
+HAPLOTYPE_WINDOW = 90  # GRCh38 bases on each side of a truth allele for the haplotype comparison
 MAX_SHIFTS = 5000
 CANDIDATE = re.compile(rb'"candidate_id": "([^"]+)"')
 REASONS = re.compile(rb'"reasons": \[([^\]]*)\]')
@@ -280,7 +295,8 @@ class TruthSet:
                                              allele_index=index, filters=filters or ["PASS"], passed=passed,
                                              in_bed=self.bed.contains(record.chrom, lo if kind != "INS" else lo - 1,
                                                                       max(hi, lo + 1)),
-                                             placements=len(places), keys=keys))
+                                             placements=len(places), keys=keys, lo=lo, hi=hi,
+                                             left_alt=places[0][2] if kind == "INS" and places else alt))
                     # Every equivalent placement counts as "the allele is here" (an INS span runs from its
                     # leftmost to its rightmost boundary: reads may write it anywhere in the repeat).
                     spans[record.chrom].append((lo, max(hi, lo + 1), tid))
@@ -288,12 +304,25 @@ class TruthSet:
                         self.by_key[key].append(tid)
                     self.stats["alleles_with_keys" if keys else "alleles_without_keys"] += 1
         genome_file.close()
-        self.spans = {}
+        self.spans, self.index = {}, {}
         for chrom, items in spans.items():
             items.sort()
             lo = np.array([i[0] for i in items], dtype=np.int64)
             hi = np.array([i[1] for i in items], dtype=np.int64)
             self.spans[chrom] = (lo, np.maximum.accumulate(hi))
+            self.index[chrom] = (lo, hi, np.array([i[2] for i in items], dtype=np.int64), np.maximum.accumulate(hi))
+
+    def overlapping(self, chrom, s, e, pad=0):
+        """Truth ids whose span of equivalent placements intersects [s - pad, e + pad)."""
+        if chrom not in self.index:
+            return []
+        lo, hi, tids, maxhi = self.index[chrom]
+        found, j = [], int(np.searchsorted(lo, e + pad, side="left")) - 1
+        while j >= 0 and maxhi[j] > s - pad:
+            if hi[j] > s - pad:
+                found.append(int(tids[j]))
+            j -= 1
+        return found
 
     def near(self, chrom, s, e, distance=NEAR_BP):
         """Any truth allele span within `distance` bp of [s, e)."""
@@ -318,6 +347,140 @@ class TruthSet:
                     representative=representative)
 
 
+# --- partial matches: overlap with a truth allele ------------------------------------
+
+def lcs(a, b):
+    """Length of the longest common subsequence of two short strings."""
+    row = [0] * (len(b) + 1)
+    for x in a:
+        diagonal = 0
+        for j, y in enumerate(b, 1):
+            diagonal, row[j] = row[j], diagonal + 1 if x == y else max(row[j], row[j - 1])
+    return row[-1]
+
+
+def allele_overlap(kind, pos0, ref, alt, truth):
+    """Fraction of two alleles in common, positions included (the truth allele over all its equivalent
+    placements, lo..hi): DEL/DEL the deleted bases both remove, INS/INS the inserted bases both carry at the
+    same insertion point, over the longer allele. Other pairs 0 (a different SNV base; different kinds are
+    compared by haplotype_overlap)."""
+    if kind != truth["kind"] or kind not in ("DEL", "INS"):
+        return 0.0
+    if kind == "DEL":
+        shared = min(len(ref), len(truth["ref"]), max(0, min(pos0 + len(ref), truth["hi"]) - max(pos0, truth["lo"])))
+        return shared / max(len(ref), len(truth["ref"]))
+    if not truth["lo"] <= pos0 <= truth["hi"]:
+        return 0.0
+    left = truth["left_alt"]
+    k = (pos0 - truth["lo"]) % len(left)  # the truth insertion rotates as it moves through a repeat
+    return lcs(alt, left[k:] + left[:k]) / max(len(alt), len(left))
+
+
+def fit_distance(read, text):
+    """Edits aligning `read` entirely inside `text` (free ends in `text`)."""
+    t = np.frombuffer(text.encode(), dtype=np.uint8)
+    positions = np.arange(len(t) + 1, dtype=np.int32)
+    previous = np.zeros(len(t) + 1, dtype=np.int32)
+    for i, base in enumerate(read.encode(), 1):
+        current = np.empty_like(previous)
+        current[0] = i
+        current[1:] = np.minimum(previous[:-1] + (t != base), previous[1:] + 1)
+        previous = np.minimum.accumulate(current - positions) + positions
+    return int(previous.min())
+
+
+def haplotype_overlap(alt_rows, ref_rows, reference, haplotype, event, oriented=True):
+    """Median over the A1 reads of the truth event they carry, from their local sequences (the tensor window):
+    with d_ref, d_truth = edits of a read against the GRCh38 window and against it with the truth allele, both
+    minus the REF reads' median error b, shared = (d_ref + event - d_truth) / 2 and overlap = shared /
+    max(d_ref, event). Catches a truth written differently by the graph alignment (a branch plus a residual
+    edit, a skipped node plus a mismatch). `oriented=False` (off-reference node): each read is taken in the
+    orientation that fits better. None with fewer than 3 A1 reads."""
+    def fits(read):
+        pairs = [(fit_distance(q, reference), fit_distance(q, haplotype)) for q in ([read] if oriented else [read, rc(read)])]
+        return min(pairs, key=min)
+    if len(alt_rows) < 3:
+        return None
+    base = sorted(min(fits(q)) for q in ref_rows)
+    b = base[len(base) // 2] if base else 0
+    overlaps = []
+    for q in alt_rows:
+        d_ref, d_truth = (max(0, d - b) for d in fits(q))
+        shared = max(0.0, (d_ref + event - d_truth) / 2)
+        overlaps.append(shared / max(d_ref, event))
+    return sorted(overlaps)[len(overlaps) // 2]
+
+
+def anchor(path, node, reach=ANCHOR_REACH):
+    """(chrom, start, end) between the nearest unique reference nodes below and above an off-reference node by
+    node ID (Minigraph-Cactus numbers nodes in topological order: a branch node's ID lies between its flanks');
+    None without one within `reach` IDs, or when the two sides are on different contigs."""
+    sides = []
+    below = np.flatnonzero(np.asarray(path.visits[max(1, node - reach):node]) == 1)
+    if below.size:
+        sides.append(max(1, node - reach) + int(below[-1]))
+    above = np.flatnonzero(np.asarray(path.visits[node + 1:node + 1 + reach]) == 1)
+    if above.size:
+        sides.append(node + 1 + int(above[0]))
+    contigs = {int(path.chrom[k]) for k in sides}
+    if len(contigs) != 1:
+        return None
+    points = [int(path.start0[k]) + d for k in sides for d in (0, int(path.lengths[k]))]
+    return path.contigs[contigs.pop()], min(points), max(points)
+
+
+class Evidence:
+    """Read sequences (channel 0) of a merged tensor's A1 and REF rows, and GRCh38 windows."""
+    CODES = {1: "A", 2: "C", 3: "G", 4: "T", 5: "N"}
+
+    def __init__(self, directory, fasta):
+        import pysam
+        self.directory, self.genome, self.loaded = Path(directory), pysam.FastaFile(str(fasta)), (None, None)
+
+    def rows(self, record):
+        name = record["shard_file"]
+        if self.loaded[0] != name:
+            path = self.directory / name
+            self.loaded = (name, np.load(path, mmap_mode="r") if path.exists() else None)
+        if self.loaded[1] is None:
+            return [], []
+        bases = self.loaded[1][record["index_within_shard"], 0]
+        groups = {g["allele"]: (g["start_row"], g["end_row"]) for g in record.get("row_groups", ())}
+        return self.take(bases, groups.get("A1"), EVIDENCE_ROWS), self.take(bases, groups.get("REF"), EVIDENCE_ROWS // 2)
+
+    def take(self, bases, span, limit):
+        if not span or span[1] <= span[0]:
+            return []
+        rows = sorted(set(np.linspace(span[0], span[1] - 1, min(limit, span[1] - span[0])).astype(int).tolist()))
+        sequences = ["".join(self.CODES[c] for c in np.asarray(bases[i]).tolist() if 1 <= c <= 5) for i in rows]
+        return [q for q in sequences if len(q) >= MIN_EVIDENCE_BASES]
+
+    def window(self, chrom, start, end):
+        return self.genome.fetch(chrom, max(0, start), end).upper()
+
+
+def truth_overlap(truth, tid, record, lin, place, evidence, cache):
+    """Overlap (0-1) of a tensor's representative allele with truth allele `tid`: the allele overlap on GRCh38,
+    and for somatic truths the haplotype overlap of its A1 reads when the alleles alone do not overlap enough."""
+    a = truth.alleles[tid]
+    value = allele_overlap(record["event_type"], lin["pos0"], lin["ref"], lin["alt"], a) if lin else 0.0
+    if value > MIN_OVERLAP or truth.name != "somatic" or evidence is None or place is None:
+        return value
+    if "rows" not in cache:
+        alt_rows, ref_rows = evidence.rows(record)
+        if lin and lin["node_reverse"]:
+            alt_rows, ref_rows = [rc(q) for q in alt_rows], [rc(q) for q in ref_rows]
+        cache["rows"] = (alt_rows, ref_rows)
+    alt_rows, ref_rows = cache["rows"]
+    start = max(0, a["pos0"] - HAPLOTYPE_WINDOW)
+    reference = evidence.window(place[0], start, a["pos0"] + len(a["ref"]) + HAPLOTYPE_WINDOW)
+    o = a["pos0"] - start
+    haplotype = reference[:o] + a["alt"] + reference[o + len(a["ref"]):]
+    event = 1 if a["kind"] == "SNP" else max(len(a["ref"]), len(a["alt"]))
+    h = haplotype_overlap(alt_rows, ref_rows, reference, haplotype, event, oriented=lin is not None)
+    return max(value, h or 0.0)
+
+
 # --- labels -------------------------------------------------------------------------
 
 def linear_interval(lin, kind):
@@ -326,8 +489,8 @@ def linear_interval(lin, kind):
     return lin["pos0"], lin["pos0"] + max(1, len(lin["ref"]))
 
 
-def classify(record, somatic, germline, path, confident):
-    """(label value, label name, reason, details) of one merged summary record."""
+def classify(record, somatic, germline, path, confident, evidence=None):
+    """(label value, label name, reason, details) of one merged summary record (rules: module docstring)."""
     representative = record["candidate_id"]
     alleles = record.get("alleles") or [record]
     hits = {}
@@ -337,45 +500,89 @@ def classify(record, somatic, germline, path, confident):
                for truth in (somatic, germline)}
     lin = path.linear(record["node_id"], record["start"], record["ref"], record["alt"], record["event_type"],
                       record.get("path"))
-    details["grch38"] = lin
+    details.update(grch38=lin, partial=None)
     rep_somatic = [tid for cid, tid in hits[somatic.name] if cid == representative]
     rep_germline = [tid for cid, tid in hits[germline.name] if cid == representative]
+    counts = {somatic.name: lambda t: somatic.alleles[t]["passed"],
+              germline.name: lambda t: germline.alleles[t]["passed"] or set(germline.alleles[t]["filters"]) <= GAP_FILTERS}
     # 1 and 2 hold inside or outside the BEDs: a PASS truth allele (germline: or GAP-filtered, see GAP_FILTERS).
     if rep_somatic:
-        if any(somatic.alleles[t]["passed"] for t in rep_somatic):
+        if any(counts[somatic.name](t) for t in rep_somatic):
             return LABELS["somatic"], "somatic", "representative_allele_is_somatic_truth", details
         return LABELS["ignore"], "ignore", "somatic_truth_filtered", details
     filtered_germline = False
     if rep_germline:
         if any(germline.alleles[t]["passed"] for t in rep_germline):
             return LABELS["germline"], "germline", "representative_allele_is_germline_truth", details
-        if any(set(germline.alleles[t]["filters"]) <= GAP_FILTERS for t in rep_germline):
+        if any(counts[germline.name](t) for t in rep_germline):
             return LABELS["germline"], "germline", "representative_allele_is_germline_truth_gap_filtered", details
         filtered_germline = True  # e.g. HET1/HET2: the assembled haplotype itself is ambiguous; not a variant call
-    if any(cid != representative for truth in (somatic, germline) for cid, _ in hits[truth.name]):
-        return LABELS["ignore"], "ignore", "truth_matches_non_representative_allele", details
-    # -1 only where test-time calling can drop the same tensors without truth: no GRCh38 position, outside the BED.
-    if lin is None:
-        return LABELS["ignore"], "ignore", "not_on_unique_grch38_node", details
-    s, e = linear_interval(lin, record["event_type"])
-    if not confident.contains(lin["chrom"], s, e):
+    cache = {}
+
+    def partial(kind, name, truth, tids, place):
+        scored = max((truth_overlap(truth, t, record, lin, place, evidence, cache), t) for t in tids)
+        if scored[0] > MIN_OVERLAP:
+            details.update(partial=kind, overlap=round(scored[0], 3), partial_truth=truth.summary(scored[1], None, False))
+            return LABELS[name], name, f"{kind}_partial_{name}_truth", details
+        return None
+
+    # Another allele of the site is a truth allele: the site is labelled by it when A1 overlaps it > MIN_OVERLAP.
+    others = {truth.name: [t for cid, t in hits[truth.name] if cid != representative and counts[truth.name](t)]
+              for truth in (somatic, germline)}
+    if others[somatic.name] or others[germline.name]:
+        place = (lin["chrom"],) if lin else None
+        for truth, name in ((somatic, "somatic"), (germline, "germline")):
+            if others[truth.name]:
+                result = partial("allele", name, truth, others[truth.name], place)
+                if result:
+                    return result
+        return LABELS["non"], "non", "truth_matches_non_representative_allele", details
+    if hits[somatic.name]:  # another allele is a filtered somatic truth allele
+        return LABELS["ignore"], "ignore", "somatic_truth_filtered", details
+    # Position: GRCh38, or for an off-reference node the interval between the reference nodes around it.
+    if lin is not None:
+        chrom, (s, e), pad = lin["chrom"], linear_interval(lin, record["event_type"]), 1
+        inside = confident.contains(chrom, s, e)
+    else:
+        place = anchor(path, int(record["node_id"]))
+        if place is None:
+            return LABELS["ignore"], "ignore", "not_on_unique_grch38_node", details
+        chrom, s, e = place
+        pad, details["anchor"] = NEAR_BP, dict(chrom=chrom, start=s, end=e)
+        inside = confident.contains(chrom, (s + e) // 2, (s + e) // 2 + 1)
+    # -1 only where test-time calling can drop the same tensors without truth: outside the BED, no position.
+    if not inside:
         return LABELS["ignore"], "ignore", "outside_confident_region", details
-    # 0 is every other tensor: artifacts and errors next to real variants included, as test-time calling sees them.
     if filtered_germline:
         return LABELS["non"], "non", "germline_truth_filtered", details
-    if somatic.near(lin["chrom"], s, e) or germline.near(lin["chrom"], s, e):
+    # A truth allele at the same place that the tensor overlaps by more than MIN_OVERLAP: the same event written
+    # differently (somatic: allele or read-haplotype overlap; germline: allele overlap on GRCh38).
+    tids = [t for t in somatic.overlapping(chrom, s, e, pad) if counts[somatic.name](t)]
+    if tids:
+        result = partial("residual", "somatic", somatic, tids, (chrom,))
+        if result:
+            return result
+    if lin is not None:
+        tids = [t for t in germline.overlapping(chrom, s, e, pad) if counts[germline.name](t)]
+        if tids:
+            result = partial("residual", "germline", germline, tids, (chrom,))
+            if result:
+                return result
+    # 0 is every other tensor: artifacts and errors next to real variants included, as test-time calling sees them.
+    if somatic.near(chrom, s, e) or germline.near(chrom, s, e):
         return LABELS["non"], "non", "near_truth_allele_mismatch", details
     return LABELS["non"], "non", "confident_no_truth_allele", details
 
 
-def label_directory(directory, somatic, germline, path, confident, provenance):
+def label_directory(directory, somatic, germline, path, confident, provenance, fasta=None):
     """Write <chrom>_shard_*_labels.npy, <chrom>_labels.ndjson and labels.manifest.json for one merged directory."""
     directory = Path(directory)
     manifest = read_json(directory / "manifest.json")
     if manifest.get("layout") != "chromosome-shards-v1":
         raise ValueError(f"{directory} is not a merged per-chromosome directory")
-    counts, reasons, written = {}, Counter(), []
+    counts, reasons, partials, written = {}, Counter(), Counter(), []
     matched = {somatic.name: defaultdict(list), germline.name: defaultdict(list)}
+    evidence = Evidence(directory, fasta) if fasta else None
     for chrom, info in manifest["chromosomes"].items():
         counts[chrom] = Counter()
         sizes = {s["file"]: s["tensors"] for s in info["shards"]}
@@ -384,7 +591,9 @@ def label_directory(directory, somatic, germline, path, confident, provenance):
         with (directory / info["summary"]).open() as source, target.with_name(target.name + ".tmp").open("w") as out:
             for line in source:
                 record = json.loads(line)
-                value, name, reason, details = classify(record, somatic, germline, path, confident)
+                value, name, reason, details = classify(record, somatic, germline, path, confident, evidence)
+                if details["partial"]:
+                    partials[f"{details['partial']}_{name}"] += 1
                 arrays[record["shard_file"]][record["index_within_shard"]] = value
                 counts[chrom][name] += 1
                 reasons[reason] += 1
@@ -407,7 +616,8 @@ def label_directory(directory, somatic, germline, path, confident, provenance):
     report = dict(version=VERSION, created=datetime.now(timezone.utc).isoformat(), labels=LABELS,
                   near_bp=NEAR_BP, tensors=sum(sum(c.values()) for c in counts.values()),
                   counts={c: dict(v) for c, v in counts.items()},
-                  totals=dict(sum(counts.values(), Counter())), reasons=dict(reasons), **provenance)
+                  totals=dict(sum(counts.values(), Counter())), reasons=dict(reasons), partial=dict(partials),
+                  min_overlap=MIN_OVERLAP, **provenance)
     write_json(directory / "labels.manifest.json", report)
     return report, matched
 
@@ -481,7 +691,7 @@ def label_run(tensors, kinds, reference_path, fasta, somatic_vcf, somatic_bed, g
                       fasta=str(fasta), reference_path=str(path.directory))
     reports, matched = {}, {somatic.name: defaultdict(list), germline.name: defaultdict(list)}
     for kind in kinds:
-        reports[kind], found = label_directory(Path(tensors) / kind, somatic, germline, path, confident, provenance)
+        reports[kind], found = label_directory(Path(tensors) / kind, somatic, germline, path, confident, provenance, fasta)
         for name, items in found.items():
             for tid, hits in items.items():
                 matched[name][tid] += hits
