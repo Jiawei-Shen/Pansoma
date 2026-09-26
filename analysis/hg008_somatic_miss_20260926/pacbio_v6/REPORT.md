@@ -1,7 +1,7 @@
 # HG008 PacBio v6：没有候选的 somatic 真值，原因分析
 
 - 数据：HG008-T PacBio Revio 116×，**v6 tensors**（job 364673/364850，常染色体，format v6：indel 左对齐、site 单元、supplement runs）。
-- 标签：2026-09-25 用当前规则（含 INS 等价范围修复，commit `9b8b1b3`）重打过的 `v6_tensors` 标签。召回状态和标签规则无关。
+- 标签：`truth-labels-v4`（2026-09-26 重打）。1/2 也给部分匹配（A1 和 truth 在同一位置、重叠 >60%，somatic 另按 A1 reads 的单倍型算重叠）；分支节点按最近的 GRCh38 节点定位；−1 只剩 BED 外、定不了位置、somatic truth 没 PASS。召回状态和标签规则无关，第 2–4 节不受影响；第 5 节和结论里跟标签有关的数字已按 v4 重算。第 6 节例子里写的标签是 v2 时的。
 - 真值：somatic `HG008-T_somatic_smvar_benchmark_v0.2_tumorvariants.vcf.gz` + `_all.bed`；germline dipcall `dip.vcf.gz` + `dip.bed`。
 - 对象：v6 召回报告里状态为"没有候选"的 somatic 等位基因，共 **3,394** 个（SNV 400，INS 2,104，DEL 890）。"没有候选"指：它的任何一种节点坐标写法，既不是任何 tensor 的 allele，也不在 `filtered_candidates` 里。
 - 对照：随机抽 200 个 v6 有 tensor 的 somatic INDEL（≥2 bp 150 个，1 bp 50 个），用同样的方法分析。
@@ -16,7 +16,7 @@
      - v5 里有 tensor、v6 里没有候选的 truth 共 **36 个**（INS 27，DEL 9）；
      - v5 里 filtered、v6 里没有候选的 **305 个**（INS 275，DEL 30）。
      这些全部是 I1/I2，其中 330/341 的序列背景里有 ≥8 bp 的 homopolymer（全部 INDEL 未命中是 2,221/2,994）。ALT reads 走一条人群插入分支（非 GRCh38 节点），剩下的 +A/+T 被左对齐到重复区起点，正好落在这个分支节点上。于是候选没有 GRCh38 坐标（标签 −1 not_on_unique_grch38_node），也不等于任何 truth 键。例子见第 6 节的 chr1:15398784、chr1:81119123。
-3. **I2 的残余 edit 大多有 tensor，但标签不对。** I2 INS 961 个位点里，658 个的残余 edit tensor 在分支节点上（−1）。按 ≥3 条 ALT reads 统计，残余 edit tensor 被标成 **germline** 的有 **301 个不同候选**（INS 位点 123，DEL 位点 95），这些是标签错误；大部分是 −1，不参与训练。
+3. **残余 edits 的标签（v4）。** I1–I3 未命中的残余 edit 里（按不同候选计），有 tensor 的现在：**2,796 个标 1**（部分匹配 somatic truth），**1,031 个标 0**（多数是「附近有 truth 但重叠不到 60%」，v2 时是 −1），328 个标 2，252 个仍是 −1；另有 1,995 个没有 tensor。残余 edit 被标成 germline 的逐条列表共 330 行、330 个不同候选（INS 位点 132，DEL 位点 100）。
 4. **次要原因**（和 v5 基本一样）：
    - ALT reads 很少或没有（I4：INS 51，DEL 16）；
    - MAPQ≤10 或没有 reads（I5：29）；
@@ -136,23 +136,23 @@
 
 | 类别 | somatic | germline | non | ignore | no tensor | (无 ≥3 reads 的残余 edit) |
 |---|---:|---:|---:|---:|---:|---:|
-| DEL I1 | 2 | 28 | 0 | 137 | 132 | 188 |
-| DEL I2 | 8 | 62 | 0 | 369 | 185 | 6 |
-| DEL I3 | 0 | 5 | 0 | 17 | 5 | 0 |
+| DEL I1 | 86 | 29 | 51 | 7 | 132 | 188 |
+| DEL I2 | 280 | 66 | 104 | 21 | 185 | 6 |
+| DEL I3 | 11 | 5 | 10 | 1 | 5 | 0 |
 | DEL I4 | 0 | 0 | 0 | 0 | 0 | 16 |
 | DEL I5 | 0 | 0 | 0 | 0 | 0 | 12 |
 | DEL I6 | 0 | 0 | 0 | 0 | 0 | 4 |
-| DEL I7 | 0 | 0 | 0 | 6 | 4 | 1 |
-| INS I1 | 3 | 34 | 0 | 416 | 299 | 352 |
-| INS I2 | 4 | 73 | 0 | 918 | 534 | 6 |
-| INS I3 | 11 | 14 | 0 | 67 | 33 | 0 |
+| DEL I7 | 5 | 0 | 1 | 0 | 4 | 1 |
+| INS I1 | 219 | 36 | 191 | 22 | 299 | 352 |
+| INS I2 | 722 | 80 | 243 | 60 | 534 | 6 |
+| INS I3 | 53 | 14 | 32 | 4 | 33 | 0 |
 | INS I4 | 0 | 0 | 0 | 0 | 0 | 51 |
 | INS I5 | 0 | 0 | 0 | 0 | 0 | 17 |
-| INS I6 | 0 | 0 | 0 | 3 | 0 | 8 |
-| INS I7 | 0 | 2 | 0 | 8 | 2 | 10 |
+| INS I6 | 1 | 0 | 2 | 0 | 0 | 8 |
+| INS I7 | 7 | 2 | 4 | 0 | 2 | 10 |
 
-- 标签的含义：somatic 基本是附近另一个 somatic truth 的 tensor；germline 是错标；ignore 是 −1（near_truth_allele_mismatch、not_on_unique_grch38_node 等）；no tensor 是残余 edit 没有建成 tensor（AF 或 reads 数不够）。
-- 残余 edit tensor 被标成 germline 的逐条列表：`residual_edits_labelled_germline.tsv`（301 行）。
+- 标签的含义（v4）：somatic 多是部分匹配这个 somatic truth 的 tensor；germline 是残余 edit 正好等于某个 germline truth；non 是重叠不到 60%；ignore 是 BED 外或定不了位置；no tensor 是残余 edit 没有建成 tensor（AF 或 reads 数不够）。
+- 残余 edit tensor 被标成 germline 的逐条列表：`residual_edits_labelled_germline.tsv`（330 行，330 个不同候选）。
 
 ## 6. 例子
 
@@ -222,8 +222,8 @@ v5 的 404 个里，下面 4 个在 v6 有了候选，但没通过过滤：chr15
 
 ## 9. 建议
 
-1. **标签（可以马上做）**：tensor 如果匹配 germline 真值，但落在某个 somatic 真值的等价范围内，改标 −1。这样可以去掉 301 个 INDEL 残余 edit 的 germline 错标（SNV 另有约 30 个）。
-2. **标签（需要设计）**：按单倍型比对真值。把 ALT reads 走的分支和残余 edit 合起来投影到 GRCh38，再和"GRCh38 + 真值"比较。这样 I2/I3 的残余 edit tensor，包括分支节点上没有 GRCh38 坐标的那些，都能对上真值。
+1. **标签（可以马上做）**：tensor 如果匹配 germline 真值，但落在某个 somatic 真值的等价范围内，改标 −1。v4 下仍有 330 个残余 edit 标成 germline（它们正好等于某个 germline truth 的键）（SNV 另有约 30 个）。
+2. **标签（v4 已部分实现）**：v4 按 A1 reads 的单倍型算和 somatic truth 的重叠，超过 60% 的残余 edit 已标 1；重叠不到 60% 的仍标 0（PacBio 1,031 个候选），这部分是否改 −1 还要定。原建议：按单倍型比对真值。把 ALT reads 走的分支和残余 edit 合起来投影到 GRCh38，再和"GRCh38 + 真值"比较。这样 I2/I3 的残余 edit tensor，包括分支节点上没有 GRCh38 坐标的那些，都能对上真值。
 3. **左对齐（需要讨论）**：v6 的左对齐让 36 个 truth 丢了 tensor、305 个从 filtered 变成没有候选，都是 edit 被推进了人群插入分支节点。单倍型投影（第 2 条）能同时解决。也可以考虑不让 indel 左对齐越过"GRCh38 → 非 GRCh38"的节点边界，但这会改变 tensor，需要评估。
 4. **候选生成（需要讨论）**：I1 这类 allele 完全在图里的变异，靠 edits 永远看不到，需要基于图路径的候选。对 tumor-only 来说，germline 的分支使用会带来大量干扰。
 
@@ -238,7 +238,7 @@ v5 的 404 个里，下面 4 个在 v6 有了候选，但没通过过滤：chr15
 | `snv_no_candidate.tsv` | 400 个 SNV 未命中（v5 分析的行，去掉 v6 里变成 filtered 的 4 个） |
 | `controls.tsv` | 200 个 INDEL 对照 |
 | `transitions.tsv` | 每个 INDEL truth 的 v5 状态/类别 → v6 状态/类别 |
-| `residual_edits_labelled_germline.tsv` | 残余 edit tensor 被标成 germline 的 301 行 |
+| `residual_edits_labelled_germline.tsv` | 残余 edit tensor 被标成 germline 的 330 行（v4） |
 | `show_examples.txt`、`examples_pick.tsv`、`show/` | 例子的 reads 逐条显示 |
 | `tables.md` | 本报告的全部表格（`tables.py` 生成） |
 | `reads.py`、`report.py`、`tables.py`、`show_locus.py`、`validate_trim.py`、`pick_examples.py` | 分析脚本 |

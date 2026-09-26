@@ -85,20 +85,32 @@ for k, c in allc:
 for k in ("INS", "DEL", "SNP"):
     pr(f"| {k} | **合计** | " + " | ".join(f"**{sum(v for (kk, _), v in cc[n].items() if kk == k)}**" for n in NAMES) + " |")
 
-# 5. labels
-pr("\n## 5. 标签（truth-labels-v2）\n")
-ORDER = [("somatic", "representative_allele_is_somatic_truth"), ("germline", "representative_allele_is_germline_truth"),
-         ("non", "confident_no_truth_allele"), ("ignore", "outside_confident_region"), ("ignore", "not_on_unique_grch38_node"),
-         ("ignore", "near_truth_allele_mismatch"), ("ignore", "truth_matches_non_representative_allele"),
-         ("ignore", "germline_truth_filtered"), ("ignore", "somatic_truth_filtered")]
-VAL = {"somatic": 1, "germline": 2, "non": 0, "ignore": -1}
+# 5. labels (counted from the label files: the value of a reason differs between label versions)
+lab = {n: Counter() for n in NAMES}; version = {}; both = Counter(); partial = Counter()
+for n, (t, _) in P.items():
+    version[n] = json.load(open(t / "SNV/labels.manifest.json"))["version"]
+    for f in glob.glob(f"{t}/*/chr*_labels.ndjson"):
+        k = f.split("/")[-2]
+        with open(f) as fh:
+            for line in fh:
+                l = json.loads(line)
+                lab[n][(k, l["label"], l["reason"])] += 1
+                if l["label"] == 2 and l["somatic"] and any(g["representative"] for g in l["germline"]) \
+                        and not any(s["representative"] for s in l["somatic"]):
+                    both[n] += 1
+pr("\n## 5. 标签（" + "、".join(f"{n} {version[n]}" for n in NAMES) + "）\n")
 for k in ("SNV", "INDEL"):
-    man = {n: json.load(open(t / k / "labels.manifest.json")) for n, (t, _) in P.items()}
+    total = {n: sum(v for (kk, _, _), v in lab[n].items() if kk == k) for n in NAMES}
+    keys = sorted({(l, r) for n in NAMES for (kk, l, r) in lab[n] if kk == k}, key=lambda x: ({1: 0, 2: 1, 0: 2, -1: 3}[x[0]], x[1]))
     pr(f"\n**{k}**\n\n| 标签 | reason | " + " | ".join(NAMES) + " |\n|---:|---|" + "---:|" * 3)
-    for name, reason in ORDER:
-        pr(f"| {VAL[name]} | {reason} | " + " | ".join(f"{man[n]['reasons'].get(reason, 0):,} ({pct(man[n]['reasons'].get(reason, 0), man[n]['tensors'])})" for n in NAMES) + " |")
-    pr("| | 合计 | " + " | ".join(f"{man[n]['tensors']:,}" for n in NAMES) + " |")
-    pr("| | 0 : 1 | " + " | ".join(f"{man[n]['totals'].get('non', 0) / max(1, man[n]['totals'].get('somatic', 0)):.0f} : 1" for n in NAMES) + " |")
+    for l, r in keys:
+        pr(f"| {l} | {r} | " + " | ".join(f"{lab[n][(k, l, r)]:,} ({pct(lab[n][(k, l, r)], total[n])})" for n in NAMES) + " |")
+    for l, name in ((1, "1 合计"), (2, "2 合计"), (0, "0 合计"), (-1, "−1 合计")):
+        pr(f"| | **{name}** | " + " | ".join(f"**{sum(v for (kk, ll, _), v in lab[n].items() if kk == k and ll == l):,}**" for n in NAMES) + " |")
+    pr("| | 总数 | " + " | ".join(f"{total[n]:,}" for n in NAMES) + " |")
+    ones = {n: sum(v for (kk, ll, _), v in lab[n].items() if kk == k and ll == 1) for n in NAMES}
+    zeros = {n: sum(v for (kk, ll, _), v in lab[n].items() if kk == k and ll == 0) for n in NAMES}
+    pr("| | 0 : 1 | " + " | ".join(f"{zeros[n] / max(1, ones[n]):.0f} : 1" for n in NAMES) + " |")
 
 # 6. label-quality items
 pr("\n## 6. 标签质量问题\n")
@@ -106,16 +118,7 @@ rows = []
 for n, (t, a) in P.items():
     res = list(csv.DictReader(open(a / "residual_edits_labelled_germline.tsv"), delimiter="\t"))
     snv = list(csv.DictReader(open(a / "snv_no_candidate.tsv"), delimiter="\t"))
-    both = 0
-    for f in glob.glob(f"{t}/*/chr*_labels.ndjson"):
-        with open(f) as fh:
-            for line in fh:
-                if '"somatic": []' in line or '"label": 2,' not in line:
-                    continue
-                l = json.loads(line)
-                if any(g["representative"] for g in l["germline"]) and not any(s["representative"] for s in l["somatic"]):
-                    both += 1
-    rows.append((n, len({r["residual_candidate"] for r in res}), sum(r["germline_same_allele"] == "True" for r in snv), both))
+    rows.append((n, len({r["residual_candidate"] for r in res}), sum(r["germline_same_allele"] == "True" for r in snv), both[n]))
 pr("| | " + " | ".join(NAMES) + " |\n|---|" + "---:|" * 3)
 pr("| 残余 edit 的 tensor 被标成 germline（不同候选数） | " + " | ".join(str(r[1]) for r in rows) + " |")
 pr("| SNV 未命中里 germline 真值在同一位置、同一 ALT | " + " | ".join(str(r[2]) for r in rows) + " |")

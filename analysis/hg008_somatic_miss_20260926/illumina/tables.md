@@ -171,19 +171,19 @@
 
 | 类别 | somatic | germline | non | ignore | no tensor | (无 ≥3 reads 的残余 edit) |
 |---|---:|---:|---:|---:|---:|---:|
-| DEL I1 | 1 | 3 | 0 | 242 | 179 | 439 |
-| DEL I2 | 7 | 102 | 0 | 343 | 165 | 29 |
-| DEL I3 | 1 | 6 | 0 | 22 | 7 | 1 |
+| DEL I1 | 31 | 6 | 202 | 19 | 179 | 439 |
+| DEL I2 | 186 | 106 | 210 | 20 | 165 | 29 |
+| DEL I3 | 13 | 6 | 13 | 1 | 7 | 1 |
 | DEL I4 | 0 | 0 | 0 | 0 | 0 | 42 |
 | DEL I5 | 0 | 0 | 0 | 0 | 0 | 17 |
 | DEL I6 | 0 | 0 | 0 | 0 | 0 | 1 |
-| DEL I7 | 0 | 0 | 0 | 1 | 1 | 6 |
-| INS I1 | 0 | 3 | 0 | 579 | 364 | 422 |
-| INS I2 | 3 | 122 | 0 | 862 | 399 | 92 |
-| INS I3 | 13 | 17 | 0 | 57 | 21 | 5 |
+| DEL I7 | 1 | 0 | 0 | 0 | 1 | 6 |
+| INS I1 | 63 | 3 | 495 | 54 | 364 | 422 |
+| INS I2 | 431 | 123 | 565 | 65 | 399 | 92 |
+| INS I3 | 41 | 17 | 37 | 3 | 21 | 5 |
 | INS I4 | 0 | 0 | 0 | 0 | 0 | 264 |
 | INS I5 | 0 | 0 | 0 | 0 | 0 | 84 |
-| INS I7 | 0 | 0 | 0 | 4 | 3 | 6 |
+| INS I7 | 2 | 0 | 4 | 0 | 3 | 6 |
 
 ### 对照（有 tensor 的 truth，同样方法分析）
 
@@ -193,8 +193,8 @@
 | site_bypassed:skip_edge:edit_on_path_taken | 0 | 2 | 16 |
 | site_bypassed:branch:edit_on_path_taken | 0 | 4 | 5 |
 | site_on_grch38:other_edit | 0 | 1 | 4 |
-| fewer_than_3_ALT_reads | 0 | 2 | 0 |
 | site_bypassed:branch:no_edit | 0 | 1 | 1 |
+| fewer_than_3_ALT_reads | 0 | 2 | 0 |
 | no_read_spans_site | 0 | 1 | 0 |
 
 ### SNV 没有候选（Illumina 339；ONT 342；PacBio v6 400）

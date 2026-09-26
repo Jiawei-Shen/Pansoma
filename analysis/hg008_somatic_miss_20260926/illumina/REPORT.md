@@ -6,7 +6,7 @@
   - 深度超过 1 万的 683 个 node 下采样到 10,000 条 read；
   - 没有 supplement 轮。
   - 目录是 `pansoma_v2_tensors/Liss_lab_BCM_Illumina-WGS_20240313/v3_tensors`。
-- 标签：用 `truth-labels-v2` 原地重打过，和 PacBio v6、ONT 现在的规则相同；旧标签清单备份在 `tmp/relabel_20260925/Illumina/`。召回状态和重打前完全一样。
+- 标签：`truth-labels-v4`（2026-09-26 重打）。1/2 也给部分匹配（A1 和 truth 在同一位置、重叠 >60%，somatic 另按 A1 reads 的单倍型算重叠）；分支节点按最近的 GRCh38 节点定位；−1 只剩 BED 外、定不了位置、somatic truth 没 PASS。召回状态和标签规则无关，第 2–4 节不受影响；第 5 节和结论里跟标签有关的数字已按 v4 重算。第 6 节例子里写的标签是 v2 时的。
 - 真值：
   - somatic：`HG008-T_somatic_smvar_benchmark_v0.2_tumorvariants.vcf.gz` + `_all.bed`；
   - germline：dipcall `dip.vcf.gz` + `dip.bed`。
@@ -41,7 +41,7 @@
    - 在两个平台都漏掉的 1,752 个 I1 / I2 位点上，像 REF 的 read 中位数 Illumina 0 条、ONT 6 条。
    - 逐条看的 4 个位点里，ONT 的「像 REF」多是同聚物长度噪声；Illumina 的 read 长度都等于 ALT，被归为「other」的是长 T 串之后零散的替换错误（Illumina 在长同聚物之后的典型错误）。
    - 这里的「ALT 比例」是「比 REF 更接近 ALT」的 read 比例，不等于 VAF。
-6. **残余 edits 的 tensor 被标成 germline 的更多：317 个不同候选**（ONT 194），集中在 INS I2（122 个位点）和 DEL I2（102 个位点）。
+6. **残余 edits 的标签（v4）。** I1–I3 未命中的残余 edit 里（按不同候选计），有 tensor 的现在：**1,054 个标 1**（部分匹配 somatic truth），**2,729 个标 0**（多数是「附近有 truth 但重叠不到 60%」，v2 时是 −1），319 个标 2，343 个仍是 −1；另有 1,762 个没有 tensor。残余 edit 被标成 germline 的逐条列表共 344 行、326 个不同候选（INS 位点 143，DEL 117，SNV 18）。
 7. **下采样没有影响真值：** 683 个深 node 上没有任何 somatic 真值的键。
 8. SNV：30 个 somatic SNV 的 germline 真值在同一位置、同一个 ALT（ONT 35），不适合当 somatic 正例。
 
@@ -199,21 +199,21 @@
 
 | 类别 | somatic | germline | non | ignore | no tensor | (无 ≥3 reads 的残余 edit) |
 |---|---:|---:|---:|---:|---:|---:|
-| DEL I1 | 1 | 3 | 0 | 242 | 179 | 439 |
-| DEL I2 | 7 | 102 | 0 | 343 | 165 | 29 |
-| DEL I3 | 1 | 6 | 0 | 22 | 7 | 1 |
+| DEL I1 | 31 | 6 | 202 | 19 | 179 | 439 |
+| DEL I2 | 186 | 106 | 210 | 20 | 165 | 29 |
+| DEL I3 | 13 | 6 | 13 | 1 | 7 | 1 |
 | DEL I4 | 0 | 0 | 0 | 0 | 0 | 42 |
 | DEL I5 | 0 | 0 | 0 | 0 | 0 | 17 |
 | DEL I6 | 0 | 0 | 0 | 0 | 0 | 1 |
-| DEL I7 | 0 | 0 | 0 | 1 | 1 | 6 |
-| INS I1 | 0 | 3 | 0 | 579 | 364 | 422 |
-| INS I2 | 3 | 122 | 0 | 862 | 399 | 92 |
-| INS I3 | 13 | 17 | 0 | 57 | 21 | 5 |
+| DEL I7 | 1 | 0 | 0 | 0 | 1 | 6 |
+| INS I1 | 63 | 3 | 495 | 54 | 364 | 422 |
+| INS I2 | 431 | 123 | 565 | 65 | 399 | 92 |
+| INS I3 | 41 | 17 | 37 | 3 | 21 | 5 |
 | INS I4 | 0 | 0 | 0 | 0 | 0 | 264 |
 | INS I5 | 0 | 0 | 0 | 0 | 0 | 84 |
-| INS I7 | 0 | 0 | 0 | 4 | 3 | 6 |
+| INS I7 | 2 | 0 | 4 | 0 | 3 | 6 |
 
-逐条列表：`residual_edits_labelled_germline.tsv`，334 行，317 个不同候选（INS 189 行、DEL 121 行、SNV 24 行）。
+逐条列表：`residual_edits_labelled_germline.tsv`（344 行，326 个不同候选）。
 
 ## 6. SNV（339）
 
@@ -276,7 +276,7 @@ PacBio 的 48 个 S1，Illumina 有 22 个成了代表 allele（ONT 40 个）。
 
 ## 9. 建议
 
-1. **标签**：和 PacBio、ONT 的建议相同。tensor 落在 somatic 真值的等价范围内时，不标 germline 而标 −1（Illumina 317 个候选）；用单倍型投影匹配真值。
+1. **标签**：和 PacBio、ONT 的建议相同。tensor 落在 somatic 真值的等价范围内时，不标 germline 而标 −1（v4 下 Illumina 326 个候选）。v4 已按单倍型重叠把 1,054 个残余 edit 标成 1，但重叠不到 60% 的 2,729 个标成了 0（比标 1 的还多），是否改 −1 还要定。
 2. **I1 是三个平台共同的主要问题，而且长读段的部分召回来自噪声。** 只靠 edits 找候选，看不见图里已有的 somatic allele。建议优先做「基于路径的候选」：read 走了非 GRCh38 的分支或跳过边、且这条路径对应的 allele 在该位点有足够支持时，也生成候选。这对 Illumina 的收益最大（I1 INS 1,136、DEL 780）。
 3. **Illumina 的长插入和长重复（I4 / I5，约 400 个）是短读段本身的限制**，靠调参解决不了，适合交给长读段数据。
 4. **INDEL 的 AF 门槛**：之前的测试显示，降到 0.05 只多召回 92 个真值 indel，而没有候选的有一半以上，瓶颈不在 AF。
@@ -293,7 +293,7 @@ PacBio 的 48 个 S1，Illumina 有 22 个成了代表 allele（ONT 40 个）。
 | `snv_no_candidate.tsv` | 339 个 SNV 未命中，另有 SNV 专用列 |
 | `controls.tsv` | 250 个对照 |
 | `transitions.tsv` | 每个真值的 PacBio v6、ONT、Illumina 状态和类别 |
-| `residual_edits_labelled_germline.tsv` | 残余 edit tensor 被标成 germline 的 334 行 |
+| `residual_edits_labelled_germline.tsv` | 残余 edit tensor 被标成 germline 的 344 行（v4） |
 | `show_examples.txt`、`examples_pick.tsv`、`show/` | 例子的 reads 逐条显示 |
 | `ont_show_compare/`、`refgap_loci.txt` | 同一批位点在 ONT 里的 reads（第 1 节第 2、5 点） |
 | `tables.md` | 全部表格（`tables.py` 生成） |
