@@ -31,9 +31,11 @@ to the INDEL directory, each with its own AF threshold (--snv-min-af, --indel-mi
 Every stream is closed before any manifest is saved with status "complete".
 
 Deep nodes (--downsample-nodes, from discovery's node_stats; or a single node over
---max-batch-alignments) are built alone in their batch from the --downsample-reads MAPQ-passing
-records with the smallest sample key (a hash of the record bytes): a fixed sample, whatever the
-batching, whose sites carry `downsampled_from` (the records they were drawn from).
+--max-batch-alignments) are built from the --downsample-reads MAPQ-passing records with the smallest
+sample key (a hash of the record bytes): a fixed sample per node, whatever the batching, whose sites
+carry `downsampled_from` (the records they were drawn from). Consecutive deep nodes (up to
+DEEP_GROUP) share one fetch and one decode, but each node's prefilters, counts and tensors see only
+its own sample, so its outputs equal those of the node built alone.
 
 Records are decoded by the native decoder when it is built and passes its checks
 (--decoder auto, the default; native.py), else by candidates.decode_alignment; the
@@ -52,7 +54,7 @@ from .candidates import (FORMAT_VERSION, SCHEMA_VERSION, STORAGE_VERSION,
     NodeReads, decode_alignment, alt_support_bounds, exact_coverage, make_site_tensor)
 from .common import batches, load_nodes, new_output, sha256_file, write_json
 from .tensor_postprocessing.chr_index import select_nodes
-from .gam_reader import IndexedGam
+from .gam_reader import IndexedGam, SampleTooLarge
 from .graph_index import GraphIndex
 from .native import select_decoder
 
@@ -87,6 +89,11 @@ def recorded(args, keys):
 
 AUTO_SIZES = (512, 1024, 2048)  # --batch-nodes auto: the batch sizes tried at each position
 AUTO_GAIN = 0.2  # a larger batch must cut the estimated GAM bytes per target node by at least this fraction
+# Neighbouring deep nodes (a collapsed repeat: thousands of nodes over the same reads) are fetched and decoded
+# together, up to DEEP_GROUP nodes per batch, with at most DEEP_GAP other target nodes between two deep nodes;
+# every node still sees only its own sample (the other nodes: all their records, as they are not deep).
+DEEP_GROUP = 64
+DEEP_GAP = 2
 
 
 class BatchTooLarge(ValueError):
@@ -122,9 +129,11 @@ def adaptive_batches(nodes, reader, max_span):
 
 
 def planned_batches(nodes, reader, args, deep):
-    """(batch, plan) in node order: every deep node alone (plan downsample=True), the runs of other
-    nodes between them batched by --batch-nodes (auto: adaptive_batches; plan None for a fixed size)."""
-    run = []
+    """(batch, plan) in node order: runs of deep nodes in groups of at most DEEP_GROUP nodes (node-ID
+    span <= --max-node-span; plan downsample=True), which may hold up to DEEP_GAP other nodes between
+    two deep nodes; the runs of other nodes between groups batched by --batch-nodes (auto:
+    adaptive_batches; plan None for a fixed size)."""
+    run, group, gap = [], [], []  # gap: the other nodes after the group's last deep node
 
     def flush():
         if run:
@@ -132,12 +141,29 @@ def planned_batches(nodes, reader, args, deep):
                         else ((b, None) for b in batches(run, args.batch_nodes, args.max_node_span)))
             run.clear()
 
+    def close_group():  # the nodes after the last deep node go back to ordinary batching
+        if group:
+            yield list(group), dict(downsample=True, reason="node_stats")
+            group.clear()
+        run.extend(gap)
+        gap.clear()
+
     for node in nodes:
         if node in deep:
-            yield from flush()
-            yield [node], dict(downsample=True, reason="node_stats")
+            if group and (len(group) + len(gap) >= DEEP_GROUP or node - group[0] > args.max_node_span):
+                yield from close_group()
+            if not group:
+                yield from flush()
+            group.extend(gap)
+            gap.clear()
+            group.append(node)
+        elif group:
+            gap.append(node)
+            if len(gap) > DEEP_GAP:
+                yield from close_group()
         else:
             run.append(node)
+    yield from close_group()
     yield from flush()
 
 
@@ -382,10 +408,17 @@ def _build_batches(args, nodes, reader, graph, shared, typed, started, decode):
 
     timings = defaultdict(float)
     auto = args.batch_nodes == "auto"
-    planned = planned_batches(nodes, reader, args, load_deep_nodes(args.downsample_nodes))
+    deep = load_deep_nodes(args.downsample_nodes)
+    planned = planned_batches(nodes, reader, args, deep)
     downsampled = {}  # node -> (records sampled from, records kept, reason)
     queue = deque()  # auto: halves of a batch that exceeded --max-batch-alignments; a single node to sample
     bi = 0
+
+    def split(batch, plan):  # a deep-node group in two halves, in order; a half without deep nodes is ordinary
+        half = len(batch) // 2
+        queue.extendleft([(b, dict(plan, split=True) if deep.intersection(b) else (dict(split=True) if auto else None))
+                          for b in (batch[half:], batch[:half])])
+
     while True:
         if queue:
             batch, plan = queue.popleft()
@@ -396,32 +429,55 @@ def _build_batches(args, nodes, reader, graph, shared, typed, started, decode):
             batch, plan = item
         batch_started = time.perf_counter()
         wanted = set(batch)
-        # 1. Fetch every complete alignment touching the batch; collect all visited nodes.
+        # 1. Fetch every complete alignment touching the batch (deep nodes: every node's own sample);
+        #    collect all visited nodes.
         metrics = {}
         alignments = []
+        drawn_for = None  # deep nodes: per record, the nodes whose sample it belongs to
         context_nodes = set(wanted)
         sample = args.downsample_reads if plan is not None and plan.get("downsample") else None
         try:
-            for alignment in reader.fetch(wanted, metrics, sample=sample):
-                if alignment.mapping_quality <= args.min_mapq:
-                    continue
-                alignments.append(alignment)
-                context_nodes.update(m.position.node_id for m in alignment.path.mapping)
-                if sample is None and len(alignments) > args.max_batch_alignments:  # a sample has its own bound
-                    raise BatchTooLarge("Batch alignment limit exceeded; reduce --batch-nodes or raise "
-                                        "--max-batch-alignments")
+            if sample is None:
+                for alignment in reader.fetch(wanted, metrics):
+                    if alignment.mapping_quality <= args.min_mapq:
+                        continue
+                    alignments.append(alignment)
+                    context_nodes.update(m.position.node_id for m in alignment.path.mapping)
+                    if len(alignments) > args.max_batch_alignments:
+                        raise BatchTooLarge("Batch alignment limit exceeded; reduce --batch-nodes or raise "
+                                            "--max-batch-alignments")
+            else:  # a sample has its own bound: the samples of a group together hold <= 2 x --downsample-reads
+                drawn_for = []
+                for alignment, nodes_drawn in reader.sample(wanted, sample, metrics, limit=2 * sample):
+                    if alignment.mapping_quality <= args.min_mapq:
+                        continue
+                    alignments.append(alignment)
+                    drawn_for.append(nodes_drawn)
+                    context_nodes.update(m.position.node_id for m in alignment.path.mapping)
+        except SampleTooLarge:  # deep nodes sharing few reads
+            alignments.clear()
+            split(batch, plan)
+            continue
         except BatchTooLarge:
             alignments.clear()
-            if len(batch) == 1 and sample is None:  # one node never fails the run: build it from a sample
+            if len(batch) == 1:  # one node never fails the run: build it from a sample
                 queue.appendleft((batch, dict(plan or {}, downsample=True, reason="max_batch_alignments")))
                 continue
-            if not auto or len(batch) < 2:
+            if not auto:
                 raise
             half = len(batch) // 2  # auto: retry as two halves, in order
             queue.extendleft([(batch[half:], dict(plan, split=True)), (batch[:half], dict(plan, split=True))])
             continue
-        if sample is not None and metrics["sampled_from"] > sample:
-            downsampled[batch[0]] = (metrics["sampled_from"], len(alignments), plan["reason"])
+        if sample is not None and plan["reason"] == "node_stats" and any(
+                n not in deep and metrics["sampled_from"][n] > sample for n in batch):
+            alignments.clear()  # a node between deep nodes has more records than a sample: build it ordinarily
+            split(batch, plan)
+            continue
+        if sample is not None:
+            for node in batch:
+                if metrics["sampled_from"][node] > sample:
+                    downsampled[node] = (metrics["sampled_from"][node], sum(node in d for d in drawn_for),
+                                         plan["reason"])
         bi += 1
         timings["gam_fetch_seconds"] += time.perf_counter() - batch_started
         # 2. Sequences and path counts for the targets and all context nodes.
@@ -433,13 +489,18 @@ def _build_batches(args, nodes, reader, graph, shared, typed, started, decode):
         # 3. Decode edits; keep candidate observations on target nodes only.
         t = time.perf_counter()
         reads, candidates, by_node = [], set(), defaultdict(list)
+        drawn_reads = defaultdict(list)  # deep nodes: node -> the reads of its sample
         for ai in range(len(alignments)):
             read, rejected = decode(alignments[ai], sequences, args.max_indel_len, target_nodes=wanted)
             alignments[ai] = None  # the decoded Read owns everything we still need
             reads.append(read)
-            for node in {v.node for v in read.visits} & wanted:
+            mine = wanted if drawn_for is None else drawn_for[ai]  # a sampled record counts only where drawn
+            for node in {v.node for v in read.visits} & mine:
                 by_node[node].append(read)
-            candidates.update(o.candidate for o in read.observations if o.candidate.node in wanted)
+            if drawn_for is not None:
+                for node in mine:
+                    drawn_reads[node].append(read)
+            candidates.update(o.candidate for o in read.observations if o.candidate.node in mine)
             for event in rejected:
                 record("unsupported", dict(event, record_sha256=read.digest,
                     in_target_nodes=event["node_id"] in wanted, batch_index=bi,
@@ -448,43 +509,48 @@ def _build_batches(args, nodes, reader, graph, shared, typed, started, decode):
         # 4. Prefilters over ALL records of each node, before any read cap, with no overlap scan:
         #    ALT support upper bound < min_variants, then ALT bound / exact coverage < AF threshold.
         #    Both only drop candidates that support counting would reject for the same reason.
+        #    A deep-node group runs steps 4 and 5 node by node on each node's own sample, exactly as
+        #    that node built alone.
         t = time.perf_counter()
-        bounds = alt_support_bounds(reads, candidates, args.min_allele_bq)
-        ordered = sorted(candidates)
-        coverage = (exact_coverage([c for c in ordered if bounds[c] >= args.min_variants], reads)
-                    if args.early_af_filter else {})
-        kept = []
-        for candidate in ordered:
-            extra = dict(site_id=site_id(candidate))
-            if bounds[candidate] < args.min_variants:
-                record("filtered", dict(candidate.metadata(), reasons=["min_variants"],
-                    alt_support_upper_bound=bounds[candidate], coverage_not_evaluated=True, **extra))
-            elif args.early_af_filter and (coverage[candidate] == 0 or
-                                           bounds[candidate] / coverage[candidate] < af_threshold(candidate, args)):
-                depth = coverage[candidate]
-                record("filtered", dict(candidate.metadata(), reasons=["min_af"],
-                    alt_support_upper_bound=bounds[candidate], coverage=depth,
-                    af_upper_bound=bounds[candidate] / depth if depth else 0.0,
-                    support_not_evaluated=True, **extra))
-            else:
-                kept.append(candidate)
-        # 5. Per site, in sorted order: cap the node's records, count support for every
-        #    allele, encode the site. Sites are sorted by node, so one NodeReads (the capped
-        #    records and their oriented visit views) serves every site of a node and is
-        #    dropped when the next node starts.
-        node_reads = None
-        for unit in candidate_units(kept):
-            node = unit[0].node
-            if node_reads is None or node_reads.node != node:
-                node_reads = NodeReads(node, capped_reads(by_node[node], args.max_node_reads), args.width)
-            rejected_alleles, tensor, meta = evaluate_unit(unit, node_reads, args, path_counts)
-            for rejection in rejected_alleles:
-                record("filtered", rejection)
-            if tensor is None:
-                continue
-            if node in downsampled:
-                meta["downsampled_from"] = downsampled[node][0]
-            sinks[KIND[meta["event_type"]]].add(tensor, meta)
+        parts = ([(reads, candidates)] if drawn_for is None else
+                 [(drawn_reads[node], {c for c in candidates if c.node == node}) for node in batch])
+        for part_reads, part_candidates in parts:
+            bounds = alt_support_bounds(part_reads, part_candidates, args.min_allele_bq)
+            ordered = sorted(part_candidates)
+            coverage = (exact_coverage([c for c in ordered if bounds[c] >= args.min_variants], part_reads)
+                        if args.early_af_filter else {})
+            kept = []
+            for candidate in ordered:
+                extra = dict(site_id=site_id(candidate))
+                if bounds[candidate] < args.min_variants:
+                    record("filtered", dict(candidate.metadata(), reasons=["min_variants"],
+                        alt_support_upper_bound=bounds[candidate], coverage_not_evaluated=True, **extra))
+                elif args.early_af_filter and (coverage[candidate] == 0 or
+                                               bounds[candidate] / coverage[candidate] < af_threshold(candidate, args)):
+                    depth = coverage[candidate]
+                    record("filtered", dict(candidate.metadata(), reasons=["min_af"],
+                        alt_support_upper_bound=bounds[candidate], coverage=depth,
+                        af_upper_bound=bounds[candidate] / depth if depth else 0.0,
+                        support_not_evaluated=True, **extra))
+                else:
+                    kept.append(candidate)
+            # 5. Per site, in sorted order: cap the node's records, count support for every
+            #    allele, encode the site. Sites are sorted by node, so one NodeReads (the capped
+            #    records and their oriented visit views) serves every site of a node and is
+            #    dropped when the next node starts.
+            node_reads = None
+            for unit in candidate_units(kept):
+                node = unit[0].node
+                if node_reads is None or node_reads.node != node:
+                    node_reads = NodeReads(node, capped_reads(by_node[node], args.max_node_reads), args.width)
+                rejected_alleles, tensor, meta = evaluate_unit(unit, node_reads, args, path_counts)
+                for rejection in rejected_alleles:
+                    record("filtered", rejection)
+                if tensor is None:
+                    continue
+                if node in downsampled:
+                    meta["downsampled_from"] = downsampled[node][0]
+                sinks[KIND[meta["event_type"]]].add(tensor, meta)
         timings["candidate_tensors_and_shard_writes_seconds"] += time.perf_counter() - t
         shared.save(timing=dict(timings))
         with (shared.path / "batch_timing.ndjson").open("a") as log:
@@ -499,7 +565,8 @@ def _build_batches(args, nodes, reader, graph, shared, typed, started, decode):
               f"{written()} tensors so far", flush=True)
         # 6. Release this batch before the next fetch so two batches never coexist in memory.
         by_node.clear()
-        node_reads = None
+        drawn_reads.clear()
+        node_reads = parts = part_reads = None
         reads.clear()
         alignments.clear()
     if downsampled:

@@ -11,10 +11,10 @@ tensor bytes for the same inputs and options) and has since gained deep-node sam
 reader, normalized-only discovery, a parallel merge and the truth-labels-v2 rule (section 10).
 
 ```
-runtime  4,790 lines of Python in 17 files + fastdecode.cpp (659 lines); frozen per run: 21 files, ~2.5 MB
+runtime  4,890 lines of Python in 17 files + fastdecode.cpp (659 lines); frozen per run: 21 files, ~2.5 MB
          (2.2 MB of it the compiled decoder)
 tools    916 lines in 6 files (not frozen)
-tests    4,644 lines in 13 files, 145 tests, ~50 s on a quiet node
+tests    4,707 lines in 13 files, 147 tests, ~50 s on a quiet node
 ```
 
 ---
@@ -237,9 +237,18 @@ grouping; audit-stream order and `batch_timing` rows do (each row records its `b
 
 **Deep nodes.** A node with far more reads than the rest of the sample (collapsed satellites, rDNA:
 on HG008 Illumina WGS the median target has 220 MAPQ>5 mappings, 683 have more than 10,000 and one
-5.4 million) is built alone in its batch from a fixed sample: the `--downsample-reads` MAPQ-passing
-records with the smallest BLAKE2b key of their bytes — the same records whatever the batching or
-process count, uniform with respect to the alleles they carry (AF unbiased), read once. Its sites
+5.4 million) is built from a fixed sample: the `--downsample-reads` MAPQ-passing records with the
+smallest BLAKE2b key of their bytes — the same records whatever the batching or process count,
+uniform with respect to the alleles they carry (AF unbiased). Deep nodes come in runs (a collapsed
+repeat: COLO829T ONT has 2,034 in one task, fiberseq 3,377), and neighbouring ones share their
+reads, so up to `DEEP_GROUP` = 64 of them, with at most `DEEP_GAP` = 2 other target nodes between two
+deep nodes, form one batch: one fetch, one decode, each node's sample drawn in the same pass
+(`IndexedGam.sample`), and prefilters, counts and tensors run node by node on that node's own sample
+only, so every node's tensors equal those of the node built alone (tested). The other nodes of such
+a batch have at most `--downsample-reads` records (they are not deep), so their sample is all of
+their records, exactly as in an ordinary batch; if one has more, or the samples together hold more
+than 2 × `--downsample-reads` records, the batch is split in halves. Built one at a time, a deep
+ONT-UL node took 436 s (fetch 207 s, decode 224 s, tensors 5 s): about 10 days for that one task. Its sites
 get `downsampled_from` (the number of records sampled from) in their summary; the shared directory
 lists every sampled node in `downsampled_nodes.tsv` (node, records, kept, reason), and the manifests
 record `downsample` (table, SHA-256, sample size). Deep nodes come from `--downsample-nodes`
@@ -754,10 +763,10 @@ suite instead of silently decoding in Python. With the decoder built, the only s
 pass is the native graph-index builder test, which needs the two environment variables of the
 third line.
 
-145 tests in 13 files cover: GAI reading, cache/scan equivalence (limits 1, 2048 and 64 MiB),
+147 tests in 13 files cover: GAI reading, cache/scan equivalence (limits 1, 2048 and 64 MiB),
 refusal of cache 0 and GAI v0/v99, bin arrays against the per-bin scan, the MAPQ-filtered cache,
-the sampled fetch; deep-node builds (alone, fixed sample, other nodes unchanged, single-node limit)
-and the prepare table; discovery (native counts against a Python reference for 1–3 processes,
+per-node samples of several nodes in one pass; deep-node builds (fixed sample, other nodes unchanged,
+single-node limit, groups equal to the nodes built alone, splits) and the prepare table; discovery (native counts against a Python reference for 1–3 processes,
 segment tiling, outputs independent of the process count, an indel counted on the node it is
 normalized to); decoding, N filter, limits, unsupported events, left-normalization (strand
 symmetry, idempotence, cross-node insertions and deletions); support rules, windows, blocks and
@@ -839,6 +848,8 @@ leaves them out.
   * the UPGMA fallback for invalid scipy trees (`12c29d3`, HG008 Illumina task 206);
   * the parallel merge (`8367f73`; the single-process copy of HG008 Illumina, 833 GB of tensors plus
     258 GB of audit streams, ran at ~150 MB/s; chr22: 227 → 101 s with 8 workers);
+  * deep-node groups (2026-09-26, after COLO829T ONT/fiberseq: one task each needed 7–10 days because
+    every deep node of a collapsed repeat fetched and decoded the same ~10,000 long reads again);
   * truth-labels-v2 (`ba1dec2`: labels 1/2 need a PASS truth allele, the BEDs only bound the
     confident region).
 

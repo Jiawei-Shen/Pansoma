@@ -13,7 +13,7 @@ import unittest
 
 from .fixtures import build_args, build_index, encode_varint, simple_alignment, tiny_gam, write_gam
 from ..common import batches, load_nodes
-from ..gam_reader import IndexedGam, sample_key, scan_gam, varint
+from ..gam_reader import IndexedGam, SampleTooLarge, sample_key, scan_gam, varint
 from ..run import discover
 
 
@@ -76,12 +76,32 @@ class IndexedQueryTest(unittest.TestCase):
             self.assertEqual(len(full), 40)
             for size in (1, 7, 39, 40, 100):
                 metrics = {}
-                sampled = [a.SerializeToString() for a in reader.fetch({10}, metrics, sample=size)]
+                drawn = reader.sample({10}, size, metrics)
                 keep = set(sorted(full, key=sample_key)[:size])
-                self.assertEqual(sampled, [r for r in full if r in keep])
-                self.assertEqual(metrics["sampled_from"], 40)
-            self.assertEqual([a.SerializeToString() for a in IndexedGam(path).fetch({10}, sample=7)],
-                             [a.SerializeToString() for a in reader.fetch({10}, sample=7)])  # cache-independent
+                self.assertEqual([a.SerializeToString() for a, _ in drawn], [r for r in full if r in keep])
+                self.assertEqual({nodes for _, nodes in drawn}, {frozenset({10})})
+                self.assertEqual(metrics["sampled_from"], {10: 40})
+            self.assertEqual([a.SerializeToString() for a, _ in IndexedGam(path).sample({10}, 7)],
+                             [a.SerializeToString() for a, _ in reader.sample({10}, 7)])  # cache-independent
+
+    def test_each_node_of_a_multi_node_sample_gets_its_own_sample(self):
+        with tempfile.TemporaryDirectory() as directory:
+            rows = [simple_alignment(nodes, name=f"r{i}") for i, nodes in
+                    enumerate([(10,), (10, 20), (10, 20, 30), (20, 30), (30,), (20,)] * 9)]
+            path = write_gam(Path(directory) / "m.gam", rows)
+            reader = IndexedGam(path)
+            for size in (3, 10, 25, 100):
+                metrics = {}
+                drawn = reader.sample({10, 20, 30}, size, metrics)
+                raws = [a.SerializeToString() for a, _ in drawn]
+                self.assertEqual(raws, [r.SerializeToString() for r in rows if r.SerializeToString() in set(raws)])
+                for node in (10, 20, 30):  # exactly the node's sample when asked for alone
+                    alone = [a.SerializeToString() for a, _ in reader.sample({node}, size)]
+                    self.assertEqual([a.SerializeToString() for a, nodes in drawn if node in nodes], alone)
+                self.assertEqual(metrics["sampled_from"], {10: 27, 20: 36, 30: 27})
+            with self.assertRaises(SampleTooLarge):
+                reader.sample({10, 20, 30}, 20, limit=30)  # 20 per node over 54 records: more than 30 distinct
+            self.assertEqual(len(reader.sample({10, 20, 30}, 20, limit=60)), len(reader.sample({10, 20, 30}, 20)))
 
 
 class GamReaderTest(unittest.TestCase):
