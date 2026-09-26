@@ -2,7 +2,7 @@
  "format": "golden-hashes-v1",
  "recorded_with": {
   "package": "indexed_gam_pipeline_v2",
-  "commit": "d0d25d6465e1e1d7f123e95a427ef59ceea40cf4",
+  "commit": "5e8215032d26c62e45b00a29c79b68d8ae2b3809",
   "source_sha256": {
    "__init__.py": "cf1c6b7f0bb0b52c019d9d74721de839a8034d452663f8ac38ce180844d57f60",
    "build.py": "5f7a9f8f562e76dc209e144b75cea6d77057777406a00c000b9f5c751fbfc007",
@@ -21,7 +21,7 @@
    "tensor_postprocessing/chr_index.py": "dfb4b893df838042843945848acf1b94d81c22ce2a142aafffdd52db7e8bedd7",
    "tensor_postprocessing/merge_shards.py": "fcb4c7319389bd0bc09af046707e990f58c2addf7fec99fc3ff6c37cd44fabfa",
    "tensor_postprocessing/reference_path.py": "4d7104b8c4177cffbd3ac627d220a09cd6d74236be399d14bb868bccabe93939",
-   "tensor_postprocessing/truth_labels.py": "f85306df0ec60ab3d36ad44a93cc471044428b35bd28dbaf4709212bd355d9bc",
+   "tensor_postprocessing/truth_labels.py": "bc19b959274c83f6e325dd101a13e406bf934e1361dfe3d79d017d431be3fac8",
    "validate_examples.py": "03c81373a3bc2f461e25e944906e34d3ae3de564535e0a2e681d04fe0d8e57d8",
    "vg_pb2.py": "8127b52f97c32457c3bf3084109ba99b4d39182af2635cd7b72b24a6edb9e6e3"
   },
@@ -189,7 +189,7 @@
    "filtered_candidates",
    "unsupported_events"
   ],
-  "tensor_postprocessing.truth_labels.VERSION": "truth-labels-v1",
+  "tensor_postprocessing.truth_labels.VERSION": "truth-labels-v2",
   "tensor_postprocessing.truth_labels.LABELS": {
    "ignore": -1,
    "non": 0,
@@ -505,7 +505,7 @@
     "tensors/INDEL/chr2_shard_00000_labels.npy": "8160731c7f71475719ad18a37b2629cc137a83576986feb48ffb71e3ecf93445",
     "tensors/INDEL/chr2_variant_summary.ndjson": "a8931cb5a0af9077445e3cf796a9a5ebc9fa14dad528a35f239818cb047e07f8",
     "tensors/INDEL/filtered_candidates.ndjson": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "tensors/INDEL/labels.manifest.json": "ba9d783496795077da33e913b1288bd4248f7891670a5b11bbde8f6800ca01cd",
+    "tensors/INDEL/labels.manifest.json": "c6fb1e2ca544d90d66c3e4ced1400ea9c0a268cd8a1e642822553a7758b8a461",
     "tensors/INDEL/manifest.json": "59cd6a190d6e838526820393d84ddc622eb1bd0d2e57abe2cebb08bea9f2da89",
     "tensors/INDEL/task_0000/filtered_candidates.ndjson": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "tensors/INDEL/task_0000/manifest.json": "6f7c39ee464d794cc131becd8b7beceed509e120a7030a67a2d780eab26a7eec",
@@ -542,7 +542,7 @@
     "tensors/SNV/chr2_shard_00000_labels.npy": "8160731c7f71475719ad18a37b2629cc137a83576986feb48ffb71e3ecf93445",
     "tensors/SNV/chr2_variant_summary.ndjson": "91eea2b36a7046e56932b0c25f54a6dc3c5a6c5718005461b3e8b4511ad65c61",
     "tensors/SNV/filtered_candidates.ndjson": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "tensors/SNV/labels.manifest.json": "3d2a1f7010e4852e180481548c1e8fdb106d6aaa35e20951b4178e1bb1e7b4ea",
+    "tensors/SNV/labels.manifest.json": "46cba87fa9f92455a6c40a2602819ba71c7fb8a14182a82d25106721b94a67b0",
     "tensors/SNV/manifest.json": "16110301eb54749e467682284c8324c11e86a45dfac17c7286b9931c10a8a882",
     "tensors/SNV/task_0000/filtered_candidates.ndjson": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "tensors/SNV/task_0000/manifest.json": "806901f925b1db728f7c21e70f90680c78786176a9891e90837f458c72039e88",

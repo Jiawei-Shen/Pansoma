@@ -698,6 +698,8 @@ statistics, stage timings and counters (`tensors`, `shards`, `filtered_candidate
   `gam_group_cache`) like timings: they say how the reader found the records, not what was built.
   The goldens were recorded again from the unchanged v2 (`d0d25d6`) with these masks when v3's
   reader stopped re-parsing low-MAPQ records (2026-09-25); every other fingerprint was unchanged.
+  Recorded again from v2 `5e82150` after the truth-labels-v2 rule change (2026-09-26): only the
+  label manifests, the `truth_labels.VERSION` constant and the source hash changed.
 
 ---
 
