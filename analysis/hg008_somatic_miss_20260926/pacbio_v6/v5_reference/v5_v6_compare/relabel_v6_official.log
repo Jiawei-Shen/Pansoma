@@ -1,0 +1,164 @@
+[E::idx_find_and_load] Could not retrieve index file for '/scratch/jshen/data/HG008_GIAB/dipcall_HG008N_GRCh38/HG008N_GRCh38_dipcall.dip.vcf.gz'
+{
+  "labels": {
+    "SNV": {
+      "totals": {
+        "ignore": 805541,
+        "germline": 315336,
+        "non": 51228,
+        "somatic": 8234
+      },
+      "reasons": {
+        "outside_confident_region": 589635,
+        "representative_allele_is_germline_truth": 315336,
+        "confident_no_truth_allele": 51228,
+        "near_truth_allele_mismatch": 35590,
+        "not_on_unique_grch38_node": 106031,
+        "germline_truth_filtered_or_outside_bed": 74076,
+        "representative_allele_is_somatic_truth": 8234,
+        "truth_matches_non_representative_allele": 209
+      }
+    },
+    "INDEL": {
+      "totals": {
+        "ignore": 459006,
+        "non": 1307535,
+        "germline": 146052,
+        "somatic": 4097
+      },
+      "reasons": {
+        "not_on_unique_grch38_node": 123317,
+        "outside_confident_region": 79965,
+        "confident_no_truth_allele": 1307535,
+        "representative_allele_is_germline_truth": 146052,
+        "near_truth_allele_mismatch": 241902,
+        "truth_matches_non_representative_allele": 8300,
+        "representative_allele_is_somatic_truth": 4097,
+        "germline_truth_filtered_or_outside_bed": 5522
+      }
+    }
+  },
+  "recall": {
+    "somatic": {
+      "alleles": 17186,
+      "status": {
+        "tensor_representative": 12295,
+        "no_candidate": 3394,
+        "filtered": 1112,
+        "tensor_non_representative_allele": 385
+      },
+      "by_kind": {
+        "DEL": {
+          "tensor_representative": 2102,
+          "no_candidate": 890,
+          "filtered": 337,
+          "filtered:min_variants": 155,
+          "tensor_non_representative_allele": 216,
+          "filtered:min_af": 178,
+          "filtered:min_af,min_variants": 4
+        },
+        "SNP": {
+          "tensor_representative": 8234,
+          "no_candidate": 400,
+          "filtered": 54,
+          "filtered:min_variants": 38,
+          "filtered:min_af": 16,
+          "tensor_non_representative_allele": 2
+        },
+        "INS": {
+          "no_candidate": 2104,
+          "tensor_representative": 1959,
+          "filtered": 721,
+          "filtered:min_variants": 334,
+          "tensor_non_representative_allele": 167,
+          "filtered:min_af": 283,
+          "filtered:min_af,min_variants": 104
+        }
+      }
+    },
+    "germline": {
+      "alleles": 5061892,
+      "status": {
+        "no_candidate": 4323708,
+        "tensor_representative": 539092,
+        "filtered": 188654,
+        "tensor_non_representative_allele": 10327,
+        "complex_allele": 111
+      },
+      "by_kind": {
+        "SNP": {
+          "no_candidate": 3599615,
+          "tensor_representative": 389422,
+          "filtered": 49477,
+          "filtered:min_variants": 43538,
+          "filtered:min_af": 5939,
+          "tensor_non_representative_allele": 388
+        },
+        "INS": {
+          "no_candidate": 392578,
+          "tensor_representative": 42929,
+          "filtered": 73726,
+          "filtered:min_af": 23803,
+          "filtered:min_variants": 42231,
+          "tensor_non_representative_allele": 4880,
+          "filtered:min_af,min_variants": 7692
+        },
+        "DEL": {
+          "no_candidate": 331515,
+          "filtered": 65451,
+          "filtered:min_variants": 32997,
+          "tensor_representative": 106741,
+          "tensor_non_representative_allele": 5059,
+          "filtered:min_af": 31672,
+          "filtered:min_af,min_variants": 782
+        },
+        "COMPLEX": {
+          "complex_allele": 111
+        }
+      }
+    }
+  },
+  "truth_stats": {
+    "somatic": {
+      "records": 17171,
+      "alleles_DEL": 3545,
+      "alleles_with_keys": 17186,
+      "alleles_SNP": 8690,
+      "alleles_INS": 4951,
+      "records_other_contigs": 1781
+    },
+    "germline": {
+      "records": 4962019,
+      "alleles_SNP": 4038902,
+      "alleles_with_keys": 5061781,
+      "alleles_INS": 514113,
+      "alleles_DEL": 508766,
+      "alleles_COMPLEX": 111,
+      "alleles_without_keys": 111,
+      "records_other_contigs": 204070
+    }
+  }
+}
+	Command being timed: "python3 -m indexed_gam_pipeline_v2.tensor_postprocessing label --tensors /scratch/jshen/data/HG008_GIAB/pansoma_v2_tensors/Liss_lab_PacBio_Revio_20240125/v6_tensors --kinds SNV INDEL --reference-path /scratch/jshen/data/HG008_GIAB/pansoma_v2_tensors/graph_index/hprc-v1.1-mc-grch38.d9.grch38_path --fasta /scratch/jshen/data/HapMap/GCA_000001405.15_GRCh38_no_alt_analysis_set.fasta --somatic-vcf /scratch/jshen/data/HG008_GIAB/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_tumorvariants.vcf.gz --somatic-bed /scratch/jshen/data/HG008_GIAB/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_all.bed --germline-vcf /scratch/jshen/data/HG008_GIAB/dipcall_HG008N_GRCh38/HG008N_GRCh38_dipcall.dip.vcf.gz --germline-bed /scratch/jshen/data/HG008_GIAB/dipcall_HG008N_GRCh38/HG008N_GRCh38_dipcall.dip.bed --truth-dir /scratch/jshen/data/HG008_GIAB/pansoma_v2_tensors/truth"
+	User time (seconds): 737.19
+	System time (seconds): 49.97
+	Percent of CPU this job got: 73%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 17:56.45
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 14475832
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 19327
+	Minor (reclaiming a frame) page faults: 10025927
+	Voluntary context switches: 1907620
+	Involuntary context switches: 33683
+	Swaps: 0
+	File system inputs: 160757332
+	File system outputs: 8783669
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

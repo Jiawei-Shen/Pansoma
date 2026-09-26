@@ -1,0 +1,27 @@
+final_class	kind	chrom	vcf_pos	vcf_ref	vcf_alt	alt_exact	alt_like	spanning	reason	residual
+I1_allele_fully_in_graph	DEL	chr12	25045848	TAA	T	99	62	180	site_bypassed:skip_edge:no_edit	
+I1_allele_fully_in_graph	DEL	chr1	7284177	CTTATTA	C	86	12	99	site_bypassed:skip_edge:no_edit	220626:0:DEL:G>(3)=ignore:not_on_unique_grch38_node; 220624:0:DEL:TT>(3)=no tensor
+I1_allele_fully_in_graph	INS	chr16	52827238	C	CA	102	16	129	site_bypassed:branch:no_edit	
+I1_allele_fully_in_graph	INS	chr3	118180974	T	TAC	99	8	108	site_bypassed:branch:no_edit	
+I2_partly_in_graph_residual_edit	DEL	chr20	60781828	CAAAAAAAAAAAAAAA	C	79	83	162	site_bypassed:skip_edge:edit_on_path_taken	31330306:0:DEL:A>(83)=ignore:near_truth_allele_mismatch; 31330306:0:DEL:AA>@31330307(17)=ignore(other site allele):near_truth_allele_mismatch; 31330306:0:INS:>A(8)=no tensor; 31330303:0:DEL:AA>@313303
+I2_partly_in_graph_residual_edit	DEL	chr2	80669853	ATT	A	79	29	174	site_bypassed:skip_edge:edit_on_path_taken	26920655:0:DEL:T>(80)=germline:representative_allele_is_germline_truth
+I2_partly_in_graph_residual_edit	INS	chr20	58872348	T	TAA	82	14	173	site_bypassed:branch:edit_on_path_taken	31293240:0:INS:>A(85)=ignore:not_on_unique_grch38_node; 31293240:0:INS:>AA(10)=no tensor
+I2_partly_in_graph_residual_edit	INS	chr5	37589249	T	TACACACACAC	79	39	171	site_bypassed:branch:edit_on_path_taken	42077285:56:INS:>AC(84)=ignore:near_truth_allele_mismatch; 42077285:56:INS:>ACAC(10)=no tensor
+I3_grch38_path_different_edit	DEL	chr15	34847140	CAAA	C	49	58	107	site_on_grch38:other_edit	17057276:341:SNP:A>C(56)=ignore:near_truth_allele_mismatch; 17057280:0:DEL:A>(7)=ignore:not_on_unique_grch38_node
+I3_grch38_path_different_edit	DEL	chr2	21561803	TTTTG	T	44	73	126	site_on_grch38:other_edit	25766028:0:DEL:G>(35)=ignore:near_truth_allele_mismatch; 25766025:0:DEL:T>(17)=ignore:near_truth_allele_mismatch; 25766027:1:DEL:TG>@25766028(3)=no tensor
+I3_grch38_path_different_edit	INS	chr13	107514434	T	TATCA	70	64	134	site_on_grch38:other_edit	13612951:0:SNP:T>A(72)=ignore:near_truth_allele_mismatch
+I3_grch38_path_different_edit	INS	chr13	89318482	C	CAAAA	47	14	119	site_on_grch38:other_edit	14686110:15:SNP:C>A(56)=ignore:near_truth_allele_mismatch; 14686110:15:DEL:C>(5)=no tensor; 14686110:12:INS:>A(3)=no tensor; 14686110:16:INS:>A(3)=no tensor
+I4_no_or_few_alt_reads	DEL	chr14	79049081	TAATAA	T	0	2	84	fewer_than_3_ALT_reads	
+I4_no_or_few_alt_reads	DEL	chr1	149151144	ATT	A	0	1	6	fewer_than_3_ALT_reads	
+I4_no_or_few_alt_reads	INS	chr10	96641127	G	GCGCGCA	0	2	70	fewer_than_3_ALT_reads	
+I4_no_or_few_alt_reads	INS	chr14	85239342	G	GGAGAGAGA	0	2	116	fewer_than_3_ALT_reads	
+I5_low_mapq_or_no_reads	DEL	chr1	143797416	CT	C	0	0	0	no_read_spans_site	
+I5_low_mapq_or_no_reads	DEL	chr1	144665794	AT	A	0	0	0	no_read_spans_site	
+I5_low_mapq_or_no_reads	INS	chr1	144023258	G	GT	0	0	0	no_read_spans_site	
+I5_low_mapq_or_no_reads	INS	chr10	47702343	C	CT	0	0	0	no_read_spans_site	
+I6_longer_than_50bp	INS	chr1	217375648	T	TTTTTTTTTTTTTTATTATACTCTAAGTTT	27	28	102	indel_longer_than_50	
+I6_longer_than_50bp	INS	chr14	24965340	T	TTGCTGTTGTCTTTTTTTTTTTTTTTTTTT	26	49	138	indel_longer_than_50	
+I7_unclear	DEL	chr11	12168964	GAAAA	G	35	70	106	site_on_grch38:no_local_edit	7843816:0:SNP:A>G(9)=ignore:near_truth_allele_mismatch
+I7_unclear	DEL	chr10	30405519	ATAT	A	15	52	74	site_on_grch38:no_local_edit	6602174:0:DEL:T>(4)=no tensor; 6602182:0:DEL:A>(3)=ignore:not_on_unique_grch38_node
+I7_unclear	INS	chr11	25529858	A	AAAAAG	44	16	114	site_on_grch38:no_local_edit	
+I7_unclear	INS	chr14	58054883	A	AAAAT	34	30	124	site_on_grch38:no_local_edit	15409211:0:SNP:T>A(15)=ignore:not_on_unique_grch38_node

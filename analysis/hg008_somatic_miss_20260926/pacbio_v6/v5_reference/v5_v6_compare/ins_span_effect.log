@@ -1,0 +1,7 @@
+somatic loaded 17186
+[E::idx_find_and_load] Could not retrieve index file for '/scratch/jshen/data/HG008_GIAB/dipcall_HG008N_GRCh38/HG008N_GRCh38_dipcall.dip.vcf.gz'
+germline loaded 5061892
+v5 SNV near_truth 35590 changed_by_fix 1119 {'SNP': 1119} distance_from_INS_leftmost {'<=50': 380, '<=20': 568, '<=100': 117, '>100': 53, '<=10': 1}
+v5 INDEL near_truth 281657 changed_by_fix 37065 {'DEL>1': 3086, 'INS>1': 5329, 'DEL1': 23662, 'INS1': 4988} distance_from_INS_leftmost {'<=50': 12879, '<=20': 23650, '<=100': 433, '<=10': 15, '>100': 88}
+v6 SNV near_truth 35590 changed_by_fix 1119 {'SNP': 1119} distance_from_INS_leftmost {'<=50': 380, '<=20': 568, '<=100': 117, '>100': 53, '<=10': 1}
+v6 INDEL near_truth 241902 changed_by_fix 7142 {'INS>1': 1378, 'DEL1': 4200, 'INS1': 1024, 'DEL>1': 540} distance_from_INS_leftmost {'<=50': 2917, '<=20': 3974, '<=100': 175, '<=10': 6, '>100': 70}

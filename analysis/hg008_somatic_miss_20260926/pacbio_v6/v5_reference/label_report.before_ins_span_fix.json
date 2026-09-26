@@ -1,0 +1,140 @@
+{
+  "labels": {
+    "SNV": {
+      "totals": {
+        "ignore": 804422,
+        "germline": 315336,
+        "non": 52347,
+        "somatic": 8234
+      },
+      "reasons": {
+        "outside_confident_region": 589635,
+        "representative_allele_is_germline_truth": 315336,
+        "confident_no_truth_allele": 52347,
+        "near_truth_allele_mismatch": 34471,
+        "not_on_unique_grch38_node": 106031,
+        "germline_truth_filtered_or_outside_bed": 74076,
+        "representative_allele_is_somatic_truth": 8234,
+        "truth_matches_non_representative_allele": 209
+      }
+    },
+    "INDEL": {
+      "totals": {
+        "ignore": 556338,
+        "non": 599564,
+        "germline": 165639,
+        "somatic": 6777
+      },
+      "reasons": {
+        "not_on_unique_grch38_node": 149755,
+        "outside_confident_region": 152498,
+        "near_truth_allele_mismatch": 244592,
+        "confident_no_truth_allele": 599564,
+        "representative_allele_is_germline_truth": 165639,
+        "representative_allele_is_somatic_truth": 6777,
+        "truth_matches_non_representative_allele": 3031,
+        "germline_truth_filtered_or_outside_bed": 6462
+      }
+    }
+  },
+  "recall": {
+    "somatic": {
+      "alleles": 17186,
+      "status": {
+        "tensor_representative": 12200,
+        "no_candidate": 3188,
+        "filtered": 1651,
+        "tensor_non_representative_allele": 147
+      },
+      "by_kind": {
+        "DEL": {
+          "tensor_representative": 2043,
+          "no_candidate": 958,
+          "filtered": 507,
+          "filtered:min_af": 190,
+          "filtered:min_af,min_variants": 105,
+          "filtered:min_variants": 212,
+          "tensor_non_representative_allele": 37
+        },
+        "SNP": {
+          "tensor_representative": 8234,
+          "no_candidate": 404,
+          "filtered": 50,
+          "filtered:min_variants": 36,
+          "filtered:min_af": 14,
+          "tensor_non_representative_allele": 2
+        },
+        "INS": {
+          "no_candidate": 1826,
+          "tensor_representative": 1923,
+          "filtered": 1094,
+          "filtered:min_variants": 555,
+          "filtered:min_af,min_variants": 264,
+          "tensor_non_representative_allele": 108,
+          "filtered:min_af": 275
+        }
+      }
+    },
+    "germline": {
+      "alleles": 5061892,
+      "status": {
+        "no_candidate": 4290455,
+        "tensor_representative": 511450,
+        "filtered": 256799,
+        "complex_allele": 111,
+        "tensor_non_representative_allele": 3077
+      },
+      "by_kind": {
+        "SNP": {
+          "no_candidate": 3599842,
+          "tensor_representative": 389422,
+          "filtered": 49250,
+          "filtered:min_variants": 43327,
+          "filtered:min_af": 5923,
+          "tensor_non_representative_allele": 388
+        },
+        "INS": {
+          "no_candidate": 357915,
+          "filtered": 115860,
+          "filtered:min_variants": 73344,
+          "tensor_representative": 38288,
+          "filtered:min_af": 23748,
+          "filtered:min_af,min_variants": 18768,
+          "tensor_non_representative_allele": 2050
+        },
+        "DEL": {
+          "no_candidate": 332698,
+          "filtered": 91689,
+          "filtered:min_variants": 46882,
+          "tensor_representative": 83740,
+          "filtered:min_af,min_variants": 18913,
+          "filtered:min_af": 25894,
+          "tensor_non_representative_allele": 639
+        },
+        "COMPLEX": {
+          "complex_allele": 111
+        }
+      }
+    }
+  },
+  "truth_stats": {
+    "somatic": {
+      "records": 17171,
+      "alleles_DEL": 3545,
+      "alleles_with_keys": 17186,
+      "alleles_SNP": 8690,
+      "alleles_INS": 4951,
+      "records_other_contigs": 1781
+    },
+    "germline": {
+      "records": 4962019,
+      "alleles_SNP": 4038902,
+      "alleles_with_keys": 5061781,
+      "alleles_INS": 514113,
+      "alleles_DEL": 508766,
+      "alleles_COMPLEX": 111,
+      "alleles_without_keys": 111,
+      "records_other_contigs": 204070
+    }
+  }
+}
