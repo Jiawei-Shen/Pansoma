@@ -37,7 +37,7 @@ from indexed_gam_pipeline_v2.common import read_json, sha256_file, write_json
 from indexed_gam_pipeline_v2.tensor_postprocessing.chr_index import AUTOSOMES
 from indexed_gam_pipeline_v2.tensor_postprocessing.reference_path import ReferencePath, rc
 
-VERSION = "truth-labels-v1"
+VERSION = "truth-labels-v2"  # v2: 1 and 2 need a PASS truth allele; BEDs only define the confident region
 LABELS = {"ignore": -1, "non": 0, "somatic": 1, "germline": 2}
 NEAR_BP = 10
 MAX_SHIFTS = 5000
@@ -334,13 +334,15 @@ def classify(record, somatic, germline, path, confident):
     details["grch38"] = lin
     rep_somatic = [tid for cid, tid in hits[somatic.name] if cid == representative]
     rep_germline = [tid for cid, tid in hits[germline.name] if cid == representative]
+    # A truth allele counts only with FILTER PASS/"."; its BED membership does not matter here.
     if rep_somatic:
-        return LABELS["somatic"], "somatic", "representative_allele_is_somatic_truth", details
+        if any(somatic.alleles[t]["passed"] for t in rep_somatic):
+            return LABELS["somatic"], "somatic", "representative_allele_is_somatic_truth", details
+        return LABELS["ignore"], "ignore", "somatic_truth_filtered", details
     if rep_germline:
-        good = [t for t in rep_germline if germline.alleles[t]["passed"] and germline.alleles[t]["in_bed"]]
-        if good:
+        if any(germline.alleles[t]["passed"] for t in rep_germline):
             return LABELS["germline"], "germline", "representative_allele_is_germline_truth", details
-        return LABELS["ignore"], "ignore", "germline_truth_filtered_or_outside_bed", details
+        return LABELS["ignore"], "ignore", "germline_truth_filtered", details
     if hits[somatic.name] or hits[germline.name]:
         return LABELS["ignore"], "ignore", "truth_matches_non_representative_allele", details
     if lin is None:

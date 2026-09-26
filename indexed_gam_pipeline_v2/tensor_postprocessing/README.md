@@ -101,10 +101,10 @@ sources are gone. A second merge of the same run is refused.
 
 | value | name | rule |
 |---:|---|---|
-| 1 | somatic | representative allele is a somatic truth allele |
-| 2 | germline | representative allele is a germline truth allele with FILTER PASS/`.` inside the germline BED |
+| 1 | somatic | representative allele is a somatic truth allele with FILTER PASS/`.` (inside or outside the somatic BED) |
+| 2 | germline | representative allele is a germline truth allele with FILTER PASS/`.` (inside or outside the germline BED) |
 | 0 | non | unique GRCh38 node, inside somatic BED ∩ germline BED, no truth allele at the site, none within 10 bp |
-| −1 | ignore | anything else; `reason` says why (`outside_confident_region`, `not_on_unique_grch38_node`, `near_truth_allele_mismatch`, `germline_truth_filtered_or_outside_bed`, `truth_matches_non_representative_allele`) |
+| −1 | ignore | anything else; `reason` says why (`outside_confident_region`, `not_on_unique_grch38_node`, `near_truth_allele_mismatch`, `somatic_truth_filtered`, `germline_truth_filtered`, `truth_matches_non_representative_allele`) |
 
 Outputs, next to the merged shards and in summary order:
 `<chrom>_shard_NNNNN_labels.npy` (int8), `<chrom>_labels.ndjson` (label, reason, matched truth

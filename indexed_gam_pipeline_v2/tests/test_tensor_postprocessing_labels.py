@@ -175,18 +175,23 @@ class TruthLabelTest(unittest.TestCase):
             path = ReferencePath(tmp / "rp")
             locator = Locator(path)
             # somatic: 1-bp DEL in the T run (VCF anchored at the G before it), SNV at 30.
+            # somatic: 1-bp DEL in the T run, SNV at 30, and a filtered SNV at 60 (not PASS -> ignore).
+            s_alt = "A" if CHR1[60] != "A" else "C"
             somatic_vcf = write_vcf(tmp / "somatic.vcf", [(3, "GT", "G", "PASS", "0|1"),
-                                                          (31, CHR1[30], "A" if CHR1[30] != "A" else "C", "PASS", "0|1")])
+                                                          (31, CHR1[30], "A" if CHR1[30] != "A" else "C", "PASS", "0|1"),
+                                                          (61, CHR1[60], s_alt, "LowQual", "0|1")])
             g_alt = "A" if CHR1[45] != "A" else "C"
             f_alt = "A" if CHR1[50] != "A" else "C"
+            o_alt = "A" if CHR1[72] != "A" else "C"
             germline_vcf = write_vcf(tmp / "germline.vcf", [(46, CHR1[45], g_alt, "PASS", "1|1"),
-                                                            (51, CHR1[50], f_alt, "GAP1", "1|0")])
+                                                            (51, CHR1[50], f_alt, "GAP1", "1|0"),
+                                                            (73, CHR1[72], o_alt, "PASS", "0|1")])  # PASS, outside germline BED
             (tmp / "somatic.bed").write_text("chr1\t0\t80\n")
             (tmp / "germline.bed").write_text("chr1\t0\t70\n")
             somatic = TruthSet("somatic", somatic_vcf, tmp / "somatic.bed", fasta, locator, chromosomes=("chr1",))
             germline = TruthSet("germline", germline_vcf, tmp / "germline.bed", fasta, locator, chromosomes=("chr1",))
             # The DEL has five placements across nodes 1 and 2; all four single-node ones are keys.
-            (deletion, snv) = somatic.alleles
+            (deletion, snv, _) = somatic.alleles
             self.assertEqual(deletion["placements"], 5)
             self.assertEqual(deletion["keys"], sorted(["1:3:DEL:T>", "1:4:DEL:T>", "2:4:DEL:A>", "2:5:DEL:A>", "2:6:DEL:A>"]))
             confident = somatic.bed.intersect(germline.bed)
@@ -206,7 +211,9 @@ class TruthLabelTest(unittest.TestCase):
             cases = [
                 ("somatic_del", vcf_del, [], 1, "representative_allele_is_somatic_truth"),
                 ("germline", candidate(45, g_alt), [], 2, "representative_allele_is_germline_truth"),
-                ("germline_filtered", candidate(50, f_alt), [], -1, "germline_truth_filtered_or_outside_bed"),
+                ("germline_filtered", candidate(50, f_alt), [], -1, "germline_truth_filtered"),
+                ("germline_outside_bed", candidate(72, o_alt), [], 2, "representative_allele_is_germline_truth"),
+                ("somatic_filtered", candidate(60, s_alt), [], -1, "somatic_truth_filtered"),
                 ("other_allele", candidate(30, snv_alt), [candidate(30, snv["alt"])], -1,
                  "truth_matches_non_representative_allele"),
                 ("near", candidate(33, other(33)), [], -1, "near_truth_allele_mismatch"),
@@ -233,10 +240,10 @@ class TruthLabelTest(unittest.TestCase):
             for (name, _, _, value, reason), line in zip(cases, lines):
                 self.assertEqual((line["label"], line["reason"]), (value, reason), name)
             self.assertEqual(lines[0]["somatic"][0]["vcf_pos"], 3)
-            self.assertEqual(report["totals"], {"somatic": 1, "germline": 1, "ignore": 5, "non": 1})
+            self.assertEqual(report["totals"], {"somatic": 1, "germline": 2, "ignore": 6, "non": 1})
             self.assertEqual(LABELS, {"ignore": -1, "non": 0, "somatic": 1, "germline": 2})
             summary = recall(somatic, matched["somatic"], {}, tmp)
-            self.assertEqual(summary["status"], {"tensor_representative": 1, "tensor_non_representative_allele": 1})
+            self.assertEqual(summary["status"], {"tensor_representative": 2, "tensor_non_representative_allele": 1})
             self.assertTrue((tmp / "somatic.recall.tsv").exists())
 
     def test_insertion_near_span_covers_the_whole_repeat(self):
