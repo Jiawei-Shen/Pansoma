@@ -1,0 +1,18 @@
+hit 8275
+   germline at same pos                18    0.2%
+   germline same pos, same ALT         10    0.1%
+   germline within 50bp: 0           6929   83.7%
+   germline within 50bp: 1           1037   12.5%
+   germline within 50bp: >=2          309    3.7%
+   node 1bp                           216    2.6%
+   node 2-32bp                        355    4.3%
+   node >32bp                        7704   93.1%
+no_candidate 342
+   germline at same pos                40   11.7%
+   germline same pos, same ALT         35   10.2%
+   germline within 50bp: 0             26    7.6%
+   germline within 50bp: 1             53   15.5%
+   germline within 50bp: >=2          263   76.9%
+   node 1bp                           242   70.8%
+   node 2-32bp                         74   21.6%
+   node >32bp                          26    7.6%

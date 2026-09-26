@@ -1,0 +1,54 @@
+chr20:60533829 G>C GT 0/1  kind SNP  span [60533828,60533829)
+  REF TTAAAAATGTGTGTGTCTGTGTGTGTGTGTGTGTGTGTGTG
+  ALT TTAAAAATGTGTGTGTCTGTCTGTGTGTGTGTGTGTGTGTG
+  REF   TTAAAAATGTGTGTGTCTGTGTGTGTGTGTGTGTGTGTGTG  ops .........................................  path 31325060
+  REF   TTAAAAATGTGTGTGTCTGTGTGTGTGTGTGTGTGTGTGTG  ops .........................................  path 31325060
+  REF   TTAAAAATGTGTGTGTCTGTGTGTGTGTGTGTGTGTGTGTG  ops .........................................  path 31325060
+  REF   TTAAAAATGTGTGTGTCTGTGTGTGTGTGTGTGTGTGTGTG  ops .........................................  path 31325060
+  other TTAAAAATGTGTGTGTCTCTGTGTGTGTGTGTGTGTGTGTG  ops ..................X......................  path 31325060
+  REF   TTAAAAATGTGTGTGTCTGTGTGTGTGTGTGTGTGTGTGTG  ops .........................................  path 31325060
+  other TTAAAAATGTGTGTGTCTCTGTGTGTGTGTGTGTGTGTGTG  ops ..................X......................  path 31325060
+  other TTGAAAATGTGTGTGTCTCTGTGTGTGTGTGTGTGTGTGTG  ops ..X...............X......................  path 31325060
+  other TTAAAAATGTGTGTGTCTCTGTGTGTGTGTGTGTGTGTGTG  ops ..................X......................  path 31325060
+  other TTAAAAATGTGTGTGTCTCTGTGTGTGTGTGTGTGTGTGTG  ops ..................X......................  path 31325060
+  other TTAAAAATGTGTGTGTCTCTGTGTGTGTGTGTGTGTGTGTG  ops ..................X......................  path 31325060
+  other TTAAAAATGTGTGTGTCTCTGTGTGTGTGTGTGTGTGTGTG  ops ..................X......................  path 31325060
+  other TTAAAAATGTGTGTGTCTCTGTGTGTGTGTGTGTGTGTGTG  ops ..................X......................  path 31325060
+  other TTAAAAATGTGTGTGTCTCTGTGTGTGTGTGTGTGTGTGTG  ops ..................X......................  path 31325060
+  other TTAAAAATGTGTGTGTCTCTGTGTGTGTGTGTGTGTGTGTG  ops ..................X......................  path 31325060
+  REF   TTAAAAATGTGTGTGTCTGTGTGTGTGTGTGTGTGTGTGTG  ops .........................................  path 31325060
+  other TTAAAAATGTGTGTGTCTCTGTGTGTGTGTGTGTGTGTGTG  ops ..................X......................  path 31325060
+  other TTAAAAATGTGTGTGTCTCTGTGTGTGTGTGTGTGTGTGTG  ops ..................X......................  path 31325060
+  other TTAAAAATGTGTGTGTCTGTGTGTGTGTGTGTGTGTGTGTGTG  ops .................II........................  path 31325060
+  other TTAAAAATGTGTGTGTCTGTGTGTGTGTGTGTGTGTGTGTGTG  ops .................II........................  path 31325060
+  other TTAAAAATGTGTGTGTCTGTGTGTGTGTGTGTGTGTGTGTGTG  ops .................II........................  path 31325060
+  other TTAAAAATGTGTGTGTCTGTGTGTGTGTGTGTGTGTGTGTGTG  ops .................II........................  path 31325060
+  other TTAAAAATGTGTGTGTCTCTGTGTGTGTGTGTGTGTGTGTG  ops ..................X......................  path 31325060
+  other TTAAAAATGTGTGTGTCTGTGTGTGTGTGTGTGTGTGTGTGTG  ops .................II........................  path 31325060
+  other TTAAAAATGTGTGTGTCTGTGTGTGTGTGTGTGTGTGTGTGTG  ops .................II........................  path 31325060
+  other TTAAAAATGTGTGTGTCTCTGTGTGTGTGTGTGTGTGTGTG  ops ..................X......................  path 31325060
+  other TTAAAAATGTGTGTGTCTCTGTGTGTGTGTGTGTGTGTGTG  ops ..................X......................  path 31325060
+  other TTAAAAATGTGTGTGTCTCTGTGGGTGTGTGTGTGTGTGTG  ops ..................X....X.................  path 31325060
+  other TTAAAAATGTGTGTGTCTCTGTGTGTGTGTGTGTGTGTGTG  ops ..................X......................  path 31325060
+  other TTAAAAATGTGTGTGTCTCTGTGTGTGTGTGGGTGTGTGTG  ops ..................X............X.........  path 31325060
+  other TTAAAAATGTGTGTGTCTCTGTGTGTGTGTGTGTGTGTGTG  ops ..................X......................  path 31325060
+  other TTAAAAATGTGTGTGTCTCTGTGTGTGTGTGTGTGTGTGTG  ops ..................X......................  path 31325060
+  other TTAAAAATGTGTGTGTCTCTGTGTGTGTGTGTGTGTGTGTG  ops ..................X......................  path 31325060
+  other TTAAAAATGTGTGTGTCTGTGTGTGTGTGTGTGTGTGTGTGTG  ops .................II........................  path 31325060
+  other TTAAAAATGTGTGTGTCTGTGTGTGTGTGTGTGTGTGTGTGTG  ops .................II........................  path 31325060
+  other TTAAAAATGTGTGTGTCTCTGTGTGTGTGTGTGTGTGTGTG  ops ..................X......................  path 31325060
+  other TTAAAAATGTGTGTGTCTCTGTGTGTGTGTGTGTGTGTGTG  ops ..................X......................  path 31325060
+  other TTAAAAATGTGTGTGTCTGTGTGTGTGTGTGTGTGTGTGTGTG  ops .................II........................  path 31325060
+  other TTAAAAATGTGTGTGTCTGTGTGTGTGTGTGTGTGTGTGTGTG  ops .................II........................  path 31325060
+  other TTAAAAATGTGTGTGTCTCTGTGTGTGTGTGTGTGTGTGTG  ops ..................X......................  path 31325060
+  other TTAAAAATGTGTGTGTCTCTGTGTGTGTGTGTGTGTGTGTG  ops ..................X......................  path 31325060
+  other TTAAAAATGTGTGTGTCTGTGTGTGTGTGTGTGTGTGTGTGTG  ops .................II........................  path 31325060
+  other TTAAAAATGTGTGTGTCTCTGTGTGTGTGTGTGTGTGTGTG  ops ..................X......................  path 31325060
+  other TTAAAAATGTGTGTGTCTCTGTGTGTGTGTGTGTGTGTGTG  ops ..................X......................  path 31325060
+  other TTAAAAATGTGTGTGTCTGTGTGTGTGTGTGTGTGTGTGTGTG  ops .................II........................  path 31325060
+  other TTAAAAATGTGTGTGTCTCTGTGTGTGTGTGAGTGTGTGTG  ops ..................X............X.........  path 31325060
+  REF   TTAAAAATGTGTGTGTCTGTGTGTGTGTGTGTGTGTGTGTG  ops .........................................  path 31325060
+  REF   TTAAAAATGTGTGTGTCTGTGTGTGTGTGTGTGTGTGTGTG  ops .........................................  path 31325060
+  REF   TTAAAAATGTGTGTGTCTGTGTGTGTGTGTGTGTGTGTGTG  ops .........................................  path 31325060
+  REF   TTAAAAATGTGTGTGTCTGTGTGTGTGTGTGTGTGTGTGTG  ops .........................................  path 31325060
+  reads: {'REF': 10, 'other': 225} (* = node not on GRCh38)

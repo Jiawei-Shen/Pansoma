@@ -1,0 +1,37 @@
+final_class	kind	chrom	vcf_pos	vcf_ref	vcf_alt	alt_exact	alt_like	spanning	reason	residual
+I1_allele_fully_in_graph	DEL	chr13	54018939	GT	G	92	25	120	site_bypassed:skip_edge:no_edit	
+I1_allele_fully_in_graph	DEL	chr13	78172743	TA	T	91	19	112	site_bypassed:skip_edge:no_edit	
+I1_allele_fully_in_graph	INS	chr11	127089896	C	CA	104	18	123	site_bypassed:branch:no_edit	
+I1_allele_fully_in_graph	INS	chr15	83610975	C	CAAAA	81	22	103	site_bypassed:branch:no_edit	
+I2_partly_in_graph_residual_edit	DEL	chr2	136876364	TA	T	65	2	100	site_bypassed:branch:edit_on_path_taken	29878198:29:DEL:T>(67)=ignore:near_truth_allele_mismatch
+I2_partly_in_graph_residual_edit	DEL	chr1	13389005	ATTT	A	60	21	81	site_bypassed:skip_edge:edit_on_path_taken	2613895:201:DEL:TT>@2613897(76)=ignore:not_on_unique_grch38_node; 2613898:15:DEL:TG>(3)=no tensor
+I2_partly_in_graph_residual_edit	INS	chr20	58872348	T	TAA	66	22	139	site_bypassed:branch:edit_on_path_taken	31293240:0:INS:>A(88)=ignore:not_on_unique_grch38_node
+I2_partly_in_graph_residual_edit	INS	chr14	62453379	G	GA	49	66	118	site_bypassed:branch:edit_on_path_taken	16371748:0:SNP:A>G(54)=ignore:not_on_unique_grch38_node
+I3_grch38_path_different_edit	DEL	chr15	34847140	CAAA	C	58	52	110	site_on_grch38:other_edit	17057276:341:SNP:A>C(68)=ignore:near_truth_allele_mismatch
+I3_grch38_path_different_edit	DEL	chr2	47673624	GA	G	50	5	114	site_on_grch38:other_edit	26625091:5:SNP:A>G(55)=ignore:near_truth_allele_mismatch
+I3_grch38_path_different_edit	INS	chr1	198137519	T	TATAGAGAGAG	50	6	107	site_on_grch38:other_edit	2444712:8:INS:>ATAGAGAG(28)=germline:representative_allele_is_germline_truth; 2444712:7:SNP:T>G(24)=ignore:near_truth_allele_mismatch
+I3_grch38_path_different_edit	INS	chr7	133606519	T	TA	39	13	52	site_on_grch38:other_edit	49873908:0:SNP:T>A(52)=ignore:near_truth_allele_mismatch
+I4_no_or_few_alt_reads	DEL	chr12	45071143	CA	C	1	0	3	fewer_than_3_ALT_reads	
+I4_no_or_few_alt_reads	DEL	chr12	20757331	TAAA	T	0	2	2	fewer_than_3_ALT_reads	
+I4_no_or_few_alt_reads	INS	chr11	14293124	A	AATATATATATATATAT	1	1	36	fewer_than_3_ALT_reads	
+I4_no_or_few_alt_reads	INS	chr3	145601340	T	TAAAA	1	1	11	fewer_than_3_ALT_reads	
+I5_low_mapq_or_no_reads	DEL	chr1	144665794	AT	A	0	0	0	no_read_spans_site	
+I5_low_mapq_or_no_reads	DEL	chr1	149865951	GAAAGAAGAAAGA	G	0	0	0	no_read_spans_site	
+I5_low_mapq_or_no_reads	INS	chr1	34802227	G	GGGTTTGGTTTGGTTTGGTTTGGTTTGGTT	0	0	0	no_read_spans_site	
+I5_low_mapq_or_no_reads	INS	chr1	78865510	T	TTGAGCATATTTTCTTTTTTTTTTTTTTTT	0	0	0	no_read_spans_site	
+I7_unclear	DEL	chr8	13913365	TTAA	T	35	3	38	site_on_grch38:no_local_edit	53403708:0:DEL:A>(16)=ignore:not_on_unique_grch38_node
+I7_unclear	DEL	chr10	30405519	ATAT	A	26	27	53	site_on_grch38:no_local_edit	
+I7_unclear	INS	chr14	58054883	A	AAAAT	25	10	77	site_on_grch38:no_local_edit	15409211:0:SNP:T>A(14)=ignore:not_on_unique_grch38_node
+I7_unclear	INS	chr11	56039648	T	TATATATATATATATATATAC	9	28	37	site_on_grch38:no_local_edit	9456030:0:SNP:C>A(4)=no tensor
+S1_low_mapq_or_no_reads	SNP	chr1	13086788	C	T	0	0	0	no_read_spans_site	
+S1_low_mapq_or_no_reads	SNP	chr1	13096397	C	T	0	0	0	no_read_spans_site	
+S2_alt_absent_in_reads	SNP	chr20	60533829	G	C	0	142	202	site_on_grch38:other_edit	31325060:484:SNP:G>C(142)=ignore:near_truth_allele_mismatch
+S2_alt_absent_in_reads	SNP	chr19	43978936	T	G	0	61	64	site_bypassed:branch:no_edit	24396382:0:SNP:G>T(3)=no tensor
+S3_alt_is_existing_graph_allele	SNP	chr13	76153195	G	A	102	8	110	site_bypassed:branch:no_edit	
+S3_alt_is_existing_graph_allele	SNP	chr7	14349471	C	A	71	4	142	site_bypassed:branch:edit_on_path_taken	51517046:0:SNP:C>T(74)=ignore:not_on_unique_grch38_node
+S4a_repeat_snv_edit_on_branch	SNP	chr3	20872044	C	A	11	15	28	site_bypassed:branch:no_edit	33901527:0:SNP:C>A(4)=ignore:near_truth_allele_mismatch
+S4a_repeat_snv_edit_on_branch	SNP	chr20	52733809	A	C	0	166	168	site_bypassed:branch:no_edit	31157611:0:SNP:A>C(55)=germline:representative_allele_is_germline_truth
+S4b_repeat_absorbed_by_graph_path	SNP	chr16	72756438	C	A	49	14	129	site_bypassed:branch:no_edit	
+S4b_repeat_absorbed_by_graph_path	SNP	chr10	10988294	T	G	37	4	62	site_on_grch38:no_local_edit	
+S4c_repeat_no_clear_alt	SNP	chr12	40539388	C	T	0	2	31	fewer_than_3_ALT_reads	
+S4c_repeat_no_clear_alt	SNP	chr20	42363303	T	A	0	2	19	fewer_than_3_ALT_reads	
