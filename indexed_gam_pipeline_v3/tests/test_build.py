@@ -9,7 +9,7 @@ from unittest.mock import patch
 
 import numpy as np
 
-from .fixtures import af_gam, build_args, graph_fixture, split_args, tiny_gam
+from .fixtures import af_gam, build_args, graph_fixture, simple_alignment, split_args, tiny_gam, write_gam
 from .. import build as build_module
 from ..build import build
 from ..candidates import BASES, CHANNELS, decode_alignment, encode_count
@@ -312,6 +312,49 @@ class DownsampleTest(unittest.TestCase):
             self.assertEqual((fixed / "shared/downsampled_nodes.tsv").read_text(),
                              "node\trecords\tkept\treason\n30\t50\t40\tnode_stats\n")
             self.assertEqual(json.loads((fixed / "shared/manifest.json").read_text())["downsampled_nodes"], 1)
+
+    def test_neighbouring_deep_nodes_share_a_batch_and_equal_the_nodes_built_alone(self):
+        def build_world(root, name, group, reads):
+            inputs = root / (name + "_inputs")
+            inputs.mkdir()
+            rows = []  # reads over several deep nodes, some only on one, mutated or not, some under the MAPQ bar
+            for i in range(90):
+                nodes = [(11, 12, 13), (12,), (11, 12), (12, 13, 14), (10, 11)][i % 5]
+                rows.append(simple_alignment(nodes, mutation=i % 7 < 2, mapq=5 if i % 11 == 0 else 60, name=f"w{i}"))
+            gam = write_gam(inputs / "world.gam", rows)
+            graph = graph_fixture(inputs / "graph.sqlite", [(n, "AAAAAA", 90) for n in range(10, 15)])
+            (inputs / "nodes.txt").write_text("".join(f"{n}\n" for n in range(10, 15)))
+            (inputs / "deep.tsv").write_text("node\tmappings\n11\t60\n12\t80\n14\t20\n")  # 13: between them
+            args = build_args(gam=str(gam), nodes=str(inputs / "nodes.txt"), graph_index=str(graph), shard_size=2,
+                              output=str(root / name / "shared"), snv_output=str(root / name / "SNV"),
+                              indel_output=str(root / name / "INDEL"), downsample_nodes=str(inputs / "deep.tsv"),
+                              downsample_reads=reads, batch_nodes=2, min_variants=1, snv_min_af=.01,
+                              indel_min_af=.01, max_node_reads=12)
+            with patch.object(build_module, "DEEP_GROUP", group):
+                quiet_build(args)
+            return root / name
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            # 60: one batch of 11-14 (13 is not deep: all its 32 records); 25 and 12: 13 has more records than a
+            # sample and the samples exceed 2 x reads, so the group is split and 13 is built as an ordinary node
+            for reads in (60, 25, 12):
+                alone = build_world(root, f"alone{reads}", 1, reads)
+                grouped = build_world(root, f"grouped{reads}", 64, reads)
+                self.assertEqual(self.sites(grouped), self.sites(alone))
+                for f in ("SNV/filtered_candidates.ndjson", "SNV/variant_summary.ndjson", "shared/downsampled_nodes.tsv"):
+                    self.assertEqual((grouped / f).read_text(), (alone / f).read_text(), f)
+                timing = [json.loads(l) for l in (grouped / "shared/batch_timing.ndjson").read_text().splitlines()]
+                deep = [t for t in timing if t.get("batch_plan", {}).get("downsample")]
+                if reads == 60:
+                    self.assertEqual([(t["first_node"], t["target_nodes"]) for t in timing], [(10, 1), (11, 4)])
+                else:
+                    self.assertEqual(sum(t["target_nodes"] for t in deep), 3)
+                    self.assertTrue(all(t["batch_plan"].get("split") for t in deep) and len(deep) > 1)
+                    self.assertIn((13, 1, None), [(t["first_node"], t["target_nodes"], t.get("batch_plan")) for t in timing])
+                self.assertEqual(len((alone / "shared/batch_timing.ndjson").read_text().splitlines()), 5)
+                self.assertTrue(any(json.loads(l)["node_id"] in (11, 12, 13) and "downsampled_from" in json.loads(l)
+                                    for l in (grouped / "SNV/variant_summary.ndjson").read_text().splitlines()))
 
     def test_a_single_node_over_the_batch_limit_is_sampled_instead_of_failing(self):
         with tempfile.TemporaryDirectory() as tmp:
