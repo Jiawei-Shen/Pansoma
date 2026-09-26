@@ -27,9 +27,6 @@ to the INDEL directory, each with its own AF threshold (--snv-min-af, --indel-mi
         batch_timing.ndjson         per-batch stage seconds and counters
         target_nodes.txt            the requested node list after --chromosomes
         downsampled_nodes.tsv       node, records, kept, reason: nodes built from a sample (only if any)
-        displaced_nodes.tsv         node, records: nodes outside the batch that left-normalization moved
-                                    an indel of a target node onto (orchestrate.py builds them in
-                                    supplement rounds; see the README "supplement run")
 
 Every stream is closed before any manifest is saved with status "complete".
 
@@ -384,7 +381,6 @@ def _build_batches(args, nodes, reader, graph, shared, typed, started, decode):
         return sum(s.manifest["tensors"] + s.buffered for s in sinks.values())
 
     timings = defaultdict(float)
-    displaced = Counter()  # node outside a batch -> records whose target-node indel normalization moved there
     auto = args.batch_nodes == "auto"
     planned = planned_batches(nodes, reader, args, load_deep_nodes(args.downsample_nodes))
     downsampled = {}  # node -> (records sampled from, records kept, reason)
@@ -441,9 +437,6 @@ def _build_batches(args, nodes, reader, graph, shared, typed, started, decode):
             read, rejected = decode(alignments[ai], sequences, args.max_indel_len, target_nodes=wanted)
             alignments[ai] = None  # the decoded Read owns everything we still need
             reads.append(read)
-            for source, destination in read.moves:
-                if source in wanted and destination not in wanted:
-                    displaced[destination] += 1
             for node in {v.node for v in read.visits} & wanted:
                 by_node[node].append(read)
             candidates.update(o.candidate for o in read.observations if o.candidate.node in wanted)
@@ -509,8 +502,6 @@ def _build_batches(args, nodes, reader, graph, shared, typed, started, decode):
         node_reads = None
         reads.clear()
         alignments.clear()
-    (shared.path / "displaced_nodes.tsv").write_text("".join(f"{n}\t{c}\n" for n, c in sorted(displaced.items())))
-    shared.manifest["displaced_nodes"] = len(displaced)
     if downsampled:
         (shared.path / "downsampled_nodes.tsv").write_text("node\trecords\tkept\treason\n" + "".join(
             f"{n}\t{a}\t{k}\t{r}\n" for n, (a, k, r) in sorted(downsampled.items())))

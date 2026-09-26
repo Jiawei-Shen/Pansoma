@@ -547,10 +547,10 @@ struct Decoder {
 // ---------------------------------------------------------------- discovery counts
 
 // Per node, in order of first appearance: mappings without / with an edit and the longest read
-// (run.discover's node_stats). add_raw applies discover's rule to vg's edits as written;
-// add_normalized first decodes the record and left-normalizes its indels exactly like the builder,
-// so an indel counts on the node the builder will see it on. A record the normalization cannot
-// decode (e.g. a node missing from `sequences`) is counted with the raw rule (`fallbacks`).
+// (run.discover's node_stats). add_normalized decodes each record and left-normalizes its indels
+// exactly like the builder, so an indel counts on the node the builder will see it on. A record the
+// normalization cannot decode (e.g. a node missing from `sequences`) is counted from vg's edits as
+// written (count_raw; `fallbacks`).
 struct Discovery {
     struct Stat { int64_t perfect = 0, not_perfect = 0, max_len = 0; };
     std::unordered_map<int64_t, size_t> index;
@@ -585,15 +585,6 @@ struct Discovery {
         char* data; Py_ssize_t size;
         if (PyBytes_AsStringAndSize(raw.ptr(), &data, &size) != 0) throw py::error_already_set();
         return std::string_view(data, size_t(size));
-    }
-    void add_raw(py::list messages, int64_t min_mapq) {
-        for (py::handle raw : messages) {
-            ++alignments;
-            AlignmentRaw a = parse_alignment(view(raw));
-            if (a.mapq <= min_mapq) continue;
-            ++used;
-            count_raw(a);
-        }
     }
     void add_normalized(py::list messages, py::object sequences, int64_t min_mapq, int64_t max_indel) {
         std::vector<Col> cols;
@@ -661,7 +652,6 @@ PYBIND11_MODULE(_fastdecode, m) {
        "Decode one serialized vg Alignment: (columns, visits, observations, moves, unsupported).");
     py::class_<Discovery>(m, "Discovery")
         .def(py::init<>())
-        .def("add_raw", &Discovery::add_raw, py::arg("messages"), py::arg("min_mapq"))
         .def("add_normalized", &Discovery::add_normalized, py::arg("messages"), py::arg("sequences"),
              py::arg("min_mapq"), py::arg("max_indel") = 50)
         .def("result", &Discovery::result, "(nodes, perfect, not_perfect, max_read_length, counters), first-appearance order");

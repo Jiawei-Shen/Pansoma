@@ -2,7 +2,7 @@
 """Command line for the indexed GAM tensor pipeline.
 
     discover  scan the GAM once and select nodes with an imperfect-mapping fraction above a threshold
-              (discovery.py: parallel native scan; indels count where the builder sees them, --raw as written)
+              (discovery.py: parallel native scan; each indel counts on the node the builder sees it on)
     build     build SNV and INDEL site tensors for a node list (see build.py for the outputs)
 """
 import argparse
@@ -99,14 +99,11 @@ def make_parser():
         if name == "discover":
             sub.add_argument("--min-mapq", type=int, default=5, help="exclusive MAPQ threshold")
             sub.add_argument("--node-alt", type=fraction, default=0.05, help="select nodes with imperfect fraction > this")
-            sub.add_argument("--max-alignments", type=positive, help="exploratory partial scan only (sequential, raw rule)")
             sub.add_argument("--processes", type=positive, help="parallel scan workers (default: $SLURM_CPUS_PER_TASK, else all CPUs)")
             sub.add_argument("--index", help="GAI of the GAM, to cut it into segments (default: GAM path + .gai)")
-            sub.add_argument("--raw", action="store_true",
-                             help="count vg's edits as written (the rule before normalized discovery; needs "
-                                  "orchestrate prepare --supplement-rounds 3). Default: each indel counts after the "
-                                  "builder's left-normalization, which needs --graph-index and the native module")
-            sub.add_argument("--graph-index", help="unified graph index SQLite (node sequences; required unless --raw)")
+            sub.add_argument("--graph-index", required=True,
+                             help="unified graph index SQLite: node sequences for the builder's left-normalization, "
+                                  "so each indel counts on the node the builder sees it on")
             sub.add_argument("--max-indel-len", type=positive, default=50,
                              help="indels longer than this are not moved (the builder's --max-indel-len)")
         else:

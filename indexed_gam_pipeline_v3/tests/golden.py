@@ -1,8 +1,7 @@
-"""Golden outputs: fingerprints of production-shaped builds and one orchestrated run, recorded from v2.
+"""Golden outputs: fingerprints of production-shaped builds and one orchestrated run of this package.
 
-    python -m indexed_gam_pipeline_v3.tests.golden record --package indexed_gam_pipeline_v2 [--output FILE]
-    python -m indexed_gam_pipeline_v3.tests.golden check --package indexed_gam_pipeline_v3
-        [--decoder python|native] [--case G1 ...] [--keep DIR]
+    python -m indexed_gam_pipeline_v3.tests.golden record [--output FILE]      (from the committed package)
+    python -m indexed_gam_pipeline_v3.tests.golden check [--decoder python|native] [--case G1 ...] [--keep DIR]
 
 Cases (all split SNV/INDEL builds through the package's CLI):
     G1   tiny_gam: default (int) --min-allele-bq, --min-variants 1, batch 2, shard 2, cache 1 MiB
@@ -11,19 +10,21 @@ Cases (all split SNV/INDEL builds through the package's CLI):
     G4a  mixed_af_rows: --no-early-af-filter, --max-node-reads 0, AF 0.3/0.3, rows 4, --debug-rows
     G4b  G4a with --early-af-filter
     G5   12 records on one node, --max-node-reads 5, --debug-rows, rows 4
-    G6   displaced repeat {1:C, 2:AT, 3:AT, 4:G}: target [3], then the supplement build of [2]
+    G6   repeat {1:C, 2:AT, 3:AT, 4:G}: target [3] (vg's placement, no site), then target [2] (where
+         left-normalization puts the insertion)
     G7   multi-node deletion {1:GCA, 2:TG, 3:GAT}, --debug-rows
     G8   random_chain_world(20260924): ~40 nodes, ~400 records, --chromosomes autosome (last 10 nodes off)
-    O1   mini_world: orchestrate prepare (3 tasks, 2 processes, node stats, autosome selection, supplement
-         rounds, merge 4, --keep-sources, reference path, labels), then run.sh (SLURM_CPUS_PER_TASK=2)
+    O1   mini_world: orchestrate prepare (3 tasks, 2 processes, node stats, autosome selection, merge 4,
+         --keep-sources, reference path, labels), then run.sh (SLURM_CPUS_PER_TASK=2)
 
 Every build is a subprocess (cwd = repository root; O1's run from <root>/source via run.sh), so a
 package's native module is the only one loaded in its process and no pipeline package other than
 this one is imported here. Inputs are generated here from tests/fixtures.py (identical for every
 package; their hashes are recorded) and outputs are compared as tools.compare_runs fingerprints with
-the case directory as the <ROOT> anchor. The recorder requires v2 python == v2 native, the expected
-decoder in every manifest, G8 independent of PYTHONHASHSEED and O1's coverage (a supplement node, a
+the case directory as the <ROOT> anchor. The recorder requires python == native decoder outputs,
+the expected decoder in every manifest, G8 independent of PYTHONHASHSEED and O1's coverage (a
 removed target, merged tensors in two autosome blocks, somatic/germline/non/ignore labels).
+Record again only after a deliberate output change, from the committed package.
 """
 import argparse
 from concurrent.futures import ThreadPoolExecutor
@@ -160,7 +161,7 @@ def g5(inputs):
         "--max-node-reads", "5", "--debug-rows", "--rows", "4", "--min-variants", "1"])]
 
 
-def displaced_repeat_rows():
+def repeat_insertion_rows():
     """{1:C, 2:AT, 3:AT, 4:G}: forward records insert AT at the repeat's right end (node 3), reverse
     records at its left end; left-normalization moves every copy to node 2 (6 ALT, 4 REF records)."""
     sequences = {1: "C", 2: "AT", 3: "AT", 4: "G"}
@@ -176,12 +177,12 @@ def displaced_repeat_rows():
 
 
 def g6(inputs):
-    sequences, rows = displaced_repeat_rows()
+    sequences, rows = repeat_insertion_rows()
     gam = write_gam(inputs / "g.gam", rows)
     graph = graph_fixture(inputs / "graph.sqlite", [(n, s, 5) for n, s in sequences.items()])
     options = ["--min-variants", "1", "--rows", "12", "--width", "11", "--max-indel-len", "5", "--batch-nodes", "4"]
-    return [("main", sources(gam, graph, write_nodes(inputs / "main.txt", [3])) + options),
-            ("supplement", sources(gam, graph, write_nodes(inputs / "supplement.txt", [2])) + options)]
+    return [("vg_placement", sources(gam, graph, write_nodes(inputs / "vg_placement.txt", [3])) + options),
+            ("normalized", sources(gam, graph, write_nodes(inputs / "normalized.txt", [2])) + options)]
 
 
 def g7(inputs):
@@ -344,9 +345,9 @@ def mini_world(inputs, root):
     """Inputs of O1 and its prepare arguments.
 
     chr1 = nodes 1-6 (12 bp each, forward), off-reference node 7 (walk HG1 >1>7>3); chr2 = nodes 8-12
-    with the displaced repeat 8(..C) 9(AT) 10(AT) 11(G..); chrX = nodes 13-15. Targets: every node but 9,
-    so the chr2 insertion (placed at node 10 by forward records) is displaced onto node 9 and built by
-    a supplement task; the chrX targets are removed by --chromosomes autosome. Truth: germline SNV
+    with the repeat 8(..C) 9(AT) 10(AT) 11(G..); chrX = nodes 13-15. Targets: every node (normalized
+    discovery selects node 9, onto which left-normalization moves the chr2 insertion that forward records
+    place at node 10); the chrX targets are removed by --chromosomes autosome. Truth: germline SNV
     (node 2) and DEL (node 3), somatic SNV (node 4), the chr2 insertion and an SNV on node 12; SNVs on
     nodes 1, 5 and 6 are non-truth (label non) and the node-7 SNV is off GRCh38 (label ignore).
     """
@@ -400,7 +401,7 @@ def mini_world(inputs, root):
 
     gam = write_gam(inputs / "mini.gam", rows)
     graph = graph_fixture(inputs / "graph.sqlite", [(n, s, 1 + n % 4) for n, s in seq.items()])
-    nodes = write_nodes(inputs / "nodes.txt", [n for n in seq if n != 9])
+    nodes = write_nodes(inputs / "nodes.txt", list(seq))
     stats = inputs / "node_stats.json"
     stats.write_text(json.dumps({str(n): dict(perfect=10, not_perfect=n, max_read_length=72) for n in seq},
                                 indent=2) + "\n")
@@ -429,8 +430,8 @@ def mini_world(inputs, root):
     (inputs / "somatic.bed").write_text(bed)
     (inputs / "germline.bed").write_text(bed)
     return ["--root", str(root), "--gam", str(gam), "--nodes", str(nodes), "--node-stats", str(stats),
-            "--graph-index", str(graph), "--tasks", "3", "--processes", "2", "--supplement-rounds", "3",
-            "--supplement-min-records", "1", "--snv-min-af", "0.06", "--indel-min-af", "0.08", "--gam-cache-mb", "1",
+            "--graph-index", str(graph), "--tasks", "3", "--processes", "2",
+            "--snv-min-af", "0.06", "--indel-min-af", "0.08", "--gam-cache-mb", "1",
             "--batch-nodes", "2", "--shard-size", "2", "--chromosomes", "autosome", "--chr-index", str(table),
             "--merge-shard-size", "4", "--keep-sources", "--reference-path", str(inputs / "rp"),
             "--somatic-vcf", str(somatic), "--somatic-bed", str(inputs / "somatic.bed"),
@@ -442,8 +443,6 @@ def o1_coverage(root):
     """The O1 properties the goldens rely on; returns a list of the missing ones."""
     config = json.loads((root / "config.json").read_text())
     missing = []
-    if not config["supplement"]["rounds"] or not config["supplement"]["rounds"][0]["nodes"]:
-        missing.append("a supplement node")
     if not config["chromosome_selection"].get("removed"):
         missing.append("a removed target")
     blocks, labels = set(), set()
@@ -485,7 +484,7 @@ def run_job(package, case, decoder, work, hashseed=None):
     python = sys.executable
     if case == "O1":
         tree = directory / "run"
-        prepare = mini_world(inputs, tree) + ["--max-batch-alignments", "20000"]  # v2's default (v3's is 200000)
+        prepare = mini_world(inputs, tree)
         freeze_times(inputs)
         env.update(SLURM_CPUS_PER_TASK="2", **({"PANSOMA_DECODER": "python"} if decoder == "python" else {}))
         execute([python, "-m", f"{package}.orchestrate", "prepare", *prepare], REPO, env)
@@ -498,10 +497,6 @@ def run_job(package, case, decoder, work, hashseed=None):
         for name, arguments in builds:
             if "--snv-min-af" not in arguments:
                 arguments = arguments + DEFAULT_AF
-            if "--batch-nodes" not in arguments:  # v2's default, which the goldens were recorded with
-                arguments = arguments + ["--batch-nodes", "512"]
-            if "--max-batch-alignments" not in arguments:  # v2's default (v3's is 200000)
-                arguments = arguments + ["--max-batch-alignments", "20000"]
             out = tree / name
             execute([python, "-m", f"{package}.run", "build", *arguments, "--output", str(out / "shared"),
                      "--snv-output", str(out / "SNV"), "--indel-output", str(out / "INDEL"), "--decoder", decoder],
@@ -550,12 +545,10 @@ def constants(package):
 
 
 def compare_constants(recorded, current):
-    """Differences of the output constants; BUILDER_OPTIONS must be v2's minus candidate_unit (v3 drops it)."""
+    """Differences of the output constants."""
     problems = []
     for key in sorted(recorded.keys() | current.keys()):
         a, b = recorded.get(key), current.get(key)
-        if key == "orchestrate.BUILDER_OPTIONS" and a:
-            a = [k for k in a if k != "candidate_unit"]
         if a != b:
             problems.append(f"constant {key}: recorded {a!r}, now {b!r}")
     return problems
@@ -605,8 +598,8 @@ def check_results(recorded, results):
         found = []
         if result["inputs"] != golden["inputs"]:
             found.append("fixture inputs differ from the recorded ones (" + "; ".join(
-                differences(golden["inputs"], result["inputs"])) + "): the generators changed; re-record the "
-                "goldens from v2 (python -m " + PACKAGE + ".tests.golden record --package indexed_gam_pipeline_v2)")
+                differences(golden["inputs"], result["inputs"])) + "): the generators changed; record the goldens "
+                "again once the change is deliberate (python -m " + PACKAGE + ".tests.golden record)")
         if result["used"] != [result["decoder"]]:
             found.append(f"decoder used {result['used']}, expected {result['decoder']}")
         found += differences(golden["outputs"], result["outputs"])
@@ -675,8 +668,8 @@ def check(package, decoders=DECODERS, cases=CASES, keep=None, workers=None, reco
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     commands = parser.add_subparsers(dest="command", required=True)
-    r = commands.add_parser("record", help="record the goldens from a package (v2, before any trimming)")
-    r.add_argument("--package", required=True)
+    r = commands.add_parser("record", help="record the goldens from the committed package (after a deliberate output change)")
+    r.add_argument("--package", default=PACKAGE)
     r.add_argument("--output", default=str(HASHES))
     c = commands.add_parser("check", help="rebuild every case with a package and compare with the goldens")
     c.add_argument("--package", default=PACKAGE)

@@ -194,10 +194,11 @@ class LeftAlignTest(unittest.TestCase):
                 self.assertEqual(observed(b), observed(a))
 
 
-class SupplementRunTest(unittest.TestCase):
-    """An indel normalized off the target nodes is listed, and a supplement run over the list builds it."""
+class NormalizedPlacementTest(unittest.TestCase):
+    """An indel is built on the node left-normalization moves it to (normalized discovery makes that
+    node a target), with the records of both strands."""
 
-    def test_displaced_indel_is_listed_and_recovered_with_both_strands(self):
+    def test_an_indel_is_built_on_the_node_it_is_normalized_to(self):
         from contextlib import redirect_stdout
         import io
         import json
@@ -220,21 +221,19 @@ class SupplementRunTest(unittest.TestCase):
             root = Path(tmp)
             gam = write_gam(root / "g.gam", rows)
             graph = graph_fixture(root / "graph.sqlite", [(n, s, 5) for n, s in sequences.items()])
-            (root / "main.txt").write_text("3\n")  # vg's forward placement made only node 3 a target
+            (root / "main.txt").write_text("3\n")  # vg's forward placement alone would make node 3 the target
             common = dict(gam=str(gam), graph_index=str(graph), min_variants=1, rows=12, width=11,
                           max_indel_len=5, batch_nodes=4)
             with redirect_stdout(io.StringIO()):
                 build(split_args(root, "main", **common, nodes=str(root / "main.txt")))
-            self.assertEqual((root / "main/shared/displaced_nodes.tsv").read_text(), "2\t3\n")
             self.assertFalse((root / "main/INDEL/variant_summary.ndjson").read_text())  # the site is not on node 3
-            (root / "supplement.txt").write_text("2\n")
+            (root / "normalized.txt").write_text("2\n")
             with redirect_stdout(io.StringIO()):
-                build(split_args(root, "supplement", **common, nodes=str(root / "supplement.txt")))
+                build(split_args(root, "normalized", **common, nodes=str(root / "normalized.txt")))
             (site,) = [json.loads(line) for line in
-                       (root / "supplement/INDEL/variant_summary.ndjson").read_text().splitlines()]
+                       (root / "normalized/INDEL/variant_summary.ndjson").read_text().splitlines()]
             self.assertEqual((site["site_id"], site["alt_count"], site["coverage"]), ("2:0:INDEL", 6, 10))
             self.assertEqual(site["site_counts"], {"A1": 6, "REF": 4})
-            self.assertEqual((root / "supplement/shared/displaced_nodes.tsv").read_text(), "")
 
     def test_multi_node_deletion_build_passes_the_independent_audit(self):
         from contextlib import redirect_stdout
@@ -263,33 +262,6 @@ class SupplementRunTest(unittest.TestCase):
             self.assertEqual((site["candidate_id"], site["alt_count"], site["ref_count"]), ("1:2:DEL:ATGG>@2+3", 5, 4))
             with redirect_stdout(io.StringIO()):
                 self.assertTrue(validate(root / "o/INDEL", str(gam), None, str(graph))["passed"])
-
-    def test_displaced_nodes_collects_tasks_and_drops_covered_nodes(self):
-        import io
-        import json
-        from contextlib import redirect_stdout
-        from pathlib import Path
-        import tempfile
-        from .. import orchestrate
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            (root / "targets.txt").write_text("5\n9\n")
-            (root / "earlier.txt").write_text("7\n")
-            config = dict(package=orchestrate.PACKAGE, tasks=2, tensors=str(root / "tensors"),
-                          variant_outputs=dict(SNV=.06, INDEL=.08), chromosome_selection=dict(selection="all"),
-                          inputs=dict(nodes=dict(path=str(root / "targets.txt"))))
-            (root / "config.json").write_text(json.dumps(config))
-            for i, table in enumerate(("4\t2\n7\t1\n", "4\t1\n9\t3\n8\t1\n")):
-                folder = root / "tensors/shared" / f"task_{i:04d}"
-                folder.mkdir(parents=True)
-                (folder / "displaced_nodes.tsv").write_text(table)
-            printed = io.StringIO()
-            with redirect_stdout(printed):
-                summary = orchestrate.displaced_nodes(root, root / "supplement.txt", [root / "earlier.txt"], 2)
-            self.assertEqual(printed.getvalue(), "")  # the summary is returned, not printed
-            self.assertEqual((root / "supplement.txt").read_text(), "4\n")  # 7 excluded, 9 a target, 8 < 2 records
-            self.assertEqual((summary["nodes"], summary["records"], summary["already_covered"], summary["below_min_records"]),
-                             (1, 3, 1, 2))
 
 
 def random_edits(rng, length, offset):

@@ -67,19 +67,15 @@ def decode(raw):
     return alignment
 
 
-def scan_gam(path, max_alignments=None):
+def scan_gam(path):
     """Sequential scan of every record; never consults the GAI."""
-    seen = 0
     with gzip.open(path, "rb") as stream:
         while True:
             messages = group(stream)
             if messages is None:
                 return
             for raw in messages:
-                if max_alignments is not None and seen >= max_alignments:
-                    return
                 yield decode(raw)
-                seen += 1
 
 
 def equivalent_eof(stream, expected, actual):

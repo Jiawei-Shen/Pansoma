@@ -53,7 +53,7 @@ class BuildTest(unittest.TestCase):
         self.assertEqual((manifest["tensors_by_type"], manifest["output_layout"]), (dict(SNV=4, INDEL=0), "split"))
         self.assertEqual(manifest["variant_outputs"], {k: str(out / k) for k in ("SNV", "INDEL")})
         self.assertEqual(sorted(p.name for p in (out / "shared").iterdir()),
-                         ["batch_timing.ndjson", "displaced_nodes.tsv", "filtered_candidates.ndjson", "manifest.json",
+                         ["batch_timing.ndjson", "filtered_candidates.ndjson", "manifest.json",
                           "target_nodes.txt", "unsupported_events.ndjson"])  # no shards, no summary
         summary = [json.loads(s) for s in (out / "SNV/variant_summary.ndjson").read_text().splitlines()]
         self.assertEqual(len(summary), 4)

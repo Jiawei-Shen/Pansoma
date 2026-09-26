@@ -1,21 +1,16 @@
 """Discovery: select target nodes from one full scan of a sorted GAM.
 
 A node is selected when more than `node_alt` of its MAPQ-passing mappings carry an edit
-(the node_stats.json counts `perfect` / `not_perfect` per node). Two rules:
+(node_stats.json counts `perfect` / `not_perfect` per node). Each record is first decoded and
+its indels left-normalized exactly like the builder does, so an indel counts on the node the
+builder will see it on (a record that cannot be decoded counts vg's edits as written; the
+report's `normalization_fallbacks`).
 
-    raw         (--raw) vg's edits as written (the rule of every run before 2026-09-24)
-    normalized  (default) each record is first decoded and its indels left-normalized
-                exactly like the builder does, so an indel counts on the node the builder will
-                see it on. Target lists from this rule already contain the nodes that
-                normalization moves indels onto, which otherwise need supplement rounds.
-
-Normalized is the default (`--raw` for the old rule). The native module scans the GAM in parallel: the file is cut at group starts taken from the
-GAI into contiguous segments, every record is read exactly once by one worker, and the
-per-node counts are merged in order of first appearance, so node_stats.json and
-target_nodes.txt are byte-identical to the sequential scan. Without the native module (or
-for an exploratory --max-alignments scan) the sequential pure-Python scan runs (raw rule).
+The native module (native.py compile; required) scans the GAM in parallel: the file is cut at
+group starts taken from the GAI into contiguous segments, every record is read exactly once by
+one worker, and the per-node counts are merged in order of first appearance, so node_stats.json
+and target_nodes.txt do not depend on the number of processes.
 """
-from collections import defaultdict
 from concurrent.futures import ProcessPoolExecutor
 import json
 import multiprocessing
@@ -27,7 +22,7 @@ import numpy as np
 import pysam
 
 from .common import new_output, write_json
-from .gam_reader import IndexedGam, group, scan_gam
+from .gam_reader import IndexedGam, group
 
 SEGMENTS_PER_PROCESS = 4
 CHUNK = 1_000_000
@@ -35,31 +30,6 @@ CHUNK = 1_000_000
 
 def default_processes():
     return int(os.environ.get("SLURM_CPUS_PER_TASK") or os.cpu_count() or 1)
-
-
-# --- sequential pure-Python scan (raw rule) -------------------------------------------
-
-def python_counts(gam, min_mapq, max_alignments=None):
-    """(nodes, perfect, not_perfect, max_read_length, counters) in first-appearance order."""
-    stats = defaultdict(lambda: [0, 0, 0])  # perfect, imperfect, max read length
-    count = used = 0
-    for alignment in scan_gam(gam, max_alignments):
-        count += 1
-        if alignment.mapping_quality <= min_mapq:
-            continue
-        used += 1
-        for mapping in alignment.path.mapping:
-            nid = mapping.position.node_id
-            if not nid:
-                continue
-            imperfect = any(e.from_length != e.to_length or e.sequence for e in mapping.edit)
-            stats[nid][int(imperfect)] += 1
-            stats[nid][2] = max(stats[nid][2], len(alignment.sequence))
-        if count % 100000 == 0:
-            print(f"Scanned {count:,} alignments; {len(stats):,} nodes", flush=True)
-    columns = list(zip(*((n, p, q, r) for n, (p, q, r) in stats.items()))) or [[], [], [], []]
-    arrays = [np.array(c, dtype=np.int64) for c in columns]
-    return (*arrays, dict(alignments=count, used=used, fallbacks=0))
 
 
 # --- parallel native scan -------------------------------------------------------------
@@ -81,16 +51,14 @@ def segments(gam, index, count):
 
 
 def _scan_segment(job):
-    gam, (start, end), normalized, min_mapq, max_indel, graph_index = job
+    gam, (start, end), min_mapq, max_indel, graph_index = job
     from . import native
+    from .graph_index import GraphIndex
     module, info = native.load()
     if module is None:
         raise RuntimeError(f"native module unavailable in a discovery worker: {info.get('reason')}")
     counter = module.Discovery()
-    graph = None
-    if normalized:
-        from .graph_index import GraphIndex
-        graph = GraphIndex(graph_index)
+    graph = GraphIndex(graph_index)
     groups = 0
     with pysam.BGZFile(str(gam), "rb") as stream:
         stream.seek(start)
@@ -101,16 +69,12 @@ def _scan_segment(job):
             groups += 1
             if not messages:
                 continue
-            if normalized:
-                nodes = [n for n in module.group_nodes(messages).tolist() if n]
-                sequences = {n: r["sequence"] for n, r in graph.get_nodes(nodes).items()}
-                counter.add_normalized(messages, sequences, min_mapq, max_indel)
-            else:
-                counter.add_raw(messages, min_mapq)
+            nodes = [n for n in module.group_nodes(messages).tolist() if n]
+            sequences = {n: r["sequence"] for n, r in graph.get_nodes(nodes).items()}
+            counter.add_normalized(messages, sequences, min_mapq, max_indel)
         if end is not None and stream.tell() != end:
             raise ValueError(f"discovery segment {start} did not end at the next segment start {end}")
-    if graph is not None:
-        graph.db.close()
+    graph.db.close()
     nodes, perfect, not_perfect, max_len, counters = counter.result()
     return nodes, perfect, not_perfect, max_len, dict(counters, groups=groups)
 
@@ -132,8 +96,8 @@ def merge(results):
     return unique[order], perfect[order], not_perfect[order], max_len[order]
 
 
-def native_counts(gam, index, processes, normalized=False, min_mapq=5, max_indel=50, graph_index=None):
-    jobs = [(str(gam), segment, normalized, min_mapq, max_indel, graph_index)
+def native_counts(gam, index, processes, graph_index, min_mapq=5, max_indel=50):
+    jobs = [(str(gam), segment, min_mapq, max_indel, graph_index)
             for segment in segments(gam, index, max(1, processes) * SEGMENTS_PER_PROCESS)]
     if processes <= 1:
         results = [_scan_segment(job) for job in jobs]
@@ -169,29 +133,17 @@ def write_node_stats(path, nodes, perfect, not_perfect, max_len):
 def discover(args):
     """Select nodes where more than `node_alt` of MAPQ-passing mappings carry an edit."""
     from . import native
-    normalized = not getattr(args, "raw", False)
-    max_alignments = getattr(args, "max_alignments", None)
     processes = getattr(args, "processes", None) or default_processes()
     max_indel = getattr(args, "max_indel_len", 50)
     graph_index = getattr(args, "graph_index", None)
-    if normalized and not graph_index:
-        raise ValueError("discover needs --graph-index (node sequences for normalization), or --raw")
-    if normalized and max_alignments:
-        raise ValueError("--max-alignments is for exploratory scans with --raw")
+    if not graph_index:
+        raise ValueError("discover needs --graph-index (node sequences for the left-normalization)")
     module, info = native.load()
+    if module is None:
+        raise ValueError(f"discover needs the native module ({info.get('reason')}; python -m {__package__}.native compile)")
     out = new_output(args.output)
-    if max_alignments or module is None:
-        if normalized:
-            raise ValueError(f"normalized discovery needs the native module ({info.get('reason')}); use --raw")
-        if module is None:
-            print(f"Discovery in pure Python, one process ({info.get('reason')})", flush=True)
-        nodes, perfect, not_perfect, max_len, counters = python_counts(args.gam, args.min_mapq, max_alignments)
-        engine, processes, counters["segments"] = "python", 1, 1
-    else:
-        index = getattr(args, "index", None)
-        nodes, perfect, not_perfect, max_len, counters = native_counts(
-            args.gam, index, processes, normalized, args.min_mapq, max_indel, graph_index)
-        engine = "native"
+    nodes, perfect, not_perfect, max_len, counters = native_counts(
+        args.gam, getattr(args, "index", None), processes, graph_index, args.min_mapq, max_indel)
     with np.errstate(divide="ignore", invalid="ignore"):
         chosen = (not_perfect >= 1) & (not_perfect / (perfect + not_perfect) > args.node_alt)
     selected = np.sort(nodes[chosen])
@@ -199,12 +151,9 @@ def discover(args):
     write_node_stats(out / "node_stats.json", nodes, perfect, not_perfect, max_len)
     report = dict(gam=str(Path(args.gam).resolve()), alignments_scanned=counters["alignments"],
                   nodes_observed=int(len(nodes)), nodes_selected=int(len(selected)), min_mapq=args.min_mapq,
-                  node_alt=args.node_alt, exploratory=bool(max_alignments), max_alignments=max_alignments,
-                  rule="normalized" if normalized else "raw", engine=engine, processes=processes,
-                  segments=counters["segments"], alignments_passing_mapq=counters["used"])
-    if normalized:
-        report.update(max_indel_len=max_indel, graph_index=str(Path(graph_index).resolve()),
-                      normalization_fallbacks=counters["fallbacks"])
+                  node_alt=args.node_alt, rule="normalized", processes=processes, segments=counters["segments"],
+                  alignments_passing_mapq=counters["used"], max_indel_len=max_indel,
+                  graph_index=str(Path(graph_index).resolve()), normalization_fallbacks=counters["fallbacks"])
     write_json(out / "discovery_report.json", report)
     print(json.dumps(report, indent=2))
     sys.stdout.flush()

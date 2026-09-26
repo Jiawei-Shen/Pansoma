@@ -1,4 +1,4 @@
-"""This package against the goldens recorded from v2 (tests/golden.py, golden_hashes.json), and the
+"""This package against its recorded goldens (tests/golden.py, golden_hashes.json), and the
 normalization of tools.compare_runs that the goldens rely on."""
 from contextlib import redirect_stdout
 import io
@@ -22,7 +22,7 @@ NATIVE, REASON = golden.native_module(PACKAGE)
 
 @unittest.skipIf(os.environ.get("PANSOMA_DECODER"), "PANSOMA_DECODER is set; the golden check runs both decoders")
 class GoldenTest(unittest.TestCase):
-    """Every golden case rebuilt by this package (in subprocesses) reproduces v2's recorded fingerprints."""
+    """Every golden case rebuilt by this package (in subprocesses) reproduces the recorded fingerprints."""
 
     @classmethod
     def setUpClass(cls):
