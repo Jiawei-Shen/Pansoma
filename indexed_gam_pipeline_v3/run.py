@@ -47,8 +47,6 @@ def add_build_arguments(sub, outputs=True):
     sub.add_argument("--snv-min-af", type=fraction, required=True, help="AF threshold for the SNV output")
     sub.add_argument("--indel-min-af", type=fraction, required=True, help="AF threshold for the INDEL output")
     if outputs:
-        sub.add_argument("--downsample-nodes", help="deep nodes to build from a sample (first column of a TSV, e.g. "
-                                                    "orchestrate prepare's downsample_nodes.tsv)")
         sub.add_argument("--snv-output", required=True, help="separate SNV output directory; one shared decoding pass")
         sub.add_argument("--indel-output", required=True, help="separate INDEL output directory; one shared decoding pass")
         sub.add_argument("--debug-rows", action="store_true", help="record per-row source hashes and per-column graph coordinates (needed by validate_examples.py)")
@@ -61,11 +59,8 @@ def add_build_arguments(sub, outputs=True):
     sub.add_argument("--max-node-span", type=positive, default=10000,
                      help="maximum node-ID span of one batch (auto: of a 512-node batch, scaled with the size)")
     sub.add_argument("--max-batch-alignments", type=positive, default=200000,
-                     help="MAPQ-passing records of one batch: a larger batch is split (auto) or fails (fixed "
-                          "--batch-nodes); a single node over it is built from a sample (--downsample-reads)")
-    sub.add_argument("--downsample-reads", type=positive, default=10000,
-                     help="a deep node is built alone from this many MAPQ-passing records, the ones with the "
-                          "smallest hash of the record bytes (a fixed sample whatever the batching)")
+                     help="records one batch decodes (after the read cap): a larger batch is split (auto) or "
+                          "fails (fixed --batch-nodes)")
     sub.add_argument("--shard-size", type=positive, default=2048, help="tensors per NPY shard")
     sub.add_argument("--min-mapq", type=int, default=10, help="exclusive: alignments with MAPQ <= this are dropped")
     sub.add_argument("--min-af", type=fraction, default=0.05, help="AF threshold (single-output mode)")
@@ -73,8 +68,8 @@ def add_build_arguments(sub, outputs=True):
     sub.add_argument("--min-allele-bq", type=float, default=10, help="minimum base quality for an ALT observation")
     sub.add_argument("--max-indel-len", type=positive, default=50)
     sub.add_argument("--max-node-reads", type=nonnegative, default=800,
-                     help="per target node, count support and select rows from at most N records (smallest "
-                          "record SHA-256), after the prefilters; 0 = no cap")
+                     help="per target node, use at most N records (smallest record SHA-256) for the prefilters, "
+                          "support counting and rows; applied while reading the GAM; 0 = all records")
     sub.add_argument("--chromosomes", default="all",
                      help="target nodes to keep, by the chromosome block of their node ID: all (default), autosome "
                           "(chr1-22) or a comma list of --chr-index block names (e.g. chr1,chr2,chrX); applied to "

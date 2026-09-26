@@ -7,14 +7,15 @@ listed in its summary record — shape `(8, 200, 101)`, `int8`, tensor format
 
 v3 is the maintained pipeline. v2 (`indexed_gam_pipeline_v2`) was retired on 2026-09-26 and removed
 from the repository in `9d61016`; v1 earlier. v3 began as v2 made smaller by subtraction (same
-tensor bytes for the same inputs and options) and has since gained deep-node sampling, a faster GAM
-reader, normalized-only discovery, a parallel merge and the truth-labels-v2 rule (section 10).
+tensor bytes for the same inputs and options) and has since gained the read cap applied while reading
+the GAM, a faster GAM reader, normalized-only discovery, a parallel merge and new truth-label rules
+(section 10).
 
 ```
-runtime  4,890 lines of Python in 17 files + fastdecode.cpp (659 lines); frozen per run: 21 files, ~2.5 MB
+runtime  4,974 lines of Python in 17 files + fastdecode.cpp (659 lines); frozen per run: 21 files, ~2.5 MB
          (2.2 MB of it the compiled decoder)
 tools    916 lines in 6 files (not frozen)
-tests    4,707 lines in 13 files, 147 tests, ~50 s on a quiet node
+tests    4,693 lines in 13 files, 149 tests, ~50 s on a quiet node
 ```
 
 ---
@@ -73,9 +74,9 @@ flowchart TD
         GAM --> DISC["run discover<br/>(left-normalized edits per node)"] --> NODES["target_nodes.txt<br/>node_stats.json"]
     end
 
-    NODES --> BATCH{{"batches of 512 / 1024 / 2048 nodes (auto),<br/>deep nodes alone"}}
+    NODES --> BATCH{{"batches of 512 / 1024 / 2048 nodes (auto)"}}
     subgraph batch["per batch (build.py)"]
-        F["1 fetch complete alignments touching the batch<br/>(GAI bins → BGZF groups, LRU group cache, MAPQ > 10;<br/>deep node: fixed sample of 10,000 records)"]
+        F["1 fetch complete alignments touching the batch<br/>(GAI bins → BGZF groups, LRU group cache, MAPQ > 10;<br/>read cap: per node the 800 smallest record digests)"]
         G["2 graph lookup: sequence + path count<br/>for target and every visited context node"]
         D["3 decode every edit → columns, visits, left-normalized<br/>candidate observations on target nodes"]
         P["4 prefilters on all records: ALT bound < min_variants,<br/>ALT bound / exact coverage < AF threshold"]
@@ -98,10 +99,11 @@ Key invariants:
   directories (`--snv-output`, `--indel-output`) from the *same* decoded reads.
 * **Only decoded reads of the current batch are alive.** Protobufs are dropped as
   soon as they are decoded; the batch is cleared before the next fetch.
-* **Counts use every eligible record** (up to the 800-record per-node cap), before the
-  200-row cap. Nodes shallower than 800 records are never subsampled for counting.
-* **Prefilters never change an accepted output** without a read cap: both are proven
-  upper bounds computed over all records.
+* **Every node sees at most 800 records** (the read cap, applied while reading the GAM): the
+  prefilters, counts and rows use the same records, before the 200-row cap. Nodes shallower
+  than 800 records use all of them; a record no node of the batch keeps is not decoded.
+* **Prefilters never change an accepted output**: both are proven upper bounds computed over
+  the records support counting uses.
 * **Discovery and builder agree on indel placement.** Discovery counts an indel on the node the
   builder's left-normalization moves it to (same C++ code), so every node the builder would see an
   indel on is a target.
@@ -122,10 +124,10 @@ Key invariants:
 | `graph_index.py` | read-only `GraphIndex` over the graph SQLite (sequence + distinct path count per node) |
 | `candidates.py` | the data path from GAM record to site tensor: `decode_alignment` (+ `left_align_indels`, `indel_runs`, `indel_observations`: the part `fastdecode.cpp` ports), `NodeReads`/`VisitView` support counting (with the scan fallback), `alt_support_bounds`, `exact_coverage`, `SiteLayout`, `make_site_tensor`, `average_linkage`, format constants |
 | `native.py`, `fastdecode.cpp` | optional C++ decoder: `compile`/`check`, load-time SHA + 300-record self-test, `select_decoder` (`--decoder`, `PANSOMA_DECODER`), `NativeDecoder` with per-record Python fallback, `ColumnArray` with its per-read block cache; `Discovery` counters and `group_nodes` for `run discover` |
-| `build.py` | the per-task builder: batch planning (`auto` sizes, deep nodes), prefilters, `capped_reads`, `candidate_units` (sites), `count_support`, `evaluate_unit`, `OutputDir`; always shared + SNV + INDEL |
+| `build.py` | the per-task builder: batch planning (`auto` sizes), the capped fetch, prefilters, `candidate_units` (sites), `count_support`, `evaluate_unit`, `OutputDir`; always shared + SNV + INDEL |
 | `discovery.py` | `run discover`: GAM segments cut at GAI group starts, native normalized per-node counts merged in first-appearance order, streamed `node_stats.json` |
 | `run.py` | builder CLI: `discover`, `build` |
-| `orchestrate.py` | whole-genome controller: `prepare` / `run [--resume]` / `task` / `finalize`, `node_costs`, deep-node table, `execute_queue`, `validate_shards`, `verify`, `read_config` (package guard), `MemoryRecorder` |
+| `orchestrate.py` | whole-genome controller: `prepare` / `run [--resume]` / `task` / `finalize`, `node_costs`, `execute_queue`, `validate_shards`, `verify`, `read_config` (package guard), `MemoryRecorder` |
 | `tensor_postprocessing/` | node → chromosome blocks (also `--chromosomes`), parallel per-chromosome merge, truth labels; CLI `merge`/`label` (own [README](tensor_postprocessing/README.md)) |
 
 Import order is top-down: `common` ← `gam_reader`/`graph_index` ← `candidates` ← `native` ←
@@ -199,8 +201,6 @@ batching / memory:
   --max-node-span 10000      node-ID span of a batch (auto: of a 512-node batch, scaled with the size)
   --max-batch-alignments 200000   MAPQ-passing records of one batch (below)
   --gam-cache-mb 1024        GAM group cache in MiB (at least 1; prepare's default is 8192)
-  --downsample-nodes TSV     deep nodes (first column; prepare writes downsample_nodes.tsv)
-  --downsample-reads 10000   a deep node is built alone from this many MAPQ-passing records
 
 candidate filters:
   --min-mapq 10              exclusive: records with MAPQ <= 10 are dropped
@@ -210,9 +210,10 @@ candidate filters:
   --min-af 0.05              recorded in the manifests' parameters only (the filters use the two AFs)
 
 speed (outputs unchanged unless stated):
-  --max-node-reads 800       per target node count support and select rows from at most 800 records
-                             (smallest record SHA-256), after the prefilters; 0 = no cap (changes outputs)
-  --early-af-filter          AF upper-bound prefilter (default on; exact without a read cap);
+  --max-node-reads 800       the read cap: per target node the 800 records with the smallest record SHA-256,
+                             for the prefilters, counts and rows, applied while reading the GAM (below);
+                             0 = all records (changes outputs)
+  --early-af-filter          AF upper-bound prefilter (default on; exact);
                              --no-early-af-filter disables it
   --decoder auto             native C++ decoder if built and self-tested, else Python (identical output);
                              native = fail if unavailable; python = never; PANSOMA_DECODER=native|python overrides auto
@@ -235,27 +236,23 @@ same GAM groups: on the HG008 ONT-UL GAM (≈ 100 MiB groups) 2048-node batches 
 (with a fixed `--batch-nodes` it fails instead). Tensors and summaries do not depend on the
 grouping; audit-stream order and `batch_timing` rows do (each row records its `batch_plan`).
 
-**Deep nodes.** A node with far more reads than the rest of the sample (collapsed satellites, rDNA:
-on HG008 Illumina WGS the median target has 220 MAPQ>5 mappings, 683 have more than 10,000 and one
-5.4 million) is built from a fixed sample: the `--downsample-reads` MAPQ-passing records with the
-smallest BLAKE2b key of their bytes — the same records whatever the batching or process count,
-uniform with respect to the alleles they carry (AF unbiased). Deep nodes come in runs (a collapsed
-repeat: COLO829T ONT has 2,034 in one task, fiberseq 3,377), and neighbouring ones share their
-reads, so up to `DEEP_GROUP` = 64 of them, with at most `DEEP_GAP` = 2 other target nodes between two
-deep nodes, form one batch: one fetch, one decode, each node's sample drawn in the same pass
-(`IndexedGam.sample`), and prefilters, counts and tensors run node by node on that node's own sample
-only, so every node's tensors equal those of the node built alone (tested). The other nodes of such
-a batch have at most `--downsample-reads` records (they are not deep), so their sample is all of
-their records, exactly as in an ordinary batch; if one has more, or the samples together hold more
-than 2 × `--downsample-reads` records, the batch is split in halves. Built one at a time, a deep
-ONT-UL node took 436 s (fetch 207 s, decode 224 s, tensors 5 s): about 10 days for that one task. Its sites
-get `downsampled_from` (the number of records sampled from) in their summary; the shared directory
-lists every sampled node in `downsampled_nodes.tsv` (node, records, kept, reason), and the manifests
-record `downsample` (table, SHA-256, sample size). Deep nodes come from `--downsample-nodes`
-(`prepare --node-stats` writes the table: discovery `perfect + not_perfect` > `--downsample-reads`);
-a single node that alone exceeds `--max-batch-alignments` is sampled the same way (reason
-`max_batch_alignments`), so one node never fails a run. HG008 PacBio and ONT have no node over
-10,000 (maxima 7,023 and 3,181).
+**The read cap and deep nodes.** Each target node uses at most `--max-node-reads` records: those
+with the smallest record digest (SHA-256 of the deterministic serialization of the GAM record,
+`Read.digest`), deterministic and uniform with respect to the alleles they carry. The cap is applied
+while the GAM is read (`IndexedGam.fetch_capped`): the reader counts every node's MAPQ-passing
+records from its group index, ranks the records of the nodes over the cap by `record_key` (which
+parses them but decodes no edits) and returns each record with the nodes whose cap leaves it out; a
+record no node of the batch keeps is not decoded at all. The prefilters, support counting and rows
+of a node then use exactly its capped records, so a node's tensors do not depend on the batching
+and equal those of a GAM holding only its capped records (tested). Nodes of a collapsed repeat
+(satellites, rDNA: on HG008 Illumina WGS the median target has 220 MAPQ>5 mappings, 683 more than
+10,000 and one 5.4 million; COLO829T ONT has 2,034 such nodes in one task, fiberseq 3,377) share
+their reads, so their capped records are the same ones and an ordinary batch there decodes about
+800 records however deep the region is. Sites of a capped node carry `downsampled_from` (the
+records the cap chose from); the shared directory lists capped nodes in `downsampled_nodes.tsv`
+(node, records, kept, reason `max_node_reads`). Before 2026-09-26 the cap was applied after the
+prefilters and nodes over 10,000 mappings were built alone from a 10,000-record sample: a deep
+ONT-UL node took 436 s (fetch 207, decode 224, tensors 5), about 10 days for one COLO829T task.
 
 **`--chromosomes`** filters the **target nodes** by the chromosome block of their node ID
 (Minigraph-Cactus numbers each chromosome's graph as one contiguous ID interval, including the
@@ -272,7 +269,7 @@ SNV/ and INDEL/   shard_XXXXX_data.npy (n, 8, rows, width) int8, variant_summary
                   unsupported_events.ndjson, manifest.json
 shared/           manifest.json (+ output_layout, variant_outputs, tensors_by_type), every audit record
                   (filtered_candidates / unsupported_events), batch_timing.ndjson, target_nodes.txt,
-                  downsampled_nodes.tsv (only if a node was sampled); no shards
+                  downsampled_nodes.tsv (nodes over the read cap, if any); no shards
 ```
 
 ### `native compile | check`
@@ -307,7 +304,7 @@ prepare
   --root DIR                 new run directory (config, frozen source, partitions, logs, status)
   --tensors DIR              tensor output directory (default <root>/tensors)
   --gam GAM [--index GAI]  --nodes target_nodes.txt  --graph-index SQLITE     (required, except --index)
-  --node-stats JSON          discovery node_stats.json: task costs (expensive first) and the deep-node table
+  --node-stats JSON          discovery node_stats.json: task costs (expensive tasks first)
   --tasks 512                contiguous near-equal node lists; use ~15,500 target nodes per task
   --processes 32             tasks at once (= builder processes); the job needs as many CPUs
   every `run build` option except the outputs and --debug-rows (same defaults, but --gam-cache-mb 8192)
@@ -395,7 +392,7 @@ All runs: one Slurm node, `-p general`, `--mem=420G`, `--chromosomes autosome`, 
 | `--tasks` (~15,500 targets each) | 1,415¹ | 1,436 | 1,201 |
 | `--processes` | 48 | **36** (48 ran out of memory) | 48 |
 | `--gam-cache-mb` | 6144¹ | 8192 | 8192 |
-| deep nodes (> 10,000 mappings) | 0 | 0 | 683 |
+| nodes over 10,000 mappings | 0 | 0 | 683 |
 | task wall time | 9.5 h¹ | 8.5 h | 3.6 h |
 | peak RSS of the whole run (sampled) | 418 GiB¹ | 348 GiB | 239 GiB |
 | tensors (SNV + INDEL, autosomes) | 3,097,029¹ | 4,883,519 | 5,152,353 |
@@ -406,8 +403,8 @@ plus 391 supplement tasks, no per-read block cache); a whole v3 PacBio run has n
 * **Memory is set by `--processes`.** Slurm kills the job when the summed RSS of all its processes
   exceeds `--mem` (`OverMemoryKill`). The ONT run at 48 processes reached 446 GB after 22 min; at 36
   processes it peaked at 348 GiB. Long reads cost memory per process through the reads of one batch
-  (section 7), short reads through the record count; the deep-node sample and the 200,000-record
-  limit keep Illumina tasks at 2.6–6.4 GiB.
+  (section 7), short reads through the record count; the read cap and the 200,000-record limit keep
+  Illumina tasks at 2.6–6.4 GiB.
 * **Discovery** needs one core per worker and little memory; ask ~20 % over the last MaxRSS (16 GB →
   20G). Its target lists differ from the raw rule's on few nodes: on PacBio 269,569 autosomal nodes
   are v3 targets only and 700,805 were built by v6 (main or supplement tasks) but are no v3 target.
@@ -416,9 +413,8 @@ plus 391 supplement tasks, no per-read block cache); a whole v3 PacBio run has n
   `config.json` (e.g. 48 → 36) and runs `run.sh --resume`, or repeats `finalize` when the merge was
   already done. The HG008 run directories keep such scripts (`fallback_job.sh`,
   `prepare_and_submit.sh`, `common.env`, `discovery_job.sh`).
-* **Illumina** before the deep-node sampling: the 20,000-record batch limit (v2's default) split
-  every batch and failed every fixed batch size down to 256; a single rDNA node of 5.4 M records
-  cannot be built whole.
+* **Illumina** with v2's 20,000-record batch limit and no cap at fetch time: every batch was split and
+  every fixed batch size down to 256 failed; a single rDNA node of 5.4 M records cannot be built whole.
 
 ---
 
@@ -434,7 +430,7 @@ plus 391 supplement tasks, no per-read block cache); a whole v3 PacBio run has n
 3. applies `--chromosomes` to the node list (`<root>/nodes_selected.txt`), splits it into `--tasks`
    contiguous, near-equal node lists (`parts/nodes_NNNN.txt`) and, with `--node-stats`, records
    each task's `predicted_cost` (Σ discovery `not_perfect` over its nodes; reading a 6 GB
-   node_stats.json takes ~1 min and ~7 GB) and writes `downsample_nodes.tsv` (node, mappings);
+   node_stats.json takes ~1 min and ~7 GB);
 4. fingerprints every input (GAM, GAI, graph index, node list, chr index, reference path, truth
    files) and writes `config.json` and `run.sh` (`cd <root>/source && exec <python> -m
    indexed_gam_pipeline_v3.orchestrate run --root <root> "$@"`). It prints a summary including
@@ -443,13 +439,13 @@ plus 391 supplement tasks, no per-read block cache); a whole v3 PacBio run has n
 `config.json` holds `package` (the guard below), `python`, `tensors`, `inputs`,
 `chromosome_selection`, `source_sha256`, `tasks`, `processes`, `schedule`, `parts`, `builder`
 (every builder option, passed explicitly to each task, so a run never depends on the CLI defaults of
-the code that executes it), `native_decoder` (`available`, `reason`), `downsample` (`reads`,
-`nodes`, `rule`, and with deep nodes `mappings`, `nodes_file`, `sha256`), `variant_outputs`
-({SNV: AF, INDEL: AF}) and `postprocess`.
+the code that executes it), `native_decoder` (`available`, `reason`), `variant_outputs`
+({SNV: AF, INDEL: AF}) and `postprocess`. Roots prepared before 2026-09-26 may also hold a
+`downsample` entry (the old deep-node table); the builder no longer reads it.
 
 **run** (`sbatch <root>/run.sh`, or `bash <root>/run.sh [--resume]`):
 1. refuses a merged root, fewer allocated CPUs (`SLURM_CPUS_PER_TASK`) than `processes`, and any
-   changed input, frozen file, partition or deep-node table (`verify`);
+   changed input, frozen file or partition (`verify`);
 2. runs the tasks, at most `processes` at once, **most expensive predicted first** (LPT order; on
    the v5 wall times this replays 12.2 h as 7.2 h), else in index order. Each task is a fresh
    `run build` process under `/usr/bin/time -v` in `<root>/source`, so all its memory is returned
@@ -458,7 +454,7 @@ the code that executes it), `native_decoder` (`available`, `reason`), `downsampl
    `validation_report.json`. Any failure stops the queue and terminates the running tasks (TERM,
    then KILL after 10 s);
 3. `verify` again (nothing the tasks depend on changed while they ran), then `outputs.json` (every
-   task directory with its tensor count; deep nodes of all tasks gathered into
+   task directory with its tensor count; the capped nodes of all tasks gathered into
    `<root>/downsampled_nodes.tsv`) and `status.json` `complete`;
 4. **finalize**: with `--merge-shard-size N` the task outputs are merged into
    `<tensors>/<kind>/<chrom>_shard_*` (chr1–22; other blocks under `<tensors>/non_autosomal/`) by
@@ -499,18 +495,17 @@ Layout — bookkeeping under `--root`, tensors under `--tensors` (default `<root
 
 ```
 <root>/
-  config.json              inputs, fingerprints, builder options, partition table, deep-node table
+  config.json              inputs, fingerprints, builder options, partition table
   run.sh                   sbatch-able entry point (forwards extra args, e.g. --resume)
   source/                  frozen copy of indexed_gam_pipeline_v3 (hashes in config.json)
   nodes_selected.txt       node list after --chromosomes (when not all)
-  downsample_nodes.tsv     deep nodes from --node-stats (when any)
   parts/nodes_NNNN.txt     node list of each task
   logs/task_NNNN.log       builder output; task_NNNN.resources.txt from /usr/bin/time -v
   queue_status.json        per-task state, PIDs, wall times
   status.json              status, tensors, tensors_by_type, merged, merge_layout, labeled, peak sampled RSS
   memory.ndjson            process-tree RSS every 30 s
   outputs.json             catalog of every task directory with its tensor count (outputs.pre_merge.json after a merge)
-  downsampled_nodes.tsv    every sampled deep node, with its task
+  downsampled_nodes.tsv    every node over the read cap, with its task
   batch_timing.ndjson      every task's batch timings (after the merge)
 <tensors>/
   shared/task_NNNN/        shared manifest, batch_timing.ndjson, complete audit streams, target nodes
@@ -555,10 +550,9 @@ Knobs, in order of effect:
    fewer GAM bytes per node.
 3. `--gam-cache-mb`: trades re-decoding of BGZF groups for memory; 8 GiB is plenty, 1 GiB costs
    little time on PacBio data.
-4. `--max-batch-alignments` (200,000 MAPQ-passing records): a hard stop, not a limiter — with a
-   fixed `--batch-nodes` a multi-node batch over it fails, with `auto` it is split; a single node
-   over it is built from a sample (`--downsample-reads`). It counts records, so it binds short
-   reads: HG008 Illumina 1024-node batches hold 25–92 k records at 2.6–6.4 GiB, while no PacBio
+4. `--max-batch-alignments` (200,000 records): a hard stop, not a limiter, on the records a batch
+   decodes after the read cap — with a fixed `--batch-nodes` a multi-node batch over it fails, with
+   `auto` it is split. It counts records, so it binds short reads: HG008 Illumina 1024-node batches hold 25–92 k records at 2.6–6.4 GiB, while no PacBio
    or ONT batch ever held more than 7,359 / 3,352.
 
 Other jobs, measured (Slurm MaxRSS): `prepare` with a 6 GB node_stats.json 3.6–5.6 GB; relabelling a
@@ -604,17 +598,18 @@ stands for and how much work each candidate costs:
    threshold → rejected with `reasons: [min_af]`, `af_upper_bound`, `coverage`,
    `support_not_evaluated`. Coverage comes from visit intervals alone, with exactly the
    covering rule of support counting (`NodeReads.classify`), so it equals the eligible-record
-   count. Both prefilters use **all** records of the node, before the read cap; without a cap
-   neither can change an accepted output. Why it matters: in a collapsed repeat with ~1,890 reads
-   per node, 3 supporting reads is an AF of 0.16 %, so the ALT prefilter alone lets through almost
+   count. Both prefilters use the node's records after the read cap, the records support counting
+   uses, so neither can change an accepted output. Why it matters: in a collapsed repeat with ~1,890
+   reads per node (800 after the cap), 3 supporting reads is an AF of 0.16 % (0.4 %), so the ALT
+   prefilter alone lets through almost
    every sequencing-error allele (HG008 node 57658580: 1,506 of 2,547 candidates reached
    full support counting, AF median 0.6 %); with the AF prefilter 79 do.
-3. *Read cap* (`--max-node-reads 800`, default; 0 disables) — after the prefilters, each
-   target node's records are ordered by the SHA-256 of the serialized GAM record and the
-   first 800 are used for support counting and row selection of every candidate on that
-   node. Deterministic and order-free. Only nodes deeper than 800 records are affected;
-   their AF and counts become estimates on those 800 (normal 116× HiFi sites have a
-   median coverage of ~40, p90 < 200). Comparable tools cap too (DeepVariant 1,500 per
+3. *Read cap* (`--max-node-reads 800`, default; 0 disables) — each target node's records are ordered
+   by the SHA-256 of the serialized GAM record and the first 800 are used for the prefilters,
+   support counting and row selection of every candidate on that node, applied while the GAM is read
+   (section 4, "The read cap and deep nodes"). Deterministic and order-free. Only nodes deeper than
+   800 records are affected; their AF and counts become estimates on those 800 (normal 116× HiFi
+   sites have a median coverage of ~40, p90 < 200). Comparable tools cap too (DeepVariant 1,500 per
    partition, ClairS 64 + 64 rows, Mutect2 ~1,000 per active region).
 4. *Sites* — surviving alleles are grouped by
    `(node, start, SNV|INDEL)`; INS and DEL at one start share an INDEL site, SNV and
@@ -725,13 +720,14 @@ versions, `parameters` (incl. `max_node_reads`, `candidate_unit` (always `site`)
 `site_id` (`"node:start:SNV|INDEL"`), `alleles[]` (every passing allele by ALT count:
 `label, candidate_id, start, end, ref, alt, event_type, event_length, coverage, alt_count,
 ref_count, other_count, af`), `allele_count`, `second_allele_af` (0 when single;
-two high-AF alleles at one site usually indicate a mapping artifact) and, for sampled deep nodes,
-`downsampled_from`. `filtered_candidates.ndjson` holds every rejected allele (with `site_id`);
-each allele appears exactly once, either in some site's `alleles[]` or there.
+two high-AF alleles at one site usually indicate a mapping artifact) and, for nodes over the read
+cap, `downsampled_from` (the records the cap chose from). `filtered_candidates.ndjson` holds every
+rejected allele (with `site_id`); each allele appears exactly once, either in some site's
+`alleles[]` or there.
 `manifest.json` carries the format/encoding versions, channel list, parameters, CLI
 arguments (31 keys in a fixed order; three retired options keep fixed values: `max_tensors` null,
 `variant_type` all/snp/indel, `candidate_unit` site), `sample_unit`/`site_definition`, `read_cap`,
-`downsample`, `decoder` (requested, used, reason, `native_record_fallbacks`), graph-index
+`decoder` (requested, used, reason, `native_record_fallbacks`), graph-index
 provenance, cache statistics, stage timings and counters (`tensors`, `shards`,
 `filtered_candidates`, `early_rejected`, `early_af_rejected`, `unsupported_events`).
 
@@ -763,10 +759,12 @@ suite instead of silently decoding in Python. With the decoder built, the only s
 pass is the native graph-index builder test, which needs the two environment variables of the
 third line.
 
-147 tests in 13 files cover: GAI reading, cache/scan equivalence (limits 1, 2048 and 64 MiB),
+149 tests in 13 files cover: GAI reading, cache/scan equivalence (limits 1, 2048 and 64 MiB),
 refusal of cache 0 and GAI v0/v99, bin arrays against the per-bin scan, the MAPQ-filtered cache,
-per-node samples of several nodes in one pass; deep-node builds (fixed sample, other nodes unchanged,
-single-node limit, groups equal to the nodes built alone, splits) and the prepare table; discovery (native counts against a Python reference for 1–3 processes,
+the capped fetch (each node its smallest record digests whatever else is asked for, the reader's key
+equal to the builder's digest); capped builds (nodes within the cap unchanged, a capped node equal to a
+GAM of its capped records only, independent of the batching, a collapsed repeat decoding one capped
+set, the batch limit on capped records) and capped nodes listed through a whole run; discovery (native counts against a Python reference for 1–3 processes,
 segment tiling, outputs independent of the process count, an indel counted on the node it is
 normalized to); decoding, N filter, limits, unsupported events, left-normalization (strand
 symmetry, idempotence, cross-node insertions and deletions); support rules, windows, blocks and
@@ -848,8 +846,12 @@ leaves them out.
   * the UPGMA fallback for invalid scipy trees (`12c29d3`, HG008 Illumina task 206);
   * the parallel merge (`8367f73`; the single-process copy of HG008 Illumina, 833 GB of tensors plus
     258 GB of audit streams, ran at ~150 MB/s; chr22: 227 → 101 s with 8 workers);
-  * deep-node groups (2026-09-26, after COLO829T ONT/fiberseq: one task each needed 7–10 days because
-    every deep node of a collapsed repeat fetched and decoded the same ~10,000 long reads again);
+  * the read cap applied while reading the GAM (2026-09-26), which replaced the deep-node sampling
+    and the short-lived deep-node groups (`6a5e6cd`): on COLO829T ONT/fiberseq one task each needed
+    7–10 days because every deep node of a collapsed repeat fetched and decoded the same ~10,000 long
+    reads again. The kept records are the ones the cap always took, so tensors change only for nodes
+    over the cap where a prefilter now decides on the capped records (and for the former deep nodes);
+    audit streams lose the candidates seen only in records no node keeps;
   * truth-labels-v2 (`ba1dec2`: labels 1/2 need a PASS truth allele, the BEDs only bound the
     confident region);
   * truth-labels-v3: −1 only where a tumor-only caller can drop the tensors too (no GRCh38 position,

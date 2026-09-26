@@ -11,8 +11,9 @@ import numpy as np
 
 from .fixtures import (SEQ, graph_fixture, mixed_af_rows, overlap, site_rows, spec_alignment,
                        split_args, write_gam)
-from ..build import ALLELE_FIELDS, ARGUMENTS, KIND, PARAMETERS, build, capped_reads, candidate_units, recorded
+from ..build import ALLELE_FIELDS, ARGUMENTS, KIND, PARAMETERS, build, candidate_units, recorded
 from ..candidates import BASES, Candidate, decode_alignment, exact_coverage
+from ..gam_reader import record_key
 from ..orchestrate import BUILDER_OPTIONS, PACKAGE, build_command, validate_shards
 from ..orchestrate import make_parser as prepare_parser
 from ..run import make_parser
@@ -80,15 +81,13 @@ class ExactCoverageTest(unittest.TestCase):
 
 
 class ReadCapTest(unittest.TestCase):
-    def test_cap_is_deterministic_order_free_and_optional(self):
+    def test_the_reader_ranks_records_by_the_builders_record_digest(self):
         seq = {1: "ACGT"}
-        reads = [decode_alignment(spec_alignment([(1, 0, False, [(1, 1, ""), (1, 1, "T"), (2, 2, "")])], seq,
-                                                 name=f"r{i}"), seq)[0] for i in range(6)]
-        smallest = sorted(r.digest for r in reads)[:3]
-        self.assertEqual([r.digest for r in capped_reads(reads, 3)], smallest)
-        self.assertEqual([r.digest for r in capped_reads(list(reversed(reads)), 3)], smallest)
-        self.assertIs(capped_reads(reads, 0), reads)
-        self.assertIs(capped_reads(reads, 6), reads)  # not deeper than the cap: untouched
+        rows = [spec_alignment([(1, 0, False, [(1, 1, ""), (1, 1, "T"), (2, 2, "")])], seq, name=f"r{i}")
+                for i in range(20)]
+        digests = [decode_alignment(a, seq)[0].digest for a in rows]
+        self.assertEqual([record_key(a) for a in rows], [int(d[:16], 16) for d in digests])
+        self.assertEqual(sorted(range(20), key=lambda i: record_key(rows[i])), sorted(range(20), key=lambda i: digests[i]))
 
     def test_capped_build_passes_cap_aware_audit(self):
         seq = {1: "ACGTACGTAC"}

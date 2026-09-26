@@ -76,32 +76,25 @@ def partition_nodes(source, folder, tasks):
 NODE_STATS_RECORD = re.compile(rb'"(\d+)":\s*\{\s*"perfect":\s*(\d+),\s*"not_perfect":\s*(\d+)')
 
 
-def node_counts(stats_path, nodes):
-    """Discovery's (not_perfect, perfect + not_perfect) counts of every node in `nodes` (sorted int64 array).
+def node_costs(stats_path, nodes):
+    """Discovery's not_perfect count of every node in `nodes` (sorted int64 array).
 
-    node_stats.json covers every observed node (several GB for a genome), so it is scanned as
-    bytes instead of parsed into one dict.
+    The number of edited MAPQ-passing mappings on a node tracks how much decoding and
+    candidate work the node costs. node_stats.json covers every observed node (several GB
+    for a genome), so it is scanned as bytes instead of parsed into one dict.
     """
-    found, perfect, edited = array("q"), array("q"), array("q")
+    found, counts = array("q"), array("q")
     with open(stats_path, "rb") as stream, mmap.mmap(stream.fileno(), 0, access=mmap.ACCESS_READ) as data:
         for match in NODE_STATS_RECORD.finditer(data):
             found.append(int(match.group(1)))
-            perfect.append(int(match.group(2)))
-            edited.append(int(match.group(3)))
-    found, perfect, edited = (np.frombuffer(a, dtype=np.int64) for a in (found, perfect, edited))
+            counts.append(int(match.group(3)))
+    found, counts = np.frombuffer(found, dtype=np.int64), np.frombuffer(counts, dtype=np.int64)
     order = np.argsort(found, kind="stable")
-    found = found[order]
+    found, counts = found[order], counts[order]
     at = np.minimum(np.searchsorted(found, nodes), max(len(found) - 1, 0))
     if not len(found) or np.any(found[at] != nodes):
         raise ValueError("node_stats.json lacks some target nodes: " + str(stats_path))
-    edited = edited[order][at]
-    return edited, perfect[order][at] + edited
-
-
-def node_costs(stats_path, nodes):
-    """Discovery's not_perfect count of every node in `nodes`: the number of edited MAPQ-passing
-    mappings on a node tracks how much decoding and candidate work the node costs."""
-    return node_counts(stats_path, nodes)[0]
+    return counts[at]
 
 
 def postprocess_options(args):
@@ -182,20 +175,8 @@ def prepare(args):
         selection.update(nodes_file=str(nodes_file), sha256=sha256_file(nodes_file))
     parts = partition_nodes(nodes_file, root / "parts", args.tasks)
     schedule = dict(order="task index")
-    # Deep nodes (more MAPQ>5 mappings in discovery than --downsample-reads) are built alone from a
-    # fixed sample of that many records; without node stats only the builder's single-node limit applies.
-    downsample = dict(reads=args.downsample_reads, nodes=0,
-                      rule="discovery perfect + not_perfect > reads" if args.node_stats else "no node stats")
     if args.node_stats:
-        edited, mappings = node_counts(args.node_stats, nodes)
-        deep = mappings > args.downsample_reads
-        if deep.any():
-            table = root / "downsample_nodes.tsv"
-            table.write_text("node\tmappings\n" + "".join(
-                f"{n}\t{m}\n" for n, m in zip(nodes[deep].tolist(), mappings[deep].tolist())))
-            downsample.update(nodes=int(deep.sum()), mappings=int(mappings[deep].sum()),
-                              nodes_file=str(table), sha256=sha256_file(table))
-        costs = np.cumsum(edited)
+        costs = np.cumsum(node_costs(args.node_stats, nodes))
         end = 0
         for part in parts:
             begin, end = end, end + part["nodes"]
@@ -218,7 +199,6 @@ def prepare(args):
         source_sha256={str(p.relative_to(root)): sha256_file(p) for p in sorted((root / "source").rglob("*")) if p.is_file()},
         tasks=args.tasks, processes=args.processes, schedule=schedule, parts=parts,
         builder={k: getattr(args, k) for k in BUILDER_OPTIONS},
-        downsample=downsample,
         native_decoder=native_decoder,
         variant_outputs=dict(SNV=args.snv_min_af, INDEL=args.indel_min_af),
         postprocess=postprocess)
@@ -232,7 +212,6 @@ def prepare(args):
     (root / "run.sh").chmod(0o755)
     print(json.dumps(dict(root=str(root), tensors=str(tensors), tasks=args.tasks, processes=args.processes,
                           nodes=int(len(nodes)), chromosome_selection={k: v for k, v in selection.items() if k != "sha256"},
-                          downsample={k: v for k, v in downsample.items() if k != "sha256"},
                           variant_outputs=config["variant_outputs"], postprocess=postprocess,
                           native_decoder=native_decoder), indent=2))
     return config
@@ -250,9 +229,6 @@ def verify(root, config):
     for part in config["parts"]:
         if sha256_file(part["nodes_file"]) != part["sha256"]:
             raise ValueError("Partition changed: " + part["nodes_file"])
-    table = config.get("downsample", {}).get("nodes_file")
-    if table and sha256_file(table) != config["downsample"]["sha256"]:
-        raise ValueError("Downsample table changed: " + table)
 
 
 # --- task -----------------------------------------------------------------------
@@ -279,10 +255,6 @@ def build_command(root, config, index):
             command += ["--early-af-filter" if b[key] else "--no-early-af-filter"]
         else:
             command += ["--" + key.replace("_", "-"), str(b[key])]
-    if "downsample" in config:  # roots prepared before downsampling keep the builder's default
-        command += ["--downsample-reads", str(config["downsample"]["reads"])]
-        if config["downsample"].get("nodes_file"):
-            command += ["--downsample-nodes", config["downsample"]["nodes_file"]]
     for kind, af in config["variant_outputs"].items():
         flag = kind.lower()
         command += [f"--{flag}-output", str(outputs[kind]), f"--{flag}-min-af", str(af)]
@@ -626,7 +598,7 @@ def finalize(root, config=None):
 
 
 def catalog_outputs(root, config):
-    """outputs.json: every tensor directory of every task with its tensor count. Sampled deep nodes
+    """outputs.json: every tensor directory of every task with its tensor count. Nodes over the read cap
     of all tasks go to <root>/downsampled_nodes.tsv (task directories may be deleted by the merge)."""
     kinds = list(config["variant_outputs"])
     entries = {kind: [] for kind in kinds}

@@ -9,7 +9,6 @@ import bisect
 from collections import OrderedDict, defaultdict
 import gzip
 import hashlib
-import heapq
 import io
 from pathlib import Path
 import sys
@@ -90,13 +89,14 @@ def equivalent_eof(stream, expected, actual):
 
 # --- indexed retrieval --------------------------------------------------------
 
-def sample_key(raw):
-    """Downsampling rank of a record: its first 8 BLAKE2b bytes (stable across runs and Pythons)."""
-    return int.from_bytes(hashlib.blake2b(raw, digest_size=8).digest(), "big")
+def record_key(alignment):
+    """Read-cap rank of a record: the first 8 bytes of the builder's record digest (SHA-256 of the
+    deterministic serialization, candidates Read.digest), so fetch_capped keeps the records the read cap
+    has always taken."""
+    return int.from_bytes(hashlib.sha256(alignment.SerializeToString(deterministic=True)).digest()[:8], "big")
 
 
-class SampleTooLarge(ValueError):
-    """IndexedGam.sample: the per-node samples together exceed the record limit."""
+NO_NODES = frozenset()
 
 
 class IndexedGam:
@@ -238,53 +238,65 @@ class IndexedGam:
         """Yield every complete alignment whose path visits any of `nodes`, once per record, in file order."""
         metrics = {} if metrics is None else metrics
         wanted, ranges = self._query(nodes, metrics)
-        for raw in self._matching(wanted, ranges, metrics):
-            metrics["decoded_alignments"] += 1
-            metrics["returned_alignments"] += 1
-            yield decode(raw)
+        for messages, postings, hits in self._group_hits(wanted, ranges, metrics):
+            for i in sorted({i for n in hits for i in postings[n]}):  # file order, each record once
+                metrics["decoded_alignments"] += 1
+                metrics["returned_alignments"] += 1
+                yield decode(messages[i])
 
-    def sample(self, nodes, size, metrics=None, limit=None):
-        """Per node of `nodes`, the `size` records visiting it with the smallest sample_key (all if there
-        are fewer), drawn in one pass: a node's sample does not depend on the other nodes asked for.
+    def fetch_capped(self, nodes, cap, metrics=None):
+        """fetch with the read cap applied while reading: a node visited by more than `cap` records keeps the
+        `cap` with the smallest record_key (the builder's record digest; ties in file order), every other node
+        all of its records. A node's sample does not depend on the other nodes asked for.
 
-        Returns [(alignment, frozenset of the nodes it was drawn for)] in file order, each record once;
-        metrics gets sampled_from = {node: records visiting it}. Raises SampleTooLarge when the samples
-        together hold more than `limit` distinct records (nodes that share few reads; ask for fewer nodes).
+        Returns [(alignment, left_out)] in file order: left_out = the visited nodes of `nodes` whose sample
+        leaves the record out (empty for most records); a record that no visited node keeps is not returned.
+        metrics gets sampled = {node: records} of the capped nodes. cap=0: every record, nothing left out.
         """
         metrics = {} if metrics is None else metrics
         wanted, ranges = self._query(nodes, metrics)
-        heaps = {node: [] for node in wanted}  # per node a max-heap on the key: (-key, -order)
-        held, raws, seen = defaultdict(int), {}, defaultdict(int)  # order -> heaps holding it, its bytes
-        for order, (raw, hits) in enumerate(self._matching(wanted, ranges, metrics, with_nodes=True)):
-            key = sample_key(raw)
-            for node in hits:
-                seen[node] += 1
-                heap, item = heaps[node], (-key, -order)
-                if len(heap) < size:
-                    heapq.heappush(heap, item)
-                elif item > heap[0]:
-                    dropped = -heapq.heapreplace(heap, item)[1]
-                    held[dropped] -= 1
-                    if not held[dropped]:
-                        del held[dropped], raws[dropped]
-                else:
-                    continue
-                held[order] += 1
-                raws[order] = raw
-            if limit is not None and len(held) > limit:
-                raise SampleTooLarge(f"samples of {len(wanted)} nodes hold more than {limit} records")
-        metrics["sampled_from"] = {node: seen[node] for node in sorted(wanted)}
-        drawn = defaultdict(set)
-        for node, heap in heaps.items():
-            for _, order in heap:
-                drawn[-order].add(node)
-        metrics["decoded_alignments"] += len(drawn)
-        metrics["returned_alignments"] += len(drawn)
-        return [(decode(raws[order]), frozenset(drawn[order])) for order in sorted(drawn)]
+        raws, groups, counts = [], [], defaultdict(int)
+        for messages, postings, hits in self._group_hits(wanted, ranges, metrics):
+            local = np.unique(np.fromiter((i for n in hits for i in postings[n]), dtype=np.int64))
+            groups.append((len(raws), local, [(n, postings[n]) for n in hits]))
+            raws.extend(messages[i] for i in local.tolist())
+            for n in hits:
+                counts[n] += len(postings[n])
+        capped = sorted(n for n, c in counts.items() if cap and c > cap)
+        left_out = defaultdict(set)
+        visits = None
+        if capped:
+            members, visits, capped_set = defaultdict(list), np.zeros(len(raws), dtype=np.int64), set(capped)
+            for base, local, hits in groups:
+                for n, posting in hits:
+                    at = base + np.searchsorted(local, np.asarray(posting, dtype=np.int64))
+                    visits[at] += 1  # visited nodes of `nodes` per record
+                    if n in capped_set:
+                        members[n].append(at)
+            keys, keyed = np.zeros(len(raws), dtype=np.uint64), np.zeros(len(raws), dtype=bool)
+            for n in capped:
+                at = np.concatenate(members[n])
+                todo = at[~keyed[at]]
+                for i in todo.tolist():
+                    keys[i] = record_key(decode(raws[i]))
+                keyed[todo] = True
+                metrics["decoded_alignments"] += len(todo)
+                for i in at[np.lexsort((at, keys[at]))[cap:]].tolist():
+                    left_out[i].add(n)
+        metrics["sampled"] = {n: counts[n] for n in capped}
+        fetched = []
+        for i, raw in enumerate(raws):
+            out = left_out.get(i)
+            if out and len(out) == visits[i]:
+                continue  # every visited node of the batch leaves it out
+            fetched.append((decode(raw), frozenset(out) if out else NO_NODES))
+        metrics["decoded_alignments"] += len(fetched)
+        metrics["returned_alignments"] += len(fetched)
+        return fetched
 
-    def _matching(self, wanted, ranges, metrics, with_nodes=False):
-        """Raw bytes of every record in `ranges` that visits a node of `wanted`, in file order
-        (with_nodes: (raw bytes, the nodes of `wanted` it visits))."""
+    def _group_hits(self, wanted, ranges, metrics):
+        """(records, postings, hits) of every GAM group in `ranges` that holds a record visiting a node of
+        `wanted`, in file order: hits = those nodes."""
         # Take the cached groups of this fetch first (refreshed, held for the walk), then read the missing
         # ones. A plain LRU walk loses every hit when consecutive fetches cycle through more groups than
         # the cache holds (long reads: neighbouring batches read the same ~50 groups of ~100-270 MiB);
@@ -310,22 +322,13 @@ class IndexedGam:
                         messages, postings = entry[1], entry[2]
                     else:
                         messages, postings = self._indexed_group(stream, metrics)
-                    # Original record order; a record touching several nodes is yielded once. The
-                    # smaller of (batch nodes, group nodes) is scanned for the intersection.
+                    # The smaller of (batch nodes, group nodes) is scanned for the intersection.
                     if len(wanted) < len(postings):
                         hits = [n for n in wanted if n in postings]
                     else:
                         hits = [n for n in postings if n in wanted]
-                    if with_nodes:
-                        visited = defaultdict(list)
-                        for n in hits:
-                            for i in postings[n]:
-                                visited[i].append(n)
-                        for i in sorted(visited):
-                            yield messages[i], visited[i]
-                    else:
-                        for i in sorted({i for n in hits for i in postings[n]}):
-                            yield messages[i]
+                    if hits:
+                        yield messages, postings, hits
                 actual_end = stream.tell()
                 if actual_end != end and not equivalent_eof(stream, end, actual_end):
                     raise ValueError("GAI run does not end on a GAM group boundary")

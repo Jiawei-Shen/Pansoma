@@ -681,16 +681,18 @@ class NodeReads:
         return result
 
 
-def alt_support_bounds(reads, candidates, min_bq):
-    """Upper bound on ALT support: one vote per record per candidate (visits do not multiply)."""
+def alt_support_bounds(reads, candidates, min_bq, left_out=None):
+    """Upper bound on ALT support: one vote per record per candidate (visits do not multiply).
+    left_out[i] (optional): nodes whose sample leaves record i out; it counts on no candidate there."""
     counts = Counter()
-    for read in reads:
+    for i, read in enumerate(reads):
+        out = left_out[i] if left_out else ()
         counts.update({o.candidate for o in read.observations
-                       if o.quality >= min_bq and o.candidate in candidates})
+                       if o.quality >= min_bq and o.candidate in candidates and o.candidate.node not in out})
     return counts
 
 
-def exact_coverage(candidates, reads):
+def exact_coverage(candidates, reads, left_out=None):
     """{candidate: number of records NodeReads.classify would classify}, from visit intervals only.
 
     NodeReads.classify returns a hit iff one of the record's non-empty visits to the candidate
@@ -698,14 +700,16 @@ def exact_coverage(candidates, reads):
     and each record counts once. That needs no column materialization, so this equals
     the eligible-record count of support counting over all records of `reads` on the
     candidate's node. One pass over all visits, then one vector test per candidate.
+    left_out[i] (optional): nodes whose sample leaves record i out; its visits there do not count.
     """
     per_node = defaultdict(list)
     for candidate in candidates:
         per_node[candidate.node].append(candidate)
     visits = defaultdict(list)
     for ri, read in enumerate(reads):
+        out = left_out[ri] if left_out else ()
         for v in read.visits:
-            if v.first != v.last and v.node in per_node:
+            if v.first != v.last and v.node in per_node and v.node not in out:
                 visits[v.node].append((ri, v.start, v.end))
     result = {}
     for node, items in per_node.items():

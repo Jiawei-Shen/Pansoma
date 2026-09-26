@@ -132,7 +132,7 @@ class EndToEndTest(unittest.TestCase):
                 "--tasks", "3", "--processes", "2", "--gam-cache-mb", "1", "--batch-nodes", "2", "--shard-size", "2",
                 "--min-variants", str(overrides.get("min_variants", 1)),
                 "--merge-shard-size", str(overrides.get("merge_shard_size", 0)),
-                "--snv-min-af", ".06", "--indel-min-af", ".08"]
+                "--snv-min-af", overrides.get("snv_min_af", ".06"), "--indel-min-af", overrides.get("indel_min_af", ".08")]
         if overrides.get("chr_index"):
             argv += ["--chr-index", str(overrides["chr_index"]), "--chromosomes", overrides.get("chromosomes", "all")]
         if overrides.get("keep_sources"):
@@ -143,50 +143,11 @@ class EndToEndTest(unittest.TestCase):
             argv += ["--node-stats", str(overrides["node_stats"])]
         if overrides.get("decoder"):
             argv += ["--decoder", overrides["decoder"]]
-        if overrides.get("downsample_reads"):
-            argv += ["--downsample-reads", str(overrides["downsample_reads"])]
+        if overrides.get("max_node_reads"):
+            argv += ["--max-node-reads", str(overrides["max_node_reads"])]
         with redirect_stdout(io.StringIO()), patch.dict(os.environ, dict(OMP_NUM_THREADS="1", OPENBLAS_NUM_THREADS="1")):
             orchestrate.main(argv)
         return json.loads((root / "config.json").read_text())
-
-    def test_prepare_lists_deep_nodes_for_every_task(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            gam, _ = tiny_gam(root)
-            graph = graph_fixture(root / "graph.sqlite", [(n, "AAAAAA", 86) for n in (10, 20, 30, 1000)])
-            nodes = root / "nodes.txt"
-            nodes.write_text("10\n20\n30\n1000\n")
-            stats = root / "node_stats.json"
-            stats.write_text(json.dumps({str(n): dict(perfect=p, not_perfect=e, max_read_length=6)
-                                         for n, p, e in ((10, 3, 3), (20, 1, 1), (30, 6, 1), (1000, 2, 2))}, indent=2))
-            argv = ["prepare", "--root", str(root / "run"), "--gam", str(gam), "--nodes", str(nodes),
-                    "--graph-index", str(graph), "--node-stats", str(stats), "--tasks", "2", "--processes", "1",
-                    "--snv-min-af", ".06", "--indel-min-af", ".08", "--merge-shard-size", "0", "--downsample-reads", "5"]
-            with redirect_stdout(io.StringIO()):
-                orchestrate.main(argv)
-            config = json.loads((root / "run/config.json").read_text())
-            table = root / "run/downsample_nodes.tsv"
-            self.assertEqual(table.read_text(), "node\tmappings\n10\t6\n30\t7\n")
-            self.assertEqual({k: config["downsample"][k] for k in ("reads", "nodes", "mappings", "nodes_file")},
-                             dict(reads=5, nodes=2, mappings=13, nodes_file=str(table)))
-            for index in range(2):
-                command = " ".join(orchestrate.build_command(root / "run", config, index))
-                self.assertIn(f"--downsample-reads 5 --downsample-nodes {table}", command)
-            orchestrate.verify(root / "run", config)
-            table.write_text("node\tmappings\n10\t6\n")
-            with self.assertRaisesRegex(ValueError, "Downsample table changed"):
-                orchestrate.verify(root / "run", config)
-            # without deep nodes there is no table, and tasks get only the sample size
-            argv[argv.index(str(root / "run"))] = str(root / "run2")
-            argv[-1] = "100"
-            with redirect_stdout(io.StringIO()):
-                orchestrate.main(argv)
-            config = json.loads((root / "run2/config.json").read_text())
-            self.assertEqual(config["downsample"]["nodes"], 0)
-            self.assertFalse((root / "run2/downsample_nodes.tsv").exists())
-            command = orchestrate.build_command(root / "run2", config, 0)
-            self.assertIn("--downsample-reads", command)
-            self.assertNotIn("--downsample-nodes", command)
 
     def test_split_run_follows_the_cost_order_and_resumes_damaged_tasks(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -313,33 +274,34 @@ class EndToEndTest(unittest.TestCase):
                 self.assertEqual(orchestrate.finalize(run), {})  # nothing left to do
             self.assertFalse((run / "finalize_report.json").exists())
 
-    def test_a_sampled_deep_node_runs_validates_and_merges(self):
+    def test_nodes_over_the_read_cap_are_listed_validated_and_merged(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             gam, _ = af_gam(root)
             graph = graph_fixture(root / "graph.sqlite", [(n, "AAAAAA", 331) for n in (10, 20, 30, 40, 50)])
             nodes = root / "nodes.txt"
             nodes.write_text("10\n20\n30\n40\n50\n")
-            stats = root / "node_stats.json"  # node 30 is deep: 50 mappings > 45
-            stats.write_text(json.dumps({str(n): dict(perfect=47 if n == 30 else 40, not_perfect=3, max_read_length=6)
+            stats = root / "node_stats.json"
+            stats.write_text(json.dumps({str(n): dict(perfect=47, not_perfect=3, max_read_length=6)
                                          for n in (10, 20, 30, 40, 50)}, indent=2))
-            run = root / "run"
+            run = root / "run"  # 50 records per node, capped at 45
             config = self.prepare(run, gam, graph, nodes, min_variants=1, chr_index=write_chr_table(root / "chr.tsv"),
-                                  chromosomes="autosome", merge_shard_size=4, node_stats=stats, downsample_reads=45)
-            self.assertEqual(config["downsample"]["nodes"], 1)
+                                  chromosomes="autosome", merge_shard_size=4, node_stats=stats, max_node_reads=45,
+                                  snv_min_af=".01", indel_min_af=".01")
+            self.assertNotIn("downsample", config)
+            self.assertEqual(config["builder"]["max_node_reads"], 45)
             with patch.dict(os.environ, dict(SLURM_CPUS_PER_TASK="2")), redirect_stdout(io.StringIO()):
                 orchestrate.run(run)
             status = json.loads((run / "status.json").read_text())
             self.assertEqual((status["status"], status["merged"]), ("finalized", True))
-            task = next(i for i, p in enumerate(config["parts"]) if p["first_node"] <= 30 <= p["last_node"])
-            self.assertEqual((run / "downsampled_nodes.tsv").read_text(),
-                             f"task\tnode\trecords\tkept\treason\n{task}\t30\t50\t45\tnode_stats\n")
-            self.assertEqual(json.loads((run / "outputs.json").read_text())["downsampled_nodes"], 1)
+            task = {n: next(i for i, p in enumerate(config["parts"]) if p["first_node"] <= n <= p["last_node"])
+                    for n in (10, 20, 30)}  # 40 and 50 are chrX, left out by --chromosomes autosome
+            self.assertEqual((run / "downsampled_nodes.tsv").read_text(), "task\tnode\trecords\tkept\treason\n" +
+                             "".join(f"{task[n]}\t{n}\t50\t45\tmax_node_reads\n" for n in (10, 20, 30)))
+            self.assertEqual(json.loads((run / "outputs.json").read_text())["downsampled_nodes"], 3)
             merged = [json.loads(l) for f in (run / "tensors").glob("*/chr1*.ndjson") for l in f.read_text().splitlines()]
-            deep = [r for r in merged if r["node_id"] == 30]  # its DEL keeps 4 ALT of 45: AF 0.089
-            self.assertTrue(deep)
-            self.assertTrue(all(r["downsampled_from"] == 50 for r in deep))
-            self.assertFalse(any("downsampled_from" in r for r in merged if r["node_id"] != 30))
+            self.assertTrue(merged)
+            self.assertTrue(all(r["downsampled_from"] == 50 for r in merged))
 
     def test_standalone_finalize_completes_an_interrupted_finalize(self):
         """`run` fails inside finalize; `python -m <package>.orchestrate finalize` (a fresh process

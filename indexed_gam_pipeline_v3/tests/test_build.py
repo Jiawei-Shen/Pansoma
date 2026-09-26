@@ -10,6 +10,7 @@ from unittest.mock import patch
 import numpy as np
 
 from .fixtures import af_gam, build_args, graph_fixture, simple_alignment, split_args, tiny_gam, write_gam
+from ..gam_reader import record_key
 from .. import build as build_module
 from ..build import build
 from ..candidates import BASES, CHANNELS, decode_alignment, encode_count
@@ -149,7 +150,7 @@ class SplitOutputTest(unittest.TestCase):
                                       indel_output=str(root / "INDEL"), snv_min_af=.06, indel_min_af=.08,
                                       decoder="python"))  # counts calls of the (patched) Python decoder
             fetch_calls, decode_calls = [], []
-            reader_fetch = build_module.IndexedGam.fetch
+            reader_fetch = build_module.IndexedGam.fetch_capped
 
             def counting_fetch(self, *a, **kw):
                 fetch_calls.append(1)
@@ -159,7 +160,7 @@ class SplitOutputTest(unittest.TestCase):
                 decode_calls.append(1)
                 return decode_alignment(*a, **kw)
 
-            with patch.object(build_module.IndexedGam, "fetch", counting_fetch), \
+            with patch.object(build_module.IndexedGam, "fetch_capped", counting_fetch), \
                  patch.object(build_module, "decode_alignment", counting_decode):
                 manifest = quiet_build(split)
             self.assertEqual((len(fetch_calls), len(decode_calls)), (1, 250))
@@ -247,122 +248,99 @@ class AdaptiveBatchTest(unittest.TestCase):
         self.assertEqual(sum(sizes(True)), 5000)
 
 
-class DownsampleTest(unittest.TestCase):
-    """Deep nodes are built alone from a fixed sample; every other node's tensors are unchanged."""
+class CappedFetchTest(unittest.TestCase):
+    """The read cap applied while reading the GAM: a node over --max-node-reads is built from its records with
+    the smallest record digest only, exactly as if the GAM held nothing else for it, whatever the batching."""
 
-    def build_af(self, root, name, deep=(), **options):
+    def build(self, root, name, rows, nodes, **options):
         inputs = root / (name + "_inputs")
         inputs.mkdir()
-        gam, _ = af_gam(inputs)
-        graph = graph_fixture(inputs / "graph.sqlite", [(n, "AAAAAA", 331) for n in (10, 20, 30, 40, 50)])
-        nodes = inputs / "nodes.txt"
-        nodes.write_text("10\n20\n30\n40\n50\n")
-        if deep:
-            (inputs / "deep.tsv").write_text("node\tmappings\n" + "".join(f"{n}\t50\n" for n in deep))
+        gam = write_gam(inputs / "reads.gam", rows)
+        graph = graph_fixture(inputs / "graph.sqlite", [(n, "AAAAAA", 331) for n in nodes])
+        (inputs / "nodes.txt").write_text("".join(f"{n}\n" for n in nodes))
         options = dict(dict(batch_nodes=2, min_variants=1, snv_min_af=.01, indel_min_af=.01), **options)
-        args = build_args(gam=str(gam), nodes=str(nodes), graph_index=str(graph), shard_size=1,
-                          output=str(root / name / "shared"), snv_output=str(root / name / "SNV"),
-                          indel_output=str(root / name / "INDEL"),
-                          downsample_nodes=str(inputs / "deep.tsv") if deep else None, **options)
-        quiet_build(args)
+        quiet_build(build_args(gam=str(gam), nodes=str(inputs / "nodes.txt"), graph_index=str(graph), shard_size=1,
+                               output=str(root / name / "shared"), snv_output=str(root / name / "SNV"),
+                               indel_output=str(root / name / "INDEL"), **options))
         return root / name
 
     @staticmethod
-    def sites(folder):
-        """{site_id: (summary without shard fields, tensor bytes)} of both typed outputs."""
+    def sites(folder, drop=("shard_index", "index_within_shard")):
+        """{site_id: (summary without `drop` and the recorded max_node_reads, tensor bytes)} of both typed outputs."""
         found = {}
         for kind in ("SNV", "INDEL"):
             for line in (folder / kind / "variant_summary.ndjson").read_text().splitlines():
                 meta = json.loads(line)
+                meta["parameters"].pop("max_node_reads")
                 shard = np.load(folder / kind / f"shard_{meta['shard_index']:05d}_data.npy")
-                tensor = shard[meta["index_within_shard"]].tobytes()
-                found[meta["site_id"]] = ({k: v for k, v in meta.items() if k not in ("shard_index", "index_within_shard")},
-                                          tensor)
+                found[meta["site_id"]] = ({k: v for k, v in meta.items() if k not in drop},
+                                          shard[meta["index_within_shard"]].tobytes())
         return found
 
-    def test_a_deep_node_within_the_sample_size_is_built_alone_and_unchanged(self):
+    @staticmethod
+    def af_rows():
         with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            plain = self.sites(self.build_af(root, "plain"))
-            out = self.build_af(root, "deep", deep=(30,), downsample_reads=100)
-            self.assertEqual(self.sites(out), plain)
+            return af_gam(Path(tmp))[1]  # five nodes x 50 records
+
+    def test_nodes_within_the_cap_are_unchanged(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root, rows, nodes = Path(tmp), self.af_rows(), (10, 20, 30, 40, 50)
+            capped = self.build(root, "capped", rows, nodes, max_node_reads=50)
+            uncapped = self.build(root, "uncapped", rows, nodes, max_node_reads=0)
+            self.assertEqual(self.sites(capped), self.sites(uncapped))
+            for f in ("SNV/filtered_candidates.ndjson", "INDEL/filtered_candidates.ndjson"):
+                self.assertEqual((capped / f).read_text(), (uncapped / f).read_text())
+            self.assertFalse((capped / "shared/downsampled_nodes.tsv").exists())
+            self.assertNotIn("downsampled_nodes", json.loads((capped / "shared/manifest.json").read_text()))
+
+    def test_a_node_over_the_cap_is_built_from_its_smallest_digest_records_only(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root, rows, nodes = Path(tmp), self.af_rows(), (10, 20, 30, 40, 50)
+            kept = []
+            for node in nodes:  # each record visits one node: the GAM a 40-record cap leaves for it
+                mine = [a for a in rows if a.path.mapping[0].position.node_id == node]
+                keys = sorted(record_key(a) for a in mine)[:40]
+                kept += [a for a in mine if record_key(a) in set(keys)]
+            capped = self.build(root, "capped", rows, nodes, max_node_reads=40)
+            alone = self.build(root, "alone", kept, nodes, max_node_reads=0)
+            sites = self.sites(capped, drop=("shard_index", "index_within_shard", "downsampled_from"))
+            self.assertTrue(sites)
+            self.assertEqual(sites, self.sites(alone))
+            for f in ("SNV/filtered_candidates.ndjson", "INDEL/filtered_candidates.ndjson"):
+                self.assertEqual((capped / f).read_text(), (alone / f).read_text())
+            self.assertTrue(all(meta["downsampled_from"] == 50 for meta, _ in self.sites(capped).values()))
+            self.assertEqual((capped / "shared/downsampled_nodes.tsv").read_text(), "node\trecords\tkept\treason\n" +
+                             "".join(f"{n}\t50\t40\tmax_node_reads\n" for n in nodes))
+            self.assertEqual(json.loads((capped / "shared/manifest.json").read_text())["downsampled_nodes"], 5)
+
+    def test_capped_records_do_not_depend_on_the_batching(self):
+        rows = [simple_alignment(nodes, mutation=i % 7 < 2, mapq=5 if i % 11 == 0 else 60, name=f"w{i}")
+                for i, nodes in enumerate([(11, 12, 13), (12,), (11, 12), (12, 13, 14), (10, 11)][i % 5] for i in range(90))]
+        with tempfile.TemporaryDirectory() as tmp:
+            root, nodes = Path(tmp), (10, 11, 12, 13, 14)
+            one = self.build(root, "one", rows, nodes, max_node_reads=12, batch_nodes=1)
+            for name, batch in (("two", 2), ("five", 5), ("auto", "auto")):
+                other = self.build(root, name, rows, nodes, max_node_reads=12, batch_nodes=batch)
+                self.assertEqual(self.sites(other), self.sites(one), name)
+                self.assertEqual((other / "shared/downsampled_nodes.tsv").read_text(),
+                                 (one / "shared/downsampled_nodes.tsv").read_text())
+
+    def test_a_collapsed_repeat_decodes_one_capped_set(self):
+        """Nodes sharing all their reads keep the same capped records: a batch decodes the cap, not the depth."""
+        rows = [simple_alignment((11, 12, 13, 14), mutation=i % 5 == 0, name=f"c{i}") for i in range(300)]
+        with tempfile.TemporaryDirectory() as tmp:
+            out = self.build(Path(tmp), "repeat", rows, (11, 12, 13, 14), max_node_reads=20, batch_nodes=4)
             timing = [json.loads(l) for l in (out / "shared/batch_timing.ndjson").read_text().splitlines()]
-            self.assertEqual([(t["first_node"], t["target_nodes"]) for t in timing], [(10, 2), (30, 1), (40, 2)])
-            self.assertEqual(timing[1]["batch_plan"], dict(downsample=True, reason="node_stats"))
-            self.assertFalse((out / "shared/downsampled_nodes.tsv").exists())
-            manifest = json.loads((out / "shared/manifest.json").read_text())
-            self.assertEqual(manifest["downsample"]["reads"], 100)
-            self.assertNotIn("downsampled_nodes", manifest)
+            self.assertEqual([(t["target_nodes"], t["alignments"], t["gam_query"]["sampled_nodes"]) for t in timing],
+                             [(4, 20, 4)])
 
-    def test_a_deep_node_is_built_from_a_fixed_sample(self):
+    def test_the_batch_limit_counts_capped_records(self):
         with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            plain = self.sites(self.build_af(root, "plain"))
-            fixed = self.build_af(root, "deep", deep=(30,), downsample_reads=40)
-            auto = self.build_af(root, "auto", deep=(30,), downsample_reads=40, batch_nodes="auto")
-            sites = self.sites(fixed)
-            self.assertEqual(sites, self.sites(auto))  # the sample does not depend on the batching
-            deep = {k: v for k, v in sites.items() if v[0]["node_id"] == 30}
-            self.assertTrue(deep)
-            for meta, _ in deep.values():
-                self.assertEqual(meta["downsampled_from"], 50)
-                self.assertTrue(all(a["coverage"] <= 40 for a in meta["alleles"]))
-            self.assertEqual({k: v for k, v in sites.items() if k not in deep},
-                             {k: v for k, v in plain.items() if v[0]["node_id"] != 30})
-            self.assertEqual((fixed / "shared/downsampled_nodes.tsv").read_text(),
-                             "node\trecords\tkept\treason\n30\t50\t40\tnode_stats\n")
-            self.assertEqual(json.loads((fixed / "shared/manifest.json").read_text())["downsampled_nodes"], 1)
-
-    def test_neighbouring_deep_nodes_share_a_batch_and_equal_the_nodes_built_alone(self):
-        def build_world(root, name, group, reads):
-            inputs = root / (name + "_inputs")
-            inputs.mkdir()
-            rows = []  # reads over several deep nodes, some only on one, mutated or not, some under the MAPQ bar
-            for i in range(90):
-                nodes = [(11, 12, 13), (12,), (11, 12), (12, 13, 14), (10, 11)][i % 5]
-                rows.append(simple_alignment(nodes, mutation=i % 7 < 2, mapq=5 if i % 11 == 0 else 60, name=f"w{i}"))
-            gam = write_gam(inputs / "world.gam", rows)
-            graph = graph_fixture(inputs / "graph.sqlite", [(n, "AAAAAA", 90) for n in range(10, 15)])
-            (inputs / "nodes.txt").write_text("".join(f"{n}\n" for n in range(10, 15)))
-            (inputs / "deep.tsv").write_text("node\tmappings\n11\t60\n12\t80\n14\t20\n")  # 13: between them
-            args = build_args(gam=str(gam), nodes=str(inputs / "nodes.txt"), graph_index=str(graph), shard_size=2,
-                              output=str(root / name / "shared"), snv_output=str(root / name / "SNV"),
-                              indel_output=str(root / name / "INDEL"), downsample_nodes=str(inputs / "deep.tsv"),
-                              downsample_reads=reads, batch_nodes=2, min_variants=1, snv_min_af=.01,
-                              indel_min_af=.01, max_node_reads=12)
-            with patch.object(build_module, "DEEP_GROUP", group):
-                quiet_build(args)
-            return root / name
-
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            # 60: one batch of 11-14 (13 is not deep: all its 32 records); 25 and 12: 13 has more records than a
-            # sample and the samples exceed 2 x reads, so the group is split and 13 is built as an ordinary node
-            for reads in (60, 25, 12):
-                alone = build_world(root, f"alone{reads}", 1, reads)
-                grouped = build_world(root, f"grouped{reads}", 64, reads)
-                self.assertEqual(self.sites(grouped), self.sites(alone))
-                for f in ("SNV/filtered_candidates.ndjson", "SNV/variant_summary.ndjson", "shared/downsampled_nodes.tsv"):
-                    self.assertEqual((grouped / f).read_text(), (alone / f).read_text(), f)
-                timing = [json.loads(l) for l in (grouped / "shared/batch_timing.ndjson").read_text().splitlines()]
-                deep = [t for t in timing if t.get("batch_plan", {}).get("downsample")]
-                if reads == 60:
-                    self.assertEqual([(t["first_node"], t["target_nodes"]) for t in timing], [(10, 1), (11, 4)])
-                else:
-                    self.assertEqual(sum(t["target_nodes"] for t in deep), 3)
-                    self.assertTrue(all(t["batch_plan"].get("split") for t in deep) and len(deep) > 1)
-                    self.assertIn((13, 1, None), [(t["first_node"], t["target_nodes"], t.get("batch_plan")) for t in timing])
-                self.assertEqual(len((alone / "shared/batch_timing.ndjson").read_text().splitlines()), 5)
-                self.assertTrue(any(json.loads(l)["node_id"] in (11, 12, 13) and "downsampled_from" in json.loads(l)
-                                    for l in (grouped / "SNV/variant_summary.ndjson").read_text().splitlines()))
-
-    def test_a_single_node_over_the_batch_limit_is_sampled_instead_of_failing(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            for batch_nodes in (1, "auto"):
-                out = self.build_af(root, f"limit{batch_nodes}", batch_nodes=batch_nodes, max_batch_alignments=45,
-                                    downsample_reads=30)
-                rows = (out / "shared/downsampled_nodes.tsv").read_text().splitlines()
-                self.assertEqual(rows[1:], [f"{n}\t50\t30\tmax_batch_alignments" for n in (10, 20, 30, 40, 50)])
-            with self.assertRaisesRegex(ValueError, "Batch alignment limit"):  # a fixed multi-node batch still fails
-                self.build_af(root, "strict", batch_nodes=2, max_batch_alignments=45)
+            root, rows, nodes = Path(tmp), self.af_rows(), (10, 20, 30, 40, 50)
+            single = self.build(root, "single", rows, nodes, max_node_reads=40, batch_nodes=1)
+            auto = self.build(root, "auto", rows, nodes, max_node_reads=40, batch_nodes="auto", max_batch_alignments=45)
+            self.assertEqual(self.sites(auto), self.sites(single))  # 5 x 40 records split down to single nodes
+            with self.assertRaisesRegex(ValueError, "Batch alignment limit"):  # a fixed multi-node batch fails
+                self.build(root, "fixed", rows, nodes, max_node_reads=40, batch_nodes=2, max_batch_alignments=45)
+            with self.assertRaisesRegex(ValueError, "Batch alignment limit"):  # no cap: one node over the limit
+                self.build(root, "uncapped", rows, nodes, max_node_reads=0, batch_nodes=1, max_batch_alignments=45)

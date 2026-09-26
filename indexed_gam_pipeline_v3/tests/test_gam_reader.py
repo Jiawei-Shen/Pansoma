@@ -13,7 +13,7 @@ import unittest
 
 from .fixtures import build_args, build_index, encode_varint, simple_alignment, tiny_gam, write_gam
 from ..common import batches, load_nodes
-from ..gam_reader import IndexedGam, SampleTooLarge, sample_key, scan_gam, varint
+from ..gam_reader import IndexedGam, decode, record_key, scan_gam, varint
 from ..run import discover
 
 
@@ -66,7 +66,7 @@ class IndexedQueryTest(unittest.TestCase):
                 self.assertEqual([a.SerializeToString() for a in reader.fetch({10, 30})], expected)
                 self.assertEqual([a.SerializeToString() for a in reader.fetch({10, 30})], expected)  # cached
 
-    def test_sample_keeps_the_smallest_keys_in_file_order(self):
+    def test_capped_fetch_keeps_the_smallest_record_keys_in_file_order(self):
         with tempfile.TemporaryDirectory() as directory:
             rows = [simple_alignment((10,) if i % 4 else (10, 20), name=f"r{i}") for i in range(40)]
             rows += [simple_alignment((20,), name=f"s{i}") for i in range(5)]
@@ -74,35 +74,36 @@ class IndexedQueryTest(unittest.TestCase):
             reader = IndexedGam(path)
             full = [a.SerializeToString() for a in reader.fetch({10})]
             self.assertEqual(len(full), 40)
-            for size in (1, 7, 39, 40, 100):
+            for cap in (1, 7, 39, 40, 100, 0):
                 metrics = {}
-                drawn = reader.sample({10}, size, metrics)
-                keep = set(sorted(full, key=sample_key)[:size])
-                self.assertEqual([a.SerializeToString() for a, _ in drawn], [r for r in full if r in keep])
-                self.assertEqual({nodes for _, nodes in drawn}, {frozenset({10})})
-                self.assertEqual(metrics["sampled_from"], {10: 40})
-            self.assertEqual([a.SerializeToString() for a, _ in IndexedGam(path).sample({10}, 7)],
-                             [a.SerializeToString() for a, _ in reader.sample({10}, 7)])  # cache-independent
+                fetched = reader.fetch_capped({10}, cap, metrics)
+                keep = set(sorted(full, key=lambda r: record_key(decode(r)))[:cap] if 0 < cap < 40 else full)
+                self.assertEqual([a.SerializeToString() for a, _ in fetched], [r for r in full if r in keep])
+                self.assertEqual({out for _, out in fetched}, {frozenset()})
+                self.assertEqual(metrics["sampled"], {10: 40} if 0 < cap < 40 else {})
+            self.assertEqual([a.SerializeToString() for a, _ in IndexedGam(path).fetch_capped({10}, 7)],
+                             [a.SerializeToString() for a, _ in reader.fetch_capped({10}, 7)])  # cache-independent
 
-    def test_each_node_of_a_multi_node_sample_gets_its_own_sample(self):
+    def test_each_node_keeps_its_own_capped_records(self):
         with tempfile.TemporaryDirectory() as directory:
             rows = [simple_alignment(nodes, name=f"r{i}") for i, nodes in
                     enumerate([(10,), (10, 20), (10, 20, 30), (20, 30), (30,), (20,)] * 9)]
             path = write_gam(Path(directory) / "m.gam", rows)
             reader = IndexedGam(path)
-            for size in (3, 10, 25, 100):
+            for cap in (3, 10, 25, 100):
                 metrics = {}
-                drawn = reader.sample({10, 20, 30}, size, metrics)
-                raws = [a.SerializeToString() for a, _ in drawn]
+                fetched = reader.fetch_capped({10, 20, 30}, cap, metrics)
+                raws = [a.SerializeToString() for a, _ in fetched]
                 self.assertEqual(raws, [r.SerializeToString() for r in rows if r.SerializeToString() in set(raws)])
-                for node in (10, 20, 30):  # exactly the node's sample when asked for alone
-                    alone = [a.SerializeToString() for a, _ in reader.sample({node}, size)]
-                    self.assertEqual([a.SerializeToString() for a, nodes in drawn if node in nodes], alone)
-                self.assertEqual(metrics["sampled_from"], {10: 27, 20: 36, 30: 27})
-            with self.assertRaises(SampleTooLarge):
-                reader.sample({10, 20, 30}, 20, limit=30)  # 20 per node over 54 records: more than 30 distinct
-            self.assertEqual(len(reader.sample({10, 20, 30}, 20, limit=60)), len(reader.sample({10, 20, 30}, 20)))
-
+                for node in (10, 20, 30):  # exactly the node's records when asked for alone
+                    alone = [a.SerializeToString() for a, _ in reader.fetch_capped({node}, cap)]
+                    kept = [a.SerializeToString() for a, out in fetched
+                            if node in {m.position.node_id for m in a.path.mapping} and node not in out]
+                    self.assertEqual(kept, alone)
+                self.assertEqual(metrics["sampled"], {n: c for n, c in ((10, 27), (20, 36), (30, 27)) if c > cap})
+                # a record is returned only if some visited node of the batch keeps it
+                for a, out in fetched:
+                    self.assertLess(len(out), len({m.position.node_id for m in a.path.mapping} & {10, 20, 30}))
 
 class GamReaderTest(unittest.TestCase):
     def test_indexed_fetch_matches_full_scan_for_every_node_set(self):
