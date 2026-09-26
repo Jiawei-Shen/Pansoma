@@ -15,12 +15,14 @@
 4. Labels. A tensor's representative allele (its candidate_id) is looked up:
 
        1 somatic    representative allele is a somatic truth allele with FILTER PASS/. (inside or outside the BED)
-       2 germline   representative allele is a germline truth allele with FILTER PASS/. (inside or outside the BED)
-       0 non        on a unique GRCh38 node, inside somatic BED ∩ germline BED, no truth allele at the site,
-                    and no truth allele (any set, any filter) within NEAR_BP
-      -1 ignore     everything else, with a reason (outside the confident region, not on a unique GRCh38 node,
-                    near a truth allele with a different allele, filtered somatic or germline record, or the
-                    truth allele is a non-representative allele of the site)
+       2 germline   representative allele is a germline truth allele with FILTER PASS/. or only GAP1/GAP2 (dipcall:
+                    on one assembled haplotype, the other uncalled), inside or outside the BED
+       0 non        every other tensor on a unique GRCh38 node inside somatic BED ∩ germline BED: no truth allele,
+                    a different allele within NEAR_BP of a truth allele (errors and artifacts next to real
+                    variants), or a germline allele with another FILTER (dipcall HET1/HET2)
+      -1 ignore     a filtered somatic truth allele, a truth allele that is a non-representative allele of the
+                    site, not on a unique GRCh38 node, or outside the BEDs (the last two test-time calling can
+                    drop too, without truth: -1 must not hide tensors a tumor-only caller will meet)
 
 Outputs next to the merged shards (per chromosome, same order as <chrom>_variant_summary.ndjson):
 <chrom>_shard_NNNNN_labels.npy (int8) and <chrom>_labels.ndjson; labels.manifest.json;
@@ -38,7 +40,10 @@ from ..common import read_json, sha256_file, write_json
 from .chr_index import AUTOSOMES
 from .reference_path import ReferencePath, rc
 
-VERSION = "truth-labels-v2"  # v2: 1 and 2 need a PASS truth allele; BEDs only define the confident region
+VERSION = "truth-labels-v3"  # v3: near-truth mismatches and HET-filtered germline alleles are 0, GAP-filtered germline 2
+# dipcall FILTER values of a germline allele present on one assembled haplotype while the other is uncalled: the
+# allele is in the normal genome (zygosity unknown), so it counts as germline truth.
+GAP_FILTERS = frozenset({"GAP1", "GAP2"})
 LABELS = {"ignore": -1, "non": 0, "somatic": 1, "germline": 2}
 NEAR_BP = 10
 MAX_SHIFTS = 5000
@@ -335,24 +340,31 @@ def classify(record, somatic, germline, path, confident):
     details["grch38"] = lin
     rep_somatic = [tid for cid, tid in hits[somatic.name] if cid == representative]
     rep_germline = [tid for cid, tid in hits[germline.name] if cid == representative]
-    # A truth allele counts only with FILTER PASS/"."; its BED membership does not matter here.
+    # 1 and 2 hold inside or outside the BEDs: a PASS truth allele (germline: or GAP-filtered, see GAP_FILTERS).
     if rep_somatic:
         if any(somatic.alleles[t]["passed"] for t in rep_somatic):
             return LABELS["somatic"], "somatic", "representative_allele_is_somatic_truth", details
         return LABELS["ignore"], "ignore", "somatic_truth_filtered", details
+    filtered_germline = False
     if rep_germline:
         if any(germline.alleles[t]["passed"] for t in rep_germline):
             return LABELS["germline"], "germline", "representative_allele_is_germline_truth", details
-        return LABELS["ignore"], "ignore", "germline_truth_filtered", details
-    if hits[somatic.name] or hits[germline.name]:
+        if any(set(germline.alleles[t]["filters"]) <= GAP_FILTERS for t in rep_germline):
+            return LABELS["germline"], "germline", "representative_allele_is_germline_truth_gap_filtered", details
+        filtered_germline = True  # e.g. HET1/HET2: the assembled haplotype itself is ambiguous; not a variant call
+    if any(cid != representative for truth in (somatic, germline) for cid, _ in hits[truth.name]):
         return LABELS["ignore"], "ignore", "truth_matches_non_representative_allele", details
+    # -1 only where test-time calling can drop the same tensors without truth: no GRCh38 position, outside the BED.
     if lin is None:
         return LABELS["ignore"], "ignore", "not_on_unique_grch38_node", details
     s, e = linear_interval(lin, record["event_type"])
     if not confident.contains(lin["chrom"], s, e):
         return LABELS["ignore"], "ignore", "outside_confident_region", details
+    # 0 is every other tensor: artifacts and errors next to real variants included, as test-time calling sees them.
+    if filtered_germline:
+        return LABELS["non"], "non", "germline_truth_filtered", details
     if somatic.near(lin["chrom"], s, e) or germline.near(lin["chrom"], s, e):
-        return LABELS["ignore"], "ignore", "near_truth_allele_mismatch", details
+        return LABELS["non"], "non", "near_truth_allele_mismatch", details
     return LABELS["non"], "non", "confident_no_truth_allele", details
 
 

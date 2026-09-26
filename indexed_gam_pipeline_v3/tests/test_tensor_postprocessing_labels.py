@@ -206,9 +206,13 @@ class TruthLabelTest(unittest.TestCase):
             g_alt = "A" if CHR1[45] != "A" else "C"
             f_alt = "A" if CHR1[50] != "A" else "C"
             o_alt = "A" if CHR1[72] != "A" else "C"
+            h_alt = "A" if CHR1[55] != "A" else "C"
+            i_alt = "A" if CHR1[77] != "A" else "C"
             germline_vcf = write_vcf(tmp / "germline.vcf", [(46, CHR1[45], g_alt, "PASS", "1|1"),
-                                                            (51, CHR1[50], f_alt, "GAP1", "1|0"),
-                                                            (73, CHR1[72], o_alt, "PASS", "0|1")])  # PASS, outside germline BED
+                                                            (51, CHR1[50], f_alt, "GAP1", "1|."),
+                                                            (56, CHR1[55], h_alt, "HET1", "1|0"),
+                                                            (73, CHR1[72], o_alt, "PASS", "0|1"),  # outside germline BED
+                                                            (78, CHR1[77], i_alt, "HET2", "0|1")])
             (tmp / "somatic.bed").write_text("chr1\t0\t80\n")
             (tmp / "germline.bed").write_text("chr1\t0\t70\n")
             somatic = TruthSet("somatic", somatic_vcf, tmp / "somatic.bed", fasta, locator, chromosomes=("chr1",))
@@ -234,12 +238,14 @@ class TruthLabelTest(unittest.TestCase):
             cases = [
                 ("somatic_del", vcf_del, [], 1, "representative_allele_is_somatic_truth"),
                 ("germline", candidate(45, g_alt), [], 2, "representative_allele_is_germline_truth"),
-                ("germline_filtered", candidate(50, f_alt), [], -1, "germline_truth_filtered"),
+                ("germline_gap", candidate(50, f_alt), [], 2, "representative_allele_is_germline_truth_gap_filtered"),
+                ("germline_het", candidate(55, h_alt), [], 0, "germline_truth_filtered"),
+                ("germline_het_outside", candidate(77, i_alt), [], -1, "outside_confident_region"),
                 ("germline_outside_bed", candidate(72, o_alt), [], 2, "representative_allele_is_germline_truth"),
                 ("somatic_filtered", candidate(60, s_alt), [], -1, "somatic_truth_filtered"),
                 ("other_allele", candidate(30, snv_alt), [candidate(30, snv["alt"])], -1,
                  "truth_matches_non_representative_allele"),
-                ("near", candidate(33, other(33)), [], -1, "near_truth_allele_mismatch"),
+                ("near", candidate(33, other(33)), [], 0, "near_truth_allele_mismatch"),
                 ("non", candidate(18, other(18)), [], 0, "confident_no_truth_allele"),
                 ("outside", candidate(75, other(75)), [], -1, "outside_confident_region"),
                 ("off_path", dict(candidate_id="7:0:SNP:G>A", node_id=7, start=0, ref="G", alt="A", event_type="SNP"),
@@ -263,7 +269,7 @@ class TruthLabelTest(unittest.TestCase):
             for (name, _, _, value, reason), line in zip(cases, lines):
                 self.assertEqual((line["label"], line["reason"]), (value, reason), name)
             self.assertEqual(lines[0]["somatic"][0]["vcf_pos"], 3)
-            self.assertEqual(report["totals"], {"somatic": 1, "germline": 2, "ignore": 6, "non": 1})
+            self.assertEqual(report["totals"], {"somatic": 1, "germline": 3, "ignore": 5, "non": 3})
             self.assertEqual(LABELS, {"ignore": -1, "non": 0, "somatic": 1, "germline": 2})
             summary = recall(somatic, matched["somatic"], {}, tmp)
             self.assertEqual(summary["status"], {"tensor_representative": 2, "tensor_non_representative_allele": 1})

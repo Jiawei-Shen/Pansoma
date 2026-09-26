@@ -851,7 +851,10 @@ leaves them out.
   * deep-node groups (2026-09-26, after COLO829T ONT/fiberseq: one task each needed 7–10 days because
     every deep node of a collapsed repeat fetched and decoded the same ~10,000 long reads again);
   * truth-labels-v2 (`ba1dec2`: labels 1/2 need a PASS truth allele, the BEDs only bound the
-    confident region).
+    confident region);
+  * truth-labels-v3: −1 only where a tumor-only caller can drop the tensors too (no GRCh38 position,
+    outside the BED); tensors next to a truth allele and HET-filtered germline alleles are 0, GAP-filtered
+    germline alleles 2.
 
 Runs made with v3: HG008 ONT-UL and Illumina WGS (`/scratch/jshen/data/pansoma_v2_tensors/<sample>/v3_run`,
 `v3_tensors`).

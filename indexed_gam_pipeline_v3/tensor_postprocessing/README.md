@@ -124,9 +124,14 @@ sources are gone. A second merge of the same run is refused.
 | value | name | rule |
 |---:|---|---|
 | 1 | somatic | representative allele is a somatic truth allele with FILTER PASS/`.` (inside or outside the somatic BED) |
-| 2 | germline | representative allele is a germline truth allele with FILTER PASS/`.` (inside or outside the germline BED) |
-| 0 | non | unique GRCh38 node, inside somatic BED ∩ germline BED, no truth allele at the site, none within 10 bp |
-| −1 | ignore | anything else; `reason` says why (`outside_confident_region`, `not_on_unique_grch38_node`, `near_truth_allele_mismatch`, `somatic_truth_filtered`, `germline_truth_filtered`, `truth_matches_non_representative_allele`) |
+| 2 | germline | representative allele is a germline truth allele with FILTER PASS/`.`, or only `GAP1`/`GAP2` (dipcall: on one assembled haplotype, the other uncalled; reason `representative_allele_is_germline_truth_gap_filtered`), inside or outside the germline BED |
+| 0 | non | every other tensor on a unique GRCh38 node inside somatic BED ∩ germline BED: no truth allele (`confident_no_truth_allele`), a different allele within 10 bp of a truth allele (`near_truth_allele_mismatch`: errors and artifacts next to real variants), a germline allele with another FILTER such as dipcall `HET1`/`HET2` (`germline_truth_filtered`) |
+| −1 | ignore | `not_on_unique_grch38_node`, `outside_confident_region`, `somatic_truth_filtered`, `truth_matches_non_representative_allele` |
+
+Why (truth-labels-v3, 2026-09-26): a tumor-only caller meets every tensor at test time, so −1 is kept only
+for tensors it can also leave out without truth (no GRCh38 position; outside the BED it calls in) and for a
+few conflicting truth cases. v2 also set tensors next to a truth allele and filtered germline alleles to −1,
+which hid most of the negatives (HG008 PacBio SNV: 4.3 % labelled 0, 67 % −1).
 
 "Within 10 bp" (`NEAR_BP`) is measured against each truth allele's whole span of equivalent
 placements: an insertion in a repeat spans from its leftmost to its rightmost equivalent boundary,
@@ -191,6 +196,8 @@ this copy is now the only one. Changes since the copy:
   Illumina chr22 tasks: copy 227 → 101 s with 8 workers.
 * `truth_labels.py` (`ba1dec2`, 2026-09-26, from v2 `5e82150`): truth-labels-v2 — labels 1 and 2
   need a PASS truth allele, and the BEDs only bound the confident region for label 0.
+* `truth_labels.py` (2026-09-26): truth-labels-v3 — near-truth mismatches and HET-filtered germline
+  alleles are 0, GAP-filtered germline alleles 2 (table above).
 
 A change to label rules or merged bytes changes the goldens (`tests/golden_hashes.json`); record
 them again from the committed change (main README, section 9).
