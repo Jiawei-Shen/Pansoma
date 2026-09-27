@@ -2,7 +2,7 @@
  "format": "golden-hashes-v1",
  "recorded_with": {
   "package": "indexed_gam_pipeline_v3",
-  "commit": "73ed267c10a01cc904678d02edff53ba4d88c592",
+  "commit": "6fa641f2ae866161f02a768fb198dd684717e5fb",
   "source_sha256": {
    "__init__.py": "4865989ad0bf9d5fad9286117dae30a4edfa8f123c84ade2aaad0bedecf3aa07",
    "build.py": "2b9fb400ccbb3fd196946655f77df6c9a7fa9e7487ca900f08a18500a889c087",
@@ -20,7 +20,7 @@
    "tensor_postprocessing/chr_index.py": "d0048ad1b3ce6b80aa78dd278df5c5a0f1183b37cb2464a2dc638174b0afa583",
    "tensor_postprocessing/merge_shards.py": "1a217428adccd9922b003806f084e3fc47cbc4656e3f687dcfbd8a1e34d1139f",
    "tensor_postprocessing/reference_path.py": "bfc59774e43b9a71d695efb2b5eee092c71f05795d0bd02d635906af43551151",
-   "tensor_postprocessing/truth_labels.py": "7a14e491f8535e3ffe06b5169ae360d69c319850bcb3150e69d4b4ae40206417",
+   "tensor_postprocessing/truth_labels.py": "4ea3cc1c0b7a5ba25a2a49b189ce43f7d164d2d88752882ef5e89603bc6b2e2d",
    "tools/__init__.py": "3178f379c91494d917f4e6c3eb56c59c9d834801ddb2091b562931a14f892967",
    "tools/binary_requirements.py": "80bcf1d57d1f8f96a41d1af9d8c3ae5a17a1309b9690258499ef0799f72878ec",
    "tools/compare_runs.py": "4e83744b19bb4966df45651a3d7611fa42d05e4d27982a5942965214ff24bf0c",
