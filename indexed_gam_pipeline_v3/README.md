@@ -860,7 +860,10 @@ leaves them out.
   * truth-labels-v4: partial matches take the truth label and are marked in labels.ndjson (A1 overlaps a
     truth allele at the same place, or another allele of the site, by more than 60 %; somatic truths also by
     read haplotype, which catches graph-branch residual edits); off-reference nodes are placed between their
-    reference neighbours by node ID and labelled like the rest.
+    reference neighbours by node ID and labelled like the rest;
+  * truth-labels-v5: an off-reference node whose reference neighbours lie more than 1024 bp apart has no
+    position (−1); v4 placed nodes near centromeres in intervals of up to 213 Mb and matched them to any
+    somatic truth inside (false partial 1s).
 
 Runs made with v3: HG008 ONT-UL and Illumina WGS (`/scratch/jshen/data/pansoma_v2_tensors/<sample>/v3_run`,
 `v3_tensors`).

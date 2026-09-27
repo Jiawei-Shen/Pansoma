@@ -314,6 +314,8 @@ class TruthLabelTest(unittest.TestCase):
         self.assertEqual(anchor(Path, 4, reach=1), ("chr1", 25, 30))  # one side only: node 5
         self.assertIsNone(anchor(Path, 4, reach=0))            # no reference node within reach
         self.assertIsNone(anchor(Path, 7))                     # node 6 on chr2, node 8 on chr1
+        self.assertEqual(anchor(Path, 3, span=20), ("chr1", 10, 30))
+        self.assertIsNone(anchor(Path, 3, span=19))            # neighbours too far apart: no position
 
     def test_insertion_near_span_covers_the_whole_repeat(self):
         """An insertion in a long homopolymer is 'near' anywhere in the run, not only at its leftmost placement
