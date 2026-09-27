@@ -125,7 +125,7 @@ sources are gone. A second merge of the same run is refused.
 | 1 | somatic | A1 (the representative allele) is a somatic truth allele with FILTER PASS/`.` (inside or outside the somatic BED), or overlaps one by more than 60 % (partial) |
 | 2 | germline | A1 is a germline truth allele with FILTER PASS/`.` or only `GAP1`/`GAP2` (dipcall: on one assembled haplotype, the other uncalled), inside or outside the germline BED, or overlaps one by more than 60 % (partial) |
 | 0 | non | every other tensor inside somatic BED ∩ germline BED: no truth allele (`confident_no_truth_allele`), a truth allele nearby that A1 does not overlap enough (`near_truth_allele_mismatch`), the truth is another allele of the site and A1 overlaps it ≤ 60 % (`truth_matches_non_representative_allele`), a germline allele with another FILTER such as dipcall `HET1`/`HET2` (`germline_truth_filtered`) |
-| −1 | ignore | `outside_confident_region`, `not_on_unique_grch38_node` (no GRCh38 position, and no reference node within 200 IDs or the reference nodes around it more than 1024 bp apart), `somatic_truth_filtered` |
+| −1 | ignore | `outside_confident_region`, `not_on_unique_grch38_node` (no GRCh38 position, and no reference node within 200 IDs or more than 1024 GRCh38 bases between the reference nodes around it), `somatic_truth_filtered` |
 
 **Partial matches** (truth-labels-v4): the same event written differently by the graph alignment takes
 the truth's label, and `<chrom>_labels.ndjson` marks it with `partial`, `overlap` and `partial_truth`:
@@ -144,13 +144,14 @@ the truth's label, and `<chrom>_labels.ndjson` marks it with `partial`, `overlap
 * Off-reference nodes (no unique GRCh38 visit) are placed between the nearest reference nodes by node ID
   (Minigraph-Cactus numbers nodes in topological order; on HG008 PacBio 86 % of the branch-node residual
   edits of missed somatic INDELs lie within 10 bp of that interval) and labelled by the same rules
-  (`anchor` in labels.ndjson); somatic residuals on them are matched by the haplotype overlap. An
-  interval wider than 1024 bp (`ANCHOR_SPAN`) is no position (−1): around centromeres the neighbours by ID
-  lie up to 213 Mb apart, and v4 compared such a tensor with every somatic truth inside (COLO829T
-  fiberseq SNV: 120 of the 194 tensors with an interval over 1 Mb became partial 1, and the label job
-  spent 45 and 54 min on chr10 and chr2, against minutes for most chromosomes). Intervals over 1024 bp are rare
-  (COLO829T fiberseq SNV: 799 of the 106,788 anchored tensors, 122 of them labelled 1 by v4, 120 of
-  those with an interval over 1 Mb).
+  (`anchor` in labels.ndjson); somatic residuals on them are matched by the haplotype overlap. More
+  than 1024 GRCh38 bases between the two reference nodes (`ANCHOR_GAP`; the nodes' own lengths, up to
+  1024 bp each, are not counted, so a SNV bubble between two long nodes keeps its position) is no
+  position (−1): around centromeres the neighbours by ID lie up to 213 Mb apart, and v4 compared such a
+  tensor with every somatic truth inside (COLO829T fiberseq SNV: 120 of the 194 tensors with an interval
+  over 1 Mb became partial 1, and the label job spent 45 and 54 min on chr10 and chr2, against minutes
+  for most chromosomes). Such gaps are rare (COLO829T fiberseq SNV: 676 of the 106,788 anchored
+  tensors, 122 of them labelled 1 by v4, 120 of those with an interval over 1 Mb).
 
 Why (truth-labels-v3/v4, 2026-09-26): a tumor-only caller meets every tensor at test time, so −1 is kept
 only for tensors it can also leave out without truth (outside the BED it calls in, no position) and for
@@ -224,8 +225,8 @@ this copy is now the only one. Changes since the copy:
   alleles are 0, GAP-filtered germline alleles 2 (table above).
 * `truth_labels.py` (2026-09-26): truth-labels-v4 — partial matches (allele and residual, > 60 %
   overlap) take the truth label; off-reference nodes are placed between their reference neighbours.
-* `truth_labels.py` (2026-09-26): truth-labels-v5 — an off-reference node whose reference neighbours
-  are more than 1024 bp apart has no position (−1).
+* `truth_labels.py` (2026-09-26): truth-labels-v5 — an off-reference node with more than 1024 GRCh38
+  bases between its reference neighbours has no position (−1).
 
 A change to label rules or merged bytes changes the goldens (`tests/golden_hashes.json`); record
 them again from the committed change (main README, section 9).

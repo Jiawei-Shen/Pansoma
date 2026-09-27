@@ -22,8 +22,8 @@
                     that A1 does not overlap enough (errors and artifacts next to real variants), a germline
                     allele with another FILTER (dipcall HET1/HET2)
       -1 ignore     a filtered somatic truth allele, outside the BEDs, or no position (no unique GRCh38 visit and
-                    no reference node within ANCHOR_REACH IDs, or reference neighbours more than ANCHOR_SPAN bp
-                    apart): tensors test-time calling can drop without truth
+                    no reference node within ANCHOR_REACH IDs, or more than ANCHOR_GAP GRCh38 bases between those
+                    reference neighbours): tensors test-time calling can drop without truth
 
    Partial (labels.ndjson `partial`, `overlap`, `partial_truth`): the same event written differently by the
    graph alignment. "allele": another allele of the site is the truth allele and A1 overlaps it by more than
@@ -50,8 +50,8 @@ from ..common import read_json, sha256_file, write_json
 from .chr_index import AUTOSOMES
 from .reference_path import ReferencePath, rc
 
-VERSION = "truth-labels-v5"  # v5: an off-reference node whose reference neighbours are more than ANCHOR_SPAN apart
-# has no position (v4 placed nodes near centromeres in 10-200 Mb intervals and matched them to any truth inside).
+VERSION = "truth-labels-v5"  # v5: an off-reference node with more than ANCHOR_GAP GRCh38 bases between its reference
+# neighbours has no position (v4 placed nodes near centromeres in 10-200 Mb intervals and matched them to any truth).
 # v4: partial matches (overlap > MIN_OVERLAP) take the truth label; off-reference nodes are placed between their
 # reference neighbours. v3: near-truth mismatches and HET-filtered germline alleles 0.
 # dipcall FILTER values of a germline allele present on one assembled haplotype while the other is uncalled: the
@@ -61,7 +61,8 @@ LABELS = {"ignore": -1, "non": 0, "somatic": 1, "germline": 2}
 NEAR_BP = 10
 MIN_OVERLAP = 0.6  # a tensor overlapping a truth allele by more than this counts as that truth (partial)
 ANCHOR_REACH = 200  # node IDs searched on each side for the reference nodes around an off-reference node
-ANCHOR_SPAN = 1024  # widest interval between those reference nodes still taken as the node's position
+ANCHOR_GAP = 1024  # most GRCh38 bases between those reference nodes (the reference a branch replaces; the nodes'
+# own lengths, up to 1024 bp each, not counted) for the interval to be taken as the node's position
 EVIDENCE_ROWS = 20  # A1 reads (and half as many REF reads) compared with the haplotypes
 MIN_EVIDENCE_BASES = 30
 HAPLOTYPE_WINDOW = 90  # GRCh38 bases on each side of a truth allele for the haplotype comparison
@@ -415,11 +416,11 @@ def haplotype_overlap(alt_rows, ref_rows, reference, haplotype, event, oriented=
     return sorted(overlaps)[len(overlaps) // 2]
 
 
-def anchor(path, node, reach=ANCHOR_REACH, span=ANCHOR_SPAN):
-    """(chrom, start, end) between the nearest unique reference nodes below and above an off-reference node by
-    node ID (Minigraph-Cactus numbers nodes in topological order: a branch node's ID lies between its flanks');
-    None without one within `reach` IDs, when the two sides are on different contigs, or when the interval is
-    wider than `span` bp (around centromeres the neighbours by ID can lie megabases apart)."""
+def anchor(path, node, reach=ANCHOR_REACH, gap=ANCHOR_GAP):
+    """(chrom, start, end) from the nearest unique reference nodes below and above an off-reference node by node ID
+    (Minigraph-Cactus numbers nodes in topological order: a branch node's ID lies between its flanks'), the nodes
+    included; None without one within `reach` IDs, when the two sides are on different contigs, or when more than
+    `gap` GRCh38 bases lie between the two nodes (around centromeres the neighbours by ID can be megabases apart)."""
     sides = []
     below = np.flatnonzero(np.asarray(path.visits[max(1, node - reach):node]) == 1)
     if below.size:
@@ -430,10 +431,10 @@ def anchor(path, node, reach=ANCHOR_REACH, span=ANCHOR_SPAN):
     contigs = {int(path.chrom[k]) for k in sides}
     if len(contigs) != 1:
         return None
-    points = [int(path.start0[k]) + d for k in sides for d in (0, int(path.lengths[k]))]
-    if max(points) - min(points) > span:
+    nodes = sorted((int(path.start0[k]), int(path.start0[k]) + int(path.lengths[k])) for k in sides)
+    if nodes[-1][0] - nodes[0][1] > gap:
         return None
-    return path.contigs[contigs.pop()], min(points), max(points)
+    return path.contigs[contigs.pop()], nodes[0][0], max(end for _, end in nodes)
 
 
 class Evidence:
