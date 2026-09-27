@@ -156,6 +156,38 @@ class MergeTest(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "differ from the source"):
                 verify_summary(tensors / "SNV", "chr1", dict(info, dataset="autosome"))
 
+    def test_tasks_with_different_read_cap_rules_merge_and_are_listed(self):
+        """A run resumed across the 2026-09-26 read-cap change holds both rule texts; the cap itself must agree."""
+        def set_caps(tensors, last_rule, last_cap=800):
+            for folder in tensors.glob("*/task_*"):
+                if (folder / "manifest.json").exists():
+                    task, m = int(folder.name[5:]), json.loads((folder / "manifest.json").read_text())
+                    last = task == max(TASKS[folder.parent.name])
+                    m["read_cap"] = dict(max_node_reads=last_cap if last else 800, rule=last_rule if last else "old")
+                    (folder / "manifest.json").write_text(json.dumps(m))
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            tensors, _ = fake_run(root)
+            set_caps(tensors, "new")
+            merge(root, write_chr_index(root / "chr.tsv"), shard_size=4, workers=1)
+            m = json.loads((tensors / "SNV" / "manifest.json").read_text())
+            last = max(TASKS["SNV"])
+            self.assertEqual(m["read_cap"], dict(max_node_reads=800, rule="old"))
+            self.assertEqual(m["read_cap_rules"], [dict(rule="old", tasks=sorted(t for t in TASKS["SNV"] if t != last)),
+                                                   dict(rule="new", tasks=[last])])
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            tensors, _ = fake_run(root)
+            set_caps(tensors, "old")
+            merge(root, write_chr_index(root / "chr.tsv"), shard_size=4, workers=1)
+            self.assertNotIn("read_cap_rules", json.loads((tensors / "SNV" / "manifest.json").read_text()))
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            tensors, _ = fake_run(root)
+            set_caps(tensors, "new", last_cap=400)
+            with self.assertRaisesRegex(ValueError, r"differs from task 0 in \['read_cap'\]"):
+                merge(root, write_chr_index(root / "chr.tsv"), shard_size=4, workers=1)
+
     def test_nodes_outside_every_block_fail_before_publishing(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

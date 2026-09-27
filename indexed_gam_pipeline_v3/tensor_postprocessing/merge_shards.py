@@ -57,7 +57,7 @@ ADDED = ("chrom", "shard_file", "source_task", "source_shard_index", "source_ind
 SHARED_KEYS = ("schema_version", "tensor_format_version", "tensor_storage_version", "shape", "dtype", "channels",
                "encodings", "row_selection_version", "row_order", "window_encoding_version", "parameters",
                "sample_unit", "site_definition", "read_cap", "debug_rows")
-COPIED_KEYS = SHARED_KEYS + ("graph_index", "gai_version")
+COPIED_KEYS = SHARED_KEYS + ("graph_index", "gai_version", "read_cap_rules")
 NODE = re.compile(rb'"node_id": (\d+)')
 AUDIT_STREAMS = ("filtered_candidates", "unsupported_events")
 
@@ -179,13 +179,22 @@ class GroupWriter:
                     summary_sha256_stripped=self.summary_hash.hexdigest())
 
 
+def comparable(manifest, key):
+    """A manifest value as the merge compares it: read_cap without its rule text. The cap was applied after the
+    prefilters before 2026-09-26 and while reading the GAM since, so a run resumed across that change holds both;
+    max_node_reads must still agree, and the merged manifest lists each rule with its tasks (read_cap_rules)."""
+    value = manifest.get(key)
+    return {k: v for k, v in value.items() if k != "rule"} if key == "read_cap" and isinstance(value, dict) else value
+
+
 def scan_source(source, reference, first_task, index):
-    """One task directory: complete, manifest agreeing with the reference; the group of every record."""
+    """One task directory: complete, manifest agreeing with the reference; the group of every record and the
+    task's read-cap rule."""
     folder = Path(source["path"])
     manifest = read_json(folder / "manifest.json")
     if manifest.get("status") != "complete":
         raise ValueError(f"Incomplete task output: {folder}")
-    mismatch = [k for k in SHARED_KEYS if manifest.get(k) != reference.get(k)]
+    mismatch = [k for k in SHARED_KEYS if comparable(manifest, k) != comparable(reference, k)]
     if mismatch:
         raise ValueError(f"{folder}: manifest differs from task {first_task} in {mismatch}")
     if manifest["tensors"] != source["tensors"] or manifest["shards"] != source["shards"]:
@@ -197,7 +206,7 @@ def scan_source(source, reference, first_task, index):
     k = index.lookup(nodes)
     if (k < 0).any():
         raise ValueError(f"{folder}: nodes outside every chromosome block, e.g. {nodes[k < 0][:5].tolist()}")
-    return k
+    return k, (manifest.get("read_cap") or {}).get("rule")
 
 
 def plan_kind(sources, index, pool=None):
@@ -209,8 +218,14 @@ def plan_kind(sources, index, pool=None):
     if reference.get("status") != "complete":
         raise ValueError(f"Incomplete task output: {first}")
     jobs = [(s, reference, sources[0]["task"], index) for s in sources]
-    groups = list(pool.map(scan_source, *zip(*jobs), chunksize=max(1, len(jobs) // 64)) if pool
-                  else map(scan_source, *zip(*jobs)))
+    scanned = list(pool.map(scan_source, *zip(*jobs), chunksize=max(1, len(jobs) // 64)) if pool
+                   else map(scan_source, *zip(*jobs)))
+    groups = [k for k, _ in scanned]
+    rules = {}
+    for source, (_, rule) in zip(sources, scanned):
+        rules.setdefault(rule, []).append(source["task"])
+    if len(rules) > 1:  # recorded only then, so the manifests of single-rule runs are unchanged
+        reference = dict(reference, read_cap_rules=[dict(rule=r, tasks=t) for r, t in rules.items()])
     totals = Counter()
     for k in groups:
         totals.update(Counter(k.tolist()))
