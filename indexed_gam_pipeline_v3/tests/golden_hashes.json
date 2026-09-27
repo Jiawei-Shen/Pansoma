@@ -2,7 +2,7 @@
  "format": "golden-hashes-v1",
  "recorded_with": {
   "package": "indexed_gam_pipeline_v3",
-  "commit": "5bb5f8c30cd034b1b9498588e56cd91d32e1863c",
+  "commit": "21e5e8bef986a3165bb34b593ac8db99486fad86",
   "source_sha256": {
    "__init__.py": "4865989ad0bf9d5fad9286117dae30a4edfa8f123c84ade2aaad0bedecf3aa07",
    "build.py": "2b9fb400ccbb3fd196946655f77df6c9a7fa9e7487ca900f08a18500a889c087",
@@ -18,7 +18,7 @@
    "tensor_postprocessing/__init__.py": "f31075d710abe26f8c2b575e2314863670b9a365a6299b8e421139ad527f95c7",
    "tensor_postprocessing/__main__.py": "d1098a0348b8a42b5ae93bd6c99f65b3107e35585e84464675e5aad3cbf2bfcc",
    "tensor_postprocessing/chr_index.py": "d0048ad1b3ce6b80aa78dd278df5c5a0f1183b37cb2464a2dc638174b0afa583",
-   "tensor_postprocessing/merge_shards.py": "1035fd6bb552e815aa04ef6fbee147282414dd1a0bdf8e816e63e4a67047fe81",
+   "tensor_postprocessing/merge_shards.py": "1a217428adccd9922b003806f084e3fc47cbc4656e3f687dcfbd8a1e34d1139f",
    "tensor_postprocessing/reference_path.py": "bfc59774e43b9a71d695efb2b5eee092c71f05795d0bd02d635906af43551151",
    "tensor_postprocessing/truth_labels.py": "5dcc09b4eca4c1832681f863e9d3456b69ffbaa50a37b6f78cb0173b4eda9a39",
    "tools/__init__.py": "3178f379c91494d917f4e6c3eb56c59c9d834801ddb2091b562931a14f892967",
@@ -187,7 +187,8 @@
    "read_cap",
    "debug_rows",
    "graph_index",
-   "gai_version"
+   "gai_version",
+   "read_cap_rules"
   ],
   "tensor_postprocessing.merge_shards.AUDIT_STREAMS": [
    "filtered_candidates",
