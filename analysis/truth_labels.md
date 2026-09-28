@@ -3,7 +3,7 @@
 - 代码：`indexed_gam_pipeline_v4/tensor_postprocessing/truth_labels.py`。规则就是这个文件的模块 docstring 和常量；`labels.manifest.json` 里的 `rules_sha256` 是这个文件的 SHA-256，用来标识打标签时用的规则。
 - 坐标换算：`indexed_gam_pipeline_v4/tensor_postprocessing/reference_path.py`（`ReferencePath.linear`）。
 - 命令（在仓库根目录运行）：`python -m indexed_gam_pipeline_v4.tensor_postprocessing label --tensors … --reference-path … --fasta … --somatic-vcf … --somatic-bed … --germline-vcf … --germline-bed … --truth-dir … [--recall-dir …] [--snv-min-af 0.07] [--indel-min-af …]`。`orchestrate finalize` 在 merge 之后用同样的规则打标签，AF 下限（floor）用 `orchestrate prepare` 时给的 `--label-snv-min-af` / `--label-indel-min-af`（存进 `config.json` 的 `postprocess.labels.snv_min_af` / `indel_min_af`，不设是 null，即不按 AF 去掉），等于 `label` 的 `--snv-min-af` / `--indel-min-af`。短读长数据集在 prepare 时加 `--label-snv-min-af 0.07`，跑完不用再单独 relabel。这两个和 build 的 `--snv-min-af` / `--indel-min-af`（决定哪些 allele 生成 tensor）无关。
-- 例子：除非另外注明，都取自 HG008 PacBio `/scratch/jshen/data/pansoma_v2_tensors/Liss_lab_PacBio_Revio_20240125/v3_tensors`（2026-09-28 用现行规则打的标签），按 `candidate_id` 在 `{SNV,INDEL}/chr*_labels.ndjson` 里查到的标签、reason、`partial`/`overlap`；reads 数来自同一目录的 `chr*_variant_summary.ndjson`。第 7 节的计数来自六个数据集的 `labels.manifest.json`。
+- 例子：除非另外注明，都取自 HG008 PacBio `/scratch/jshen/data/pansoma_v2_tensors/Liss_lab_PacBio_Revio_20240125/v3_tensors`（2026-09-28 用现行规则打的标签），按 `candidate_id` 在 `{SNV,INDEL}/chr*_labels.ndjson` 里查到的标签、reason、`partial`/`overlap`；reads 数来自同一目录的 `chr*_variant_summary.ndjson`；单倍型重叠例子里每行 read 的 `(d_ref, d_truth)` 和 `b` 是用 `truth_labels.py` 的函数在同一个 tensor 上重算的（结果和 labels.ndjson 的 `overlap` 一致）。第 7 节的计数来自六个数据集的 `labels.manifest.json`。
 
 ## 0. 名词
 
@@ -179,8 +179,8 @@ PacBio 上没有位置的 tensor（SNV 33,043、INDEL 8,684）绝大多数是第
 **R7 其它 FILTER 的 germline（COLO829T fiberseq）。** `21701893:995:DEL:T>` = germline `chr17:22914140 CT>C`，FILTER `HET1`，GT `./2`，在 confident 区里，28 条 reads 里 22 条 ALT → **0**。六个数据集里只有这一个 site（COLO829T fiberseq 和 ONT 各一个 tensor）；HG008 三个平台都是 0 个。
 
 **R8 部分匹配同一位置的 somatic truth（残余 edit）。**
-- `31293240:0:INS:>A`（miss 分析里的例子）：somatic truth `chr20:58872348 T>TAA`。ALT reads 走一个多一个 A 的分支节点，再带一个 `+A` 残余 edit。这个 tensor 在分支节点上，anchor `chr20:58872268–58872534` 覆盖 truth 位置。A1 reads（86 条）的单倍型重叠 = 0.75 → **1**。
-- `30602891:0:SNP:T>C`：somatic truth 是 `chr20:19677686 CTTTT>C`（删 4 个 T），但 reads 在旁边写出了一个 SNV（`chr20:19677690`，7 条 A1 reads）。SNV 对 DEL 的 allele 重叠为 0，单倍型重叠 1.0 → **1**。所以 SNV tensor 也可以部分匹配一个 DEL truth。
+- `31293240:0:INS:>A`（miss 分析里的例子）：somatic truth `chr20:58872348 T>TAA`。ALT reads 走一个多一个 A 的分支节点，再带一个 `+A` 残余 edit。这个 tensor 在分支节点上，anchor `chr20:58872268–58872534` 覆盖 truth 位置。A1 row group 有 86 行，均匀取 20 行，其中 19 行正好带着 `+AA`，单倍型重叠 = 0.75（怎么算出来的见第 5.2 节）→ **1**（overlap 0.75）。
+- `30602891:0:SNP:T>C`：somatic truth 是 `chr20:19677686 CTTTT>C`（删 4 个 T），但 reads 在旁边写出了一个 SNV（`chr20:19677690`，7 条 A1 reads）。SNV 对 DEL 的 allele 重叠为 0。7 行 A1 的原始 `(d_ref, d_truth)`（第 5.2 节）是 4 行 (5, 1)、(6, 2)、(4, 1)、(5, 2)，都离 truth 单倍型更近；b = 1，每行 0.8–1.0，单倍型重叠 1.0 → **1**（overlap 1.0）。所以 SNV tensor 也可以部分匹配一个 DEL truth。
 
 **R9 分支节点，没对上 somatic truth。** `30194624:0:SNP:T>C` 在分支节点上，anchor `chr20:214823–214878`，在 confident 区里，7 条 reads 全是 ALT（AF 1.0），附近没有能部分匹配的 somatic truth → **−1**。
 
@@ -188,7 +188,7 @@ PacBio 上没有位置的 tensor（SNV 33,043、INDEL 8,684）绝大多数是第
 - `30209021:0:DEL:TTTTTTT>@30209022`（删 7 个 T，跨两个节点，6 条 reads 全是 ALT），germline truth `chr20:775268 CTTTTTTTTTTT>CTTT`（删 8 个 T，1/2）。共同删掉的碱基 = 7，除以较长的 8 = 0.875 → **2**。
 - `30251303:0:INS:>AAATA`（18 条 A1 reads），germline truth `chr20:2284361 A>AAAAT`（插入 `AAAT`，2/1）。这个 truth 的键里有 `30251303:0:INS:>AATA`，但它不是这个 site 的 allele，所以走 R10：重叠 0.8（第 5.1 节）→ **2**。
 
-**R11 附近有 truth 但对不上。** `30191903:0:INS:>T`（`chr20:92969`，55 条 reads 里 14 条 ALT，AF 0.255），10 bp 内有 truth allele，但既不相同也重叠不够 → **0**。
+**R11 附近有 truth 但对不上。** `30191903:0:INS:>T`（`chr20:92969`，55 条 reads 里 14 条 ALT，AF 0.255），10 bp 内有 truth allele，但既不相同也重叠不够 → **0**。同一个碱基上就有 somatic truth、但 A1 reads 离它不比离 GRCh38 近的，也是这里的 0：`30419351:0:DEL:A>`（第 5.2 节）。
 
 **R12 附近什么都没有。** `30191732:122:INS:>A`（`chr20:73326`，56 条 reads 里 5 条 ALT，AF 0.089）→ **0**。
 
@@ -212,26 +212,41 @@ PacBio 上没有位置的 tensor（SNV 33,043、INDEL 8,684）绝大多数是第
 
 ### 5.2 单倍型重叠（`haplotype_overlap`，只对 somatic truth）
 
-用 tensor 里 A1 那组 reads 的实际序列来判断它们带的是不是 truth 的变化，所以"走分支 + 残余 edit""跳过节点 + 错配"这类写法、以及和 truth 类型不同的 edit（如上面 SNV 对 DEL 的 `30602891:0:SNP:T>C`）也能认出来。分支节点上的 tensor 只能靠它匹配 somatic truth。
+用 tensor 里 A1 那组 reads 的实际序列来判断它们带的是不是 truth 的变化，所以"走分支 + 残余 edit""跳过节点 + 错配"这类写法、以及和 truth 类型不同的 edit（如上面 SNV 对 DEL 的 `30602891:0:SNP:T>C`）也能认出来。分支节点上的 tensor 只能靠它匹配 somatic truth。它只在 allele 重叠不超过 0.45 时才算（`truth_overlap`）。
 
-1. 从 tensor 的 channel 0（每行 read 的碱基）在 A1 和 REF 的 row group 里各均匀取最多 20 条、10 条行，每行去掉空位后至少 30 个碱基（tensor 宽 101 列，所以每条大约 100 bp 的局部序列）。节点在 GRCh38 上是反向的，就先把 reads 取反向互补。
-2. 取 truth 两侧各 90 bp 的 GRCh38 序列作 REF 单倍型，在其中换入 truth allele 得到 truth 单倍型。
-3. 每条 read 分别算它嵌进 REF 单倍型、嵌进 truth 单倍型所需的编辑数：`d_ref`、`d_truth`。分支节点的 read 不知道方向，正反两个方向取较好的。
-4. 每条 REF read 取 `d_ref`、`d_truth` 里较小的那个，它们的中位数记作 `b`（测序背景噪声）；A1 reads 的 `d_ref`、`d_truth` 都减去 `b`（最小为 0）。
-5. `event` = truth 的长度（SNV 为 1，INDEL 为 max(len REF, len ALT)）。
-6. 每条 A1 read：`shared = (d_ref + event − d_truth) / 2`（最小为 0），`overlap = shared / max(d_ref, event)`。
-7. 所有 A1 reads 取中位数；合格的 A1 reads 少于 3 条时不算。
+1. **取 reads。** 从 tensor 的 channel 0（每行 read 的碱基，编码 1–5 = A/C/G/T/N，其它值是空位）在 A1 和 REF 的 row group 里各均匀取最多 20 行、10 行（`EVIDENCE_ROWS`），每行去掉空位后至少要有 30 个碱基（`MIN_EVIDENCE_BASES`），不够的丢掉。tensor 宽 101 列，所以每行是一条 read 大约 100 bp 的局部序列。节点在 GRCh38 上是反向的，就先把 reads 取反向互补。
+2. **两条单倍型。** GRCh38 上 truth 两侧各 90 bp（`[pos0 − 90, pos0 + len(REF) + 90)`，pos0、REF 是 VCF 的 allele 去掉共同头尾之后的）作 REF 单倍型，在其中换入 truth allele 得到 truth 单倍型。
+3. **原始距离。** 每条 read 分别算它整条放进 REF 单倍型、放进 truth 单倍型所需的最少编辑数（read 从头到尾都要对上，单倍型两端可以空出；`fit_distance`），记作原始的 `d_ref`、`d_truth`。分支节点上的 read 不知道方向，正反两个方向都算，用 min(d_ref, d_truth) 较小的那个方向的两个距离。
+4. **背景 `b`。** 每条 REF read 取 min(d_ref, d_truth)，排序后取第 ⌊n/2⌋ 个（从 0 数；偶数条时是中间两个里较大的那个），就是这个位置的测序背景噪声；没有 REF read 时 b = 0。
+5. **`event`** = truth 的长度：SNV 为 1，INDEL 为 max(len REF, len ALT)。
+6. **每条 A1 read 的 overlap。**
+   - 原始 `d_truth ≥ d_ref`（离 truth 单倍型不比离 GRCh38 近）：overlap = 0。
+   - 否则 `d_ref`、`d_truth` 各减去 `b`（最小为 0），`shared = max(0, (d_ref + event − d_truth) / 2)`，`overlap = shared / max(d_ref, event)`。
+7. **tensor 的单倍型重叠** = A1 reads 的 overlap 排序后第 ⌊n/2⌋ 个（同第 4 步）。合格的 A1 行（第 1 步）少于 3 条时没有单倍型重叠，只看 allele 重叠。
 
-用 truth `+AA`（event = 2）、背景 b = 0 来算几种 read：
+第 6 步的第一条是因为：离两条单倍型一样近（或离 GRCh38 更近）的 read——没覆盖到事件、只带测序错误、或者在同一位置带着别的变化——不是这个 truth 的证据；只做减法的话，b 不小于这两个距离时它会正好得到 0.5，超过 0.45。
 
-| read 带的变化 | d_ref | d_truth | shared | overlap |
-|---|---:|---:|---:|---:|
-| 正好 `+AA` | 2 | 0 | 2 | **1.0** |
-| `+AAA` | 3 | 1 | 2 | 0.667 |
-| `+A` | 1 | 1 | 1 | 0.5 |
-| 旁边一个无关的错配 | 1 | 3 | 0 | 0 |
+用 truth `+AA`（event = 2）来算几种 read：
 
-A1 reads 的中位数超过 0.45，就算部分匹配这个 somatic truth。
+| read 带的变化 | b | 原始 d_ref | 原始 d_truth | 减去 b 后 | shared | overlap |
+|---|---:|---:|---:|---|---:|---:|
+| 正好 `+AA` | 0 | 2 | 0 | 2, 0 | 2 | **1.0** |
+| `+AAA` | 0 | 3 | 1 | 3, 1 | 2 | 0.667 |
+| `+A` | 0 | 1 | 1 | — | — | 0（d_truth ≥ d_ref） |
+| 旁边一个无关的错配 | 0 | 1 | 3 | — | — | 0（d_truth ≥ d_ref） |
+| 正好 `+AA` | 1 | 2 | 0 | 1, 0 | 1.5 | 0.75 |
+| `+AA`，另有 1 个测序错误 | 1 | 3 | 1 | 2, 0 | 2 | **1.0** |
+| 正好 `+AA` | 2 | 2 | 0 | 0, 0 | 1 | 0.5 |
+| 没覆盖到插入点，另有 2 个测序错误 | 2 | 2 | 2 | — | — | 0（d_truth ≥ d_ref） |
+
+单倍型重叠（和 allele 重叠取较大的）超过 0.45，就算部分匹配这个 somatic truth。由此：
+- b = 0 时，只带 truth 一部分的 read 要带超过一半才算：INS truth 长 event、read 带其中 k 个碱基时 d_ref = k、d_truth = event − k。所以 truth `+AA`、read `+A` 记 0。同聚物里差一个碱基的 indel 靠的是 allele 重叠（第 5.1 节），那只在有 GRCh38 坐标时有。
+- b 也会压低带着完整事件的 read：原始 (2, 0) 的 read，b = 1 时 0.75，b ≥ 2 时 0.5。
+
+真实例子（HG008 PacBio）：
+- `31293240:0:INS:>A`（R8，分支节点，somatic truth `chr20:58872348 T>TAA`）：取的 20 行 A1 里 19 行原始 `(d_ref, d_truth)` = (2, 0)，正好带着 `+AA`，1 行 (3, 1)；10 行 REF 的 min 是 9 个 1、1 个 3，b = 1。于是 19 行各 0.75、1 行 1.0，单倍型重叠 0.75 > 0.45 → **1**（`residual_partial_somatic_truth`，overlap 0.75）。
+- `30419351:0:DEL:A>`（`chr20:10302796` 删一个 A，72 条 reads 里 10 条 ALT，AF 0.139）：同一个碱基上是 somatic truth `chr20:10302797 A>T`（0/1，PASS）。10 行 A1 的原始 `(d_ref, d_truth)` 都是 (1, 1)：删掉的 A 离 GRCh38 的 A 和离 truth 的 T 一样远，这些 reads 不带这个 SNV。REF 只有 2 行（min 是 1 和 2，b = 2）。每行记 0，单倍型重叠 0；DEL 对 SNV 的 allele 重叠也是 0 → 不是部分匹配，10 bp 内有 truth → **0**（R11 `near_truth_allele_mismatch`）。
+- 分支节点上一样：`30887064:0:DEL:G>`（anchor `chr20:38906296–38906302`，somatic truth `chr20:38906297 T>G`，100 条 reads 里 14 条 ALT）的 14 行 A1 里 13 行 (1, 1)、1 行 (2, 2)，b = 1，单倍型重叠 0 → **−1**（R9 `off_reference_no_truth_match`）。
 
 ## 6. 输出
 
@@ -244,32 +259,32 @@ A1 reads 的中位数超过 0.45，就算部分匹配这个 somatic truth。
 
 ## 7. 六个数据集的计数
 
-目录都在 `/scratch/jshen/data/pansoma_v2_tensors/<数据集>/v3_tensors/{SNV,INDEL}/labels.manifest.json`，2026-09-28 按现行规则打的标签。两个 Illumina 数据集用了 `--snv-min-af 0.07`，其它四个没有（六个数据集 build 时 SNV 的 AF 阈值都是 0.06）；六个都没有用 `--indel-min-af`。
+目录都在 `/scratch/jshen/data/pansoma_v2_tensors/<数据集>/v3_tensors/{SNV,INDEL}/labels.manifest.json`，2026-09-28 按现行规则打的标签（十二个 manifest 的 `rules_sha256` 都是 `197b5d25bbf4…`）。部分匹配的几行（`allele_partial_*`、`residual_partial_*`）和 manifest 的 `partial` 计数相同。两个 Illumina 数据集用了 `--snv-min-af 0.07`，其它四个没有（六个数据集 build 时 SNV 的 AF 阈值都是 0.06）；六个都没有用 `--indel-min-af`。
 
 **HG008**（`Liss_lab_PacBio_Revio_20240125`、`Liss_lab_Northeastern-ONT-UL-20241216`、`Liss_lab_BCM_Illumina-WGS_20240313`；truth：GIAB `HG008-T_somatic_smvar_benchmark_v0.2` + HG008-N dipcall）
 
 | 标签 | reason | PacBio SNV | PacBio INDEL | ONT SNV | ONT INDEL | Illumina SNV | Illumina INDEL |
 |---:|---|---:|---:|---:|---:|---:|---:|
 | 1 | representative_allele_is_somatic_truth | 8,234 | 4,098 | 8,275 | 3,673 | 8,277 | 3,562 |
-| 1 | allele_partial_somatic_truth | 1 | 98 | 3 | 416 | 4 | 34 |
-| 1 | residual_partial_somatic_truth | 690 | 2,854 | 735 | 2,751 | 2,808 | 1,720 |
+| 1 | allele_partial_somatic_truth | 1 | 93 | 3 | 391 | 2 | 32 |
+| 1 | residual_partial_somatic_truth | 601 | 2,649 | 570 | 2,319 | 2,347 | 1,645 |
 | 2 | representative_allele_is_germline_truth | 332,598 | 147,786 | 343,284 | 157,914 | 310,349 | 55,800 |
 | 2 | representative_allele_is_germline_truth_gap_filtered | 18,229 | 1,544 | 26,891 | 2,177 | 5,089 | 373 |
-| 2 | allele_partial_germline_truth | 0 | 4,539 | 0 | 16,407 | 0 | 609 |
-| 2 | residual_partial_germline_truth | 0 | 37,542 | 0 | 44,252 | 0 | 13,756 |
+| 2 | allele_partial_germline_truth | 0 | 4,540 | 0 | 16,407 | 0 | 609 |
+| 2 | residual_partial_germline_truth | 0 | 37,554 | 0 | 44,265 | 0 | 13,768 |
 | 0 | confident_no_truth_allele | 51,229 | 1,309,897 | 256,169 | 1,681,012 | 2,041,479 | 6,552 |
-| 0 | near_truth_allele_mismatch | 35,259 | 205,094 | 57,348 | 275,338 | 593,763 | 24,320 |
-| 0 | truth_matches_non_representative_allele | 137 | 3,573 | 160 | 20,028 | 323 | 495 |
+| 0 | near_truth_allele_mismatch | 35,311 | 205,183 | 57,455 | 275,572 | 594,093 | 24,343 |
+| 0 | truth_matches_non_representative_allele | 137 | 3,577 | 160 | 20,053 | 325 | 497 |
 | 0 | germline_truth_filtered | 0 | 0 | 0 | 0 | 0 | 0 |
 | −1 | outside_confident_region | 652,007 | 98,698 | 1,594,086 | 156,864 | 578,632 | 25,093 |
-| −1 | off_reference_no_truth_match | 48,916 | 99,337 | 48,226 | 138,106 | 126,687 | 18,178 |
+| −1 | off_reference_no_truth_match | 48,953 | 99,441 | 48,284 | 138,291 | 126,818 | 18,218 |
 | −1 | not_on_unique_grch38_node | 33,043 | 8,684 | 37,329 | 12,075 | 20,923 | 973 |
 | −1 | below_snv_min_af | 0 | 0 | 0 | 0 | 1,312,554 | 0 |
 | −1 | somatic_truth_filtered | 0 | 0 | 0 | 0 | 0 | 0 |
-| 1 | **合计** | **8,925** | **7,050** | **9,013** | **6,840** | **11,089** | **5,316** |
-| 2 | **合计** | **350,827** | **191,411** | **370,175** | **220,750** | **315,438** | **70,538** |
-| 0 | **合计** | **86,625** | **1,518,564** | **313,677** | **1,976,378** | **2,635,565** | **31,367** |
-| −1 | **合计** | **733,966** | **206,719** | **1,679,641** | **307,045** | **2,038,796** | **44,244** |
+| 1 | **合计** | **8,836** | **6,840** | **8,848** | **6,383** | **10,626** | **5,239** |
+| 2 | **合计** | **350,827** | **191,424** | **370,175** | **220,763** | **315,438** | **70,550** |
+| 0 | **合计** | **86,677** | **1,518,657** | **313,784** | **1,976,637** | **2,635,897** | **31,392** |
+| −1 | **合计** | **734,003** | **206,823** | **1,679,699** | **307,230** | **2,038,927** | **44,284** |
 | | 总数 | 1,180,343 | 1,923,744 | 2,372,506 | 2,511,013 | 5,000,888 | 151,465 |
 
 **COLO829T**（`COLO829T_Illumina`、`COLO829T_fiberseq`、`COLO829T_ONT`；truth：`COLO829T_somatic_snv_indel.vcf.gz` + SMaHT BED，germline 是 COLO829BL dipcall）
@@ -277,25 +292,25 @@ A1 reads 的中位数超过 0.45，就算部分匹配这个 somatic truth。
 | 标签 | reason | Illumina SNV | Illumina INDEL | fiberseq SNV | fiberseq INDEL | ONT SNV | ONT INDEL |
 |---:|---|---:|---:|---:|---:|---:|---:|
 | 1 | representative_allele_is_somatic_truth | 38,239 | 1,096 | 38,550 | 1,217 | 38,355 | 1,121 |
-| 1 | allele_partial_somatic_truth | 1 | 5 | 0 | 9 | 1 | 96 |
-| 1 | residual_partial_somatic_truth | 541 | 266 | 295 | 607 | 418 | 1,183 |
+| 1 | allele_partial_somatic_truth | 1 | 5 | 0 | 9 | 1 | 88 |
+| 1 | residual_partial_somatic_truth | 487 | 248 | 246 | 413 | 291 | 546 |
 | 2 | representative_allele_is_germline_truth | 331,542 | 59,271 | 370,509 | 158,478 | 397,907 | 182,304 |
 | 2 | representative_allele_is_germline_truth_gap_filtered | 5,954 | 544 | 23,521 | 2,062 | 34,055 | 2,839 |
 | 2 | allele_partial_germline_truth | 0 | 573 | 0 | 4,781 | 0 | 24,440 |
-| 2 | residual_partial_germline_truth | 0 | 15,099 | 0 | 42,830 | 0 | 44,270 |
+| 2 | residual_partial_germline_truth | 0 | 15,100 | 0 | 42,833 | 0 | 44,274 |
 | 0 | confident_no_truth_allele | 902,500 | 8,606 | 90,005 | 1,061,525 | 715,458 | 3,360,091 |
-| 0 | near_truth_allele_mismatch | 332,148 | 25,492 | 51,392 | 245,059 | 118,808 | 438,979 |
-| 0 | truth_matches_non_representative_allele | 190 | 493 | 246 | 4,007 | 241 | 23,504 |
+| 0 | near_truth_allele_mismatch | 332,182 | 25,496 | 51,419 | 245,149 | 118,872 | 439,356 |
+| 0 | truth_matches_non_representative_allele | 190 | 493 | 246 | 4,007 | 241 | 23,512 |
 | 0 | germline_truth_filtered | 0 | 0 | 0 | 1 | 0 | 1 |
 | −1 | outside_confident_region | 336,146 | 15,587 | 1,024,172 | 98,542 | 1,706,426 | 144,439 |
-| −1 | off_reference_no_truth_match | 66,181 | 18,429 | 78,681 | 148,805 | 101,183 | 249,525 |
+| −1 | off_reference_no_truth_match | 66,201 | 18,442 | 78,703 | 148,906 | 101,246 | 249,781 |
 | −1 | not_on_unique_grch38_node | 11,280 | 791 | 38,458 | 14,634 | 51,452 | 20,945 |
 | −1 | below_snv_min_af | 480,878 | 0 | 0 | 0 | 0 | 0 |
 | −1 | somatic_truth_filtered | 0 | 0 | 0 | 0 | 0 | 0 |
-| 1 | **合计** | **38,781** | **1,367** | **38,845** | **1,833** | **38,774** | **2,400** |
-| 2 | **合计** | **337,496** | **75,487** | **394,030** | **208,151** | **431,962** | **253,853** |
-| 0 | **合计** | **1,234,838** | **34,591** | **141,643** | **1,310,592** | **834,507** | **3,822,575** |
-| −1 | **合计** | **894,485** | **34,807** | **1,141,311** | **261,981** | **1,859,061** | **414,909** |
+| 1 | **合计** | **38,727** | **1,349** | **38,796** | **1,639** | **38,647** | **1,755** |
+| 2 | **合计** | **337,496** | **75,488** | **394,030** | **208,154** | **431,962** | **253,857** |
+| 0 | **合计** | **1,234,872** | **34,595** | **141,670** | **1,310,682** | **834,571** | **3,822,960** |
+| −1 | **合计** | **894,505** | **34,820** | **1,141,333** | **262,082** | **1,859,124** | **415,165** |
 | | 总数 | 2,505,600 | 146,252 | 1,715,829 | 1,782,557 | 3,164,304 | 4,493,737 |
 
 - `somatic_truth_filtered` 在六个数据集里都是 0：没有 tensor 的 allele 只匹配到没 PASS 的 somatic truth（HG008 的 somatic truth 全部 PASS）。
@@ -309,8 +324,8 @@ A1 reads 的中位数超过 0.45，就算部分匹配这个 somatic truth。
 
 ### 8.1 还没定的点
 
-1. **分支节点上的 tensor 拿不到 2，没对上 somatic 的也不当 0。** 分支节点只能是 1（R8）或 −1（R5、R6、R9；短读长的 SNV 还有 R1）。PacBio 上定了 anchor 的 tensor：SNV 72,989 个、INDEL 116,695 个；其中标 1 的 SNV 359、INDEL 1,457，R9 的 −1 有 SNV 48,916、INDEL 99,337（AF ≥ 0.3 的 SNV 33,906、INDEL 41,712），其余在 confident 区外。AF 高的那些里应该有不少是人群分支上的真实 germline allele（例如 `30194624:0:SNP:T>C`，7/7 条 reads 是 ALT）：训练时它们既不是 2 也不是 0，而 tumor-only caller 在测试时会遇到它们。
-2. **truth 在 site 的另一个 allele 上、A1 和它重叠不够 → 0，BED 外也是 0。** PacBio INDEL 有 3,573 个，其中 3,221 个是同一位置 INS 对 DEL（A1 是缺失、truth 是插入，或反过来；类型不同，allele 重叠是 0，germline 又不算单倍型重叠），这里面 2,730 个是同一个碱基的删一个对插一个（如 A1 `−A`、truth `+A`）；2,801 个的 truth allele reads 不少于 A1 的一半，300 个不少于 A1。例子 `31372027:40:DEL:A>`：A1 `−A` 49 条，germline truth（1/1）`+A` 46 条 → 0。site 里确实有真实 germline allele 的 reads，却当成负样本。
+1. **分支节点上的 tensor 拿不到 2，没对上 somatic 的也不当 0。** 分支节点只能是 1（R8）或 −1（R5、R6、R9；短读长的 SNV 还有 R1）。PacBio 上定了 anchor 的 tensor：SNV 72,989 个、INDEL 116,695 个；其中标 1 的 SNV 322、INDEL 1,353，R9 的 −1 有 SNV 48,953、INDEL 99,441（AF ≥ 0.3 的 SNV 33,925、INDEL 41,741），其余（SNV 23,714、INDEL 15,901）在 confident 区外。AF 高的那些里应该有不少是人群分支上的真实 germline allele（例如 `30194624:0:SNP:T>C`，7/7 条 reads 是 ALT）：训练时它们既不是 2 也不是 0，而 tumor-only caller 在测试时会遇到它们。
+2. **truth 在 site 的另一个 allele 上、A1 和它重叠不够 → 0，BED 外也是 0。** PacBio INDEL 有 3,577 个，其中 3,223 个是同一位置 INS 对 DEL（A1 是缺失、truth 是插入，或反过来；类型不同，allele 重叠是 0；这里面 3,195 个只有 germline truth，germline 又不算单倍型重叠），这里面 2,731 个是同一个碱基的删一个对插一个（如 A1 `−A`、truth `+A`）；2,804 个的 truth allele reads 不少于 A1 的一半，300 个不少于 A1。例子 `31372027:40:DEL:A>`：A1 `−A` 49 条，germline truth（1/1）`+A` 46 条 → 0。site 里确实有真实 germline allele 的 reads，却当成负样本。
 3. **SNV 对 SNV 只看完全相同。** 同一位置 ALT 不同（例如 truth G>A、A1 G>C）的 allele 重叠为 0；somatic 还有单倍型重叠兜底，germline 没有。PacBio SNV 的 137 个 `truth_matches_non_representative_allele` 全是这种（136 个 germline，1 个 somatic）。
 4. **germline 不做单倍型重叠。** 所以"走分支 + 残余 edit""跳过节点 + 错配"这类写法的 germline 变异，只能靠 allele 重叠（R4、R10，且只在 GRCh38 节点上）：在 GRCh38 节点上对不上的落到 R11/R12 的 0，在分支节点上的是 R9 的 −1。
 5. **somatic 优先；但 A1 是 germline 时，site 里别的 somatic allele 不管用。** A1 同时等于 somatic 和 germline truth 时 R2 先命中，标 1：HG008 有 209 个 somatic allele 和某个 germline allele 完全相同（多为正常样本杂合，可能是肿瘤 LOH 或两个 benchmark 冲突），PacBio 上这样的 tensor 有 61 个（INDEL 51、SNV 10）。反过来，A1 等于 germline truth、site 里另一个 allele 是 somatic truth 时 R3 先命中，整个 tensor 标 2：PacBio 254、ONT 234、Illumina 40 个。
@@ -318,19 +333,20 @@ A1 reads 的中位数超过 0.45，就算部分匹配这个 somatic truth。
 
    | | PacBio | ONT | Illumina |
    |---|---:|---:|---:|
-   | 1 | 3,366 | 2,744 | 1,780 |
-   | 2 | 429 | 238 | 322 |
-   | 0 | 246 | 275 | 1,622 |
-   | −1 | 390 | 398 | 721 |
+   | 1 | 3,322 | 2,668 | 1,709 |
+   | 2 | 430 | 239 | 323 |
+   | 0 | 273 | 324 | 1,684 |
+   | −1 | 406 | 424 | 729 |
    | 没有 tensor | 1,971 | 679 | 1,762 |
 
-   0 大多是 R11 `near_truth_allele_mismatch`（204 / 188 / 1,617），其余是 R4 的 `truth_matches_non_representative_allele`（42 / 87 / 5）。这些 tensor 带的是 somatic 单倍型的 reads，却是负样本；Illumina 上标 0 的和标 1 的差不多一样多。
-7. **残余 edit 正好等于（或部分匹配）一个 germline truth → 2。** 例如 germline `TA>T`、somatic `TAA>T`，残余 edit `DEL A` 等于 germline 键，R3（和 R4）在 R8 之前 → 2。上表里的 2：PacBio 429 个（A1 正好是 germline truth 300 个、R4 allele 部分匹配 108、R10 residual 部分匹配 20、GAP 1），ONT 238，Illumina 322。像上面这个例子，reads 其实是 somatic 单倍型的残余，却标 2；另一部分是 ALT reads 上附带的真实 germline 变异，这些标 2 是对的。
+   0 大多是 R11 `near_truth_allele_mismatch`（231 / 237 / 1,679），其余是 R4 的 `truth_matches_non_representative_allele`（42 / 87 / 5）。这些 tensor 带的是 somatic 单倍型的 reads，却是负样本；Illumina 上标 0 的和标 1 的差不多一样多。
+7. **残余 edit 正好等于（或部分匹配）一个 germline truth → 2。** 例如 germline `TA>T`、somatic `TAA>T`，残余 edit `DEL A` 等于 germline 键，R3（和 R4）在 R8 之前 → 2。上表里的 2：PacBio 430 个（A1 正好是 germline truth 300 个、R4 allele 部分匹配 108、R10 residual 部分匹配 21、GAP 1），ONT 239，Illumina 323。像上面这个例子，reads 其实是 somatic 单倍型的残余，却标 2；另一部分是 ALT reads 上附带的真实 germline 变异，这些标 2 是对的。
 8. **1/2 不看 BED，大部分 0 要看。** confident 区外的 truth 匹配（R2–R4）照样是 1/2（R4 的 0 也不看 BED），而同样位置的非 truth tensor 是 −1（R8、R10 的部分匹配也只在区内）。分支节点判断是否在 confident 区只看 anchor 区间的中点。
 9. **单倍型重叠只用 tensor 窗口里的序列。** 每条 read 大约 100 bp、最多 20 条，取中位数；A1 少于 3 条时不算。长插入（>50 bp）或跨出窗口的事件算不准。
 
 ### 8.2 现行规则已经定下的点
 
-- **重叠阈值是 0.45（`MIN_OVERLAP`）。** 这样同聚物里差一个碱基的短 indel（`+T` 对 `+TT`、删 1 个对删 2 个，重叠 0.5）和较长的（`+TT` 对 `+TTT`，0.667）一样算同一个事件；差两个碱基的（`+T` 对 `+TTT`、删 1 个对删 3 个，0.333）不算。
-- **分支节点上没对上 somatic truth 的 tensor 是 −1（R9），不是 0。** germline truth 只有 GRCh38 上的键，分支节点上"没有 truth"不代表没有变异，多数分支节点上根本没有 truth；部分匹配 somatic 的 1 照样保留（PacBio SNV 359、INDEL 1,457）。
+- **重叠阈值是 0.45（`MIN_OVERLAP`）。** 这样同聚物里差一个碱基的短 indel（`+T` 对 `+TT`、删 1 个对删 2 个，allele 重叠 0.5）和较长的（`+TT` 对 `+TTT`，0.667）一样算同一个事件；差两个碱基的（`+T` 对 `+TTT`、删 1 个对删 3 个，0.333）不算。
+- **单倍型重叠只认离 truth 比离 GRCh38 更近的 read。** 原始 `d_truth ≥ d_ref` 的 A1 read 记 0，减去背景 b 不改变这一点（第 5.2 节）：离两条单倍型一样近的 read 不是这个 truth 的证据。所以同一位置有 somatic truth、A1 reads 却不带它的 tensor 不是部分匹配，例如 `30419351:0:DEL:A>`（R11 的 0）、`30887064:0:DEL:G>`（R9 的 −1）。
+- **分支节点上没对上 somatic truth 的 tensor 是 −1（R9），不是 0。** germline truth 只有 GRCh38 上的键，分支节点上"没有 truth"不代表没有变异，多数分支节点上根本没有 truth；部分匹配 somatic 的 1 照样保留（PacBio SNV 322、INDEL 1,353）。
 - **短读长数据集的 SNV：AF < 0.07 → −1（R1，`--snv-min-af 0.07`，只用于 HG008 Illumina 和 COLO829T Illumina）。** 效果等于用 SNV AF 阈值 0.07 建这两个数据集（build 时是 0.06），但不用重建 tensor；AF 是测试时不看 truth 也能用的过滤条件。HG008 Illumina SNV 有 1,312,554 个（26.2%）、COLO829T Illumina 480,878 个（19.2%）因此是 −1，其中 A1 是 somatic truth 的只有 2 个和 389 个。用 `orchestrate` 跑短读长数据时，在 prepare 加 `--label-snv-min-af 0.07`，finalize 就按这个下限打标签。INDEL 的下限（`--indel-min-af`，prepare 里是 `--label-indel-min-af`）和 SNV 的分开设，六个数据集都没用。

@@ -505,9 +505,9 @@ All runs: one Slurm node, `-p general`, `--mem=420G`, `--chromosomes autosome`, 
 | run wall time (tasks) | 13.6 h / 48 min¹ | 5.7 h² | 3.6 h |
 | peak RSS of the whole run (sampled) | 418 / 312 GiB¹ | 348 GiB² | 239 GiB |
 | tensors SNV / INDEL | 1,180,343 / 1,923,744 | 2,372,506 / 2,511,013 | 5,000,888 / 151,465 |
-| SNV labels 1 / 2 / 0 / −1 | 8,925 / 350,827 / 86,625 / 733,966 | 9,013 / 370,175 / 313,677 / 1,679,641 | 11,089 / 315,438 / 2,635,565 / 2,038,796 |
-| INDEL labels 1 / 2 / 0 / −1 | 7,050 / 191,411 / 1,518,564 / 206,719 | 6,840 / 220,750 / 1,976,378 / 307,045 | 5,316 / 70,538 / 31,367 / 44,244 |
-| label job (1 CPU) / MaxRSS | 25 min / 13.9 GiB | 46 min / 14.0 GiB | 53 min / 13.9 GiB |
+| SNV labels 1 / 2 / 0 / −1 | 8,836 / 350,827 / 86,677 / 734,003 | 8,848 / 370,175 / 313,784 / 1,679,699 | 10,626 / 315,438 / 2,635,897 / 2,038,927 |
+| INDEL labels 1 / 2 / 0 / −1 | 6,840 / 191,424 / 1,518,657 / 206,823 | 6,383 / 220,763 / 1,976,637 / 307,230 | 5,239 / 70,550 / 31,392 / 44,284 |
+| label job (1 CPU) / MaxRSS | 23 min / 12.4 GiB | 50 min / 12.9 GiB | 55 min / 13.2 GiB |
 
 ¹ PacBio `v3_tensors` = `v6_run` + `v3_extra_run` (cells with two values: `v6_run` / `v3_extra_run`).
 `v6_run` (1,415 tasks at 48 processes: 1,024 in 7.6 h, then the 391 extra tasks of section 4's
@@ -558,9 +558,9 @@ empty), germline = COLO829BL dipcall `dip.vcf.gz` + `dip.bed`.
 | `--processes` (peak RSS) | 48 (201 GiB) | 15 (210 GiB), 36 (318 GiB) | 15 (215 GiB), 36 (360 GiB), 48 (418 GiB, `--mem=480G`) |
 | run jobs, wall time in total | 3 h 18 min | 14 h 35 min³ | 20 h 50 min³ |
 | tensors SNV / INDEL | 2,505,600 / 146,252 | 1,715,829 / 1,782,557 | 3,164,304 / 4,493,737 |
-| SNV labels 1 / 2 / 0 / −1 | 38,781 / 337,496 / 1,234,838 / 894,485 | 38,845 / 394,030 / 141,643 / 1,141,311 | 38,774 / 431,962 / 834,507 / 1,859,061 |
-| INDEL labels 1 / 2 / 0 / −1 | 1,367 / 75,487 / 34,591 / 34,807 | 1,833 / 208,151 / 1,310,592 / 261,981 | 2,400 / 253,853 / 3,822,575 / 414,909 |
-| label job (1 CPU) / MaxRSS | 32 min / 15.7 GiB | 32 min / 15.7 GiB | 2 h 12 min / 15.7 GiB |
+| SNV labels 1 / 2 / 0 / −1 | 38,727 / 337,496 / 1,234,872 / 894,505 | 38,796 / 394,030 / 141,670 / 1,141,333 | 38,647 / 431,962 / 834,571 / 1,859,124 |
+| INDEL labels 1 / 2 / 0 / −1 | 1,349 / 75,488 / 34,595 / 34,820 | 1,639 / 208,154 / 1,310,682 / 262,082 | 1,755 / 253,857 / 3,822,960 / 415,165 |
+| label job (1 CPU) / MaxRSS | 33 min / 14.9 GiB | 34 min / 14.6 GiB | 2 h 26 min / 14.7 GiB |
 
 ³ The long-read runs were stopped and resumed several times (other process counts, fixes brought
 into their frozen source), so their wall times are not a clean measurement.
@@ -726,7 +726,7 @@ Knobs, in order of effect:
    3,352.
 
 Other jobs, measured (Slurm MaxRSS): `prepare` with a 6 GB node_stats.json 3.6–5.6 GB; labelling a
-genome 13.9–15.7 GiB on 1 CPU (section 5); the parallel merge of the HG008 Illumina chr22 tasks with
+genome 12.4–15.7 GiB on 1 CPU (section 5); the parallel merge of the HG008 Illumina chr22 tasks with
 8 workers 5.6 GB.
 
 ---

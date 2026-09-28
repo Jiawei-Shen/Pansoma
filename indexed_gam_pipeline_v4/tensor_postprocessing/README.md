@@ -247,9 +247,10 @@ the graph alignment takes the truth's label. `<chrom>_labels.ndjson` marks it wi
   REF reads' median error, and let e be the event size (1 for an SNV, otherwise the longer allele).
   A read's overlap is max(0, (d_ref + e − d_truth) / 2) / max(d_ref, e), and the tensor's is the
   median over its A1 reads. A read that is not closer to the truth haplotype than to GRCh38 before the
-  error subtraction (raw d_truth ≥ raw d_ref) counts as 0: it carries none of the event (2026-09-28;
-  before, the subtraction gave such reads exactly 0.5 whenever the REF error was at least both
-  distances, which passed the 45 % threshold; `analysis/label_checks_20260928`). With fewer than 3 A1 reads there is no haplotype overlap. This catches
+  error subtraction (raw d_truth ≥ raw d_ref) counts as 0: it carries none of the event (the
+  subtraction alone would give such a read exactly 0.5 whenever the REF error is at least both
+  distances, above the 45 % threshold; `analysis/label_checks_20260928`). With fewer than 3 A1 reads
+  there is no haplotype overlap. This catches
   a truth written as a graph branch plus a residual edit (truth +AAA, tensor DEL A after a +AAAA
   branch), or as a skipped node plus a mismatch. It is also the only way an off-reference tensor
   matches, with each read taken in the orientation that fits better.
@@ -421,12 +422,12 @@ Label job, 1 CPU:
 
 | set | wall time | MaxRSS |
 |---|---|---|
-| HG008 PacBio | 25 min | 13.9 GiB |
-| HG008 ONT-UL | 46 min | 14.0 GiB |
-| HG008 Illumina | 53 min | 13.9 GiB |
-| COLO829T Illumina | 32 min | 15.7 GiB |
-| COLO829T fiberseq | 32 min | 15.7 GiB |
-| COLO829T ONT (7.7 M tensors) | 2 h 12 min | 15.7 GiB |
+| HG008 PacBio | 23 min | 12.4 GiB |
+| HG008 ONT-UL | 50 min | 12.9 GiB |
+| HG008 Illumina | 55 min | 13.2 GiB |
+| COLO829T Illumina | 33 min | 14.9 GiB |
+| COLO829T fiberseq | 34 min | 14.6 GiB |
+| COLO829T ONT (7.7 M tensors) | 2 h 26 min | 14.7 GiB |
 
 The label counts of the six sets are in the [main README](../README.md), section 5.
 
