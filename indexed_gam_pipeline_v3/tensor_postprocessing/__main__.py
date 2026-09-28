@@ -31,6 +31,7 @@ def main(argv=None):
     p.add_argument("--germline-bed", required=True)
     p.add_argument("--truth-dir", required=True, help="where <set>.graph.tsv truth tables are written")
     p.add_argument("--recall-dir", help="where recall reports go (default: --tensors)")
+    p.add_argument("--snv-min-af", type=float, help="SNV tensors with a lower AF are -1 (short-read sets: 0.07)")
 
     args = parser.parse_args(argv)
     if args.command == "merge":
@@ -40,7 +41,8 @@ def main(argv=None):
     elif args.command == "label":
         from .truth_labels import label_run
         result = label_run(args.tensors, args.kinds, args.reference_path, args.fasta, args.somatic_vcf,
-                           args.somatic_bed, args.germline_vcf, args.germline_bed, args.truth_dir, args.recall_dir)
+                           args.somatic_bed, args.germline_vcf, args.germline_bed, args.truth_dir, args.recall_dir,
+                           snv_min_af=args.snv_min_af)
     print(json.dumps(result, indent=2))
 
 

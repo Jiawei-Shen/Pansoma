@@ -18,12 +18,13 @@
                     more than MIN_OVERLAP (partial, below)
        2 germline   A1 is a germline truth allele with FILTER PASS/. or only GAP1/GAP2 (dipcall: on one assembled
                     haplotype, the other uncalled), inside or outside the BED, or overlaps one (partial)
-       0 non        every other tensor inside somatic BED ∩ germline BED: no truth allele, a truth allele nearby
-                    that A1 does not overlap enough (errors and artifacts next to real variants), a germline
-                    allele with another FILTER (dipcall HET1/HET2)
-      -1 ignore     a filtered somatic truth allele, outside the BEDs, or no position (no unique GRCh38 visit and
-                    no reference node within ANCHOR_REACH IDs, or more than ANCHOR_GAP GRCh38 bases between those
-                    reference neighbours): tensors test-time calling can drop without truth
+       0 non        every other tensor on a GRCh38 node inside somatic BED ∩ germline BED: no truth allele, a truth
+                    allele nearby that A1 does not overlap enough (errors and artifacts next to real variants), a
+                    germline allele with another FILTER (dipcall HET1/HET2)
+      -1 ignore     a filtered somatic truth allele, outside the BEDs, no position (no unique GRCh38 visit and no
+                    reference node within ANCHOR_REACH IDs, or more than ANCHOR_GAP GRCh38 bases between those
+                    reference neighbours), an off-reference node without a partial truth match (v6: those are not
+                    trained as 0), or an SNV below the label run's snv_min_af (v6: short reads, AF 0.07)
 
    Partial (labels.ndjson `partial`, `overlap`, `partial_truth`): the same event written differently by the
    graph alignment. "allele": another allele of the site is the truth allele and A1 overlaps it by more than
@@ -50,7 +51,9 @@ from ..common import read_json, sha256_file, write_json
 from .chr_index import AUTOSOMES
 from .reference_path import ReferencePath, rc
 
-VERSION = "truth-labels-v5"  # v5: an off-reference node with more than ANCHOR_GAP GRCh38 bases between its reference
+VERSION = "truth-labels-v6"  # v6: MIN_OVERLAP 0.45; an off-reference node is 1 on a partial somatic match, else -1;
+# optional snv_min_af (short-read sets: 0.07) makes lower-AF SNV tensors -1.
+# v5: an off-reference node with more than ANCHOR_GAP GRCh38 bases between its reference
 # neighbours has no position (v4 placed nodes near centromeres in 10-200 Mb intervals and matched them to any truth).
 # v4: partial matches (overlap > MIN_OVERLAP) take the truth label; off-reference nodes are placed between their
 # reference neighbours. v3: near-truth mismatches and HET-filtered germline alleles 0.
@@ -59,7 +62,7 @@ VERSION = "truth-labels-v5"  # v5: an off-reference node with more than ANCHOR_G
 GAP_FILTERS = frozenset({"GAP1", "GAP2"})
 LABELS = {"ignore": -1, "non": 0, "somatic": 1, "germline": 2}
 NEAR_BP = 10
-MIN_OVERLAP = 0.6  # a tensor overlapping a truth allele by more than this counts as that truth (partial)
+MIN_OVERLAP = 0.45  # a tensor overlapping a truth allele by more than this counts as that truth (partial)
 ANCHOR_REACH = 200  # node IDs searched on each side for the reference nodes around an off-reference node
 ANCHOR_GAP = 1024  # most GRCh38 bases between those reference nodes (the reference a branch replaces; the nodes'
 # own lengths, up to 1024 bp each, not counted) for the interval to be taken as the node's position
@@ -497,7 +500,7 @@ def linear_interval(lin, kind):
     return lin["pos0"], lin["pos0"] + max(1, len(lin["ref"]))
 
 
-def classify(record, somatic, germline, path, confident, evidence=None):
+def classify(record, somatic, germline, path, confident, evidence=None, snv_min_af=None):
     """(label value, label name, reason, details) of one merged summary record (rules: module docstring)."""
     representative = record["candidate_id"]
     alleles = record.get("alleles") or [record]
@@ -509,6 +512,9 @@ def classify(record, somatic, germline, path, confident, evidence=None):
     lin = path.linear(record["node_id"], record["start"], record["ref"], record["alt"], record["event_type"],
                       record.get("path"))
     details.update(grch38=lin, partial=None)
+    # The label run's SNV AF filter (short reads): as if the build had used it, whatever the truth.
+    if snv_min_af is not None and record["event_type"] == "SNP" and record.get("af", 1.0) < snv_min_af:
+        return LABELS["ignore"], "ignore", "below_snv_min_af", details
     rep_somatic = [tid for cid, tid in hits[somatic.name] if cid == representative]
     rep_germline = [tid for cid, tid in hits[germline.name] if cid == representative]
     counts = {somatic.name: lambda t: somatic.alleles[t]["passed"],
@@ -561,7 +567,7 @@ def classify(record, somatic, germline, path, confident, evidence=None):
     # -1 only where test-time calling can drop the same tensors without truth: outside the BED, no position.
     if not inside:
         return LABELS["ignore"], "ignore", "outside_confident_region", details
-    if filtered_germline:
+    if filtered_germline:  # only GRCh38 nodes have truth keys, so never an off-reference node
         return LABELS["non"], "non", "germline_truth_filtered", details
     # A truth allele at the same place that the tensor overlaps by more than MIN_OVERLAP: the same event written
     # differently (somatic: allele or read-haplotype overlap; germline: allele overlap on GRCh38).
@@ -570,19 +576,22 @@ def classify(record, somatic, germline, path, confident, evidence=None):
         result = partial("residual", "somatic", somatic, tids, (chrom,))
         if result:
             return result
-    if lin is not None:
-        tids = [t for t in germline.overlapping(chrom, s, e, pad) if counts[germline.name](t)]
-        if tids:
-            result = partial("residual", "germline", germline, tids, (chrom,))
-            if result:
-                return result
+    # An off-reference node without a partial somatic match is not a training negative (v6): most branch
+    # nodes carry no truth at all, so its tensors are -1 rather than 0.
+    if lin is None:
+        return LABELS["ignore"], "ignore", "off_reference_no_truth_match", details
+    tids = [t for t in germline.overlapping(chrom, s, e, pad) if counts[germline.name](t)]
+    if tids:
+        result = partial("residual", "germline", germline, tids, (chrom,))
+        if result:
+            return result
     # 0 is every other tensor: artifacts and errors next to real variants included, as test-time calling sees them.
     if somatic.near(chrom, s, e) or germline.near(chrom, s, e):
         return LABELS["non"], "non", "near_truth_allele_mismatch", details
     return LABELS["non"], "non", "confident_no_truth_allele", details
 
 
-def label_directory(directory, somatic, germline, path, confident, provenance, fasta=None):
+def label_directory(directory, somatic, germline, path, confident, provenance, fasta=None, snv_min_af=None):
     """Write <chrom>_shard_*_labels.npy, <chrom>_labels.ndjson and labels.manifest.json for one merged directory."""
     directory = Path(directory)
     manifest = read_json(directory / "manifest.json")
@@ -599,7 +608,7 @@ def label_directory(directory, somatic, germline, path, confident, provenance, f
         with (directory / info["summary"]).open() as source, target.with_name(target.name + ".tmp").open("w") as out:
             for line in source:
                 record = json.loads(line)
-                value, name, reason, details = classify(record, somatic, germline, path, confident, evidence)
+                value, name, reason, details = classify(record, somatic, germline, path, confident, evidence, snv_min_af)
                 if details["partial"]:
                     partials[f"{details['partial']}_{name}"] += 1
                 arrays[record["shard_file"]][record["index_within_shard"]] = value
@@ -625,7 +634,7 @@ def label_directory(directory, somatic, germline, path, confident, provenance, f
                   near_bp=NEAR_BP, tensors=sum(sum(c.values()) for c in counts.values()),
                   counts={c: dict(v) for c, v in counts.items()},
                   totals=dict(sum(counts.values(), Counter())), reasons=dict(reasons), partial=dict(partials),
-                  min_overlap=MIN_OVERLAP, **provenance)
+                  min_overlap=MIN_OVERLAP, snv_min_af=snv_min_af, **provenance)
     write_json(directory / "labels.manifest.json", report)
     return report, matched
 
@@ -674,7 +683,7 @@ def recall(truth, matched, filtered, output_dir):
 
 
 def label_run(tensors, kinds, reference_path, fasta, somatic_vcf, somatic_bed, germline_vcf, germline_bed, truth_dir,
-              recall_dir=None):
+              recall_dir=None, snv_min_af=None):
     """Build both truth sets, label every merged autosome directory of `kinds`, write recall reports.
 
     Truth tables (<set>.graph.tsv) depend only on the graph and the VCFs and go to `truth_dir`;
@@ -699,7 +708,8 @@ def label_run(tensors, kinds, reference_path, fasta, somatic_vcf, somatic_bed, g
                       fasta=str(fasta), reference_path=str(path.directory))
     reports, matched = {}, {somatic.name: defaultdict(list), germline.name: defaultdict(list)}
     for kind in kinds:
-        reports[kind], found = label_directory(Path(tensors) / kind, somatic, germline, path, confident, provenance, fasta)
+        reports[kind], found = label_directory(Path(tensors) / kind, somatic, germline, path, confident, provenance, fasta,
+                                               snv_min_af)
         for name, items in found.items():
             for tid, hits in items.items():
                 matched[name][tid] += hits

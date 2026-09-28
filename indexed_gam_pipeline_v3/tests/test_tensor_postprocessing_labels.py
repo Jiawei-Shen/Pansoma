@@ -6,12 +6,14 @@ from pathlib import Path
 import sqlite3
 import tempfile
 import unittest
+from unittest import mock
 
 import numpy as np
 import pysam
 
 from .fixtures import CHR1, CHR2, CHR3, graph_files, graph_fixture, write_vcf
 from ..tensor_postprocessing.chr_index import AUTOSOMES, ChrIndex
+from ..tensor_postprocessing import truth_labels
 from ..tensor_postprocessing.reference_path import ReferencePath, rc
 from ..tensor_postprocessing.truth_labels import (Bed, LABELS, Locator, TruthSet, allele_overlap, anchor, haplotype_overlap,
                                                                         label_directory, placements, recall,
@@ -250,6 +252,7 @@ class TruthLabelTest(unittest.TestCase):
                 ("allele_partial", candidate(38, "GGGG", "INS", ""), [candidate(38, "GGGGG", "INS", "")], 1,
                  "allele_partial_somatic_truth"),                # A1 +GGGG vs the truth +GGGGG (A2): 80 %
                 ("residual_partial", candidate(38, "GGGG", "INS", ""), [], 1, "residual_partial_somatic_truth"),
+                ("residual_partial_60", candidate(38, "GGG", "INS", ""), [], 1, "residual_partial_somatic_truth"),  # 3/5 > 0.45
                 ("far_insertion", candidate(48, "GGGG", "INS", ""), [], 0, "near_truth_allele_mismatch"),
                 ("germline_residual", candidate(64, "", "DEL", CHR1[64:66]), [], 2,
                  "residual_partial_germline_truth"),             # DEL 64..66 inside the germline DEL 63..66: 2/3
@@ -258,6 +261,9 @@ class TruthLabelTest(unittest.TestCase):
                 ("outside", candidate(75, other(75)), [], -1, "outside_confident_region"),
                 ("off_path", dict(candidate_id="7:0:SNP:G>A", node_id=7, start=0, ref="G", alt="A", event_type="SNP"),
                  [], -1, "not_on_unique_grch38_node"),
+                ("off_reference", dict(candidate_id="12:0:SNP:G>A", node_id=12, start=0, ref="G", alt="A", event_type="SNP"),
+                 [], -1, "off_reference_no_truth_match"),      # anchored inside the confident region, no truth match
+                ("snv_low_af", dict(candidate(18, other(18)), af=0.065), [], -1, "below_snv_min_af"),
             ]
             merged = tmp / "SNV"
             merged.mkdir()
@@ -269,7 +275,10 @@ class TruthLabelTest(unittest.TestCase):
             (merged / "manifest.json").write_text(json.dumps(dict(layout="chromosome-shards-v1", chromosomes={
                 "chr1": dict(summary="chr1_variant_summary.ndjson",
                              shards=[dict(file="chr1_shard_00000_data.npy", tensors=len(cases))])})))
-            report, matched = label_directory(merged, somatic, germline, path, confident, {})
+            real_anchor = truth_labels.anchor
+            with mock.patch.object(truth_labels, "anchor",
+                                   lambda p, node: ("chr1", 14, 22) if node == 12 else real_anchor(p, node)):
+                report, matched = label_directory(merged, somatic, germline, path, confident, {}, snv_min_af=0.07)
             labels = np.load(merged / "chr1_shard_00000_labels.npy")
             self.assertEqual(labels.dtype, np.int8)
             self.assertEqual(labels.tolist(), [c[3] for c in cases])
@@ -277,8 +286,9 @@ class TruthLabelTest(unittest.TestCase):
             for (name, _, _, value, reason), line in zip(cases, lines):
                 self.assertEqual((line["label"], line["reason"]), (value, reason), name)
             self.assertEqual(lines[0]["somatic"][0]["vcf_pos"], 3)
-            self.assertEqual(report["totals"], {"somatic": 3, "germline": 4, "ignore": 4, "non": 5})
-            self.assertEqual(report["partial"], {"allele_somatic": 1, "residual_somatic": 1, "residual_germline": 1})
+            self.assertEqual(report["totals"], {"somatic": 4, "germline": 4, "ignore": 6, "non": 5})
+            self.assertEqual(report["partial"], {"allele_somatic": 1, "residual_somatic": 2, "residual_germline": 1})
+            self.assertEqual((report["min_overlap"], report["snv_min_af"]), (0.45, 0.07))
             partial = {name: line["partial"] for (name, *_), line in zip(cases, lines)}
             self.assertEqual((partial["allele_partial"], partial["residual_partial"], partial["somatic_del"]),
                              ("allele", "residual", None))
