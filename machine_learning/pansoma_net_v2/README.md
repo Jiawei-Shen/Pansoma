@@ -59,7 +59,9 @@ $P -m pansoma_net_v2.predict --checkpoint runs/HG008_Illumina_SNV/best.pth --ten
 ```
 
 `/scratch/jshen/data/pansoma_net_v2_runs/jobs/run.sh NAME SET KIND [train options]` runs both steps as one
-Slurm job.
+Slurm job. `python -m pansoma_net_v2.summary [NAME ...]` prints each run's per-epoch table (training loss,
+speed, minutes, GPU peak; validation somatic AP, F1 / P / R at the best threshold, the threshold, germline
+F1), its current step and, when done, its chr1 test result.
 
 Useful `train` options:
 
