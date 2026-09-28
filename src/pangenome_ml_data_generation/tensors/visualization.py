@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render legacy five-channel and versioned candidate-v2/v3/v4/v5/v6 six/seven/eight-channel tensors."""
+"""Render legacy five-channel, indexed_gam_pipeline candidate and versioned candidate-v2/v3/v4/v5/v6 six/seven/eight-channel tensors."""
 
 import argparse
 import json
@@ -273,10 +273,16 @@ V5_VERSION = "indexed-gam-candidate-v5"
 V6_VERSION = "indexed-gam-candidate-v6"
 V5_LOG_STORAGE = "int8-count-log2x14-v1"
 V6_LINEAR_STORAGE = "int8-count-linear100-log2-v1"
+# indexed_gam_pipeline writes the v6 layout under plain names, in the keys tensor_format / tensor_storage
+CANDIDATE_FORMAT = "indexed-gam-candidate"
+LINEAR_STORAGE = "int8-count-linear100-log2"
+V6_FORMATS = (V6_VERSION, CANDIDATE_FORMAT)
+LINEAR_STORAGES = (V6_LINEAR_STORAGE, LINEAR_STORAGE)
 V5_LOG_SCALE = 14
-CANDIDATE_VERSIONS = {"candidate-v2": V2_VERSION, "candidate-v3": V3_VERSION,
-                      "candidate-v4": V4_VERSION, "candidate-v5": V5_VERSION, "candidate-v6": V6_VERSION}
-CANDIDATE_CHANNELS = {"candidate-v2": 6, "candidate-v3": 7, "candidate-v4": 7, "candidate-v5": 8, "candidate-v6": 8}
+CANDIDATE_VERSIONS = {"candidate-v2": V2_VERSION, "candidate-v3": V3_VERSION, "candidate-v4": V4_VERSION,
+                      "candidate-v5": V5_VERSION, "candidate-v6": V6_VERSION, "candidate": CANDIDATE_FORMAT}
+CANDIDATE_CHANNELS = {"candidate-v2": 6, "candidate-v3": 7, "candidate-v4": 7, "candidate-v5": 8, "candidate-v6": 8,
+                      "candidate": 8}
 STRAND_LABELS = {0: "Padding", 1: "Forward", 2: "Reverse"}
 STRAND_COLORS = {0: "#ffffff", 1: "#1b9e77", 2: "#d95f02"}
 V2_BASE_LABELS = {0: "Padding", 1: "A", 2: "C", 3: "G", 4: "T", 5: "N", 6: "Gap"}
@@ -289,15 +295,21 @@ V2_FLAG_LABELS = {-1: "Padding", 0: "No event", 1: "Event", 2: "Candidate", 3: "
 V2_FLAG_COLORS = {-1: "#ffffff", 0: "#d9ead3", 1: "#cc0000", 2: "#6baed6", 3: "#88419d"}
 
 
+def metadata_format(metadata, key="tensor_format"):
+    """The format name under key: <key>_version in candidate-v2..v6 outputs, <key> in indexed_gam_pipeline outputs."""
+    metadata = metadata or {}
+    return metadata.get(key + "_version", metadata.get(key))
+
+
 def resolve_format(tensor, metadata=None, tensor_format="auto"):
-    version = (metadata or {}).get("tensor_format_version")
+    version = metadata_format(metadata)
     if tensor_format == "auto":
         if version in CANDIDATE_VERSIONS.values():
             tensor_format = version.removeprefix("indexed-gam-")
         elif version in (None, "indexed-gam-legacy-v1") and tensor.shape[0] == 5:
             tensor_format = "legacy"
         else:
-            raise ValueError("Candidate format is ambiguous: supply its v2/v3/v4/v5/v6 manifest/summary or an explicit --format")
+            raise ValueError("Candidate format is ambiguous: supply its manifest/summary or an explicit --format")
     expected = dict(CANDIDATE_CHANNELS, legacy=5)[tensor_format]
     if tensor.ndim != 3 or tensor.shape[0] != expected:
         raise ValueError(f"{tensor_format} expects {expected} channels; got {tensor.shape}")
@@ -307,13 +319,13 @@ def resolve_format(tensor, metadata=None, tensor_format="auto"):
 
 
 def is_v5(tensor, metadata=None):
-    """Eight-channel layout (v5 and v6: channel 2 is base-coded, 6 = path count, 7 = strand)."""
-    version = (metadata or {}).get("tensor_format_version")
-    return version in (V5_VERSION, V6_VERSION) or (version is None and tensor.shape[0] == 8)
+    """Eight-channel layout (v5, v6 and candidate: channel 2 is base-coded, 6 = path count, 7 = strand)."""
+    version = metadata_format(metadata)
+    return version in (V5_VERSION, *V6_FORMATS) or (version is None and tensor.shape[0] == 8)
 
 
 def is_v6(metadata=None):
-    return (metadata or {}).get("tensor_format_version") == V6_VERSION
+    return metadata_format(metadata) in V6_FORMATS
 
 
 def prepare_candidate_view(tensor, show_all_rows=False, metadata=None):
@@ -348,7 +360,7 @@ def path_count_colorbar(fig, ax, side_ax, values, storage_version):
     side_ax.axis("off")
     bar = side_ax.inset_axes((.03, .12, .12, .75))
     colorbar = fig.colorbar(image, cax=bar)
-    if storage_version == V6_LINEAR_STORAGE:
+    if storage_version in LINEAR_STORAGES:
         # exact up to 100; above, value k means a count in (99 + 2**(k-101), 99 + 2**(k-100)]
         ticks = [(c, str(c)) for c in (1, 25, 50, 75, 90, 100) if c <= top]
         if top > 100:
@@ -404,14 +416,14 @@ def visualize_candidate_tensor(tensor, out_path, title, show_all_rows=False,
             legends[channel].text(.27, .25, "Gray: no read\nbase / quality", fontsize=11)
     if channels >= 7:
         values = np.ma.masked_where(view[4] == 0, view[6])
-        storage = (metadata or {}).get("tensor_storage_version")
-        version = (metadata or {}).get("tensor_format_version")
+        storage = metadata_format(metadata, "tensor_storage")
+        version = metadata_format(metadata)
         path_count_colorbar(fig, axes[6], legends[6], values,
                             storage if is_v6(metadata) and storage else V5_LOG_STORAGE if v5 else storage)
         count_label = ("Distinct GBWT\npaths" if v5 or version == V4_VERSION else "Distinct GFA\nW records")
         if storage == "int8-count-div4-v1":
             count_label += "\n// 4 (cap 127)"
-        elif storage == V6_LINEAR_STORAGE:
+        elif storage in LINEAR_STORAGES:
             count_label += "\nexact <= 100,\nlog2 above"
         elif v5:
             count_label += "\nlog scale; ticks\nshow counts"
@@ -443,7 +455,7 @@ def visualize_candidate_tensor(tensor, out_path, title, show_all_rows=False,
         if channel < channels-1:
             ax.tick_params(labelbottom=False)
     axes[-1].set_xlabel("Tensor column (candidate-relative context; branches may differ)", fontsize=13)
-    version = (metadata or {}).get("tensor_format_version", {6: V2_VERSION, 7: V3_VERSION, 8: V5_VERSION}[channels])
+    version = metadata_format(metadata) or {6: V2_VERSION, 7: V3_VERSION, 8: V5_VERSION}[channels]
     caption = version.removeprefix("indexed-gam-") + " | no dedicated reference row"
     if region:
         caption += f" | candidate columns [{region[0]}, {region[1]})"
@@ -564,7 +576,7 @@ def visualize_tensor(
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Visualize legacy five-channel or candidate-v2/v3/v4/v5 six/seven/eight-channel NPY tensors."
+        description="Visualize legacy five-channel, indexed_gam_pipeline candidate or candidate-v2..v6 six/seven/eight-channel NPY tensors."
     )
     parser.add_argument("npy_path", help="Input .npy path: (N,C,H,W) shard or (C,H,W) tensor.")
     parser.add_argument(
@@ -608,7 +620,7 @@ def main() -> None:
         type=int,
         help="Extra column marker; -1 hides markers. Default: full candidate range or legacy center.",
     )
-    parser.add_argument("--format", choices=("auto", "legacy", "candidate-v2", "candidate-v3", "candidate-v4", "candidate-v5", "candidate-v6"), default="auto")
+    parser.add_argument("--format", choices=("auto", "legacy", "candidate", "candidate-v2", "candidate-v3", "candidate-v4", "candidate-v5", "candidate-v6"), default="auto")
     parser.add_argument("--manifest-path", help="Format manifest; default: manifest.json beside input")
     parser.add_argument("--shard-index", type=int, help="Metadata shard index for nonstandard filenames")
     parser.add_argument("--title", help="Optional figure title.")
@@ -726,7 +738,7 @@ def main() -> None:
             print(f"Rendered {rendered}/{total_to_render}")
 
     print(f"Input shape: {array.shape}; dtype: {array.dtype}")
-    print("Candidate-v2/v3/v4/v5 quality scales use observed maxima (at least BQ 40 / MAPQ 60).")
+    print("Candidate quality scales use observed maxima (at least BQ 40 / MAPQ 60).")
     print(
         f"Legacy quality color scale: 0-{QUALITY_COLOR_SCALE_MAX}; "
         f"displayed colorbars: base 0-{BASE_QUALITY_DISPLAY_MAX}, "

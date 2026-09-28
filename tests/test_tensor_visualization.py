@@ -22,6 +22,20 @@ def example():
         coverage=5,alt_count=2,ref_count=1,other_count=2,af=.4)
 
 
+def v6_example():
+    x,m=example()
+    x=x.astype(np.int8)
+    evidence=x[0]!=0
+    stripe=np.zeros_like(x[0]); stripe[0,1:3]=[4,1]; stripe[1,1:3]=[6,6]; stripe[~evidence]=0  # row 0 A1 ">TA", row 1 REF
+    counts=np.where(evidence,91,0).astype(np.int8)
+    strand=np.where(evidence,[[1],[2],[0]],0).astype(np.int8)
+    v6=np.concatenate([x[:2],stripe[None],x[3:6],counts[None],strand[None]],axis=0)
+    allele=dict(label="A1",event_type="INS",ref="",alt="TA",af=.4,alt_count=2,coverage=5)
+    return v6,dict(m,tensor_format_version=v.V6_VERSION,tensor_storage_version=v.V6_LINEAR_STORAGE,candidate_columns=[1,3],
+                   alleles=[allele],site_coverage=6,site_counts=dict(A1=2,REF=1,OTHER=3),
+                   row_groups=[dict(start_row=0,end_row=1,allele="A1"),dict(start_row=1,end_row=2,allele="REF")])
+
+
 class VisualizationTest(unittest.TestCase):
     def test_format_requires_v2_identity_and_checks_conflicts(self):
         x,m=example()
@@ -172,17 +186,7 @@ class VisualizationTest(unittest.TestCase):
                 image.verify()
 
     def test_v6_site_allele_blocks_and_caption(self):
-        x,m=example()
-        x=x.astype(np.int8)
-        evidence=x[0]!=0
-        stripe=np.zeros_like(x[0]); stripe[0,1:3]=[4,1]; stripe[1,1:3]=[6,6]; stripe[~evidence]=0  # row 0 A1 ">TA", row 1 REF
-        counts=np.where(evidence,91,0).astype(np.int8)
-        strand=np.where(evidence,[[1],[2],[0]],0).astype(np.int8)
-        v6=np.concatenate([x[:2],stripe[None],x[3:6],counts[None],strand[None]],axis=0)
-        allele=dict(label="A1",event_type="INS",ref="",alt="TA",af=.4,alt_count=2,coverage=5)
-        m=dict(m,tensor_format_version=v.V6_VERSION,tensor_storage_version=v.V6_LINEAR_STORAGE,candidate_columns=[1,3],
-               alleles=[allele],site_coverage=6,site_counts=dict(A1=2,REF=1,OTHER=3),
-               row_groups=[dict(start_row=0,end_row=1,allele="A1"),dict(start_row=1,end_row=2,allele="REF")])
+        v6,m=v6_example()
         self.assertEqual(v.resolve_format(v6,m),"candidate-v6")
         self.assertEqual(v.prepare_candidate_view(v6,metadata=m)[1],[1,3])
         with tempfile.TemporaryDirectory() as d:
@@ -206,6 +210,44 @@ class VisualizationTest(unittest.TestCase):
                 real_close(fig)
             with Image.open(output) as image:
                 image.verify()
+
+    def test_candidate_format_renders_like_v6(self):
+        # indexed_gam_pipeline writes the v6 layout under plain names, in tensor_format / tensor_storage
+        v6,versioned=v6_example()
+        m={k:val for k,val in versioned.items() if not k.endswith("_version")}
+        m.update(tensor_format="indexed-gam-candidate",tensor_storage="int8-count-linear100-log2")
+        self.assertEqual(v.resolve_format(v6,m),"candidate")
+        with self.assertRaisesRegex(ValueError,"conflicts"):
+            v.resolve_format(v6,m,"candidate-v6")
+        with tempfile.TemporaryDirectory() as d:
+            p=Path(d)
+            (p/'manifest.json').write_text(json.dumps({'tensor_format':m['tensor_format'],'tensor_storage':m['tensor_storage']}))
+            (p/'variant_summary.ndjson').write_text(json.dumps(dict(m,shard_index=0,index_within_shard=0))+'\n')
+            manifest,rows=v.load_metadata(str(p/'shard_00000_data.npy'))
+            self.assertEqual(v.resolve_format(v6,dict(manifest,**rows[0])),"candidate")
+            rendered={}
+            real_close=v.plt.close
+            with patch.object(v.plt,"close"):
+                for name,metadata in (("v6",versioned),("candidate",m)):
+                    self.assertEqual(v.visualize_tensor(v6,str(p/f"{name}.png"),"T",False,None,metadata=metadata),2)
+                    fig=v.plt.gcf()
+                    panels=[ax for ax in fig.axes if ax.images]
+                    rendered[name]=dict(arrays=[ax.images[0].get_array() for ax in panels],
+                                        titles=[ax.get_title(loc="left") for ax in panels],
+                                        texts=[t.get_text() for ax in fig.axes for t in ax.texts],
+                                        ticks=[t.get_text() for t in panels[6].images[0].colorbar.ax.get_yticklabels()],
+                                        caption=fig._suptitle.get_text())
+                    real_close(fig)
+        a,b=rendered["v6"],rendered["candidate"]
+        self.assertEqual(len(b["arrays"]),8)
+        for x,y in zip(a["arrays"],b["arrays"]):
+            np.testing.assert_array_equal(np.ma.getmaskarray(x),np.ma.getmaskarray(y))
+            np.testing.assert_array_equal(np.ma.filled(x,0),np.ma.filled(y,0))
+        self.assertEqual((a["titles"],a["texts"],a["ticks"]),(b["titles"],b["texts"],b["ticks"]))
+        self.assertIn("Distinct GBWT\npaths\nexact <= 100,\nlog2 above",b["texts"])
+        self.assertEqual(b["ticks"],["1","25","50","75","90"])   # linear storage, not the log2x14 ticks
+        self.assertTrue(b["caption"].startswith("T\ncandidate | "))
+        self.assertEqual(a["caption"].replace("candidate-v6 | ","candidate | ",1),b["caption"])
 
     def test_legacy_still_renders_five_channels(self):
         x=np.zeros((5,3,4),dtype=np.int8)
