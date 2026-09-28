@@ -118,60 +118,60 @@
 | DEL | **合计** | **890** | **725** | **1321** |
 | SNP | **合计** | **400** | **342** | **339** |
 
-## 5. 标签（PacBio truth-labels-v6、ONT truth-labels-v6、Illumina truth-labels-v6）
+## 5. 标签（PacBio truth-labels rules 197b5d25、ONT truth-labels rules 197b5d25、Illumina truth-labels rules 197b5d25）
 
 
 **SNV**
 
 | 标签 | reason | PacBio | ONT | Illumina |
 |---:|---|---:|---:|---:|
-| 1 | allele_partial_somatic_truth | 1 (0.0%) | 3 (0.0%) | 4 (0.0%) |
+| 1 | allele_partial_somatic_truth | 1 (0.0%) | 3 (0.0%) | 2 (0.0%) |
 | 1 | representative_allele_is_somatic_truth | 8,234 (0.7%) | 8,275 (0.3%) | 8,277 (0.2%) |
-| 1 | residual_partial_somatic_truth | 690 (0.1%) | 735 (0.0%) | 2,808 (0.1%) |
+| 1 | residual_partial_somatic_truth | 601 (0.1%) | 570 (0.0%) | 2,347 (0.0%) |
 | 2 | representative_allele_is_germline_truth | 332,598 (28.2%) | 343,284 (14.5%) | 310,349 (6.2%) |
 | 2 | representative_allele_is_germline_truth_gap_filtered | 18,229 (1.5%) | 26,891 (1.1%) | 5,089 (0.1%) |
 | 0 | confident_no_truth_allele | 51,229 (4.3%) | 256,169 (10.8%) | 2,041,479 (40.8%) |
-| 0 | near_truth_allele_mismatch | 35,259 (3.0%) | 57,348 (2.4%) | 593,763 (11.9%) |
-| 0 | truth_matches_non_representative_allele | 137 (0.0%) | 160 (0.0%) | 323 (0.0%) |
+| 0 | near_truth_allele_mismatch | 35,311 (3.0%) | 57,455 (2.4%) | 594,093 (11.9%) |
+| 0 | truth_matches_non_representative_allele | 137 (0.0%) | 160 (0.0%) | 325 (0.0%) |
 | -1 | below_snv_min_af | 0 (0.0%) | 0 (0.0%) | 1,312,554 (26.2%) |
 | -1 | not_on_unique_grch38_node | 33,043 (2.8%) | 37,329 (1.6%) | 20,923 (0.4%) |
-| -1 | off_reference_no_truth_match | 48,916 (4.1%) | 48,226 (2.0%) | 126,687 (2.5%) |
+| -1 | off_reference_no_truth_match | 48,953 (4.1%) | 48,284 (2.0%) | 126,818 (2.5%) |
 | -1 | outside_confident_region | 652,007 (55.2%) | 1,594,086 (67.2%) | 578,632 (11.6%) |
-| | **1 合计** | **8,925** | **9,013** | **11,089** |
+| | **1 合计** | **8,836** | **8,848** | **10,626** |
 | | **2 合计** | **350,827** | **370,175** | **315,438** |
-| | **0 合计** | **86,625** | **313,677** | **2,635,565** |
-| | **−1 合计** | **733,966** | **1,679,641** | **2,038,796** |
+| | **0 合计** | **86,677** | **313,784** | **2,635,897** |
+| | **−1 合计** | **734,003** | **1,679,699** | **2,038,927** |
 | | 总数 | 1,180,343 | 2,372,506 | 5,000,888 |
-| | 0 : 1 | 10 : 1 | 35 : 1 | 238 : 1 |
+| | 0 : 1 | 10 : 1 | 35 : 1 | 248 : 1 |
 
 **INDEL**
 
 | 标签 | reason | PacBio | ONT | Illumina |
 |---:|---|---:|---:|---:|
-| 1 | allele_partial_somatic_truth | 98 (0.0%) | 416 (0.0%) | 34 (0.0%) |
+| 1 | allele_partial_somatic_truth | 93 (0.0%) | 391 (0.0%) | 32 (0.0%) |
 | 1 | representative_allele_is_somatic_truth | 4,098 (0.2%) | 3,673 (0.1%) | 3,562 (2.4%) |
-| 1 | residual_partial_somatic_truth | 2,854 (0.1%) | 2,751 (0.1%) | 1,720 (1.1%) |
-| 2 | allele_partial_germline_truth | 4,539 (0.2%) | 16,407 (0.7%) | 609 (0.4%) |
+| 1 | residual_partial_somatic_truth | 2,649 (0.1%) | 2,319 (0.1%) | 1,645 (1.1%) |
+| 2 | allele_partial_germline_truth | 4,540 (0.2%) | 16,407 (0.7%) | 609 (0.4%) |
 | 2 | representative_allele_is_germline_truth | 147,786 (7.7%) | 157,914 (6.3%) | 55,800 (36.8%) |
 | 2 | representative_allele_is_germline_truth_gap_filtered | 1,544 (0.1%) | 2,177 (0.1%) | 373 (0.2%) |
-| 2 | residual_partial_germline_truth | 37,542 (2.0%) | 44,252 (1.8%) | 13,756 (9.1%) |
+| 2 | residual_partial_germline_truth | 37,554 (2.0%) | 44,265 (1.8%) | 13,768 (9.1%) |
 | 0 | confident_no_truth_allele | 1,309,897 (68.1%) | 1,681,012 (66.9%) | 6,552 (4.3%) |
-| 0 | near_truth_allele_mismatch | 205,094 (10.7%) | 275,338 (11.0%) | 24,320 (16.1%) |
-| 0 | truth_matches_non_representative_allele | 3,573 (0.2%) | 20,028 (0.8%) | 495 (0.3%) |
+| 0 | near_truth_allele_mismatch | 205,183 (10.7%) | 275,572 (11.0%) | 24,343 (16.1%) |
+| 0 | truth_matches_non_representative_allele | 3,577 (0.2%) | 20,053 (0.8%) | 497 (0.3%) |
 | -1 | not_on_unique_grch38_node | 8,684 (0.5%) | 12,075 (0.5%) | 973 (0.6%) |
-| -1 | off_reference_no_truth_match | 99,337 (5.2%) | 138,106 (5.5%) | 18,178 (12.0%) |
+| -1 | off_reference_no_truth_match | 99,441 (5.2%) | 138,291 (5.5%) | 18,218 (12.0%) |
 | -1 | outside_confident_region | 98,698 (5.1%) | 156,864 (6.2%) | 25,093 (16.6%) |
-| | **1 合计** | **7,050** | **6,840** | **5,316** |
-| | **2 合计** | **191,411** | **220,750** | **70,538** |
-| | **0 合计** | **1,518,564** | **1,976,378** | **31,367** |
-| | **−1 合计** | **206,719** | **307,045** | **44,244** |
+| | **1 合计** | **6,840** | **6,383** | **5,239** |
+| | **2 合计** | **191,424** | **220,763** | **70,550** |
+| | **0 合计** | **1,518,657** | **1,976,637** | **31,392** |
+| | **−1 合计** | **206,823** | **307,230** | **44,284** |
 | | 总数 | 1,923,744 | 2,511,013 | 151,465 |
-| | 0 : 1 | 215 : 1 | 289 : 1 | 6 : 1 |
+| | 0 : 1 | 222 : 1 | 310 : 1 | 6 : 1 |
 
 ## 6. 标签质量问题
 
 | | PacBio | ONT | Illumina |
 |---|---:|---:|---:|
-| 残余 edit 的 tensor 被标成 germline（不同候选数） | 431 | 270 | 329 |
+| 残余 edit 的 tensor 被标成 germline（不同候选数） | 432 | 271 | 330 |
 | SNV 未命中里 germline 真值在同一位置、同一 ALT | 38 | 35 | 30 |
 | site 的代表 allele 是 germline、另一个 allele 是 somatic truth → 标 2 | 254 | 234 | 40 |

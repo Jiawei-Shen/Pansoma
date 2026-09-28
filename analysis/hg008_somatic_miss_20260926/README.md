@@ -14,7 +14,7 @@
 - 真值：
   - somatic：GIAB `HG008-T_somatic_smvar_benchmark_v0.2`，17,186 个 allele，全部 PASS；
   - germline：dipcall `HG008N` 的 `dip.vcf.gz` + `dip.bed`。
-- 标签：三个平台都是 `truth-labels-v6`（2026-09-28 重打；PacBio 用的是 `v3_tensors`，即 v6 的全部 tensors 加额外节点，`v6_tensors` 合并后的那份已删）：
+- 标签：三个平台都是 `truth-labels-v6` 规则，并已修正单倍型重叠（没有证据的 read 不再被算成 0.5，`69bdb2a`；2026-09-28 重打；PacBio 用的是 `v3_tensors`，即 v6 的全部 tensors 加额外节点，`v6_tensors` 合并后的那份已删）：
   - 部分匹配也拿 truth 的标签：A1 和同一位置的 truth 重叠超过 45%（somatic 另按 A1 reads 的单倍型算重叠）；
   - 分支节点上的 tensor 只有部分匹配 somatic 才标 1，其余 −1；
   - Illumina 的 SNV 另有 AF 门槛 0.07，低于它的标 −1；
@@ -33,10 +33,10 @@
    - **Illumina**：INDEL 召回最低（有 tensor 的比例 DEL 51.7%、INS 36.3%）。长插入和长重复里 150 bp 的 reads 看不到或跨不过（I4 INS 264，I5 INS 84）；片段重复区的 SNV 没有 MAPQ>10 的 reads（S1 55）。噪声 allele 很少（非代表 allele DEL 1.4%）。
    - 长读段对一部分 I1 truth 的召回，来自同聚物噪声 edits 碰巧左对齐到 truth 位置；Illumina 没有这种噪声，所以 I1 更多（见 Illumina 报告第 1 节第 2 条）。
 4. **标签（v6 下）：**
-   - I1–I3 未命中的残余 edit 里，标 1 的不同候选 3,366 / 2,744 / 1,780 个（v4：2,796 / 2,007 / 1,054）。
-   - 重叠不到 45% 仍标 0 的：246 / 275 / 1,622 个（v4 阈值 60% 时是 1,031 / 1,254 / 2,729）。
-   - 分支节点上没对上 truth 的残余 edit 现在是 −1：标 −1 的 390 / 398 / 721 个。
-   - 残余 edit 的 tensor 被标成 germline：431 / 270 / 329 个不同候选。其中约一半是残余 edit 正好等于同一段重复里更短的 germline indel，另一部分是 ALT reads 上附带的真实 germline 变异（这部分标 2 是对的）。
+   - I1–I3 未命中的残余 edit 里，标 1 的不同候选 3,322 / 2,668 / 1,709 个（v4：2,796 / 2,007 / 1,054）。
+   - 重叠不到 45% 仍标 0 的：273 / 324 / 1,684 个（v4 阈值 60% 时是 1,031 / 1,254 / 2,729）。
+   - 分支节点上没对上 truth 的残余 edit 现在是 −1：标 −1 的 406 / 424 / 729 个。
+   - 残余 edit 的 tensor 被标成 germline：432 / 271 / 330 个不同候选。其中约一半是残余 edit 正好等于同一段重复里更短的 germline indel，另一部分是 ALT reads 上附带的真实 germline 变异（这部分标 2 是对的）。
    - site 的代表 allele 是 germline、另一个 allele 是 somatic truth，整个 tensor 被标成 2：254 / 234 / 40 个。
    - 209 个 somatic allele 和 germline 完全相同（多为正常样本杂合，可能是肿瘤 LOH 或两个 benchmark 冲突）；SNV 未命中里有 38 / 35 / 30 个属于这种。
 5. **负样本的构成差别很大**：

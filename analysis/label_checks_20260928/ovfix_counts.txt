@@ -1,0 +1,65 @@
+HG008 PacBio SNV: 1: 8,925 -> 8,836  2: 350,827 -> 350,827  0: 86,625 -> 86,677  -1: 733,966 -> 734,003
+      near_truth_allele_mismatch                          35,259 ->    35,311
+      off_reference_no_truth_match                        48,916 ->    48,953
+      residual_partial_somatic_truth                         690 ->       601
+HG008 PacBio INDEL: 1: 7,050 -> 6,840  2: 191,411 -> 191,424  0: 1,518,564 -> 1,518,657  -1: 206,719 -> 206,823
+      allele_partial_germline_truth                        4,539 ->     4,540
+      allele_partial_somatic_truth                            98 ->        93
+      near_truth_allele_mismatch                         205,094 ->   205,183
+      off_reference_no_truth_match                        99,337 ->    99,441
+      residual_partial_germline_truth                     37,542 ->    37,554
+      residual_partial_somatic_truth                       2,854 ->     2,649
+      truth_matches_non_representative_allele              3,573 ->     3,577
+HG008 ONT SNV: 1: 9,013 -> 8,848  2: 370,175 -> 370,175  0: 313,677 -> 313,784  -1: 1,679,641 -> 1,679,699
+      near_truth_allele_mismatch                          57,348 ->    57,455
+      off_reference_no_truth_match                        48,226 ->    48,284
+      residual_partial_somatic_truth                         735 ->       570
+HG008 ONT INDEL: 1: 6,840 -> 6,383  2: 220,750 -> 220,763  0: 1,976,378 -> 1,976,637  -1: 307,045 -> 307,230
+      allele_partial_somatic_truth                           416 ->       391
+      near_truth_allele_mismatch                         275,338 ->   275,572
+      off_reference_no_truth_match                       138,106 ->   138,291
+      residual_partial_germline_truth                     44,252 ->    44,265
+      residual_partial_somatic_truth                       2,751 ->     2,319
+      truth_matches_non_representative_allele             20,028 ->    20,053
+HG008 Illumina SNV: 1: 11,089 -> 10,626  2: 315,438 -> 315,438  0: 2,635,565 -> 2,635,897  -1: 2,038,796 -> 2,038,927
+      allele_partial_somatic_truth                             4 ->         2
+      near_truth_allele_mismatch                         593,763 ->   594,093
+      off_reference_no_truth_match                       126,687 ->   126,818
+      residual_partial_somatic_truth                       2,808 ->     2,347
+      truth_matches_non_representative_allele                323 ->       325
+HG008 Illumina INDEL: 1: 5,316 -> 5,239  2: 70,538 -> 70,550  0: 31,367 -> 31,392  -1: 44,244 -> 44,284
+      allele_partial_somatic_truth                            34 ->        32
+      near_truth_allele_mismatch                          24,320 ->    24,343
+      off_reference_no_truth_match                        18,178 ->    18,218
+      residual_partial_germline_truth                     13,756 ->    13,768
+      residual_partial_somatic_truth                       1,720 ->     1,645
+      truth_matches_non_representative_allele                495 ->       497
+COLO829T Illumina SNV: 1: 38,781 -> 38,727  2: 337,496 -> 337,496  0: 1,234,838 -> 1,234,872  -1: 894,485 -> 894,505
+      near_truth_allele_mismatch                         332,148 ->   332,182
+      off_reference_no_truth_match                        66,181 ->    66,201
+      residual_partial_somatic_truth                         541 ->       487
+COLO829T Illumina INDEL: 1: 1,367 -> 1,349  2: 75,487 -> 75,488  0: 34,591 -> 34,595  -1: 34,807 -> 34,820
+      near_truth_allele_mismatch                          25,492 ->    25,496
+      off_reference_no_truth_match                        18,429 ->    18,442
+      residual_partial_germline_truth                     15,099 ->    15,100
+      residual_partial_somatic_truth                         266 ->       248
+COLO829T ONT SNV: 1: 38,774 -> 38,647  2: 431,962 -> 431,962  0: 834,507 -> 834,571  -1: 1,859,061 -> 1,859,124
+      near_truth_allele_mismatch                         118,808 ->   118,872
+      off_reference_no_truth_match                       101,183 ->   101,246
+      residual_partial_somatic_truth                         418 ->       291
+COLO829T ONT INDEL: 1: 2,400 -> 1,755  2: 253,853 -> 253,857  0: 3,822,575 -> 3,822,960  -1: 414,909 -> 415,165
+      allele_partial_somatic_truth                            96 ->        88
+      near_truth_allele_mismatch                         438,979 ->   439,356
+      off_reference_no_truth_match                       249,525 ->   249,781
+      residual_partial_germline_truth                     44,270 ->    44,274
+      residual_partial_somatic_truth                       1,183 ->       546
+      truth_matches_non_representative_allele             23,504 ->    23,512
+COLO829T fiberseq SNV: 1: 38,845 -> 38,796  2: 394,030 -> 394,030  0: 141,643 -> 141,670  -1: 1,141,311 -> 1,141,333
+      near_truth_allele_mismatch                          51,392 ->    51,419
+      off_reference_no_truth_match                        78,681 ->    78,703
+      residual_partial_somatic_truth                         295 ->       246
+COLO829T fiberseq INDEL: 1: 1,833 -> 1,639  2: 208,151 -> 208,154  0: 1,310,592 -> 1,310,682  -1: 261,981 -> 262,082
+      near_truth_allele_mismatch                         245,059 ->   245,149
+      off_reference_no_truth_match                       148,805 ->   148,906
+      residual_partial_germline_truth                     42,830 ->    42,833
+      residual_partial_somatic_truth                         607 ->       413

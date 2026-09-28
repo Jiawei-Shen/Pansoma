@@ -296,6 +296,7 @@ chr8	55438588	T	TC	INS	I2_partly_in_graph_residual_edit	54715417:0:SNP:G>A	25	ge
 chr8	88763207	C	CAAAA	INS	I2_partly_in_graph_residual_edit	52338092:35:INS:>AAA	10	germline:representative_allele_is_germline_truth
 chr8	102008917	T	TACACAC	INS	I2_partly_in_graph_residual_edit	52627990:20:DEL:AC>	7	germline(other site allele):representative_allele_is_germline_truth
 chr8	106953978	C	CT	INS	I2_partly_in_graph_residual_edit	52714206:0:SNP:C>T	4	germline:representative_allele_is_germline_truth
+chr8	117515730	T	TA	INS	I2_partly_in_graph_residual_edit	52895499:587:DEL:A>	5	germline:residual_partial_germline_truth
 chr8	122276552	G	GAA	INS	I2_partly_in_graph_residual_edit	52990299:52:INS:>A	46	germline:representative_allele_is_germline_truth
 chr9	31249420	T	TA	INS	I2_partly_in_graph_residual_edit	56877103:0:SNP:T>A	29	germline:representative_allele_is_germline_truth
 chr9	31249420	T	TA	INS	I2_partly_in_graph_residual_edit	56877099:0:SNP:T>A	28	germline:representative_allele_is_germline_truth

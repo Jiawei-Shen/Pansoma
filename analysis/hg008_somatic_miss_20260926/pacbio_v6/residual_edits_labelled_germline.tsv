@@ -1,4 +1,5 @@
 chrom	vcf_pos	vcf_ref	vcf_alt	kind	final_class	residual_candidate	alt_reads	tensor_label
+chr1	23017177	TTATATATA	T	DEL	I1_allele_fully_in_graph	2851370:0:DEL:TA>@2851371	26	germline:residual_partial_germline_truth
 chr1	171476413	AGAAAGAAT	A	DEL	I1_allele_fully_in_graph	1975877:0:SNP:T>A	4	germline:representative_allele_is_germline_truth
 chr1	233552150	TAA	T	DEL	I1_allele_fully_in_graph	3007910:0:DEL:A>	11	germline:representative_allele_is_germline_truth
 chr10	104733520	ATT	A	DEL	I1_allele_fully_in_graph	5914936:0:DEL:T>	7	germline:representative_allele_is_germline_truth

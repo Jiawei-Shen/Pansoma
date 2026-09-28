@@ -88,7 +88,8 @@ for k in ("INS", "DEL", "SNP"):
 # 5. labels (counted from the label files: the value of a reason differs between label versions)
 lab = {n: Counter() for n in NAMES}; version = {}; both = Counter(); partial = Counter()
 for n, (t, _) in P.items():
-    version[n] = json.load(open(t / "SNV/labels.manifest.json"))["version"]
+    man = json.load(open(t / "SNV/labels.manifest.json"))  # v4 manifests: format + rules_sha256 instead of version
+    version[n] = man.get("version") or f"{man.get('format', 'truth-labels')} rules {man.get('rules_sha256', '')[:8]}"
     for f in glob.glob(f"{t}/*/chr*_labels.ndjson"):
         k = f.split("/")[-2]
         with open(f) as fh:

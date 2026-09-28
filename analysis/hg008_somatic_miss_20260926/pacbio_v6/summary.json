@@ -639,34 +639,34 @@
  "residual_edit_tensor_labels": {
   "DEL:I1": {
    "(no residual edit in >=3 ALT reads)": 188,
-   "somatic": 112,
+   "somatic": 110,
    "no tensor": 130,
-   "non": 15,
+   "non": 20,
    "ignore": 21,
-   "germline": 27,
-   "somatic(other site allele)": 11,
-   "non(other site allele)": 2,
+   "germline": 28,
+   "somatic(other site allele)": 10,
+   "non(other site allele)": 3,
    "germline(other site allele)": 5,
    "ignore(other site allele)": 2
   },
   "DEL:I2": {
-   "non(other site allele)": 16,
-   "non": 35,
-   "germline": 89,
+   "non(other site allele)": 18,
+   "non": 41,
    "no tensor": 185,
-   "somatic": 308,
-   "somatic(other site allele)": 159,
-   "ignore": 29,
+   "germline": 89,
+   "somatic(other site allele)": 157,
+   "somatic": 303,
+   "ignore": 32,
    "germline(other site allele)": 53,
    "(no residual edit in >=3 ALT reads)": 6,
    "ignore(other site allele)": 11
   },
   "DEL:I3": {
-   "somatic": 15,
    "ignore": 2,
-   "germline": 5,
-   "non": 5,
+   "somatic": 15,
+   "non": 6,
    "somatic(other site allele)": 2,
+   "germline": 5,
    "no tensor": 5,
    "non(other site allele)": 1
   },
@@ -680,44 +680,44 @@
    "(no residual edit in >=3 ALT reads)": 4
   },
   "DEL:I7": {
+   "somatic(other site allele)": 1,
    "somatic": 5,
    "no tensor": 4,
-   "somatic(other site allele)": 1,
    "non": 1,
    "(no residual edit in >=3 ALT reads)": 1
   },
   "INS:I1": {
-   "somatic": 378,
+   "somatic": 377,
    "no tensor": 281,
    "(no residual edit in >=3 ALT reads)": 352,
    "ignore(other site allele)": 11,
    "ignore": 39,
    "germline": 38,
-   "somatic(other site allele)": 43,
-   "non": 31,
+   "somatic(other site allele)": 42,
+   "non": 32,
    "germline(other site allele)": 6,
-   "non(other site allele)": 4
+   "non(other site allele)": 5
   },
   "INS:I2": {
-   "somatic": 813,
+   "somatic(other site allele)": 399,
+   "somatic": 807,
    "no tensor": 534,
-   "somatic(other site allele)": 403,
-   "ignore(other site allele)": 49,
-   "ignore": 95,
-   "non": 66,
+   "ignore": 102,
+   "ignore(other site allele)": 50,
+   "non": 67,
    "germline(other site allele)": 46,
    "germline": 92,
-   "non(other site allele)": 24,
+   "non(other site allele)": 27,
    "(no residual edit in >=3 ALT reads)": 6
   },
   "INS:I3": {
-   "somatic": 68,
-   "germline": 14,
+   "somatic": 67,
    "no tensor": 33,
-   "non": 12,
+   "germline": 14,
+   "non": 13,
    "somatic(other site allele)": 10,
-   "ignore(other site allele)": 2,
    "ignore": 9,
+   "ignore(other site allele)": 2,
    "non(other site allele)": 3,
    "germline(other site allele)": 1
   },
@@ -734,10 +734,10 @@
   "INS:I7": {
    "somatic": 8,
    "germline": 2,
-   "ignore": 1,
+   "ignore": 2,
    "(no residual edit in >=3 ALT reads)": 10,
-   "non": 1,
-   "no tensor": 2
+   "no tensor": 2,
+   "non": 1
   }
  }
 }

@@ -46,7 +46,18 @@ HG008 Illumina 有 2,812 个 SNV tensor 靠部分匹配 somatic truth 标成 1�
 
 另外还有一批"弱证据"的（中位数大于 0 但小于事件长度的一半），数量见 `partial_evidence.txt`。
 
-**建议的修复**（需要用户决定）：单倍型重叠只认"比 GRCh38 更接近 truth"的 read。每条 read 若 `d_truth ≥ d_ref`，重叠记 0；或者改成用原始差值 `(d_ref − d_truth) / event` 衡量，不再对两个距离做对称的背景扣除。修复后上表这些 tensor 会从 1 变成 0（在分支节点上的则变成 −1）。
+**已修复（2026-09-28）**：单倍型重叠只认比 GRCh38 更接近 truth 的 read，原始 `d_truth ≥ d_ref` 的 read 记 0（`69bdb2a`，golden `7f43172`），六组已重打。修复前后 somatic 标签（1）的变化：
+
+| 数据 | SNV | INDEL | 合计 |
+|---|---|---|---:|
+| HG008 PacBio | 8,925 → 8,836 | 7,050 → 6,840 | −299 |
+| HG008 ONT | 9,013 → 8,848 | 6,840 → 6,383 | −622 |
+| HG008 Illumina | 11,089 → 10,626 | 5,316 → 5,239 | −540 |
+| COLO829T Illumina | 38,781 → 38,727 | 1,367 → 1,349 | −72 |
+| COLO829T ONT | 38,774 → 38,647 | 2,400 → 1,755 | −772 |
+| COLO829T fiberseq | 38,845 → 38,796 | 1,833 → 1,639 | −243 |
+
+这些 tensor 在 GRCh38 节点上的变成 0（`near_truth_allele_mismatch`），在分支节点上的变成 −1（`off_reference_no_truth_match`）；完全匹配的 somatic 和 2 基本不变。逐 reason 的对比见 `ovfix_counts.txt`（`ovfix_counts.py`）。
 
 ## 文件
 
@@ -57,4 +68,5 @@ HG008 Illumina 有 2,812 个 SNV tensor 靠部分匹配 somatic truth 标成 1�
 | `strand_filter.py` / `strand_filter.txt` | Illumina SNV：按链过滤 vs 提高 AF 对 somatic 和 0 的影响（v5 标签） |
 | `partial_snv_check.py` / `partial_snv_check.txt` | 部分匹配 somatic 的 SNV：对上的 truth 类型、重叠档、偏链、AF；抽样例子 |
 | `replay_examples.py` / `replay_examples.txt` / `partial_snv_examples.json` | 12 个例子逐条 read 的 `d_ref`、`d_truth`、`b` |
-| `partial_evidence.py` / `partial_evidence.txt` | 六组所有部分匹配 somatic 的 tensor：原始 read 证据分档 |
+| `partial_evidence.py` / `partial_evidence.txt` | 六组所有部分匹配 somatic 的 tensor：原始 read 证据分档（修复前） |
+| `ovfix_counts.py` / `ovfix_counts.txt` | 单倍型重叠修复前后，六组各 reason 的计数 |
