@@ -5,6 +5,7 @@ import io
 import json
 from pathlib import Path
 import sqlite3
+import subprocess
 import tempfile
 import unittest
 from unittest import mock
@@ -291,6 +292,7 @@ class TruthLabelTest(unittest.TestCase):
                 ("off_reference", dict(candidate_id="12:0:SNP:G>A", node_id=12, start=0, ref="G", alt="A", event_type="SNP"),
                  [], -1, "off_reference_no_truth_match"),      # anchored inside the confident region, no truth match
                 ("snv_low_af", dict(candidate(18, other(18)), af=0.065), [], -1, "below_snv_min_af"),
+                ("indel_low_af", dict(vcf_del, af=0.09), [], -1, "below_indel_min_af"),  # a somatic truth DEL
             ]
             merged = tmp / "SNV"
             merged.mkdir()
@@ -305,7 +307,8 @@ class TruthLabelTest(unittest.TestCase):
             real_anchor = truth_labels.anchor
             with mock.patch.object(truth_labels, "anchor",
                                    lambda p, node: ("chr1", 14, 22) if node == 12 else real_anchor(p, node)):
-                report, matched = label_directory(merged, somatic, germline, path, confident, {}, snv_min_af=0.07)
+                report, matched = label_directory(merged, somatic, germline, path, confident, {}, snv_min_af=0.07,
+                                                  indel_min_af=0.1)
             labels = np.load(merged / "chr1_shard_00000_labels.npy")
             self.assertEqual(labels.dtype, np.int8)
             self.assertEqual(labels.tolist(), [c[3] for c in cases])
@@ -313,9 +316,11 @@ class TruthLabelTest(unittest.TestCase):
             for (name, _, _, value, reason), line in zip(cases, lines):
                 self.assertEqual((line["label"], line["reason"]), (value, reason), name)
             self.assertEqual(lines[0]["somatic"][0]["vcf_pos"], 3)
-            self.assertEqual(report["totals"], {"somatic": 4, "germline": 4, "ignore": 6, "non": 5})
+            self.assertEqual(report["totals"], {"somatic": 4, "germline": 4, "ignore": 7, "non": 5})
             self.assertEqual(report["partial"], {"allele_somatic": 1, "residual_somatic": 2, "residual_germline": 1})
-            self.assertEqual((report["min_overlap"], report["snv_min_af"]), (0.45, 0.07))
+            self.assertEqual((report["min_overlap"], report["snv_min_af"], report["indel_min_af"]), (0.45, 0.07, 0.1))
+            keys = list(report)
+            self.assertEqual(keys[keys.index("snv_min_af") + 1], "indel_min_af")
             # labels.manifest.json names the rules by the plain format name, their constants and this module's SHA-256
             self.assertEqual((report["format"], report["near_bp"], report["anchor_reach"], report["anchor_gap"]),
                              ("truth-labels", truth_labels.NEAR_BP, truth_labels.ANCHOR_REACH, truth_labels.ANCHOR_GAP))
@@ -338,12 +343,72 @@ class TruthLabelTest(unittest.TestCase):
             (merged / "manifest.json").write_text(json.dumps(dict(manifest, layout="chromosome-shards-v1")))
             with mock.patch.object(truth_labels, "anchor",
                                    lambda p, node: ("chr1", 14, 22) if node == 12 else real_anchor(p, node)):
-                again, _ = label_directory(merged, somatic, germline, path, confident, {}, snv_min_af=0.07)
+                again, _ = label_directory(merged, somatic, germline, path, confident, {}, snv_min_af=0.07,
+                                           indel_min_af=0.1)
             self.assertEqual({p.name: p.read_bytes() for p in merged.glob("chr1_*labels*")}, written)
             self.assertEqual(dict(again, created=None), dict(report, created=None))
             (merged / "manifest.json").write_text(json.dumps({k: v for k, v in manifest.items() if k != "layout"}))
             with self.assertRaisesRegex(ValueError, "not a merged per-chromosome directory"):
-                label_directory(merged, somatic, germline, path, confident, {}, snv_min_af=0.07)
+                label_directory(merged, somatic, germline, path, confident, {}, snv_min_af=0.07, indel_min_af=0.1)
+
+    def test_af_floors_per_kind_come_before_the_truth(self):
+        """snv_min_af applies to SNVs and indel_min_af to INDELs (A1 an INS or DEL) only, each before every other
+        rule (truth tensors included, their matches still recorded); an AF at the floor is kept, no af is 1.0."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            gfa, fasta = graph_files(tmp)
+            scan(gfa, tmp / "rp")
+            path = ReferencePath(tmp / "rp")
+            locator = Locator(path)
+            s_alt, g_alt = ("A" if CHR1[x] != "A" else "C" for x in (30, 45))
+            somatic_vcf = write_vcf(tmp / "somatic.vcf", [(3, "GT", "G", "PASS", "0|1"),  # DEL, SNV, INS
+                                                          (31, CHR1[30], s_alt, "PASS", "0|1"),
+                                                          (38, CHR1[37], CHR1[37] + "GGGGG", "PASS", "0|1")])
+            germline_vcf = write_vcf(tmp / "germline.vcf", [(46, CHR1[45], g_alt, "PASS", "1|1")])
+            (tmp / "all.bed").write_text("chr1\t0\t80\n")
+            somatic, germline = (TruthSet(name, vcf, tmp / "all.bed", fasta, locator, chromosomes=("chr1",))
+                                 for name, vcf in (("somatic", somatic_vcf), ("germline", germline_vcf)))
+            confident = somatic.bed.intersect(germline.bed)
+
+            def tensor(x, ref, alt, kind):
+                (key,) = locator.keys("chr1", x, ref, alt, kind)
+                node, start, _, alleles = key.split(":")
+                r, a = alleles.split(">")
+                allele = dict(candidate_id=key, node_id=int(node), start=int(start), ref=r, alt=a, event_type=kind)
+                return dict(allele, alleles=[allele])
+
+            snv, germline_snv = tensor(30, CHR1[30], s_alt, "SNP"), tensor(45, CHR1[45], g_alt, "SNP")
+            deletion, insertion = tensor(5, "T", "", "DEL"), tensor(38, "", "GGGGG", "INS")
+            truth_1, truth_2 = (1, "representative_allele_is_somatic_truth"), (2, "representative_allele_is_germline_truth")
+            below_snv, below_indel = (-1, "below_snv_min_af"), (-1, "below_indel_min_af")
+            cases = [  # (tensor, af, snv_min_af, indel_min_af, expected)
+                (snv, 0.05, 0.07, None, below_snv), (germline_snv, 0.05, 0.07, 0.01, below_snv),
+                (snv, 0.07, 0.07, 0.5, truth_1),              # at the floor; the INDEL floor leaves SNVs alone
+                (snv, 0.05, None, 0.1, truth_1), (germline_snv, 0.01, None, None, truth_2),
+                (deletion, 0.09, None, 0.1, below_indel), (insertion, 0.2, 0.07, 0.3, below_indel),
+                (deletion, 0.1, None, 0.1, truth_1), (insertion, 0.4, 0.5, 0.3, truth_1),
+                (deletion, 0.05, 0.07, None, truth_1),        # the SNV floor leaves INDELs alone
+                (insertion, None, None, 0.1, truth_1),        # no af: 1.0
+            ]
+            for record, af, snv_min_af, indel_min_af, expected in cases:
+                record = dict(record, **({} if af is None else dict(af=af)))
+                with self.subTest(kind=record["event_type"], af=af, snv_min_af=snv_min_af, indel_min_af=indel_min_af):
+                    value, _, reason, details = truth_labels.classify(record, somatic, germline, path, confident,
+                                                                      snv_min_af=snv_min_af, indel_min_af=indel_min_af)
+                    self.assertEqual((value, reason), expected)
+                    self.assertEqual(len(details["somatic"] + details["germline"]), 1)  # recorded when floored too
+
+    def test_relabel_job_takes_both_af_floors(self):
+        """tools/jobs/relabel.sh: 6 to 8 arguments (SNV_MIN_AF, INDEL_MIN_AF; '' skips one), else its usage line."""
+        script = Path(truth_labels.__file__).resolve().parents[1] / "tools" / "jobs" / "relabel.sh"
+        with tempfile.TemporaryDirectory() as tmp:
+            for arguments, code, message in (([tmp] * 9, 2, "TRUTH_DIR [SNV_MIN_AF [INDEL_MIN_AF]]"),
+                                             ([tmp] * 5, 2, "TRUTH_DIR [SNV_MIN_AF [INDEL_MIN_AF]]"),
+                                             ([tmp] * 6 + ["", "0.10"], 1, "is not merged")):  # past the count check
+                with self.subTest(arguments=len(arguments)):
+                    result = subprocess.run(["bash", str(script), *arguments], cwd=tmp, capture_output=True, text=True)
+                    self.assertEqual(result.returncode, code, result.stdout + result.stderr)
+                    self.assertIn(message, result.stdout)
 
     def test_haplotype_overlap_sees_a_truth_written_differently(self):
         rng = __import__("random").Random(3)

@@ -46,16 +46,16 @@ $PY -m $P.orchestrate prepare --root /path/to/run --tensors /path/to/tensors \
     --chromosomes autosome --chr-index $G/hprc-v1.1-mc-grch38.d9.chr_node_ranges.tsv \
     --merge-shard-size 32768 --keep-sources --reference-path $G/hprc-v1.1-mc-grch38.d9.grch38_path \
     --somatic-vcf ... --somatic-bed ... --germline-vcf ... --germline-bed ... \
-    --reference-fasta GRCh38.fasta --truth-dir /path/to/truth
+    --reference-fasta GRCh38.fasta --truth-dir /path/to/truth    # short-read sets: + --label-snv-min-af 0.07
 sbatch -p general --cpus-per-task=48 --mem=420G --time=14-00:00:00 \
        --output=/path/to/run/slurm-%j.out /path/to/run/run.sh
 sbatch ... /path/to/run/run.sh --resume               # after a failure: redo only unfinished tasks
 $PY -m $P.orchestrate finalize --root /path/to/run    # only the merge + labels (idempotent)
 
-# (short-read sets) label again with the SNV AF floor; finalize labels without it
+# (re-label by hand, e.g. other AF floors) as finalize does with prepare's --label-snv-min-af / --label-indel-min-af
 $PY -m $P.tensor_postprocessing label --tensors /path/to/tensors --reference-path $G/hprc-v1.1-mc-grch38.d9.grch38_path \
     --fasta GRCh38.fasta --somatic-vcf ... --somatic-bed ... --germline-vcf ... --germline-bed ... \
-    --truth-dir /path/to/truth --snv-min-af 0.07
+    --truth-dir /path/to/truth [--snv-min-af 0.07] [--indel-min-af F]
 
 # (one task by hand, e.g. an audit) exactly what every task runs
 $PY -m $P.run build --gam sample.sorted.gam --nodes nodes.txt --graph-index $G/hprc-v1.1-mc-grch38.d9.graph_index.sqlite \
@@ -329,6 +329,8 @@ prepare
   --keep-sources             keep the task_* directories after the verified merge (default: delete them)
   --reference-path DIR       tools.graph_prep ref-path-scan directory: GRCh38 coordinates; needed for labels
   --somatic-vcf --somatic-bed --germline-vcf --germline-bed --reference-fasta --truth-dir     labels: all or none
+  --label-snv-min-af F       lower-AF SNV tensors are labelled -1 (short-read sets: 0.07); in [0, 1], needs the labels
+  --label-indel-min-af F     lower-AF INDEL tensors are labelled -1; in [0, 1], needs the labels
 
 run --root R [--resume]      execute the tasks, then finalize (section 6)
 task --root R --index I      one task (spawned by run)
@@ -336,8 +338,10 @@ finalize --root R            merge + labels as frozen at prepare; skips finished
 ```
 
 `--chr-index` is required for the merge and for `--chromosomes` other than `all`; labels need the
-merge, `--reference-path` and `--truth-dir`. Labels in finalize use no SNV AF floor; label short-read
-sets again with `tensor_postprocessing label --snv-min-af`.
+merge, `--reference-path` and `--truth-dir`. The label AF floors are frozen as
+`config.postprocess.labels.snv_min_af` / `indel_min_af` (null when unset); finalize labels with
+them as `tensor_postprocessing label --snv-min-af` / `--indel-min-af` does. They are unrelated to
+the build's `--snv-min-af` / `--indel-min-af`, which decide which alleles become tensors.
 
 ### `tensor_postprocessing merge | label`
 
@@ -346,7 +350,7 @@ Manual re-merge or re-label (`orchestrate finalize` runs both as frozen at prepa
 ```
 merge --root R --chr-index TSV [--shard-size 32768] [--keep-sources] [--workers 8] [--spots 200] [--reference-path DIR]
 label --tensors T --reference-path DIR --fasta FA --somatic-vcf --somatic-bed --germline-vcf --germline-bed
-      --truth-dir DIR [--kinds SNV INDEL] [--recall-dir DIR (default T)] [--snv-min-af F]
+      --truth-dir DIR [--kinds SNV INDEL] [--recall-dir DIR (default T)] [--snv-min-af F] [--indel-min-af F]
 ```
 
 * **Merge.** Every task directory of `outputs.json` must be complete and agree with the first on
@@ -371,18 +375,19 @@ label --tensors T --reference-path DIR --fasta FA --somatic-vcf --somatic-bed --
   within 10 bp that A1 does not match, a germline allele with another FILTER such as
   `HET1`/`HET2`); **−1** ignore — a filtered somatic truth allele, outside the BEDs, no position
   (no GRCh38 coordinate and no anchor), an off-reference node without a partial somatic match, and
-  with `--snv-min-af` every SNV of lower AF, whatever its truth (short-read sets: 0.07; this rule is
-  checked first). Indels are
+  with `--snv-min-af` / `--indel-min-af` every SNV / INDEL (A1 an INS or DEL) of lower AF, whatever
+  its truth (short-read sets: SNV 0.07; these two rules are checked first). Indels are
   matched at every equivalent placement in their repeat; an off-reference node is placed between the
   reference nodes around it by node ID (within 200 IDs, at most 1024 GRCh38 bases apart), and
   somatic truths written differently by the graph alignment are matched by the haplotype overlap of
   the A1 reads. `labels.manifest.json` records `format` `truth-labels`, `rules_sha256` (the SHA-256
   of `truth_labels.py`, which identifies the rules), the rule constants (`labels`, `near_bp`,
-  `min_overlap`, `anchor_reach`, `anchor_gap`), `snv_min_af`, counts per chromosome and reason, and
-  the truth/BED SHA-256s. −1 marks tensors a tumor-only caller can leave out at test time as well
-  (outside the BEDs, no position) and tensors that are no reliable negative (off-reference nodes,
-  which mostly carry no truth at all; short-read SNVs below the AF floor); every other tensor
-  without truth is 0, so the negatives stay in the training data.
+  `min_overlap`, `anchor_reach`, `anchor_gap`), `snv_min_af`, `indel_min_af` (null when not given),
+  counts per chromosome and reason, and the truth/BED SHA-256s. −1 marks tensors a tumor-only caller
+  can leave out at test time as well (outside the BEDs, no position) and tensors that are no
+  reliable negative (off-reference nodes, which mostly carry no truth at all; tensors below an AF
+  floor, e.g. short-read SNVs); every other tensor without truth is 0, so the negatives stay in the
+  training data.
 
 Details, rules and the HG008 commands: [tensor_postprocessing/README.md](tensor_postprocessing/README.md).
 
@@ -401,7 +406,8 @@ $PY -m $P.tools.graph_prep chr-index --components-dir D --reference-path DIR --o
 # the same three steps as one Slurm job (defaults: the HPRC v1.1 d9 inputs)
 sbatch -J graph_prep -o LOG $P/tools/jobs/graph_prep.sh OUTDIR [GFA [GRAPH_INDEX [FASTA [COMPONENTS_DIR]]]]
 # labels of one merged set as a Slurm job, after a backup of the current labels
-sbatch -J NAME -o LOG $P/tools/jobs/relabel.sh TENSORS SOMATIC_VCF SOMATIC_BED GERMLINE_VCF GERMLINE_BED TRUTH_DIR [SNV_MIN_AF]
+sbatch -J NAME -o LOG $P/tools/jobs/relabel.sh TENSORS SOMATIC_VCF SOMATIC_BED GERMLINE_VCF GERMLINE_BED TRUTH_DIR \
+    [SNV_MIN_AF [INDEL_MIN_AF]]    # '' skips one: ... '' 0.10
 # audit of a --debug-rows build (one typed directory)
 $PY -m $P.tools.validate_examples out/SNV --gam G [--index GAI] --graph-index DB --output report.json
 # compare two run roots, task directories or build directories; exit 1 on any difference
@@ -532,7 +538,8 @@ bound, COLO829T ONT ran at 48 processes (below).
   node of 5.4 M records cannot be built whole, and with a 20,000-record limit and the cap applied
   after decoding every batch was split and every fixed batch size down to 256 failed; HG008 Illumina
   1024-node batches held 25–92 k records (section 7).
-* **Labels.** `--snv-min-af 0.07` makes 1,312,554 HG008 Illumina SNV tensors −1 (`below_snv_min_af`).
+* **Labels.** `--snv-min-af 0.07` makes 1,312,554 HG008 Illumina SNV tensors −1 (`below_snv_min_af`);
+  a short-read run prepared with `--label-snv-min-af 0.07` gets this floor from finalize (no relabel).
   Outside the confident region (−1, `outside_confident_region`) lie 55 % of the PacBio, 67 % of the
   ONT-UL and 12 % of the Illumina SNV tensors.
 
@@ -587,7 +594,8 @@ into their frozen source), so their wall times are not a clean measurement.
 `chromosome_selection`, `source_sha256`, `tasks`, `processes`, `schedule`, `parts`, `builder`
 (every builder option, passed explicitly to each task, so a run never depends on the CLI defaults of
 the code that executes it), `native_decoder` (`available`, `reason`), `variant_outputs`
-({SNV: AF, INDEL: AF}) and `postprocess`.
+({SNV: AF, INDEL: AF}) and `postprocess` (`merge_shard_size`, `keep_sources`, `reference_path`,
+`labels`: the label inputs, `truth_dir` and the label AF floors `snv_min_af` / `indel_min_af`).
 
 **run** (`sbatch <root>/run.sh`, or `bash <root>/run.sh [--resume]`):
 1. refuses a merged root, fewer allocated CPUs (`SLURM_CPUS_PER_TASK`) than `processes`, and any
@@ -606,7 +614,7 @@ the code that executes it), `native_decoder` (`available`, `reason`), `variant_o
    `<tensors>/<kind>/<chrom>_shard_*` (chr1–22; other blocks under `<tensors>/non_autosomal/`) by
    `min(8, processes)` workers, byte-verified, the task directories deleted unless
    `--keep-sources`, and with the truth options every merged tensor labelled (somatic 1,
-   germline 2, non 0, ignore −1).
+   germline 2, non 0, ignore −1; below `--label-snv-min-af` / `--label-indel-min-af` −1).
 
 **Resume and recovery.**
 * `run --resume` re-validates every task directory with `validate_shards` (serially: ~24 min for a
@@ -616,8 +624,8 @@ the code that executes it), `native_decoder` (`available`, `reason`), `variant_o
 * If the job died during the merge or labels: `orchestrate finalize --root R` (from the checkout or
   from `R/source`). It skips steps already done (`outputs.json` has `merge`; every
   `labels.manifest.json` exists), so it can be repeated; it prints what it did (`{}` when nothing
-  was left). To re-label, delete `<tensors>/{SNV,INDEL}/labels.manifest.json` and run it again (or
-  use `tensor_postprocessing label`).
+  was left). To re-label, delete `<tensors>/{SNV,INDEL}/labels.manifest.json` and run it again (with
+  the AF floors frozen at prepare), or use `tensor_postprocessing label` (e.g. with other floors).
 * **Hand edits of `config.json`** (e.g. after running out of memory): every task re-reads it when it
   starts, so `builder.gam_cache_mb` (memory only; recorded in the manifests' arguments, tensor bytes
   unchanged) applies to tasks started later; `processes` is read when `run` starts, so set it before
@@ -644,9 +652,11 @@ the code that executes it), `native_decoder` (`available`, `reason`), `variant_o
   compiled `.so`; the commit in `pipeline_code/git_head.txt`) through its `tools/jobs/relabel.sh`,
   which runs the package it is in (section 4, "Tools"): `sbatch -J NAME -o LOG
   pipeline_code/indexed_gam_pipeline_v4/tools/jobs/relabel.sh TENSORS SOMATIC_VCF SOMATIC_BED
-  GERMLINE_VCF GERMLINE_BED TRUTH_DIR [SNV_MIN_AF]`, after copying the current label manifests and
-  recall files to `<sample dir>/labels_backup_<tensors dir>_<time>_<job>/`. The COLO829T
-  `label_job.sh` scripts call it the same way.
+  GERMLINE_VCF GERMLINE_BED TRUTH_DIR [SNV_MIN_AF [INDEL_MIN_AF]]` (`''` skips one), after copying
+  the current label manifests and recall files to
+  `<sample dir>/labels_backup_<tensors dir>_<time>_<job>/`. The COLO829T `label_job.sh` scripts call
+  it the same way. A run prepared with the label AF floors (`--label-snv-min-af 0.07` for short
+  reads) needs no relabel: its finalize applies them.
 * The queue ledger (`queue_status.json`: per-task state, PIDs, wall times) is written at start,
   whenever a task starts or ends, and at the end.
 
@@ -969,12 +979,14 @@ cap-aware audit, early-AF exactness, multi-allelic sites and allele accounting;
 `parameters`/`arguments` bytes; the 30,000-record native == Python decoder equivalence, decoder
 selection and fallbacks; the task queue, cost scan, partition, `prepare → run → resume`, the
 parallel merge (bytes independent of the worker count, the read cap a shared key) and labels (every
-rule, partial matches, off-reference anchors), the package guard, the native refusal at prepare, a
-subprocess import of the frozen source, a standalone `finalize` after an interrupted one; the
-earlier format names (a graph index with the suffixed schema and metric opens, a reference-path
-directory with `version` opens, `label` and the merge's refusal work on a merged set with the
-suffixed layout); `compare_runs` itself; and static checks (no runtime import of `tools`/`tests`,
-no module-search-path edits, no other package names).
+rule, the AF floors per kind, partial matches, off-reference anchors, the `relabel.sh` arguments),
+the package guard, the native refusal at prepare, a subprocess import of the frozen source, a
+standalone `finalize` after an interrupted one, finalize labels with the AF floors frozen at prepare
+(equal to `label` with the same floors); the earlier format names (a graph index with the suffixed
+schema and metric opens, a reference-path directory with `version` opens, `label` and the merge's
+refusal work on a merged set with the suffixed layout); `compare_runs` itself; and static checks (no
+runtime import of `tools`/`tests`, no module-search-path edits, no other package names in the `.py`,
+`.cpp` and `.sh` files).
 
 **Goldens** (`tests/golden.py`, `tests/golden_hashes.json`). Nine production-shaped fixture builds
 and one orchestrated run, each in a subprocess, under both decoders; `golden_hashes.json` (`format`

@@ -73,10 +73,15 @@ labels when every kind has a `labels.manifest.json`.
 --chr-index TSV               needed for the merge and for --chromosomes other than all
 --reference-path DIR          GRCh38 coordinates in the merged summaries; needed for labels
 --somatic-vcf --somatic-bed --germline-vcf --germline-bed --reference-fasta --truth-dir   (labels; all or none)
+--label-snv-min-af F          labels: lower-AF SNV tensors are -1 (short-read sets: 0.07); in [0, 1], needs the labels
+--label-indel-min-af F        labels: lower-AF INDEL tensors are -1; in [0, 1], needs the labels
 ```
 
-`finalize` labels without an SNV AF filter. To apply one to a short-read set, label it again with
-`label --snv-min-af 0.07` (`tools/jobs/relabel.sh ... 0.07`; see [Commands](#commands)).
+`finalize` labels with these AF floors as `label --snv-min-af` / `--indel-min-af` does (frozen as
+`postprocess.labels.snv_min_af` / `indel_min_af`, null when unset), so a short-read run prepared
+with `--label-snv-min-af 0.07` needs no relabel. They are not the build's `--snv-min-af` /
+`--indel-min-af`, which decide which alleles become tensors. `label` and `tools/jobs/relabel.sh`
+label a merged set again, e.g. with other floors (see [Commands](#commands)).
 
 ## Merge (`merge_shards.py`)
 
@@ -167,7 +172,7 @@ from a merged manifest, so it relabels those sets as they are.
 | 1 | somatic | A1 is a somatic truth allele with FILTER PASS/`.`, inside or outside the BEDs; or A1 overlaps such an allele by more than 45 % (partial, below: another allele of the site anywhere, a truth allele at the same place inside the confident region) |
 | 2 | germline | A1 is a germline truth allele with FILTER PASS/`.` or only `GAP1`/`GAP2`, inside or outside the BEDs; or A1 overlaps such an allele by more than 45 % (partial) |
 | 0 | non | another allele of the site is such a truth allele and A1 overlaps it by 45 % or less (inside or outside the BEDs); every other tensor with a GRCh38 position inside the confident region: no truth allele, a truth allele nearby that A1 does not overlap enough (errors and artifacts next to real variants), or A1 is a germline allele with another FILTER (dipcall `HET1`/`HET2`) |
-| −1 | ignore | an SNV below `--snv-min-af` (whatever the truth); a filtered somatic truth allele; no position; outside the confident region; an off-reference tensor without a partial somatic match |
+| −1 | ignore | an SNV below `--snv-min-af` or an INDEL below `--indel-min-af` (whatever the truth); a filtered somatic truth allele; no position; outside the confident region; an off-reference tensor without a partial somatic match |
 
 `GAP_FILTERS` (`GAP1`/`GAP2`, dipcall): the allele is on one assembled haplotype and the other is
 uncalled. It is in the normal genome (zygosity unknown), so it counts as germline truth. `HET1`/`HET2`
@@ -179,6 +184,7 @@ reason the code returns:
 | # | check | label | reason |
 |---:|---|---:|---|
 | 1 | `--snv-min-af` given, SNV tensor with `af` below it | −1 | `below_snv_min_af` |
+| | `--indel-min-af` given, INDEL tensor (A1 an INS or DEL) with `af` below it | −1 | `below_indel_min_af` |
 | 2 | A1 is a somatic truth allele: one with PASS | 1 | `representative_allele_is_somatic_truth` |
 | | only filtered ones | −1 | `somatic_truth_filtered` |
 | 3 | A1 is a germline truth allele: one with PASS | 2 | `representative_allele_is_germline_truth` |
@@ -266,14 +272,16 @@ otherwise (step 10). Germline residuals are not tried on off-reference tensors.
 
 **Why −1 is kept narrow.** A tumor-only caller meets every tensor at test time. So, apart from
 off-reference tensors (below), −1 is used only for filtered somatic truth and for tensors that the
-caller can also leave out without truth: outside the BED it calls in, no position, or an SNV under
-the AF filter. Everything else it will meet is 0 or a truth label, errors and artifacts next to
-real variants included. On HG008 PacBio, 35,259 of the 86,625 SNV 0s and 205,094 of the 1,518,564
-INDEL 0s are `near_truth_allele_mismatch`.
+caller can also leave out without truth: outside the BED it calls in, no position, or a tensor
+under the AF floor of its kind. Everything else it will meet is 0 or a truth label, errors and
+artifacts next to real variants included. On HG008 PacBio, 35,259 of the 86,625 SNV 0s and 205,094
+of the 1,518,564 INDEL 0s are `near_truth_allele_mismatch`.
 
-* **`--snv-min-af`** (the short-read sets use 0.07) labels as if the build had used that SNV AF
-  filter: a lower-AF SNV tensor is −1 whatever the truth, and this is the first check. `af` is in
-  every summary record, so a caller can apply the same filter without truth.
+* **`--snv-min-af`, `--indel-min-af`** (the short-read sets use an SNV floor of 0.07 and no INDEL
+  floor) label as if the build had used that AF filter for the kind: a lower-AF SNV tensor (A1 an
+  SNP) or INDEL tensor (A1 an INS or DEL) is −1 whatever the truth, and these are the first checks;
+  each floor leaves the other kind alone. `af` is in every summary record, so a caller can apply the
+  same filters without truth.
 * **Off-reference tensors without a partial somatic match** are −1 for a different reason: they are
   not training negatives, because most branch nodes carry no truth at all (the truth sets are
   GRCh38 VCFs). A partial somatic match still makes one 1.
@@ -299,7 +307,7 @@ The label files are written as temporaries and renamed only after every shard is
   so any edit of the file (comments included) changes the hash;
 * `created`, `labels` (name → value), `near_bp`, `tensors`;
 * `counts` (per chromosome and label name), `totals`, `reasons`, `partial`;
-* `min_overlap`, `anchor_reach`, `anchor_gap`, `snv_min_af` (null when not given);
+* `min_overlap`, `anchor_reach`, `anchor_gap`, `snv_min_af`, `indel_min_af` (null when not given);
 * the provenance: `truth` (per set: VCF and BED with their SHA-256, parsing stats, truth table
   path), `confident_region` (definition and bp), `fasta`, `reference_path`.
 
@@ -331,7 +339,7 @@ $P.tensor_postprocessing merge --root /path/to/run --chr-index TSV [--shard-size
     [--workers 8] [--spots 200] [--reference-path DIR]
 $P.tensor_postprocessing label --tensors /path/to/tensors --reference-path DIR --fasta FA \
     --somatic-vcf VCF --somatic-bed BED --germline-vcf VCF --germline-bed BED --truth-dir DIR \
-    [--kinds SNV INDEL] [--recall-dir DIR] [--snv-min-af 0.07]
+    [--kinds SNV INDEL] [--recall-dir DIR] [--snv-min-af 0.07] [--indel-min-af F]
 ```
 
 HPRC v1.1 d9 graph files. The files under `$G` are the current ones; the reference-path and
@@ -374,13 +382,16 @@ script does two things:
   `<sample dir>/labels_backup_<tensors dir>_<time>_<job>/`.
 
 It then runs `tensor_postprocessing label` with the HPRC reference-path directory and the GRCh38
-FASTA above (1 CPU, `--mem=19G`, 6 h). The COLO829T `label_job.sh` scripts (step 4 of those runs)
-call it with the COLO829T truth files below.
+FASTA above (1 CPU, `--mem=19G`, 6 h). Its optional 7th and 8th arguments are `label`'s
+`--snv-min-af` and `--indel-min-af`; `''` skips one (`... TRUTH_DIR '' 0.10` sets the INDEL floor
+only). The COLO829T `label_job.sh` scripts (step 4 of those runs) call it with the COLO829T truth
+files below.
 
 ```bash
 D=/scratch/jshen/data/pansoma_v2_tensors; H=/scratch/jshen/data/HG008_GIAB; Q=/scratch/qfu/COLO829BL_DSA/dipcall_hg38
 J=$D/pipeline_code/indexed_gam_pipeline_v4/tools/jobs
-# sbatch -J NAME -o LOG $J/relabel.sh TENSORS SOMATIC_VCF SOMATIC_BED GERMLINE_VCF GERMLINE_BED TRUTH_DIR [SNV_MIN_AF]
+# sbatch -J NAME -o LOG $J/relabel.sh TENSORS SOMATIC_VCF SOMATIC_BED GERMLINE_VCF GERMLINE_BED TRUTH_DIR \
+#     [SNV_MIN_AF [INDEL_MIN_AF]]
 HG008="$H/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_tumorvariants.vcf.gz
        $H/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_all.bed
        $H/dipcall_HG008N_GRCh38/HG008N_GRCh38_dipcall.dip.vcf.gz $H/dipcall_HG008N_GRCh38/HG008N_GRCh38_dipcall.dip.bed"

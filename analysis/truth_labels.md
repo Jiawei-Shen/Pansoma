@@ -2,7 +2,7 @@
 
 - 代码：`indexed_gam_pipeline_v4/tensor_postprocessing/truth_labels.py`。规则就是这个文件的模块 docstring 和常量；`labels.manifest.json` 里的 `rules_sha256` 是这个文件的 SHA-256，用来标识打标签时用的规则。
 - 坐标换算：`indexed_gam_pipeline_v4/tensor_postprocessing/reference_path.py`（`ReferencePath.linear`）。
-- 命令（在仓库根目录运行）：`python -m indexed_gam_pipeline_v4.tensor_postprocessing label --tensors … --reference-path … --fasta … --somatic-vcf … --somatic-bed … --germline-vcf … --germline-bed … --truth-dir … [--recall-dir …] [--snv-min-af 0.07]`。`orchestrate finalize` 在 merge 之后用同样的规则打标签，但不带 `--snv-min-af`。
+- 命令（在仓库根目录运行）：`python -m indexed_gam_pipeline_v4.tensor_postprocessing label --tensors … --reference-path … --fasta … --somatic-vcf … --somatic-bed … --germline-vcf … --germline-bed … --truth-dir … [--recall-dir …] [--snv-min-af 0.07] [--indel-min-af …]`。`orchestrate finalize` 在 merge 之后用同样的规则打标签，AF 下限（floor）用 `orchestrate prepare` 时给的 `--label-snv-min-af` / `--label-indel-min-af`（存进 `config.json` 的 `postprocess.labels.snv_min_af` / `indel_min_af`，不设是 null，即不按 AF 去掉），等于 `label` 的 `--snv-min-af` / `--indel-min-af`。短读长数据集在 prepare 时加 `--label-snv-min-af 0.07`，跑完不用再单独 relabel。这两个和 build 的 `--snv-min-af` / `--indel-min-af`（决定哪些 allele 生成 tensor）无关。
 - 例子：除非另外注明，都取自 HG008 PacBio `/scratch/jshen/data/pansoma_v2_tensors/Liss_lab_PacBio_Revio_20240125/v3_tensors`（2026-09-28 用现行规则打的标签），按 `candidate_id` 在 `{SNV,INDEL}/chr*_labels.ndjson` 里查到的标签、reason、`partial`/`overlap`；reads 数来自同一目录的 `chr*_variant_summary.ndjson`。第 7 节的计数来自六个数据集的 `labels.manifest.json`。
 
 ## 0. 名词
@@ -38,7 +38,8 @@
 | `MIN_EVIDENCE_BASES` | 30 | 一行 read 至少要有的碱基数 |
 | `HAPLOTYPE_WINDOW` | 90 | 单倍型重叠时 truth 两侧取的 GRCh38 碱基数 |
 | `MAX_SHIFTS` | 5,000 | 一个 truth allele 最多枚举的等价位置数 |
-| `--snv-min-af` | 不设（短读长数据集 0.07） | 命令行参数，不是常量；设了以后 AF 更低的 SNV tensor 是 −1（R1） |
+| `--snv-min-af` | 不设（短读长数据集 0.07） | 命令行参数，不是常量（`orchestrate prepare` 里是 `--label-snv-min-af`）；设了以后 AF 更低的 SNV tensor 是 −1（R1） |
+| `--indel-min-af` | 不设（六个数据集都没用） | 命令行参数，不是常量（`orchestrate prepare` 里是 `--label-indel-min-af`）；设了以后 AF 更低的 INDEL tensor（A1 是 INS 或 DEL）是 −1（R1），和 SNV 的下限分开设、互不影响 |
 
 ## 1. 整体流程
 
@@ -127,7 +128,7 @@ PacBio 上没有位置的 tensor（SNV 33,043、INDEL 8,684）绝大多数是第
 
 | 顺序 | 条件 | 标签 | reason |
 |---|---|---:|---|
-| R1 | （只在给了 `--snv-min-af` 时）SNV tensor 的 AF 低于它，不管 truth | −1 | `below_snv_min_af` |
+| R1 | AF 低于这类 tensor 的下限，不管 truth：SNV tensor 低于 `--snv-min-af`，INDEL tensor（A1 是 INS 或 DEL）低于 `--indel-min-af`（各自只在给了时） | −1 | `below_snv_min_af` / `below_indel_min_af` |
 | R2 | A1 的键等于一个 **PASS 的 somatic truth** | 1 | `representative_allele_is_somatic_truth` |
 | R2' | A1 等于 somatic truth，但它们都没 PASS | −1 | `somatic_truth_filtered` |
 | R3 | A1 等于一个 **PASS 的 germline truth** | 2 | `representative_allele_is_germline_truth` |
@@ -237,13 +238,13 @@ A1 reads 的中位数超过 0.45，就算部分匹配这个 somatic truth。
 每个 `<tensors>/<SNV|INDEL>/` 里（merge 之后的目录，和 `<chrom>_variant_summary.ndjson` 同序）：
 - `<chrom>_shard_NNNNN_labels.npy`（int8，和 tensor 一一对应）。
 - `<chrom>_labels.ndjson`，每个 tensor 一行：`candidate_id`、`site_id`、`chrom`、`shard_file`、`index_within_shard`、`label`、`label_name`、`reason`、`somatic`/`germline`（键等于 site 里某个 allele 的 truth，含 `matched_candidate_id` 和 `representative`，表示是不是 A1）、`grch38`、`anchor`（分支节点定了位时）、`partial`（`allele` / `residual` / null），部分匹配时再加 `overlap` 和 `partial_truth`。
-- `labels.manifest.json`：`format`（`truth-labels`）、`rules_sha256`（`truth_labels.py` 的 SHA-256）、`created`、标签值、`near_bp`、`min_overlap`、`anchor_reach`、`anchor_gap`、`snv_min_af`、`tensors`（tensor 总数）、每条染色体和总的标签计数、每个 reason 的计数、`partial` 计数、truth VCF 和 BED 的路径与 SHA-256、truth 统计、confident 区大小、FASTA 和 reference-path 目录。
+- `labels.manifest.json`：`format`（`truth-labels`）、`rules_sha256`（`truth_labels.py` 的 SHA-256）、`created`、标签值、`near_bp`、`min_overlap`、`anchor_reach`、`anchor_gap`、`snv_min_af`、`indel_min_af`（没给时是 null）、`tensors`（tensor 总数）、每条染色体和总的标签计数、每个 reason 的计数、`partial` 计数、truth VCF 和 BED 的路径与 SHA-256、truth 统计、confident 区大小、FASTA 和 reference-path 目录。
 
 另外：`--truth-dir` 下的 `<set>.graph.tsv`（每个 truth allele 和它的键，只取决于图和 VCF）；`--recall-dir`（默认 `--tensors`）下的 `<set>.recall.tsv` 和 `truth_recall.json`（每个 truth allele：是某个 tensor 的 A1、是 site 里的其它 allele、COMPLEX、没有唯一节点键、被 filtered（带原因）、或者没有候选）。
 
 ## 7. 六个数据集的计数
 
-目录都在 `/scratch/jshen/data/pansoma_v2_tensors/<数据集>/v3_tensors/{SNV,INDEL}/labels.manifest.json`，2026-09-28 按现行规则打的标签。两个 Illumina 数据集用了 `--snv-min-af 0.07`，其它四个没有（六个数据集 build 时 SNV 的 AF 阈值都是 0.06）。
+目录都在 `/scratch/jshen/data/pansoma_v2_tensors/<数据集>/v3_tensors/{SNV,INDEL}/labels.manifest.json`，2026-09-28 按现行规则打的标签。两个 Illumina 数据集用了 `--snv-min-af 0.07`，其它四个没有（六个数据集 build 时 SNV 的 AF 阈值都是 0.06）；六个都没有用 `--indel-min-af`。
 
 **HG008**（`Liss_lab_PacBio_Revio_20240125`、`Liss_lab_Northeastern-ONT-UL-20241216`、`Liss_lab_BCM_Illumina-WGS_20240313`；truth：GIAB `HG008-T_somatic_smvar_benchmark_v0.2` + HG008-N dipcall）
 
@@ -332,4 +333,4 @@ A1 reads 的中位数超过 0.45，就算部分匹配这个 somatic truth。
 
 - **重叠阈值是 0.45（`MIN_OVERLAP`）。** 这样同聚物里差一个碱基的短 indel（`+T` 对 `+TT`、删 1 个对删 2 个，重叠 0.5）和较长的（`+TT` 对 `+TTT`，0.667）一样算同一个事件；差两个碱基的（`+T` 对 `+TTT`、删 1 个对删 3 个，0.333）不算。
 - **分支节点上没对上 somatic truth 的 tensor 是 −1（R9），不是 0。** germline truth 只有 GRCh38 上的键，分支节点上"没有 truth"不代表没有变异，多数分支节点上根本没有 truth；部分匹配 somatic 的 1 照样保留（PacBio SNV 359、INDEL 1,457）。
-- **短读长数据集的 SNV：AF < 0.07 → −1（R1，`--snv-min-af 0.07`，只用于 HG008 Illumina 和 COLO829T Illumina）。** 效果等于用 SNV AF 阈值 0.07 建这两个数据集（build 时是 0.06），但不用重建 tensor；AF 是测试时不看 truth 也能用的过滤条件。HG008 Illumina SNV 有 1,312,554 个（26.2%）、COLO829T Illumina 480,878 个（19.2%）因此是 −1，其中 A1 是 somatic truth 的只有 2 个和 389 个。
+- **短读长数据集的 SNV：AF < 0.07 → −1（R1，`--snv-min-af 0.07`，只用于 HG008 Illumina 和 COLO829T Illumina）。** 效果等于用 SNV AF 阈值 0.07 建这两个数据集（build 时是 0.06），但不用重建 tensor；AF 是测试时不看 truth 也能用的过滤条件。HG008 Illumina SNV 有 1,312,554 个（26.2%）、COLO829T Illumina 480,878 个（19.2%）因此是 −1，其中 A1 是 somatic truth 的只有 2 个和 389 个。用 `orchestrate` 跑短读长数据时，在 prepare 加 `--label-snv-min-af 0.07`，finalize 就按这个下限打标签。INDEL 的下限（`--indel-min-af`，prepare 里是 `--label-indel-min-af`）和 SNV 的分开设，六个数据集都没用。

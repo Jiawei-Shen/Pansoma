@@ -1,5 +1,5 @@
 """Task queue behaviour, node partitioning, a full prepare -> run -> resume cycle, the package
-guard, the frozen closure, standalone finalize and static checks of the package."""
+guard, the frozen closure, standalone finalize, finalize labels with AF floors and static checks of the package."""
 import ast
 from contextlib import redirect_stderr, redirect_stdout
 import csv
@@ -16,6 +16,7 @@ from unittest.mock import patch
 
 import numpy as np
 
+from . import golden
 from .fixtures import af_gam, graph_fixture, tiny_gam  # noqa: F401
 from ..tensor_postprocessing.chr_index import FIELDS
 from .. import native, orchestrate
@@ -146,6 +147,7 @@ class EndToEndTest(unittest.TestCase):
             argv += ["--decoder", overrides["decoder"]]
         if overrides.get("max_node_reads"):
             argv += ["--max-node-reads", str(overrides["max_node_reads"])]
+        argv += overrides.get("extra", [])
         with redirect_stdout(io.StringIO()), patch.dict(os.environ, dict(OMP_NUM_THREADS="1", OPENBLAS_NUM_THREADS="1")):
             orchestrate.main(argv)
         return json.loads((root / "config.json").read_text())
@@ -348,6 +350,88 @@ class EndToEndTest(unittest.TestCase):
                 self.prepare(root / "run", gam, graph, nodes, merge_shard_size=32768)
             self.assertFalse((root / "run").exists())
 
+    def test_prepare_refuses_label_af_floors_without_labels_or_outside_0_1(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            gam, _ = tiny_gam(root)
+            graph = graph_fixture(root / "graph.sqlite", [(n, "AAAAAA", 86) for n in (10, 20, 30, 1000)])
+            nodes = root / "nodes.txt"
+            nodes.write_text("10\n20\n30\n1000\n")
+            for extra, message in ((["--label-snv-min-af", "0.07"], "--label-snv-min-af needs the label options"),
+                                   (["--label-indel-min-af", "0.1"], "--label-indel-min-af needs the label options"),
+                                   (["--label-snv-min-af", "1.5"], r"--label-snv-min-af must be in \[0, 1\]"),
+                                   (["--label-indel-min-af=-0.1"], r"--label-indel-min-af must be in \[0, 1\]")):
+                with self.subTest(extra=extra):
+                    with self.assertRaisesRegex(ValueError, message):
+                        self.prepare(root / "run", gam, graph, nodes, extra=extra)
+                    self.assertFalse((root / "run").exists())  # refused before anything is created
+
+    def test_finalize_labels_with_the_af_floors_frozen_at_prepare(self):
+        """--label-snv-min-af / --label-indel-min-af go into config.postprocess.labels after truth_dir (null when
+        unset); finalize labels with them, exactly as `tensor_postprocessing label` with the same floors, and with
+        both null only the floored tensors change (O1's world: SNV tensors at AF 0.16-0.8, the germline DEL at 0.2,
+        the somatic INS at 0.6)."""
+        from ..tensor_postprocessing.__main__ import main as postprocessing
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "inputs").mkdir()
+            run = root / "run"
+            argv = golden.mini_world(root / "inputs", run)
+            with redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()):
+                orchestrate.main(["prepare", "--root", str(root / "plain"), *argv[2:]])
+                orchestrate.main(["prepare", *argv, "--label-snv-min-af", "0.3", "--label-indel-min-af", "0.3"])
+            unset, frozen = (json.loads((r / "config.json").read_text())["postprocess"]["labels"]
+                             for r in (root / "plain", run))
+            self.assertEqual(list(frozen), [*orchestrate.LABEL_INPUTS, "truth_dir", "snv_min_af", "indel_min_af"])
+            self.assertEqual(unset, dict(frozen, snv_min_af=None, indel_min_af=None))
+            self.assertEqual((frozen["snv_min_af"], frozen["indel_min_af"]), (0.3, 0.3))
+            with patch.dict(os.environ, dict(SLURM_CPUS_PER_TASK="2")), redirect_stdout(io.StringIO()):
+                orchestrate.run(run)
+            self.assertTrue(json.loads((run / "status.json").read_text())["labeled"])
+            config = json.loads((run / "config.json").read_text())
+            tensors = Path(config["tensors"])
+
+            def labelled():
+                """Label .npy/.ndjson bytes; per kind labels.manifest.json without `created`, [(AF, labels.ndjson line)]."""
+                files = {str(p.relative_to(tensors)): p.read_bytes() for p in sorted(tensors.glob("*/chr*_labels*"))}
+                manifests, lines = {}, {}
+                for kind in ("SNV", "INDEL"):
+                    manifests[kind] = dict(json.loads((tensors / kind / "labels.manifest.json").read_text()), created=None)
+                    lines[kind] = []
+                    for f in sorted((tensors / kind).glob("chr*_labels.ndjson")):
+                        summary = (tensors / kind / f.name.replace("_labels", "_variant_summary")).read_text().splitlines()
+                        lines[kind] += [(json.loads(a)["af"], json.loads(b)) for a, b in zip(summary, f.read_text().splitlines())]
+                return files, manifests, lines
+
+            files, manifests, lines = labelled()
+            for kind, below in (("SNV", "below_snv_min_af"), ("INDEL", "below_indel_min_af")):
+                self.assertEqual((manifests[kind]["snv_min_af"], manifests[kind]["indel_min_af"]), (0.3, 0.3))
+                self.assertEqual([line["reason"] == below for _, line in lines[kind]], [af < 0.3 for af, _ in lines[kind]])
+                floored = [line for af, line in lines[kind] if af < 0.3]
+                self.assertTrue(any(line["somatic"] or line["germline"] for line in floored), kind)  # truth tensors too
+            post, labels = config["postprocess"], config["postprocess"]["labels"]
+            with redirect_stdout(io.StringIO()):
+                postprocessing(["label", "--tensors", str(tensors), "--reference-path", post["reference_path"],
+                                "--fasta", labels["reference_fasta"], "--somatic-vcf", labels["somatic_vcf"],
+                                "--somatic-bed", labels["somatic_bed"], "--germline-vcf", labels["germline_vcf"],
+                                "--germline-bed", labels["germline_bed"], "--truth-dir", labels["truth_dir"],
+                                "--snv-min-af", "0.3", "--indel-min-af", "0.3"])
+            self.assertEqual(labelled(), (files, manifests, lines))
+            # Both floors null (a prepare without them): finalize labels again; only the floored tensors differ.
+            labels.update(snv_min_af=None, indel_min_af=None)
+            (run / "config.json").write_text(json.dumps(config))
+            for kind in ("SNV", "INDEL"):
+                (tensors / kind / "labels.manifest.json").unlink()
+            with redirect_stdout(io.StringIO()):
+                self.assertEqual(list(orchestrate.finalize(run)), ["labels"])
+            _, unfloored, again = labelled()
+            for kind in ("SNV", "INDEL"):
+                self.assertEqual((unfloored[kind]["snv_min_af"], unfloored[kind]["indel_min_af"]), (None, None))
+                for (af, line), (_, unset_line) in zip(lines[kind], again[kind]):
+                    self.assertEqual(unset_line == line, af >= 0.3, line["candidate_id"])
+                truths = [line for af, line in again[kind] if af < 0.3 and (line["somatic"] or line["germline"])]
+                self.assertEqual([line["label"] for line in truths], [1 if line["somatic"] else 2 for line in truths])
+
     def test_prepare_refuses_an_unusable_native_decoder_and_warns_under_auto(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -435,7 +519,7 @@ class StaticTest(unittest.TestCase):
 
     def test_no_path_hacks_and_no_other_package_names(self):
         hack, package_name = "sys." + "path", re.compile(r"indexed_gam_pipeline\w+")
-        for path in self.sources(".py", ".cpp"):
+        for path in self.sources(".py", ".cpp", ".sh"):
             relative, text = path.relative_to(PACKAGE_DIR), path.read_text()
             self.assertNotIn(hack, text, str(relative))
             self.assertEqual(set(package_name.findall(text)) - {orchestrate.PACKAGE}, set(), str(relative))

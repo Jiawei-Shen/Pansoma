@@ -102,6 +102,14 @@ def postprocess_options(args):
     labels = {k: getattr(args, k) for k in LABEL_INPUTS}
     if any(labels.values()) and not all(labels.values()):
         raise ValueError("Labels need all of --" + ", --".join(k.replace("_", "-") for k in LABEL_INPUTS))
+    # AF floors of the labels per kind (tensor_postprocessing label --snv-min-af / --indel-min-af), null when unset.
+    floors = {k: getattr(args, "label_" + k) for k in ("snv_min_af", "indel_min_af")}
+    for key, value in floors.items():
+        flag = "--label-" + key.replace("_", "-")
+        if value is not None and not 0 <= value <= 1:
+            raise ValueError(f"{flag} must be in [0, 1]")
+        if value is not None and not all(labels.values()):
+            raise ValueError(f"{flag} needs the label options (--somatic-vcf ... --truth-dir)")
     if args.merge_shard_size < 0:
         raise ValueError("--merge-shard-size must be nonnegative (0 = no merge)")
     if (args.merge_shard_size or args.chromosomes != "all") and not args.chr_index:
@@ -117,7 +125,7 @@ def postprocess_options(args):
     return dict(merge_shard_size=args.merge_shard_size, keep_sources=args.keep_sources,
                 reference_path=str(Path(args.reference_path).resolve()) if args.reference_path else None,
                 labels=dict({k: str(Path(v).resolve()) for k, v in labels.items()},
-                            truth_dir=str(Path(args.truth_dir).resolve())) if all(labels.values()) else None,
+                            truth_dir=str(Path(args.truth_dir).resolve()), **floors) if all(labels.values()) else None,
                 inputs=inputs)
 
 
@@ -590,7 +598,8 @@ def finalize(root, config=None):
         if labels and not all((tensors / kind / "labels.manifest.json").exists() for kind in kinds):
             report["labels"] = label_run(tensors, kinds, post["reference_path"], labels["reference_fasta"],
                                          labels["somatic_vcf"], labels["somatic_bed"], labels["germline_vcf"],
-                                         labels["germline_bed"], labels["truth_dir"])
+                                         labels["germline_bed"], labels["truth_dir"],
+                                         snv_min_af=labels.get("snv_min_af"), indel_min_af=labels.get("indel_min_af"))
             status = read_json(root / "status.json")
             status.update(labeled=True)
             write_json(root / "status.json", status)
@@ -648,6 +657,10 @@ def make_parser():
     f.add_argument("--germline-bed")
     f.add_argument("--reference-fasta", help="GRCh38 FASTA with .fai (labels)")
     f.add_argument("--truth-dir", help="where the truth tables (<set>.graph.tsv) are written")
+    f.add_argument("--label-snv-min-af", type=float,
+                   help="SNV tensors with a lower AF are labelled -1 (short-read sets: 0.07; needs the labels)")
+    f.add_argument("--label-indel-min-af", type=float,
+                   help="INDEL tensors with a lower AF are labelled -1 (needs the labels)")
     r = commands.add_parser("run", help="execute all pending tasks")
     r.add_argument("--root", required=True)
     r.add_argument("--resume", action="store_true", help="skip validated tasks; set aside partial outputs and rerun them")

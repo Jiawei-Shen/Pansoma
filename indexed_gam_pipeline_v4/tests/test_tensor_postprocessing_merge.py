@@ -1,4 +1,4 @@
-"""postprocess.merge_shards: per-chromosome shards, byte identity, provenance, bookkeeping, deletion."""
+"""tensor_postprocessing.merge_shards: per-chromosome shards, byte identity, provenance, bookkeeping, deletion."""
 import csv
 import json
 from pathlib import Path

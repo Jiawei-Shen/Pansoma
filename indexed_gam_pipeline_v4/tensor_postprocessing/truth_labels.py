@@ -27,13 +27,14 @@
                     unique GRCh38 visit and no reference node within ANCHOR_REACH IDs, the two reference neighbours
                     on different contigs, or more than ANCHOR_GAP GRCh38 bases between them), an off-reference node
                     without a partial somatic match (not a training negative: most branch nodes carry no truth at
-                    all), or, whatever the truth, an SNV with AF below the label run's snv_min_af (short-read sets:
-                    0.07)
+                    all), or, whatever the truth, a tensor with AF below the label run's floor of its kind: an SNV
+                    below snv_min_af (short-read sets: 0.07), an INDEL (A1 an INS or DEL) below indel_min_af
 
-   The first rule that applies decides (classify, in this order): the snv_min_af SNV filter; a truth allele of A1
-   (somatic, then germline PASS/GAP); a truth allele as in 1/2 of another allele ("allele" partial, else 0), else a
-   filtered somatic one (-1); no position; outside the BEDs; A1 a germline allele with another FILTER (0); a
-   "residual" partial match (somatic, then germline; an off-reference node: somatic only, else -1); otherwise 0.
+   The first rule that applies decides (classify, in this order): the AF floors (snv_min_af for SNVs, indel_min_af
+   for INDELs); a truth allele of A1 (somatic, then germline PASS/GAP); a truth allele as in 1/2 of another allele
+   ("allele" partial, else 0), else a filtered somatic one (-1); no position; outside the BEDs; A1 a germline allele
+   with another FILTER (0); a "residual" partial match (somatic, then germline; an off-reference node: somatic only,
+   else -1); otherwise 0.
 
    Partial (labels.ndjson `partial`, `overlap`, `partial_truth`): the same event written differently by the
    graph alignment. "allele": another allele of the site is the truth allele and A1 overlaps it by more than
@@ -46,7 +47,7 @@
 
 Outputs next to the merged shards (per chromosome, same order as <chrom>_variant_summary.ndjson):
 <chrom>_shard_NNNNN_labels.npy (int8) and <chrom>_labels.ndjson; labels.manifest.json (counts, reasons, the rule
-constants, rules_sha256 = SHA-256 of this file, provenance);
+constants, the AF floors snv_min_af / indel_min_af (null when unset), rules_sha256 = SHA-256 of this file, provenance);
 <truth dir>/<set>.graph.tsv (every truth allele with its keys) and <set>.recall.tsv / recall.json.
 """
 from collections import Counter, defaultdict
@@ -507,7 +508,7 @@ def linear_interval(lin, kind):
     return lin["pos0"], lin["pos0"] + max(1, len(lin["ref"]))
 
 
-def classify(record, somatic, germline, path, confident, evidence=None, snv_min_af=None):
+def classify(record, somatic, germline, path, confident, evidence=None, snv_min_af=None, indel_min_af=None):
     """(label value, label name, reason, details) of one merged summary record (rules: module docstring)."""
     representative = record["candidate_id"]
     alleles = record["alleles"]
@@ -519,9 +520,11 @@ def classify(record, somatic, germline, path, confident, evidence=None, snv_min_
     lin = path.linear(record["node_id"], record["start"], record["ref"], record["alt"], record["event_type"],
                       record.get("path"))
     details.update(grch38=lin, partial=None)
-    # The label run's SNV AF filter (short reads): as if the build had used it, whatever the truth.
+    # The label run's AF floor of the tensor's kind (A1's event type): as if the build had used it, whatever the truth.
     if snv_min_af is not None and record["event_type"] == "SNP" and record.get("af", 1.0) < snv_min_af:
         return LABELS["ignore"], "ignore", "below_snv_min_af", details
+    if indel_min_af is not None and record["event_type"] in ("INS", "DEL") and record.get("af", 1.0) < indel_min_af:
+        return LABELS["ignore"], "ignore", "below_indel_min_af", details
     rep_somatic = [tid for cid, tid in hits[somatic.name] if cid == representative]
     rep_germline = [tid for cid, tid in hits[germline.name] if cid == representative]
     counts = {somatic.name: lambda t: somatic.alleles[t]["passed"],
@@ -598,7 +601,8 @@ def classify(record, somatic, germline, path, confident, evidence=None, snv_min_
     return LABELS["non"], "non", "confident_no_truth_allele", details
 
 
-def label_directory(directory, somatic, germline, path, confident, provenance, fasta=None, snv_min_af=None):
+def label_directory(directory, somatic, germline, path, confident, provenance, fasta=None, snv_min_af=None,
+                    indel_min_af=None):
     """Write <chrom>_shard_*_labels.npy, <chrom>_labels.ndjson and labels.manifest.json for one merged directory."""
     directory = Path(directory)
     manifest = read_json(directory / "manifest.json")
@@ -615,7 +619,8 @@ def label_directory(directory, somatic, germline, path, confident, provenance, f
         with (directory / info["summary"]).open() as source, target.with_name(target.name + ".tmp").open("w") as out:
             for line in source:
                 record = json.loads(line)
-                value, name, reason, details = classify(record, somatic, germline, path, confident, evidence, snv_min_af)
+                value, name, reason, details = classify(record, somatic, germline, path, confident, evidence, snv_min_af,
+                                                        indel_min_af)
                 if details["partial"]:
                     partials[f"{details['partial']}_{name}"] += 1
                 arrays[record["shard_file"]][record["index_within_shard"]] = value
@@ -642,7 +647,7 @@ def label_directory(directory, somatic, germline, path, confident, provenance, f
                   counts={c: dict(v) for c, v in counts.items()},
                   totals=dict(sum(counts.values(), Counter())), reasons=dict(reasons), partial=dict(partials),
                   min_overlap=MIN_OVERLAP, anchor_reach=ANCHOR_REACH, anchor_gap=ANCHOR_GAP, snv_min_af=snv_min_af,
-                  **provenance)
+                  indel_min_af=indel_min_af, **provenance)
     write_json(directory / "labels.manifest.json", report)
     return report, matched
 
@@ -691,7 +696,7 @@ def recall(truth, matched, filtered, output_dir):
 
 
 def label_run(tensors, kinds, reference_path, fasta, somatic_vcf, somatic_bed, germline_vcf, germline_bed, truth_dir,
-              recall_dir=None, snv_min_af=None):
+              recall_dir=None, snv_min_af=None, indel_min_af=None):
     """Build both truth sets, label every merged autosome directory of `kinds`, write recall reports.
 
     Truth tables (<set>.graph.tsv) depend only on the graph and the VCFs and go to `truth_dir`;
@@ -717,7 +722,7 @@ def label_run(tensors, kinds, reference_path, fasta, somatic_vcf, somatic_bed, g
     reports, matched = {}, {somatic.name: defaultdict(list), germline.name: defaultdict(list)}
     for kind in kinds:
         reports[kind], found = label_directory(Path(tensors) / kind, somatic, germline, path, confident, provenance, fasta,
-                                               snv_min_af)
+                                               snv_min_af, indel_min_af)
         for name, items in found.items():
             for tid, hits in items.items():
                 matched[name][tid] += hits
