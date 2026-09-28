@@ -54,6 +54,25 @@ class MetricsTest(unittest.TestCase):
         self.assertEqual(sum(map(sum, report["thresholded"]["confusion"])), 2)
 
 
+class AtRecallTest(unittest.TestCase):
+    def test_precision_at_recall_against_brute_force(self):
+        rng = np.random.default_rng(3)
+        labels = rng.choice([0, 1, 2], 400, p=[0.7, 0.1, 0.2])
+        probs = rng.dirichlet([1, 1, 1], 400).round(2)                 # ties
+        got = metrics.somatic_at_recall(labels, probs, (0.5, 0.9, 1.0))
+        n = (labels == 1).sum()
+        for r, v in got.items():
+            ts = [t for t in sorted(set(probs[:, 1].tolist()), reverse=True) if ((probs[:, 1] >= t) & (labels == 1)).sum() >= float(r) * n]
+            t = ts[0]
+            called = probs[:, 1] >= t
+            self.assertEqual(v["threshold"], t)
+            self.assertEqual(v["calls"], int(called.sum()))
+            self.assertAlmostEqual(v["precision"], (called & (labels == 1)).sum() / called.sum())
+            self.assertGreaterEqual(v["recall"], float(r))
+        self.assertIsNone(metrics.somatic_at_recall(np.zeros(5, int), np.full((5, 3), 1 / 3))["0.5"])
+        self.assertIn("somatic_at_recall", metrics.report(labels, probs, 0.3))
+
+
 class TruthReportTest(unittest.TestCase):
     """Against brute force: every truth allele once (duplicates collapse), misses without a tensor, false
     positives from labels 0 and 2, found truth alleles of the other kind as true calls (once, not in the

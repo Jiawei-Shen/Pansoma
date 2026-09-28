@@ -64,6 +64,33 @@ def best_somatic_threshold(labels, probs):
     return float(s[i]), float(prec[i]), float(rec[i]), float(f1[i])
 
 
+RECALLS = (0.5, 0.8, 0.9, 0.95)
+
+
+def somatic_at_recall(labels, probs, recalls=RECALLS):
+    """Per target recall: the highest threshold (a distinct p_somatic) whose somatic recall reaches it, with the
+    precision, recall, F1 and number of somatic calls there (somatic when p_somatic >= threshold); None when out
+    of reach. Compares models at one operating point (e.g. v1's argmax with class weight 200 sits near R 0.93)."""
+    positive = labels == SOMATIC
+    n_pos = int(positive.sum())
+    score = probs[:, SOMATIC]
+    order = np.argsort(-score, kind="stable")
+    s, pos = score[order], positive[order]
+    last = np.r_[s[1:] != s[:-1], True] if len(s) else np.zeros(0, bool)
+    tp, calls, s = np.cumsum(pos)[last], np.flatnonzero(last) + 1, s[last]
+    out = {}
+    for r in recalls:
+        hit = np.flatnonzero(tp >= r * n_pos) if n_pos else np.zeros(0, np.int64)
+        if len(hit) == 0:
+            out[f"{r:g}"] = None
+            continue
+        i = int(hit[0])
+        prec, rec = tp[i] / calls[i], tp[i] / n_pos
+        out[f"{r:g}"] = dict(threshold=float(s[i]), precision=float(prec), recall=float(rec),
+                             f1=float(2 * prec * rec / (prec + rec)) if prec + rec else 0.0, calls=int(calls[i]))
+    return out
+
+
 def call(probs, threshold=None):
     """Class calls: argmax, or somatic when p_somatic >= threshold and else the larger of non / germline."""
     if threshold is None:
@@ -80,6 +107,7 @@ def report(labels, probs, threshold=None):
     out["argmax"]["confusion"] = confusion(labels, call(probs)).tolist()
     out["somatic_ap"] = average_precision(labels == SOMATIC, probs[:, SOMATIC])
     out["germline_ap"] = average_precision(labels == 2, probs[:, 2])
+    out["somatic_at_recall"] = somatic_at_recall(labels, probs)
     if threshold is not None:
         cm = confusion(labels, call(probs, threshold))
         out["threshold"] = float(threshold)

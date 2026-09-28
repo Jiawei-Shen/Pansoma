@@ -6,7 +6,7 @@
 
 RUNS is $PANSOMA_RUNS or /scratch/jshen/data/pansoma_net_v2_runs. Columns: training loss, speed and minutes
 of the epoch, GPU peak (allocated GiB); validation per tensor: somatic AP, F1 / precision / recall at the
-best-F1 threshold t (s.*), t itself; against the truth VCF at the same t (t.*, metrics.truth_report: every
+best-F1 threshold t (s.*), t itself, the precision where the somatic recall reaches 0.9 (P@R.9); against the truth VCF at the same t (t.*, metrics.truth_report: every
 truth allele once, truth alleles without a tensor are misses, found truth of the other kind are true calls)
 and its ceiling; germline argmax F1; "*" marks the best epoch so far by the run's --select. combine scores a
 sample's SNV and INDEL models together.
@@ -43,7 +43,7 @@ def show(d):
     rows = [json.loads(line) for line in open(d / "metrics.jsonl")] if (d / "metrics.jsonl").exists() else []
     if rows:
         print(f"{'epoch':>5} {'loss':>7} {'t/s':>6} {'min':>5} {'GPU':>5} | {'s.AP':>6} {'s.F1':>6} {'s.P':>6} {'s.R':>6} "
-              f"{'t':>6} | {'t.AP':>6} {'t.F1':>6} {'t.P':>6} {'t.R':>6} {'ceil':>6} | {'g.F1':>6}")
+              f"{'t':>6} {'P@R.9':>6} | {'t.AP':>6} {'t.F1':>6} {'t.P':>6} {'t.R':>6} {'ceil':>6} | {'g.F1':>6}")
         best, select = -1.0, _select(d)
         for r in rows:
             v = r["val"]
@@ -57,7 +57,7 @@ def show(d):
                      f"{tr['at_threshold']['recall']:>6.3f} {tr['ceiling']:>6.3f}") if tr else f"{'-':>6} " * 4 + f"{'-':>6}"
             print(f"{r['epoch']:>5} {r['train_loss']:>7.4f} {r['tensors_per_second']:>6.0f} {r['train_seconds'] / 60:>5.1f} "
                   f"{gpu if gpu is not None else '-':>5} | {v['somatic_ap']:>6.3f} {s['f1']:>6.3f} {s['precision']:>6.3f} "
-                  f"{s['recall']:>6.3f} {v['threshold']:>6.3f} | {truth} | {v['argmax']['germline']['f1']:>6.3f} {mark}")
+                  f"{s['recall']:>6.3f} {v['threshold']:>6.3f} {_p_at(v, '0.9'):>6} | {truth} | {v['argmax']['germline']['f1']:>6.3f} {mark}")
     else:
         print("  no finished epoch yet")
     step = current_step(d)
@@ -70,6 +70,10 @@ def show(d):
               f"off-reference), t {t['threshold']:.3f}")
         print(f"    per tensor:    somatic AP {t['somatic_ap']:.3f} F1 {s['f1']:.3f} P {s['precision']:.3f} "
               f"R {s['recall']:.3f} (support {s['support']:,}) | germline F1 {t['argmax']['germline']['f1']:.3f}")
+        at = t.get("somatic_at_recall") or {}
+        if at:
+            print("    at a recall:   " + " | ".join(f"R {r}: P {v['precision']:.3f} (F1 {v['f1']:.3f}, p>={v['threshold']:.3f})"
+                                              for r, v in at.items() if v))
         tr = t.get("truth")
         if tr:
             at = tr["at_threshold"]
@@ -79,6 +83,12 @@ def show(d):
             if "other_kind_tensors" in tr:
                 print(f"                   + {at['other_tp']:,} truth of the other kind found (true calls, each once; "
                       f"{tr['other_kind_tensors']:,} tensors of {tr['other_kind_truth_with_tensor']:,} such truth)")
+
+def _p_at(v, recall):
+    """Somatic precision at the lowest threshold with recall >= `recall` (metrics.somatic_at_recall), or '-'."""
+    x = (v.get("somatic_at_recall") or {}).get(recall)
+    return f"{x['precision']:.3f}" if x else "-"
+
 
 def _select(d):
     """The run's --select, from the args.json that train writes at its start (f1 for older runs)."""
