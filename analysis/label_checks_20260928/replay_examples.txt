@@ -1,0 +1,48 @@
+
+40074642:120:SNP:C>T (chr4:172308003, AF 0.113, ALT 7/62, strands fwd 0 rev 7)  truth chr4:172308003 C>CTTTTTTT (INS, event 7), overlap 0.591, truth has own tensor: False
+   GRCh38 around truth: AGCATGGGATGTGTTTTAAC||TTTTTTTTTTTTTTTTTTTT   SNV at +0 bp from truth
+   REF-read median error b=4; A1 reads (d_ref, d_truth): [(11, 5), (15, 9), (11, 5), (6, 1), (5, 2), (5, 1), (15, 10)]
+
+47983036:1:SNP:C>A (chr6:154281184, AF 0.164, ALT 10/61, strands fwd 0 rev 10)  truth chr6:154281184 C>CAA (INS, event 2), overlap 0.5, truth has own tensor: False
+   GRCh38 around truth: CCCCGTTCCTACTAAAATAC||AAAAAAAAAAAAAAAAAAAA   SNV at +0 bp from truth
+   REF-read median error b=5; A1 reads (d_ref, d_truth): [(5, 3), (2, 1), (6, 4), (6, 4), (6, 4), (7, 5), (13, 11), (2, 0), (12, 10), (11, 9)]
+
+41365234:104:SNP:C>A (chr5:2461228, AF 0.126, ALT 25/198, strands fwd 0 rev 25)  truth chr5:2461228 CA>C (DEL, event 1), overlap 0.5, truth has own tensor: False
+   GRCh38 around truth: ACAGAGCCAGACTCCAGCTC|A|AAAAAAAAAAAAAAAAAAAG   SNV at +0 bp from truth
+   REF-read median error b=2; A1 reads (d_ref, d_truth): [(3, 3), (1, 1), (1, 1), (1, 1), (3, 3), (2, 2), (2, 2), (4, 4), (2, 2), (4, 4)]
+
+4150549:0:SNP:T>C (chr1:203955471, AF 0.080, ALT 11/138, strands fwd 5 rev 6)  truth chr1:203955469 C>CT (INS, event 1), overlap 0.5, truth has own tensor: False
+   GRCh38 around truth: TTTTCTTCTCTCTCTCTCTC||TTTTTTTTTTTTTTTTTTTT   SNV at +2 bp from truth
+   REF-read median error b=5; A1 reads (d_ref, d_truth): [(2, 1), (6, 5), (1, 0), (4, 3), (3, 2), (3, 2), (5, 4), (4, 3), (3, 2), (6, 5)]
+
+33336509:6:SNP:A>C (chr22:49443732, AF 0.264, ALT 24/91, strands fwd 17 rev 7)  truth chr22:49443706 CAAAA>C (DEL, event 4), overlap 0.5, truth has own tensor: False
+   GRCh38 around truth: GCAGCCCTGCAAAGCCCACC|AAAA|AAAAAAAAAAAAAAAAAAAA   SNV at +26 bp from truth
+   REF-read median error b=7; A1 reads (d_ref, d_truth): [(5, 1), (5, 1), (5, 1), (5, 1), (5, 1), (5, 1), (6, 2), (6, 2), (6, 2), (6, 2)]
+
+52102100:31:SNP:A>T (chr8:14306742, AF 0.072, ALT 5/69, strands fwd 3 rev 2)  truth chr8:14306729 TTATTTGTGGTCAA>T (DEL, event 13), overlap 0.538, truth has own tensor: True
+   GRCh38 around truth: AAATTTGCATGCATTTGCAT|TATTTGTGGTCAA|TTTCTGTTGTCCTCCTCCCT   SNV at +13 bp from truth
+   REF-read median error b=0; A1 reads (d_ref, d_truth): [(1, 0), (1, 0), (1, 0), (3, 0), (1, 0)]
+
+52210836:105:SNP:C>A (chr8:81879170, AF 0.072, ALT 6/83, strands fwd 0 rev 6)  truth chr8:81879170 C>CAAAAAAAAAAAA (INS, event 12), overlap 0.605, truth has own tensor: False
+   GRCh38 around truth: ATAGAGCGAGACTCAGTCTC||AAAAAAAAAAAAAAAATATA   SNV at +0 bp from truth
+   REF-read median error b=2; A1 reads (d_ref, d_truth): [(24, 13), (25, 13), (18, 6), (21, 10), (19, 8), (24, 13)]
+
+22668191:0:SNP:T>A (chr18:None, AF 0.083, ALT 4/48, strands fwd 4 rev 0)  truth chr18:53226948 A>ATATATATATATATA (INS, event 32), overlap 0.922, truth has own tensor: False
+   GRCh38 around truth: TGTGTGTATATATATATATA||TTTTTTTTTTTTTTTTTTTG
+   REF-read median error b=5; A1 reads (d_ref, d_truth): [(36, 10), (36, 9), (34, 3), (32, 9)]
+
+22668184:0:SNP:T>A (chr18:53226950, AF 0.205, ALT 8/39, strands fwd 8 rev 0)  truth chr18:53226948 A>ATATATATATATATA (INS, event 32), overlap 0.891, truth has own tensor: False
+   GRCh38 around truth: TGTGTGTATATATATATATA||TTTTTTTTTTTTTTTTTTTG   SNV at +2 bp from truth
+   REF-read median error b=6; A1 reads (d_ref, d_truth): [(34, 8), (31, 4), (31, 6), (24, 0), (32, 5), (22, 0), (31, 7), (31, 4)]
+
+55842546:0:SNP:T>G (chr9:None, AF 0.531, ALT 17/32, strands fwd 11 rev 6)  truth chr9:70221380 T>TATATATATATAGAG (INS, event 44), overlap 0.67, truth has own tensor: False
+   GRCh38 around truth: ATATATATATATATATATAT||AGAGAGAGAGAGAGAGAGAG
+   REF-read median error b=4; A1 reads (d_ref, d_truth): [(21, 0), (21, 0), (13, 0), (21, 0), (12, 0), (21, 0), (17, 0), (12, 0), (23, 3), (12, 0)]
+
+38828933:13:SNP:C>A (chr4:92510872, AF 0.082, ALT 10/122, strands fwd 7 rev 3)  truth chr4:92510858 T>TAAA (INS, event 3), overlap 1.0, truth has own tensor: False
+   GRCh38 around truth: ACAATTACAATGTGTCAATT||AAAAAAAAAAAAACAGTGGC   SNV at +14 bp from truth
+   REF-read median error b=0; A1 reads (d_ref, d_truth): [(3, 0), (3, 0), (3, 0), (3, 0), (3, 0), (3, 0), (4, 1), (5, 2), (6, 3), (7, 4)]
+
+37167388:253:SNP:G>A (chr3:97033065, AF 0.072, ALT 13/181, strands fwd 12 rev 1)  truth chr3:97033065 G>GA (INS, event 1), overlap 1.0, truth has own tensor: True
+   GRCh38 around truth: AAATGTGGAAAAAAAGAAAG||AAAAAAAAAAGGAAGTATAC   SNV at +0 bp from truth
+   REF-read median error b=0; A1 reads (d_ref, d_truth): [(1, 0), (1, 0), (1, 0), (1, 0), (1, 0), (1, 0), (1, 0), (1, 0), (1, 0), (1, 0)]

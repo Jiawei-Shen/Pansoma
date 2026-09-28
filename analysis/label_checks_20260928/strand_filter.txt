@@ -1,0 +1,9 @@
+label 1 tensors 9,703 (all); label 0 sample 100,085 (1/40 of ~3.99M)
+rule                             somatic kept    0 kept (est.)
+none                            9,703 (100.0%)     4.00M (100.0%)
+AF>=0.10                        8,998 ( 92.7%)     1.13M ( 28.3%)
+AF>=0.15                        8,727 ( 89.9%)     0.38M (  9.5%)
+both strands                    9,265 ( 95.5%)     1.07M ( 26.8%)
+both strands or AF>=0.15        9,397 ( 96.8%)     1.30M ( 32.5%)
+min(fwd,rev)>=2 or AF>=0.15     9,238 ( 95.2%)     0.77M ( 19.3%)
+somatic tensors with ALT reads on one strand only, by reason: {'residual_partial_somatic_truth': 400, 'representative_allele_is_somatic_truth': 38}

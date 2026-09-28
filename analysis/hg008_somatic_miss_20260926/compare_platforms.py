@@ -11,7 +11,7 @@ from pathlib import Path
 csv.field_size_limit(sys.maxsize)
 D = Path("/scratch/jshen/data/pansoma_v2_tensors")
 TMP = Path("/scratch/jshen/Github/Pansoma/tmp")
-P = {"PacBio": (D / "Liss_lab_PacBio_Revio_20240125/v6_tensors", TMP / "somatic_miss_analysis_v6"),
+P = {"PacBio": (D / "Liss_lab_PacBio_Revio_20240125/v3_tensors", TMP / "somatic_miss_analysis_v6"),  # v6 tensors + extra nodes
      "ONT": (D / "Liss_lab_Northeastern-ONT-UL-20241216/v3_tensors", TMP / "somatic_miss_analysis_ont"),
      "Illumina": (D / "Liss_lab_BCM_Illumina-WGS_20240313/v3_tensors", TMP / "somatic_miss_analysis_illumina")}
 NAMES = list(P)

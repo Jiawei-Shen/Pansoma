@@ -1,7 +1,7 @@
 # HG008 ONT-UL：没有候选的 somatic 真值，原因分析（和 PacBio v6 对比）
 
 - 数据：HG008-T ONT-UL R10.4.1 dorado 0.8.1 sup，54×。tensors 来自 `indexed_gam_pipeline_v3`，job 367607/367608（常染色体，format v6：indel 左对齐、site 单元；**没有 supplement 轮**）。目录是 `pansoma_v2_tensors/Liss_lab_Northeastern-ONT-UL-20241216/v3_tensors`。
-- 标签：`truth-labels-v4`（2026-09-26 重打）。1/2 也给部分匹配（A1 和 truth 在同一位置、重叠 >60%，somatic 另按 A1 reads 的单倍型算重叠）；分支节点按最近的 GRCh38 节点定位；−1 只剩 BED 外、定不了位置、somatic truth 没 PASS。召回状态和标签规则无关，第 2–4 节不受影响；第 5 节和结论里跟标签有关的数字已按 v4 重算。第 6 节例子里写的标签是 v2 时的。
+- 标签：`truth-labels-v6`（2026-09-28 重打；v4 流水线的规则与它逐字节相同）。部分匹配要求重叠 >45%（somatic 另按 A1 reads 的单倍型算重叠）；分支节点只有部分匹配 somatic 才标 1，其余 −1；Illumina 的 SNV AF < 0.07 标 −1。召回状态和标签规则无关，第 2–4 节不受影响；第 5 节和结论里跟标签有关的数字已按 v6 重算。第 6 节例子里写的标签是 v2 时的。
 - 真值：somatic `HG008-T_somatic_smvar_benchmark_v0.2_tumorvariants.vcf.gz` + `_all.bed`；germline dipcall `dip.vcf.gz` + `dip.bed`。
 - 对象：ONT 召回报告里"没有候选"的 somatic 等位基因，共 **2,796** 个（SNV 342，INS 1,729，DEL 725）。SNV 和 INDEL 都按 reads 逐个分析了。
 - 对照：随机抽 250 个有 ONT tensor 的 truth（INDEL ≥2 bp 150 个、1 bp 50 个，SNV 50 个）。
@@ -16,7 +16,7 @@
    - 原因是 ONT 的噪声 allele 更多：PacBio 里是代表 allele 的，有 248 个 DEL、243 个 INS 在 ONT 里变成了同一 site 的非代表 allele。
 3. **ONT 的"没有候选"更少，"filtered"更多。** PacBio 没有候选的 truth 里，ONT 有 418 个 INS、164 个 DEL 变成了 filtered，reads 写出了 truth 的 edit，但数量不够。ONT filtered 的原因大多是 min_variants（INS 831，DEL 397）：ONT 的 reads 把同一个 allele 分散成多种写法，每种都不到 3 条。
 4. **ONT-UL 解决了低 MAPQ 区域。** I5 只有 1 个（PacBio 29），SNV 的 S1 只有 1 个（PacBio 48）。PacBio S1 的 48 个 SNV，在 ONT 里有 40 个成为代表 allele：ultra-long reads 能唯一比对到片段重复区。
-5. **残余 edits 的标签（v4）。** I1–I3 未命中的残余 edit 里（按不同候选计），有 tensor 的现在：**2,007 个标 1**（部分匹配 somatic truth），**1,254 个标 0**（多数是「附近有 truth 但重叠不到 60%」，v2 时是 −1），187 个标 2，207 个仍是 −1；另有 679 个没有 tensor。残余 edit 被标成 germline 的逐条列表共 230 行、217 个不同候选（INS 位点 84，DEL 60，SNV 29）。
+5. **残余 edits 的标签（v6）。** I1–I3 未命中的残余 edit 里（按不同候选计），有 tensor 的现在：**2,744 个标 1**（部分匹配 somatic truth），275 个标 0（重叠不到 45%），238 个标 2，398 个 −1（多为分支节点上没对上的）；另有 679 个没有 tensor。残余 edit 被标成 germline 的逐条列表共 283 行、270 个不同候选（INS 位点 94，DEL 76，SNV 31）。
 6. **没有 supplement 的代价很小**：只有 1 个 DEL（chr11:134897366）是 reads 写出了 truth edit，但它所在节点不是 target（I9）。
 7. SNV：35 个 somatic SNV 的 germline 真值在同一位置有同一个 ALT（PacBio 分析里是 38 个），不适合当 somatic 正例。
 
@@ -150,22 +150,22 @@
 
 | 类别 | somatic | germline | non | ignore | no tensor | (无 ≥3 reads 的残余 edit) |
 |---|---:|---:|---:|---:|---:|---:|
-| DEL I1 | 56 | 20 | 63 | 6 | 35 | 159 |
-| DEL I2 | 226 | 37 | 134 | 14 | 101 | 11 |
-| DEL I3 | 6 | 3 | 11 | 0 | 5 | 0 |
+| DEL I1 | 87 | 23 | 19 | 17 | 35 | 159 |
+| DEL I2 | 269 | 51 | 45 | 20 | 101 | 11 |
+| DEL I3 | 15 | 2 | 3 | 1 | 5 | 0 |
 | DEL I4 | 0 | 0 | 0 | 0 | 0 | 20 |
 | DEL I6 | 0 | 0 | 0 | 0 | 0 | 4 |
-| DEL I7 | 1 | 0 | 1 | 1 | 0 | 4 |
+| DEL I7 | 2 | 0 | 0 | 1 | 0 | 4 |
 | DEL I9 | 0 | 0 | 1 | 0 | 0 | 0 |
-| INS I1 | 167 | 16 | 212 | 18 | 74 | 272 |
-| INS I2 | 496 | 48 | 262 | 49 | 173 | 106 |
-| INS I3 | 47 | 19 | 38 | 7 | 20 | 6 |
+| INS I1 | 302 | 16 | 27 | 67 | 74 | 272 |
+| INS I2 | 619 | 57 | 67 | 96 | 173 | 106 |
+| INS I3 | 68 | 20 | 9 | 12 | 20 | 6 |
 | INS I4 | 0 | 0 | 0 | 0 | 0 | 40 |
 | INS I5 | 0 | 0 | 0 | 0 | 0 | 1 |
-| INS I6 | 0 | 0 | 1 | 0 | 1 | 9 |
-| INS I7 | 3 | 1 | 5 | 0 | 2 | 11 |
+| INS I6 | 1 | 0 | 0 | 0 | 1 | 9 |
+| INS I7 | 5 | 1 | 3 | 0 | 2 | 11 |
 
-逐条列表：`residual_edits_labelled_germline.tsv`（230 行，217 个不同候选）。
+逐条列表：`residual_edits_labelled_germline.tsv`（283 行，270 个不同候选）。
 
 ## 6. SNV（342）
 
@@ -226,7 +226,7 @@
 
 ## 9. 建议
 
-1. **标签**：和 PacBio 一样。tensor 落在 somatic 真值的等价范围内时，不标 germline 而标 −1（v4 下 ONT 217 个）。v4 已按单倍型重叠把 2,007 个残余 edit 标成 1，但重叠不到 60% 的 1,254 个标成了 0，是否改 −1 还要定。
+1. **标签**：和 PacBio 一样。tensor 落在 somatic 真值的等价范围内时，不标 germline 而标 −1（v6 下 ONT 270 个）。v6 已按单倍型重叠把 2,744 个残余 edit 标成 1，重叠不到 45% 的 275 个标 0。
 2. **ONT 的 min_variants / AF**：ONT 有 1,552 个 somatic INDEL 是 filtered，比 PacBio 的 1,058 多很多，主要卡在 min_variants。如果单倍型投影把同一 allele 的不同写法合并计数，这部分会大幅恢复。
 3. **代表 allele**：ONT 的噪声 allele 常常抢走代表位置（非代表 allele DEL 446、INS 416）。在训练里可以考虑用"site 中任一 allele 匹配 truth"来打标签。
 4. **supplement**：ONT 只丢了 1 个 truth，可以继续不开。
@@ -242,7 +242,7 @@
 | `snv_no_candidate.tsv` | 342 个 SNV 未命中，另有 SNV 专用列：等长 reads 数、SNV 位置的碱基分布、ALT reads 走的节点、节点长度、是否 target、discovery 统计 |
 | `controls.tsv` | 250 个对照 |
 | `transitions.tsv` | 每个 truth 的 PacBio v6 状态/类别 → ONT 状态/类别 |
-| `residual_edits_labelled_germline.tsv` | 残余 edit tensor 被标成 germline 的 230 行（v4） |
+| `residual_edits_labelled_germline.tsv` | 残余 edit tensor 被标成 germline 的 283 行（v6） |
 | `show_examples.txt`、`examples_pick.tsv`、`show/` | 例子的 reads 逐条显示 |
 | `tables.md` | 全部表格（`tables.py` 生成） |
 | `reads.py`、`snv_detail.py`、`snv_nodes.py`、`snv_compare.py`、`report.py`、`tables.py`、`show_locus.py`、`validate_trim.py` | 分析脚本 |

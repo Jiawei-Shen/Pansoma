@@ -14,11 +14,12 @@
 - 真值：
   - somatic：GIAB `HG008-T_somatic_smvar_benchmark_v0.2`，17,186 个 allele，全部 PASS；
   - germline：dipcall `HG008N` 的 `dip.vcf.gz` + `dip.bed`。
-- 标签：三个平台都是 `truth-labels-v4`（2026-09-26 重打，PacBio 用的是 `v6_tensors`）：
-  - 部分匹配也拿 truth 的标签：A1 和同一位置的 truth 重叠超过 60%（somatic 另按 A1 reads 的单倍型算重叠）；
-  - 分支节点上的 tensor 按最近的 GRCh38 节点定位后同样打标签；
-  - −1 只剩 BED 外、定不了位置、somatic truth 没 PASS；confident 区仍是 somatic BED ∩ germline BED。
-- 召回和原因分类不受标签规则影响。三份分析里跟标签有关的表（残余 edit 的标签、标签计数）都已按 v4 重算；各报告第 6 节例子里写的标签还是 v2 时的。
+- 标签：三个平台都是 `truth-labels-v6`（2026-09-28 重打；PacBio 用的是 `v3_tensors`，即 v6 的全部 tensors 加额外节点，`v6_tensors` 合并后的那份已删）：
+  - 部分匹配也拿 truth 的标签：A1 和同一位置的 truth 重叠超过 45%（somatic 另按 A1 reads 的单倍型算重叠）；
+  - 分支节点上的 tensor 只有部分匹配 somatic 才标 1，其余 −1；
+  - Illumina 的 SNV 另有 AF 门槛 0.07，低于它的标 −1；
+  - −1 另外还有 BED 外、定不了位置、somatic truth 没 PASS；confident 区仍是 somatic BED ∩ germline BED。
+- 召回和原因分类不受标签规则影响。三份分析里跟标签有关的表（残余 edit 的标签、标签计数）都已按 v6 重算；各报告第 6 节例子里写的标签还是 v2 时的。
 
 ## 主要结论
 
@@ -31,21 +32,22 @@
    - **ONT**：ultra-long reads 能唯一比对到片段重复区（I5 只有 1 个，S1 只有 1 个）。噪声 allele 多：非代表 allele 多（DEL 12.6%），filtered 多，同一个 allele 被分散成多种 edit 写法。
    - **Illumina**：INDEL 召回最低（有 tensor 的比例 DEL 51.7%、INS 36.3%）。长插入和长重复里 150 bp 的 reads 看不到或跨不过（I4 INS 264，I5 INS 84）；片段重复区的 SNV 没有 MAPQ>10 的 reads（S1 55）。噪声 allele 很少（非代表 allele DEL 1.4%）。
    - 长读段对一部分 I1 truth 的召回，来自同聚物噪声 edits 碰巧左对齐到 truth 位置；Illumina 没有这种噪声，所以 I1 更多（见 Illumina 报告第 1 节第 2 条）。
-4. **标签（v4 下）：**
-   - v4 把大量残余 edit 标成了 1：I1–I3 未命中的残余 edit 里，标 1 的不同候选 2,796 / 2,007 / 1,054 个。
-   - **但重叠不到 60% 的标成了 0**（负样本）：1,031 / 1,254 / 2,729 个，Illumina 比标 1 的还多。这些 tensor 带的是 somatic 单倍型的 reads，是否改标 −1 还没定。
-   - 残余 edit 的 tensor 被标成 germline（正好等于某个 germline truth）：330 / 217 / 326 个不同候选。
+4. **标签（v6 下）：**
+   - I1–I3 未命中的残余 edit 里，标 1 的不同候选 3,366 / 2,744 / 1,780 个（v4：2,796 / 2,007 / 1,054）。
+   - 重叠不到 45% 仍标 0 的：246 / 275 / 1,622 个（v4 阈值 60% 时是 1,031 / 1,254 / 2,729）。
+   - 分支节点上没对上 truth 的残余 edit 现在是 −1：标 −1 的 390 / 398 / 721 个。
+   - 残余 edit 的 tensor 被标成 germline：431 / 270 / 329 个不同候选。其中约一半是残余 edit 正好等于同一段重复里更短的 germline indel，另一部分是 ALT reads 上附带的真实 germline 变异（这部分标 2 是对的）。
    - site 的代表 allele 是 germline、另一个 allele 是 somatic truth，整个 tensor 被标成 2：254 / 234 / 40 个。
    - 209 个 somatic allele 和 germline 完全相同（多为正常样本杂合，可能是肿瘤 LOH 或两个 benchmark 冲突）；SNV 未命中里有 38 / 35 / 30 个属于这种。
 5. **负样本的构成差别很大**：
-   - PacBio 和 ONT 的 0 主要是 INDEL，大多是 1 bp 同聚物噪声；INDEL 的 0 : 1 分别为 265 : 1 和 401 : 1（v4）。
-   - Illumina 的 0 主要是 SNV：399 万个，0 : 1 为 410 : 1。它的 INDEL 负样本反而很少，0 : 1 只有 13 : 1。
+   - PacBio 和 ONT 的 0 主要是 INDEL，大多是 1 bp 同聚物噪声；INDEL 的 0 : 1 分别为 215 : 1 和 289 : 1（v6）。
+   - Illumina 的 0 主要是 SNV，多为偏链、低 AF 的测序错误（C>A、T>G、T>A）。加了 AF 0.07 门槛后还有 264 万个，0 : 1 为 238 : 1（v4 时 399 万、410 : 1）。它的 INDEL 负样本反而很少，0 : 1 只有 6 : 1。
 
 ## 目录
 
 | 路径 | 内容 |
 |---|---|
-| `comparison_tables.md` | 三平台对比表：召回、同一个 truth 在三个平台的状态、三个平台都漏掉的类别、原因分类、标签 0/1/2/−1（v4，按 reason）、标签质量问题（`compare_platforms.py` 生成） |
+| `comparison_tables.md` | 三平台对比表：召回、同一个 truth 在三个平台的状态、三个平台都漏掉的类别、原因分类、标签 0/1/2/−1（v6，按 reason）、标签质量问题（`compare_platforms.py` 生成） |
 | `compare_platforms.py` | 生成上面的表 |
 | `pacbio_v6/REPORT.md` | PacBio 报告：INDEL 用 v6 重新分析，SNV 沿用 v5（SNV tensors 两版相同）；含 v5 → v6 变化 |
 | `ont/REPORT.md` | ONT 报告（SNV 和 INDEL 都分析），和 PacBio 对比 |

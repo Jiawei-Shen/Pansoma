@@ -92,7 +92,7 @@ def trim(alignment, nodes, margin=TRIM_BP):
 
 def loci():
     status = {}
-    with open(RUN / "v6_tensors/somatic.recall.tsv") as f:
+    with open(RUN / "v6_tensors/merged_metadata_deleted_20260927/somatic.recall.tsv") as f:
         for row in csv.DictReader(f, delimiter="\t"):
             status[row["truth_id"]] = row["status"]
     rows = []
@@ -287,7 +287,7 @@ def tensor_labels():
     result = {}
     ids = re.compile(r'"candidate_id": "([^"]+)"')
     for kind in ("SNV", "INDEL"):
-        for f in sorted((RUN / "v6_tensors" / kind).glob("chr*_labels.ndjson")):
+        for f in sorted((RUN / "v3_tensors" / kind).glob("chr*_labels.ndjson")):
             summary = f.with_name(f.name.replace("_labels.ndjson", "_variant_summary.ndjson"))
             with f.open() as lab, summary.open() as summ:
                 for a, b in zip(lab, summ):

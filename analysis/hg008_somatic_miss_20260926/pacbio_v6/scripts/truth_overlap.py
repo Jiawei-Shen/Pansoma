@@ -46,7 +46,7 @@ for r in som:
 print("somatic with any germline allele within 10 bp:", near)
 json.dump(sorted(key_shared), open("/tmp/claude-10008/-scratch-jshen-Github-Pansoma/c9020fc2-7f52-41b9-b09f-9e3636ed53ce/scratchpad/key_shared.json", "w"))
 # tensors carrying both a somatic and a germline match
-for name, d in (("PacBio v6", "/scratch/jshen/data/pansoma_v2_tensors/Liss_lab_PacBio_Revio_20240125/v6_tensors"),
+for name, d in (("PacBio v6", "/scratch/jshen/data/pansoma_v2_tensors/Liss_lab_PacBio_Revio_20240125/v3_tensors"),
                 ("ONT", "/scratch/jshen/data/pansoma_v2_tensors/Liss_lab_Northeastern-ONT-UL-20241216/v3_tensors")):
     c = collections.Counter()
     for f in glob.glob(f"{d}/*/chr*_labels.ndjson"):

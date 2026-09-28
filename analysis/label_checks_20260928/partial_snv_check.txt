@@ -1,0 +1,46 @@
+
+=== HG008 Illumina: exact somatic SNV 8,277 (one strand 0.4%), partial 2,812
+   truth DEL  overlap 0.45-0.6 (new in v6)   n=  624  one-strand  36.9%  truth has its own exact tensor  30.6%  AF p50 0.129  dist to truth p50 8 bp
+   truth DEL  overlap >0.6                   n=  449  one-strand  21.4%  truth has its own exact tensor  53.7%  AF p50 0.116  dist to truth p50 4 bp
+   truth INS  overlap 0.45-0.6 (new in v6)   n=  928  one-strand  46.1%  truth has its own exact tensor  20.3%  AF p50 0.121  dist to truth p50 3 bp
+   truth INS  overlap >0.6                   n=  696  one-strand  33.0%  truth has its own exact tensor  24.0%  AF p50 0.125  dist to truth p50 2 bp
+   truth SNV  overlap 0.45-0.6 (new in v6)   n=   96  one-strand  28.1%  truth has its own exact tensor  53.1%  AF p50 0.265  dist to truth p50 1 bp
+   truth SNV  overlap >0.6                   n=   19  one-strand   0.0%  truth has its own exact tensor  36.8%  AF p50 0.933  dist to truth p50 1 bp
+
+=== HG008 PacBio: exact somatic SNV 8,234 (one strand 0.0%), partial 691
+   truth DEL  overlap 0.45-0.6 (new in v6)   n=   99  one-strand   4.0%  truth has its own exact tensor  39.4%  AF p50 0.208  dist to truth p50 5 bp
+   truth DEL  overlap >0.6                   n=  120  one-strand   3.3%  truth has its own exact tensor   9.2%  AF p50 0.333  dist to truth p50 8 bp
+   truth INS  overlap 0.45-0.6 (new in v6)   n=  143  one-strand   5.6%  truth has its own exact tensor  27.3%  AF p50 0.175  dist to truth p50 1 bp
+   truth INS  overlap >0.6                   n=  231  one-strand   4.3%  truth has its own exact tensor   7.4%  AF p50 0.415  dist to truth p50 1 bp
+   truth SNV  overlap 0.45-0.6 (new in v6)   n=   75  one-strand   4.0%  truth has its own exact tensor  58.7%  AF p50 0.203  dist to truth p50 1 bp
+   truth SNV  overlap >0.6                   n=   23  one-strand   4.3%  truth has its own exact tensor  60.9%  AF p50 0.393  dist to truth p50 1 bp
+
+=== HG008 ONT: exact somatic SNV 8,275 (one strand 0.2%), partial 738
+   truth DEL  overlap 0.45-0.6 (new in v6)   n=  147  one-strand  15.6%  truth has its own exact tensor  32.7%  AF p50 0.158  dist to truth p50 3 bp
+   truth DEL  overlap >0.6                   n=  100  one-strand  21.0%  truth has its own exact tensor   9.0%  AF p50 0.238  dist to truth p50 10 bp
+   truth INS  overlap 0.45-0.6 (new in v6)   n=  209  one-strand  20.6%  truth has its own exact tensor  17.2%  AF p50 0.185  dist to truth p50 2 bp
+   truth INS  overlap >0.6                   n=  188  one-strand  15.4%  truth has its own exact tensor   4.8%  AF p50 0.250  dist to truth p50 0 bp
+   truth SNV  overlap 0.45-0.6 (new in v6)   n=   77  one-strand   3.9%  truth has its own exact tensor  51.9%  AF p50 0.250  dist to truth p50 1 bp
+   truth SNV  overlap >0.6                   n=   17  one-strand   5.9%  truth has its own exact tensor  52.9%  AF p50 0.250  dist to truth p50 1 bp
+
+=== COLO829T Illumina: exact somatic SNV 38,239 (one strand 0.3%), partial 542
+   truth DEL  overlap 0.45-0.6 (new in v6)   n=   98  one-strand  18.4%  truth has its own exact tensor  56.1%  AF p50 0.157  dist to truth p50 4 bp
+   truth DEL  overlap >0.6                   n=  128  one-strand  10.2%  truth has its own exact tensor  50.8%  AF p50 0.154  dist to truth p50 2 bp
+   truth INS  overlap 0.45-0.6 (new in v6)   n=  115  one-strand  18.3%  truth has its own exact tensor  40.9%  AF p50 0.206  dist to truth p50 1 bp
+   truth INS  overlap >0.6                   n=  120  one-strand   4.2%  truth has its own exact tensor  34.2%  AF p50 0.233  dist to truth p50 1 bp
+   truth SNV  overlap 0.45-0.6 (new in v6)   n=   50  one-strand  10.0%  truth has its own exact tensor  82.0%  AF p50 0.514  dist to truth p50 1 bp
+   truth SNV  overlap >0.6                   n=   31  one-strand   6.5%  truth has its own exact tensor  48.4%  AF p50 1.000  dist to truth p50 1 bp
+
+examples:
+  {'cid': '40074642:120:SNP:C>T', 'chrom': 'chr4', 'pos': 172308003, 'truth': 'chr4:172308003 C>CTTTTTTT', 'tk': 'INS', 'ov': 0.591, 'af': 0.11290322580645161, 'alt': 7, 'cov': 62, 'fwd': 0, 'rev': 7, 'own': False, 'dist': 0}
+  {'cid': '47983036:1:SNP:C>A', 'chrom': 'chr6', 'pos': 154281184, 'truth': 'chr6:154281184 C>CAA', 'tk': 'INS', 'ov': 0.5, 'af': 0.16393442622950818, 'alt': 10, 'cov': 61, 'fwd': 0, 'rev': 10, 'own': False, 'dist': 0}
+  {'cid': '41365234:104:SNP:C>A', 'chrom': 'chr5', 'pos': 2461228, 'truth': 'chr5:2461228 CA>C', 'tk': 'DEL', 'ov': 0.5, 'af': 0.12626262626262627, 'alt': 25, 'cov': 198, 'fwd': 0, 'rev': 25, 'own': False, 'dist': 0}
+  {'cid': '4150549:0:SNP:T>C', 'chrom': 'chr1', 'pos': 203955471, 'truth': 'chr1:203955469 C>CT', 'tk': 'INS', 'ov': 0.5, 'af': 0.07971014492753623, 'alt': 11, 'cov': 138, 'fwd': 5, 'rev': 6, 'own': False, 'dist': 2}
+  {'cid': '33336509:6:SNP:A>C', 'chrom': 'chr22', 'pos': 49443732, 'truth': 'chr22:49443706 CAAAA>C', 'tk': 'DEL', 'ov': 0.5, 'af': 0.26373626373626374, 'alt': 24, 'cov': 91, 'fwd': 17, 'rev': 7, 'own': False, 'dist': 26}
+  {'cid': '52102100:31:SNP:A>T', 'chrom': 'chr8', 'pos': 14306742, 'truth': 'chr8:14306729 TTATTTGTGGTC>T', 'tk': 'DEL', 'ov': 0.538, 'af': 0.07246376811594203, 'alt': 5, 'cov': 69, 'fwd': 3, 'rev': 2, 'own': True, 'dist': 13}
+  {'cid': '52210836:105:SNP:C>A', 'chrom': 'chr8', 'pos': 81879170, 'truth': 'chr8:81879170 C>CAAAAAAAAAAA', 'tk': 'INS', 'ov': 0.605, 'af': 0.07228915662650602, 'alt': 6, 'cov': 83, 'fwd': 0, 'rev': 6, 'own': False, 'dist': 0}
+  {'cid': '22668191:0:SNP:T>A', 'chrom': 'chr18', 'pos': None, 'truth': 'chr18:53226948 A>ATATATATATAT', 'tk': 'INS', 'ov': 0.922, 'af': 0.08333333333333333, 'alt': 4, 'cov': 48, 'fwd': 4, 'rev': 0, 'own': False, 'dist': None}
+  {'cid': '22668184:0:SNP:T>A', 'chrom': 'chr18', 'pos': 53226950, 'truth': 'chr18:53226948 A>ATATATATATAT', 'tk': 'INS', 'ov': 0.891, 'af': 0.20512820512820512, 'alt': 8, 'cov': 39, 'fwd': 8, 'rev': 0, 'own': False, 'dist': 2}
+  {'cid': '55842546:0:SNP:T>G', 'chrom': 'chr9', 'pos': None, 'truth': 'chr9:70221380 T>TATATATATATA', 'tk': 'INS', 'ov': 0.67, 'af': 0.53125, 'alt': 17, 'cov': 32, 'fwd': 11, 'rev': 6, 'own': False, 'dist': None}
+  {'cid': '38828933:13:SNP:C>A', 'chrom': 'chr4', 'pos': 92510872, 'truth': 'chr4:92510858 T>TAAA', 'tk': 'INS', 'ov': 1.0, 'af': 0.08196721311475409, 'alt': 10, 'cov': 122, 'fwd': 7, 'rev': 3, 'own': False, 'dist': 14}
+  {'cid': '37167388:253:SNP:G>A', 'chrom': 'chr3', 'pos': 97033065, 'truth': 'chr3:97033065 G>GA', 'tk': 'INS', 'ov': 1.0, 'af': 0.0718232044198895, 'alt': 13, 'cov': 181, 'fwd': 12, 'rev': 1, 'own': True, 'dist': 0}

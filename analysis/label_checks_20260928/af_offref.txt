@@ -1,0 +1,45 @@
+
+=== PacBio  SNV tensors kept at AF >= threshold (label 1 somatic / 2 germline / 0 non)
+  threshold   0.06    0.07    0.08     0.1    0.15     0.2     0.3
+  label  1    8608    8589    8575    8541    8497    8447    8154
+  label  2  350827  349260  348027  346022  342837  340540  331269
+  label  0  135858  126323  119697  108301   88288   77682   63720
+  off-reference anchored tensors by (kind, label, reason):
+     ('INDEL', -1, 'outside_confident_region') 15901
+     ('INDEL', 0, 'confident_no_truth_allele') 18023
+     ('INDEL', 0, 'near_truth_allele_mismatch') 81814
+     ('INDEL', 1, 'residual_partial_somatic_truth') 957
+     ('SNV', -1, 'outside_confident_region') 23714
+     ('SNV', 0, 'confident_no_truth_allele') 18025
+     ('SNV', 0, 'near_truth_allele_mismatch') 31029
+     ('SNV', 1, 'residual_partial_somatic_truth') 221
+
+=== ONT  SNV tensors kept at AF >= threshold (label 1 somatic / 2 germline / 0 non)
+  threshold   0.06    0.07    0.08     0.1    0.15     0.2     0.3
+  label  1    8580    8566    8553    8520    8425    8338    7952
+  label  2  370175  369614  369101  367474  362179  357048  341284
+  label  0  362336  285104  244533  186781  110609   85312   61645
+  off-reference anchored tensors by (kind, label, reason):
+     ('INDEL', -1, 'outside_confident_region') 18027
+     ('INDEL', 0, 'confident_no_truth_allele') 30468
+     ('INDEL', 0, 'near_truth_allele_mismatch') 108257
+     ('INDEL', 1, 'residual_partial_somatic_truth') 676
+     ('SNV', -1, 'outside_confident_region') 23867
+     ('SNV', 0, 'confident_no_truth_allele') 16552
+     ('SNV', 0, 'near_truth_allele_mismatch') 31855
+     ('SNV', 1, 'residual_partial_somatic_truth') 170
+
+=== Illumina  SNV tensors kept at AF >= threshold (label 1 somatic / 2 germline / 0 non)
+  threshold   0.06    0.07    0.08     0.1    0.15     0.2     0.3
+  label  1    9703    9441    9238    8998    8727    8595    8267
+  label  2  316795  315438  314363  312789  310139  308024  299387
+  label  0   3988k   2763k   1990k   1116k    373k    188k     96k
+  off-reference anchored tensors by (kind, label, reason):
+     ('INDEL', -1, 'outside_confident_region') 3039
+     ('INDEL', 0, 'confident_no_truth_allele') 1185
+     ('INDEL', 0, 'near_truth_allele_mismatch') 17342
+     ('INDEL', 1, 'residual_partial_somatic_truth') 349
+     ('SNV', -1, 'outside_confident_region') 36506
+     ('SNV', 0, 'confident_no_truth_allele') 36493
+     ('SNV', 0, 'near_truth_allele_mismatch') 110236
+     ('SNV', 1, 'residual_partial_somatic_truth') 344

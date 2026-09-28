@@ -40,7 +40,7 @@ def tensor_labels():
     result = {}
     ids = re.compile(r'"candidate_id": "([^"]+)"')
     for kind in ("SNV", "INDEL"):
-        for f in sorted((RUN / "v6_tensors" / kind).glob("chr*_labels.ndjson")):
+        for f in sorted((RUN / "v3_tensors" / kind).glob("chr*_labels.ndjson")):  # v6 merged copy deleted; v3_tensors = v6 + extra nodes
             summary = f.with_name(f.name.replace("_labels.ndjson", "_variant_summary.ndjson"))
             with f.open() as lab, summary.open() as summ:
                 for a, b in zip(lab, summ):
@@ -153,7 +153,7 @@ with open(HERE / "residual_edits_labelled_germline.tsv", "w") as out:
 
 # ---- v5 -> v6 transitions -----------------------------------------------------------------
 v5_status = {r["truth_id"]: r["status"] for r in csv.DictReader(open(HERE / "v5_reference/v5_somatic.recall.tsv"), delimiter="\t")}
-v6_status = {r["truth_id"]: r["status"] for r in csv.DictReader(open(RUN / "v6_tensors/somatic.recall.tsv"), delimiter="\t")}
+v6_status = {r["truth_id"]: r["status"] for r in csv.DictReader(open(RUN / "v6_tensors/merged_metadata_deleted_20260927/somatic.recall.tsv"), delimiter="\t")}
 v5_class = {(r["chrom"], r["vcf_pos"], r["vcf_ref"], r["vcf_alt"]): r["final_class"]
             for r in csv.DictReader(open(HERE / "v5_reference/v5_indel_no_candidate.tsv"), delimiter="\t")}
 v6_class = {r["truth_id"]: r["final_class"] for r in misses}

@@ -188,7 +188,7 @@ with open(HERE / "residual_edits_labelled_germline.tsv", "w") as out:
                           f"\t{c}\t{n}\t{lab}\n")
 
 # ---- PacBio v6 -> ONT transitions ---------------------------------------------------------
-pb_status = {r["truth_id"]: r["status"] for r in csv.DictReader(open(PACBIO / "v6_tensors/somatic.recall.tsv"), delimiter="\t")}
+pb_status = {r["truth_id"]: r["status"] for r in csv.DictReader(open(PACBIO / "v6_tensors/merged_metadata_deleted_20260927/somatic.recall.tsv"), delimiter="\t")}
 ont_status = {r["truth_id"]: r["status"] for r in csv.DictReader(open(RUN / "v3_tensors/somatic.recall.tsv"), delimiter="\t")}
 pb_class = {}
 for f in ("indel_no_candidate.tsv", "snv_no_candidate.tsv"):

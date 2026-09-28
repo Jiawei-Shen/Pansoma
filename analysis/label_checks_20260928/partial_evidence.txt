@@ -1,0 +1,90 @@
+
+=== HG008 Illumina
+   INDEL overlap 0.45-0.6 allele overlap                                 76
+   INDEL overlap 0.45-0.6 no evidence (median d_ref-d_truth <= 0)        77
+   INDEL overlap 0.45-0.6 reads carry >= half the truth                 603
+   INDEL overlap 0.45-0.6 weak evidence                                  71
+   INDEL overlap >0.6     allele overlap                                 65
+   INDEL overlap >0.6     reads carry >= half the truth                 806
+   INDEL overlap >0.6     weak evidence                                  56
+   SNV   overlap 0.45-0.6 no evidence (median d_ref-d_truth <= 0)       348
+   SNV   overlap 0.45-0.6 reads carry >= half the truth                 960
+   SNV   overlap 0.45-0.6 weak evidence                                 340
+   SNV   overlap >0.6     no evidence (median d_ref-d_truth <= 0)         1
+   SNV   overlap >0.6     reads carry >= half the truth                 975
+   SNV   overlap >0.6     weak evidence                                 188
+
+=== HG008 PacBio
+   INDEL overlap 0.45-0.6 allele overlap                                116
+   INDEL overlap 0.45-0.6 no evidence (median d_ref-d_truth <= 0)       218
+   INDEL overlap 0.45-0.6 reads carry >= half the truth                 511
+   INDEL overlap 0.45-0.6 weak evidence                                 106
+   INDEL overlap >0.6     allele overlap                                 97
+   INDEL overlap >0.6     no evidence (median d_ref-d_truth <= 0)         3
+   INDEL overlap >0.6     reads carry >= half the truth                1720
+   INDEL overlap >0.6     weak evidence                                 181
+   SNV   overlap 0.45-0.6 no evidence (median d_ref-d_truth <= 0)        91
+   SNV   overlap 0.45-0.6 reads carry >= half the truth                 185
+   SNV   overlap 0.45-0.6 weak evidence                                  41
+   SNV   overlap >0.6     no evidence (median d_ref-d_truth <= 0)         1
+   SNV   overlap >0.6     reads carry >= half the truth                 313
+   SNV   overlap >0.6     weak evidence                                  60
+
+=== HG008 ONT
+   INDEL overlap 0.45-0.6 allele overlap                                446
+   INDEL overlap 0.45-0.6 no evidence (median d_ref-d_truth <= 0)       472
+   INDEL overlap 0.45-0.6 reads carry >= half the truth                 600
+   INDEL overlap 0.45-0.6 weak evidence                                 142
+   INDEL overlap >0.6     allele overlap                                 98
+   INDEL overlap >0.6     no evidence (median d_ref-d_truth <= 0)         5
+   INDEL overlap >0.6     reads carry >= half the truth                1201
+   INDEL overlap >0.6     weak evidence                                 203
+   SNV   overlap 0.45-0.6 no evidence (median d_ref-d_truth <= 0)       161
+   SNV   overlap 0.45-0.6 reads carry >= half the truth                 206
+   SNV   overlap 0.45-0.6 weak evidence                                  66
+   SNV   overlap >0.6     no evidence (median d_ref-d_truth <= 0)         1
+   SNV   overlap >0.6     reads carry >= half the truth                 238
+   SNV   overlap >0.6     weak evidence                                  66
+
+=== COLO829T Illumina
+   INDEL overlap 0.45-0.6 allele overlap                                 13
+   INDEL overlap 0.45-0.6 no evidence (median d_ref-d_truth <= 0)        17
+   INDEL overlap 0.45-0.6 reads carry >= half the truth                  81
+   INDEL overlap 0.45-0.6 weak evidence                                  20
+   INDEL overlap >0.6     allele overlap                                 15
+   INDEL overlap >0.6     reads carry >= half the truth                 117
+   INDEL overlap >0.6     weak evidence                                   8
+   SNV   overlap 0.45-0.6 no evidence (median d_ref-d_truth <= 0)        42
+   SNV   overlap 0.45-0.6 reads carry >= half the truth                 193
+   SNV   overlap 0.45-0.6 weak evidence                                  28
+   SNV   overlap >0.6     reads carry >= half the truth                 253
+   SNV   overlap >0.6     weak evidence                                  26
+
+=== COLO829T ONT
+   INDEL overlap 0.45-0.6 allele overlap                                106
+   INDEL overlap 0.45-0.6 no evidence (median d_ref-d_truth <= 0)       654
+   INDEL overlap 0.45-0.6 reads carry >= half the truth                 252
+   INDEL overlap 0.45-0.6 weak evidence                                  31
+   INDEL overlap >0.6     allele overlap                                 18
+   INDEL overlap >0.6     no evidence (median d_ref-d_truth <= 0)         1
+   INDEL overlap >0.6     reads carry >= half the truth                 199
+   INDEL overlap >0.6     weak evidence                                  18
+   SNV   overlap 0.45-0.6 no evidence (median d_ref-d_truth <= 0)       121
+   SNV   overlap 0.45-0.6 reads carry >= half the truth                 171
+   SNV   overlap 0.45-0.6 weak evidence                                  13
+   SNV   overlap >0.6     reads carry >= half the truth                 100
+   SNV   overlap >0.6     weak evidence                                  14
+
+=== COLO829T fiberseq
+   INDEL overlap 0.45-0.6 allele overlap                                 25
+   INDEL overlap 0.45-0.6 no evidence (median d_ref-d_truth <= 0)       199
+   INDEL overlap 0.45-0.6 reads carry >= half the truth                 158
+   INDEL overlap 0.45-0.6 weak evidence                                  21
+   INDEL overlap >0.6     allele overlap                                 18
+   INDEL overlap >0.6     reads carry >= half the truth                 172
+   INDEL overlap >0.6     weak evidence                                  23
+   SNV   overlap 0.45-0.6 no evidence (median d_ref-d_truth <= 0)        50
+   SNV   overlap 0.45-0.6 reads carry >= half the truth                 106
+   SNV   overlap 0.45-0.6 weak evidence                                   5
+   SNV   overlap >0.6     reads carry >= half the truth                 125
+   SNV   overlap >0.6     weak evidence                                   9

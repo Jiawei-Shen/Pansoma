@@ -126,7 +126,7 @@ def snv():
 if __name__ == "__main__":
     what = sys.argv[1:] or ["recall", "transitions", "classes", "residual", "controls", "snv"]
     if "recall" in what:
-        recall_table(RUN / "v6_tensors/somatic.recall.tsv", "v6 somatic 召回（新标签规则；召回与规则无关）")
+        recall_table(RUN / "v6_tensors/merged_metadata_deleted_20260927/somatic.recall.tsv", "v6 somatic 召回（召回与标签规则无关）")
     if "transitions" in what:
         print("\n### v5 → v6 状态变化（INDEL）")
         transitions()

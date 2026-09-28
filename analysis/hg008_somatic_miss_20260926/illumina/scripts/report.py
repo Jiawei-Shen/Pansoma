@@ -202,7 +202,7 @@ def classes(folder):
     return found
 
 
-pb_status, ont_status = statuses(PACBIO / "v6_tensors/somatic.recall.tsv"), statuses(ONT / "v3_tensors/somatic.recall.tsv")
+pb_status, ont_status = statuses(PACBIO / "v6_tensors/merged_metadata_deleted_20260927/somatic.recall.tsv"), statuses(ONT / "v3_tensors/somatic.recall.tsv")
 il_status = statuses(RUN / "v3_tensors/somatic.recall.tsv")
 pb_class, ont_class = classes(PACBIO_ANALYSIS), classes(ONT_ANALYSIS)
 il_class = {r["truth_id"]: r["final_class"] for r in misses}
