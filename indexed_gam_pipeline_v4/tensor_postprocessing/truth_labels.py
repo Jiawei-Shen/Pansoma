@@ -408,7 +408,9 @@ def haplotype_overlap(alt_rows, ref_rows, reference, haplotype, event, oriented=
     """Median over the A1 reads of the truth event they carry, from their local sequences (the tensor window):
     with d_ref, d_truth = edits of a read against the GRCh38 window and against it with the truth allele, both
     minus the REF reads' median error b, shared = (d_ref + event - d_truth) / 2 and overlap = shared /
-    max(d_ref, event). Catches a truth written differently by the graph alignment (a branch plus a residual
+    max(d_ref, event). A read not closer to the truth haplotype than to GRCh38 before that subtraction
+    (d_truth >= d_ref) carries none of the event: overlap 0 (the subtraction alone would give it 0.5 whenever
+    b >= both distances). Catches a truth written differently by the graph alignment (a branch plus a residual
     edit, a skipped node plus a mismatch). `oriented=False` (off-reference node): each read is taken in the
     orientation that fits better. None with fewer than 3 A1 reads."""
     def fits(read):
@@ -420,7 +422,11 @@ def haplotype_overlap(alt_rows, ref_rows, reference, haplotype, event, oriented=
     b = base[len(base) // 2] if base else 0
     overlaps = []
     for q in alt_rows:
-        d_ref, d_truth = (max(0, d - b) for d in fits(q))
+        raw_ref, raw_truth = fits(q)
+        if raw_truth >= raw_ref:  # no closer to the truth than to GRCh38: no evidence for it
+            overlaps.append(0.0)
+            continue
+        d_ref, d_truth = max(0, raw_ref - b), max(0, raw_truth - b)
         shared = max(0.0, (d_ref + event - d_truth) / 2)
         overlaps.append(shared / max(d_ref, event))
     return sorted(overlaps)[len(overlaps) // 2]

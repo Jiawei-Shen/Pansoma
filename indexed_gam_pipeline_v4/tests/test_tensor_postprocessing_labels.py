@@ -422,6 +422,12 @@ class TruthLabelTest(unittest.TestCase):
         self.assertAlmostEqual(haplotype_overlap(other, refs, reference, truth, 3), 0.75)
         self.assertEqual(haplotype_overlap([rc(q) for q in reads], refs, reference, truth, 3, oriented=False), 1.0)
         self.assertIsNone(haplotype_overlap(reads[:2], refs, reference, truth, 3))
+        # Reads that do not reach the event fit both haplotypes equally: no evidence, overlap 0 (it was 0.5 once the
+        # REF-read error b >= both distances, b = 0 here), also with noisy REF reads (b = 2).
+        away = [reference[i:i + 40] for i in (0, 5, 10)]
+        self.assertEqual(haplotype_overlap(away, refs, reference, truth, 3), 0.0)
+        noisy = [q[:20] + ("C" if q[20] != "C" else "G") + q[21:40] + ("C" if q[40] != "C" else "G") + q[41:] for q in refs]
+        self.assertEqual(haplotype_overlap(away, noisy, reference, truth, 3), 0.0)
         self.assertEqual(allele_overlap("DEL", 201, "AA", "", dict(kind="DEL", ref="AAA", lo=200, hi=203)), 2 / 3)
         self.assertEqual(allele_overlap("DEL", 210, "AA", "", dict(kind="DEL", ref="AAA", lo=200, hi=203)), 0)
 

@@ -246,7 +246,10 @@ the graph alignment takes the truth's label. `<chrom>_labels.ndjson` marks it wi
   each side) with and without the truth allele. Let d_ref and d_truth be those edit counts minus the
   REF reads' median error, and let e be the event size (1 for an SNV, otherwise the longer allele).
   A read's overlap is max(0, (d_ref + e − d_truth) / 2) / max(d_ref, e), and the tensor's is the
-  median over its A1 reads. With fewer than 3 A1 reads there is no haplotype overlap. This catches
+  median over its A1 reads. A read that is not closer to the truth haplotype than to GRCh38 before the
+  error subtraction (raw d_truth ≥ raw d_ref) counts as 0: it carries none of the event (2026-09-28;
+  before, the subtraction gave such reads exactly 0.5 whenever the REF error was at least both
+  distances, which passed the 45 % threshold; `analysis/label_checks_20260928`). With fewer than 3 A1 reads there is no haplotype overlap. This catches
   a truth written as a graph branch plus a residual edit (truth +AAA, tensor DEL A after a +AAAA
   branch), or as a skipped node plus a mismatch. It is also the only way an off-reference tensor
   matches, with each read taken in the orientation that fits better.
