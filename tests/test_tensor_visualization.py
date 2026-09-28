@@ -1,4 +1,6 @@
 """Image/metadata regressions; run with a compatible NumPy + Matplotlib environment."""
+from contextlib import redirect_stdout
+import io
 import json
 from pathlib import Path
 import sys
@@ -276,6 +278,36 @@ class VisualizationTest(unittest.TestCase):
             (p/'variant_summary.ndjson').write_text((json.dumps(record)+'\n')*2)
             with self.assertRaisesRegex(ValueError,'Duplicate'):
                 v.load_metadata(str(p/'custom.npy'),shard_index=3)
+
+    def test_merged_shard_uses_its_chromosome_summary_by_shard_position(self):
+        # tensor_postprocessing layout: <chrom>_shard_NNNNN_data.npy + <chrom>_variant_summary.ndjson + manifest.json
+        v6,versioned=v6_example()
+        plain={k:val for k,val in versioned.items() if not k.endswith("_version")}
+        plain.update(tensor_format=v.CANDIDATE_FORMAT,tensor_storage=v.LINEAR_STORAGE)
+        for names,record in (("v4",plain),("-v6/-v1",versioned)):
+            with self.subTest(names),tempfile.TemporaryDirectory() as d:
+                p=Path(d)
+                (p/'manifest.json').write_text(json.dumps(dict({k:val for k,val in record.items() if k.startswith('tensor_')},
+                                                               layout='chromosome-shards')))
+                for chrom in ('chr1','chr2'):  # shard 0 has 3 records: shard 1's lines are not its positions
+                    rows=[dict(record,candidate_id=f'{chrom}:{s}:{i}',chrom=chrom,shard_file=f'{chrom}_shard_{s:05d}_data.npy',
+                               shard_index=s,index_within_shard=i) for s,n in ((0,3),(1,2)) for i in range(n)]
+                    (p/f'{chrom}_variant_summary.ndjson').write_text(''.join(json.dumps(r)+'\n' for r in rows))
+                shard=p/'chr2_shard_00001_data.npy'
+                np.save(shard,np.stack([v6,v6]))
+                manifest,rows=v.load_metadata(str(shard))
+                self.assertEqual(manifest['layout'],'chromosome-shards')
+                self.assertEqual({i:r['candidate_id'] for i,r in rows.items()},{0:'chr2:1:0',1:'chr2:1:1'})
+                self.assertEqual(v.default_summary(p/'x_shard_00000_data.npy'),p/'variant_summary.ndjson')
+                real_close=v.plt.close
+                with patch.object(v.plt,'close'),redirect_stdout(io.StringIO()),\
+                        patch.object(sys,'argv',['visualize_tensor.py',str(shard),'-i','1','-o',str(p/'t.png')]):
+                    v.main()
+                    fig=v.plt.gcf()
+                    caption=fig._suptitle.get_text()
+                    real_close(fig)
+                self.assertTrue(caption.startswith('chr2:1:1\ncandidate'))
+                self.assertIn('A1 INS ->TA AF 0.400 (2/5)',caption)
 
 
 if __name__=='__main__':

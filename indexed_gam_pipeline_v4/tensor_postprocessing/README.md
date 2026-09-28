@@ -76,7 +76,7 @@ labels when every kind has a `labels.manifest.json`.
 ```
 
 `finalize` labels without an SNV AF filter. To apply one to a short-read set, label it again with
-`label --snv-min-af 0.07` (`relabel.sh ... 0.07`; see [Commands](#commands)).
+`label --snv-min-af 0.07` (`tools/jobs/relabel.sh ... 0.07`; see [Commands](#commands)).
 
 ## Merge (`merge_shards.py`)
 
@@ -350,33 +350,43 @@ $P.tools.graph_prep chr-index \
     --graph-index $G/hprc-v1.1-mc-grch38.d9.graph_index.sqlite
 ```
 
+`tools/jobs/graph_prep.sh OUTDIR` runs the same three commands as one Slurm job, with these inputs
+as its defaults (other graphs: `graph_prep.sh OUTDIR GFA GRAPH_INDEX FASTA COMPONENTS_DIR`); it
+names the outputs after the GFA, as above, and does not overwrite them.
+
 Measured on HPRC v1.1 d9:
 
 * ref-path-scan: 7.4 min / 4.0 GiB (49,092,514 GRCh38 nodes, none visited twice);
 * ref-path-check: 0 length and 0 sequence mismatches;
-* chr-index: 29 s.
+* chr-index: 29 s;
+* `graph_prep.sh` (all three, 2 CPUs, `--mem=5G`): 10 min, peak 4.0 GiB. Its outputs equal the
+  files under `$G`: every `.npy`, `walks.ndjson` and the `.tsv` byte for byte; the JSON only in the
+  format key (`format`, plain name, instead of `version`, `-v1` name), `scan_seconds` and paths.
 
-**Relabelling the six existing sets.** `/scratch/jshen/data/pansoma_v2_tensors/relabel.sh` labels
-one merged set with `pipeline_code/` next to it. `pipeline_code/` is a `git archive` of this
-package, with the commit recorded in `pipeline_code/git_head.txt`. Before labelling, the script
-does two things:
+**Relabelling the six existing sets.** `tools/jobs/relabel.sh` labels one merged set with the
+package it is in (main README, section 4, "Tools"). On the data side it runs from
+`/scratch/jshen/data/pansoma_v2_tensors/pipeline_code/`, a `git archive` of this package plus the
+compiled `.so`, with the commit recorded in `pipeline_code/git_head.txt`. Before labelling, the
+script does two things:
 
 * checks that `TENSORS/SNV/manifest.json` has a merged layout (either name);
 * copies the current `labels.manifest.json` files and recall reports to
   `<sample dir>/labels_backup_<tensors dir>_<time>_<job>/`.
 
-It then runs `indexed_gam_pipeline_v4.tensor_postprocessing label` with the HPRC reference-path
-directory and the GRCh38 FASTA above (1 CPU, `--mem=20G`, 6 h).
+It then runs `tensor_postprocessing label` with the HPRC reference-path directory and the GRCh38
+FASTA above (1 CPU, `--mem=19G`, 6 h). The COLO829T `label_job.sh` scripts (step 4 of those runs)
+call it with the COLO829T truth files below.
 
 ```bash
 D=/scratch/jshen/data/pansoma_v2_tensors; H=/scratch/jshen/data/HG008_GIAB; Q=/scratch/qfu/COLO829BL_DSA/dipcall_hg38
-# sbatch -J NAME -o LOG $D/relabel.sh TENSORS SOMATIC_VCF SOMATIC_BED GERMLINE_VCF GERMLINE_BED TRUTH_DIR [SNV_MIN_AF]
+J=$D/pipeline_code/indexed_gam_pipeline_v4/tools/jobs
+# sbatch -J NAME -o LOG $J/relabel.sh TENSORS SOMATIC_VCF SOMATIC_BED GERMLINE_VCF GERMLINE_BED TRUTH_DIR [SNV_MIN_AF]
 HG008="$H/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_tumorvariants.vcf.gz
        $H/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_all.bed
        $H/dipcall_HG008N_GRCh38/HG008N_GRCh38_dipcall.dip.vcf.gz $H/dipcall_HG008N_GRCh38/HG008N_GRCh38_dipcall.dip.bed"
 COLO="$D/COLO829T_truth/COLO829T_somatic_snv_indel.vcf.gz $D/COLO829T_truth/SMaHT_v2_easy_difficult_extreme.union.bed
       $Q/dipcall_hg38.dip.vcf.gz $Q/dipcall_hg38.dip.bed"
-relabel() { sbatch -J relabel_$1 -o $D/$1/slurm-relabel-%j.out $D/relabel.sh $D/$1/v3_tensors $2 $D/$1/truth $3; }
+relabel() { sbatch -J relabel_$1 -o $D/$1/slurm-relabel-%j.out $J/relabel.sh $D/$1/v3_tensors $2 $D/$1/truth $3; }
 relabel Liss_lab_PacBio_Revio_20240125 "$HG008"             # HG008 PacBio HiFi
 relabel Liss_lab_Northeastern-ONT-UL-20241216 "$HG008"      # HG008 ONT-UL
 relabel Liss_lab_BCM_Illumina-WGS_20240313 "$HG008" 0.07    # HG008 Illumina

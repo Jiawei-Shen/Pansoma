@@ -478,13 +478,24 @@ def visualize_candidate_tensor(tensor, out_path, title, show_all_rows=False,
     return view.shape[1]
 
 
+def default_summary(npy_path):
+    """variant_summary.ndjson beside a task shard (shard_NNNNN_data.npy); <chrom>_variant_summary.ndjson beside a
+    merged shard (<chrom>_shard_NNNNN_data.npy of tensor_postprocessing), whose records carry the chromosome's
+    shard_index / index_within_shard and shard_file."""
+    path = Path(npy_path)
+    merged = re.match(r"(.+)_shard_\d+_data\.npy$", path.name)
+    if merged and (path.parent / f"{merged.group(1)}_variant_summary.ndjson").exists():
+        return path.parent / f"{merged.group(1)}_variant_summary.ndjson"
+    return path.parent / "variant_summary.ndjson"
+
+
 def load_metadata(npy_path, manifest_path=None, summary_path=None, shard_index=None):
     parent = Path(npy_path).parent
     manifest_file = Path(manifest_path) if manifest_path else parent / "manifest.json"
     manifest = json.loads(manifest_file.read_text()) if manifest_file.exists() else {}
     if manifest_path and not manifest_file.exists():
         raise ValueError(f"Manifest does not exist: {manifest_path}")
-    summary_file = Path(summary_path) if summary_path else parent / "variant_summary.ndjson"
+    summary_file = Path(summary_path) if summary_path else default_summary(npy_path)
     records = {}
     if summary_file.exists():
         if shard_index is None:
@@ -603,7 +614,8 @@ def main() -> None:
     )
     parser.add_argument(
         "--summary-path",
-        help="Candidate or classified NDJSON metadata; default: beside input NPY.",
+        help="Candidate or classified NDJSON metadata; default: beside input NPY (variant_summary.ndjson; "
+             "<chrom>_variant_summary.ndjson for a merged <chrom>_shard_NNNNN_data.npy).",
     )
     parser.add_argument(
         "--max-samples",

@@ -139,8 +139,9 @@ Import order is top-down: `common` ← `gam_reader`/`graph_index` ← `candidate
 `build` ← `run` ← `orchestrate`; `tensor_postprocessing` uses only `common`/`graph_index` and is
 used by `build` (`--chromosomes`) and `orchestrate` (`finalize`).
 
-**Tools** (`tools/`) — offline, run from the checkout, never imported by a runtime module and not
-frozen (a static test enforces both):
+**Tools** (`tools/`) — offline, run from the checkout (the job scripts also from a `git archive`
+copy such as `pipeline_code/`, section 6), never imported by a runtime module and not frozen (a
+static test enforces both):
 
 | File | Purpose |
 |---|---|
@@ -149,6 +150,7 @@ frozen (a static test enforces both):
 | `tools/validate_examples.py` | independent audit of a `--debug-rows` output against the GAM and graph |
 | `tools/binary_requirements.py` | newest GLIBC/GLIBCXX/CXXABI symbol versions and AVX/AVX-512/BMI use of a binary |
 | `tools/compare_runs.py` | byte and normalized comparison of two run roots, task or build directories (stdlib only) |
+| `tools/jobs/graph_prep.sh`, `tools/jobs/relabel.sh` | Slurm job scripts (shell) that run the package they are in: the three `graph_prep` steps for one graph; `tensor_postprocessing label` of one merged set, after a backup of its labels |
 
 **Tests** (`tests/`, a subpackage) — section 9.
 
@@ -396,6 +398,10 @@ $PY -m $P.tools.graph_index_build build --gbz /scratch/jshen/data/AF-Filtered_VG
 $PY -m $P.tools.graph_prep ref-path-scan --gfa G.gfa --output DIR [--reference-sample GRCh38]
 $PY -m $P.tools.graph_prep ref-path-check --path DIR --graph-index DB --fasta FA [--samples 100000]
 $PY -m $P.tools.graph_prep chr-index --components-dir D --reference-path DIR --output PREFIX [--graph-index DB]
+# the same three steps as one Slurm job (defaults: the HPRC v1.1 d9 inputs)
+sbatch -J graph_prep -o LOG $P/tools/jobs/graph_prep.sh OUTDIR [GFA [GRAPH_INDEX [FASTA [COMPONENTS_DIR]]]]
+# labels of one merged set as a Slurm job, after a backup of the current labels
+sbatch -J NAME -o LOG $P/tools/jobs/relabel.sh TENSORS SOMATIC_VCF SOMATIC_BED GERMLINE_VCF GERMLINE_BED TRUTH_DIR [SNV_MIN_AF]
 # audit of a --debug-rows build (one typed directory)
 $PY -m $P.tools.validate_examples out/SNV --gam G [--index GAI] --graph-index DB --output report.json
 # compare two run roots, task directories or build directories; exit 1 on any difference
@@ -418,6 +424,18 @@ $PY -m $P.tools.compare_runs A B [--mask DOTTED.KEY ...] [--report FILE]
   `meta.json` that records the format under `version`, in its earlier spelling, as under `$G`);
   `chr-index` writes `<prefix>.tsv` plus `<prefix>.json` (`format` `chr-node-ranges`, `tsv_sha256`,
   which `ChrIndex` checks).
+* **Job scripts** (`tools/jobs/`, plain shell with `#SBATCH` defaults for `-p general`). Each runs
+  the package it lives in: started with `bash`, the one around its own path; under `sbatch`, which
+  runs a copy of the script, the one around the submitted path (job record, `scontrol show job`:
+  `Command=`). So the checkout's scripts run the checkout, and
+  `pipeline_code/indexed_gam_pipeline_v4/tools/jobs/` runs `pipeline_code/`. A script prints
+  `package: <dir>`, makes relative path arguments absolute and runs `python -m <package>...` from
+  the package's parent directory. `graph_prep.sh` writes `OUTDIR/<GFA name>.grch38_path/` and
+  `OUTDIR/<GFA name>.chr_node_ranges.{tsv,json}` and stops before the scan if any of them (or the
+  `.grch38_path.tmp` of a failed scan) exists; 2 CPUs, `--mem=5G`. On HPRC v1.1 d9 it takes 10 min
+  (peak 4.0 GiB, in the scan) and reproduces the files under `$G` (arrays, walk list and TSV
+  byte-identical; the JSON differ in the format key, the scan time and paths). `relabel.sh`:
+  section 6; 1 CPU, `--mem=19G` (label peak 15.7 GiB, COLO829T), 6 h.
 * **validate_examples** requires `--debug-rows`. It recounts every site allele's (and the site's)
   coverage from raw mapping intervals, re-applies the read cap from the record digests, re-derives
   the site layout, the allele blocks and the uniform sampling from the recorded audit, and checks
@@ -433,10 +451,16 @@ $PY -m $P.tools.compare_runs A B [--mask DOTTED.KEY ...] [--report FILE]
   file present in only one tree is a difference. The module docstring lists every rule.
 
 Tensor PNGs: `scripts/visualize_tensor.py` renders `indexed-gam-candidate` tensors as eight panels
-from a shard plus the `manifest.json`/`variant_summary.ndjson` beside it, with the allele blocks. The
-base environment's matplotlib has a NumPy ABI conflict; use `MPLBACKEND=Agg
-MPLCONFIGDIR=/tmp/pansoma_matplotlib /wanglab/jshen/anaconda3/envs/hunyuanvideo15/bin/python
-scripts/visualize_tensor.py SHARD -i 0 -o figure.png`.
+with the allele blocks, from a shard plus the metadata beside it: `manifest.json` +
+`variant_summary.ndjson` for a task shard (`task_NNNN/shard_NNNNN_data.npy`), `manifest.json` +
+`<chrom>_variant_summary.ndjson` for a merged shard (`<tensors>/<kind>/<chrom>_shard_NNNNN_data.npy`).
+`-i` is the position within that shard (the record with the shard's `shard_index` and
+`index_within_shard`), not a line number of the chromosome summary. The finished datasets' merged
+shards (older `-v6`/`-v1` names) render the same way. Reading a whole-chromosome summary takes up to
+~25 s (chr1 SNV, 1.45 GB). The base environment's matplotlib has a NumPy ABI conflict; use
+`MPLBACKEND=Agg MPLCONFIGDIR=/tmp/pansoma_matplotlib
+/wanglab/jshen/anaconda3/envs/hunyuanvideo15/bin/python scripts/visualize_tensor.py SHARD -i 0 -o
+figure.png`.
 
 ---
 
@@ -454,7 +478,8 @@ tensors of nodes over the cap can therefore differ from what this package builds
 `Liss_lab_BCM_Illumina-WGS_20240313`; COLO829T: `COLO829T_{Illumina,fiberseq,ONT}`). HG008 PacBio
 differs: its `v3_tensors` merges `v6_run`, built by an earlier package, with `v3_extra_run`
 (footnote ¹). The label counts are those of this package's rules (`tensor_postprocessing label` over
-the merged sets; data side `relabel.sh`, section 6), the Illumina sets with `--snv-min-af 0.07`.
+the merged sets; data side `tools/jobs/relabel.sh`, section 6), the Illumina sets with
+`--snv-min-af 0.07`.
 
 All runs: one Slurm node, `-p general`, `--mem=420G`, `--chromosomes autosome`, `--snv-min-af
 0.06 --indel-min-af 0.08`, other builder options at their defaults (except as noted),
@@ -614,12 +639,14 @@ the code that executes it), `native_decoder` (`available`, `reason`), `variant_o
   finalize --root <root>`); PacBio `v6_run` has no `package` key, is finished and must not be
   re-finalized. The merged sets of section 5 are relabelled by this package's
   `tensor_postprocessing label`, which reads their merged layout under
-  its earlier name (section 8, "Format names"). On the data side
-  `/scratch/jshen/data/pansoma_v2_tensors/relabel.sh` runs it from `pipeline_code/` (a `git
-  archive` of this package; the commit in `pipeline_code/git_head.txt`): `sbatch -J NAME -o LOG
-  relabel.sh TENSORS SOMATIC_VCF SOMATIC_BED GERMLINE_VCF GERMLINE_BED TRUTH_DIR [SNV_MIN_AF]`, after
-  copying the current label manifests and recall files to
-  `<sample dir>/labels_backup_<tensors dir>_<time>_<job>/`.
+  its earlier name (section 8, "Format names"). On the data side this runs from
+  `/scratch/jshen/data/pansoma_v2_tensors/pipeline_code/` (a `git archive` of this package plus the
+  compiled `.so`; the commit in `pipeline_code/git_head.txt`) through its `tools/jobs/relabel.sh`,
+  which runs the package it is in (section 4, "Tools"): `sbatch -J NAME -o LOG
+  pipeline_code/indexed_gam_pipeline_v4/tools/jobs/relabel.sh TENSORS SOMATIC_VCF SOMATIC_BED
+  GERMLINE_VCF GERMLINE_BED TRUTH_DIR [SNV_MIN_AF]`, after copying the current label manifests and
+  recall files to `<sample dir>/labels_backup_<tensors dir>_<time>_<job>/`. The COLO829T
+  `label_job.sh` scripts call it the same way.
 * The queue ledger (`queue_status.json`: per-task state, PIDs, wall times) is written at start,
   whenever a task starts or ends, and at the end.
 
