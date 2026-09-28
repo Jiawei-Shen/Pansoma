@@ -7,7 +7,8 @@ from unittest import mock
 import numpy as np
 
 from .. import data
-from ..data import SCALARS, EpochSampler, KindIndex, TensorDataset, block_ends, block_split, load_parts, site_scalars
+from ..data import (SCALARS, EpochSampler, KindIndex, TensorDataset, block_ends, block_split, load_parts, site_scalars,
+                    somatic_truth, validation_truth)
 from .fixtures import make_tensor_set
 
 SPEC = {"SNV": {"chr1": 9, "chr2": 6}, "INDEL": {"chr1": 5, "chr2": 3}}
@@ -38,6 +39,9 @@ class IndexTest(unittest.TestCase):
                 self.assertEqual(index.reason(k), t["reason"])
                 self.assertEqual(bool(a["off_reference"][k]), t["off_reference"])
                 self.assertEqual(int(a["eval_label"][k]), t["eval_label"])
+                self.assertEqual(bool(a["in_region"][k]), t["in_region"])
+                self.assertEqual(int(a["pos0"][k]), t["node"])  # GRCh38 position (anchor middle off the reference)
+                self.assertEqual(index.truth_of(k).tolist(), [t["truth_id"]] if t["label"] == 1 else [])
                 # the record's own numbers, not those of an entry in alleles[]
                 self.assertTrue(np.allclose(a["scalars"][k], site_scalars(t["numbers"]), atol=1e-5))
                 self.assertAlmostEqual(float(a["scalars"][k][SCALARS.index("af")]), t["af"], places=4)
@@ -74,6 +78,11 @@ class IndexTest(unittest.TestCase):
         self.assertTrue(all(index.arrays["eval_label"][added] == 0))
         others = [k for k, t in enumerate(rows) if t["reason"] in ("outside_confident_region", "below_snv_min_af")]
         self.assertFalse(set(others) & set(evaluation.tolist()))
+        # labels 1 and 2 outside the confident region are trained on but not evaluated (a BED filter drops them)
+        outside = [k for k, t in enumerate(rows) if t["label"] in (1, 2) and not t["in_region"]]
+        self.assertTrue(outside)
+        self.assertFalse(set(outside) & set(evaluation.tolist()))
+        self.assertTrue(set(outside) <= set(index.select().tolist()))
 
     def test_dataset_returns_the_stored_tensor_blocks_and_label(self):
         parts = load_parts([self.root], ["SNV", "INDEL"], self.cache, labelled=False)
@@ -110,6 +119,22 @@ class IndexTest(unittest.TestCase):
         self.assertEqual(val.tolist(), again[1].tolist())                   # deterministic
         self.assertEqual(len(block_split(index, pos, 0.0, 14)[1]), 0)
         self.assertEqual(len(block_split(index, pos, 1.0, 14)[0]), 0)
+
+    def test_truth_of_the_validation_blocks(self):
+        root = Path(self.tmp.name) / "big" / "v3_tensors"
+        rows = make_tensor_set(root, {"SNV": {"chr1": 60, "chr2": 60}}, shard_size=16, seed=3)["SNV"]
+        index = KindIndex(root / "SNV", self.cache)
+        truth = somatic_truth(index)                                          # PASS, in the BED, SNP rows
+        self.assertTrue(all(t["truth_id"] in truth for t in rows if t["label"] == 1 and t["in_region"]))
+        self.assertTrue(any(tid not in {t["truth_id"] for t in rows} for tid in truth))  # truth without a tensor
+        pos = index.select(labelled=False)
+        train, val = block_split(index, pos, 0.5, block_nodes=21, seed=2)
+        vt = validation_truth(index, pos, truth, 0.5, block_nodes=21, seed=2)
+        val_ids = {rows[k]["truth_id"] for k in val.tolist() if rows[k]["label"] == 1} & set(truth)
+        train_ids = {rows[k]["truth_id"] for k in train.tolist() if rows[k]["label"] == 1} & set(truth)
+        self.assertTrue(val_ids and val_ids <= vt)                            # a validation tensor's truth is validation
+        self.assertFalse((train_ids - val_ids) & vt)                          # a training tensor's truth is not
+        self.assertEqual(vt, validation_truth(index, pos, truth, 0.5, block_nodes=21, seed=2))  # deterministic
 
     def test_block_ends(self):
         groups = [dict(start_row=0, end_row=4, allele="A1"), dict(start_row=4, end_row=6, allele="A2"),

@@ -6,12 +6,18 @@
 Writes, per <sample>.<set>.<KIND>:
 - .predictions.ndjson.gz: one JSON record per tensor of the chromosomes, in index order: chrom, candidate_id,
   label (the truth label), test_label (the label the test scores, null when not in the test), in_test, reason,
-  off_reference (the node is off the GRCh38 path), p_non, p_somatic, p_germline, pred (with the somatic
+  off_reference (the node is off the GRCh38 path), truth_ids (the somatic truth alleles a tensor labelled 1
+  stands for: representative or partial match), p_non, p_somatic, p_germline, pred (with the somatic
   threshold: the checkpoint's, or --threshold).
-- .metrics.json: metrics.report over the test tensors. These are the tensors labelled 0/1/2 and the
-  off-reference tensors without a truth match (as non: test-time calling meets them inside the BED). Tensors
-  outside the BED, below the AF floors, or without a GRCh38 position are left out, since calling drops them
-  without truth.
+- .metrics.json: metrics.report over the test tensors. These are the tensors labelled 0/1/2 inside the
+  confident region, and the off-reference tensors without a truth match (as non: test-time calling meets them
+  inside the BED). Tensors outside the BED (labels 1 and 2 included), below the AF floors, or without a GRCh38
+  position are left out, since calling drops them without truth.
+  Also `truth`: metrics.truth_report against the somatic truth VCF (the set's somatic.recall.tsv: PASS, in the
+  BED, the chromosomes, this kind), at the same threshold. Every truth allele counts once: it is found when its
+  best tensor (a labelled-1 tensor matching it, exactly or partially) is called somatic, so duplicate tensors of
+  one truth do not count twice; truth alleles without a tensor are misses; a false positive is a somatic call on
+  a tensor labelled 0 or 2. `ceiling` is the recall of a perfect model.
 
 The encoder uses the checkpoint's statistics; they are not refitted on these tensors.
 """
@@ -23,7 +29,7 @@ from pathlib import Path
 import torch
 
 from . import metrics
-from .data import CLASSES, KINDS, EpochSampler, TensorDataset, load_parts
+from .data import CLASSES, KINDS, EpochSampler, TensorDataset, load_parts, somatic_truth
 from .model import PansomaNetV2
 from .train import describe, make_loader, predict_probs, retry_workers
 
@@ -70,9 +76,14 @@ def main(argv=None):
                     chrom=chroms[a["chrom"][pos]], candidate_id=candidates[pos], label=int(a["label"][pos]),
                     test_label=int(labels[k]) if labels[k] >= 0 else None, in_test=bool(labels[k] >= 0),
                     reason=index.reason(pos), off_reference=bool(a["off_reference"][pos]),
+                    truth_ids=index.truth_of(pos).tolist(),
                     **{f"p_{c}": round(float(probs[k][j]), 5) for j, c in enumerate(CLASSES)},
                     pred=CLASSES[pred[k]])) + "\n")
         report = metrics.report(labels, probs, threshold)
+        truth = somatic_truth(index, chroms={index.meta["chroms"][c] for c in set(index.arrays["chrom"][positions].tolist())})
+        if truth is not None:  # every truth allele of the chromosomes counts once; see metrics.truth_report
+            report["truth"] = metrics.truth_report(set(truth), [set(index.truth_of(p).tolist()) for p in positions],
+                                                   labels, probs, threshold)
         in_test = labels >= 0
         off = a["off_reference"][positions]
         report.update(all_tensors=int(len(labels)), left_out=int((~in_test).sum()),
@@ -83,6 +94,7 @@ def main(argv=None):
         (out / f"{name}.metrics.json").write_text(json.dumps(report, indent=2) + "\n")
         print(f"{name}: {len(labels):,} tensors, {report['tensors']:,} in the test "
               f"({report['off_reference_in_test']:,} off-reference) | {describe(report)}", flush=True)
+
 
 if __name__ == "__main__":
     main()

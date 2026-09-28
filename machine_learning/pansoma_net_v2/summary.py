@@ -5,8 +5,10 @@
     python -m pansoma_net_v2.summary /path/to/run_dir
 
 RUNS is $PANSOMA_RUNS or /scratch/jshen/data/pansoma_net_v2_runs. Columns: training loss, speed and minutes
-of the epoch, GPU peak (allocated GiB); validation somatic AP, F1 / precision / recall at the best-F1
-threshold t, t itself, and the germline argmax F1; "*" marks the best epoch so far.
+of the epoch, GPU peak (allocated GiB); validation per tensor: somatic AP, F1 / precision / recall at the
+best-F1 threshold t (s.*), t itself; against the truth VCF at the same t (t.*, metrics.truth_report: every
+truth allele once, truth alleles without a tensor are misses) and its ceiling; germline argmax F1; "*" marks
+the best epoch so far by the run's --select.
 """
 import argparse
 import glob
@@ -40,17 +42,21 @@ def show(d):
     rows = [json.loads(line) for line in open(d / "metrics.jsonl")] if (d / "metrics.jsonl").exists() else []
     if rows:
         print(f"{'epoch':>5} {'loss':>7} {'t/s':>6} {'min':>5} {'GPU':>5} | {'s.AP':>6} {'s.F1':>6} {'s.P':>6} {'s.R':>6} "
-              f"{'t':>6} | {'g.F1':>6}")
-        best = -1.0
+              f"{'t':>6} | {'t.AP':>6} {'t.F1':>6} {'t.P':>6} {'t.R':>6} {'ceil':>6} | {'g.F1':>6}")
+        best, select = -1.0, _select(d)
         for r in rows:
             v = r["val"]
             s = v["thresholded"]["somatic"]
-            mark = "*" if s["f1"] > best else " "
-            best = max(best, s["f1"])
+            tr = v.get("truth")
+            score = (tr["best"]["f1"] if select == "truth_f1" and tr else v["somatic_ap"] if select == "ap" else s["f1"])
+            mark = "*" if score > best else " "
+            best = max(best, score)
             gpu = (r.get("gpu_peak_gib") or {}).get("allocated")
+            truth = (f"{tr['ap']:>6.3f} {tr['at_threshold']['f1']:>6.3f} {tr['at_threshold']['precision']:>6.3f} "
+                     f"{tr['at_threshold']['recall']:>6.3f} {tr['ceiling']:>6.3f}") if tr else f"{'-':>6} " * 4 + f"{'-':>6}"
             print(f"{r['epoch']:>5} {r['train_loss']:>7.4f} {r['tensors_per_second']:>6.0f} {r['train_seconds'] / 60:>5.1f} "
                   f"{gpu if gpu is not None else '-':>5} | {v['somatic_ap']:>6.3f} {s['f1']:>6.3f} {s['precision']:>6.3f} "
-                  f"{s['recall']:>6.3f} {v['threshold']:>6.3f} | {v['argmax']['germline']['f1']:>6.3f} {mark}")
+                  f"{s['recall']:>6.3f} {v['threshold']:>6.3f} | {truth} | {v['argmax']['germline']['f1']:>6.3f} {mark}")
     else:
         print("  no finished epoch yet")
     step = current_step(d)
@@ -60,9 +66,26 @@ def show(d):
         t = json.loads(m.read_text())
         s = t["thresholded"]["somatic"]
         print(f"  test {m.name.replace('.metrics.json', '')}: {t['tensors']:,} tensors ({t['off_reference_in_test']:,} "
-              f"off-reference) | somatic AP {t['somatic_ap']:.3f} F1 {s['f1']:.3f} P {s['precision']:.3f} "
-              f"R {s['recall']:.3f} (support {s['support']:,}, t {t['threshold']:.3f}) | germline F1 "
-              f"{t['argmax']['germline']['f1']:.3f}")
+              f"off-reference), t {t['threshold']:.3f}")
+        print(f"    per tensor:    somatic AP {t['somatic_ap']:.3f} F1 {s['f1']:.3f} P {s['precision']:.3f} "
+              f"R {s['recall']:.3f} (support {s['support']:,}) | germline F1 {t['argmax']['germline']['f1']:.3f}")
+        tr = t.get("truth")
+        if tr:
+            at = tr["at_threshold"]
+            print(f"    vs truth VCF:  somatic AP {tr['ap']:.3f} F1 {at['f1']:.3f} P {at['precision']:.3f} "
+                  f"R {at['recall']:.3f} ({at['tp']:,} of {tr['truth_alleles']:,} truth found, {at['fp']:,} false calls; "
+                  f"ceiling {tr['ceiling']:.3f})")
+            if "somatic_tensors" in tr:
+                print(f"                   {tr['somatic_tensors']:,} somatic tensors of these truth alleles; "
+                      f"{tr['other_truth_tensors']:,} of other truth (another kind, outside the BED) left out")
+
+
+def _select(d):
+    """The run's --select, from the args.json that train writes at its start (f1 for older runs)."""
+    try:
+        return json.loads((d / "args.json").read_text()).get("select", "f1")
+    except (OSError, ValueError):
+        return "f1"
 
 
 def main(argv=None):

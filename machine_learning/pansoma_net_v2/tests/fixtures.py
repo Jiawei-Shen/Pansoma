@@ -44,12 +44,23 @@ def make_tensor(rng, blocks, alt="A", ref="C", width=101, height=200):
     return x
 
 
+GAP = (1070, 1140)  # positions left out of the somatic BED (the confident region has a hole there)
+
+
 def make_tensor_set(root, spec, shard_size=4, seed=0, labels_created="2026-09-28T00:00:00+00:00"):
-    """root/<KIND>/ merged directories from spec {kind: {chrom: n}}; returns {kind: [dict per tensor]}."""
+    """root/<KIND>/ merged directories from spec {kind: {chrom: n}}, the BEDs of the labels and root's
+    somatic.recall.tsv (every truth allele, some without a tensor); returns {kind: [dict per tensor]}.
+    Tensor k of a kind sits at node / GRCh38 position 1000 + 7k. Inside GAP a label 0 or -1 becomes -1
+    outside_confident_region (as the labeller does); labels 1 and 2 keep theirs but are out of the region."""
     rng = np.random.default_rng(seed)
-    truth = {}
+    root = Path(root)
+    root.mkdir(parents=True, exist_ok=True)
+    all_chroms = sorted({c for chroms in spec.values() for c in chroms})
+    (root / "somatic.bed").write_text("".join(f"{c}\t0\t{GAP[0]}\n{c}\t{GAP[1]}\t1000000\n" for c in all_chroms))
+    (root / "germline.bed").write_text("".join(f"{c}\t0\t1000000\n" for c in all_chroms))
+    truth, truth_rows = {}, []
     for kind, chroms in spec.items():
-        d = Path(root) / kind
+        d = root / kind
         d.mkdir(parents=True, exist_ok=True)
         manifest = dict(status="complete", layout="chromosome-shards", kind=kind, shape=[8, 200, 101], dtype="int8",
                         tensors=sum(chroms.values()), chromosomes={})
@@ -67,7 +78,14 @@ def make_tensor_set(root, spec, shard_size=4, seed=0, labels_created="2026-09-28
                     ref_end = int(rng.integers(alt_end, rows + 1))
                     blocks = [a1, alt_end, ref_end, rows]
                     data[i] = make_tensor(rng, blocks)
-                    labels[i] = rng.choice([-1, 0, 0, 1, 2])
+                    k = len(truth[kind])
+                    node = 1000 + 7 * k
+                    label = int(rng.choice([-1, 0, 0, 1, 2]))
+                    reason, off = reason_of(label, k)
+                    in_gap = GAP[0] <= node < GAP[1]
+                    if in_gap and label <= 0:
+                        label, reason, off = -1, "outside_confident_region", False
+                    labels[i] = label
                     groups = [dict(start_row=0, end_row=a1, allele="A1")]
                     if alt_end > a1:
                         groups.append(dict(start_row=a1, end_row=alt_end, allele="A2"))
@@ -75,7 +93,6 @@ def make_tensor_set(root, spec, shard_size=4, seed=0, labels_created="2026-09-28
                         groups.append(dict(start_row=alt_end, end_row=ref_end, allele="REF"))
                     if rows > ref_end:
                         groups.append(dict(start_row=ref_end, end_row=rows, allele="OTHER"))
-                    node = 1000 + 7 * len(truth[kind])
                     cid = f"{node}:5:SNP:C>A"
                     af = round(float(rng.random()), 4)
                     nums = dict(coverage=rows + 3, alt_count=a1, ref_count=ref_end - alt_end, other_count=rows - ref_end,
@@ -91,23 +108,48 @@ def make_tensor_set(root, spec, shard_size=4, seed=0, labels_created="2026-09-28
                         allele_count=nums["allele_count"], second_allele_af=nums["second_allele_af"],
                         parameters=dict(min_af=0.06), shard_index=s // shard_size, index_within_shard=i, chrom=chrom,
                         shard_file=name, source_task=0, source_shard_index=0, source_index_within_shard=7)))
-                    reason, off = reason_of(int(labels[i]), len(truth[kind]))
+                    somatic, partial_truth, truth_id = [], None, None
+                    if label == 1:  # a truth allele of its own; partial ones match through partial_truth, and
+                        # every second partial one repeats the chromosome's previous truth (a duplicate, as INDELs do)
+                        previous = [t["truth_id"] for t in truth[kind] if t["chrom"] == chrom and t["truth_id"] is not None]
+                        if reason == "residual_partial_somatic_truth" and previous and k % 8 == 0:
+                            truth_id = previous[-1]
+                        else:
+                            truth_id = len(truth_rows)
+                            truth_rows.append((truth_id, chrom, node + 1, "SNP" if kind == "SNV" else "DEL", not in_gap,
+                                               "tensor"))
+                        if reason == "residual_partial_somatic_truth":
+                            partial_truth = dict(truth_id=truth_id)
+                        else:
+                            somatic = [dict(truth_id=truth_id, representative=True, in_bed=not in_gap)]
+                    extra = dict(anchor=dict(chrom=chrom, start=node - 5, end=node + 5)) if off else {}
                     label_records.append(json.dumps(dict(
                         candidate_id=cid, site_id=f"{cid}:SNV", chrom=chrom, shard_file=name, index_within_shard=i,
-                        label=int(labels[i]), label_name="x", reason=reason, somatic=[], germline=[],
-                        grch38=None if off else dict(chrom=chrom, pos0=node, ref="C", alt="A"), partial=None)))
-                    truth[kind].append(dict(chrom=chrom, file=name, row=i, label=int(labels[i]), blocks=blocks,
-                                            af=af, candidate_id=cid, node=node, numbers=nums, x=data[i], reason=reason,
-                                            off_reference=off,
-                                            eval_label=0 if reason == "off_reference_no_truth_match" else int(labels[i])))
+                        label=label, label_name="x", reason=reason, somatic=somatic, germline=[],
+                        grch38=None if off else dict(chrom=chrom, pos0=node, ref="C", alt="A", node_reverse=False),
+                        partial="residual" if partial_truth else None, partial_truth=partial_truth, **extra)))
+                    in_region = not in_gap and reason != "outside_confident_region"
+                    ev = 0 if reason == "off_reference_no_truth_match" else label
+                    truth[kind].append(dict(chrom=chrom, file=name, row=i, label=label, blocks=blocks, af=af,
+                                            candidate_id=cid, node=node, numbers=nums, x=data[i], reason=reason,
+                                            off_reference=off, in_region=in_region, truth_id=truth_id,
+                                            eval_label=ev if in_region else -1))
                 np.save(d / name, data)
                 np.save(d / name.replace("_data.npy", "_labels.npy"), labels)
                 shards.append(dict(file=name, tensors=count))
             (d / f"{chrom}_variant_summary.ndjson").write_text("\n".join(records) + "\n")
             (d / f"{chrom}_labels.ndjson").write_text("\n".join(label_records) + "\n")
             manifest["chromosomes"][chrom] = dict(tensors=n, shards=shards, summary=f"{chrom}_variant_summary.ndjson")
+            for extra_truth in range(3):  # truth alleles with no tensor at all: misses for every model
+                truth_rows.append((len(truth_rows), chrom, 900000 + extra_truth, "SNP" if kind == "SNV" else "DEL",
+                                   True, "no_candidate"))
         (d / "manifest.json").write_text(json.dumps(manifest))
         (d / "labels.manifest.json").write_text(json.dumps(dict(
-            version="truth-labels-v6", created=labels_created, tensors=manifest["tensors"],
-            labels=dict(ignore=-1, non=0, somatic=1, germline=2))))
+            format="truth-labels", created=labels_created, tensors=manifest["tensors"],
+            labels=dict(ignore=-1, non=0, somatic=1, germline=2),
+            truth=dict(somatic=dict(bed=str(root / "somatic.bed")), germline=dict(bed=str(root / "germline.bed"))))))
+    with open(root / "somatic.recall.tsv", "w") as f:
+        f.write("truth_id\tchrom\tvcf_pos\tkind\tpassed\tin_bed\tstatus\tdetail\n")
+        for tid, chrom, pos, kind, in_bed, status in truth_rows:
+            f.write(f"{tid}\t{chrom}\t{pos}\t{kind}\tTrue\t{in_bed}\t{status}\t\n")
     return truth

@@ -38,9 +38,27 @@ class RealDataTest(unittest.TestCase):
             self.assertEqual({names[v]: n for v, n in counts.items()}, labels["totals"])
             reasons = Counter(index.meta["reasons"][r] for r in index.arrays["reason"].tolist())
             self.assertEqual(dict(reasons), labels["reasons"])  # every labels.ndjson line read in order
-            moved = index.arrays["eval_label"] != index.arrays["label"]
-            self.assertEqual(int(moved.sum()), labels["reasons"].get("off_reference_no_truth_match", 0))
-            self.assertTrue(index.arrays["off_reference"][moved].all())
+            a = index.arrays
+            to_non = (a["eval_label"] == 0) & (a["label"] == -1)
+            self.assertEqual(int(to_non.sum()), labels["reasons"].get("off_reference_no_truth_match", 0))
+            self.assertTrue(a["off_reference"][to_non].all())
+            # the region test agrees with the labeller: its outside_confident_region tensors are outside, its 0s and
+            # its off-reference negatives inside; evaluation drops only labelled tensors outside the region
+            reason = np.array(index.meta["reasons"])[a["reason"]]
+            self.assertFalse(a["in_region"][reason == "outside_confident_region"].any())
+            # (except truth_matches_non_representative_allele: the labeller decides it before the BED test, so it
+            # can lie outside; a BED filter drops it at test time, and evaluation leaves it out)
+            self.assertTrue(a["in_region"][(a["label"] == 0) & (reason != "truth_matches_non_representative_allele")].all())
+            self.assertTrue(a["in_region"][reason == "off_reference_no_truth_match"].all())
+            dropped = (a["eval_label"] == -1) & (a["label"] >= 0)
+            self.assertFalse(a["in_region"][dropped].any())
+            # truth ids: every labelled-1 tensor stands for at least one truth allele of the recall table
+            with open(REAL / "somatic.recall.tsv") as f:
+                known = {int(line.split("\t")[0]) for line in list(f)[1:]}
+            n = np.diff(a["truth_ptr"])
+            self.assertTrue((n[a["label"] == 1] >= 1).all())
+            self.assertFalse(n[a["label"] != 1].any())
+            self.assertTrue(set(a["truth_ids"].tolist()) <= known)
 
     def test_candidates_follow_the_summary(self):
         index = self.index["SNV"]

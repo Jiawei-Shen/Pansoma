@@ -59,9 +59,13 @@ $P -m pansoma_net_v2.predict --checkpoint runs/HG008_Illumina_SNV/best.pth --ten
 ```
 
 `/scratch/jshen/data/pansoma_net_v2_runs/jobs/run.sh NAME SET KIND [train options]` runs both steps as one
-Slurm job. `python -m pansoma_net_v2.summary [NAME ...]` prints each run's per-epoch table (training loss,
-speed, minutes, GPU peak; validation somatic AP, F1 / P / R at the best threshold, the threshold, germline
-F1), its current step and, when done, its chr1 test result.
+Slurm job. `python -m pansoma_net_v2.summary [NAME ...]` prints each run's per-epoch table, its current step and, when
+done, its chr1 test result (per tensor and against the truth VCF). The table columns are:
+
+- training loss, speed, minutes, GPU peak;
+- validation per tensor: somatic AP and s.F1 / s.P / s.R at the best threshold, and the threshold t;
+- against the truth VCF at the same t: t.AP, t.F1 / t.P / t.R and the ceiling (below);
+- germline F1.
 
 Useful `train` options:
 
@@ -73,6 +77,9 @@ Useful `train` options:
 - **Imbalance.**
   - `--non-fraction F`: each epoch takes every somatic and germline tensor and a fresh random fraction F of
     the non tensors.
+  - `--keep-non-af A` (with `--non-fraction`): the non tensors with AF ≥ A are taken every epoch. The sampled
+    non tensors get loss weight 1/F, so each epoch's loss stays an unbiased estimate of the loss over all
+    non tensors, whatever their AF.
   - `--class-weights balanced|sqrt|none|w0,w1,w2`: balanced is n / (3 n_c) over one epoch's tensors; sqrt
     is its square root.
 - **Model.**
@@ -81,8 +88,9 @@ Useful `train` options:
     before the 200-row cap, z-scored with training statistics that are stored in the model.
   - `--depths`, `--dims`, `--front`, `--drop-path` set the size (defaults `3 3 27 3` / `192 384 768 1536`,
     as in v1's training script).
-- **Selection.** `--select f1|ap` picks the best checkpoint by the thresholded somatic F1 (default) or the
-  somatic average precision.
+- **Selection.** `--select f1|ap|truth_f1` picks the best checkpoint by the thresholded somatic F1 per tensor
+  (default), the somatic average precision, or the best F1 against the truth VCF (below). With `truth_f1` the
+  stored threshold is the one of that F1.
 - **Speed.** `--no-compile` and `--no-channels-last` turn off the defaults on CUDA (below).
 - Also: `--epoch-samples`, `--val-samples`, `--stats-samples 20000`, `--amp bf16|off`, `--resume` (keeps the
   checkpoint's statistics), `--seed`.
@@ -95,16 +103,37 @@ Useful `train` options:
   are left out, because calling drops them without truth: outside the BED (`outside_confident_region`),
   below the AF floors (`below_snv_min_af`, `below_indel_min_af`), and no GRCh38 position
   (`not_on_unique_grch38_node`). Training uses only 0/1/2.
+- **The confident region.** Labels 1 and 2 outside the confident region (somatic BED ∩ germline BED of the
+  labels, the labeller's test in `bed.py`) are trained on but not scored: the test drops them with the BED,
+  as it drops the outside −1.
 
 - Each validation reports the somatic and germline average precision (PR-AUC), the argmax precision /
   recall / F1 per class, and the somatic threshold t of the best F1.
 - With t, a tensor is somatic when p_somatic ≥ t, and otherwise the larger of non and germline. The
   checkpoint stores t (`somatic_threshold`), and `predict` applies it to the test chromosome.
 
+**Against the truth VCF** (`metrics.truth_report`, the `truth` entry of each report). Per tensor, a truth
+allele can count twice (two partial INDEL tensors of one truth) or not at all (no tensor). So each report also
+scores the truth alleles themselves:
+
+- The truth alleles are the somatic truth rows of the set's `somatic.recall.tsv` that pass and lie in the
+  BED, of the model's kind (SNV: SNP; INDEL: DEL, INS), on the scored chromosomes.
+- Each labelled-1 tensor stands for the truth alleles its labels record: the representative allele's
+  matches, or `partial_truth` for a partial match.
+- A truth allele scores the highest p_somatic of its tensors. A truth allele without a tensor is a miss at
+  every threshold.
+- A false call is a somatic call on a tensor scored 0 or 2 (off-reference no-match tensors included).
+- A labelled-1 tensor whose truth alleles do not count (e.g. an SNV tensor that partially matches an INDEL
+  truth) is neither a hit nor a false call (`other_truth_tensors`).
+- Precision = found / (found + false calls); recall = found / all truth alleles; `ceiling` = the recall if
+  every tensor were called; AP over the same ranking; `at_threshold` uses t, `best` the best-F1 threshold.
+- Validation: a truth allele belongs to the validation block that holds its position (each block starts at
+  its first tensor), so validation truth alleles without a tensor count as misses there too.
+
 Outputs in `--output`:
 
-- `train.log` and `metrics.jsonl` (per epoch: train loss and accuracy, speed, GPU peak memory, and the
-  validation report).
+- `args.json` (the options) and `train.log`.
+- `metrics.jsonl` (per epoch: train loss and accuracy, speed, GPU peak memory, and the validation report).
 - `stats.json`.
 - `last.pth`, and `best.pth` (best validation by `--select`).
 
@@ -116,8 +145,9 @@ data (directories, label provenance, counts), the chromosome split and `args`. R
 `predict` writes, for every tensor of the chosen chromosomes, `<sample>.<set>.<KIND>.predictions.ndjson.gz`.
 Each record has chrom, candidate_id, label (truth), test_label (the scored label, null when left out),
 in_test, reason, off_reference (the node is off the GRCh38 path, as in the paper's pangenome-only calls),
-p_non, p_somatic, p_germline, and pred (with the threshold). It also writes `.metrics.json`: the same report
-over the test tensors, with the counts of test tensors on off-reference nodes (`--threshold` overrides t).
+truth_ids (the somatic truth alleles of a labelled-1 tensor), p_non, p_somatic, p_germline, and pred (with
+the threshold). It also writes `.metrics.json`: the same report over the test tensors, with the truth report
+and the counts of test tensors on off-reference nodes (`--threshold` overrides t).
 Off-reference tensors are marked for analysis only; the test scores them like the others.
 
 ## GPU runs (measured 2026-09-28, node tequila)
@@ -153,8 +183,9 @@ model has 199.4 M parameters. Measured bf16 training speed (a whole H100, batch 
 It caches the result in `--cache-dir` (default `<output>/index_cache`) as
 `<sample>.<set>.<KIND>.<path hash>.npz` plus `.candidates.txt`, and rebuilds it when `labels.manifest.json`
 changes (format, version, rules_sha256, created, tensors, the AF floors). From `<chrom>_labels.ndjson` (the
-summary's order, checked by candidate id) it also keeps each tensor's reason and off-reference flag, and
-derives the evaluation labels. Jobs can share a cache: each process writes its own temporary files, then
+summary's order, checked by candidate id) it also keeps each tensor's reason, off-reference flag, confident
+region flag, GRCh38 position (the anchor's middle off the reference) and truth ids, and derives the
+evaluation labels. Jobs can share a cache: each process writes its own temporary files, then
 renames them. Reading the summaries takes about a minute per
 2.5 M tensors.
 
@@ -186,7 +217,9 @@ cd machine_learning && $P -m unittest discover -s pansoma_net_v2/tests -t .
   - the index (node, scalars) against a synthetic merged set;
   - the cache is reused and rebuilt when the labels change, and two samples' `v3_tensors` share one cache
     without collisions;
-  - −1 is never selected for training;
+  - −1 is never selected for training; evaluation adds only the off-reference no-match tensors and drops
+    labels 1 and 2 outside the region;
+  - truth ids from the labels, and the validation truth alleles of the blocks;
   - the block split keeps whole blocks and is deterministic;
   - `EpochSampler` gives disjoint evaluation slices and equal padded training slices per rank.
 - `test_model_train`:
@@ -194,13 +227,15 @@ cd machine_learning && $P -m unittest discover -s pansoma_net_v2/tests -t .
   - loss without −1;
   - forkserver workers;
   - CPU runs: train 2 epochs (chr1 left out, block validation, threshold stored), resume (statistics kept),
-    then predict chr1 with the stored threshold; and a run with `--scalars`.
+    then predict chr1 with the stored threshold, and the truth report recomputed from the predictions; runs
+    with `--scalars`, `--select truth_f1` and `--keep-non-af`.
 - `test_real_data`: runs if `PANSOMA_TEST_TENSORS` exists (default: COLO829T Illumina `v3_tensors`); ~70 s.
-  Checks the index counts against the manifests, candidates against a summary, and that the row blocks agree
+  Checks the index counts against the manifests (and the region flag against the labeller's reasons, the truth
+  ids against `somatic.recall.tsv`), candidates against a summary, and that the row blocks agree
   with the tensors (A1 rows carry the A1 base at the site column, REF rows the graph base, OTHER rows no
   site allele, no reads after the blocks). It also checks the scalars against a summary and encodes real
   tensors.
 - `test_metrics`: average precision (ties together, as sklearn), the best-F1 threshold, and the thresholded
-  call.
+  call; the truth report against brute force, duplicates counted once.
 - `test_gpu`: runs on a CUDA node. The GPU encoding equals the CPU one, a bf16 training step learns, and
   compile + channels_last gives the eager logits and gradients in fp32.

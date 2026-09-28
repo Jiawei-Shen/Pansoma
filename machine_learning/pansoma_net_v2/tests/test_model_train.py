@@ -104,6 +104,7 @@ class TrainPredictTest(unittest.TestCase):
             self.assertEqual(rows[-1]["val"]["tensors"], expected_val)                # off-reference no-match as non
             self.assertGreater(expected_val, 0)
             self.assertIn("somatic_ap", rows[-1]["val"])
+            self.assertGreater(rows[-1]["val"]["truth"]["truth_alleles"], 0)   # truth-level validation each epoch
 
             train.main(["--tensors", str(root), "--output", str(out), "--epochs", "3", "--resume", str(out / "last.pth")]
                        + SMALL_ARGS)
@@ -128,6 +129,24 @@ class TrainPredictTest(unittest.TestCase):
             self.assertEqual(report["left_out"], sum(t["eval_label"] < 0 for t in chr1))
             self.assertEqual(report["off_reference_in_test"], sum(t["off_reference"] and t["eval_label"] >= 0 for t in chr1))
             self.assertEqual(report["threshold"], torch.load(out / "best.pth", weights_only=False)["somatic_threshold"])
+            # against the truth table, recomputed from the predictions: every truth allele once
+            tr = report["truth"]
+            wanted = {int(line.split("\t")[0]) for line in (root / "somatic.recall.tsv").read_text().splitlines()[1:]
+                      if line.split("\t")[1] == "chr1" and line.split("\t")[3] == "SNP" and line.split("\t")[5] == "True"}
+            by_id = {t["candidate_id"]: t for t in chr1}
+            self.assertTrue(all(r["truth_ids"] == ([by_id[r["candidate_id"]]["truth_id"]] if r["label"] == 1 else [])
+                                for r in records))
+            called = [r for r in records if r["in_test"] and r["pred"] == "somatic"]
+            found = set().union(*[set(r["truth_ids"]) for r in called if r["test_label"] == 1]) & wanted
+            false_calls = sum(r["test_label"] in (0, 2) for r in called)
+            reachable = set().union(*[set(r["truth_ids"]) for r in records if r["in_test"] and r["test_label"] == 1]) & wanted
+            at = tr["at_threshold"]
+            self.assertEqual((tr["truth_alleles"], at["tp"], at["fp"], tr["with_tensor"]),
+                             (len(wanted), len(found), false_calls, len(reachable)))
+            self.assertAlmostEqual(at["recall"], len(found) / len(wanted))
+            if found or false_calls:
+                self.assertAlmostEqual(at["precision"], len(found) / (len(found) + false_calls))
+            self.assertLess(tr["ceiling"], 1.0)                      # truth alleles without a tensor are misses
             self.assertEqual(len(KindIndex(root / "SNV", pred / "index_cache")), len(truth["SNV"]))
 
     def test_scalars_run(self):
@@ -140,6 +159,11 @@ class TrainPredictTest(unittest.TestCase):
                        + SMALL_ARGS)
             ckpt = torch.load(out / "best.pth", weights_only=False)
             self.assertEqual(ckpt["config"]["scalars"], len(SCALARS))
+            train.main(["--tensors", str(root), "--output", str(tmp / "run_truth"), "--epochs", "2", "--kinds", "SNV",
+                        "--select", "truth_f1"] + SMALL_ARGS)
+            best = torch.load(tmp / "run_truth" / "best.pth", weights_only=False)
+            self.assertEqual(best["somatic_threshold"], best["val"]["truth"]["best"]["threshold"])
+            self.assertEqual(json.loads((tmp / "run_truth" / "args.json").read_text())["select"], "truth_f1")
             train.main(["--tensors", str(root), "--output", str(tmp / "run_keep"), "--epochs", "1", "--kinds", "SNV",
                         "--non-fraction", "0.5", "--keep-non-af", "0.5"] + SMALL_ARGS)
             log = (tmp / "run_keep" / "train.log").read_text()

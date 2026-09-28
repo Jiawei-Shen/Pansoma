@@ -28,7 +28,8 @@ from torch.utils.data import DataLoader, Subset
 
 from . import metrics
 from .env import triton_libcuda
-from .data import CLASSES, KINDS, SCALARS, EpochSampler, TensorDataset, block_split, load_parts
+from .data import (CLASSES, KINDS, SCALARS, EpochSampler, TensorDataset, block_split, load_parts, somatic_truth,
+                   validation_truth)
 
 AF = SCALARS.index("af")
 from .encode import PLANES, compute_stats
@@ -48,7 +49,10 @@ def parse_args(argv=None):
     p.add_argument("--val-chroms", nargs="+", default=[], help="validation chromosomes (default: node blocks)")
     p.add_argument("--val-fraction", type=float, default=0.05, help="node blocks of the training chromosomes")
     p.add_argument("--val-block-nodes", type=int, default=20000)
-    p.add_argument("--select", choices=["f1", "ap"], default="f1", help="best checkpoint by thresholded somatic F1 or AP")
+    p.add_argument("--select", choices=["f1", "ap", "truth_f1"], default="f1",
+                   help="best checkpoint by the tensor-level somatic F1 at its best threshold (default), the somatic AP, "
+                        "or the truth-level F1 at its best threshold (metrics.truth_report); the checkpoint stores "
+                        "that criterion's threshold")
     p.add_argument("--scalars", action="store_true", help="feed the site scalars (data.SCALARS) to the head")
     p.add_argument("--epochs", type=int, default=30)
     p.add_argument("--epoch-samples", type=int, help="training tensors per epoch (a fresh random subset each epoch)")
@@ -160,15 +164,22 @@ def predict_probs(model, loader, device, amp):
             np.concatenate(probs) if probs else np.zeros((0, len(CLASSES)), np.float32))
 
 
-def evaluate(model, loader, criterion, run, amp):
-    """Validation report (metrics.report at the best-F1 somatic threshold) and weighted loss; all ranks."""
+def evaluate(model, loader, criterion, run, amp, truth=None):
+    """Validation report (metrics.report at the best tensor-level somatic threshold), weighted loss and, with
+    truth = (truth keys, per-sample matched keys), metrics.truth_report at the same threshold; all ranks."""
     labels, probs = predict_probs(model, loader, run.device, amp)
+    order = np.asarray(list(loader.sampler), np.int64)[:len(labels)]  # dataset indices of this rank's samples
     if run.ddp:
         parts = [None] * run.world
-        dist.all_gather_object(parts, (labels, probs))
-        labels, probs = np.concatenate([p[0] for p in parts]), np.concatenate([p[1] for p in parts])
+        dist.all_gather_object(parts, (order, labels, probs))
+        order, labels, probs = (np.concatenate([p[k] for p in parts]) for k in range(3))
+    s = np.argsort(order, kind="stable")
+    order, labels, probs = order[s], labels[s], probs[s]
     threshold, _, _, _ = metrics.best_somatic_threshold(labels, probs)
     out = metrics.report(labels, probs, threshold)
+    if truth is not None:
+        keys, matches = truth
+        out["truth"] = metrics.truth_report(keys, [matches[i] for i in order], labels, probs, threshold)
     w = criterion.weight.cpu().numpy() if criterion.weight is not None else np.ones(len(CLASSES))
     nll = -np.log(np.clip(probs[np.arange(len(labels)), labels], 1e-12, None))
     out["loss"] = float((w[labels] * nll).sum() / max(w[labels].sum(), 1e-12))
@@ -182,8 +193,13 @@ def describe(report):
     if t:
         s = t["somatic"]
         line += f" F1 {s['f1']:.3f} (P {s['precision']:.3f} R {s['recall']:.3f} @ p>={report['threshold']:.3f})"
-    return (line + f" argmax F1 {a['somatic']['f1']:.3f} | germline AP {report['germline_ap']:.3f} "
-            f"F1 {a['germline']['f1']:.3f} | non F1 {a['non']['f1']:.3f}")
+    line += f" argmax F1 {a['somatic']['f1']:.3f}"
+    if report.get("truth"):
+        tr, at = report["truth"], report["truth"]["at_threshold"]
+        line += (f" | truth F1 {at['f1']:.3f} (P {at['precision']:.3f} R {at['recall']:.3f}; {tr['truth_alleles']:,} "
+                 f"truth, ceiling {tr['ceiling']:.3f}, best F1 {tr['best']['f1']:.3f} @ p>={tr['best']['threshold']:.3f})")
+    return line + (f" | germline AP {report['germline_ap']:.3f} F1 {a['germline']['f1']:.3f} | "
+                   f"non F1 {a['non']['f1']:.3f}")
 
 
 def gpu_peak(run):
@@ -239,6 +255,8 @@ def started_loader(dataset, sampler, num_workers, batch_size, log, what, prefetc
 def main(argv=None):
     args = parse_args(argv)
     run = Run(args)
+    if run.main:
+        (run.out / "args.json").write_text(json.dumps(vars(args), indent=2) + "\n")
     torch.manual_seed(args.seed)
     cache = args.cache_dir or str(Path(args.output) / "index_cache")
     if run.main:  # rank 0 builds / refreshes the index cache, the others read it
@@ -276,8 +294,29 @@ def main(argv=None):
             f"({dict(zip(CLASSES, val_set.class_counts().tolist()))})")
     if len(train_set) == 0 or len(val_set) == 0:
         raise SystemExit("empty training or validation set")
+    keep = None
     if args.val_samples and args.val_samples < len(val_set):
         keep = np.sort(np.random.default_rng(args.seed).choice(len(val_set), args.val_samples, replace=False))
+    # truth-level validation: the truth alleles of the validation region (with or without a tensor) and, per
+    # validation sample, the truth alleles its tensor stands for; keys are (part, truth id)
+    val_truth, truth_keys = None, set()
+    for p, ((index, _), (_, va)) in enumerate(zip(train_parts, val_parts)):
+        t_all = somatic_truth(index, chroms=val_chroms or train_chroms)
+        if t_all is None:
+            run.log(f"{index.dir}: no somatic.recall.tsv, no truth-level validation")
+            truth_keys = None
+            break
+        vt = set(t_all) if val_chroms else validation_truth(
+            index, index.select(train_chroms, labelled=False), t_all, args.val_fraction, args.val_block_nodes, args.seed)
+        truth_keys |= {(p, t) for t in vt}
+    if truth_keys is not None:
+        ids = keep.tolist() if keep is not None else range(len(val_set))
+        matches = [{(int(val_set.part[i]), int(t)) for t in val_parts[val_set.part[i]][0].truth_of(val_set.position[i])}
+                   for i in ids]
+        val_truth = (truth_keys, matches)
+        run.log(f"truth-level validation: {len(truth_keys):,} somatic truth alleles in the validation region "
+                f"({len(set().union(*matches) & truth_keys) if matches else 0:,} with a validation tensor)")
+    if keep is not None:
         val_set = Subset(val_set, keep.tolist())
 
     model = PansomaNetV2(len(CLASSES), args.depths, args.dims, args.front, args.drop_path,
@@ -355,11 +394,11 @@ def main(argv=None):
             f"device {run.device} x {run.world}, amp {amp}, compile {args.compile and run.device.type == 'cuda'}, "
             f"channels_last {args.channels_last and run.device.type == 'cuda'}; {steps_per_epoch} steps per epoch")
 
-    def save(path, epoch, val):
+    def save(path, epoch, val, threshold):
         if run.main:
             payload = dict(format="pansoma_net_v2", config=model.config, model_state_dict=model.state_dict(),
                            optimizer_state_dict=optimizer.state_dict(), scheduler_state_dict=scheduler.state_dict(),
-                           epoch=epoch, best=best, val=val, somatic_threshold=val["threshold"], classes=list(CLASSES),
+                           epoch=epoch, best=best, val=val, somatic_threshold=threshold, classes=list(CLASSES),
                            planes=list(PLANES), scalars=list(SCALARS) if args.scalars else [],
                            stats=model.encoder.stats(), args=vars(args),
                            data=[dict(directory=str(i.dir), labels=i.meta["labels"], train=int(len(p)))
@@ -396,12 +435,16 @@ def main(argv=None):
                       f"lr {scheduler.get_last_lr()[0]:.2e} {seen * run.world / (time.time() - t0):.0f} tensors/s",
                       flush=True)
         train_time = time.time() - t0
-        val = evaluate(net, val_loader, criterion, run, amp)
-        score = val["thresholded"]["somatic"]["f1"] if args.select == "f1" else val["somatic_ap"]
+        val = evaluate(net, val_loader, criterion, run, amp, val_truth)
+        if args.select == "truth_f1" and val.get("truth"):
+            score, threshold = val["truth"]["best"]["f1"], val["truth"]["best"]["threshold"]
+        else:
+            score = val["thresholded"]["somatic"]["f1"] if args.select == "f1" else val["somatic_ap"]
+            threshold = val["threshold"]
         improved = score > best["score"] or (score == best["score"] and val["loss"] < best["loss"])
         if improved:
             best = {"score": score, "select": args.select, "loss": val["loss"], "epoch": epoch + 1,
-                    "threshold": val["threshold"]}
+                    "threshold": threshold}
         gpu = gpu_peak(run)
         row = dict(epoch=epoch + 1, train_loss=loss_sum / max(seen, 1), train_accuracy=correct / max(seen, 1),
                    train_seconds=round(train_time, 1), tensors_per_second=round(seen * run.world / train_time, 1),
@@ -411,9 +454,9 @@ def main(argv=None):
                 f"({train_time:.0f} s, {row['tensors_per_second']:.0f} tensors/s"
                 + (f", GPU peak {gpu['allocated']:.1f} / {gpu['reserved']:.1f} GiB allocated / reserved" if gpu else "")
                 + f") | val loss {val['loss']:.4f} | " + describe(val) + (" | best" if improved else ""))
-        save("last.pth", epoch + 1, val)
+        save("last.pth", epoch + 1, val, threshold)
         if improved:
-            save("best.pth", epoch + 1, val)
+            save("best.pth", epoch + 1, val, threshold)
     run.log(f"done; best epoch {best['epoch']} ({best.get('select', args.select)} {best['score']:.4f}, "
             f"somatic threshold {best['threshold']}) -> {run.out / 'best.pth'}")
     if run.ddp:

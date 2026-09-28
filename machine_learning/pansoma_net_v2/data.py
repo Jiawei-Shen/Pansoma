@@ -14,9 +14,18 @@ the index is cached (cache_dir) and rebuilt when the labels change.
 From <chrom>_labels.ndjson it also keeps each tensor's label reason and whether its node is off the GRCh38
 path (grch38 null). Evaluation (validation and the test chromosome) uses `eval_label`: the label, except that
 off-reference tensors without a truth match (reason off_reference_no_truth_match, -1 for training) count as
-non, because test-time calling meets them inside the BED. The other -1 reasons are left out: outside the BED,
-below the AF floors and without a GRCh38 position can all be dropped without truth.
+non, because test-time calling meets them inside the BED, and that every tensor outside the confident region
+(somatic BED ∩ germline BED of labels.manifest.json, the labeller's test: bed.py) is left out, labels 1 and 2
+included, because test-time calling drops it with the BED. The other -1 reasons are left out too: outside the
+BED, below the AF floors and without a GRCh38 position can all be dropped without truth.
+
+For the truth-level metrics (metrics.truth_report) the index also keeps each tensor's GRCh38 position (pos0; the
+middle of the anchor interval off the reference path; -1 without either) and, for tensors labelled 1, the
+somatic truth ids they stand for (the representative matches and the partial truth of labels.ndjson), as
+truth_ptr / truth_ids. `somatic_truth` reads the set's somatic.recall.tsv (every truth allele, with or without a
+tensor) and `validation_truth` places each truth allele in the node block that holds its position.
 """
+import csv
 import hashlib
 import json
 import math
@@ -28,11 +37,13 @@ import numpy as np
 import torch
 from torch.utils.data import Dataset, Sampler
 
+from .bed import Bed, in_region
+
 CLASSES = ("non", "somatic", "germline")  # label values 0, 1, 2; -1 = ignore
 KINDS = ("SNV", "INDEL")
 TENSOR_SHAPE = (8, 200, 101)
 MAX_OPEN_SHARDS = 256  # open shard files per DataLoader worker
-INDEX_VERSION = 4  # 4: label reasons, off-reference flags, eval labels; 3: node ids, scalars, cache names
+INDEX_VERSION = 6  # 6: pos0, truth ids; 5: confident-region flags; 4: label reasons, off-reference flags
 EVAL_AS_NON = ("off_reference_no_truth_match",)  # -1 for training, 0 (non) when evaluating
 SCALARS = ("log_coverage", "log_site_coverage", "log_alt_count", "log_ref_count", "log_other_count", "af",
            "second_allele_af", "allele_count", "log_event_length")
@@ -44,6 +55,9 @@ _NUMBER = {k: re.compile(rb'"' + k.encode() + rb'": ([-+0-9.eE]+)')
            for k in ("node_id", "coverage", "alt_count", "ref_count", "other_count", "af", "site_coverage",
                      "allele_count", "second_allele_af", "event_length")}  # first match = the record's own (A1) field
 _REASON = re.compile(rb'"reason": "([^"]+)"')
+_GRCH38 = re.compile(rb'"grch38": (\{[^}]*\}|null)')
+_ANCHOR = re.compile(rb'"anchor": (\{[^}]*\})')
+_EVENT = re.compile(rb'"event_type": "([A-Z]+)"')
 _BLOCK = {"A1": 0, "REF": 2, "OTHER": 3}  # A2, A3, ... -> 1 (ALT)
 
 
@@ -76,14 +90,26 @@ def _labels_meta(kind_dir):
     return {k: m.get(k) for k in ("format", "version", "rules_sha256", "created", "tensors", "snv_min_af", "indel_min_af")}
 
 
+def confident_region(kind_dir):
+    """somatic BED ∩ germline BED of the labels, or None when labels.manifest.json names no BEDs."""
+    truth = json.loads((kind_dir / "labels.manifest.json").read_text()).get("truth") or {}
+    beds = [truth.get(k, {}).get("bed") for k in ("somatic", "germline")]
+    if not all(beds):
+        return None, None
+    return Bed.read(beds[0]).intersect(Bed.read(beds[1])), beds
+
+
 def build_index(kind_dir):
     """Index arrays of one merged kind directory (every tensor, labels -1 included)."""
     kind_dir = Path(kind_dir)
     manifest = json.loads((kind_dir / "manifest.json").read_text())
+    confident, beds = confident_region(kind_dir)
     if manifest.get("layout", "").split("-")[0] != "chromosome" or list(manifest.get("shape", [])) != [8, 200, 101]:
         raise ValueError(f"{kind_dir}: not a merged (8, 200, 101) tensor directory")
     chroms, shards = list(manifest["chromosomes"]), []
-    cols = {k: [] for k in ("chrom", "node", "shard", "row", "label", "blocks", "scalars", "reason", "off_reference")}
+    cols = {k: [] for k in ("chrom", "node", "shard", "row", "label", "blocks", "scalars", "reason", "off_reference",
+                            "in_region", "pos0", "truth_n")}
+    truth_ids = []
     candidates, reasons = [], {}
     for ci, chrom in enumerate(chroms):
         info = manifest["chromosomes"][chrom]
@@ -101,9 +127,23 @@ def build_index(kind_dir):
                     raise ValueError(f"{kind_dir}/{chrom}_labels.ndjson is not in the summary's order")
                 reason = _REASON.search(lab).group(1).decode()
                 cols["reason"].append(reasons.setdefault(reason, len(reasons)))
-                cols["off_reference"].append(b'"grch38": null' in lab)
+                g = _GRCH38.search(lab).group(1)
+                grch38 = json.loads(g)
+                a = _ANCHOR.search(lab)
+                anchor = json.loads(a.group(1)) if a else None
+                cols["off_reference"].append(grch38 is None)
+                cols["pos0"].append(grch38["pos0"] if grch38 else (anchor["start"] + anchor["end"]) // 2 if anchor else -1)
+                cols["in_region"].append(True if confident is None else
+                                         in_region(confident, _EVENT.search(line).group(1).decode(), grch38, anchor))
                 f = _SHARD.search(line).group(1).decode()
                 row = int(_ROW.search(line).group(1))
+                ids = []
+                if labels[f][row] == 1:  # the truth alleles this tensor stands for
+                    r = json.loads(lab)
+                    ids = sorted({d["truth_id"] for d in r.get("somatic") or [] if d.get("representative")}
+                                 | ({r["partial_truth"]["truth_id"]} if r.get("partial_truth") else set()))
+                truth_ids += ids
+                cols["truth_n"].append(len(ids))
                 v = {k: float(p.search(line).group(1)) for k, p in _NUMBER.items()}
                 cols["chrom"].append(ci)
                 cols["node"].append(int(v["node_id"]))
@@ -119,14 +159,19 @@ def build_index(kind_dir):
                   shard=np.asarray(cols["shard"], np.int32), row=np.asarray(cols["row"], np.int32),
                   label=np.asarray(cols["label"], np.int8), blocks=np.asarray(cols["blocks"], np.int16).reshape(-1, 4),
                   scalars=np.asarray(cols["scalars"], np.float32).reshape(-1, len(SCALARS)),
-                  reason=np.asarray(cols["reason"], np.int16), off_reference=np.asarray(cols["off_reference"], bool))
+                  reason=np.asarray(cols["reason"], np.int16), off_reference=np.asarray(cols["off_reference"], bool),
+                  in_region=np.asarray(cols["in_region"], bool), pos0=np.asarray(cols["pos0"], np.int64),
+                  truth_ptr=np.concatenate([[0], np.cumsum(np.asarray(cols["truth_n"], np.int64))]),
+                  truth_ids=np.asarray(truth_ids, np.int64))
     vocabulary = sorted(reasons, key=reasons.get)
     eval_label = arrays["label"].copy()
     eval_label[np.isin(arrays["reason"], [reasons[r] for r in EVAL_AS_NON if r in reasons])] = 0
+    eval_label[~arrays["in_region"]] = -1  # a BED filter drops it at test time, whatever its label
     arrays["eval_label"] = eval_label
     meta = dict(index_version=INDEX_VERSION, directory=str(kind_dir.resolve()), chroms=chroms, shards=shards,
                 labels=_labels_meta(kind_dir), tensors=int(manifest["tensors"]), scalars=list(SCALARS),
-                reasons=vocabulary, eval_as_non=list(EVAL_AS_NON))
+                reasons=vocabulary, eval_as_non=list(EVAL_AS_NON),
+                confident_region=dict(beds=beds) if beds else "none (all tensors in the region)")
     return arrays, candidates, meta
 
 
@@ -188,6 +233,16 @@ class KindIndex:
     def reason(self, position):
         return self.meta["reasons"][int(self.arrays["reason"][position])]
 
+    def truth_of(self, position):
+        """The somatic truth ids a tensor labelled 1 stands for (empty otherwise)."""
+        a = self.arrays
+        return a["truth_ids"][a["truth_ptr"][position]:a["truth_ptr"][position + 1]]
+
+
+def _block_u(seed, chrom, block):
+    """A uniform number in [0, 1) fixed by (seed, chromosome name, block)."""
+    return int.from_bytes(hashlib.sha1(f"{seed}:{chrom}:{block}".encode()).digest()[:8], "big") / 2 ** 64
+
 
 def block_split(index, positions, fraction, block_nodes=20000, seed=0):
     """(train, validation) positions: whole blocks of `block_nodes` consecutive node IDs of one chromosome (about
@@ -197,10 +252,48 @@ def block_split(index, positions, fraction, block_nodes=20000, seed=0):
     block = index.arrays["node"][positions] // block_nodes
     keys, inverse = np.unique(np.stack([chrom, block], 1), axis=0, return_inverse=True)
     names = index.meta["chroms"]
-    u = np.array([int.from_bytes(hashlib.sha1(f"{seed}:{names[c]}:{b}".encode()).digest()[:8], "big") / 2 ** 64
-                  for c, b in keys.tolist()])
+    u = np.array([_block_u(seed, names[c], b) for c, b in keys.tolist()])
     is_val = (u < fraction)[inverse.reshape(-1)]
     return positions[~is_val], positions[is_val]
+
+
+TRUTH_KINDS = {"SNV": ("SNP",), "INDEL": ("DEL", "INS")}
+
+
+def somatic_truth(index, chroms=None):
+    """{truth_id: (chrom, pos0)} of the somatic truth alleles of this kind that count: PASS, in the BED, on
+    `chroms` (None = any), from the set's somatic.recall.tsv (with or without a tensor); None without the table."""
+    table = index.dir.parent / "somatic.recall.tsv"
+    if not table.exists():
+        return None
+    with open(table) as f:
+        return {int(r["truth_id"]): (r["chrom"], int(r["vcf_pos"]) - 1) for r in csv.DictReader(f, delimiter="\t")
+                if r["passed"] == "True" and r["in_bed"] == "True" and r["kind"] in TRUTH_KINDS[index.kind]
+                and (chroms is None or r["chrom"] in set(chroms))}
+
+
+def validation_truth(index, positions, truth, fraction, block_nodes=20000, seed=0):
+    """The truth ids (of `truth`, on the chromosomes of `positions`) whose position falls in a validation block:
+    each block spans GRCh38 from its first tensor's position, and a truth allele belongs to the last block that
+    starts at or before it (block_split's choice of blocks)."""
+    a, names = index.arrays, index.meta["chroms"]
+    keep = positions[a["pos0"][positions] >= 0]
+    chrom, block, pos0 = a["chrom"][keep], a["node"][keep] // block_nodes, a["pos0"][keep]
+    starts = {}
+    for c, b, p in zip(chrom.tolist(), block.tolist(), pos0.tolist()):
+        key = (names[c], b)
+        starts[key] = min(p, starts.get(key, p))
+    by_chrom = {}
+    for (c, b), p in starts.items():
+        by_chrom.setdefault(c, []).append((p, _block_u(seed, c, b) < fraction))
+    by_chrom = {c: (np.array([s for s, _ in sorted(v)]), np.array([x for _, x in sorted(v)])) for c, v in by_chrom.items()}
+    out = set()
+    for tid, (c, p) in truth.items():
+        if c in by_chrom:
+            span_starts, is_val = by_chrom[c]
+            if is_val[max(0, int(np.searchsorted(span_starts, p, side="right")) - 1)]:
+                out.add(tid)
+    return out
 
 
 class TensorDataset(Dataset):
@@ -209,9 +302,11 @@ class TensorDataset(Dataset):
 
     def __init__(self, parts, labels="label"):
         """parts: [(KindIndex, positions)]; labels: "label" (training) or "eval_label" (evaluation)."""
-        # 53 bytes per sample, pickled to every DataLoader worker
-        self.files, shard, row, label, blocks, scalars = [], [], [], [], [], []
-        for index, positions in parts:
+        # 63 bytes per sample, pickled to every DataLoader worker
+        self.files, shard, row, label, blocks, scalars, part, position = [], [], [], [], [], [], [], []
+        for p, (index, positions) in enumerate(parts):
+            part.append(np.full(len(positions), p, np.int16))
+            position.append(np.asarray(positions, np.int64))
             offset = len(self.files)
             self.files += [str(index.dir / f) for f in index.meta["shards"]]
             a = index.arrays
@@ -224,6 +319,7 @@ class TensorDataset(Dataset):
         self.shard, self.row = cat(shard, 0, np.int32), cat(row, 0, np.int32)
         self.label, self.blocks = cat(label, 0, np.int8), cat(blocks, (0, 4), np.int16)
         self.scalars = cat(scalars, (0, len(SCALARS)), np.float32)
+        self.part, self.position = cat(part, 0, np.int16), cat(position, 0, np.int64)  # sample -> (part, index position)
         self._open = {}
 
     def __len__(self):
