@@ -2,7 +2,7 @@
  "format": "golden-hashes",
  "recorded_with": {
   "package": "indexed_gam_pipeline_v4",
-  "commit": "c9eb3af5ad0eb13d458f1bea019144c4c6207809",
+  "commit": "69bdb2a572e3fd37a0ce8a6209c77a71a9e762b7",
   "source_sha256": {
    "__init__.py": "6ad86869e80cecb27a0749acabc7b1cbece76f084e05cfc58b11adb8c37be481",
    "build.py": "101dcaf5a17e8fe488f4d0a564bb6c6a57baf925c9de7411e5775bad227ccbfa",

@@ -143,7 +143,7 @@ Earlier code is in the git history only:
 
 They were removed on 2026-09-28. Their last tree is the parent of the commit that removed them:
 `git log --diff-filter=D -1 -- scripts/build_dat_idx.py`. The earlier indexed-GAM pipeline versions were removed
-in 3d3964a (v1), 9d61016 (v2) and 0674372 (v3).
+in 09f93a7 (v1), 3925042 (v2) and 89e6a8c (v3).
 
 ## License
 

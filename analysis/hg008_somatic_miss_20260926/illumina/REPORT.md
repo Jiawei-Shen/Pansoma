@@ -1,7 +1,7 @@
 # HG008 Illumina WGS：没有候选的 somatic 真值，原因分析（和 ONT、PacBio v6 对比）
 
 - 数据：HG008-T p23 BCM Illumina WGS。tensors 来自 `indexed_gam_pipeline_v3`：
-  - 代码 `6ef7c69`，续跑前打了 `12c29d3` 的 linkage 补丁；
+  - 代码 `cddb268`，续跑前打了 `c952392` 的 linkage 补丁；
   - 常染色体，format v6；
   - 深度超过 1 万的 683 个 node 下采样到 10,000 条 read；
   - 没有 supplement 轮。
