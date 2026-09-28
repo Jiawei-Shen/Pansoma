@@ -417,9 +417,9 @@ plus 391 supplement tasks, no per-read block cache); a whole v3 PacBio run has n
   every fixed batch size down to 256 failed; a single rDNA node of 5.4 M records cannot be built whole.
 
 **COLO829T** (2026-09-26, same graph and settings; `/scratch/jshen/data/pansoma_v2_tensors/COLO829T_<platform>/`).
-Labels truth-labels-v5: somatic truth = the validated union SNV + INDEL VCFs, somatic BED = union of the
+Labels truth-labels-v6: somatic truth = the validated union SNV + INDEL VCFs, somatic BED = union of the
 SMaHT easy/difficult/extreme v2 BEDs (they tile the genome, so their intersection is empty), germline =
-COLO829BL dipcall `dip.vcf.gz` + `dip.bed`.
+COLO829BL dipcall `dip.vcf.gz` + `dip.bed`; Illumina with `--snv-min-af 0.07`.
 
 | | Illumina | fiberseq | ONT |
 |---|---|---|---|
@@ -430,9 +430,9 @@ COLO829BL dipcall `dip.vcf.gz` + `dip.bed`.
 | `--processes` (peak RSS) | 48 (201 GiB) | 15 (210 GiB), 36 (318 GiB) | 15 (215 GiB), 36 (360 GiB), 48 (418 GiB, `--mem=480G`) |
 | run jobs, wall time in total | 3 h 18 min | 14 h 35 min² | 20 h 50 min² |
 | tensors SNV / INDEL | 2,505,600 / 146,252 | 1,715,829 / 1,782,557 | 3,164,304 / 4,493,737 |
-| SNV labels 1 / 2 / 0 / −1 | 38,965 / 338,743 / 1,760,336 / 367,556 | 38,684 / 394,030 / 220,485 / 1,062,630 | 38,469 / 431,962 / 935,995 / 1,757,878 |
-| INDEL labels 1 / 2 / 0 / −1 | 1,249 / 66,080 / 62,545 / 16,378 | 1,449 / 168,706 / 1,499,226 / 113,176 | 1,393 / 195,066 / 4,131,894 / 165,384 |
-| label job (1 CPU) | 33 min | 33 min | 2 h 19 min / 16.5 GB |
+| SNV labels 1 / 2 / 0 / −1 | 38,781 / 337,496 / 1,234,838 / 894,485 | 38,845 / 394,030 / 141,643 / 1,141,311 | 38,774 / 431,962 / 834,507 / 1,859,061 |
+| INDEL labels 1 / 2 / 0 / −1 | 1,367 / 75,487 / 34,591 / 34,807 | 1,833 / 208,151 / 1,310,592 / 261,981 | 2,400 / 253,853 / 3,822,575 / 414,909 |
+| label job (1 CPU) | 32 min | 32 min | 2 h 13 min / 16.0 GB |
 
 ² The long-read runs were stopped and resumed to take fixes: before the read cap moved into the GAM
 read (`5bb5f8c`) the nodes over the cap sat in one or two tasks each that needed 7–10 days, and the
@@ -443,7 +443,8 @@ times are not a clean measurement.
 * ONT at 48 processes peaked at 418 GiB (largest process 66 GiB) under `--mem=480G`; HG008 ONT-UL at
   48 processes was killed under 420G after 22 min.
 * 60 % (fiberseq) and 54 % (ONT) of the SNV tensors are outside the confident region (−1), mostly in
-  centromeric satellite arrays (chr1 120–125 Mb, chr10 38–42 Mb); Illumina 14 %.
+  centromeric satellite arrays (chr1 120–125 Mb, chr10 38–42 Mb); Illumina 13 % (its SNVs below AF 0.07
+  are −1 first).
 
 ---
 
@@ -891,8 +892,11 @@ leaves them out.
     read haplotype, which catches graph-branch residual edits); off-reference nodes are placed between their
     reference neighbours by node ID and labelled like the rest;
   * truth-labels-v5: an off-reference node with more than 1024 GRCh38 bases between its reference
-    neighbours has no position (−1); v4 placed nodes near centromeres in intervals of up to 213 Mb and matched them to any
-    somatic truth inside (false partial 1s).
+    neighbours has no position (−1); v4 placed nodes near centromeres in intervals of up to 213 Mb and
+    matched them to any somatic truth inside (false partial 1s);
+  * truth-labels-v6 (`1c43c89`): partial matches need more than 45 % overlap (was 60 %); an off-reference
+    tensor without a partial somatic match is −1 (`off_reference_no_truth_match`); `label --snv-min-af`
+    makes SNVs below that AF −1 (`below_snv_min_af`; 0.07 for the Illumina sets).
 
 Runs made with v3: HG008 ONT-UL and Illumina WGS, COLO829T Illumina, fiberseq and ONT
 (`/scratch/jshen/data/pansoma_v2_tensors/<sample>/v3_run`, `v3_tensors`).

@@ -122,19 +122,20 @@ sources are gone. A second merge of the same run is refused.
 
 | value | name | rule |
 |---:|---|---|
-| 1 | somatic | A1 (the representative allele) is a somatic truth allele with FILTER PASS/`.` (inside or outside the somatic BED), or overlaps one by more than 60 % (partial) |
-| 2 | germline | A1 is a germline truth allele with FILTER PASS/`.` or only `GAP1`/`GAP2` (dipcall: on one assembled haplotype, the other uncalled), inside or outside the germline BED, or overlaps one by more than 60 % (partial) |
-| 0 | non | every other tensor inside somatic BED ∩ germline BED: no truth allele (`confident_no_truth_allele`), a truth allele nearby that A1 does not overlap enough (`near_truth_allele_mismatch`), the truth is another allele of the site and A1 overlaps it ≤ 60 % (`truth_matches_non_representative_allele`), a germline allele with another FILTER such as dipcall `HET1`/`HET2` (`germline_truth_filtered`) |
-| −1 | ignore | `outside_confident_region`, `not_on_unique_grch38_node` (no GRCh38 position, and no reference node within 200 IDs or more than 1024 GRCh38 bases between the reference nodes around it), `somatic_truth_filtered` |
+| 1 | somatic | A1 (the representative allele) is a somatic truth allele with FILTER PASS/`.` (inside or outside the somatic BED), or overlaps one by more than 45 % (partial) |
+| 2 | germline | A1 is a germline truth allele with FILTER PASS/`.` or only `GAP1`/`GAP2` (dipcall: on one assembled haplotype, the other uncalled), inside or outside the germline BED, or overlaps one by more than 45 % (partial) |
+| 0 | non | every other tensor on a GRCh38 node inside somatic BED ∩ germline BED: no truth allele (`confident_no_truth_allele`), a truth allele nearby that A1 does not overlap enough (`near_truth_allele_mismatch`), the truth is another allele of the site and A1 overlaps it ≤ 45 % (`truth_matches_non_representative_allele`), a germline allele with another FILTER such as dipcall `HET1`/`HET2` (`germline_truth_filtered`) |
+| −1 | ignore | `outside_confident_region`, `not_on_unique_grch38_node` (no GRCh38 position, and no reference node within 200 IDs or more than 1024 GRCh38 bases between the reference nodes around it), `somatic_truth_filtered`, `off_reference_no_truth_match` (an off-reference node without a partial somatic match; v6), `below_snv_min_af` (an SNV below `label --snv-min-af`, checked before every other rule, truth included; v6, 0.07 for the Illumina sets) |
 
-**Partial matches** (truth-labels-v4): the same event written differently by the graph alignment takes
-the truth's label, and `<chrom>_labels.ndjson` marks it with `partial`, `overlap` and `partial_truth`:
+**Partial matches** (truth-labels-v4; threshold 45 % since v6, 60 % before): the same event written
+differently by the graph alignment takes the truth's label, and `<chrom>_labels.ndjson` marks it with
+`partial`, `overlap` and `partial_truth`:
 
 * `partial: "allele"` — another allele of the site (A2, A3, ...) is the truth allele and A1 overlaps it
-  by more than 60 % (reason `allele_partial_somatic_truth` / `allele_partial_germline_truth`); e.g. A1
+  by more than 45 % (reason `allele_partial_somatic_truth` / `allele_partial_germline_truth`); e.g. A1
   +6C next to the truth +5C (83 %), A1 DEL AA next to the truth DEL AAA (67 %).
 * `partial: "residual"` — a truth allele at the same place (the spans of their equivalent placements
-  intersect or touch) that A1 overlaps by more than 60 % (`residual_partial_somatic_truth` /
+  intersect or touch) that A1 overlaps by more than 45 % (`residual_partial_somatic_truth` /
   `residual_partial_germline_truth`). chr1:201 DEL AA overlaps chr1:200 DEL AAA; chr1:210 DEL AA does not.
 * Overlap: DEL/DEL the deleted bases in common, INS/INS the inserted bases in common at the same
   insertion point, over the longer allele. For somatic truths also the haplotype overlap of the A1 reads
@@ -143,8 +144,10 @@ the truth's label, and `<chrom>_labels.ndjson` marks it with `partial`, `overlap
   a +AAAA branch) or a skipped node plus a mismatch counts. Germline truths use the allele overlap only.
 * Off-reference nodes (no unique GRCh38 visit) are placed between the nearest reference nodes by node ID
   (Minigraph-Cactus numbers nodes in topological order; on HG008 PacBio 86 % of the branch-node residual
-  edits of missed somatic INDELs lie within 10 bp of that interval) and labelled by the same rules
-  (`anchor` in labels.ndjson); somatic residuals on them are matched by the haplotype overlap. More
+  edits of missed somatic INDELs lie within 10 bp of that interval) (`anchor` in labels.ndjson);
+  somatic residuals on them are matched by the haplotype overlap. Since v6 such a tensor is 1 on a partial
+  somatic match and otherwise −1 (`off_reference_no_truth_match`), not 0: most branch nodes carry no
+  truth at all, so they are not trained as negatives. More
   than 1024 GRCh38 bases between the two reference nodes (`ANCHOR_GAP`; the nodes' own lengths, up to
   1024 bp each, are not counted, so a SNV bubble between two long nodes keeps its position) is no
   position (−1): around centromeres the neighbours by ID lie up to 213 Mb apart, and v4 compared such a
@@ -197,7 +200,7 @@ $P.tensor_postprocessing label --tensors <tensors dir> \
     --somatic-bed  /scratch/jshen/data/HG008_GIAB/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_all.bed \
     --germline-vcf /scratch/jshen/data/HG008_GIAB/dipcall_HG008N_GRCh38/HG008N_GRCh38_dipcall.dip.vcf.gz \
     --germline-bed /scratch/jshen/data/HG008_GIAB/dipcall_HG008N_GRCh38/HG008N_GRCh38_dipcall.dip.bed \
-    --truth-dir /scratch/jshen/data/pansoma_v2_tensors/truth
+    --truth-dir /scratch/jshen/data/pansoma_v2_tensors/truth      # short-read sets: add --snv-min-af 0.07
 ```
 
 Measured on HG008 (2026-09-23): ref-path-scan 7.4 min / 4.2 GB (49,092,514 GRCh38 nodes, none
@@ -227,6 +230,9 @@ this copy is now the only one. Changes since the copy:
   overlap) take the truth label; off-reference nodes are placed between their reference neighbours.
 * `truth_labels.py` (2026-09-26): truth-labels-v5 — an off-reference node with more than 1024 GRCh38
   bases between its reference neighbours has no position (−1).
+* `truth_labels.py` (`1c43c89`, 2026-09-27): truth-labels-v6 — partial matches above 45 % overlap; an
+  off-reference tensor without a partial somatic match is −1; `label --snv-min-af` (Illumina sets:
+  0.07, as if the build had used it) makes lower-AF SNV tensors −1; manifest key `snv_min_af`.
 
 A change to label rules or merged bytes changes the goldens (`tests/golden_hashes.json`); record
 them again from the committed change (main README, section 9).
