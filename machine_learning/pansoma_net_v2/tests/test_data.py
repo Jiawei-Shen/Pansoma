@@ -123,6 +123,20 @@ class IndexTest(unittest.TestCase):
 
 
 class SamplerTest(unittest.TestCase):
+    def test_kept_non_every_epoch_and_the_rest_sampled(self):
+        labels = np.array([0] * 100 + [0] * 20 + [1] * 5 + [2] * 5)
+        keep = np.array([False] * 100 + [True] * 20 + [False] * 10)      # e.g. the high-AF non
+        s = EpochSampler(130, seed=1, labels=labels, non_fraction=0.25, keep=keep)
+        for epoch in range(3):
+            s.set_epoch(epoch)
+            got = set(s)
+            self.assertTrue(set(range(100, 130)) <= got)                  # kept non, somatic, germline: always
+            low = [i for i in got if i < 100]
+            self.assertEqual(len(low), 25)                                # 25 % of the other non
+            self.assertAlmostEqual(len(low) / 0.25, 100)                  # with weight 1/0.25 they stand for all 100
+        self.assertEqual(s.epoch_size(), 55)
+
+
     def test_evaluation_slices_are_disjoint_and_complete(self):
         parts = [list(EpochSampler(10, shuffle=False, rank=r, world=3)) for r in range(3)]
         self.assertEqual(sorted(sum(parts, [])), list(range(10)))

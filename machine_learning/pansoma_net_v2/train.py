@@ -29,6 +29,8 @@ from torch.utils.data import DataLoader, Subset
 from . import metrics
 from .env import triton_libcuda
 from .data import CLASSES, KINDS, SCALARS, EpochSampler, TensorDataset, block_split, load_parts
+
+AF = SCALARS.index("af")
 from .encode import PLANES, compute_stats
 from .model import PansomaNetV2
 
@@ -60,6 +62,10 @@ def parse_args(argv=None):
                         "numbers w_non,w_som,w_germ")
     p.add_argument("--non-fraction", type=float, default=1.0,
                    help="each epoch: every somatic / germline tensor and a fresh random fraction of the non ones")
+    p.add_argument("--keep-non-af", type=float,
+                   help="non tensors with AF >= this are taken every epoch; the sampled rest weigh 1/--non-fraction "
+                        "in the loss and the class weights use all tensors, so the expected loss is that of all non "
+                        "(without the weights an AF-dependent sampling would bias p_somatic by AF)")
     p.add_argument("--depths", type=int, nargs=4, default=[3, 3, 27, 3])
     p.add_argument("--dims", type=int, nargs=4, default=[192, 384, 768, 1536])
     p.add_argument("--front", type=int, nargs="+", default=[64, 64], help="widths of the 1x1 layers before the stem")
@@ -69,7 +75,11 @@ def parse_args(argv=None):
     p.add_argument("--no-compile", dest="compile", action="store_false",
                    help="skip torch.compile (default on CUDA: 3x faster on an H100, ~2 min to compile)")
     p.add_argument("--no-channels-last", dest="channels_last", action="store_false")
-    p.add_argument("--num-workers", type=int, default=8)
+    p.add_argument("--num-workers", type=int, default=8,
+                   help="training DataLoader workers: reads from BeeGFS are latency-bound, so more workers read "
+                        "faster (HG008 Illumina SNV: 351 / 826 / 2,290 tensors/s with 14 / 28 / 48)")
+    p.add_argument("--val-workers", type=int, default=8)
+    p.add_argument("--prefetch-factor", type=int, default=2, help="batches in flight per worker")
     p.add_argument("--seed", type=int, default=0)
     p.add_argument("--ddp", action="store_true")
     p.add_argument("--resume", help="checkpoint to continue from (its statistics are kept)")
@@ -188,10 +198,10 @@ def gpu_peak(run):
     return {"allocated": round(float(peak[0]), 2), "reserved": round(float(peak[1]), 2)}
 
 
-def make_loader(dataset, sampler, num_workers, batch_size, persistent=True):
+def make_loader(dataset, sampler, num_workers, batch_size, persistent=True, prefetch_factor=2):
     """Workers come from a forkserver, not fork: a forked worker's RSS includes every page it shares with the
     main process (CUDA context, pinned memory), and Slurm limits the RSS summed over processes."""
-    workers = dict(num_workers=num_workers, persistent_workers=persistent, prefetch_factor=4,
+    workers = dict(num_workers=num_workers, persistent_workers=persistent, prefetch_factor=prefetch_factor,
                    multiprocessing_context="forkserver") if num_workers > 0 else {}
     return DataLoader(dataset, batch_size=batch_size, sampler=sampler, pin_memory=torch.cuda.is_available(),
                       drop_last=False, **workers)
@@ -215,10 +225,11 @@ def retry_workers(action, log, what, tries=3, wait=5.0):
             time.sleep(wait)
 
 
-def started_loader(dataset, sampler, num_workers, batch_size, log, what):
+def started_loader(dataset, sampler, num_workers, batch_size, log, what, prefetch_factor=2):
     """A persistent DataLoader whose workers are running (one batch fetched), retried as in retry_workers."""
     def start():
-        loader = make_loader(dataset, sampler, num_workers, batch_size, persistent=True)
+        loader = make_loader(dataset, sampler, num_workers, batch_size, persistent=True,
+                             prefetch_factor=prefetch_factor)
         if num_workers > 0 and len(loader):
             next(iter(loader))
         return loader
@@ -306,17 +317,26 @@ def main(argv=None):
         run.log(f"torch.compile (Triton libcuda directory: {triton_libcuda()})")
         net = torch.compile(net)  # after DDP, as PyTorch recommends; the checkpoint saves `model`
 
-    epoch_counts = counts.astype(np.float64) * np.array([args.non_fraction, 1.0, 1.0])
+    # class weights follow one epoch's classes; with --keep-non-af the importance weights restore all non
+    importance = args.keep_non_af is not None and args.non_fraction < 1.0
+    epoch_counts = counts.astype(np.float64) * np.array([1.0 if importance else args.non_fraction, 1.0, 1.0])
     weights = class_weights(args.class_weights, epoch_counts).to(run.device)
     criterion = nn.CrossEntropyLoss(weight=weights, ignore_index=-1)
+    per_sample = nn.CrossEntropyLoss(weight=weights, ignore_index=-1, reduction="none")
+    keep = train_set.scalars[:, AF] >= args.keep_non_af if args.keep_non_af is not None else None
     train_sampler = EpochSampler(len(train_set), args.epoch_samples, True, run.rank, run.world, args.seed,
-                                 labels=train_set.label, non_fraction=args.non_fraction)
+                                 labels=train_set.label, non_fraction=args.non_fraction, keep=keep)
+    if importance:
+        n_keep = int((keep & (train_set.label == 0)).sum())
+        run.log(f"non tensors with AF >= {args.keep_non_af}: {n_keep:,} taken every epoch; the others sampled at "
+                f"{args.non_fraction} with importance weight {1 / args.non_fraction:.2f}")
     run.log(f"class weights {dict(zip(CLASSES, [round(w, 4) for w in weights.tolist()]))}; each epoch "
             f"{train_sampler.epoch_size():,} tensors (non fraction {args.non_fraction})")
     val_sampler = EpochSampler(len(val_set), None, False, run.rank, run.world)
-    train_loader = started_loader(train_set, train_sampler, args.num_workers, args.batch_size, run.log, "training")
-    val_loader = started_loader(val_set, val_sampler, max(1, args.num_workers // 2) if args.num_workers else 0,
-                                args.batch_size, run.log, "validation")
+    train_loader = started_loader(train_set, train_sampler, args.num_workers, args.batch_size, run.log, "training",
+                                  args.prefetch_factor)
+    val_loader = started_loader(val_set, val_sampler, args.val_workers if args.num_workers else 0, args.batch_size,
+                                run.log, "validation", args.prefetch_factor)
     steps_per_epoch = max(1, len(train_loader))
     total_steps, warmup = args.epochs * steps_per_epoch, int(args.warmup_epochs * steps_per_epoch)
     optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=args.weight_decay,
@@ -359,7 +379,11 @@ def main(argv=None):
             x, blocks, scalars, y = (t.to(run.device, non_blocking=True) for t in (x, blocks, scalars, y))
             with torch.autocast(run.device.type, dtype=torch.bfloat16, enabled=amp):
                 logits = net(x, blocks, scalars)
-            loss = criterion(logits.float(), y)
+            if importance:  # a sampled low-AF non tensor stands for 1 / non_fraction of them
+                iw = torch.where((y == 0) & (scalars[:, AF] < args.keep_non_af), 1.0 / args.non_fraction, 1.0)
+                loss = (per_sample(logits.float(), y) * iw).sum() / (weights[y] * iw).sum()
+            else:
+                loss = criterion(logits.float(), y)
             optimizer.zero_grad(set_to_none=True)
             loss.backward()
             optimizer.step()

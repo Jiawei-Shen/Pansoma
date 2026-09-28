@@ -62,7 +62,9 @@ class TensorEncoder(nn.Module):
 
     def forward(self, x, blocks, dtype=torch.float32):
         """x: (B, 8, H, W) int8; blocks: (B, 4) row ends of the A1, ALT, REF and OTHER blocks."""
-        if not bool(self.fitted):
+        # checked only in eager mode: bool() of a GPU buffer is a graph break, and under torch.compile the
+        # code after it was recompiled every step until Dynamo gave up (recompile_limit) and ran it eagerly
+        if not torch.compiler.is_compiling() and not bool(self.fitted):
             raise RuntimeError("TensorEncoder has no statistics: fit them with compute_stats or load a checkpoint")
         x = x.to(torch.int16)
         covered = x[:, 4] > 0

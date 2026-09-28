@@ -266,15 +266,19 @@ class EpochSampler(Sampler):
     """A fresh random (or fixed) order each epoch, optionally only num_samples of it, split over DDP ranks:
     shuffled training pads to equal per-rank lengths; evaluation (shuffle=False) gives disjoint slices.
     With labels and non_fraction < 1 each epoch takes every tensor of the other classes and a fresh random
-    non_fraction of the non tensors (label 0)."""
+    non_fraction of the non tensors (label 0); non tensors marked in `keep` are taken every epoch too."""
 
-    def __init__(self, n, num_samples=None, shuffle=True, rank=0, world=1, seed=0, labels=None, non_fraction=1.0):
+    def __init__(self, n, num_samples=None, shuffle=True, rank=0, world=1, seed=0, labels=None, non_fraction=1.0,
+                 keep=None):
         self.n, self.num_samples, self.shuffle = n, num_samples, shuffle
         self.rank, self.world, self.seed, self.epoch = rank, world, seed, 0
         self.non, self.other, self.keep_non = None, None, None
         if labels is not None and non_fraction < 1.0:
             labels = np.asarray(labels)
-            self.non, self.other = torch.from_numpy(np.flatnonzero(labels == 0)), torch.from_numpy(np.flatnonzero(labels != 0))
+            sampled = labels == 0
+            if keep is not None:
+                sampled &= ~np.asarray(keep, bool)
+            self.non, self.other = torch.from_numpy(np.flatnonzero(sampled)), torch.from_numpy(np.flatnonzero(~sampled))
             self.keep_non = int(round(non_fraction * len(self.non)))
 
     def set_epoch(self, epoch):

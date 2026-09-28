@@ -140,6 +140,11 @@ class TrainPredictTest(unittest.TestCase):
                        + SMALL_ARGS)
             ckpt = torch.load(out / "best.pth", weights_only=False)
             self.assertEqual(ckpt["config"]["scalars"], len(SCALARS))
+            train.main(["--tensors", str(root), "--output", str(tmp / "run_keep"), "--epochs", "1", "--kinds", "SNV",
+                        "--non-fraction", "0.5", "--keep-non-af", "0.5"] + SMALL_ARGS)
+            log = (tmp / "run_keep" / "train.log").read_text()
+            self.assertIn("importance weight 2.00", log)
+            self.assertTrue((tmp / "run_keep" / "best.pth").exists())
             self.assertEqual(ckpt["scalars"], list(SCALARS))
             self.assertIn("scalar_mean", ckpt["model_state_dict"])
             predict.main(["--checkpoint", str(out / "best.pth"), "--tensors", str(root), "--output", str(tmp / "p"),
