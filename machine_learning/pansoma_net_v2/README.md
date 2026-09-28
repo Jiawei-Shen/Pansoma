@@ -87,6 +87,13 @@ Useful `train` options:
 
 **Evaluation** (`metrics.py`). The target is the somatic class; germline is reported too.
 
+- **Which tensors count.** Validation and the test chromosome score the tensors labelled 0/1/2, plus the
+  off-reference tensors without a truth match (`off_reference_no_truth_match`, −1 for training) as non:
+  test-time calling meets them inside the BED, and a somatic call on one is a false positive. The other −1
+  are left out, because calling drops them without truth: outside the BED (`outside_confident_region`),
+  below the AF floors (`below_snv_min_af`, `below_indel_min_af`), and no GRCh38 position
+  (`not_on_unique_grch38_node`). Training uses only 0/1/2.
+
 - Each validation reports the somatic and germline average precision (PR-AUC), the argmax precision /
   recall / F1 per class, and the somatic threshold t of the best F1.
 - With t, a tensor is somatic when p_somatic ≥ t, and otherwise the larger of non and germline. The
@@ -104,8 +111,12 @@ statistics are buffers in it), `stats`, `somatic_threshold`, `classes`, `planes`
 data (directories, label provenance, counts), the chromosome split and `args`. Rebuild it with
 `PansomaNetV2.from_checkpoint(path)`.
 
-`predict` writes `<sample>.<set>.<KIND>.predictions.tsv.gz` (chrom, candidate_id, label, p_non, p_somatic,
-p_germline, pred with the threshold) and `.metrics.json` (the same report, `--threshold` overrides t).
+`predict` writes, for every tensor of the chosen chromosomes, `<sample>.<set>.<KIND>.predictions.ndjson.gz`.
+Each record has chrom, candidate_id, label (truth), test_label (the scored label, null when left out),
+in_test, reason, off_reference (the node is off the GRCh38 path, as in the paper's pangenome-only calls),
+p_non, p_somatic, p_germline, and pred (with the threshold). It also writes `.metrics.json`: the same report
+over the test tensors, with the counts of test tensors on off-reference nodes (`--threshold` overrides t).
+Off-reference tensors are marked for analysis only; the test scores them like the others.
 
 ## GPU runs (measured 2026-09-28, node tequila)
 
@@ -139,9 +150,15 @@ model has 199.4 M parameters. Measured bf16 training speed (a whole H100, batch 
 
 It caches the result in `--cache-dir` (default `<output>/index_cache`) as
 `<sample>.<set>.<KIND>.<path hash>.npz` plus `.candidates.txt`, and rebuilds it when `labels.manifest.json`
-changes (format, version, rules_sha256, created, tensors, the AF floors). Jobs can share a cache: each
-process writes its own temporary files, then renames them. Reading the summaries takes about a minute per
+changes (format, version, rules_sha256, created, tensors, the AF floors). From `<chrom>_labels.ndjson` (the
+summary's order, checked by candidate id) it also keeps each tensor's reason and off-reference flag, and
+derives the evaluation labels. Jobs can share a cache: each process writes its own temporary files, then
+renames them. Reading the summaries takes about a minute per
 2.5 M tensors.
+
+Loaders are persistent and their workers' start is retried (`train.retry_workers`, up to 3 times). On
+tequila, three of four jobs started together once lost their forkserver workers' semaphores in /dev/shm
+(FileNotFoundError in SemLock._rebuild). Running workers hold the semaphores, so only the start is exposed.
 
 Each sample is one `pread` of 161.6 KB at its row's offset in the shard. There is no memory map: mapped
 pages stay in every DataLoader worker's RSS, and Slurm's summed-RSS limit counts them once per worker (a
