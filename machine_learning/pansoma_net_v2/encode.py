@@ -84,11 +84,11 @@ class TensorEncoder(nn.Module):
 
 def compute_stats(loader, max_samples):
     """Mean and std of BQ, MAPQ and path count over the valid covered cells of up to max_samples tensors from
-    loader (batches of (x, blocks, label)); padding and invalid cells (-1) never enter."""
+    loader (batches whose first item is x); padding and invalid cells (-1) never enter."""
     total = {name: torch.zeros(3, dtype=torch.float64) for name, _, _ in CONTINUOUS}  # count, sum, sum of squares
     seen = 0
-    for x, _, _ in loader:
-        x = x[:max_samples - seen].to(torch.int16)
+    for batch in loader:
+        x = batch[0][:max_samples - seen].to(torch.int16)
         for name, mask in valid_masks(x).items():
             c = next(c for n, c, _ in CONTINUOUS if n == name)
             v = x[:, c][mask].to(torch.float64)

@@ -137,21 +137,28 @@ class ConvNeXtCBAM(nn.Module):
             if m.bias is not None:
                 nn.init.constant_(m.bias, 0)
 
-    def forward(self, x):
+    def forward_features(self, x):
         x = self.stem(x)
         for i in range(4):
             x = self.stages[i](x)
             if i < 3:
                 x = self.downsample_layers[i](x)
-        return self.head(torch.flatten(self.pool(x), 1))
+        return torch.flatten(self.pool(x), 1)
+
+    def forward(self, x):
+        return self.head(self.forward_features(x))
 
 
 class PansomaNetV2(nn.Module):
+    """scalars > 0: the site's scalars (data.SCALARS), z-scored with statistics fitted on the training tensors
+    (buffers, like the encoder's), go through a Linear(scalars, 64) + GELU and join the pooled features before the
+    head."""
+
     def __init__(self, num_classes=3, depths=(3, 3, 27, 3), dims=(192, 384, 768, 1536), front=(64, 64),
-                 drop_path_rate=0.1, stats=None):
+                 drop_path_rate=0.1, stats=None, scalars=0):
         super().__init__()
         self.config = dict(num_classes=num_classes, depths=list(depths), dims=list(dims), front=list(front),
-                           drop_path_rate=drop_path_rate)
+                           drop_path_rate=drop_path_rate, scalars=scalars)
         self.encoder = TensorEncoder(stats)
         layers, c = [], N_PLANES
         for width in front:
@@ -159,14 +166,27 @@ class PansomaNetV2(nn.Module):
             c = width
         self.front = nn.Sequential(*layers)
         self.backbone = ConvNeXtCBAM(c, num_classes, depths, dims, drop_path_rate)
-        for m in self.front.modules():
-            if isinstance(m, nn.Conv2d):
+        if scalars:
+            self.register_buffer("scalar_mean", torch.zeros(scalars))
+            self.register_buffer("scalar_std", torch.ones(scalars))
+            self.scalar_mlp = nn.Sequential(nn.Linear(scalars, 64), nn.GELU())
+            self.backbone.head = nn.Linear(dims[-1] + 64, num_classes)
+        for m in list(self.front.modules()) + list(self.scalar_mlp.modules() if scalars else []) + [self.backbone.head]:
+            if isinstance(m, (nn.Conv2d, nn.Linear)):
                 trunc_normal_(m.weight, std=.02)
                 nn.init.constant_(m.bias, 0)
 
-    def forward(self, x, blocks):
-        """x: (B, 8, 200, 101) int8 tensors; blocks: (B, 4) row-block ends -> logits (B, num_classes)."""
-        return self.backbone(self.front(self.encoder(x, blocks)))
+    def set_scalar_stats(self, mean, std):
+        self.scalar_mean.copy_(torch.as_tensor(mean, dtype=torch.float32))
+        self.scalar_std.copy_(torch.clamp(torch.as_tensor(std, dtype=torch.float32), min=1e-6))
+
+    def forward(self, x, blocks, scalars=None):
+        """x: (B, 8, 200, 101) int8 tensors; blocks: (B, 4) row-block ends; scalars: (B, S) -> logits (B, classes)."""
+        features = self.backbone.forward_features(self.front(self.encoder(x, blocks)))
+        if self.config["scalars"]:
+            z = (scalars.to(features.device, torch.float32) - self.scalar_mean) / self.scalar_std
+            features = torch.cat([features, self.scalar_mlp(z).to(features.dtype)], 1)
+        return self.backbone.head(features)
 
     @classmethod
     def from_checkpoint(cls, checkpoint, map_location="cpu"):
@@ -174,6 +194,6 @@ class PansomaNetV2(nn.Module):
             checkpoint = torch.load(checkpoint, map_location=map_location, weights_only=False)
         if checkpoint.get("format") != "pansoma_net_v2":
             raise ValueError("not a pansoma_net_v2 checkpoint")
-        model = cls(**checkpoint["config"])
+        model = cls(**{"scalars": 0, **checkpoint["config"]})
         model.load_state_dict(checkpoint["model_state_dict"])
         return model

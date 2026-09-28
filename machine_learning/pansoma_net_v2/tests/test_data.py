@@ -7,7 +7,7 @@ from unittest import mock
 import numpy as np
 
 from .. import data
-from ..data import EpochSampler, KindIndex, TensorDataset, block_ends, load_parts
+from ..data import SCALARS, EpochSampler, KindIndex, TensorDataset, block_ends, block_split, load_parts, site_scalars
 from .fixtures import make_tensor_set
 
 SPEC = {"SNV": {"chr1": 9, "chr2": 6}, "INDEL": {"chr1": 5, "chr2": 3}}
@@ -34,7 +34,10 @@ class IndexTest(unittest.TestCase):
                 self.assertEqual(int(a["row"][k]), t["row"])
                 self.assertEqual(int(a["label"][k]), t["label"])
                 self.assertEqual(a["blocks"][k].tolist(), t["blocks"])
-                self.assertAlmostEqual(float(a["af"][k]), t["af"], places=4)  # the top-level af, not an allele's
+                self.assertEqual(int(a["node"][k]), t["node"])
+                # the record's own numbers, not those of an entry in alleles[]
+                self.assertTrue(np.allclose(a["scalars"][k], site_scalars(t["numbers"]), atol=1e-5))
+                self.assertAlmostEqual(float(a["scalars"][k][SCALARS.index("af")]), t["af"], places=4)
             self.assertEqual(index.candidates(), [t["candidate_id"] for t in rows])
 
     def test_cache_is_reused_and_rebuilt_when_labels_change(self):
@@ -66,12 +69,35 @@ class IndexTest(unittest.TestCase):
         self.assertEqual(len(ds), sum(len(v) for v in self.truth.values()))
         flat = self.truth["SNV"] + self.truth["INDEL"]
         for k in (0, 5, len(ds) - 1):
-            x, blocks, label = ds[k]
+            x, blocks, scalars, label = ds[k]
             self.assertTrue(np.array_equal(x.numpy(), flat[k]["x"]))
             self.assertEqual(blocks.tolist(), flat[k]["blocks"])
+            self.assertTrue(np.allclose(scalars.numpy(), site_scalars(flat[k]["numbers"]), atol=1e-5))
             self.assertEqual(label, flat[k]["label"])
         counts = ds.class_counts()
         self.assertEqual(counts.tolist(), [sum(t["label"] == c for t in flat) for c in range(3)])
+
+    def test_two_samples_with_the_same_set_name_share_a_cache(self):
+        other = Path(self.tmp.name) / "sample2" / "v3_tensors"
+        truth2 = make_tensor_set(other, {"SNV": {"chr1": 3}}, seed=5)
+        a, b = KindIndex(self.root / "SNV", self.cache), KindIndex(other / "SNV", self.cache)
+        with mock.patch.object(data, "build_index", side_effect=AssertionError("rebuilt")):
+            a2, b2 = KindIndex(self.root / "SNV", self.cache), KindIndex(other / "SNV", self.cache)
+        self.assertEqual(len(a2), len(self.truth["SNV"]))
+        self.assertEqual(b2.candidates(), [t["candidate_id"] for t in truth2["SNV"]])
+        self.assertEqual((len(a), len(b)), (len(a2), len(b2)))
+
+    def test_block_split_keeps_whole_blocks(self):
+        index = KindIndex(self.root / "SNV", self.cache)
+        pos = index.select(labelled=False)
+        train, val = block_split(index, pos, 0.5, block_nodes=14, seed=1)
+        self.assertEqual(sorted(np.r_[train, val].tolist()), pos.tolist())
+        key = lambda p: (int(index.arrays["chrom"][p]), int(index.arrays["node"][p]) // 14)  # noqa: E731
+        self.assertFalse({key(p) for p in train} & {key(p) for p in val})
+        again = block_split(index, pos, 0.5, block_nodes=14, seed=1)
+        self.assertEqual(val.tolist(), again[1].tolist())                   # deterministic
+        self.assertEqual(len(block_split(index, pos, 0.0, 14)[1]), 0)
+        self.assertEqual(len(block_split(index, pos, 1.0, 14)[0]), 0)
 
     def test_block_ends(self):
         groups = [dict(start_row=0, end_row=4, allele="A1"), dict(start_row=4, end_row=6, allele="A2"),

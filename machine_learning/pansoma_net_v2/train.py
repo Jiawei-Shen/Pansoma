@@ -1,14 +1,16 @@
 """Train PansomaNetV2 on merged Pansoma tensor sets.
 
     cd machine_learning
-    python -m pansoma_net_v2.train --tensors <set> [<set> ...] --output <dir> [--val-chroms chr20] ...
+    python -m pansoma_net_v2.train --tensors <set> [<set> ...] --kinds SNV --output <dir> [--test-chroms chr1] ...
     torchrun --nproc_per_node=N -m pansoma_net_v2.train --ddp ...           # several GPUs
 
 A <set> is a directory holding merged SNV/ and INDEL/ (e.g. .../COLO829T_Illumina/v3_tensors). Classes are
-the labels 0 non, 1 somatic, 2 germline; tensors labelled -1 are not used. Chromosomes split train / val /
-test (test chromosomes are left out entirely). The encoder's z-score statistics are fitted once on the
-training tensors (or taken from --resume) and saved in every checkpoint. The best checkpoint is chosen by
-the validation F1 of the somatic class.
+the labels 0 non, 1 somatic, 2 germline; tensors labelled -1 are not used. The test chromosomes (default chr1)
+are left out; the others train, except the validation: whole ~1 Mb node blocks (--val-fraction of them), or
+--val-chroms. The encoder's z-score statistics (and with --scalars the scalars') are fitted once on the
+training tensors (or taken from --resume) and saved in every checkpoint. Each epoch the somatic threshold of
+the best validation F1 is found (metrics.py); the best checkpoint has the highest thresholded somatic F1 (or
+--select ap: somatic average precision) and stores its threshold.
 """
 import argparse
 import json
@@ -24,7 +26,9 @@ import torch.nn as nn
 from torch.nn.parallel import DistributedDataParallel
 from torch.utils.data import DataLoader, Subset
 
-from .data import CLASSES, KINDS, EpochSampler, TensorDataset, load_parts
+from . import metrics
+from .env import triton_libcuda
+from .data import CLASSES, KINDS, SCALARS, EpochSampler, TensorDataset, block_split, load_parts
 from .encode import PLANES, compute_stats
 from .model import PansomaNetV2
 
@@ -38,8 +42,12 @@ def parse_args(argv=None):
     p.add_argument("--output", required=True)
     p.add_argument("--cache-dir", help="index cache (default: <output>/index_cache)")
     p.add_argument("--train-chroms", nargs="+", help="default: every autosome not in --val-chroms/--test-chroms")
-    p.add_argument("--val-chroms", nargs="+", default=["chr20"])
-    p.add_argument("--test-chroms", nargs="+", default=[], help="left out of training and validation")
+    p.add_argument("--test-chroms", nargs="+", default=["chr1"], help="left out of training and validation")
+    p.add_argument("--val-chroms", nargs="+", default=[], help="validation chromosomes (default: node blocks)")
+    p.add_argument("--val-fraction", type=float, default=0.05, help="node blocks of the training chromosomes")
+    p.add_argument("--val-block-nodes", type=int, default=20000)
+    p.add_argument("--select", choices=["f1", "ap"], default="f1", help="best checkpoint by thresholded somatic F1 or AP")
+    p.add_argument("--scalars", action="store_true", help="feed the site scalars (data.SCALARS) to the head")
     p.add_argument("--epochs", type=int, default=30)
     p.add_argument("--epoch-samples", type=int, help="training tensors per epoch (a fresh random subset each epoch)")
     p.add_argument("--val-samples", type=int, help="fixed random subset of the validation tensors")
@@ -48,13 +56,19 @@ def parse_args(argv=None):
     p.add_argument("--weight-decay", type=float, default=0.05)
     p.add_argument("--warmup-epochs", type=float, default=1.0)
     p.add_argument("--class-weights", default="balanced",
-                   help="'balanced' (n / (3 n_c) on the training tensors), 'none', or three numbers w_non,w_som,w_germ")
+                   help="'balanced' (n / (3 n_c) over an epoch's tensors), 'sqrt' (its square root), 'none', or three "
+                        "numbers w_non,w_som,w_germ")
+    p.add_argument("--non-fraction", type=float, default=1.0,
+                   help="each epoch: every somatic / germline tensor and a fresh random fraction of the non ones")
     p.add_argument("--depths", type=int, nargs=4, default=[3, 3, 27, 3])
     p.add_argument("--dims", type=int, nargs=4, default=[192, 384, 768, 1536])
     p.add_argument("--front", type=int, nargs="+", default=[64, 64], help="widths of the 1x1 layers before the stem")
     p.add_argument("--drop-path", type=float, default=0.1)
     p.add_argument("--stats-samples", type=int, default=20000, help="training tensors used to fit the z-score")
     p.add_argument("--amp", choices=["bf16", "off"], default="bf16")
+    p.add_argument("--no-compile", dest="compile", action="store_false",
+                   help="skip torch.compile (default on CUDA: 3x faster on an H100, ~2 min to compile)")
+    p.add_argument("--no-channels-last", dest="channels_last", action="store_false")
     p.add_argument("--num-workers", type=int, default=8)
     p.add_argument("--seed", type=int, default=0)
     p.add_argument("--ddp", action="store_true")
@@ -69,11 +83,11 @@ class Run:
     def __init__(self, args):
         self.ddp = args.ddp
         if self.ddp:
-            dist.init_process_group(backend="nccl")
-            self.rank, self.world = dist.get_rank(), dist.get_world_size()
             self.local = int(os.environ.get("LOCAL_RANK", 0))
             torch.cuda.set_device(self.local)
             self.device = torch.device("cuda", self.local)
+            dist.init_process_group(backend="nccl", device_id=self.device)
+            self.rank, self.world = dist.get_rank(), dist.get_world_size()
         else:
             self.rank, self.world, self.local = 0, 1, 0
             self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -108,51 +122,70 @@ def split_chroms(args, available):
 
 
 def class_weights(spec, counts):
+    """counts: tensors per class in one epoch."""
     if spec == "none":
         return torch.ones(len(CLASSES))
-    if spec == "balanced":
+    if spec in ("balanced", "sqrt"):
         counts = np.maximum(counts, 1)
-        return torch.tensor(counts.sum() / (len(CLASSES) * counts), dtype=torch.float32)
+        w = counts.sum() / (len(CLASSES) * counts)
+        return torch.tensor(np.sqrt(w) if spec == "sqrt" else w, dtype=torch.float32)
     w = [float(x) for x in spec.split(",")]
     if len(w) != len(CLASSES):
         raise SystemExit("--class-weights needs three numbers: non,somatic,germline")
     return torch.tensor(w)
 
 
-def metrics_from_confusion(cm):
-    """cm[true, pred] -> accuracy and per-class precision / recall / F1."""
-    cm = cm.astype(np.float64)
-    out = {"accuracy": float(np.trace(cm) / max(cm.sum(), 1))}
-    for k, name in enumerate(CLASSES):
-        tp, fp, fn = cm[k, k], cm[:, k].sum() - cm[k, k], cm[k, :].sum() - cm[k, k]
-        prec = tp / (tp + fp) if tp + fp else 0.0
-        rec = tp / (tp + fn) if tp + fn else 0.0
-        out[name] = {"precision": prec, "recall": rec, "f1": 2 * prec * rec / (prec + rec) if prec + rec else 0.0,
-                     "support": int(cm[k, :].sum())}
-    return out
+def predict_probs(model, loader, device, amp):
+    """(labels, probabilities) of loader's samples on this rank."""
+    model.eval()
+    labels, probs = [], []
+    with torch.no_grad():
+        for x, blocks, scalars, y in loader:
+            with torch.autocast(device.type, dtype=torch.bfloat16, enabled=amp):
+                logits = model(x.to(device, non_blocking=True), blocks.to(device, non_blocking=True),
+                               scalars.to(device, non_blocking=True))
+            probs.append(torch.softmax(logits.float(), 1).cpu().numpy())
+            labels.append(y.numpy())
+    return (np.concatenate(labels) if labels else np.zeros(0, np.int64),
+            np.concatenate(probs) if probs else np.zeros((0, len(CLASSES)), np.float32))
 
 
 def evaluate(model, loader, criterion, run, amp):
-    model.eval()
-    cm = torch.zeros(len(CLASSES), len(CLASSES), dtype=torch.long, device=run.device)
-    loss_sum = torch.zeros(2, dtype=torch.float64, device=run.device)  # weighted loss sum, weight sum
-    with torch.no_grad():
-        for x, blocks, y in loader:
-            x, blocks, y = (t.to(run.device, non_blocking=True) for t in (x, blocks, y))
-            with torch.autocast(run.device.type, dtype=torch.bfloat16, enabled=amp):
-                logits = model(x, blocks)
-            w = criterion.weight[y].sum() if criterion.weight is not None else \
-                torch.tensor(float(y.numel()), device=run.device)
-            loss_sum += torch.stack([criterion(logits.float(), y) * w, w]).double()
-            pred = logits.argmax(1)
-            cm += torch.bincount(y * len(CLASSES) + pred, minlength=len(CLASSES) ** 2).view(len(CLASSES), -1)
+    """Validation report (metrics.report at the best-F1 somatic threshold) and weighted loss; all ranks."""
+    labels, probs = predict_probs(model, loader, run.device, amp)
     if run.ddp:
-        dist.all_reduce(cm)
-        dist.all_reduce(loss_sum)
-    m = metrics_from_confusion(cm.cpu().numpy())
-    m["loss"] = float(loss_sum[0] / max(loss_sum[1], 1))
-    m["confusion"] = cm.cpu().tolist()
-    return m
+        parts = [None] * run.world
+        dist.all_gather_object(parts, (labels, probs))
+        labels, probs = np.concatenate([p[0] for p in parts]), np.concatenate([p[1] for p in parts])
+    threshold, _, _, _ = metrics.best_somatic_threshold(labels, probs)
+    out = metrics.report(labels, probs, threshold)
+    w = criterion.weight.cpu().numpy() if criterion.weight is not None else np.ones(len(CLASSES))
+    nll = -np.log(np.clip(probs[np.arange(len(labels)), labels], 1e-12, None))
+    out["loss"] = float((w[labels] * nll).sum() / max(w[labels].sum(), 1e-12))
+    return out
+
+
+def describe(report):
+    """One line: somatic AP, F1 / P / R at the report's threshold, argmax F1; germline AP and argmax F1."""
+    t, a = report.get("thresholded"), report["argmax"]
+    line = f"somatic AP {report['somatic_ap']:.3f}"
+    if t:
+        s = t["somatic"]
+        line += f" F1 {s['f1']:.3f} (P {s['precision']:.3f} R {s['recall']:.3f} @ p>={report['threshold']:.3f})"
+    return (line + f" argmax F1 {a['somatic']['f1']:.3f} | germline AP {report['germline_ap']:.3f} "
+            f"F1 {a['germline']['f1']:.3f} | non F1 {a['non']['f1']:.3f}")
+
+
+def gpu_peak(run):
+    """Peak GPU memory (GiB) of this epoch, the maximum over ranks: allocated by tensors, reserved by the caching
+    allocator (what nvidia-smi shows, minus the CUDA context)."""
+    if run.device.type != "cuda":
+        return None
+    peak = torch.tensor([torch.cuda.max_memory_allocated(run.device), torch.cuda.max_memory_reserved(run.device)],
+                        dtype=torch.float64, device=run.device) / 2 ** 30
+    if run.ddp:
+        dist.all_reduce(peak, op=dist.ReduceOp.MAX)
+    return {"allocated": round(float(peak[0]), 2), "reserved": round(float(peak[1]), 2)}
 
 
 def make_loader(dataset, sampler, num_workers, batch_size, persistent=True):
@@ -177,22 +210,33 @@ def main(argv=None):
     train_chroms, val_chroms, test_chroms, missing = split_chroms(args, available)
     run.log(f"train {train_chroms}\nval {val_chroms}\ntest (left out) {test_chroms}"
             + (f"\nnot in the data: {missing}" if missing else ""))
-    train_parts = [(i, i.select(train_chroms)) for i, _ in everything]
-    val_parts = [(i, i.select(val_chroms)) for i, _ in everything]
+    if val_chroms:
+        train_parts = [(i, i.select(train_chroms)) for i, _ in everything]
+        val_parts = [(i, i.select(val_chroms)) for i, _ in everything]
+    else:
+        splits = [(i, block_split(i, i.select(train_chroms), args.val_fraction, args.val_block_nodes, args.seed))
+                  for i, _ in everything]
+        train_parts = [(i, tr) for i, (tr, _) in splits]
+        val_parts = [(i, va) for i, (_, va) in splits]
+        run.log(f"validation: {args.val_fraction:.0%} of the {args.val_block_nodes}-node blocks of the training chromosomes")
     train_set, val_set = TensorDataset(train_parts), TensorDataset(val_parts)
     counts = train_set.class_counts()
     for index, pos in train_parts:
         labels = index.arrays["label"][pos]
-        run.log(f"{index.dir}: labels {index.meta['labels']['version']} ({index.meta['labels']['created']}), "
+        lm = index.meta["labels"]
+        run.log(f"{index.dir}: labels {lm.get('version') or (lm.get('format'), (lm.get('rules_sha256') or '')[:12])} "
+                f"({lm['created']}), "
                 f"train {len(pos):,} " + " ".join(f"{c}={int((labels == k).sum()):,}" for k, c in enumerate(CLASSES)))
-    run.log(f"training tensors {len(train_set):,} ({dict(zip(CLASSES, counts.tolist()))}), validation {len(val_set):,}")
+    run.log(f"training tensors {len(train_set):,} ({dict(zip(CLASSES, counts.tolist()))}), validation {len(val_set):,} "
+            f"({dict(zip(CLASSES, val_set.class_counts().tolist()))})")
     if len(train_set) == 0 or len(val_set) == 0:
         raise SystemExit("empty training or validation set")
     if args.val_samples and args.val_samples < len(val_set):
         keep = np.sort(np.random.default_rng(args.seed).choice(len(val_set), args.val_samples, replace=False))
         val_set = Subset(val_set, keep.tolist())
 
-    model = PansomaNetV2(len(CLASSES), args.depths, args.dims, args.front, args.drop_path)
+    model = PansomaNetV2(len(CLASSES), args.depths, args.dims, args.front, args.drop_path,
+                         scalars=len(SCALARS) if args.scalars else 0)
     checkpoint = torch.load(args.resume, map_location="cpu", weights_only=False) if args.resume else None
     if checkpoint is not None:
         if checkpoint["config"] != model.config:
@@ -214,23 +258,37 @@ def main(argv=None):
             dist.broadcast_object_list(stats, src=0)
         stats = stats[0]
     model.encoder.set_stats(stats)
+    if args.scalars and checkpoint is None:  # all training tensors (the arrays are in memory)
+        s = train_set.scalars.astype(np.float64)
+        model.set_scalar_stats(s.mean(0), s.std(0))
+        run.log("scalar statistics: " + json.dumps({n: [round(float(m), 4), round(float(d), 4)]
+                                                   for n, m, d in zip(SCALARS, s.mean(0), s.std(0))}))
     model.to(run.device)
+    if args.channels_last and run.device.type == "cuda":
+        model.to(memory_format=torch.channels_last)
     net = DistributedDataParallel(model, device_ids=[run.local]) if run.ddp else model
+    if args.compile and run.device.type == "cuda":
+        run.log(f"torch.compile (Triton libcuda directory: {triton_libcuda()})")
+        net = torch.compile(net)  # after DDP, as PyTorch recommends; the checkpoint saves `model`
 
-    weights = class_weights(args.class_weights, counts).to(run.device)
-    run.log(f"class weights {dict(zip(CLASSES, [round(w, 4) for w in weights.tolist()]))}")
+    epoch_counts = counts.astype(np.float64) * np.array([args.non_fraction, 1.0, 1.0])
+    weights = class_weights(args.class_weights, epoch_counts).to(run.device)
     criterion = nn.CrossEntropyLoss(weight=weights, ignore_index=-1)
-    train_sampler = EpochSampler(len(train_set), args.epoch_samples, True, run.rank, run.world, args.seed)
+    train_sampler = EpochSampler(len(train_set), args.epoch_samples, True, run.rank, run.world, args.seed,
+                                 labels=train_set.label, non_fraction=args.non_fraction)
+    run.log(f"class weights {dict(zip(CLASSES, [round(w, 4) for w in weights.tolist()]))}; each epoch "
+            f"{train_sampler.epoch_size():,} tensors (non fraction {args.non_fraction})")
     val_sampler = EpochSampler(len(val_set), None, False, run.rank, run.world)
     train_loader = make_loader(train_set, train_sampler, args.num_workers, args.batch_size)
     val_loader = make_loader(val_set, val_sampler, args.num_workers, args.batch_size, persistent=False)
     steps_per_epoch = max(1, len(train_loader))
     total_steps, warmup = args.epochs * steps_per_epoch, int(args.warmup_epochs * steps_per_epoch)
-    optimizer = torch.optim.AdamW(net.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+    optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=args.weight_decay,
+                                  fused=run.device.type == "cuda")
     schedule = lambda s: (s + 1) / max(1, warmup) if s < warmup else \
         0.5 * (1 + math.cos(math.pi * (s - warmup) / max(1, total_steps - warmup)))  # noqa: E731
     scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, schedule)
-    start_epoch, best = 0, {"somatic_f1": -1.0, "loss": math.inf, "epoch": None}
+    start_epoch, best = 0, {"score": -1.0, "loss": math.inf, "epoch": None, "threshold": None}
     if checkpoint is not None:
         optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
         scheduler.load_state_dict(checkpoint["scheduler_state_dict"])
@@ -238,13 +296,15 @@ def main(argv=None):
     amp = args.amp == "bf16" and run.device.type == "cuda"
     n_params = sum(p.numel() for p in model.parameters())
     run.log(f"model {model.config}, {n_params / 1e6:.1f} M parameters, input planes {len(PLANES)}; "
-            f"device {run.device} x {run.world}, amp {amp}; {steps_per_epoch} steps per epoch")
+            f"device {run.device} x {run.world}, amp {amp}, compile {args.compile and run.device.type == 'cuda'}, "
+            f"channels_last {args.channels_last and run.device.type == 'cuda'}; {steps_per_epoch} steps per epoch")
 
     def save(path, epoch, val):
         if run.main:
             payload = dict(format="pansoma_net_v2", config=model.config, model_state_dict=model.state_dict(),
                            optimizer_state_dict=optimizer.state_dict(), scheduler_state_dict=scheduler.state_dict(),
-                           epoch=epoch, best=best, val=val, classes=list(CLASSES), planes=list(PLANES),
+                           epoch=epoch, best=best, val=val, somatic_threshold=val["threshold"], classes=list(CLASSES),
+                           planes=list(PLANES), scalars=list(SCALARS) if args.scalars else [],
                            stats=model.encoder.stats(), args=vars(args),
                            data=[dict(directory=str(i.dir), labels=i.meta["labels"], train=int(len(p)))
                                  for i, p in train_parts],
@@ -256,11 +316,13 @@ def main(argv=None):
     for epoch in range(start_epoch, args.epochs):
         net.train()
         train_sampler.set_epoch(epoch)
+        if run.device.type == "cuda":
+            torch.cuda.reset_peak_memory_stats(run.device)
         t0, loss_sum, seen, correct = time.time(), 0.0, 0, 0
-        for step, (x, blocks, y) in enumerate(train_loader):
-            x, blocks, y = (t.to(run.device, non_blocking=True) for t in (x, blocks, y))
+        for step, (x, blocks, scalars, y) in enumerate(train_loader):
+            x, blocks, scalars, y = (t.to(run.device, non_blocking=True) for t in (x, blocks, scalars, y))
             with torch.autocast(run.device.type, dtype=torch.bfloat16, enabled=amp):
-                logits = net(x, blocks)
+                logits = net(x, blocks, scalars)
             loss = criterion(logits.float(), y)
             optimizer.zero_grad(set_to_none=True)
             loss.backward()
@@ -275,22 +337,25 @@ def main(argv=None):
                       flush=True)
         train_time = time.time() - t0
         val = evaluate(net, val_loader, criterion, run, amp)
-        som = val["somatic"]
-        improved = som["f1"] > best["somatic_f1"] or (som["f1"] == best["somatic_f1"] and val["loss"] < best["loss"])
+        score = val["thresholded"]["somatic"]["f1"] if args.select == "f1" else val["somatic_ap"]
+        improved = score > best["score"] or (score == best["score"] and val["loss"] < best["loss"])
         if improved:
-            best = {"somatic_f1": som["f1"], "loss": val["loss"], "epoch": epoch + 1}
+            best = {"score": score, "select": args.select, "loss": val["loss"], "epoch": epoch + 1,
+                    "threshold": val["threshold"]}
+        gpu = gpu_peak(run)
         row = dict(epoch=epoch + 1, train_loss=loss_sum / max(seen, 1), train_accuracy=correct / max(seen, 1),
                    train_seconds=round(train_time, 1), tensors_per_second=round(seen * run.world / train_time, 1),
-                   lr=scheduler.get_last_lr()[0], val=val)
+                   lr=scheduler.get_last_lr()[0], gpu_peak_gib=gpu, val=val)
         run.record(row)
         run.log(f"epoch {epoch + 1}/{args.epochs}: train loss {row['train_loss']:.4f} acc {row['train_accuracy']:.4f} "
-                f"({train_time:.0f} s) | val loss {val['loss']:.4f} acc {val['accuracy']:.4f} | "
-                + " | ".join(f"{c} P {val[c]['precision']:.3f} R {val[c]['recall']:.3f} F1 {val[c]['f1']:.3f}"
-                             for c in CLASSES) + (" | best" if improved else ""))
+                f"({train_time:.0f} s, {row['tensors_per_second']:.0f} tensors/s"
+                + (f", GPU peak {gpu['allocated']:.1f} / {gpu['reserved']:.1f} GiB allocated / reserved" if gpu else "")
+                + f") | val loss {val['loss']:.4f} | " + describe(val) + (" | best" if improved else ""))
         save("last.pth", epoch + 1, val)
         if improved:
             save("best.pth", epoch + 1, val)
-    run.log(f"done; best epoch {best['epoch']} somatic F1 {best['somatic_f1']:.4f} -> {run.out / 'best.pth'}")
+    run.log(f"done; best epoch {best['epoch']} ({best.get('select', args.select)} {best['score']:.4f}, "
+            f"somatic threshold {best['threshold']}) -> {run.out / 'best.pth'}")
     if run.ddp:
         dist.destroy_process_group()
 

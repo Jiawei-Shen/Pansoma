@@ -64,16 +64,24 @@ def make_tensor_set(root, spec, shard_size=4, seed=0, labels_created="2026-09-28
                         groups.append(dict(start_row=alt_end, end_row=ref_end, allele="REF"))
                     if rows > ref_end:
                         groups.append(dict(start_row=ref_end, end_row=rows, allele="OTHER"))
-                    cid = f"{1000 + len(truth[kind])}:5:SNP:C>A"
+                    node = 1000 + 7 * len(truth[kind])
+                    cid = f"{node}:5:SNP:C>A"
                     af = round(float(rng.random()), 4)
+                    nums = dict(coverage=rows + 3, alt_count=a1, ref_count=ref_end - alt_end, other_count=rows - ref_end,
+                                af=af, site_coverage=rows + 5, allele_count=1 + (alt_end > a1),
+                                second_allele_af=0.1 if alt_end > a1 else 0.0, event_length=1 + i % 3)
                     records.append(json.dumps(dict(
-                        candidate_id=cid, node_id=1000, ref="C", alt="A", event_type="SNP", row_groups=groups,
-                        coverage=rows, af=af, site_id=f"{cid}:SNV",
-                        alleles=[dict(candidate_id="9:9:SNP:C>T", af=0.5)], parameters=dict(min_af=0.06),
-                        shard_index=s // shard_size, index_within_shard=i, chrom=chrom, shard_file=name,
-                        source_task=0, source_shard_index=0, source_index_within_shard=7)))
+                        candidate_id=cid, node_id=node, start=5, ref="C", alt="A", event_type="SNP",
+                        event_length=nums["event_length"], row_groups=groups,
+                        coverage=nums["coverage"], alt_count=nums["alt_count"], ref_count=nums["ref_count"],
+                        other_count=nums["other_count"], af=af, site_coverage=nums["site_coverage"], site_id=f"{cid}:SNV",
+                        alleles=[dict(candidate_id="9:9:SNP:C>T", event_length=99, coverage=999, alt_count=99,
+                                      ref_count=99, other_count=99, af=0.5)],
+                        allele_count=nums["allele_count"], second_allele_af=nums["second_allele_af"],
+                        parameters=dict(min_af=0.06), shard_index=s // shard_size, index_within_shard=i, chrom=chrom,
+                        shard_file=name, source_task=0, source_shard_index=0, source_index_within_shard=7)))
                     truth[kind].append(dict(chrom=chrom, file=name, row=i, label=int(labels[i]), blocks=blocks,
-                                            af=af, candidate_id=cid, x=data[i]))
+                                            af=af, candidate_id=cid, node=node, numbers=nums, x=data[i]))
                 np.save(d / name, data)
                 np.save(d / name.replace("_data.npy", "_labels.npy"), labels)
                 shards.append(dict(file=name, tensors=count))

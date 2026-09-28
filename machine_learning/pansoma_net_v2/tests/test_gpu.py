@@ -6,6 +6,7 @@ import torch
 import torch.nn as nn
 
 from ..encode import TensorEncoder
+from ..env import triton_libcuda
 from ..model import PansomaNetV2
 from .test_encode import STATS, batch
 
@@ -36,6 +37,34 @@ class GpuTest(unittest.TestCase):
             losses.append(loss.item())
         self.assertTrue(all(torch.isfinite(torch.tensor(losses))))
         self.assertLess(losses[-1], losses[0])  # it learns the 7 labelled tensors
+
+    def test_channels_last_and_compile_match_eager_in_fp32(self):
+        """The speed options change only the kernels: in fp32 without TF32 the compiled channels_last model gives
+        the eager model's logits and gradients (compared directly: an AdamW step would turn the sign noise of
+        near-zero gradients into full-size updates)."""
+        import copy
+        triton_libcuda()
+        tf32 = (torch.backends.cudnn.allow_tf32, torch.backends.cuda.matmul.allow_tf32)
+        torch.backends.cudnn.allow_tf32 = torch.backends.cuda.matmul.allow_tf32 = False
+        try:
+            x, blocks = batch(8)
+            x, blocks = x.cuda(), blocks.cuda()
+            y = torch.tensor([0, 1, 2, 0, 1, 2, 0, 1]).cuda()
+            torch.manual_seed(0)
+            eager = PansomaNetV2(3, depths=(1, 1, 2, 1), dims=(32, 64, 128, 256), stats=STATS, drop_path_rate=0.0).cuda()
+            fast = copy.deepcopy(eager).to(memory_format=torch.channels_last)
+            compiled = torch.compile(fast)
+            with torch.no_grad():
+                a, b = eager.eval()(x, blocks), compiled.eval()(x, blocks)
+            self.assertLess(float((a - b).abs().max()), 1e-4 * max(1.0, float(a.abs().max())))
+            for net, model in ((eager, eager), (compiled, fast)):
+                model.train()
+                nn.CrossEntropyLoss()(net(x, blocks), y).backward()
+            for (name, p), q in zip(eager.named_parameters(), fast.parameters()):
+                rel = float((p.grad - q.grad).norm() / (p.grad.norm() + 1e-12))
+                self.assertLess(rel, 1e-3, name)
+        finally:
+            torch.backends.cudnn.allow_tf32, torch.backends.cuda.matmul.allow_tf32 = tf32
 
 
 if __name__ == "__main__":

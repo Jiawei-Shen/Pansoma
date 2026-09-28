@@ -10,7 +10,7 @@ from pathlib import Path
 import numpy as np
 import torch
 
-from ..data import CLASSES, KindIndex, TensorDataset
+from ..data import CLASSES, KindIndex, TensorDataset, site_scalars
 from ..encode import PLANES, TensorEncoder, compute_stats
 
 REAL = Path(os.environ.get("PANSOMA_TEST_TENSORS", "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_Illumina/v3_tensors"))
@@ -42,8 +42,11 @@ class RealDataTest(unittest.TestCase):
         chrom = index.meta["chroms"].index("chr21")
         pos = np.flatnonzero(index.arrays["chrom"] == chrom)
         with open(REAL / "SNV" / "chr21_variant_summary.ndjson") as f:
-            ids = [json.loads(line)["candidate_id"] for line in f]
-        self.assertEqual([index.candidates()[p] for p in pos], ids)
+            records = [json.loads(line) for line in f]
+        self.assertEqual([index.candidates()[p] for p in pos], [r["candidate_id"] for r in records])
+        for p, r in list(zip(pos, records))[:500]:  # the scalars are the record's own numbers
+            self.assertTrue(np.allclose(index.arrays["scalars"][p], site_scalars(r), atol=1e-4), r["candidate_id"])
+            self.assertEqual(int(index.arrays["node"][p]), r["node_id"])
 
     def test_row_blocks_agree_with_the_tensors(self):
         index = self.index["SNV"]
@@ -52,7 +55,7 @@ class RealDataTest(unittest.TestCase):
         ds = TensorDataset([(index, picks)])
         checked = Counter()
         for k, p in enumerate(picks):
-            x, blocks, _ = ds[k]
+            x, blocks, _, _ = ds[k]
             x, (a1, alt, ref, other) = x.numpy(), blocks.tolist()
             has_read = x[4].max(1) > 0
             self.assertTrue(has_read[:other].all() and not has_read[other:].any(), index.candidates()[p])

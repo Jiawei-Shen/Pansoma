@@ -40,74 +40,108 @@ The width is zero-padded from 101 to 104 so the stem also covers column 100. The
 
 ## Use
 
+One model per sample, platform and kind (SNV or INDEL). The test chromosome is chr1; it is never used for
+training or selection.
+
 ```bash
 cd machine_learning
 P=/wanglab/jshen/anaconda3/bin/python       # torch 2.8 + timm 1.0 (GPU)
-T=/scratch/jshen/data/pansoma_v2_tensors
+T=/scratch/jshen/data/pansoma_v2_tensors/Liss_lab_BCM_Illumina-WGS_20240313/v3_tensors
 
-# train: chromosomes split train / --val-chroms / --test-chroms (left out); -1 tensors are not used
-$P -m pansoma_net_v2.train --tensors $T/COLO829T_Illumina/v3_tensors $T/Liss_lab_BCM_Illumina-WGS_20240313/v3_tensors \
-    --output runs/illumina --val-chroms chr20 --test-chroms chr21 chr22 --epochs 30 --epoch-samples 1000000
-torchrun --nproc_per_node=4 -m pansoma_net_v2.train --ddp ...            # several GPUs, same options
+# train on chr2-22 (5 % of their ~1 Mb node blocks validate), chr1 left out; -1 tensors are not used
+$P -m pansoma_net_v2.train --tensors $T --kinds SNV --output runs/HG008_Illumina_SNV \
+    --epochs 12 --non-fraction 0.25 --class-weights sqrt --batch-size 256 --lr 2e-4
+torchrun --nproc_per_node=2 -m pansoma_net_v2.train --ddp ...           # several GPUs, same options
 
-# predict: every tensor (-1 included) with the checkpoint's statistics; metrics over the labelled ones
-$P -m pansoma_net_v2.predict --checkpoint runs/illumina/best.pth --tensors $T/COLO829T_Illumina/v3_tensors \
-    --chroms chr21 chr22 --output runs/illumina/test
+# test: every chr1 tensor (-1 included), the checkpoint's statistics and somatic threshold
+$P -m pansoma_net_v2.predict --checkpoint runs/HG008_Illumina_SNV/best.pth --tensors $T --kinds SNV \
+    --chroms chr1 --output runs/HG008_Illumina_SNV/test_chr1
 ```
+
+`/scratch/jshen/data/pansoma_net_v2_runs/jobs/run.sh NAME SET KIND [train options]` runs both steps as one
+Slurm job.
 
 Useful `train` options:
 
-- `--kinds SNV INDEL` (default both).
-- `--epoch-samples` / `--val-samples`: a fresh random subset of the training tensors each epoch, and a
-  fixed subset of the validation tensors.
-- `--class-weights balanced|none|w0,w1,w2`: balanced is n / (3 n_c) over the training tensors.
-- `--depths`, `--dims`, `--front`, `--drop-path`: model size (defaults `3 3 27 3` / `192 384 768 1536`, as
-  in v1's training script).
-- `--stats-samples 20000`, `--amp bf16|off`, `--resume` (keeps the checkpoint's statistics), `--seed`.
+- **Split.**
+  - `--test-chroms` (default chr1).
+  - `--val-fraction 0.05` of the `--val-block-nodes 20000`-node blocks of the training chromosomes; whole
+    blocks, so validation tensors share no reads with training tensors. `--val-chroms` instead validates on
+    whole chromosomes.
+- **Imbalance.**
+  - `--non-fraction F`: each epoch takes every somatic and germline tensor and a fresh random fraction F of
+    the non tensors.
+  - `--class-weights balanced|sqrt|none|w0,w1,w2`: balanced is n / (3 n_c) over one epoch's tensors; sqrt
+    is its square root.
+- **Model.**
+  - `--scalars` feeds the site scalars to the head (`data.SCALARS`: log coverage, log site coverage, log
+    ALT / REF / OTHER counts, AF, second allele AF, allele count, log event length). They are the counts
+    before the 200-row cap, z-scored with training statistics that are stored in the model.
+  - `--depths`, `--dims`, `--front`, `--drop-path` set the size (defaults `3 3 27 3` / `192 384 768 1536`,
+    as in v1's training script).
+- **Selection.** `--select f1|ap` picks the best checkpoint by the thresholded somatic F1 (default) or the
+  somatic average precision.
+- **Speed.** `--no-compile` and `--no-channels-last` turn off the defaults on CUDA (below).
+- Also: `--epoch-samples`, `--val-samples`, `--stats-samples 20000`, `--amp bf16|off`, `--resume` (keeps the
+  checkpoint's statistics), `--seed`.
+
+**Evaluation** (`metrics.py`). The target is the somatic class; germline is reported too.
+
+- Each validation reports the somatic and germline average precision (PR-AUC), the argmax precision /
+  recall / F1 per class, and the somatic threshold t of the best F1.
+- With t, a tensor is somatic when p_somatic ≥ t, and otherwise the larger of non and germline. The
+  checkpoint stores t (`somatic_threshold`), and `predict` applies it to the test chromosome.
 
 Outputs in `--output`:
 
-- `train.log` and `metrics.jsonl` (per epoch: train loss and accuracy, speed, validation loss, accuracy,
-  per-class precision / recall / F1, confusion matrix).
+- `train.log` and `metrics.jsonl` (per epoch: train loss and accuracy, speed, GPU peak memory, and the
+  validation report).
 - `stats.json`.
-- `last.pth`, and `best.pth` (the best validation somatic F1).
+- `last.pth`, and `best.pth` (best validation by `--select`).
 
-A checkpoint holds `format: pansoma_net_v2`, `config`, `model_state_dict` (the encoder's statistics are
-buffers in it), `stats`, `classes`, `planes`, the training data (directories, label versions, counts), the
-chromosome split and `args`. Rebuild it with `PansomaNetV2.from_checkpoint(path)`.
+A checkpoint holds `format: pansoma_net_v2`, `config`, `model_state_dict` (the encoder's and scalar
+statistics are buffers in it), `stats`, `somatic_threshold`, `classes`, `planes`, `scalars`, the training
+data (directories, label provenance, counts), the chromosome split and `args`. Rebuild it with
+`PansomaNetV2.from_checkpoint(path)`.
 
 `predict` writes `<sample>.<set>.<KIND>.predictions.tsv.gz` (chrom, candidate_id, label, p_non, p_somatic,
-p_germline, pred) and `.metrics.json`.
+p_germline, pred with the threshold) and `.metrics.json` (the same report, `--threshold` overrides t).
 
-## GPU runs (measured 2026-09-28)
+## GPU runs (measured 2026-09-28, node tequila)
 
-On the `gpu` partition (node tequila), `--gres=gpu:24gb:1` is an H100 NVL MIG slice (`2g.24gb`). The default
-model has 199.4 M parameters. A bf16 training step on real tensors measured:
+`--gres=gpu:24gb:1` is an H100 NVL MIG slice (`2g.24gb`); `gpu:h100` is a whole H100 NVL (94 GB). The default
+model has 199.4 M parameters. Measured bf16 training speed (a whole H100, batch 256 unless noted):
 
-| batch | GPU memory (peak) | speed |
+| setting | speed | GPU memory (peak) |
 |---|---|---|
-| 32 | 8.6 GiB | 111 tensors/s |
-| 64 | 13.7 GiB | 122 tensors/s |
-| 96 | 18.7 GiB | 126 tensors/s |
-| 128 | out of memory | |
+| MIG 2g.24gb, eager, batch 64 / 96 | 122 / 126 tensors/s | 13.7 / 18.7 GiB (128 does not fit) |
+| H100, eager, batch 64 / 256 / 512 | 409 / 478 / 485 tensors/s | 13.6 / 44.1 / 84.6 GiB |
+| H100, + channels_last + fused AdamW | 627 tensors/s | 44.8 GiB |
+| H100, + torch.compile (the default) | 1,404 tensors/s | 26.9 GiB |
+| 2 H100s, DDP, eager, batch 384 per GPU | 926 tensors/s | 65 GiB per GPU, summed RSS 47–50 GiB |
 
-A short run on COLO829T Illumina (2 epochs of 20,000 tensors, batch 64, 14 workers) trained at ~120
-tensors/s. The job's summed RSS was 24.9 GiB (main process 8.3 GB). At that speed one pass over COLO829T
-Illumina's 1.67 M labelled training tensors takes ~3.9 h, so use `--epoch-samples`, the full H100s
-(`gpu:h100`), torchrun over several GPUs, or a smaller `--dims`.
-
-```bash
-sbatch -p gpu --gres=gpu:24gb:1 -c 16 --mem=30G -t 24:00:00 -o train-%j.out --wrap \
-  "cd /scratch/jshen/Github/Pansoma/machine_learning && $P -m pansoma_net_v2.train --tensors ... --output ... --num-workers 14"
-```
+- `cudnn.benchmark` changed nothing. Above batch 256 the speed stays flat, so a larger batch only changes
+  the optimization.
+- Compile takes ~2 min. In fp32 without TF32 the compiled channels_last model gives the eager model's
+  logits and gradients (`tests/test_gpu.py`). In bf16 the logits differ by ≤ 0.04, and the loss over 20
+  steps follows the same curve.
+- Triton builds a helper with `-lcuda`. tequila has only `libcuda.so.1`, so `env.triton_libcuda()` (called
+  by `train`) points `TRITON_LIBCUDA_PATH` at a private `libcuda.so` link. Without it compile fails
+  whenever that helper is not in Triton's cache.
 
 ## Data and index
 
-`data.KindIndex` reads each `<set>/<KIND>/`: `manifest.json`, the label files `*_labels.npy`, and from every
-summary record `candidate_id`, `shard_file`, `index_within_shard`, `af` and `row_groups`. It caches the
-result in `--cache-dir` (default `<output>/index_cache`) and rebuilds it when `labels.manifest.json`
-changes (version, created, tensors, snv_min_af). Reading the summaries takes about a minute per 2.5 M
-tensors (COLO829T Illumina: 2.65 M tensors in ~60 s, 1.7 GB).
+`data.KindIndex` reads each `<set>/<KIND>/`:
+
+- `manifest.json` and the label files `*_labels.npy`;
+- from every summary record: `candidate_id`, `node_id`, `shard_file`, `index_within_shard`, `row_groups`,
+  and the numbers behind `SCALARS` (the record's own fields, not those of its `alleles[]` entries).
+
+It caches the result in `--cache-dir` (default `<output>/index_cache`) as
+`<sample>.<set>.<KIND>.<path hash>.npz` plus `.candidates.txt`, and rebuilds it when `labels.manifest.json`
+changes (format, version, rules_sha256, created, tensors, the AF floors). Jobs can share a cache: each
+process writes its own temporary files, then renames them. Reading the summaries takes about a minute per
+2.5 M tensors.
 
 Each sample is one `pread` of 161.6 KB at its row's offset in the shard. There is no memory map: mapped
 pages stay in every DataLoader worker's RSS, and Slurm's summed-RSS limit counts them once per worker (a
@@ -129,13 +163,25 @@ cd machine_learning && $P -m unittest discover -s pansoma_net_v2/tests -t .
 - `test_encode`: every plane is 0 on padding; one-hot groups; masked z-score (MAPQ 0 ≠ padding, BQ −1 →
   `bq_missing`); `differs`; row blocks fill exactly the covered cells of each read; statistics only from
   valid covered cells; bf16 output.
-- `test_data`: the index against a synthetic merged set; the cache is reused, and rebuilt when the labels
-  change; −1 is never selected for training; `EpochSampler` gives disjoint evaluation slices and equal
-  padded training slices per rank.
-- `test_model_train`: forward, checkpoint round trip, loss without −1, and a CPU run of train (2 epochs),
-  resume (statistics kept), then predict (every tensor written).
+- `test_data`:
+  - the index (node, scalars) against a synthetic merged set;
+  - the cache is reused and rebuilt when the labels change, and two samples' `v3_tensors` share one cache
+    without collisions;
+  - −1 is never selected for training;
+  - the block split keeps whole blocks and is deterministic;
+  - `EpochSampler` gives disjoint evaluation slices and equal padded training slices per rank.
+- `test_model_train`:
+  - forward and checkpoint round trip, with and without scalars;
+  - loss without −1;
+  - forkserver workers;
+  - CPU runs: train 2 epochs (chr1 left out, block validation, threshold stored), resume (statistics kept),
+    then predict chr1 with the stored threshold; and a run with `--scalars`.
 - `test_real_data`: runs if `PANSOMA_TEST_TENSORS` exists (default: COLO829T Illumina `v3_tensors`); ~70 s.
   Checks the index counts against the manifests, candidates against a summary, and that the row blocks agree
   with the tensors (A1 rows carry the A1 base at the site column, REF rows the graph base, OTHER rows no
-  site allele, no reads after the blocks). It also encodes real tensors.
-- `test_gpu`: runs on a CUDA node. The GPU encoding equals the CPU one, and a bf16 training step learns.
+  site allele, no reads after the blocks). It also checks the scalars against a summary and encodes real
+  tensors.
+- `test_metrics`: average precision (ties together, as sklearn), the best-F1 threshold, and the thresholded
+  call.
+- `test_gpu`: runs on a CUDA node. The GPU encoding equals the CPU one, a bf16 training step learns, and
+  compile + channels_last gives the eager logits and gradients in fp32.
