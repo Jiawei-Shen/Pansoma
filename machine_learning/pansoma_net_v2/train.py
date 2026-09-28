@@ -166,7 +166,8 @@ def predict_probs(model, loader, device, amp):
 
 def evaluate(model, loader, criterion, run, amp, truth=None):
     """Validation report (metrics.report at the best tensor-level somatic threshold), weighted loss and, with
-    truth = (truth keys, per-sample matched keys), metrics.truth_report at the same threshold; all ranks."""
+    truth = (truth keys, other-kind truth keys, per-sample matched keys), metrics.truth_report at the same
+    threshold; all ranks."""
     labels, probs = predict_probs(model, loader, run.device, amp)
     order = np.asarray(list(loader.sampler), np.int64)[:len(labels)]  # dataset indices of this rank's samples
     if run.ddp:
@@ -178,8 +179,8 @@ def evaluate(model, loader, criterion, run, amp, truth=None):
     threshold, _, _, _ = metrics.best_somatic_threshold(labels, probs)
     out = metrics.report(labels, probs, threshold)
     if truth is not None:
-        keys, matches = truth
-        out["truth"] = metrics.truth_report(keys, [matches[i] for i in order], labels, probs, threshold)
+        keys, other, matches = truth
+        out["truth"] = metrics.truth_report(keys, [matches[i] for i in order], labels, probs, threshold, other)
     w = criterion.weight.cpu().numpy() if criterion.weight is not None else np.ones(len(CLASSES))
     nll = -np.log(np.clip(probs[np.arange(len(labels)), labels], 1e-12, None))
     out["loss"] = float((w[labels] * nll).sum() / max(w[labels].sum(), 1e-12))
@@ -197,7 +198,8 @@ def describe(report):
     if report.get("truth"):
         tr, at = report["truth"], report["truth"]["at_threshold"]
         line += (f" | truth F1 {at['f1']:.3f} (P {at['precision']:.3f} R {at['recall']:.3f}; {tr['truth_alleles']:,} "
-                 f"truth, ceiling {tr['ceiling']:.3f}, best F1 {tr['best']['f1']:.3f} @ p>={tr['best']['threshold']:.3f})")
+                 f"truth, {at['other_tp']:,} of the other kind found, ceiling {tr['ceiling']:.3f}, best F1 "
+                 f"{tr['best']['f1']:.3f} @ p>={tr['best']['threshold']:.3f})")
     return line + (f" | germline AP {report['germline_ap']:.3f} F1 {a['germline']['f1']:.3f} | "
                    f"non F1 {a['non']['f1']:.3f}")
 
@@ -299,7 +301,8 @@ def main(argv=None):
         keep = np.sort(np.random.default_rng(args.seed).choice(len(val_set), args.val_samples, replace=False))
     # truth-level validation: the truth alleles of the validation region (with or without a tensor) and, per
     # validation sample, the truth alleles its tensor stands for; keys are (part, truth id)
-    val_truth, truth_keys = None, set()
+    # (other_keys: the truth alleles of the other kind, true calls when a validation tensor matches one)
+    val_truth, truth_keys, other_keys = None, set(), set()
     for p, ((index, _), (_, va)) in enumerate(zip(train_parts, val_parts)):
         t_all = somatic_truth(index, chroms=val_chroms or train_chroms)
         if t_all is None:
@@ -309,11 +312,12 @@ def main(argv=None):
         vt = set(t_all) if val_chroms else validation_truth(
             index, index.select(train_chroms, labelled=False), t_all, args.val_fraction, args.val_block_nodes, args.seed)
         truth_keys |= {(p, t) for t in vt}
+        other_keys |= {(p, t) for t in somatic_truth(index, val_chroms or train_chroms, other_kind=True)}
     if truth_keys is not None:
         ids = keep.tolist() if keep is not None else range(len(val_set))
         matches = [{(int(val_set.part[i]), int(t)) for t in val_parts[val_set.part[i]][0].truth_of(val_set.position[i])}
                    for i in ids]
-        val_truth = (truth_keys, matches)
+        val_truth = (truth_keys, other_keys, matches)
         run.log(f"truth-level validation: {len(truth_keys):,} somatic truth alleles in the validation region "
                 f"({len(set().union(*matches) & truth_keys) if matches else 0:,} with a validation tensor)")
     if keep is not None:

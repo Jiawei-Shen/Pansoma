@@ -88,80 +88,93 @@ def report(labels, probs, threshold=None):
     return out
 
 
-def truth_items(n_truth, truth_scores, negative_scores):
-    """(positive, score) items: one per truth allele (its best tensor's p_somatic; -inf without a tensor) and
-    one per negative tensor."""
-    pos = np.full(n_truth, -np.inf)
-    pos[:len(truth_scores)] = truth_scores
-    score = np.concatenate([pos, np.asarray(negative_scores, np.float64)])
-    return np.r_[np.ones(n_truth, bool), np.zeros(len(negative_scores), bool)], score
+def truth_curve(own, other, negatives):
+    """Per distinct score from the highest: the score, and at a threshold of that score the truth alleles found
+    (own kind, other kind) and the false calls. own / other: each truth allele's best score; negatives: one per
+    tensor scored 0 or 2."""
+    score = np.concatenate([np.asarray(own, np.float64), np.asarray(other, np.float64),
+                            np.asarray(negatives, np.float64)])
+    kind = np.r_[np.zeros(len(own), np.int8), np.ones(len(other), np.int8), np.full(len(negatives), 2, np.int8)]
+    order = np.argsort(-score, kind="stable")
+    s, k = score[order], kind[order]
+    last = np.r_[s[1:] != s[:-1], True] if len(s) else np.zeros(0, bool)
+    return s[last], np.cumsum(k == 0)[last], np.cumsum(k == 1)[last], np.cumsum(k == 2)[last]
 
 
-def truth_ap(n_truth, truth_scores, negative_scores):
-    """Average precision with every truth allele in the recall denominator: truth alleles without a tensor are
-    never retrieved, so they only lower the recall steps (average_precision would credit them at score -inf)."""
+def truth_prf(n_truth, tp, other_tp, fp):
+    """Precision over the distinct truth alleles found (either kind) and the false calls; recall over the
+    n_truth truth alleles of the model's kind."""
+    tp, other_tp, fp = (np.asarray(v, np.float64) for v in (tp, other_tp, fp))
+    hits = tp + other_tp
+    prec = np.where(hits + fp > 0, hits / np.maximum(hits + fp, 1), 0.0)
+    rec = tp / n_truth if n_truth else np.zeros_like(tp)
+    f1 = np.where(prec + rec > 0, 2 * prec * rec / np.maximum(prec + rec, 1e-300), 0.0)
+    return prec, rec, f1
+
+
+def truth_counts(n_truth, own, other, negatives, threshold):
+    tp = int((np.asarray(own) >= threshold).sum())
+    other_tp = int((np.asarray(other) >= threshold).sum())
+    fp = int((np.asarray(negatives) >= threshold).sum())
+    prec, rec, f1 = (float(v) for v in truth_prf(n_truth, tp, other_tp, fp))
+    return dict(tp=tp, other_tp=other_tp, fp=fp, fn=n_truth - tp, precision=prec, recall=rec, f1=f1)
+
+
+def truth_ap(n_truth, own, other, negatives):
+    """Average precision (sklearn's step sum) with every truth allele of the model's kind in the recall
+    denominator: truth alleles without a tensor are never retrieved, so they only lower the recall steps."""
     if n_truth == 0:
         return 0.0
-    score = np.concatenate([np.asarray(truth_scores, np.float64), np.asarray(negative_scores, np.float64)])
-    positive = np.r_[np.ones(len(truth_scores), bool), np.zeros(len(negative_scores), bool)]
-    order = np.argsort(-score, kind="stable")
-    s, pos = score[order], positive[order]
-    tp = np.cumsum(pos)
-    last = np.r_[s[1:] != s[:-1], True]
-    tp, k = tp[last], np.flatnonzero(last) + 1
-    return float(np.sum(np.diff(np.r_[0.0, tp / n_truth]) * (tp / k)))
+    _, tp, other_tp, fp = truth_curve(own, other, negatives)
+    prec, rec, _ = truth_prf(n_truth, tp, other_tp, fp)
+    return float(np.sum(np.diff(np.r_[0.0, rec]) * prec))
 
 
-def truth_counts(n_truth, truth_scores, negative_scores, threshold):
-    tp = int((np.asarray(truth_scores) >= threshold).sum())
-    fp = int((np.asarray(negative_scores) >= threshold).sum())
-    prec = tp / (tp + fp) if tp + fp else 0.0
-    rec = tp / n_truth if n_truth else 0.0
-    return dict(tp=tp, fp=fp, fn=n_truth - tp, precision=prec, recall=rec,
-                f1=2 * prec * rec / (prec + rec) if prec + rec else 0.0)
+def best_truth_threshold(n_truth, own, other, negatives):
+    """(threshold, counts) of the best truth-level F1 over the distinct scores."""
+    s, tp, other_tp, fp = truth_curve(own, other, negatives)
+    if len(s) == 0 or n_truth == 0:
+        return 0.5, truth_counts(n_truth, own, other, negatives, 0.5)
+    t = float(s[int(np.argmax(truth_prf(n_truth, tp, other_tp, fp)[2]))])
+    return t, truth_counts(n_truth, own, other, negatives, t)
 
 
-def best_truth_threshold(n_truth, truth_scores, negative_scores):
-    """(threshold, counts) of the best truth-level F1 over the distinct finite scores."""
-    positive, score = truth_items(n_truth, truth_scores, negative_scores)
-    finite = np.isfinite(score)
-    if not finite.any() or n_truth == 0:
-        return 0.5, truth_counts(n_truth, truth_scores, negative_scores, 0.5)
-    order = np.argsort(-score[finite], kind="stable")
-    s, pos = score[finite][order], positive[finite][order]
-    tp, fp = np.cumsum(pos), np.cumsum(~pos)
-    last = np.r_[s[1:] != s[:-1], True]
-    f1 = np.where(last, 2 * tp / np.maximum(2 * tp + fp + (n_truth - tp), 1), -1)
-    t = float(s[int(np.argmax(f1))])
-    return t, truth_counts(n_truth, truth_scores, negative_scores, t)
-
-
-def truth_report(truth, matches, labels, probs, threshold):
-    """Truth-level metrics. truth: the truth keys that count (any hashable); matches: per tensor the truth keys it
-    stands for (tensors labelled 1); labels / probs: per tensor (evaluation labels; -1 left out). A truth allele
-    scores the best p_somatic of its tensors; a labelled-1 tensor whose truth alleles do not count is left out
-    (counted in other_truth_tensors: e.g. an SNV tensor that is a partial match of an INDEL truth)."""
+def truth_report(truth, matches, labels, probs, threshold, other=()):
+    """Truth-level metrics: every truth allele counts once.
+    truth: the truth keys of the model's kind (any hashable; the recall denominator); other: the truth keys of
+    the other kind (an SNV tensor can partially match an INDEL truth); matches: per tensor the truth keys it
+    stands for (tensors labelled 1); labels / probs: per tensor (evaluation labels; -1 left out).
+    A truth allele scores the best p_somatic of its tensors, so duplicate tensors of one truth count once; truth
+    alleles of the model's kind without a tensor are misses. Found other-kind truth alleles are true calls
+    (precision) but not in the recall, which is over the model's kind. A false call is a call on a tensor scored
+    0 or 2. A labelled-1 tensor whose truth alleles count for neither (not PASS, outside the BED) is left out."""
     truth = set(truth)
+    other = set(other) - truth
+    counted = truth | other
     best = {}
     negatives = []
-    somatic_tensors = other = 0
+    own_tensors = other_tensors = unmatched = 0
     for k in range(len(labels)):
         if labels[k] < 0:
             continue
         p = float(probs[k, SOMATIC])
         if labels[k] == SOMATIC:
-            keys = set(matches[k]) & truth
-            somatic_tensors += bool(keys)
-            other += not keys
+            keys = set(matches[k]) & counted
+            own_tensors += bool(keys & truth)
+            other_tensors += bool(keys) and not keys & truth
+            unmatched += not keys
             for key in keys:
                 best[key] = max(p, best.get(key, -np.inf))
         else:
             negatives.append(p)
-    scores = np.array(list(best.values()), np.float64)
-    out = dict(truth_alleles=len(truth), with_tensor=len(best), ceiling=len(best) / len(truth) if truth else 0.0,
-               somatic_tensors=somatic_tensors, other_truth_tensors=other,
-               ap=truth_ap(len(truth), scores, negatives), negatives=len(negatives),
-               at_threshold=dict(threshold=float(threshold), **truth_counts(len(truth), scores, negatives, threshold)))
-    t, counts = best_truth_threshold(len(truth), scores, negatives)
+    own = np.array([v for key, v in best.items() if key in truth], np.float64)
+    found_other = np.array([v for key, v in best.items() if key in other], np.float64)
+    out = dict(truth_alleles=len(truth), with_tensor=len(own), ceiling=len(own) / len(truth) if truth else 0.0,
+               other_kind_truth_with_tensor=len(found_other), somatic_tensors=own_tensors,
+               other_kind_tensors=other_tensors, unmatched_tensors=unmatched,
+               ap=truth_ap(len(truth), own, found_other, negatives), negatives=len(negatives),
+               at_threshold=dict(threshold=float(threshold),
+                                 **truth_counts(len(truth), own, found_other, negatives, threshold)))
+    t, counts = best_truth_threshold(len(truth), own, found_other, negatives)
     out["best"] = dict(threshold=t, **counts)
     return out

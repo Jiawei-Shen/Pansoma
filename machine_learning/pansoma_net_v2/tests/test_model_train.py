@@ -7,7 +7,7 @@ from pathlib import Path
 import torch
 import torch.nn as nn
 
-from .. import predict, train
+from .. import combine, predict, train
 from ..data import SCALARS, EpochSampler, KindIndex, TensorDataset, block_split, load_parts
 from ..model import PansomaNetV2
 from .fixtures import make_tensor_set
@@ -84,7 +84,7 @@ class TrainPredictTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             tmp = Path(tmp)
             root = tmp / "sample" / "v3_tensors"
-            truth = make_tensor_set(root, SPEC, shard_size=8)
+            truth = make_tensor_set(root, SPEC, shard_size=8, seed=6)  # seed 6: chr1 has SNV tensors of an INS truth
             out = tmp / "run"
             train.main(["--tensors", str(root), "--output", str(out), "--epochs", "2"] + SMALL_ARGS)
             for f in ("best.pth", "last.pth", "stats.json", "metrics.jsonl", "train.log"):
@@ -131,22 +131,41 @@ class TrainPredictTest(unittest.TestCase):
             self.assertEqual(report["threshold"], torch.load(out / "best.pth", weights_only=False)["somatic_threshold"])
             # against the truth table, recomputed from the predictions: every truth allele once
             tr = report["truth"]
-            wanted = {int(line.split("\t")[0]) for line in (root / "somatic.recall.tsv").read_text().splitlines()[1:]
-                      if line.split("\t")[1] == "chr1" and line.split("\t")[3] == "SNP" and line.split("\t")[5] == "True"}
+            table = [line.split("\t") for line in (root / "somatic.recall.tsv").read_text().splitlines()[1:]]
+            wanted = {int(r[0]) for r in table if r[1] == "chr1" and r[3] == "SNP" and r[5] == "True"}
+            other = {int(r[0]) for r in table if r[1] == "chr1" and r[3] in ("DEL", "INS") and r[5] == "True"}
             by_id = {t["candidate_id"]: t for t in chr1}
             self.assertTrue(all(r["truth_ids"] == ([by_id[r["candidate_id"]]["truth_id"]] if r["label"] == 1 else [])
                                 for r in records))
             called = [r for r in records if r["in_test"] and r["pred"] == "somatic"]
-            found = set().union(*[set(r["truth_ids"]) for r in called if r["test_label"] == 1]) & wanted
+            hit = set().union(*[set(r["truth_ids"]) for r in called if r["test_label"] == 1])
+            found, found_other = hit & wanted, hit & other           # an INS truth found by an SNV tensor: a true call
             false_calls = sum(r["test_label"] in (0, 2) for r in called)
-            reachable = set().union(*[set(r["truth_ids"]) for r in records if r["in_test"] and r["test_label"] == 1]) & wanted
+            reached = set().union(*[set(r["truth_ids"]) for r in records if r["in_test"] and r["test_label"] == 1])
             at = tr["at_threshold"]
-            self.assertEqual((tr["truth_alleles"], at["tp"], at["fp"], tr["with_tensor"]),
-                             (len(wanted), len(found), false_calls, len(reachable)))
+            self.assertEqual((tr["truth_alleles"], at["tp"], at["other_tp"], at["fp"], tr["with_tensor"]),
+                             (len(wanted), len(found), len(found_other), false_calls, len(reached & wanted)))
+            self.assertGreater(tr["other_kind_truth_with_tensor"], 0)
             self.assertAlmostEqual(at["recall"], len(found) / len(wanted))
-            if found or false_calls:
-                self.assertAlmostEqual(at["precision"], len(found) / (len(found) + false_calls))
+            if hit or false_calls:
+                self.assertAlmostEqual(at["precision"], len(hit & (wanted | other)) / (len(hit & (wanted | other)) + false_calls))
             self.assertLess(tr["ceiling"], 1.0)                      # truth alleles without a tensor are misses
+            # SNV and INDEL together against the whole truth VCF (combine): every truth allele once, whichever set
+            both = combine.main([str(pred)])
+            self.assertEqual(len(both), 1)
+            c = both[0]
+            with gzip.open(pred / "sample.v3_tensors.INDEL.predictions.ndjson.gz", "rt") as f:
+                records += [json.loads(line) for line in f]
+            called = [r for r in records if r["in_test"] and r["pred"] == "somatic"]
+            everything = wanted | other
+            hit = set().union(*[set(r["truth_ids"]) for r in called if r["test_label"] == 1]) & everything
+            false_calls = sum(r["test_label"] in (0, 2) for r in called)
+            self.assertEqual((c["truth_alleles"], c["tp"], c["fp"], c["other_kind_tp"]),
+                             (len(everything), len(hit), false_calls, 0))
+            self.assertAlmostEqual(c["recall"], len(hit) / len(everything))
+            self.assertEqual(set(c["per_truth_kind"]), {"SNP", "DEL", "INS"})
+            on_truth = [r for r in called if r["test_label"] == 1 and set(r["truth_ids"]) & everything]
+            self.assertEqual(c["repeated_calls"], len(on_truth) - len(hit))  # one truth id per tensor here
             self.assertEqual(len(KindIndex(root / "SNV", pred / "index_cache")), len(truth["SNV"]))
 
     def test_scalars_run(self):

@@ -110,14 +110,16 @@ def make_tensor_set(root, spec, shard_size=4, seed=0, labels_created="2026-09-28
                         shard_file=name, source_task=0, source_shard_index=0, source_index_within_shard=7)))
                     somatic, partial_truth, truth_id = [], None, None
                     if label == 1:  # a truth allele of its own; partial ones match through partial_truth, and
-                        # every second partial one repeats the chromosome's previous truth (a duplicate, as INDELs do)
+                        # every second partial one repeats the chromosome's previous truth (a duplicate, as INDELs do);
+                        # the other SNV partial ones match an INS truth (another kind, as in the real sets)
                         previous = [t["truth_id"] for t in truth[kind] if t["chrom"] == chrom and t["truth_id"] is not None]
-                        if reason == "residual_partial_somatic_truth" and previous and k % 8 == 0:
+                        partial = reason == "residual_partial_somatic_truth"
+                        if partial and previous and k % 8 == 0:
                             truth_id = previous[-1]
                         else:
                             truth_id = len(truth_rows)
-                            truth_rows.append((truth_id, chrom, node + 1, "SNP" if kind == "SNV" else "DEL", not in_gap,
-                                               "tensor"))
+                            truth_kind = "INS" if kind == "SNV" and partial else "SNP" if kind == "SNV" else "DEL"
+                            truth_rows.append((truth_id, chrom, node + 1, truth_kind, not in_gap, "tensor"))
                         if reason == "residual_partial_somatic_truth":
                             partial_truth = dict(truth_id=truth_id)
                         else:

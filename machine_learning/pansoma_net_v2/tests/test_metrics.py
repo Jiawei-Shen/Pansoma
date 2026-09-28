@@ -56,7 +56,8 @@ class MetricsTest(unittest.TestCase):
 
 class TruthReportTest(unittest.TestCase):
     """Against brute force: every truth allele once (duplicates collapse), misses without a tensor, false
-    positives from labels 0 and 2, labelled-1 tensors of truth alleles that do not count left out."""
+    positives from labels 0 and 2, found truth alleles of the other kind as true calls (once, not in the
+    recall), labelled-1 tensors of truth alleles that do not count left out."""
 
     def setUp(self):
         rng = np.random.default_rng(5)
@@ -64,10 +65,11 @@ class TruthReportTest(unittest.TestCase):
         self.labels = rng.choice([-1, 0, 1, 2], n, p=[0.1, 0.6, 0.15, 0.15])
         self.probs = rng.dirichlet([1, 1, 1], n)
         self.truth = set(range(40))                       # truth 30..39 have no tensor
+        self.other = set(range(200, 206))                 # the other kind's truth (e.g. INDEL for an SNV model)
         self.matches = []
         for k in range(n):
-            if self.labels[k] == 1:
-                self.matches.append({int(rng.integers(0, 30))} if k % 5 else {100})  # 100: a truth that does not count
+            if self.labels[k] == 1:  # 100: a truth that does not count
+                self.matches.append({int(rng.integers(0, 30))} if k % 5 else {100} if k % 10 else {200 + k % 6})
             else:
                 self.matches.append(set())
 
@@ -75,31 +77,41 @@ class TruthReportTest(unittest.TestCase):
         found = set()
         for k in range(len(self.labels)):
             if self.labels[k] == 1 and self.probs[k, 1] >= t:
-                found |= self.matches[k] & self.truth
+                found |= self.matches[k] & (self.truth | self.other)
         fp = sum(1 for k in range(len(self.labels)) if self.labels[k] in (0, 2) and self.probs[k, 1] >= t)
-        tp = len(found)
-        prec = tp / (tp + fp) if tp + fp else 0.0
+        tp, hits = len(found & self.truth), len(found)
+        prec = hits / (hits + fp) if hits + fp else 0.0
         rec = tp / len(self.truth)
-        return tp, fp, 2 * prec * rec / (prec + rec) if prec + rec else 0.0, prec, rec
+        return tp, fp, 2 * prec * rec / (prec + rec) if prec + rec else 0.0, prec, rec, hits - tp
 
     def test_counts_best_threshold_and_ap(self):
-        r = metrics.truth_report(self.truth, self.matches, self.labels, self.probs, 0.4)
-        tp, fp, f1, prec, rec = self.brute(0.4)
+        r = metrics.truth_report(self.truth, self.matches, self.labels, self.probs, 0.4, self.other)
+        tp, fp, f1, prec, rec, other_tp = self.brute(0.4)
         at = r["at_threshold"]
-        self.assertEqual((at["tp"], at["fp"], at["fn"]), (tp, fp, 40 - tp))
+        self.assertEqual((at["tp"], at["other_tp"], at["fp"], at["fn"]), (tp, other_tp, fp, 40 - tp))
+        self.assertGreater(other_tp, 0)
         self.assertAlmostEqual(at["f1"], f1)
-        reachable = set().union(*[self.matches[k] for k in range(len(self.labels)) if self.labels[k] == 1]) & self.truth
-        self.assertEqual(r["with_tensor"], len(reachable))
-        self.assertAlmostEqual(r["ceiling"], len(reachable) / 40)
+        self.assertAlmostEqual(at["precision"], prec)
+        reachable = set().union(*[self.matches[k] for k in range(len(self.labels)) if self.labels[k] == 1])
+        self.assertEqual(r["with_tensor"], len(reachable & self.truth))
+        self.assertEqual(r["other_kind_truth_with_tensor"], len(reachable & self.other))
+        self.assertAlmostEqual(r["ceiling"], len(reachable & self.truth) / 40)
+        somatic = [self.matches[k] for k in range(len(self.labels)) if self.labels[k] == 1]
+        self.assertEqual((r["somatic_tensors"], r["other_kind_tensors"], r["unmatched_tensors"]),
+                         (sum(bool(m & self.truth) for m in somatic), sum(bool(m & self.other) for m in somatic),
+                          sum(m == {100} for m in somatic)))
         thresholds = sorted(set(self.probs[:, 1].tolist()))
         self.assertAlmostEqual(r["best"]["f1"], max(self.brute(t)[2] for t in thresholds))
         self.assertAlmostEqual(r["best"]["f1"], self.brute(r["best"]["threshold"])[2])
-        ap, prev = 0.0, 0.0                               # sklearn's definition over the distinct scores
+        ap, prev = 0.0, 0.0                               # sklearn's step sum over the distinct scores
         for t in sorted(thresholds, reverse=True):
-            _, _, _, p_t, r_t = self.brute(t)
+            _, _, _, p_t, r_t, _ = self.brute(t)
             ap += (r_t - prev) * p_t
             prev = r_t
         self.assertAlmostEqual(r["ap"], ap)
+        no_other = metrics.truth_report(self.truth, self.matches, self.labels, self.probs, 0.4)
+        self.assertEqual(no_other["at_threshold"]["tp"], tp)                  # the recall does not change
+        self.assertEqual(no_other["at_threshold"]["other_tp"], 0)
 
     def test_duplicates_count_once(self):
         labels = np.array([1, 1, 1, 0])
@@ -107,10 +119,16 @@ class TruthReportTest(unittest.TestCase):
         r = metrics.truth_report({"a", "b"}, [{"a"}, {"a"}, {"a"}, set()], labels, probs, 0.5)
         self.assertEqual((r["at_threshold"]["tp"], r["at_threshold"]["fp"], r["at_threshold"]["fn"]), (1, 1, 1))
         self.assertAlmostEqual(r["at_threshold"]["precision"], 0.5)   # 3 calls of one truth are one true positive
-        self.assertEqual((r["somatic_tensors"], r["other_truth_tensors"]), (3, 0))
-        r = metrics.truth_report({"b"}, [{"a"}, {"a"}, {"b"}, set()], labels, probs, 0.5)   # "a" does not count
-        self.assertEqual((r["somatic_tensors"], r["other_truth_tensors"], r["negatives"]), (1, 2, 1))
-        self.assertEqual((r["at_threshold"]["tp"], r["at_threshold"]["fp"]), (1, 1))      # neither a hit nor a false call
+        self.assertEqual((r["somatic_tensors"], r["other_kind_tensors"]), (3, 0))
+        # two tensors of one other-kind truth "c": one true call, not two, and not in the recall
+        r = metrics.truth_report({"b"}, [{"c"}, {"c"}, {"b"}, set()], labels, probs, 0.5, other={"c"})
+        at = r["at_threshold"]
+        self.assertEqual((at["tp"], at["other_tp"], at["fp"], at["fn"]), (1, 1, 1, 0))
+        self.assertAlmostEqual(at["precision"], 2 / 3)
+        self.assertEqual((r["somatic_tensors"], r["other_kind_tensors"], r["unmatched_tensors"]), (1, 2, 0))
+        r = metrics.truth_report({"b"}, [{"c"}, {"c"}, {"b"}, set()], labels, probs, 0.5)   # "c" counts for neither
+        self.assertEqual((r["at_threshold"]["tp"], r["at_threshold"]["other_tp"], r["unmatched_tensors"]), (1, 0, 2))
+        self.assertAlmostEqual(r["at_threshold"]["precision"], 0.5)
 
 
 if __name__ == "__main__":

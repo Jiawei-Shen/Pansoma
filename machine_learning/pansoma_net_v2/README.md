@@ -123,12 +123,37 @@ scores the truth alleles themselves:
 - A truth allele scores the highest p_somatic of its tensors. A truth allele without a tensor is a miss at
   every threshold.
 - A false call is a somatic call on a tensor scored 0 or 2 (off-reference no-match tensors included).
-- A labelled-1 tensor whose truth alleles do not count (e.g. an SNV tensor that partially matches an INDEL
-  truth) is neither a hit nor a false call (`other_truth_tensors`).
-- Precision = found / (found + false calls); recall = found / all truth alleles; `ceiling` = the recall if
-  every tensor were called; AP over the same ranking; `at_threshold` uses t, `best` the best-F1 threshold.
+- A tensor of the other kind's truth (an SNV tensor that partially matches an INS or DEL truth) is somatic for
+  training and per tensor. Against the truth VCF, the truth allele it finds is a true call, counted once
+  (`other_tp`), but not in the recall, which is over the model's kind. A labelled-1 tensor whose truth alleles
+  count for neither kind (not PASS, outside the BED) is neither (`unmatched_tensors`).
+- Precision = distinct truth alleles found (either kind) / (those + false calls); recall = found / all truth
+  alleles of the kind; `ceiling` = the recall if every tensor were called; AP over the same ranking;
+  `at_threshold` uses t, `best` the best-F1 threshold.
 - Validation: a truth allele belongs to the validation block that holds its position (each block starts at
   its first tensor), so validation truth alleles without a tensor count as misses there too.
+
+On HG008 Illumina chr1:
+
+| | truth alleles | with a tensor (ceiling) | tensors of the other kind's truth |
+|---|---|---|---|
+| SNV | 697 SNP | 662 (95.0 %) | 188 SNV tensors of 137 INDEL truth alleles |
+| INDEL | 588 DEL + INS | 317 (53.9 %) | 1 |
+
+Of those 137 INDEL truth alleles, 74 also have an INDEL tensor. Adding the two models' truth reports would
+count them twice, so `combine` scores a sample's SNV and INDEL predictions together against the whole truth
+VCF, as a pipeline's output VCF is compared with it:
+
+```bash
+$P -m pansoma_net_v2.combine HG008_Illumina_SNV_base HG008_Illumina_INDEL_base --output HG008_Illumina.json
+```
+
+- The truth alleles are those of all predicted kinds.
+- A truth allele is found when any of its test tensors, in either set, is called by its model (each model's
+  own threshold). It counts once, however many calls it has.
+- Precision, recall, F1, the ceiling, per truth kind, which sets found each truth allele, and the calls
+  repeated on a truth already found. No AP: the two models' scores are not on one scale.
+- With both sets, the INDEL truth alleles on chr1 with a tensor are 380 (64.6 %) instead of 317.
 
 Outputs in `--output`:
 
@@ -236,6 +261,8 @@ cd machine_learning && $P -m unittest discover -s pansoma_net_v2/tests -t .
   site allele, no reads after the blocks). It also checks the scalars against a summary and encodes real
   tensors.
 - `test_metrics`: average precision (ties together, as sklearn), the best-F1 threshold, and the thresholded
-  call; the truth report against brute force, duplicates counted once.
+  call; the truth report against brute force, duplicates and other-kind truth counted once.
+- `test_combine`: one truth found from both sets counts once; repeated calls; other-kind truth with one set;
+  two predictions of one kind are refused.
 - `test_gpu`: runs on a CUDA node. The GPU encoding equals the CPU one, a bf16 training step learns, and
   compile + channels_last gives the eager logits and gradients in fp32.

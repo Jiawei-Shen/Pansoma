@@ -7,8 +7,9 @@
 RUNS is $PANSOMA_RUNS or /scratch/jshen/data/pansoma_net_v2_runs. Columns: training loss, speed and minutes
 of the epoch, GPU peak (allocated GiB); validation per tensor: somatic AP, F1 / precision / recall at the
 best-F1 threshold t (s.*), t itself; against the truth VCF at the same t (t.*, metrics.truth_report: every
-truth allele once, truth alleles without a tensor are misses) and its ceiling; germline argmax F1; "*" marks
-the best epoch so far by the run's --select.
+truth allele once, truth alleles without a tensor are misses, found truth of the other kind are true calls)
+and its ceiling; germline argmax F1; "*" marks the best epoch so far by the run's --select. combine scores a
+sample's SNV and INDEL models together.
 """
 import argparse
 import glob
@@ -75,10 +76,9 @@ def show(d):
             print(f"    vs truth VCF:  somatic AP {tr['ap']:.3f} F1 {at['f1']:.3f} P {at['precision']:.3f} "
                   f"R {at['recall']:.3f} ({at['tp']:,} of {tr['truth_alleles']:,} truth found, {at['fp']:,} false calls; "
                   f"ceiling {tr['ceiling']:.3f})")
-            if "somatic_tensors" in tr:
-                print(f"                   {tr['somatic_tensors']:,} somatic tensors of these truth alleles; "
-                      f"{tr['other_truth_tensors']:,} of other truth (another kind, outside the BED) left out")
-
+            if "other_kind_tensors" in tr:
+                print(f"                   + {at['other_tp']:,} truth of the other kind found (true calls, each once; "
+                      f"{tr['other_kind_tensors']:,} tensors of {tr['other_kind_truth_with_tensor']:,} such truth)")
 
 def _select(d):
     """The run's --select, from the args.json that train writes at its start (f1 for older runs)."""

@@ -17,7 +17,9 @@ Writes, per <sample>.<set>.<KIND>:
   BED, the chromosomes, this kind), at the same threshold. Every truth allele counts once: it is found when its
   best tensor (a labelled-1 tensor matching it, exactly or partially) is called somatic, so duplicate tensors of
   one truth do not count twice; truth alleles without a tensor are misses; a false positive is a somatic call on
-  a tensor labelled 0 or 2. `ceiling` is the recall of a perfect model.
+  a tensor labelled 0 or 2. A found truth allele of the other kind (an SNV tensor matching an INDEL truth
+  partially) is a true call too, once. `ceiling` is the recall of a perfect model. `combine` scores the SNV and
+  INDEL predictions of a sample together against the whole truth VCF.
 
 The encoder uses the checkpoint's statistics; they are not refitted on these tensors.
 """
@@ -80,10 +82,11 @@ def main(argv=None):
                     **{f"p_{c}": round(float(probs[k][j]), 5) for j, c in enumerate(CLASSES)},
                     pred=CLASSES[pred[k]])) + "\n")
         report = metrics.report(labels, probs, threshold)
-        truth = somatic_truth(index, chroms={index.meta["chroms"][c] for c in set(index.arrays["chrom"][positions].tolist())})
+        on = {index.meta["chroms"][c] for c in set(index.arrays["chrom"][positions].tolist())}
+        truth = somatic_truth(index, chroms=on)
         if truth is not None:  # every truth allele of the chromosomes counts once; see metrics.truth_report
             report["truth"] = metrics.truth_report(set(truth), [set(index.truth_of(p).tolist()) for p in positions],
-                                                   labels, probs, threshold)
+                                                   labels, probs, threshold, other=somatic_truth(index, on, True))
         in_test = labels >= 0
         off = a["off_reference"][positions]
         report.update(all_tensors=int(len(labels)), left_out=int((~in_test).sum()),

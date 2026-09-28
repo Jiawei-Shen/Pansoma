@@ -260,15 +260,17 @@ def block_split(index, positions, fraction, block_nodes=20000, seed=0):
 TRUTH_KINDS = {"SNV": ("SNP",), "INDEL": ("DEL", "INS")}
 
 
-def somatic_truth(index, chroms=None):
-    """{truth_id: (chrom, pos0)} of the somatic truth alleles of this kind that count: PASS, in the BED, on
-    `chroms` (None = any), from the set's somatic.recall.tsv (with or without a tensor); None without the table."""
+def somatic_truth(index, chroms=None, other_kind=False):
+    """{truth_id: (chrom, pos0)} of the somatic truth alleles that count: PASS, in the BED, on `chroms` (None =
+    any), of the index's kind (other_kind: of the other kind), from the set's somatic.recall.tsv (with or without
+    a tensor); None without the table."""
     table = index.dir.parent / "somatic.recall.tsv"
     if not table.exists():
         return None
+    kinds = {k for kind, ks in TRUTH_KINDS.items() if (kind == index.kind) != other_kind for k in ks}
     with open(table) as f:
         return {int(r["truth_id"]): (r["chrom"], int(r["vcf_pos"]) - 1) for r in csv.DictReader(f, delimiter="\t")
-                if r["passed"] == "True" and r["in_bed"] == "True" and r["kind"] in TRUTH_KINDS[index.kind]
+                if r["passed"] == "True" and r["in_bed"] == "True" and r["kind"] in kinds
                 and (chroms is None or r["chrom"] in set(chroms))}
 
 

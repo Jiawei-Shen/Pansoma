@@ -125,7 +125,11 @@ class IndexTest(unittest.TestCase):
         rows = make_tensor_set(root, {"SNV": {"chr1": 60, "chr2": 60}}, shard_size=16, seed=3)["SNV"]
         index = KindIndex(root / "SNV", self.cache)
         truth = somatic_truth(index)                                          # PASS, in the BED, SNP rows
-        self.assertTrue(all(t["truth_id"] in truth for t in rows if t["label"] == 1 and t["in_region"]))
+        other = somatic_truth(index, other_kind=True)                         # DEL and INS rows
+        self.assertFalse(set(truth) & set(other))
+        in_region = [t["truth_id"] for t in rows if t["label"] == 1 and t["in_region"]]
+        self.assertTrue(all(tid in truth or tid in other for tid in in_region))
+        self.assertTrue(any(tid in other for tid in in_region))              # SNV tensors of an INS truth
         self.assertTrue(any(tid not in {t["truth_id"] for t in rows} for tid in truth))  # truth without a tensor
         pos = index.select(labelled=False)
         train, val = block_split(index, pos, 0.5, block_nodes=21, seed=2)
