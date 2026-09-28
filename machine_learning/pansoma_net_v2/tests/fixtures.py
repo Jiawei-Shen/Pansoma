@@ -5,6 +5,17 @@ from pathlib import Path
 import numpy as np
 
 CODES = {"A": 1, "C": 2, "G": 3, "T": 4}
+IGNORED = ("outside_confident_region", "off_reference_no_truth_match", "below_snv_min_af")
+
+
+def reason_of(label, k):
+    """(reason, off_reference) of the k-th tensor with this label."""
+    if label == -1:
+        r = IGNORED[k % 3]
+        return r, r == "off_reference_no_truth_match"
+    if label == 1:
+        return ("residual_partial_somatic_truth", True) if k % 4 == 0 else ("representative_allele_is_somatic_truth", False)
+    return {0: "confident_no_truth_allele", 2: "representative_allele_is_germline_truth"}[label], False
 
 
 def make_tensor(rng, blocks, alt="A", ref="C", width=101, height=200):
@@ -44,7 +55,7 @@ def make_tensor_set(root, spec, shard_size=4, seed=0, labels_created="2026-09-28
                         tensors=sum(chroms.values()), chromosomes={})
         truth[kind] = []
         for chrom, n in chroms.items():
-            records, shards = [], []
+            records, shards, label_records = [], [], []
             for s in range(0, n, shard_size):
                 count = min(shard_size, n - s)
                 name = f"{chrom}_shard_{s // shard_size:05d}_data.npy"
@@ -80,12 +91,20 @@ def make_tensor_set(root, spec, shard_size=4, seed=0, labels_created="2026-09-28
                         allele_count=nums["allele_count"], second_allele_af=nums["second_allele_af"],
                         parameters=dict(min_af=0.06), shard_index=s // shard_size, index_within_shard=i, chrom=chrom,
                         shard_file=name, source_task=0, source_shard_index=0, source_index_within_shard=7)))
+                    reason, off = reason_of(int(labels[i]), len(truth[kind]))
+                    label_records.append(json.dumps(dict(
+                        candidate_id=cid, site_id=f"{cid}:SNV", chrom=chrom, shard_file=name, index_within_shard=i,
+                        label=int(labels[i]), label_name="x", reason=reason, somatic=[], germline=[],
+                        grch38=None if off else dict(chrom=chrom, pos0=node, ref="C", alt="A"), partial=None)))
                     truth[kind].append(dict(chrom=chrom, file=name, row=i, label=int(labels[i]), blocks=blocks,
-                                            af=af, candidate_id=cid, node=node, numbers=nums, x=data[i]))
+                                            af=af, candidate_id=cid, node=node, numbers=nums, x=data[i], reason=reason,
+                                            off_reference=off,
+                                            eval_label=0 if reason == "off_reference_no_truth_match" else int(labels[i])))
                 np.save(d / name, data)
                 np.save(d / name.replace("_data.npy", "_labels.npy"), labels)
                 shards.append(dict(file=name, tensors=count))
             (d / f"{chrom}_variant_summary.ndjson").write_text("\n".join(records) + "\n")
+            (d / f"{chrom}_labels.ndjson").write_text("\n".join(label_records) + "\n")
             manifest["chromosomes"][chrom] = dict(tensors=n, shards=shards, summary=f"{chrom}_variant_summary.ndjson")
         (d / "manifest.json").write_text(json.dumps(manifest))
         (d / "labels.manifest.json").write_text(json.dumps(dict(

@@ -36,6 +36,11 @@ class RealDataTest(unittest.TestCase):
             counts = Counter(index.arrays["label"].tolist())
             names = {v: k for k, v in labels["labels"].items()}
             self.assertEqual({names[v]: n for v, n in counts.items()}, labels["totals"])
+            reasons = Counter(index.meta["reasons"][r] for r in index.arrays["reason"].tolist())
+            self.assertEqual(dict(reasons), labels["reasons"])  # every labels.ndjson line read in order
+            moved = index.arrays["eval_label"] != index.arrays["label"]
+            self.assertEqual(int(moved.sum()), labels["reasons"].get("off_reference_no_truth_match", 0))
+            self.assertTrue(index.arrays["off_reference"][moved].all())
 
     def test_candidates_follow_the_summary(self):
         index = self.index["SNV"]

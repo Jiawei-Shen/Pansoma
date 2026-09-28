@@ -197,6 +197,34 @@ def make_loader(dataset, sampler, num_workers, batch_size, persistent=True):
                       drop_last=False, **workers)
 
 
+WORKER_START_FAILURES = (RuntimeError, FileNotFoundError, EOFError, ConnectionError)
+
+
+def retry_workers(action, log, what, tries=3, wait=5.0):
+    """action() with fresh DataLoader workers, again (up to `tries`) when they fail to start. A forkserver
+    worker opens the parent's semaphores by name in /dev/shm; on tequila three of four jobs started at once
+    lost those names (FileNotFoundError in SemLock._rebuild, "DataLoader worker exited unexpectedly"). Once
+    started, workers hold the semaphores, so the loaders are persistent and only their start is retried."""
+    for attempt in range(1, tries + 1):
+        try:
+            return action()
+        except WORKER_START_FAILURES as e:
+            if attempt == tries:
+                raise
+            log(f"{what}: DataLoader workers failed to start ({type(e).__name__}: {str(e)[:160]}); retry {attempt}")
+            time.sleep(wait)
+
+
+def started_loader(dataset, sampler, num_workers, batch_size, log, what):
+    """A persistent DataLoader whose workers are running (one batch fetched), retried as in retry_workers."""
+    def start():
+        loader = make_loader(dataset, sampler, num_workers, batch_size, persistent=True)
+        if num_workers > 0 and len(loader):
+            next(iter(loader))
+        return loader
+    return retry_workers(start, log, what)
+
+
 def main(argv=None):
     args = parse_args(argv)
     run = Run(args)
@@ -210,16 +238,22 @@ def main(argv=None):
     train_chroms, val_chroms, test_chroms, missing = split_chroms(args, available)
     run.log(f"train {train_chroms}\nval {val_chroms}\ntest (left out) {test_chroms}"
             + (f"\nnot in the data: {missing}" if missing else ""))
+    # training: labels >= 0; validation (like the test): evaluation labels (off-reference tensors without a
+    # truth match count as non), since the threshold chosen on it is applied to the test chromosome
     if val_chroms:
         train_parts = [(i, i.select(train_chroms)) for i, _ in everything]
-        val_parts = [(i, i.select(val_chroms)) for i, _ in everything]
+        val_parts = [(i, i.select(val_chroms, evaluation=True)) for i, _ in everything]
     else:
-        splits = [(i, block_split(i, i.select(train_chroms), args.val_fraction, args.val_block_nodes, args.seed))
-                  for i, _ in everything]
-        train_parts = [(i, tr) for i, (tr, _) in splits]
-        val_parts = [(i, va) for i, (_, va) in splits]
+        train_parts, val_parts = [], []
+        for i, _ in everything:
+            tr, va = block_split(i, i.select(train_chroms, labelled=False), args.val_fraction, args.val_block_nodes,
+                                 args.seed)
+            train_parts.append((i, tr[i.arrays["label"][tr] >= 0]))
+            val_parts.append((i, va[i.arrays["eval_label"][va] >= 0]))
         run.log(f"validation: {args.val_fraction:.0%} of the {args.val_block_nodes}-node blocks of the training chromosomes")
-    train_set, val_set = TensorDataset(train_parts), TensorDataset(val_parts)
+    train_set, val_set = TensorDataset(train_parts), TensorDataset(val_parts, labels="eval_label")
+    n_off = sum(int((i.arrays["eval_label"][v] != i.arrays["label"][v]).sum()) for i, v in val_parts)
+    run.log(f"validation includes {n_off:,} off-reference tensors without a truth match, as non")
     counts = train_set.class_counts()
     for index, pos in train_parts:
         labels = index.arrays["label"][pos]
@@ -249,8 +283,9 @@ def main(argv=None):
         if run.main:
             order = EpochSampler(len(train_set), args.stats_samples, shuffle=True, seed=args.seed + 12345)
             t0 = time.time()
-            stats[0] = compute_stats(make_loader(train_set, order, args.num_workers, 256, persistent=False),
-                                     args.stats_samples)
+            stats[0] = retry_workers(lambda: compute_stats(make_loader(train_set, order, args.num_workers, 256,
+                                                                       persistent=False), args.stats_samples),
+                                     run.log, "statistics")
             run.log(f"statistics from {stats[0]['tensors']:,} training tensors ({time.time() - t0:.0f} s): "
                     + json.dumps({k: v for k, v in stats[0].items() if k != "tensors"}))
             (run.out / "stats.json").write_text(json.dumps(stats[0], indent=2) + "\n")
@@ -279,8 +314,9 @@ def main(argv=None):
     run.log(f"class weights {dict(zip(CLASSES, [round(w, 4) for w in weights.tolist()]))}; each epoch "
             f"{train_sampler.epoch_size():,} tensors (non fraction {args.non_fraction})")
     val_sampler = EpochSampler(len(val_set), None, False, run.rank, run.world)
-    train_loader = make_loader(train_set, train_sampler, args.num_workers, args.batch_size)
-    val_loader = make_loader(val_set, val_sampler, args.num_workers, args.batch_size, persistent=False)
+    train_loader = started_loader(train_set, train_sampler, args.num_workers, args.batch_size, run.log, "training")
+    val_loader = started_loader(val_set, val_sampler, max(1, args.num_workers // 2) if args.num_workers else 0,
+                                args.batch_size, run.log, "validation")
     steps_per_epoch = max(1, len(train_loader))
     total_steps, warmup = args.epochs * steps_per_epoch, int(args.warmup_epochs * steps_per_epoch)
     optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=args.weight_decay,

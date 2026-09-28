@@ -8,7 +8,7 @@ import torch
 import torch.nn as nn
 
 from .. import predict, train
-from ..data import SCALARS, EpochSampler, KindIndex, TensorDataset, load_parts
+from ..data import SCALARS, EpochSampler, KindIndex, TensorDataset, block_split, load_parts
 from ..model import PansomaNetV2
 from .fixtures import make_tensor_set
 from .test_encode import STATS, batch
@@ -58,6 +58,24 @@ class LoaderTest(unittest.TestCase):
             self.assertTrue(torch.equal(got, torch.stack([ds[k][0] for k in range(len(ds))])))
 
 
+class RetryTest(unittest.TestCase):
+    def test_worker_start_is_retried_then_raised(self):
+        calls, logged = [], []
+
+        def flaky():
+            calls.append(1)
+            if len(calls) < 3:
+                raise RuntimeError("DataLoader worker (pid(s) 1) exited unexpectedly")
+            return "ok"
+        self.assertEqual(train.retry_workers(flaky, logged.append, "test", wait=0), "ok")
+        self.assertEqual((len(calls), len(logged)), (3, 2))
+
+        def gone():
+            raise FileNotFoundError(2, "gone")
+        with self.assertRaises(FileNotFoundError):
+            train.retry_workers(gone, logged.append, "t", wait=0)
+
+
 class TrainPredictTest(unittest.TestCase):
     """Small end-to-end runs on CPU: train 2 epochs (chr1 left out, validation from node blocks of chr2/chr3),
     resume to 3, predict chr1; and one run with the scalars."""
@@ -76,10 +94,15 @@ class TrainPredictTest(unittest.TestCase):
             ckpt = torch.load(out / "last.pth", weights_only=False)
             self.assertEqual(ckpt["chroms"]["test"], ["chr1"])
             self.assertIsNotNone(ckpt["somatic_threshold"])
-            labelled_23 = sum(1 for kind in truth.values() for t in kind if t["chrom"] != "chr1" and t["label"] >= 0)
-            val_n = rows[-1]["val"]["tensors"]
-            self.assertGreater(val_n, 0)
-            self.assertEqual(sum(d["train"] for d in ckpt["data"]) + val_n, labelled_23)  # chr1 and -1 never used
+            expected_train = expected_val = 0  # the same block split: training labels / evaluation labels
+            for kind in ("SNV", "INDEL"):
+                index = KindIndex(root / kind, tmp / "check_cache")
+                tr, va = block_split(index, index.select(["chr2", "chr3"], labelled=False), 0.5, 21, 0)
+                expected_train += int((index.arrays["label"][tr] >= 0).sum())
+                expected_val += int((index.arrays["eval_label"][va] >= 0).sum())
+            self.assertEqual(sum(d["train"] for d in ckpt["data"]), expected_train)  # chr1 and -1 never trained on
+            self.assertEqual(rows[-1]["val"]["tensors"], expected_val)                # off-reference no-match as non
+            self.assertGreater(expected_val, 0)
             self.assertIn("somatic_ap", rows[-1]["val"])
 
             train.main(["--tensors", str(root), "--output", str(out), "--epochs", "3", "--resume", str(out / "last.pth")]
@@ -91,14 +114,19 @@ class TrainPredictTest(unittest.TestCase):
             pred = tmp / "pred"
             predict.main(["--checkpoint", str(out / "best.pth"), "--tensors", str(root), "--output", str(pred),
                           "--chroms", "chr1", "--num-workers", "0", "--amp", "off", "--batch-size", "5"])
-            with gzip.open(pred / "sample.v3_tensors.SNV.predictions.tsv.gz", "rt") as f:
-                lines = f.read().splitlines()
+            with gzip.open(pred / "sample.v3_tensors.SNV.predictions.ndjson.gz", "rt") as f:
+                records = [json.loads(line) for line in f]
             chr1 = [t for t in truth["SNV"] if t["chrom"] == "chr1"]
-            self.assertEqual([line.split("\t")[1] for line in lines[1:]], [t["candidate_id"] for t in chr1])
-            self.assertTrue(all(abs(sum(map(float, line.split("\t")[3:6])) - 1) < 1e-3 for line in lines[1:]))
+            self.assertEqual([r["candidate_id"] for r in records], [t["candidate_id"] for t in chr1])
+            self.assertTrue(all(abs(r["p_non"] + r["p_somatic"] + r["p_germline"] - 1) < 1e-3 for r in records))
+            self.assertEqual([r["in_test"] for r in records], [t["eval_label"] >= 0 for t in chr1])
+            self.assertEqual([r["off_reference"] for r in records], [t["off_reference"] for t in chr1])
+            self.assertEqual([r["reason"] for r in records], [t["reason"] for t in chr1])
+            self.assertTrue(all(r["test_label"] == 0 for r in records if r["reason"] == "off_reference_no_truth_match"))
             report = json.loads((pred / "sample.v3_tensors.SNV.metrics.json").read_text())
-            self.assertEqual(report["tensors"], sum(t["label"] >= 0 for t in chr1))
-            self.assertEqual(report["ignored"], sum(t["label"] < 0 for t in chr1))
+            self.assertEqual(report["tensors"], sum(t["eval_label"] >= 0 for t in chr1))
+            self.assertEqual(report["left_out"], sum(t["eval_label"] < 0 for t in chr1))
+            self.assertEqual(report["off_reference_in_test"], sum(t["off_reference"] and t["eval_label"] >= 0 for t in chr1))
             self.assertEqual(report["threshold"], torch.load(out / "best.pth", weights_only=False)["somatic_threshold"])
             self.assertEqual(len(KindIndex(root / "SNV", pred / "index_cache")), len(truth["SNV"]))
 

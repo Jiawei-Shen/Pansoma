@@ -10,6 +10,12 @@ the site's row blocks A1, ALT (A2..Ak), REF, OTHER (rows are ordered in these bl
 give them exactly, and rows from the OTHER end on are padding) and the site's scalars (SCALARS: counts before
 the 200-row cap, AFs, alleles, event length). Reading the summaries takes about a minute per 2.5 M tensors, so
 the index is cached (cache_dir) and rebuilt when the labels change.
+
+From <chrom>_labels.ndjson it also keeps each tensor's label reason and whether its node is off the GRCh38
+path (grch38 null). Evaluation (validation and the test chromosome) uses `eval_label`: the label, except that
+off-reference tensors without a truth match (reason off_reference_no_truth_match, -1 for training) count as
+non, because test-time calling meets them inside the BED. The other -1 reasons are left out: outside the BED,
+below the AF floors and without a GRCh38 position can all be dropped without truth.
 """
 import hashlib
 import json
@@ -26,7 +32,8 @@ CLASSES = ("non", "somatic", "germline")  # label values 0, 1, 2; -1 = ignore
 KINDS = ("SNV", "INDEL")
 TENSOR_SHAPE = (8, 200, 101)
 MAX_OPEN_SHARDS = 256  # open shard files per DataLoader worker
-INDEX_VERSION = 3  # 3: node ids and site scalars; cache files named by set, kind and path hash
+INDEX_VERSION = 4  # 4: label reasons, off-reference flags, eval labels; 3: node ids, scalars, cache names
+EVAL_AS_NON = ("off_reference_no_truth_match",)  # -1 for training, 0 (non) when evaluating
 SCALARS = ("log_coverage", "log_site_coverage", "log_alt_count", "log_ref_count", "log_other_count", "af",
            "second_allele_af", "allele_count", "log_event_length")
 _ROW_GROUPS = re.compile(rb'"row_groups": (\[[^\]]*\])')
@@ -36,6 +43,7 @@ _ROW = re.compile(rb'"index_within_shard": (\d+)')
 _NUMBER = {k: re.compile(rb'"' + k.encode() + rb'": ([-+0-9.eE]+)')
            for k in ("node_id", "coverage", "alt_count", "ref_count", "other_count", "af", "site_coverage",
                      "allele_count", "second_allele_af", "event_length")}  # first match = the record's own (A1) field
+_REASON = re.compile(rb'"reason": "([^"]+)"')
 _BLOCK = {"A1": 0, "REF": 2, "OTHER": 3}  # A2, A3, ... -> 1 (ALT)
 
 
@@ -75,8 +83,8 @@ def build_index(kind_dir):
     if manifest.get("layout", "").split("-")[0] != "chromosome" or list(manifest.get("shape", [])) != [8, 200, 101]:
         raise ValueError(f"{kind_dir}: not a merged (8, 200, 101) tensor directory")
     chroms, shards = list(manifest["chromosomes"]), []
-    cols = {k: [] for k in ("chrom", "node", "shard", "row", "label", "blocks", "scalars")}
-    candidates = []
+    cols = {k: [] for k in ("chrom", "node", "shard", "row", "label", "blocks", "scalars", "reason", "off_reference")}
+    candidates, reasons = [], {}
     for ci, chrom in enumerate(chroms):
         info = manifest["chromosomes"][chrom]
         local = {}
@@ -85,8 +93,15 @@ def build_index(kind_dir):
             shards.append(s["file"])
         labels = {f: np.load(kind_dir / f.replace("_data.npy", "_labels.npy")) for f in local}
         before = len(cols["chrom"])
-        with open(kind_dir / info["summary"], "rb") as src:
+        label_lines = open(kind_dir / f"{chrom}_labels.ndjson", "rb")  # same order as the summary
+        with open(kind_dir / info["summary"], "rb") as src, label_lines:
             for line in src:
+                lab = label_lines.readline()
+                if _CANDIDATE.search(lab).group(1) != _CANDIDATE.search(line).group(1):
+                    raise ValueError(f"{kind_dir}/{chrom}_labels.ndjson is not in the summary's order")
+                reason = _REASON.search(lab).group(1).decode()
+                cols["reason"].append(reasons.setdefault(reason, len(reasons)))
+                cols["off_reference"].append(b'"grch38": null' in lab)
                 f = _SHARD.search(line).group(1).decode()
                 row = int(_ROW.search(line).group(1))
                 v = {k: float(p.search(line).group(1)) for k, p in _NUMBER.items()}
@@ -103,9 +118,15 @@ def build_index(kind_dir):
     arrays = dict(chrom=np.asarray(cols["chrom"], np.int16), node=np.asarray(cols["node"], np.int64),
                   shard=np.asarray(cols["shard"], np.int32), row=np.asarray(cols["row"], np.int32),
                   label=np.asarray(cols["label"], np.int8), blocks=np.asarray(cols["blocks"], np.int16).reshape(-1, 4),
-                  scalars=np.asarray(cols["scalars"], np.float32).reshape(-1, len(SCALARS)))
+                  scalars=np.asarray(cols["scalars"], np.float32).reshape(-1, len(SCALARS)),
+                  reason=np.asarray(cols["reason"], np.int16), off_reference=np.asarray(cols["off_reference"], bool))
+    vocabulary = sorted(reasons, key=reasons.get)
+    eval_label = arrays["label"].copy()
+    eval_label[np.isin(arrays["reason"], [reasons[r] for r in EVAL_AS_NON if r in reasons])] = 0
+    arrays["eval_label"] = eval_label
     meta = dict(index_version=INDEX_VERSION, directory=str(kind_dir.resolve()), chroms=chroms, shards=shards,
-                labels=_labels_meta(kind_dir), tensors=int(manifest["tensors"]), scalars=list(SCALARS))
+                labels=_labels_meta(kind_dir), tensors=int(manifest["tensors"]), scalars=list(SCALARS),
+                reasons=vocabulary, eval_as_non=list(EVAL_AS_NON))
     return arrays, candidates, meta
 
 
@@ -151,15 +172,21 @@ class KindIndex:
             self._candidates = self._candidates_path.read_text().split("\n")[:len(self)]
         return self._candidates
 
-    def select(self, chroms=None, labelled=True):
-        """Positions of the tensors on `chroms` (None = all) with a label >= 0 (labelled) or any label."""
+    def select(self, chroms=None, labelled=True, evaluation=False):
+        """Positions of the tensors on `chroms` (None = all): with a training label >= 0 (labelled), with an
+        evaluation label >= 0 (evaluation), or all (labelled=False)."""
         keep = np.ones(len(self), bool)
         if chroms is not None:
             wanted = [i for i, c in enumerate(self.meta["chroms"]) if c in set(chroms)]
             keep &= np.isin(self.arrays["chrom"], wanted)
-        if labelled:
+        if evaluation:
+            keep &= self.arrays["eval_label"] >= 0
+        elif labelled:
             keep &= self.arrays["label"] >= 0
         return np.flatnonzero(keep)
+
+    def reason(self, position):
+        return self.meta["reasons"][int(self.arrays["reason"][position])]
 
 
 def block_split(index, positions, fraction, block_nodes=20000, seed=0):
@@ -180,8 +207,8 @@ class TensorDataset(Dataset):
     """Samples from several KindIndex selections: (x int8 (8, 200, 101), blocks int16 (4,), scalars float32 (9,),
     label int)."""
 
-    def __init__(self, parts):
-        """parts: [(KindIndex, positions)]."""
+    def __init__(self, parts, labels="label"):
+        """parts: [(KindIndex, positions)]; labels: "label" (training) or "eval_label" (evaluation)."""
         # 53 bytes per sample, pickled to every DataLoader worker
         self.files, shard, row, label, blocks, scalars = [], [], [], [], [], []
         for index, positions in parts:
@@ -190,7 +217,7 @@ class TensorDataset(Dataset):
             a = index.arrays
             shard.append(a["shard"][positions] + offset)
             row.append(a["row"][positions])
-            label.append(a["label"][positions])
+            label.append(a[labels][positions])
             blocks.append(a["blocks"][positions])
             scalars.append(a["scalars"][positions])
         cat = lambda xs, shape, dtype: np.concatenate(xs).astype(dtype) if xs else np.zeros(shape, dtype)  # noqa: E731

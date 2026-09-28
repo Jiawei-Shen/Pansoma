@@ -35,6 +35,9 @@ class IndexTest(unittest.TestCase):
                 self.assertEqual(int(a["label"][k]), t["label"])
                 self.assertEqual(a["blocks"][k].tolist(), t["blocks"])
                 self.assertEqual(int(a["node"][k]), t["node"])
+                self.assertEqual(index.reason(k), t["reason"])
+                self.assertEqual(bool(a["off_reference"][k]), t["off_reference"])
+                self.assertEqual(int(a["eval_label"][k]), t["eval_label"])
                 # the record's own numbers, not those of an entry in alleles[]
                 self.assertTrue(np.allclose(a["scalars"][k], site_scalars(t["numbers"]), atol=1e-5))
                 self.assertAlmostEqual(float(a["scalars"][k][SCALARS.index("af")]), t["af"], places=4)
@@ -62,6 +65,15 @@ class IndexTest(unittest.TestCase):
         self.assertEqual(len(index.select(["chr2"], labelled=False)), SPEC["SNV"]["chr2"])
         self.assertIn(-1, labels)  # the fixture has ignored tensors, and they are never selected for training
         self.assertTrue(all(index.arrays["label"][index.select()] >= 0))
+        # evaluation adds exactly the off-reference tensors without a truth match, as non
+        rows = self.truth["SNV"]
+        evaluation = index.select(evaluation=True)
+        self.assertEqual(evaluation.tolist(), [k for k, t in enumerate(rows) if t["eval_label"] >= 0])
+        added = [k for k in evaluation if rows[k]["label"] == -1]
+        self.assertTrue(added and all(rows[k]["reason"] == "off_reference_no_truth_match" for k in added))
+        self.assertTrue(all(index.arrays["eval_label"][added] == 0))
+        others = [k for k, t in enumerate(rows) if t["reason"] in ("outside_confident_region", "below_snv_min_af")]
+        self.assertFalse(set(others) & set(evaluation.tolist()))
 
     def test_dataset_returns_the_stored_tensor_blocks_and_label(self):
         parts = load_parts([self.root], ["SNV", "INDEL"], self.cache, labelled=False)
