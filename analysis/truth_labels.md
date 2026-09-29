@@ -3,7 +3,7 @@
 - 代码：`indexed_gam_pipeline_v4/tensor_postprocessing/truth_labels.py`。规则就是这个文件的模块 docstring 和常量；`labels.manifest.json` 里的 `rules_sha256` 是这个文件的 SHA-256，用来标识打标签时用的规则。
 - 坐标换算：`indexed_gam_pipeline_v4/tensor_postprocessing/reference_path.py`（`ReferencePath.linear`）。
 - 命令（在仓库根目录运行）：`python -m indexed_gam_pipeline_v4.tensor_postprocessing label --tensors … --reference-path … --fasta … --somatic-vcf … --somatic-bed … --germline-vcf … --germline-bed … --truth-dir … [--recall-dir …] [--snv-min-af 0.07] [--indel-min-af …]`。`orchestrate finalize` 在 merge 之后用同样的规则打标签，AF 下限（floor）用 `orchestrate prepare` 时给的 `--label-snv-min-af` / `--label-indel-min-af`（存进 `config.json` 的 `postprocess.labels.snv_min_af` / `indel_min_af`，不设是 null，即不按 AF 去掉），等于 `label` 的 `--snv-min-af` / `--indel-min-af`。短读长数据集在 prepare 时加 `--label-snv-min-af 0.07`，跑完不用再单独 relabel。这两个和 build 的 `--snv-min-af` / `--indel-min-af`（决定哪些 allele 生成 tensor）无关。
-- 例子：除非另外注明，都取自 HG008 PacBio `/scratch/jshen/data/pansoma_v2_tensors/Liss_lab_PacBio_Revio_20240125/v3_tensors`（2026-09-28 用现行规则打的标签），按 `candidate_id` 在 `{SNV,INDEL}/chr*_labels.ndjson` 里查到的标签、reason、`partial`/`overlap`；reads 数来自同一目录的 `chr*_variant_summary.ndjson`；单倍型重叠例子里每行 read 的 `(d_ref, d_truth)` 和 `b` 是用 `truth_labels.py` 的函数在同一个 tensor 上重算的（结果和 labels.ndjson 的 `overlap` 一致）。第 7 节的计数来自六个数据集的 `labels.manifest.json`。
+- 例子：除非另外注明，都取自 HG008 PacBio `/scratch/jshen/data/pansoma_v2_tensors/HG008T_PacBio/tensors`（2026-09-28 用现行规则打的标签），按 `candidate_id` 在 `{SNV,INDEL}/chr*_labels.ndjson` 里查到的标签、reason、`partial`/`overlap`；reads 数来自同一目录的 `chr*_variant_summary.ndjson`；单倍型重叠例子里每行 read 的 `(d_ref, d_truth)` 和 `b` 是用 `truth_labels.py` 的函数在同一个 tensor 上重算的（结果和 labels.ndjson 的 `overlap` 一致）。第 7 节的计数来自六个数据集的 `labels.manifest.json`。
 
 ## 0. 名词
 
@@ -259,9 +259,9 @@ PacBio 上没有位置的 tensor（SNV 33,043、INDEL 8,684）绝大多数是第
 
 ## 7. 六个数据集的计数
 
-目录都在 `/scratch/jshen/data/pansoma_v2_tensors/<数据集>/v3_tensors/{SNV,INDEL}/labels.manifest.json`，2026-09-28 按现行规则打的标签（十二个 manifest 的 `rules_sha256` 都是 `197b5d25bbf4…`）。部分匹配的几行（`allele_partial_*`、`residual_partial_*`）和 manifest 的 `partial` 计数相同。两个 Illumina 数据集用了 `--snv-min-af 0.07`，其它四个没有（六个数据集 build 时 SNV 的 AF 阈值都是 0.06）；六个都没有用 `--indel-min-af`。
+目录都在 `/scratch/jshen/data/pansoma_v2_tensors/<数据集>/tensors/{SNV,INDEL}/labels.manifest.json`，2026-09-28 按现行规则打的标签（十二个 manifest 的 `rules_sha256` 都是 `197b5d25bbf4…`）。部分匹配的几行（`allele_partial_*`、`residual_partial_*`）和 manifest 的 `partial` 计数相同。两个 Illumina 数据集用了 `--snv-min-af 0.07`，其它四个没有（六个数据集 build 时 SNV 的 AF 阈值都是 0.06）；六个都没有用 `--indel-min-af`。
 
-**HG008**（`Liss_lab_PacBio_Revio_20240125`、`Liss_lab_Northeastern-ONT-UL-20241216`、`Liss_lab_BCM_Illumina-WGS_20240313`；truth：GIAB `HG008-T_somatic_smvar_benchmark_v0.2` + HG008-N dipcall）
+**HG008**（`HG008T_PacBio`、`HG008T_ONT`、`HG008T_Illumina`；truth：GIAB `HG008-T_somatic_smvar_benchmark_v0.2` + HG008-N dipcall）
 
 | 标签 | reason | PacBio SNV | PacBio INDEL | ONT SNV | ONT INDEL | Illumina SNV | Illumina INDEL |
 |---:|---|---:|---:|---:|---:|---:|---:|

@@ -388,8 +388,8 @@ script does two things:
 It then runs `tensor_postprocessing label` with the HPRC reference-path directory and the GRCh38
 FASTA above (1 CPU, `--mem=19G`, 6 h). Its optional 7th and 8th arguments are `label`'s
 `--snv-min-af` and `--indel-min-af`; `''` skips one (`... TRUTH_DIR '' 0.10` sets the INDEL floor
-only). The COLO829T `label_job.sh` scripts (step 4 of those runs) call it with the COLO829T truth
-files below.
+only). Each sample's `README.txt` under `/scratch/jshen/data/pansoma_v2_tensors` has its command; for all
+six sets:
 
 ```bash
 D=/scratch/jshen/data/pansoma_v2_tensors; H=/scratch/jshen/data/HG008_GIAB; Q=/scratch/qfu/COLO829BL_DSA/dipcall_hg38
@@ -401,10 +401,10 @@ HG008="$H/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_tumorvariants
        $H/dipcall_HG008N_GRCh38/HG008N_GRCh38_dipcall.dip.vcf.gz $H/dipcall_HG008N_GRCh38/HG008N_GRCh38_dipcall.dip.bed"
 COLO="$D/COLO829T_truth/COLO829T_somatic_snv_indel.vcf.gz $D/COLO829T_truth/SMaHT_v2_easy_difficult_extreme.union.bed
       $Q/dipcall_hg38.dip.vcf.gz $Q/dipcall_hg38.dip.bed"
-relabel() { sbatch -J relabel_$1 -o $D/$1/slurm-relabel-%j.out $J/relabel.sh $D/$1/v3_tensors $2 $D/$1/truth $3; }
-relabel Liss_lab_PacBio_Revio_20240125 "$HG008"             # HG008 PacBio HiFi
-relabel Liss_lab_Northeastern-ONT-UL-20241216 "$HG008"      # HG008 ONT-UL
-relabel Liss_lab_BCM_Illumina-WGS_20240313 "$HG008" 0.07    # HG008 Illumina
+relabel() { sbatch -J relabel_$1 -o ${LOGDIR:-.}/relabel_$1-%j.out $J/relabel.sh $D/$1/tensors $2 $D/$1/truth $3; }
+relabel HG008T_PacBio "$HG008"            # HG008 PacBio HiFi
+relabel HG008T_ONT "$HG008"               # HG008 ONT-UL
+relabel HG008T_Illumina "$HG008" 0.07     # HG008 Illumina
 relabel COLO829T_Illumina "$COLO" 0.07
 relabel COLO829T_fiberseq "$COLO"
 relabel COLO829T_ONT "$COLO"

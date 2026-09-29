@@ -478,11 +478,13 @@ where a fix was brought into the started run, section 6). That code applied the 
 two prefilters (and, where a run had nodes over 10,000 mappings, built them alone from a
 10,000-record sample), except in 1 of the 1,178 COLO829T fiberseq tasks and 884 of the 1,921
 COLO829T ONT tasks, which read with the cap as described here (merged manifests, `read_cap_rules`);
-tensors of nodes over the cap can therefore differ from what this package builds. Roots are
-`/scratch/jshen/data/pansoma_v2_tensors/<sample>/v3_run` with the tensors in `<sample>/v3_tensors`
-(HG008: `Liss_lab_PacBio_Revio_20240125`, `Liss_lab_Northeastern-ONT-UL-20241216`,
-`Liss_lab_BCM_Illumina-WGS_20240313`; COLO829T: `COLO829T_{Illumina,fiberseq,ONT}`). HG008 PacBio
-differs: its `v3_tensors` merges `v6_run`, built by an earlier package, with `v3_extra_run`
+tensors of nodes over the cap can therefore differ from what this package builds. Each sample
+directory `/scratch/jshen/data/pansoma_v2_tensors/<sample>` (HG008: `HG008T_PacBio`, `HG008T_ONT`,
+`HG008T_Illumina`; COLO829T: `COLO829T_{Illumina,fiberseq,ONT}`) holds `discovery/`, the run root
+`run/`, the merged and labelled `tensors/` (the only copy of the tensors: the task outputs were
+deleted after the merge), `truth/` (the truth tables of the labels) and a `README.txt` with the
+sample's inputs, settings, counts and relabel command. HG008 PacBio differs: its `tensors/` merges
+`run/`, built by an earlier package, with `run_extra/`, and `merge/` holds that merge's bookkeeping
 (footnote ¹). The label counts are those of this package's rules (`tensor_postprocessing label` over
 the merged sets; data side `tools/jobs/relabel.sh`, section 6), the Illumina sets with
 `--snv-min-af 0.07`.
@@ -509,13 +511,13 @@ All runs: one Slurm node, `-p general`, `--mem=420G`, `--chromosomes autosome`, 
 | INDEL labels 1 / 2 / 0 / −1 | 6,840 / 191,424 / 1,518,657 / 206,823 | 6,383 / 220,763 / 1,976,637 / 307,230 | 5,239 / 70,550 / 31,392 / 44,284 |
 | label job (1 CPU) / MaxRSS | 23 min / 12.4 GiB | 50 min / 12.9 GiB | 55 min / 13.2 GiB |
 
-¹ PacBio `v3_tensors` = `v6_run` + `v3_extra_run` (cells with two values: `v6_run` / `v3_extra_run`).
-`v6_run` (1,415 tasks at 48 processes: 1,024 in 7.6 h, then the 391 extra tasks of section 4's
+¹ PacBio `tensors/` = `run/` + `run_extra/` (cells with two values: `run/` / `run_extra/`).
+`run/` (1,415 tasks at 48 processes: 1,024 in 7.6 h, then the 391 extra tasks of section 4's
 discovery rule in 6.0 h of a second job; peak 418 GiB sampled; 3,097,029 tensors) was built by an
 earlier package with fixed `--batch-nodes 512`, `--max-batch-alignments 20000`, `--gam-cache-mb 6144`
-and no per-read block cache, over a target list that is not this discovery's; `v3_extra_run` (144
+and no per-read block cache, over a target list that is not this discovery's; `run_extra/` (144
 tasks at 36 processes, 48 min, peak 312 GiB, 7,058 tensors) built the 269,569 autosomal targets of
-this discovery that `v6_run` had not. The set also holds the tensors of 700,805 autosomal nodes that
+this discovery that `run/` had not. The set also holds the tensors of 700,805 autosomal nodes that
 this discovery does not select. A whole PacBio run of this code has not been measured.
 ² The HG008 ONT-UL run kept every converted column block of a read (no `CACHED_BLOCKS` bound) and ran
 with `--max-batch-alignments 20000` (no ONT batch came near it): at 48 processes it was killed under
@@ -641,10 +643,10 @@ the code that executes it), `native_decoder` (`available`, `reason`), `variant_o
   SHA is compiled in).
 * **Package guard**: `run`, `task` and `finalize` refuse a root whose `config.package` is not this
   package (`<root> was prepared by ..., not indexed_gam_pipeline_v4`), and a root without
-  `config.package`. The `v3_run` and `v3_extra_run` roots of section 5 were prepared by
+  `config.package`. The `run/` roots of section 5 (and PacBio `run_extra/`) were prepared by
   `indexed_gam_pipeline_v3`: resume or finalize them only with their frozen `<root>/source` (`bash
   <root>/run.sh --resume`; `cd <root>/source && python -m indexed_gam_pipeline_v3.orchestrate
-  finalize --root <root>`); PacBio `v6_run` has no `package` key, is finished and must not be
+  finalize --root <root>`); PacBio `run/` has no `package` key, is finished and must not be
   re-finalized. The merged sets of section 5 are relabelled by this package's
   `tensor_postprocessing label`, which reads their merged layout under
   its earlier name (section 8, "Format names"). On the data side this runs from
@@ -654,8 +656,8 @@ the code that executes it), `native_decoder` (`available`, `reason`), `variant_o
   pipeline_code/indexed_gam_pipeline_v4/tools/jobs/relabel.sh TENSORS SOMATIC_VCF SOMATIC_BED
   GERMLINE_VCF GERMLINE_BED TRUTH_DIR [SNV_MIN_AF [INDEL_MIN_AF]]` (`''` skips one), after copying
   the current label manifests and recall files to
-  `<sample dir>/labels_backup_<tensors dir>_<time>_<job>/`. The COLO829T `label_job.sh` scripts call
-  it the same way. A run prepared with the label AF floors (`--label-snv-min-af 0.07` for short
+  `<sample dir>/labels_backup_<tensors dir>_<time>_<job>/`. Each sample's `README.txt` has its
+  relabel command. A run prepared with the label AF floors (`--label-snv-min-af 0.07` for short
   reads) needs no relabel: its finalize applies them.
 * The queue ledger (`queue_status.json`: per-task state, PIDs, wall times) is written at start,
   whenever a task starts or ends, and at the end.
