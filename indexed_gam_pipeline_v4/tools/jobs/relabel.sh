@@ -1,7 +1,7 @@
 #!/bin/bash
 # Labels one merged tensor set with this package's truth-label rules (tensor_postprocessing label), the HPRC v1.1 d9
-# reference-path directory and the GRCh38 FASTA. The current label manifests and recall files are copied first to
-# <sample dir>/labels_backup_<tensors dir>_<time>_<job>/.
+# reference-path directory and the GRCh38 FASTA. No backup is kept: label replaces a kind's label files only when all
+# of them are written, so a failed run leaves the current labels in place.
 # Usage: sbatch -J NAME -o LOG relabel.sh TENSORS SOMATIC_VCF SOMATIC_BED GERMLINE_VCF GERMLINE_BED TRUTH_DIR [SNV_MIN_AF [INDEL_MIN_AF]]
 # SNV_MIN_AF (short-read sets: 0.07), INDEL_MIN_AF: lower-AF SNV / INDEL tensors become -1; '' skips one (e.g. '' 0.10).
 # Runs the package it lives in (<package>/tools/jobs/): the checkout, or
@@ -22,12 +22,6 @@ abs() { case $1 in /*) echo "$1" ;; *) echo "$PWD/$1" ;; esac; }  # the job runs
 T=$(abs "$1"); SV=$(abs "$2"); SB=$(abs "$3"); GV=$(abs "$4"); GB=$(abs "$5"); TD=$(abs "$6"); AF=${7:-}; IAF=${8:-}
 G=/scratch/jshen/data/pansoma_v2_tensors/graph_index; PY=/wanglab/jshen/anaconda3/bin/python
 grep -qE '"layout": "chromosome-shards(-v1)?"' "$T/SNV/manifest.json" 2>/dev/null || { echo "$T is not merged"; exit 1; }
-if [ -f "$T/SNV/labels.manifest.json" ]; then
-  B=$(dirname "$T")/labels_backup_$(basename "$T")_$(date +%Y%m%dT%H%M%S)_${SLURM_JOB_ID:-local}; mkdir "$B"
-  for k in SNV INDEL; do cp -p "$T/$k/labels.manifest.json" "$B/$k.labels.manifest.json"; done
-  cp -p "$T"/*.recall.tsv "$T/truth_recall.json" "$B/" 2>/dev/null || true
-  echo "previous labels backed up to $B"
-fi
 cd "$(dirname "$PKG")"
 /usr/bin/time -v $PY -m "$(basename "$PKG")".tensor_postprocessing label --tensors "$T" \
   --reference-path $G/hprc-v1.1-mc-grch38.d9.grch38_path \

@@ -150,7 +150,7 @@ static test enforces both):
 | `tools/validate_examples.py` | independent audit of a `--debug-rows` output against the GAM and graph |
 | `tools/binary_requirements.py` | newest GLIBC/GLIBCXX/CXXABI symbol versions and AVX/AVX-512/BMI use of a binary |
 | `tools/compare_runs.py` | byte and normalized comparison of two run roots, task or build directories (stdlib only) |
-| `tools/jobs/graph_prep.sh`, `tools/jobs/relabel.sh` | Slurm job scripts (shell) that run the package they are in: the three `graph_prep` steps for one graph; `tensor_postprocessing label` of one merged set, after a backup of its labels |
+| `tools/jobs/graph_prep.sh`, `tools/jobs/relabel.sh` | Slurm job scripts (shell) that run the package they are in: the three `graph_prep` steps for one graph; `tensor_postprocessing label` of one merged set |
 
 **Tests** (`tests/`, a subpackage) — section 9.
 
@@ -405,7 +405,7 @@ $PY -m $P.tools.graph_prep ref-path-check --path DIR --graph-index DB --fasta FA
 $PY -m $P.tools.graph_prep chr-index --components-dir D --reference-path DIR --output PREFIX [--graph-index DB]
 # the same three steps as one Slurm job (defaults: the HPRC v1.1 d9 inputs)
 sbatch -J graph_prep -o LOG $P/tools/jobs/graph_prep.sh OUTDIR [GFA [GRAPH_INDEX [FASTA [COMPONENTS_DIR]]]]
-# labels of one merged set as a Slurm job, after a backup of the current labels
+# labels of one merged set as a Slurm job
 sbatch -J NAME -o LOG $P/tools/jobs/relabel.sh TENSORS SOMATIC_VCF SOMATIC_BED GERMLINE_VCF GERMLINE_BED TRUTH_DIR \
     [SNV_MIN_AF [INDEL_MIN_AF]]    # '' skips one: ... '' 0.10
 # audit of a --debug-rows build (one typed directory)
@@ -654,9 +654,8 @@ the code that executes it), `native_decoder` (`available`, `reason`), `variant_o
   compiled `.so`; the commit in `pipeline_code/git_head.txt`) through its `tools/jobs/relabel.sh`,
   which runs the package it is in (section 4, "Tools"): `sbatch -J NAME -o LOG
   pipeline_code/indexed_gam_pipeline_v4/tools/jobs/relabel.sh TENSORS SOMATIC_VCF SOMATIC_BED
-  GERMLINE_VCF GERMLINE_BED TRUTH_DIR [SNV_MIN_AF [INDEL_MIN_AF]]` (`''` skips one), after copying
-  the current label manifests and recall files to
-  `<sample dir>/labels_backup_<tensors dir>_<time>_<job>/`. Each sample's `README.txt` has its
+  GERMLINE_VCF GERMLINE_BED TRUTH_DIR [SNV_MIN_AF [INDEL_MIN_AF]]` (`''` skips one); no backup is
+  kept (`label` replaces a kind's label files only when all are written). Each sample's `README.txt` has its
   relabel command. A run prepared with the label AF floors (`--label-snv-min-af 0.07` for short
   reads) needs no relabel: its finalize applies them.
 * The queue ledger (`queue_status.json`: per-task state, PIDs, wall times) is written at start,

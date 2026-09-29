@@ -379,11 +379,9 @@ Measured on HPRC v1.1 d9:
 package it is in (main README, section 4, "Tools"). On the data side it runs from
 `/scratch/jshen/data/pansoma_v2_tensors/pipeline_code/`, a `git archive` of this package plus the
 compiled `.so`, with the commit recorded in `pipeline_code/git_head.txt`. Before labelling, the
-script does two things:
-
-* checks that `TENSORS/SNV/manifest.json` has a merged layout (either name);
-* copies the current `labels.manifest.json` files and recall reports to
-  `<sample dir>/labels_backup_<tensors dir>_<time>_<job>/`.
+script checks that `TENSORS/SNV/manifest.json` has a merged layout (either name). It keeps no backup:
+`label` writes every label file of a kind to a temporary name and replaces the current ones only when
+all of them are written, so a failed run leaves the current labels in place.
 
 It then runs `tensor_postprocessing label` with the HPRC reference-path directory and the GRCh38
 FASTA above (1 CPU, `--mem=19G`, 6 h). Its optional 7th and 8th arguments are `label`'s
