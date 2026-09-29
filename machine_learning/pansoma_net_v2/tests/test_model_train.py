@@ -220,6 +220,19 @@ class TrainPredictTest(unittest.TestCase):
             best = torch.load(tmp / "run_truth" / "best.pth", weights_only=False)
             self.assertEqual(best["somatic_threshold"], best["val"]["truth"]["best"]["threshold"])
             self.assertEqual(json.loads((tmp / "run_truth" / "args.json").read_text())["select"], "truth_f1")
+            train.main(["--tensors", str(root), "--output", str(tmp / "run_ignore"), "--epochs", "1", "--kinds", "SNV",
+                        "--ignore-reasons", "residual_partial_somatic_truth"] + SMALL_ARGS)
+            log = (tmp / "run_ignore" / "train.log").read_text()
+            index = KindIndex(root / "SNV", tmp / "run_ignore" / "index_cache")
+            tr, va = block_split(index, index.select(["chr2", "chr3"], labelled=False), 0.5, 21, 0)
+            partial = index.meta["reasons"].index("residual_partial_somatic_truth")
+            n_tr = int(((index.arrays["label"][tr] >= 0) & (index.arrays["reason"][tr] == partial)).sum())
+            n_va = int(((index.arrays["eval_label"][va] >= 0) & (index.arrays["reason"][va] == partial)).sum())
+            self.assertGreater(n_tr + n_va, 0)
+            self.assertIn(f"left out (--ignore-reasons residual_partial_somatic_truth): {n_tr:,} training, {n_va:,} validation", log)
+            ckpt_i = torch.load(tmp / "run_ignore" / "best.pth", weights_only=False)
+            self.assertEqual(sum(d["train"] for d in ckpt_i["data"]),
+                             int((index.arrays["label"][tr] >= 0).sum()) - n_tr)
             train.main(["--tensors", str(root), "--output", str(tmp / "run_keep"), "--epochs", "1", "--kinds", "SNV",
                         "--non-fraction", "0.5", "--keep-non-af", "0.5"] + SMALL_ARGS)
             log = (tmp / "run_keep" / "train.log").read_text()

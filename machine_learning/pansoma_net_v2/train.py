@@ -67,6 +67,9 @@ def parse_args(argv=None):
                         "numbers w_non,w_som,w_germ")
     p.add_argument("--non-fraction", type=float, default=1.0,
                    help="each epoch: every somatic / germline tensor and a fresh random fraction of the non ones")
+    p.add_argument("--ignore-reasons", nargs="+", default=[],
+                   help="label reasons left out of training and validation, as if -1 (e.g. "
+                        "residual_partial_somatic_truth allele_partial_somatic_truth); the label files are unchanged")
     p.add_argument("--keep-non-af", type=float,
                    help="non tensors with AF >= this are taken every epoch; the sampled rest weigh 1/--non-fraction "
                         "in the loss and the class weights use all tensors, so the expected loss is that of all non "
@@ -299,6 +302,16 @@ def main(argv=None):
             train_parts.append((i, tr[i.arrays["label"][tr] >= 0]))
             val_parts.append((i, va[i.arrays["eval_label"][va] >= 0]))
         run.log(f"validation: {args.val_fraction:.0%} of the {args.val_block_nodes}-node blocks of the training chromosomes")
+    if args.ignore_reasons:
+        def keep(i, pos):
+            codes = [k for k, r in enumerate(i.meta["reasons"]) if r in set(args.ignore_reasons)]
+            return pos[~np.isin(i.arrays["reason"][pos], codes)]
+        before = sum(len(p) for _, p in train_parts), sum(len(p) for _, p in val_parts)
+        train_parts = [(i, keep(i, p)) for i, p in train_parts]
+        val_parts = [(i, keep(i, p)) for i, p in val_parts]
+        run.log(f"left out (--ignore-reasons {' '.join(args.ignore_reasons)}): "
+                f"{before[0] - sum(len(p) for _, p in train_parts):,} training, "
+                f"{before[1] - sum(len(p) for _, p in val_parts):,} validation tensors")
     train_set, val_set = TensorDataset(train_parts), TensorDataset(val_parts, labels="eval_label")
     n_off = sum(int((i.arrays["eval_label"][v] != i.arrays["label"][v]).sum()) for i, v in val_parts)
     run.log(f"validation includes {n_off:,} off-reference tensors without a truth match, as non")
