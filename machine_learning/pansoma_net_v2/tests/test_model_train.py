@@ -120,7 +120,7 @@ class TrainPredictTest(unittest.TestCase):
     def test_train_resume_predict(self):
         with tempfile.TemporaryDirectory() as tmp:
             tmp = Path(tmp)
-            root = tmp / "sample" / "v3_tensors"
+            root = tmp / "sample" / "tensors"
             truth = make_tensor_set(root, SPEC, shard_size=8, seed=6)  # seed 6: chr1 has SNV tensors of an INS truth
             out = tmp / "run"
             train.main(["--tensors", str(root), "--output", str(out), "--epochs", "2"] + SMALL_ARGS)
@@ -152,7 +152,7 @@ class TrainPredictTest(unittest.TestCase):
             pred = tmp / "pred"
             predict.main(["--checkpoint", str(out / "best.pth"), "--tensors", str(root), "--output", str(pred),
                           "--chroms", "chr1", "--num-workers", "0", "--amp", "off", "--batch-size", "5"])
-            with gzip.open(pred / "sample.v3_tensors.SNV.predictions.ndjson.gz", "rt") as f:
+            with gzip.open(pred / "sample.tensors.SNV.predictions.ndjson.gz", "rt") as f:
                 records = [json.loads(line) for line in f]
             chr1 = [t for t in truth["SNV"] if t["chrom"] == "chr1"]
             self.assertEqual([r["candidate_id"] for r in records], [t["candidate_id"] for t in chr1])
@@ -161,7 +161,7 @@ class TrainPredictTest(unittest.TestCase):
             self.assertEqual([r["off_reference"] for r in records], [t["off_reference"] for t in chr1])
             self.assertEqual([r["reason"] for r in records], [t["reason"] for t in chr1])
             self.assertTrue(all(r["test_label"] == 0 for r in records if r["reason"] == "off_reference_no_truth_match"))
-            report = json.loads((pred / "sample.v3_tensors.SNV.metrics.json").read_text())
+            report = json.loads((pred / "sample.tensors.SNV.metrics.json").read_text())
             self.assertEqual(report["tensors"], sum(t["eval_label"] >= 0 for t in chr1))
             self.assertEqual(report["left_out"], sum(t["eval_label"] < 0 for t in chr1))
             self.assertEqual(report["off_reference_in_test"], sum(t["off_reference"] and t["eval_label"] >= 0 for t in chr1))
@@ -191,7 +191,7 @@ class TrainPredictTest(unittest.TestCase):
             both = combine.main([str(pred)])
             self.assertEqual(len(both), 1)
             c = both[0]
-            with gzip.open(pred / "sample.v3_tensors.INDEL.predictions.ndjson.gz", "rt") as f:
+            with gzip.open(pred / "sample.tensors.INDEL.predictions.ndjson.gz", "rt") as f:
                 records += [json.loads(line) for line in f]
             called = [r for r in records if r["in_test"] and r["pred"] == "somatic"]
             everything = wanted | other
@@ -208,7 +208,7 @@ class TrainPredictTest(unittest.TestCase):
     def test_scalars_run(self):
         with tempfile.TemporaryDirectory() as tmp:
             tmp = Path(tmp)
-            root = tmp / "sample" / "v3_tensors"
+            root = tmp / "sample" / "tensors"
             make_tensor_set(root, SPEC, shard_size=8)
             out = tmp / "run"
             train.main(["--tensors", str(root), "--output", str(out), "--epochs", "1", "--kinds", "SNV", "--scalars"]
@@ -229,7 +229,7 @@ class TrainPredictTest(unittest.TestCase):
             self.assertIn("scalar_mean", ckpt["model_state_dict"])
             predict.main(["--checkpoint", str(out / "best.pth"), "--tensors", str(root), "--output", str(tmp / "p"),
                           "--kinds", "SNV", "--num-workers", "0", "--amp", "off"])
-            self.assertTrue((tmp / "p" / "sample.v3_tensors.SNV.metrics.json").exists())
+            self.assertTrue((tmp / "p" / "sample.tensors.SNV.metrics.json").exists())
 
 
 if __name__ == "__main__":

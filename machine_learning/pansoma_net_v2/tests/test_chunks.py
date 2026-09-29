@@ -14,7 +14,7 @@ class ChunkLoaderTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.tmp = tempfile.TemporaryDirectory()
-        root = Path(cls.tmp.name) / "s" / "v3_tensors"
+        root = Path(cls.tmp.name) / "s" / "tensors"
         make_tensor_set(root, {"SNV": {"chr1": 50, "chr2": 37}}, shard_size=16, seed=2)
         cls.ds = TensorDataset(load_parts([root], ["SNV"], Path(cls.tmp.name) / "c", labelled=False))
         cls.x = np.stack([cls.ds[k][0].numpy() for k in range(len(cls.ds))])

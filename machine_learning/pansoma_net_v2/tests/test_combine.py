@@ -27,7 +27,7 @@ INDEL = [rec(1, "somatic", [2]),                          # the same INS truth a
 class CombineTest(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
-        root = Path(self.tmp.name) / "sample" / "v3_tensors"
+        root = Path(self.tmp.name) / "sample" / "tensors"
         root.mkdir(parents=True)
         with open(root / "somatic.recall.tsv", "w") as f:
             f.write("truth_id\tchrom\tvcf_pos\tkind\tpassed\tin_bed\tstatus\tdetail\n")
@@ -37,8 +37,8 @@ class CombineTest(unittest.TestCase):
         for kind, records in (("SNV", SNV), ("INDEL", INDEL)):
             d = Path(self.tmp.name) / f"run_{kind}" / "test_chr1"
             d.mkdir(parents=True)
-            (d / f"sample.v3_tensors.{kind}.metrics.json").write_text(json.dumps(dict(directory=str(root / kind))))
-            with gzip.open(d / f"sample.v3_tensors.{kind}.predictions.ndjson.gz", "wt") as f:
+            (d / f"sample.tensors.{kind}.metrics.json").write_text(json.dumps(dict(directory=str(root / kind))))
+            with gzip.open(d / f"sample.tensors.{kind}.predictions.ndjson.gz", "wt") as f:
                 f.write("".join(json.dumps(r) + "\n" for r in records))
             self.files[kind] = d.parent
 

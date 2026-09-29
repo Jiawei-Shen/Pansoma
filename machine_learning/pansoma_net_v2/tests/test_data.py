@@ -17,7 +17,7 @@ SPEC = {"SNV": {"chr1": 9, "chr2": 6}, "INDEL": {"chr1": 5, "chr2": 3}}
 class IndexTest(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
-        self.root = Path(self.tmp.name) / "sample" / "v3_tensors"
+        self.root = Path(self.tmp.name) / "sample" / "tensors"
         self.truth = make_tensor_set(self.root, SPEC)
         self.cache = Path(self.tmp.name) / "cache"
 
@@ -99,7 +99,7 @@ class IndexTest(unittest.TestCase):
         self.assertEqual(counts.tolist(), [sum(t["label"] == c for t in flat) for c in range(3)])
 
     def test_two_samples_with_the_same_set_name_share_a_cache(self):
-        other = Path(self.tmp.name) / "sample2" / "v3_tensors"
+        other = Path(self.tmp.name) / "sample2" / "tensors"
         truth2 = make_tensor_set(other, {"SNV": {"chr1": 3}}, seed=5)
         a, b = KindIndex(self.root / "SNV", self.cache), KindIndex(other / "SNV", self.cache)
         with mock.patch.object(data, "build_index", side_effect=AssertionError("rebuilt")):
@@ -121,7 +121,7 @@ class IndexTest(unittest.TestCase):
         self.assertEqual(len(block_split(index, pos, 1.0, 14)[0]), 0)
 
     def test_truth_of_the_validation_blocks(self):
-        root = Path(self.tmp.name) / "big" / "v3_tensors"
+        root = Path(self.tmp.name) / "big" / "tensors"
         rows = make_tensor_set(root, {"SNV": {"chr1": 60, "chr2": 60}}, shard_size=16, seed=3)["SNV"]
         index = KindIndex(root / "SNV", self.cache)
         truth = somatic_truth(index)                                          # PASS, in the BED, SNP rows
