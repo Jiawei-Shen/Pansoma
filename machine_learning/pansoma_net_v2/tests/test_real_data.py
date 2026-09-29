@@ -13,7 +13,7 @@ import torch
 from ..data import CLASSES, KindIndex, TensorDataset, site_scalars
 from ..encode import PLANES, TensorEncoder, compute_stats
 
-REAL = Path(os.environ.get("PANSOMA_TEST_TENSORS", "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_Illumina/v3_tensors"))
+REAL = Path(os.environ.get("PANSOMA_TEST_TENSORS", "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_Illumina/tensors"))
 CODES = {"A": 1, "C": 2, "G": 3, "T": 4, "N": 5}
 
 

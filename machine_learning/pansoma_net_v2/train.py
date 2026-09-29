@@ -4,7 +4,7 @@
     python -m pansoma_net_v2.train --tensors <set> [<set> ...] --kinds SNV --output <dir> [--test-chroms chr1] ...
     torchrun --nproc_per_node=N -m pansoma_net_v2.train --ddp ...           # several GPUs
 
-A <set> is a directory holding merged SNV/ and INDEL/ (e.g. .../COLO829T_Illumina/v3_tensors). Classes are
+A <set> is a directory holding merged SNV/ and INDEL/ (e.g. .../COLO829T_Illumina/tensors). Classes are
 the labels 0 non, 1 somatic, 2 germline; tensors labelled -1 are not used. The test chromosomes (default chr1)
 are left out; the others train, except the validation: whole ~1 Mb node blocks (--val-fraction of them), or
 --val-chroms. The encoder's z-score statistics (and with --scalars the scalars') are fitted once on the

@@ -46,7 +46,7 @@ training or selection.
 ```bash
 cd machine_learning
 P=/wanglab/jshen/anaconda3/bin/python       # torch 2.8 + timm 1.0 (GPU)
-T=/scratch/jshen/data/pansoma_v2_tensors/Liss_lab_BCM_Illumina-WGS_20240313/v3_tensors
+T=/scratch/jshen/data/pansoma_v2_tensors/HG008T_Illumina/tensors
 
 # train on chr2-22 (5 % of their ~1 Mb node blocks validate), chr1 left out; -1 tensors are not used
 $P -m pansoma_net_v2.train --tensors $T --kinds SNV --output runs/HG008_Illumina_SNV \
@@ -284,7 +284,7 @@ cd machine_learning && $P -m unittest discover -s pansoma_net_v2/tests -t .
   valid covered cells; bf16 output.
 - `test_data`:
   - the index (node, scalars) against a synthetic merged set;
-  - the cache is reused and rebuilt when the labels change, and two samples' `v3_tensors` share one cache
+  - the cache is reused and rebuilt when the labels change, and two samples' `tensors` sets share one cache
     without collisions;
   - −1 is never selected for training; evaluation adds only the off-reference no-match tensors and drops
     labels 1 and 2 outside the region;
@@ -300,7 +300,7 @@ cd machine_learning && $P -m unittest discover -s pansoma_net_v2/tests -t .
   - CPU runs: train 2 epochs (chr1 left out, block validation, threshold stored), resume (statistics kept),
     then predict chr1 with the stored threshold, and the truth report recomputed from the predictions; runs
     with `--scalars`, `--select truth_f1` and `--keep-non-af`.
-- `test_real_data`: runs if `PANSOMA_TEST_TENSORS` exists (default: COLO829T Illumina `v3_tensors`); ~70 s.
+- `test_real_data`: runs if `PANSOMA_TEST_TENSORS` exists (default: COLO829T Illumina `tensors`); ~70 s.
   Checks the index counts against the manifests (and the region flag against the labeller's reasons, the truth
   ids against `somatic.recall.tsv`), candidates against a summary, and that the row blocks agree
   with the tensors (A1 rows carry the A1 base at the site column, REF rows the graph base, OTHER rows no

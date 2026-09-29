@@ -181,7 +181,7 @@ class KindIndex:
     def __init__(self, kind_dir, cache_dir=None, rebuild=False):
         self.dir = Path(kind_dir).resolve()
         cache = None
-        if cache_dir is not None:  # e.g. COLO829T_Illumina.v3_tensors.SNV.<hash of the path>
+        if cache_dir is not None:  # e.g. COLO829T_Illumina.tensors.SNV.<hash of the path>
             key = hashlib.sha1(str(self.dir).encode()).hexdigest()[:12]
             cache = Path(cache_dir) / f"{self.dir.parent.parent.name}.{self.dir.parent.name}.{self.dir.name}.{key}"
         npz, text = (Path(f"{cache}.npz"), Path(f"{cache}.candidates.txt")) if cache is not None else (None, None)
