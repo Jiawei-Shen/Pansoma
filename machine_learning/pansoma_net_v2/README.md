@@ -91,7 +91,10 @@ Useful `train` options:
 - **Selection.** `--select f1|ap|truth_f1` picks the best checkpoint by the thresholded somatic F1 per tensor
   (default), the somatic average precision, or the best F1 against the truth VCF (below). With `truth_f1` the
   stored threshold is the one of that F1.
-- **Speed.** `--no-compile` and `--no-channels-last` turn off the defaults on CUDA (below).
+- **Speed.** `--no-compile` and `--no-channels-last` turn off the defaults on CUDA (below). Training reads
+  chunks from a zstd cache (`--read-threads 16`, `--chunk-rows 512`, `--window-chunks 32`, `--chunk-cache`;
+  "Reading the training tensors" below); `--no-chunk-cache` reads the chunks from the raw shards, and
+  `--random-reads` goes back to one pread per tensor in DataLoader workers (`--num-workers`).
 - Also: `--epoch-samples`, `--val-samples`, `--stats-samples 20000`, `--amp bf16|off`, `--resume` (keeps the
   checkpoint's statistics), `--seed`.
 
@@ -218,9 +221,35 @@ Loaders are persistent and their workers' start is retried (`train.retry_workers
 tequila, three of four jobs started together once lost their forkserver workers' semaphores in /dev/shm
 (FileNotFoundError in SemLock._rebuild). Running workers hold the semaphores, so only the start is exposed.
 
-Each sample is one `pread` of 161.6 KB at its row's offset in the shard. There is no memory map: mapped
-pages stay in every DataLoader worker's RSS, and Slurm's summed-RSS limit counts them once per worker (a
-first GPU run with 14 workers and memory maps passed 48 GB within 200 steps).
+Validation, prediction and the statistics read each tensor with one `pread` of 161.6 KB in DataLoader workers.
+There is no memory map: mapped pages stay in every worker's RSS, and Slurm's summed-RSS limit counts them once
+per worker (a first GPU run with 14 workers and memory maps passed 48 GB within 200 steps).
+
+### Reading the training tensors (`chunks.py`)
+
+Random reads cannot keep an H100 busy (~1,400 tensors/s compiled). Measured on tequila on 2026-09-28:
+
+| read | speed |
+|---|---|
+| one random 161.6 KB `pread` from BeeGFS, one thread, under load | 38 tensors/s (~26 ms per read) |
+| a whole 5.3 GB shard in one sequential read, one thread | ~1,290 tensors/s (210 MB/s) |
+| training with 48 workers and random reads (four jobs on the node) | 300–550 tensors/s, GPU busy ~20 % |
+| chunks of 512 rows, 16 threads, raw shards (other jobs running) | ~350 tensors/s: all readers of the node together got ~300 MB/s |
+
+The tensors are 45 % zero bytes; zstd level 1 packs a 512-row chunk (83 MB) 28.8× and unpacks it at ~1.1 GB/s
+per thread. So the training shards are copied once into a chunk cache: per shard one `.zst` file of compressed
+chunks and an `.idx.npy` of their offsets, named by the shard's path, size, mtime and chunk size.
+`train` builds missing ones (rank 0) before training; or ahead of time:
+
+```bash
+$P -m pansoma_net_v2.chunks --tensors $T --kinds SNV INDEL --index-cache <runs>/index_cache \
+    --cache <runs>/index_cache/chunks          # HG008 Illumina: 148 SNV shards, ~440 GB -> ~15 GB, ~15 min
+```
+
+Each epoch `chunks.ChunkLoader` takes the epoch's tensors from the `EpochSampler` (so `--non-fraction` and
+`--keep-non-af` are unchanged), groups them by chunk, reads the chunks in a random order with a thread pool, and
+draws the batches from a shuffled pool of 32 chunks at a time, i.e. from ~32 random places of the genome. With
+DDP the chunks are dealt to the ranks by load and every rank yields the same number of tensors.
 
 ## Model
 
@@ -260,6 +289,9 @@ cd machine_learning && $P -m unittest discover -s pansoma_net_v2/tests -t .
   with the tensors (A1 rows carry the A1 base at the site column, REF rows the graph base, OTHER rows no
   site allele, no reads after the blocks). It also checks the scalars against a summary and encodes real
   tensors.
+- `test_chunks`: every tensor of an epoch once with its own blocks, scalars and label, a new order each epoch;
+  equal shares for DDP ranks; the zstd cache gives the same tensors, is reused, and a cache of another chunk
+  size is refused; read errors reach the training loop.
 - `test_metrics`: average precision (ties together, as sklearn), the best-F1 threshold, and the thresholded
   call; the truth report against brute force, duplicates and other-kind truth counted once.
 - `test_combine`: one truth found from both sets counts once; repeated calls; other-kind truth with one set;

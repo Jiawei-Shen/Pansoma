@@ -28,6 +28,7 @@ from torch.utils.data import DataLoader, Subset
 
 from . import metrics
 from .env import triton_libcuda
+from .chunks import ChunkLoader, build_cache
 from .data import (CLASSES, KINDS, SCALARS, EpochSampler, TensorDataset, block_split, load_parts, somatic_truth,
                    validation_truth)
 
@@ -80,10 +81,20 @@ def parse_args(argv=None):
                    help="skip torch.compile (default on CUDA: 3x faster on an H100, ~2 min to compile)")
     p.add_argument("--no-channels-last", dest="channels_last", action="store_false")
     p.add_argument("--num-workers", type=int, default=8,
-                   help="training DataLoader workers: reads from BeeGFS are latency-bound, so more workers read "
-                        "faster (HG008 Illumina SNV: 351 / 826 / 2,290 tensors/s with 14 / 28 / 48)")
+                   help="DataLoader workers for the statistics and, with --random-reads, training (random reads "
+                        "from BeeGFS are latency-bound: more workers read faster)")
     p.add_argument("--val-workers", type=int, default=8)
     p.add_argument("--prefetch-factor", type=int, default=2, help="batches in flight per worker")
+    p.add_argument("--read-threads", type=int, default=16,
+                   help="training: threads reading chunks of consecutive shard rows (chunks.ChunkLoader)")
+    p.add_argument("--chunk-rows", type=int, default=512, help="rows per sequential read (512 = 83 MB)")
+    p.add_argument("--window-chunks", type=int, default=32, help="chunks mixed into one shuffled pool of batches")
+    p.add_argument("--chunk-cache", help="zstd chunk cache of the training shards (default: <cache-dir>/chunks; "
+                   "built where missing, see chunks.py)")
+    p.add_argument("--no-chunk-cache", dest="use_chunk_cache", action="store_false",
+                   help="read the chunks from the raw shards")
+    p.add_argument("--random-reads", action="store_true",
+                   help="training with one random pread per tensor (DataLoader workers) instead of chunks")
     p.add_argument("--seed", type=int, default=0)
     p.add_argument("--ddp", action="store_true")
     p.add_argument("--resume", help="checkpoint to continue from (its statistics are kept)")
@@ -367,7 +378,9 @@ def main(argv=None):
     criterion = nn.CrossEntropyLoss(weight=weights, ignore_index=-1)
     per_sample = nn.CrossEntropyLoss(weight=weights, ignore_index=-1, reduction="none")
     keep = train_set.scalars[:, AF] >= args.keep_non_af if args.keep_non_af is not None else None
-    train_sampler = EpochSampler(len(train_set), args.epoch_samples, True, run.rank, run.world, args.seed,
+    # chunked reading splits the epoch over the ranks itself
+    rank, world = (run.rank, run.world) if args.random_reads else (0, 1)
+    train_sampler = EpochSampler(len(train_set), args.epoch_samples, True, rank, world, args.seed,
                                  labels=train_set.label, non_fraction=args.non_fraction, keep=keep)
     if importance:
         n_keep = int((keep & (train_set.label == 0)).sum())
@@ -376,8 +389,23 @@ def main(argv=None):
     run.log(f"class weights {dict(zip(CLASSES, [round(w, 4) for w in weights.tolist()]))}; each epoch "
             f"{train_sampler.epoch_size():,} tensors (non fraction {args.non_fraction})")
     val_sampler = EpochSampler(len(val_set), None, False, run.rank, run.world)
-    train_loader = started_loader(train_set, train_sampler, args.num_workers, args.batch_size, run.log, "training",
-                                  args.prefetch_factor)
+    if args.random_reads:
+        train_loader = started_loader(train_set, train_sampler, args.num_workers, args.batch_size, run.log,
+                                      "training", args.prefetch_factor)
+    else:
+        chunk_cache = None
+        if args.use_chunk_cache:
+            files = [train_set.files[f] for f in np.unique(train_set.shard).tolist()]
+            where = args.chunk_cache or str(Path(cache) / "chunks")
+            if run.main:  # rank 0 builds what is missing, the others wait
+                build_cache(files, where, args.chunk_rows, args.read_threads, run.log)
+            run.barrier()
+            chunk_cache = build_cache(files, where, args.chunk_rows, args.read_threads, run.log)
+        train_loader = ChunkLoader(train_set, train_sampler, args.batch_size, args.read_threads, args.chunk_rows,
+                                   args.window_chunks, run.rank, run.world, args.seed, cache=chunk_cache)
+        run.log(f"training reads chunks of {args.chunk_rows} rows with {args.read_threads} threads, "
+                f"{args.window_chunks} chunks per shuffled pool, from "
+                + (f"the zstd chunk cache {where}" if chunk_cache else "the raw shards"))
     val_loader = started_loader(val_set, val_sampler, args.val_workers if args.num_workers else 0, args.batch_size,
                                 run.log, "validation", args.prefetch_factor)
     steps_per_epoch = max(1, len(train_loader))

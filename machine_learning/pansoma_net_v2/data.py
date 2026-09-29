@@ -298,6 +298,18 @@ def validation_truth(index, positions, truth, fraction, block_nodes=20000, seed=
     return out
 
 
+def read_shard_header(path):
+    """(offset of row 0, rows) of a shard's .npy file, checked to be C-order int8 (N, 8, 200, 101)."""
+    with open(path, "rb") as fh:
+        version = np.lib.format.read_magic(fh)
+        read = np.lib.format.read_array_header_1_0 if version == (1, 0) else np.lib.format.read_array_header_2_0
+        shape, fortran, dtype = read(fh)
+        offset = fh.tell()
+    if tuple(shape[1:]) != TENSOR_SHAPE or dtype != np.int8 or fortran:
+        raise ValueError(f"{path}: {shape} {dtype} is not a C-order int8 (N, 8, 200, 101) array")
+    return offset, int(shape[0])
+
+
 class TensorDataset(Dataset):
     """Samples from several KindIndex selections: (x int8 (8, 200, 101), blocks int16 (4,), scalars float32 (9,),
     label int)."""
@@ -331,13 +343,7 @@ class TensorDataset(Dataset):
         """(fd, offset of row 0) of shard f. Tensors are read with pread, not a memory map: mapped pages stay
         in every worker's RSS, and Slurm's summed-RSS limit counts them once per worker."""
         if f not in self._open:
-            with open(self.files[f], "rb") as fh:
-                version = np.lib.format.read_magic(fh)
-                read = np.lib.format.read_array_header_1_0 if version == (1, 0) else np.lib.format.read_array_header_2_0
-                shape, fortran, dtype = read(fh)
-                offset = fh.tell()
-            if tuple(shape[1:]) != TENSOR_SHAPE or dtype != np.int8 or fortran:
-                raise ValueError(f"{self.files[f]}: {shape} {dtype} is not a C-order int8 (N, 8, 200, 101) array")
+            offset, _ = read_shard_header(self.files[f])
             if len(self._open) >= MAX_OPEN_SHARDS:  # stay far below the per-process file limit
                 os.close(self._open.pop(next(iter(self._open)))[0])
             self._open[f] = (os.open(self.files[f], os.O_RDONLY), offset)
@@ -385,7 +391,15 @@ class EpochSampler(Sampler):
     def epoch_size(self):
         return self.n if self.non is None else len(self.other) + self.keep_non
 
-    def _order(self):
+    def selection_size(self):
+        """Tensors of one epoch over all ranks."""
+        return self.epoch_size() if self.num_samples is None else min(self.epoch_size(), self.num_samples)
+
+    def epoch_indices(self):
+        """This epoch's indices over all ranks, in order (numpy int64)."""
+        return self._epoch_order().numpy().astype(np.int64)
+
+    def _epoch_order(self):
         if self.shuffle:
             g = torch.Generator()
             g.manual_seed(self.seed + self.epoch)
@@ -398,6 +412,10 @@ class EpochSampler(Sampler):
             order = torch.arange(self.n)
         if self.num_samples is not None:
             order = order[:self.num_samples]
+        return order
+
+    def _order(self):
+        order = self._epoch_order()
         if self.shuffle and self.world > 1 and len(order):
             per = math.ceil(len(order) / self.world)
             order = torch.cat([order, order[:per * self.world - len(order)]])
@@ -407,7 +425,7 @@ class EpochSampler(Sampler):
         return iter(self._order().tolist())
 
     def __len__(self):
-        m = self.epoch_size() if self.num_samples is None else min(self.epoch_size(), self.num_samples)
+        m = self.selection_size()
         if self.shuffle and self.world > 1:
             return math.ceil(m / self.world)
         return max(0, math.ceil((m - self.rank) / self.world))
