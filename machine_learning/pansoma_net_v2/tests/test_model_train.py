@@ -9,7 +9,7 @@ import torch.nn as nn
 
 from .. import combine, predict, train
 from ..data import SCALARS, EpochSampler, KindIndex, TensorDataset, block_split, load_parts
-from ..model import PansomaNetV2
+from ..model import PansomaNetV2, no_decay
 from .fixtures import make_tensor_set
 from .test_encode import STATS, batch
 
@@ -38,6 +38,43 @@ class ModelTest(unittest.TestCase):
                 self.assertTrue(torch.equal(again(x, blocks, scalars), logits))
         with torch.no_grad():  # the scalars reach the logits
             self.assertFalse(torch.equal(model(x, blocks, scalars), model(x, blocks, scalars + 1)))
+
+    def test_blocks_v1_and_v2(self):
+        x, blocks = batch(2)
+        v1, v2 = (PansomaNetV2(3, stats=STATS, block=b, **SMALL).eval() for b in ("v1", "v2"))
+        self.assertEqual(v2.backbone.stages[0][0].grn.gamma.shape, (1, 1, 1, 64))    # per channel (4 x 16)
+        self.assertEqual(v1.backbone.stages[0][0].grn.gamma.shape, (1,))
+        # a v2 block with a zero branch is the identity; a v1 block applies GELU to the sum
+        for model, expect in ((v2, lambda h: h), (v1, torch.nn.functional.gelu)):
+            blk = model.backbone.stages[0][0]
+            nn.init.zeros_(blk.pwconv2.weight), nn.init.zeros_(blk.pwconv2.bias)
+            h = torch.randn(2, 16, 5, 7)
+            with torch.no_grad():
+                self.assertTrue(torch.allclose(blk(h), expect(h), atol=1e-6))
+        # GRN v2: per-channel norm over the positions, divided by its mean over the channels
+        g = PansomaNetV2(3, stats=STATS, **SMALL).backbone.stages[0][0].grn
+        with torch.no_grad():
+            g.gamma.fill_(1.0)
+            h = torch.randn(2, 5, 7, 64)
+            gx = h.pow(2).sum((1, 2), keepdim=True).sqrt()
+            self.assertTrue(torch.allclose(g(h), h * gx / (gx.mean(-1, keepdim=True) + 1e-6) + h, atol=1e-5))
+        # checkpoints from before "block" load as v1, and give the same logits
+        payload = dict(format="pansoma_net_v2", config={k: v for k, v in v1.config.items() if k != "block"},
+                       model_state_dict=v1.state_dict())
+        again = PansomaNetV2.from_checkpoint(payload).eval()
+        self.assertEqual(again.config["block"], "v1")
+        with torch.no_grad():
+            self.assertTrue(torch.equal(again(x, blocks), v1(x, blocks)))
+        with self.assertRaises(RuntimeError):                                   # v1 weights do not fit v2
+            PansomaNetV2(3, stats=STATS, block="v2", **SMALL).load_state_dict(v1.state_dict())
+
+    def test_weight_decay_groups(self):
+        model = PansomaNetV2(3, stats=STATS, **SMALL)
+        params = dict(model.named_parameters())
+        names = {n for n, p in params.items() if no_decay(n, p)}
+        self.assertTrue(all(params[n].ndim <= 1 or ".grn." in n for n in names))   # biases, norm weights, GRN
+        self.assertTrue(any(".grn.gamma" in n for n in names) and any(".norm.weight" in n for n in names))
+        self.assertFalse(any(n.endswith(("pwconv1.weight", "dwconv.weight", "head.weight")) for n in names))
 
     def test_ignored_labels_do_not_enter_the_loss(self):
         logits = torch.randn(5, 3)

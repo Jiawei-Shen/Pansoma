@@ -86,6 +86,7 @@ Useful `train` options:
   - `--scalars` feeds the site scalars to the head (`data.SCALARS`: log coverage, log site coverage, log
     ALT / REF / OTHER counts, AF, second allele AF, allele count, log event length). They are the counts
     before the 200-row cap, z-scored with training statistics that are stored in the model.
+  - `--block v2|v1` (below, Model) and `--decay-all`.
   - `--depths`, `--dims`, `--front`, `--drop-path` set the size (defaults `3 3 27 3` / `192 384 768 1536`,
     as in v1's training script).
 - **Selection.** `--select f1|ap|truth_f1` picks the best checkpoint by the thresholded somatic F1 per tensor
@@ -253,10 +254,24 @@ DDP the chunks are dealt to the ranks by load and every rank yields the same num
 
 ## Model
 
-`model.PansomaNetV2` = `TensorEncoder` → 1×1 front → `ConvNeXtCBAM` → 3 logits. The backbone is v1's
-`mynet.ConvNeXtCBAMClassifier`, copied unchanged (state-dict names included) apart from its print, so v2 has
-no import from v1. Weights use the backbone's own truncated-normal initialization; v1's training script
-re-initialized them with Kaiming.
+`model.PansomaNetV2` = `TensorEncoder` → 1×1 front → `ConvNeXtCBAM` → 3 logits. The backbone comes from v1's
+`mynet.ConvNeXtCBAMClassifier` (state-dict names kept), so v2 has no import from v1. Weights use the backbone's
+own truncated-normal initialization; v1's training script re-initialized them with Kaiming.
+
+`--block` chooses the blocks (config key `block`):
+
+- `v2` (default): ConvNeXt(-V2) as published.
+  - GRN takes each channel's L2 norm over the positions and divides it by the mean over the channels, with
+    per-channel gamma / beta.
+  - A block returns shortcut + branch, so every stage has an identity path.
+  - The stem and the downsampling layers have no GELU.
+- `v1`: mynet's blocks, for loading and comparing the checkpoints made before 2026-09-29 (a config without
+  `block` loads as v1).
+  - Its GRN normalizes each read row by the norm over (positions, channels), with one scalar gamma / beta.
+  - A GELU follows every residual sum (no identity path through the 39 blocks), the stem and every downsampling.
+
+AdamW decays every weight matrix but not biases, norm weights and the GRN gamma / beta; `--decay-all` decays
+every parameter, as the runs before 2026-09-29 did.
 
 ## Tests
 
@@ -278,6 +293,8 @@ cd machine_learning && $P -m unittest discover -s pansoma_net_v2/tests -t .
   - `EpochSampler` gives disjoint evaluation slices and equal padded training slices per rank.
 - `test_model_train`:
   - forward and checkpoint round trip, with and without scalars;
+  - blocks v1 / v2: a v2 block with a zero branch is the identity, GRN v2 against its formula, checkpoints without
+    `block` load as v1 with the same logits; the weight-decay groups;
   - loss without −1;
   - forkserver workers;
   - CPU runs: train 2 epochs (chr1 left out, block validation, threshold stored), resume (statistics kept),

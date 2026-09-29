@@ -34,7 +34,7 @@ from .data import (CLASSES, KINDS, SCALARS, EpochSampler, TensorDataset, block_s
 
 AF = SCALARS.index("af")
 from .encode import PLANES, compute_stats
-from .model import PansomaNetV2
+from .model import PansomaNetV2, full_config, no_decay
 
 AUTOSOMES = [f"chr{i}" for i in range(1, 23)]
 
@@ -75,6 +75,12 @@ def parse_args(argv=None):
     p.add_argument("--dims", type=int, nargs=4, default=[192, 384, 768, 1536])
     p.add_argument("--front", type=int, nargs="+", default=[64, 64], help="widths of the 1x1 layers before the stem")
     p.add_argument("--drop-path", type=float, default=0.1)
+    p.add_argument("--block", choices=["v2", "v1"], default="v2",
+                   help="v2: ConvNeXt blocks as published; v1: mynet's (row-wise scalar GRN, GELU after each residual "
+                        "sum); see model.py")
+    p.add_argument("--decay-all", action="store_true",
+                   help="weight decay on every parameter (as runs before 2026-09-29); default: not on biases, norm "
+                        "weights and GRN gamma / beta")
     p.add_argument("--stats-samples", type=int, default=20000, help="training tensors used to fit the z-score")
     p.add_argument("--amp", choices=["bf16", "off"], default="bf16")
     p.add_argument("--no-compile", dest="compile", action="store_false",
@@ -335,10 +341,10 @@ def main(argv=None):
         val_set = Subset(val_set, keep.tolist())
 
     model = PansomaNetV2(len(CLASSES), args.depths, args.dims, args.front, args.drop_path,
-                         scalars=len(SCALARS) if args.scalars else 0)
+                         scalars=len(SCALARS) if args.scalars else 0, block=args.block)
     checkpoint = torch.load(args.resume, map_location="cpu", weights_only=False) if args.resume else None
     if checkpoint is not None:
-        if checkpoint["config"] != model.config:
+        if full_config(checkpoint["config"]) != model.config:
             raise SystemExit(f"--resume model config {checkpoint['config']} differs from the arguments' {model.config}")
         model.load_state_dict(checkpoint["model_state_dict"])
         stats = checkpoint["stats"]
@@ -410,8 +416,15 @@ def main(argv=None):
                                 run.log, "validation", args.prefetch_factor)
     steps_per_epoch = max(1, len(train_loader))
     total_steps, warmup = args.epochs * steps_per_epoch, int(args.warmup_epochs * steps_per_epoch)
-    optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=args.weight_decay,
-                                  fused=run.device.type == "cuda")
+    if args.decay_all:
+        groups = [dict(params=list(model.parameters()))]
+    else:
+        named = list(model.named_parameters())
+        groups = [dict(params=[p for n, p in named if not no_decay(n, p)]),
+                  dict(params=[p for n, p in named if no_decay(n, p)], weight_decay=0.0)]
+        run.log(f"weight decay {args.weight_decay} on {sum(p.numel() for p in groups[0]['params']) / 1e6:.1f} M parameters, "
+                f"none on {sum(p.numel() for p in groups[1]['params']):,} (biases, norms, GRN)")
+    optimizer = torch.optim.AdamW(groups, lr=args.lr, weight_decay=args.weight_decay, fused=run.device.type == "cuda")
     schedule = lambda s: (s + 1) / max(1, warmup) if s < warmup else \
         0.5 * (1 + math.cos(math.pi * (s - warmup) / max(1, total_steps - warmup)))  # noqa: E731
     scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, schedule)
