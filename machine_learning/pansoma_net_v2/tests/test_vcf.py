@@ -182,6 +182,26 @@ class GraphVcfTest(unittest.TestCase):
         self.assertEqual({r[2]: r[6] for r in columns(out)}["4:6:SNP:A>C"], "LowQual")
         self.assertEqual({r[2]: r[6] for r in columns(out)}["7:0:SNP:C>A"], "PASS")
 
+    def test_offref_rescue_is_called_by_offref_call(self):
+        """A record with predict's off-reference rescue fields is called by offref_call, not the threshold, and takes
+        QUAL and OFFREF_P_* from the rescored probabilities; the other records keep the threshold."""
+        lines = [json.loads(x) for x in gzip.open(self.f.predictions["SNV"], "rt")]
+        lines[4].update(offref_call=False, p_offref_non=0.7, p_offref_somatic=0.2, p_offref_germline=0.1)  # 3:0, p 0.8
+        lines[1].update(offref_call=True, p_offref_non=0.3, p_offref_somatic=0.6, p_offref_germline=0.1)   # 1:2, p 0.001
+        with gzip.open(self.f.predictions["SNV"], "wt") as f:
+            f.write("".join(json.dumps(x) + "\n" for x in lines))
+        stats, out = self.f.graph("SNV")
+        records = {r[2]: r for r in columns(out)}
+        self.assertEqual({k: r[6] for k, r in records.items()}, {"1:2:SNP:G>T": "PASS", "1:4:SNP:A>G": "LowAF",
+                                                               "3:0:SNP:T>G": "LowQual", "4:6:SNP:A>C": "PASS",
+                                                               "7:0:SNP:C>A": "LowQual"})
+        self.assertEqual(records["1:2:SNP:G>T"][5], "3.979")  # -10 log10(1 - 0.6): the rescored p_somatic
+        info = parse_info(records["1:2:SNP:G>T"][7])
+        self.assertEqual((info["P_SOMATIC"], info["OFFREF_P_SOMATIC"], info["OFFREF_P_NON"]), ("0.00100", "0.60000", "0.30000"))
+        self.assertNotIn("OFFREF_P_SOMATIC", parse_info(records["4:6:SNP:A>C"][7]))
+        self.assertEqual((stats["offref_rescored"], stats["offref_called"]), (2, 1))
+        self.assertIn("offref_call (argmax)", stats["call"])
+
     def test_threshold_and_min_af_follow_the_checkpoint(self):
         stats, out = self.f.graph("SNV", target_recall=0.8)  # threshold 0.85
         self.assertEqual({r[2]: r[6] for r in columns(out)}, {"1:4:SNP:A>G": "LowAF", "3:0:SNP:T>G": "LowQual",

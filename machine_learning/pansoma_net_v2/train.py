@@ -64,8 +64,8 @@ def parse_args(argv=None):
     p.add_argument("--weight-decay", type=float, default=0.05)
     p.add_argument("--warmup-epochs", type=float, default=1.0)
     p.add_argument("--class-weights", default="balanced",
-                   help="'balanced' (n / (3 n_c) over an epoch's tensors), 'sqrt' (its square root), 'none', or three "
-                        "numbers w_non,w_som,w_germ")
+                   help="'balanced' (n / (3 n_c) over an epoch's tensors), 'sqrt' (its square root), 'pow:E' (balanced "
+                        "to the power E: pow:0.5 = sqrt), 'none', or three numbers w_non,w_som,w_germ")
     p.add_argument("--non-fraction", type=float, default=1.0,
                    help="each epoch: every somatic / germline tensor and a fresh random fraction of the non ones")
     p.add_argument("--ignore-reasons", nargs="+", default=[],
@@ -172,10 +172,14 @@ def class_weights(spec, counts):
     """counts: tensors per class in one epoch."""
     if spec == "none":
         return torch.ones(len(CLASSES))
-    if spec in ("balanced", "sqrt"):
+    if spec in ("balanced", "sqrt") or spec.startswith("pow:"):
+        try:
+            power = {"balanced": 1.0, "sqrt": 0.5}.get(spec) or float(spec[4:])
+        except ValueError:
+            raise SystemExit(f"--class-weights {spec}: pow:E needs a number E")
         counts = np.maximum(counts, 1)
         w = counts.sum() / (len(CLASSES) * counts)
-        return torch.tensor(np.sqrt(w) if spec == "sqrt" else w, dtype=torch.float32)
+        return torch.tensor(w ** power, dtype=torch.float32)
     w = [float(x) for x in spec.split(",")]
     if len(w) != len(CLASSES):
         raise SystemExit("--class-weights needs three numbers: non,somatic,germline")

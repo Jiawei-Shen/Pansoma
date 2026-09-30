@@ -100,6 +100,18 @@ class ModelTest(unittest.TestCase):
         self.assertTrue(torch.allclose(criterion(logits, y), criterion(logits[keep], y[keep])))
 
 
+class ClassWeightsTest(unittest.TestCase):
+    def test_power_of_balanced(self):
+        counts = np.array([900, 10, 90])
+        balanced = train.class_weights("balanced", counts).numpy()
+        np.testing.assert_allclose(balanced, 1000 / (3 * counts), rtol=1e-6)
+        np.testing.assert_allclose(train.class_weights("sqrt", counts).numpy(), np.sqrt(balanced), rtol=1e-6)
+        np.testing.assert_allclose(train.class_weights("pow:0.5", counts).numpy(), np.sqrt(balanced), rtol=1e-6)
+        np.testing.assert_allclose(train.class_weights("pow:0.75", counts).numpy(), balanced ** 0.75, rtol=1e-6)
+        with self.assertRaisesRegex(SystemExit, "pow:E needs a number"):
+            train.class_weights("pow:x", counts)
+
+
 class MicroBatchTest(unittest.TestCase):
     def test_micro_batches_give_the_whole_batch_update(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -253,7 +265,7 @@ class TrainPredictTest(unittest.TestCase):
             self.assertEqual(report["threshold"], torch.load(out / "best.pth", weights_only=False)["somatic_threshold"])
             # three decision rules: threshold t (= the report above), argmax, the validation recall-0.9 threshold
             rules = report["rules"]
-            self.assertEqual(set(rules), {"threshold_t", "argmax", "val_recall_0.9"})
+            self.assertEqual(set(rules), {"threshold_t", "argmax", "val_recall_0.9", "pipeline"})
             self.assertEqual({k: rules["threshold_t"]["per_tensor"][k] for k in ("precision", "recall", "f1", "support")},
                              {k: report["thresholded"]["somatic"][k] for k in ("precision", "recall", "f1", "support")})
             self.assertEqual(rules["argmax"]["per_tensor"]["f1"], report["argmax"]["somatic"]["f1"])
@@ -264,6 +276,29 @@ class TrainPredictTest(unittest.TestCase):
             argmax_calls = sum(r["in_test"] and max(r["p_non"], r["p_somatic"], r["p_germline"]) == r["p_somatic"]
                                for r in records)
             self.assertEqual(rules["argmax"]["per_tensor"]["calls"], argmax_calls)
+            # the SNV off-reference rescue: only off-reference tensors are rescored, and called by argmax
+            off = [r for r in records if r["off_reference"]]
+            self.assertTrue(off)
+            self.assertTrue(all(("offref_call" in r) == r["off_reference"] for r in records))
+            self.assertTrue(all(r["offref_call"] == (max(r["p_offref_non"], r["p_offref_somatic"], r["p_offref_germline"])
+                                                     == r["p_offref_somatic"]) for r in off))
+            o = report["offref_rescue"]
+            self.assertEqual((o["tensors"], o["calls"], o["site_halfwidth"], o["floor"]),
+                             (len(off), sum(r["offref_call"] for r in off), 10, 90))
+            t09 = best["val"]["somatic_at_recall"]["0.9"]["threshold"]
+            self.assertEqual(rules["pipeline"]["threshold"], t09)
+            self.assertEqual(rules["pipeline"]["per_tensor"]["calls"],
+                             sum(r["in_test"] and (r["offref_call"] if r["off_reference"] else r["p_somatic"] >= t09)
+                                 for r in records))
+            index = KindIndex(root / "SNV", tmp / "check_cache")
+            k = next(i for i, r in enumerate(records) if r["off_reference"])
+            chr1_pos = index.select(["chr1"], labelled=False)
+            plain = TensorDataset([(index, chr1_pos[k:k + 1])])[0][0].numpy()
+            edited = predict.OffrefSite90([(index, chr1_pos[k:k + 1])], 10)[0][0].numpy()
+            window = np.s_[predict.PATH_COUNT, :, predict.SITE - 10:predict.SITE + 11]
+            expected = plain.copy()
+            expected[window] = np.where((plain[window] > 0) & (plain[window] < 90), 90, plain[window])
+            np.testing.assert_array_equal(edited, expected)  # ch6 raised at the site only, uncovered cells stay 0
             # against the truth table, recomputed from the predictions: every truth allele once
             tr = report["truth"]
             table = [line.split("\t") for line in (root / "somatic.recall.tsv").read_text().splitlines()[1:]]
@@ -290,7 +325,9 @@ class TrainPredictTest(unittest.TestCase):
             self.assertEqual(len(both), 1)
             c = both[0]
             with gzip.open(pred / "sample.tensors.INDEL.predictions.ndjson.gz", "rt") as f:
-                records += [json.loads(line) for line in f]
+                indel = [json.loads(line) for line in f]
+            self.assertFalse(any("offref_call" in r for r in indel))  # the rescue is for SNV only
+            records += indel
             called = [r for r in records if r["in_test"] and r["pred"] == "somatic"]
             everything = wanted | other
             hit = set().union(*[set(r["truth_ids"]) for r in called if r["test_label"] == 1]) & everything

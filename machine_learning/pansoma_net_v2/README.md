@@ -49,8 +49,10 @@ P=/wanglab/jshen/anaconda3/bin/python       # torch 2.8 + timm 1.0 (GPU)
 T=/scratch/jshen/data/pansoma_v2_tensors/HG008T_Illumina/tensors
 
 # train on chr2-22 (5 % of their ~1 Mb node blocks validate), chr1 left out; -1 tensors are not used
+# (the SNV recipe: see "SNV recipe" below)
 $P -m pansoma_net_v2.train --tensors $T --kinds SNV --output runs/HG008_Illumina_SNV \
-    --epochs 12 --non-fraction 0.25 --class-weights sqrt --batch-size 256 --lr 2e-4
+    --epochs 12 --batch-size 1024 --lr 1e-4 --class-weights pow:0.75 --non-fraction 1.0 --block v2 \
+    --ignore-reasons residual_partial_somatic_truth allele_partial_somatic_truth
 torchrun --nproc_per_node=2 -m pansoma_net_v2.train --ddp ...           # several GPUs, same options
 
 # test: every chr1 tensor (-1 included), the checkpoint's statistics and somatic threshold
@@ -80,8 +82,9 @@ Useful `train` options:
   - `--keep-non-af A` (with `--non-fraction`): the non tensors with AF ≥ A are taken every epoch. The sampled
     non tensors get loss weight 1/F, so each epoch's loss stays an unbiased estimate of the loss over all
     non tensors, whatever their AF.
-  - `--class-weights balanced|sqrt|none|w0,w1,w2`: balanced is n / (3 n_c) over one epoch's tensors; sqrt
-    is its square root.
+  - `--class-weights balanced|sqrt|pow:E|none|w0,w1,w2`: balanced is n / (3 n_c) over one epoch's tensors;
+    sqrt is its square root, pow:E its power E. The loss is normalized by the batch's summed weights, so
+    scaling all three weights changes nothing.
 - **Label reasons left out.** `--ignore-reasons R ...` treats the tensors of those label reasons as -1 in training and
   validation; the label files are unchanged. HG008T Illumina SNV runs leave out
   `residual_partial_somatic_truth allele_partial_somatic_truth`: SNV tensors that partially match an INDEL truth
@@ -189,6 +192,20 @@ checkpoint's training `--ignore-reasons`) leaves those reasons out of the test l
 reason and truth_ids and say `ignored: true`.
 Off-reference tensors are marked for analysis only; the test scores them like the others.
 
+**Off-reference rescue (SNV).** The model learned that a low path count (ch6: how many HPRC haplotypes run
+through the node) is not somatic, and on an off-reference node every read has a low path count, so it hardly ever
+calls somatic there. `predict --offref-site90 W` (default 10; 0 turns it off) scores every SNV off-reference tensor
+again with its ch6 cells below 90 set to 90 in the site columns (the middle column ± W; uncovered cells stay 0), and
+calls it somatic when somatic is the most probable class of those probabilities. Its record adds p_offref_non,
+p_offref_somatic, p_offref_germline and offref_call. `.metrics.json` adds `offref_rescue` (tensors, calls before
+and after) and the rule `pipeline`: offref_call on the off-reference tensors, the checkpoint's validation recall-0.9
+threshold on the others.
+
+**SNV recipe** (HG008T Illumina, PacBio, ONT): train with `--class-weights pow:0.75 --batch-size 1024 --lr 1e-4
+--non-fraction 1.0 --block v2 --epochs 12 --ignore-reasons residual_partial_somatic_truth
+allele_partial_somatic_truth`, every plane kept (ch6 included); calls at the validation recall-0.9 threshold,
+off-reference tensors by the rescue above (graph_vcf's defaults).
+
 ## Calls: graph VCF → GRCh38 VCF → PoN → rtg vcfeval
 
 Three steps turn `predict`'s output into VCFs and score them against the truth VCF. Each module's docstring has
@@ -231,6 +248,8 @@ without validation thresholds (trained before `val.somatic_at_recall`), set `THR
   - PASS: p_somatic ≥ the checkpoint's validation threshold at recall 0.9 (`--target-recall`; the checkpoint
     is the one in predict's `.metrics.json`). The model favours recall and the PoN raises precision.
     `--threshold T` sets the threshold. `--threshold predict` keeps `predict`'s own call (best-F1 threshold).
+    A record with predict's off-reference rescue is called by offref_call instead; its QUAL is from
+    p_offref_somatic and INFO OFFREF_P_* keeps the rescored probabilities. INDEL predictions have no rescue.
   - LowQual: not called.
   - LowAF: below the AF floor of the checkpoint's training labels (Illumina SNV 0.07; none for INDEL or the
     long-read sets). A relabel of the predicted set, or a new sample without labels, does not change it.

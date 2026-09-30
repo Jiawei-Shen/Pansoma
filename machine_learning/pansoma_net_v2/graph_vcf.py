@@ -23,9 +23,13 @@ A record is the site's representative allele A1, the allele the model scores. Th
   model does not genotype), plus DP, AD and AF. On a node over the read cap (max_node_reads) these count the
   sampled records only, and INFO NODE_RECORDS gives the node's records before the sample.
 - QUAL = -10 log10(1 - p_somatic), which is 50 at p = 1 (the probabilities have 5 decimals). rtg vcfeval
-  rounds scores to 3 decimals, and on the phred scale the probabilities near 1 stay apart.
+  rounds scores to 3 decimals, and on the phred scale the probabilities near 1 stay apart. A record with the
+  off-reference rescue (below) uses p_offref_somatic.
 - FILTER:
-  - PASS: called somatic and AF >= the AF floor.
+  - PASS: called somatic and AF >= the AF floor. An SNV off-reference tensor that predict rescored (predict
+    --offref-site90: ch6 raised to 90 at the site) is called by offref_call, somatic the most probable class of
+    the rescored probabilities, instead of the threshold; INFO OFFREF_P_* keeps those probabilities. Predictions
+    without these fields (INDEL, older runs) use the threshold for every tensor.
   - LowQual: not called somatic: p_somatic < the threshold. The default threshold is the checkpoint's
     validation threshold at --target-recall (0.9): the highest p_somatic at which the validation somatic recall
     reaches it (train's val.somatic_at_recall, for recall 0.5, 0.8, 0.9, 0.95). The model favours recall and
@@ -51,13 +55,14 @@ from .vcfio import format_info, import_pipeline, stats_path, write_vcf
 KIND_EVENTS = {"SNV": {"SNP"}, "INDEL": {"INS", "DEL"}}
 FIRST_ID = re.compile(r'\{"candidate_id": ?"([^"\\]*)"')
 PREDICTION_FIELDS = ("candidate_id", "p_somatic", "p_germline", "p_non", "pred")
+OFFREF_FIELDS = ("offref_call", "p_offref_somatic", "p_offref_germline", "p_offref_non")  # SNV off-reference rescue
 SUMMARY_FIELDS = ("candidate_id", "node_id", "start", "ref", "alt", "event_type", "path", "chrom", "site_id",
                   "allele_count", "coverage", "ref_count", "alt_count", "af", "downsampled_from")  # the rest is kilobytes
 LABEL_FLOOR = {"SNV": "snv_min_af", "INDEL": "indel_min_af"}
 MAX_QUAL = 50.0
 
 HEADER = """##FILTER=<ID=PASS,Description="Called somatic (##pansoma_call) and AF at or above the AF floor">
-##FILTER=<ID=LowQual,Description="Not called somatic: p_somatic below the somatic threshold">
+##FILTER=<ID=LowQual,Description="Not called somatic: p_somatic below the somatic threshold (off-reference rescue: somatic not the most probable class)">
 ##FILTER=<ID=LowAF,Description="A1 allele fraction below the AF floor of the training labels">
 ##INFO=<ID=BLOCK,Number=1,Type=String,Description="Chromosome block of the node (tensor_postprocessing chr_index)">
 ##INFO=<ID=START,Number=1,Type=Integer,Description="0-based start of the event on the node's forward strand">
@@ -69,6 +74,9 @@ HEADER = """##FILTER=<ID=PASS,Description="Called somatic (##pansoma_call) and A
 ##INFO=<ID=P_SOMATIC,Number=1,Type=Float,Description="Model probability of somatic">
 ##INFO=<ID=P_GERMLINE,Number=1,Type=Float,Description="Model probability of germline">
 ##INFO=<ID=P_NON,Number=1,Type=Float,Description="Model probability of non-variant">
+##INFO=<ID=OFFREF_P_SOMATIC,Number=1,Type=Float,Description="Off-reference rescue: probability of somatic with the site's path count raised to 90">
+##INFO=<ID=OFFREF_P_GERMLINE,Number=1,Type=Float,Description="Off-reference rescue: probability of germline with the site's path count raised to 90">
+##INFO=<ID=OFFREF_P_NON,Number=1,Type=Float,Description="Off-reference rescue: probability of non-variant with the site's path count raised to 90">
 ##INFO=<ID=SITE,Number=1,Type=String,Description="Tensor site: node:start:SNV|INDEL">
 ##INFO=<ID=NALLELES,Number=1,Type=Integer,Description="Passing alleles at the site; the model scores A1, this record, only">
 ##INFO=<ID=NODE_RECORDS,Number=1,Type=Integer,Description="Records on the node before the max_node_reads sample; FORMAT DP and AD count reads within the sample">
@@ -156,12 +164,15 @@ def select(predictions, summaries_dir, kind, called, min_score, threshold, stats
                     raise ValueError(f"{summary_path} line {k + 1} is {s['candidate_id']}, the prediction {p['candidate_id']}")
                 if s["event_type"] not in KIND_EVENTS[kind]:
                     raise ValueError(f"{p['candidate_id']}: event {s['event_type']} is not {kind}")
-                kept.append(({k: p[k] for k in PREDICTION_FIELDS}, {k: s.get(k) for k in SUMMARY_FIELDS}))
+                kept.append(({k: p[k] for k in PREDICTION_FIELDS + OFFREF_FIELDS if k in p},
+                             {k: s.get(k) for k in SUMMARY_FIELDS}))
             if f.readline():
                 raise ValueError(f"{summary_path} has more records than the {len(block)} predictions of {chrom}")
         stats["predictions"] += len(block)
         stats["called_by_predict"] += sum(p["pred"] == "somatic" for p in block)
         stats["called"] += sum(called(p) for p in block)
+        stats["offref_rescored"] += sum("offref_call" in p for p in block)
+        stats["offref_called"] += sum(bool(p.get("offref_call")) for p in block)
         stats["pred_differs_from_threshold"] += sum((p["pred"] == "somatic") != (p["p_somatic"] >= threshold)
                                                     for p in block)
     return kept, chroms
@@ -220,15 +231,20 @@ def build(args):
             source = f"validation recall {args.target_recall}"
         call_rule = f"p_somatic >= {threshold} ({source})"
         called = lambda p: p["p_somatic"] >= threshold  # noqa: E731
+    by_rule = called
+    called = lambda p: p["offref_call"] if "offref_call" in p else by_rule(p)  # noqa: E731
     if args.min_af is not None:
         min_af, min_af_source = args.min_af, "--min-af"
     else:
         min_af = training_min_af(checkpoint, checkpoint_path, args.kind)
         min_af_source = f"checkpoint training labels {LABEL_FLOOR[args.kind]}"
     sample = args.sample or Path(args.tensors).resolve().parent.name
-    stats = dict(predictions=0, called_by_predict=0, called=0, pred_differs_from_threshold=0)
+    stats = dict(predictions=0, called_by_predict=0, called=0, pred_differs_from_threshold=0, offref_rescored=0,
+                 offref_called=0)
     kept, chroms = select(args.predictions, Path(args.tensors) / args.kind, args.kind, called, args.min_score,
                           threshold, stats)
+    if stats["offref_rescored"]:
+        call_rule += "; off-reference tensors rescored by predict --offref-site90: offref_call (argmax)"
 
     nodes = {int(s["node_id"]) for _, s in kept} | {int(n) for _, s in kept for n, _, _ in s.get("path") or []}
     with GraphIndex(args.graph_index) as graph:
@@ -240,12 +256,16 @@ def build(args):
                                         ("LowAF", min_af is not None and s["af"] < min_af)) if bad]
         for name in flags or ["PASS"]:
             filters[name] += 1
+        rescued = "offref_call" in p
         info = dict(BLOCK=s["chrom"], **event, P_SOMATIC=f"{p['p_somatic']:.5f}", P_GERMLINE=f"{p['p_germline']:.5f}",
-                    P_NON=f"{p['p_non']:.5f}", SITE=s["site_id"], NALLELES=s["allele_count"],
-                    NODE_RECORDS=s["downsampled_from"])
+                    P_NON=f"{p['p_non']:.5f}",
+                    **({f"OFFREF_P_{c.upper()}": f"{p[f'p_offref_{c}']:.5f}" for c in ("somatic", "germline", "non")}
+                       if rescued else {}),
+                    SITE=s["site_id"], NALLELES=s["allele_count"], NODE_RECORDS=s["downsampled_from"])
         sample_field = f"0/1:{s['coverage']}:{s['ref_count']},{s['alt_count']}:{s['af']:.6g}"
         records.append((int(s["node_id"]), pos, [str(s["node_id"]), str(pos), s["candidate_id"], ref, alt,
-                                                 f"{phred(p['p_somatic']):.3f}", ";".join(flags) or "PASS",
+                                                 f"{phred(p['p_offref_somatic'] if rescued else p['p_somatic']):.3f}",
+                                                 ";".join(flags) or "PASS",
                                                  format_info(info), "GT:DP:AD:AF", sample_field]))
     records.sort(key=lambda r: (r[0], r[1], r[2][3], r[2][4]))
     used = sorted({r[0] for r in records})

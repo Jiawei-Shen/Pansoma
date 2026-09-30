@@ -208,18 +208,20 @@ def truth_report(truth, matches, labels, probs, threshold, other=()):
     return out
 
 
-def decision_rules(labels, probs, thresholds, truth=None):
+def decision_rules(labels, probs, thresholds, truth=None, preds=None):
     """The somatic calls of several decision rules, each per tensor and against the truth.
     thresholds: {rule: threshold}; the rule "argmax" takes the most probable class, the others call(probs, threshold)
-    (a rule with threshold None is skipped). truth: (truth keys, per-tensor matched keys, other-kind keys) for
-    truth_report, or None. Returns {rule: {threshold, per_tensor (somatic P/R/F1/support, calls), confusion, truth}}."""
+    (a rule with threshold None is skipped); preds: {rule: class calls} given instead (its threshold is only
+    recorded). truth: (truth keys, per-tensor matched keys, other-kind keys) for truth_report, or None.
+    Returns {rule: {threshold, per_tensor (somatic P/R/F1/support, calls), confusion, truth}}."""
     out, keep = {}, labels >= 0
     for rule, threshold in thresholds.items():
-        if rule != "argmax" and threshold is None:
+        given = preds is not None and rule in preds
+        if rule != "argmax" and threshold is None and not given:
             continue
-        pred = probs.argmax(1) if rule == "argmax" else call(probs, threshold)
+        pred = preds[rule] if given else probs.argmax(1) if rule == "argmax" else call(probs, threshold)
         cm = confusion(labels[keep].astype(np.int64), pred[keep])
-        entry = dict(threshold=None if rule == "argmax" else float(threshold),
+        entry = dict(threshold=None if rule == "argmax" or threshold is None else float(threshold),
                      per_tensor=dict(per_class(cm)["somatic"], calls=int((pred[keep] == SOMATIC).sum())),
                      confusion=cm.tolist())
         if truth is not None:
