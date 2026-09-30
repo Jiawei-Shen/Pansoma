@@ -14,8 +14,8 @@ with a byte-verified per-chromosome merge and truth labels (`tensor_postprocessi
 ```
 runtime  5,010 lines of Python in 17 files + fastdecode.cpp (659 lines); frozen per run: 21 files (those 18,
          the compiled decoder and the two READMEs), 2.55 MB, 2.15 MB of it the compiled decoder
-tools    909 lines of Python in 6 files + gbz_graph_index.cpp (75 lines); not frozen
-tests    4,834 lines of Python in 16 files (+ golden_hashes.json), 153 tests, ~50 s on a quiet node
+tools    1,201 lines of Python in 7 files + gbz_graph_index.cpp (75 lines); not frozen
+tests    5,110 lines of Python in 17 files (+ golden_hashes.json), 162 tests, ~55 s on a quiet node
 ```
 
 ---
@@ -32,6 +32,12 @@ G=/scratch/jshen/data/pansoma_v2_tensors/graph_index   # HPRC v1.1 d9: graph ind
 # identical output. The .so is gitignored; compile before `orchestrate prepare`, which freezes it.
 $PY -m $P.native compile                   # prints the build info
 $PY -m $P.native check                     # will the builder use it? if not, why
+
+# (once per graph) GFA with the GBZ node IDs, graph index, reference path, chromosome blocks, index audit;
+# a step whose output exists is skipped. For HPRC v1.1 d9 the outputs exist under $G.
+sbatch -J graph_prep -o LOG $P/tools/jobs/graph_prep.sh graph.gbz OUTDIR [FASTA]
+# (once per GAM) sort the giraffe GAM and write its GAI (vg gamsort -i), checked before publication
+sbatch -J gam_sort -o LOG $P/tools/jobs/gam_sort.sh sample.gam     # -> sample.sorted.gam + .gai
 
 # (once per sample) target nodes: > 5 % of the MAPQ>5 mappings carry an edit after the builder's
 # indel left-normalization. Parallel over GAM segments: one core per worker, 10-16 GB in total.
@@ -62,9 +68,9 @@ $PY -m $P.run build --gam sample.sorted.gam --nodes nodes.txt --graph-index $G/h
     --output out/shared --snv-output out/SNV --indel-output out/INDEL --snv-min-af 0.06 --indel-min-af 0.08
 ```
 
-The graph index, the reference-path directory and the chromosome block table are made once per
-graph with `tools` (section 4); for HPRC v1.1 d9 they exist under `$G`. The GAM must be sorted
-with a GAI from `vg gamsort -i`. Section 5 has the settings used for PacBio HiFi, ONT-UL,
+The graph files (graph index, reference-path directory, chromosome block table) are made once per
+graph and the sorted GAM with its GAI once per GAM, both with `tools` (section 4); for HPRC v1.1 d9
+the graph files exist under `$G`. Section 5 has the settings used for PacBio HiFi, ONT-UL,
 Illumina and fiberseq and what they cost.
 
 ---
@@ -73,9 +79,10 @@ Illumina and fiberseq and what they cost.
 
 ```mermaid
 flowchart TD
-    subgraph once["Once per graph / GAM"]
+    subgraph once["Once per graph / GAM (tools)"]
         GBZ["GBZ graph"] --> GIDX[("graph.sqlite<br/>node_id, seq, distinct_path_count")]
-        GAM["sorted BGZF GAM"] --> GAI[".gam.gai (vg gamsort -i)"]
+        GBZ --> PREP["graph_prep: GFA, reference path,<br/>chr index, index audit"]
+        RAW["giraffe GAM"] --> GAM["sorted BGZF GAM<br/>(gam_prep sort)"] --> GAI[".gam.gai (vg gamsort -i)"]
         GAM --> DISC["run discover<br/>(left-normalized edits per node)"] --> NODES["target_nodes.txt<br/>node_stats.json"]
     end
 
@@ -146,11 +153,12 @@ static test enforces both):
 | File | Purpose |
 |---|---|
 | `tools/graph_index_build.py`, `tools/gbz_graph_index.cpp` | compile the native GBZ → SQLite builder, build the graph index (once per graph) |
-| `tools/graph_prep.py` | `ref-path-scan`, `ref-path-check`, `chr-index` (once per graph) |
+| `tools/graph_prep.py` | `gfa`, `ref-path-scan`, `ref-path-check`, `components`, `chr-index`, `audit` (once per graph) |
+| `tools/gam_prep.py` | `sort` (`vg gamsort -i`, checked, then published) and `check` (once per GAM) |
 | `tools/validate_examples.py` | independent audit of a `--debug-rows` output against the GAM and graph |
 | `tools/binary_requirements.py` | newest GLIBC/GLIBCXX/CXXABI symbol versions and AVX/AVX-512/BMI use of a binary |
 | `tools/compare_runs.py` | byte and normalized comparison of two run roots, task or build directories (stdlib only) |
-| `tools/jobs/graph_prep.sh`, `tools/jobs/relabel.sh` | Slurm job scripts (shell) that run the package they are in: the three `graph_prep` steps for one graph; `tensor_postprocessing label` of one merged set |
+| `tools/jobs/graph_prep.sh`, `tools/jobs/gam_sort.sh`, `tools/jobs/relabel.sh` | Slurm job scripts (shell) that run the package they are in: every once-per-graph step for one GBZ; the sort of one GAM; `tensor_postprocessing label` of one merged set |
 
 **Tests** (`tests/`, a subpackage) — section 9.
 
@@ -399,15 +407,22 @@ $PY -m $P.tools.graph_index_build compile --deps /scratch/jshen/Github/gbz-tool/
     --output bin/gbz_graph_index [--cxx CXX] [--no-portable]
 $PY -m $P.tools.graph_index_build build --gbz /scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.gbz \
     --builder bin/gbz_graph_index --output /path/to/new.graph.sqlite
-# reference path and chromosome blocks (once per graph; tensor_postprocessing/README.md)
+# GFA, reference path, chromosome blocks, index audit (once per graph; tensor_postprocessing/README.md)
+$PY -m $P.tools.graph_prep gfa --gbz G.gbz --output G.gfa [--threads 16] [--vg VG]
 $PY -m $P.tools.graph_prep ref-path-scan --gfa G.gfa --output DIR [--reference-sample GRCh38]
 $PY -m $P.tools.graph_prep ref-path-check --path DIR --graph-index DB --fasta FA [--samples 100000]
+$PY -m $P.tools.graph_prep components --gbz G.gbz --reference-path DIR --output DIR [--threads 4] [--vg VG]
 $PY -m $P.tools.graph_prep chr-index --components-dir D --reference-path DIR --output PREFIX [--graph-index DB]
-# the same three steps as one Slurm job (defaults: the HPRC v1.1 d9 inputs)
-sbatch -J graph_prep -o LOG $P/tools/jobs/graph_prep.sh OUTDIR [GFA [GRAPH_INDEX [FASTA [COMPONENTS_DIR]]]]
+$PY -m $P.tools.graph_prep audit --graph-index DB --gfa G.gfa --chr-index TSV --output graph_audit.json
+# every graph step above (graph index included) as one Slurm job; steps whose output exists are skipped
+sbatch -J graph_prep -o LOG $P/tools/jobs/graph_prep.sh GBZ OUTDIR [FASTA]
+# sorted GAM + GAI (once per GAM)
+$PY -m $P.tools.gam_prep sort --gam IN.gam --output IN.sorted.gam [--threads 8] [--tmp-dir DIR] [--vg VG]
+$PY -m $P.tools.gam_prep check --gam IN.sorted.gam [--index GAI] [--input IN.gam] [--threads 8]
+sbatch -J gam_sort -o LOG $P/tools/jobs/gam_sort.sh GAM [OUTPUT]      # VERIFY=1: also check --input
 # labels of one merged set as a Slurm job
 sbatch -J NAME -o LOG $P/tools/jobs/relabel.sh TENSORS SOMATIC_VCF SOMATIC_BED GERMLINE_VCF GERMLINE_BED TRUTH_DIR \
-    [SNV_MIN_AF [INDEL_MIN_AF]]    # '' skips one: ... '' 0.10
+    [SNV_MIN_AF [INDEL_MIN_AF]]    # '' skips one: ... '' 0.10; REFERENCE_PATH=DIR: another graph's
 # audit of a --debug-rows build (one typed directory)
 $PY -m $P.tools.validate_examples out/SNV --gam G [--index GAI] --graph-index DB --output report.json
 # compare two run roots, task directories or build directories; exit 1 on any difference
@@ -425,6 +440,22 @@ $PY -m $P.tools.compare_runs A B [--mask DOTTED.KEY ...] [--report FILE]
   instructions, which come from the gbwtgraph dependencies (sdsl-lite's `-march=native`). Our build
   (`gbz-tool/dependency`) needs glibc ≥ 2.34 and an AVX/BMI CPU; the finished SQLite is needed only
   once per graph.
+* **GFA, components, audit.** `gfa` runs `vg convert -f --no-translation`, so the segment names are
+  the GBZ node IDs (the IDs in GAM alignments and in the graph index), not the original segment names
+  a translation would restore; `ref-path-check` then finds any disagreement with the graph index.
+  `components` writes `DIR/chrN/chrN.component.nodes.raw.txt` for chr1–22 (`vg chunk -C -p
+  <sample>#<hap>#chrN`, the path names from the reference-path directory) and `DIR/summary.json`
+  (nodes, ID range, nodes on and off the reference path). `audit` compares, on the first node of every
+  chr-index block and 24 random nodes, the graph index's sequence with the GFA's S line and its
+  `distinct_path_count` with the number of GFA W/P lines visiting the node; it writes its JSON only
+  when every node agrees (else `<output>.failed`, and it fails). `gfa`, `components` and `gam_prep`
+  run vg from `--vg`, else `$PANSOMA_VG` (`scripts/use_vg.sh`: vg 1.77), else `vg` on PATH.
+* **Sorted GAM.** `gam_prep sort` runs `vg gamsort -t N -p -i` (temporary files in `--tmp-dir`, else
+  `$TMPDIR`) into `<output>.tmp` and `<output>.gai.tmp`, checks them and then renames them; it never
+  overwrites. `check` opens the GAI with `IndexedGam` (the `'GAI!'` magic, format number 1, offsets
+  inside the GAM) and reads the first 10,000 records: GAM records whose smallest node IDs never
+  decrease. `--input` also compares `vg stats -a` of the two GAMs: alignments, primary, secondary,
+  aligned, perfect and matched bases must be equal.
 * **Reference path, chr index.** `ref-path-scan` writes a directory with `meta.json` (`format`
   `gfa-reference-path`) that `tensor_postprocessing.reference_path.ReferencePath` reads (also a
   `meta.json` that records the format under `version`, in its earlier spelling, as under `$G`);
@@ -436,12 +467,20 @@ $PY -m $P.tools.compare_runs A B [--mask DOTTED.KEY ...] [--report FILE]
   `Command=`). So the checkout's scripts run the checkout, and
   `pipeline_code/indexed_gam_pipeline_v4/tools/jobs/` runs `pipeline_code/`. A script prints
   `package: <dir>`, makes relative path arguments absolute and runs `python -m <package>...` from
-  the package's parent directory. `graph_prep.sh` writes `OUTDIR/<GFA name>.grch38_path/` and
-  `OUTDIR/<GFA name>.chr_node_ranges.{tsv,json}` and stops before the scan if any of them (or the
-  `.grch38_path.tmp` of a failed scan) exists; 2 CPUs, `--mem=5G`. On HPRC v1.1 d9 it takes 10 min
-  (peak 4.0 GiB, in the scan) and reproduces the files under `$G` (arrays, walk list and TSV
-  byte-identical; the JSON differ in the format key, the scan time and paths). `relabel.sh`:
-  section 6; 1 CPU, `--mem=19G` (label peak 15.7 GiB, COLO829T), 6 h.
+  the package's parent directory.
+  * `graph_prep.sh GBZ OUTDIR [FASTA]`, with `<name>` the GBZ file name without `.gbz`: the builder
+    `OUTDIR/gbz_graph_index` (compiled once from `$GBZ_DEPS`), `<GBZ dir>/<name>.gfa` (or `$GFA`)
+    and `OUTDIR/<name>.graph_index.sqlite` + `OUTDIR/graph_index_report.json` side by side, then
+    `OUTDIR/<name>.grch38_path/` (scan, check), `OUTDIR/<name>.components/`,
+    `OUTDIR/<name>.chr_node_ranges.{tsv,json}` and `OUTDIR/graph_audit.json`. A step whose output
+    exists is skipped (ref-path-check always runs), so a resubmission resumes; the `.tmp` of a failed
+    scan or components step stops it. 16 CPUs, `--mem=96G`, 2 days.
+  * `gam_sort.sh GAM [OUTPUT]` (OUTPUT default `<GAM without .gam>.sorted.gam`): `gam_prep sort` with
+    `$SLURM_CPUS_PER_TASK − 2` gamsort threads and `$GAMSORT_TMP` (default `/scratch/jshen/tmp_gamsort`),
+    with `VERIFY=1` also `gam_prep check --input`. 10 CPUs, `--mem=64G`, 6 days.
+  * `relabel.sh`: section 6; the reference path is `$REFERENCE_PATH`, else the one the set's current
+    labels used (`reference_path` of `TENSORS/SNV/labels.manifest.json`); 1 CPU, `--mem=19G` (label
+    peak 15.7 GiB, COLO829T), 6 h.
 * **validate_examples** requires `--debug-rows`. It recounts every site allele's (and the site's)
   coverage from raw mapping intervals, re-applies the read cap from the record digests, re-derives
   the site layout, the allele blocks and the uniform sampling from the recorded audit, and checks
@@ -948,7 +987,8 @@ PY=/wanglab/jshen/anaconda3/bin/python
 $PY -m unittest discover -s indexed_gam_pipeline_v4/tests -t .                          # ~50 s (quiet node), goldens included
 PANSOMA_DECODER=python $PY -m unittest discover -s indexed_gam_pipeline_v4/tests -t .   # ~45 s, Python decoder
 GBZ_TOOL=/scratch/jshen/Github/gbz-tool/gbztool GBZ_GRAPH_INDEX=tmp/native_check/gbz_graph_index \
-    $PY -m unittest discover -s indexed_gam_pipeline_v4/tests -t .                      # + the native graph-index builder
+PANSOMA_VG=/scratch/jshen/bin/vg_v1.77.0 \
+    $PY -m unittest discover -s indexed_gam_pipeline_v4/tests -t .     # + the native graph-index builder and vg
 ```
 
 Run from the repository root with `-t .` (the tests are the subpackage
@@ -956,11 +996,12 @@ Run from the repository root with `-t .` (the tests are the subpackage
 `tests/__init__.py` refuses to load next to another pipeline package (e.g. a frozen run source).
 Compile the decoder first: without a `_fastdecode*.so` the native cases are skipped with the reason
 printed; with one present, a module that does not load (stale build, another package's) fails the
-suite instead of silently decoding in Python. With the decoder built, the only skip of the first
-pass is the native graph-index builder test, which needs the two environment variables of the
-third line; the second pass also skips the five golden tests.
+suite instead of silently decoding in Python. With the decoder built, the only skips of the first
+pass are the native graph-index builder test and the two vg cases of `test_prep_tools.py`, which
+need the environment variables of the third command; the second pass also skips the five golden
+tests.
 
-153 tests in 13 test modules cover: GAI reading, cache/scan equivalence (limits 1, 2048 and 64 MiB),
+162 tests in 14 test modules cover: GAI reading, cache/scan equivalence (limits 1, 2048 and 64 MiB),
 refusal of cache 0, of a GAI without the `'GAI!'` magic and of an unknown GAI format number, bin
 arrays against the per-bin scan, the MAPQ-filtered cache, the capped fetch (each node its smallest
 record digests whatever else is asked for, the reader's key equal to the builder's digest); capped
@@ -985,7 +1026,11 @@ the package guard, the native refusal at prepare, a subprocess import of the fro
 standalone `finalize` after an interrupted one, finalize labels with the AF floors frozen at prepare
 (equal to `label` with the same floors); the earlier format names (a graph index with the suffixed
 schema and metric opens, a reference-path directory with `version` opens, `label` and the merge's
-refusal work on a merged set with the suffixed layout); `compare_runs` itself; and static checks (no
+refusal work on a merged set with the suffixed layout); `compare_runs` itself; the once-per-graph and once-per-GAM tools (`graph_prep audit` against a GFA,
+a wrong count or sequence caught and reported to `.failed`; `gam_prep check` passing a sorted GAM
+and refusing an unsorted one or another GAM's GAI; with vg: a GBZ → `gfa` keeping the node IDs,
+`components` of three chromosomes with an off-reference node, `gam_prep sort` publishing a checked
+GAM with the input's `vg stats -a` counts); and static checks (no
 runtime import of `tools`/`tests`, no module-search-path edits, no other package names in the `.py`,
 `.cpp` and `.sh` files).
 

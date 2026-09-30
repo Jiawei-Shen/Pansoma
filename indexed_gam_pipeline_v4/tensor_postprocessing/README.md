@@ -45,7 +45,7 @@ chr3–chr9, chrEBV, chrM, unplaced, chrX, chrY.
 
 * **chr1–22** blocks are exactly the node sets of `vg chunk -C -p GRCh38#0#chrN`: the whole
   connected component, including every node that is not on GRCh38 (insertions and
-  alternative branches, 17–22 % of each component). They come from `scripts/build_chr_node_filters.sh`.
+  alternative branches, 17–22 % of each component). They come from `tools.graph_prep components`.
   Each list must be one gap-free interval.
 * **Non-autosomal groups** (chrEBV, chrM, chrX, chrY; `*_random`, `chrUn_*` and HPRC contigs
   assigned to no chromosome → `unplaced`) take the remaining IDs, split at each group's
@@ -334,10 +334,13 @@ Recall counts key matches only; partial matches are not in it.
 From the repository root, with `P="python -m indexed_gam_pipeline_v4"`:
 
 ```bash
-# once per graph
+# once per graph (all of them, graph index included: tools/jobs/graph_prep.sh GBZ OUTDIR [FASTA])
+$P.tools.graph_prep gfa --gbz G.gbz --output G.gfa [--threads 16] [--vg VG]
 $P.tools.graph_prep ref-path-scan --gfa G.gfa --output DIR [--reference-sample GRCh38]
 $P.tools.graph_prep ref-path-check --path DIR --graph-index DB --fasta FA [--samples 100000]
+$P.tools.graph_prep components --gbz G.gbz --reference-path DIR --output DIR [--threads 4] [--vg VG]
 $P.tools.graph_prep chr-index --components-dir D --reference-path DIR --output PREFIX [--graph-index DB]
+$P.tools.graph_prep audit --graph-index DB --gfa G.gfa --chr-index TSV --output graph_audit.json
 # manual re-merge / re-label of a run root (orchestrate finalize does both)
 $P.tensor_postprocessing merge --root /path/to/run --chr-index TSV [--shard-size 32768] [--keep-sources] \
     [--workers 8] [--spots 200] [--reference-path DIR]
@@ -362,24 +365,29 @@ $P.tools.graph_prep chr-index \
     --graph-index $G/hprc-v1.1-mc-grch38.d9.graph_index.sqlite
 ```
 
-`tools/jobs/graph_prep.sh OUTDIR` runs the same three commands as one Slurm job, with these inputs
-as its defaults (other graphs: `graph_prep.sh OUTDIR GFA GRAPH_INDEX FASTA COMPONENTS_DIR`); it
-names the outputs after the GFA, as above, and does not overwrite them.
+The chr1–22 component lists given to chr-index here were made with `scripts/build_chr_node_filters.sh`,
+the same `vg chunk -C -p GRCh38#0#chrN` call that `graph_prep components` makes.
+`tools/jobs/graph_prep.sh GBZ OUTDIR [FASTA]` runs every once-per-graph step (main README,
+section 4, "Tools").
 
 Measured on HPRC v1.1 d9:
 
 * ref-path-scan: 7.4 min / 4.0 GiB (49,092,514 GRCh38 nodes, none visited twice);
 * ref-path-check: 0 length and 0 sequence mismatches;
 * chr-index: 29 s;
-* `graph_prep.sh` (all three, 2 CPUs, `--mem=5G`): 10 min, peak 4.0 GiB. Its outputs equal the
+* scan, check and chr-index together (2 CPUs): 10 min, peak 4.0 GiB. Their outputs equal the
   files under `$G`: every `.npy`, `walks.ndjson` and the `.tsv` byte for byte; the JSON only in the
-  format key (`format`, plain name, instead of `version`, `-v1` name), `scan_seconds` and paths.
+  format key (`format`, plain name, instead of `version`, `-v1` name), `scan_seconds` and paths;
+* components, chr22 (vg 1.77, 4 threads): 3.4 min, 15 GB (loading the GBZ); the list is byte for
+  byte the one under `chr_component_vs_GRCh38_summary/chr22`.
 
 **Relabelling the six existing sets.** `tools/jobs/relabel.sh` labels one merged set with the
 package it is in (main README, section 4, "Tools"). On the data side it runs from
 `/scratch/jshen/data/pansoma_v2_tensors/pipeline_code/`, a `git archive` of this package plus the
 compiled `.so`, with the commit recorded in `pipeline_code/git_head.txt`. Before labelling, the
-script checks that `TENSORS/SNV/manifest.json` has a merged layout (either name). It keeps no backup:
+script checks that `TENSORS/SNV/manifest.json` has a merged layout (either name) and takes the
+reference path of the set's current labels (`labels.manifest.json`), or `$REFERENCE_PATH` for a set of
+another graph or one without labels. It keeps no backup:
 `label` writes every label file of a kind to a temporary name and replaces the current ones only when
 all of them are written, so a failed run leaves the current labels in place.
 

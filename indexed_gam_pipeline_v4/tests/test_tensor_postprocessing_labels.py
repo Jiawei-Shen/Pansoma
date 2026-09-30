@@ -399,12 +399,18 @@ class TruthLabelTest(unittest.TestCase):
                     self.assertEqual(len(details["somatic"] + details["germline"]), 1)  # recorded when floored too
 
     def test_relabel_job_takes_both_af_floors(self):
-        """tools/jobs/relabel.sh: 6 to 8 arguments (SNV_MIN_AF, INDEL_MIN_AF; '' skips one), else its usage line."""
+        """tools/jobs/relabel.sh: 6 to 8 arguments (SNV_MIN_AF, INDEL_MIN_AF; '' skips one), else its usage line;
+        the reference path is $REFERENCE_PATH or the one of the set's current labels."""
         script = Path(truth_labels.__file__).resolve().parents[1] / "tools" / "jobs" / "relabel.sh"
         with tempfile.TemporaryDirectory() as tmp:
+            merged = Path(tmp) / "merged"
+            (merged / "SNV").mkdir(parents=True)
+            (merged / "SNV" / "manifest.json").write_text(json.dumps(dict(layout=LAYOUT)))
             for arguments, code, message in (([tmp] * 9, 2, "TRUTH_DIR [SNV_MIN_AF [INDEL_MIN_AF]]"),
                                              ([tmp] * 5, 2, "TRUTH_DIR [SNV_MIN_AF [INDEL_MIN_AF]]"),
-                                             ([tmp] * 6 + ["", "0.10"], 1, "is not merged")):  # past the count check
+                                             ([tmp] * 6 + ["", "0.10"], 1, "is not merged"),  # past the count check
+                                             # merged, but no labels to take the graph's reference path from
+                                             ([str(merged)] + [tmp] * 5, 1, "set REFERENCE_PATH")):
                 with self.subTest(arguments=len(arguments)):
                     result = subprocess.run(["bash", str(script), *arguments], cwd=tmp, capture_output=True, text=True)
                     self.assertEqual(result.returncode, code, result.stdout + result.stderr)
