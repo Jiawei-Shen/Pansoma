@@ -179,6 +179,99 @@ the threshold). It also writes `.metrics.json`: the same report over the test te
 and the counts of test tensors on off-reference nodes (`--threshold` overrides t).
 Off-reference tensors are marked for analysis only; the test scores them like the others.
 
+## Calls: graph VCF → GRCh38 VCF → PoN → rtg vcfeval
+
+Three steps turn `predict`'s output into VCFs and score them against the truth VCF. Each module's docstring has
+the full rules.
+
+```bash
+cd machine_learning
+G=/scratch/jshen/data/pansoma_v2_tensors/graph_index; PON=/scratch/jshen/data/Pansoma/panel_of_normal_VCFs
+$P -m pansoma_net_v2.graph_vcf --predictions <run>/test_chr1/<name>.SNV.predictions.ndjson.gz --tensors $T \
+    --kind SNV --graph-index $G/hprc-v1.1-mc-grch38.d9.graph_index.sqlite --output out/HG008T_Illumina.SNV.graph.vcf.gz
+$P -m pansoma_net_v2.linear_vcf --graph-vcf out/HG008T_Illumina.SNV.graph.vcf.gz \
+    --reference-path $G/hprc-v1.1-mc-grch38.d9.grch38_path --fasta GRCh38_no_alt_analysis_set.fasta \
+    --output out/HG008T_Illumina.SNV.linear.vcf.gz
+$P -m pansoma_net_v2.vcfeval --calls out/HG008T_Illumina.SNV.linear.vcf.gz \
+    --pon $PON/af-only-gnomad.hg38.vcf.gz $PON/Homo_sapiens_assembly38.dbsnp138.vcf.gz $PON/1000g_pon.hg38.vcf.gz \
+          $PON/CoLoRSdb.GRCh38.v1.1.0.deepvariant.glnexus.vcf.gz \
+    --truth <somatic truth>.vcf.gz --bed <benchmark>.bed --sdf GRCh38.sdf --rtg rtg --output out/eval_bed
+```
+
+`/scratch/jshen/data/pansoma_net_v2_runs/jobs/vcf.sh RUN KIND` runs the three on a run's chr1 predictions into
+`<run>/vcf_chr1/`, with the truth VCF and BED of the set's labels. vcfeval runs twice there:
+
+- `eval_bed`: inside the benchmark BED.
+- `eval_nobed`: on the whole chromosome, reusing the PoN-tagged calls through `--pon-vcf`. This is the form
+  of the earlier rtg runs of ClairS-TO, DeepSomatic and Pansoma v1 (`--squash-ploidy --sample ALT,ALT`, no BED).
+
+**graph_vcf.** One record per tensor: the site's representative allele A1, the allele the model scores.
+
+- Coordinates: CHROM is the node ID, POS is 1-based on the node's forward strand, and ID is the candidate ID.
+- INDEL padding uses the node base before the event. At node offset 0 it uses the base after the event,
+  or N (flag NOPAD) when the deletion ends at a node end.
+- INFO holds the exact event (START, KIND, EVREF, EVALT, PATH), p_somatic / p_germline / p_non, and the site.
+- FORMAT holds A1's read support: GT (always 0/1), DP, AD and AF.
+- QUAL = −10 log10(1 − p_somatic). rtg rounds scores to 3 decimals, so p near 1 would collapse on a
+  linear scale.
+- FILTER:
+  - PASS: `predict`'s somatic call (or p_somatic ≥ `--threshold`).
+  - LowQual: not called.
+  - LowAF: below the AF floor of the labels predict's test used (Illumina SNV 0.07; none for INDEL or the
+    long-read sets).
+- Tensors with p_somatic < `--min-score` (0.01) that are not called are left out. The LowQual records give
+  vcfeval its curve.
+
+**linear_vcf.** Each event is projected with `tensor_postprocessing`'s `ReferencePath.linear`, the projection
+merge stored as the summaries' `grch38`.
+
+- The projected REF must equal the FASTA, or the run stops.
+- INDELs are left-aligned on the FASTA and padded from it.
+- Records of one GRCh38 allele are merged (INFO MERGED, MERGED_ALT; ID lists every candidate). The same
+  insertion is often seen at the end of one node and at the start of the next.
+- Events with no GRCh38 position go unchanged to `<name>.linear.unplaced.vcf.gz`. These are off-reference
+  nodes, and deletions over nodes that are not GRCh38 neighbours. Placing them would need the graph's edges.
+
+**vcfeval.**
+
+- **PoN.** `scripts/filter_panel_of_normals.py` with the four PoNs. gnomAD and dbSNP match by allele, 1000G
+  and CoLoRSdb by position. It also runs over the truth records, which shows how much recall the PoN leaves
+  to any caller.
+- **Truth.** The PASS truth records of the kind on the predicted chromosomes.
+- **rtg vcfeval.** Always with `--squash-ploidy --sample ALT,ALT -f QUAL`. For the calls without and with the
+  PoN (raw / pon) it runs twice:
+  - once on the PASS records: the result at the threshold;
+  - once with `--all-records` on PASS + LowQual: the curve (best F1, precision at recall 0.5–0.95, ceiling).
+- **Reports.** `report.json` and `report.txt`. The latter also gives the PASS calls without a GRCh38 position:
+  they are not evaluated, so precision is also shown with them counted as false calls.
+
+HG008 Illumina chr1 (SNV `HG008_Illumina_SNV_keephard_w100`, INDEL `HG008_Illumina_INDEL_base`, 2026-09-29).
+Values are at the checkpoint threshold; best F1 is the best point of the chr1 curve, a test-set choice.
+
+| | PASS evaluated (unplaced) | TP | FP | P | R | F1 | best F1 (P, R) |
+|---|---|---|---|---|---|---|---|
+| SNV raw, in BED (697) | 1,932 (22) | 315 | 1,617 | 0.163 | 0.452 | 0.240 | 0.256 |
+| SNV pon, in BED | 445 | 295 | 150 | 0.663 | 0.423 | 0.517 | 0.623 (0.574, 0.683) |
+| SNV pon, no BED (702) | 461 | 297 | 164 | 0.644 | 0.423 | 0.511 | 0.615 (0.560, 0.682) |
+| SNV pon, no BED, `HG008_Illumina_SNV_keephard_w100_nopartial` | 482 (0) | 319 | 163 | 0.662 | 0.454 | 0.539 | 0.662 (0.611, 0.724) |
+| INDEL raw, no BED (635) | 899 (324) | 98 | 801 | 0.109 | 0.154 | 0.128 | 0.143 |
+| INDEL pon, no BED | 19 | 11 | 8 | 0.579 | 0.017 | 0.034 | 0.101 |
+
+- **Agreement with the truth-level metrics.** The results agree with `metrics.truth_report`:
+  - SNV raw: TP 315 in both.
+  - FP: 1,617 against 1,627. rtg does not score the 17 unplaced false calls, counts 4 SNV tensors next to
+    INS truths as FP, and 3 calls lie in the somatic BED but outside the germline BED.
+  - INDEL TP: 92 against 123. The other 31 are unplaced residual-partial tensors.
+  - The SNV pon best F1 equals the v1-vs-v2 comparison's result with the same PoN rule (0.623; 0.573, 0.683).
+- **Partial labels.** `nopartial` is keephard_w100 trained without the SNV partial-match labels (`train
+  --ignore-reasons residual_partial_somatic_truth allele_partial_somatic_truth`). No partial SNV tensor is an
+  rtg true positive: its allele is an SNV and its truth an INDEL. With the PoN, its false calls with AF < 0.2
+  (at raw recall 0.9) fall from 336 to 25. At the validation per-tensor recall-0.9 threshold (p ≥ 0.654) it
+  gives P 0.553, R 0.776, F1 0.646 with the PoN, no BED; Pansoma v1 with its PoN gave 0.622 (P 0.507, R 0.805).
+- **The PoN on INDELs.** It tags 576 of the 635 chr1 INDEL truth records, mostly by exact allele: CoLoRSdb
+  569, most of them in homopolymers, at population AF around 0.1–1 %. So after it, no caller can recall more
+  than 9 %. For SNV it tags 100 of 702.
+
 ## GPU runs (measured 2026-09-28, node tequila)
 
 `--gres=gpu:24gb:1` is an H100 NVL MIG slice (`2g.24gb`); `gpu:h100` is a whole H100 NVL (94 GB). The default
@@ -313,5 +406,12 @@ cd machine_learning && $P -m unittest discover -s pansoma_net_v2/tests -t .
   call; the truth report against brute force, duplicates and other-kind truth counted once.
 - `test_combine`: one truth found from both sets counts once; repeated calls; other-kind truth with one set;
   two predictions of one kind are refused.
+- `test_vcf`: a small graph (a GRCh38 walk, an off-reference node) and one tensor per case.
+  - graph_vcf: node padding (offset 0, node end, NOPAD, several nodes), FILTER from predict's calls and the
+    labels' AF floor, and a summary out of line.
+  - linear_vcf: projection equal to `ReferencePath.linear`, left-alignment, a merged junction insertion
+    (PASS kept, A1 reads summed), unplaced events, a FASTA that disagrees.
+  - vcfeval: summary parsing (no baseline, NaN), the curve points. With rtg (`$RTG` or on PATH): PoN tags on
+    calls and truth (a sites-only truth without ##contig), calls vs curve, `--pon-vcf` reuse and refusal.
 - `test_gpu`: runs on a CUDA node. The GPU encoding equals the CPU one, a bf16 training step learns, and
   compile + channels_last gives the eager logits and gradients in fp32.
