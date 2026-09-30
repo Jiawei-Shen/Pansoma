@@ -1,0 +1,808 @@
+{
+ "loci": 1535,
+ "misses": 1285,
+ "controls": 250,
+ "by_kind": {
+  "miss:SNP": {
+   "total": 598,
+   "groups": {
+    "final_class=S1_low_mapq_or_no_reads": {
+     "n": 237,
+     "pct": 39.6,
+     "median_alt_fraction": 0.0,
+     "from_exact_reads": 0,
+     "pass_in_bed": 237,
+     "by_length": {
+      "1": 237
+     }
+    },
+    "final_class=S2_alt_absent_in_reads": {
+     "n": 200,
+     "pct": 33.4,
+     "median_alt_fraction": 0.0,
+     "from_exact_reads": 0,
+     "pass_in_bed": 200,
+     "by_length": {
+      "1": 200
+     }
+    },
+    "reason=no_read_spans_site": {
+     "n": 200,
+     "pct": 33.4,
+     "median_alt_fraction": null,
+     "from_exact_reads": 0,
+     "pass_in_bed": 200,
+     "by_length": {
+      "1": 200
+     }
+    },
+    "reason=no_ALT_read": {
+     "n": 199,
+     "pct": 33.3,
+     "median_alt_fraction": 0.0,
+     "from_exact_reads": 0,
+     "pass_in_bed": 199,
+     "by_length": {
+      "1": 199
+     }
+    },
+    "reason=fewer_than_3_ALT_reads": {
+     "n": 89,
+     "pct": 14.9,
+     "median_alt_fraction": 0.02,
+     "from_exact_reads": 0,
+     "pass_in_bed": 89,
+     "by_length": {
+      "1": 89
+     }
+    },
+    "final_class=S3_alt_is_existing_graph_allele": {
+     "n": 65,
+     "pct": 10.9,
+     "median_alt_fraction": 0.533,
+     "from_exact_reads": 61,
+     "pass_in_bed": 65,
+     "by_length": {
+      "1": 65
+     }
+    },
+    "final_class=S4c_repeat_no_clear_alt": {
+     "n": 54,
+     "pct": 9.0,
+     "median_alt_fraction": 0.0,
+     "from_exact_reads": 0,
+     "pass_in_bed": 54,
+     "by_length": {
+      "1": 54
+     }
+    },
+    "reason=site_bypassed:branch:no_edit": {
+     "n": 51,
+     "pct": 8.5,
+     "median_alt_fraction": 0.533,
+     "from_exact_reads": 49,
+     "pass_in_bed": 51,
+     "by_length": {
+      "1": 51
+     }
+    },
+    "final_class=S4a_repeat_snv_edit_on_branch": {
+     "n": 32,
+     "pct": 5.4,
+     "median_alt_fraction": 0.047,
+     "from_exact_reads": 17,
+     "pass_in_bed": 32,
+     "by_length": {
+      "1": 32
+     }
+    },
+    "reason=key_observed_on_non_target_node": {
+     "n": 23,
+     "pct": 3.8,
+     "median_alt_fraction": 0.042,
+     "from_exact_reads": 17,
+     "pass_in_bed": 23,
+     "by_length": {
+      "1": 23
+     }
+    },
+    "reason=site_bypassed:branch:edit_on_path_taken": {
+     "n": 15,
+     "pct": 2.5,
+     "median_alt_fraction": 0.51,
+     "from_exact_reads": 12,
+     "pass_in_bed": 15,
+     "by_length": {
+      "1": 15
+     }
+    },
+    "reason=site_on_grch38:other_edit": {
+     "n": 11,
+     "pct": 1.8,
+     "median_alt_fraction": 0.208,
+     "from_exact_reads": 0,
+     "pass_in_bed": 11,
+     "by_length": {
+      "1": 11
+     }
+    },
+    "final_class=S4b_repeat_absorbed_by_graph_path": {
+     "n": 10,
+     "pct": 1.7,
+     "median_alt_fraction": 0.48,
+     "from_exact_reads": 0,
+     "pass_in_bed": 10,
+     "by_length": {
+      "1": 10
+     }
+    },
+    "reason=site_on_grch38:no_local_edit": {
+     "n": 4,
+     "pct": 0.7,
+     "median_alt_fraction": 1.0,
+     "from_exact_reads": 0,
+     "pass_in_bed": 4,
+     "by_length": {
+      "1": 4
+     }
+    },
+    "reason=site_bypassed:skip_edge:edit_on_path_taken": {
+     "n": 4,
+     "pct": 0.7,
+     "median_alt_fraction": 0.355,
+     "from_exact_reads": 0,
+     "pass_in_bed": 4,
+     "by_length": {
+      "1": 4
+     }
+    },
+    "reason=site_bypassed:skip_edge:no_edit": {
+     "n": 2,
+     "pct": 0.3,
+     "median_alt_fraction": 0.582,
+     "from_exact_reads": 0,
+     "pass_in_bed": 2,
+     "by_length": {
+      "1": 2
+     }
+    }
+   }
+  },
+  "miss:INS": {
+   "total": 397,
+   "groups": {
+    "final_class=I1_allele_fully_in_graph": {
+     "n": 220,
+     "pct": 55.4,
+     "median_alt_fraction": 0.651,
+     "from_exact_reads": 174,
+     "pass_in_bed": 220,
+     "by_length": {
+      "2-5": 88,
+      "6-20": 16,
+      "1": 112,
+      "21-50": 4
+     }
+    },
+    "reason=site_bypassed:branch:no_edit": {
+     "n": 220,
+     "pct": 55.4,
+     "median_alt_fraction": 0.651,
+     "from_exact_reads": 174,
+     "pass_in_bed": 220,
+     "by_length": {
+      "2-5": 88,
+      "6-20": 16,
+      "1": 112,
+      "21-50": 4
+     }
+    },
+    "final_class=I2_partly_in_graph_residual_edit": {
+     "n": 91,
+     "pct": 22.9,
+     "median_alt_fraction": 0.894,
+     "from_exact_reads": 74,
+     "pass_in_bed": 91,
+     "by_length": {
+      "2-5": 40,
+      "6-20": 24,
+      "21-50": 4,
+      "1": 23
+     }
+    },
+    "reason=site_bypassed:branch:edit_on_path_taken": {
+     "n": 89,
+     "pct": 22.4,
+     "median_alt_fraction": 0.939,
+     "from_exact_reads": 73,
+     "pass_in_bed": 89,
+     "by_length": {
+      "2-5": 39,
+      "6-20": 23,
+      "21-50": 4,
+      "1": 23
+     }
+    },
+    "final_class=I3_grch38_path_different_edit": {
+     "n": 50,
+     "pct": 12.6,
+     "median_alt_fraction": 0.605,
+     "from_exact_reads": 37,
+     "pass_in_bed": 50,
+     "by_length": {
+      "1": 24,
+      "2-5": 18,
+      "6-20": 8
+     }
+    },
+    "reason=site_on_grch38:other_edit": {
+     "n": 50,
+     "pct": 12.6,
+     "median_alt_fraction": 0.605,
+     "from_exact_reads": 37,
+     "pass_in_bed": 50,
+     "by_length": {
+      "1": 24,
+      "2-5": 18,
+      "6-20": 8
+     }
+    },
+    "final_class=I4_no_or_few_alt_reads": {
+     "n": 25,
+     "pct": 6.3,
+     "median_alt_fraction": 0.0,
+     "from_exact_reads": 0,
+     "pass_in_bed": 25,
+     "by_length": {
+      "6-20": 10,
+      "2-5": 7,
+      "1": 5,
+      "21-50": 3
+     }
+    },
+    "reason=no_ALT_read": {
+     "n": 14,
+     "pct": 3.5,
+     "median_alt_fraction": 0.0,
+     "from_exact_reads": 0,
+     "pass_in_bed": 14,
+     "by_length": {
+      "6-20": 3,
+      "2-5": 5,
+      "1": 4,
+      "21-50": 2
+     }
+    },
+    "reason=fewer_than_3_ALT_reads": {
+     "n": 11,
+     "pct": 2.8,
+     "median_alt_fraction": 1.0,
+     "from_exact_reads": 0,
+     "pass_in_bed": 11,
+     "by_length": {
+      "6-20": 7,
+      "1": 1,
+      "2-5": 2,
+      "21-50": 1
+     }
+    },
+    "final_class=I5_low_mapq_or_no_reads": {
+     "n": 9,
+     "pct": 2.3,
+     "median_alt_fraction": null,
+     "from_exact_reads": 0,
+     "pass_in_bed": 9,
+     "by_length": {
+      "6-20": 2,
+      "1": 1,
+      "2-5": 6
+     }
+    },
+    "reason=no_read_spans_site": {
+     "n": 9,
+     "pct": 2.3,
+     "median_alt_fraction": null,
+     "from_exact_reads": 0,
+     "pass_in_bed": 9,
+     "by_length": {
+      "6-20": 2,
+      "1": 1,
+      "2-5": 6
+     }
+    },
+    "final_class=I7_unclear": {
+     "n": 2,
+     "pct": 0.5,
+     "median_alt_fraction": 1.0,
+     "from_exact_reads": 0,
+     "pass_in_bed": 2,
+     "by_length": {
+      "2-5": 1,
+      "6-20": 1
+     }
+    },
+    "reason=site_bypassed:skip_edge:edit_on_path_taken": {
+     "n": 2,
+     "pct": 0.5,
+     "median_alt_fraction": 0.603,
+     "from_exact_reads": 1,
+     "pass_in_bed": 2,
+     "by_length": {
+      "2-5": 1,
+      "6-20": 1
+     }
+    },
+    "reason=site_on_grch38:no_local_edit": {
+     "n": 2,
+     "pct": 0.5,
+     "median_alt_fraction": 1.0,
+     "from_exact_reads": 0,
+     "pass_in_bed": 2,
+     "by_length": {
+      "2-5": 1,
+      "6-20": 1
+     }
+    }
+   }
+  },
+  "miss:DEL": {
+   "total": 290,
+   "groups": {
+    "final_class=I1_allele_fully_in_graph": {
+     "n": 176,
+     "pct": 60.7,
+     "median_alt_fraction": 0.667,
+     "from_exact_reads": 151,
+     "pass_in_bed": 176,
+     "by_length": {
+      "1": 121,
+      "2-5": 30,
+      "6-20": 21,
+      "21-50": 4
+     }
+    },
+    "reason=site_bypassed:skip_edge:no_edit": {
+     "n": 143,
+     "pct": 49.3,
+     "median_alt_fraction": 0.64,
+     "from_exact_reads": 133,
+     "pass_in_bed": 143,
+     "by_length": {
+      "1": 112,
+      "2-5": 19,
+      "6-20": 12
+     }
+    },
+    "final_class=I2_partly_in_graph_residual_edit": {
+     "n": 78,
+     "pct": 26.9,
+     "median_alt_fraction": 0.765,
+     "from_exact_reads": 58,
+     "pass_in_bed": 78,
+     "by_length": {
+      "2-5": 35,
+      "1": 17,
+      "6-20": 19,
+      "21-50": 7
+     }
+    },
+    "reason=site_bypassed:skip_edge:edit_on_path_taken": {
+     "n": 52,
+     "pct": 17.9,
+     "median_alt_fraction": 0.839,
+     "from_exact_reads": 42,
+     "pass_in_bed": 52,
+     "by_length": {
+      "2-5": 29,
+      "1": 7,
+      "6-20": 11,
+      "21-50": 5
+     }
+    },
+    "reason=site_bypassed:branch:no_edit": {
+     "n": 33,
+     "pct": 11.4,
+     "median_alt_fraction": 0.955,
+     "from_exact_reads": 18,
+     "pass_in_bed": 33,
+     "by_length": {
+      "2-5": 11,
+      "1": 9,
+      "6-20": 9,
+      "21-50": 4
+     }
+    },
+    "reason=site_bypassed:branch:edit_on_path_taken": {
+     "n": 26,
+     "pct": 9.0,
+     "median_alt_fraction": 0.6,
+     "from_exact_reads": 16,
+     "pass_in_bed": 26,
+     "by_length": {
+      "2-5": 6,
+      "6-20": 8,
+      "1": 10,
+      "21-50": 2
+     }
+    },
+    "final_class=I5_low_mapq_or_no_reads": {
+     "n": 17,
+     "pct": 5.9,
+     "median_alt_fraction": null,
+     "from_exact_reads": 0,
+     "pass_in_bed": 17,
+     "by_length": {
+      "1": 7,
+      "6-20": 1,
+      "2-5": 9
+     }
+    },
+    "reason=no_read_spans_site": {
+     "n": 17,
+     "pct": 5.9,
+     "median_alt_fraction": null,
+     "from_exact_reads": 0,
+     "pass_in_bed": 17,
+     "by_length": {
+      "1": 7,
+      "6-20": 1,
+      "2-5": 9
+     }
+    },
+    "final_class=I3_grch38_path_different_edit": {
+     "n": 9,
+     "pct": 3.1,
+     "median_alt_fraction": 0.553,
+     "from_exact_reads": 6,
+     "pass_in_bed": 9,
+     "by_length": {
+      "6-20": 1,
+      "1": 4,
+      "2-5": 4
+     }
+    },
+    "reason=site_on_grch38:other_edit": {
+     "n": 9,
+     "pct": 3.1,
+     "median_alt_fraction": 0.553,
+     "from_exact_reads": 6,
+     "pass_in_bed": 9,
+     "by_length": {
+      "6-20": 1,
+      "1": 4,
+      "2-5": 4
+     }
+    },
+    "final_class=I4_no_or_few_alt_reads": {
+     "n": 8,
+     "pct": 2.8,
+     "median_alt_fraction": 0.5,
+     "from_exact_reads": 0,
+     "pass_in_bed": 8,
+     "by_length": {
+      "2-5": 3,
+      "6-20": 3,
+      "1": 2
+     }
+    },
+    "reason=no_ALT_read": {
+     "n": 4,
+     "pct": 1.4,
+     "median_alt_fraction": 0.0,
+     "from_exact_reads": 0,
+     "pass_in_bed": 4,
+     "by_length": {
+      "2-5": 3,
+      "1": 1
+     }
+    },
+    "reason=fewer_than_3_ALT_reads": {
+     "n": 4,
+     "pct": 1.4,
+     "median_alt_fraction": 1.0,
+     "from_exact_reads": 0,
+     "pass_in_bed": 4,
+     "by_length": {
+      "6-20": 3,
+      "1": 1
+     }
+    },
+    "final_class=I7_unclear": {
+     "n": 2,
+     "pct": 0.7,
+     "median_alt_fraction": 1.0,
+     "from_exact_reads": 0,
+     "pass_in_bed": 2,
+     "by_length": {
+      "2-5": 1,
+      "6-20": 1
+     }
+    },
+    "reason=site_on_grch38:no_local_edit": {
+     "n": 2,
+     "pct": 0.7,
+     "median_alt_fraction": 1.0,
+     "from_exact_reads": 0,
+     "pass_in_bed": 2,
+     "by_length": {
+      "2-5": 1,
+      "6-20": 1
+     }
+    }
+   }
+  },
+  "control:SNP": {
+   "total": 50,
+   "groups": {
+    "final_class=S4a_repeat_snv_edit_on_branch": {
+     "n": 50,
+     "pct": 100.0,
+     "median_alt_fraction": 0.535,
+     "from_exact_reads": 45,
+     "pass_in_bed": 50,
+     "by_length": {
+      "1": 50
+     }
+    },
+    "reason=key_observed_on_target_node": {
+     "n": 50,
+     "pct": 100.0,
+     "median_alt_fraction": 0.535,
+     "from_exact_reads": 45,
+     "pass_in_bed": 50,
+     "by_length": {
+      "1": 50
+     }
+    }
+   }
+  },
+  "control:INS": {
+   "total": 70,
+   "groups": {
+    "final_class=I10_truth_edit_on_built_node": {
+     "n": 66,
+     "pct": 94.3,
+     "median_alt_fraction": 0.508,
+     "from_exact_reads": 59,
+     "pass_in_bed": 66,
+     "by_length": {
+      "6-20": 8,
+      "1": 22,
+      "2-5": 36
+     }
+    },
+    "reason=key_observed_on_target_node": {
+     "n": 66,
+     "pct": 94.3,
+     "median_alt_fraction": 0.508,
+     "from_exact_reads": 59,
+     "pass_in_bed": 66,
+     "by_length": {
+      "6-20": 8,
+      "1": 22,
+      "2-5": 36
+     }
+    },
+    "final_class=I3_grch38_path_different_edit": {
+     "n": 3,
+     "pct": 4.3,
+     "median_alt_fraction": 0.907,
+     "from_exact_reads": 3,
+     "pass_in_bed": 3,
+     "by_length": {
+      "2-5": 2,
+      "6-20": 1
+     }
+    },
+    "reason=site_on_grch38:other_edit": {
+     "n": 3,
+     "pct": 4.3,
+     "median_alt_fraction": 0.907,
+     "from_exact_reads": 3,
+     "pass_in_bed": 3,
+     "by_length": {
+      "2-5": 2,
+      "6-20": 1
+     }
+    },
+    "final_class=I2_partly_in_graph_residual_edit": {
+     "n": 1,
+     "pct": 1.4,
+     "median_alt_fraction": 1.0,
+     "from_exact_reads": 1,
+     "pass_in_bed": 1,
+     "by_length": {
+      "2-5": 1
+     }
+    },
+    "reason=site_bypassed:branch:edit_on_path_taken": {
+     "n": 1,
+     "pct": 1.4,
+     "median_alt_fraction": 1.0,
+     "from_exact_reads": 1,
+     "pass_in_bed": 1,
+     "by_length": {
+      "2-5": 1
+     }
+    }
+   }
+  },
+  "control:DEL": {
+   "total": 130,
+   "groups": {
+    "final_class=I10_truth_edit_on_built_node": {
+     "n": 121,
+     "pct": 93.1,
+     "median_alt_fraction": 0.583,
+     "from_exact_reads": 109,
+     "pass_in_bed": 121,
+     "by_length": {
+      "21-50": 17,
+      "2-5": 46,
+      "6-20": 32,
+      "1": 26
+     }
+    },
+    "reason=key_observed_on_target_node": {
+     "n": 121,
+     "pct": 93.1,
+     "median_alt_fraction": 0.583,
+     "from_exact_reads": 109,
+     "pass_in_bed": 121,
+     "by_length": {
+      "21-50": 17,
+      "2-5": 46,
+      "6-20": 32,
+      "1": 26
+     }
+    },
+    "final_class=I2_partly_in_graph_residual_edit": {
+     "n": 7,
+     "pct": 5.4,
+     "median_alt_fraction": 0.978,
+     "from_exact_reads": 7,
+     "pass_in_bed": 7,
+     "by_length": {
+      "1": 2,
+      "6-20": 1,
+      "2-5": 3,
+      "21-50": 1
+     }
+    },
+    "reason=site_bypassed:branch:edit_on_path_taken": {
+     "n": 4,
+     "pct": 3.1,
+     "median_alt_fraction": 1.0,
+     "from_exact_reads": 4,
+     "pass_in_bed": 4,
+     "by_length": {
+      "1": 2,
+      "21-50": 1,
+      "2-5": 1
+     }
+    },
+    "reason=site_bypassed:skip_edge:edit_on_path_taken": {
+     "n": 3,
+     "pct": 2.3,
+     "median_alt_fraction": 0.978,
+     "from_exact_reads": 3,
+     "pass_in_bed": 3,
+     "by_length": {
+      "6-20": 1,
+      "2-5": 2
+     }
+    },
+    "final_class=I3_grch38_path_different_edit": {
+     "n": 2,
+     "pct": 1.5,
+     "median_alt_fraction": 0.5,
+     "from_exact_reads": 1,
+     "pass_in_bed": 2,
+     "by_length": {
+      "6-20": 2
+     }
+    },
+    "reason=site_on_grch38:other_edit": {
+     "n": 2,
+     "pct": 1.5,
+     "median_alt_fraction": 0.5,
+     "from_exact_reads": 1,
+     "pass_in_bed": 2,
+     "by_length": {
+      "6-20": 2
+     }
+    }
+   }
+  }
+ },
+ "residual_edit_tensor_labels": {
+  "DEL:I1": {
+   "(no residual edit in >=3 ALT reads)": 130,
+   "no tensor": 36,
+   "somatic": 7,
+   "non": 8,
+   "germline": 1,
+   "ignore": 6,
+   "ignore(other site allele)": 1
+  },
+  "DEL:I2": {
+   "somatic": 50,
+   "germline": 24,
+   "non": 7,
+   "somatic(other site allele)": 1,
+   "ignore": 3,
+   "(no residual edit in >=3 ALT reads)": 3,
+   "no tensor": 11
+  },
+  "DEL:I3": {
+   "somatic": 8,
+   "no tensor": 2,
+   "non": 2,
+   "ignore": 1,
+   "germline": 1
+  },
+  "DEL:I4": {
+   "(no residual edit in >=3 ALT reads)": 8
+  },
+  "DEL:I5": {
+   "(no residual edit in >=3 ALT reads)": 17
+  },
+  "DEL:I7": {
+   "(no residual edit in >=3 ALT reads)": 1,
+   "somatic": 1,
+   "non": 1
+  },
+  "INS:I1": {
+   "(no residual edit in >=3 ALT reads)": 153,
+   "somatic": 7,
+   "no tensor": 45,
+   "non": 19,
+   "ignore": 16
+  },
+  "INS:I2": {
+   "somatic": 67,
+   "non": 8,
+   "no tensor": 26,
+   "(no residual edit in >=3 ALT reads)": 5,
+   "germline": 13,
+   "ignore": 7,
+   "somatic(other site allele)": 2
+  },
+  "INS:I3": {
+   "somatic": 45,
+   "no tensor": 8,
+   "non": 6,
+   "ignore": 4,
+   "germline": 4
+  },
+  "INS:I4": {
+   "(no residual edit in >=3 ALT reads)": 25
+  },
+  "INS:I5": {
+   "(no residual edit in >=3 ALT reads)": 9
+  },
+  "INS:I7": {
+   "(no residual edit in >=3 ALT reads)": 1,
+   "somatic": 1
+  },
+  "SNP:S1": {
+   "(no residual edit in >=3 ALT reads)": 237
+  },
+  "SNP:S2": {
+   "(no residual edit in >=3 ALT reads)": 195,
+   "no tensor": 3,
+   "non": 2
+  },
+  "SNP:S3": {
+   "(no residual edit in >=3 ALT reads)": 49,
+   "somatic": 15,
+   "no tensor": 1
+  },
+  "SNP:S4": {
+   "(no residual edit in >=3 ALT reads)": 63,
+   "no tensor": 24,
+   "somatic": 5,
+   "non": 5
+  }
+ }
+}
