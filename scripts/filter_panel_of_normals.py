@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Tag or remove Pansoma VCF records found in panels of normals."""
+"""Tag or remove Pansoma VCF records found in panels of normals.
+
+A record matches a PoN when a PoN record has its position, REF and one of its ALTs, and
+- gnomAD and CoLoRSdb: that ALT's AF is >= 0.001;
+- dbSNP: the record is not somatic (SAO != 2);
+- 1000G: any such record."""
 
 from __future__ import annotations
 
@@ -13,8 +18,13 @@ from typing import Iterable
 import pysam
 
 
-DEFAULT_MATCHING = ("allele", "allele", "position", "position")
 PON_NAMES = ("PoN1_gnomAD", "PoN2_dbSNP", "PoN3_1000G", "PoN4_CoLoRSdb")
+PON_RULES = (  # per PoN, in PON_NAMES order
+    dict(min_af=0.001),
+    dict(non_somatic=True),
+    dict(),
+    dict(min_af=0.001),
+)
 
 
 def chromosome_aliases(chromosome: str) -> tuple[str, ...]:
@@ -41,9 +51,10 @@ def record_matches(
     position: int,
     ref: str,
     alts: Iterable[str],
-    matching: str,
+    min_af: float | None = None,
+    non_somatic: bool = False,
 ) -> bool:
-    """Query one indexed PoN for an exact position or exact allele match."""
+    """Query one indexed PoN for an exact allele match (with the ALT's AF >= min_af; not SAO=2 if non_somatic)."""
     input_alts = {alt.upper() for alt in alts if alt}
     try:
         records = pon.fetch(contig, max(0, position - 1), position)
@@ -54,12 +65,19 @@ def record_matches(
         ) from exc
 
     for candidate in records:
-        if candidate.pos != position:
+        if candidate.pos != position or (candidate.ref or "").upper() != ref.upper():
             continue
-        if matching == "position":
+        if non_somatic and candidate.info.get("SAO") == 2:
+            continue
+        candidate_alts = [(alt or "").upper() for alt in (candidate.alts or ())]
+        hits = [k for k, alt in enumerate(candidate_alts) if alt in input_alts]
+        if not hits:
+            continue
+        if min_af is None:
             return True
-        candidate_alts = {alt.upper() for alt in (candidate.alts or ()) if alt}
-        if (candidate.ref or "").upper() == ref.upper() and input_alts & candidate_alts:
+        af = candidate.info.get("AF")
+        af = af if isinstance(af, tuple) else (af,) * len(candidate_alts)
+        if any(af[k] is not None and af[k] >= min_af for k in hits):
             return True
     return False
 
@@ -138,7 +156,7 @@ def main() -> int:
                 total += 1
                 matches: list[str] = []
 
-                for index, (pon, matching) in enumerate(zip(pons, DEFAULT_MATCHING)):
+                for index, (pon, rule) in enumerate(zip(pons, PON_RULES)):
                     cache_key = (index, record.contig)
                     if cache_key not in contig_cache:
                         contig_cache[cache_key] = resolve_contig(pon, record.contig)
@@ -153,7 +171,7 @@ def main() -> int:
                         record.pos,
                         record.ref or "",
                         record.alts or (),
-                        matching,
+                        **rule,
                     ):
                         matches.append(PON_NAMES[index])
                         matched_by_pon[PON_NAMES[index]] += 1

@@ -6,8 +6,8 @@
 
 1. PoN (with --pon or --pon-vcf; without either only the raw calls are evaluated, as for INDELs for now): the
    repository's scripts/filter_panel_of_normals.py, with the four PoNs in its order (gnomAD, dbSNP, 1000G,
-   CoLoRSdb). gnomAD and dbSNP match by allele, 1000G and CoLoRSdb by position. Matched records get
-   FILTER PanelOfNormals: <dir>/<name>.pon.vcf.gz. --pon-vcf reuses the tagged calls of an earlier run
+   CoLoRSdb). All match by allele; gnomAD and CoLoRSdb only at AF >= 0.001, dbSNP only non-somatic.
+   Matched records get FILTER PanelOfNormals: <dir>/<name>.pon.vcf.gz. --pon-vcf reuses the tagged calls of an earlier run
    (e.g. to evaluate the same calls with and without a BED).
 2. Truth: the PASS (or '.') truth records of the kind on the predicted chromosomes, written to
    <dir>/truth.<KIND>.vcf.gz, with the calls' ##contig lines and a declaration of every INFO key where the truth

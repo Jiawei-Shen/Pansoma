@@ -335,7 +335,7 @@ class VcfevalPartsTest(unittest.TestCase):
 @unittest.skipUnless(RTG, "rtg not found (set $RTG)")
 class VcfevalTest(unittest.TestCase):
     """PoN tagging and rtg vcfeval on the fixture's SNV calls: chr1 18 A>C PASS (a truth), chr1 24 C>A LowQual
-    (a truth, in CoLoRSdb by position), chr1 5 A>G LowAF; a third truth has no call."""
+    (a truth, in CoLoRSdb at AF 0.01), chr1 5 A>G LowAF (in 1000G); a third truth has no call."""
 
     def test_calls_curve_and_pon(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -351,18 +351,22 @@ class VcfevalTest(unittest.TestCase):
                                   ("chr1", "24", ".", "C", "A", ".", "PASS", ".", "GT", "0|1"),
                                   ("chr1", "30", ".", "A", "T", ".", "Filtered", ".", "GT", "0|1"),  # left out
                                   ("chr1", "33", ".", "CA", "C", ".", ".", ".", "GT", "0|1")], sample=True)
-            pons = [write_vcf_gz(Path(tmp) / f"{name}.vcf.gz", contig, records) for name, records in (
-                ("gnomad", [("chr1", "18", ".", "A", "G", ".", ".", ".")]),     # other allele: no match
-                ("dbsnp", [("chr1", "30", ".", "A", "T", ".", ".", ".")]),
-                ("1000g", [("chr1", "5", ".", "A", "T", ".", ".", ".")]),       # position: the LowAF record
-                ("colors", [("chr1", "24", ".", "C", "T", ".", ".", ".")]))]    # position: the LowQual truth
+            af = '##INFO=<ID=AF,Number=A,Type=Float,Description="AF">'
+            sao = '##INFO=<ID=SAO,Number=1,Type=Integer,Description="SAO">'
+            pons = [write_vcf_gz(Path(tmp) / f"{name}.vcf.gz", contig + [info], records) for name, info, records in (
+                ("gnomad", af, [("chr1", "18", ".", "A", "G,C", ".", ".", "AF=0.2,0.0005"),  # A>C below AF 0.001
+                                ("chr1", "24", ".", "C", "T", ".", ".", "AF=0.3")]),       # other allele
+                ("dbsnp", sao, [("chr1", "18", ".", "A", "C", ".", ".", "SAO=2"),          # somatic: no match
+                                ("chr1", "30", ".", "A", "T", ".", ".", "SAO=0")]),
+                ("1000g", af, [("chr1", "5", ".", "A", "G", ".", ".", ".")]),              # the LowAF record
+                ("colors", af, [("chr1", "24", ".", "C", "A", ".", ".", "AF=0.01")]))]     # the LowQual truth
             args = vcfeval.parse_args(["--calls", str(calls), "--pon", *map(str, pons), "--truth", str(truth),
                                        "--sdf", str(sdf), "--rtg", RTG, "--rtg-mem", "1g", "--threads", "1",
                                        "--output", str(Path(tmp) / "eval")])
             report = vcfeval.evaluate(args)
             self.assertEqual((report["truth_records"], report["truth_not_pass"]), (3, 1))  # the PASS SNV truth records
             self.assertEqual({k: report["truth_pon_tags"][k] for k in ("records", "tagged", "PoN4_CoLoRSdb")},
-                             dict(records=3, tagged=1, PoN4_CoLoRSdb=1))  # chr1 24 by position
+                             dict(records=3, tagged=1, PoN4_CoLoRSdb=1))  # chr1 24
             self.assertEqual(report["unplaced_pass"], 1)
             text = (Path(tmp) / "eval" / "report.txt").read_text()
             self.assertIn("PoN tags 1 of 3 truth records", text)

@@ -94,37 +94,22 @@ The same README covers the calls: `pansoma_net_v2.graph_vcf` (predictions → VC
 
 ### 5. Panel of normals filter
 
-Download the four default GRCh38 PoNs once and index them:
+Four indexed GRCh38 PoNs (bgzip + tabix), in this order: gnomAD (`af-only-gnomad.hg38.vcf.gz`), dbSNP
+(`Homo_sapiens_assembly38.dbsnp138.vcf.gz`), 1000G (`1000g_pon.hg38.vcf.gz`) and CoLoRSdb
+(`CoLoRSdb.GRCh38.v1.1.0.deepvariant.glnexus.vcf.gz`). Tag calls that occur in them:
 
 ```bash
-mkdir -p /path/to/pons && cd /path/to/pons
-curl --fail --location --remote-name \
-  https://www.bio8.cs.hku.hk/clairs-to/databases/gnomad.r2.1.af-ge-0.001.sites.vcf.gz
-curl --fail --location --remote-name \
-  https://www.bio8.cs.hku.hk/clairs-to/databases/dbsnp.b138.non-somatic.sites.vcf.gz
-curl --fail --location --remote-name \
-  https://www.bio8.cs.hku.hk/clairs-to/databases/1000g-pon.sites.vcf.gz
-curl --fail --location --remote-name \
-  https://www.bio8.cs.hku.hk/clairs-to/databases/CoLoRSdb.GRCh38.v1.1.0.deepvariant.glnexus.af-ge-0.001.vcf.gz
-for pon in *.vcf.gz; do tabix -f -p vcf "${pon}"; done
-```
-
-Tag calls that occur in the PoNs:
-
-```bash
+PON=/scratch/jshen/data/Pansoma/panel_of_normal_VCFs
 python -u scripts/filter_panel_of_normals.py calls.vcf.gz calls.pon-tagged.vcf.gz \
-  --pon \
-    /path/to/pons/gnomad.r2.1.af-ge-0.001.sites.vcf.gz \
-    /path/to/pons/dbsnp.b138.non-somatic.sites.vcf.gz \
-    /path/to/pons/1000g-pon.sites.vcf.gz \
-    /path/to/pons/CoLoRSdb.GRCh38.v1.1.0.deepvariant.glnexus.af-ge-0.001.vcf.gz
+  --pon $PON/af-only-gnomad.hg38.vcf.gz $PON/Homo_sapiens_assembly38.dbsnp138.vcf.gz \
+        $PON/1000g_pon.hg38.vcf.gz $PON/CoLoRSdb.GRCh38.v1.1.0.deepvariant.glnexus.vcf.gz
 ```
 
 Every record is kept, and each match gets `FILTER=PanelOfNormals` and a `PANSOMA_PON` INFO field. Add
-`--drop-matched` to leave matched records out. The rules follow the
-[ClairS-TO defaults](https://github.com/HKU-BAL/ClairS-TO). PoN 1 (gnomAD) and PoN 2 (dbSNP) need an exact
-position/REF/ALT match. PoN 3 (1000G) and PoN 4 (CoLoRSdb) need a position match only. Calls and PoNs must be in
-GRCh38 coordinates (`chr1` and `1` naming are both recognized).
+`--drop-matched` to leave matched records out. The rules are like ClairS-TO's panels: a call matches a PoN record
+with its position, REF and ALT, and for gnomAD and CoLoRSdb that ALT's AF must be ≥ 0.001; dbSNP records flagged
+somatic (`SAO=2`) do not count. Calls and PoNs must be in GRCh38 coordinates (`chr1` and `1` naming are both
+recognized).
 
 ## Tests
 
