@@ -11,6 +11,7 @@ env/
 
 # Generated data and large artifacts
 /tmp/
+/pretrained_model/
 data/raw/
 data/interim/
 data/processed/
