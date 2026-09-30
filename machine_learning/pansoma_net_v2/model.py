@@ -18,7 +18,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from timm.layers import DropPath, trunc_normal_
 
-from .encode import N_PLANES, TensorEncoder
+from .encode import TensorEncoder
 
 
 class LayerNorm(nn.Module):
@@ -186,7 +186,7 @@ class ConvNeXtCBAM(nn.Module):
 
 def full_config(config):
     """A checkpoint's config with the defaults of keys added later (checkpoints before "block" are v1)."""
-    return {"scalars": 0, "block": "v1", **config}
+    return {"scalars": 0, "block": "v1", "drop_planes": [], **config}
 
 
 def no_decay(name, param):
@@ -200,12 +200,12 @@ class PansomaNetV2(nn.Module):
     head."""
 
     def __init__(self, num_classes=3, depths=(3, 3, 27, 3), dims=(192, 384, 768, 1536), front=(64, 64),
-                 drop_path_rate=0.1, stats=None, scalars=0, block="v2"):
+                 drop_path_rate=0.1, stats=None, scalars=0, block="v2", drop_planes=()):
         super().__init__()
         self.config = dict(num_classes=num_classes, depths=list(depths), dims=list(dims), front=list(front),
-                           drop_path_rate=drop_path_rate, scalars=scalars, block=block)
-        self.encoder = TensorEncoder(stats)
-        layers, c = [], N_PLANES
+                           drop_path_rate=drop_path_rate, scalars=scalars, block=block, drop_planes=list(drop_planes))
+        self.encoder = TensorEncoder(stats, drop_planes)
+        layers, c = [], self.encoder.n_planes
         for width in front:
             layers += [nn.Conv2d(c, width, kernel_size=1), nn.GELU()]
             c = width

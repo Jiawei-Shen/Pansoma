@@ -4,6 +4,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
+import numpy as np
 import torch
 import torch.nn as nn
 
@@ -38,6 +39,21 @@ class ModelTest(unittest.TestCase):
                 self.assertTrue(torch.equal(again(x, blocks, scalars), logits))
         with torch.no_grad():  # the scalars reach the logits
             self.assertFalse(torch.equal(model(x, blocks, scalars), model(x, blocks, scalars + 1)))
+
+    def test_dropped_planes_round_trip(self):
+        x, blocks = batch(3)
+        model = PansomaNetV2(3, stats=STATS, drop_planes=["path_count"], **SMALL).eval()
+        self.assertEqual(model.front[0].in_channels, 35)
+        payload = dict(format="pansoma_net_v2", config=model.config, model_state_dict=model.state_dict())
+        again = PansomaNetV2.from_checkpoint(payload).eval()
+        self.assertEqual(again.config["drop_planes"], ["path_count"])
+        with torch.no_grad():
+            self.assertTrue(torch.equal(again(x, blocks), model(x, blocks)))
+            x2 = x.clone(); x2[:, 6] = 1
+            self.assertTrue(torch.equal(model(x2, blocks), model(x, blocks)))
+        old = dict(payload, config={k: v for k, v in model.config.items() if k != "drop_planes"})
+        with self.assertRaises(RuntimeError):   # a config without drop_planes is a 36-plane model
+            PansomaNetV2.from_checkpoint(old)
 
     def test_blocks_v1_and_v2(self):
         x, blocks = batch(2)
@@ -132,6 +148,56 @@ class RetryTest(unittest.TestCase):
             train.retry_workers(gone, logged.append, "t", wait=0)
 
 
+class RelabelTest(unittest.TestCase):
+    """--reason-labels (inside the confident region) and --label-overrides (any tensor; exempt from --ignore-reasons)."""
+
+    def test_relabel_in_place(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp) / "sample" / "tensors"
+            make_tensor_set(root, SPEC, shard_size=8)
+            index = KindIndex(root / "SNV", Path(tmp) / "cache")
+            a = {k: v.copy() for k, v in index.arrays.items()}
+            reasons, cands = index.meta["reasons"], index.candidates()
+            off = np.flatnonzero(a["reason"] == reasons.index("off_reference_no_truth_match"))
+            region = a["in_region"].astype(bool)
+            self.assertTrue(off.size and region[off].any())
+            partial = int(np.flatnonzero(a["reason"] == reasons.index("residual_partial_somatic_truth"))[0])
+            overrides = {cands[partial]: -1, cands[int(off[0])]: 1}
+            train.relabel([(index, None)], overrides, {"off_reference_no_truth_match": 0})
+            label, evl = index.arrays["label"], index.arrays["eval_label"]
+            rest = off[1:]
+            self.assertTrue((label[rest[region[rest]]] == 0).all() and (evl[rest[region[rest]]] == 0).all())
+            self.assertTrue((label[rest[~region[rest]]] == a["label"][rest[~region[rest]]]).all())  # outside: unchanged
+            self.assertEqual((int(label[partial]), int(evl[partial])), (-1, -1))
+            self.assertEqual(int(label[off[0]]), 1)
+            self.assertEqual(int(evl[off[0]]), 1 if region[off[0]] else -1)
+            other = np.setdiff1d(np.arange(len(label)), np.concatenate([off, [partial]]))
+            self.assertTrue((label[other] == a["label"][other]).all() and (evl[other] == a["eval_label"][other]).all())
+
+    def test_overrides_are_exempt_from_ignore_reasons(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            root = tmp / "sample" / "tensors"
+            make_tensor_set(root, SPEC, shard_size=8)
+            index = KindIndex(root / "SNV", tmp / "check_cache")
+            reasons, cands = index.meta["reasons"], index.candidates()
+            tr, _ = block_split(index, index.select(["chr2", "chr3"], labelled=False), 0.5, 21, 0)
+            partial_code = reasons.index("residual_partial_somatic_truth")
+            promoted = [int(k) for k in tr if index.arrays["reason"][k] == partial_code][:1]
+            self.assertTrue(promoted)
+            (tmp / "overrides.tsv").write_text("candidate_id\tlabel\n" + "".join(f"{cands[k]}\t1\n" for k in promoted))
+            out = tmp / "run"
+            train.main(["--tensors", str(root), "--output", str(out), "--epochs", "1", "--kinds", "SNV",
+                        "--ignore-reasons", "residual_partial_somatic_truth", "--label-overrides", str(tmp / "overrides.tsv"),
+                        "--reason-labels", "off_reference_no_truth_match=0"] + SMALL_ARGS)
+            train.relabel([(index, None)], {cands[k]: 1 for k in promoted}, {"off_reference_no_truth_match": 0})
+            a = index.arrays
+            expected = int(((a["label"][tr] >= 0) & ((a["reason"][tr] != partial_code) | np.isin(tr, promoted))).sum())
+            ckpt = torch.load(out / "best.pth", weights_only=False)
+            self.assertEqual(sum(d["train"] for d in ckpt["data"]), expected)
+            self.assertIn("--label-overrides 1 of 1 candidate ids", (out / "train.log").read_text())
+
+
 class TrainPredictTest(unittest.TestCase):
     """Small end-to-end runs on CPU: train 2 epochs (chr1 left out, validation from node blocks of chr2/chr3),
     resume to 3, predict chr1; and one run with the scalars."""
@@ -185,6 +251,19 @@ class TrainPredictTest(unittest.TestCase):
             self.assertEqual(report["left_out"], sum(t["eval_label"] < 0 for t in chr1))
             self.assertEqual(report["off_reference_in_test"], sum(t["off_reference"] and t["eval_label"] >= 0 for t in chr1))
             self.assertEqual(report["threshold"], torch.load(out / "best.pth", weights_only=False)["somatic_threshold"])
+            # three decision rules: threshold t (= the report above), argmax, the validation recall-0.9 threshold
+            rules = report["rules"]
+            self.assertEqual(set(rules), {"threshold_t", "argmax", "val_recall_0.9"})
+            self.assertEqual({k: rules["threshold_t"]["per_tensor"][k] for k in ("precision", "recall", "f1", "support")},
+                             {k: report["thresholded"]["somatic"][k] for k in ("precision", "recall", "f1", "support")})
+            self.assertEqual(rules["argmax"]["per_tensor"]["f1"], report["argmax"]["somatic"]["f1"])
+            for k in ("tp", "fp", "precision", "recall", "f1"):
+                self.assertEqual(rules["threshold_t"]["truth"][k], report["truth"]["at_threshold"][k])
+            best = torch.load(out / "best.pth", weights_only=False)
+            self.assertEqual(rules["val_recall_0.9"]["threshold"], best["val"]["somatic_at_recall"]["0.9"]["threshold"])
+            argmax_calls = sum(r["in_test"] and max(r["p_non"], r["p_somatic"], r["p_germline"]) == r["p_somatic"]
+                               for r in records)
+            self.assertEqual(rules["argmax"]["per_tensor"]["calls"], argmax_calls)
             # against the truth table, recomputed from the predictions: every truth allele once
             tr = report["truth"]
             table = [line.split("\t") for line in (root / "somatic.recall.tsv").read_text().splitlines()[1:]]

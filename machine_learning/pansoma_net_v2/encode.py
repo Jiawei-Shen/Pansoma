@@ -14,7 +14,9 @@ Planes, in order (`PLANES`):
                              representative allele), ALT (A2..Ak), REF, OTHER, each 1 on the covered cells
                              of the rows in that block (from the summary's row_groups, see data.py)
 
-Every plane is 0 where there is no evidence, so padding stays 0 after encoding. The z-score statistics are
+`drop` leaves planes out of the output (e.g. path_count: the path count says how common the node is in HPRC,
+which separates GRCh38 nodes shared by all haplotypes from alternative-branch nodes). Every plane is 0 where there
+is no evidence, so padding stays 0 after encoding. The z-score statistics are
 fitted once on covered cells of the training set (`compute_stats`) and live in the encoder's buffers, i.e. in
 the model checkpoint; they are never refitted on other data. The width is zero-padded from 101 to 104 so the
 4 x 4, stride 4 stem covers the last column.
@@ -41,8 +43,14 @@ def valid_masks(x):
 
 
 class TensorEncoder(nn.Module):
-    def __init__(self, stats=None):
+    def __init__(self, stats=None, drop=()):
         super().__init__()
+        unknown = set(drop) - set(PLANES)
+        if unknown:
+            raise ValueError(f"unknown planes {sorted(unknown)}; planes: {', '.join(PLANES)}")
+        self.drop = tuple(p for p in PLANES if p in set(drop))
+        self.keep = [k for k, p in enumerate(PLANES) if p not in set(drop)]
+        self.n_planes = len(self.keep)
         self.register_buffer("mean", torch.zeros(len(CONTINUOUS)))
         self.register_buffer("std", torch.ones(len(CONTINUOUS)))
         self.register_buffer("fitted", torch.zeros((), dtype=torch.bool))
@@ -81,6 +89,8 @@ class TensorEncoder(nn.Module):
             in_block = (rows >= starts[:, b:b + 1]) & (rows < ends[:, b:b + 1])   # (B, H)
             planes.append(covered & in_block[:, :, None])
         out = torch.stack([p.to(dtype) for p in planes], 1)                 # (B, 36, H, W)
+        if self.drop:
+            out = out[:, self.keep]
         return F.pad(out, (0, WIDTH - out.shape[-1])) if out.shape[-1] < WIDTH else out
 
 

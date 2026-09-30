@@ -38,6 +38,18 @@ class EncoderTest(unittest.TestCase):
         self.assertEqual(tuple(self.out.shape), (6, 36, 200, WIDTH))
         self.assertEqual(len(set(PLANES)), N_PLANES)
 
+    def test_dropped_planes_are_left_out(self):
+        enc = TensorEncoder(STATS, drop=["path_count"])
+        out = enc(self.x, self.blocks)
+        self.assertEqual((enc.n_planes, out.shape[1]), (N_PLANES - 1, N_PLANES - 1))
+        kept = [p for p in PLANES if p != "path_count"]
+        for k, name in enumerate(kept):
+            self.assertTrue(torch.equal(out[:, k], plane(self.out, name)))
+        self.x[:, 6] = 1                                    # the path count no longer reaches the output
+        self.assertTrue(torch.equal(enc(self.x, self.blocks), out))
+        with self.assertRaises(ValueError):
+            TensorEncoder(STATS, drop=["no_such_plane"])
+
     def test_padding_is_zero_in_every_plane(self):
         out = self.out[..., :101]
         self.assertTrue(((~self.covered).sum() > 0).item())

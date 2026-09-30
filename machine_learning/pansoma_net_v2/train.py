@@ -13,6 +13,7 @@ the best validation F1 is found (metrics.py); the best checkpoint has the highes
 --select ap: somatic average precision) and stores its threshold.
 """
 import argparse
+import csv
 import json
 import math
 import os
@@ -70,6 +71,13 @@ def parse_args(argv=None):
     p.add_argument("--ignore-reasons", nargs="+", default=[],
                    help="label reasons left out of training and validation, as if -1 (e.g. "
                         "residual_partial_somatic_truth allele_partial_somatic_truth); the label files are unchanged")
+    p.add_argument("--label-overrides",
+                   help="TSV with columns candidate_id and label (-1/0/1/2): these tensors' training and validation "
+                        "labels (validation: -1 outside the confident region), whatever their reason; they are exempt "
+                        "from --ignore-reasons")
+    p.add_argument("--reason-labels", nargs="+", default=[], metavar="REASON=LABEL",
+                   help="label for every tensor of a reason inside the confident region (training and validation), "
+                        "e.g. off_reference_no_truth_match=0; --label-overrides take precedence")
     p.add_argument("--keep-non-af", type=float,
                    help="non tensors with AF >= this are taken every epoch; the sampled rest weigh 1/--non-fraction "
                         "in the loss and the class weights use all tensors, so the expected loss is that of all non "
@@ -78,6 +86,8 @@ def parse_args(argv=None):
     p.add_argument("--dims", type=int, nargs=4, default=[192, 384, 768, 1536])
     p.add_argument("--front", type=int, nargs="+", default=[64, 64], help="widths of the 1x1 layers before the stem")
     p.add_argument("--drop-path", type=float, default=0.1)
+    p.add_argument("--drop-planes", nargs="+", default=[], metavar="PLANE",
+                   help="encoder planes left out of the input (encode.PLANES), e.g. path_count")
     p.add_argument("--block", choices=["v2", "v1"], default="v2",
                    help="v2: ConvNeXt blocks as published; v1: mynet's (row-wise scalar GRN, GELU after each residual "
                         "sum); see model.py")
@@ -277,6 +287,32 @@ def started_loader(dataset, sampler, num_workers, batch_size, log, what, prefetc
     return retry_workers(start, log, what)
 
 
+def relabel(everything, overrides, reason_labels):
+    """Set the training (label) and validation (eval_label) labels of the indexes in place, from reason_labels
+    ({reason: label}, inside the confident region) and then overrides ({candidate_id: label}). Returns, per index,
+    the positions that overrides set, and counts for the log."""
+    overridden, counts = [], []
+    for index, _ in everything:
+        a = index.arrays
+        label, evl, region = a["label"].copy(), a["eval_label"].copy(), a["in_region"].astype(bool)
+        n_reason = 0
+        for reason, value in reason_labels.items():
+            if reason not in index.meta["reasons"]:
+                continue
+            m = (a["reason"] == index.meta["reasons"].index(reason)) & region
+            label[m], evl[m] = value, value
+            n_reason += int(m.sum())
+        candidates = index.candidates()
+        pos = np.array([k for k, c in enumerate(candidates) if c in overrides], dtype=np.int64)
+        values = np.array([overrides[candidates[k]] for k in pos], dtype=np.int8)
+        label[pos] = values
+        evl[pos] = np.where((values >= 0) & region[pos], values, -1)
+        a["label"], a["eval_label"] = label, evl
+        overridden.append(pos)
+        counts.append((n_reason, len(pos), {int(v): int((values == v).sum()) for v in np.unique(values)}))
+    return overridden, counts
+
+
 def main(argv=None):
     args = parse_args(argv)
     run = Run(args)
@@ -288,6 +324,18 @@ def main(argv=None):
         load_parts(args.tensors, args.kinds, cache, rebuild=args.rebuild_index)
     run.barrier()
     everything = load_parts(args.tensors, args.kinds, cache)
+    overridden = [np.zeros(0, np.int64) for _ in everything]
+    if args.label_overrides or args.reason_labels:
+        overrides = {}
+        if args.label_overrides:
+            with open(args.label_overrides) as f:
+                rows = list(csv.DictReader(f, delimiter="\t"))
+            overrides = {r["candidate_id"]: int(r["label"]) for r in rows}
+        reason_labels = {r.split("=")[0]: int(r.split("=")[1]) for r in args.reason_labels}
+        overridden, counts = relabel(everything, overrides, reason_labels)
+        for (index, _), (n_reason, n_over, by) in zip(everything, counts):
+            run.log(f"{index.dir}: --reason-labels {n_reason:,} tensors; --label-overrides {n_over:,} of {len(overrides):,} "
+                    f"candidate ids ({by})")
     available = sorted({c for index, _ in everything for c in index.meta["chroms"]})
     train_chroms, val_chroms, test_chroms, missing = split_chroms(args, available)
     run.log(f"train {train_chroms}\nval {val_chroms}\ntest (left out) {test_chroms}"
@@ -306,12 +354,12 @@ def main(argv=None):
             val_parts.append((i, va[i.arrays["eval_label"][va] >= 0]))
         run.log(f"validation: {args.val_fraction:.0%} of the {args.val_block_nodes}-node blocks of the training chromosomes")
     if args.ignore_reasons:
-        def keep(i, pos):
+        def keep(i, pos, exempt):
             codes = [k for k, r in enumerate(i.meta["reasons"]) if r in set(args.ignore_reasons)]
-            return pos[~np.isin(i.arrays["reason"][pos], codes)]
+            return pos[~np.isin(i.arrays["reason"][pos], codes) | np.isin(pos, exempt)]
         before = sum(len(p) for _, p in train_parts), sum(len(p) for _, p in val_parts)
-        train_parts = [(i, keep(i, p)) for i, p in train_parts]
-        val_parts = [(i, keep(i, p)) for i, p in val_parts]
+        train_parts = [(i, keep(i, p, o)) for (i, p), o in zip(train_parts, overridden)]
+        val_parts = [(i, keep(i, p, o)) for (i, p), o in zip(val_parts, overridden)]
         run.log(f"left out (--ignore-reasons {' '.join(args.ignore_reasons)}): "
                 f"{before[0] - sum(len(p) for _, p in train_parts):,} training, "
                 f"{before[1] - sum(len(p) for _, p in val_parts):,} validation tensors")
@@ -357,7 +405,7 @@ def main(argv=None):
         val_set = Subset(val_set, keep.tolist())
 
     model = PansomaNetV2(len(CLASSES), args.depths, args.dims, args.front, args.drop_path,
-                         scalars=len(SCALARS) if args.scalars else 0, block=args.block)
+                         scalars=len(SCALARS) if args.scalars else 0, block=args.block, drop_planes=args.drop_planes)
     checkpoint = torch.load(args.resume, map_location="cpu", weights_only=False) if args.resume else None
     if checkpoint is not None:
         if full_config(checkpoint["config"]) != model.config:
