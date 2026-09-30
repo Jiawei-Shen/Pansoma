@@ -14,8 +14,8 @@ with a byte-verified per-chromosome merge and truth labels (`tensor_postprocessi
 ```
 runtime  5,010 lines of Python in 17 files + fastdecode.cpp (659 lines); frozen per run: 21 files (those 18,
          the compiled decoder and the two READMEs), 2.55 MB, 2.15 MB of it the compiled decoder
-tools    1,201 lines of Python in 7 files + gbz_graph_index.cpp (75 lines); not frozen
-tests    5,110 lines of Python in 17 files (+ golden_hashes.json), 162 tests, ~55 s on a quiet node
+tools    1,282 lines of Python in 7 files + gbz_graph_index.cpp (75 lines); not frozen
+tests    5,146 lines of Python in 17 files (+ golden_hashes.json), 164 tests, ~55 s on a quiet node
 ```
 
 ---
@@ -445,10 +445,14 @@ $PY -m $P.tools.compare_runs A B [--mask DOTTED.KEY ...] [--report FILE]
   a translation would restore; `ref-path-check` then finds any disagreement with the graph index.
   `components` writes `DIR/chrN/chrN.component.nodes.raw.txt` for chr1–22 (`vg chunk -C -p
   <sample>#<hap>#chrN`, the path names from the reference-path directory) and `DIR/summary.json`
-  (nodes, ID range, nodes on and off the reference path). `audit` compares, on the first node of every
-  chr-index block and 24 random nodes, the graph index's sequence with the GFA's S line and its
-  `distinct_path_count` with the number of GFA W/P lines visiting the node; it writes its JSON only
-  when every node agrees (else `<output>.failed`, and it fails). `gfa`, `components` and `gam_prep`
+  (nodes, ID range, nodes on and off the reference path). `audit` recounts, in one pass over the GFA,
+  every node's number of W/P lines (paths) visiting it (numpy; a node counts once per line; the file
+  cut into `--processes` byte ranges, default `$SLURM_CPUS_PER_TASK`, each process taking the lines
+  that start in its range) and compares it with every node's `distinct_path_count`; it also requires one
+  S line per index node and no path node outside the index, compares the sequences of the first node of
+  every chr-index block and 24 random nodes with their S lines, and reports the GFA's path and visit
+  totals beside the index's `logical_paths` and `path_visits`. It writes its JSON only when everything
+  agrees (else `<output>.failed`, and it fails). `gfa`, `components` and `gam_prep`
   run vg from `--vg`, else `$PANSOMA_VG` (`scripts/use_vg.sh`: vg 1.77), else `vg` on PATH.
 * **Sorted GAM.** `gam_prep sort` runs `vg gamsort -t N -p -i` into `<output>.tmp` and
   `<output>.gai.tmp`, checks them and then renames them; it never overwrites. gamsort's temporary
@@ -1005,7 +1009,7 @@ pass are the native graph-index builder test and the two vg cases of `test_prep_
 need the environment variables of the third command; the second pass also skips the five golden
 tests.
 
-162 tests in 14 test modules cover: GAI reading, cache/scan equivalence (limits 1, 2048 and 64 MiB),
+164 tests in 14 test modules cover: GAI reading, cache/scan equivalence (limits 1, 2048 and 64 MiB),
 refusal of cache 0, of a GAI without the `'GAI!'` magic and of an unknown GAI format number, bin
 arrays against the per-bin scan, the MAPQ-filtered cache, the capped fetch (each node its smallest
 record digests whatever else is asked for, the reader's key equal to the builder's digest); capped
@@ -1030,8 +1034,9 @@ the package guard, the native refusal at prepare, a subprocess import of the fro
 standalone `finalize` after an interrupted one, finalize labels with the AF floors frozen at prepare
 (equal to `label` with the same floors); the earlier format names (a graph index with the suffixed
 schema and metric opens, a reference-path directory with `version` opens, `label` and the merge's
-refusal work on a merged set with the suffixed layout); `compare_runs` itself; the once-per-graph and once-per-GAM tools (`graph_prep audit` against a GFA,
-a wrong count or sequence caught and reported to `.failed`; `gam_prep check` passing a sorted GAM
+refusal work on a merged set with the suffixed layout); `compare_runs` itself; the once-per-graph and once-per-GAM tools (`graph_prep audit` recounting every node
+identically for 1–5 processes and more processes than bytes, a wrong count of an unsampled node, a
+wrong sequence, a P line and a path node outside the index caught and reported to `.failed`; `gam_prep check` passing a sorted GAM
 and refusing an unsorted one or another GAM's GAI; with vg: a GBZ → `gfa` keeping the node IDs,
 `components` of three chromosomes with an off-reference node, `gam_prep sort` publishing a checked
 GAM with the input's `vg stats -a` counts); and static checks (no

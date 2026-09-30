@@ -380,6 +380,9 @@ Measured on HPRC v1.1 d9:
   format key (`format`, plain name, instead of `version`, `-v1` name), `scan_seconds` and paths;
 * components, chr22 (vg 1.77, 4 threads): 3.4 min, 15 GB (loading the GBZ); the list is byte for
   byte the one under `chr_component_vs_GRCh38_summary/chr22`.
+* audit (16 processes, 50 GB GFA): 6.5 min, 1.9 GB per process; all 60,118,570 nodes' path counts
+  equal the index, and the GFA's 44,624,788 paths and 4,296,025,276 visits equal its `logical_paths`
+  and `path_visits`.
 
 **Relabelling the six existing sets.** `tools/jobs/relabel.sh` labels one merged set with the
 package it is in (main README, section 4, "Tools"). On the data side it runs from

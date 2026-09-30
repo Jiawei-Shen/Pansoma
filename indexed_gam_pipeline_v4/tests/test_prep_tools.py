@@ -27,26 +27,48 @@ def chr_table(path, firsts):
 
 
 class AuditTest(unittest.TestCase):
-    def test_counts_and_sequences_against_the_gfa(self):
+    def test_every_node_is_recounted_the_same_for_any_process_count(self):
         with tempfile.TemporaryDirectory() as tmp:
             tmp = Path(tmp)
             gfa, _ = graph_files(tmp)
             seqs = segments(gfa)
             db = graph_fixture(tmp / "g.sqlite", [(n, s, PATHS[n]) for n, s in seqs.items()])
             table = chr_table(tmp / "idx.tsv", [1, 8, 10])
-            report = graph_prep.audit(db, gfa, table, tmp / "graph_audit.json", random_nodes=5)
-            self.assertTrue(report["passed"])
-            self.assertTrue({"1", "8", "10"} <= set(report["nodes"]))
-            self.assertEqual({int(n): c for n, c in report["nodes"].items()}, {n: PATHS[n] for n in map(int, report["nodes"])})
-            self.assertEqual(json.loads((tmp / "graph_audit.json").read_text())["passed"], True)
-            # a wrong count or a wrong sequence fails; the report goes to .failed, not to the output
-            bad = graph_fixture(tmp / "bad.sqlite", [(n, s if n != 10 else "A" * len(s), PATHS[n] + (n == 1))
+            reports = [graph_prep.audit(db, gfa, table, tmp / f"audit{k}.json", random_nodes=5, processes=k)
+                       for k in (1, 2, 3, 5, gfa.stat().st_size + 3)]  # byte ranges cut lines anywhere, even empty
+            for report in reports:
+                self.assertTrue(report["passed"], report["checks"])
+                self.assertEqual((report["nodes_compared"], report["gfa_totals"]),
+                                 (11, dict(s_lines=11, paths=4, path_visits=14, beyond_index=0)))
+            self.assertTrue({"1", "8", "10"} <= set(reports[0]["sequence_nodes"]))
+            self.assertEqual(json.loads((tmp / "audit1.json").read_text())["passed"], True)
+
+    def test_wrong_counts_sequences_and_outside_nodes_fail_to_a_failed_report(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            gfa, _ = graph_files(tmp)
+            seqs = segments(gfa)
+            table = chr_table(tmp / "idx.tsv", [1, 8, 10])
+            # node 5 is no sampled node: only the full recount sees its count; node 10's sequence is wrong
+            bad = graph_fixture(tmp / "bad.sqlite", [(n, s if n != 10 else "A" * len(s), PATHS[n] + (n == 5))
                                                      for n, s in seqs.items()])
             with self.assertRaisesRegex(ValueError, "audit failed"):
-                graph_prep.audit(bad, gfa, table, tmp / "bad_audit.json", random_nodes=0)
-            self.assertFalse((tmp / "bad_audit.json").exists())
-            failed = json.loads((tmp / "bad_audit.json.failed").read_text())
-            self.assertEqual(sorted(m["node"] for m in failed["mismatches"]), [1, 10])
+                graph_prep.audit(bad, gfa, table, tmp / "bad.json", random_nodes=0, processes=2)
+            self.assertFalse((tmp / "bad.json").exists())
+            failed = json.loads((tmp / "bad.json.failed").read_text())
+            self.assertEqual((failed["checks"]["path_count_mismatches"], failed["checks"]["sequence_mismatches"]), (1, 1))
+            self.assertEqual(failed["path_count_examples"], [dict(node=5, index_count=2, gfa_paths=1)])
+            # a P line counts like a W line; a path node without an index node fails
+            text = gfa.read_text() + "P\tp1\t1+,7+,3-\t*\nW\tHG2\t1\tctg2\t0\t4\t>11>99\n"
+            (tmp / "p.gfa").write_text(text)
+            extra = {**PATHS, 1: 3, 7: 2, 3: 3, 11: 2}
+            db = graph_fixture(tmp / "p.sqlite", [(n, s, extra[n]) for n, s in seqs.items()])
+            with self.assertRaisesRegex(ValueError, "audit failed"):
+                graph_prep.audit(db, tmp / "p.gfa", table, tmp / "p.json", random_nodes=0, processes=3)
+            failed = json.loads((tmp / "p.json.failed").read_text())
+            self.assertEqual(failed["checks"], dict(path_count_mismatches=0, path_nodes_outside_index=1,
+                                                    s_lines_minus_index_nodes=0, sequence_mismatches=0))
+            self.assertEqual(failed["gfa_totals"]["paths"], 6)
 
 
 class GamCheckTest(unittest.TestCase):

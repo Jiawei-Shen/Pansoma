@@ -6,7 +6,7 @@ index audit (the graph index itself: tools.graph_index_build; all steps as one j
     python -m indexed_gam_pipeline_v4.tools.graph_prep ref-path-check --path DIR --graph-index DB --fasta FA [--samples 100000]
     python -m indexed_gam_pipeline_v4.tools.graph_prep components --gbz G.gbz --reference-path DIR --output DIR [--vg VG]
     python -m indexed_gam_pipeline_v4.tools.graph_prep chr-index --components-dir D --reference-path DIR --output PREFIX [--graph-index DB]
-    python -m indexed_gam_pipeline_v4.tools.graph_prep audit --graph-index DB --gfa G.gfa --chr-index TSV --output JSON
+    python -m indexed_gam_pipeline_v4.tools.graph_prep audit --graph-index DB --gfa G.gfa --chr-index TSV --output JSON [--processes 16]
 
 The formats are documented with their run-time readers: tensor_postprocessing.reference_path
 (gfa-reference-path directory, ReferencePath) and tensor_postprocessing.chr_index (chr-node-ranges
@@ -345,56 +345,119 @@ def build(components_dir, reference_path, output, graph_index=None, autosomes=AU
 
 # --- graph index audit ---------------------------------------------------------------------------
 
-# Target S lines -> "S id seq"; every W/P line visiting targets -> one "V id" per visited target (revisits once).
-AUDIT_AWK = r'''BEGIN { FS = "\t"; while ((getline id < NODES) > 0) t[id] = 1 }
-$1 == "S" { if ($2 in t) print "S\t" $2 "\t" $3; next }
-$1 == "W" || $1 == "P" { w = ($1 == "W") ? $7 : $3; n = split(w, a, /[<>,+-]+/); split("", seen)
-                         for (i = 1; i <= n; i++) if (a[i] in t) seen[a[i]] = 1
-                         for (k in seen) print "V\t" k }'''
+WALK_SEPARATORS = bytes.maketrans(b"<>", b"  ")      # W line walk: >12<13
+PATH_SEPARATORS = bytes.maketrans(b",+-", b"   ")    # P line segments: 12+,13-
 
 
-def audit(graph_index, gfa, chr_index, output, random_nodes=24, seed=20260930):
-    """Independent check of the graph index against the GFA of the same GBZ, on the first node of every chr-index
-    block and `random_nodes` random index nodes: the index sequence must equal the S line, and distinct_path_count
-    the number of W/P lines (paths) that visit the node. Writes the report to `output` (JSON); on any difference to
+def audit_part(gfa, start, end, size, targets):
+    """One byte range of the GFA (the lines that start in [start, end)): every node's number of W/P lines visiting it
+    (numpy fancy-index increments count a node once per line), the S lines of `targets`, and totals."""
+    counts = np.zeros(size, dtype=np.int32)
+    sequences, totals = {}, dict(s_lines=0, paths=0, path_visits=0, beyond_index=0)
+    with open(gfa, "rb", buffering=1 << 24) as stream:
+        stream.seek(max(start - 1, 0))
+        if start:
+            stream.readline()  # the rest of the line in progress at start - 1 belongs to the previous range
+        position = stream.tell()
+        while position < end:
+            line = stream.readline()
+            if not line:
+                break
+            position += len(line)
+            kind = line[:2]
+            if kind == b"S\t":
+                totals["s_lines"] += 1
+                tab = line.index(b"\t", 2)
+                node = int(line[2:tab])
+                if node in targets:
+                    sequences[node] = line[tab + 1:].split(b"\t", 1)[0].rstrip(b"\n").decode()
+                continue
+            if kind == b"W\t":
+                walk = line.split(b"\t", 7)[6].rstrip(b"\n")  # field 7; optional tags would follow
+                ids = np.fromstring(walk.translate(WALK_SEPARATORS), dtype=np.int64, sep=" ")
+            elif kind == b"P\t":
+                ids = np.fromstring(line.split(b"\t", 3)[2].translate(PATH_SEPARATORS), dtype=np.int64, sep=" ")
+            else:
+                continue
+            totals["paths"] += 1
+            totals["path_visits"] += int(ids.size)
+            if ids.size and (ids.max() >= size or ids.min() < 0):
+                totals["beyond_index"] += int(np.count_nonzero((ids >= size) | (ids < 0)))
+                ids = ids[(ids < size) & (ids >= 0)]
+            counts[ids] += 1
+    return counts, sequences, totals
+
+
+def _audit_part(task):
+    return audit_part(*task)
+
+
+def audit(graph_index, gfa, chr_index, output, random_nodes=24, seed=20260930, processes=None):
+    """Independent check of the graph index against the GFA of the same GBZ. distinct_path_count of every index node
+    must equal the number of GFA W/P lines (paths) visiting it, recounted in one pass over the GFA (byte ranges in
+    `processes` processes; default $SLURM_CPUS_PER_TASK, else 1); every path node must be an index node, and the GFA
+    must have one S line per index node. The sequence of the first node of every chr-index block and of
+    `random_nodes` random nodes must equal its S line. Writes the report to `output` (JSON); on any difference to
     <output>.failed instead, and raises."""
+    from multiprocessing import get_context
     from ..graph_index import GraphIndex
+    started = time.perf_counter()
+    processes = processes or int(os.environ.get("SLURM_CPUS_PER_TASK") or 1)
     with Path(chr_index).open() as stream:
         blocks = [int(row["first_node"]) for row in csv.DictReader(stream, delimiter="\t")]
     with GraphIndex(graph_index) as index:
+        metadata = index.metadata
         low, high = index.db.execute("SELECT min(node_id), max(node_id) FROM nodes").fetchone()
         rng = random.Random(seed)
         picks = {index.db.execute("SELECT node_id FROM nodes WHERE node_id >= ? ORDER BY node_id LIMIT 1",
                                   (rng.randint(low, high),)).fetchone()[0] for _ in range(random_nodes)}
         records = index.get_nodes(set(blocks) | picks)
-    nodes = sorted(records)
-    output = Path(output)
-    listed = output.with_name(output.name + ".nodes.tmp")
-    listed.write_text("".join(f"{n}\n" for n in nodes))
-    sequences, visits = {}, dict.fromkeys(nodes, 0)
-    with subprocess.Popen(["awk", "-v", f"NODES={listed}", AUDIT_AWK, str(gfa)], stdout=subprocess.PIPE,
-                          text=True) as process:
-        for line in process.stdout:
-            kind, node, *rest = line.rstrip("\n").split("\t")
-            if kind == "S":
-                sequences[int(node)] = rest[0]
-            else:
-                visits[int(node)] += 1
-    if process.returncode:
-        raise RuntimeError(f"awk failed on {gfa}")
-    listed.unlink()
-    mismatches = [dict(node=n, index_count=records[n]["distinct_path_count"], gfa_paths=visits[n],
-                       sequence_equal=records[n]["sequence"] == sequences.get(n))
-                  for n in nodes if records[n]["distinct_path_count"] != visits[n]
-                  or records[n]["sequence"] != sequences.get(n)]
-    report = dict(passed=not mismatches, nodes={str(n): records[n]["distinct_path_count"] for n in nodes},
-                  block_first_nodes=blocks, random_nodes=random_nodes, seed=seed, mismatches=mismatches,
+    total = Path(gfa).stat().st_size
+    cuts = [total * k // processes for k in range(processes + 1)]
+    tasks = [(str(gfa), a, b, high + 1, set(records)) for a, b in zip(cuts, cuts[1:])]
+    counts = np.zeros(high + 1, dtype=np.int64)
+    sequences, totals = {}, dict(s_lines=0, paths=0, path_visits=0, beyond_index=0)
+    with get_context("fork").Pool(processes) as pool:
+        for part_counts, part_sequences, part_totals in pool.imap_unordered(_audit_part, tasks):
+            counts += part_counts
+            sequences.update(part_sequences)
+            for key, value in part_totals.items():
+                totals[key] += value
+    scan_seconds = time.perf_counter() - started
+    present = np.zeros(high + 1, dtype=bool)
+    compared, mismatched, examples = 0, 0, []
+    with GraphIndex(graph_index) as index:
+        cursor = index.db.execute("SELECT node_id, distinct_path_count FROM nodes")
+        while True:
+            rows = cursor.fetchmany(5_000_000)
+            if not rows:
+                break
+            ids, expected = (np.array(column, dtype=np.int64) for column in zip(*rows))
+            present[ids] = True
+            wrong = np.flatnonzero(counts[ids] != expected)
+            compared += len(ids)
+            mismatched += len(wrong)
+            examples += [dict(node=int(ids[k]), index_count=int(expected[k]), gfa_paths=int(counts[ids[k]]))
+                         for k in wrong[:20 - len(examples)]]
+    outside = int(np.count_nonzero(counts[~present]))
+    sequence_mismatches = [dict(node=n, in_gfa=n in sequences) for n in sorted(records)
+                           if records[n]["sequence"] != sequences.get(n)]
+    checks = dict(path_count_mismatches=mismatched, path_nodes_outside_index=outside + totals["beyond_index"],
+                  s_lines_minus_index_nodes=totals["s_lines"] - metadata["nodes"],
+                  sequence_mismatches=len(sequence_mismatches))
+    report = dict(passed=not any(checks.values()), checks=checks, nodes_compared=compared,
+                  path_count_examples=examples, sequence_examples=sequence_mismatches[:20],
+                  sequence_nodes={str(n): records[n]["distinct_path_count"] for n in sorted(records)},
+                  block_first_nodes=blocks, random_nodes=random_nodes, seed=seed, gfa_totals=totals,
+                  index_totals={k: metadata.get(k) for k in ("nodes", "logical_paths", "path_visits")},
+                  processes=processes, scan_seconds=scan_seconds, seconds=time.perf_counter() - started,
                   graph_index=str(Path(graph_index).resolve()), gfa=stamp(gfa),
-                  scope="index sequence vs GFA S line, distinct_path_count vs GFA W/P lines visiting the node, "
-                        "on the chr-index block starts and random nodes")
-    if mismatches:  # the report goes to <output>.failed, so `output` exists only for a passed audit
+                  scope="distinct_path_count of every index node vs the GFA W/P lines visiting it; GFA S lines vs "
+                        "index nodes; sequences of the chr-index block starts and random nodes vs their S lines")
+    output = Path(output)
+    if not report["passed"]:  # the report goes to <output>.failed, so `output` exists only for a passed audit
         write_json(output.with_name(output.name + ".failed"), report)
-        raise ValueError(f"Graph index audit failed: {mismatches[:5]}")
+        raise ValueError(f"Graph index audit failed: {checks}; {examples[:3]} {sequence_mismatches[:3]}")
     write_json(output, report)
     return report
 
@@ -439,7 +502,8 @@ def main(argv=None):
     p.add_argument("--gfa", required=True, help="the GFA of the index's GBZ (the gfa command's output)")
     p.add_argument("--chr-index", required=True, help="chr-index .tsv (its block starts are audited)")
     p.add_argument("--output", required=True, help="report JSON (e.g. graph_audit.json)")
-    p.add_argument("--random-nodes", type=int, default=24)
+    p.add_argument("--random-nodes", type=int, default=24, help="sequence check: random nodes besides the block starts")
+    p.add_argument("--processes", type=int, help="GFA byte ranges read in parallel (default: $SLURM_CPUS_PER_TASK, else 1)")
 
     args = parser.parse_args(argv)
     if args.command == "gfa":
@@ -447,8 +511,9 @@ def main(argv=None):
     elif args.command == "components":
         result = components(args.gbz, args.reference_path, args.output, args.vg, args.threads)
     elif args.command == "audit":
-        result = audit(args.graph_index, args.gfa, args.chr_index, args.output, args.random_nodes)
-        result = {k: v for k, v in result.items() if k != "nodes"}
+        result = audit(args.graph_index, args.gfa, args.chr_index, args.output, args.random_nodes,
+                       processes=args.processes)
+        result = {k: v for k, v in result.items() if k != "sequence_nodes"}
     elif args.command == "ref-path-scan":
         result = scan(args.gfa, args.output, args.reference_sample)
         result = {k: v for k, v in result.items() if k != "contigs"}

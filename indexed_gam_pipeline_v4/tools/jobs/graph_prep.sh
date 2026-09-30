@@ -66,6 +66,7 @@ if done_or chr-index "$CI.json"; then
   $TIME $PY -m $M.graph_prep chr-index --components-dir "$CO" --reference-path "$RP" --output "$CI" --graph-index "$DB"
 fi
 if done_or audit "$OUT/graph_audit.json"; then
-  $TIME $PY -m $M.graph_prep audit --graph-index "$DB" --gfa "$GFA" --chr-index "$CI.tsv" --output "$OUT/graph_audit.json"
+  $TIME $PY -m $M.graph_prep audit --graph-index "$DB" --gfa "$GFA" --chr-index "$CI.tsv" --output "$OUT/graph_audit.json" \
+    --processes "$T"
 fi
 echo GRAPH_PREP_DONE
