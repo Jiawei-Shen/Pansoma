@@ -354,7 +354,7 @@ class VcfevalTest(unittest.TestCase):
             af = '##INFO=<ID=AF,Number=A,Type=Float,Description="AF">'
             sao = '##INFO=<ID=SAO,Number=1,Type=Integer,Description="SAO">'
             pons = [write_vcf_gz(Path(tmp) / f"{name}.vcf.gz", contig + [info], records) for name, info, records in (
-                ("gnomad", af, [("chr1", "18", ".", "A", "G,C", ".", ".", "AF=0.2,0.0005"),  # A>C below AF 0.001
+                ("gnomad", af, [("chr1", "18", ".", "A", "G,C", ".", ".", "AF=0.2,0.00005"),  # A>C below AF 0.0001
                                 ("chr1", "24", ".", "C", "T", ".", ".", "AF=0.3")]),       # other allele
                 ("dbsnp", sao, [("chr1", "18", ".", "A", "C", ".", ".", "SAO=2"),          # somatic: no match
                                 ("chr1", "30", ".", "A", "T", ".", ".", "SAO=0")]),

@@ -107,7 +107,7 @@ python -u scripts/filter_panel_of_normals.py calls.vcf.gz calls.pon-tagged.vcf.g
 
 Every record is kept, and each match gets `FILTER=PanelOfNormals` and a `PANSOMA_PON` INFO field. Add
 `--drop-matched` to leave matched records out. The rules are like ClairS-TO's panels: a call matches a PoN record
-with its position, REF and ALT, and for gnomAD and CoLoRSdb that ALT's AF must be ≥ 0.001; dbSNP records flagged
+with its position, REF and ALT, and for gnomAD and CoLoRSdb that ALT's AF must be ≥ 0.0001; dbSNP records flagged
 somatic (`SAO=2`) do not count. Calls and PoNs must be in GRCh38 coordinates (`chr1` and `1` naming are both
 recognized).
 

@@ -2,7 +2,7 @@
 """Tag or remove Pansoma VCF records found in panels of normals.
 
 A record matches a PoN when a PoN record has its position, REF and one of its ALTs, and
-- gnomAD and CoLoRSdb: that ALT's AF is >= 0.001;
+- gnomAD and CoLoRSdb: that ALT's AF is >= 0.0001;
 - dbSNP: the record is not somatic (SAO != 2);
 - 1000G: any such record."""
 
@@ -20,10 +20,10 @@ import pysam
 
 PON_NAMES = ("PoN1_gnomAD", "PoN2_dbSNP", "PoN3_1000G", "PoN4_CoLoRSdb")
 PON_RULES = (  # per PoN, in PON_NAMES order
-    dict(min_af=0.001),
+    dict(min_af=0.0001),
     dict(non_somatic=True),
     dict(),
-    dict(min_af=0.001),
+    dict(min_af=0.0001),
 )
 
 
