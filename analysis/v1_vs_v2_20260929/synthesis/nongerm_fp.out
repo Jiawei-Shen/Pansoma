@@ -1,0 +1,42 @@
+
+==== v2_base: 725 non-germline false calls after the repo PoN (p >= 0.122); 561 true calls ====
+  v2 label / reason of the called tensor:
+     label  0  near_truth_allele_mismatch               663
+     label  1  residual_partial_somatic_truth           33
+     label  0  confident_no_truth_allele                29
+  AF: median 0.105; < 0.20: 546
+  nearest somatic INDEL truth       : <=10 bp   24  <=50 bp   41  <=200 bp   41
+  nearest any somatic truth         : <=10 bp   27  <=50 bp   45  <=200 bp   45
+  nearest germline INDEL (HG008-N)  : <=10 bp  343  <=50 bp  662  <=200 bp  688
+  nearest other germline SNV        : <=10 bp   80  <=50 bp  148  <=200 bp  333
+  AF < 0.20 and within 50 bp of a germline or somatic INDEL: 525 of 546 low-AF
+  v1 has a candidate at the site: 586 of 725; v1 p_true >= 0.5 there: 10; v1 median p where present: 0.003
+  read features (median)          false calls    true calls
+     A1 reads                            10.00        93.00
+     A1 forward-strand fraction           0.50         0.50
+     A1 base quality at site             33.80        35.75
+     A1 MAPQ                             60.00        59.59
+     other mismatches per A1 read         2.41         0.20
+     other mismatches per REF read        3.32         0.20
+  A1 reads all on one strand (fraction 0 or 1): false calls 138 of 725; true calls 0 of 300
+
+==== v2_allnon_w100: 233 non-germline false calls after the repo PoN (p >= 0.363); 561 true calls ====
+  v2 label / reason of the called tensor:
+     label  0  near_truth_allele_mismatch               194
+     label  0  confident_no_truth_allele                20
+     label  1  residual_partial_somatic_truth           19
+  AF: median 0.092; < 0.20: 191
+  nearest somatic INDEL truth       : <=10 bp   13  <=50 bp   19  <=200 bp   19
+  nearest any somatic truth         : <=10 bp   15  <=50 bp   21  <=200 bp   21
+  nearest germline INDEL (HG008-N)  : <=10 bp  130  <=50 bp  195  <=200 bp  206
+  nearest other germline SNV        : <=10 bp   19  <=50 bp   40  <=200 bp   97
+  AF < 0.20 and within 50 bp of a germline or somatic INDEL: 173 of 191 low-AF
+  v1 has a candidate at the site: 179 of 233; v1 p_true >= 0.5 there: 2; v1 median p where present: 0.004
+  read features (median)          false calls    true calls
+     A1 reads                             9.00        93.50
+     A1 forward-strand fraction           0.44         0.50
+     A1 base quality at site             33.55        35.76
+     A1 MAPQ                             60.00        59.60
+     other mismatches per A1 read         2.00         0.19
+     other mismatches per REF read        3.00         0.20
+  A1 reads all on one strand (fraction 0 or 1): false calls 45 of 233; true calls 0 of 300

@@ -1,0 +1,224 @@
+{
+ "v1_any": 671,
+ "v1_allele": 670,
+ "v1_true_label": 669,
+ "n": 697,
+ "missing": [
+  {
+   "tid": 3,
+   "vcf_pos": 1743558,
+   "status": "filtered",
+   "pos0": 1743557,
+   "ref": "A",
+   "alt": "G"
+  },
+  {
+   "tid": 5,
+   "vcf_pos": 1743580,
+   "status": "no_candidate",
+   "pos0": 1743579,
+   "ref": "T",
+   "alt": "C"
+  },
+  {
+   "tid": 6,
+   "vcf_pos": 1743582,
+   "status": "no_candidate",
+   "pos0": 1743581,
+   "ref": "C",
+   "alt": "T"
+  },
+  {
+   "tid": 7,
+   "vcf_pos": 1743586,
+   "status": "no_candidate",
+   "pos0": 1743585,
+   "ref": "T",
+   "alt": "C"
+  },
+  {
+   "tid": 65,
+   "vcf_pos": 13096397,
+   "status": "no_candidate",
+   "pos0": 13096396,
+   "ref": "C",
+   "alt": "T"
+  },
+  {
+   "tid": 92,
+   "vcf_pos": 22431386,
+   "status": "no_candidate",
+   "pos0": 22431385,
+   "ref": "A",
+   "alt": "G"
+  },
+  {
+   "tid": 192,
+   "vcf_pos": 56757698,
+   "status": "tensor_representative",
+   "pos0": 56757697,
+   "ref": "C",
+   "alt": "T"
+  },
+  {
+   "tid": 291,
+   "vcf_pos": 75902679,
+   "status": "no_candidate",
+   "pos0": 75902678,
+   "ref": "A",
+   "alt": "G"
+  },
+  {
+   "tid": 304,
+   "vcf_pos": 77306496,
+   "status": "no_candidate",
+   "pos0": 77306495,
+   "ref": "T",
+   "alt": "G"
+  },
+  {
+   "tid": 308,
+   "vcf_pos": 78729320,
+   "status": "no_candidate",
+   "pos0": 78729319,
+   "ref": "T",
+   "alt": "G"
+  },
+  {
+   "tid": 311,
+   "vcf_pos": 78932081,
+   "status": "filtered",
+   "pos0": 78932080,
+   "ref": "A",
+   "alt": "T"
+  },
+  {
+   "tid": 327,
+   "vcf_pos": 80499681,
+   "status": "no_candidate",
+   "pos0": 80499680,
+   "ref": "T",
+   "alt": "A"
+  },
+  {
+   "tid": 378,
+   "vcf_pos": 92707201,
+   "status": "no_candidate",
+   "pos0": 92707200,
+   "ref": "C",
+   "alt": "A"
+  },
+  {
+   "tid": 383,
+   "vcf_pos": 93573620,
+   "status": "no_candidate",
+   "pos0": 93573619,
+   "ref": "T",
+   "alt": "G"
+  },
+  {
+   "tid": 416,
+   "vcf_pos": 103652711,
+   "status": "no_candidate",
+   "pos0": 103652710,
+   "ref": "G",
+   "alt": "A"
+  },
+  {
+   "tid": 478,
+   "vcf_pos": 122337652,
+   "status": "no_candidate",
+   "pos0": 122337651,
+   "ref": "T",
+   "alt": "C"
+  },
+  {
+   "tid": 490,
+   "vcf_pos": 144127334,
+   "status": "no_candidate",
+   "pos0": 144127333,
+   "ref": "C",
+   "alt": "T"
+  },
+  {
+   "tid": 492,
+   "vcf_pos": 144758479,
+   "status": "no_candidate",
+   "pos0": 144758478,
+   "ref": "C",
+   "alt": "T"
+  },
+  {
+   "tid": 494,
+   "vcf_pos": 145347576,
+   "status": "no_candidate",
+   "pos0": 145347575,
+   "ref": "C",
+   "alt": "G"
+  },
+  {
+   "tid": 519,
+   "vcf_pos": 149865947,
+   "status": "no_candidate",
+   "pos0": 149865946,
+   "ref": "A",
+   "alt": "G"
+  },
+  {
+   "tid": 546,
+   "vcf_pos": 153539448,
+   "status": "no_candidate",
+   "pos0": 153539447,
+   "ref": "A",
+   "alt": "T"
+  },
+  {
+   "tid": 590,
+   "vcf_pos": 161454140,
+   "status": "no_candidate",
+   "pos0": 161454139,
+   "ref": "G",
+   "alt": "C"
+  },
+  {
+   "tid": 699,
+   "vcf_pos": 175696225,
+   "status": "filtered",
+   "pos0": 175696224,
+   "ref": "T",
+   "alt": "G"
+  },
+  {
+   "tid": 748,
+   "vcf_pos": 181637439,
+   "status": "no_candidate",
+   "pos0": 181637438,
+   "ref": "C",
+   "alt": "T"
+  },
+  {
+   "tid": 892,
+   "vcf_pos": 194321457,
+   "status": "no_candidate",
+   "pos0": 194321456,
+   "ref": "A",
+   "alt": "G"
+  },
+  {
+   "tid": 1098,
+   "vcf_pos": 219698210,
+   "status": "no_candidate",
+   "pos0": 219698209,
+   "ref": "C",
+   "alt": "G"
+  },
+  {
+   "tid": 1301,
+   "vcf_pos": 244276021,
+   "status": "no_candidate",
+   "pos0": 244276020,
+   "ref": "G",
+   "alt": "A"
+  }
+ ]
+}

@@ -1,0 +1,77 @@
+chr1 SNV tensors 468721
+
+# label, reason, count, in_confident_region
+ -1 below_snv_min_af                                          115541   103193
+ -1 not_on_unique_grch38_node                                   3722        0
+ -1 off_reference_no_truth_match                               10295    10295
+ -1 outside_confident_region                                   92336        0
+  0 confident_no_truth_allele                                 173838   173838
+  0 near_truth_allele_mismatch                                 48475    48475
+  0 truth_matches_non_representative_allele                       33       27
+  1 representative_allele_is_somatic_truth                       665      659
+  1 residual_partial_somatic_truth                               193      193
+  2 representative_allele_is_germline_truth                    23202    22809
+  2 representative_allele_is_germline_truth_gap_filtered         421        0
+labels: Counter({0: 222346, -1: 221894, 2: 23623, 1: 858})
+in-region labels: Counter({0: 222340, -1: 113488, 2: 22809, 1: 852})
+eval labels: Counter({0: 232635, -1: 212425, 2: 22809, 1: 852})
+
+# AF by eval class (test set of v2), bins [0, 0.06, 0.07, 0.1, 0.15, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0001]
+somatic(eval=1)                            n=852 mean=0.551 q05/25/50/75/95=0.085/0.400/0.508/0.750/1.000
+                                           hist 0 0 78 35 18 22 60 193 185 46 4 8 203
+                                           coverage n=852 mean=137.708 q05/25/50/75/95=43.000/99.000/146.500/176.000/213.000
+germline(eval=2)                           n=22809 mean=0.709 q05/25/50/75/95=0.367/0.475/0.600/1.000/1.000
+                                           hist 0 0 123 148 114 246 1384 4646 4709 1178 118 154 9989
+                                           coverage n=22809 mean=142.817 q05/25/50/75/95=56.000/101.000/153.000/183.000/218.000
+non(eval=0)                                n=232635 mean=0.121 q05/25/50/75/95=0.071/0.078/0.092/0.118/0.220
+                                           hist 0 0 139993 62891 15331 7253 1674 772 574 488 552 477 2630
+                                           coverage n=232635 mean=117.022 q05/25/50/75/95=40.000/82.000/108.000/155.000/201.000
+non(eval=0, on-ref)                        n=222340 mean=0.108 q05/25/50/75/95=0.071/0.078/0.091/0.115/0.189
+                                           hist 0 0 137168 61106 14628 6555 1251 510 282 178 151 133 378
+                                           coverage n=222340 mean=120.255 q05/25/50/75/95=53.000/84.000/110.000/156.000/202.000
+non off-ref (eval 0)                       n=10295 mean=0.405 q05/25/50/75/95=0.074/0.095/0.182/0.800/1.000
+                                           hist 0 0 2825 1785 703 698 423 262 292 310 401 344 2252
+                                           coverage n=10295 mean=47.195 q05/25/50/75/95=3.000/8.000/33.000/70.000/149.000
+somatic rep exact (eval=1, reason rep)     n=659 mean=0.643 q05/25/50/75/95=0.377/0.465/0.552/0.989/1.000
+                                           hist 0 0 1 0 0 4 50 182 182 43 0 3 194
+                                           coverage n=659 mean=151.029 q05/25/50/75/95=79.000/112.000/158.000/182.000/218.000
+somatic partial (eval=1)                   n=193 mean=0.238 q05/25/50/75/95=0.073/0.088/0.120/0.286/0.864
+                                           hist 0 0 77 35 18 18 10 11 3 3 4 5 9
+                                           coverage n=193 mean=92.223 q05/25/50/75/95=13.000/53.000/91.000/127.000/172.600
+below_snv_min_af (-1)                      n=115541 mean=0.065 q05/25/50/75/95=0.060/0.062/0.065/0.067/0.069
+                                           hist 0 115541 0 0 0 0 0 0 0 0 0 0 0
+                                           coverage n=115541 mean=124.714 q05/25/50/75/95=58.000/86.000/113.000/161.000/207.000
+all label 1                                n=858 mean=0.553 q05/25/50/75/95=0.085/0.400/0.510/0.797/1.000
+                                           hist 0 0 78 36 18 22 60 193 186 46 4 8 207
+                                           coverage n=858 mean=137.561 q05/25/50/75/95=43.000/99.000/146.000/176.000/213.000
+all label 2                                n=23623 mean=0.707 q05/25/50/75/95=0.355/0.472/0.600/1.000/1.000
+                                           hist 0 0 152 189 148 320 1448 4720 4769 1222 146 196 10313
+                                           coverage n=23623 mean=140.396 q05/25/50/75/95=38.000/99.000/151.000/182.000/218.000
+all label 0                                n=222346 mean=0.108 q05/25/50/75/95=0.071/0.078/0.091/0.115/0.189
+                                           hist 0 0 137168 61106 14629 6556 1252 512 282 179 151 133 378
+                                           coverage n=222346 mean=120.252 q05/25/50/75/95=53.000/84.000/110.000/156.000/202.000
+
+chr1 SNP truth alleles 702 PASS+in somatic BED 697
+status: Counter({('tensor_representative', ''): 660, ('no_candidate', ''): 32, ('filtered', 'min_variants'): 4, ('filtered', 'min_af'): 1})
+of the 697 in germline BED: 695  in somatic∩germline: 695
+status x in-confident: Counter({('tensor_representative', True): 659, ('no_candidate', True): 31, ('filtered', True): 5, ('no_candidate', False): 1, ('tensor_representative', False): 1})
+697: with a label-1 SNV tensor as representative: 660  any label-1 SNV tensor (rep or partial): 663  a label-1 tensor in the test region (eval 1): 662
+tensor-matches of 697 (kind, label, reason, inreg): Counter({('rep', 1, 'representative_allele_is_somatic_truth', True): 659, ('partial', 1, 'residual_partial_somatic_truth', True): 5, ('rep', 1, 'representative_allele_is_somatic_truth', False): 1})
+number of label-1 tensors per truth (of 697): [(0, 34), (1, 661), (2, 2)]
+AF of the representative tensor of each found truth: n=660 mean=0.643 q05/25/50/75/95=0.377/0.465/0.552/0.989/1.000 hist 0 0 1 0 0 4 50 182 183 43 0 3 194
+coverage of those tensors: n=660 mean=151.052 q05/25/50/75/95=79.000/112.000/158.000/182.000/218.000
+label-1 tensor->truth links by truth set: Counter({'snp697': 665, 'non_snp_truth': 188, 'snp_other': 5})
+
+# v1-style 'true' sets on chr1
+label==1 (all)                                                              tensors=    858 distinct_truth=  805 of697= 663
+label==1 & in confident region                                              tensors=    852 distinct_truth=  799 of697= 662
+label==1 & representative exact SNP match                                   tensors=    665 distinct_truth=  665 of697= 660
+label==1 & rep exact & in region                                            tensors=    659 distinct_truth=  659 of697= 659
+label==1 & rep exact & in region & AF>=0.07                                 tensors=    659 distinct_truth=  659 of697= 659
+label==1 & rep exact & AF>=0.1                                              tensors=    664 distinct_truth=  664 of697= 659
+label==1 & partial (not rep)                                                tensors=    193 distinct_truth=  142 of697=   5
+somatic truth among site alleles (any allele, any label)                    tensors=    698 distinct_truth=  665 of697= 660
+rows with downsampled_from: 276
+allele_count distribution: Counter({1: 457077, 2: 10769, 3: 875})
+off-reference tensors: 19224  off-ref in region: 10342
+done

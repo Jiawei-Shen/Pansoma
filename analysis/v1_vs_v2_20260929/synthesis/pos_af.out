@@ -1,0 +1,6 @@
+v2 chr2-22 label-1 tensors 9768 [('representative_allele_is_somatic_truth', 7612), ('residual_partial_somatic_truth', 2154), ('allele_partial_somatic_truth', 2)] t=7
+v2 partial 2156 median 0.126 AF<0.2: 1473 (68.3%)
+v2 exact 7612 median 0.535 AF<0.2: 46 (0.6%)
+v2 all positives 9768 AF<0.2 1519 of which partial 1473
+v1 chr1 val true 670 median 0.641 AF<0.2 2 (0.3%)
+t=59

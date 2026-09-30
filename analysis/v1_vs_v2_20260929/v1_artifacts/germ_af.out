@@ -1,0 +1,10 @@
+AF_HPRC
+  false_other  n= 321009 median=0.114 hist[0-.1,.1-.2,.2-.35,.35-.65,.65-.9,.9-1]=[np.int64(114318), np.int64(134851), np.int64(27395), np.int64(18659), np.int64(11880), np.int64(13906)]
+  germ_het     n=  21730 median=0.601 hist[0-.1,.1-.2,.2-.35,.35-.65,.65-.9,.9-1]=[np.int64(92), np.int64(334), np.int64(575), np.int64(10961), np.int64(1102), np.int64(8666)]
+  germ_hom     n=   1967 median=1.000 hist[0-.1,.1-.2,.2-.35,.35-.65,.65-.9,.9-1]=[np.int64(17), np.int64(30), np.int64(33), np.int64(79), np.int64(138), np.int64(1670)]
+  true         n=    670 median=0.641 hist[0-.1,.1-.2,.2-.35,.35-.65,.65-.9,.9-1]=[np.int64(1), np.int64(1), np.int64(8), np.int64(337), np.int64(123), np.int64(200)]
+AF_HPRC_HG008N_added
+  false_other  n= 256994 median=0.118 hist[0-.1,.1-.2,.2-.35,.35-.65,.65-.9,.9-1]=[np.int64(85840), np.int64(102192), np.int64(23618), np.int64(18456), np.int64(12187), np.int64(14701)]
+  germ_het     n=  21966 median=0.381 hist[0-.1,.1-.2,.2-.35,.35-.65,.65-.9,.9-1]=[np.int64(803), np.int64(4318), np.int64(5098), np.int64(3467), np.int64(802), np.int64(7478)]
+  germ_hom     n=  14803 median=1.000 hist[0-.1,.1-.2,.2-.35,.35-.65,.65-.9,.9-1]=[np.int64(15), np.int64(56), np.int64(85), np.int64(241), np.int64(970), np.int64(13436)]
+  true         n=    681 median=0.551 hist[0-.1,.1-.2,.2-.35,.35-.65,.65-.9,.9-1]=[np.int64(2), np.int64(1), np.int64(17), np.int64(448), np.int64(12), np.int64(201)]

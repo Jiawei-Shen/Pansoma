@@ -1,0 +1,86 @@
+==== false calls by AF (v2 AF of the site's tensor; v1 calls looked up in v2's AF where the site has a v2 tensor) ====
+  v2_base no PoN @ TP 608 (p>=0.139): 7296 false calls (germline 5020, non-germline 2276)
+      AF 0.00-0.08: germline     5   non-germline   359
+      AF 0.08-0.10: germline    17   non-germline   436
+      AF 0.10-0.15: germline    31   non-germline   533
+      AF 0.15-0.20: germline    10   non-germline   249
+      AF 0.20-0.35: germline   103   non-germline   303
+      AF 0.35-0.60: germline  2665   non-germline   211
+      AF 0.60-1.00: germline  2189   non-germline   185
+  v2_base repo PoN @ TP 561 (p>=0.122): 1119 false calls (germline 394, non-germline 725)
+      AF 0.00-0.08: germline     1   non-germline   157
+      AF 0.08-0.10: germline     0   non-germline   175
+      AF 0.10-0.15: germline     1   non-germline   162
+      AF 0.15-0.20: germline     0   non-germline    52
+      AF 0.20-0.35: germline     5   non-germline    80
+      AF 0.35-0.60: germline   235   non-germline    55
+      AF 0.60-1.00: germline   152   non-germline    44
+  v2_keephard_w100 no PoN @ TP 608 (p>=0.766): 5959 false calls (germline 5264, non-germline 695)
+      AF 0.00-0.08: germline     1   non-germline   139
+      AF 0.08-0.10: germline     3   non-germline   115
+      AF 0.10-0.15: germline     7   non-germline   120
+      AF 0.15-0.20: germline     4   non-germline    54
+      AF 0.20-0.35: germline    76   non-germline    96
+      AF 0.35-0.60: germline  2881   non-germline    91
+      AF 0.60-1.00: germline  2292   non-germline    80
+  v2_keephard_w100 repo PoN @ TP 561 (p>=0.725): 740 false calls (germline 425, non-germline 315)
+      AF 0.00-0.08: germline     1   non-germline    85
+      AF 0.08-0.10: germline     0   non-germline    68
+      AF 0.10-0.15: germline     0   non-germline    62
+      AF 0.15-0.20: germline     0   non-germline    23
+      AF 0.20-0.35: germline     5   non-germline    31
+      AF 0.35-0.60: germline   250   non-germline    28
+      AF 0.60-1.00: germline   169   non-germline    18
+  v2_allnon_w100 no PoN @ TP 608 (p>=0.591): 5741 false calls (germline 5178, non-germline 563)
+      AF 0.00-0.08: germline     1   non-germline    94
+      AF 0.08-0.10: germline     2   non-germline   122
+      AF 0.10-0.15: germline     6   non-germline   104
+      AF 0.15-0.20: germline     7   non-germline    49
+      AF 0.20-0.35: germline    67   non-germline    59
+      AF 0.35-0.60: germline  2701   non-germline    55
+      AF 0.60-1.00: germline  2394   non-germline    80
+  v2_allnon_w100 repo PoN @ TP 561 (p>=0.363): 651 false calls (germline 418, non-germline 233)
+      AF 0.00-0.08: germline     1   non-germline    66
+      AF 0.08-0.10: germline     0   non-germline    66
+      AF 0.10-0.15: germline     0   non-germline    46
+      AF 0.15-0.20: germline     0   non-germline    13
+      AF 0.20-0.35: germline     5   non-germline    17
+      AF 0.35-0.60: germline   240   non-germline     7
+      AF 0.60-1.00: germline   172   non-germline    18
+  v1 e053 no PoN (PROB>=0.5, TP 608): 5446 false calls (germline 5341, non-germline 105)
+      AF 0.08-0.10: germline     0   non-germline     2
+      AF 0.10-0.15: germline     0   non-germline     4
+      AF 0.15-0.20: germline     0   non-germline     8
+      AF 0.20-0.35: germline    47   non-germline    13
+      AF 0.35-0.60: germline  2832   non-germline    35
+      AF 0.60-1.00: germline  2462   non-germline    38
+      AF  no v2 AF: germline     0   non-germline     5
+  v1 e053 repo PoN (TP 561): 457 false calls (germline 421, non-germline 36)
+      AF 0.08-0.10: germline     0   non-germline     2
+      AF 0.10-0.15: germline     0   non-germline     4
+      AF 0.15-0.20: germline     0   non-germline     5
+      AF 0.20-0.35: germline     3   non-germline     9
+      AF 0.35-0.60: germline   248   non-germline    10
+      AF 0.60-1.00: germline   170   non-germline     4
+      AF  no v2 AF: germline     0   non-germline     2
+
+==== an AF floor on v2 calls (sites below the floor dropped; truths lost counted) ====
+  v2_base            floor 0.00: ceiling 0.945 | no PoN: P@TP608 0.077, max F1 0.260 | repo PoN: P@TP561 0.334, max F1 0.528
+  v2_base            floor 0.08: ceiling 0.945 | no PoN: P@TP608 0.081, max F1 0.275 | repo PoN: P@TP561 0.369, max F1 0.561
+  v2_base            floor 0.10: ceiling 0.944 | no PoN: P@TP608 0.086, max F1 0.294 | repo PoN: P@TP561 0.416, max F1 0.598
+  v2_base            floor 0.15: ceiling 0.944 | no PoN: P@TP608 0.093, max F1 0.317 | repo PoN: P@TP561 0.474, max F1 0.639
+  v2_base            floor 0.20: ceiling 0.944 | no PoN: P@TP608 0.097, max F1 0.325 | repo PoN: P@TP561 0.496, max F1 0.651
+  v2_base            floor 0.25: ceiling 0.941 | no PoN: P@TP608 0.098, max F1 0.329 | repo PoN: P@TP561 0.509, max F1 0.658
+  v2_keephard_w100   floor 0.00: ceiling 0.945 | no PoN: P@TP608 0.093, max F1 0.255 | repo PoN: P@TP561 0.431, max F1 0.623
+  v2_keephard_w100   floor 0.08: ceiling 0.945 | no PoN: P@TP608 0.095, max F1 0.258 | repo PoN: P@TP561 0.462, max F1 0.636
+  v2_keephard_w100   floor 0.10: ceiling 0.944 | no PoN: P@TP608 0.096, max F1 0.259 | repo PoN: P@TP561 0.489, max F1 0.647
+  v2_keephard_w100   floor 0.15: ceiling 0.944 | no PoN: P@TP608 0.098, max F1 0.260 | repo PoN: P@TP561 0.517, max F1 0.656
+  v2_keephard_w100   floor 0.20: ceiling 0.944 | no PoN: P@TP608 0.099, max F1 0.260 | repo PoN: P@TP561 0.528, max F1 0.659
+  v2_keephard_w100   floor 0.25: ceiling 0.941 | no PoN: P@TP608 0.098, max F1 0.259 | repo PoN: P@TP561 0.533, max F1 0.659
+  v2_allnon_w100     floor 0.00: ceiling 0.945 | no PoN: P@TP608 0.096, max F1 0.260 | repo PoN: P@TP561 0.463, max F1 0.618
+  v2_allnon_w100     floor 0.08: ceiling 0.945 | no PoN: P@TP608 0.097, max F1 0.263 | repo PoN: P@TP561 0.490, max F1 0.631
+  v2_allnon_w100     floor 0.10: ceiling 0.944 | no PoN: P@TP608 0.099, max F1 0.269 | repo PoN: P@TP561 0.520, max F1 0.647
+  v2_allnon_w100     floor 0.15: ceiling 0.944 | no PoN: P@TP608 0.101, max F1 0.275 | repo PoN: P@TP561 0.543, max F1 0.659
+  v2_allnon_w100     floor 0.20: ceiling 0.944 | no PoN: P@TP608 0.102, max F1 0.278 | repo PoN: P@TP561 0.550, max F1 0.664
+  v2_allnon_w100     floor 0.25: ceiling 0.941 | no PoN: P@TP608 0.101, max F1 0.278 | repo PoN: P@TP561 0.545, max F1 0.664
+v1 e053 for reference: no PoN P@TP608 0.100 (max F1 0.183); own PoN P@TP561 0.522 (max F1 0.643)

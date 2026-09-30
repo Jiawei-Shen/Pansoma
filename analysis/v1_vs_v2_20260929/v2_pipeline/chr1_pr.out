@@ -1,0 +1,57 @@
+
+== HG008_Illumina_SNV_base: truths with a test tensor 662/697 (ceiling 0.950); negatives {'non_onref': 222340, 'non_offref': 10295, 'germline': 22809, 'other_kind_label1': 188}
+  strict (FP = non + germline + other-kind label-1 calls):
+    maxF1 0.242 (P 0.163 R 0.476 TP 332 FP 1711 thr 0.4605)  R@P0.05=0.920  R@P0.10=0.710  R@P0.15=0.525  R@P0.20=0.199  R@P0.30=na  P@R0.5=0.153  P@R0.7=0.102  P@R0.8=0.090  P@R0.9=0.059
+  v2-default-like (other-kind calls not FP):
+    maxF1 0.247 (P 0.167 R 0.476 TP 332 FP 1659 thr 0.4605)  R@P0.05=0.920  R@P0.10=0.726  R@P0.15=0.539  R@P0.20=0.241  R@P0.30=0.011  P@R0.5=0.157  P@R0.7=0.103  P@R0.8=0.091  P@R0.9=0.059
+  no germline FP (hypothetical: patient germline absent):
+    maxF1 0.367 (P 0.283 R 0.525 TP 366 FP 929 thr 0.4249)  R@P0.05=0.931  R@P0.10=0.918  R@P0.15=0.879  R@P0.20=0.803  R@P0.30=0.359  P@R0.5=0.284  P@R0.7=0.217  P@R0.8=0.203  P@R0.9=0.125
+  germline FP only:
+    maxF1 0.342 (P 0.267 R 0.476 TP 332 FP 910 thr 0.4605)  R@P0.05=0.945  R@P0.10=0.902  R@P0.15=0.758  R@P0.20=0.627  R@P0.30=0.367  P@R0.5=0.251  P@R0.7=0.161  P@R0.8=0.138  P@R0.9=0.100
+  at truth recall 0.5: threshold 0.4385, TP 349, FP by kind {'non_onref': 619, 'non_offref': 215, 'germline': 1039, 'other_kind_label1': 53}
+  at truth recall 0.7: threshold 0.2797, TP 488, FP by kind {'non_onref': 1159, 'non_offref': 526, 'germline': 2545, 'other_kind_label1': 79}
+  at truth recall 0.8: threshold 0.2302, TP 558, FP by kind {'non_onref': 1450, 'non_offref': 650, 'germline': 3471, 'other_kind_label1': 86}
+  at truth recall 0.9: threshold 0.0872, TP 628, FP by kind {'non_onref': 3017, 'non_offref': 1275, 'germline': 5658, 'other_kind_label1': 124}
+
+== HG008_Illumina_SNV_scalars: truths with a test tensor 662/697 (ceiling 0.950); negatives {'non_onref': 222340, 'non_offref': 10295, 'germline': 22809, 'other_kind_label1': 188}
+  strict (FP = non + germline + other-kind label-1 calls):
+    maxF1 0.273 (P 0.222 R 0.353 TP 246 FP 862 thr 0.5634)  R@P0.05=0.900  R@P0.10=0.735  R@P0.15=0.572  R@P0.20=0.385  R@P0.30=0.004  P@R0.5=0.165  P@R0.7=0.108  P@R0.8=0.085  P@R0.9=0.050
+  v2-default-like (other-kind calls not FP):
+    maxF1 0.278 (P 0.230 R 0.353 TP 246 FP 825 thr 0.5634)  R@P0.05=0.902  R@P0.10=0.750  R@P0.15=0.574  R@P0.20=0.406  R@P0.30=0.004  P@R0.5=0.170  P@R0.7=0.110  P@R0.8=0.086  P@R0.9=0.050
+  no germline FP (hypothetical: patient germline absent):
+    maxF1 0.397 (P 0.310 R 0.549 TP 383 FP 851 thr 0.4068)  R@P0.05=0.925  R@P0.10=0.891  R@P0.15=0.848  R@P0.20=0.795  R@P0.30=0.560  P@R0.5=0.318  P@R0.7=0.237  P@R0.8=0.192  P@R0.9=0.090
+  germline FP only:
+    maxF1 0.347 (P 0.304 R 0.405 TP 282 FP 647 thr 0.5124)  R@P0.05=0.945  R@P0.10=0.897  R@P0.15=0.753  R@P0.20=0.636  R@P0.30=0.406  P@R0.5=0.256  P@R0.7=0.165  P@R0.8=0.132  P@R0.9=0.100
+  at truth recall 0.5: threshold 0.4373, TP 349, FP by kind {'non_onref': 539, 'non_offref': 151, 'germline': 1016, 'other_kind_label1': 60}
+  at truth recall 0.7: threshold 0.2787, TP 488, FP by kind {'non_onref': 1111, 'non_offref': 386, 'germline': 2467, 'other_kind_label1': 77}
+  at truth recall 0.8: threshold 0.2006, TP 558, FP by kind {'non_onref': 1651, 'non_offref': 603, 'germline': 3671, 'other_kind_label1': 89}
+  at truth recall 0.9: threshold 0.0520, TP 628, FP by kind {'non_onref': 4715, 'non_offref': 1476, 'germline': 5681, 'other_kind_label1': 132}
+
+== HG008_Illumina_SNV_keephard_w100: truths with a test tensor 662/697 (ceiling 0.950); negatives {'non_onref': 222340, 'non_offref': 10295, 'germline': 22809, 'other_kind_label1': 188}
+  strict (FP = non + germline + other-kind label-1 calls):
+    maxF1 0.254 (P 0.253 R 0.255 TP 178 FP 525 thr 0.9334)  R@P0.05=0.931  R@P0.10=0.839  R@P0.15=0.482  R@P0.20=0.317  R@P0.30=0.208  P@R0.5=0.145  P@R0.7=0.125  P@R0.8=0.110  P@R0.9=0.078
+  v2-default-like (other-kind calls not FP):
+    maxF1 0.255 (P 0.254 R 0.255 TP 178 FP 523 thr 0.9334)  R@P0.05=0.931  R@P0.10=0.841  R@P0.15=0.482  R@P0.20=0.317  R@P0.30=0.209  P@R0.5=0.146  P@R0.7=0.125  P@R0.8=0.110  P@R0.9=0.078
+  no germline FP (hypothetical: patient germline absent):
+    maxF1 0.693 (P 0.647 R 0.746 TP 520 FP 284 thr 0.8673)  R@P0.05=0.947  R@P0.10=0.933  R@P0.15=0.921  R@P0.20=0.912  R@P0.30=0.891  P@R0.5=0.724  P@R0.7=0.666  P@R0.8=0.584  P@R0.9=0.260
+  germline FP only:
+    maxF1 0.262 (P 0.257 R 0.268 TP 187 FP 542 thr 0.9316)  R@P0.05=0.945  R@P0.10=0.895  R@P0.15=0.522  R@P0.20=0.326  R@P0.30=0.224  P@R0.5=0.154  P@R0.7=0.133  P@R0.8=0.119  P@R0.9=0.099
+  at truth recall 0.5: threshold 0.9014, TP 349, FP by kind {'non_onref': 107, 'non_offref': 22, 'germline': 1916, 'other_kind_label1': 6}
+  at truth recall 0.7: threshold 0.8759, TP 488, FP by kind {'non_onref': 180, 'non_offref': 50, 'germline': 3180, 'other_kind_label1': 15}
+  at truth recall 0.8: threshold 0.8465, TP 558, FP by kind {'non_onref': 279, 'non_offref': 97, 'germline': 4125, 'other_kind_label1': 21}
+  at truth recall 0.9: threshold 0.6778, TP 628, FP by kind {'non_onref': 1122, 'non_offref': 593, 'germline': 5687, 'other_kind_label1': 69}
+
+== HG008_Illumina_SNV_allnon_w100: truths with a test tensor 662/697 (ceiling 0.950); negatives {'non_onref': 222340, 'non_offref': 10295, 'germline': 22809, 'other_kind_label1': 188}
+  strict (FP = non + germline + other-kind label-1 calls):
+    maxF1 0.239 (P 0.164 R 0.443 TP 309 FP 1577 thr 0.9179)  R@P0.05=0.915  R@P0.10=0.818  R@P0.15=0.491  R@P0.20=0.261  R@P0.30=na  P@R0.5=0.147  P@R0.7=0.120  P@R0.8=0.103  P@R0.9=0.071
+  v2-default-like (other-kind calls not FP):
+    maxF1 0.241 (P 0.166 R 0.443 TP 309 FP 1557 thr 0.9179)  R@P0.05=0.915  R@P0.10=0.818  R@P0.15=0.492  R@P0.20=0.261  R@P0.30=na  P@R0.5=0.148  P@R0.7=0.121  P@R0.8=0.103  P@R0.9=0.071
+  no germline FP (hypothetical: patient germline absent):
+    maxF1 0.559 (P 0.424 R 0.818 TP 570 FP 773 thr 0.7852)  R@P0.05=0.941  R@P0.10=0.924  R@P0.15=0.910  R@P0.20=0.904  R@P0.30=0.890  P@R0.5=0.453  P@R0.7=0.447  P@R0.8=0.426  P@R0.9=0.233
+  germline FP only:
+    maxF1 0.283 (P 0.208 R 0.443 TP 309 FP 1174 thr 0.9179)  R@P0.05=0.928  R@P0.10=0.888  R@P0.15=0.661  R@P0.20=0.461  R@P0.30=0.234  P@R0.5=0.181  P@R0.7=0.141  P@R0.8=0.119  P@R0.9=0.092
+  at truth recall 0.5: threshold 0.9046, TP 349, FP by kind {'non_onref': 208, 'non_offref': 217, 'germline': 1581, 'other_kind_label1': 22}
+  at truth recall 0.7: threshold 0.8551, TP 488, FP by kind {'non_onref': 288, 'non_offref': 292, 'germline': 2976, 'other_kind_label1': 25}
+  at truth recall 0.8: threshold 0.7940, TP 558, FP by kind {'non_onref': 368, 'non_offref': 357, 'germline': 4119, 'other_kind_label1': 29}
+  at truth recall 0.9: threshold 0.0973, TP 628, FP by kind {'non_onref': 1117, 'non_offref': 888, 'germline': 6186, 'other_kind_label1': 67}
+15.17 s 280180 KB

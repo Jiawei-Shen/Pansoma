@@ -1,0 +1,83 @@
+confident bp chr1 222991757
+n697 697 Counter({'tensor_representative': 660, 'no_candidate': 32, 'filtered': 5})
+697 truth allele keys 697 distinct 697
+snv truth VCF records 9609 FILTER values {('.',): 9609} chr1 SNV alleles 702
+germline SNP alleles chr1 311428 autosomes 4039024 t=13s
+
+[AF_HPRC] chr1 val tensors 345376; by (label, BED, class):
+    ('LABEL_RULE_MISMATCH', 'inBED', 'HG008N_germline') 2
+    ('LABEL_RULE_MISMATCH', 'inBED', 'other') 3
+    ('false', 'inBED', 'HG008N_germline') 22772
+    ('false', 'inBED', 'other') 225034
+    ('false', 'inBED', 'pos_of_other_somatic') 91
+    ('false', 'outBED', 'HG008N_germline') 925
+    ('false', 'outBED', 'other') 95871
+    ('false', 'outBED', 'pos_of_other_somatic') 13
+    ('true', 'inBED', 'HG008N_germline') 2
+    ('true', 'inBED', 'other') 3
+    ('true', 'inBED', 'truth697') 659
+    ('true', 'outBED', 'other_somatic_SNV_truth') 5
+    ('true', 'outBED', 'truth697') 1
+[AF_HPRC] ceiling: 660 of 697 = 0.9469
+[AF_HPRC] train chr2-22 by (label, BED, class):
+    ('LABEL_RULE_MISMATCH', 'inBED', 'HG008N_germline') 11
+    ('LABEL_RULE_MISMATCH', 'inBED', 'other') 14
+    ('false', 'inBED', 'HG008N_germline') 277063
+    ('false', 'inBED', 'other') 2337304
+    ('false', 'inBED', 'pos_of_other_somatic') 1246
+    ('false', 'outBED', 'HG008N_germline') 32968
+    ('false', 'outBED', 'other') 459702
+    ('false', 'outBED', 'pos_of_other_somatic') 98
+    ('true', 'inBED', 'HG008N_germline') 11
+    ('true', 'inBED', 'other') 14
+    ('true', 'inBED', 'other_somatic_SNV_truth') 7475
+    ('true', 'outBED', 'other_somatic_SNV_truth') 134
+[AF_HPRC] train true 7634, false-that-are-HG008N-germline 310031 (ratio 40.6:1) t=46s
+
+[AF_HPRC_HG008N_added] chr1 val tensors 294444; by (label, BED, class):
+    ('LABEL_RULE_MISMATCH', 'inBED', 'HG008N_germline') 2
+    ('LABEL_RULE_MISMATCH', 'inBED', 'other') 5
+    ('false', 'inBED', 'HG008N_germline') 35794
+    ('false', 'inBED', 'other') 163725
+    ('false', 'inBED', 'pos_of_other_somatic') 89
+    ('false', 'outBED', 'HG008N_germline') 975
+    ('false', 'outBED', 'other') 93167
+    ('false', 'outBED', 'pos_of_other_somatic') 13
+    ('true', 'inBED', 'HG008N_germline') 2
+    ('true', 'inBED', 'other') 5
+    ('true', 'inBED', 'truth697') 668
+    ('true', 'outBED', 'other_somatic_SNV_truth') 5
+    ('true', 'outBED', 'truth697') 1
+[AF_HPRC_HG008N_added] ceiling: 669 of 697 = 0.9598
+[AF_HPRC_HG008N_added] train chr2-22 by (label, BED, class):
+    ('LABEL_RULE_MISMATCH', 'inBED', 'HG008N_germline') 16
+    ('LABEL_RULE_MISMATCH', 'inBED', 'other') 19
+    ('LABEL_RULE_MISMATCH', 'inBED', 'pos_of_other_somatic') 2
+    ('LABEL_RULE_MISMATCH', 'outBED', 'other') 1
+    ('false', 'inBED', 'HG008N_germline') 415829
+    ('false', 'inBED', 'other') 1784161
+    ('false', 'inBED', 'pos_of_other_somatic') 1325
+    ('false', 'outBED', 'HG008N_germline') 36343
+    ('false', 'outBED', 'other') 434156
+    ('false', 'outBED', 'pos_of_other_somatic') 93
+    ('true', 'inBED', 'HG008N_germline') 16
+    ('true', 'inBED', 'other') 19
+    ('true', 'inBED', 'other_somatic_SNV_truth') 7558
+    ('true', 'inBED', 'pos_of_other_somatic') 2
+    ('true', 'outBED', 'other') 1
+    ('true', 'outBED', 'other_somatic_SNV_truth') 144
+[AF_HPRC_HG008N_added] train true 7740, false-that-are-HG008N-germline 452172 (ratio 58.4:1) t=74s
+
+[AF_HPRC] chr1 testing set: {'on_val_node': 345376, 'node_not_in_val_(off-GRCh38 or new)': 16018} truth697 found 660
+
+v1 VCFs, strict counting (TP = distinct of the 697; FP = distinct called chr1 SNV alleles in somatic BED ∩ germline BED not among the 697):
+* AF_HPRC e053 linear (May14, ALL_chr): calls 6240 minPROB 0.500; at lowest threshold TP 608 FP 5446 (HG008N germline 5341, other-somatic-pos 1, other 104) P 0.1004 R 0.8723 F1 0.1801; maxF1 0.1830 (P 0.1024 R 0.8594 thr 0.773); R@P0.05=0.8723 R@P0.1=0.8723 R@P0.15=0.01 R@P0.2=0.0014 P@R0.5=0.1031 P@R0.7=0.103 P@R0.8=0.1024 P@R0.9=None; [no-BED FP vs snv VCF: 5628]
+* AF_HPRC e053 linear+4PoN (Apr9, ALL_chr): calls 1114 minPROB 0.509; at lowest threshold TP 561 FP 514 (HG008N germline 459, other-somatic-pos 1, other 54) P 0.5219 R 0.8049 F1 0.6332; maxF1 0.6430 (P 0.5406 R 0.7934 thr 0.773); R@P0.05=0.8049 R@P0.1=0.8049 R@P0.15=0.8049 R@P0.2=0.8049 P@R0.5=0.5592 P@R0.7=0.5543 P@R0.8=0.5309 P@R0.9=None; [no-BED FP vs snv VCF: 549]
+* AF_HPRC e053 linear (Mar20, Chr1): calls 6240 minPROB 0.500; at lowest threshold TP 608 FP 5446 (HG008N germline 5341, other-somatic-pos 1, other 104) P 0.1004 R 0.8723 F1 0.1801; maxF1 0.1830 (P 0.1024 R 0.8594 thr 0.773); R@P0.05=0.8723 R@P0.1=0.8723 R@P0.15=0.01 R@P0.2=0.0014 P@R0.5=0.1031 P@R0.7=0.103 P@R0.8=0.1024 P@R0.9=None; [no-BED FP vs snv VCF: 5628]
+* AF_HPRC e053 linear+4PoN (Mar19, Chr1): calls 1114 minPROB 0.509; at lowest threshold TP 561 FP 514 (HG008N germline 459, other-somatic-pos 1, other 54) P 0.5219 R 0.8049 F1 0.6332; maxF1 0.6430 (P 0.5406 R 0.7934 thr 0.773); R@P0.05=0.8049 R@P0.1=0.8049 R@P0.15=0.8049 R@P0.2=0.8049 P@R0.5=0.5592 P@R0.7=0.5543 P@R0.8=0.5309 P@R0.9=None; [no-BED FP vs snv VCF: 549]
+* AF_HPRC run1 linear (Mar9, tmp): calls 7323 minPROB 0.500; at lowest threshold TP 625 FP 5798 (HG008N germline 5459, other-somatic-pos 1, other 338) P 0.0973 R 0.8967 F1 0.1756; maxF1 0.1843 (P 0.1036 R 0.8336 thr 0.906); R@P0.05=0.8967 R@P0.1=0.8766 R@P0.15=None R@P0.2=None P@R0.5=0.1036 P@R0.7=0.1036 P@R0.8=0.1036 P@R0.9=None; [no-BED FP vs snv VCF: 6694]
+* AF_HPRC run1 linear+4PoN (Mar9, tmp): calls 1376 minPROB 0.500; at lowest threshold TP 576 FP 587 (HG008N germline 469, other-somatic-pos 1, other 117) P 0.4953 R 0.8264 F1 0.6194; maxF1 0.6402 (P 0.5340 R 0.7991 thr 0.900); R@P0.05=0.8264 R@P0.1=0.8264 R@P0.15=0.8264 R@P0.2=0.8264 P@R0.5=0.5557 P@R0.7=0.5431 P@R0.8=0.533 P@R0.9=None; [no-BED FP vs snv VCF: 796]
+* HG008N_added linear (Apr5): calls 902 minPROB 0.503; at lowest threshold TP 609 FP 75 (HG008N germline 9, other-somatic-pos 2, other 64) P 0.8904 R 0.8737 F1 0.8820; maxF1 0.8953 (P 0.9429 R 0.8522 thr 0.749); R@P0.05=0.8737 R@P0.1=0.8737 R@P0.15=0.8737 R@P0.2=0.8737 P@R0.5=0.9951 P@R0.7=0.9879 P@R0.8=0.9738 P@R0.9=None; [no-BED FP vs snv VCF: 289]
+* HG008N_added linear+4PoN (Apr6): calls 641 minPROB 0.503; at lowest threshold TP 562 FP 24 (HG008N germline 0, other-somatic-pos 2, other 22) P 0.9590 R 0.8063 F1 0.8761; maxF1 0.8794 (P 0.9755 R 0.8006 thr 0.612); R@P0.05=0.8063 R@P0.1=0.8063 R@P0.15=0.8063 R@P0.2=0.8063 P@R0.5=1.0 P@R0.7=0.9981 P@R0.8=0.9755 P@R0.9=None; [no-BED FP vs snv VCF: 75]
+* HG008N_added e064 linear (Apr7, gthreshold02): calls 902 minPROB 0.503; at lowest threshold TP 609 FP 75 (HG008N germline 9, other-somatic-pos 2, other 64) P 0.8904 R 0.8737 F1 0.8820; maxF1 0.8953 (P 0.9429 R 0.8522 thr 0.749); R@P0.05=0.8737 R@P0.1=0.8737 R@P0.15=0.8737 R@P0.2=0.8737 P@R0.5=0.9951 P@R0.7=0.9879 P@R0.8=0.9738 P@R0.9=None; [no-BED FP vs snv VCF: 289]
+done t=79s

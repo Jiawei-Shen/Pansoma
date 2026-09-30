@@ -1,0 +1,40 @@
+tensors to annotate 42192 Counter({2: 22809, 0: 18578, 1: 805})
+grch38 REF != FASTA: 0
+somatic(eval 1): n=805 gnomad=48 (6.0%) dbsnp=55 (6.8%) pon1000g=2 (0.2%) colors=81 (10.1%) any_pon=124 (15.4%) gnomad_any_af=102 (12.7%) gnomad_or_1000g_or_colors (no dbSNP)=114 (14.2%)
+germline(eval 2): n=22809 gnomad=20346 (89.2%) dbsnp=20194 (88.5%) pon1000g=1498 (6.6%) colors=21315 (93.4%) any_pon=21647 (94.9%) gnomad_any_af=21261 (93.2%) gnomad_or_1000g_or_colors (no dbSNP)=21526 (94.4%)
+non, p_max>=0.02: n=18578 gnomad=4966 (26.7%) dbsnp=2844 (15.3%) pon1000g=346 (1.9%) colors=6809 (36.7%) any_pon=11237 (60.5%) gnomad_any_af=6631 (35.7%) gnomad_or_1000g_or_colors (no dbSNP)=10815 (58.2%)
+697-truth tensors hit by PoN: {'any': 31, 'no_dbsnp': 25, 'dbsnp': 18}
+
+== HG008_Illumina_SNV_base
+  [no PoN]
+    ceiling 0.950  maxF1 0.242 (P 0.163 R 0.476 TP 332 FP 1711)  R@P0.05=0.920  R@P0.10=0.710  R@P0.15=0.525  R@P0.20=0.199  R@P0.30=na  R@P0.50=na  P@R0.5=0.153  P@R0.7=0.102  P@R0.8=0.090  P@R0.9=0.059  FP@R0.8 by kind {'non_onref': 1450, 'non_offref': 650, 'germline': 3471, 'other_kind_label1': 86}
+  [ClairS-TO PoN (gnomAD AF>=0.001 allele, dbSNP138 allele, 1000G PoN pos, CoLoRSdb AF>=0.001 pos)]
+    ceiling 0.907  maxF1 0.397 (P 0.323 R 0.515 TP 359 FP 754)  R@P0.05=0.900  R@P0.10=0.894  R@P0.15=0.877  R@P0.20=0.819  R@P0.30=0.555  R@P0.50=0.013  P@R0.5=0.324  P@R0.7=0.239  P@R0.8=0.213  P@R0.9=0.049  FP@R0.8 by kind {'non_onref': 592, 'non_offref': 713, 'germline': 709, 'other_kind_label1': 47}
+  [PoN without dbSNP]
+    ceiling 0.915  maxF1 0.389 (P 0.311 R 0.518 TP 361 FP 799)  R@P0.05=0.907  R@P0.10=0.902  R@P0.15=0.878  R@P0.20=0.815  R@P0.30=0.537  R@P0.50=0.013  P@R0.5=0.313  P@R0.7=0.231  P@R0.8=0.208  P@R0.9=0.110  FP@R0.8 by kind {'non_onref': 642, 'non_offref': 684, 'germline': 745, 'other_kind_label1': 48}
+
+== HG008_Illumina_SNV_scalars
+  [no PoN]
+    ceiling 0.950  maxF1 0.273 (P 0.222 R 0.353 TP 246 FP 862)  R@P0.05=0.900  R@P0.10=0.735  R@P0.15=0.572  R@P0.20=0.385  R@P0.30=0.004  R@P0.50=0.001  P@R0.5=0.165  P@R0.7=0.108  P@R0.8=0.085  P@R0.9=0.050  FP@R0.8 by kind {'non_onref': 1651, 'non_offref': 603, 'germline': 3671, 'other_kind_label1': 89}
+  [ClairS-TO PoN (gnomAD AF>=0.001 allele, dbSNP138 allele, 1000G PoN pos, CoLoRSdb AF>=0.001 pos)]
+    ceiling 0.907  maxF1 0.431 (P 0.357 R 0.544 TP 379 FP 684)  R@P0.05=0.898  R@P0.10=0.882  R@P0.15=0.849  R@P0.20=0.801  R@P0.30=0.627  R@P0.50=0.006  P@R0.5=0.365  P@R0.7=0.262  P@R0.8=0.201  P@R0.9=0.034  FP@R0.8 by kind {'non_onref': 714, 'non_offref': 703, 'germline': 748, 'other_kind_label1': 50}
+  [PoN without dbSNP]
+    ceiling 0.915  maxF1 0.421 (P 0.343 R 0.545 TP 380 FP 727)  R@P0.05=0.905  R@P0.10=0.890  R@P0.15=0.848  R@P0.20=0.799  R@P0.30=0.618  R@P0.50=0.006  P@R0.5=0.352  P@R0.7=0.252  P@R0.8=0.199  P@R0.9=0.074  FP@R0.8 by kind {'non_onref': 748, 'non_offref': 664, 'germline': 780, 'other_kind_label1': 51}
+
+== HG008_Illumina_SNV_keephard_w100
+  [no PoN]
+    ceiling 0.950  maxF1 0.254 (P 0.253 R 0.255 TP 178 FP 525)  R@P0.05=0.931  R@P0.10=0.839  R@P0.15=0.482  R@P0.20=0.317  R@P0.30=0.208  R@P0.50=0.030  P@R0.5=0.145  P@R0.7=0.125  P@R0.8=0.110  P@R0.9=0.078  FP@R0.8 by kind {'non_onref': 279, 'non_offref': 97, 'germline': 4125, 'other_kind_label1': 21}
+  [ClairS-TO PoN (gnomAD AF>=0.001 allele, dbSNP138 allele, 1000G PoN pos, CoLoRSdb AF>=0.001 pos)]
+    ceiling 0.907  maxF1 0.503 (P 0.384 R 0.730 TP 509 FP 816)  R@P0.05=0.905  R@P0.10=0.898  R@P0.15=0.891  R@P0.20=0.881  R@P0.30=0.828  R@P0.50=0.374  P@R0.5=0.446  P@R0.7=0.390  P@R0.8=0.345  P@R0.9=0.087  FP@R0.8 by kind {'non_onref': 128, 'non_offref': 109, 'germline': 815, 'other_kind_label1': 9}
+  [PoN without dbSNP]
+    ceiling 0.915  maxF1 0.489 (P 0.366 R 0.737 TP 514 FP 891)  R@P0.05=0.914  R@P0.10=0.905  R@P0.15=0.900  R@P0.20=0.888  R@P0.30=0.829  R@P0.50=0.360  P@R0.5=0.424  P@R0.7=0.375  P@R0.8=0.329  P@R0.9=0.142  FP@R0.8 by kind {'non_onref': 133, 'non_offref': 108, 'germline': 888, 'other_kind_label1': 9}
+
+== HG008_Illumina_SNV_allnon_w100
+  [no PoN]
+    ceiling 0.950  maxF1 0.239 (P 0.164 R 0.443 TP 309 FP 1577)  R@P0.05=0.915  R@P0.10=0.818  R@P0.15=0.491  R@P0.20=0.261  R@P0.30=na  R@P0.50=na  P@R0.5=0.147  P@R0.7=0.120  P@R0.8=0.103  P@R0.9=0.071  FP@R0.8 by kind {'non_onref': 368, 'non_offref': 357, 'germline': 4119, 'other_kind_label1': 29}
+  [ClairS-TO PoN (gnomAD AF>=0.001 allele, dbSNP138 allele, 1000G PoN pos, CoLoRSdb AF>=0.001 pos)]
+    ceiling 0.907  maxF1 0.449 (P 0.347 R 0.636 TP 443 FP 834)  R@P0.05=0.905  R@P0.10=0.894  R@P0.15=0.881  R@P0.20=0.875  R@P0.30=0.776  R@P0.50=na  P@R0.5=0.365  P@R0.7=0.327  P@R0.8=0.291  P@R0.9=0.076  FP@R0.8 by kind {'non_onref': 141, 'non_offref': 372, 'germline': 829, 'other_kind_label1': 23}
+  [PoN without dbSNP]
+    ceiling 0.915  maxF1 0.440 (P 0.335 R 0.641 TP 447 FP 887)  R@P0.05=0.914  R@P0.10=0.901  R@P0.15=0.890  R@P0.20=0.882  R@P0.30=0.740  R@P0.50=na  P@R0.5=0.352  P@R0.7=0.317  P@R0.8=0.286  P@R0.9=0.108  FP@R0.8 by kind {'non_onref': 146, 'non_offref': 363, 'germline': 864, 'other_kind_label1': 22}
+done
+116.11 s 377580 KB

@@ -1,0 +1,328 @@
+{
+ "verdict": {
+  "verdict": "v2 is not worse than v1 before the panel-of-normals (PoN) filter, and modestly worse after it. The big gap the user remembers comes from a v1 design whose graph contains the patient's own normal genome, not from the .dat/.idx tensor format.\n\nComparison basis: same 697 chr1 PASS SNP truths, same somatic BED \u2229 germline BED, strict allele matching, false calls counted once per distinct GRCh38 allele. Model versions compared: the published v1 SNV model (byte-identical to model_e067 of the pasted AF-HPRC run, graph without HG008-N) and its sibling checkpoint e053 (the only one with real chr1 VCFs on this server), against the four v2 runs.\n\n(a) No PoN: essentially a tie.\n- v2 wins at low recall. Recall at precision 0.15 is 0.49-0.61 for v2 against \u22640.01 for v1. Max F1 is 0.255-0.281 for v2 against 0.183 for v1 e053 (exact) and 0.190 [0.182-0.202] for v1 e067 (estimate).\n- v1 is slightly better at high recall. At the same TP 608 (recall 0.872), precision is 0.100 for v1 against 0.096 (allnon), 0.093 (keephard) and 0.077 (base).\n- Neither model rejects the patient's germline SNPs that are missing from the graph: 5,341 germline false calls for v1 against 5,020-5,264 for v2.\n\n(b) After the same repo-rule PoN: v1 is ahead.\n- At TP 561 (recall 0.805), precision is 0.522 for v1 (its own PoN VCF) against 0.463 (allnon), 0.431 (keephard) and 0.334 (base).\n- Max F1 is 0.643-0.656 for v1 e053 and about 0.672 [0.649-0.701] for v1 e067 (estimate), against 0.623 (keephard), 0.618 (allnon) and 0.528 (base).\n- The whole post-PoN gap is non-germline, mostly low-AF noise. At TP 608, v1 has 105 non-germline false calls; v2 has 563-2,276.\n- This ranking depends on the PoN rule. With an AF \u22650.001 rule the two tie (v1 0.508, v2 0.471-0.526).\n\nThe dramatic 'old design' numbers belong to AF_HPRC_HG008N_added: P 0.89, R 0.874, 75 false calls; per-tensor F1 0.7757. That graph has HG008-N's own 5.2 M dipcall variants injected, which amounts to using a matched normal, so it is not a valid tumor-only baseline.\n\nWhat is still open:\n- The exact v1 e067 curve. The current one is a stratified-sample estimate. A GPU inference run with no training (head_to_head/run_v1_full_gpu.sh, estimated under 30 min per checkpoint) would make it exact. The sample's confidence interval already puts v1 ahead after PoN, apart from the unknown optimism from choosing v1's epoch on chr1.\n- Why v2 lets more low-AF noise through. The strongest candidate is v2's partial-match positive labels (untested hypothesis). Settling it takes one GPU retraining ablation of about 3 h (keephard config: 840 s/epoch \u00d7 12).",
+  "head_to_head_table": [
+   "Columns: v1 e053 (exact VCF, only p\u22650.5 exists) | v1 e067 published (stratified-sample estimate, head_to_head) | v2 base | v2 keephard_w100 | v2 allnon_w100 | v2 scalars. Source: synthesis/my_check.out unless marked (h2h) = head_to_head/h2h_final.out.",
+   "Ceiling (of 697): v1 660 (0.947) | 660 | v2 659 exact-allele (0.945); 662 (0.950) if partial matches count. Same for all v2 runs.",
+   "No PoN, recall at P 0.05/0.10/0.15/0.20: v1 e053 0.872/0.872/0.010/0.001 | e067 0.920/0.911/0.003/0.003 (h2h) | base 0.924/0.801/0.582/0.248 | keephard 0.930/0.845/0.486/0.317 | allnon 0.921/0.846/0.547/0.330 | scalars 0.910/0.785/0.607/0.412",
+   "No PoN, precision at R 0.5/0.7/0.8/0.9: v1 e053 0.103/0.103/0.102/n.a. | e067 0.107/0.107/0.107/0.106 (h2h) | base 0.170/0.115/0.101/0.066 | keephard 0.147/0.127/0.112/0.082 | allnon 0.162/0.130/0.110/0.075 | scalars 0.177/0.117/0.094/0.056",
+   "No PoN, max F1 (P, R): v1 e053 0.183 (0.102, 0.859) | e067 0.190 [0.182-0.202] (0.106, 0.897) (h2h) | base 0.260 (0.179, 0.475) | keephard 0.255 (0.244, 0.268) | allnon 0.260 (0.183, 0.443) | scalars 0.281 (0.234, 0.352)",
+   "No PoN at the same TP 608 (R 0.872), FP (germline / other) and P: v1 e053 5,446 (5,341 / 105), 0.100 | base 7,296 (5,020 / 2,276), 0.077 | keephard 5,959 (5,264 / 695), 0.093 | allnon 5,741 (5,178 / 563), 0.096 | scalars 8,550 (5,182 / 3,368), 0.066",
+   "Repo-rule PoN (gnomAD allele, dbSNP allele, 1000G position, CoLoRSdb position), at the same TP 561 (R 0.805), P: v1 own PoN VCF 0.522 (FP 514 = 459 germline + 55 other) | base 0.334 (FP 1,119) | keephard 0.431 (740) | allnon 0.463 (651) | scalars 0.279 (1,452)",
+   "Repo-rule PoN, recall at P 0.05/0.10/0.15/0.20: v1 own PoN 0.805 flat | e067 0.842/0.839/0.838/0.836 (h2h) | base 0.838/0.834/0.831/0.829 | keephard 0.841/0.841/0.839/0.835 | allnon 0.841/0.841/0.836/0.832 | scalars 0.835/0.829/0.828/0.824. Ceilings: v1 0.842, v2 0.841.",
+   "Repo-rule PoN, precision at R 0.5/0.7/0.8/0.9: v1 own PoN 0.559/0.554/0.531/n.a. | e067 0.596/0.596/0.574/n.a. (h2h) | base 0.497/0.416/0.338/n.a. | keephard 0.619/0.560/0.439/n.a. | allnon 0.615/0.537/0.476/n.a. | scalars 0.534/0.427/0.294/n.a.",
+   "Repo-rule PoN, max F1: v1 own PoN VCF 0.643 (P 0.541, R 0.793); v1 e053 + my PoN 0.656 | e067 0.672 [0.649-0.701] (h2h) | base 0.528 | keephard 0.623 | allnon 0.618 | scalars 0.543",
+   "AF \u22650.001 PoN rule, max F1 (h2h): v1 e053 0.507 | e067 0.508 [0.496-0.529] | base 0.471 | keephard 0.521 | allnon 0.526 | scalars 0.489. A tie.",
+   "Off-reference calls with p \u22650.5 (no GRCh38 position, so not scorable against the truth) (h2h): v1 19 of 16,018 | base 141, keephard 1,216, allnon 553, scalars 91, each of 10,295. Counting them as FP gives v2 no-PoN max F1 0.242 / 0.254 / 0.239 / 0.271 and PoN max F1 0.428 / 0.599 / 0.505 / 0.467.",
+   "Per tensor, P at R 0.935 (v1's logged metric): v1 log 0.0986 (epoch chosen on chr1); v1 e067 on CPU, in region 0.106 (h2h) | v2 0.076 / 0.090 / 0.092 / 0.067 (h2h)",
+   "Not tumor-only, for reference: v1 HG008N_added e064 (patient's normal in the graph): TP 609, FP 75 (9 germline), P 0.890, R 0.874; with its own PoN, P 0.959, R 0.806"
+  ],
+  "why_v1_looks_better": [
+   "1. The best 'v1' numbers used the patient's normal (largest effect). Tensor F1 0.7757 and truth-level P 0.89 / R 0.874 come from AF_HPRC_HG008N_added. Its graph is d9 plus HG008-N's own dipcall variants: /scratch/jshen/Scripts/HG008_GIAB/add_hg008n_to_hprc-af_vg.sh runs dipcall on HG008N_curatedv6 hap1/hap2, then vg convert -p -H, then vg add (5,221,087 variants, the same VCF body as v2's germline truth). That removes the germline false calls (9 against 5,341) and amounts to a matched normal. The pasted/published model is NOT this design: its 106 training shards and 3,116,015 samples match AF_HPRC, and its first 8 validation shards give exactly 261,620 / 524.",
+   "2. v1 is quoted after PoN, v2 before it (large effect). v1 e053 + PoN scores F1 0.633 strict (0.622 in the user's rtg run); v2 without PoN peaks at max F1 0.26-0.28. Both models carry about 5,000-5,300 germline false calls at R 0.872, and the PoN removes about 90% of them. With the same PoN on both, the gap shrinks to 0.02-0.13 F1 (v1 0.643-0.672 against v2 0.528-0.623).",
+   "3. Different metric and denominator. The pasted 'P 9.86% at R 93.5%' is per tensor, over 524 true tensors in the first 8 of 11 chr1 validation shards, with the epoch picked on that same set. On that metric v2 gets 0.064-0.092 against v1's 0.0986 (0.106 when v1 e067 is re-run on CPU). This is a real but modest v1 advantage, about 10-40% lower precision for v2 at R 0.935. It exists only at the very-high-recall end.",
+   "4. v1's epoch was selected on chr1; v2 never saw chr1. Probably small (hypothesis): v1 validation F1 moved only 0.169 \u2192 0.178 between epochs 24 and 67, and truth-level max F1 is 0.183 for e053 against 0.190 for e067.",
+   "5. The user's own evaluations used no BED and a 702-record baseline (rtg --region chr1). Small effect: v1 e053 + PoN gets rtg F1 0.622 against 0.633 strict in-BED.",
+   "6. v2's built-in test metrics count off-reference tensors as non (EVAL_AS_NON), while v1's linear VCF drops them. This lowers v2 base max F1 from 0.260 to 0.242. They cannot be false positives against a GRCh38 truth, so they belong in a separate graph-VCF evaluation. Small to moderate for base and allnon."
+  ],
+  "real_design_differences": [
+   "1. Positive labels (most likely cause; hypothesis consistent with the numbers). v2 labels residual partial matches as somatic: on chr2-22, 2,156 of 9,768 label-1 SNV tensors, median AF 0.126, 1,473 of them with AF <0.2. That makes 97% of all v2 positives with AF <0.2 partial matches (exact ones: 46 of 7,612). v1 labels only exact matches: 7,634 true, and on chr1 validation 2 of 670 have AF <0.2. The failure has the same signature: after PoN, 913 of v2's 1,196 non-germline false calls have AF <0.2, against 13 for v1. At TP 608, v2 has 563-2,276 non-germline false calls against 105 for v1. Also, 952 of those v2 false calls are v1 candidates that v1 scored below 0.5. Sources: synthesis/pos_af.out, v1_artifacts/fp_comp2.out, synthesis/my_check.out.",
+   "2. Training schedule (medium). v2 ran 12 epochs at lr 2e-4 with 1 warmup epoch. Base and keephard peak at epoch 5 and then overfit (base val loss 0.097 \u2192 0.335), with non tensors subsampled to 25% per epoch (about 4-5 M tensor passes to the best epoch). v1 ran 80 epochs at lr 1e-4 with 10 warmup epochs and cosine decay, on 90% of shards per epoch (about 188 M passes to e067). Exposure alone is not the fix: allnon_w100 (all non every epoch) still has 563 non-germline false calls at TP 608, and its validation truth F1 plateaus at 0.22-0.24 from epoch 2.",
+   "3. Which negatives are trained (medium-low). v2 marks out-of-BED tensors -1 (92,336 on chr1), and off-reference tensors never train. v1 trains on every false tensor, including out-of-BED ones (95,871 on chr1 validation). v2 calls 91-1,216 of 10,295 off-reference tensors at p \u22650.5; v1 calls 19 of 16,018.",
+   "4. Row selection and encoding (unknown impact; hypothesis). v1 sorts reads with the most mismatches first before the 200-row cap, and has an explicit mismatch-flag channel across the 100-column window (5 at the variant column), so a read's mismatch burden is visible directly. v2 samples rows uniformly within allele blocks, orders them by similarity, and marks alleles in site_allele; mismatches must be inferred from read_base against the graph reference base.",
+   "5. AF floor (low). v2 builds at 0.06 and labels at 0.07; v1 uses 0.08. 215 of v2's 1,196 post-PoN non-germline false calls are not v1 candidates. Restricting v2 to AF \u22650.08 adds only 0.01-0.03 to max F1 (h2h).",
+   "6. Germline class / 3 classes (low; neither helps nor provably hurts). At TP 608, v2's germline false calls are 5,020-5,264 against v1's 5,341, a reduction of 6% at most. Tumor-only tensors cannot tell a private germline het from a clonal somatic variant (AF medians 0.60 and 0.55). The class only buys v2's higher-precision points at low recall.",
+   "7. Class weights (low). v2 base uses somatic weight 5.6, keephard/allnon 100, v1 200. A v2 run with weights 1/200/10 on all non tensors (HG008_Illumina_SNV_allnon_w1_200_10_b512_fixed) was worse on validation (truth F1 \u22640.16) and was cancelled at epoch 11 (job 377155).",
+   "8. Not a difference: graph and population information. Both use the plain d9 graph with no gnomAD channel; v1's genomead_af JSON field is not read by the 5-channel builder. Candidate ceilings are the same (660 against 659 exact alleles; the same 660 truths). v2's extra channels (strand, graph reference base, a near-constant path count) are not implicated."
+  ],
+  "next_steps": [
+   "1. Free: ask the user which v1 number they are comparing against. If it is F1 0.78 per tensor, or P 0.89-0.96 at truth level, it is the HG008N_added (patient-normal) design and cannot serve as a tumor-only baseline. From now on, report every v1 and v2 result with the same PoN post-filter and the same truth-level scorer (synthesis/my_check.py or head_to_head/h2h_final.py).",
+   "2. CPU, under 15 min, read-only: characterize the 952 low-AF v2 false calls that v1 scores below 0.5 against v2's true positives. Check ALT-strand fraction, ALT base quality, MAPQ, per-read mismatch burden, distance to the nearest somatic INDEL truth, and whether the site resembles v2's partial-match training positives. This shows which ablation to run first.",
+   "3. GPU inference, no training, estimated under 30 min per checkpoint (needs user approval): head_to_head/run_v1_full_gpu.sh (v1_full_chr1_gpu_test.py plus score_v1_full.py) on all 361,394 v1 chr1 test tensors, for e067 and e053. This turns the v1 e067 estimate into an exact curve at every threshold, including P@R0.9 and off-reference calls. Copy the scratch scripts somewhere persistent first.",
+   "4. GPU training, about 3 h (keephard_w100 config, 840 s/epoch \u00d7 12): relabel residual_partial_somatic_truth (and allele_partial) SNV tensors to -1, then retrain on chr2-22 and test on chr1. Success criterion: non-germline false calls at TP 608 fall from 695 toward about 105, and post-PoN precision at R 0.805 reaches \u22650.52 (v1's level).",
+   "5. Only if step 4 is not enough, one change at a time: SNV label floor 0.08; lr 1e-4 with a longer warmup and cosine schedule; out-of-BED and off-reference non tensors added to training as negatives; v1-like mismatch-first row ordering, or a per-read mismatch-count plane.",
+   "6. For future fair comparisons, select v1 checkpoints on a non-chr1 validation set, or state that v1's chr1 numbers carry some optimism from epoch selection on chr1."
+  ],
+  "rechecked": [
+   "Published model identity. cmp shows /scratch/jshen/Github/Pansoma/pretrained_model/Pansoma_zenodo/pretrained_model_Pansoma/HG008/HG008_WGS_SNV.pth is IDENTICAL to /scratch/jshen/Github/GoogleNet/HG008T_GIAB_AF-HPRC_CE_Large_Model_V2_weight200/model_e067_f1_0.1784.pth and differs from e053 at byte 39. That run's training_log_5ch_sharded.txt: 106 train / 11 val shards, 3,116,015 samples, best epoch 67 (line 502), class weights [1, 200].",
+   "The pasted run used AF_HPRC. My own labels.npy count: AF_HPRC train has 106 shards = 3,108,381 false + 7,634 true = 3,116,015; val has 11 shards = 344,706 / 670. The running total after the first 8 val shards is exactly 261,620 / 524, i.e. the pasted log. So it used the no-HG008-N data, and the chr1 validation set served as epoch selection.",
+   "HG008N_added graph. /scratch/jshen/Scripts/HG008_GIAB/add_hg008n_to_hprc-af_vg.sh runs dipcall on HG008N_curatedv6_250714_polished6.2 hap1/hap2 against GRCh38, then vg convert -p -H of hprc-v1.1-mc-grch38.d9.gbz, then vg add. The patient's normal assembly is in the graph.",
+   "Independent truth-level scoring (analysis/v1_vs_v2_20260929/synthesis/my_check.py \u2192 my_check.out, 72 s):\n- Truth set: 697 truths, 697 distinct allele keys.\n- v1 e053 VCF: TP 608, FP 5,446 (5,341 HG008-N germline, 105 other), P 0.1004, R 0.8723.\n- v2 at the same TP 608: base 7,296 (5,020 / 2,276), keephard 5,959 (5,264 / 695), allnon 5,741 (5,178 / 563), scalars 8,550.\n- With PoN, v1's own PoN VCF: TP 561, FP 514 (459 germline / 55 other).\n- v2 at TP 561 with the repo-rule PoN (my own pysam lookups on 40,853 sites): allnon P 0.463, keephard 0.431, base 0.334.\n- My repo-rule PoN matches v1's own filter on 6,176 of 6,240 e053 calls.\n- The v2 curves reproduce head_to_head within \u00b10.01, and v1_artifacts' 7,297 / 5,020 / 2,277 split within 1.",
+   "Positive-label AF (synthesis/pos_af.py \u2192 pos_af.out, 59 s). v2 chr2-22 label-1: 7,612 exact (median AF 0.535, 46 below 0.2) and 2,156 partial (median 0.126, 1,473 below 0.2). v1 chr1 validation true: 670 (median 0.641, 2 below 0.2).",
+   "v2 training logs (/scratch/jshen/data/pansoma_net_v2_runs/*/train.log).\n- base: best epoch 5 of 12, val loss 0.097 \u2192 0.335, non subsampled to 0.25 per epoch.\n- allnon_w100: all non every epoch, best epoch 12, truth F1 0.22-0.24 from epoch 2 on.\n- allnon_w1_200_10_b512_fixed (weights 1/200/10): val truth F1 \u22640.16; job 377155 was cancelled at 08:35 during epoch 11.\n- v1 trainer (machine_learning/pansoma_net/scripts/train_5channels_npy_pansoma.py:486-616): 10 warmup epochs, then cosine decay, weight decay 0.05."
+  ],
+  "caveats": [
+   "The v1 e067 curve is a stratified-sample estimate (12,170 tensors, bootstrap intervals from head_to_head). For e053, only calls with p \u22650.5 exist, so its curve covers only the high-threshold end and P@R0.9 is not reachable.",
+   "v1's chr1 numbers carry some optimism, because both e053 and e067 were chosen by F1 on chr1 validation. Its size is not measured.",
+   "The post-PoN ranking depends on the PoN rule. The repo rule favours v1 by 0.03-0.13 F1; an AF \u22650.001 rule gives a tie (0.507-0.508 against 0.471-0.526).",
+   "Counting choices move v2 by a few hundredths. I count v2 SNV tensors that partially match INDEL truths (146 sites) as false positives; making them neutral changes max F1 by \u22640.005. Off-reference calls are excluded from the main numbers. In my v2 PoN curves, sites with p <0.02 were not looked up and were treated as not in the PoN; this affects only thresholds below 0.02.",
+   "Ceilings differ by definition: v2 is 0.945 with strict allele matching (659) and 0.950 if its 3 partial-match finds count; v1 is 0.947 (660). They are effectively equal.",
+   "The partial-label explanation is supported by correlation (AF profile of the positives against that of the false calls), not by a retraining ablation.",
+   "Everything here is one sample, one platform (HG008 BCM Illumina) and SNVs on chr1 only. INDEL, PacBio, ONT and COLO829 were not compared.",
+   "Unexplained but not decisive: the pasted training log evaluated only 8 of the 11 validation shards, and a CPU re-run of e067 finds 484 of 524 true tensors where the log says 490."
+  ]
+ },
+ "investigations": [
+  {
+   "key": "v1_artifacts",
+   "summary": "Scratch dir: analysis/v1_vs_v2_20260929/v1_artifacts/. Scripts: v1_verify.py, count_labels2.py, germ_af.py, fp_comp2.py. Outputs: the matching .out files and ckpt_keys.out. Everything ran read-only on CPU; the largest run took 80 s and about 1.1 GB. An earlier, unfinished run of this same task left v1_eval.out and old_src/ here. I reused them after checking them against the new tensor paths.\n\n**Short answer.** There were two v1 designs, and they must not be mixed up.\n- **v1 \"AF_HPRC\" (the design without a normal).** This is the pasted run and the published HG008_WGS_SNV.pth. On the same 697 truths it is about as good as v2 before the PoN filter, and better than v2 after it.\n- **v1 \"AF_HPRC_HG008N_added\".** Its graph contains the patient's own normal assembly, which amounts to using a matched normal. It is the only v1 design with very good numbers.\n\n**(1) Graph**\n- AF_HPRC is the plain HPRC v1.1 MC GRCh38 d9 graph (hprc-v1.1-mc-grch38.d9.gbz). The Zenodo readme calls this the \"AF-filtered\" graph: nodes carried by fewer than 10% of haplotypes are removed. Nothing is added to it: no gnomAD, no HG008-N.\n- AF_HPRC_HG008N_added is that d9 graph with the HG008-N dipcall variants injected by `vg add` (5,221,087 variants), then rebuilt by autoindex with the haplotypes dropped and a greedy path-cover GBWT. Its variant set is byte-identical to v2's germline truth VCF.\n- The pasted run used AF_HPRC. Its shard and sample counts (106/11 shards, 3,116,015 training tensors, 261,620/524 validation) match AF_HPRC exactly. They do not match HG008N_added (95/9 shards, 2,679,647 training tensors, first 8 validation shards = 261,533/611).\n- The published HG008_WGS_SNV.pth is byte-identical to that run's model_e067_f1_0.1784.pth.\n\n**(2) Candidates**\n- Nodes go into the .dat when more than 5% of their mappings are imperfect. Reads need MAPQ \u226510.\n- SNV edits come from the CIGAR against the node sequence. Filters: at least 3 ALT reads, AF \u22650.08, mean ALT base quality \u226510.\n- One tensor is made per (node, offset, ALT). Training and validation use GRCh38-path nodes only; the test set adds the component's non-reference nodes (+16,018 tensors on chr1).\n- There is no population-AF filter. The `genomead_af` arrays in the ref_nodes_position JSONs are not read by the 5-channel builder.\n- In principle this is the same kind of candidate as v2 (edits against the walked node), so germline variants already in d9 are never candidates.\n\n**(3) Labels**\n- \"true\" means an exact (position, REF, ALT) match to HG008-T_somatic_smvar_benchmark_v0.2_tumorvariants.snv.vcf.gz: 9,609 records, all FILTER '.', 702 on chr1. Because of the fetch window, a truth one base downstream with the same REF/ALT also counts.\n- No BED is used, either for labels or in the user's rtg evaluations (`vcfeval --region chr1`).\n- Germline variants that are candidates are labelled \"false\". On chr1 validation that is 23,697 of the false tensors; in chr2-22 training it is 310,031 germline false against 7,634 true (40.6:1).\n\n**(4) Channels.** Five int8 channels of shape (5, 201, 100): row 0 is the node's reference sequence, then up to 200 reads.\n- base (A20 C30 G50 T70 N5 *1 I90, padding 0)\n- base quality\n- mismatch flag (0/1, 5 at the variant column, padding -1)\n- MAPQ (padding -1)\n- CIGAR op (M10 \u2026 X90)\n\nThere is no strand channel and no population AF. Reads are sorted with mismatch-heavy reads first before the 200-row cap.\n\n**(5) Counts**\n- AF_HPRC chr1 validation: 345,376 tensors = 344,706 false + 670 true (11 shards). The pasted 261,620/524 is exactly the running total after shards 00000-00007 (262,144 = 8 \u00d7 32,768). Why the log says 11 shards but evaluated 8 is not explained.\n- AF_HPRC chr2-22 training: 3,108,381 false + 7,634 true.\n- Ceilings on the 697 truths: AF_HPRC 660 (0.947, the same 660 that v2 has as tensor_representative); HG008N_added 669 (0.960); v2 662 (0.950).\n\n**(6) Existing v1 chr1 predictions.** These are VCFs holding only calls with PROB \u22650.5 (argmax), so only the high-threshold end of a curve exists. None of them comes from the published e067 checkpoint; the AF_HPRC ones come from e053 (also selected on chr1). Strict scoring on the 697 truths, with FP counted as distinct alleles inside somatic BED \u2229 germline BED:\n\n| Model / filter | P | R | F1 | FP |\n|---|---|---|---|---|\n| AF_HPRC e053 | 0.100 | 0.872 | 0.180 | 5,446 (5,341 of them HG008-N germline) |\n| AF_HPRC e053 + 4-PoN | 0.522 | 0.805 | 0.633 | 514 |\n| HG008N_added e064 | 0.890 | 0.874 | 0.882 | 75 |\n| HG008N_added e064 + 4-PoN | 0.959 | 0.806 | 0.876 | 24 |\n\n**Why v2 looks worse (matched recall 0.872, TP 608 for both).**\n- The germline false-positive load is about the same: v1 e053 5,341 against v2 base 5,020.\n- The non-germline false positives differ a lot: v1 105, v2 2,277.\n- After the PoN filter: v1 514 (55 non-germline) against v2 1,616 (1,196 non-germline).\n- 76% of v2's remaining non-germline false positives have AF <0.2. 952 of them are v1 candidates that v1 scored below 0.5. So v2 is mostly worse at rejecting low-AF noise, not at rejecting germline.\n- A likely cause is v2's partial-match positives (median AF 0.12). That is a hypothesis, not tested here.\n\n**Needs a GPU.** A full v1 curve for the published e067 checkpoint on chr1 (about 361k tensors).",
+   "facts": [
+    {
+     "claim": "v1 AF_HPRC tensors come from the plain d9 graph with nothing added. The GAM is BCM Illumina mapped by giraffe (vg 1.66) to /scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.gbz. The .dat/.idx are built from that GAM, and the node positions come from the d9 GFA.",
+     "evidence": "/scratch/jshen/Scripts/HG008_GIAB/hg008t_giraffe_Liss_lab_BCM_Illumina-WGS_20240313_AF-HPRC.sh (GBZ=...d9.gbz). ..._illumina_make_training_set.sh uses DAT/IDX=.../HG008-T_p23_BCM_IlluminaWGS_20240313.{dat,idx} and REF_JSON_BASE=/scratch/jshen/data/Pansoma/ref_nodes_position_AF-HPRC. ..._illumina_make_jsons.sh uses GFA=...d9.gfa. The GAM log lists the d9 indexes. Old repo config (git show bcd227d^:configs/hg008_illumina_5ch_snp.yaml) says the same.",
+     "verified": true
+    },
+    {
+     "claim": "'AF-HPRC' is simply the HPRC v1.1 MC GRCh38 d9 graph: nodes and edges supported by fewer than 10% of haplotypes are removed. It is not a gnomAD-augmented graph. The ref_nodes_position_AF-HPRC JSONs are byte-for-byte the same size as ref_nodes/ (chr1 6,334,636,790 bytes; the first 100 MB of chr21 are identical) and carry per-base 'genomead_af' arrays.",
+     "evidence": "pretrained_model/Pansoma_zenodo/readme.md section 4 ('GRCh38 AF-Filtered VG Indexes ... removing nodes and edges supported by fewer than 10% of the graph haplotypes'). ls -la of /scratch/jshen/data/Pansoma/ref_nodes and ref_nodes_position_AF-HPRC. cmp -n 100000000 on chr21. Head of the JSON.",
+     "verified": true
+    },
+    {
+     "claim": "The 5-channel v1 builder and labeller never read population AF. The 'genomead_af' field in the node JSONs is unused, and the 5-channel format was explicitly 'no AF channel'; the older 6-channel tensors carried it.",
+     "evidence": "grep for genomead/population in /scratch/jshen/Github/pangenome_ML_data_generation/node_pileup_tensors/node_5channel_batchP_pileup_tensor.py and the testing builder: no hits. Builder description at line 712 ('Output tensors have 5 channels (no AF channel)'). Label script lines 130-133.",
+     "verified": true
+    },
+    {
+     "claim": "AF_HPRC_HG008N_added = d9 plus the patient's own normal. The script runs dipcall on HG008N_curatedv6_250714_polished6.2 hap1/hap2 against GRCh38, then vg convert -p -H (haplotypes dropped), then vg add -v of the 5,221,087 normalized variants, then autoindex with a greedy path-cover GBWT, producing indexes_HG008N_curatedv6_250714_polished6.2_rebuild_hprc_d9_vg1660/hprc-v1.1-mc-grch38.d9.plus_HG008N_curatedv6_250714_polished6_2.gbz. The BCM reads were re-mapped to it (..._giraffed_with_HG008N_added.gam/.dat/.idx) and tensors built into AF_HPRC_HG008N_added/. This is equivalent to using a matched normal.",
+     "evidence": "/scratch/jshen/Scripts/HG008_GIAB/add_hg008n_to_hprc-af_vg.sh. /scratch/jshen/tmp/rebuild_hprc_d9_plus_HG008N_curatedv6_250714_polished6.2_vg1660_268142/autoindex.stderr ('Constructing a greedy path cover GBWT') and step5_vg_add.stderr (last line Variant 5221087). hg008t_giraffe_Liss_lab_BCM_Illumina-WGS_20240313_AF-HPRC_HG008N.sh. ..._HG008N_added_graph_make_DAT_IDX.sh. ..._HG008N_added_graph_make_SNV_training_set.sh.",
+     "verified": true
+    },
+    {
+     "claim": "The HG008-N variant set injected into the v1 graph is identical to the germline truth that v2 uses for its germline class and its confident BED.",
+     "evidence": "md5 of the VCF bodies is b434a683dba68caf5333fe377c90bbfa for both, 5,166,089 records each: /scratch/jshen/data/HG008_GIAB/dipcall_HG008N_GRCh38/HG008N_GRCh38_dipcall.dip.vcf.gz and the rebuild dir's HG008N_curatedv6_250714_polished6.2.dip.vcf.gz. The two dip.bed files have the same md5 (8637879a...).",
+     "verified": true
+    },
+    {
+     "claim": "The pasted run HG008T_GIAB_AF-HPRC_CE_Large_Model_V2_weight200 used the AF_HPRC (no HG008-N) data. Its log (on this server) reports #train_shards=106, #val_shards=11, 3,116,015 training samples and validation 261,620 false / 524 true. AF_HPRC has 106 training shards with 3,108,381 + 7,634 = 3,116,015 tensors and 11 validation shards; its first 8 validation shards sum to exactly 261,620 / 524. HG008N_added has 95/9 shards, 2,679,647 training tensors, and its first 8 validation shards sum to 261,533 / 611.",
+     "evidence": "/scratch/jshen/Github/GoogleNet/HG008T_GIAB_AF-HPRC_CE_Large_Model_V2_weight200/training_log_5ch_sharded.txt lines 3-4 and 13-15. count_labels2.out. Per-shard running totals (shards 00000..00007 = 261,620/524).",
+     "verified": true
+    },
+    {
+     "claim": "The pasted run evaluated only the first 262,144 validation rows (shards 00000-00007, 8 x 32,768) although its log says 11 shards. The repo trainer passes max_steps=None for validation, so the cause is unknown. The best epoch (67) and e053 were both chosen on chr1.",
+     "evidence": "train_5channels_npy_pansoma.py lines 768-830 (validation iterator with max_steps=None). The cumulative counts above. make_training_set.sh sends chr1 to val/ and chr2-22 to train/.",
+     "verified": false
+    },
+    {
+     "claim": "The published HG008_WGS_SNV.pth is byte-identical to /scratch/jshen/Github/GoogleNet/HG008T_GIAB_AF-HPRC_CE_Large_Model_V2_weight200/model_e067_f1_0.1784.pth, so it has no HG008-N and saw chr1 only as validation. Contents: the zip entries are named model_e067_f1_0.1784; epoch 67; in_channels 5; genotype_map {false, true}; best_f1_true 0.17844; best_rec_true 0.93511; best_val_acc 98.279; ConvNeXt with 199,186,322 parameters (stem 5->192, 4x4 patchify; head 2x1536). No data or graph provenance is stored in the checkpoint.",
+     "evidence": "cmp -s of the published file against each checkpoint: IDENTICAL only for e067. ckpt_keys.out.",
+     "verified": true
+    },
+    {
+     "claim": "How v1 picks candidates. A node goes into the .dat only if not_perfect/(perfect+not_perfect) > 0.05. Reads with MAPQ <10 are dropped. SNV edits ('X') are read from the node-level CIGAR against the node sequence. Kept if ALT reads \u22653, AF \u22650.08 and mean ALT base quality \u226510. One tensor is made per (node, offset, REF, ALT) allele. Training and validation iterate over the GRCh38-path nodes of the chromosome (ref_nodes_position_AF-HPRC). The test set uses the ALL_node_pos JSON restricted to the chromosome component plus GRCh38-path nodes. There is no population-AF filter.",
+     "evidence": "parseGAM_filtered_unperfect_nodes_Ver6CPP.py:124 (--alt default 0.05). node_5channel_batchP_pileup_tensor.py:435 (mapq<10), 486-547 (detection and filters). make_training_set.sh (--min_af 0.08 --min_variants 3). make_testing_set_chr1-22.sh (--chr_nodes component + GRCh38_path).",
+     "verified": true
+    },
+    {
+     "claim": "The v1 chr1 test set holds 361,394 tensors: the 345,376 validation tensors (on GRCh38-path nodes) plus 16,018 on nodes outside the GRCh38 path.",
+     "evidence": "v1_verify.out: '[AF_HPRC] chr1 testing set: on_val_node 345376, node_not_in_val 16018'. v1_eval.out: test-val 16,018, val-test 0.",
+     "verified": true
+    },
+    {
+     "claim": "The 5 channels, int8 (5, 201, 100) with a 100-column window and row 0 = node reference. ch1 base: A20 C30 G50 T70 N5 *1 I90 (insertion at the anchor), padding 0. ch2 base quality, padding 0. ch3 mismatch versus the reference row: 0/1, 5 at the variant column, padding -1. ch4 MAPQ capped at 127, padding -1. ch5 CIGAR op: M10 N20 S30 I40 D50 H60 P70 =80 X90. There is no strand channel and no AF channel. Reads are sorted by weighted non-M length (X counted twice for SNPs), capped at 400, and the first 200 fill the rows, so mismatching reads come first.",
+     "evidence": "node_5channel_batchP_pileup_tensor.py lines 36-52, 373-397, 470-475, 598-647. That file and the label script are byte-identical to the Pansoma git history copies under experiments/legacy (md5 7f2393fa... and 26249343...).",
+     "verified": true
+    },
+    {
+     "claim": "The v1 truth and label rule. The truth is HG008-T_somatic_smvar_benchmark_v0.2_tumorvariants.snv.vcf.gz: 9,609 records, all FILTER '.', 702 chr1 SNV alleles. A tensor is 'true' when REF==v_ref and ALT==v_alt for a truth record fetched in [pos-1, pos+1), otherwise 'false'; nodes with no GRCh38 position are 'unknown' (-1). No BED is used. The window also accepts a truth one base downstream: 5 chr1 validation and 25 training 'true' labels are not exact matches. The mechanism is read from the code, not checked record by record.",
+     "evidence": "make_training_set.sh TRUTH_VCF. node_5channel_batchP_pileup_tensor_label.py lines 44-66 and 212-235. v1_verify.out ('LABEL_RULE_MISMATCH' rows and 'snv truth VCF records 9609 FILTER values {.:9609}').",
+     "verified": true
+    },
+    {
+     "claim": "In v1 AF_HPRC, germline variants are labelled 'false' whenever they are candidates. Variants already in d9 are never candidates. chr1 validation: 22,772 in-BED and 925 out-of-BED false tensors are exact HG008-N germline SNP alleles. chr2-22 training: 310,031 germline false against 7,634 true (40.6:1). v2 training has germline:somatic about 30:1.",
+     "evidence": "v1_verify.out ([AF_HPRC] chr1 val and train blocks). v2_pipeline_result.json (276,793 germline : 9,178 somatic).",
+     "verified": true
+    },
+    {
+     "claim": "The HG008N_added graph still yields 36,769 germline-matching candidates on chr1 validation (35,794 in the BED), but their AF drops (het germline median 0.381 against 0.601 in plain d9). The HG008N_added model calls almost none of them (9 germline FP before PoN). The likely reason, not verified, is that the graph moves germline-ALT reads off the GRCh38 node.",
+     "evidence": "v1_verify.out ([AF_HPRC_HG008N_added] chr1 val). germ_af.out.",
+     "verified": true
+    },
+    {
+     "claim": "The chr1 ceilings on the 697 truths. v1 AF_HPRC validation/test: 660 (0.947). These are exactly the 660 that v2 has as tensor_representative; the 37 v1 misses are v2's 32 no_candidate and 5 filtered. v1 HG008N_added: 669 (0.960). v2: 662 (0.950).",
+     "evidence": "v1_verify.out ('ceiling: 660 of 697', '669 of 697'). v1_eval.out (v2 status of the v1-found and v1-missed). v2_pipeline_result.json.",
+     "verified": true
+    },
+    {
+     "claim": "The existing v1 chr1 SNV predictions on this server. All are VCFs with only PROB \u22650.5 calls; there are no per-tensor probabilities. (a) AF_HPRC by model_e053_f1_0.1733.pth: Pansoma_testing_results_V2/HG008_GIAB/AF_HPRC/pansoma_HG008T_WGS_ALL_chr/pansoma_HG008T_WGS_chr1/*.linear.vcf.gz (6,240 calls, May 14) and .linear.filtered_PoN.vcf.gz (1,114), plus the identical earlier set in pansoma_HG008T_WGS_Chr1/ (Mar 19-20). (b) /scratch/jshen/tmp/HG008T_WGS_AF-HPRC_pansoma.test.linear{,.filtered_PoN}.vcf.gz (Mar 9, 7,323 / 1,376 calls); its model is not recorded, probably HG008T_GIAB_AF-HPRC_CE_Large_Model, which is a hypothesis. (c) HG008N_added by model_e064_f1_0.7757.pth: AF_HPRC_HG008N_added/pansoma_HG008T_WGS_ALL_chr{,_gthreshold02}/pansoma_HG008T_WGS_chr1/*.linear.vcf.gz (902 calls) and .linear.filtered_PoN.vcf.gz (641). No chr1 output exists for the published e067.",
+     "evidence": "/scratch/jshen/Scripts/HG008_GIAB/hg008t_Liss_lab_BCM_Illumina-WGS_20240313_illumina_evaluate_testing_set_chr1-22.sh and _make_evaluate_testing_set.sh (CKPT=...e053). _HG008N_added_graph_evaluate_testing_set_chr1-22.sh (CKPT=...e064). v1_verify.out (minPROB 0.500-0.509).",
+     "verified": true
+    },
+    {
+     "claim": "The existing v1 VCFs on the 697 truths, strict counting (TP = distinct truths; FP = distinct called chr1 SNV alleles in somatic BED \u2229 germline BED). AF_HPRC e053: TP 608, FP 5,446 (HG008-N germline 5,341), P 0.1004, R 0.8723, F1 0.180; maxF1 0.183 (P 0.102, R 0.859). AF_HPRC e053 + 4-PoN: TP 561, FP 514 (germline 459), P 0.522, R 0.805, F1 0.633; maxF1 0.643. HG008N_added e064: TP 609, FP 75 (germline 9), P 0.890, R 0.874, F1 0.882; maxF1 0.895. HG008N_added + 4-PoN: TP 562, FP 24, P 0.959, R 0.806, F1 0.876. Mar-9 run: P 0.097, R 0.897; with PoN P 0.495, R 0.826, F1 0.619.",
+     "evidence": "v1_verify.out (VCF block); matches the earlier v1_eval.out.",
+     "verified": true
+    },
+    {
+     "claim": "The user's own v1 evaluations were rtg vcfeval against the .snv.vcf.gz with --region chr1 --squash-ploidy and no BED (702 baseline). v1 e053 + PoN: P 0.5072, R 0.8048, F1 0.6222. Mar-9 run without PoN: P 0.0859, R 0.8960; with PoN F1 0.5582. ClairS-TO: P 0.2646, R 0.8590, F1 0.4046. DeepSomatic-TO: P 0.1167, R 0.9103, F1 0.2068.",
+     "evidence": "summary.txt and vcfeval.log in /scratch/jshen/Pansoma_testing_results_V2/HG008_GIAB/AF_HPRC/{pansoma_HG008T_WGS_Chr1.somatic,clairs-to_HG008T_GIAB_WGS_Chr_1_SNV.somatic,deepsomatic_HG008T_GIAB_WGS_Chr_1_SNV.somatic} and /scratch/jshen/tmp/HG008T_WGS_AF-HPRC_pansoma.test.linear{,.filtered_PoN}.somatic.",
+     "verified": true
+    },
+    {
+     "claim": "Same recall (0.872, TP 608), v1 AF_HPRC e053 against v2 HG008_Illumina_SNV_base. Pre-PoN FP: v1 5,446 (germline 5,341, other 105); v2 7,297 (germline 5,020, other 2,277). After 4-PoN: v1 514 (germline 459, other 55); v2 1,616 (germline 420, other 1,196). 913 of v2's 1,196 post-PoN non-germline FP have AF <0.2 (v1: 13). 952 of the 1,196 are v1 candidates that v1 scored below 0.5, 215 are not v1 candidates, and 29 were called by v1. So both designs carry the same germline burden, and v2 loses on low-AF noise.",
+     "evidence": "fp_comp2.out (v2 base p_somatic \u22650.1388, in_test; PoN strict allele match on the 4 PoNs in /scratch/jshen/data/Panels_of_Normal; the v1 post-PoN FP of 514 equals the bcftools-filtered VCF's FP).",
+     "verified": true
+    },
+    {
+     "claim": "Hypothesis for v2's extra low-AF false positives: v2 labels partial-match tensors as somatic (22% of somatic SNV labels, median AF 0.12), while v1 labels only exact matches. v2's lower AF floor (0.06/0.07 against 0.08) adds a little (215 FP are not v1 candidates).",
+     "evidence": "v2_pipeline_result.json (residual_partial_somatic 2,347 of 10,626). fp_comp2.out. Not tested by retraining.",
+     "verified": false
+    },
+    {
+     "claim": "The HG008N_added model scores far higher on per-tensor chr1 validation (all 9 shards, 293,763/681): best F1 0.7757 (P 68.07%, R 90.16%) at epoch 64 with class weight 300. The AF_HPRC run gets F1 0.1784 (P 9.86%, R 93.51%).",
+     "evidence": "/scratch/jshen/Github/GoogleNet/HG008T_GIAB_AF-HPRC-HG008N_added_CE_Large_Model_weight300/training_log_5ch_sharded.txt lines 3-4, 13-15 and 126. The weight200 log line 421.",
+     "verified": true
+    },
+    {
+     "claim": "/scratch/jshen/data/Pansoma/models holds only P50_6ch_sharded/training_log_6ch.txt (426 bytes, Nov 2025, 51 training shards). It has no checkpoints and nothing for HG008.",
+     "evidence": "ls -la; head of the log",
+     "verified": true
+    }
+   ],
+   "numbers": [
+    "v1 AF_HPRC chr1 val: 345,376 = 344,706 false + 670 true (11 shards, (5,201,100) int8). The first 8 shards give 261,620 / 524, exactly the pasted log. Shards 8-10 hold 83,232 tensors and 146 true.",
+    "v1 AF_HPRC chr2-22 train: 3,116,015 = 3,108,381 false + 7,634 true (106 shards). Per chromosome, e.g. chr2 277,311/925, chr21 59,588/85, chr22 80,770/56.",
+    "v1 HG008N_added: train 2,679,647 = 2,671,907 + 7,740 (95 shards). Val chr1 294,444 = 293,763 + 681 (9 shards).",
+    "v1 chr1 test: 361,394 tensors = 345,376 on GRCh38 nodes + 16,018 off-path.",
+    "Germline false in v1 AF_HPRC: chr1 val 22,772 in BED + 925 out; train 310,031 against 7,634 true (40.6:1). In HG008N_added: chr1 val 35,794 in BED, train 452,172 (still candidates, but low AF: het median 0.381 against 0.601).",
+    "Ceilings on the 697 truths: v1 AF_HPRC 660 (0.947); v1 HG008N_added 669 (0.960); v2 662 (0.950).",
+    "v1 AF_HPRC e053 strict: P 0.100, R 0.872, F1 0.180 (TP 608, FP 5,446, of which 5,341 germline); maxF1 0.183. Curve points: R@P0.05 = R@P0.10 = 0.872; R@P0.15 \u2248 0.010; R@P0.20 \u2248 0.001; P@R0.5 0.103, P@R0.7 0.103, P@R0.8 0.102; P@R0.9 not reachable (only calls with p \u22650.5 exist).",
+    "v1 AF_HPRC e053 + 4-PoN strict: P 0.522, R 0.805, F1 0.633 (TP 561, FP 514); maxF1 0.643; P@R0.5 0.559, P@R0.7 0.554, P@R0.8 0.531; R@P0.05-0.20 = 0.805.",
+    "v1 HG008N_added e064 strict: P 0.890, R 0.874, F1 0.882 (FP 75, of which 9 germline). With PoN: P 0.959, R 0.806, F1 0.876 (FP 24).",
+    "Same recall 0.872, FP (in BED, distinct alleles): v1 e053 5,446 (non-germline 105) vs v2 base 7,297 (non-germline 2,277). After PoN: v1 514 (55 non-germline) vs v2 1,616 (1,196 non-germline; 913 with AF <0.2).",
+    "User's rtg (no BED, 702 baseline): v1 e053 + PoN P 0.5072, R 0.8048, F1 0.6222; ClairS-TO F1 0.4046; DeepSomatic-TO F1 0.2068.",
+    "Per-tensor val F1: AF_HPRC e067 0.1784 (P 9.86%, R 93.51%); HG008N_added e064 0.7757 (P 68.07%, R 90.16%).",
+    "Published HG008_WGS_SNV.pth: byte-identical to e067; 199,186,322 params; in_channels 5; best_f1_true 0.17844."
+   ],
+   "needs_gpu_or_user": [
+    "A full-curve v1 result (all thresholds, including P@R0.9) for the published checkpoint does not exist on this server, because the existing VCFs keep only calls with PROB \u22650.5 and come from e053, not e067. It needs about 361k tensors of GPU inference, about 10-20 min on one GPU and roughly 10 h on CPU. Sketch: cd /scratch/jshen/Github/GoogleNet/scripts; python test_5channels_npy_pansoma.py --input_dir /scratch/jshen/data/Pansoma/HG008_GIAB/AF_HPRC/5ch_testing_data_SNV/5ch_testing_data_SNV_chr1 --ckpt /scratch/jshen/Github/Pansoma/pretrained_model/Pansoma_zenodo/pretrained_model_Pansoma/HG008/HG008_WGS_SNV.pth --out_prefix <scratch>/v1_e067_chr1 --input_mode shard --num_workers 4 --map_json /scratch/jshen/data/Pansoma/HG008_GIAB/AF_HPRC/tmp/hprc-v1.1-mc-grch38.d9.ALL_node_pos.HapMap_HG008T_AF-HPRC.json --variant_summary .../5ch_testing_data_SNV_chr1/variant_summary.ndjson --batch_size 256 --gpu-normalize --emit linear --refcall_prob 0.0 (the RefCall records keep PROB for every tensor). Then add the output VCF to the VCFS dict in v1_artifacts/v1_verify.py for strict scoring, and apply the 4-PoN filter with scripts/filter_panel_of_normals.py or pon_check.py. The head_to_head agent's run_v1_full_gpu.sh / v1_full_chr1_gpu.py is an equivalent, not-yet-submitted alternative.",
+    "Fairness note for the user: both v1 AF_HPRC checkpoints (e053 used for the chr1 VCFs, and the published e067) were chosen by F1 on chr1 validation (its first 8 shards), so their chr1 numbers are somewhat optimistic. v2 never used chr1 for selection. A strictly fair v1 number would need a v1 checkpoint selected on another chromosome, which needs GPU retraining or the user's decision to accept the optimism.",
+    "The 'good v1' result the user may remember (F1 0.78 per tensor; P 0.96, R 0.81 after PoN) comes from AF_HPRC_HG008N_added, whose graph contains the patient's own HG008-N assembly variants. That is equivalent to a matched normal and cannot be used in a tumor-only claim. The user should confirm which v1 result they were comparing against."
+   ]
+  },
+  {
+   "key": "head_to_head",
+   "summary": "**Verdict.** On the same 697 chr1 truths and the same region (somatic BED \u2229 germline BED), v2 is not worse than v1 before the panel-of-normals (PoN) filter. The two are equally poor: precision is about 0.10\u20130.11 at recall 0.8\u20130.9. After the PoN filter that the v1 pipeline used, v1 is modestly better: max F1 0.672 against 0.625 for the best v2 run and 0.535 for v2 base. The gap widens when v2's off-reference false calls are counted. The very good \"old design\" numbers the user may remember (tensor F1 0.78, truth F1 0.88\u20130.90) come from the HG008N_added graph, which contains the patient's own normal genome. That is equivalent to using a matched normal.\n\n**Scratch dir:** analysis/v1_vs_v2_20260929/head_to_head/\n- Main outputs: h2h_final.py \u2192 h2h_final.out and h2h_final.json (every row); h2h_boot.py \u2192 h2h_boot.out (95% intervals for the v1 sample rows).\n- Checks: v1_infer_check.out (CPU inference matches the logged GPU VCF); score_v1_full.py plus score_v1_full.selftest.out (scorer for a full v1 run, tested).\n- Samples: v1_sample_part1/2/3.npz. PoN lookups: pon_annot.py, cached in pon_sites.pkl.\n- GPU recipe, not run: run_v1_full_gpu.sh, v1_full_chr1_gpu_test.py.\n- The earlier scripts (common.py, v1_ceiling.py, v1N_ceiling.py, v1_bootstrap.py) now use the reorganized path /scratch/jshen/data/pansoma_v2_tensors/HG008T_Illumina/{tensors,truth}. v2_truth_curves.json and v2_tensor_level_v1def.json were re-run there and came out identical to the earlier run (copies in prev_run/).\n\n**v1 predictions on this server.**\n- The logged GPU run of epoch-53 checkpoint model_e053_f1_0.1733.pth (from the same weight200 training run) wrote /scratch/jshen/Pansoma_testing_results_V2/HG008_GIAB/AF_HPRC/pansoma_HG008T_WGS_ALL_chr/pansoma_HG008T_WGS_chr1/pansoma-to_SNV_pansoma_HG008T_WGS_chr1.{linear,graph,linear.filtered_PoN}.vcf.gz (log: /scratch/jshen/Log_info/pansoma_test_allchr_294195.out). These VCFs keep only calls with PROB \u2265 0.5, so they give the curve only above 0.5.\n- For the published HG008_WGS_SNV.pth there is no full-chr1 output. I ran it on CPU on a stratified random sample of 12,170 v1 chr1 candidates in the region: all 670 true tensors, 4,000 of the 23,015 false tensors at the patient's germline (HG008-N) SNP alleles, and 7,500 of the other 224,882 false tensors. Sampled false calls are weighted back up to their full group sizes.\n- The published model is byte-identical to model_e067_f1_0.1784.pth. That is the best epoch (67) of the pasted AF-HPRC run: trained on chr2\u201322 and chosen on chr1.\n\n**Head-to-head, no PoN.** FP = distinct (pos0, alt) sites in the region. Each row gives recall at precision 0.05/0.10/0.15/0.20; precision at recall 0.5/0.7/0.8/0.9; max F1 (P, R).\n| Model | Recall at P .05 / .10 / .15 / .20 | Precision at R .5 / .7 / .8 / .9 | Max F1 (P, R) |\n|---|---|---|---|\n| v2 base | 0.927 / 0.801 / 0.594 / 0.359 | 0.174 / 0.116 / 0.102 / 0.068 | 0.265 (0.184, 0.476) |\n| v2 scalars | 0.912 / 0.786 / 0.618 / 0.438 | 0.183 / 0.120 / 0.095 / 0.057 | 0.287 |\n| v2 keephard_w100 | 0.934 / 0.847 / 0.489 / 0.317 | 0.147 / 0.127 / 0.113 / 0.084 | 0.256 |\n| v2 allnon_w100 | 0.924 / 0.852 / 0.552 / 0.337 | 0.163 / 0.130 / 0.111 / 0.079 | 0.261 |\n| v1 e067 published (sample estimate) | 0.920 / 0.911 / 0.003 / 0.003 | 0.107 / 0.107 / 0.107 / 0.106 | 0.190 (0.106, 0.897) |\n| v1 e053 (exact, PROB \u2265 0.5 only) | at 0.5: TP 608, FP 5,442 | P 0.1005, R 0.872 | 0.183 |\n- 95% interval for v1 e067 max F1: [0.182, 0.202].\n- Counting off-reference false calls lowers v2 max F1 to 0.247 (base), 0.278 (scalars), 0.255 (keephard) and 0.241 (allnon). v1 barely changes: only 19 off-reference calls \u2265 0.5.\n- Ceilings: v1 0.947 (660/697), v2 0.950 (662/697). Both designs cover the same 660 exact-allele truths; v2 finds 3 more only through partial matches.\n\n**Why both look bad.** The false positives are the patient's own germline SNVs that are missing from the graph. At recall 0.8, v1's false positives are 4,666 germline and about 0 others. v2 base has 3,471 germline, 1,450 other on-reference and 650 off-reference; keephard has 4,125 / 279 / 97.\n\n**The real v2 weakness is noise rejection.** v1 separates somatic calls from non-germline noise almost perfectly: counting only non-germline false positives, its max F1 is 0.898. v2 on the same basis reaches 0.429 (base) to 0.731 (keephard).\n\n**With the PoN filter.** I used the rule of the repo's scripts/filter_panel_of_normals.py; it reproduces v1's own filtering for 6,176 of 6,240 (99.0%) e053 calls.\n- v1: e067 max F1 0.672 [0.649, 0.701], with precision 0.574 at recall 0.8. e053 gives 0.656, and v1's own PoN VCF gives 0.643.\n- v2 (on-reference false positives only): base 0.535, scalars 0.552, keephard 0.625, allnon 0.624. Adding off-reference false positives: 0.437 / 0.477 / 0.601 / 0.512.\n- The verdict depends on the PoN rule. With the stricter AF \u2265 0.001 rule, v1 e067 gets 0.508 and v2 gets 0.471 to 0.526.\n\n**Tensor level.** The pasted \"P 9.86% at R 93.5%\" (490 of 524 true) is exactly the first 8 of the 11 chr1 val shards: 524 true and 261,620 false. That same chr1 set was used to choose the epoch. On CPU, the published model finds 484 of those 524 at p \u2265 0.5, a 6-tensor difference I could not explain. In the region, v1 e067 has precision 0.106 at recall 0.935. v2 has 0.076 (base), 0.067 (scalars), 0.090 (keephard) and 0.092 (allnon). On the v1 log's own definition, v2 gets 0.064\u20130.089 against v1's 0.0986.\n\n**The patient-normal design.** The v1 HG008N_added model (e064) gets P 0.894 at R 0.874 with no PoN: only 72 false positives, 9 of them germline, against 5,342 germline for AF-HPRC.",
+   "facts": [
+    {
+     "claim": "The published HG008_WGS_SNV.pth is byte-identical to /scratch/jshen/Github/GoogleNet/HG008T_GIAB_AF-HPRC_CE_Large_Model_V2_weight200/model_e067_f1_0.1784.pth. That is the best epoch of the pasted AF-HPRC weight200 run: trained on 106 chr2-22 shards (3,116,015 samples, the AF_HPRC train set) and validated on chr1, with epoch 67 chosen by chr1 F1.",
+     "evidence": "cmp reports IDENTICAL. Checkpoint keys: epoch 67, best_f1_true 0.17844, best_rec_true 0.93511 (= 490/524). training_log_5ch_sharded.txt lines 1-10 (106 train / 11 val shards, 3,116,015 samples) and 421-422, 502. count_labels2.out gives the AF_HPRC train TOTAL 3,116,015 for chr2-22.",
+     "verified": true
+    },
+    {
+     "claim": "The pasted log's val set (524 true / 261,620 false = 262,144) is exactly rows 0-262,143, i.e. the first 8 of the 11 AF_HPRC chr1 val shards. Those rows span all of chr1. The full 11 shards hold 670 true and 344,706 false.",
+     "evidence": "Cumulative true count by shard over v1_val_recs.pkl: 43, 91, 199, 309, 417, 515, 524, 524 (8 shards), then 572, 649, 670. The last pos0 of the first 8 shards is 248,946,060. The trainer code has no val cap, so why only 8 shards were evaluated is unexplained.",
+     "verified": true
+    },
+    {
+     "claim": "v1 chr1 predictions exist only for checkpoint e053 (not the published e067). They are the May-14 GPU run on all 361,394 v1 chr1 testing tensors, kept only for PROB \u2265 0.5: 6,240 GRCh38 (linear) records and 57 off-reference (graph) records, of which 19 are \u2265 0.5.",
+     "evidence": "/scratch/jshen/Log_info/pansoma_test_allchr_294195.out lines 3-26 name the checkpoint model_e053_f1_0.1733.pth and the VCFs /scratch/jshen/Pansoma_testing_results_V2/HG008_GIAB/AF_HPRC/pansoma_HG008T_WGS_ALL_chr/pansoma_HG008T_WGS_chr1/*.vcf.gz. Minimum PROB in the linear VCF is 0.500.",
+     "verified": true
+    },
+    {
+     "claim": "CPU inference with the v1 code and normalization reproduces the logged GPU run. For 40 random e053 VCF calls, the PROB difference is at most 1.3e-4. For 16 tensors not in the VCF, p is below 0.5 (maximum 0.061). The val tensors are identical to the testing tensors for the same node and variant key (279 of 279).",
+     "evidence": "head_to_head/v1_infer_check.out (v1_infer_check.py). Normalization constants: test_5channels_npy_pansoma.py:55-70 and train_5channels_npy_pansoma.py:1169-1179.",
+     "verified": true
+    },
+    {
+     "claim": "The v1 chr1 testing set (361,394) is the val set (345,376 GRCh38 candidates, all AF \u2265 0.08) plus 16,018 off-reference candidates. v1 training also has no off-reference candidates: chr21 train has 59,673 records, all with a genomic position, and testing has 4,089 more. v2 also excludes off-reference tensors from training (label -1) but counts them as non at test.",
+     "evidence": "Key comparison of the variant_summary files. For v2: pansoma_net_v2/data.py:16, 47 and 168 (EVAL_AS_NON).",
+     "verified": true
+    },
+    {
+     "claim": "Without PoN, v1 and v2 are equally poor against the same 697 truths. v2 has the higher max F1 (0.256-0.287 against 0.190) because it has operating points at precision 0.15-0.25, which v1 never reaches (recall at P \u2265 0.15 is 0.003). v1 is a little better at recall \u2265 0.9 (precision 0.106 against 0.068-0.084).",
+     "evidence": "h2h_final.out noPoN rows. Bootstrap for v1 e067 (h2h_boot.out): max F1 0.190 [0.182, 0.202], R@P0.10 0.911 [0.891, 0.923], P@R0.8 0.107 [0.102, 0.115], P@R0.9 0.106 [0.062, 0.113]. The exact e053 VCF agrees: at 0.5, TP 608, FP 5,442 (P 0.1005, R 0.872); the e067 sample at 0.5 estimates TP 605, FP about 5,100-5,255.",
+     "verified": true
+    },
+    {
+     "claim": "Both models' false positives are dominated by the patient's own germline (HG008-N) SNVs that are missing from the d9 graph. v1's are almost only germline; v2 also leaks non-germline noise. At truth recall 0.8, v1 e067 has 4,666 germline and 0 non-germline. v2 base has 3,471 germline, 1,450 on-reference non and 650 off-reference; keephard has 4,125 / 279 / 97. v1's AF_HPRC val holds 23,015 in-region false tensors at HG008-N germline alleles (median AF 0.63); v2's test set holds 22,809 germline tensors.",
+     "evidence": "h2h_final.json fp_composition_noPoN. Composition of v1_val_recs.pkl. e053 VCF false positives at PROB \u2265 0.5 (region): germline 5,342, non 100, outside the region 186.",
+     "verified": true
+    },
+    {
+     "claim": "v1 almost perfectly separates somatic calls from non-germline noise; v2 does not. Counting only non-germline false positives, v1 e067 has max F1 0.898 (P 1.000, R 0.815). v2 has 0.429 (base), 0.453 (scalars), 0.731 (keephard) and 0.694 (allnon).",
+     "evidence": "h2h_final.out ('FP non-germline only'); v2_truth_curve.out non_only_fp. In the sample, about 0.04% of non-germline v1 candidates have p \u2265 0.5.",
+     "verified": true
+    },
+    {
+     "claim": "After the PoN filter, v1 is better than v2. Using the repo filter's rule (gnomAD allele, dbSNP allele, 1000G position, CoLoRSdb position): v1 e067 max F1 0.672 [0.649, 0.701] with P@R0.8 0.574; v1 e053 0.656; v1's own PoN VCF 0.643 (P 0.541, R 0.793). v2 base 0.535 (P@R0.8 0.357), scalars 0.552, keephard 0.625 (P@R0.8 0.456), allnon 0.624. With off-reference false positives counted: v2 0.437 / 0.477 / 0.601 / 0.512, v1 e053 0.652. Ceilings drop to 0.842 (v1) and 0.845 (v2).",
+     "evidence": "h2h_final.out PoN_repo and ownPoN rows; h2h_boot.out. The repo rule reproduces v1's own PoN removal for 6,176 of 6,240 e053 calls; 64 that v1 kept are flagged by the repo rule.",
+     "verified": true
+    },
+    {
+     "claim": "The post-PoN ranking depends on the PoN rule. With the ClairS-TO-like AF \u2265 0.001 rule, v1 e067 gets 0.508 [0.496, 0.529] and e053 0.507, while v2 gets 0.471 (base), 0.489 (scalars), 0.521 (keephard) and 0.526 (allnon). Ceilings are 0.902 (v1) and 0.907 (v2). v1 relies more on the PoN because it scores rare germline variants high.",
+     "evidence": "h2h_final.out PoN_af001 rows. This rule misses 639 of the calls that v1's own filter removed.",
+     "verified": true
+    },
+    {
+     "claim": "Off-reference false calls (no GRCh38 position) at p \u2265 0.5: v1 e053, 19 of 16,018 candidates. v2: base 141, scalars 91, keephard 1,216, allnon 553 of 10,295.",
+     "evidence": "h2h_final.json offref",
+     "verified": true
+    },
+    {
+     "claim": "The dramatically better 'old design' results come from the HG008N_added graph (the patient's own normal genome in the graph, equivalent to using a matched normal), not from the .dat/.idx tensor format. Its model (HG008T_GIAB_AF-HPRC-HG008N_added_CE_Large_Model_weight300/model_e064_f1_0.7757.pth) has val tensor F1 0.7757 (P 68.07%, R 90.16%). Against the 697 truths with no PoN it gets TP 609 and FP 72 (P 0.894, R 0.874; only 9 germline false positives, against 5,342 for AF-HPRC), max F1 0.897; with its own PoN, 0.881.",
+     "evidence": "Training log line 125-126. /scratch/jshen/Log_info/HG008T_HG008N_added_graph_test_chr1_22.278027.out line 4 (checkpoint). h2h_final.out 'HG008N-added' rows. GAM name HG008-T_p23_BCM_IlluminaWGS_20240313_giraffed_with_HG008N_added.gam. How the graph was built was not checked by me.",
+     "verified": true
+    },
+    {
+     "claim": "The published AF-HPRC model (e067) did not use HG008-N in the graph: its data set and GAM are the plain AF_HPRC ones, and its false set contains 23,015 in-region HG008-N germline SNP alleles.",
+     "evidence": "Train sample count 3,116,015 = AF_HPRC train, not HG008N_added (2,679,647). v1_val_recs.pkl strata.",
+     "verified": true
+    },
+    {
+     "claim": "Tensor-level comparison on an equivalent definition of 'true'. In the region, v1 e067 (664 true) has precision 0.106 at recall 0.935 (argmax: P 0.106, R 0.913). v2 in the region (659 exact true, AF \u2265 0.08) has P@R0.935 0.076 (base), 0.067 (scalars), 0.090 (keephard), 0.092 (allnon). On the v1-log definition (any BED, AF \u2265 0.08, GRCh38, 665 true in 266,008 tensors), v2 gets 0.073 / 0.064 / 0.088 / 0.089, against v1's logged 0.0986, whose epoch was picked on chr1.",
+     "evidence": "Inline computation from the three sample parts. v2_tensor_level_v1def.json (re-run on the new paths, identical to the earlier run).",
+     "verified": true
+    },
+    {
+     "claim": "On CPU, the published e067 finds 484 of the 524 log-val true tensors at p \u2265 0.5, against 490 in the training log. Only 3 of them lie in [0.45, 0.55), so numerics do not explain the difference.",
+     "evidence": "v1_sample_part1/2.npz rows < 262144",
+     "verified": true
+    },
+    {
+     "claim": "On the 660 truths that both designs score, v1 is far more confident: median p 0.898 against v2 base 0.461; 605 against 276 have p \u2265 0.5.",
+     "evidence": "head_to_head_results.json paired_truth_scores (combine.py)",
+     "verified": true
+    },
+    {
+     "claim": "Training budgets differ a lot. v1 ran 80 epochs of about 2.8 M tensors (about 224 M tensor passes, pos weight 200). v2 base ran 12 epochs of 854,638 tensors (non fraction 0.25 per epoch, about 10 M passes), was best at epoch 5 and overfit afterwards (val loss 0.097 \u2192 0.335).",
+     "evidence": "v1 training_log_5ch_sharded.txt header; /scratch/jshen/data/pansoma_net_v2_runs/HG008_Illumina_SNV_base/train.log",
+     "verified": true
+    },
+    {
+     "claim": "Hypotheses for why v2 rejects non-germline noise worse than v1, not tested here: (a) the residual partial-match somatic labels (188 of 852 on chr1; 22% genome-wide) are low-AF, noise-like positives; (b) the short, subsampled training (about 10 M passes against about 224 M), with overfitting after epoch 5; (c) the 3-class setup, with germline outnumbering somatic about 30:1; (d) off-reference tensors are never trained on in either design, but v2 generalizes worse to them (1,216 calls \u2265 0.5 for keephard against 19 for v1).",
+     "evidence": "Reasoning only; ablations are needed.",
+     "verified": false
+    }
+   ],
+   "numbers": [
+    "697 truths; ceilings: v1 0.947 (660), v2 0.950 (662), v1 HG008N_added 0.961 (670); same 660 exact-allele truths covered by v1 and v2",
+    "NO PoN, R@P .05/.10/.15/.20 | P@R .5/.7/.8/.9 | maxF1 (P, R):",
+    "v2 base 0.927/0.801/0.594/0.359 | 0.174/0.116/0.102/0.068 | 0.265 (0.184, 0.476); with off-reference FP: maxF1 0.247, R@P.10 0.726, P@R.9 0.059",
+    "v2 scalars 0.912/0.786/0.618/0.438 | 0.183/0.120/0.095/0.057 | 0.287 (0.242, 0.353); with off-reference FP: 0.278",
+    "v2 keephard_w100 0.934/0.847/0.489/0.317 | 0.147/0.127/0.113/0.084 | 0.256 (0.244, 0.268); with off-reference FP: 0.255, P@R.9 0.078",
+    "v2 allnon_w100 0.924/0.852/0.552/0.337 | 0.163/0.130/0.111/0.079 | 0.261; with off-reference FP: 0.241",
+    "v2 at AF \u2265 0.08 (v1's floor): base maxF1 0.279, scalars 0.302, keephard 0.258, allnon 0.265",
+    "v1 e067 published (sample of 12,170 tensors) 0.920/0.911/0.003/0.003 | 0.107/0.107/0.107/0.106 | 0.190 (0.106, 0.897); 95% interval for maxF1 [0.182, 0.202], for P@R.9 [0.062, 0.113]",
+    "v1 e053 exact VCF (PROB \u2265 0.5 only): TP 608, FP 5,442, P 0.1005, R 0.872; maxF1 0.183",
+    "FP at truth recall 0.8, no PoN: v1 e067 germline 4,666 / non 0; v2 base germline 3,471 / non 1,450 / off-reference 650; keephard 4,125 / 279 / 97",
+    "Non-germline FP only: v1 maxF1 0.898; v2 base 0.429, scalars 0.453, keephard 0.731, allnon 0.694",
+    "PoN (repo rule): v1 e067 maxF1 0.672 [0.649, 0.701], P@R.8 0.574; v1 e053 0.656; v1 own PoN VCF 0.643 (P 0.541, R 0.793)",
+    "PoN (repo rule), v2 on-reference FP only / with off-reference FP: base 0.535/0.437, scalars 0.552/0.477, keephard 0.625/0.601, allnon 0.624/0.512; P@R.8 base 0.357, keephard 0.456",
+    "PoN (AF \u2265 0.001 rule): v1 e067 0.508 [0.496, 0.529], e053 0.507; v2 base 0.471, scalars 0.489, keephard 0.521, allnon 0.526",
+    "PoN ceilings: repo rule v1 0.842 / v2 0.845; AF \u2265 0.001 rule v1 0.902 / v2 0.907",
+    "The repo PoN rule matches v1's own PoN filtering for 6,176 of 6,240 e053 calls (99.0%)",
+    "Off-reference calls \u2265 0.5: v1 e053 19 of 16,018 candidates; v2 base 141, scalars 91, keephard 1,216, allnon 553 of 10,295",
+    "HG008N_added v1 (e064, patient's normal in the graph): P 0.894, R 0.874, FP 72 (9 germline); maxF1 0.897; own PoN 0.881; val tensor F1 0.7757 (P 68.07%, R 90.16%)",
+    "Tensor level: v1 log P 0.0986 @ R 0.935 (490/524, first 8 val shards, epoch picked on it); CPU e067 on the same rows 484/524; v1 e067 in region P@R.935 0.106; v2 in region 0.076 (base) / 0.067 (scalars) / 0.090 (keephard) / 0.092 (allnon); v1-log definition: v2 0.073 / 0.064 / 0.088 / 0.089",
+    "Paired truth scores (660): v1 median 0.898 vs v2 base 0.461; p \u2265 0.5: 605 vs 276",
+    "CPU v1 inference speed: 6.6-8.3 tensors/s on 4 threads (part 3: 4,000 in 482 s), so a full chr1 run would take about 12 h per checkpoint on CPU",
+    "Training passes: v1 about 224 M (80 epochs \u00d7 about 2.8 M); v2 base about 10.3 M (12 \u00d7 854,638), best epoch 5"
+   ],
+   "needs_gpu_or_user": [
+    "The exact v1 e067 curve at every threshold, including off-reference candidates (the numbers here are a stratified-sample estimate with 95% intervals, plus the exact e053 curve above 0.5). Run sbatch analysis/v1_vs_v2_20260929/head_to_head/run_v1_full_gpu.sh (not submitted). It runs v1_full_chr1_gpu_test.py for the published checkpoint (e067) and for e053 on all 361,394 tensors in /scratch/jshen/data/Pansoma/HG008_GIAB/AF_HPRC/5ch_testing_data_SNV/5ch_testing_data_SNV_chr1/shard_000{00..11}_data.npy, then score_v1_full.py (tested by re-deriving the e053 VCF results). Expect well under 30 min per checkpoint on one GPU, reading about 36 GB each; on CPU it would be about 12 h per checkpoint. Copy the scratch dir somewhere persistent first.",
+    "Unexplained: in the pasted training log the trainer evaluated only 262,144 of the 345,376 val rows (the first 8 of 11 shards), and on CPU the published model finds 484 of 524 true tensors where the log reports 490. Probably not decisive.",
+    "A design decision for the user (not a measurement): v2 already matches or beats v1 before the PoN filter. The remaining gap after PoN is v2's non-germline false positives (on-reference label-0 and off-reference tensors), not germline. Ablations to test the hypotheses: (1) train with the partial-match somatic labels removed or set to -1; (2) train longer, or without subsampling non tensors at 25%; (3) add off-reference non tensors to training. Each needs GPU training."
+   ]
+  }
+ ]
+}

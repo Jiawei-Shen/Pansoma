@@ -1,0 +1,11 @@
+confident bp chr1 222991757
+n697 697 Counter({'tensor_representative': 660, 'no_candidate': 32, 'filtered': 5})
+truth keys 697 distinct ids 697 inbed check 695 not in my BED: [122337652, 223483912]
+germline chr1 SNP alleles 313686
+mismatch 0 v2 in_test tensors 245954 tensors in my BED or TP 349148 distinct alleles 349148 partial-indel alleles 146
+v2_base_noPoN: maxF1=0.242 (P=0.162 R=0.476 thr=0.4605 TP=332 FP=1712) | R@P>=0.05: 0.921 | R@P>=0.1: 0.763 | R@P>=0.15: 0.529 | R@P>=0.2: 0.030 | R@P>=0.3: NA | R@P>=0.5: NA | P@R>=0.5: 0.154 | P@R>=0.7: 0.107 | P@R>=0.8: 0.095 | P@R>=0.87: 0.073 | P@R>=0.9: 0.062 | last: thr=0.0029 TP=654 FP=29346
+v2_base_noPoN_exclPartial: maxF1=0.246 (P=0.166 R=0.476 thr=0.4605 TP=332 FP=1668) | R@P>=0.05: 0.921 | R@P>=0.1: 0.769 | R@P>=0.15: 0.542 | R@P>=0.2: 0.195 | R@P>=0.3: NA | R@P>=0.5: NA | P@R>=0.5: 0.157 | P@R>=0.7: 0.109 | P@R>=0.8: 0.096 | P@R>=0.87: 0.074 | P@R>=0.9: 0.063 | last: thr=0.0029 TP=654 FP=29210
+v2_base_4PoN: maxF1=0.408 (P=0.311 R=0.593 thr=0.3475 TP=413 FP=916) | R@P>=0.05: 0.848 | R@P>=0.1: 0.841 | R@P>=0.15: 0.839 | R@P>=0.2: 0.822 | R@P>=0.3: 0.610 | R@P>=0.5: NA | P@R>=0.5: 0.337 | P@R>=0.7: 0.278 | P@R>=0.8: 0.225 | P@R>=0.87: NA | P@R>=0.9: NA | last: thr=0.0029 TP=592 FP=12475
+v2_base_4PoN_exclPartial: maxF1=0.414 (P=0.318 R=0.593 thr=0.3475 TP=413 FP=884) | R@P>=0.05: 0.848 | R@P>=0.1: 0.841 | R@P>=0.15: 0.839 | R@P>=0.2: 0.822 | R@P>=0.3: 0.628 | R@P>=0.5: NA | P@R>=0.5: 0.346 | P@R>=0.7: 0.283 | P@R>=0.8: 0.229 | P@R>=0.87: NA | P@R>=0.9: NA | last: thr=0.0029 TP=592 FP=12411
+v2 at thr 0.2201: pre-PoN TP=562 FP=5638 (HG008N germline alleles 3676) P=0.091 R=0.806 | post-PoN TP=527 FP=1471 P=0.264 R=0.756
+v2 at thr 0.1415: pre-PoN TP=608 FP=7720 (HG008N germline alleles 4977) P=0.073 R=0.872 | post-PoN TP=562 FP=1957 P=0.223 R=0.806

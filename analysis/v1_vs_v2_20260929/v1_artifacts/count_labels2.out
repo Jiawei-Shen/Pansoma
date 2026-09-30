@@ -1,0 +1,52 @@
+BASE /scratch/jshen/data/Pansoma/HG008_GIAB/AF_HPRC/5ch_training_data_SNV/train dtype int8 nfiles 106
+   chr2 {0: 277311, 1: 925}
+   chr3 {0: 210915, 1: 669}
+   chr4 {0: 158965, 1: 395}
+   chr5 {0: 170490, 1: 563}
+   chr6 {0: 147944, 1: 384}
+   chr7 {0: 183082, 1: 465}
+   chr8 {0: 149201, 1: 499}
+   chr9 {0: 132666, 1: 201}
+   chr10 {0: 163447, 1: 513}
+   chr11 {0: 181463, 1: 476}
+   chr12 {0: 156398, 1: 358}
+   chr13 {0: 126617, 1: 454}
+   chr14 {0: 110976, 1: 382}
+   chr15 {0: 116527, 1: 281}
+   chr16 {0: 132390, 1: 231}
+   chr17 {0: 166435, 1: 127}
+   chr18 {0: 87022, 1: 228}
+   chr19 {0: 128870, 1: 119}
+   chr20 {0: 167304, 1: 223}
+   chr21 {0: 59588, 1: 85}
+   chr22 {0: 80770, 1: 56}
+  TOTAL {0: 3108381, 1: 7634} 3116015
+BASE /scratch/jshen/data/Pansoma/HG008_GIAB/AF_HPRC/5ch_training_data_SNV/val dtype int8 nfiles 11
+   chr1 {0: 344706, 1: 670}
+  TOTAL {0: 344706, 1: 670} 345376
+BASE /scratch/jshen/data/Pansoma/HG008_GIAB/AF_HPRC_HG008N_added/5ch_training_data_SNV_flat/train dtype int8 nfiles 95
+   chr2 {0: 217607, 1: 934}
+   chr3 {0: 184511, 1: 675}
+   chr4 {0: 174959, 1: 400}
+   chr5 {0: 160537, 1: 570}
+   chr6 {0: 163738, 1: 392}
+   chr7 {0: 164088, 1: 468}
+   chr8 {0: 119940, 1: 503}
+   chr9 {0: 133266, 1: 206}
+   chr10 {0: 149796, 1: 514}
+   chr11 {0: 131024, 1: 482}
+   chr12 {0: 140851, 1: 366}
+   chr13 {0: 102444, 1: 466}
+   chr14 {0: 77587, 1: 383}
+   chr15 {0: 81364, 1: 289}
+   chr16 {0: 109050, 1: 236}
+   chr17 {0: 134241, 1: 128}
+   chr18 {0: 81463, 1: 236}
+   chr19 {0: 109085, 1: 122}
+   chr20 {0: 103004, 1: 226}
+   chr21 {0: 60072, 1: 87}
+   chr22 {0: 73280, 1: 57}
+  TOTAL {0: 2671907, 1: 7740} 2679647
+BASE /scratch/jshen/data/Pansoma/HG008_GIAB/AF_HPRC_HG008N_added/5ch_training_data_SNV_flat/val dtype int8 nfiles 9
+   chr1 {0: 293763, 1: 681}
+  TOTAL {0: 293763, 1: 681} 294444

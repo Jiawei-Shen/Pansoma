@@ -1,0 +1,66 @@
+conf bp chr1 222991757
+697 check: 697 allele keys 697 distinct tids 697 Counter({'tensor_representative': 660, 'no_candidate': 32, 'filtered': 5})
+germline chr1 SNP alleles 313686 t=1
+HG008_Illumina_SNV_base in_test 256296 on-ref sites 245954 offref 10342 label1-not-697 sites 146 truth sites present 659 t=6
+HG008_Illumina_SNV_keephard_w100 in_test 256296 on-ref sites 245954 offref 10342 label1-not-697 sites 146 truth sites present 659 t=10
+HG008_Illumina_SNV_scalars in_test 256296 on-ref sites 245954 offref 10342 label1-not-697 sites 146 truth sites present 659 t=15
+HG008_Illumina_SNV_allnon_w100 in_test 256296 on-ref sites 245954 offref 10342 label1-not-697 sites 146 truth sites present 659 t=20
+v1 truth present (PROB>=0.5) 608
+PoN lookups needed 40853
+PoN done t=67
+v1 e053 calls: (kept by v1 own PoN, kept by my repo-rule PoN) -> {(False, False): 5126, (True, False): 64, (True, True): 1050}
+
+==== curves (FP = distinct in-conf alleles, strict allele match; v2 label-1 non-697 SNV sites counted as FP) ====
+v1_e053 noPoN {'R@P0.05': 0.872, 'R@P0.10': 0.872, 'R@P0.15': 0.01, 'R@P0.20': 0.001, 'P@R0.5': 0.103, 'P@R0.7': 0.103, 'P@R0.8': 0.102, 'P@R0.9': None, 'maxF1': (0.183, 0.102, 0.859, 0.7733), 'ceiling': 0.872}
+v1_e053 ownPoN VCF {'R@P0.05': 0.805, 'R@P0.10': 0.805, 'R@P0.15': 0.805, 'R@P0.20': 0.805, 'P@R0.5': 0.559, 'P@R0.7': 0.554, 'P@R0.8': 0.531, 'P@R0.9': None, 'maxF1': (0.643, 0.541, 0.793, 0.7733), 'ceiling': 0.805}
+v1_e053 myPoN {'R@P0.05': 0.796, 'R@P0.10': 0.796, 'R@P0.15': 0.796, 'R@P0.20': 0.796, 'P@R0.5': 0.573, 'P@R0.7': 0.571, 'P@R0.8': None, 'P@R0.9': None, 'maxF1': (0.656, 0.563, 0.785, 0.7733), 'ceiling': 0.796}
+v2_base noPoN {'R@P0.05': 0.924, 'R@P0.10': 0.801, 'R@P0.15': 0.582, 'R@P0.20': 0.248, 'P@R0.5': 0.17, 'P@R0.7': 0.115, 'P@R0.8': 0.101, 'P@R0.9': 0.066, 'maxF1': (0.26, 0.179, 0.475, 0.4605), 'ceiling': 0.945}
+v2_base noPoN +offref {'R@P0.05': 0.917, 'R@P0.10': 0.71, 'R@P0.15': 0.524, 'R@P0.20': 0.199, 'P@R0.5': 0.153, 'P@R0.7': 0.102, 'P@R0.8': 0.09, 'P@R0.9': 0.058, 'maxF1': (0.242, 0.162, 0.475, 0.4605), 'ceiling': 0.945}
+v2_base noPoN neutral-partial {'R@P0.05': 0.924, 'R@P0.10': 0.801, 'R@P0.15': 0.594, 'R@P0.20': 0.357, 'P@R0.5': 0.174, 'P@R0.7': 0.116, 'P@R0.8': 0.102, 'P@R0.9': 0.067, 'maxF1': (0.264, 0.183, 0.475, 0.4605), 'ceiling': 0.945}
+v2_base myPoN {'R@P0.05': 0.838, 'R@P0.10': 0.834, 'R@P0.15': 0.831, 'R@P0.20': 0.829, 'P@R0.5': 0.497, 'P@R0.7': 0.416, 'P@R0.8': 0.338, 'P@R0.9': None, 'maxF1': (0.528, 0.409, 0.743, 0.2314), 'ceiling': 0.841}
+v2_base myPoN +offref {'R@P0.05': 0.836, 'R@P0.10': 0.829, 'R@P0.15': 0.828, 'R@P0.20': 0.809, 'P@R0.5': 0.372, 'P@R0.7': 0.274, 'P@R0.8': 0.207, 'P@R0.9': None, 'maxF1': (0.428, 0.365, 0.516, 0.4127), 'ceiling': 0.841}
+v2_keephard_w100 noPoN {'R@P0.05': 0.93, 'R@P0.10': 0.845, 'R@P0.15': 0.486, 'R@P0.20': 0.317, 'P@R0.5': 0.147, 'P@R0.7': 0.127, 'P@R0.8': 0.112, 'P@R0.9': 0.082, 'maxF1': (0.255, 0.244, 0.268, 0.9315), 'ceiling': 0.945}
+v2_keephard_w100 noPoN +offref {'R@P0.05': 0.927, 'R@P0.10': 0.839, 'R@P0.15': 0.482, 'R@P0.20': 0.317, 'P@R0.5': 0.145, 'P@R0.7': 0.125, 'P@R0.8': 0.11, 'P@R0.9': 0.076, 'maxF1': (0.254, 0.253, 0.255, 0.9334), 'ceiling': 0.945}
+v2_keephard_w100 noPoN neutral-partial {'R@P0.05': 0.93, 'R@P0.10': 0.846, 'R@P0.15': 0.489, 'R@P0.20': 0.317, 'P@R0.5': 0.147, 'P@R0.7': 0.127, 'P@R0.8': 0.112, 'P@R0.9': 0.083, 'maxF1': (0.256, 0.244, 0.268, 0.9315), 'ceiling': 0.945}
+v2_keephard_w100 myPoN {'R@P0.05': 0.841, 'R@P0.10': 0.841, 'R@P0.15': 0.839, 'R@P0.20': 0.835, 'P@R0.5': 0.619, 'P@R0.7': 0.56, 'P@R0.8': 0.439, 'P@R0.9': None, 'maxF1': (0.623, 0.573, 0.683, 0.8673), 'ceiling': 0.841}
+v2_keephard_w100 myPoN +offref {'R@P0.05': 0.841, 'R@P0.10': 0.835, 'R@P0.15': 0.831, 'R@P0.20': 0.825, 'P@R0.5': 0.59, 'P@R0.7': 0.515, 'P@R0.8': 0.332, 'P@R0.9': None, 'maxF1': (0.599, 0.534, 0.683, 0.8673), 'ceiling': 0.841}
+v2_scalars noPoN {'R@P0.05': 0.91, 'R@P0.10': 0.785, 'R@P0.15': 0.607, 'R@P0.20': 0.412, 'P@R0.5': 0.177, 'P@R0.7': 0.117, 'P@R0.8': 0.094, 'P@R0.9': 0.056, 'maxF1': (0.281, 0.234, 0.352, 0.5635), 'ceiling': 0.945}
+v2_scalars noPoN +offref {'R@P0.05': 0.898, 'R@P0.10': 0.735, 'R@P0.15': 0.571, 'R@P0.20': 0.382, 'P@R0.5': 0.164, 'P@R0.7': 0.107, 'P@R0.8': 0.085, 'P@R0.9': 0.049, 'maxF1': (0.271, 0.221, 0.352, 0.5635), 'ceiling': 0.945}
+v2_scalars noPoN neutral-partial {'R@P0.05': 0.91, 'R@P0.10': 0.785, 'R@P0.15': 0.617, 'R@P0.20': 0.436, 'P@R0.5': 0.182, 'P@R0.7': 0.119, 'P@R0.8': 0.095, 'P@R0.9': 0.057, 'maxF1': (0.286, 0.242, 0.352, 0.5635), 'ceiling': 0.945}
+v2_scalars myPoN {'R@P0.05': 0.835, 'R@P0.10': 0.829, 'R@P0.15': 0.828, 'R@P0.20': 0.824, 'P@R0.5': 0.534, 'P@R0.7': 0.427, 'P@R0.8': 0.294, 'P@R0.9': None, 'maxF1': (0.543, 0.496, 0.6, 0.3431), 'ceiling': 0.841}
+v2_scalars myPoN +offref {'R@P0.05': 0.835, 'R@P0.10': 0.828, 'R@P0.15': 0.813, 'R@P0.20': 0.788, 'P@R0.5': 0.421, 'P@R0.7': 0.3, 'P@R0.8': 0.181, 'P@R0.9': None, 'maxF1': (0.467, 0.418, 0.529, 0.4068), 'ceiling': 0.841}
+v2_allnon_w100 noPoN {'R@P0.05': 0.921, 'R@P0.10': 0.846, 'R@P0.15': 0.547, 'R@P0.20': 0.33, 'P@R0.5': 0.162, 'P@R0.7': 0.13, 'P@R0.8': 0.11, 'P@R0.9': 0.075, 'maxF1': (0.26, 0.183, 0.443, 0.9179), 'ceiling': 0.945}
+v2_allnon_w100 noPoN +offref {'R@P0.05': 0.912, 'R@P0.10': 0.818, 'R@P0.15': 0.491, 'R@P0.20': 0.253, 'P@R0.5': 0.147, 'P@R0.7': 0.12, 'P@R0.8': 0.103, 'P@R0.9': 0.067, 'maxF1': (0.239, 0.164, 0.443, 0.9179), 'ceiling': 0.945}
+v2_allnon_w100 noPoN neutral-partial {'R@P0.05': 0.921, 'R@P0.10': 0.851, 'R@P0.15': 0.552, 'R@P0.20': 0.337, 'P@R0.5': 0.163, 'P@R0.7': 0.13, 'P@R0.8': 0.111, 'P@R0.9': 0.076, 'maxF1': (0.261, 0.185, 0.443, 0.9179), 'ceiling': 0.945}
+v2_allnon_w100 myPoN {'R@P0.05': 0.841, 'R@P0.10': 0.841, 'R@P0.15': 0.836, 'R@P0.20': 0.832, 'P@R0.5': 0.615, 'P@R0.7': 0.537, 'P@R0.8': 0.476, 'P@R0.9': None, 'maxF1': (0.618, 0.527, 0.746, 0.7852), 'ceiling': 0.841}
+v2_allnon_w100 myPoN +offref {'R@P0.05': 0.841, 'R@P0.10': 0.832, 'R@P0.15': 0.826, 'R@P0.20': 0.818, 'P@R0.5': 0.433, 'P@R0.7': 0.39, 'P@R0.8': 0.317, 'P@R0.9': None, 'maxF1': (0.505, 0.401, 0.683, 0.8354), 'ceiling': 0.841}
+
+==== matched TP comparison ====
+v1 e053 PROB>=0.5 noPoN: TP 608 FP 5446 P 0.1004 R 0.8723
+   v2_base noPoN: thr 0.1388 TP 608 FP 7296 P 0.0769
+   v2_base noPoN +offref: thr 0.1388 TP 608 FP 8291 P 0.0683
+   v2_keephard_w100 noPoN: thr 0.7663 TP 608 FP 5959 P 0.0926
+   v2_keephard_w100 noPoN +offref: thr 0.7663 TP 608 FP 6280 P 0.0883
+   v2_scalars noPoN: thr 0.0876 TP 608 FP 8550 P 0.0664
+   v2_scalars noPoN +offref: thr 0.0876 TP 608 FP 9709 P 0.0589
+   v2_allnon_w100 noPoN: thr 0.5912 TP 608 FP 5741 P 0.0958
+   v2_allnon_w100 noPoN +offref: thr 0.5912 TP 608 FP 6248 P 0.0887
+v1 e053 own PoN: TP 561 FP 514 P 0.5219 R 0.8049
+   v2_base myPoN: thr 0.1218 TP 561 FP 1119 P 0.3339
+   v2_base myPoN +offref: thr 0.1218 TP 561 FP 2190 P 0.2039
+   v2_keephard_w100 myPoN: thr 0.7249 TP 561 FP 740 P 0.4312
+   v2_keephard_w100 myPoN +offref: thr 0.7249 TP 561 FP 1201 P 0.3184
+   v2_scalars myPoN: thr 0.0736 TP 561 FP 1452 P 0.2787
+   v2_scalars myPoN +offref: thr 0.0736 TP 561 FP 2730 P 0.1705
+   v2_allnon_w100 myPoN: thr 0.3628 TP 561 FP 651 P 0.4629
+   v2_allnon_w100 myPoN +offref: thr 0.3628 TP 561 FP 1315 P 0.2990
+
+==== FP composition (germline = exact HG008-N dipcall SNP allele) ====
+v1 e053 noPoN (>=0.5) {'germ': 5341, 'nongerm': 105}
+v1 e053 myPoN (>=0.5) {'nongerm': 36, 'germ': 421}
+v1 e053 ownPoN VCF {'nongerm': 55, 'germ': 459}
+v2_base noPoN@TP608 thr 0.1388 {'nongerm': 2276, 'germ': 5020} offref>=thr 995 | myPoN@TP555 thr 0.1423 {'germ': 374, 'nongerm': 660} offref>=thr 978
+v2_keephard_w100 noPoN@TP608 thr 0.7663 {'nongerm': 695, 'germ': 5264} offref>=thr 321 | myPoN@TP555 thr 0.7493 {'germ': 419, 'nongerm': 260} offref>=thr 378
+v2_scalars noPoN@TP608 thr 0.0876 {'nongerm': 3368, 'germ': 5182} offref>=thr 1159 | myPoN@TP555 thr 0.0904 {'nongerm': 910, 'germ': 396} offref>=thr 1144
+v2_allnon_w100 noPoN@TP608 thr 0.5912 {'nongerm': 563, 'germ': 5178} offref>=thr 507 | myPoN@TP555 thr 0.5589 {'germ': 399, 'nongerm': 184} offref>=thr 533
+done t=72

@@ -1,0 +1,38 @@
+[E::idx_find_and_load] Could not retrieve index file for '/scratch/jshen/data/HG008_GIAB/dipcall_HG008N_GRCh38/HG008N_GRCh38_dipcall.dip.vcf.gz'
+confident bp chr1 222991757
+n697 697 Counter({'tensor_representative': 660, 'no_candidate': 32, 'filtered': 5})
+truth keys 697 distinct ids 697 inbed check 695 not in my BED: [122337652, 223483912]
+germline chr1 SNP alleles 313686
+v1 val tensors by (label, bed, match):
+   ('false', 'inBED', 'germline') 22772
+   ('false', 'inBED', 'other') 225125
+   ('false', 'outBED', 'germline') 925
+   ('false', 'outBED', 'other') 95884
+   ('true', 'inBED', 'germline') 2
+   ('true', 'inBED', 'other') 3
+   ('true', 'inBED', 'truth697') 659
+   ('true', 'outBED', 'other') 5
+   ('true', 'outBED', 'truth697') 1
+v1 ceiling (697 with a v1 val/ref-path candidate): 660 0.9469153515064562
+  v2 status of the v1-found: Counter({'tensor_representative': 660})
+  v2 status of the v1-missed: Counter({'no_candidate': 32, 'filtered': 5})
+  v1-missed but v2 has tensor: []
+  v2-missed but v1 has cand: []
+test n 361394 distinct 361394 val n 345376 val-test 0 test-val 16018
+e053_linear_May14: calls=6240 evaluated_inBED_or_TP=6054 TP=608 FP_inBED=5446 (of which HG008N-germline allele 5341, somatic-other-kind pos 1) P=0.1004 R=0.8723 F1=0.1801 minPROB=0.501
+e053_linear_PoN_Apr9: calls=1114 evaluated_inBED_or_TP=1075 TP=561 FP_inBED=514 (of which HG008N-germline allele 459, somatic-other-kind pos 1) P=0.5219 R=0.8049 F1=0.6332 minPROB=0.509
+e053_linear_Mar20: calls=6240 evaluated_inBED_or_TP=6054 TP=608 FP_inBED=5446 (of which HG008N-germline allele 5341, somatic-other-kind pos 1) P=0.1004 R=0.8723 F1=0.1801 minPROB=0.501
+e053_linear_PoN_Mar19: calls=1114 evaluated_inBED_or_TP=1075 TP=561 FP_inBED=514 (of which HG008N-germline allele 459, somatic-other-kind pos 1) P=0.5219 R=0.8049 F1=0.6332 minPROB=0.509
+run1_linear_Mar9: calls=7323 evaluated_inBED_or_TP=6423 TP=625 FP_inBED=5798 (of which HG008N-germline allele 5459, somatic-other-kind pos 1) P=0.0973 R=0.8967 F1=0.1756 minPROB=0.500
+run1_linear_PoN_Mar9: calls=1376 evaluated_inBED_or_TP=1163 TP=576 FP_inBED=587 (of which HG008N-germline allele 469, somatic-other-kind pos 1) P=0.4953 R=0.8264 F1=0.6194 minPROB=0.500
+HG008Nadded_linear_PoN: calls=641 evaluated_inBED_or_TP=586 TP=562 FP_inBED=24 (of which HG008N-germline allele 0, somatic-other-kind pos 2) P=0.9590 R=0.8063 F1=0.8761 minPROB=0.512
+e053_linear_May14 {"maxF1": [0.18298457308691002, [0.7732909917831421, 599, 5251, 0.10239316239316239, 0.8593974175035868]], "recall@P>=0.05": 0.8723098995695839, "recall@P>=0.1": 0.8723098995695839, "recall@P>=0.15": 0.010043041606886656, "recall@P>=0.2": 0.0014347202295552368, "P@R>=0.5": 0.10310240261254956, "P@R>=0.7": 0.10302791977978765, "P@R>=0.8": 0.10239316239316239, "P@R>=0.9": null, "at_min_threshold": [0.5005130171775818, 608, 5446, 0.10042946812025107, 0.8723098995695839, 0.18012146348689081]}
+   thr>=0.5: TP=608 FP=5446 P=0.1004 R=0.8723 F1=0.1801
+   thr>=0.6: TP=605 FP=5386 P=0.1010 R=0.8680 F1=0.1809
+   thr>=0.7: TP=602 FP=5325 P=0.1016 R=0.8637 F1=0.1818
+   thr>=0.8: TP=589 FP=5211 P=0.1016 R=0.8451 F1=0.1813
+   thr>=0.9: TP=534 FP=4691 P=0.1022 R=0.7661 F1=0.1803
+e053_linear_PoN_Apr9 {"maxF1": [0.6430232558139535, [0.7733169794082642, 553, 470, 0.5405669599217986, 0.793400286944046]], "recall@P>=0.05": 0.8048780487804879, "recall@P>=0.1": 0.8048780487804879, "recall@P>=0.15": 0.8048780487804879, "recall@P>=0.2": 0.8048780487804879, "P@R>=0.5": 0.5591836734693878, "P@R>=0.7": 0.5542986425339367, "P@R>=0.8": 0.5309229305423406, "P@R>=0.9": null, "at_min_threshold": [0.5090919733047485, 561, 514, 0.521860465116279, 0.8048780487804879, 0.6331828442437923]}
+run1_linear_Mar9 {"maxF1": [0.1843274111675127, [0.905614972114563, 581, 5026, 0.10362047440699126, 0.8335724533715926]], "recall@P>=0.05": 0.896700143472023, "recall@P>=0.1": 0.8766140602582496, "recall@P>=0.15": null, "recall@P>=0.2": null, "P@R>=0.5": 0.10362047440699126, "P@R>=0.7": 0.10362047440699126, "P@R>=0.8": 0.10362047440699126, "P@R>=0.9": null, "at_min_threshold": [0.5004879832267761, 625, 5798, 0.0973065545695158, 0.896700143472023, 0.175561797752809]}
+run1_linear_PoN_Mar9 {"maxF1": [0.6402298850574712, [0.8996520042419434, 557, 486, 0.5340364333652924, 0.7991391678622669]], "recall@P>=0.05": 0.8263988522238164, "recall@P>=0.1": 0.8263988522238164, "recall@P>=0.15": 0.8263988522238164, "recall@P>=0.2": 0.8263988522238164, "P@R>=0.5": 0.5557275541795665, "P@R>=0.7": 0.543141592920354, "P@R>=0.8": 0.5329512893982808, "P@R>=0.9": null, "at_min_threshold": [0.5004879832267761, 576, 587, 0.49527085124677556, 0.8263988522238164, 0.6193548387096773]}
+HG008Nadded_linear_PoN {"maxF1": [0.8794326241134751, [0.6123149991035461, 558, 14, 0.9755244755244755, 0.8005738880918221]], "recall@P>=0.05": 0.806312769010043, "recall@P>=0.1": 0.806312769010043, "recall@P>=0.15": 0.806312769010043, "recall@P>=0.2": 0.806312769010043, "P@R>=0.5": 1.0, "P@R>=0.7": 0.9980657640232108, "P@R>=0.8": 0.9755244755244755, "P@R>=0.9": null, "at_min_threshold": [0.5119879841804504, 562, 24, 0.9590443686006825, 0.806312769010043, 0.8760717069368668]}

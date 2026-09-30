@@ -1,0 +1,133 @@
+[
+ {
+  "summary": "Scratch dir: analysis/v1_vs_v2_20260929/v2_pipeline/. Scripts: chr1_stats.py, chr1_pr.py, chr1_pon.py, chr1_per_tensor.py. Outputs: the matching .out files, chr1_697_truth.tsv (one row per truth), chr1_pon_annotations.tsv. Everything was read-only on CPU; no script needed more than about 2 minutes or 0.5 GB of memory.\n\n**How v2 builds the HG008 Illumina SNV set**\n- **Graph:** the reads are the BCM Illumina tumor reads. giraffe mapped them to the plain HPRC v1.1 Minigraph-Cactus GRCh38 d9 graph (/scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.gbz). Nothing was added to it: no HG008-N, no gnomAD, no other population data.\n- **Candidates:** a candidate exists only where reads carry an edit against the node they walk through. So germline variants already in the graph never become candidates: 91.1% of the chr1 germline SNPs got no candidate.\n- **Channels (8):** read base, base quality, site allele, mapping quality, alignment operation, graph reference base, HPRC path count per node, strand. None carries population allele frequency, and the path-count channel is nearly constant (mean 87.6, sd 9.3).\n- **Labels:** somatic truth = GIAB HG008-T draft v0.2. Germline truth = the HG008-N dipcall VCF and BED, from the patient's own normal. It is used only for the germline class and to define the confident region (somatic BED \u2229 germline BED, 2.79 Gb). It never goes into the tensors or the graph.\n\n**chr1 data**\n- 468,721 SNV tensors. The test set has 256,296: non 232,635 (including 10,295 off-reference), somatic 852, germline 22,809.\n- Of the 852 somatic tensors, 659 match a truth SNP exactly. The other 193 are partial matches, 188 of them to INS/DEL truths. They are low-AF, noise-like tensors (median AF 0.12, against 0.55 for exact matches). Across the whole genome, 2,347 of the 10,626 somatic SNV labels (22%) are partial matches.\n- Ceiling: 662 of the 697 truths have a test tensor (0.950).\n- AF: germline tensors (median 0.60, 44% \u22650.9) look like somatic ones (median 0.55, 29% \u22650.9). Non tensors are low (median 0.09).\n\n**v2 against the 697 truths (strict counting)**\nThe base model reaches max F1 0.242, recall 0.71 at precision 0.10, and precision 0.059 at recall 0.9. The best run, keephard_w100, reaches recall 0.839 at precision 0.10 and max F1 0.254.\n\n**Why precision is low**\nThe false positives are mostly the patient's own germline SNVs that are missing from the d9 graph. At truth recall 0.8, germline tensors make up 61% of the base model's false positives and 91% of keephard_w100's. 94.9% of these germline tensors are in the ClairS-TO-style panels of normals (PoN) in /scratch/jshen/data/Pansoma/panel_of_normal_VCFs, which the repo's scripts/filter_panel_of_normals.py applies after calling. Only 4.7% of the truth tensors are.\n- With that PoN filter, keephard_w100 improves to max F1 0.503 and recall 0.898 at precision 0.10; the ceiling drops to 0.907.\n- If germline tensors were not candidates at all, it would reach max F1 0.693. That is the effect a graph containing HG008-N would have, and a graph containing the patient's normal amounts to using a matched normal.\n\n**Against v1's own kind of number (per tensor, exact matches as positives)**\nv1's pasted log gives precision 9.86% at recall 93.5%, and v1 picked its best epoch on chr1 itself. At that precision v2 gets recall 0.763 (base) to 0.891 (keephard). At recall 0.935 it gets precision 0.065 (base) to 0.083 (keephard). So per tensor, v2 is similar to v1 or a little below it, not clearly worse.\n\n**The \"true\" counts are about the same.** Counting only exact somatic matches, v2 has 665 true tensors on chr1. The v1 chr1 validation shards on this server hold 670 true and 344,706 false. The 524 true in the pasted log (262,144 = 2^18 rows in all) look like a roughly 76% subsample of that set.\n\n**Still open**\nA v1 result against the same 697 truths needs v1 inference on the GPU. Also still unchecked: whether v1's false set contains the same HG008 germline SNVs, and whether the v1 \"AF_HPRC_HG008N_added\" design put the patient's normal into the graph.",
+  "facts": [
+   {
+    "claim": "The v2 HG008 Illumina GAM comes from giraffe mapping to the plain HPRC v1.1 MC GRCh38 d9 indexes (d9 GBZ, d9 distance index, d9 shortread minimizers and zipcodes). No HG008-N was added. A separate HG008N-added GAM exists for the old pipeline.",
+    "evidence": "/scratch/jshen/data/HG008_GIAB/vg_giraffe_GAM/Liss_lab_BCM_Illumina-WGS_20240313/log/HG008-T_p23_BCM_IlluminaWGS_20240313.log lists the /scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.* files. common.env GAM=...HG008-T_p23_BCM_IlluminaWGS_20240313.sorted.gam. discovery_report.json alignments_scanned 2,974,694,440 equals the .vg.stats 'Total alignments'. The same directory also holds HG008-T_p23_BCM_IlluminaWGS_20240313_giraffed_with_HG008N_added.{gam,dat,idx,pkl}.",
+    "verified": true
+   },
+   {
+    "claim": "The graph index and the path-count channel come from hprc-v1.1-mc-grch38.d9.gbz: 60,118,570 nodes, sha256 d6fd0ad2..., 44,624,788 logical GBWT paths. v2 has no gnomAD, dbSNP, PoN or other population feature in the tensors or the model.",
+    "evidence": "v3_tensors/SNV/manifest.json graph_index.source. A case-insensitive grep for gnomad/population/panel_of_normal in indexed_gam_pipeline_v4/*.py, its README and machine_learning/pansoma_net_v2 finds nothing.",
+    "verified": true
+   },
+   {
+    "claim": "'d9' most likely means the HPRC Minigraph-Cactus graph filtered to nodes supported by at least 9 haplotypes (the giraffe default graph); the local directory name 'AF-Filtered_VG_Indexes' fits that. This comes from outside knowledge, not from a local file.",
+    "evidence": "hypothesis; the repo documents no definition of d9",
+    "verified": false
+   },
+   {
+    "claim": "The old pipeline's graph JSONs are the d9 graph annotated per base with gnomAD v4.1 AF (genomead_af arrays on GRCh38 path nodes). The old pipeline also had ClairS-TO-style PoN VCFs. v2 uses neither.",
+    "evidence": "/scratch/jshen/data/genomeAD/graph_genomeAD_JSON/hprc-v1.1-mc-grch38.d9.genomeAD.chr21.json head shows a 'genomead_af' field. /scratch/jshen/data/genomeAD/genomes/gnomad.genomes.v4.1.sites.*. /scratch/jshen/data/Pansoma/panel_of_normal_VCFs holds af-only-gnomad, 1000g_pon, dbsnp138 and CoLoRSdb. scripts/filter_panel_of_normals.py and README.md section 5. Whether the v1 tensors used genomead_af as a channel is not verified here.",
+    "verified": true
+   },
+   {
+    "claim": "How v2 picks candidates. Discovery keeps a node when more than 5% of its MAPQ>5 mappings carry an edit after left-normalization. The builder then applies MAPQ>10, at least 3 ALT reads, ALT base quality \u226510, and AF \u22650.06 for SNVs (0.08 for INDELs), with a read cap of 800 records per node. One tensor is made per (node, start, SNV) site, with all passing alleles as A1..Ak. Labelling then sets SNVs with AF <0.07 to -1 (below_snv_min_af), so they drop out of training and test.",
+    "evidence": "indexed_gam_pipeline_v4/README.md sections 4-5 and 8. discovery/discovery_report.json (node_alt 0.05, min_mapq 5). v3_tensors/SNV/manifest.json parameters. build.py:164-176 count_support. v3_run.prepare.json variant_outputs SNV 0.06. labels.manifest.json snv_min_af 0.07.",
+    "verified": true
+   },
+   {
+    "claim": "Common germline variants that are already in the graph do not become candidates: reads carrying them walk the ALT node with no edit. Of the chr1 PASS in-BED germline SNPs (HG008-N dipcall), 268,336 of 294,552 (91.1%) got no candidate, 23,105 (7.8%) got a representative tensor, 3,076 were filtered (min_variants 2,852, min_af 224) and 35 are a non-representative allele.",
+    "evidence": "awk over v3_tensors/germline.recall.tsv (chr1, SNP, passed True, in_bed True)",
+    "verified": true
+   },
+   {
+    "claim": "The v2 tensor has 8 channels, int8, shape (8,200,101): read_base, base_quality, site_allele, mapping_quality, alignment_operation, row_graph_reference_base, node_distinct_gbwt_path_count, strand. The path-count channel is nearly constant (training mean 87.6, sd 9.3).",
+    "evidence": "v3_tensors/SNV/manifest.json channels and encodings. /scratch/jshen/data/pansoma_net_v2_runs/HG008_Illumina_SNV_base/stats.json path_count mean 87.62, std 9.32.",
+    "verified": true
+   },
+   {
+    "claim": "Label truth sets. Somatic: GIAB HG008-T_somatic_smvar_benchmark_v0.2_tumorvariants.vcf.gz with v0.2_all.bed; all FILTER values are '.', i.e. PASS. Germline: HG008N_GRCh38_dipcall.dip.vcf.gz with dip.bed, from the patient's own normal assembly. The confident region is somatic BED \u2229 germline BED, 2,794,672,256 bp. HG008-N is used only as a label source and to define the region, never as tensor input or in the graph.",
+    "evidence": "v3_tensors/SNV/labels.manifest.json truth and confident_region. The somatic VCF FILTER column is 18,952 \u00d7 '.'. The chain is truth_labels.py label_run, then v3_run.prepare.json postprocess.labels.",
+    "verified": true
+   },
+   {
+    "claim": "Label rules (first match wins): the AF floor first (-1). Then A1 equal to a PASS somatic truth gives 1, and to a PASS or GAP germline truth gives 2. Then another allele of the site being a truth: 1 or 2 if A1 overlaps it by more than 0.45, else 0. Then no GRCh38 position gives -1, and outside the confident region gives -1. Then a residual partial somatic overlap above 0.45 (allele overlap or read-haplotype overlap) gives 1. Then off-reference without a match gives -1, which the test counts as non. Then a residual germline overlap gives 2. Everything else is 0 (near_truth_allele_mismatch or confident_no_truth_allele).",
+    "evidence": "indexed_gam_pipeline_v4/tensor_postprocessing/truth_labels.py:1-60 (docstring) and classify() about lines 505-590. pansoma_net_v2/data.py:167-170 (eval_label, EVAL_AS_NON).",
+    "verified": true
+   },
+   {
+    "claim": "chr1 SNV tensors: 468,721. Labels: -1 221,894 / 0 222,346 / 1 858 / 2 23,623. By reason: below_snv_min_af 115,541; outside_confident_region 92,336; off_reference_no_truth_match 10,295; not_on_unique_grch38_node 3,722; confident_no_truth_allele 173,838; near_truth_allele_mismatch 48,475; truth_matches_non_representative_allele 33; representative somatic 665; residual_partial_somatic 193; representative germline 23,202; germline GAP-filtered 421 (all outside the region). The test set is 256,296: non 232,635 (222,340 on the reference path plus 10,295 off-reference), somatic 852, germline 22,809.",
+    "evidence": "chr1_stats.out (computed from v3_tensors/SNV/chr1_labels.ndjson and chr1_variant_summary.ndjson with the pansoma_net_v2.bed in_region test); matches the SNV_base metrics.json",
+    "verified": true
+   },
+   {
+    "claim": "The 697 truths are the chr1 SNPs that PASS and lie in the somatic BED. 695 of them also lie in the germline BED. Status in somatic.recall.tsv: 660 tensor_representative, 32 no_candidate, 4 filtered for min_variants, 1 filtered for min_af. 662 have a test tensor (ceiling 0.950): 659 exact matches in the region plus 3 found only through partial matches. One exact-match tensor falls outside the germline BED. Five more PASS SNPs have tensors but lie outside the somatic BED and are not among the 697. The recall.tsv in_bed column is the somatic BED only.",
+    "evidence": "chr1_stats.out, chr1_697_truth.tsv, truth_labels.py TruthSet in_bed uses self.bed",
+    "verified": true
+   },
+   {
+    "claim": "Why the 32 chr1 no-candidate SNP truths are missed. 19 are graph-representation losses: S3, ALT already a graph allele (9); S4a, SNV edit lands on a branch node (6); S4b, absorbed by a graph path (4). 9 are low MAPQ or have no spanning reads (S1). 2 have no ALT in the reads (S2), and 2 have no clear ALT in a repeat (S4c).",
+    "evidence": "analysis/hg008_somatic_miss_20260926/illumina/snv_no_candidate.tsv, final_class for chr1, deduplicated",
+    "verified": true
+   },
+   {
+    "claim": "AF by test class on chr1. Exact somatic: median 0.552, q05 0.377, 194 of 659 \u22650.9. Partial somatic: median 0.120, 77 of 193 in 0.07-0.1. Germline: median 0.600, q05 0.367, 9,989 of 22,809 \u22650.9. Non on the reference path: median 0.091, only 2,883 of 222,340 \u22650.3. Off-reference non: median 0.182, 2,252 of 10,295 \u22650.9. AF separates somatic from non, but not somatic from germline.",
+    "evidence": "chr1_stats.out histograms (bins 0,.06,.07,.1,.15,.2,.3,...,1)",
+    "verified": true
+   },
+   {
+    "claim": "188 of the 852 chr1 somatic test tensors are SNV tensors that partially match INS/DEL truths, and 5 more partially match SNP truths. Genome-wide, 2,347 of 10,626 somatic SNV labels (22%) are residual_partial_somatic_truth. These low-AF positives may teach the model to call noise somatic; that effect is a hypothesis.",
+    "evidence": "chr1_stats.out 'label-1 tensor->truth links' (non_snp_truth 188); labels.manifest.json reasons",
+    "verified": true
+   },
+   {
+    "claim": "Mapping v2 to v1-style binary labels on chr1. True = label 1 with an exact representative match gives 665 tensors (659 in the region), covering 660 of the 697. Counting all label-1 tensors gives 858. The v1 chr1 validation shards on this server hold 670 true and 344,706 false. The pasted log's 524 true / 261,620 false (262,144 = 2^18) look like a ~76-78% subsample of that set; this is a hypothesis.",
+    "evidence": "chr1_stats.out 'v1-style' lines; np.load of /scratch/jshen/data/Pansoma/HG008_GIAB/AF_HPRC/5ch_training_data_SNV/val/SNV_chr1_5chan_tensor_dataset/*_labels.npy gives {0: 344706, 1: 670}, data (N,5,201,100) int8",
+    "verified": true
+   },
+   {
+    "claim": "v2 against the 697 truths, strict counting. TP = distinct truths found. FP = calls on non, germline or other-kind label-1 tensors in the region, deduplicated by GRCh38 allele. Per run, as max F1 (P, R), then recall at P 0.05/0.10/0.15/0.20, then precision at R 0.5/0.7/0.8/0.9. base: 0.242 (0.163, 0.476); 0.920/0.710/0.525/0.199; 0.153/0.102/0.090/0.059. scalars: 0.273 (0.222, 0.353); 0.900/0.735/0.572/0.385; 0.165/0.108/0.085/0.050. keephard_w100: 0.254 (0.253, 0.255); 0.931/0.839/0.482/0.317; 0.145/0.125/0.110/0.078. allnon_w100: 0.239 (0.164, 0.443); 0.915/0.818/0.491/0.261; 0.147/0.120/0.103/0.071. Ceiling 0.950 for all. Not counting other-kind calls as FP changes these by at most 0.04.",
+    "evidence": "chr1_pr.out, computed from /scratch/jshen/data/pansoma_net_v2_runs/<run>/test_chr1/*.SNV.predictions.ndjson.gz",
+    "verified": true
+   },
+   {
+    "claim": "False positives in v2 are mainly the patient's germline SNVs that are missing from the graph. At truth recall 0.8: base FP = germline 3,471, non on reference 1,450, off-reference non 650, other-kind 86 (germline 61%); keephard_w100 = germline 4,125 of 4,522 (91%); allnon_w100 = germline 4,119 of 4,873. With germline removed from the negatives (hypothetical), keephard_w100 reaches max F1 0.693 (P 0.647, R 0.746), P@R0.8 0.584 and R@P0.20 0.912.",
+    "evidence": "chr1_pr.out 'at truth recall' and 'no germline FP' lines",
+    "verified": true
+   },
+   {
+    "claim": "PoN matching of chr1 on-reference test tensors, using the 4 ClairS-TO-style PoNs with the repo filter's rules (gnomAD AF \u22650.001 and dbSNP138 by allele; 1000G PoN and CoLoRSdb AF \u22650.001 by position). Germline: 21,647 of 22,809 hit (94.9%; gnomAD 89.2%). Somatic label-1 tensors: 124 of 805 (15.4%). Truth tensors among the 697: 31. Non tensors with p_somatic \u22650.02 in some run: 60.5%. gnomAD AF of germline tensors: 50.6% in 0.01-0.1 and 27.6% in 0.1-0.5, so d9 lacks many common variants.",
+    "evidence": "chr1_pon.out, chr1_pon_annotations.tsv; REF equal to FASTA for all 42,192 annotated tensors",
+    "verified": true
+   },
+   {
+    "claim": "v2 after the PoN filter (ceiling drops to 0.907). keephard_w100: max F1 0.503 (P 0.384, R 0.730), R@P0.10 0.898, R@P0.20 0.881, R@P0.30 0.828, P@R0.5 0.446, P@R0.7 0.390, P@R0.8 0.345, P@R0.9 0.087. base: max F1 0.397, R@P0.10 0.894, P@R0.8 0.213. allnon_w100: max F1 0.449, R@P0.10 0.894. scalars: max F1 0.431.",
+    "evidence": "chr1_pon.out",
+    "verified": true
+   },
+   {
+    "claim": "The v1-style per-tensor metric for v2, with the 659 exact positives and all other test tensors as negatives. At v1's precision of 0.0986: recall 0.763 (base), 0.794 (scalars), 0.891 (keephard), 0.868 (allnon). At recall 0.935: precision 0.065 / 0.055 / 0.083 / 0.082. v1's pasted log reports P 0.0986 at R 0.935, but v1 chose its epoch on chr1. With germline removed from the negatives, keephard gives P@R0.935 0.324.",
+    "evidence": "chr1_per_tensor.out",
+    "verified": true
+   },
+   {
+    "claim": "v2 training on chr2-22 has 9,178 somatic, 276,793 germline and 2,274,667 non tensors (germline:somatic about 30:1). Class weights: base non 0.71 / somatic 5.57 / germline 1.01; keephard and allnon 1 / 100 / 1.",
+    "evidence": "/scratch/jshen/data/pansoma_net_v2_runs/HG008_Illumina_SNV_{base,keephard_w100,allnon_w100}/train.log",
+    "verified": true
+   }
+  ],
+  "numbers": [
+   "chr1 SNV tensors 468,721; test 256,296 = non 232,635 (222,340 on reference + 10,295 off-reference) + somatic 852 (659 exact + 193 partial, 188 of them to INDEL truths) + germline 22,809",
+   "chr1 -1 reasons: below_snv_min_af 115,541; outside_confident_region 92,336; off_reference_no_truth_match 10,295; not_on_unique_grch38_node 3,722",
+   "697 truths: 660 tensor_representative, 32 no_candidate, 5 filtered; 695 in germline BED; 662 with a test tensor, ceiling 0.950",
+   "chr1 germline PASS in-BED SNPs: 294,552; no candidate 268,336 (91.1%); tensor 23,105 (7.8%)",
+   "AF medians: exact somatic 0.552, partial somatic 0.120, germline 0.600, non 0.091; \u22650.9: somatic 194/659, germline 9,989/22,809",
+   "v1-style true on chr1: v2 665 exact (659 in region) vs v1 val on this server 670 true / 344,706 false (the pasted log's 524 / 261,620)",
+   "v2 base strict: maxF1 0.242; R@P .05/.10/.15/.20 = 0.920/0.710/0.525/0.199; P@R .5/.7/.8/.9 = 0.153/0.102/0.090/0.059",
+   "v2 keephard_w100 strict: maxF1 0.254; R@P .05/.10/.15/.20 = 0.931/0.839/0.482/0.317; P@R .5/.7/.8/.9 = 0.145/0.125/0.110/0.078",
+   "v2 allnon_w100 strict: maxF1 0.239; R@P.10 0.818; P@R.9 0.071. scalars: maxF1 0.273; R@P.10 0.735; P@R.9 0.050",
+   "FP at truth recall 0.8, base: germline 3,471 / non on-ref 1,450 / off-ref 650 / other-kind 86; keephard: germline 4,125 of 4,522",
+   "PoN hits: germline 94.9%, somatic 15.4%, 31 of the 697 truth tensors; after PoN keephard maxF1 0.503, R@P0.10 0.898, R@P0.20 0.881, ceiling 0.907",
+   "No-germline hypothetical, keephard: maxF1 0.693, P@R0.8 0.584",
+   "Per-tensor (v1-style) keephard: R@P0.0986 = 0.891, P@R0.935 = 0.083 (v1 pasted log: P 0.0986 at R 0.935, epoch chosen on chr1)",
+   "v1 chr1 test tensors: 11 x 32,768 + 946 = 361,394 (from file sizes, (5,201,100) int8)"
+  ],
+  "needs_gpu_or_user": [
+   "Scoring v1 against the same 697 truths needs GPU inference of a v1 SNV model on /scratch/jshen/data/Pansoma/HG008_GIAB/AF_HPRC/5ch_testing_data_SNV/5ch_testing_data_SNV_chr1 (shard_00000..00011_data.npy, about 361k tensors of shape (5,201,100), plus variant_summary.ndjson). Sketch: cd machine_learning/pansoma_net; python scripts/test_5channels_npy_pansoma.py with the checkpoint and that input dir (check its argparse for exact flags); join the per-row probabilities to variant_summary.ndjson to get GRCh38 chrom/pos/alt (the v1 predictions_to_vcf*.py utilities); then score with the logic of the scratchpad's chr1_pr.py (TP = distinct truths among the 697, FP = distinct called alleles in somatic BED \u2229 germline BED), with and without the PoN filter as in chr1_pon.py. Expect minutes on one GPU and hours on CPU.",
+   "The checkpoint must not have seen chr1 in training. The pasted run's best checkpoint (HG008T_GIAB_AF-HPRC_CE_Large_Model_V2_weight200, trained without chr1, epoch picked on chr1) is on the other server, so the user needs to supply it. The training chromosomes of the published pretrained_model/.../HG008/HG008_WGS_SNV.pth are unknown; if it saw chr1, its chr1 score is optimistic.",
+   "CPU check, cheap: read v1 chr1 variant_summary.ndjson and the val labels, then match to HG008N dipcall. Does v1's 'false' set contain the HG008-N germline SNVs (v2 has 22,809 on chr1)? Is v1's candidate set per node/edit like v2's? Which GAM and graph fed AF_HPRC versus AF_HPRC_HG008N_added? If any v1 set put HG008-N into the graph, its germline false positives disappear; that amounts to using a matched normal and explains much better numbers (v2's no-germline hypothetical: max F1 0.693)."
+  ]
+ }
+]

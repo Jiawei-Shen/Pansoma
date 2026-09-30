@@ -1,0 +1,30 @@
+{'pos': 659, 'partial': 193, 'germ': 22809, 'non': 222340, 'offnon': 10295}
+
+== HG008_Illumina_SNV_base
+  neg = non+offnon+germ+partial       pos 659 neg 255637  maxF1 0.245 (P 0.162 R 0.502)  P@R0.5=0.162  P@R0.8=0.096  P@R0.9=0.073  P@R0.935=0.065  R@P0.0986=0.763  R@P0.2=0.211
+  neg = non+offnon+germ (partial out) pos 659 neg 255444  maxF1 0.250 (P 0.166 R 0.502)  P@R0.5=0.166  P@R0.8=0.097  P@R0.9=0.074  P@R0.935=0.065  R@P0.0986=0.789  R@P0.2=0.255
+  neg = non+offnon (germline out)     pos 659 neg 232635  maxF1 0.384 (P 0.294 R 0.554)  P@R0.5=0.306  P@R0.8=0.217  P@R0.9=0.175  P@R0.935=0.148  R@P0.0986=0.970  R@P0.2=0.863
+  neg = non on-ref only               pos 659 neg 222340  maxF1 0.437 (P 0.355 R 0.569)  P@R0.5=0.369  P@R0.8=0.286  P@R0.9=0.234  P@R0.935=0.200  R@P0.0986=0.977  R@P0.2=0.935
+  PoN-filtered, neg = non+offnon+germ+partial pos 628 neg 222660  maxF1 0.410 (P 0.321 R 0.568)  P@R0.5=0.336  P@R0.8=0.235  P@R0.9=0.204  P@R0.935=0.180  R@P0.0986=0.987  R@P0.2=0.908
+
+== HG008_Illumina_SNV_scalars
+  neg = non+offnon+germ+partial       pos 659 neg 255637  maxF1 0.277 (P 0.221 R 0.372)  P@R0.5=0.173  P@R0.8=0.096  P@R0.9=0.067  P@R0.935=0.055  R@P0.0986=0.794  R@P0.2=0.404
+  neg = non+offnon+germ (partial out) pos 659 neg 255444  maxF1 0.283 (P 0.229 R 0.372)  P@R0.5=0.178  P@R0.8=0.098  P@R0.9=0.067  P@R0.935=0.056  R@P0.0986=0.798  R@P0.2=0.428
+  neg = non+offnon (germline out)     pos 659 neg 232635  maxF1 0.418 (P 0.326 R 0.580)  P@R0.5=0.349  P@R0.8=0.224  P@R0.9=0.146  P@R0.935=0.109  R@P0.0986=0.944  R@P0.2=0.844
+  neg = non on-ref only               pos 659 neg 222340  maxF1 0.463 (P 0.385 R 0.580)  P@R0.5=0.401  P@R0.8=0.284  P@R0.9=0.189  P@R0.935=0.141  R@P0.0986=0.961  R@P0.2=0.894
+  PoN-filtered, neg = non+offnon+germ+partial pos 628 neg 222660  maxF1 0.446 (P 0.355 R 0.600)  P@R0.5=0.390  P@R0.8=0.250  P@R0.9=0.189  P@R0.935=0.152  R@P0.0986=0.975  R@P0.2=0.885
+
+== HG008_Illumina_SNV_keephard_w100
+  neg = non+offnon+germ+partial       pos 659 neg 255637  maxF1 0.261 (P 0.253 R 0.270)  P@R0.5=0.151  P@R0.8=0.118  P@R0.9=0.094  P@R0.935=0.083  R@P0.0986=0.891  R@P0.2=0.335
+  neg = non+offnon+germ (partial out) pos 659 neg 255444  maxF1 0.262 (P 0.254 R 0.270)  P@R0.5=0.152  P@R0.8=0.119  P@R0.9=0.094  P@R0.935=0.083  R@P0.0986=0.894  R@P0.2=0.335
+  neg = non+offnon (germline out)     pos 659 neg 232635  maxF1 0.719 (P 0.660 R 0.789)  P@R0.5=0.742  P@R0.8=0.645  P@R0.9=0.451  P@R0.935=0.324  R@P0.0986=0.982  R@P0.2=0.964
+  neg = non on-ref only               pos 659 neg 222340  maxF1 0.751 (P 0.713 R 0.792)  P@R0.5=0.775  P@R0.8=0.705  P@R0.9=0.543  P@R0.935=0.419  R@P0.0986=0.991  R@P0.2=0.973
+  PoN-filtered, neg = non+offnon+germ+partial pos 628 neg 222660  maxF1 0.521 (P 0.384 R 0.811)  P@R0.5=0.468  P@R0.8=0.386  P@R0.9=0.332  P@R0.935=0.282  R@P0.0986=0.990  R@P0.2=0.973
+
+== HG008_Illumina_SNV_allnon_w100
+  neg = non+offnon+germ+partial       pos 659 neg 255637  maxF1 0.243 (P 0.167 R 0.445)  P@R0.5=0.157  P@R0.8=0.107  P@R0.9=0.092  P@R0.935=0.082  R@P0.0986=0.868  R@P0.2=0.267
+  neg = non+offnon+germ (partial out) pos 659 neg 255444  maxF1 0.245 (P 0.166 R 0.469)  P@R0.5=0.159  P@R0.8=0.108  P@R0.9=0.093  P@R0.935=0.083  R@P0.0986=0.869  R@P0.2=0.276
+  neg = non+offnon (germline out)     pos 659 neg 232635  maxF1 0.578 (P 0.434 R 0.865)  P@R0.5=0.465  P@R0.8=0.438  P@R0.9=0.399  P@R0.935=0.323  R@P0.0986=0.974  R@P0.2=0.958
+  neg = non on-ref only               pos 659 neg 222340  maxF1 0.710 (P 0.603 R 0.865)  P@R0.5=0.645  P@R0.8=0.605  P@R0.9=0.560  P@R0.935=0.481  R@P0.0986=0.982  R@P0.2=0.965
+  PoN-filtered, neg = non+offnon+germ+partial pos 628 neg 222660  maxF1 0.464 (P 0.346 R 0.704)  P@R0.5=0.382  P@R0.8=0.316  P@R0.9=0.280  P@R0.935=0.269  R@P0.0986=0.987  R@P0.2=0.967
+31.57 s 44676 KB

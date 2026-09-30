@@ -1,0 +1,20 @@
+zip entries 2380 ['model_e067_f1_0.1784/data.pkl', 'model_e067_f1_0.1784/byteorder', 'model_e067_f1_0.1784/data/0']
+<class 'dict'>
+KEY epoch 67
+KEY model_state_dict dict 594 ['stem.0.weight', 'stem.0.bias', 'stem.1.weight', 'stem.1.bias', 'stages.0.0.dwconv.weight', 'stages.0.0.dwconv.bias']
+KEY optimizer_state_dict dict 2 ['state', 'param_groups']
+KEY scheduler_state_dict dict 4 ['_milestones', 'last_epoch', '_last_lr', '_schedulers']
+KEY genotype_map dict 2 ['false', 'true']
+KEY in_channels 5
+KEY best_f1_true 0.17844136926438456
+KEY best_rec_true 0.9351145038167938
+KEY best_val_acc 98.27880859375
+KEY best_val_loss 0.07289855182170868
+params 199186322
+first keys ['stem.0.weight', 'stem.0.bias', 'stem.1.weight', 'stem.1.bias', 'stages.0.0.dwconv.weight']
+last keys ['downsample_layers.2.downsample.0.bias', 'downsample_layers.2.downsample.1.weight', 'downsample_layers.2.downsample.1.bias', 'head.weight', 'head.bias']
+   stem.0.weight (192, 5, 4, 4)
+   stem.0.bias (192,)
+   stem.1.weight (192,)
+   stem.1.bias (192,)
+   head.weight (2, 1536)

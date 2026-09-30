@@ -1,0 +1,7 @@
+depths=[3, 3, 27, 3], dims=[192, 384, 768, 1536]. 
+
+e053 epoch 53 best_f1 0.17332407085793677
+infer s 8.5
+VCF PROB vs CPU: max abs diff 0.00013 median 1.7e-05 CPU>=0.5: 40 /40
+non-VCF tensors CPU p>=0.5: 0 / 16 max 0.0606
+val tensor == test tensor: 279 / 279
