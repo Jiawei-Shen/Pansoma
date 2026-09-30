@@ -82,6 +82,11 @@ Useful `train` options:
     non tensors, whatever their AF.
   - `--class-weights balanced|sqrt|none|w0,w1,w2`: balanced is n / (3 n_c) over one epoch's tensors; sqrt
     is its square root.
+- **Label reasons left out.** `--ignore-reasons R ...` treats the tensors of those label reasons as -1 in training and
+  validation; the label files are unchanged. HG008T Illumina SNV runs leave out
+  `residual_partial_somatic_truth allele_partial_somatic_truth`: SNV tensors that partially match an INDEL truth
+  (mostly read-end SNV shadows of the INDEL) taught the model low-AF artefacts next to germline INDELs, and as SNV
+  calls they never match the truth (analysis/v1_vs_v2_20260929).
 - **Model.**
   - `--scalars` feeds the site scalars to the head (`data.SCALARS`: log coverage, log site coverage, log
     ALT / REF / OTHER counts, AF, second allele AF, allele count, log event length). They are the counts
@@ -96,6 +101,9 @@ Useful `train` options:
   chunks from a zstd cache (`--read-threads 16`, `--chunk-rows 512`, `--window-chunks 32`, `--chunk-cache`;
   "Reading the training tensors" below); `--no-chunk-cache` reads the chunks from the raw shards, and
   `--random-reads` goes back to one pread per tensor in DataLoader workers (`--num-workers`).
+- **Memory.** `--micro-batches K` runs the forward and backward of each batch in K parts (gradient accumulation):
+  the same update as the whole batch, with the loss normalized over the whole batch, and the GPU memory of one part.
+  Batch 1024 of the default model fills a 94 GB H100 NVL (about 94.7 of 95.8 GB); batch 512 takes about 49 GB.
 - Also: `--epoch-samples`, `--val-samples`, `--stats-samples 20000`, `--amp bf16|off`, `--resume` (keeps the
   checkpoint's statistics), `--seed`.
 
@@ -176,7 +184,9 @@ Each record has chrom, candidate_id, label (truth), test_label (the scored label
 in_test, reason, off_reference (the node is off the GRCh38 path, as in the paper's pangenome-only calls),
 truth_ids (the somatic truth alleles of a labelled-1 tensor), p_non, p_somatic, p_germline, and pred (with
 the threshold). It also writes `.metrics.json`: the same report over the test tensors, with the truth report
-and the counts of test tensors on off-reference nodes (`--threshold` overrides t).
+and the counts of test tensors on off-reference nodes (`--threshold` overrides t). `--ignore-reasons` (default: the
+checkpoint's training `--ignore-reasons`) leaves those reasons out of the test like -1; their records keep label,
+reason and truth_ids and say `ignored: true`.
 Off-reference tensors are marked for analysis only; the test scores them like the others.
 
 ## Calls: graph VCF → GRCh38 VCF → PoN → rtg vcfeval
