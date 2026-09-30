@@ -230,6 +230,16 @@ class TrainPredictTest(unittest.TestCase):
             n_va = int(((index.arrays["eval_label"][va] >= 0) & (index.arrays["reason"][va] == partial)).sum())
             self.assertGreater(n_tr + n_va, 0)
             self.assertIn(f"left out (--ignore-reasons residual_partial_somatic_truth): {n_tr:,} training, {n_va:,} validation", log)
+            predict.main(["--checkpoint", str(tmp / "run_ignore" / "best.pth"), "--tensors", str(root), "--output",
+                          str(tmp / "p_ignore"), "--kinds", "SNV", "--num-workers", "0", "--amp", "off"])
+            with gzip.open(tmp / "p_ignore" / "sample.tensors.SNV.predictions.ndjson.gz", "rt") as f:
+                recs = [json.loads(line) for line in f]
+            part = [r for r in recs if r["reason"] == "residual_partial_somatic_truth"]
+            self.assertTrue(part and all(r["ignored"] and not r["in_test"] and r["test_label"] is None and r["label"] == 1
+                                         and r["truth_ids"] for r in part))           # left out, information kept
+            self.assertFalse(any(r["ignored"] for r in recs if r["reason"] != "residual_partial_somatic_truth"))
+            rep = json.loads((tmp / "p_ignore" / "sample.tensors.SNV.metrics.json").read_text())
+            self.assertEqual((rep["ignored"], rep["ignored_reasons"]), (len(part), ["residual_partial_somatic_truth"]))
             ckpt_i = torch.load(tmp / "run_ignore" / "best.pth", weights_only=False)
             self.assertEqual(sum(d["train"] for d in ckpt_i["data"]),
                              int((index.arrays["label"][tr] >= 0).sum()) - n_tr)

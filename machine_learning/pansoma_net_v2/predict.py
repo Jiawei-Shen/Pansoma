@@ -17,7 +17,8 @@ Writes, per <sample>.<set>.<KIND>:
   BED, the chromosomes, this kind), at the same threshold. Every truth allele counts once: it is found when its
   best tensor (a labelled-1 tensor matching it, exactly or partially) is called somatic, so duplicate tensors of
   one truth do not count twice; truth alleles without a tensor are misses; a false positive is a somatic call on
-  a tensor labelled 0 or 2. A found truth allele of the other kind (an SNV tensor matching an INDEL truth
+  a tensor labelled 0 or 2. Reasons in --ignore-reasons (default: those the model was trained without) are left out
+  like -1; their records say ignored: true and keep label, reason and truth_ids. A found truth allele of the other kind (an SNV tensor matching an INDEL truth
   partially) is a true call too, once. `ceiling` is the recall of a perfect model. `combine` scores the SNV and
   INDEL predictions of a sample together against the whole truth VCF.
 
@@ -28,6 +29,7 @@ import gzip
 import json
 from pathlib import Path
 
+import numpy as np
 import torch
 
 from . import metrics
@@ -48,6 +50,9 @@ def parse_args(argv=None):
     p.add_argument("--num-workers", type=int, default=8)
     p.add_argument("--amp", choices=["bf16", "off"], default="bf16")
     p.add_argument("--threshold", type=float, help="somatic threshold (default: the checkpoint's)")
+    p.add_argument("--ignore-reasons", nargs="*",
+                   help="label reasons left out of the test, as if -1 (default: the checkpoint's train --ignore-reasons); "
+                        "their records keep label, reason and truth_ids and get ignored: true")
     return p.parse_args(argv)
 
 
@@ -64,6 +69,10 @@ def main(argv=None):
     for index, positions in load_parts(args.tensors, args.kinds, args.cache_dir or str(out / "index_cache"),
                                        chroms=args.chroms, labelled=False):
         dataset = TensorDataset([(index, positions)], labels="eval_label")
+        ignore = args.ignore_reasons if args.ignore_reasons is not None else checkpoint.get("args", {}).get("ignore_reasons", [])
+        ignored = np.isin(index.arrays["reason"][positions],
+                          [k for k, r in enumerate(index.meta["reasons"]) if r in set(ignore)])
+        dataset.label[ignored] = -1  # out of the test like the other -1; the record keeps its label and reason
         labels, probs = retry_workers(
             lambda: predict_probs(model, make_loader(dataset, EpochSampler(len(dataset), shuffle=False), args.num_workers,
                                                      args.batch_size, persistent=False), device, amp),
@@ -77,7 +86,7 @@ def main(argv=None):
                 f.write(json.dumps(dict(
                     chrom=chroms[a["chrom"][pos]], candidate_id=candidates[pos], label=int(a["label"][pos]),
                     test_label=int(labels[k]) if labels[k] >= 0 else None, in_test=bool(labels[k] >= 0),
-                    reason=index.reason(pos), off_reference=bool(a["off_reference"][pos]),
+                    reason=index.reason(pos), ignored=bool(ignored[k]), off_reference=bool(a["off_reference"][pos]),
                     truth_ids=index.truth_of(pos).tolist(),
                     **{f"p_{c}": round(float(probs[k][j]), 5) for j, c in enumerate(CLASSES)},
                     pred=CLASSES[pred[k]])) + "\n")
@@ -92,6 +101,7 @@ def main(argv=None):
         report.update(all_tensors=int(len(labels)), left_out=int((~in_test).sum()),
                       off_reference_in_test=int((in_test & off).sum()),
                       off_reference_somatic_in_test=int((in_test & off & (labels == 1)).sum()),
+                      ignored_reasons=list(ignore), ignored=int(ignored.sum()),
                       directory=str(index.dir), labels=index.meta["labels"],
                       checkpoint=str(Path(args.checkpoint).resolve()), chroms=args.chroms)
         (out / f"{name}.metrics.json").write_text(json.dumps(report, indent=2) + "\n")
