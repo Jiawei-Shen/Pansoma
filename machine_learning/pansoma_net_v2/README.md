@@ -198,11 +198,14 @@ $P -m pansoma_net_v2.vcfeval --calls out/HG008T_Illumina.SNV.linear.vcf.gz \
     --truth <somatic truth>.vcf.gz --bed <benchmark>.bed --sdf GRCh38.sdf --rtg rtg --output out/eval_bed
 ```
 
+INDEL calls go through vcfeval without `--pon` for now.
+
 `/scratch/jshen/data/pansoma_net_v2_runs/jobs/vcf.sh RUN KIND` runs the three on a run's chr1 predictions into
-`<run>/vcf_chr1/`, with the truth VCF and BED of the set's labels. vcfeval runs twice there:
+`<run>/vcf_chr1/`, with the truth VCF and BED of the set's labels. It uses the PoN for SNV only. For a checkpoint
+without validation thresholds (trained before `val.somatic_at_recall`), set `THRESHOLD=t`. vcfeval runs twice there:
 
 - `eval_bed`: inside the benchmark BED.
-- `eval_nobed`: on the whole chromosome, reusing the PoN-tagged calls through `--pon-vcf`. This is the form
+- `eval_nobed`: on the whole chromosome (SNV: reusing the PoN-tagged calls through `--pon-vcf`). This is the form
   of the earlier rtg runs of ClairS-TO, DeepSomatic and Pansoma v1 (`--squash-ploidy --sample ALT,ALT`, no BED).
 
 **graph_vcf.** One record per tensor: the site's representative allele A1, the allele the model scores.
@@ -215,10 +218,12 @@ $P -m pansoma_net_v2.vcfeval --calls out/HG008T_Illumina.SNV.linear.vcf.gz \
 - QUAL = −10 log10(1 − p_somatic). rtg rounds scores to 3 decimals, so p near 1 would collapse on a
   linear scale.
 - FILTER:
-  - PASS: `predict`'s somatic call (or p_somatic ≥ `--threshold`).
+  - PASS: p_somatic ≥ the checkpoint's validation threshold at recall 0.9 (`--target-recall`; the checkpoint
+    is the one in predict's `.metrics.json`). The model favours recall and the PoN raises precision.
+    `--threshold T` sets the threshold. `--threshold predict` keeps `predict`'s own call (best-F1 threshold).
   - LowQual: not called.
-  - LowAF: below the AF floor of the labels predict's test used (Illumina SNV 0.07; none for INDEL or the
-    long-read sets).
+  - LowAF: below the AF floor of the checkpoint's training labels (Illumina SNV 0.07; none for INDEL or the
+    long-read sets). A relabel of the predicted set, or a new sample without labels, does not change it.
 - Tensors with p_somatic < `--min-score` (0.01) that are not called are left out. The LowQual records give
   vcfeval its curve.
 
@@ -229,35 +234,42 @@ merge stored as the summaries' `grch38`.
 - INDELs are left-aligned on the FASTA and padded from it.
 - Records of one GRCh38 allele are merged (INFO MERGED, MERGED_ALT; ID lists every candidate). The same
   insertion is often seen at the end of one node and at the start of the next.
-- Events with no GRCh38 position go unchanged to `<name>.linear.unplaced.vcf.gz`. These are off-reference
-  nodes, and deletions over nodes that are not GRCh38 neighbours. Placing them would need the graph's edges.
+- Events with no GRCh38 position go unchanged to `<name>.linear.unplaced.vcf.gz`, in graph coordinates:
+  CHROM is the node ID, INFO START the 0-based start offset on the node, and ID `node:start:KIND:REF>ALT`.
+  These are off-reference nodes, and deletions over nodes that are not GRCh38 neighbours. Placing them would
+  need the graph's edges.
 
 **vcfeval.**
 
-- **PoN.** `scripts/filter_panel_of_normals.py` with the four PoNs. gnomAD and dbSNP match by allele, 1000G
-  and CoLoRSdb by position. It also runs over the truth records, which shows how much recall the PoN leaves
-  to any caller.
+- **PoN** (optional: `--pon` or `--pon-vcf`; SNV only for now). `scripts/filter_panel_of_normals.py` with the
+  four PoNs. gnomAD and dbSNP match by allele, 1000G and CoLoRSdb by position. It also runs over the truth
+  records, which shows how much recall the PoN leaves to any caller.
 - **Truth.** The PASS truth records of the kind on the predicted chromosomes.
-- **rtg vcfeval.** Always with `--squash-ploidy --sample ALT,ALT -f QUAL`. For the calls without and with the
-  PoN (raw / pon) it runs twice:
+- **rtg vcfeval.** Always with `--squash-ploidy --sample ALT,ALT -f QUAL`. For the calls without the PoN (raw)
+  and, with a PoN, with it (pon), it runs twice:
   - once on the PASS records: the result at the threshold;
   - once with `--all-records` on PASS + LowQual: the curve (best F1, precision at recall 0.5–0.95, ceiling).
 - **Reports.** `report.json` and `report.txt`. The latter also gives the PASS calls without a GRCh38 position:
   they are not evaluated, so precision is also shown with them counted as false calls.
 
-HG008 Illumina chr1 (SNV `HG008_Illumina_SNV_keephard_w100`, INDEL `HG008_Illumina_INDEL_base`, 2026-09-29).
-Values are at the checkpoint threshold; best F1 is the best point of the chr1 curve, a test-set choice.
+HG008 Illumina chr1 (SNV `HG008_Illumina_SNV_keephard_w100_nopartial`, INDEL `HG008_Illumina_INDEL_base`,
+2026-09-29, `<run>/vcf_chr1_r09/`). PASS is at the validation recall-0.9 threshold: SNV p ≥ 0.654, INDEL
+p ≥ 0.034 (`THRESHOLD`, from the run's saved validation probabilities `val_probs_e2.npz`; its checkpoint predates
+`val.somatic_at_recall`). INDEL without the PoN. Best F1 is the best point of the chr1 curve, a test-set choice.
 
 | | PASS evaluated (unplaced) | TP | FP | P | R | F1 | best F1 (P, R) |
 |---|---|---|---|---|---|---|---|
-| SNV raw, in BED (697) | 1,932 (22) | 315 | 1,617 | 0.163 | 0.452 | 0.240 | 0.256 |
-| SNV pon, in BED | 445 | 295 | 150 | 0.663 | 0.423 | 0.517 | 0.623 (0.574, 0.683) |
-| SNV pon, no BED (702) | 461 | 297 | 164 | 0.644 | 0.423 | 0.511 | 0.615 (0.560, 0.682) |
-| SNV pon, no BED, `HG008_Illumina_SNV_keephard_w100_nopartial` | 482 (0) | 319 | 163 | 0.662 | 0.454 | 0.539 | 0.662 (0.611, 0.724) |
-| INDEL raw, no BED (635) | 899 (324) | 98 | 801 | 0.109 | 0.154 | 0.128 | 0.143 |
-| INDEL pon, no BED | 19 | 11 | 8 | 0.579 | 0.017 | 0.034 | 0.101 |
+| SNV raw, in BED (697) | 5,655 (19) | 594 | 5,061 | 0.105 | 0.852 | 0.187 | 0.222 |
+| SNV pon, in BED | 965 | 541 | 424 | 0.561 | 0.776 | 0.651 | 0.666 (0.617, 0.723) |
+| SNV pon, no BED (702) | 985 | 545 | 440 | 0.553 | 0.776 | 0.646 | 0.662 (0.611, 0.724) |
+| INDEL raw, in BED (587) | 4,396 (1,281) | 217 | 4,179 | 0.049 | 0.370 | 0.087 | 0.150 (0.106, 0.256) |
+| INDEL raw, no BED (635) | 4,929 (1,281) | 234 | 4,695 | 0.048 | 0.368 | 0.084 | 0.143 (0.100, 0.252) |
 
-- **Agreement with the truth-level metrics.** The results agree with `metrics.truth_report`:
+At predict's best-F1 threshold (`--threshold predict`, `<run>/vcf_chr1/`) the same runs give SNV pon, no BED:
+P 0.662, R 0.454, F1 0.539; INDEL raw, no BED: 899 PASS evaluated (324 unplaced), P 0.109, R 0.154, F1 0.128.
+
+- **Agreement with the truth-level metrics** (`HG008_Illumina_SNV_keephard_w100` and INDEL_base at predict's
+  threshold). The results agree with `metrics.truth_report`:
   - SNV raw: TP 315 in both.
   - FP: 1,617 against 1,627. rtg does not score the 17 unplaced false calls, counts 4 SNV tensors next to
     INS truths as FP, and 3 calls lie in the somatic BED but outside the germline BED.
@@ -407,11 +419,12 @@ cd machine_learning && $P -m unittest discover -s pansoma_net_v2/tests -t .
 - `test_combine`: one truth found from both sets counts once; repeated calls; other-kind truth with one set;
   two predictions of one kind are refused.
 - `test_vcf`: a small graph (a GRCh38 walk, an off-reference node) and one tensor per case.
-  - graph_vcf: node padding (offset 0, node end, NOPAD, several nodes), FILTER from predict's calls and the
-    labels' AF floor, and a summary out of line.
+  - graph_vcf: node padding (offset 0, node end, NOPAD, several nodes); FILTER from the checkpoint's validation
+    threshold at a recall, `--threshold` or predict's calls, and the AF floor of the checkpoint's training
+    labels (not the predicted set's), with the errors for a checkpoint without them; a summary out of line.
   - linear_vcf: projection equal to `ReferencePath.linear`, left-alignment, a merged junction insertion
     (PASS kept, A1 reads summed), unplaced events, a FASTA that disagrees.
   - vcfeval: summary parsing (no baseline, NaN), the curve points. With rtg (`$RTG` or on PATH): PoN tags on
-    calls and truth (a sites-only truth without ##contig), calls vs curve, `--pon-vcf` reuse and refusal.
+    calls and truth (a sites-only truth without ##contig), calls vs curve, `--pon-vcf` reuse and refusal, no PoN.
 - `test_gpu`: runs on a CUDA node. The GPU encoding equals the CPU one, a bf16 training step learns, and
   compile + channels_last gives the eager logits and gradients in fp32.

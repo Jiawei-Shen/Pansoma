@@ -1,11 +1,12 @@
 """Panel-of-normals filter and rtg vcfeval of a GRCh38 VCF of linear_vcf against a somatic truth VCF.
 
     cd machine_learning
-    python -m pansoma_net_v2.vcfeval --calls <name>.SNV.linear.vcf.gz --pon GNOMAD DBSNP 1000G COLORSDB \
+    python -m pansoma_net_v2.vcfeval --calls <name>.SNV.linear.vcf.gz [--pon GNOMAD DBSNP 1000G COLORSDB] \
         --truth somatic.vcf.gz [--bed benchmark.bed] --sdf GRCh38.sdf --output <dir>
 
-1. PoN: the repository's scripts/filter_panel_of_normals.py, with the four PoNs in its order (gnomAD, dbSNP,
-   1000G, CoLoRSdb). gnomAD and dbSNP match by allele, 1000G and CoLoRSdb by position. Matched records get
+1. PoN (with --pon or --pon-vcf; without either only the raw calls are evaluated, as for INDELs for now): the
+   repository's scripts/filter_panel_of_normals.py, with the four PoNs in its order (gnomAD, dbSNP, 1000G,
+   CoLoRSdb). gnomAD and dbSNP match by allele, 1000G and CoLoRSdb by position. Matched records get
    FILTER PanelOfNormals: <dir>/<name>.pon.vcf.gz. --pon-vcf reuses the tagged calls of an earlier run
    (e.g. to evaluate the same calls with and without a BED).
 2. Truth: the PASS (or '.') truth records of the kind on the predicted chromosomes, written to
@@ -13,20 +14,21 @@
    has none (COLO829T's truth declares neither).
    - SNV: a record with an ALT of REF's length. INDEL: an ALT of another length. ALL: every record.
    - The predicted chromosomes are the calls' ##pansoma_chromosomes, or --regions.
-   - The PoN filter also runs over these truth records (truth_pon_tags): the share it tags bounds the
-     recall of any caller after the PoN.
+   - With --pon the PoN filter also runs over these truth records (truth_pon_tags): the share it tags bounds
+     the recall of any caller after the PoN.
 3. rtg vcfeval compares alleles only: --squash-ploidy --sample ALT,ALT. The truth is phased and the calls are
    not, and COLO829T's truth is sites-only.
    - Options: -f QUAL, the predicted chromosomes as --bed-regions, and -e --bed when given.
-   - It runs for the calls without the PoN ("raw") and with it ("pon"), twice each, under <dir>/vcfeval/:
+   - It runs for the calls without the PoN ("raw") and, with a PoN, with it ("pon"), twice each, under
+     <dir>/vcfeval/:
      - <set>_calls: the PASS records, i.e. the call set at the model threshold. Its None row is the result.
      - <set>_curve: every PASS or LowQual record (not LowAF, not PanelOfNormals), with --all-records. This
        gives the precision/recall curve down to graph_vcf's --min-score.
 4. <dir>/report.json and report.txt. For each set: the result at the threshold, the best F1 on the curve,
    precision at recall 0.5/0.8/0.9/0.95 (at the highest threshold that reaches it), and the ceiling (the
-   curve's recall at the lowest score). Below the table: the truth records the PoN tags, and the PASS calls
-   without a GRCh38 position (linear_vcf's unplaced records), which are not evaluated, with the precision they
-   would give as false calls.
+   curve's recall at the lowest score). Below the table: the truth records the PoN tags (with a PoN), and the
+   PASS calls without a GRCh38 position (linear_vcf's unplaced records), which are not evaluated, with the
+   precision they would give as false calls.
 """
 import argparse
 import gzip
@@ -192,7 +194,8 @@ def table(report):
     lines = [f"{'set':<5} {'records':>8} {'TP':>5} {'FP':>6} {'FN':>5} {'P':>6} {'R':>6} {'F1':>6} | "
              f"{'best F1':>7} {'(p':>7} {'P':>6} {'R)':>6} | " + " ".join(f"{'P@R' + str(r):>7}" for r in RECALLS)
              + f" | {'ceiling':>7}"]
-    for name in ("raw", "pon"):
+    sets = [name for name in ("raw", "pon") if name in report]
+    for name in sets:
         d = report[name]
         a, b = d["at_threshold"], d["best"] or {}
         par = [d["precision_at_recall"][str(r)] for r in RECALLS]
@@ -207,9 +210,9 @@ def table(report):
                      f"<= {1 - t['tagged'] / t['records']:.3f}" if t["records"] else "No truth records for the PoN")
     if u:
         p = " ".join(f"{name} {d['tp_call'] / (d['tp_call'] + d['fp'] + u):.3f}"
-                     for name, d in ((n, report[n]["at_threshold"]) for n in ("raw", "pon")))
+                     for name, d in ((n, report[n]["at_threshold"]) for n in sets))
         lines.append(f"{u:,} PASS calls without a GRCh38 position are not evaluated; precision at the threshold "
-                     f"with them as false calls: {p} (pon: if the PoN kept them all)")
+                     f"with them as false calls: {p}" + (" (pon: if the PoN kept them all)" if "pon" in sets else ""))
     return "\n".join(lines)
 
 
@@ -239,6 +242,7 @@ def evaluate(args):
         raise SystemExit(f"no PASS {kind} truth records on {','.join(chroms)} in {args.truth}")
     regions = out / "regions.bed"
     regions_bed(header, chroms, regions)
+    pon_vcf = pon = pon_files = truth_pon = None
     if args.pon_vcf:
         pon_vcf = Path(args.pon_vcf)
         if not same_calls(pon_vcf, calls):
@@ -247,7 +251,7 @@ def evaluate(args):
         earlier = pon_vcf.parent / "report.json"
         earlier = json.loads(earlier.read_text()) if earlier.exists() else {}
         pon_files, truth_pon = earlier.get("pon_files"), earlier.get("truth_pon_tags")
-    else:
+    elif args.pon:
         pon_vcf = out / f"{calls.name[:-len('.vcf.gz')]}.pon.vcf.gz"
         print(f"PoN filter -> {pon_vcf}", flush=True)
         pon = run_pon(calls, pon_vcf, args.pon)
@@ -259,10 +263,11 @@ def evaluate(args):
             steps[step] = json.loads(stats_path(vcf).read_text())
     report = dict(calls=str(calls.resolve()), kind=kind, chromosomes=chroms, truth=str(Path(args.truth).resolve()),
                   truth_records=n_truth, truth_not_pass=n_filtered, bed=str(Path(args.bed).resolve()) if args.bed else None,
-                  pon_files=pon_files, pon_vcf=str(pon_vcf.resolve()), pon_tags=pon, truth_pon_tags=truth_pon,
-                  threshold=float(meta(header, "pansoma_threshold")), min_score=float(meta(header, "pansoma_min_score")),
+                  pon_files=pon_files, pon_vcf=str(pon_vcf.resolve()) if pon_vcf else None, pon_tags=pon,
+                  truth_pon_tags=truth_pon, threshold=float(meta(header, "pansoma_threshold")),
+                  min_score=float(meta(header, "pansoma_min_score")),
                   unplaced_pass=steps.get("linear_vcf", {}).get("unplaced_pass"))
-    for label, source in (("raw", calls), ("pon", pon_vcf)):
+    for label, source in (("raw", calls), ("pon", pon_vcf)) if pon_vcf else (("raw", calls),):
         curve_vcf = work / f"{label}_curve_input.vcf.gz"
         subset(source, curve_vcf, lambda f: f <= CURVE_FILTERS)
         print(f"rtg vcfeval {label}", flush=True)
@@ -275,8 +280,8 @@ def evaluate(args):
     text = table(report)
     (out / "report.txt").write_text(text + "\n")
     print(f"{kind} on {','.join(chroms)}: {report['raw']['baseline']:,} truth variants"
-          f"{' in ' + args.bed if args.bed else ''}; threshold {report['threshold']:.5f}; PoN tagged "
-          f"{pon['tagged']:,} records ({pon['tagged_pass']:,} PASS)")
+          f"{' in ' + args.bed if args.bed else ''}; threshold {report['threshold']:.5f}; "
+          + (f"PoN tagged {pon['tagged']:,} records ({pon['tagged_pass']:,} PASS)" if pon else "no PoN"))
     print(text, flush=True)
     return report
 
@@ -284,9 +289,9 @@ def evaluate(args):
 def parse_args(argv=None):
     p = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     p.add_argument("--calls", required=True, help="<name>.linear.vcf.gz of linear_vcf")
-    pon = p.add_mutually_exclusive_group(required=True)
+    pon = p.add_mutually_exclusive_group()
     pon.add_argument("--pon", nargs=4, metavar=("GNOMAD", "DBSNP", "1000G", "COLORSDB"),
-                     help="the four indexed PoN VCFs, in this order")
+                     help="the four indexed PoN VCFs, in this order (without --pon / --pon-vcf: no PoN)")
     pon.add_argument("--pon-vcf", help="the calls already tagged by the PoN filter (an earlier run's <name>.pon.vcf.gz)")
     p.add_argument("--truth", required=True, help="somatic truth VCF (bgzipped)")
     p.add_argument("--bed", help="evaluate inside these regions only (rtg -e), e.g. the benchmark BED")

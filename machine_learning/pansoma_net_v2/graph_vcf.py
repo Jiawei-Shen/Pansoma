@@ -4,9 +4,10 @@
     python -m pansoma_net_v2.graph_vcf --predictions <predict output>/<name>.SNV.predictions.ndjson.gz \
         --tensors <set> --kind SNV --graph-index <graph>.graph_index.sqlite --output <out>/<name>.SNV.graph.vcf.gz
 
-Inputs: the predictions of one kind (predict.py) and the set's summaries, which give each tensor's event and read
-support. Record k of chromosome C in the predictions is line k of <set>/<KIND>/C_variant_summary.ndjson; the
-candidate IDs must agree. Labels and truth are not read.
+Inputs: the predictions of one kind (predict.py), the set's summaries, which give each tensor's event and read
+support, and the model's checkpoint (the one in predict's .metrics.json, or --checkpoint), which gives the
+threshold and the AF floor. Record k of chromosome C in the predictions is line k of
+<set>/<KIND>/C_variant_summary.ndjson; the candidate IDs must agree. Labels and truth are not read.
 
 A record is the site's representative allele A1, the allele the model scores. The other alleles of the site
 (INFO NALLELES > 1) get no probability of their own and no record.
@@ -25,14 +26,15 @@ A record is the site's representative allele A1, the allele the model scores. Th
   rounds scores to 3 decimals, and on the phred scale the probabilities near 1 stay apart.
 - FILTER:
   - PASS: called somatic and AF >= the AF floor.
-  - LowQual: not called somatic. Without --threshold, the call is predict's own (`pred`, made with the
-    checkpoint's threshold before the probabilities were rounded), so PASS is exactly predict's somatic call
-    set; the threshold is read from the .metrics.json beside the predictions for the header. With
-    --threshold, the call is p_somatic >= threshold.
-  - LowAF: AF < --min-af. The default is the label floor of the kind that predict's test used (the labels
-    entry of its .metrics.json: snv_min_af / indel_min_af; e.g. SNV 0.07 on the Illumina sets, none on the
-    long-read sets), else the set's labels.manifest.json, else none: the labels ignore those tensors
-    (below_snv_min_af) and the test leaves them out. A relabel of the set after predict does not change it.
+  - LowQual: not called somatic: p_somatic < the threshold. The default threshold is the checkpoint's
+    validation threshold at --target-recall (0.9): the highest p_somatic at which the validation somatic recall
+    reaches it (train's val.somatic_at_recall, for recall 0.5, 0.8, 0.9, 0.95). The model favours recall and
+    a PoN raises precision afterwards. --threshold T sets it. --threshold predict keeps predict's own call
+    (`pred`, made with the checkpoint's best-F1 threshold before the probabilities were rounded).
+  - LowAF: AF < --min-af. The default is the AF floor of the checkpoint's training labels (data[].labels
+    snv_min_af / indel_min_af; e.g. SNV 0.07 on the Illumina sets, none on the long-read sets): the model never
+    trained on tensors below it (below_snv_min_af). The labels of the predicted set do not change it (a relabel,
+    or a new sample without labels).
 - Tensors with p_somatic < --min-score (default 0.01) that are not called are not written. The LowQual records
   are kept so that vcfeval can draw the precision/recall curve below the threshold.
 """
@@ -43,6 +45,7 @@ import math
 import re
 from pathlib import Path
 
+from .metrics import RECALLS
 from .vcfio import format_info, import_pipeline, stats_path, write_vcf
 
 KIND_EVENTS = {"SNV": {"SNP"}, "INDEL": {"INS", "DEL"}}
@@ -106,21 +109,30 @@ def predict_report(predictions):
     return json.loads(report.read_text()) if report.exists() else {}
 
 
-def default_threshold(predictions):
-    """The threshold predict applied."""
-    return predict_report(predictions).get("threshold")
+def read_checkpoint(path):
+    """The validation thresholds at fixed recalls and the training sets' labels of a checkpoint (memory-mapped,
+    so the weights are not read)."""
+    import torch
+    checkpoint = torch.load(path, map_location="cpu", weights_only=False, mmap=True)
+    return dict(at_recall=(checkpoint.get("val") or {}).get("somatic_at_recall") or {},
+                labels=[d.get("labels") or {} for d in checkpoint.get("data") or []])
 
 
-def default_min_af(predictions, tensors, kind):
-    """(AF floor, source): the labels of predict's test, else the set's labels, else none."""
+def recall_threshold(checkpoint, path, recall):
+    at = checkpoint["at_recall"].get(str(recall))
+    if not at:
+        raise SystemExit(f"{path}: no validation threshold at recall {recall} (val.somatic_at_recall); give --threshold")
+    return at["threshold"]
+
+
+def training_min_af(checkpoint, path, kind):
+    """The AF floor of the kind that every training set's labels had."""
     key = LABEL_FLOOR[kind]
-    labels = predict_report(predictions).get("labels") or {}
-    if key in labels:
-        return labels[key], f".metrics.json labels {key}"
-    manifest = Path(tensors) / kind / "labels.manifest.json"
-    if manifest.exists():
-        return json.loads(manifest.read_text()).get(key), f"labels.manifest.json {key}"
-    return None, "none (no labels)"
+    floors = {labels[key] if key in labels else "missing" for labels in checkpoint["labels"]}
+    if len(floors) != 1 or "missing" in floors:
+        raise SystemExit(f"{path}: the training labels give no single {key} ({', '.join(map(str, floors))}); "
+                         f"give --min-af")
+    return floors.pop()
 
 
 def select(predictions, summaries_dir, kind, called, min_score, threshold, stats):
@@ -188,19 +200,31 @@ def build(args):
     import_pipeline()
     from indexed_gam_pipeline_v4.graph_index import GraphIndex
 
-    threshold = args.threshold if args.threshold is not None else default_threshold(args.predictions)
-    if threshold is None:
-        raise SystemExit("no --threshold, and no .metrics.json with the threshold beside the predictions")
-    if args.threshold is None:
-        call_rule = "predict's call (pred)"
+    report = predict_report(args.predictions)
+    checkpoint_path, checkpoint = args.checkpoint or report.get("checkpoint"), None
+    if args.threshold is None or args.min_af is None:
+        if not checkpoint_path:
+            raise SystemExit("no --checkpoint, and no .metrics.json with the checkpoint beside the predictions")
+        checkpoint = read_checkpoint(checkpoint_path)
+    if args.threshold == "predict":
+        threshold = report.get("threshold")
+        if threshold is None:
+            raise SystemExit("--threshold predict: no .metrics.json with predict's threshold beside the predictions")
+        call_rule = "predict's call (pred: the checkpoint's best-F1 threshold)"
         called = lambda p: p["pred"] == "somatic"  # noqa: E731
     else:
-        call_rule = f"p_somatic >= {threshold}"
+        if args.threshold is not None:
+            threshold, source = args.threshold, "--threshold"
+        else:
+            threshold = recall_threshold(checkpoint, checkpoint_path, args.target_recall)
+            source = f"validation recall {args.target_recall}"
+        call_rule = f"p_somatic >= {threshold} ({source})"
         called = lambda p: p["p_somatic"] >= threshold  # noqa: E731
     if args.min_af is not None:
         min_af, min_af_source = args.min_af, "--min-af"
     else:
-        min_af, min_af_source = default_min_af(args.predictions, args.tensors, args.kind)
+        min_af = training_min_af(checkpoint, checkpoint_path, args.kind)
+        min_af_source = f"checkpoint training labels {LABEL_FLOOR[args.kind]}"
     sample = args.sample or Path(args.tensors).resolve().parent.name
     stats = dict(predictions=0, called_by_predict=0, called=0, pred_differs_from_threshold=0)
     kept, chroms = select(args.predictions, Path(args.tensors) / args.kind, args.kind, called, args.min_score,
@@ -231,14 +255,15 @@ def build(args):
               f"##pansoma_predictions={Path(args.predictions).resolve()}",
               f"##pansoma_tensors={Path(args.tensors).resolve()}",
               f"##pansoma_graph_index={Path(args.graph_index).resolve()}",
+              f"##pansoma_checkpoint={Path(checkpoint_path).resolve() if checkpoint_path else None}",
               f"##pansoma_threshold={threshold}", f"##pansoma_call={call_rule}",
               f"##pansoma_min_score={args.min_score}", f"##pansoma_min_af={min_af}",
               f"##pansoma_min_af_source={min_af_source}", *HEADER.split("\n"),
               *(f"##contig=<ID={n},length={len(sequences[n])}>" for n in used)]
     columns = "\t".join(["#CHROM", "POS", "ID", "REF", "ALT", "QUAL", "FILTER", "INFO", "FORMAT", sample])
     write_vcf(args.output, header, columns, (r[2] for r in records))
-    stats.update(kind=args.kind, chromosomes=chroms, threshold=threshold, call=call_rule, min_score=args.min_score,
-                 min_af=min_af, min_af_source=min_af_source,
+    stats.update(kind=args.kind, chromosomes=chroms, checkpoint=checkpoint_path, threshold=threshold, call=call_rule,
+                 min_score=args.min_score, min_af=min_af, min_af_source=min_af_source,
                  records=len(records), filters=filters, nopad=sum(";NOPAD" in r[2][7] for r in records),
                  multi_allele_sites=sum(s["allele_count"] > 1 for _, s in kept), output=str(Path(args.output).resolve()))
     stats_path(args.output).write_text(json.dumps(stats, indent=2) + "\n")
@@ -255,12 +280,15 @@ def parse_args(argv=None):
     p.add_argument("--kind", required=True, choices=sorted(KIND_EVENTS))
     p.add_argument("--graph-index", required=True, help="graph SQLite with the node sequences (indexed_gam_pipeline_v4)")
     p.add_argument("--output", required=True, help="<name>.graph.vcf.gz")
-    p.add_argument("--threshold", type=float, help="somatic threshold (default: predict's calls)")
+    p.add_argument("--checkpoint", help="the model's checkpoint (default: the one in predict's .metrics.json)")
+    p.add_argument("--target-recall", type=float, default=0.9, choices=RECALLS,
+                   help="the threshold is the checkpoint's validation threshold at this somatic recall")
+    p.add_argument("--threshold", type=lambda text: text if text == "predict" else float(text),
+                   help="somatic threshold instead, or 'predict' for predict's own calls (best-F1 threshold)")
     p.add_argument("--min-score", type=float, default=0.01,
                    help="leave out tensors with a lower p_somatic that are not called")
     p.add_argument("--min-af", type=float,
-                   help="AF floor (default: the labels' snv_min_af / indel_min_af of predict's .metrics.json, "
-                        "else of the set's labels.manifest.json)")
+                   help="AF floor (default: snv_min_af / indel_min_af of the checkpoint's training labels)")
     p.add_argument("--sample", help="sample column name (default: the name of the set's parent directory)")
     return p.parse_args(argv)
 

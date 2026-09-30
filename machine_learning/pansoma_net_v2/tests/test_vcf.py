@@ -13,6 +13,7 @@ import unittest
 from pathlib import Path
 
 import pysam
+import torch
 
 from .. import graph_vcf, linear_vcf, vcfeval
 from ..vcfio import import_pipeline, parse_info, read_vcf
@@ -45,6 +46,15 @@ def columns(path):
     return [r for r in read_vcf(path)[2]]
 
 
+def write_checkpoint(path, at_recall=None, labels=(dict(snv_min_af=0.07, indel_min_af=None),)):
+    """The parts of a pansoma_net_v2 checkpoint graph_vcf reads: validation thresholds at fixed recalls and the
+    training sets' labels."""
+    at_recall = {"0.9": dict(threshold=0.5), "0.8": dict(threshold=0.85)} if at_recall is None else at_recall
+    torch.save(dict(val=dict(somatic_at_recall=at_recall), data=[dict(directory="set", labels=dict(x)) for x in labels]),
+               path)
+    return path
+
+
 class Fixture:
     def __init__(self, root, fasta_bases=CHR1):
         self.root = Path(root)
@@ -65,11 +75,10 @@ class Fixture:
             db.execute("CREATE TABLE nodes(node_id INTEGER PRIMARY KEY, seq TEXT, distinct_path_count INTEGER)")
             db.executemany("INSERT INTO nodes VALUES(?,?,?)", [(n, s, 1) for n, s in NODES.items()])
         self.tensors = self.root / "sample" / "tensors"
+        self.checkpoint = write_checkpoint(self.root / "best.pth")  # threshold 0.5 at recall 0.9, SNV floor 0.07
         self.predictions = {}
         for kind, cases in (("SNV", SNV), ("INDEL", INDEL)):
             (self.tensors / kind).mkdir(parents=True)
-            (self.tensors / kind / "labels.manifest.json").write_text(json.dumps(
-                dict(snv_min_af=0.07, indel_min_af=None)))  # the labels' AF floors (graph_vcf's default --min-af)
             with open(self.tensors / kind / "chr1_variant_summary.ndjson", "w") as f:
                 for cid, node, start, ref, alt, event, path, af, _ in cases:
                     record = dict(candidate_id=cid, node_id=node, start=start, ref=ref, alt=alt,
@@ -82,7 +91,8 @@ class Fixture:
             run = self.root / f"run_{kind}"
             run.mkdir()
             self.predictions[kind] = run / f"sample.tensors.{kind}.predictions.ndjson.gz"
-            (run / f"sample.tensors.{kind}.metrics.json").write_text(json.dumps(dict(threshold=0.5)))
+            (run / f"sample.tensors.{kind}.metrics.json").write_text(json.dumps(  # predict's: best-F1 0.5
+                dict(threshold=0.5, checkpoint=str(self.checkpoint), labels=dict(snv_min_af=0.06))))
             with gzip.open(self.predictions[kind], "wt") as f:
                 for case in cases:
                     p = case[-1]
@@ -128,7 +138,8 @@ class GraphVcfTest(unittest.TestCase):
         self.assertEqual(records["1:4:SNP:A>G"][6], "LowAF")
         self.assertEqual(records["7:0:SNP:C>A"][6], "LowQual")
         self.assertEqual((stats["threshold"], stats["min_af"], stats["records"]), (0.5, 0.07, 4))
-        self.assertEqual(stats["min_af_source"], "labels.manifest.json snv_min_af")
+        self.assertEqual((stats["min_af_source"], stats["call"]),
+                         ("checkpoint training labels snv_min_af", "p_somatic >= 0.5 (validation recall 0.9)"))
         self.assertEqual(stats["filters"], {"PASS": 2, "LowQual": 1, "LowAF": 1})
         header = read_vcf(out)[0]
         self.assertIn("##contig=<ID=4,length=10>", header)
@@ -155,32 +166,45 @@ class GraphVcfTest(unittest.TestCase):
                                    "7:0:SNP:C>A": "LowQual", "3:0:SNP:T>G": "LowQual"})
         self.assertEqual(stats["pred_differs_from_threshold"], 2)  # predict's pred used 0.5
 
-    def test_pass_is_predicts_call_set(self):
-        """Without --threshold a record is PASS when predict called it (pred, made before rounding), whatever its
-        rounded p_somatic; with --threshold, by p_somatic."""
+    def test_threshold_predict_is_predicts_call_set(self):
+        """With --threshold predict a record is PASS when predict called it (pred, made before rounding), whatever
+        its rounded p_somatic; by default, when p_somatic reaches the validation threshold."""
         lines = [json.loads(x) for x in gzip.open(self.f.predictions["SNV"], "rt")]
         lines[3].update(p_somatic=0.5, pred="non")      # 7:0 rounded up to the threshold, below it before
         lines[0].update(p_somatic=0.49999, pred="somatic")
         with gzip.open(self.f.predictions["SNV"], "wt") as f:
             f.write("".join(json.dumps(x) + "\n" for x in lines))
-        stats, out = self.f.graph("SNV")
+        stats, out = self.f.graph("SNV", threshold="predict")
         self.assertEqual({r[2]: r[6] for r in columns(out)}["4:6:SNP:A>C"], "PASS")
         self.assertEqual({r[2]: r[6] for r in columns(out)}["7:0:SNP:C>A"], "LowQual")
-        self.assertEqual(stats["pred_differs_from_threshold"], 2)
-        _, out = self.f.graph("SNV", threshold=0.5)
+        self.assertEqual((stats["pred_differs_from_threshold"], stats["threshold"]), (2, 0.5))
+        _, out = self.f.graph("SNV")
         self.assertEqual({r[2]: r[6] for r in columns(out)}["4:6:SNP:A>C"], "LowQual")
+        self.assertEqual({r[2]: r[6] for r in columns(out)}["7:0:SNP:C>A"], "PASS")
 
-    def test_min_af_default_follows_the_labels(self):
-        (self.f.tensors / "SNV" / "labels.manifest.json").write_text(json.dumps(dict(snv_min_af=None)))
-        stats, out = self.f.graph("SNV")
+    def test_threshold_and_min_af_follow_the_checkpoint(self):
+        stats, out = self.f.graph("SNV", target_recall=0.8)  # threshold 0.85
+        self.assertEqual({r[2]: r[6] for r in columns(out)}, {"1:4:SNP:A>G": "LowAF", "3:0:SNP:T>G": "LowQual",
+                                                              "4:6:SNP:A>C": "PASS", "7:0:SNP:C>A": "LowQual"})
+        # the floor is the training labels' (0.07), not the labels predict's test used (0.06 in .metrics.json)
+        self.assertEqual((stats["threshold"], stats["min_af"]), (0.85, 0.07))
+        self.assertIn(f"##pansoma_checkpoint={self.f.checkpoint.resolve()}", read_vcf(out)[0])
+        other = write_checkpoint(self.f.root / "other.pth", labels=[dict(snv_min_af=None)])  # --checkpoint wins
+        stats, out = self.f.graph("SNV", checkpoint=other)
         self.assertEqual((stats["min_af"], {r[2]: r[6] for r in columns(out)}["1:4:SNP:A>G"]), (None, "PASS"))
-        (self.f.tensors / "SNV" / "labels.manifest.json").unlink()  # a set without labels: no floor
-        self.assertIsNone(self.f.graph("SNV")[0]["min_af"])
-        # the labels predict's test used come first (a relabel of the set afterwards does not change the floor)
+        write_checkpoint(self.f.checkpoint, at_recall={})  # a checkpoint from before val.somatic_at_recall
+        with self.assertRaisesRegex(SystemExit, "no validation threshold at recall 0.9"):
+            self.f.graph("SNV")
+        self.assertEqual(self.f.graph("SNV", threshold=0.5)[0]["filters"], {"PASS": 2, "LowQual": 1, "LowAF": 1})
+        write_checkpoint(self.f.checkpoint, labels=[dict(snv_min_af=0.07), dict(snv_min_af=None)])
+        with self.assertRaisesRegex(SystemExit, "no single snv_min_af"):
+            self.f.graph("SNV")
+        self.assertEqual(self.f.graph("SNV", min_af=0.07)[0]["min_af"], 0.07)
         report = self.f.predictions["SNV"].with_name("sample.tensors.SNV.metrics.json")
-        report.write_text(json.dumps(dict(threshold=0.5, labels=dict(snv_min_af=0.06, indel_min_af=None))))
-        stats = self.f.graph("SNV")[0]
-        self.assertEqual((stats["min_af"], stats["min_af_source"]), (0.06, ".metrics.json labels snv_min_af"))
+        report.write_text(json.dumps(dict(threshold=0.5)))  # no checkpoint to read
+        with self.assertRaisesRegex(SystemExit, "no --checkpoint"):
+            self.f.graph("SNV")
+        self.assertIsNone(self.f.graph("SNV", threshold=0.5, min_af=0.07)[0]["checkpoint"])
 
     def test_predictions_must_match_the_summaries(self):
         lines = gzip.open(self.f.predictions["SNV"], "rt").read().splitlines()
@@ -365,6 +389,15 @@ class VcfevalTest(unittest.TestCase):
             with self.assertRaisesRegex(SystemExit, "is not the PoN-tagged"):
                 vcfeval.evaluate(vcfeval.parse_args(["--calls", str(calls), "--pon-vcf", str(stale), "--truth", str(truth),
                                                      "--sdf", str(sdf), "--rtg", RTG, "--output", str(Path(tmp) / "e3")]))
+            plain = vcfeval.evaluate(vcfeval.parse_args([   # no PoN (INDELs for now): the raw calls only
+                "--calls", str(calls), "--truth", str(truth), "--sdf", str(sdf), "--rtg", RTG, "--rtg-mem", "1g",
+                "--threads", "1", "--output", str(Path(tmp) / "eval5")]))
+            self.assertEqual(("pon" in plain, plain["pon_vcf"], plain["truth_pon_tags"]), (False, None, None))
+            self.assertEqual(plain["raw"]["at_threshold"], raw["at_threshold"])
+            text = (Path(tmp) / "eval5" / "report.txt").read_text()
+            self.assertNotIn("\npon ", text)
+            self.assertNotIn("PoN tags", text)
+            self.assertIn("with them as false calls: raw 0.500\n", text + "\n")  # 1 TP, 1 unplaced
             with self.assertRaisesRegex(SystemExit, "no PASS INDEL truth"):
                 vcfeval.evaluate(vcfeval.parse_args(["--calls", str(calls), "--pon-vcf", report["pon_vcf"], "--kind", "INDEL",
                                                      "--truth", str(Path(tmp) / "eval" / "truth.SNV.vcf.gz"), "--sdf", str(sdf),
