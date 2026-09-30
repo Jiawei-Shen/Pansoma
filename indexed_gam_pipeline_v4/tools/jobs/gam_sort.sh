@@ -3,8 +3,9 @@
 # check the pipeline needs (GAI readable, first records in node order); both are published only after the check.
 # With VERIFY=1 it also compares the vg stats -a counts of OUTPUT with the input (reads both GAMs once more).
 # Usage: sbatch -J NAME -o LOG gam_sort.sh GAM [OUTPUT]   (OUTPUT default: GAM without .gam + .sorted.gam)
-# Environment: PANSOMA_VG (vg; default vg on PATH; scripts/use_vg.sh sets it), GAMSORT_TMP (vg gamsort's temporary
-# files; default /scratch/jshen/tmp_gamsort), VERIFY.
+# Environment: PANSOMA_VG (vg; default vg on PATH; scripts/use_vg.sh sets it), GAMSORT_TMP (node-local directory for
+# vg gamsort's temporary files, about 2x the GAM free; default /tmp), VERIFY. The nodes' /tmp are local NVMe disks and
+# Slurm does not track them: give concurrent sorts different nodes (sbatch -w NODE).
 # Runs the package it lives in (<package>/tools/jobs/): the checkout or pipeline_code/.
 #SBATCH -p general
 #SBATCH -c 10
@@ -20,7 +21,7 @@ echo "package: $PKG"
 [ $# -ge 1 ] && [ $# -le 2 ] || { sed -n 5p "$S"; exit 2; }
 abs() { case $1 in /*) echo "$1" ;; *) echo "$PWD/$1" ;; esac; }  # the job runs from the package's parent
 GAM=$(abs "$1"); OUTPUT=$(abs "${2:-${GAM%.gam}.sorted.gam}")
-TMP=${GAMSORT_TMP:-/scratch/jshen/tmp_gamsort}
+TMP=${GAMSORT_TMP:-/tmp}
 T=$(( ${SLURM_CPUS_PER_TASK:-4} > 2 ? ${SLURM_CPUS_PER_TASK:-4} - 2 : 1 ))  # gamsort workers; the rest for its I/O
 PY=/wanglab/jshen/anaconda3/bin/python
 echo "GAM $GAM -> $OUTPUT; tmp $TMP; vg $(command -v "${PANSOMA_VG:-vg}"): $("${PANSOMA_VG:-vg}" version | head -1)"

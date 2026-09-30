@@ -417,7 +417,7 @@ $PY -m $P.tools.graph_prep audit --graph-index DB --gfa G.gfa --chr-index TSV --
 # every graph step above (graph index included) as one Slurm job; steps whose output exists are skipped
 sbatch -J graph_prep -o LOG $P/tools/jobs/graph_prep.sh GBZ OUTDIR [FASTA]
 # sorted GAM + GAI (once per GAM)
-$PY -m $P.tools.gam_prep sort --gam IN.gam --output IN.sorted.gam [--threads 8] [--tmp-dir DIR] [--vg VG]
+$PY -m $P.tools.gam_prep sort --gam IN.gam --output IN.sorted.gam [--threads 8] [--tmp-dir /tmp] [--vg VG]
 $PY -m $P.tools.gam_prep check --gam IN.sorted.gam [--index GAI] [--input IN.gam] [--threads 8]
 sbatch -J gam_sort -o LOG $P/tools/jobs/gam_sort.sh GAM [OUTPUT]      # VERIFY=1: also check --input
 # labels of one merged set as a Slurm job
@@ -450,9 +450,12 @@ $PY -m $P.tools.compare_runs A B [--mask DOTTED.KEY ...] [--report FILE]
   `distinct_path_count` with the number of GFA W/P lines visiting the node; it writes its JSON only
   when every node agrees (else `<output>.failed`, and it fails). `gfa`, `components` and `gam_prep`
   run vg from `--vg`, else `$PANSOMA_VG` (`scripts/use_vg.sh`: vg 1.77), else `vg` on PATH.
-* **Sorted GAM.** `gam_prep sort` runs `vg gamsort -t N -p -i` (temporary files in `--tmp-dir`, else
-  `$TMPDIR`) into `<output>.tmp` and `<output>.gai.tmp`, checks them and then renames them; it never
-  overwrites. `check` opens the GAI with `IndexedGam` (the `'GAI!'` magic, format number 1, offsets
+* **Sorted GAM.** `gam_prep sort` runs `vg gamsort -t N -p -i` into `<output>.tmp` and
+  `<output>.gai.tmp`, checks them and then renames them; it never overwrites. gamsort's temporary
+  chunks go to a new directory under `--tmp-dir` (default `/tmp`, a node-local NVMe disk here: its
+  k-way merge does many small random reads, which crawl on BeeGFS). It first checks that
+  `--min-free` (2) times the GAM is free there and removes the directory when it ends, fails or gets
+  SIGTERM (Slurm does not clean a node's `/tmp`). `check` opens the GAI with `IndexedGam` (the `'GAI!'` magic, format number 1, offsets
   inside the GAM) and reads the first 10,000 records: GAM records whose smallest node IDs never
   decrease. `--input` also compares `vg stats -a` of the two GAMs: alignments, primary, secondary,
   aligned, perfect and matched bases must be equal.
@@ -476,8 +479,9 @@ $PY -m $P.tools.compare_runs A B [--mask DOTTED.KEY ...] [--report FILE]
     exists is skipped (ref-path-check always runs), so a resubmission resumes; the `.tmp` of a failed
     scan or components step stops it. 16 CPUs, `--mem=96G`, 2 days.
   * `gam_sort.sh GAM [OUTPUT]` (OUTPUT default `<GAM without .gam>.sorted.gam`): `gam_prep sort` with
-    `$SLURM_CPUS_PER_TASK − 2` gamsort threads and `$GAMSORT_TMP` (default `/scratch/jshen/tmp_gamsort`),
-    with `VERIFY=1` also `gam_prep check --input`. 10 CPUs, `--mem=64G`, 6 days.
+    `$SLURM_CPUS_PER_TASK − 2` gamsort threads and `$GAMSORT_TMP` (default `/tmp`), with `VERIFY=1`
+    also `gam_prep check --input`. 10 CPUs, `--mem=64G`, 6 days. Slurm does not track the nodes' local
+    disks (`TmpDisk=0`), so concurrent sorts get different nodes (`sbatch -w NODE`).
   * `relabel.sh`: section 6; the reference path is `$REFERENCE_PATH`, else the one the set's current
     labels used (`reference_path` of `TENSORS/SNV/labels.manifest.json`); 1 CPU, `--mem=19G` (label
     peak 15.7 GiB, COLO829T), 6 h.

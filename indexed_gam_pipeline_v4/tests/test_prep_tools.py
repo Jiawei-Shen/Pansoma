@@ -64,6 +64,13 @@ class GamCheckTest(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "mismatched GAM/index"):
                 gam_prep.check(gam, index=str(big) + ".gai")
 
+    def test_sort_refuses_a_temporary_disk_without_room(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            gam, _ = tiny_gam(tmp)
+            with self.assertRaisesRegex(ValueError, "GB free, vg gamsort needs"):  # before vg runs
+                gam_prep.sort(gam, Path(tmp) / "out.sorted.gam", vg="/nonexistent/vg", tmp_dir=tmp, min_free=1e15)
+            self.assertFalse(list(Path(tmp).glob("out.sorted.gam*")))
+
     def test_stats_counts_are_parsed(self):
         text = "Total alignments: 12\nTotal primary: 10\nTotal secondary: 2\nTotal aligned: 11\nTotal perfect: 3\n" \
                "Total gapless (softclips allowed): 9\nMatches: 1500 bp\n"
@@ -111,6 +118,7 @@ class VgToolsTest(unittest.TestCase):
             self.assertTrue(result["check"]["first_records_in_node_order"])
             self.assertTrue(Path(str(tmp / "out.sorted.gam") + ".gai").exists())
             self.assertFalse(any(p.name.endswith(".tmp") for p in tmp.iterdir()))
+            self.assertEqual(list((tmp / "sort_tmp").iterdir()), [])  # gamsort's temporary directory is gone
             checked = gam_prep.check(tmp / "out.sorted.gam", unsorted=unsorted)
             self.assertEqual(checked["counts"]["Total alignments"], len(rows))
             with self.assertRaisesRegex(ValueError, "Output exists"):

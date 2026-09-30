@@ -3,8 +3,11 @@
     python -m indexed_gam_pipeline_v4.tools.gam_prep sort --gam IN.gam --output IN.sorted.gam [--threads 8] [--tmp-dir DIR] [--vg VG]
     python -m indexed_gam_pipeline_v4.tools.gam_prep check --gam IN.sorted.gam [--index GAI] [--input IN.gam] [--threads 8] [--vg VG]
 
-sort runs `vg gamsort -i` (vg: --vg, else $PANSOMA_VG, else vg on PATH; its temporary files go to --tmp-dir, else
-$TMPDIR), checks the result and publishes <output> and <output>.gai atomically. check opens the GAI with the
+sort runs `vg gamsort -i` (vg: --vg, else $PANSOMA_VG, else vg on PATH), checks the result and publishes <output> and
+<output>.gai atomically. gamsort's temporary chunks go to a directory of their own under --tmp-dir (default /tmp):
+use a node-local disk, since the k-way merge's many small random reads crawl on a network file system; it needs
+about --min-free (2) times the GAM free there, checked first, and it is removed when sort ends, fails or gets SIGTERM
+(Slurm does not clean a node's /tmp; run one sort per node). check opens the GAI with the
 pipeline's reader (the 'GAI!' magic, format number 1, offsets inside the GAM) and reads the first records to see
 that they are GAM records in node order; with --input it also compares `vg stats -a` of the sorted GAM with the
 unsorted input (the numbers of alignments, primary, secondary, aligned and perfect records and of matched bases,
@@ -14,7 +17,11 @@ import argparse
 import json
 import os
 from pathlib import Path
+import shutil
+import signal
 import subprocess
+import sys
+import tempfile
 import time
 
 import pysam
@@ -81,21 +88,29 @@ def check(gam, index=None, unsorted=None, vg=None, threads=1, records=10000):
     return report
 
 
-def sort(gam, output, vg=None, threads=1, tmp_dir=None):
-    """vg gamsort -i into <output>.tmp and <output>.gai.tmp, check, then publish (the GAI first, the GAM last)."""
+def sort(gam, output, vg=None, threads=1, tmp_dir="/tmp", min_free=2.0):
+    """vg gamsort -i into <output>.tmp and <output>.gai.tmp, check, then publish (the GAI first, the GAM last).
+    gamsort's temporary files: a new directory under `tmp_dir` (min_free x the GAM free there), always removed."""
     vg, output, started = vg_command(vg), Path(output), time.perf_counter()
     index = Path(str(output) + ".gai")
     for path in (output, index):
         if path.exists():
             raise ValueError(f"Output exists: {path}")
     work, work_index = output.with_name(output.name + ".tmp"), index.with_name(index.name + ".tmp")
-    env = dict(os.environ)
-    if tmp_dir:
-        Path(tmp_dir).mkdir(parents=True, exist_ok=True)
-        env["TMPDIR"] = str(tmp_dir)
-    with work.open("wb") as stream:
-        subprocess.run([vg, "gamsort", "-t", str(threads), "-p", "-i", str(work_index), str(gam)], stdout=stream,
-                       check=True, env=env)
+    base = Path(tmp_dir)
+    base.mkdir(parents=True, exist_ok=True)
+    need, free = min_free * Path(gam).stat().st_size, shutil.disk_usage(base).free
+    if free < need:
+        raise ValueError(f"{base}: {free / 1e9:.0f} GB free, vg gamsort needs about {min_free:g} x the GAM "
+                         f"({need / 1e9:.0f} GB)")
+    previous = signal.signal(signal.SIGTERM, lambda *_: sys.exit(143))  # scancel / time limit: clean up first
+    try:
+        with tempfile.TemporaryDirectory(prefix="gamsort-", dir=base) as scratch:
+            with work.open("wb") as stream:
+                subprocess.run([vg, "gamsort", "-t", str(threads), "-p", "-i", str(work_index), str(gam)],
+                               stdout=stream, check=True, env=dict(os.environ, TMPDIR=scratch))
+    finally:
+        signal.signal(signal.SIGTERM, previous)
     report = check(work, work_index)
     work_index.rename(index)
     work.rename(output)
@@ -111,7 +126,8 @@ def main(argv=None):
     p.add_argument("--gam", required=True, help="unsorted GAM (giraffe output)")
     p.add_argument("--output", required=True, help="new sorted GAM; its GAI is <output>.gai")
     p.add_argument("--threads", type=int, default=1)
-    p.add_argument("--tmp-dir", help="vg gamsort's temporary files (default: $TMPDIR)")
+    p.add_argument("--tmp-dir", default="/tmp", help="node-local directory for vg gamsort's temporary files")
+    p.add_argument("--min-free", type=float, default=2.0, help="free space needed there, in GAM sizes")
     p.add_argument("--vg", help="vg executable (default: $PANSOMA_VG, else vg on PATH)")
     p = commands.add_parser("check", help="GAI readable by the pipeline, records in node order; --input: same counts")
     p.add_argument("--gam", required=True)
@@ -121,7 +137,7 @@ def main(argv=None):
     p.add_argument("--vg", help="vg executable (default: $PANSOMA_VG, else vg on PATH)")
     args = parser.parse_args(argv)
     if args.command == "sort":
-        result = sort(args.gam, args.output, args.vg, args.threads, args.tmp_dir)
+        result = sort(args.gam, args.output, args.vg, args.threads, args.tmp_dir, args.min_free)
     else:
         result = check(args.gam, args.index, args.input, args.vg, args.threads)
     print(json.dumps(result, indent=2))
