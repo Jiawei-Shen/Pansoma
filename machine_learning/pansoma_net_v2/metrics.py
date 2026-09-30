@@ -206,3 +206,28 @@ def truth_report(truth, matches, labels, probs, threshold, other=()):
     t, counts = best_truth_threshold(len(truth), own, found_other, negatives)
     out["best"] = dict(threshold=t, **counts)
     return out
+
+
+def decision_rules(labels, probs, thresholds, truth=None):
+    """The somatic calls of several decision rules, each per tensor and against the truth.
+    thresholds: {rule: threshold}; the rule "argmax" takes the most probable class, the others call(probs, threshold)
+    (a rule with threshold None is skipped). truth: (truth keys, per-tensor matched keys, other-kind keys) for
+    truth_report, or None. Returns {rule: {threshold, per_tensor (somatic P/R/F1/support, calls), confusion, truth}}."""
+    out, keep = {}, labels >= 0
+    for rule, threshold in thresholds.items():
+        if rule != "argmax" and threshold is None:
+            continue
+        pred = probs.argmax(1) if rule == "argmax" else call(probs, threshold)
+        cm = confusion(labels[keep].astype(np.int64), pred[keep])
+        entry = dict(threshold=None if rule == "argmax" else float(threshold),
+                     per_tensor=dict(per_class(cm)["somatic"], calls=int((pred[keep] == SOMATIC).sum())),
+                     confusion=cm.tolist())
+        if truth is not None:
+            keys, matches, other = truth
+            called = probs.copy()
+            called[:, SOMATIC] = (pred == SOMATIC).astype(probs.dtype)  # the rule's calls as scores 0/1
+            tr = truth_report(keys, matches, labels, called, 0.5, other)
+            counts = {k: v for k, v in tr["at_threshold"].items() if k != "threshold"}
+            entry["truth"] = dict(truth_alleles=tr["truth_alleles"], ceiling=tr["ceiling"], **counts)
+        out[rule] = entry
+    return out

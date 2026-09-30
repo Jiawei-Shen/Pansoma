@@ -93,9 +93,16 @@ def main(argv=None):
         report = metrics.report(labels, probs, threshold)
         on = {index.meta["chroms"][c] for c in set(index.arrays["chrom"][positions].tolist())}
         truth = somatic_truth(index, chroms=on)
+        truth_args = None
         if truth is not None:  # every truth allele of the chromosomes counts once; see metrics.truth_report
-            report["truth"] = metrics.truth_report(set(truth), [set(index.truth_of(p).tolist()) for p in positions],
-                                                   labels, probs, threshold, other=somatic_truth(index, on, True))
+            truth_args = (set(truth), [set(index.truth_of(p).tolist()) for p in positions], somatic_truth(index, on, True))
+            report["truth"] = metrics.truth_report(truth_args[0], truth_args[1], labels, probs, threshold,
+                                                   other=truth_args[2])
+        # three decision rules: the threshold t above, argmax, and the checkpoint's validation recall-0.9 threshold
+        r09 = ((checkpoint.get("val") or {}).get("somatic_at_recall") or {}).get("0.9")
+        report["rules"] = metrics.decision_rules(labels, probs, {"threshold_t": threshold, "argmax": None,
+                                                                 "val_recall_0.9": r09["threshold"] if r09 else None},
+                                                 truth_args)
         in_test = labels >= 0
         off = a["off_reference"][positions]
         report.update(all_tensors=int(len(labels)), left_out=int((~in_test).sum()),
@@ -107,6 +114,14 @@ def main(argv=None):
         (out / f"{name}.metrics.json").write_text(json.dumps(report, indent=2) + "\n")
         print(f"{name}: {len(labels):,} tensors, {report['tensors']:,} in the test "
               f"({report['off_reference_in_test']:,} off-reference) | {describe(report)}", flush=True)
+        for rule, r in report["rules"].items():
+            t, tr = r["per_tensor"], r.get("truth")
+            at = "" if r["threshold"] is None else f"p>={r['threshold']:.3f}"
+            line = f"  {rule:<15} {at:<9} per tensor P {t['precision']:.3f} R {t['recall']:.3f} F1 {t['f1']:.3f} ({t['calls']:,} calls)"
+            if tr:
+                line += (f" | vs truth P {tr['precision']:.3f} R {tr['recall']:.3f} F1 {tr['f1']:.3f} "
+                         f"({tr['tp']} of {tr['truth_alleles']}, {tr['fp']:,} false calls)")
+            print(line, flush=True)
 
 
 if __name__ == "__main__":

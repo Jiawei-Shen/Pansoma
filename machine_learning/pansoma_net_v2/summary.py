@@ -70,6 +70,12 @@ def show(d):
               f"off-reference), t {t['threshold']:.3f}")
         print(f"    per tensor:    somatic AP {t['somatic_ap']:.3f} F1 {s['f1']:.3f} P {s['precision']:.3f} "
               f"R {s['recall']:.3f} (support {s['support']:,}) | germline F1 {t['argmax']['germline']['f1']:.3f}")
+        for rule, r in (t.get("rules") or {}).items():  # threshold t, argmax, validation recall 0.9
+            pt, tr = r["per_tensor"], r.get("truth")
+            at_ = "" if r["threshold"] is None else f"p>={r['threshold']:.3f}"
+            print(f"    rule {rule:<15} {at_:<9} per tensor P {pt['precision']:.3f} R {pt['recall']:.3f} F1 {pt['f1']:.3f}"
+                  + (f" | vs truth P {tr['precision']:.3f} R {tr['recall']:.3f} F1 {tr['f1']:.3f} ({tr['tp']:,} of "
+                     f"{tr['truth_alleles']:,}, {tr['fp']:,} false calls)" if tr else ""))
         at = t.get("somatic_at_recall") or {}
         if at:
             print("    at a recall:   " + " | ".join(f"R {r}: P {v['precision']:.3f} (F1 {v['f1']:.3f}, p>={v['threshold']:.3f})"
