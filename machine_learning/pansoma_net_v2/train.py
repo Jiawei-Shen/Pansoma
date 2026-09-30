@@ -93,6 +93,9 @@ def parse_args(argv=None):
                    help="DataLoader workers for the statistics and, with --random-reads, training (random reads "
                         "from BeeGFS are latency-bound: more workers read faster)")
     p.add_argument("--val-workers", type=int, default=8)
+    p.add_argument("--micro-batches", type=int, default=1,
+                   help="forward/backward each batch in this many parts (gradient accumulation: the same update as the "
+                        "whole batch, loss normalized over the whole batch, with the GPU memory of one part)")
     p.add_argument("--prefetch-factor", type=int, default=2, help="batches in flight per worker")
     p.add_argument("--read-threads", type=int, default=16,
                    help="training: threads reading chunks of consecutive shard rows (chunks.ChunkLoader)")
@@ -474,20 +477,33 @@ def main(argv=None):
         t0, loss_sum, seen, correct = time.time(), 0.0, 0, 0
         for step, (x, blocks, scalars, y) in enumerate(train_loader):
             x, blocks, scalars, y = (t.to(run.device, non_blocking=True) for t in (x, blocks, scalars, y))
-            with torch.autocast(run.device.type, dtype=torch.bfloat16, enabled=amp):
-                logits = net(x, blocks, scalars)
-            if importance:  # a sampled low-AF non tensor stands for 1 / non_fraction of them
-                iw = torch.where((y == 0) & (scalars[:, AF] < args.keep_non_af), 1.0 / args.non_fraction, 1.0)
-                loss = (per_sample(logits.float(), y) * iw).sum() / (weights[y] * iw).sum()
-            else:
-                loss = criterion(logits.float(), y)
             optimizer.zero_grad(set_to_none=True)
-            loss.backward()
+            if args.micro_batches == 1:
+                with torch.autocast(run.device.type, dtype=torch.bfloat16, enabled=amp):
+                    logits = net(x, blocks, scalars)
+                if importance:  # a sampled low-AF non tensor stands for 1 / non_fraction of them
+                    iw = torch.where((y == 0) & (scalars[:, AF] < args.keep_non_af), 1.0 / args.non_fraction, 1.0)
+                    loss = (per_sample(logits.float(), y) * iw).sum() / (weights[y] * iw).sum()
+                else:
+                    loss = criterion(logits.float(), y)
+                loss.backward()
+                correct += int((logits.argmax(1) == y).sum())
+            else:  # the batch's loss, normalized over the whole batch, from parts: the same gradient, less memory
+                iw = (torch.where((y == 0) & (scalars[:, AF] < args.keep_non_af), 1.0 / args.non_fraction, 1.0)
+                      if importance else torch.ones_like(y, dtype=torch.float32))
+                denom = (weights[y] * iw).sum()
+                loss = torch.zeros((), device=run.device)
+                for part in torch.arange(len(y), device=run.device).chunk(args.micro_batches):
+                    with torch.autocast(run.device.type, dtype=torch.bfloat16, enabled=amp):
+                        logits = net(x[part], blocks[part], scalars[part])
+                    part_loss = (per_sample(logits.float(), y[part]) * iw[part]).sum() / denom
+                    part_loss.backward()
+                    loss += part_loss.detach()
+                    correct += int((logits.argmax(1) == y[part]).sum())
             optimizer.step()
             scheduler.step()
             loss_sum += loss.item() * y.numel()
             seen += y.numel()
-            correct += int((logits.argmax(1) == y).sum())
             if run.main and (step + 1) % 200 == 0:
                 print(f"epoch {epoch + 1} step {step + 1}/{steps_per_epoch} loss {loss_sum / seen:.4f} "
                       f"lr {scheduler.get_last_lr()[0]:.2e} {seen * run.world / (time.time() - t0):.0f} tensors/s",

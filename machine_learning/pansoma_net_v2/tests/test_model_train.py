@@ -84,6 +84,25 @@ class ModelTest(unittest.TestCase):
         self.assertTrue(torch.allclose(criterion(logits, y), criterion(logits[keep], y[keep])))
 
 
+class MicroBatchTest(unittest.TestCase):
+    def test_micro_batches_give_the_whole_batch_update(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            root = tmp / "sample" / "tensors"
+            make_tensor_set(root, SPEC, shard_size=8)
+            args = ["--tensors", str(root), "--epochs", "1", "--kinds", "SNV", "--seed", "3", "--drop-path", "0"] + SMALL_ARGS
+            args[args.index("--batch-size") + 1] = "8"
+            train.main(args + ["--output", str(tmp / "one")])
+            train.main(args + ["--output", str(tmp / "two"), "--micro-batches", "2"])
+            a = torch.load(tmp / "one" / "last.pth", weights_only=False)["model_state_dict"]
+            b = torch.load(tmp / "two" / "last.pth", weights_only=False)["model_state_dict"]
+            for k in a:
+                self.assertTrue(torch.allclose(a[k].float(), b[k].float(), atol=1e-5, rtol=1e-4), k)
+            rows = [json.loads(line) for line in (tmp / "one" / "metrics.jsonl").read_text().splitlines()]
+            rows2 = [json.loads(line) for line in (tmp / "two" / "metrics.jsonl").read_text().splitlines()]
+            self.assertAlmostEqual(rows[0]["train_loss"], rows2[0]["train_loss"], places=5)
+
+
 class LoaderTest(unittest.TestCase):
     def test_forkserver_workers_read_the_same_tensors(self):
         with tempfile.TemporaryDirectory() as tmp:
