@@ -1,0 +1,12 @@
+== rtg tp (PASS at predict's threshold, in BED): 92
+  context {'hp>=5': 90, 'other': 2}
+  AF {'>=0.6': 34, '0.3-0.6': 52, '0.15-0.3': 6}
+  context x AF [(('hp>=5', '0.15-0.3'), 6), (('hp>=5', '0.3-0.6'), 51), (('hp>=5', '>=0.6'), 33), (('other', '0.3-0.6'), 1), (('other', '>=0.6'), 1)]
+  label reason [('representative_allele_is_somatic_truth', 92)]
+== rtg fp (PASS at predict's threshold, in BED): 731
+  context {'other': 26, 'hp>=5': 705}
+  AF {'>=0.6': 333, '0.3-0.6': 350, '0.15-0.3': 40, '<0.15': 8}
+  context x AF [(('hp>=5', '0.15-0.3'), 38), (('hp>=5', '0.3-0.6'), 337), (('hp>=5', '<0.15'), 8), (('hp>=5', '>=0.6'), 322), (('other', '0.15-0.3'), 2), (('other', '0.3-0.6'), 13), (('other', '>=0.6'), 11)]
+  label reason [('representative_allele_is_germline_truth', 672), ('residual_partial_germline_truth', 35), ('near_truth_allele_mismatch', 21), ('confident_no_truth_allele', 1), ('representative_allele_is_germline_truth_gap_filtered', 1), ('allele_partial_germline_truth', 1)]
+== unplaced PASS label reasons [('off_reference_no_truth_match', 268), ('residual_partial_somatic_truth', 31), ('outside_confident_region', 25)]
+== training somatic INDEL tensors by reason (chr2-22, current labels) [('representative_allele_is_somatic_truth', 3307), ('residual_partial_somatic_truth', 1518), ('allele_partial_somatic_truth', 31)]

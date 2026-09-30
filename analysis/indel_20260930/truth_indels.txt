@@ -1,0 +1,10 @@
+chr1 INDEL truths PASS in BED: 586
+status Counter({'no_candidate': 282, 'tensor_representative': 236, 'filtered': 65, 'tensor_non_representative_allele': 3})
+context Counter({'homopolymer>=5': 431, 'other': 104, 'STR>=3': 51})
+size Counter({'1bp': 320, '2-5bp': 152, '>5bp': 114})
+in d9 graph Counter({False: 429, True: 157})  composite Counter({False: 332, True: 254})
+PoN Counter({(True, False): 456, (True, True): 67, (False, False): 57, (False, True): 6})
+status x in_graph [(('filtered', False), 40), (('filtered', True), 25), (('no_candidate', False), 150), (('no_candidate', True), 132), (('tensor_non_representative_allele', False), 3), (('tensor_representative', False), 236)]
+status x context [(('filtered', 'hp'), 54), (('filtered', 'other'), 4), (('filtered', 'str'), 7), (('no_candidate', 'hp'), 184), (('no_candidate', 'other'), 61), (('no_candidate', 'str'), 37), (('tensor_non_representative_allele', 'hp'), 2), (('tensor_non_representative_allele', 'str'), 1), (('tensor_representative', 'hp'), 191), (('tensor_representative', 'other'), 39), (('tensor_representative', 'str'), 6)]
+status x composite [(('filtered', False), 23), (('filtered', True), 42), (('no_candidate', False), 87), (('no_candidate', True), 195), (('tensor_non_representative_allele', False), 1), (('tensor_non_representative_allele', True), 2), (('tensor_representative', False), 221), (('tensor_representative', True), 15)]
+in_graph x composite [((False, False), 237), ((False, True), 192), ((True, False), 95), ((True, True), 62)]

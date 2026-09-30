@@ -1,0 +1,587 @@
+pos	kind	len	status	detail	unit	copies	hp	str_	composite	in_graph	pon
+978957	DEL	-3	tensor_representative		GCC	1	False	False	False	False	
+4855445	INS	1	filtered	min_variants	A	18	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+5023298	DEL	-47	tensor_representative		GGAGGTTGCAGTGAGCTGAGATGACACCACTGCACTCCAGCCTGGGT	1	False	False	False	False	
+5175534	DEL	-5	no_candidate		T	26	True	False	True	False	PoN4_CoLoRSdb
+5837950	INS	1	no_candidate		A	13	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+6767953	INS	3	no_candidate		T	23	True	False	True	False	PoN4_CoLoRSdb
+7284177	DEL	-6	no_candidate		TTA	13	False	True	True	True	PoN4_CoLoRSdb
+8007481	INS	6	no_candidate		TCTCTA	0	False	False	True	False	PoN4_CoLoRSdb
+8216405	INS	1	filtered	min_variants	T	23	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+8228965	INS	8	no_candidate		GAGG	13	False	True	True	False	PoN4_CoLoRSdb
+8559280	INS	14	filtered	min_variants	A	24	True	False	True	False	PoN4_CoLoRSdb
+8890333	INS	1	no_candidate		A	19	True	False	True	True	PoN4_CoLoRSdb
+8930729	INS	15	no_candidate		T	16	True	False	True	True	PoN4_CoLoRSdb
+11619716	DEL	-2	no_candidate		T	23	True	False	True	True	PoN4_CoLoRSdb
+11868119	DEL	-1	tensor_representative		T	22	True	False	False	False	PoN4_CoLoRSdb
+11898043	INS	18	no_candidate		AAAAAAAGAAAAGAAAAG	0	False	False	True	False	PoN4_CoLoRSdb
+12854937	INS	2	filtered	min_af	T	15	True	False	True	False	PoN4_CoLoRSdb
+13389005	DEL	-3	no_candidate		T	19	True	False	True	False	PoN4_CoLoRSdb
+15398784	INS	2	no_candidate		A	14	True	False	True	False	PoN4_CoLoRSdb
+15544151	INS	32	filtered	min_af	AC	17	False	True	True	False	PoN3_1000G,PoN4_CoLoRSdb
+16705437	INS	8	filtered	min_variants	T	19	True	False	True	False	PoN4_CoLoRSdb
+17049647	DEL	-3	tensor_representative		T	30	True	False	True	False	PoN4_CoLoRSdb
+18208376	INS	6	no_candidate		AT	10	False	True	True	True	PoN1_gnomAD,PoN4_CoLoRSdb
+18232209	INS	12	no_candidate		T	8	True	False	True	False	PoN2_dbSNP,PoN3_1000G,PoN4_CoLoRSdb
+18258604	INS	1	tensor_representative		A	2	False	False	False	False	
+18502519	DEL	-1	no_candidate		A	13	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+20549949	INS	1	no_candidate		A	13	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+21496316	INS	1	tensor_representative		T	6	True	False	False	False	
+21780738	INS	1	no_candidate		T	22	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+22233367	DEL	-13	tensor_representative		TCTGGGAGGCATC	1	False	False	False	False	
+23017177	DEL	-8	no_candidate		TA	31	False	True	True	True	PoN4_CoLoRSdb
+23942681	INS	2	no_candidate		AG	0	False	False	True	False	PoN4_CoLoRSdb
+24564513	INS	2	no_candidate		A	19	True	False	True	True	PoN4_CoLoRSdb
+24602569	INS	1	no_candidate		A	23	True	False	False	False	PoN1_gnomAD,PoN4_CoLoRSdb
+24738267	INS	24	no_candidate		AT	8	False	True	True	False	PoN1_gnomAD,PoN4_CoLoRSdb
+26272642	INS	1	no_candidate		G	0	False	False	False	False	PoN4_CoLoRSdb
+27003327	INS	2	no_candidate		T	20	True	False	True	True	PoN4_CoLoRSdb
+28347589	INS	1	no_candidate		T	19	True	False	False	True	PoN4_CoLoRSdb
+28664185	DEL	-1	no_candidate		T	19	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+28723106	INS	3	no_candidate		A	25	True	False	True	False	PoN4_CoLoRSdb
+30100364	INS	1	tensor_representative		G	8	True	False	False	False	PoN4_CoLoRSdb
+30115910	INS	1	no_candidate		T	23	True	False	False	True	PoN4_CoLoRSdb
+30242555	INS	1	tensor_representative		A	13	True	False	False	False	PoN2_dbSNP,PoN4_CoLoRSdb
+31177641	INS	3	no_candidate		A	14	True	False	True	False	PoN2_dbSNP,PoN4_CoLoRSdb
+31291288	INS	11	no_candidate		A	12	True	False	True	False	PoN2_dbSNP,PoN4_CoLoRSdb
+32000771	DEL	-1	tensor_representative		T	17	True	False	False	False	PoN2_dbSNP,PoN4_CoLoRSdb
+32405697	INS	1	no_candidate		T	16	True	False	False	True	PoN4_CoLoRSdb
+33751785	INS	1	tensor_representative		T	13	True	False	False	False	PoN4_CoLoRSdb
+34184834	INS	1	tensor_representative		T	10	True	False	False	False	PoN4_CoLoRSdb
+34487152	DEL	-16	no_candidate		AC	23	False	True	True	True	PoN2_dbSNP,PoN4_CoLoRSdb
+34802227	INS	60	no_candidate		GGTTT	44	False	True	True	False	PoN4_CoLoRSdb
+35198816	INS	1	no_candidate		T	39	True	False	False	True	PoN4_CoLoRSdb
+35261032	DEL	-2	tensor_representative		G	11	True	False	True	False	PoN4_CoLoRSdb
+36580278	INS	2	no_candidate		AC	18	False	True	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+37868312	INS	2	tensor_non_representative_allele		A	21	True	False	True	False	PoN4_CoLoRSdb
+38522283	INS	1	no_candidate		T	22	True	False	False	True	PoN4_CoLoRSdb
+39065136	INS	1	tensor_representative		A	12	True	False	False	False	PoN4_CoLoRSdb
+40113891	INS	5	no_candidate		T	26	True	False	True	False	PoN4_CoLoRSdb
+41058378	INS	7	no_candidate		T	22	True	False	True	True	PoN4_CoLoRSdb
+41835250	INS	1	tensor_representative		T	7	True	False	False	False	
+42620582	INS	2	filtered	min_variants	A	15	True	False	True	False	PoN4_CoLoRSdb
+42935828	DEL	-1	tensor_representative		A	1	False	False	False	False	PoN4_CoLoRSdb
+43840030	INS	1	tensor_representative		T	16	True	False	False	False	PoN4_CoLoRSdb
+44065405	DEL	-1	tensor_representative		T	22	True	False	False	False	PoN4_CoLoRSdb
+44108660	INS	5	no_candidate		T	24	True	False	True	True	PoN4_CoLoRSdb
+46852633	INS	1	no_candidate		A	23	True	False	False	True	PoN4_CoLoRSdb
+48267752	INS	5	no_candidate		T	25	True	False	True	True	PoN4_CoLoRSdb
+49665929	INS	1	tensor_representative		T	12	True	False	False	False	PoN4_CoLoRSdb
+50002359	DEL	-1	tensor_representative		T	28	True	False	False	False	PoN2_dbSNP,PoN4_CoLoRSdb
+50382613	INS	2	no_candidate		T	15	True	False	True	True	PoN4_CoLoRSdb
+50388379	DEL	-1	no_candidate		T	17	True	False	False	True	PoN4_CoLoRSdb
+50457865	INS	1	no_candidate		A	19	True	False	False	True	PoN4_CoLoRSdb
+50931888	INS	18	no_candidate		AAT	13	False	True	True	False	PoN4_CoLoRSdb
+51040005	INS	1	tensor_representative		A	10	True	False	False	False	
+51546696	INS	1	no_candidate		A	12	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+51971010	INS	1	tensor_representative		A	23	True	False	False	False	PoN4_CoLoRSdb
+53516802	INS	1	tensor_representative		A	11	True	False	False	False	PoN4_CoLoRSdb
+55285013	INS	1	no_candidate		T	21	True	False	False	True	PoN4_CoLoRSdb
+55420073	INS	1	no_candidate		T	21	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+55796112	INS	1	no_candidate		A	8	True	False	True	False	PoN4_CoLoRSdb
+56757694	INS	3	no_candidate		T	3	False	False	True	False	PoN4_CoLoRSdb
+57173808	INS	1	tensor_representative		T	10	True	False	False	False	PoN4_CoLoRSdb
+57980912	INS	2	tensor_representative		AC	9	False	True	False	False	PoN4_CoLoRSdb
+60163263	DEL	-1	no_candidate		T	15	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+60236811	INS	1	tensor_representative		T	10	True	False	False	False	PoN4_CoLoRSdb
+60478726	INS	1	tensor_representative		T	20	True	False	False	False	PoN4_CoLoRSdb
+60649512	INS	2	tensor_representative		TA	11	False	True	False	False	PoN4_CoLoRSdb
+60881813	DEL	-20	no_candidate		AAGAAAGAAAGAAAGGAAGG	1	False	False	True	False	PoN4_CoLoRSdb
+60910257	INS	1	tensor_representative		A	16	True	False	False	False	PoN4_CoLoRSdb
+62778958	DEL	-10	filtered	min_af	T	30	True	False	True	False	PoN4_CoLoRSdb
+62921182	DEL	-1	no_candidate		T	18	True	False	False	True	PoN4_CoLoRSdb
+62983512	DEL	-1	filtered	min_variants	T	19	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+64132760	DEL	-3	no_candidate		A	24	True	False	True	True	PoN2_dbSNP,PoN4_CoLoRSdb
+64970761	INS	2	tensor_representative		A	15	True	False	True	False	PoN4_CoLoRSdb
+65664313	INS	12	no_candidate		AT	14	False	True	True	False	PoN4_CoLoRSdb
+66141327	INS	6	no_candidate		AT	20	False	True	True	False	PoN4_CoLoRSdb
+66159405	DEL	-1	tensor_representative		T	14	True	False	False	False	PoN4_CoLoRSdb
+66742460	INS	20	no_candidate		T	27	True	False	True	False	PoN4_CoLoRSdb
+67428735	INS	1	filtered	min_variants	A	17	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+68236666	INS	1	tensor_representative		A	13	True	False	False	False	PoN4_CoLoRSdb
+69127170	DEL	-2	no_candidate		TA	1	False	False	True	False	PoN4_CoLoRSdb
+69486290	INS	4	no_candidate		TATT	0	False	False	True	False	PoN4_CoLoRSdb
+69952997	INS	1	filtered	min_variants	A	22	True	False	False	True	PoN4_CoLoRSdb
+70097454	DEL	-1	tensor_representative		T	8	True	False	False	False	PoN1_gnomAD
+70387345	DEL	-1	no_candidate		T	15	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+70457297	INS	1	tensor_representative		A	13	True	False	False	False	PoN4_CoLoRSdb
+70653901	INS	3	no_candidate		A	23	True	False	True	False	PoN4_CoLoRSdb
+70748855	INS	5	no_candidate		T	3	False	False	True	False	PoN4_CoLoRSdb
+71039649	INS	1	no_candidate		A	21	True	False	False	True	PoN4_CoLoRSdb
+71156211	DEL	-1	no_candidate		A	12	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+71269206	INS	1	tensor_representative		A	8	True	False	False	False	
+71857626	DEL	-1	tensor_representative		A	30	True	False	False	False	PoN2_dbSNP,PoN4_CoLoRSdb
+72040577	DEL	-2	filtered	min_af	A	34	True	False	True	False	PoN4_CoLoRSdb
+72093329	INS	13	no_candidate		A	14	True	False	True	False	PoN1_gnomAD,PoN4_CoLoRSdb
+72149879	INS	1	no_candidate		A	22	True	False	True	True	PoN4_CoLoRSdb
+72284593	DEL	-3	tensor_representative		TTA	1	False	False	False	False	
+72386968	DEL	-13	no_candidate		T	30	True	False	True	False	PoN4_CoLoRSdb
+72622524	DEL	-1	tensor_representative		T	14	True	False	False	False	PoN4_CoLoRSdb
+73127428	INS	3	no_candidate		A	20	True	False	True	False	PoN4_CoLoRSdb
+73228717	DEL	-1	tensor_representative		A	9	True	False	False	False	PoN1_gnomAD,PoN2_dbSNP,PoN4_CoLoRSdb
+73265653	DEL	-3	filtered	min_variants	A	21	True	False	True	False	PoN4_CoLoRSdb
+74016690	DEL	-2	filtered	min_variants	A	20	True	False	True	False	PoN4_CoLoRSdb
+74120124	INS	1	tensor_representative		T	12	True	False	False	False	PoN4_CoLoRSdb
+74363709	INS	1	tensor_representative		T	1	False	False	False	False	
+74500603	DEL	-24	no_candidate		A	56	True	False	True	False	PoN4_CoLoRSdb
+74943418	INS	4	no_candidate		TC	1	False	False	True	False	
+75161669	INS	1	no_candidate		A	12	True	False	True	False	PoN2_dbSNP,PoN4_CoLoRSdb
+75661387	INS	12	no_candidate		A	28	True	False	True	False	PoN4_CoLoRSdb
+75902673	DEL	-4	tensor_representative		TA	31	False	True	True	False	PoN4_CoLoRSdb
+76387746	DEL	-1	tensor_representative		C	1	False	False	False	False	
+76699297	INS	4	no_candidate		A	15	True	False	True	False	PoN1_gnomAD,PoN4_CoLoRSdb
+76948453	INS	1	tensor_representative		A	1	False	False	False	False	
+77052917	DEL	-1	no_candidate		A	22	True	False	False	True	PoN4_CoLoRSdb
+77306493	DEL	-1	no_candidate		G	1	False	False	False	False	PoN1_gnomAD,PoN4_CoLoRSdb
+78182937	DEL	-1	no_candidate		T	9	True	False	False	True	PoN1_gnomAD,PoN2_dbSNP,PoN4_CoLoRSdb
+78729313	DEL	-3	no_candidate		T	19	True	False	True	True	PoN2_dbSNP,PoN4_CoLoRSdb
+78788813	INS	1	tensor_representative		A	12	True	False	False	False	PoN2_dbSNP,PoN4_CoLoRSdb
+78865510	INS	338	no_candidate		TGAGCATATTTTCTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTGAGACGGAGTCTCGCTCTGTCGCCCAGGCTGGAGTGCAGTGGCGGGATCTCGGCTCACTGCAAGCTCCGCCTCCCGGGTTCACGCCATTCTCCTGCCTCAGCCTCCCAAGTAGCTGGGACTACAGGCGCCCGCCACTACGCCCGGCTAATTTTTTTTTGTATTTTTAGTAGAGACGGGGTTTCACCGTTTTAGCCGGGATGGTCTCGATCTCCTGACCTCGTGATCTGCCCGCCTCGGCCTCCCAAAGTGCTGGGATTACAGGCGTGAGCCACCGCGCCCGGCC	0	False	False	True	False	PoN4_CoLoRSdb
+79029181	INS	2	no_candidate		T	14	True	False	True	False	PoN2_dbSNP,PoN4_CoLoRSdb
+79681271	INS	3	filtered	min_variants	A	29	True	False	True	False	PoN4_CoLoRSdb
+79720612	INS	16	no_candidate		AAAAAAAAAAAAAAAT	0	False	False	True	False	PoN4_CoLoRSdb
+79883783	INS	8	no_candidate		A	13	True	False	True	True	PoN2_dbSNP,PoN4_CoLoRSdb
+80009763	INS	8	no_candidate		AAATATAT	0	False	False	True	False	PoN4_CoLoRSdb
+80009956	DEL	-2	tensor_representative		TC	1	False	False	False	False	
+80071663	DEL	-10	tensor_representative		TTAGTGGTGA	1	False	False	False	False	
+80274186	DEL	-1	tensor_representative		T	15	True	False	False	False	PoN4_CoLoRSdb
+80382039	INS	1	tensor_representative		T	15	True	False	False	False	PoN2_dbSNP,PoN4_CoLoRSdb
+80573480	INS	1	no_candidate		A	13	True	False	False	True	PoN1_gnomAD,PoN4_CoLoRSdb
+80600219	DEL	-1	tensor_representative		C	2	False	False	False	False	
+81119123	INS	2	no_candidate		T	17	True	False	True	False	PoN2_dbSNP,PoN4_CoLoRSdb
+81209459	DEL	-1	tensor_representative		T	11	True	False	False	False	PoN4_CoLoRSdb
+81324508	DEL	-1	tensor_representative		A	13	True	False	False	False	PoN4_CoLoRSdb
+81325829	INS	1	tensor_representative		A	2	False	False	False	False	
+81524196	INS	1	tensor_representative		A	11	True	False	False	False	PoN2_dbSNP,PoN4_CoLoRSdb
+81994857	INS	16	no_candidate		TTTTTTTTTTTTTTTG	0	False	False	True	False	PoN4_CoLoRSdb
+82092313	INS	1	tensor_representative		A	10	True	False	False	False	PoN1_gnomAD,PoN4_CoLoRSdb
+82562495	INS	1	tensor_representative		A	16	True	False	False	False	PoN4_CoLoRSdb
+82686653	DEL	-1	no_candidate		A	15	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+83128401	INS	1	tensor_representative		A	7	True	False	False	False	
+83764422	DEL	-1	tensor_representative		A	13	True	False	False	False	PoN2_dbSNP,PoN4_CoLoRSdb
+85239156	INS	1	tensor_representative		A	18	True	False	False	False	PoN4_CoLoRSdb
+85565040	INS	1	tensor_representative		A	10	True	False	False	False	PoN4_CoLoRSdb
+85725272	DEL	-1	no_candidate		C	1	False	False	True	True	PoN1_gnomAD,PoN2_dbSNP,PoN4_CoLoRSdb
+88109114	DEL	-38	tensor_representative		TTATGAAGGTCTTTTTCTTAAGAGCTAAAAAACAAGCA	1	False	False	False	False	
+90757450	DEL	-1	tensor_representative		A	22	True	False	False	False	PoN1_gnomAD,PoN4_CoLoRSdb
+90802248	DEL	-16	no_candidate		TCTTTTTTTTTTTTTT	1	False	False	True	False	PoN4_CoLoRSdb
+91264361	INS	2	filtered	min_variants	T	29	True	False	True	False	PoN2_dbSNP,PoN4_CoLoRSdb
+92230615	INS	1	tensor_representative		A	15	True	False	False	False	PoN2_dbSNP,PoN4_CoLoRSdb
+92428850	DEL	-1	tensor_representative		A	17	True	False	False	False	PoN2_dbSNP,PoN4_CoLoRSdb
+93568185	INS	1	tensor_representative		A	13	True	False	False	False	PoN4_CoLoRSdb
+93573617	DEL	-1	no_candidate		A	1	False	False	False	False	PoN1_gnomAD,PoN4_CoLoRSdb
+95577283	INS	5	no_candidate		T	23	True	False	True	False	PoN4_CoLoRSdb
+96063846	INS	1	tensor_representative		A	5	True	False	False	False	
+98541750	INS	1	tensor_representative		A	18	True	False	False	False	PoN4_CoLoRSdb
+98663252	DEL	-3	tensor_representative		GTT	1	False	False	True	False	PoN4_CoLoRSdb
+99077339	INS	1	tensor_representative		T	12	True	False	False	False	PoN4_CoLoRSdb
+99159171	INS	4	no_candidate		A	28	True	False	True	False	PoN1_gnomAD,PoN4_CoLoRSdb
+99357628	INS	1	tensor_representative		T	14	True	False	False	False	PoN4_CoLoRSdb
+100854157	DEL	-12	tensor_representative		GCACACACACAC	1	False	False	False	False	
+101331466	INS	1	tensor_representative		G	4	False	False	False	False	
+101786256	DEL	-1	tensor_representative		T	13	True	False	False	False	PoN2_dbSNP,PoN4_CoLoRSdb
+102429021	DEL	-2	filtered	min_variants	T	14	True	False	True	False	PoN4_CoLoRSdb
+102641539	INS	11	no_candidate		T	29	True	False	True	False	PoN4_CoLoRSdb
+102664951	INS	1	no_candidate		T	16	True	False	True	True	PoN1_gnomAD,PoN2_dbSNP,PoN4_CoLoRSdb
+102863585	INS	1	no_candidate		A	22	True	False	False	True	PoN4_CoLoRSdb
+103465979	INS	4	no_candidate		TA	21	False	True	True	True	PoN4_CoLoRSdb
+104016395	DEL	-1	tensor_representative		T	10	True	False	False	False	PoN1_gnomAD,PoN4_CoLoRSdb
+104077082	DEL	-26	no_candidate		AAAAAAATATATATATATATATATAT	1	False	False	True	False	PoN4_CoLoRSdb
+104641776	DEL	-1	filtered	min_variants	T	15	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+106003351	DEL	-1	tensor_representative		T	13	True	False	False	False	PoN2_dbSNP,PoN4_CoLoRSdb
+106044878	DEL	-1	no_candidate		A	37	True	False	False	True	PoN4_CoLoRSdb
+106823345	INS	7	no_candidate		ATTTTTT	0	False	False	True	False	PoN1_gnomAD,PoN4_CoLoRSdb
+107501915	DEL	-5	filtered	min_variants	A	32	True	False	True	False	PoN2_dbSNP,PoN4_CoLoRSdb
+108089651	DEL	-1	no_candidate		T	20	True	False	True	True	PoN2_dbSNP,PoN4_CoLoRSdb
+108112944	INS	2	filtered	min_af	T	26	True	False	True	False	PoN4_CoLoRSdb
+108906236	INS	1	tensor_representative		T	3	False	False	False	False	PoN1_gnomAD
+109183347	DEL	-13	no_candidate		ACAAAAAAAAGAG	1	False	False	True	False	PoN1_gnomAD,PoN4_CoLoRSdb
+109204352	INS	1	tensor_representative		T	8	True	False	False	False	
+110304445	INS	5	filtered	min_variants	A	19	True	False	True	True	PoN4_CoLoRSdb
+110806296	INS	3	no_candidate		A	21	True	False	True	True	PoN2_dbSNP,PoN4_CoLoRSdb
+111011502	DEL	-1	tensor_representative		A	16	True	False	False	False	PoN2_dbSNP,PoN4_CoLoRSdb
+112082789	INS	8	no_candidate		AGAGAGAC	0	False	False	True	False	PoN4_CoLoRSdb
+112233484	INS	2	no_candidate		A	13	True	False	True	True	PoN2_dbSNP,PoN4_CoLoRSdb
+112741370	INS	6	no_candidate		GT	18	False	True	True	True	PoN2_dbSNP,PoN4_CoLoRSdb
+112973660	INS	4	no_candidate		A	26	True	False	True	False	PoN4_CoLoRSdb
+113033910	INS	2	filtered	min_variants	T	21	True	False	True	True	PoN4_CoLoRSdb
+114318880	INS	15	no_candidate		T	18	True	False	True	False	PoN4_CoLoRSdb
+114331680	INS	1	no_candidate		A	14	True	False	False	True	PoN4_CoLoRSdb
+114789899	DEL	-1	tensor_representative		T	21	True	False	False	False	PoN4_CoLoRSdb
+116497678	DEL	-22	tensor_representative		CAGGGACTATTACTCTGAGGCC	1	False	False	False	False	
+116794589	INS	1	tensor_representative		T	20	True	False	False	False	PoN4_CoLoRSdb
+117332504	INS	28	no_candidate		AT	11	False	True	True	False	PoN4_CoLoRSdb
+118068535	DEL	-6	tensor_representative		CAGCAC	1	False	False	False	False	
+118404266	DEL	-1	filtered	min_variants	A	18	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+118998635	INS	4	filtered	min_variants	C	9	True	False	True	False	PoN1_gnomAD,PoN4_CoLoRSdb
+121069860	DEL	-1	tensor_representative		T	14	True	False	False	False	PoN4_CoLoRSdb
+121130667	INS	1	tensor_representative		A	13	True	False	False	False	PoN4_CoLoRSdb
+125141874	INS	1	tensor_representative		T	14	True	False	False	False	PoN4_CoLoRSdb
+143636217	INS	2	no_candidate		A	23	True	False	True	True	PoN4_CoLoRSdb
+143712467	INS	2	tensor_representative		A	16	True	False	True	False	PoN4_CoLoRSdb
+143797416	DEL	-1	no_candidate		T	12	True	False	False	False	PoN1_gnomAD,PoN4_CoLoRSdb
+143948937	INS	1	no_candidate		T	9	True	False	False	False	PoN4_CoLoRSdb
+144023258	INS	1	tensor_representative		T	20	True	False	False	False	PoN4_CoLoRSdb
+144665794	DEL	-1	no_candidate		T	20	True	False	False	False	PoN4_CoLoRSdb
+145416132	INS	1	tensor_representative		A	11	True	False	False	False	PoN4_CoLoRSdb
+145656117	DEL	-1	tensor_representative		C	2	False	False	False	False	
+145940550	INS	1	tensor_representative		T	17	True	False	False	False	PoN4_CoLoRSdb
+147614844	INS	2	filtered	min_af,min_variants	T	13	True	False	True	False	PoN3_1000G,PoN4_CoLoRSdb
+147674747	INS	1	no_candidate		T	13	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+147829211	INS	1	tensor_representative		A	17	True	False	False	False	PoN4_CoLoRSdb
+148471247	INS	14	no_candidate		AT	10	False	True	True	False	PoN4_CoLoRSdb
+148513618	INS	1	no_candidate		T	19	True	False	False	True	PoN4_CoLoRSdb
+149151144	DEL	-2	tensor_representative		T	21	True	False	True	False	PoN4_CoLoRSdb
+149727677	INS	1	tensor_representative		A	10	True	False	False	False	PoN4_CoLoRSdb
+149865951	DEL	-12	no_candidate		AAAGAAGAAAGA	1	False	False	True	True	
+151150736	INS	1	tensor_representative		T	16	True	False	False	False	PoN4_CoLoRSdb
+151261954	INS	2	no_candidate		A	19	True	False	True	True	PoN3_1000G,PoN4_CoLoRSdb
+151587192	INS	1	filtered	min_variants	A	26	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+151747490	INS	1	tensor_representative		T	11	True	False	False	False	PoN4_CoLoRSdb
+151868876	DEL	-1	tensor_representative		T	12	True	False	False	False	PoN2_dbSNP,PoN4_CoLoRSdb
+151871325	INS	1	no_candidate		A	18	True	False	False	True	PoN4_CoLoRSdb
+152874454	DEL	-1	tensor_representative		A	14	True	False	False	False	PoN4_CoLoRSdb
+153014677	DEL	-4	tensor_representative		GTTG	1	False	False	False	False	
+153539446	INS	3	no_candidate		TAT	0	False	False	True	False	PoN4_CoLoRSdb
+153695252	INS	1	no_candidate		A	18	True	False	True	True	PoN4_CoLoRSdb
+153707686	DEL	-1	tensor_representative		A	19	True	False	False	False	PoN4_CoLoRSdb
+153987774	DEL	-1	no_candidate		A	27	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+154560123	DEL	-24	no_candidate		TATATATATATTTATTTATTTATT	1	False	False	True	False	PoN4_CoLoRSdb
+154702700	DEL	-2	tensor_non_representative_allele		AT	24	False	True	True	False	PoN2_dbSNP,PoN4_CoLoRSdb
+155068427	INS	2	no_candidate		T	34	True	False	True	False	PoN4_CoLoRSdb
+155366989	INS	1	no_candidate		T	22	True	False	False	True	PoN4_CoLoRSdb
+156303561	INS	1	tensor_non_representative_allele		T	20	True	False	False	False	PoN4_CoLoRSdb
+156317712	INS	1	tensor_representative		T	14	True	False	False	False	PoN3_1000G,PoN4_CoLoRSdb
+157480638	DEL	-1	tensor_representative		A	10	True	False	False	False	PoN1_gnomAD,PoN4_CoLoRSdb
+158133337	INS	7	no_candidate		T	18	True	False	True	False	PoN4_CoLoRSdb
+158208310	INS	2	no_candidate		T	14	True	False	True	False	PoN4_CoLoRSdb
+158254030	DEL	-18	no_candidate		GTTTTTTTTTTTTTTTTT	1	False	False	True	False	PoN4_CoLoRSdb
+158356657	DEL	-1	tensor_representative		T	11	True	False	False	False	PoN2_dbSNP,PoN3_1000G,PoN4_CoLoRSdb
+158592983	DEL	-1	tensor_representative		A	12	True	False	False	False	PoN1_gnomAD,PoN4_CoLoRSdb
+158691885	INS	1	no_candidate		A	11	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+159111805	INS	1	filtered	min_variants	C	0	False	False	False	False	PoN1_gnomAD,PoN4_CoLoRSdb
+159340622	DEL	-6	tensor_representative		CCTAGG	1	False	False	False	False	
+159578113	DEL	-1	no_candidate		A	24	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+160825207	DEL	-1	tensor_representative		A	15	True	False	False	False	PoN2_dbSNP,PoN4_CoLoRSdb
+161156536	INS	1	no_candidate		A	21	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+161221660	DEL	-3	filtered	min_af	T	28	True	False	True	False	PoN4_CoLoRSdb
+162005902	INS	1	filtered	min_variants	A	26	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+162043592	INS	1	no_candidate		A	30	True	False	False	True	PoN4_CoLoRSdb
+162608004	INS	1	filtered	min_variants	T	12	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+162827139	INS	1	tensor_representative		T	11	True	False	False	False	PoN4_CoLoRSdb
+162909898	INS	1	no_candidate		G	0	False	False	True	False	
+163290653	DEL	-1	no_candidate		A	17	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+163784889	INS	2	filtered	min_variants	A	14	True	False	True	False	PoN4_CoLoRSdb
+164013460	DEL	-1	no_candidate		A	16	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+164044467	DEL	-1	tensor_representative		A	14	True	False	False	False	PoN2_dbSNP,PoN4_CoLoRSdb
+164174946	DEL	-1	tensor_representative		T	9	True	False	False	False	PoN1_gnomAD,PoN4_CoLoRSdb
+164934021	DEL	-5	tensor_representative		T	17	True	False	True	False	PoN1_gnomAD,PoN4_CoLoRSdb
+165223809	DEL	-1	no_candidate		A	16	True	False	False	True	PoN4_CoLoRSdb
+165724986	DEL	-14	no_candidate		TC	19	False	True	True	False	PoN1_gnomAD,PoN4_CoLoRSdb
+166345975	INS	1	tensor_representative		T	6	True	False	False	False	
+166389526	INS	1	no_candidate		A	14	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+166577950	DEL	-1	tensor_representative		A	11	True	False	False	False	PoN4_CoLoRSdb
+166603807	INS	1	tensor_representative		A	7	True	False	False	False	
+166714504	INS	6	no_candidate		AT	15	False	True	True	False	PoN2_dbSNP,PoN4_CoLoRSdb
+166733167	DEL	-2	filtered	min_variants	A	17	True	False	True	False	PoN4_CoLoRSdb
+166887954	INS	1	no_candidate		A	23	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+167007131	INS	1	tensor_representative		A	13	True	False	False	False	PoN4_CoLoRSdb
+167040488	INS	2	no_candidate		A	21	True	False	True	True	PoN4_CoLoRSdb
+167144906	DEL	-1	no_candidate		A	22	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+167357369	DEL	-10	no_candidate		CCCCCCCCCA	1	False	False	True	False	PoN1_gnomAD,PoN4_CoLoRSdb
+167449156	INS	15	no_candidate		TTTTTTCTTTTTTTC	0	False	False	True	False	PoN1_gnomAD,PoN4_CoLoRSdb
+168217521	INS	4	no_candidate		T	16	True	False	True	False	PoN4_CoLoRSdb
+169190798	INS	1	tensor_representative		T	32	True	False	False	False	PoN4_CoLoRSdb
+169363075	DEL	-1	tensor_representative		A	14	True	False	False	False	PoN1_gnomAD,PoN4_CoLoRSdb
+170077885	DEL	-1	filtered	min_variants	T	11	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+170480495	INS	1	filtered	min_variants	T	12	True	False	True	True	PoN2_dbSNP,PoN4_CoLoRSdb
+170585727	INS	1	no_candidate		A	28	True	False	False	True	PoN4_CoLoRSdb
+170740632	INS	5	no_candidate		A	25	True	False	True	False	PoN4_CoLoRSdb
+170830035	INS	1	tensor_representative		T	12	True	False	False	False	PoN4_CoLoRSdb
+170970389	INS	1	no_candidate		A	12	True	False	False	True	PoN4_CoLoRSdb
+171156363	INS	1	no_candidate		A	20	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+171283265	DEL	-13	no_candidate		A	32	True	False	True	False	PoN4_CoLoRSdb
+171476413	DEL	-8	no_candidate		GAAAGAAT	1	False	False	True	False	PoN1_gnomAD,PoN4_CoLoRSdb
+172225134	INS	6	no_candidate		T	25	True	False	True	False	PoN4_CoLoRSdb
+172761020	INS	6	filtered	min_variants	GTGTGC	0	False	False	True	False	PoN1_gnomAD,PoN3_1000G,PoN4_CoLoRSdb
+173099730	INS	5	no_candidate		T	30	True	False	True	True	PoN4_CoLoRSdb
+173236292	DEL	-5	tensor_representative		CCTTG	1	False	False	False	False	
+173328515	INS	1	tensor_representative		A	7	True	False	False	False	PoN1_gnomAD
+173456575	INS	1	no_candidate		T	13	True	False	False	True	PoN4_CoLoRSdb
+173574505	INS	2	no_candidate		T	22	True	False	True	True	PoN2_dbSNP,PoN4_CoLoRSdb
+173973534	INS	1	filtered	min_variants	A	17	True	False	False	True	PoN4_CoLoRSdb
+174327984	DEL	-6	no_candidate		ACATAT	1	False	False	True	False	PoN4_CoLoRSdb
+174447890	DEL	-2	no_candidate		C	10	True	False	True	False	PoN1_gnomAD,PoN4_CoLoRSdb
+174804281	INS	12	no_candidate		TTTTTTTTTTGT	0	False	False	True	False	PoN4_CoLoRSdb
+175047335	DEL	-5	no_candidate		T	44	True	False	True	True	PoN4_CoLoRSdb
+175085874	INS	1	no_candidate		A	20	True	False	True	False	PoN4_CoLoRSdb
+175480419	INS	36	no_candidate		AAAG	6	False	True	True	False	PoN3_1000G,PoN4_CoLoRSdb
+175696220	INS	2	filtered	min_variants	TG	0	False	False	True	False	PoN1_gnomAD,PoN4_CoLoRSdb
+175696227	INS	10	no_candidate		GTTGTTGTTG	0	False	False	True	False	PoN1_gnomAD,PoN4_CoLoRSdb
+176275360	DEL	-5	no_candidate		A	30	True	False	True	False	PoN1_gnomAD,PoN4_CoLoRSdb
+176377056	DEL	-1	tensor_representative		T	18	True	False	False	False	PoN4_CoLoRSdb
+176465638	DEL	-1	tensor_representative		T	15	True	False	False	False	PoN4_CoLoRSdb
+176587137	INS	1	tensor_representative		T	10	True	False	False	False	
+176626889	INS	1	tensor_representative		T	19	True	False	False	False	PoN4_CoLoRSdb
+176713158	DEL	-1	tensor_representative		T	13	True	False	False	False	
+176974387	DEL	-1	tensor_representative		T	16	True	False	False	False	PoN4_CoLoRSdb
+177072949	INS	1	tensor_representative		A	10	True	False	False	False	PoN4_CoLoRSdb
+177158903	DEL	-1	tensor_representative		A	15	True	False	False	False	PoN4_CoLoRSdb
+177216779	DEL	-1	tensor_representative		T	17	True	False	False	False	PoN2_dbSNP,PoN4_CoLoRSdb
+177755378	INS	1	no_candidate		A	13	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+177874958	INS	2	tensor_representative		TA	6	False	True	False	False	PoN2_dbSNP,PoN4_CoLoRSdb
+178135496	INS	4	no_candidate		A	20	True	False	True	False	PoN4_CoLoRSdb
+178155462	INS	1	tensor_representative		A	17	True	False	False	False	PoN4_CoLoRSdb
+178657270	INS	1	tensor_representative		T	18	True	False	False	False	PoN4_CoLoRSdb
+179284261	DEL	-1	no_candidate		T	17	True	False	False	True	PoN4_CoLoRSdb
+179408968	INS	1	no_candidate		T	21	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+180077671	INS	4	no_candidate		A	20	True	False	True	False	PoN4_CoLoRSdb
+181440983	INS	2	no_candidate		A	36	True	False	True	True	PoN4_CoLoRSdb
+181795767	INS	44	no_candidate		AT	10	False	True	True	False	PoN4_CoLoRSdb
+182312030	DEL	-1	no_candidate		T	27	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+183957778	INS	1	no_candidate		T	22	True	False	False	True	PoN4_CoLoRSdb
+184141993	INS	1	tensor_representative		T	9	True	False	False	False	PoN4_CoLoRSdb
+184675912	INS	1	no_candidate		T	22	True	False	False	True	PoN4_CoLoRSdb
+185827171	INS	1	tensor_representative		A	17	True	False	False	False	PoN4_CoLoRSdb
+186147390	DEL	-2	no_candidate		T	16	True	False	True	True	PoN2_dbSNP,PoN4_CoLoRSdb
+186811293	DEL	-1	tensor_representative		A	10	True	False	False	False	PoN1_gnomAD,PoN2_dbSNP,PoN4_CoLoRSdb
+187024859	DEL	-1	no_candidate		A	17	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+187294682	DEL	-1	no_candidate		A	23	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+187365985	DEL	-2	no_candidate		T	49	True	False	True	False	PoN4_CoLoRSdb
+187493468	DEL	-1	filtered	min_variants	T	20	True	False	False	True	PoN4_CoLoRSdb
+187677185	DEL	-1	no_candidate		T	13	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+187827390	DEL	-1	tensor_representative		A	5	True	False	False	False	
+187921327	INS	1	no_candidate		T	15	True	False	True	False	PoN2_dbSNP,PoN4_CoLoRSdb
+187963076	DEL	-2	no_candidate		A	19	True	False	True	True	PoN2_dbSNP,PoN4_CoLoRSdb
+188087553	INS	1	no_candidate		A	28	True	False	True	False	PoN4_CoLoRSdb
+188429377	DEL	-5	tensor_representative		CCAGA	1	False	False	False	False	
+188508320	DEL	-1	tensor_representative		T	11	True	False	False	False	PoN1_gnomAD,PoN4_CoLoRSdb
+188635089	INS	2	no_candidate		A	13	True	False	True	True	PoN2_dbSNP,PoN4_CoLoRSdb
+188859465	INS	2	tensor_representative		GT	16	False	True	False	False	PoN2_dbSNP,PoN4_CoLoRSdb
+189044489	DEL	-1	tensor_representative		A	9	True	False	False	False	PoN1_gnomAD
+189092852	INS	1	tensor_representative		T	24	True	False	False	False	PoN4_CoLoRSdb
+189476371	INS	1	tensor_representative		T	5	True	False	False	False	
+189482134	INS	8	no_candidate		TGTATATA	0	False	False	True	False	PoN4_CoLoRSdb
+189600829	INS	1	no_candidate		T	14	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+189827641	INS	1	no_candidate		G	0	False	False	True	False	PoN1_gnomAD,PoN4_CoLoRSdb
+189870594	INS	1	tensor_representative		A	2	False	False	False	False	
+189935608	INS	2	no_candidate		A	14	True	False	True	False	PoN1_gnomAD,PoN2_dbSNP,PoN4_CoLoRSdb
+190177150	INS	1	no_candidate		T	30	True	False	False	True	PoN4_CoLoRSdb
+190208114	DEL	-1	tensor_representative		T	11	True	False	False	False	PoN1_gnomAD,PoN2_dbSNP,PoN4_CoLoRSdb
+190277087	INS	24	no_candidate		TA	15	False	True	True	False	PoN2_dbSNP,PoN4_CoLoRSdb
+190429593	DEL	-1	no_candidate		T	15	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+190891974	INS	1	tensor_representative		T	9	True	False	False	False	PoN4_CoLoRSdb
+191218773	DEL	-1	tensor_representative		T	15	True	False	False	False	PoN4_CoLoRSdb
+191234698	INS	2	filtered	min_variants	TA	7	False	True	False	False	PoN1_gnomAD,PoN4_CoLoRSdb
+191259931	DEL	-2	no_candidate		T	15	True	False	True	True	PoN4_CoLoRSdb
+191382801	DEL	-1	tensor_representative		T	14	True	False	False	False	PoN4_CoLoRSdb
+191433483	INS	18	no_candidate		AAAAAAAAACAAACAAAC	0	False	False	True	True	PoN4_CoLoRSdb
+191581492	INS	2	filtered	min_variants	T	23	True	False	True	True	PoN4_CoLoRSdb
+191617486	INS	4	no_candidate		CT	11	False	True	True	True	PoN4_CoLoRSdb
+191651282	INS	2	no_candidate		T	21	True	False	True	False	PoN4_CoLoRSdb
+191867402	DEL	-1	tensor_representative		A	14	True	False	False	False	PoN4_CoLoRSdb
+191935281	INS	1	tensor_representative		A	19	True	False	False	False	PoN4_CoLoRSdb
+191996785	DEL	-1	tensor_representative		A	11	True	False	False	False	PoN1_gnomAD,PoN4_CoLoRSdb
+192060934	DEL	-1	filtered	min_variants	A	19	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+192345179	DEL	-11	tensor_representative		CTTTTGGATTA	1	False	False	False	False	
+192755043	INS	1	tensor_representative		A	13	True	False	False	False	PoN4_CoLoRSdb
+192818298	INS	4	no_candidate		AT	0	False	False	True	False	PoN4_CoLoRSdb
+192857703	INS	177	no_candidate		GAGGGAGGTGGGGGGGGTCAGCCCCCCGCCCGGCCAGCCGCCCCATCTGGGAGGTGAGGGGCGCCTCTGCCTGGCCGCCCCTACTGGGAAGTGGGGAGCCCCTCTGCCCGGCCAGCCGCCCCGTCCGGGAGGGAGGTGGGGGGGTCAGCCCCCTCACCGGCCAGCCGCCCCGTCCGA	0	False	False	True	False	PoN4_CoLoRSdb
+193158502	INS	2	no_candidate		A	11	True	False	True	False	PoN4_CoLoRSdb
+193565126	INS	1	tensor_representative		T	17	True	False	False	False	PoN4_CoLoRSdb
+194075724	DEL	-7	filtered	min_variants	T	35	True	False	True	False	PoN4_CoLoRSdb
+194115661	INS	2	no_candidate		CA	20	False	True	False	True	PoN4_CoLoRSdb
+194969734	DEL	-1	tensor_representative		A	3	False	False	False	False	
+195161520	INS	2	no_candidate		A	15	True	False	True	False	PoN4_CoLoRSdb
+195771528	DEL	-2	tensor_representative		A	2	False	False	False	False	PoN1_gnomAD,PoN2_dbSNP,PoN4_CoLoRSdb
+196206349	INS	1	tensor_representative		T	11	True	False	False	False	PoN4_CoLoRSdb
+196404146	INS	1	tensor_representative		T	2	False	False	False	False	
+196656686	DEL	-1	tensor_representative		T	15	True	False	False	False	PoN4_CoLoRSdb
+196773694	INS	32	no_candidate		TATATATATATATATATATATATATATATACG	0	False	False	True	False	PoN1_gnomAD,PoN4_CoLoRSdb
+197476397	INS	4	no_candidate		GTGC	0	False	False	True	False	PoN1_gnomAD,PoN4_CoLoRSdb
+197905244	INS	1	tensor_representative		A	11	True	False	False	False	PoN2_dbSNP,PoN4_CoLoRSdb
+198046452	DEL	-1	tensor_representative		C	2	False	False	False	False	
+198137519	INS	10	no_candidate		ATAGAGAGAG	0	False	False	True	False	PoN4_CoLoRSdb
+198265289	DEL	-2	tensor_representative		A	3	False	False	False	False	
+198488330	INS	3	no_candidate		ATA	14	False	True	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+199333659	INS	1	tensor_representative		A	21	True	False	False	False	PoN4_CoLoRSdb
+199697214	INS	4	no_candidate		A	25	True	False	True	True	PoN4_CoLoRSdb
+200899209	DEL	-1	tensor_representative		C	3	False	False	False	False	
+200917847	INS	8	no_candidate		TCTCTATA	0	False	False	True	False	PoN4_CoLoRSdb
+201521888	INS	1	no_candidate		T	14	True	False	False	True	PoN4_CoLoRSdb
+202022806	DEL	-8	tensor_representative		TGCCTTCT	1	False	False	False	False	
+203386066	INS	1	no_candidate		T	13	True	False	False	True	PoN4_CoLoRSdb
+203532786	DEL	-1	no_candidate		T	16	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+203955469	INS	1	no_candidate		T	26	True	False	False	False	PoN2_dbSNP,PoN4_CoLoRSdb
+203978413	INS	1	tensor_representative		T	14	True	False	False	False	PoN4_CoLoRSdb
+204754298	INS	1	tensor_representative		T	19	True	False	False	False	PoN4_CoLoRSdb
+204835213	DEL	-2	no_candidate		T	25	True	False	True	True	PoN4_CoLoRSdb
+205391946	INS	1	tensor_representative		A	18	True	False	False	False	PoN4_CoLoRSdb
+206372898	DEL	-70	no_candidate		CTTTCTTTCTTTCTTTCTTTCTTTCTTTCTTTCTTTCTTTCTTTCTTTCTTTCTTTCTTTTCTTTCCTTT	1	False	False	True	False	PoN4_CoLoRSdb
+206911238	INS	1	no_candidate		T	12	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+206964196	DEL	-4	tensor_representative		TC	3	False	True	False	False	
+207053904	INS	1	no_candidate		T	20	True	False	False	True	PoN4_CoLoRSdb
+207498877	INS	8	filtered	min_variants	A	16	True	False	True	False	PoN4_CoLoRSdb
+207617606	DEL	-20	no_candidate		ATATATAGAGAGAGAGAGAG	1	False	False	True	False	PoN4_CoLoRSdb
+207693753	DEL	-1	tensor_representative		T	11	True	False	False	False	PoN1_gnomAD,PoN4_CoLoRSdb
+208017985	INS	2	no_candidate		AC	26	False	True	False	True	PoN4_CoLoRSdb
+208022027	DEL	-4	no_candidate		GT	30	False	True	True	True	PoN2_dbSNP,PoN4_CoLoRSdb
+208284334	DEL	-1	tensor_representative		A	9	True	False	False	False	PoN1_gnomAD,PoN2_dbSNP,PoN4_CoLoRSdb
+208789569	INS	1	tensor_representative		T	15	True	False	False	False	PoN4_CoLoRSdb
+208848214	DEL	-1	tensor_representative		A	21	True	False	False	False	PoN4_CoLoRSdb
+209547259	INS	1	tensor_representative		A	16	True	False	False	False	PoN4_CoLoRSdb
+209592183	INS	1	tensor_representative		A	8	True	False	False	False	
+209719019	INS	15	no_candidate		A	17	True	False	True	False	PoN4_CoLoRSdb
+210311120	DEL	-8	no_candidate		C	20	True	False	True	False	PoN1_gnomAD,PoN4_CoLoRSdb
+210519527	INS	2	no_candidate		T	18	True	False	True	True	PoN2_dbSNP,PoN4_CoLoRSdb
+210538075	DEL	-1	no_candidate		T	12	True	False	False	True	PoN4_CoLoRSdb
+210849365	INS	2	filtered	min_af	T	17	True	False	True	False	PoN2_dbSNP,PoN4_CoLoRSdb
+210895162	DEL	-1	tensor_representative		T	12	True	False	False	False	PoN4_CoLoRSdb
+210963213	INS	1	tensor_representative		A	8	True	False	False	False	PoN4_CoLoRSdb
+211045041	INS	28	no_candidate		AT	9	False	True	True	False	PoN4_CoLoRSdb
+211054118	DEL	-1	no_candidate		A	14	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+211566155	INS	1	tensor_representative		A	9	True	False	False	False	PoN2_dbSNP,PoN4_CoLoRSdb
+211741523	INS	1	no_candidate		A	12	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+211835803	DEL	-7	no_candidate		TATATTT	1	False	False	True	False	PoN4_CoLoRSdb
+212041386	INS	1	tensor_representative		T	11	True	False	False	False	PoN4_CoLoRSdb
+212681420	INS	22	no_candidate		T	14	True	False	True	False	PoN4_CoLoRSdb
+212917334	INS	8	no_candidate		T	18	True	False	True	False	PoN1_gnomAD,PoN4_CoLoRSdb
+212957617	INS	1	no_candidate		T	18	True	False	False	True	PoN4_CoLoRSdb
+213363821	INS	1	tensor_representative		T	14	True	False	False	False	PoN4_CoLoRSdb
+213631378	INS	2	no_candidate		A	15	True	False	True	False	PoN4_CoLoRSdb
+213827569	INS	1	tensor_representative		A	10	True	False	False	False	PoN4_CoLoRSdb
+213994750	DEL	-24	no_candidate		AT	26	False	True	True	False	PoN4_CoLoRSdb
+214017567	INS	1	no_candidate		A	14	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+214150272	DEL	-3	filtered	min_af	A	37	True	False	True	False	PoN4_CoLoRSdb
+214589746	INS	1	tensor_representative		T	15	True	False	False	False	PoN4_CoLoRSdb
+215030709	INS	1	tensor_representative		T	17	True	False	False	False	PoN4_CoLoRSdb
+215236045	INS	15	no_candidate		ATCTATCTATCATCT	0	False	False	True	True	PoN2_dbSNP,PoN3_1000G,PoN4_CoLoRSdb
+215591287	DEL	-16	no_candidate		TTCC	14	False	True	True	False	PoN4_CoLoRSdb
+215924607	INS	1	tensor_representative		T	11	True	False	False	False	PoN4_CoLoRSdb
+215926210	DEL	-1	tensor_representative		A	23	True	False	False	False	PoN2_dbSNP,PoN4_CoLoRSdb
+215926614	INS	1	filtered	min_af	T	20	True	False	False	False	PoN4_CoLoRSdb
+216075903	INS	1	tensor_representative		A	10	True	False	False	False	PoN4_CoLoRSdb
+216156295	DEL	-1	tensor_representative		T	17	True	False	False	False	PoN2_dbSNP,PoN4_CoLoRSdb
+216245470	INS	6	filtered	min_af	GA	24	False	True	True	True	PoN4_CoLoRSdb
+216599823	INS	1	tensor_representative		A	13	True	False	False	False	PoN4_CoLoRSdb
+216615736	DEL	-1	tensor_representative		T	16	True	False	False	False	PoN1_gnomAD,PoN4_CoLoRSdb
+216645871	DEL	-2	filtered	min_af	A	23	True	False	True	False	PoN4_CoLoRSdb
+216718461	INS	1	tensor_representative		A	7	True	False	False	False	
+216754702	INS	1	tensor_representative		T	19	True	False	False	False	PoN4_CoLoRSdb
+216974874	INS	1	tensor_representative		T	14	True	False	False	False	PoN4_CoLoRSdb
+216996034	INS	1	tensor_representative		A	10	True	False	False	False	PoN4_CoLoRSdb
+217084133	DEL	-2	tensor_representative		A	14	True	False	True	False	PoN4_CoLoRSdb
+217375648	INS	280	no_candidate		TTTTTTTTTTTTTATTATACTCTAAGTTTTAGGGTACATGTGCACATTGTGCAGGTTAGTTACATATGTATACATGTGCCATGCTGGTGCGCTGCACCCACTAATGTGTCATCTAGCATTAGGTATATCTCCCAATACTATCCCTCCCCCCTCCCCCGACCCCACCACAGTCCCCAGAGTGTGATATTCCCCTTCCTGTGTCCATGTGATCTCATTGTTCAATTCCCACCTATGAGTGAGAATATGCGGTGTTTGGTTTTTTGTTCTTGCGATAGTTTAC	0	False	False	True	False	PoN4_CoLoRSdb
+217387242	INS	4	filtered	min_variants	GT	21	False	True	True	True	PoN2_dbSNP,PoN4_CoLoRSdb
+217749985	INS	30	no_candidate		TCTATATATATATATATATATATATATATA	0	False	False	True	False	PoN4_CoLoRSdb
+218008018	INS	2	no_candidate		T	17	True	False	True	False	PoN2_dbSNP,PoN4_CoLoRSdb
+218053774	INS	2	no_candidate		A	22	True	False	True	True	PoN2_dbSNP,PoN4_CoLoRSdb
+218103815	DEL	-1	tensor_representative		A	18	True	False	False	False	PoN4_CoLoRSdb
+218145483	DEL	-2	no_candidate		AC	12	False	True	False	False	PoN4_CoLoRSdb
+218178671	INS	1	filtered	min_variants	T	12	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+218379487	INS	3	no_candidate		T	14	True	False	True	True	PoN2_dbSNP,PoN4_CoLoRSdb
+218522476	INS	1	no_candidate		T	22	True	False	False	True	PoN4_CoLoRSdb
+218714487	INS	10	no_candidate		TC	20	False	True	True	False	PoN1_gnomAD,PoN4_CoLoRSdb
+218811942	INS	1	tensor_representative		A	7	True	False	False	False	PoN4_CoLoRSdb
+219535824	INS	8	no_candidate		TTTA	8	False	True	True	False	PoN4_CoLoRSdb
+219591849	INS	1	tensor_representative		T	22	True	False	True	False	PoN4_CoLoRSdb
+219658294	INS	1	tensor_representative		A	11	True	False	False	False	PoN4_CoLoRSdb
+219871680	INS	1	tensor_representative		A	12	True	False	False	False	PoN4_CoLoRSdb
+219927638	DEL	-4	no_candidate		A	30	True	False	True	False	PoN3_1000G,PoN4_CoLoRSdb
+219927687	INS	1	filtered	min_af	C	0	False	False	True	False	PoN1_gnomAD,PoN4_CoLoRSdb
+220252152	DEL	-1	tensor_representative		A	18	True	False	False	False	PoN4_CoLoRSdb
+220471791	DEL	-1	tensor_representative		T	17	True	False	False	False	PoN2_dbSNP,PoN4_CoLoRSdb
+220881763	INS	4	filtered	min_variants	AC	25	False	True	True	False	PoN4_CoLoRSdb
+221009990	DEL	-1	tensor_representative		A	7	True	False	False	False	PoN2_dbSNP,PoN4_CoLoRSdb
+221466574	INS	1	tensor_representative		T	12	True	False	False	False	PoN4_CoLoRSdb
+221579541	INS	33	no_candidate		TATATATATATTTTTTTTTTTTTTTTTTTTTTT	0	False	False	True	False	PoN4_CoLoRSdb
+222256436	DEL	-1	no_candidate		T	19	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+222501557	INS	5	no_candidate		A	14	True	False	True	False	PoN1_gnomAD,PoN4_CoLoRSdb
+224674272	DEL	-3	filtered	min_af	T	35	True	False	True	False	PoN2_dbSNP,PoN4_CoLoRSdb
+224884461	INS	1	tensor_representative		A	14	True	False	False	False	PoN2_dbSNP,PoN4_CoLoRSdb
+225274197	DEL	-1	filtered	min_variants	T	25	True	False	False	False	PoN2_dbSNP,PoN4_CoLoRSdb
+225417714	INS	2	tensor_representative		T	9	True	False	False	False	
+226420253	INS	1	tensor_representative		T	17	True	False	False	False	PoN4_CoLoRSdb
+226931406	INS	2	filtered	min_af	T	15	True	False	True	False	PoN4_CoLoRSdb
+227273995	INS	1	tensor_representative		A	26	True	False	False	False	PoN4_CoLoRSdb
+227338171	INS	2	tensor_representative		A	19	True	False	True	False	PoN4_CoLoRSdb
+227851048	INS	1	tensor_representative		A	15	True	False	False	False	PoN4_CoLoRSdb
+228892754	INS	4	no_candidate		TTTC	0	False	False	True	False	
+228935001	INS	1	tensor_representative		C	10	True	False	False	False	PoN2_dbSNP,PoN4_CoLoRSdb
+229382580	INS	8	no_candidate		TA	0	False	False	True	False	PoN4_CoLoRSdb
+230312430	INS	1	filtered	min_af	T	22	True	False	False	False	PoN2_dbSNP,PoN4_CoLoRSdb
+231346941	INS	3	filtered	min_af	A	10	True	False	True	False	PoN3_1000G,PoN4_CoLoRSdb
+231455878	INS	1	tensor_representative		A	15	True	False	False	False	PoN4_CoLoRSdb
+231559317	INS	12	no_candidate		TTG	8	False	True	True	False	PoN4_CoLoRSdb
+231755212	DEL	-1	tensor_representative		T	12	True	False	False	False	PoN1_gnomAD,PoN4_CoLoRSdb
+231875647	INS	1	tensor_representative		T	3	False	False	False	False	
+232165547	INS	20	no_candidate		AT	7	False	True	True	False	PoN4_CoLoRSdb
+232979914	DEL	-17	tensor_representative		GGAGCTGGTCAGCCCCA	1	False	False	False	False	
+233387578	INS	1	tensor_representative		A	2	False	False	False	False	PoN1_gnomAD
+233552150	DEL	-2	no_candidate		A	28	True	False	True	True	PoN2_dbSNP,PoN4_CoLoRSdb
+233935189	INS	4	no_candidate		T	28	True	False	True	True	PoN4_CoLoRSdb
+234081904	INS	14	no_candidate		T	32	True	False	True	False	PoN4_CoLoRSdb
+234123576	INS	3	no_candidate		T	13	True	False	True	False	PoN1_gnomAD,PoN4_CoLoRSdb
+235031480	DEL	-2	tensor_representative		TC	1	False	False	False	False	
+235798578	DEL	-18	no_candidate		A	38	True	False	True	False	PoN4_CoLoRSdb
+236010300	DEL	-1	tensor_representative		T	22	True	False	False	False	PoN4_CoLoRSdb
+236396696	INS	1	tensor_representative		T	12	True	False	False	False	PoN4_CoLoRSdb
+236778463	DEL	-1	no_candidate		A	18	True	False	False	True	PoN4_CoLoRSdb
+237081280	INS	2	no_candidate		TA	0	False	False	True	False	PoN4_CoLoRSdb
+237082524	INS	10	no_candidate		AT	16	False	True	True	True	PoN4_CoLoRSdb
+237148527	INS	7	no_candidate		TATATAT	0	False	False	True	False	PoN4_CoLoRSdb
+237148553	INS	4	no_candidate		AC	5	False	True	True	False	PoN4_CoLoRSdb
+237208926	INS	2	filtered	min_variants	TG	5	False	True	True	True	PoN1_gnomAD,PoN4_CoLoRSdb
+237212078	DEL	-1	no_candidate		T	11	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+237253163	DEL	-2	no_candidate		A	18	True	False	True	False	PoN2_dbSNP,PoN4_CoLoRSdb
+237346367	INS	19	filtered	min_af	A	17	True	False	True	False	PoN4_CoLoRSdb
+237449758	INS	2	no_candidate		T	10	True	False	True	False	PoN2_dbSNP,PoN4_CoLoRSdb
+237923324	INS	1	tensor_representative		T	8	True	False	False	False	PoN1_gnomAD,PoN2_dbSNP,PoN4_CoLoRSdb
+237952157	DEL	-3	no_candidate		ATA	1	False	False	True	False	PoN4_CoLoRSdb
+238044184	DEL	-4	tensor_representative		A	15	True	False	True	False	PoN1_gnomAD,PoN4_CoLoRSdb
+238244686	DEL	-4	no_candidate		ATAC	1	False	False	True	False	PoN1_gnomAD,PoN4_CoLoRSdb
+238282548	INS	3	no_candidate		T	10	True	False	True	False	PoN3_1000G,PoN4_CoLoRSdb
+238504508	DEL	-1	tensor_representative		T	17	True	False	False	False	PoN4_CoLoRSdb
+238884482	INS	9	no_candidate		TTTTTTTTA	0	False	False	True	False	PoN4_CoLoRSdb
+239140379	DEL	-1	no_candidate		T	1	False	False	False	False	PoN1_gnomAD,PoN2_dbSNP,PoN4_CoLoRSdb
+239323665	DEL	-8	filtered	min_variants	AT	25	False	True	True	False	PoN2_dbSNP,PoN4_CoLoRSdb
+239488714	DEL	-14	no_candidate		A	37	True	False	True	False	PoN4_CoLoRSdb
+240187269	DEL	-1	tensor_representative		A	22	True	False	True	False	PoN2_dbSNP,PoN4_CoLoRSdb
+240218281	DEL	-3	no_candidate		A	26	True	False	True	True	PoN4_CoLoRSdb
+240355951	INS	7	no_candidate		A	35	True	False	True	False	PoN3_1000G,PoN4_CoLoRSdb
+240388227	DEL	-1	filtered	min_variants	A	27	True	False	False	True	PoN4_CoLoRSdb
+240430714	INS	1	tensor_representative		A	18	True	False	False	False	PoN2_dbSNP,PoN4_CoLoRSdb
+240439270	INS	5	no_candidate		A	12	True	False	True	True	PoN2_dbSNP,PoN4_CoLoRSdb
+240819739	INS	1	tensor_representative		A	8	True	False	False	False	PoN1_gnomAD,PoN2_dbSNP,PoN4_CoLoRSdb
+241235909	INS	38	no_candidate		GAGAGAGAAAGAGAGAGAGAGAGAGAGAGAGAGAGAGA	0	False	False	True	False	PoN4_CoLoRSdb
+241394700	DEL	-1	tensor_representative		A	16	True	False	False	False	PoN4_CoLoRSdb
+241586191	DEL	-1	tensor_representative		T	25	True	False	False	False	PoN2_dbSNP,PoN4_CoLoRSdb
+241794504	INS	4	no_candidate		T	22	True	False	True	True	PoN4_CoLoRSdb
+241804824	INS	2	tensor_representative		T	21	True	False	True	False	PoN4_CoLoRSdb
+242215043	DEL	-2	tensor_representative		T	18	True	False	True	False	PoN4_CoLoRSdb
+242267888	DEL	-1	tensor_representative		A	15	True	False	False	False	PoN1_gnomAD,PoN2_dbSNP,PoN4_CoLoRSdb
+242425639	DEL	-1	tensor_representative		T	21	True	False	False	False	PoN2_dbSNP,PoN4_CoLoRSdb
+242680268	INS	10	no_candidate		CTCGTTCCCA	0	False	False	True	False	
+242750920	INS	2	no_candidate		A	17	True	False	True	True	PoN1_gnomAD,PoN2_dbSNP,PoN4_CoLoRSdb
+242760124	DEL	-1	tensor_representative		A	18	True	False	False	False	PoN1_gnomAD,PoN4_CoLoRSdb
+242823592	INS	1	filtered	min_variants	A	24	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+242964213	DEL	-3	filtered	min_variants	T	27	True	False	True	False	PoN4_CoLoRSdb
+242988933	DEL	-1	filtered	min_af	A	37	True	False	True	False	PoN4_CoLoRSdb
+243553179	DEL	-1	tensor_representative		A	13	True	False	False	False	PoN2_dbSNP,PoN4_CoLoRSdb
+243583545	DEL	-12	no_candidate		AAAAAAAAAAAG	1	False	False	True	False	PoN1_gnomAD,PoN4_CoLoRSdb
+243648256	INS	1	tensor_representative		A	14	True	False	False	False	PoN4_CoLoRSdb
+243918679	DEL	-3	no_candidate		C	12	True	False	True	False	PoN3_1000G,PoN4_CoLoRSdb
+244038915	INS	1	tensor_representative		T	9	True	False	False	False	PoN4_CoLoRSdb
+244310074	INS	14	no_candidate		AT	25	False	True	True	False	PoN4_CoLoRSdb
+244972815	INS	1	tensor_representative		A	15	True	False	False	False	PoN4_CoLoRSdb
+245128014	INS	5	no_candidate		A	17	True	False	True	True	PoN1_gnomAD,PoN2_dbSNP,PoN4_CoLoRSdb
+245141292	DEL	-1	tensor_representative		A	16	True	False	False	False	PoN1_gnomAD,PoN2_dbSNP,PoN4_CoLoRSdb
+245184050	INS	24	no_candidate		T	19	True	False	True	False	PoN4_CoLoRSdb
+245640143	INS	54	no_candidate		TCTCTCTCTCTCTCTCTCTCTCTCTCTCTCTCTATATATATATATATATATATA	0	False	False	True	False	PoN4_CoLoRSdb
+247061183	INS	1	no_candidate		T	16	True	False	True	True	PoN4_CoLoRSdb
+247091456	DEL	-24	no_candidate		AG	32	False	True	True	False	PoN2_dbSNP,PoN4_CoLoRSdb
+247233245	INS	1	filtered	min_variants	A	17	True	False	False	True	PoN2_dbSNP,PoN4_CoLoRSdb
+247583914	INS	1	no_candidate		A	13	True	False	True	False	PoN4_CoLoRSdb
+248232685	DEL	-1	tensor_representative		A	2	False	False	False	False	
+248236794	INS	1	tensor_representative		A	6	True	False	False	False	PoN1_gnomAD
+248771254	INS	1	tensor_representative		A	7	True	False	False	False	
