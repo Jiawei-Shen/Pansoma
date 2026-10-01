@@ -1,0 +1,1917 @@
+chrom	vcf_pos	vcf_ref	vcf_alt	kind	length	in_bed	reads_reason	graph_class	events
+chr1	5837950	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr1	7284177	CTTATTA	C	DEL	6	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:6
+chr1	8890333	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr1	9206786	AT	A	DEL	1	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr1	11619716	CTT	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr1	11898043	A	AAAAAAAAGAAAAGAAAAG	INS	18	True	site_bypassed:skip_edge:no_edit	closest graph allele differs by >= 2 bp	edit distance 3
+chr1	18208376	A	AATATAT	INS	6	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:ATATAT
+chr1	18502519	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr1	20549949	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr1	21780738	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr1	24564513	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr1	26272642	T	TG	INS	1	True	site_bypassed:branch:no_edit	several events	branch:1:0:T;branch:1:1:G
+chr1	27003327	C	CTT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr1	28347589	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr1	28664185	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr1	32405697	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr1	34487152	AACACACACACACACAC	A	DEL	16	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:16
+chr1	36580278	T	TAC	INS	2	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:AC
+chr1	38522283	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr1	41058378	G	GTTTTTTT	INS	7	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:7:0:TTTTTTT
+chr1	44108660	C	CTTTTT	INS	5	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:5:0:TTTTT
+chr1	46852633	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr1	48267752	G	GTTTTT	INS	5	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:5:0:TTTTT
+chr1	50382613	C	CTT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr1	50388379	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr1	50457865	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr1	51546696	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr1	55285013	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr1	55420073	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr1	55796112	C	CA	INS	1	True	site_bypassed:branch:no_edit	several events	branch:1:0:C;branch:1:1:A
+chr1	60157226	GATAT	G	DEL	4	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:4
+chr1	60163263	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr1	60881813	AAAGAAAGAAAGAAAGGAAGG	A	DEL	20	True	site_bypassed:branch:no_edit	several events	skip:16;skip:4;branch:1:1:A
+chr1	62921182	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr1	70387345	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr1	70748855	G	GTTTTT	INS	5	True	site_bypassed:branch:no_edit	matches with nearby germline	70748842:G>A;70748859:G>T
+chr1	71039649	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr1	71156211	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr1	72149879	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr1	77052917	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr1	77454821	GTT	G	DEL	2	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr1	78182937	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr1	78729313	CTTT	C	DEL	3	True	site_bypassed:branch:no_edit	DEL skip edge	skip:3
+chr1	79883783	G	GAAAAAAAA	INS	8	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AAAAAAAA
+chr1	80573480	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr1	82686653	GA	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr1	85725272	AC	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr1	102664951	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr1	102863585	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr1	103465979	G	GTATA	INS	4	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TATA
+chr1	106823345	A	AATTTTTT	INS	7	True	site_bypassed:branch:no_edit	several events	skip:4;branch:1:0:TATATATA;skip:1;branch:3:3:ATT;branch:3:0:TTTT
+chr1	108089651	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr1	109183347	AACAAAAAAAAGAG	A	DEL	13	True	site_bypassed:skip_edge:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr1	110806296	C	CAAA	INS	3	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AAA
+chr1	112233484	T	TAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr1	112741370	C	CGTGTGT	INS	6	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:TGTGTG
+chr1	114331680	G	GA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr1	143636217	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr1	147674747	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr1	148513618	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr1	151261954	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr1	151446274	A	AAG	INS	2	False	site_bypassed:branch:no_edit	several events	branch:1:0:A;branch:1:0:G
+chr1	151871325	G	GA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr1	153539446	A	ATAT	INS	3	True	site_bypassed:branch:no_edit	matches with nearby germline	153539450:A>T
+chr1	153695252	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr1	153987774	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr1	154560123	ATATATATATATTTATTTATTTATT	A	DEL	24	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr1	155366989	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr1	158633661	GA	G	DEL	1	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr1	158691885	G	GA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr1	159578113	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr1	161156536	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr1	163290653	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr1	164013460	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr1	165223809	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr1	165724986	TTCTCTCTCTCTCTC	T	DEL	14	True	site_bypassed:branch:no_edit	several events	skip:6;branch:1:1:A;branch:1:9:A
+chr1	166389526	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr1	166887954	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr1	167040488	T	TAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr1	167144906	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr1	170585727	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr1	170970389	G	GA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr1	171156363	G	GA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr1	171476413	AGAAAGAAT	A	DEL	8	True	site_bypassed:branch:no_edit	several events	skip:8;branch:1:1:A
+chr1	173456575	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr1	173574505	C	CTT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr1	177755378	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr1	179284261	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr1	179408968	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr1	182312030	GT	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr1	183957778	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr1	184675912	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr1	186147390	CTT	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr1	187024859	GA	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr1	187294682	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr1	187677185	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr1	187963076	CAA	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr1	188635089	T	TAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr1	189600829	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr1	189827641	A	AG	INS	1	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr1	190429593	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr1	191259931	CTT	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr1	191433483	A	AAAAAAAAAACAAACAAAC	INS	18	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:13:0:ACAAACAAACAAAAAAAA
+chr1	191617486	A	ACTCT	INS	4	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:CTCT
+chr1	194115661	G	GCA	INS	2	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:CA
+chr1	195754793	AACACAC	A	DEL	6	False	site_bypassed:branch:no_edit	several events	branch:1:1:G;branch:1:1:G;branch:1:1:G;skip:6
+chr1	198488330	G	GATA	INS	3	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:AAT
+chr1	201521888	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr1	203246756	T	TAAAA	INS	4	False	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:AAAA
+chr1	203386066	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr1	203532786	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr1	204835213	CTT	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr1	206911238	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr1	207053904	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr1	208017985	T	TAC	INS	2	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:CA
+chr1	208022027	CGTGT	C	DEL	4	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:4
+chr1	210519527	C	CTT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr1	210538075	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr1	211054118	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr1	211741523	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr1	212957617	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr1	213994750	AATATATATATATATATATATATAT	A	DEL	24	True	site_bypassed:skip_edge:no_edit	several events	skip:1;skip:2;skip:11;skip:10
+chr1	214017567	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr1	214752975	C	CA	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr1	215236045	A	AATCTATCTATCATCT	INS	15	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:6:0:ATCATCTATCTATCT
+chr1	215312157	C	CATATATATAT	INS	10	False	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 4
+chr1	217749985	C	CTCTATATATATATATATATATATATATATA	INS	30	True	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 10
+chr1	218053774	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr1	218145483	TAC	T	DEL	2	True	site_bypassed:branch:no_edit	several events	skip:2;branch:1:1:T
+chr1	218379487	C	CTTT	INS	3	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TTT
+chr1	218522476	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr1	222256436	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr1	227456809	CA	C	DEL	1	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr1	229382580	T	TTATATATA	INS	8	True	site_bypassed:branch:no_edit	matches with nearby germline	229382582:T>A
+chr1	236778463	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr1	237148527	A	ATATATAT	INS	7	True	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 4
+chr1	237212078	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr1	237253163	CAA	C	DEL	2	True	site_bypassed:branch:no_edit	several events	branch:1:0:C;skip:3
+chr1	238244686	TATAC	T	DEL	4	True	site_bypassed:branch:no_edit	several events	skip:6;branch:1:1:T;branch:1:1:T;branch:2:0:CA
+chr1	238884482	T	TTTTTTTTTA	INS	9	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr1	239140379	AT	A	DEL	1	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr1	241235909	T	TGAGAGAGAAAGAGAGAGAGAGAGAGAGAGAGAGAGAGA	INS	38	True	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 14
+chr1	241341870	C	CT	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr1	242750920	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr1	242862508	C	CA	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr1	245128014	C	CAAAAA	INS	5	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:5:0:AAAAA
+chr1	245640143	C	CTCTCTCTCTCTCTCTCTCTCTCTCTCTCTCTCTATATATATATATATATATATA	INS	54	True	site_bypassed:branch:no_edit	several events	branch:11:0:CTCTCTCTCTCTCTCTCTCTCTCTCTCTCTCT;branch:2:0:TC;branch:4:0:TCTC;branch:10:1:ATATATATATATATATA;branch:1:1:A;branch:1:1:A
+chr1	247061183	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr2	984259	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr2	2068769	GTT	G	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr2	2671565	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr2	3049608	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr2	3813732	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr2	4179555	CAAA	C	DEL	3	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:3
+chr2	4966416	T	TATATACAC	INS	8	True	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 8
+chr2	6286861	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr2	6474209	G	GTTTTTT	INS	6	True	site_bypassed:branch:no_edit	matches with nearby germline	6474210:G>T
+chr2	6482149	G	GTTT	INS	3	True	site_bypassed:branch:no_edit	matches with nearby germline	6482156:G>T
+chr2	7208870	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr2	7385925	G	GGAGA	INS	4	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AGAG
+chr2	9651869	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr2	11507403	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr2	11693818	ATATAT	A	DEL	5	True	site_bypassed:branch:no_edit	several events	skip:4;branch:4:5:TATA
+chr2	12909272	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr2	13009796	G	GTA	INS	2	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:TA
+chr2	13931306	CAAAAAAAAAA	C	DEL	10	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:10
+chr2	14588117	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr2	14797094	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr2	16267044	GA	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr2	16459623	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr2	16959779	ATT	A	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr2	17688315	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr2	17888629	G	GTATATCTATA	INS	10	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:9:0:CTATATATAT
+chr2	18380381	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr2	19091576	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr2	21969611	T	TA	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr2	22047670	G	GTATATA	INS	6	True	site_bypassed:branch:no_edit	several events	branch:2:0:ATAT;branch:2:0:AT
+chr2	25781959	C	CTTTT	INS	4	True	site_bypassed:branch:no_edit	matches with nearby germline	25781966:C>T
+chr2	28838178	ATT	A	DEL	2	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr2	31596385	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr2	34044537	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr2	34396470	A	ATTT	INS	3	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:TTT
+chr2	34500599	C	CAAAAA	INS	5	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:4:0:AAAAA
+chr2	35695046	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr2	36703934	TTG	T	DEL	2	True	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 2
+chr2	38312706	T	TA	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr2	38325673	CACACACACACACACACACACACCAGT	C	DEL	26	True	site_bypassed:skip_edge:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr2	40032011	C	CA	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr2	41036460	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr2	42452243	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr2	42487156	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr2	44708211	A	ATTTTT	INS	5	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:5:0:TTTTT
+chr2	45591013	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr2	47210005	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr2	48302987	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr2	50008468	A	ATTT	INS	3	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TTT
+chr2	50072613	AT	A	DEL	1	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr2	50232386	TC	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr2	50341397	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr2	50499947	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr2	50683646	A	AAAAAAAAATATATAT	INS	15	True	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 3
+chr2	52321950	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr2	58257404	C	CAAAAAAA	INS	7	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:AAAAAAA
+chr2	60960149	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr2	61515069	T	TAAA	INS	3	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:AAA
+chr2	61798993	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr2	65573712	CAAAA	C	DEL	4	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:4
+chr2	66889220	AC	A	DEL	1	True	site_bypassed:branch:no_edit	several events	branch:1:0:C;skip:2
+chr2	67316779	C	CAT	INS	2	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:TA
+chr2	67746039	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr2	67773641	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr2	67956883	GAC	G	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr2	68700830	AAAAAAAC	A	DEL	7	True	site_bypassed:skip_edge:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr2	68904220	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr2	68915459	GA	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr2	69694365	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr2	69771094	C	CA	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr2	69933200	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr2	70521097	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr2	72319841	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr2	73613839	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr2	73832108	T	TATATATATATATATATATATAC	INS	22	True	site_bypassed:branch:no_edit	matches with nearby germline	73832084:C>CAT
+chr2	74122511	A	ATAT	INS	3	True	site_bypassed:branch:no_edit	branch replaces GRCh38	branch:5:2:ATTTT
+chr2	75228675	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr2	77526486	C	CAAA	INS	3	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:AAA
+chr2	77548081	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr2	77978970	A	AT	INS	1	True	site_bypassed:branch:no_edit	several events	branch:1:0:A;branch:1:1:T
+chr2	79332301	GAA	G	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr2	79655828	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr2	79751593	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr2	80363004	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr2	80364556	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr2	81146241	AG	A	DEL	1	True	site_bypassed:branch:no_edit	DEL skip edge	skip:1
+chr2	82768186	C	CAAAA	INS	4	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AAAA
+chr2	83139316	T	TAGAG	INS	4	True	site_bypassed:branch:no_edit	matches with nearby germline	83139320:T>G
+chr2	83500032	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr2	85176986	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr2	86569308	A	ATATATATATATAT	INS	13	True	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 5
+chr2	86905128	A	AAAATATAT	INS	8	True	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 2
+chr2	103515107	A	ATGTG	INS	4	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TGTG
+chr2	104777060	GAA	G	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr2	105669116	TATA	T	DEL	3	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr2	106711032	C	CGT	INS	2	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:GT
+chr2	107156686	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr2	107904612	A	ATT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr2	109632818	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr2	114196935	CAT	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr2	114270120	TTCC	T	DEL	3	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr2	114993580	G	GTATATATATATATATA	INS	16	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:8:0:TATATATATATATATA
+chr2	115244237	TATAGAGAGAGAG	T	DEL	12	True	site_bypassed:branch:no_edit	several events	skip:4;branch:1:1:T;skip:8
+chr2	116066593	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr2	116101198	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr2	118216023	A	AC	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:C
+chr2	118826825	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr2	123011359	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr2	125050552	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr2	126804957	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr2	130292130	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr2	130770050	AG	A	DEL	1	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr2	131943402	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr2	132394666	C	CA	INS	1	False	site_bypassed:branch:no_edit	several events	branch:1:1:A;branch:1:0:C
+chr2	132394726	C	CA	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr2	135618463	A	AT	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr2	139814495	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr2	139907681	GT	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr2	140089113	CTTT	C	DEL	3	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:3
+chr2	140843058	TTTTTTTTTGTTTTTTTTTTTTTGTTTG	T	DEL	27	True	site_bypassed:skip_edge:no_edit	several events	skip:29;branch:1:0:TT
+chr2	143067951	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr2	143145839	GGTGT	G	DEL	4	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:4
+chr2	143407989	A	ATG	INS	2	True	site_bypassed:branch:no_edit	several events	branch:1:0:TG;branch:1:1:A;branch:1:1:G
+chr2	146564189	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr2	147040479	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr2	149806057	GT	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr2	151967039	AT	A	DEL	1	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr2	152974028	C	CAAAAA	INS	5	False	site_bypassed:branch:no_edit	INS multi-node branch	branch:5:0:AAAAA
+chr2	154497013	GT	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr2	154825875	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr2	154970389	AAAAAAATAT	A	DEL	9	True	site_bypassed:branch:no_edit	several events	skip:7;branch:1:1:A;skip:2
+chr2	159325076	ATTATATATATATATATTATATATATATATATATATATATTT	A	DEL	41	True	site_bypassed:skip_edge:no_edit	closest graph allele differs by >= 2 bp	edit distance 2
+chr2	161978384	C	CAA	INS	2	False	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr2	163254963	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr2	163668014	A	AC	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:C
+chr2	166103449	T	TTAAA	INS	4	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:TAAA
+chr2	167542798	C	CT	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr2	167812996	A	AC	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:C
+chr2	169627725	T	TTTTTTTTA	INS	8	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr2	174632709	CAAAAA	C	DEL	5	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:5
+chr2	175481951	GT	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr2	176136150	AACACAC	A	DEL	6	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:6
+chr2	176882601	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr2	178183624	AAAAG	A	DEL	4	True	site_bypassed:skip_edge:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr2	181371984	GA	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr2	181948611	TTTTCTTTC	T	DEL	8	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:8
+chr2	185166219	TACA	T	DEL	3	True	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 2
+chr2	185454614	CAAAA	C	DEL	4	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:4
+chr2	186073698	G	GA	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr2	188769116	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr2	191375470	A	AAGATAGATAGAT	INS	12	True	site_bypassed:branch:no_edit	several events	branch:2:0:AA;branch:1:0:GAT;branch:1:0:GAT;branch:1:0:ATAG
+chr2	195766167	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr2	196982108	T	TTTTATATATATATATATATA	INS	20	True	site_bypassed:branch:no_edit	several events	branch:1:1:T;branch:5:0:TATATATATATATATATATA
+chr2	198270289	C	CTT	INS	2	True	site_bypassed:branch:no_edit	several events	branch:1:0:TCT;branch:1:2:T
+chr2	199185814	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr2	201816455	GTT	G	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr2	204327114	C	CTTT	INS	3	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TTT
+chr2	205378635	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr2	206917458	C	CTCTCTCTCTCTCTCTATATATATATATATATATATA	INS	36	True	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 4
+chr2	211324487	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr2	211687304	CAA	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr2	213980725	T	TATATAG	INS	6	True	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 2
+chr2	218969502	C	CT	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr2	219759777	C	CTTT	INS	3	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:TTT
+chr2	219983546	GATAT	G	DEL	4	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:4
+chr2	220873985	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr2	222731041	T	TACACACAC	INS	8	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:4:0:CACACACA
+chr2	223769736	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr2	225009638	C	CAAA	INS	3	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:AAA
+chr2	225014081	A	ATATAT	INS	5	True	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 2
+chr2	227643251	TTCTCTCTC	T	DEL	8	True	site_bypassed:skip_edge:no_edit	closest graph allele differs by >= 2 bp	edit distance 2
+chr2	227881743	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr2	228473352	T	TA	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr2	230752247	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr2	231629686	A	ATT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr2	232471388	TCACA	T	DEL	4	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:4
+chr2	234125814	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr2	235389465	A	AAAAC	INS	4	True	site_bypassed:branch:no_edit	several events	branch:4:0:AAAA;branch:1:1:C
+chr2	239687117	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr3	337188	TTTG	T	DEL	3	True	site_bypassed:skip_edge:no_edit	several events	skip:1;skip:2
+chr3	1170236	CAAAAAAAAAAA	C	DEL	11	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:11
+chr3	2396656	G	GTTTTTT	INS	6	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:TTTTTT
+chr3	2584697	CAA	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr3	3343439	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr3	7041079	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr3	9588627	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr3	11733001	T	TG	INS	1	True	site_bypassed:branch:no_edit	matches with nearby germline	11733000:G>T;11733004:G>T;11733008:G>T;11733012:G>T;11733061:C>T
+chr3	13912311	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr3	14049261	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr3	15964121	A	ATTTTTTTTTTT	INS	11	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:4:0:TTTTTTTTTTT
+chr3	16591433	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr3	20639487	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr3	20806603	GAA	G	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr3	20868232	G	GA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr3	22220060	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr3	22566730	C	CTT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr3	23224156	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr3	28037661	AGAGT	A	DEL	4	True	site_bypassed:branch:no_edit	several events	branch:1:1:T;skip:4
+chr3	29011533	C	CTT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr3	29246719	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr3	31812718	AAAAGAAAGAAAGAAAGAAAGAAAGAAAG	A	DEL	28	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr3	33246651	C	CA	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr3	33584282	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr3	33923116	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr3	35667948	AAAGAAGAAG	A	DEL	9	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:9
+chr3	36585428	CAA	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr3	41404226	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr3	46550377	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr3	54774629	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr3	56266131	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr3	57171953	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr3	57483950	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr3	59106081	GA	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr3	60124041	G	GACAGAGAGAGAGAGAGAC	INS	18	True	site_bypassed:branch:no_edit	several events	branch:12:0:ATATATAGAGAG;branch:1:5:G;branch:1:1:C;branch:4:0:AGAGAGAGAC
+chr3	62737474	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr3	64720865	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr3	66018113	T	TG	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:G
+chr3	69304175	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr3	70143298	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr3	72984601	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr3	74987379	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr3	75240109	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr3	76963836	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr3	76992325	CTA	C	DEL	2	True	site_bypassed:branch:no_edit	DEL skip edge	skip:2
+chr3	77902667	C	CAACAAAAAA	INS	9	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:7:0:AACAAAAAA
+chr3	78860326	A	ATATAT	INS	5	True	site_bypassed:branch:no_edit	several events	branch:4:1:TATA;branch:2:0:TT
+chr3	82690434	C	CAAA	INS	3	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:AAA
+chr3	82930049	T	TATATATATATATATATATATATATAC	INS	26	True	site_bypassed:branch:no_edit	several events	branch:1:0:A;branch:9:0:TATATATATATATATATATAT;branch:3:0:ATAC
+chr3	84619766	C	CTATATA	INS	6	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:TATATA
+chr3	84775592	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr3	84782460	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr3	84919515	TAA	T	DEL	2	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr3	85066381	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr3	86092619	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr3	86446433	T	TTATATACATATATATATATATATA	INS	24	True	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 2
+chr3	86817151	GAA	G	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr3	89864061	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr3	94202347	AT	A	DEL	1	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr3	95731195	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr3	96762166	CT	C	DEL	1	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr3	97946586	G	GTATATATATA	INS	10	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:4:0:TATATATATA
+chr3	98094223	G	GTTT	INS	3	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:TTT
+chr3	98709552	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr3	102678222	C	CT	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr3	103010435	C	CATATAT	INS	6	True	site_bypassed:branch:no_edit	several events	branch:2:0:ATAT;branch:2:0:AT
+chr3	103489596	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr3	103824989	C	CA	INS	1	True	site_bypassed:branch:no_edit	branch replaces GRCh38	branch:2:1:AT
+chr3	105059627	CAAAAAAAAAAA	C	DEL	11	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:11
+chr3	107014039	GA	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr3	109359368	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr3	109552631	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr3	114347077	GTTT	G	DEL	3	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:3
+chr3	115546399	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr3	116019157	T	TG	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:G
+chr3	116221150	C	CAAAAAAAAA	INS	9	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:5:0:AAAAAAAAA
+chr3	116498132	G	GTT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr3	116563552	CTCTGTG	C	DEL	6	True	site_bypassed:branch:no_edit	several events	branch:1:1:G;skip:6
+chr3	116675736	A	AACAC	INS	4	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:CACA
+chr3	116818074	CTTT	C	DEL	3	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:3
+chr3	117559606	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr3	117694300	G	GACACACACACACACAC	INS	16	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:8:0:ACACACACACACACAC
+chr3	118125763	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr3	118180974	T	TAC	INS	2	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:AC
+chr3	119645566	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr3	119960151	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr3	121194909	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr3	121203071	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr3	123426314	G	GTT	INS	2	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:TT
+chr3	125036209	C	CAAAAAAA	INS	7	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AAAAAAA
+chr3	125768654	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr3	126636925	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr3	127658406	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr3	128046550	AT	A	DEL	1	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr3	128511369	T	TAGAGAG	INS	6	True	site_bypassed:branch:no_edit	matches with nearby germline	128511367:T>G;128511371:T>G
+chr3	129702249	GT	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr3	130874109	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr3	131443957	CT	C	DEL	1	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr3	133084122	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr3	135692832	CAAAAAAA	C	DEL	7	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:7
+chr3	137144915	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr3	137495081	G	GT	INS	1	True	site_bypassed:branch:no_edit	matches with nearby germline	137495082:G>T
+chr3	140422189	TTCTCTC	T	DEL	6	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:6
+chr3	140617693	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr3	140889892	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr3	144563280	T	TTATATATA	INS	8	True	site_bypassed:branch:no_edit	several events	branch:2:0:TA;branch:7:1:TATATAC
+chr3	145214225	T	TATAGAG	INS	6	True	site_bypassed:branch:no_edit	several events	branch:1:1:T;branch:2:0:GAGAGA
+chr3	147261112	GATAGATAGAGAT	G	DEL	12	True	site_bypassed:skip_edge:no_edit	several events	skip:8;skip:4
+chr3	150232678	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr3	151219891	AC	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr3	151229305	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr3	151463523	GT	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr3	153046342	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr3	153185652	TTATTTATATATATATATATATA	T	DEL	22	True	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 2
+chr3	153280500	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr3	154331364	G	GA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr3	155982966	GA	G	DEL	1	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr3	156875992	CAA	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr3	157378306	GTATATATATATATATATATATA	G	DEL	22	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:22
+chr3	157660807	TG	T	DEL	1	True	site_bypassed:branch:no_edit	several events	skip:1;branch:1:1:T
+chr3	159432327	TGTGTGTGTGTGTGAGAGAGA	T	DEL	20	True	site_bypassed:branch:no_edit	several events	skip:14;skip:2;branch:1:5:T
+chr3	161246933	G	GTT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr3	161954848	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr3	162315583	GTT	G	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr3	162462131	A	AAAAAG	INS	5	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr3	163439329	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr3	163533041	TATATATATATATATACACACAC	T	DEL	22	True	site_bypassed:skip_edge:no_edit	closest graph allele differs by >= 2 bp	edit distance 2
+chr3	163831016	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr3	163895787	T	TTA	INS	2	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr3	164729653	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr3	165269170	GT	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr3	166065391	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr3	166670601	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr3	166897395	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr3	167150162	G	GA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr3	167323236	AGAGG	A	DEL	4	True	site_bypassed:skip_edge:no_edit	several events	skip:1;skip:3
+chr3	168537979	G	GTATATATATATATATATATATATATATA	INS	28	True	site_bypassed:branch:no_edit	matches with nearby germline	168537996:C>T
+chr3	168920783	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr3	169149077	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr3	171347221	G	GAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr3	171357551	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr3	172012099	AAG	A	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr3	174030122	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr3	174066516	G	GTC	INS	2	True	site_bypassed:branch:no_edit	several events	skip:2;branch:1:1:C;branch:1:1:C;branch:4:0:GTGT
+chr3	174302837	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr3	174657041	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr3	177134945	C	CTGTGTGTGTG	INS	10	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:4:0:GTGTGTGTGT
+chr3	179085349	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr3	180926506	A	ATT	INS	2	True	site_bypassed:branch:no_edit	several events	skip:2;branch:4:0:TATT
+chr3	181523326	AC	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr3	185395357	C	CTTTTTTTTTTT	INS	11	True	site_bypassed:branch:no_edit	several events	branch:2:0:TT;branch:4:0:TTTTTTTTT
+chr3	186507431	C	CTT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr3	188142662	G	GAGAAAGAA	INS	8	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:AAGAAAGA
+chr3	188441612	T	TC	INS	1	False	site_bypassed:branch:no_edit	several events	branch:1:0:T;branch:1:1:C
+chr3	198089706	CAAAA	C	DEL	4	True	site_bypassed:branch:no_edit	matches with nearby germline	198089735:AAATATATATATATAT>A
+chr4	2013540	GT	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr4	4225566	C	CAAAAA	INS	5	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:5:0:AAAAA
+chr4	5434454	G	GTA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TA
+chr4	6073077	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr4	9646883	CAA	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr4	11884215	AGAAAAG	A	DEL	6	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:6
+chr4	12187456	GA	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr4	14412764	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr4	17304709	A	AAAAAAAAAAAAAAAC	INS	15	True	site_bypassed:branch:no_edit	matches with nearby germline	17304717:C>A
+chr4	19434251	T	TTTTATTTTATTTTATTTTATTTTATTTTA	INS	29	True	site_bypassed:branch:no_edit	several events	branch:4:0:ATTTTATTTT;branch:2:0:TATTT;branch:8:0:TTATTTATTTTATT
+chr4	22288057	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr4	23485788	G	GTT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr4	25449117	T	TA	INS	1	True	site_bypassed:branch:no_edit	several events	branch:1:0:AA;skip:1
+chr4	28517980	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr4	28864346	GTT	G	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr4	29600817	G	GA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr4	31833903	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr4	32683412	GA	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr4	32793744	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr4	32993567	CAA	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr4	33542334	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr4	33612385	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr4	37208190	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr4	43264804	T	TATATAC	INS	6	True	site_bypassed:branch:no_edit	several events	branch:1:1:C;branch:1:1:T;branch:4:0:ATAC;branch:1:1:T;branch:1:0:CA
+chr4	44007137	TAAA	T	DEL	3	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:3
+chr4	45724740	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr4	47597351	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr4	48674736	C	CAAAAAAA	INS	7	True	site_bypassed:branch:no_edit	several events	branch:4:0:AAAAA;branch:2:0:AA
+chr4	57514464	C	CT	INS	1	False	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 3
+chr4	58079730	GA	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr4	58665244	G	GTT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr4	58792816	C	CTT	INS	2	False	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr4	60879745	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr4	61280107	C	CT	INS	1	True	site_bypassed:branch:no_edit	matches with nearby germline	61280113:C>T
+chr4	61980306	A	ATTTTT	INS	5	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:4:0:TTTTT
+chr4	62307552	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr4	67015319	GT	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr4	67990271	T	TATACGTATATATATATATACATATATATATATACGTATATATATATATATACACACAC	INS	58	True	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 9
+chr4	73492792	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr4	74186438	G	GA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr4	74443735	G	GTTATTA	INS	6	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:ATTATT
+chr4	75870878	C	CATTTATTTATTTATTT	INS	16	True	site_bypassed:branch:no_edit	several events	branch:3:0:ATTTATTTATTT;branch:2:0:TTAT
+chr4	77661277	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr4	82947235	A	ATTTTTTT	INS	7	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:7:0:TTTTTTT
+chr4	89580066	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr4	89605600	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr4	89791005	C	CTTT	INS	3	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:TTT
+chr4	89956680	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr4	91411491	C	CATATATATAT	INS	10	True	site_bypassed:branch:no_edit	several events	branch:1:0:CATATATA;branch:1:1:T;branch:2:0:TA
+chr4	95679697	A	ATG	INS	2	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:TG
+chr4	96544557	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr4	101830244	GTT	G	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr4	105388834	AAG	A	DEL	2	True	site_bypassed:branch:no_edit	several events	branch:1:1:A;skip:2
+chr4	105508740	CTT	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr4	106363883	T	TG	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:G
+chr4	107407539	G	GAGAAAGAA	INS	8	True	site_bypassed:branch:no_edit	several events	branch:1:0:AGAA;branch:3:0:AGAA
+chr4	108252474	CTATATATATA	C	DEL	10	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:10
+chr4	108442079	C	CT	INS	1	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr4	110581279	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr4	112496045	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr4	112845322	G	GTT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr4	114821152	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr4	117009625	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr4	120224631	C	CTCTCTCTCTCTATATATATATATATA	INS	26	False	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 8
+chr4	121081914	C	CTTTTT	INS	5	False	site_bypassed:branch:no_edit	INS multi-node branch	branch:5:0:TTTTT
+chr4	122448712	CTT	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr4	122921616	AAAC	A	DEL	3	True	site_bypassed:branch:no_edit	several events	skip:3;branch:1:1:A
+chr4	124971321	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr4	127086270	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr4	128783188	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr4	129656378	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr4	129945779	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr4	129973772	A	ATGTG	INS	4	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TGTG
+chr4	130535602	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr4	132309531	G	GTGTA	INS	4	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr4	132340527	C	CTCTCTCTCTCTATATATATATATA	INS	24	True	site_bypassed:branch:no_edit	matches with nearby germline	132340507:T>C;132340544:C>T
+chr4	132718229	C	CATAT	INS	4	True	site_bypassed:branch:no_edit	several events	branch:1:0:ATAT;branch:1:1:C;branch:1:1:T
+chr4	133731278	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr4	134345829	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr4	135923958	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr4	136048792	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr4	136785854	C	CAAA	INS	3	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:AAA
+chr4	136913411	A	ACC	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:CC
+chr4	137951945	CAA	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr4	138571705	CAAA	C	DEL	3	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:3
+chr4	140496837	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr4	143055308	A	AAG	INS	2	True	site_bypassed:branch:no_edit	several events	branch:2:0:AA;branch:1:1:G
+chr4	145573152	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr4	152454251	G	GC	INS	1	True	site_bypassed:branch:no_edit	several events	branch:1:1:C;branch:1:0:T
+chr4	157093754	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr4	159773105	G	GTT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr4	160833147	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr4	160988609	GA	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr4	161153474	G	GTT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr4	161585587	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr4	161784892	C	CAAAAAA	INS	6	True	site_bypassed:branch:no_edit	matches with nearby germline	161784901:C>A;161784907:C>A
+chr4	162698556	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr4	163247493	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr4	165456739	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr4	166172049	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr4	166447921	A	ATT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr4	166535729	A	AAAAAG	INS	5	True	site_bypassed:branch:no_edit	several events	branch:4:0:AAAA;branch:1:0:G
+chr4	167615956	G	GTT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr4	169882811	C	CTTT	INS	3	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:TTT
+chr4	173734542	TCC	T	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr4	173938955	A	AAC	INS	2	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr4	176563664	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr4	176564277	C	CTTT	INS	3	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:TTT
+chr4	178092325	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr4	180433221	ATTTC	A	DEL	4	True	site_bypassed:branch:no_edit	several events	branch:1:0:CTTT;skip:2;skip:6
+chr4	182806199	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr4	185206660	C	CAAAAA	INS	5	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:4:0:AAAAA
+chr4	185975902	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr4	187987581	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr4	188203326	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr4	189114588	CTTT	C	DEL	3	True	site_bypassed:branch:no_edit	DEL skip edge	skip:3
+chr5	2088764	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr5	2461228	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr5	3679524	A	ATT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr5	3857799	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr5	4643523	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr5	4811321	GTATA	G	DEL	4	True	site_bypassed:branch:no_edit	several events	branch:1:0:TA;skip:6
+chr5	8152261	TG	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr5	9291761	C	CT	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr5	9412591	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr5	9640497	T	TAAAA	INS	4	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:4:0:AAAA
+chr5	11505197	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr5	11623800	GTGTGTATGTATATATA	G	DEL	16	True	site_bypassed:branch:no_edit	DEL skip edge	skip:16
+chr5	12254443	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr5	12359194	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr5	14045783	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr5	15170858	T	TTATA	INS	4	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TATA
+chr5	16615399	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr5	16858441	T	TA	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr5	16942996	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr5	17221365	GT	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr5	18487342	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr5	20012372	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr5	21895017	GA	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr5	22085175	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr5	22752556	TTTTTTTTTTTTTTTTTTC	T	DEL	18	True	site_bypassed:skip_edge:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr5	23414859	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr5	24762128	A	AT	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr5	25009641	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr5	26340611	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr5	26771505	CA	C	DEL	1	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr5	27274510	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr5	27320305	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr5	27431964	A	ATTTTATAT	INS	8	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:4:0:TTTTATAT
+chr5	27627990	T	TCCC	INS	3	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:CCC
+chr5	27659943	TAA	T	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr5	27669181	CAA	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr5	28930963	AT	A	DEL	1	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr5	29725447	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr5	30258340	GT	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr5	30876402	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr5	32011008	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr5	32042407	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr5	33347358	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr5	36290898	AT	A	DEL	1	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr5	37707921	GAAA	G	DEL	3	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:3
+chr5	40820230	TTC	T	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr5	41666471	C	CA	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr5	42643720	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr5	45404498	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr5	50364184	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr5	53798063	C	CAAA	INS	3	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:AAA
+chr5	62196995	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr5	64427548	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr5	64528810	CAAA	C	DEL	3	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:3
+chr5	65486122	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr5	72419192	G	GC	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:C
+chr5	80118714	A	ATT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr5	82124074	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr5	82299195	CTTT	C	DEL	3	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:3
+chr5	82917545	TATATATATATATATATATATATAA	T	DEL	24	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:24
+chr5	85075307	C	CATATATATATATATATAT	INS	18	True	site_bypassed:branch:no_edit	several events	branch:7:0:TATATATATATATA;branch:4:0:TATA
+chr5	87476238	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr5	89568337	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr5	90085666	ATT	A	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr5	90993154	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr5	93358816	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr5	95257796	T	TACACACATACACACACACAC	INS	20	True	site_bypassed:branch:no_edit	several events	branch:1:1:T;branch:7:0:ACACACACACACACACACAC
+chr5	97370870	CAAA	C	DEL	3	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:3
+chr5	98315186	G	GA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr5	99641115	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr5	99917848	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr5	103856283	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr5	104609146	TTTTTC	T	DEL	5	True	site_bypassed:branch:no_edit	several events	skip:5;branch:1:1:T
+chr5	105746180	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr5	110466616	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr5	111622299	A	AAG	INS	2	True	site_bypassed:branch:no_edit	matches with nearby germline	111622296:G>A;111622303:A>G;111622327:A>G
+chr5	114065846	GTTTTTTTTTT	G	DEL	10	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:10
+chr5	115314518	T	TATATATATATAGAGAGAGAGAG	INS	22	True	site_bypassed:branch:no_edit	several events	branch:1:0:TATATATA;branch:1:1:T;branch:7:0:GAGAGAGAGAGAGA
+chr5	120655374	C	CT	INS	1	True	site_bypassed:branch:no_edit	several events	branch:1:1:T;branch:1:0:A
+chr5	123303183	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr5	124245969	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr5	125041443	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr5	126422199	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr5	127138533	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr5	127391573	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr5	131393817	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr5	132153003	GT	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr5	137815075	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr5	140714104	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr5	143787274	C	CTCTCTCTCTCTATATATATATATA	INS	24	True	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 6
+chr5	144358090	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr5	145790721	G	GTGTGTGTGTGTATATATA	INS	18	False	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 2
+chr5	152553631	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr5	152562663	GA	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr5	153650896	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr5	154529665	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr5	157147629	C	CAAAA	INS	4	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AAAA
+chr5	157591205	TAA	T	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr5	160463177	ATTTTTTTTTTTT	A	DEL	12	True	site_bypassed:skip_edge:no_edit	several events	skip:8;skip:4
+chr5	161839895	C	CTCTTTCTTTCTTTCTTTCTT	INS	20	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:5:0:TCTTTCTTTCTTTCTTTCTT
+chr5	161886348	GT	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr5	163128307	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr5	164652358	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr5	165755085	TATATATATATGTACATATATATATGTAC	T	DEL	28	False	site_bypassed:skip_edge:no_edit	several events	skip:20;skip:8
+chr5	166052553	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr5	166209775	A	ATTT	INS	3	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:TTT
+chr5	166355207	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr5	166687360	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr5	166833522	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr5	169240579	CTTTT	C	DEL	4	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:4
+chr5	170032027	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr5	170376150	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr5	170656996	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr5	171166426	GT	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr5	172262446	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr5	177031998	CT	C	DEL	1	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr6	7813086	C	CAAAAAAAA	INS	8	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:8:0:AAAAAAAA
+chr6	10037507	G	GC	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:C
+chr6	10107964	C	CTTTTTTTTTTT	INS	11	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TTTTTTTTTTT
+chr6	10446566	T	TC	INS	1	True	site_bypassed:skip_edge:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr6	10907353	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr6	12689846	GT	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr6	13019072	A	ATT	INS	2	True	site_bypassed:branch:no_edit	several events	branch:1:0:AT;branch:1:1:T
+chr6	15061590	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr6	17675155	G	GA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr6	21633807	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr6	23406593	TTG	T	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr6	28643879	TATA	T	DEL	3	True	site_bypassed:branch:no_edit	matches with nearby germline	28643871:CAT>CATATAT;28643884:A>T;28643886:A>T
+chr6	28823884	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr6	28834776	C	CAAA	INS	3	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:AAA
+chr6	30459318	T	TAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr6	32691473	AAT	A	DEL	2	True	site_bypassed:skip_edge:no_edit	several events	skip:1;skip:1
+chr6	33244256	GTATATATATATATATATATATATATA	G	DEL	26	True	site_bypassed:branch:no_edit	several events	skip:6;branch:1:1:G;branch:3:1:ATA;branch:1:11:T;branch:1:3:T;branch:1:1:T;branch:1:1:T;branch:1:1:T;skip:8;skip:2
+chr6	33379334	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr6	35829242	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr6	38302485	GTATATATATA	G	DEL	10	True	site_bypassed:skip_edge:no_edit	several events	skip:8;skip:2
+chr6	39968541	A	AAG	INS	2	True	site_bypassed:branch:no_edit	matches with nearby germline	39968528:TA>T;39968540:G>A;39968545:A>C
+chr6	45113827	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr6	46339014	C	CAAAAAA	INS	6	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:4:0:AAAAAA
+chr6	46749554	C	CA	INS	1	True	site_bypassed:branch:no_edit	several events	branch:1:0:C;branch:1:1:A
+chr6	48079970	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr6	48619671	A	ATT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr6	49144692	TTTCCTTCCTTCC	T	DEL	12	True	site_bypassed:branch:no_edit	several events	skip:12;branch:1:1:T;branch:1:1:T;branch:1:1:T
+chr6	50547966	C	CAT	INS	2	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:AT
+chr6	53047464	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr6	53138278	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr6	56148338	C	CAGAGAGAGAGAGAGAGAG	INS	18	True	site_bypassed:branch:no_edit	several events	branch:8:0:AGAGAGAGAGAGAGAG;branch:2:0:GA
+chr6	57694521	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr6	60248138	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr6	60434835	GT	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr6	60477395	GT	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr6	63810315	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr6	63887314	G	GTTT	INS	3	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:TTT
+chr6	65279200	AT	A	DEL	1	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr6	65598230	CCCCA	C	DEL	4	True	site_bypassed:skip_edge:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr6	67033127	TTG	T	DEL	2	True	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 2
+chr6	67550305	A	ATTTTTTTT	INS	8	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:8:0:TTTTTTTT
+chr6	68191783	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr6	68293917	CTT	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr6	68402734	G	GTA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TA
+chr6	69069553	C	CAAAAA	INS	5	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:5:0:AAAAA
+chr6	69069731	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr6	71890596	A	AAAAAAAAAAC	INS	10	True	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 6
+chr6	74049014	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr6	74866012	T	TCA	INS	2	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:AC
+chr6	78233363	GA	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr6	78522161	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr6	81070370	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr6	81158262	C	CAG	INS	2	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:AG
+chr6	82456681	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr6	83737392	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr6	86101318	A	ATT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr6	91767060	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr6	92206345	T	TA	INS	1	True	site_bypassed:skip_edge:no_edit	several events	branch:1:0:AT;skip:1
+chr6	97144105	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr6	97284483	G	GCA	INS	2	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:AC
+chr6	97984689	CAA	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr6	101075860	AAC	A	DEL	2	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr6	101092682	C	CTT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr6	101389384	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr6	101558669	C	CTTTT	INS	4	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:4:0:TTTT
+chr6	101922141	C	CTCCCTTCCT	INS	9	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TCCCTTCCT
+chr6	106914948	ATATATATATGTATTTATGTATT	A	DEL	22	True	site_bypassed:skip_edge:no_edit	closest graph allele differs by >= 2 bp	edit distance 2
+chr6	107173122	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr6	114006590	G	GTT	INS	2	True	site_bypassed:branch:no_edit	matches with nearby germline	114006595:G>T;114006602:G>T
+chr6	117227129	GA	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr6	118991751	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr6	120912414	CTCTCTCTCTCTATATATATATATATATATATATATATATATA	C	DEL	42	True	site_bypassed:skip_edge:no_edit	several events	skip:10;skip:10;skip:8;skip:14
+chr6	123511989	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr6	125447503	G	GA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr6	130304926	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr6	130667980	GGAAAGAAA	G	DEL	8	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:8
+chr6	131409626	A	ATACACACACACACACAC	INS	17	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:TACACACACACACACAC
+chr6	136310518	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr6	139285257	AAC	A	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr6	141363465	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr6	141782528	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr6	143405123	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr6	145422074	T	TAG	INS	2	True	site_bypassed:branch:no_edit	several events	branch:1:1:G;branch:1:1:T;branch:1:0:AG
+chr6	145512710	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr6	146706845	G	GTTT	INS	3	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:TTT
+chr6	146807992	G	GTT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr6	147899189	A	AAAAAAAAAAAG	INS	11	True	site_bypassed:branch:no_edit	several events	branch:3:0:AAAA;branch:2:0:AAAAAAG
+chr6	153185637	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr6	156163803	G	GAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr6	158214660	A	ACTAT	INS	4	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:ATCT
+chr6	160467904	A	ATTTT	INS	4	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:4:0:TTTT
+chr6	160910531	C	CTT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr6	161692947	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr6	162958878	TATATATAGAGAGAGAGAGAGAGAGAG	T	DEL	26	True	site_bypassed:branch:no_edit	several events	skip:20;branch:1:7:T;branch:1:1:T;branch:1:1:T;branch:1:1:T;branch:1:1:T;branch:1:1:T;branch:1:1:T
+chr6	163193905	TTTC	T	DEL	3	True	site_bypassed:skip_edge:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr6	163768690	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr6	163895583	T	TC	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:C
+chr6	164823127	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr6	169739208	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr7	3053089	TTGGGG	T	DEL	5	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:5
+chr7	9105657	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr7	9164346	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr7	9253159	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr7	9816053	C	CATAG	INS	4	True	site_bypassed:branch:no_edit	several events	branch:1:1:T;branch:2:0:CAGA
+chr7	10496206	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr7	15072714	G	GAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr7	15241461	A	AC	INS	1	True	site_bypassed:branch:no_edit	several events	branch:1:0:A;branch:1:1:C
+chr7	15342779	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr7	17609297	CAAAAA	C	DEL	5	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:5
+chr7	18568026	G	GTGTATATATATATATATATA	INS	20	True	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 2
+chr7	18732701	GTA	G	DEL	2	True	site_bypassed:skip_edge:no_edit	closest graph allele differs by >= 2 bp	edit distance 2
+chr7	19268266	CATATATATAT	C	DEL	10	True	site_bypassed:branch:no_edit	several events	skip:2;branch:1:1:C;branch:1:1:C;branch:1:1:C;branch:1:1:C;skip:8
+chr7	19969968	ACC	A	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr7	20672327	GT	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr7	20758300	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr7	20994754	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr7	21880084	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr7	22000749	A	AAAGAAAGAAAG	INS	11	True	site_bypassed:branch:no_edit	several events	branch:1:0:AAA;skip:1;branch:1:0:AAAG;branch:1:0:GAAAG
+chr7	24240646	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr7	26175778	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr7	27703941	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr7	28543578	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr7	29293362	GC	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr7	30108067	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr7	31588631	C	CAAAAAAAAAAAAAA	INS	14	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:AAAAAAAAAAAAAA
+chr7	31705986	A	ATT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr7	35134007	T	TTATA	INS	4	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TATA
+chr7	36319327	CTT	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr7	37191188	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr7	37215992	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr7	40111336	A	AAGGG	INS	4	True	site_bypassed:branch:no_edit	several events	branch:2:0:AAGG;branch:1:1:G
+chr7	40245434	T	TTA	INS	2	True	site_bypassed:branch:no_edit	matches with nearby germline	40245421:A>T;40245423:AT>A;40245426:T>A;40245442:T>A
+chr7	40562298	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr7	41171959	CAAAAAAAAA	C	DEL	9	True	site_bypassed:branch:no_edit	several events	skip:2;branch:1:1:T;branch:1:1:T;branch:1:4:T;skip:4
+chr7	41376086	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr7	41817779	ATT	A	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr7	42115133	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr7	42337972	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr7	42442674	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr7	44597544	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr7	44857515	ATATATATATTTTTT	A	DEL	14	True	site_bypassed:branch:no_edit	several events	branch:1:0:TA;branch:1:14:A;branch:1:1:A;skip:3
+chr7	46247298	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr7	46289314	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr7	46815144	C	CAAAA	INS	4	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:AAAA
+chr7	48759056	A	AACACACACAC	INS	10	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:5:0:ACACACACAC
+chr7	48856894	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr7	52847632	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr7	54088145	C	CTTTTTTTTTTTT	INS	12	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:4:0:TTTTTTTTTTTT
+chr7	54578119	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr7	55061612	A	ATGTGTG	INS	6	True	site_bypassed:branch:no_edit	several events	branch:1:1:T;branch:1:1:T;branch:1:1:T;branch:3:0:AGAGAG
+chr7	55323225	C	CTCTCTCTCTCTCTCTCTATATATATA	INS	26	True	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 10
+chr7	55865972	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr7	62082995	CT	C	DEL	1	True	site_bypassed:branch:no_edit	several events	skip:1;branch:2:2:TC;branch:2:2:TC
+chr7	63587530	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr7	66628736	G	GCC	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:CC
+chr7	68422570	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr7	69266448	A	AG	INS	1	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr7	69306666	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr7	69659451	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr7	70685472	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr7	71544850	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr7	71849436	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr7	73277041	CAAAA	C	DEL	4	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:4
+chr7	79597956	GC	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr7	79871275	G	GT	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr7	85706988	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr7	87105166	CAA	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr7	88500606	G	GAT	INS	2	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:TA
+chr7	91444489	CTGTGTGTG	C	DEL	8	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:8
+chr7	93888664	GA	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr7	97876429	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr7	97896737	C	CATATATATATATATATAT	INS	18	True	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 3
+chr7	98669279	ATATATATAT	A	DEL	9	False	site_bypassed:branch:no_edit	matches with nearby germline	98669259:AG>A
+chr7	98787233	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr7	101054057	CAAAAAAAAAAA	C	DEL	11	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:11
+chr7	101394585	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr7	104417884	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr7	105596106	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr7	108364728	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr7	108982926	G	GTTTTTT	INS	6	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:5:0:TTTTTT
+chr7	108985769	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr7	109228292	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr7	109541640	A	ATT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr7	109774039	CAAAA	C	DEL	4	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:4
+chr7	110041985	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr7	110561853	GCC	G	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr7	113921924	C	CTTT	INS	3	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:TTT
+chr7	115645874	G	GA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr7	118242484	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr7	118505277	C	CGT	INS	2	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:GT
+chr7	121600354	A	ATTTTTTT	INS	7	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:6:0:TTTTTTT
+chr7	121981140	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr7	123047690	CTTT	C	DEL	3	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:3
+chr7	127283075	AT	A	DEL	1	True	site_bypassed:branch:no_edit	DEL skip edge	skip:1
+chr7	128382388	A	AAAAG	INS	4	True	site_bypassed:branch:no_edit	several events	branch:1:1:A;branch:2:0:GAGA
+chr7	132635170	TTATATA	T	DEL	6	True	site_bypassed:skip_edge:no_edit	several events	skip:1;skip:4;skip:1
+chr7	133243116	T	TTCTCTCTC	INS	8	True	site_bypassed:branch:no_edit	several events	branch:1:0:TCTC;branch:4:1:TCTCC
+chr7	134178934	A	AAAAAAAAAAAAAAAAACC	INS	18	True	site_bypassed:branch:no_edit	several events	branch:3:0:AAA;branch:6:0:AAAAAAAAAAAACC;branch:1:0:A
+chr7	134562832	CTCTT	C	DEL	4	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:4
+chr7	135892732	A	AAAAT	INS	4	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr7	136968721	A	AAT	INS	2	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:AT
+chr7	138409611	T	TC	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:C
+chr7	138456178	GC	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr7	139986795	GTGTGTATATATATATATA	G	DEL	18	True	site_bypassed:skip_edge:no_edit	several events	skip:4;skip:14
+chr7	141018064	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr7	144780041	A	ATT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr7	147638841	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr7	152007413	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr7	153004980	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr7	153038218	A	ATT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr7	154301809	TTTTTG	T	DEL	5	False	site_bypassed:skip_edge:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr7	155305145	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr7	158715796	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr8	736421	C	CTTTTTTTTTTTTTT	INS	14	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:8:0:TTTTTTTTTTTTTT
+chr8	2730544	CTTTTTTTT	C	DEL	8	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:8
+chr8	3394000	T	TAATAATA	INS	7	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr8	4557429	GT	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr8	4912135	A	AAAAAAAAAAAAAG	INS	13	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:6:0:AAAAAAGAAAAAA
+chr8	4924722	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr8	11147654	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr8	14024646	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr8	14823055	TAA	T	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr8	14946005	CAT	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr8	15075225	CAA	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr8	16292823	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr8	19339495	C	CTT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr8	20949807	CAT	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr8	21027733	CTTTT	C	DEL	4	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:4
+chr8	24128213	C	CA	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr8	24628820	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr8	25907419	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr8	27900789	G	GTT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr8	32608101	T	TG	INS	1	True	site_bypassed:branch:no_edit	matches with nearby germline	32608097:T>G;32608107:G>T;32608112:T>G
+chr8	33579695	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr8	35599142	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr8	36702232	GT	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr8	41057617	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr8	42054250	A	ATAT	INS	3	True	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 6
+chr8	42836223	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr8	48112894	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr8	48916154	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr8	49969385	ATCT	A	DEL	3	False	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr8	49987649	C	CTT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr8	50376754	TATAG	T	DEL	4	True	site_bypassed:branch:no_edit	several events	branch:1:1:G;skip:4
+chr8	51039215	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr8	51739875	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr8	52236611	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr8	52785529	AAG	A	DEL	2	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr8	53163698	CTTTTTTTTTTTTTTTTTTTT	C	DEL	20	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:20
+chr8	54131487	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr8	57475108	GTGTATATATA	G	DEL	10	True	site_bypassed:branch:no_edit	several events	skip:4;branch:1:1:G;branch:1:5:C;skip:2
+chr8	57795530	C	CTT	INS	2	False	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr8	57804921	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr8	59682162	ATATATATATATATAT	A	DEL	15	True	site_bypassed:skip_edge:no_edit	several events	skip:8;branch:2:7:AT;skip:2
+chr8	59930666	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr8	60516120	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr8	64783541	C	CT	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr8	65222650	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr8	65798206	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr8	68937050	ATTTT	A	DEL	4	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:4
+chr8	70046322	A	AAAAAT	INS	5	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr8	72837828	CTT	C	DEL	2	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr8	74002093	TTC	T	DEL	2	True	site_bypassed:branch:no_edit	DEL skip edge	skip:2
+chr8	75226286	G	GA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr8	75545239	A	ATGTGTGTGTG	INS	10	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:5:0:TGTGTGTGTG
+chr8	75674573	CATAT	C	DEL	4	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:4
+chr8	76047168	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr8	76822452	C	CT	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr8	78375985	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr8	78552329	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr8	78680286	CAAAAAAA	C	DEL	7	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:7
+chr8	79134233	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr8	79755088	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr8	82409115	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr8	82968598	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr8	83472619	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr8	84254746	G	GAAAAAAA	INS	7	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:4:0:AAAAAAA
+chr8	84669487	T	TCC	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:CC
+chr8	87220499	GT	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr8	87685188	T	TATAGAG	INS	6	True	site_bypassed:branch:no_edit	several events	branch:1:1:T;branch:2:0:GA;branch:1:0:AGAG
+chr8	88025273	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr8	88336004	C	CAAAAAAAAAAA	INS	11	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:AAAAAAAAAAA
+chr8	88419224	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr8	89289158	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr8	89302647	T	TAC	INS	2	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:AC
+chr8	91494427	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr8	92357755	CT	C	DEL	1	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr8	92647983	GT	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr8	95677207	ATGTG	A	DEL	4	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:4
+chr8	100836495	TATAGAGAGAGAGAG	T	DEL	14	True	site_bypassed:branch:no_edit	several events	skip:6;skip:2;skip:6;branch:1:1:T;branch:1:1:T;branch:1:1:T;branch:1:1:T;branch:1:1:T;branch:1:1:T
+chr8	100961165	G	GT	INS	1	True	site_bypassed:branch:no_edit	matches with nearby germline	100961166:G>T
+chr8	101571490	T	TAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr8	102801788	C	CA	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr8	104339199	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr8	104907211	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr8	105345425	C	CTT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr8	105937915	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr8	106982224	GA	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr8	107192194	T	TGAGA	INS	4	True	site_bypassed:branch:no_edit	several events	branch:1:0:TG;branch:1:1:A;branch:1:0:AG
+chr8	107889834	GT	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr8	108404104	AC	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr8	108519978	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr8	109125789	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr8	112211788	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr8	114235782	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr8	114786521	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr8	116627909	T	TTTA	INS	3	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr8	116792312	CTT	C	DEL	2	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr8	116835032	G	GTTT	INS	3	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:TTT
+chr8	116958841	A	AT	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr8	118002381	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr8	119542144	G	GTTTTTT	INS	6	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:TTTTTT
+chr8	119712961	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr8	120298597	T	TTATATATATA	INS	10	True	site_bypassed:branch:no_edit	several events	branch:4:0:TATA;branch:4:0:TATATA
+chr8	122359441	GT	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr8	122387147	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr8	124015607	A	ATATG	INS	4	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:4:0:ATGT
+chr8	125286774	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr8	126542263	C	CAA	INS	2	False	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr8	127831155	C	CTA	INS	2	True	site_bypassed:branch:no_edit	several events	branch:1:0:TC;branch:1:1:A
+chr8	128662609	TATATAC	T	DEL	6	True	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 6
+chr8	130722587	T	TTTCTTTCTTTC	INS	11	True	site_bypassed:branch:no_edit	several events	branch:3:0:TTC;branch:2:2:TC;branch:1:1:TC;branch:2:0:TT;branch:6:1:CTTTCT
+chr8	131095536	AACC	A	DEL	3	True	site_bypassed:branch:no_edit	several events	skip:3;branch:2:2:AA
+chr8	131919595	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr8	132392790	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr8	134136507	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr8	134854275	TTTTTTTG	T	DEL	7	True	site_bypassed:skip_edge:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr8	135265117	TA	T	DEL	1	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr8	135333084	G	GA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr8	135713829	G	GTGTT	INS	4	True	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 2
+chr8	135924188	A	AAGAAAGAAAGAAAGAAAGAAAGAAAG	INS	26	False	site_bypassed:branch:no_edit	several events	branch:2:0:AA;branch:2:0:AG;branch:5:1:AAGAAAG;branch:6:0:AAGAAAGAAAGAAAGA
+chr8	138901364	T	TTTTTTG	INS	6	True	site_bypassed:branch:no_edit	matches with nearby germline	138901369:G>T
+chr8	139103661	C	CTT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr8	141644950	CTTTCTTTCTTTCTTTCTTTCTTTCTTCTTTCTTTCTTTCTTTCTT	C	DEL	45	True	site_bypassed:skip_edge:no_edit	several events	skip:4;skip:41;skip:16;branch:4:0:TTCTTTCTTTCTTTCT
+chr9	1942970	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr9	3423778	CAT	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr9	5718139	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr9	6677601	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr9	7423598	A	ATTTTTTTTTTT	INS	11	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:6:0:TTTTTTTTTTT
+chr9	9832893	GT	G	DEL	1	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr9	10418446	TACACAC	T	DEL	6	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:6
+chr9	11380923	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr9	13067161	C	CAA	INS	2	True	site_bypassed:branch:no_edit	several events	skip:2;branch:1:1:A;branch:4:0:ACAA
+chr9	13236268	T	TATATA	INS	5	True	site_bypassed:branch:no_edit	several events	skip:2;branch:3:0:TGTA;branch:1:1:A;branch:1:1:A;branch:3:0:TTT
+chr9	13641494	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr9	17023807	G	GA	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr9	19905406	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr9	19969183	C	CCACACACA	INS	8	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:4:0:ACACACAC
+chr9	20815123	G	GTGTTTTTTT	INS	9	True	site_bypassed:branch:no_edit	matches with nearby germline	20815137:G>T
+chr9	22056202	A	ATG	INS	2	True	site_bypassed:branch:no_edit	several events	branch:1:1:G;branch:1:0:AT
+chr9	23197909	TAAAAA	T	DEL	5	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:5
+chr9	23469810	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr9	23547055	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr9	23584210	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr9	24990758	G	GATAT	INS	4	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:ATAT
+chr9	25963898	GCC	G	DEL	2	True	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 2
+chr9	26034815	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr9	28194561	T	TA	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr9	28434529	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr9	28598418	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr9	29259419	TATACAC	T	DEL	6	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:6
+chr9	29734482	CAA	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr9	36028640	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr9	36909814	A	ATTTT	INS	4	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:4:0:TTTT
+chr9	69662021	AAC	A	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr9	71077906	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr9	72070314	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr9	74093768	C	CAA	INS	2	True	site_bypassed:branch:no_edit	several events	branch:1:0:A;branch:1:0:A
+chr9	74704345	TATATATGGCATATATATACACATATATATATATGGCATATATATACACATATATATATATGGCATATATATACACATATATATATATGGCATATATATACACATATATATATATGGCATATATATACACATATATATATATGGCATATATATACACATATATATATATGGCATATATATACACATATATATATATGGCATATATATACACATATATATATATGGCATATATATACACATATATATATGGCATATATATACAC	T	DEL	262	True	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 5
+chr9	75141312	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr9	77962892	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr9	78262202	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr9	78484886	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr9	80229350	G	GTTTTTTT	INS	7	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:4:0:TTTTTTT
+chr9	80543836	ATTTTTTTTTTTTT	A	DEL	13	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:13
+chr9	80824165	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr9	81768694	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr9	84685365	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr9	86715572	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr9	93875869	A	ATATCTCTCTCTCTCTCTCTCTCTCTCTCTCTCTCTCTCTC	INS	40	True	site_bypassed:branch:no_edit	matches with nearby germline	93875904:TATAGAGAGAGAG>T
+chr9	95609922	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr9	103721336	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr9	104317502	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr9	106355967	ATTT	A	DEL	3	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:3
+chr9	107950513	C	CTT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr9	114949834	C	CCTTCCTTTCTTT	INS	12	True	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 4
+chr9	116108854	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr9	116707285	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr9	122684402	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr9	126577032	ATATAT	A	DEL	5	True	site_bypassed:branch:no_edit	several events	skip:4;branch:1:2:A
+chr9	126900329	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr9	129326296	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr9	130173199	T	TG	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:G
+chr9	133500553	ATTTTT	A	DEL	5	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:5
+chr9	135972718	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr10	862279	A	AAAAAC	INS	5	True	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 2
+chr10	3081977	CTTTTTTTT	C	DEL	8	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:8
+chr10	4432348	CCAAAAA	C	DEL	6	True	site_bypassed:skip_edge:no_edit	closest graph allele differs by >= 2 bp	edit distance 5
+chr10	4432348	CCAAAAA	CAAAAAACAAAAA	INS	6	True	site_bypassed:skip_edge:no_edit	closest graph allele differs by >= 2 bp	edit distance 4
+chr10	7327135	GAA	G	DEL	2	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr10	8414084	A	ATTTTT	INS	5	False	site_bypassed:branch:no_edit	INS multi-node branch	branch:5:0:TTTTT
+chr10	8493258	CTTTTG	C	DEL	5	True	site_bypassed:branch:no_edit	several events	skip:6;branch:3:2:TCT
+chr10	8730875	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr10	10084358	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr10	10795239	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr10	11079741	G	GCC	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:CC
+chr10	11229598	A	ATT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr10	11721609	T	TGTGAGA	INS	6	True	site_bypassed:branch:no_edit	several events	branch:1:1:T;branch:2:0:GAGAGA
+chr10	13992952	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr10	15507958	GT	G	DEL	1	True	site_bypassed:branch:no_edit	branch replaces GRCh38	branch:1:2:G
+chr10	15720865	C	CTTTTTTTTTTT	INS	11	True	site_bypassed:branch:no_edit	matches with nearby germline	15720868:C>T
+chr10	16949464	T	TGTGTGTGTGTG	INS	11	True	site_bypassed:skip_edge:no_edit	closest graph allele differs by >= 2 bp	edit distance 5
+chr10	17190433	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr10	17248973	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr10	17356389	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr10	17560149	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr10	17796654	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr10	18058949	GA	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr10	19312378	G	GTATA	INS	4	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TATA
+chr10	21443394	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr10	26145179	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr10	26483092	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr10	26853234	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr10	26889384	C	CAAA	INS	3	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:AAA
+chr10	28628000	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr10	30252774	C	CTT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr10	32645503	CTT	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr10	33237487	G	GCACA	INS	4	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:CACA
+chr10	35878926	G	GTATA	INS	4	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TATA
+chr10	36543026	C	CCA	INS	2	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:CA
+chr10	36628539	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr10	36775522	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr10	36941676	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr10	43770039	GT	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr10	44003038	A	AAAAC	INS	4	True	site_bypassed:branch:no_edit	matches with nearby germline	44003047:T>A;44003049:A>AAC
+chr10	44003049	A	AAC	INS	2	True	site_bypassed:branch:no_edit	matches with nearby germline	44003047:T>A
+chr10	47738579	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr10	51647150	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr10	53478626	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr10	53626869	C	CTTTTTTTTT	INS	9	False	site_bypassed:branch:no_edit	INS multi-node branch	branch:8:0:TTTTTTTTT
+chr10	54655428	GGT	G	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr10	55642202	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr10	57425494	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr10	58555306	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr10	59416569	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr10	61061409	C	CTT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr10	61242392	A	ATT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr10	61417465	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr10	62889771	GAGAAAGAA	G	DEL	8	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:8
+chr10	63050142	AGTTT	A	DEL	4	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:4
+chr10	63714202	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr10	65266701	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr10	65555929	C	CAAAAAAAAAA	INS	10	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:6:0:AAAAAAAAAA
+chr10	71199658	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr10	72500298	ATATAT	A	DEL	5	True	site_bypassed:branch:no_edit	several events	branch:1:0:AT;branch:1:1:T;skip:1;branch:1:1:T;skip:6
+chr10	74512402	C	CT	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr10	74737668	AAATACAC	A	DEL	7	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr10	80028752	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr10	81650194	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr10	84949178	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr10	88470617	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr10	91677776	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr10	91959718	A	ATGTGTG	INS	6	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:GTGTGT
+chr10	92445033	TATA	T	DEL	3	True	site_bypassed:branch:no_edit	matches with nearby germline	92445006:GTATATATA>G
+chr10	95001546	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr10	96459704	AAATATATAT	A	DEL	9	True	site_bypassed:branch:no_edit	several events	branch:1:0:A;branch:1:1:T;skip:10
+chr10	97102422	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr10	97527171	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr10	99244568	A	ATT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr10	99529579	T	TAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr10	99862812	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr10	100494825	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr10	100640736	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr10	102070798	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr10	103286335	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr10	104733520	ATT	A	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr10	104977730	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr10	105390175	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr10	106167989	AAAAAAAC	A	DEL	7	True	site_bypassed:skip_edge:no_edit	closest graph allele differs by >= 2 bp	edit distance 2
+chr10	106995313	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr10	107264795	G	GA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr10	107834039	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr10	108709499	G	GA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr10	109280119	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr10	111260680	G	GTTTTTTTGT	INS	9	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr10	112471367	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr10	112496185	ACC	A	DEL	2	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr10	112576019	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr10	113637006	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr10	113948657	ATATATATATATATATATATAT	A	DEL	21	True	site_bypassed:branch:no_edit	several events	skip:12;skip:1;branch:6:0:ACACAC;skip:14
+chr10	115774425	CAAAAAA	C	DEL	6	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:6
+chr10	117258766	CTT	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr10	119161437	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr10	120083369	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr10	121125264	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr10	121604703	C	CTT	INS	2	True	site_bypassed:branch:no_edit	matches with nearby germline	121604707:C>T
+chr10	123353078	GT	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr10	126549744	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr10	126714230	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr10	126757518	CA	C	DEL	1	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr10	129354768	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr10	130894806	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr10	131606502	C	CT	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr11	3426401	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr11	3592579	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr11	4333915	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr11	5276336	T	TA	INS	1	True	site_bypassed:branch:no_edit	matches with nearby germline	5276353:C>A
+chr11	5669080	C	CT	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr11	7270832	GAC	G	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr11	8509116	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr11	11294609	GAA	G	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr11	11385298	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr11	12313961	A	ATTTTT	INS	5	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:5:0:TTTTT
+chr11	13735224	C	CAAAAAAA	INS	7	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:AAAAAAA
+chr11	15213140	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr11	15391467	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr11	17240194	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr11	17259400	A	AAT	INS	2	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:AT
+chr11	19295154	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr11	20122088	G	GAA	INS	2	False	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr11	20755548	TTGTTTTTGTTTTTG	T	DEL	14	True	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 3
+chr11	20930804	GT	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr11	22360537	C	CCA	INS	2	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr11	22507202	G	GTTTT	INS	4	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:4:0:TTTT
+chr11	22841203	ATTTT	A	DEL	4	True	site_bypassed:branch:no_edit	several events	skip:3;branch:1:2:A
+chr11	24267032	GAA	G	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr11	24427043	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr11	25273964	A	ATTT	INS	3	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:TTT
+chr11	25664597	C	CTCTA	INS	4	True	site_bypassed:branch:no_edit	several events	branch:1:0:TCTC;branch:1:1:A
+chr11	29045070	C	CAAA	INS	3	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:AAA
+chr11	29908258	C	CA	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr11	30003890	AAAG	A	DEL	3	True	site_bypassed:branch:no_edit	several events	skip:3;branch:1:1:A
+chr11	30018467	TAA	T	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr11	30401860	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr11	30897582	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr11	31004681	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr11	31456876	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr11	32076337	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr11	33649860	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr11	35556923	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr11	35885406	AG	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr11	37347683	C	CTCTATA	INS	6	True	site_bypassed:branch:no_edit	several events	branch:1:0:TC;branch:4:0:TCTC;branch:1:1:A;branch:1:1:A
+chr11	38056859	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr11	40083200	C	CTT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr11	40901999	TACAC	T	DEL	4	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:4
+chr11	41059210	G	GTTTTTTTTTTTTT	INS	13	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:12:0:TTTTTTTTTTTTT
+chr11	42288834	T	TATACACAC	INS	8	True	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 4
+chr11	46179150	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr11	47549820	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr11	49971770	AC	A	DEL	1	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr11	57403476	AGAG	A	DEL	3	True	site_bypassed:branch:no_edit	several events	branch:1:1:A;branch:1:1:G;branch:1:1:A;branch:1:4:G
+chr11	58496311	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr11	58628106	CTG	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr11	60562970	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr11	67937271	C	CTT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr11	72467256	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr11	72851101	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr11	73051868	AACACAC	A	DEL	6	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:6
+chr11	73351327	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr11	76037539	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr11	77939848	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr11	79207865	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr11	81287287	GA	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr11	82363006	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr11	82461307	A	ATATATAT	INS	7	True	site_bypassed:branch:no_edit	matches with nearby germline	82461309:A>T;82461311:A>T;82461313:A>T
+chr11	82871177	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr11	83577559	A	AATATATAT	INS	8	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:4:0:ATATATAT
+chr11	84788100	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr11	87419191	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr11	87598296	TAA	T	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr11	90713401	A	ATT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr11	91026578	A	AATAT	INS	4	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:ATAT
+chr11	92106290	TATATATAA	T	DEL	8	True	site_bypassed:skip_edge:no_edit	matches with nearby germline	92106267:G>A
+chr11	92416219	CAA	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr11	92605719	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr11	94396869	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr11	96697379	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr11	97351391	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr11	97523197	G	GA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr11	98596265	G	GA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr11	98702726	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr11	99772071	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr11	101506015	GA	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr11	101526861	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr11	102204229	G	GA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr11	107602726	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr11	108986879	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr11	109289116	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr11	110726024	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr11	113173591	GATATATAT	G	DEL	8	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:8
+chr11	114146848	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr11	115922396	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr11	122476274	TAA	T	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr11	123160279	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr11	125542627	T	TAAAAA	INS	5	True	site_bypassed:branch:no_edit	matches with nearby germline	125542635:T>A
+chr11	126170735	AAAAATAT	A	DEL	7	True	site_bypassed:branch:no_edit	several events	skip:1;skip:2;skip:4
+chr11	127089896	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr11	127528989	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr11	128151706	CTTT	C	DEL	3	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:3
+chr11	130041651	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr11	130052370	A	ATT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr11	130990355	G	GTTTT	INS	4	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:TTTT
+chr11	132782917	G	GTA	INS	2	True	site_bypassed:branch:no_edit	several events	skip:2;branch:4:8:TGTATATATATA
+chr11	133201305	C	CTTT	INS	3	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:TTT
+chr12	1445222	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr12	1626569	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr12	1687085	G	GT	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr12	3490546	TG	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr12	4882307	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr12	8103376	GT	G	DEL	1	False	site_bypassed:branch:no_edit	DEL skip edge	skip:1
+chr12	8272600	CAAAAAAAA	C	DEL	8	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:8
+chr12	8331878	A	AT	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr12	11206411	A	ATATATATATATATATATATATATATATATATATTTT	INS	36	True	site_bypassed:branch:no_edit	matches with nearby germline	11206379:GAAAAAAAA>G
+chr12	11927175	A	AAAAAT	INS	5	False	site_bypassed:branch:no_edit	several events	branch:1:0:AA;branch:2:0:AA;branch:1:0:T
+chr12	12647210	A	AAAAAG	INS	5	True	site_bypassed:branch:no_edit	matches with nearby germline	12647207:C>A
+chr12	13928302	C	CA	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr12	14325324	GGTAT	G	DEL	4	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:4
+chr12	14750890	ATT	A	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr12	15514451	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr12	15791701	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr12	17217486	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr12	17261604	ATT	A	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr12	17873597	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr12	18839556	TATATATATATATATATATATATATATAGAG	T	DEL	30	True	site_bypassed:branch:no_edit	several events	skip:18;branch:1:1:G;branch:1:1:G;branch:1:1:G;branch:1:1:G;branch:1:1:G;skip:12
+chr12	20033423	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr12	20353912	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr12	20404826	G	GTTTT	INS	4	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:4:0:TTTT
+chr12	22187124	AAAAG	A	DEL	4	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr12	24754420	CTCTCTCTCTCTCTATATATATATATATA	C	DEL	28	True	site_bypassed:branch:no_edit	matches with nearby germline	24754488:A>G;24754490:A>G;24754494:A>G
+chr12	24867337	CTT	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr12	24952296	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr12	25045848	TAA	T	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr12	27596071	T	TACAC	INS	4	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:CACA
+chr12	29685367	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr12	29891419	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr12	31632059	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr12	33166462	TTTTA	T	DEL	4	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:4
+chr12	33327531	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr12	34280147	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr12	37319392	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr12	37586126	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr12	38290846	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr12	40539300	TTTTCTTTC	T	DEL	8	True	site_bypassed:branch:no_edit	several events	skip:4;branch:1:5:C
+chr12	41166749	C	CAAA	INS	3	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:AAA
+chr12	45117155	A	AAAAAAAAAAAAAAATATATATATATAT	INS	27	False	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 2
+chr12	48075055	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr12	50123032	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr12	59128010	ATTTTTTTTTT	A	DEL	10	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr12	60460510	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr12	64392064	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr12	76306226	CT	C	DEL	1	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr12	78729589	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr12	81971550	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr12	84034061	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr12	90510496	C	CTTTTTTTTTTTTT	INS	13	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:5:0:TTTTTTTTTTTTT
+chr12	90640585	CTTTTTTTTTTTTT	C	DEL	13	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:13
+chr12	90705167	GA	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr12	91660409	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr12	93643761	T	TACAC	INS	4	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:ACAC
+chr12	97090777	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr12	98026335	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr12	98653691	A	ATATATATATATATATAT	INS	17	True	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 2
+chr12	99484764	GT	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr12	99982333	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr12	100033534	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr12	105265150	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr12	106486287	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr12	106916205	CTT	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr12	109312790	GTT	G	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr12	109327122	C	CT	INS	1	True	site_bypassed:branch:no_edit	matches with nearby germline	109327128:C>T;109327134:C>T
+chr12	112580394	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr12	113035450	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr12	114806631	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr12	115365497	CA	C	DEL	1	True	site_bypassed:branch:no_edit	DEL skip edge	skip:1
+chr12	116394616	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr12	117656958	AATAG	A	DEL	4	True	site_bypassed:skip_edge:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr12	118324734	C	CT	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr12	118498792	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr12	118701939	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr12	119472576	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr12	123559413	C	CAAA	INS	3	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:AAA
+chr12	125715838	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr12	127840066	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr12	128729509	C	CAAA	INS	3	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:AAA
+chr12	128924426	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr12	129662812	A	AAGAG	INS	4	True	site_bypassed:branch:no_edit	several events	branch:1:0:A;branch:1:0:GAG
+chr12	130604291	TA	T	DEL	1	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr12	130639383	T	TAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr12	130955123	C	CTTTTTTTTTTTTTT	INS	14	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:6:0:TTTTTTTTTTTTTT
+chr12	132302229	T	TAC	INS	2	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:CA
+chr13	18465429	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr13	18716557	CTTT	C	DEL	3	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:3
+chr13	19137030	T	TATATATATATATA	INS	13	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr13	21244175	GT	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr13	21763620	A	ATTT	INS	3	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:TTT
+chr13	21865536	GT	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr13	22804387	AAAAAAAAAAAAC	A	DEL	12	True	site_bypassed:skip_edge:no_edit	several events	skip:9;skip:3
+chr13	24535176	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr13	26148632	T	TTATA	INS	4	True	site_bypassed:branch:no_edit	several events	branch:1:0:T;branch:1:0:A;branch:1:0:AT
+chr13	26599184	C	CTTTT	INS	4	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:4:0:TTTT
+chr13	26818713	A	ATTCTCTCTCTCTCTCT	INS	16	True	site_bypassed:branch:no_edit	matches with nearby germline	26818742:C>A
+chr13	30003096	T	TATATA	INS	5	True	site_bypassed:branch:no_edit	several events	branch:1:1:A;branch:1:1:A;branch:1:1:A;branch:4:0:TTTTT
+chr13	32809648	GA	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr13	34852203	A	ATGTGTGTG	INS	8	True	site_bypassed:branch:no_edit	several events	branch:1:0:GT;branch:6:0:TGTGTG
+chr13	35254324	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr13	35733333	G	GTT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr13	36030463	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr13	37195969	C	CTT	INS	2	False	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr13	37953956	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr13	38286673	C	CAAAAAAAAAAAA	INS	12	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:AAAAAAAAAAAA
+chr13	38572449	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr13	38995988	C	CA	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr13	39199536	A	AAAAAAAAATAAATAAAT	INS	17	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr13	39482442	T	TAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr13	40397529	TAA	T	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr13	40625658	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr13	45664013	ATT	A	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr13	48540217	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr13	49522758	GGTT	G	DEL	3	False	site_bypassed:skip_edge:no_edit	matches with nearby germline	49522767:G>T
+chr13	50250670	CT	C	DEL	1	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr13	52352641	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr13	53969175	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr13	54018939	GT	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr13	54277239	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr13	54698881	CAA	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr13	55708414	CAAA	C	DEL	3	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:3
+chr13	55751059	G	GT	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr13	55939310	CAA	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr13	55987321	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr13	56017650	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr13	56461326	AAAAG	A	DEL	4	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr13	61566836	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr13	61604435	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr13	63975619	A	ATTTT	INS	4	True	site_bypassed:branch:no_edit	branch replaces GRCh38	branch:3:1:TTTTT
+chr13	64736836	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr13	64922205	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr13	65487707	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr13	65606585	A	AATATATATATATATATATATATATAT	INS	26	True	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 10
+chr13	66717479	AAATATATATAT	A	DEL	11	True	site_bypassed:skip_edge:no_edit	several events	skip:5;branch:3:0:AAA;skip:9
+chr13	66733677	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr13	67271717	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr13	67680244	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr13	70549013	GTATATA	G	DEL	6	True	site_bypassed:branch:no_edit	several events	skip:2;skip:2;branch:1:3:G
+chr13	70819326	AG	A	DEL	1	True	site_bypassed:branch:no_edit	several events	skip:1;branch:1:1:A
+chr13	71149603	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr13	72025605	G	GA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr13	72474841	CTT	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr13	72987858	AT	A	DEL	1	True	site_bypassed:branch:no_edit	several events	branch:4:5:TTTA;branch:2:2:TA
+chr13	74919633	ATTTT	A	DEL	4	True	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 2
+chr13	74985731	GTT	G	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr13	76120845	AAAAG	A	DEL	4	True	site_bypassed:branch:no_edit	several events	skip:2;skip:2
+chr13	76512029	GTAGATAGA	G	DEL	8	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:8
+chr13	77592562	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr13	78172743	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr13	78943254	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr13	80843161	A	ATG	INS	2	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:TG
+chr13	81243322	GA	G	DEL	1	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr13	81286414	G	GTT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr13	82243235	ATAT	A	DEL	3	True	site_bypassed:skip_edge:no_edit	several events	skip:1;skip:2
+chr13	83566768	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr13	83811706	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr13	84017759	GT	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr13	84039485	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr13	85748774	G	GTATATATATATA	INS	12	True	site_bypassed:branch:no_edit	several events	branch:6:0:TGTATA;branch:5:1:ATATATA
+chr13	87258122	CT	C	DEL	1	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr13	87837249	T	TTCTCTCTCTC	INS	10	True	site_bypassed:branch:no_edit	several events	branch:1:0:T;branch:4:0:CTCTCTCTC
+chr13	88104170	GA	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr13	88510923	CAA	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr13	90509120	C	CAAAA	INS	4	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:4:0:AAAA
+chr13	91056479	AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC	A	DEL	32	True	site_bypassed:skip_edge:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr13	91501240	GT	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr13	91562619	ATT	ATTTTT	INS	3	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:TTT
+chr13	91986061	C	CTT	INS	2	False	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr13	92474147	GT	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr13	92623165	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr13	93393127	T	TATATAG	INS	6	True	site_bypassed:branch:no_edit	several events	branch:1:0:ATATAT;branch:1:1:G
+chr13	93401689	CTTT	C	DEL	3	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:3
+chr13	94114096	CAA	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr13	94335901	ATTTT	A	DEL	4	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:4
+chr13	95675663	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr13	97697455	T	TAAA	INS	3	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:AAA
+chr13	98277109	T	TACACACACACACACACACAC	INS	20	True	site_bypassed:branch:no_edit	several events	branch:7:0:ACACACACACACAC;branch:7:1:ACACACC
+chr13	100054833	C	CAAA	INS	3	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:AAA
+chr13	100733747	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr13	101439208	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr13	102366618	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr13	103456972	C	CTTTTTTT	INS	7	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:6:0:TTTTTTT
+chr13	103493507	G	GTT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr13	104206204	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr13	105716749	T	TTG	INS	2	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:TG
+chr13	106460302	G	GTT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr13	107191833	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr13	107213230	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr13	107269913	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr13	107906831	T	TTTTTTTTC	INS	8	True	site_bypassed:branch:no_edit	several events	branch:4:0:TTTTTTTT;branch:1:1:C
+chr13	110610168	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr13	111935917	T	TG	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:G
+chr13	113894589	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr14	21226878	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:AA
+chr14	23736944	C	CCG	INS	2	True	site_bypassed:branch:no_edit	several events	branch:1:0:C;branch:1:0:G
+chr14	25606302	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr14	26006669	C	CTTTTTTTT	INS	8	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:6:0:TTTTTTTT
+chr14	27299093	AAT	A	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr14	27447060	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr14	28716242	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr14	29804235	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr14	30829579	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr14	31508091	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr14	31805073	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr14	32056469	CTTTTCT	C	DEL	6	True	site_bypassed:branch:no_edit	branch replaces GRCh38	branch:1:7:C
+chr14	32797925	G	GA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr14	33078542	AAAAC	A	DEL	4	True	site_bypassed:skip_edge:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr14	35291823	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr14	38832335	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr14	39937207	G	GA	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr14	39993251	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr14	41370790	GATAT	G	DEL	4	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:4
+chr14	42273965	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr14	42817436	GA	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr14	43941453	C	CTT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr14	44753141	GA	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr14	44888154	A	AT	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr14	45413733	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr14	47301295	CCACA	C	DEL	4	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:4
+chr14	49503391	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr14	50274274	C	CA	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr14	54507315	C	CT	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr14	55777164	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr14	58198850	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr14	61261668	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr14	61303012	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr14	62571489	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr14	63102005	CAAA	C	DEL	3	True	site_bypassed:skip_edge:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr14	63465450	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr14	65124899	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr14	65868864	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr14	68835056	T	TTTTG	INS	4	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr14	69883889	A	ATT	INS	2	False	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr14	69919910	AC	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr14	70280738	A	AAAATAT	INS	6	False	site_bypassed:branch:no_edit	several events	branch:1:0:A;branch:4:0:AAAA;branch:1:1:T;branch:1:0:T
+chr14	71759376	AAATATATATATAT	A	DEL	13	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr14	71953969	G	GTTTTTT	INS	6	False	site_bypassed:branch:no_edit	INS multi-node branch	branch:6:0:TTTTTT
+chr14	72298454	TTCC	T	DEL	3	True	site_bypassed:branch:no_edit	several events	skip:2;branch:1:2:T
+chr14	72475199	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr14	74705043	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr14	76608505	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:AA
+chr14	77419446	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr14	77788013	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr14	78312585	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr14	78566380	GT	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr14	78711434	CTTT	C	DEL	3	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:3
+chr14	78880239	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr14	79202074	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr14	82734676	AAAAC	A	DEL	4	True	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 3
+chr14	83286081	A	AAG	INS	2	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr14	83577812	G	GAT	INS	2	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:AT
+chr14	83715679	AAGAGAG	A	DEL	6	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:6
+chr14	83807615	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr14	84600780	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr14	84939246	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr14	85004836	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr14	85033274	A	AC	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:C
+chr14	86173328	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr14	86226345	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr14	87373511	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr14	91429026	CAA	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr14	91531496	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr14	94704983	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr14	94864182	AAAAAGAAAAG	A	DEL	10	True	site_bypassed:branch:no_edit	several events	skip:10;branch:1:1:A;branch:1:1:A
+chr14	95665950	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr14	95689322	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr14	95708474	C	CAAAA	INS	4	True	site_bypassed:branch:no_edit	several events	branch:1:0:A;branch:1:0:A;branch:1:1:A;branch:1:0:AT
+chr14	95884875	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr14	97868754	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr14	98247482	A	ATT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr14	98307277	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr14	98592659	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr14	100977771	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr14	101078141	TG	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr14	101699643	G	GA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr15	23831423	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr15	24280544	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr15	25915894	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr15	25938689	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr15	27101842	TA	TAA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr15	27734151	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr15	27832830	A	ATTT	INS	3	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:TTT
+chr15	29026759	G	GA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr15	29423631	CAA	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr15	31991738	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr15	33180744	C	CTTT	INS	3	False	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:TTT
+chr15	33236816	GGA	G	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr15	35448984	A	ATTTTT	INS	5	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:5:0:TTTTT
+chr15	35684951	G	GT	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr15	38632107	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr15	41301970	TAAAAAAAA	T	DEL	8	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:8
+chr15	42026972	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr15	47848719	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr15	48619875	TA	T	DEL	1	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr15	51519636	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr15	51710752	A	AT	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr15	52132636	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr15	52899958	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr15	53250051	T	TTA	INS	2	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr15	54093192	CAA	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr15	55708148	T	TAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr15	55777099	A	AAGAGAGAGAGAGAGAGAG	INS	18	True	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 8
+chr15	60645797	GTT	G	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr15	61300541	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr15	62465104	GT	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr15	63197370	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr15	64006036	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr15	69045536	T	TTTTCTTTCTTTCTTTCTTTCTTTC	INS	24	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:5:0:TTTCTTTCTTTCTTTCTTTCTTTC
+chr15	69409223	A	AAC	INS	2	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:AC
+chr15	70785203	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr15	71332892	A	ATTTTTTTTTTTTTTTTTTTT	INS	20	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:11:0:TTTTTTTTTTTTTTTTTTTT
+chr15	73008827	A	ATTTTTTTTTTTTT	INS	13	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:5:0:TTTTTTTTTTTTT
+chr15	74875902	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr15	81591416	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr15	81898400	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr15	83610975	C	CAAAA	INS	4	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:4:0:AAAA
+chr15	84019076	T	TACACACAC	INS	8	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:4:0:CACACACA
+chr15	84137448	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr15	86160099	GT	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr15	86838941	T	TAAA	INS	3	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:AAA
+chr15	86925720	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr15	86980885	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr15	87158400	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr15	87898823	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr15	90353425	A	AGT	INS	2	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:GT
+chr15	91850267	GGGGGT	G	DEL	5	True	site_bypassed:branch:no_edit	several events	branch:1:0:G;skip:9;branch:3:0:GGG;branch:1:1:G
+chr15	92716246	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr15	92721955	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr15	93292705	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr15	93657180	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr15	93768649	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr15	94579662	TG	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr15	94782796	C	CTA	INS	2	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:AT
+chr15	94868218	C	CTT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr15	95126264	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr15	95552752	CAAA	C	DEL	3	True	site_bypassed:skip_edge:no_edit	matches with nearby germline	95552745:A>G;95552790:C>CATATATATACACACATGTATATGTACACATATACACACATGTATATGT;95552794:CACATAT>C
+chr15	95571599	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr15	96866676	CTT	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr15	97073599	GA	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr16	3258970	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr16	5756223	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr16	6028509	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr16	6231831	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr16	6775329	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr16	7534086	C	CTTT	INS	3	True	site_bypassed:branch:no_edit	several events	branch:1:0:TT;branch:1:0:T
+chr16	10109632	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr16	12817412	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr16	12848415	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr16	12895690	GTT	G	DEL	2	True	site_bypassed:branch:no_edit	several events	branch:1:0:T;skip:3
+chr16	14059997	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr16	16869646	CTTCTTTTT	C	DEL	8	True	site_bypassed:branch:no_edit	several events	branch:1:1:T;skip:8
+chr16	17531169	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr16	19820648	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr16	20067804	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr16	20358633	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr16	23759423	T	TCTTTCTTTCTTTCTTTCTTTCTTTCTTTCTTTCTTTC	INS	37	True	site_bypassed:branch:no_edit	several events	branch:2:0:TTCTTTCT;branch:5:0:CTTTCTTTCTTTCTTTCTTT;branch:5:0:CTTTCTTTC
+chr16	24520725	CA	C	DEL	1	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr16	24602278	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr16	25456370	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr16	26456991	G	GA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr16	26528357	GA	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr16	27892789	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr16	35777357	G	GT	INS	1	True	site_bypassed:skip_edge:no_edit	several events	skip:4;branch:1:0:TTTGT
+chr16	35973651	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr16	47433770	A	AAT	INS	2	True	site_bypassed:branch:no_edit	several events	branch:1:1:T;branch:1:0:CA
+chr16	50153183	T	TGGGG	INS	4	True	site_bypassed:branch:no_edit	several events	skip:1;branch:4:1:GGGGGC
+chr16	52827238	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr16	54230780	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr16	56244366	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr16	57840760	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr16	60614137	AAC	A	DEL	2	True	site_bypassed:branch:no_edit	several events	skip:2;branch:1:1:A
+chr16	60763159	G	GT	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr16	60809063	G	GTATATA	INS	6	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:4:0:TATATA
+chr16	60991322	C	CAAAA	INS	4	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:AAAA
+chr16	61820314	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr16	61917062	AGTGTGT	A	DEL	6	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:6
+chr16	62077673	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr16	62680753	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr16	63115877	AAC	A	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr16	63116227	ATTT	A	DEL	3	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:3
+chr16	64487042	GT	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr16	65483873	C	CTT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr16	65833045	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr16	65922765	G	GA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr16	66590323	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr16	67972481	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr16	70443115	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr16	72157183	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr16	72213197	C	CG	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:G
+chr16	72786415	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr16	73085985	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr16	74137377	C	CTTT	INS	3	True	site_bypassed:branch:no_edit	several events	branch:1:0:TTCTTTTTT;branch:1:1:T;skip:6
+chr16	74382906	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr16	76097122	C	CTT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr16	76307503	C	CATATAT	INS	6	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:ATATAT
+chr16	76947600	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr16	77945278	C	CTTTTTTTTT	INS	9	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TTTTTTTTT
+chr16	78864270	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr16	78962302	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr16	80843991	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr16	82525122	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr16	83077186	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr16	83256844	CAAA	C	DEL	3	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:3
+chr16	83379938	T	TAGAGAG	INS	6	True	site_bypassed:branch:no_edit	matches with nearby germline	83379909:A>ATATGTG
+chr16	84382894	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr16	86128278	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr16	86750555	G	GTT	INS	2	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr16	87562248	ACCC	A	DEL	3	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:3
+chr16	88251538	CTTTTTTTTTTTTTT	C	DEL	14	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:14
+chr17	724675	TA	T	DEL	1	True	site_bypassed:branch:no_edit	several events	branch:1:1:T;skip:1
+chr17	6152434	C	CAAA	INS	3	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:AAA
+chr17	6224142	A	AAAAG	INS	4	True	site_bypassed:branch:no_edit	several events	branch:2:0:AA;branch:1:0:AG
+chr17	6259138	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr17	8485457	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr17	10540359	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr17	10974889	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr17	11673601	G	GTT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr17	13659188	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr17	15022340	C	CAAAA	INS	4	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:4:0:AAAA
+chr17	15723575	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr17	20038403	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr17	30133109	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr17	34424759	CG	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr17	34429829	G	GA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr17	39160324	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr17	41450170	A	AGGAG	INS	4	True	site_bypassed:branch:no_edit	several events	branch:2:2:GG;branch:1:0:AGAA
+chr17	41729868	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr17	49113539	AT	A	DEL	1	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr17	49241969	T	TACACAC	INS	6	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:ACACAC
+chr17	49327757	ATATATATATATATATATATATATTT	A	DEL	25	True	site_bypassed:branch:no_edit	several events	skip:24;branch:1:1:A;branch:1:2:A
+chr17	49403576	CAA	C	DEL	2	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr17	50250812	AAAGAAAGT	A	DEL	8	True	site_bypassed:branch:no_edit	several events	skip:8;branch:1:1:A
+chr17	51572093	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr17	53680227	T	TTC	INS	2	True	site_bypassed:skip_edge:no_edit	closest graph allele differs by >= 2 bp	edit distance 2
+chr17	54714577	C	CTTCT	INS	4	True	site_bypassed:branch:no_edit	several events	branch:1:0:CTT;branch:1:0:T
+chr17	58460510	C	CACACAT	INS	6	True	site_bypassed:branch:no_edit	several events	branch:3:0:ACACAC;branch:1:1:T
+chr17	66626362	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr17	68618382	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr17	70260641	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr18	1112778	T	TTA	INS	2	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:TA
+chr18	1634173	TA	T	DEL	1	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr18	2708908	A	ATAT	INS	3	True	site_bypassed:branch:no_edit	matches with nearby germline	2708867:CATATAT>C;2708910:C>T;2708914:T>A;2708915:T>C
+chr18	3677960	GTT	G	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr18	3688614	GACACACAC	G	DEL	8	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:8
+chr18	4423851	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr18	5867743	C	CGT	INS	2	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:GT
+chr18	8069109	CAA	C	DEL	2	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr18	8716569	ATTT	A	DEL	3	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:3
+chr18	8726286	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr18	11178144	T	TTCTCTC	INS	6	True	site_bypassed:branch:no_edit	several events	branch:1:0:T;branch:1:0:TC;branch:1:0:C;branch:2:0:TC
+chr18	13566367	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr18	13782897	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr18	14058542	TC	T	DEL	1	True	site_bypassed:branch:no_edit	several events	branch:1:1:T;skip:1
+chr18	14058543	CTTT	C	DEL	3	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:3
+chr18	15274872	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr18	21938024	CAA	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr18	24253164	T	TG	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:G
+chr18	26126185	CA	C	DEL	1	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr18	26310956	G	GT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr18	26969000	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr18	28945135	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr18	31485389	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr18	34436623	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr18	35287574	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr18	37118008	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr18	39320611	G	GTTTTTT	INS	6	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:4:0:TTTTTT
+chr18	39409316	A	AATATATATAT	INS	10	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr18	40078131	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr18	40426234	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr18	41203627	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr18	44179836	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr18	45247701	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr18	48389368	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr18	50575792	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr18	51556995	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr18	51771968	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr18	54133428	TAA	T	DEL	2	True	site_bypassed:branch:no_edit	several events	branch:1:1:T;branch:2:4:AT
+chr18	59031379	A	ATTTT	INS	4	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:4:0:TTTT
+chr18	59727480	C	CAAAA	INS	4	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:AAAA
+chr18	59925831	CAAAAAAAAAA	C	DEL	10	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:10
+chr18	60560432	CCA	C	DEL	2	True	site_bypassed:branch:no_edit	several events	skip:2;branch:1:1:C
+chr18	63073077	T	TA	INS	1	True	site_bypassed:branch:no_edit	several events	branch:1:1:A;branch:1:0:T
+chr18	64196221	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr18	65837924	A	ATTT	INS	3	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:TTT
+chr18	67791103	ATT	A	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr18	68545131	GTTTTT	G	DEL	5	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:5
+chr19	2745999	C	CTT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr19	5445360	G	GA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr19	6615744	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr19	8072966	C	CGTGT	INS	4	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:GTGT
+chr19	8249587	A	ATT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr19	9812759	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr19	11434534	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr19	12296504	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr19	14618846	C	CAAAAAAAA	INS	8	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:8:0:AAAAAAAA
+chr19	15568797	GAA	G	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr19	15784353	A	AAAG	INS	3	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr19	16027190	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr19	17179027	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr19	19203953	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr19	20575955	G	GTGTTTTTT	INS	8	True	site_bypassed:branch:no_edit	matches with nearby germline	20575935:T>C;20575971:C>T;20575976:G>T;20575983:A>G
+chr19	20931620	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr19	21011659	T	TACACACACACACAC	INS	14	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:10:0:ACACACACACACAC
+chr19	21464659	CA	C	DEL	1	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr19	22214598	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr19	22441647	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr19	28173888	G	GTT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr19	28356637	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr19	28670618	GA	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr19	29646614	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr19	30414093	C	CAAA	INS	3	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:AAA
+chr19	33942393	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr19	37503577	G	GA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr19	38181845	C	CA	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr19	38363489	C	CT	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr19	39791646	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr19	42074456	T	TAAATA	INS	5	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:AATAA
+chr19	43978934	T	TG	INS	1	True	site_bypassed:branch:no_edit	several events	branch:1:1:G;branch:1:0:T
+chr19	44749284	TGG	T	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr19	46024714	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr19	48059764	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr19	48657616	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr19	49698049	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr19	54487630	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr19	56266493	C	CCT	INS	2	True	site_bypassed:branch:no_edit	several events	branch:1:1:C;branch:2:0:TT
+chr20	1624233	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr20	2512919	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr20	5454164	A	AATATAT	INS	6	True	site_bypassed:branch:no_edit	several events	branch:1:0:A;branch:1:0:T;branch:2:0:TATA
+chr20	6425084	A	AAAAAAGAG	INS	8	True	site_bypassed:branch:no_edit	several events	branch:2:0:AA;branch:1:0:AAAGAG
+chr20	9768790	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr20	13576342	G	GAAGAAAGA	INS	8	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AAAGAAAG
+chr20	15869238	T	TATATATAGAGAGAGAG	INS	16	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:15:0:TATATAGAGAGAGAGA
+chr20	17047314	CT	C	DEL	1	False	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr20	18680430	TTTG	T	DEL	3	True	site_bypassed:skip_edge:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr20	19502868	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr20	21646627	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr20	22135947	G	GTTT	INS	3	True	site_bypassed:branch:no_edit	matches with nearby germline	22135954:G>T
+chr20	23889340	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr20	24210917	ATATATATATATG	A	DEL	12	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:12
+chr20	31507014	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr20	33887396	C	CTCTCTCTCTATATATA	INS	16	True	site_bypassed:branch:no_edit	several events	branch:4:0:CTCTCTCTCTCTCTCT;branch:1:1:A;branch:1:1:A;branch:1:1:A;branch:3:1:ATA;skip:2
+chr20	35150021	A	AC	INS	1	True	site_bypassed:branch:no_edit	matches with nearby germline	35150010:G>A
+chr20	35338888	A	ATATATATATATAT	INS	13	False	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 3
+chr20	35367092	T	TA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr20	36829513	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr20	38101030	A	ATT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr20	38972004	GT	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr20	39135800	ATG	A	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr20	39617512	T	TATATATAGAGAGAG	INS	14	True	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 23
+chr20	42126025	T	TG	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:G
+chr20	49455356	A	AT	INS	1	False	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr20	52429966	T	TATATATATATATATATACACAC	INS	22	True	site_bypassed:branch:no_edit	matches with nearby germline	52429944:C>T
+chr20	52458259	GTTT	G	DEL	3	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:3
+chr20	53501524	AAAAT	A	DEL	4	False	site_bypassed:skip_edge:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr20	54418398	C	CATAT	INS	4	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:ATAT
+chr20	55092728	G	GGTGTGT	INS	6	True	site_bypassed:branch:no_edit	branch replaces GRCh38	branch:5:1:GGTGTGT
+chr20	55151592	A	ATGTGTGTGTGTGTGTGTG	INS	18	True	site_bypassed:branch:no_edit	closest graph allele differs by >= 2 bp	edit distance 4
+chr20	55759740	T	TG	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:G
+chr20	56136275	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr20	56651359	TA	T	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr20	57669142	C	CATTTATTTATTT	INS	12	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:ATTTATTTATTT
+chr20	58528188	C	CAT	INS	2	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:AT
+chr20	59510112	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr20	61049405	G	GAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr21	16772096	T	TAA	INS	2	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr21	20199489	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr21	21934883	T	TTA	INS	2	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:TA
+chr21	22488220	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr21	23404290	CTT	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr21	24427690	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr21	24765823	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr21	27385909	CAA	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr21	29871760	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr21	30235159	AT	A	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr21	31430225	A	AT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr21	31798672	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr21	32482854	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr21	33107255	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr21	36980026	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr21	37308538	A	AATAAAT	INS	6	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:ATAAAT
+chr21	37764383	C	CTTT	INS	3	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:3:0:TTT
+chr21	39745056	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr21	39809976	C	CAA	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:AA
+chr21	40205602	CA	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr21	45231472	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr22	16102487	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr22	17886988	C	CA	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:A
+chr22	22526055	C	CTTTCT	INS	5	True	site_bypassed:branch:no_edit	several events	branch:1:0:CTTT;branch:1:0:T
+chr22	22551642	A	AAAAAC	INS	5	True	site_bypassed:branch:no_edit	closest graph allele differs by 1 bp	edit distance 1
+chr22	25251412	TTC	T	DEL	2	True	site_bypassed:branch:no_edit	several events	branch:1:1:T;skip:1;skip:1
+chr22	31113936	CT	C	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr22	34137118	C	CT	INS	1	True	site_bypassed:branch:no_edit	INS single bubble node	branch:1:0:T
+chr22	35364770	A	ATATTT	INS	5	True	site_bypassed:branch:no_edit	several events	branch:1:0:TA;branch:2:0:TTT
+chr22	39553718	C	CTT	INS	2	True	site_bypassed:branch:no_edit	INS multi-node branch	branch:2:0:TT
+chr22	43574645	CAA	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
+chr22	43575358	GT	G	DEL	1	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:1
+chr22	48512944	AG	A	DEL	1	True	site_bypassed:branch:no_edit	several events	skip:1;branch:1:1:A
+chr22	49389325	CAA	C	DEL	2	True	site_bypassed:skip_edge:no_edit	DEL skip edge	skip:2
