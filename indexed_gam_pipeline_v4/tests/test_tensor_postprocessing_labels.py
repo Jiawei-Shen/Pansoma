@@ -250,6 +250,8 @@ class TruthLabelTest(unittest.TestCase):
             somatic = TruthSet("somatic", somatic_vcf, tmp / "somatic.bed", fasta, locator, chromosomes=("chr1",))
             germline = TruthSet("germline", germline_vcf, tmp / "germline.bed", fasta, locator, chromosomes=("chr1",))
             # The DEL has five placements across nodes 1 and 2; all four single-node ones are keys.
+            with self.assertRaisesRegex(ValueError, "somatic or germline"):  # the name is the set's role in the rules
+                TruthSet("normal", germline_vcf, tmp / "germline.bed", fasta, locator, chromosomes=("chr1",))
             (deletion, snv, _, _) = somatic.alleles
             self.assertEqual(deletion["placements"], 5)
             self.assertEqual(deletion["keys"], sorted(["1:3:DEL:T>", "1:4:DEL:T>", "2:4:DEL:A>", "2:5:DEL:A>", "2:6:DEL:A>"]))
