@@ -280,8 +280,9 @@ chose from); the shared directory lists capped nodes in `downsampled_nodes.tsv` 
 kept, reason `max_node_reads`).
 
 **`--chromosomes`** filters the **target nodes** by the chromosome block of their node ID
-(Minigraph-Cactus numbers each chromosome's graph as one contiguous ID interval, including the
-off-GRCh38 insertion and branch nodes; see `tensor_postprocessing/README.md`). Reads are not
+(Minigraph-Cactus numbers each chromosome's graph as one ID interval, with gaps in a frequency-
+filtered graph, including the off-GRCh38 insertion and branch nodes; see
+`tensor_postprocessing/README.md`). Reads are not
 filtered: a read on a chr1 target keeps its columns on neighbouring nodes of any block.
 `autosome` removes chrX/Y/M/EBV and the unplaced contigs up front (on HG008 PacBio 4.4 % of the
 targets, including 24,258 unplaced nodes behind one task's 5.8 h tail). The selection (and the

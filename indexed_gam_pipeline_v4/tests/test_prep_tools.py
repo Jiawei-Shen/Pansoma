@@ -2,7 +2,9 @@
 The cases that run vg need PANSOMA_VG=/path/to/vg (scripts/use_vg.sh sets it); the others always run."""
 import json
 import os
+import re
 from pathlib import Path
+import sqlite3
 import subprocess
 import tempfile
 import unittest
@@ -69,6 +71,58 @@ class AuditTest(unittest.TestCase):
             self.assertEqual(failed["checks"], dict(path_count_mismatches=0, path_nodes_outside_index=1,
                                                     s_lines_minus_index_nodes=0, sequence_mismatches=0))
             self.assertEqual(failed["gfa_totals"]["paths"], 6)
+
+
+class SparseNodeIdTest(unittest.TestCase):
+    """A filtered graph (e.g. HPRC v2.1 d46) keeps its nodes' IDs: fewer nodes than the largest ID, and chromosome
+    components with ID gaps. ref-path-check compares the index with the GFA's segments, chr-index uses the index."""
+
+    def files(self, tmp):
+        gfa, fasta = graph_files(tmp)
+        lines = []
+        for line in gfa.read_text().splitlines():
+            f = line.split("\t")
+            if f[0] == "S":
+                f[1] = str(int(f[1]) * 10)
+            elif f[0] == "W":
+                f[6] = re.sub(r"\d+", lambda m: str(int(m.group()) * 10), f[6])
+            lines.append("\t".join(f))
+        sparse = tmp / "sparse.gfa"
+        sparse.write_text("\n".join(lines) + "\n")
+        db = graph_fixture(tmp / "sparse.sqlite", [(n * 10, s, PATHS[n]) for n, s in segments(gfa).items()])
+        with sqlite3.connect(db) as connection:  # chr-index records the index's GBZ fingerprint
+            (value,) = connection.execute("SELECT value FROM graph_metadata").fetchone()
+            connection.execute("UPDATE graph_metadata SET value=?",
+                               (json.dumps(dict(json.loads(value), source=dict(path="sparse.gbz"))),))
+        return sparse, fasta, db
+
+    def components(self, root, lists):
+        for chrom, nodes in lists.items():
+            (root / chrom).mkdir(parents=True, exist_ok=True)
+            (root / chrom / f"{chrom}.component.nodes.raw.txt").write_text("".join(f"{n}\n" for n in nodes))
+        return root
+
+    def test_gapped_ids_pass_with_the_graph_index_only(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            gfa, fasta, db = self.files(tmp)
+            meta = graph_prep.scan(gfa, tmp / "rp")
+            self.assertEqual((meta["segments"], meta["max_node"]), (11, 110))
+            report = graph_prep.check(tmp / "rp", db, fasta, samples=50)
+            self.assertTrue(report["passed"])
+            self.assertEqual((report["graph_index_nodes"], report["gfa_segments"], report["gfa_max_node"]), (11, 11, 110))
+            chroms = ("chr1", "chr2", "chr3")
+            good = self.components(tmp / "good", dict(chr1=range(10, 80, 10), chr2=[80, 90], chr3=[100, 110]))
+            blocks, meta = graph_prep.build(good, tmp / "rp", tmp / "idx", graph_index=db, autosomes=chroms)
+            self.assertEqual([(b["chrom"], b["first_node"], b["last_node"], b["nodes"]) for b in blocks],
+                             [("chr1", 10, 70, 7), ("chr2", 80, 90, 2), ("chr3", 100, 110, 2)])
+            self.assertEqual((meta["covered_nodes"], meta["uncovered_nodes"]), (11, 0))
+            with self.assertRaisesRegex(ValueError, "give the graph index"):
+                graph_prep.build(good, tmp / "rp", tmp / "idx2", autosomes=chroms)
+            # node 30 is a chr1 node left out of chr1's list: another component's node inside chr1's interval
+            bad = self.components(tmp / "bad", dict(chr1=[10, 20, 40, 50, 60, 70], chr2=[80, 90], chr3=[100, 110]))
+            with self.assertRaisesRegex(ValueError, "1 graph nodes of other components"):
+                graph_prep.build(bad, tmp / "rp", tmp / "idx3", graph_index=db, autosomes=chroms)
 
 
 class GamCheckTest(unittest.TestCase):

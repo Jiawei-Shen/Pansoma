@@ -1,14 +1,16 @@
 """Node ID -> chromosome block, as a table of contiguous node-ID intervals.
 
 Minigraph-Cactus builds one graph per reference chromosome and then gives node IDs
-chromosome by chromosome, so each chromosome's graph is one contiguous ID interval
-(for HPRC v1.1 d9, in contig-name order: chr1, chr10..chr19, chr2, chr20..chr22, chr3..chr9,
-chrEBV, chrM, unplaced, chrX, chrY).
+chromosome by chromosome, so each chromosome's graph is one ID interval (for HPRC v1.1 d9, in
+contig-name order: chr1, chr10..chr19, chr2, chr20..chr22, chr3..chr9, chrEBV, chrM, unplaced,
+chrX, chrY). A frequency-filtered graph keeps the full graph's IDs (HPRC v2.1 d46: 94.5 M nodes,
+IDs up to 212.7 M), so its intervals have gaps; a lookup only needs the intervals.
 
 * Autosome blocks (chr1-22) are exactly the node sets of `vg chunk -C -p GRCh38#0#chrN`,
   i.e. the whole connected component of the chromosome's reference path, including every
   node that is not on GRCh38 (insertions, alternative branches). Built from those lists
-  (`scripts/build_chr_node_filters.sh`), which must each be one gap-free interval.
+  (`tools.graph_prep components`): each a gap-free interval, or, checked against the graph
+  index, an interval with no graph node of another component inside.
 * Non-autosomal groups (chrEBV, chrM, chrX, chrY; `*_random`/`chrUn_*`/alt contigs -> "unplaced")
   take the remaining IDs up to the largest node, split at the smallest node of each group's
   reference walks.

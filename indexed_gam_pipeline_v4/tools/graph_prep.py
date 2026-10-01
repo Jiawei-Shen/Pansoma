@@ -15,6 +15,7 @@ CHR_INDEX_FORMAT; nothing here is imported at run time. `gfa` and `components` r
 (scripts/use_vg.sh), else vg on PATH.
 """
 import argparse
+import contextlib
 import csv
 import hashlib
 import json
@@ -175,7 +176,8 @@ def check(directory, graph_index, fasta, samples=100000, seed=20260923):
     report = dict(graph_index=str(graph_index), fasta=str(fasta), samples=samples, seed=seed)
     with GraphIndex(graph_index) as graph, pysam.FastaFile(str(fasta)) as genome:
         report["graph_index_nodes"] = graph.metadata["nodes"]
-        report["gfa_max_node"] = path.meta["max_node"]
+        report["gfa_segments"] = path.meta["segments"]
+        report["gfa_max_node"] = path.meta["max_node"]  # above the node count when IDs have gaps (filtered graphs)
         records = graph.get_nodes(set(any_nodes) | set(ref_nodes))
         report["length_mismatches"] = int(sum(len(records[n]["sequence"]) != int(lengths[n]) for n in set(any_nodes)))
         mismatches, skipped = 0, 0
@@ -191,7 +193,7 @@ def check(directory, graph_index, fasta, samples=100000, seed=20260923):
         report.update(fasta_sequence_mismatches=mismatches, fasta_nodes_checked=len(set(ref_nodes)) - skipped,
                       fasta_contig_missing=skipped)
     report["passed"] = (report["length_mismatches"] == 0 and mismatches == 0
-                        and report["graph_index_nodes"] == report["gfa_max_node"])
+                        and report["graph_index_nodes"] == report["gfa_segments"])
     meta = read_json(Path(directory) / "meta.json")
     meta["checks"]["graph_index_and_fasta"] = report
     write_json(Path(directory) / "meta.json", meta)
@@ -256,8 +258,10 @@ def group_of(contig):
     return contig if contig in NAMED_GROUPS else UNPLACED
 
 
-def component_block(path):
-    """(first, last, count) of one component node list; it must be one gap-free interval."""
+def component_block(path, graph=None):
+    """(first, last, count) of one component node list. Its node-ID interval [first, last] may have gaps (IDs of a
+    filtered graph, e.g. HPRC v2.1 d46) only when `graph` (a GraphIndex) shows that every graph node in the interval
+    is in the component; without a graph index it must be gap-free."""
     ids = np.fromfile(path, sep=" ", dtype=np.int64)
     if not ids.size:
         raise ValueError(f"Empty component node list: {path}")
@@ -265,13 +269,30 @@ def component_block(path):
     if np.unique(ids).size != ids.size:
         raise ValueError(f"Duplicate node IDs in {path}")
     if ids.size != last - first + 1:
-        raise ValueError(f"Component {path} is not one contiguous node-ID interval "
-                         f"({ids.size} nodes in [{first}, {last}])")
+        if graph is None:
+            raise ValueError(f"Component {path} is not one contiguous node-ID interval "
+                             f"({ids.size} nodes in [{first}, {last}]); give the graph index to allow ID gaps")
+        inside = graph_nodes_between(graph, first, last)
+        if inside != ids.size:
+            raise ValueError(f"Component {path}: {inside - ids.size} graph nodes of other components inside its "
+                             f"node-ID interval [{first}, {last}]")
     return first, last, int(ids.size)
 
 
+def graph_nodes_between(graph, first, last):
+    """Number of graph index nodes with first <= ID <= last."""
+    return graph.db.execute("SELECT count(*) FROM nodes WHERE node_id BETWEEN ? AND ?", (first, last)).fetchone()[0]
+
+
 def build(components_dir, reference_path, output, graph_index=None, autosomes=AUTOSOMES):
-    """Write <output>.tsv + <output>.json; raises on any violated invariant."""
+    """Write <output>.tsv + <output>.json; raises on any violated invariant. With the graph index, node IDs may have
+    gaps (filtered graphs): block node counts are counted in the index, and a component interval may have gaps."""
+    from ..graph_index import GraphIndex
+    with GraphIndex(graph_index) if graph_index else contextlib.nullcontext() as graph:
+        return _build(components_dir, reference_path, output, graph_index, graph, autosomes)
+
+
+def _build(components_dir, reference_path, output, graph_index, graph, autosomes):
     from ..tensor_postprocessing.reference_path import ReferencePath
     components_dir, output = Path(components_dir), Path(output)
     path = ReferencePath(reference_path)
@@ -279,7 +300,7 @@ def build(components_dir, reference_path, output, graph_index=None, autosomes=AU
     blocks, sources = [], {}
     for chrom in autosomes:
         source = components_dir / chrom / f"{chrom}.component.nodes.raw.txt"
-        first, last, count = component_block(source)
+        first, last, count = component_block(source, graph)
         blocks.append(dict(chrom=chrom, first_node=first, last_node=last, nodes=count, dataset="autosome",
                            source=f"vg chunk -C connected component ({source.name})"))
         sources[chrom] = stamp(source)
@@ -301,7 +322,8 @@ def build(components_dir, reference_path, output, graph_index=None, autosomes=AU
             raise ValueError(f"Reference contigs of {group} start inside an autosome block")
         following = [s for s in autosome_starts if s > first] + [s for _, s in ordered[i + 1:]]
         last = min(following) - 1 if following else max_node
-        blocks.append(dict(chrom=group, first_node=first, last_node=last, nodes=last - first + 1,
+        nodes = graph_nodes_between(graph, first, last) if graph else last - first + 1
+        blocks.append(dict(chrom=group, first_node=first, last_node=last, nodes=nodes,
                            dataset="non_autosomal", source="reference contigs' smallest node .. next block"))
     blocks.sort(key=lambda b: b["first_node"])
     index = ChrIndex.from_blocks(blocks)
@@ -328,17 +350,16 @@ def build(components_dir, reference_path, output, graph_index=None, autosomes=AU
     if walks["crossing_autosome"] or walks["unassigned"]:
         raise ValueError(f"Walks leave their chromosome block: {walks}")
     covered = sum(b["nodes"] for b in blocks)
-    meta = dict(format=CHR_INDEX_FORMAT, max_node=max_node, covered_nodes=covered, uncovered_nodes=max_node - covered,
+    total = graph.metadata["nodes"] if graph else max_node  # the same when node IDs are 1..N
+    meta = dict(format=CHR_INDEX_FORMAT, max_node=max_node, covered_nodes=covered, uncovered_nodes=total - covered,
                 autosome_components=sources, reference_path=dict(path=str(Path(reference_path).resolve()),
                                                                  source=path.meta["source"]),
                 walk_check=walks)
-    if graph_index:
-        from ..graph_index import GraphIndex
-        with GraphIndex(graph_index) as graph:
-            meta["graph_index"] = dict(path=str(Path(graph_index).resolve()), nodes=graph.metadata["nodes"],
-                                       gbz=graph.metadata["source"])
-            if graph.metadata["nodes"] != max_node:
-                raise ValueError("Graph index and GFA disagree on the node count")
+    if graph:
+        meta["graph_index"] = dict(path=str(Path(graph_index).resolve()), nodes=graph.metadata["nodes"],
+                                   gbz=graph.metadata["source"])
+        if graph.metadata["nodes"] != path.meta["segments"]:
+            raise ValueError("Graph index and GFA disagree on the node count")
     output.parent.mkdir(parents=True, exist_ok=True)
     table = output.with_name(output.name + ".tsv")
     with table.open("w", newline="") as stream:

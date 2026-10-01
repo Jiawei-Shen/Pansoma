@@ -39,14 +39,18 @@ freeze. The run-time readers of its outputs stay here:
 ## Chromosome of a node (`chr_index.py`)
 
 Minigraph-Cactus builds one graph per reference chromosome and then numbers the nodes
-chromosome by chromosome, so each chromosome's graph is one contiguous node-ID interval.
-For HPRC v1.1 d9 the order is the contig-name order: chr1, chr10–chr19, chr2, chr20–chr22,
-chr3–chr9, chrEBV, chrM, unplaced, chrX, chrY.
+chromosome by chromosome, so each chromosome's graph is one node-ID interval. For HPRC v1.1 d9
+the order is the contig-name order: chr1, chr10–chr19, chr2, chr20–chr22, chr3–chr9, chrEBV,
+chrM, unplaced, chrX, chrY. A frequency-filtered graph keeps the full graph's IDs, so its
+intervals have gaps (HPRC v2.1 d46: 94,468,093 nodes, IDs up to 212,734,056).
 
 * **chr1–22** blocks are exactly the node sets of `vg chunk -C -p GRCh38#0#chrN`: the whole
   connected component, including every node that is not on GRCh38 (insertions and
   alternative branches, 17–22 % of each component). They come from `tools.graph_prep components`.
-  Each list must be one gap-free interval.
+  Each list must be one gap-free interval or, with `--graph-index`, an interval without a graph
+  node of another component inside (then the block's `nodes` are counted in the index).
+  `ref-path-check` compares the graph index's node count with the GFA's segments, not with the
+  largest ID.
 * **Non-autosomal groups** (chrEBV, chrM, chrX, chrY; `*_random`, `chrUn_*` and HPRC contigs
   assigned to no chromosome → `unplaced`) take the remaining IDs, split at each group's
   smallest GRCh38 node.
@@ -372,7 +376,7 @@ section 4, "Tools").
 
 Measured on HPRC v1.1 d9:
 
-* ref-path-scan: 7.4 min / 4.0 GiB (49,092,514 GRCh38 nodes, none visited twice);
+* ref-path-scan: 5.7 min / 4.2 GB (49,092,514 GRCh38 nodes, none visited twice);
 * ref-path-check: 0 length and 0 sequence mismatches;
 * chr-index: 29 s;
 * scan, check and chr-index together (2 CPUs): 10 min, peak 4.0 GiB. Their outputs equal the
