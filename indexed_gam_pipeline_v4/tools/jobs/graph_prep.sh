@@ -11,7 +11,9 @@
 # The GFA and the graph index are built side by side (both read only the GBZ).
 # Usage: sbatch -J graph_prep -o LOG graph_prep.sh GBZ OUTDIR [FASTA]
 # Environment: PANSOMA_VG (vg for gfa and components; default vg on PATH; scripts/use_vg.sh sets it), GFA (default
-# next to the GBZ), GBZ_DEPS (gbwtgraph prefix for the builder; default /scratch/jshen/Github/gbz-tool/dependency).
+# next to the GBZ), GBZ_DEPS (gbwtgraph prefix for the builder; default /scratch/jshen/Github/gbz-tool/dependency),
+# REFERENCE_SAMPLE (ref-path-scan --reference-sample; default GRCh38; _gbwt_ref for a GBZ whose reference is generic
+# paths, e.g. a GRCh38-only vg autoindex graph).
 # Runs the package it lives in (<package>/tools/jobs/): the checkout or pipeline_code/.
 #SBATCH -p general
 #SBATCH -c 16
@@ -55,7 +57,7 @@ if done_or graph-index "$DB"; then
 fi
 for p in "${pids[@]}"; do wait "$p"; done
 if done_or ref-path-scan "$RP"; then
-  $TIME $PY -m $M.graph_prep ref-path-scan --gfa "$GFA" --output "$RP"
+  $TIME $PY -m $M.graph_prep ref-path-scan --gfa "$GFA" --output "$RP" --reference-sample "${REFERENCE_SAMPLE:-GRCh38}"
 fi
 echo "== ref-path-check"
 $TIME $PY -m $M.graph_prep ref-path-check --path "$RP" --graph-index "$DB" --fasta "$FASTA"

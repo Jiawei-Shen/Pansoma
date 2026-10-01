@@ -414,7 +414,7 @@ $PY -m $P.tools.graph_index_build build --gbz /scratch/jshen/data/AF-Filtered_VG
     --builder bin/gbz_graph_index --output /path/to/new.graph.sqlite
 # GFA, reference path, chromosome blocks, index audit (once per graph; tensor_postprocessing/README.md)
 $PY -m $P.tools.graph_prep gfa --gbz G.gbz --output G.gfa [--threads 16] [--vg VG]
-$PY -m $P.tools.graph_prep ref-path-scan --gfa G.gfa --output DIR [--reference-sample GRCh38]
+$PY -m $P.tools.graph_prep ref-path-scan --gfa G.gfa --output DIR [--reference-sample GRCh38]   # _gbwt_ref: generic paths
 $PY -m $P.tools.graph_prep ref-path-check --path DIR --graph-index DB --fasta FA [--samples 100000]
 $PY -m $P.tools.graph_prep components --gbz G.gbz --reference-path DIR --output DIR [--threads 4] [--vg VG]
 $PY -m $P.tools.graph_prep chr-index --components-dir D --reference-path DIR --output PREFIX [--graph-index DB]
@@ -470,7 +470,11 @@ $PY -m $P.tools.compare_runs A B [--mask DOTTED.KEY ...] [--report FILE]
   aligned, perfect and matched bases must be equal.
 * **Reference path, chr index.** `ref-path-scan` writes a directory with `meta.json` (`format`
   `gfa-reference-path`) that `tensor_postprocessing.reference_path.ReferencePath` reads (also a
-  `meta.json` that records the format under `version`, in its earlier spelling, as under `$G`);
+  `meta.json` that records the format under `version`, in its earlier spelling, as under `$G`). The
+  reference walks are the GFA's W lines of `--reference-sample` (default `GRCh38`); a GBZ built from a
+  FASTA alone (the GRCh38-only vg autoindex graph) keeps its reference as generic paths, the GFA's P
+  lines (`P chr1 1+,2+,…`), read with `--reference-sample _gbwt_ref` (GBWT's sample name of generic
+  paths; `graph_prep.sh` takes it as `REFERENCE_SAMPLE`), and `components` then cuts `vg chunk -p chr1`;
   `chr-index` writes `<prefix>.tsv` plus `<prefix>.json` (`format` `chr-node-ranges`, `tsv_sha256`,
   which `ChrIndex` checks).
 * **Job scripts** (`tools/jobs/`, plain shell with `#SBATCH` defaults for `-p general`). Each runs

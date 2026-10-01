@@ -10,7 +10,8 @@ Arrays in reference-walk order (contig k occupies [meta.contigs[k].offset, + nod
     path_nodes.npy     int64   node IDs
     path_starts.npy    int64   0-based contig start of each visit (non-decreasing within a contig)
     path_reverse.npy   bool
-    walks.ndjson       every W line of every sample: sample, hap, contig, start, end, nodes, min, max
+    walks.ndjson       every W line of every sample (and the P lines of generic reference paths, sample _gbwt_ref):
+                       sample, hap, contig, start, end, nodes, min, max
     meta.json          format, contigs, source stamp, counts, checks (added by `check`)
 
 A walk's node range (min, max) is enough to test chromosome-block membership, because

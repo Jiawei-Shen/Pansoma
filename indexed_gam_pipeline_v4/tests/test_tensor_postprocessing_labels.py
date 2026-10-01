@@ -60,6 +60,36 @@ class ReferencePathTest(unittest.TestCase):
                 self.assertEqual(Locator(path).keys(lin["chrom"], lin["pos0"], lin["ref"], lin["alt"], kind).count(
                     f"{node}:{start}:{kind}:{ref}>{alt}"), 1)
 
+    def test_generic_reference_paths_give_the_same_directory(self):
+        """--reference-sample _gbwt_ref: the GFA's P lines (generic paths, e.g. a GRCh38-only vg autoindex GBZ) are the
+        reference walks; the directory equals the one from the same paths written as GRCh38 W lines."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            gfa, _ = graph_files(tmp)
+            lines = []
+            for line in gfa.read_text().splitlines():
+                f = line.split("\t")
+                if f[0] == "W" and f[1] == "GRCh38":  # >1<2>3 -> P chr1 1+,2-,3+ *
+                    steps = f[6].replace(">", " >").replace("<", " <").split()
+                    line = "\t".join(["P", f[3], ",".join(x[1:] + ("+" if x[0] == ">" else "-") for x in steps), "*"])
+                lines.append(line)
+            (tmp / "generic.gfa").write_text("\n".join(lines) + "\n")
+            scan(gfa, tmp / "walks")
+            meta = scan(tmp / "generic.gfa", tmp / "generic", reference_sample=graph_prep.GENERIC_SAMPLE)
+            a, b = ReferencePath(tmp / "walks"), ReferencePath(tmp / "generic")
+            for name in ("lengths", "chrom", "start0", "reverse", "visits", "path_nodes", "path_starts", "path_reverse"):
+                np.testing.assert_array_equal(getattr(a, name), getattr(b, name), name)
+            self.assertEqual([{k: c[k] for k in c if k != "hap"} for c in a.meta["contigs"]],
+                             [{k: c[k] for k in c if k != "hap"} for c in b.meta["contigs"]])
+            self.assertEqual({c["hap"] for c in meta["contigs"]}, {"0"})
+            self.assertEqual([(w["sample"], w["contig"], w["start"], w["end"]) for w in b.walks()],
+                             [("HG1", "ctg1", 0, 9)] + [("_gbwt_ref", c["name"], 0, c["end"]) for c in a.meta["contigs"]])
+            self.assertEqual((graph_prep.reference_path_name(b.meta, "chr2"), graph_prep.reference_path_name(a.meta, "chr2")),
+                             ("chr2", "GRCh38#0#chr2"))  # the names vg chunk -p finds in each GBZ
+            with self.assertRaisesRegex(ValueError, "No W lines for sample GRCh38"):
+                scan(tmp / "generic.gfa", tmp / "other")  # P lines are read only as generic paths
+            self.assertFalse((tmp / "other").exists())
+
     def test_a_directory_with_the_earlier_format_key_opens(self):
         """The HPRC reference-path directory's meta.json has `version: gfa-reference-path-v1` instead of
         `format: gfa-reference-path` (common.EARLIER_FORMAT_NAMES); it reads the same. Other names are refused."""

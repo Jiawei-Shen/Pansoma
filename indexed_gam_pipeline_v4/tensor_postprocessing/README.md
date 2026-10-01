@@ -11,7 +11,7 @@ run (this package)                  merge ─▶ label
 
 | Command | Module | What it does |
 |---|---|---|
-| `ref-path-scan` | `tools/graph_prep.py` | one pass over the GFA (awk prefilter): node lengths, GRCh38 walk coordinates of every node, node range of every walk of every sample |
+| `ref-path-scan` | `tools/graph_prep.py` | one pass over the GFA (awk prefilter): node lengths, GRCh38 walk coordinates of every node (the GRCh38 W lines, or with `--reference-sample _gbwt_ref` the P lines of a GBZ whose reference is generic paths), node range of every walk of every sample |
 | `ref-path-check` | `tools/graph_prep.py` | GFA lengths vs the GBZ graph index, reference node sequences vs the GRCh38 FASTA (100k random nodes each) |
 | `chr-index` | `tools/graph_prep.py` | node ID → chromosome block table (`*.chr_node_ranges.tsv/.json`) |
 | `merge` | `merge_shards.py` | `task_*/shard_*` (2,048 each) → `<chrom>_shard_*` (32,768 each), byte-verified |
@@ -340,7 +340,7 @@ From the repository root, with `P="python -m indexed_gam_pipeline_v4"`:
 ```bash
 # once per graph (all of them, graph index included: tools/jobs/graph_prep.sh GBZ OUTDIR [FASTA])
 $P.tools.graph_prep gfa --gbz G.gbz --output G.gfa [--threads 16] [--vg VG]
-$P.tools.graph_prep ref-path-scan --gfa G.gfa --output DIR [--reference-sample GRCh38]
+$P.tools.graph_prep ref-path-scan --gfa G.gfa --output DIR [--reference-sample GRCh38]   # _gbwt_ref: P-line generic paths
 $P.tools.graph_prep ref-path-check --path DIR --graph-index DB --fasta FA [--samples 100000]
 $P.tools.graph_prep components --gbz G.gbz --reference-path DIR --output DIR [--threads 4] [--vg VG]
 $P.tools.graph_prep chr-index --components-dir D --reference-path DIR --output PREFIX [--graph-index DB]

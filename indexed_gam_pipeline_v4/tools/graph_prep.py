@@ -62,12 +62,19 @@ def to_gfa(gbz, output, vg=None, threads=1):
 # --- reference path: one pass over a GFA --------------------------------------------------------
 
 SEPARATORS = bytes.maketrans(b"<>", b"  ")
-# S lines -> "id<TAB>length" into LENGTHS (LN:i: when the sequence is '*'); W lines pass through.
+PATH_SEPARATORS = bytes.maketrans(b"+-,", b"   ")
+# GBWT's sample name of generic paths (plain names such as chr1, written as P lines by vg convert -f): the reference of
+# a GBZ built from a FASTA alone, e.g. a GRCh38-only vg autoindex graph. ref-path-scan --reference-sample _gbwt_ref
+# takes the GFA's P lines as the reference walks.
+GENERIC_SAMPLE = "_gbwt_ref"
+# S lines -> "id<TAB>length" into LENGTHS (LN:i: when the sequence is '*'); W lines pass through, P lines too when
+# GENERIC is 1.
 AWK = r'''BEGIN { FS = OFS = "\t" }
 $1 == "S" { n = length($3)
             if ($3 == "*") { n = -1; for (i = 4; i <= NF; i++) if ($i ~ /^LN:i:/) n = substr($i, 6) + 0 }
             print $2, n > LENGTHS; next }
-$1 == "W" { print }'''
+$1 == "W" { print }
+$1 == "P" && GENERIC { print }'''
 
 
 def parse_walk(walk):
@@ -80,8 +87,27 @@ def parse_walk(walk):
     return ids, reverse
 
 
+def parse_path(segments):
+    """b'12+,3-' (the segment field of a GFA P line) -> (ids int64, reverse bool)."""
+    raw = np.frombuffer(segments, dtype=np.uint8)
+    reverse = raw[(raw == 43) | (raw == 45)] == 45
+    ids = np.array(segments.translate(PATH_SEPARATORS).split(), dtype=np.int64)
+    if ids.size != reverse.size or not ids.size:
+        raise ValueError("Malformed GFA path")
+    return ids, reverse
+
+
+def reference_path_name(meta, contig):
+    """The GBZ path name of a reference contig: <sample>#<hap>#<contig>, or the contig itself for generic paths."""
+    if meta["reference_sample"] == GENERIC_SAMPLE:
+        return contig
+    hap = next(c["hap"] for c in meta["contigs"] if c["name"] == contig)
+    return f"{meta['reference_sample']}#{hap}#{contig}"
+
+
 def scan(gfa, output, reference_sample="GRCh38"):
-    """Build the output directory from one streaming pass (awk prefilter) over `gfa`."""
+    """Build the output directory from one streaming pass (awk prefilter) over `gfa`. The reference walks are the W
+    lines of `reference_sample`, or with GENERIC_SAMPLE the P lines (generic paths: hap 0, start 0)."""
     started = time.perf_counter()
     output = Path(output)
     if output.exists():
@@ -91,10 +117,19 @@ def scan(gfa, output, reference_sample="GRCh38"):
     lengths_txt = work / "segment_lengths.txt"
     # Walk records are streamed to walks.ndjson, never kept: a graph can have hundreds of millions of W lines.
     reference, n_walks, samples = [], 0, set()
-    process = subprocess.Popen(["awk", "-v", f"LENGTHS={lengths_txt}", AWK, str(gfa)], stdout=subprocess.PIPE)
+    generic, paths = reference_sample == GENERIC_SAMPLE, []  # paths: P lines, logged once their lengths are known
+    process = subprocess.Popen(["awk", "-v", f"LENGTHS={lengths_txt}", "-v", f"GENERIC={int(generic)}", AWK, str(gfa)],
+                               stdout=subprocess.PIPE)
     with (work / "walks.ndjson").open("w") as log:
         for line in process.stdout:
             fields = line.rstrip(b"\n").split(b"\t")
+            if fields[0] == b"P":
+                if len(fields) < 3:
+                    raise ValueError("Malformed GFA P line")
+                ids, reverse = parse_path(fields[2])
+                paths.append((dict(sample=GENERIC_SAMPLE, hap="0", contig=fields[1].decode(), start=0, end=None,
+                                   nodes=int(ids.size), min=int(ids.min()), max=int(ids.max())), ids, reverse))
+                continue
             if len(fields) != 7:
                 raise ValueError("Malformed GFA W line")
             sample, hap, contig = (f.decode() for f in fields[1:4])
@@ -114,8 +149,8 @@ def scan(gfa, output, reference_sample="GRCh38"):
     process.stdout.close()
     if process.wait():
         raise RuntimeError(f"awk failed on {gfa}")
-    if not reference:
-        raise ValueError(f"No W lines for sample {reference_sample} in {gfa}")
+    if not reference and not paths:
+        raise ValueError(f"No {'P' if generic else 'W'} lines for sample {reference_sample} in {gfa}")
     pairs = np.fromfile(lengths_txt, sep=" ", dtype=np.int64).reshape(-1, 2)
     if (pairs[:, 1] < 0).any() or (pairs[:, 0] <= 0).any():
         raise ValueError("Segments need a positive integer ID and a sequence or LN tag")
@@ -124,6 +159,15 @@ def scan(gfa, output, reference_sample="GRCh38"):
     lengths[pairs[:, 0]] = pairs[:, 1]
     if np.count_nonzero(lengths) != len(pairs):
         raise ValueError("Duplicate or empty segments in the GFA")
+    with (work / "walks.ndjson").open("a") as log:  # a generic path spans its whole contig: end = its length
+        for record, ids, reverse in paths:
+            if ids.max() >= size or not lengths[ids].all():
+                raise ValueError(f"Reference path {record['contig']} uses nodes without segments")
+            record["end"] = int(lengths[ids].astype(np.int64).sum())
+            log.write(json.dumps(record) + "\n")
+            n_walks += 1
+            samples.add(GENERIC_SAMPLE)
+            reference.append((record, ids, reverse))
     chrom = np.full(size, -1, dtype=np.int16)
     start0 = np.zeros(size, dtype=np.int64)
     reverse_of = np.zeros(size, dtype=bool)
@@ -206,7 +250,8 @@ def check(directory, graph_index, fasta, samples=100000, seed=20260923):
 
 def components(gbz, reference_path, output, vg=None, threads=1, autosomes=AUTOSOMES):
     """<output>/chrN/chrN.component.nodes.raw.txt (one node ID per line) for chr-index: the connected component of
-    each autosome's reference path, `vg chunk -C -p <sample>#<hap>#<contig>` on the GBZ, off-reference nodes
+    each autosome's reference path, `vg chunk -C -p <sample>#<hap>#<contig>` (a generic path: `-p <contig>`) on the
+    GBZ, off-reference nodes
     included; plus <output>/summary.json (per chromosome: node count, ID range, nodes on the reference path).
     The path names come from the ref-path-scan directory. Published atomically."""
     vg, output, started = vg_command(vg), Path(output), time.perf_counter()
@@ -221,7 +266,7 @@ def components(gbz, reference_path, output, vg=None, threads=1, autosomes=AUTOSO
     for chrom in autosomes:
         if chrom not in contigs:
             raise ValueError(f"No reference walk for {chrom} in {reference_path}")
-        name = f"{path.meta['reference_sample']}#{contigs[chrom]['hap']}#{chrom}"
+        name = reference_path_name(path.meta, chrom)
         chunk = subprocess.Popen([vg, "chunk", "-x", str(gbz), "-p", name, "-C", "-t", str(threads)],
                                  stdout=subprocess.PIPE)
         convert = subprocess.Popen([vg, "convert", "-f", "-"], stdin=chunk.stdout, stdout=subprocess.PIPE)
@@ -504,7 +549,9 @@ def main(argv=None):
     p = commands.add_parser("ref-path-scan", help="one GFA pass: node lengths, GRCh38 path coordinates, walk ranges")
     p.add_argument("--gfa", required=True)
     p.add_argument("--output", required=True, help="new directory")
-    p.add_argument("--reference-sample", default="GRCh38")
+    p.add_argument("--reference-sample", default="GRCh38",
+                   help=f"sample of the reference W lines; {GENERIC_SAMPLE}: the generic paths, the GFA's P lines (a GBZ "
+                        "built from a FASTA alone, e.g. a GRCh38-only vg autoindex graph)")
 
     p = commands.add_parser("ref-path-check", help="check a ref-path directory against the graph index and a FASTA")
     p.add_argument("--path", required=True)
