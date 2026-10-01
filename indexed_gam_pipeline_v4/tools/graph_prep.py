@@ -88,19 +88,26 @@ def scan(gfa, output, reference_sample="GRCh38"):
     work = output.with_name(output.name + ".tmp")
     work.mkdir(parents=True)
     lengths_txt = work / "segment_lengths.txt"
-    reference, walks = [], []
+    # Walk records are streamed to walks.ndjson, never kept: a graph can have hundreds of millions of W lines.
+    reference, n_walks, samples = [], 0, set()
     process = subprocess.Popen(["awk", "-v", f"LENGTHS={lengths_txt}", AWK, str(gfa)], stdout=subprocess.PIPE)
     with (work / "walks.ndjson").open("w") as log:
         for line in process.stdout:
             fields = line.rstrip(b"\n").split(b"\t")
             if len(fields) != 7:
                 raise ValueError("Malformed GFA W line")
-            ids, reverse = parse_walk(fields[6])
             sample, hap, contig = (f.decode() for f in fields[1:4])
+            if sample == reference_sample:
+                ids, reverse = parse_walk(fields[6])
+            else:  # only the node count and ID range are recorded
+                ids = np.fromstring(fields[6].translate(SEPARATORS), dtype=np.int64, sep=" ")
+                if not ids.size:
+                    raise ValueError("Malformed GFA walk")
             record = dict(sample=sample, hap=hap, contig=contig, start=int(fields[4]), end=int(fields[5]),
                           nodes=int(ids.size), min=int(ids.min()), max=int(ids.max()))
             log.write(json.dumps(record) + "\n")
-            walks.append(record)
+            n_walks += 1
+            samples.add(sample)
             if sample == reference_sample:
                 reference.append((record, ids, reverse))
     process.stdout.close()
@@ -145,7 +152,7 @@ def scan(gfa, output, reference_sample="GRCh38"):
         np.save(work / f"{name}.npy", values)
     lengths_txt.unlink()
     meta = dict(format=FORMAT, source=stamp(gfa), reference_sample=reference_sample, max_node=size - 1,
-                segments=int(len(pairs)), walks=len(walks), samples=len({w["sample"] for w in walks}),
+                segments=int(len(pairs)), walks=n_walks, samples=len(samples),
                 contigs=contigs, reference_nodes=int(np.count_nonzero(visits)),
                 ambiguous_reference_nodes=int(np.count_nonzero(visits > 1)),
                 scan_seconds=time.perf_counter() - started, checks={})

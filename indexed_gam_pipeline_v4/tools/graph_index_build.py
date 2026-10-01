@@ -85,7 +85,9 @@ def build_index(gbz, output, builder):
         meta = temp / "metadata.json"
         meta.write_text(json.dumps(metadata))
         dbpath = temp / "index.sqlite"
-        subprocess.run([str(Path(builder).resolve()), str(gbz), str(dbpath), str(meta)], check=True)
+        # the builder prints its metadata; the caller gets the final one (with the validation timing) instead
+        subprocess.run([str(Path(builder).resolve()), str(gbz), str(dbpath), str(meta)], check=True,
+                       stdout=subprocess.DEVNULL)
         if stamp(gbz) != source:
             raise ValueError("GBZ changed during index build")
         t = time.perf_counter()
