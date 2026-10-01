@@ -12,10 +12,10 @@ record decoder); `orchestrate` runs a whole genome on one Slurm node as many sma
 with a byte-verified per-chromosome merge and truth labels (`tensor_postprocessing`).
 
 ```
-runtime  5,010 lines of Python in 17 files + fastdecode.cpp (659 lines); frozen per run: 21 files (those 18,
+runtime  5,069 lines of Python in 17 files + fastdecode.cpp (659 lines); frozen per run: 21 files (those 18,
          the compiled decoder and the two READMEs), 2.55 MB, 2.15 MB of it the compiled decoder
 tools    1,282 lines of Python in 7 files + gbz_graph_index.cpp (75 lines); not frozen
-tests    5,146 lines of Python in 17 files (+ golden_hashes.json), 164 tests, ~55 s on a quiet node
+tests    5,207 lines of Python in 17 files (+ golden_hashes.json), 165 tests, ~55 s on a quiet node
 ```
 
 ---
@@ -47,7 +47,8 @@ $PY -m $P.run discover --gam sample.sorted.gam --output discovery/ \
 # (whole genome, one Slurm node) prepare a run root, then submit it
 $PY -m $P.orchestrate prepare --root /path/to/run --tensors /path/to/tensors \
     --gam sample.sorted.gam --nodes discovery/target_nodes.txt --node-stats discovery/node_stats.json \
-    --graph-index $G/hprc-v1.1-mc-grch38.d9.graph_index.sqlite --tasks 1200 --processes 48 --gam-cache-mb 8192 \
+    --graph-index $G/hprc-v1.1-mc-grch38.d9.graph_index.sqlite --haplotypes 90 \
+    --tasks 1200 --processes 48 --gam-cache-mb 8192 \
     --snv-min-af 0.06 --indel-min-af 0.08 \
     --chromosomes autosome --chr-index $G/hprc-v1.1-mc-grch38.d9.chr_node_ranges.tsv \
     --merge-shard-size 32768 --keep-sources --reference-path $G/hprc-v1.1-mc-grch38.d9.grch38_path \
@@ -65,7 +66,7 @@ $PY -m $P.tensor_postprocessing label --tensors /path/to/tensors --reference-pat
 
 # (one task by hand, e.g. an audit) exactly what every task runs
 $PY -m $P.run build --gam sample.sorted.gam --nodes nodes.txt --graph-index $G/hprc-v1.1-mc-grch38.d9.graph_index.sqlite \
-    --output out/shared --snv-output out/SNV --indel-output out/INDEL --snv-min-af 0.06 --indel-min-af 0.08
+    --haplotypes 90 --output out/shared --snv-output out/SNV --indel-output out/INDEL --snv-min-af 0.06 --indel-min-af 0.08
 ```
 
 The graph files (graph index, reference-path directory, chromosome block table) are made once per
@@ -204,6 +205,8 @@ Writes `target_nodes.txt` (sorted), `node_stats.json` (per node `perfect`, `not_
 ```
 required:
   --gam GAM --nodes NODES --graph-index SQLITE
+  --haplotypes H             haplotype paths of that graph, references included (HPRC v1.1 d9 90, v2.1 d46 464,
+                             GRCh38-only 1): channel 6 codes path counts relative to it (section 8)
   --output SHARED_DIR --snv-output DIR --indel-output DIR      new or empty, distinct, non-nested directories
   --snv-min-af F --indel-min-af F                              AF thresholds of the two outputs
   --index GAI                default GAM.gai
@@ -331,7 +334,8 @@ prepare
   --tasks 512                contiguous near-equal node lists; use ~15,500 target nodes per task
   --processes 32             tasks at once (= builder processes; 1 <= processes <= tasks); the job needs as many CPUs
   every `run build` option except --output, --snv-output, --indel-output and --debug-rows
-                             (same defaults, but --gam-cache-mb 8192; --snv-min-af, --indel-min-af required)
+                             (same defaults, but --gam-cache-mb 8192; --haplotypes, --snv-min-af, --indel-min-af
+                             required)
   finalize (merge per chromosome, then labels):
   --merge-shard-size 32768   tensors per merged <chrom>_shard_* file; 0 = keep the task layout, no merge, no labels
   --keep-sources             keep the task_* directories after the verified merge (default: delete them)
@@ -909,20 +913,34 @@ gives the blocks (`start_row, end_row, allele`). Deterministic and independent o
 | 3 | MAPQ | clip(MAPQ, −1, 127) |
 | 4 | operation | M=1 X=2 I=3 D=4 complex=5 aligned-no-insertion gap=6 |
 | 5 | graph base | the graph reference base under that row/column, encoding as channel 0 |
-| 6 | path count | distinct GBWT paths of the column's node: the count itself up to 100, then `100 + ceil(log2(count − 99))` (331 → 108), max 127 (`tensor_storage` `int8-count-linear100-log2`); insertion/gap columns use the anchor node |
+| 6 | path count | distinct GBWT paths of the column's node, relative to the graph's haplotype count H (`--haplotypes`): H → 100; H−1 … H−49 → 99 … 51 (exact); 1 … H−50 → 1 … 50 (exact if H ≤ 100, else pow 0.5); above H 101 … 127 (log2) (`tensor_storage` `int8-count-haplotypes100`); insertion/gap columns use the anchor node |
 | 7 | strand | 1 = read sequenced on the candidate node's forward strand, 2 = reverse; one value per row |
 
 Reading the channels: **row matches REF** ⇔ channel 0 == channel 5; channel 2 is the
 pipeline's call of which site allele each record carries (blank for OTHER), so blocks and
 their strand mix (channel 7) can be read directly. The REF allele of an SNP/DEL is
-channel 5 at the site columns; an INS has an empty REF. Path counts are exact up to 100:
-on HPRC v1.1 d9 99.29 % of the 60.1 M nodes have ≤ 100 paths and 57 % have 85–90, which a
-log encoding such as `floor(14·log2(count+1)+0.5)` would collapse (88, 89, 90 and 91 all → 91,
-i.e. "missing from one or two haplotypes" would look like "in every haplotype"); above 100 (repeat
-nodes revisited by one haplotype) 101→101, 102–103→102, 104–107→103, …, 331→108; a value k > 100
-means a count in (99 + 2^(k−101), 99 + 2^(k−100)]. Every real node has ≥1 path, so 0 is
-unambiguously "no evidence". (A graph with more than ~100 haplotypes, e.g. HPRC release 2, would
-put most nodes in the log range again — revisit the encoding, or store counts as int16, then.)
+channel 5 at the site columns; an INS has an empty REF. Path counts are coded relative to the
+graph's haplotype count H (`--haplotypes`, references included: HPRC v1.1 d9 90, v2.1 d46 464 =
+462 haplotypes + GRCh38 + CHM13, a GRCh38-only graph 1; `candidates.encode_count`):
+
+| distinct paths | code |
+|---|---|
+| H (every haplotype) | 100 |
+| H−1 … H−49 | 99 … 51, exact: 100 − the number of missing haplotypes |
+| 1 … H−50 | the count when H ≤ 100; else `1 + round(49·√((count − 1)/(H − 51)))` (half up): 1 → 1, H−50 → 50 |
+| above H (repeat nodes revisited by one haplotype) | `min(127, 100 + ceil(log2(count − H + 1)))`: H+1 → 101, H+2–H+3 → 102, H+4–H+7 → 103, … |
+| 0 | no evidence (every real node has ≥ 1 path) |
+
+The code spends one value per missing haplotype near H because that is where the somatic/germline
+signal is: on the HG008T Illumina chr1 SNV tensors (v1.1) the median site path count is 90 at
+somatic and 86 at germline tensors (AUC 0.764), and 84 % of somatic against 40 % of germline tensors
+have ≥ 88 paths (`/scratch/jshen/data/pansoma_net_v2_runs/pathcount_kind_auc_20260930/pc_auc.py`).
+On d46 46 % of the 94.5 M nodes are at 464 (25.3 M), 463 (13.3 M) or 462 (5.1 M) paths and 69 %
+within 415–464; they get 100, 99, 98 and 51–100. On v1.1 (54 % of the 60.1 M nodes at 85–90 paths,
+maximum 331) 1–40 are exact, 41–89 → 51–99, 90 → 100, 331 → 108. On d46 1–414 → 1–50 by the square
+root (2 → 3, 3 → 4, 50 → 18, 100 → 25), 415–463 → 51–99, and the maximum 2,153 → 111. With H = 100
+the code is the count itself up to 100 and `100 + ceil(log2(count − 99))` above.
+
 Strand is the anchor mapping's `is_reverse` relative to the candidate node's forward strand — the
 same frame as channels 2 and 5, so an allele/strand imbalance is consistent no matter how the node
 is oriented against the linear reference. Insertions and gap slots take their **anchor** node's
@@ -947,7 +965,7 @@ from). The merge adds `chrom`, `shard_file`, `source_task`, `source_shard_index`
 exactly once, either in some site's `alleles[]` or there.
 
 `manifest.json`, in this key order: `status`, `tensor_format` (`indexed-gam-candidate`),
-`tensor_storage` (`int8-count-linear100-log2`), `shape`, `dtype`, `channels`, `encodings`,
+`tensor_storage` (`int8-count-haplotypes100`), `shape`, `dtype`, `channels`, `encodings`,
 `row_selection` (`site-allele-blocks-uniform-similarity`), `row_order`, `window_encoding`
 (`site-layout-columns`), `parameters`, `arguments`, `gai_version` (vg's GAI format number of the
 input, 1), `graph_index` (path and the index's own metadata), `sample_unit` (`site`),
@@ -957,9 +975,9 @@ input, 1), `graph_index` (path and the index's own metadata), `sample_unit` (`si
 `timing`, then `shared_output` (typed) or `output_layout: "split"`, `variant_outputs`,
 `downsampled_nodes` (if any), `tensors_by_type` (shared), and `gam_group_cache`,
 `graph_index_performance`.
-`parameters` are `min_mapq`, `min_af`, `min_variants`, `min_allele_bq`, `max_indel_len`, `rows`,
-`width`, `max_node_reads`, `early_af_filter`; a typed directory adds `variant_type` (`snp` /
-`indel`) and sets `min_af` to its own threshold. `arguments` has 28 keys: `command` and every
+`parameters` are `haplotypes`, `min_mapq`, `min_af`, `min_variants`, `min_allele_bq`, `max_indel_len`,
+`rows`, `width`, `max_node_reads`, `early_af_filter`; a typed directory adds `variant_type` (`snp` /
+`indel`) and sets `min_af` to its own threshold. `arguments` has 29 keys: `command` and every
 `run build` option in the parser's order; a typed directory sets `output` to itself and `min_af`
 to its threshold. The merged manifest (`layout` `chromosome-shards`, `kind`, `dataset`,
 `shard_size`) copies the shared keys, `graph_index` and `gai_version` from the tasks and adds
@@ -976,7 +994,10 @@ merged sets of section 5 (`layout`). Readers accept both through the one table `
 never produce the suffixed names. (The chr-index JSON under `$G` carries its name the same way;
 `ChrIndex` reads only its `tsv_sha256`. The tensor manifests and summary records of the section 5
 sets also spell the four tensor names and `sample_unit` the earlier way, under keys ending in
-`_version`, with a `schema_version`; `label` does not read them.) The graph-index metadata copied
+`_version`, with a `schema_version`; `label` does not read them.) Their channel 6 is a different code,
+`tensor_storage_version` `int8-count-linear100-log2-v1`: the count itself up to 100, then
+`min(127, 100 + ceil(log2(count − 99)))` — this package's code with H = 100, not with their graph's H = 90;
+models and tools that read channel 6 must tell the two storages apart. The graph-index metadata copied
 into manifests is the index's own, so tensors built from the HPRC index record its suffixed schema,
 metric and `count_algorithm`.
 
@@ -1009,7 +1030,7 @@ pass are the native graph-index builder test and the two vg cases of `test_prep_
 need the environment variables of the third command; the second pass also skips the five golden
 tests.
 
-164 tests in 14 test modules cover: GAI reading, cache/scan equivalence (limits 1, 2048 and 64 MiB),
+165 tests in 14 test modules cover: GAI reading, cache/scan equivalence (limits 1, 2048 and 64 MiB),
 refusal of cache 0, of a GAI without the `'GAI!'` magic and of an unknown GAI format number, bin
 arrays against the per-bin scan, the MAPQ-filtered cache, the capped fetch (each node its smallest
 record digests whatever else is asked for, the reader's key equal to the builder's digest); capped
@@ -1060,6 +1081,8 @@ $PY -m indexed_gam_pipeline_v4.tests.golden check [--decoder python|native] [--c
 $PY -m indexed_gam_pipeline_v4.tests.golden record    # only after a deliberate output change (below)
 ```
 
+Every case builds with `--haplotypes 90` except G8 (464) and O1 (4).
+
 | case | input | options |
 |---|---|---|
 | G1 | tiny GAM | default (int) `--min-allele-bq`, `--min-variants 1`, batch 2, shard 2, cache 1 MiB |
@@ -1069,8 +1092,8 @@ $PY -m indexed_gam_pipeline_v4.tests.golden record    # only after a deliberate 
 | G5 | 12 records on one node | `--max-node-reads 5`, `--debug-rows`, rows 4 |
 | G6 | repeat insertion | built on node [3] (vg's placement) and on node [2] (where it is normalized to), width 11 |
 | G7 | multi-node deletion | `--debug-rows`, width 11 |
-| G8 | random 40-node world, ~400 records | both strands, N, complex/long indels, MAPQ 0–60, `--chromosomes autosome`, cap 30, batch 7, rows 20, width 21, `--debug-rows` |
-| O1 | mini world | 3 tasks, 2 processes, node stats, every node a target, autosome selection, merge (4 per shard), labels |
+| G8 | random 40-node world, ~400 records | both strands, N, complex/long indels, MAPQ 0–60, `--haplotypes 464` (path counts 1–1000), `--chromosomes autosome`, cap 30, batch 7, rows 20, width 21, `--debug-rows` |
+| O1 | mini world | `--haplotypes 4` (path counts 1–4), 3 tasks, 2 processes, node stats, every node a target, autosome selection, merge (4 per shard), labels |
 
 The hashes are recorded from this package; `recorded_with.commit` names the commit they were
 recorded from. Record again only after a deliberate change of the outputs (or of the `compare_runs`

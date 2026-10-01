@@ -251,6 +251,30 @@ class VisualizationTest(unittest.TestCase):
         self.assertTrue(b["caption"].startswith("T\ncandidate | "))
         self.assertEqual(a["caption"].replace("candidate-v6 | ","candidate | ",1),b["caption"])
 
+    def test_haplotype_storage_ticks_show_counts(self):
+        # indexed_gam_pipeline_v4 codes path counts relative to H: H -> 100, H-1..H-49 -> 99..51, above H log2
+        v6,versioned=v6_example()
+        base={k:val for k,val in versioned.items() if not k.endswith("_version")}
+        base.update(tensor_format=v.CANDIDATE_FORMAT,tensor_storage=v.HAPLOTYPE_STORAGE)
+        self.assertEqual([v.haplotype_count_code(c,90) for c in (0,1,40,41,89,90,91,331)],[0,1,40,51,99,100,101,108])
+        self.assertEqual([v.haplotype_count_code(c,464) for c in (1,2,50,414,415,463,464,2153)],[1,3,18,50,51,99,100,111])
+        self.assertEqual(v.haplotype_count_code(730,9655),15)  # an exact .5 tie rounds up, in integers like encode_count
+        real_close=v.plt.close
+        for haplotypes,top,expected,label in (
+                (90,99,["1","40","65","80"],"H = 90: 100 = all,\n51-99 = 1-49 missing"),
+                (464,108,["1","414","439","454","464","≤719"],"H = 464: 100 = all,\n51-99 = 1-49 missing"),
+                (None,100,["0","50","100"],"relative to H")):  # H unknown: the codes themselves
+            m=dict(base,parameters=dict(haplotypes=haplotypes)) if haplotypes else base
+            x=v6.copy()
+            x[6][x[6]!=0]=top
+            with self.subTest(haplotypes=haplotypes),tempfile.TemporaryDirectory() as d,patch.object(v.plt,"close"):
+                self.assertEqual(v.visualize_tensor(x,str(Path(d)/"h.png"),"T",False,None,metadata=m),2)
+                fig=v.plt.gcf()
+                panels=[ax for ax in fig.axes if ax.images]
+                self.assertEqual([t.get_text() for t in panels[6].images[0].colorbar.ax.get_yticklabels()],expected)
+                self.assertIn("Distinct GBWT\npaths\n"+label,[t.get_text() for ax in fig.axes for t in ax.texts])
+                real_close(fig)
+
     def test_legacy_still_renders_five_channels(self):
         x=np.zeros((5,3,4),dtype=np.int8)
         x[0,:2]=20

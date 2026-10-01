@@ -131,7 +131,8 @@ class QueueTest(unittest.TestCase):
 class EndToEndTest(unittest.TestCase):
     def prepare(self, root, gam, graph, nodes, **overrides):
         argv = ["prepare", "--root", str(root), "--gam", str(gam), "--nodes", str(nodes), "--graph-index", str(graph),
-                "--tasks", "3", "--processes", "2", "--gam-cache-mb", "1", "--batch-nodes", "2", "--shard-size", "2",
+                "--haplotypes", "90", "--tasks", "3", "--processes", "2", "--gam-cache-mb", "1", "--batch-nodes", "2",
+                "--shard-size", "2",
                 "--min-variants", str(overrides.get("min_variants", 1)),
                 "--merge-shard-size", str(overrides.get("merge_shard_size", 0)),
                 "--snv-min-af", overrides.get("snv_min_af", ".06"), "--indel-min-af", overrides.get("indel_min_af", ".08")]

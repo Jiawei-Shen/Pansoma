@@ -18,8 +18,9 @@ row. Cells without evidence are 0 in every channel.
     3 mapping quality  clip(MAPQ, -1, 127)
     4 operation        M=1 X=2 I=3 D=4 complex=5 aligned-no-insertion gap=6
     5 graph base       the graph reference base under this row/column, same encoding as 0
-    6 path count       distinct GBWT paths of the column's node: exact up to 100, then
-                       100 + ceil(log2(count - 99)) (331 -> 108), max 127
+    6 path count       distinct GBWT paths of the column's node relative to the graph's haplotype
+                       count H (--haplotypes): H -> 100, H-1..H-49 -> 99..51 (exact), 1..H-50 ->
+                       1..50 (exact if H <= 100, else pow 0.5), above H 101..127 (log2); encode_count
     7 strand           1 = read sequenced on the candidate node's forward strand, 2 = reverse (row-level)
 
 Rows come in blocks A1 (best-supported ALT), A2, ..., REF, OTHER; inside a block similar
@@ -35,7 +36,7 @@ from types import SimpleNamespace
 import numpy as np
 
 TENSOR_FORMAT = "indexed-gam-candidate"
-TENSOR_STORAGE = "int8-count-linear100-log2"
+TENSOR_STORAGE = "int8-count-haplotypes100"
 ROW_SELECTION = "site-allele-blocks-uniform-similarity"
 WINDOW_ENCODING = "site-layout-columns"
 ROW_ORDER = ("site-allele blocks A1..Ak, REF, OTHER (each by record hash), uniform ordered sampling, then "
@@ -45,7 +46,9 @@ CHANNELS = ["read_base", "base_quality", "site_allele", "mapping_quality", "alig
 BASES = {"A": 1, "C": 2, "G": 3, "T": 4, "N": 5, "-": 6}
 OPS = {"M": 1, "X": 2, "I": 3, "D": 4, "C": 5, "G": 6}
 STRAND = {"forward": 1, "reverse": 2}
-COUNT_LINEAR_MAX = 100
+COUNT_ALL = 100  # channel 6 code of a node every haplotype visits (count == H)
+COUNT_EXACT = 49  # H-1 .. H-49 paths: one code per missing haplotype, 99 .. 51
+COUNT_LOW = 50  # 1 .. H-50 paths: codes 1 .. 50, exact when they fit (H <= 100), else pow 0.5
 COMPLEMENT = str.maketrans("ACGTNacgtn", "TGCANtgcan")
 
 
@@ -58,22 +61,39 @@ def int8_quality(value):
     return max(-1, min(127, int(value)))
 
 
-def encode_count(value):
-    """int8 path counts: exact up to 100, then 100 + ceil(log2(count - 99)), saturating at 127.
+def encode_count(value, haplotypes):
+    """int8 code of a node's distinct path count relative to H = `haplotypes`, the graph's haplotype paths
+    (references included: HPRC v1.1 d9 90, v2.1 d46 464, a GRCh38-only graph 1).
 
-    On HPRC v1.1 d9, 99.3 % of nodes have <= 100 paths (57 % have 85-90, near every
-    haplotype), so those keep their exact count; the rest (repeat nodes revisited by
-    one haplotype, max 331) are compressed: 101 -> 101, 102-103 -> 102, 104-107 -> 103,
-    ..., 331 -> 108. Invert: value <= 100 is the count; value k > 100 means a count in
-    (99 + 2 ** (k - 101), 99 + 2 ** (k - 100)]. Real nodes always have at least one
-    path, so 0 only ever means "no evidence".
+        count == H              100                      every haplotype
+        H-49 <= count < H       100 - (H - count)        99 .. 51, one code per missing haplotype
+        1 <= count <= H-50      count                    when H <= 100 (codes up to 50)
+                                1 + round(49 * ((count - 1) / (H - 51)) ** 0.5)   when H > 100: 1 -> 1,
+                                                         H-50 -> 50 (d46: 2 -> 3, 3 -> 4, 50 -> 18, 100 -> 25)
+        count > H               min(127, 100 + ceil(log2(count - H + 1)))   repeat nodes revisited by one
+                                                         haplotype: H+1 -> 101, H+2..H+3 -> 102, H+4..H+7 -> 103
+
+    0 only ever means "no evidence" (real nodes have at least one path). With H = 100 this is the count itself up
+    to 100 and 100 + ceil(log2(count - 99)) above. Rounding is half up, computed in integers (exact for any H).
     """
-    value = int(value)
+    value, h = int(value), int(haplotypes)
     if value < 0:
         raise ValueError("Path counts must be nonnegative")
-    if value <= COUNT_LINEAR_MAX:
+    if h < 1:
+        raise ValueError("The haplotype count must be positive")
+    if value == 0:
+        return 0
+    if value > h:
+        return min(127, COUNT_ALL + (value - h).bit_length())  # = ceil(log2(value - h + 1))
+    if h - value <= COUNT_EXACT:
+        return COUNT_ALL - (h - value)
+    low = h - COUNT_EXACT - 1  # the highest count of the low range, coded COUNT_LOW
+    if low <= COUNT_LOW:
         return value
-    return min(127, COUNT_LINEAR_MAX + (value - COUNT_LINEAR_MAX).bit_length())  # = ceil(log2(value - 99))
+    # 1 + round(49 * sqrt((value - 1) / (low - 1))): with y = 98 * sqrt(...), round(y / 2) = (floor(y) + 1) // 2
+    # and floor(y) = isqrt(floor(y ** 2))
+    span = COUNT_LOW - 1
+    return 1 + (math.isqrt(4 * span * span * (value - 1) // (low - 1)) + 1) // 2
 
 
 # --- decoded-read model --------------------------------------------------------
@@ -828,10 +848,11 @@ for _op, _code in OPS.items():
     OP_CODES[ord(_op)] = _code
 
 
-def fill_rows(tensor, rows, stripes, path_counts, width):
+def fill_rows(tensor, rows, stripes, path_counts, haplotypes, width):
     """Write window rows into `tensor` (all eight channels, cells with a column only).
 
-    rows = [(read, anchor Visit, row columns)]; stripes = (len(rows), width) channel-2 codes.
+    rows = [(read, anchor Visit, row columns)]; stripes = (len(rows), width) channel-2 codes; channel 6 codes
+    path_counts relative to the graph's haplotype count (encode_count).
     """
     flat = [col for _, _, row in rows for col in row]
     cells = np.flatnonzero(np.fromiter((c is not None for c in flat), dtype=bool, count=len(flat)))
@@ -856,7 +877,7 @@ def fill_rows(tensor, rows, stripes, path_counts, width):
         count = path_counts[node]
         if not isinstance(count, (int, np.integer)) or not 0 <= count <= np.iinfo(np.int32).max:
             raise ValueError("Node path counts must be nonnegative int32 integers")
-        codes.append(encode_count(count))
+        codes.append(encode_count(count, haplotypes))
     mapq = np.array([int8_quality(read.mapq) for read, _, _ in rows], dtype=np.int64)
     strand = np.array([STRAND["reverse"] if visit.reverse else STRAND["forward"] for _, visit, _ in rows],
                       dtype=np.int64)
@@ -995,9 +1016,10 @@ def site_labels(alleles, eligible_by_allele):
     return result
 
 
-def make_site_tensor(alleles, eligible_by_allele, path_counts, rows=200, width=101, debug=False):
+def make_site_tensor(alleles, eligible_by_allele, path_counts, rows=200, width=101, debug=False, *, haplotypes):
     """Encode one site: `alleles` in rank order (tensor representative first), each with its
-    `eligible` = [(read, support, anchor Visit or VisitView)].
+    `eligible` = [(read, support, anchor Visit or VisitView)]; `haplotypes` is the graph's haplotype
+    count H that channel 6 codes the path counts against (encode_count).
 
     Rows: every record eligible for any allele is labeled (site_labels), windowed over the
     site layout and put in blocks A1, A2, ..., REF, OTHER, each ordered by record hash;
@@ -1046,7 +1068,8 @@ def make_site_tensor(alleles, eligible_by_allele, path_counts, rows=200, width=1
         for k, code in enumerate(codes.get(w["label"], ())):
             if anchor_column + k < width:
                 stripes[ri, anchor_column + k] = code
-    fill_rows(tensor, [(w["read"], w["visit"], w["row"]) for w in chosen], stripes, path_counts, width)
+    fill_rows(tensor, [(w["read"], w["visit"], w["row"]) for w in chosen], stripes, path_counts, haplotypes,
+              width)
     omitted = [dict(row_index=ri, omitted_columns=w["cropped"], cropped_inserted_bases=w["cropped_inserted"],
                     reason="site_extends_beyond_window_or_insertion_longer_than_slots")
                for ri, w in enumerate(chosen) if w["cropped"] or w["cropped_inserted"]]

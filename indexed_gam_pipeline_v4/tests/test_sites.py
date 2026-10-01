@@ -236,7 +236,7 @@ class SiteTest(unittest.TestCase):
         self.assertEqual(SiteLayout.of([a1, a2]), SiteLayout(1, 4, 3, 2, "GA"))
         node = NodeReads(1, reads, 15)
         x, m = make_site_tensor([a1, a2], [node.eligible(a1, 10), node.eligible(a2, 10)], {1: 5}, rows=6, width=15,
-                                debug=True)
+                                debug=True, haplotypes=90)
         rows = {r["read_name"]: (i, r) for i, r in enumerate(m["rows"])}
         self.assertEqual({n: r["site_allele"] for n, (_, r) in rows.items()},
                          dict(ins="A1", short="OTHER", long="OTHER", ref="REF", **{"del": "A2"}))
@@ -274,11 +274,12 @@ class SiteTest(unittest.TestCase):
 
 class OrchestratorOptionsTest(unittest.TestCase):
     # a production-shaped config.builder; min_allele_bq is the int 10 (argparse default of a float option)
-    E2E_BUILDER = dict(rows=200, width=101, gam_cache_mb=6144, batch_nodes=512, max_node_span=10000,
+    E2E_BUILDER = dict(haplotypes=90, rows=200, width=101, gam_cache_mb=6144, batch_nodes=512, max_node_span=10000,
                        max_batch_alignments=20000, shard_size=2048, min_mapq=10, min_af=0.05, min_variants=3,
                        min_allele_bq=10, max_indel_len=50, chromosomes="autosome", max_node_reads=800,
                        early_af_filter=True, decoder="auto")
-    MANIFEST_ARGUMENTS = ["command", "gam", "output", "nodes", "index", "graph_index", "snv_min_af", "indel_min_af",
+    MANIFEST_ARGUMENTS = ["command", "gam", "output", "nodes", "index", "graph_index", "haplotypes", "snv_min_af",
+                          "indel_min_af",
                           "snv_output", "indel_output", "debug_rows", "rows", "width", "gam_cache_mb", "batch_nodes",
                           "max_node_span", "max_batch_alignments", "shard_size", "min_mapq", "min_af", "min_variants",
                           "min_allele_bq", "max_indel_len", "max_node_reads", "chromosomes", "chr_index",
@@ -304,10 +305,11 @@ class OrchestratorOptionsTest(unittest.TestCase):
     def test_every_builder_option_is_a_dest_of_the_prepare_parser(self):
         """prepare freezes {k: getattr(args, k) for k in BUILDER_OPTIONS}, with the run parser's
         defaults except --gam-cache-mb 8192 (min_allele_bq stays the int 10 when not given)."""
-        base = ["prepare", "--root", "r", "--gam", "g", "--nodes", "n", "--graph-index", "x"]
+        base = ["prepare", "--root", "r", "--gam", "g", "--nodes", "n", "--graph-index", "x", "--haplotypes", "90"]
         args = prepare_parser().parse_args(base + ["--snv-min-af", ".06", "--indel-min-af", ".08"])
         run_args = make_parser().parse_args(["build", "--gam", "g", "--output", "o", "--nodes", "n", "--graph-index", "x",
-                                             "--snv-output", "s", "--indel-output", "i", "--snv-min-af", ".06",
+                                             "--haplotypes", "90", "--snv-output", "s", "--indel-output", "i",
+                                             "--snv-min-af", ".06",
                                              "--indel-min-af", ".08"])
         frozen = {k: getattr(args, k) for k in BUILDER_OPTIONS}
         self.assertEqual(frozen, dict({k: getattr(run_args, k) for k in BUILDER_OPTIONS}, gam_cache_mb=8192))
@@ -326,20 +328,24 @@ class OrchestratorOptionsTest(unittest.TestCase):
         self.assertEqual(command[1:4], ["-m", f"{PACKAGE}.run", "build"])
         args = make_parser().parse_args(command[3:])
         shared = recorded(args, PARAMETERS)
-        self.assertEqual(json.dumps(shared), '{"min_mapq": 10, "min_af": 0.05, "min_variants": 3, "min_allele_bq": 10.0, '
-                         '"max_indel_len": 50, "rows": 200, "width": 101, "max_node_reads": 800, "early_af_filter": true}')
+        self.assertEqual(json.dumps(shared), '{"haplotypes": 90, "min_mapq": 10, "min_af": 0.05, "min_variants": 3, '
+                         '"min_allele_bq": 10.0, "max_indel_len": 50, "rows": 200, "width": 101, "max_node_reads": 800, '
+                         '"early_af_filter": true}')
         # build.build derives the typed parameters with dict(parameters, variant_type=..., min_af=...)
         self.assertEqual(json.dumps(dict(shared, variant_type="snp", min_af=args.snv_min_af)),
-                         '{"min_mapq": 10, "min_af": 0.06, "min_variants": 3, "min_allele_bq": 10.0, "max_indel_len": 50, '
-                         '"rows": 200, "width": 101, "max_node_reads": 800, "early_af_filter": true, "variant_type": "snp"}')
+                         '{"haplotypes": 90, "min_mapq": 10, "min_af": 0.06, "min_variants": 3, "min_allele_bq": 10.0, '
+                         '"max_indel_len": 50, "rows": 200, "width": 101, "max_node_reads": 800, "early_af_filter": true, '
+                         '"variant_type": "snp"}')
         self.assertEqual(json.dumps(dict(shared, variant_type="indel", min_af=args.indel_min_af)),
-                         '{"min_mapq": 10, "min_af": 0.08, "min_variants": 3, "min_allele_bq": 10.0, "max_indel_len": 50, '
-                         '"rows": 200, "width": 101, "max_node_reads": 800, "early_af_filter": true, "variant_type": "indel"}')
+                         '{"haplotypes": 90, "min_mapq": 10, "min_af": 0.08, "min_variants": 3, "min_allele_bq": 10.0, '
+                         '"max_indel_len": 50, "rows": 200, "width": 101, "max_node_reads": 800, "early_af_filter": true, '
+                         '"variant_type": "indel"}')
         arguments = recorded(args, ARGUMENTS)
         self.assertEqual(list(ARGUMENTS), self.MANIFEST_ARGUMENTS)
         self.assertEqual(json.dumps(arguments), '{"command": "build", "gam": "/g", "output": "/t/shared/task_0000", '
-                         '"nodes": "/n", "index": "/g.gai", "graph_index": "/x", "snv_min_af": 0.06, "indel_min_af": 0.08, '
-                         '"snv_output": "/t/SNV/task_0000", "indel_output": "/t/INDEL/task_0000", "debug_rows": false, '
+                         '"nodes": "/n", "index": "/g.gai", "graph_index": "/x", "haplotypes": 90, "snv_min_af": 0.06, '
+                         '"indel_min_af": 0.08, "snv_output": "/t/SNV/task_0000", "indel_output": "/t/INDEL/task_0000", '
+                         '"debug_rows": false, '
                          '"rows": 200, "width": 101, "gam_cache_mb": 6144, "batch_nodes": 512, "max_node_span": 10000, '
                          '"max_batch_alignments": 20000, "shard_size": 2048, "min_mapq": 10, "min_af": 0.05, '
                          '"min_variants": 3, "min_allele_bq": 10.0, "max_indel_len": 50, "max_node_reads": 800, '
@@ -347,8 +353,8 @@ class OrchestratorOptionsTest(unittest.TestCase):
         self.assertEqual(list(ARGUMENTS), list(vars(args)))  # every `run build` option, in the parser's order
         # A standalone build without --min-allele-bq records the int default.
         args = make_parser().parse_args(["build", "--gam", "g", "--output", "o", "--nodes", "n", "--graph-index", "x",
-                                         "--snv-output", "s", "--indel-output", "i", "--snv-min-af", ".1",
-                                         "--indel-min-af", ".1"])
+                                         "--haplotypes", "90", "--snv-output", "s", "--indel-output", "i",
+                                         "--snv-min-af", ".1", "--indel-min-af", ".1"])
         self.assertIn('"min_allele_bq": 10,', json.dumps(recorded(args, PARAMETERS)))
         self.assertIn('"min_allele_bq": 10,', json.dumps(recorded(args, ARGUMENTS)))
 

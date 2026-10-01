@@ -495,26 +495,54 @@ class CandidateAltAndStrandTest(unittest.TestCase):
 
 
 class StorageTest(unittest.TestCase):
-    def test_path_count_log_encoding_and_padding(self):
+    def test_path_count_codes_relative_to_the_haplotype_count(self):
         seq = {1: "ACA"}
         r = read([(1, 0, False, [(1, 1, ""), (1, 1, "T"), (1, 1, "")])], seq)
         c = r.observations[0].candidate
-        expected = {0: 0, 1: 1, 2: 2, 3: 3, 45: 45, 88: 88, 89: 89, 90: 90, 100: 100, 101: 101, 102: 102,
-                    103: 102, 104: 103, 107: 103, 108: 104, 331: 108, 2 ** 26 + 99: 126, 2 ** 26 + 100: 127,
-                    2 ** 31 - 1: 127}
-        for count, code in expected.items():
-            with self.subTest(count=count):
-                self.assertEqual(encode_count(count), code)
-                x, m = tensor(c, [r], rows=2, width=5, path_counts={1: count})
+        expected = {  # (count, H): code
+            # HPRC v1.1 d9 (H 90): 1-40 exact, 41-89 one code per missing haplotype, 90 -> 100, log2 above
+            (0, 90): 0, (1, 90): 1, (40, 90): 40, (41, 90): 51, (86, 90): 96, (88, 90): 98, (89, 90): 99,
+            (90, 90): 100, (91, 90): 101, (92, 90): 102, (93, 90): 102, (94, 90): 103, (331, 90): 108,
+            (90 + 2 ** 26 - 1, 90): 126, (90 + 2 ** 26, 90): 127, (2 ** 31 - 1, 90): 127,
+            # HPRC v2.1 d46 (H 464): 1-414 -> 1-50 by pow 0.5, 415-463 -> 51-99, 464 -> 100
+            (1, 464): 1, (2, 464): 3, (3, 464): 4, (5, 464): 6, (6, 464): 6, (50, 464): 18, (100, 464): 25,
+            (413, 464): 50, (414, 464): 50, (415, 464): 51, (462, 464): 98, (463, 464): 99, (464, 464): 100,
+            (465, 464): 101, (2153, 464): 111,
+            # H 100: the count itself up to 100, then 100 + ceil(log2(count - 99))
+            (50, 100): 50, (51, 100): 51, (100, 100): 100, (101, 100): 101, (331, 100): 108,
+            # small H (a GRCh38-only graph: 1): every count below H is a missing-haplotype code
+            (1, 1): 100, (2, 1): 101, (1, 30): 71, (29, 30): 99, (30, 30): 100,
+        }
+        for (count, haplotypes), code in expected.items():
+            with self.subTest(count=count, haplotypes=haplotypes):
+                self.assertEqual(encode_count(count, haplotypes), code)
+                x, m = tensor(c, [r], rows=2, width=5, path_counts={1: count}, haplotypes=haplotypes)
                 self.assertEqual((x.dtype, x.nbytes), (np.int8, 8 * 2 * 5))
                 np.testing.assert_array_equal(x[6, 0], [0, code, code, code, 0])
                 self.assertFalse(x[:, 1].any())
                 self.assertEqual((m["coverage"], m["alt_count"], m["af"]), (1, 1, 1.0))
-        self.assertEqual(len({encode_count(c) for c in range(1, 101)}), 100)  # every count up to 100 is exact
-        for count in range(1, 3000):
-            self.assertLessEqual(encode_count(count), encode_count(count + 1))  # monotonic
+        for haplotypes in (1, 2, 30, 49, 50, 51, 90, 99, 100, 101, 102, 150, 464, 1000):
+            with self.subTest(haplotypes=haplotypes):
+                codes = [encode_count(count, haplotypes) for count in range(0, 3 * haplotypes + 200)]
+                self.assertEqual(codes, sorted(codes))  # monotonic
+                self.assertEqual(codes[haplotypes], 100)
+                self.assertEqual([codes[haplotypes - k] for k in range(1, min(50, haplotypes))],
+                                 list(range(99, 100 - min(50, haplotypes), -1)))  # exact per missing haplotype
+                low = haplotypes - 50
+                if 0 < low <= 50:
+                    self.assertEqual(codes[1:low + 1], list(range(1, low + 1)))  # exact when it fits
+                elif low > 50:
+                    self.assertEqual((codes[1], codes[low]), (1, 50))
+                    for count in range(1, low + 1):  # 1 + round(49 * sqrt((count - 1) / (low - 1))), half up
+                        k = codes[count] - 1
+                        scaled = 4 * 49 ** 2 * (count - 1)
+                        self.assertTrue((k == 0 or (2 * k - 1) ** 2 * (low - 1) <= scaled)
+                                        and scaled < (2 * k + 1) ** 2 * (low - 1), count)
+                self.assertTrue(all(100 < code <= 127 for code in codes[haplotypes + 1:]))
         with self.assertRaisesRegex(ValueError, "int32"):
             tensor(c, [r], path_counts={1: -1})
+        with self.assertRaisesRegex(ValueError, "haplotype count"):
+            encode_count(5, 0)
 
     def test_quality_and_mapq_clip_without_changing_raw_values(self):
         seq = {1: "ACA"}

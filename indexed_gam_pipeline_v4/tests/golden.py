@@ -13,9 +13,12 @@ Cases (all split SNV/INDEL builds through the package's CLI):
     G6   repeat {1:C, 2:AT, 3:AT, 4:G}: target [3] (vg's placement, no site), then target [2] (where
          left-normalization puts the insertion)
     G7   multi-node deletion {1:GCA, 2:TG, 3:GAT}, --debug-rows
-    G8   random_chain_world(20260924): ~40 nodes, ~400 records, --chromosomes autosome (last 10 nodes off)
+    G8   random_chain_world(20260924): ~40 nodes, ~400 records, --chromosomes autosome (last 10 nodes off),
+         --haplotypes 464 (path counts 1-1000)
     O1   mini_world: orchestrate prepare (3 tasks, 2 processes, node stats, autosome selection, merge 4,
-         --keep-sources, reference path, labels), then run.sh (SLURM_CPUS_PER_TASK=2)
+         --keep-sources, reference path, labels, --haplotypes 4 for path counts 1-4), then run.sh
+         (SLURM_CPUS_PER_TASK=2)
+G1-G7 build with --haplotypes 90 (HPRC v1.1).
 
 Every build is a subprocess (cwd = repository root; O1's run from <root>/source via run.sh), so a
 package's native module is the only one loaded in its process and no pipeline package other than
@@ -61,7 +64,8 @@ import importlib, json, sys
 package = sys.argv[1]
 names = {
     "candidates": ("TENSOR_FORMAT", "TENSOR_STORAGE", "ROW_SELECTION", "WINDOW_ENCODING", "ROW_ORDER", "CHANNELS",
-                   "BASES", "OPS", "STRAND", "COUNT_LINEAR_MAX", "REF_LABEL", "OTHER_LABEL"),
+                   "BASES", "OPS", "STRAND", "COUNT_ALL", "COUNT_EXACT", "COUNT_LOW", "REF_LABEL",
+                   "OTHER_LABEL"),
     "build": ("KIND", "SITE_UNIT", "PARAMETERS", "ALLELE_FIELDS", "SITE_DEFINITION", "READ_CAP_RULE"),
     "orchestrate": ("BUILDER_OPTIONS", "LABEL_INPUTS"),
     "tensor_postprocessing.merge_shards": ("LAYOUT", "DEFAULT_SHARD_SIZE", "POSITION", "ADDED", "SHARED_KEYS",
@@ -93,8 +97,8 @@ def chr_table(path, blocks):
     return Path(path)
 
 
-def sources(gam, graph, nodes):
-    return ["--gam", str(gam), "--graph-index", str(graph), "--nodes", str(nodes)]
+def sources(gam, graph, nodes, haplotypes=90):
+    return ["--gam", str(gam), "--graph-index", str(graph), "--haplotypes", str(haplotypes), "--nodes", str(nodes)]
 
 
 def input_hashes(directory):
@@ -317,7 +321,7 @@ def g8(inputs):
     last = max(sequences)
     table = chr_table(inputs / "chr.tsv", [("chr1", 1, last - 10, "autosome"),
                                            ("chrX", last - 9, last, "non_autosomal")])
-    return [("out", sources(gam, graph, write_nodes(inputs / "nodes.txt", sorted(sequences))) + [
+    return [("out", sources(gam, graph, write_nodes(inputs / "nodes.txt", sorted(sequences)), haplotypes=464) + [
         "--rows", "20", "--width", "21", "--max-node-reads", "30", "--batch-nodes", "7", "--max-node-span", "12",
         "--shard-size", "3", "--max-indel-len", "10", "--chromosomes", "autosome", "--chr-index", str(table),
         "--debug-rows"])]
@@ -429,7 +433,7 @@ def mini_world(inputs, root):
     (inputs / "somatic.bed").write_text(bed)
     (inputs / "germline.bed").write_text(bed)
     return ["--root", str(root), "--gam", str(gam), "--nodes", str(nodes), "--node-stats", str(stats),
-            "--graph-index", str(graph), "--tasks", "3", "--processes", "2",
+            "--graph-index", str(graph), "--haplotypes", "4", "--tasks", "3", "--processes", "2",
             "--snv-min-af", "0.06", "--indel-min-af", "0.08", "--gam-cache-mb", "1",
             "--batch-nodes", "2", "--shard-size", "2", "--chromosomes", "autosome", "--chr-index", str(table),
             "--merge-shard-size", "4", "--keep-sources", "--reference-path", str(inputs / "rp"),

@@ -116,7 +116,7 @@ H=/scratch/jshen/data/HG008_GIAB
 sbatch -p general -c 1 --mem=8G -t 1:00:00 -J prepare -o $S/prepare-%j.out --wrap \
   "cd /scratch/jshen/Github/Pansoma && $PY -m $P.orchestrate prepare --root $S/run --tensors $S/tensors \
    --gam $GAM --nodes $S/discovery/target_nodes.txt --node-stats $S/discovery/node_stats.json \
-   --graph-index $G/hprc-v1.1-mc-grch38.d9.graph_index.sqlite \
+   --graph-index $G/hprc-v1.1-mc-grch38.d9.graph_index.sqlite --haplotypes 90 \
    --tasks $TASKS --processes 48 --gam-cache-mb 8192 \
    --snv-min-af 0.06 --indel-min-af 0.08 \
    --chromosomes autosome --chr-index $G/hprc-v1.1-mc-grch38.d9.chr_node_ranges.tsv \
@@ -133,6 +133,7 @@ sbatch -p general -c 1 --mem=8G -t 1:00:00 -J prepare -o $S/prepare-%j.out --wra
 
 | 参数 | 含义 |
 |---|---|
+| `--haplotypes 90` | 这个 graph 的 haplotype path 数 H，包括 GRCh38 和 CHM13：HPRC v1.1 d9 是 90，v2.1 d46 是 464，只有 GRCh38 的 linear graph 是 1。channel 6（path count）按 H 编码：H 条 path → 100，少 1–49 条 → 99–51，更少的 → 1–50，多于 H → 101–127（见 v4 README 第 8 节）。必填，换 graph 时一定要跟着改 |
 | `--tasks` | task 个数；按每个 task 约 15,500 个 node 算 |
 | `--processes` | 同时跑几个 task，也就是几个 builder 进程。决定内存，见第 3 步的表 |
 | `--gam-cache-mb 8192` | 每个进程的 GAM group cache，8 GiB 足够 |

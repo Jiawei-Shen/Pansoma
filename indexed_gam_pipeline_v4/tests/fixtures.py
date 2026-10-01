@@ -164,7 +164,8 @@ def graph_fixture(path, nodes):
 
 def build_args(**overrides):
     """A complete argparse.Namespace with the run.py build defaults, tuned small for synthetic data."""
-    args = dict(command="build", gam=None, index=None, nodes=None, graph_index=None, output=None, chromosomes="all", chr_index=None,
+    args = dict(command="build", gam=None, index=None, nodes=None, graph_index=None, haplotypes=90, output=None,
+                chromosomes="all", chr_index=None,
                 snv_output=None, indel_output=None, snv_min_af=None, indel_min_af=None,
                 rows=200, width=101, debug_rows=False, gam_cache_mb=1, batch_nodes=2, max_node_span=100,
                 max_batch_alignments=1000, shard_size=2, min_mapq=10, min_af=0.05,
@@ -194,9 +195,9 @@ def overlap(read, candidate, min_bq):
     return None if hit is None else (hit[0], hit[1].visit)
 
 
-def make_tensor(candidate, eligible, path_counts, rows=200, width=101, debug=False):
+def make_tensor(candidate, eligible, path_counts, rows=200, width=101, debug=False, haplotypes=90):
     """One-allele site tensor: `eligible` = [(read, support, anchor Visit or VisitView)]."""
-    return make_site_tensor([candidate], [eligible], path_counts, rows, width, debug)
+    return make_site_tensor([candidate], [eligible], path_counts, rows, width, debug, haplotypes=haplotypes)
 
 
 def mirror(specs, sequences):

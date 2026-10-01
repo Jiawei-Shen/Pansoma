@@ -169,7 +169,7 @@ def validate(folder, gam, index, graph_index):
                 if ci == anchor and not slots and "offset" in col:
                     check(col["mapping_index"] == row["anchor_mapping_index"] and col["offset"] == meta["start"],
                           f"{label}: anchor coordinate")
-                check(int(x[6, ri, ci]) == encode_count(counts[col["node_id"]]),
+                check(int(x[6, ri, ci]) == encode_count(counts[col["node_id"]], parameters["haplotypes"]),
                       f"{label}: path count at row {ri}, column {ci}")
                 if "offset" in col:
                     base = sequences[col["node_id"]][col["offset"]]

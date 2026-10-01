@@ -47,9 +47,9 @@ from .tensor_postprocessing.chr_index import select_nodes
 PACKAGE = Path(__file__).resolve().parent.name
 # Every builder option is frozen into config.json and passed explicitly, so a prepared
 # run never depends on the CLI defaults of the code that later executes it.
-BUILDER_OPTIONS = ("rows", "width", "gam_cache_mb", "batch_nodes", "max_node_span", "max_batch_alignments",
-                   "shard_size", "min_mapq", "min_af", "min_variants", "min_allele_bq", "max_indel_len",
-                   "chromosomes", "max_node_reads", "early_af_filter", "decoder")
+BUILDER_OPTIONS = ("haplotypes", "rows", "width", "gam_cache_mb", "batch_nodes", "max_node_span",
+                   "max_batch_alignments", "shard_size", "min_mapq", "min_af", "min_variants", "min_allele_bq",
+                   "max_indel_len", "chromosomes", "max_node_reads", "early_af_filter", "decoder")
 LABEL_INPUTS = ("somatic_vcf", "somatic_bed", "germline_vcf", "germline_bed", "reference_fasta")
 
 

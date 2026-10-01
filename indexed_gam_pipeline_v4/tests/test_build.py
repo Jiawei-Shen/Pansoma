@@ -63,7 +63,8 @@ class BuildTest(unittest.TestCase):
             self.assertEqual((meta["shard_index"], meta["index_within_shard"]), (i // 2, i % 2))
             x = np.load(out / f"SNV/shard_{i // 2:05d}_data.npy")[i % 2]
             self.assertEqual((list(x.shape), str(x.dtype)), (manifest["shape"], "int8"))
-            self.assertEqual(int(x[6].max()), encode_count(331))
+            self.assertEqual(int(x[6].max()), encode_count(331, 90))  # fixture default H 90
+            self.assertEqual(meta["parameters"]["haplotypes"], 90)
             self.assertTrue(np.all(x[7][x[0] != 0] == 1) and not x[7][x[0] == 0].any())  # forward-only fixture
             self.assertEqual(meta["channels"], CHANNELS)
             self.assertEqual(meta["coverage"], meta["alt_count"] + meta["ref_count"] + meta["other_count"])
@@ -76,7 +77,7 @@ class BuildTest(unittest.TestCase):
         self.assertEqual((typed["status"], typed["tensors"], typed["shared_output"]), ("complete", 4, str(out / "shared")))
         # The format names are plain; gai_version is the GAI's own format number (vg's).
         self.assertEqual((TENSOR_FORMAT, TENSOR_STORAGE, ROW_SELECTION, WINDOW_ENCODING),
-                         ("indexed-gam-candidate", "int8-count-linear100-log2", "site-allele-blocks-uniform-similarity",
+                         ("indexed-gam-candidate", "int8-count-haplotypes100", "site-allele-blocks-uniform-similarity",
                           "site-layout-columns"))
         self.assertEqual([k for k in typed if "version" in k], ["gai_version"])
         # parameters/arguments: the shared manifest's key tables; a typed one adds its kind (variant_type)
@@ -113,6 +114,23 @@ class BuildTest(unittest.TestCase):
         for kind in ("shared", "SNV", "INDEL"):
             self.assertEqual(files(self.root / "baseline" / kind), files(self.root / "restricted" / kind), kind)
 
+    def test_haplotypes_set_channel_6_and_only_channel_6(self):
+        """--haplotypes reaches every channel-6 cell (331 paths: 108 at H 90, 100 at H 331, 45 at H 464) and the manifest;
+        nothing else in the outputs depends on it."""
+        built = {}
+        for h, code in ((90, 108), (331, 100), (464, 45)):
+            manifest = quiet_build(self.args(f"h{h}", haplotypes=h))
+            self.assertEqual(manifest["parameters"]["haplotypes"], h)
+            self.assertIn(f"H = {h} haplotype paths", manifest["encodings"]["node_distinct_gbwt_path_count"])
+            x = np.concatenate([np.load(f) for f in sorted((self.root / f"h{h}" / "SNV").glob("shard_*_data.npy"))])
+            self.assertEqual(sorted(np.unique(x[:, 6]).tolist()), [0, code])
+            built[h] = x
+        for h in (331, 464):
+            np.testing.assert_array_equal(np.delete(built[h], 6, axis=1), np.delete(built[90], 6, axis=1))
+            np.testing.assert_array_equal(built[h][:, 6] != 0, built[90][:, 6] != 0)
+        with self.assertRaisesRegex(ValueError, "--haplotypes"):
+            quiet_build(self.args("h0", haplotypes=0))
+
     def test_missing_graph_node(self):
         graph_fixture(self.root / "partial.sqlite", [(n, "AAAAAA", 1) for n in (10, 20)])
         args = self.args("missing", graph_index=str(self.root / "partial.sqlite"))
@@ -132,9 +150,10 @@ class BuildTest(unittest.TestCase):
         self.assertFalse((self.root / "o").exists())  # refused before any output directory exists
         # The CLI refuses a 0 MiB cache and a missing split option before any work.
         argv = ["build", "--gam", "g", "--output", "o", "--nodes", "n", "--graph-index", "x", "--snv-output", "s",
-                "--indel-output", "i", "--snv-min-af", ".1", "--indel-min-af", ".1"]
+                "--indel-output", "i", "--haplotypes", "90", "--snv-min-af", ".1", "--indel-min-af", ".1"]
         self.assertEqual(make_parser().parse_args(argv).gam_cache_mb, 1024)
-        for bad in (argv + ["--gam-cache-mb", "0"], argv[:-2], argv[:9] + argv[11:]):
+        for bad in (argv + ["--gam-cache-mb", "0"], argv[:-2], argv[:9] + argv[11:], argv[:13] + argv[15:],
+                    argv + ["--haplotypes", "0"]):
             with self.assertRaises(SystemExit), redirect_stderr(io.StringIO()):
                 make_parser().parse_args(bad)
 

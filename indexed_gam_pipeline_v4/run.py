@@ -44,6 +44,9 @@ def fraction(value):
 def add_build_arguments(sub, outputs=True):
     """Builder options shared with the orchestrator; `outputs=False` omits per-run output options."""
     sub.add_argument("--graph-index", required=True, help="unified GBZ sequence/path-count SQLite (tools.graph_index_build build)")
+    sub.add_argument("--haplotypes", type=positive, required=True,
+                     help="haplotype paths of that graph, references included (HPRC v1.1 d9: 90, v2.1 d46: 464, "
+                          "GRCh38-only: 1); channel 6 codes each node's path count relative to it (candidates.encode_count)")
     sub.add_argument("--snv-min-af", type=fraction, required=True, help="AF threshold for the SNV output")
     sub.add_argument("--indel-min-af", type=fraction, required=True, help="AF threshold for the INDEL output")
     if outputs:

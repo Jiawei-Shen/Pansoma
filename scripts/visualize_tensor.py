@@ -3,6 +3,7 @@
 
 import argparse
 import json
+import math
 from pathlib import Path
 import os
 import re
@@ -276,6 +277,8 @@ V6_LINEAR_STORAGE = "int8-count-linear100-log2-v1"
 # indexed_gam_pipeline writes the v6 layout under plain names, in the keys tensor_format / tensor_storage
 CANDIDATE_FORMAT = "indexed-gam-candidate"
 LINEAR_STORAGE = "int8-count-linear100-log2"
+# indexed_gam_pipeline_v4: path counts relative to the graph's haplotype count H (summary parameters.haplotypes)
+HAPLOTYPE_STORAGE = "int8-count-haplotypes100"
 V6_FORMATS = (V6_VERSION, CANDIDATE_FORMAT)
 LINEAR_STORAGES = (V6_LINEAR_STORAGE, LINEAR_STORAGE)
 V5_LOG_SCALE = 14
@@ -351,8 +354,24 @@ def prepare_candidate_view(tensor, show_all_rows=False, metadata=None):
     return view, region
 
 
-def path_count_colorbar(fig, ax, side_ax, values, storage_version):
-    """Channel 6: distinct path counts; v5 stores floor(14*log2(count+1)+0.5), shown as counts."""
+def haplotype_count_code(count, haplotypes):
+    """indexed_gam_pipeline_v4 candidates.encode_count: H -> 100, H-1..H-49 -> 99..51, 1..H-50 -> 1..50
+    (the count if H <= 100, else by the square root), above H 100 + ceil(log2(count - H + 1)), max 127."""
+    count, haplotypes = int(count), int(haplotypes)
+    if count == 0:
+        return 0
+    if count > haplotypes:
+        return min(127, 100 + (count - haplotypes).bit_length())
+    if haplotypes - count <= 49:
+        return 100 - (haplotypes - count)
+    low = haplotypes - 50
+    # half-up rounding in integers, as encode_count: round(49 * sqrt(r)) = (isqrt(floor(98 ** 2 * r)) + 1) // 2
+    return count if low <= 50 else 1 + (math.isqrt(9604 * (count - 1) // (low - 1)) + 1) // 2
+
+
+def path_count_colorbar(fig, ax, side_ax, values, storage_version, haplotypes=None):
+    """Channel 6: distinct path counts; v5 stores floor(14*log2(count+1)+0.5) and the haplotype storage codes
+    relative to H (haplotype_count_code), both shown as counts (the latter when H is known)."""
     cmap = plt.get_cmap("viridis").copy()
     cmap.set_bad("#ffffff")
     top = max(1, int(values.max()))
@@ -365,6 +384,15 @@ def path_count_colorbar(fig, ax, side_ax, values, storage_version):
         ticks = [(c, str(c)) for c in (1, 25, 50, 75, 90, 100) if c <= top]
         if top > 100:
             ticks.append((top, f"≤{99 + 2 ** (top - 100)}"))
+        colorbar.set_ticks([t for t, _ in ticks])
+        colorbar.set_ticklabels([label for _, label in ticks])
+        colorbar.ax.tick_params(labelsize=10)
+    elif storage_version == HAPLOTYPE_STORAGE and haplotypes:
+        counts = sorted({c for c in (1, haplotypes - 50, haplotypes - 25, haplotypes - 10, haplotypes) if c >= 1})
+        ticks = [(haplotype_count_code(c, haplotypes), str(c)) for c in counts]
+        ticks = [(code, label) for code, label in ticks if code <= top]
+        if top > 100:  # value k above 100: at most H + 2 ** (k - 100) - 1 paths
+            ticks.append((top, f"≤{haplotypes + 2 ** (top - 100) - 1}"))
         colorbar.set_ticks([t for t, _ in ticks])
         colorbar.set_ticklabels([label for _, label in ticks])
         colorbar.ax.tick_params(labelsize=10)
@@ -418,13 +446,16 @@ def visualize_candidate_tensor(tensor, out_path, title, show_all_rows=False,
         values = np.ma.masked_where(view[4] == 0, view[6])
         storage = metadata_format(metadata, "tensor_storage")
         version = metadata_format(metadata)
+        haplotypes = ((metadata or {}).get("parameters") or {}).get("haplotypes")
         path_count_colorbar(fig, axes[6], legends[6], values,
-                            storage if is_v6(metadata) and storage else V5_LOG_STORAGE if v5 else storage)
+                            storage if is_v6(metadata) and storage else V5_LOG_STORAGE if v5 else storage, haplotypes)
         count_label = ("Distinct GBWT\npaths" if v5 or version == V4_VERSION else "Distinct GFA\nW records")
         if storage == "int8-count-div4-v1":
             count_label += "\n// 4 (cap 127)"
         elif storage in LINEAR_STORAGES:
             count_label += "\nexact <= 100,\nlog2 above"
+        elif storage == HAPLOTYPE_STORAGE:
+            count_label += f"\nH = {haplotypes}: 100 = all,\n51-99 = 1-49 missing" if haplotypes else "\nrelative to H"
         elif v5:
             count_label += "\nlog scale; ticks\nshow counts"
         legends[6].text(.27, .25, count_label, fontsize=11)

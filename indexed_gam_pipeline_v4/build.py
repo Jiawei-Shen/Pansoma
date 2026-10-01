@@ -49,7 +49,7 @@ import time
 import numpy as np
 
 from .candidates import (TENSOR_FORMAT, TENSOR_STORAGE, ROW_SELECTION, WINDOW_ENCODING, ROW_ORDER, CHANNELS, BASES,
-    OPS, STRAND, COUNT_LINEAR_MAX, NodeReads, decode_alignment, alt_support_bounds, exact_coverage, make_site_tensor)
+    OPS, STRAND, NodeReads, decode_alignment, alt_support_bounds, exact_coverage, make_site_tensor)
 from .common import batches, load_nodes, new_output, write_json
 from .tensor_postprocessing.chr_index import select_nodes
 from .gam_reader import IndexedGam
@@ -58,8 +58,8 @@ from .native import select_decoder
 
 KIND ={"SNP": "SNV", "INS": "INDEL", "DEL": "INDEL"}
 SITE_UNIT = "site"
-PARAMETERS = ("min_mapq", "min_af", "min_variants", "min_allele_bq", "max_indel_len", "rows", "width",
-              "max_node_reads", "early_af_filter")
+PARAMETERS = ("haplotypes", "min_mapq", "min_af", "min_variants", "min_allele_bq", "max_indel_len", "rows",
+              "width", "max_node_reads", "early_af_filter")
 ALLELE_FIELDS = ("candidate_id", "start", "end", "ref", "alt", "event_type", "event_length", "path",
                  "coverage", "alt_count", "ref_count", "other_count", "af")
 SITE_DEFINITION = ("one tensor per (node, start, SNV|INDEL) after indel left-normalization; INS and DEL at one "
@@ -68,13 +68,19 @@ SITE_DEFINITION = ("one tensor per (node, start, SNV|INDEL) after indel left-nor
                    "allele is a row, labeled with the allele it carries (or REF/OTHER), and channel 2 spells that "
                    "allele over the site layout (longest insertion's slots + longest deletion's span); top-level "
                    "counts/AF are A1's (the representative)")
+# manifest encodings.node_distinct_gbwt_path_count (candidates.encode_count), with H filled in
+PATH_COUNT_ENCODING = ("relative to H = {h} haplotype paths (--haplotypes, references included): count == H -> 100; "
+                       "H-49 <= count < H -> 100 - (H - count); 1 <= count <= H-50 -> count if H <= 100, else "
+                       "1 + round(49 * sqrt((count - 1) / (H - 51))) (half up); count > H -> "
+                       "min(127, 100 + ceil(log2(count - H + 1))); 0 = no evidence; insertion and gap columns use the "
+                       "anchor node")
 READ_CAP_RULE = ("records on a target node ordered by SHA-256 of the serialized GAM record; the first N are used "
                  "for the prefilters, support counting and rows of every candidate on that node; applied while "
                  "reading the GAM (records no node keeps are not decoded)")
 # manifest.arguments: every `run build` option, in the order of the run parser.
-ARGUMENTS = ("command", "gam", "output", "nodes", "index", "graph_index", "snv_min_af", "indel_min_af", "snv_output",
-             "indel_output", "debug_rows", "rows", "width", "gam_cache_mb", "batch_nodes", "max_node_span",
-             "max_batch_alignments", "shard_size", "min_mapq", "min_af", "min_variants", "min_allele_bq",
+ARGUMENTS = ("command", "gam", "output", "nodes", "index", "graph_index", "haplotypes", "snv_min_af",
+             "indel_min_af", "snv_output", "indel_output", "debug_rows", "rows", "width", "gam_cache_mb", "batch_nodes",
+             "max_node_span", "max_batch_alignments", "shard_size", "min_mapq", "min_af", "min_variants", "min_allele_bq",
              "max_indel_len", "max_node_reads", "chromosomes", "chr_index", "early_af_filter", "decoder")
 
 
@@ -130,6 +136,8 @@ def validate_args(args):
         raise ValueError("--gam-cache-mb must be positive")
     if args.max_node_reads < 0:
         raise ValueError("--max-node-reads must be nonnegative")
+    if not (isinstance(args.haplotypes, int) and args.haplotypes >= 1):
+        raise ValueError("--haplotypes must be a positive integer (the graph's haplotype paths)")
     split = [getattr(args, k, None) for k in ("snv_output", "indel_output", "snv_min_af", "indel_min_af")]
     if any(v is None for v in split):
         raise ValueError("Split output needs --snv-output, --indel-output, --snv-min-af and --indel-min-af")
@@ -193,7 +201,7 @@ def evaluate_unit(alleles, node_reads, args, path_counts):
     if not passing:
         return rejected, None, None
     tensor, meta = make_site_tensor([c for c, _, _, _ in passing], [e for _, e, _, _ in passing], path_counts,
-                                    args.rows, args.width, args.debug_rows)
+                                    args.rows, args.width, args.debug_rows, haplotypes=args.haplotypes)
     listed = [dict({k: dict(c.metadata(), **summary)[k] for k in ALLELE_FIELDS}, label=f"A{i + 1}")
               for i, (c, _, summary, _) in enumerate(passing)]
     meta.update(sample_unit=SITE_UNIT, site_id=extra["site_id"], alleles=listed, allele_count=len(listed),
@@ -282,9 +290,7 @@ def build(args):
                 site_allele="per row: the site allele the record carries (A1..Ak or REF) spelled over the "
                             "site layout columns (bases encoding, gaps = 6); 0 for OTHER records, outside "
                             "the site and without evidence",
-                node_distinct_gbwt_path_count=f"count if count <= {COUNT_LINEAR_MAX}, else "
-                                              f"min(127, {COUNT_LINEAR_MAX} + ceil(log2(count - {COUNT_LINEAR_MAX - 1}))); "
-                                              "insertion and gap columns use the anchor node",
+                node_distinct_gbwt_path_count=PATH_COUNT_ENCODING.format(h=args.haplotypes),
                 strand=dict(STRAND, definition="anchor mapping orientation relative to the candidate node's "
                                                "forward strand; one value per row")),
             row_selection=ROW_SELECTION, row_order=ROW_ORDER, window_encoding=WINDOW_ENCODING,
