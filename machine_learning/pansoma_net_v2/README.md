@@ -51,8 +51,8 @@ T=/scratch/jshen/data/pansoma_v2_tensors/HG008T_Illumina/tensors
 # train on chr2-22 (5 % of their ~1 Mb node blocks validate), chr1 left out; -1 tensors are not used
 # (the SNV recipe: see "SNV recipe" below)
 $P -m pansoma_net_v2.train --tensors $T --kinds SNV --output runs/HG008_Illumina_SNV \
-    --epochs 12 --batch-size 1024 --lr 1e-4 --class-weights pow:0.75 --non-fraction 1.0 --block v2 \
-    --ignore-reasons residual_partial_somatic_truth allele_partial_somatic_truth
+    --depths 3 3 27 3 --dims 96 192 384 768 --epochs 20 --batch-size 1024 --lr 1e-4 --class-weights pow:0.75 \
+    --non-fraction 1.0 --block v2 --ignore-reasons residual_partial_somatic_truth allele_partial_somatic_truth
 torchrun --nproc_per_node=2 -m pansoma_net_v2.train --ddp ...           # several GPUs, same options
 
 # test: every chr1 tensor (-1 included), the checkpoint's statistics and somatic threshold
@@ -201,10 +201,13 @@ p_offref_somatic, p_offref_germline and offref_call. `.metrics.json` adds `offre
 and after) and the rule `pipeline`: offref_call on the off-reference tensors, the checkpoint's validation recall-0.9
 threshold on the others.
 
-**SNV recipe** (HG008T Illumina, PacBio, ONT): train with `--class-weights pow:0.75 --batch-size 1024 --lr 1e-4
---non-fraction 1.0 --block v2 --epochs 12 --ignore-reasons residual_partial_somatic_truth
-allele_partial_somatic_truth`, every plane kept (ch6 included); calls at the validation recall-0.9 threshold,
-off-reference tensors by the rescue above (graph_vcf's defaults).
+**SNV recipe** (HG008T Illumina, PacBio, ONT): the 50.4 M model `--depths 3 3 27 3 --dims 96 192 384 768` (the
+default widths halved), `--class-weights pow:0.75 --batch-size 1024 --lr 1e-4 --epochs 20 --non-fraction 1.0
+--block v2 --ignore-reasons residual_partial_somatic_truth allele_partial_somatic_truth`, every plane kept (ch6
+included), one whole GPU; calls at the validation recall-0.9 threshold, off-reference tensors by the rescue above
+(graph_vcf's defaults). On HG008T PacBio chr1 (12 epochs) the default 199.6 M model at lr 1e-4 overfits after
+epoch ~7 (validation loss 0.51 -> 2.16) and the 50.4 M model does not; with the PoN in the BED both reach P/R/F1
+0.473/0.832/0.604 (199.6 M, best epoch 5) and 0.493/0.822/0.616 (50.4 M).
 
 ## Calls: graph VCF → GRCh38 VCF → PoN → rtg vcfeval
 
