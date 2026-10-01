@@ -30,8 +30,8 @@ from torch.utils.data import DataLoader, Subset
 from . import metrics
 from .env import triton_libcuda
 from .chunks import ChunkLoader, build_cache
-from .data import (CLASSES, KINDS, SCALARS, EpochSampler, TensorDataset, block_split, load_parts, somatic_truth,
-                   validation_truth)
+from .data import (CHECKPOINT_PATH_COUNT, CLASSES, KINDS, SCALARS, EpochSampler, TensorDataset, block_split,
+                   common_path_count, load_parts, somatic_truth, validation_truth)
 
 AF = SCALARS.index("af")
 from .encode import PLANES, compute_stats
@@ -328,6 +328,16 @@ def main(argv=None):
         load_parts(args.tensors, args.kinds, cache, rebuild=args.rebuild_index)
     run.barrier()
     everything = load_parts(args.tensors, args.kinds, cache)
+    reads_path_count = "path_count" not in args.drop_planes  # the only plane made from channel 6
+    if reads_path_count:
+        try:
+            path_count, haplotypes = common_path_count(everything)
+        except ValueError as e:
+            raise SystemExit(str(e)) from None
+        run.log(f"channel 6 (path count): {path_count}" + (f", --haplotypes {haplotypes}" if haplotypes else ""))
+    else:  # the model never reads channel 6: sets of any storage
+        path_count, haplotypes = None, sorted({i.haplotypes for i, _ in everything if i.haplotypes is not None})
+        run.log("channel 6 (path count) not read (--drop-planes path_count)")
     overridden = [np.zeros(0, np.int64) for _ in everything]
     if args.label_overrides or args.reason_labels:
         overrides = {}
@@ -414,6 +424,9 @@ def main(argv=None):
     if checkpoint is not None:
         if full_config(checkpoint["config"]) != model.config:
             raise SystemExit(f"--resume model config {checkpoint['config']} differs from the arguments' {model.config}")
+        trained = checkpoint.get("path_count_storage", CHECKPOINT_PATH_COUNT)
+        if reads_path_count and trained != path_count:
+            raise SystemExit(f"--resume checkpoint was trained on channel 6 {trained}, the tensors are {path_count}")
         model.load_state_dict(checkpoint["model_state_dict"])
         stats = checkpoint["stats"]
         run.log(f"resumed from {args.resume} (epoch {checkpoint['epoch']}); statistics kept: {json.dumps(stats)}")
@@ -513,7 +526,8 @@ def main(argv=None):
                            optimizer_state_dict=optimizer.state_dict(), scheduler_state_dict=scheduler.state_dict(),
                            epoch=epoch, best=best, val=val, somatic_threshold=threshold, classes=list(CLASSES),
                            planes=list(PLANES), scalars=list(SCALARS) if args.scalars else [],
-                           stats=model.encoder.stats(), args=vars(args),
+                           stats=model.encoder.stats(), args=vars(args), path_count_storage=path_count,
+                           path_count_haplotypes=haplotypes,
                            data=[dict(directory=str(i.dir), labels=i.meta["labels"], train=int(len(p)))
                                  for i, p in train_parts],
                            chroms=dict(train=train_chroms, val=val_chroms, test=test_chroms))

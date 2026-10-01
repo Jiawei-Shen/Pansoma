@@ -47,11 +47,14 @@ def make_tensor(rng, blocks, alt="A", ref="C", width=101, height=200):
 GAP = (1070, 1140)  # positions left out of the somatic BED (the confident region has a hole there)
 
 
-def make_tensor_set(root, spec, shard_size=4, seed=0, labels_created="2026-09-28T00:00:00+00:00"):
+def make_tensor_set(root, spec, shard_size=4, seed=0, labels_created="2026-09-28T00:00:00+00:00",
+                    storage="int8-count-linear100-log2", haplotypes=None, storage_key="tensor_storage"):
     """root/<KIND>/ merged directories from spec {kind: {chrom: n}}, the BEDs of the labels and root's
     somatic.recall.tsv (every truth allele, some without a tensor); returns {kind: [dict per tensor]}.
     Tensor k of a kind sits at node / GRCh38 position 1000 + 7k. Inside GAP a label 0 or -1 becomes -1
-    outside_confident_region (as the labeller does); labels 1 and 2 keep theirs but are out of the region."""
+    outside_confident_region (as the labeller does); labels 1 and 2 keep theirs but are out of the region.
+    The manifest names the channel-6 `storage` under `storage_key` (the six v1.1 sets: tensor_storage_version, with
+    a -v1 suffix) and, when given, parameters.haplotypes."""
     rng = np.random.default_rng(seed)
     root = Path(root)
     root.mkdir(parents=True, exist_ok=True)
@@ -62,8 +65,9 @@ def make_tensor_set(root, spec, shard_size=4, seed=0, labels_created="2026-09-28
     for kind, chroms in spec.items():
         d = root / kind
         d.mkdir(parents=True, exist_ok=True)
-        manifest = dict(status="complete", layout="chromosome-shards", kind=kind, shape=[8, 200, 101], dtype="int8",
-                        tensors=sum(chroms.values()), chromosomes={})
+        manifest = dict(status="complete", layout="chromosome-shards", kind=kind, **{storage_key: storage},
+                        shape=[8, 200, 101], dtype="int8", tensors=sum(chroms.values()), chromosomes={},
+                        **({"parameters": dict(haplotypes=haplotypes)} if haplotypes else {}))
         truth[kind] = []
         for chrom, n in chroms.items():
             records, shards, label_records = [], [], []

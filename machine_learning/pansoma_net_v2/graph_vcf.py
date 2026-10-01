@@ -27,9 +27,9 @@ A record is the site's representative allele A1, the allele the model scores. Th
   off-reference rescue (below) uses p_offref_somatic.
 - FILTER:
   - PASS: called somatic and AF >= the AF floor. An SNV off-reference tensor that predict rescored (predict
-    --offref-site90: ch6 raised to 90 at the site) is called by offref_call, somatic the most probable class of
-    the rescored probabilities, instead of the threshold; INFO OFFREF_P_* keeps those probabilities. Predictions
-    without these fields (INDEL, older runs) use the threshold for every tensor.
+    --offref-site90: ch6 raised to the every-haplotype code at the site) is called by offref_call, somatic the
+    most probable class of the rescored probabilities, instead of the threshold; INFO OFFREF_P_* keeps those
+    probabilities. Predictions without these fields (INDEL, older runs) use the threshold for every tensor.
   - LowQual: not called somatic: p_somatic < the threshold. The default threshold is the checkpoint's
     validation threshold at --target-recall (0.9): the highest p_somatic at which the validation somatic recall
     reaches it (train's val.somatic_at_recall, for recall 0.5, 0.8, 0.9, 0.95). The model favours recall and
@@ -74,9 +74,9 @@ HEADER = """##FILTER=<ID=PASS,Description="Called somatic (##pansoma_call) and A
 ##INFO=<ID=P_SOMATIC,Number=1,Type=Float,Description="Model probability of somatic">
 ##INFO=<ID=P_GERMLINE,Number=1,Type=Float,Description="Model probability of germline">
 ##INFO=<ID=P_NON,Number=1,Type=Float,Description="Model probability of non-variant">
-##INFO=<ID=OFFREF_P_SOMATIC,Number=1,Type=Float,Description="Off-reference rescue: probability of somatic with the site's path count raised to 90">
-##INFO=<ID=OFFREF_P_GERMLINE,Number=1,Type=Float,Description="Off-reference rescue: probability of germline with the site's path count raised to 90">
-##INFO=<ID=OFFREF_P_NON,Number=1,Type=Float,Description="Off-reference rescue: probability of non-variant with the site's path count raised to 90">
+##INFO=<ID=OFFREF_P_SOMATIC,Number=1,Type=Float,Description="Off-reference rescue: probability of somatic with the site's path count raised to the every-haplotype code">
+##INFO=<ID=OFFREF_P_GERMLINE,Number=1,Type=Float,Description="Off-reference rescue: probability of germline with the site's path count raised to the every-haplotype code">
+##INFO=<ID=OFFREF_P_NON,Number=1,Type=Float,Description="Off-reference rescue: probability of non-variant with the site's path count raised to the every-haplotype code">
 ##INFO=<ID=SITE,Number=1,Type=String,Description="Tensor site: node:start:SNV|INDEL">
 ##INFO=<ID=NALLELES,Number=1,Type=Integer,Description="Passing alleles at the site; the model scores A1, this record, only">
 ##INFO=<ID=NODE_RECORDS,Number=1,Type=Integer,Description="Records on the node before the max_node_reads sample; FORMAT DP and AD count reads within the sample">

@@ -26,12 +26,18 @@ Writes, per <sample>.<set>.<KIND>:
 Off-reference rescue (SNV, --offref-site90 W, default 10; 0 turns it off). The model learned that a low path count
 (ch6, how many HPRC haplotypes run through the node) is not somatic, so it does not call somatic on an
 off-reference node, where every read has a low path count. Each SNV off-reference tensor is scored again with its
-ch6 cells below 90 set to 90 in the site columns (the middle column +- W; uncovered cells stay 0), and it is called
-somatic when somatic is the most probable class of those probabilities (offref_call). graph_vcf uses offref_call
-for these tensors. `rules.pipeline` in .metrics.json scores that call on the off-reference tensors and the
-checkpoint's validation recall-0.9 threshold on the others; `offref_rescue` counts the tensors and calls.
+ch6 cells below the every-haplotype code raised to it in the site columns (the middle column +- W; uncovered cells
+stay 0): 90 on int8-count-linear100-log2 sets (HPRC v1.1, 90 haplotype paths), 100 on int8-count-haplotypes100
+sets (data.PATH_COUNT_ALL). It is called somatic when somatic is the most probable class of those probabilities
+(offref_call). graph_vcf uses offref_call for these tensors. `rules.pipeline` in .metrics.json scores that call on
+the off-reference tensors and the checkpoint's validation recall-0.9 threshold on the others; `offref_rescue`
+counts the tensors and calls and gives the floor.
 
-The encoder uses the checkpoint's statistics; they are not refitted on these tensors.
+The encoder uses the checkpoint's statistics; they are not refitted on these tensors. If any set codes channel 6
+otherwise than the checkpoint's training sets (checkpoint path_count_storage; int8-count-linear100-log2 when it
+records none), predict exits before predicting anything (a model trained with --drop-planes path_count never reads
+channel 6 and takes sets of any storage); a set built with another --haplotypes is predicted with a
+note, and .metrics.json `path_count` gives the set's storage and H and the checkpoint's H.
 """
 import argparse
 import gzip
@@ -42,7 +48,8 @@ import numpy as np
 import torch
 
 from . import metrics
-from .data import CLASSES, KINDS, TENSOR_SHAPE, EpochSampler, TensorDataset, load_parts, somatic_truth
+from .data import (CHECKPOINT_PATH_COUNT, CLASSES, KINDS, PATH_COUNT_ALL, TENSOR_SHAPE, EpochSampler, TensorDataset,
+                   load_parts, somatic_truth)
 from .encode import CONTINUOUS
 from .model import PansomaNetV2
 from .train import describe, make_loader, predict_probs, retry_workers
@@ -61,8 +68,9 @@ def parse_args(argv=None):
     p.add_argument("--amp", choices=["bf16", "off"], default="bf16")
     p.add_argument("--threshold", type=float, help="somatic threshold (default: the checkpoint's)")
     p.add_argument("--offref-site90", type=int, default=10, metavar="W",
-                   help="SNV off-reference rescue: score the off-reference tensors again with ch6 below 90 raised to 90 in "
-                        "the site columns +- W and call them by argmax (0: off)")
+                   help="SNV off-reference rescue: score the off-reference tensors again with ch6 below the "
+                        "every-haplotype code (90 on int8-count-linear100-log2 sets, 100 on int8-count-haplotypes100) "
+                        "raised to it in the site columns +- W and call them by argmax (0: off)")
     p.add_argument("--ignore-reasons", nargs="*",
                    help="label reasons left out of the test, as if -1 (default: the checkpoint's train --ignore-reasons); "
                         "their records keep label, reason and truth_ids and get ignored: true")
@@ -73,17 +81,17 @@ PATH_COUNT = dict((name, channel) for name, channel, _ in CONTINUOUS)["path_coun
 SITE = TENSOR_SHAPE[2] // 2
 
 
-class OffrefSite90(TensorDataset):
-    """Tensors with the ch6 (path count) cells below 90 set to 90 in the columns SITE +- halfwidth."""
+class OffrefRescue(TensorDataset):
+    """Tensors with the ch6 (path count) cells below `floor` set to `floor` in the columns SITE +- halfwidth."""
 
-    def __init__(self, parts, halfwidth, labels="label"):
+    def __init__(self, parts, halfwidth, floor, labels="label"):
         super().__init__(parts, labels)
-        self.halfwidth = halfwidth
+        self.halfwidth, self.floor = halfwidth, floor
 
     def __getitem__(self, i):
         x, blocks, scalars, label = super().__getitem__(i)
         window = x[PATH_COUNT, :, SITE - self.halfwidth:SITE + self.halfwidth + 1]
-        window[(window > 0) & (window < 90)] = 90
+        window[(window > 0) & (window < self.floor)] = self.floor
         return x, blocks, scalars, label
 
 
@@ -97,8 +105,18 @@ def main(argv=None):
     out.mkdir(parents=True, exist_ok=True)
     print(f"checkpoint {args.checkpoint} (epoch {checkpoint['epoch']}), statistics {json.dumps(model.encoder.stats())}",
           flush=True)
-    for index, positions in load_parts(args.tensors, args.kinds, args.cache_dir or str(out / "index_cache"),
-                                       chroms=args.chroms, labelled=False):
+    trained = checkpoint.get("path_count_storage", CHECKPOINT_PATH_COUNT)
+    trained_haplotypes = checkpoint.get("path_count_haplotypes") or []
+    reads_path_count = "path_count" not in model.config["drop_planes"]  # the only plane made from channel 6
+    parts = load_parts(args.tensors, args.kinds, args.cache_dir or str(out / "index_cache"), chroms=args.chroms,
+                       labelled=False)
+    for index, _ in parts:  # before any prediction: every set must code channel 6 like the training sets
+        if reads_path_count and index.path_count != trained:
+            raise SystemExit(f"{index.dir}: channel 6 is {index.path_count}, the checkpoint was trained on {trained}")
+    for index, positions in parts:
+        if reads_path_count and index.haplotypes is not None and index.haplotypes not in trained_haplotypes:
+            print(f"note: {index.dir} was built with --haplotypes {index.haplotypes}, the checkpoint's training sets "
+                  f"with {trained_haplotypes or 'none recorded'}", flush=True)
         dataset = TensorDataset([(index, positions)], labels="eval_label")
         ignore = args.ignore_reasons if args.ignore_reasons is not None else checkpoint.get("args", {}).get("ignore_reasons", [])
         ignored = np.isin(index.arrays["reason"][positions],
@@ -116,7 +134,7 @@ def main(argv=None):
         off_k = np.flatnonzero(a["off_reference"][positions]) if rescue else np.array([], np.int64)
         off_probs = {}
         if len(off_k):
-            edited = OffrefSite90([(index, positions[off_k])], args.offref_site90)
+            edited = OffrefRescue([(index, positions[off_k])], args.offref_site90, PATH_COUNT_ALL[index.path_count])
             _, probs2 = retry_workers(
                 lambda: predict_probs(model, make_loader(edited, EpochSampler(len(edited), shuffle=False), args.num_workers,
                                                          args.batch_size, persistent=False), device, amp),
@@ -155,7 +173,8 @@ def main(argv=None):
         off = a["off_reference"][positions]
         if rescue:
             calls = np.array([off_probs[k].argmax() == metrics.SOMATIC for k in off_k.tolist()], bool)
-            report["offref_rescue"] = dict(site_halfwidth=args.offref_site90, floor=90, tensors=int(len(off_k)),
+            report["offref_rescue"] = dict(site_halfwidth=args.offref_site90, floor=PATH_COUNT_ALL[index.path_count],
+                                           tensors=int(len(off_k)),
                                            in_test=int(in_test[off_k].sum()), calls=int(calls.sum()),
                                            calls_in_test=int((calls & in_test[off_k]).sum()),
                                            calls_before=int((probs[off_k].argmax(1) == metrics.SOMATIC).sum()))
@@ -164,14 +183,17 @@ def main(argv=None):
                       off_reference_somatic_in_test=int((in_test & off & (labels == 1)).sum()),
                       ignored_reasons=list(ignore), ignored=int(ignored.sum()),
                       directory=str(index.dir), labels=index.meta["labels"],
+                      path_count=dict(storage=index.path_count, haplotypes=index.haplotypes,
+                                      checkpoint_haplotypes=trained_haplotypes),
                       checkpoint=str(Path(args.checkpoint).resolve()), chroms=args.chroms)
         (out / f"{name}.metrics.json").write_text(json.dumps(report, indent=2) + "\n")
         print(f"{name}: {len(labels):,} tensors, {report['tensors']:,} in the test "
               f"({report['off_reference_in_test']:,} off-reference) | {describe(report)}", flush=True)
         if "offref_rescue" in report:
             o = report["offref_rescue"]
-            print(f"  off-reference rescue (site +- {o['site_halfwidth']}): {o['tensors']:,} tensors, argmax somatic "
-                  f"{o['calls_before']:,} before, {o['calls']:,} after ({o['calls_in_test']:,} in the test)", flush=True)
+            print(f"  off-reference rescue (site +- {o['site_halfwidth']}, ch6 floor {o['floor']}): {o['tensors']:,} "
+                  f"tensors, argmax somatic {o['calls_before']:,} before, {o['calls']:,} after "
+                  f"({o['calls_in_test']:,} in the test)", flush=True)
         for rule, r in report["rules"].items():
             t, tr = r["per_tensor"], r.get("truth")
             at = "" if r["threshold"] is None else f"p>={r['threshold']:.3f}"

@@ -1,8 +1,11 @@
 import gzip
+import io
 import json
 import tempfile
 import unittest
+from contextlib import redirect_stdout
 from pathlib import Path
+from unittest import mock
 
 import numpy as np
 import torch
@@ -244,6 +247,8 @@ class TrainPredictTest(unittest.TestCase):
                        + SMALL_ARGS)
             resumed = torch.load(out / "last.pth", weights_only=False)
             self.assertEqual(resumed["epoch"], 3)
+            self.assertEqual((resumed["path_count_storage"], resumed["path_count_haplotypes"]),
+                             ("int8-count-linear100-log2", []))
             self.assertEqual(resumed["stats"], ckpt["stats"])  # statistics are not refitted
 
             pred = tmp / "pred"
@@ -294,7 +299,7 @@ class TrainPredictTest(unittest.TestCase):
             k = next(i for i, r in enumerate(records) if r["off_reference"])
             chr1_pos = index.select(["chr1"], labelled=False)
             plain = TensorDataset([(index, chr1_pos[k:k + 1])])[0][0].numpy()
-            edited = predict.OffrefSite90([(index, chr1_pos[k:k + 1])], 10)[0][0].numpy()
+            edited = predict.OffrefRescue([(index, chr1_pos[k:k + 1])], 10, 90)[0][0].numpy()
             window = np.s_[predict.PATH_COUNT, :, predict.SITE - 10:predict.SITE + 11]
             expected = plain.copy()
             expected[window] = np.where((plain[window] > 0) & (plain[window] < 90), 90, plain[window])
@@ -339,6 +344,79 @@ class TrainPredictTest(unittest.TestCase):
             on_truth = [r for r in called if r["test_label"] == 1 and set(r["truth_ids"]) & everything]
             self.assertEqual(c["repeated_calls"], len(on_truth) - len(hit))  # one truth id per tensor here
             self.assertEqual(len(KindIndex(root / "SNV", pred / "index_cache")), len(truth["SNV"]))
+
+    def test_channel_6_storage_is_checked_and_sets_the_rescue_floor(self):
+        """Training needs one channel-6 storage and records it; predict refuses another one before predicting any set
+        (a checkpoint without the record counts as int8-count-linear100-log2), rescores off-reference SNVs with ch6
+        raised to that storage's every-haplotype code (100 for int8-count-haplotypes100, 90 for the old sets) and notes
+        another --haplotypes. A model trained without the path-count plane takes sets of any storage."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            new, old, d46 = (tmp / name / "tensors" for name in ("new", "old", "d46"))
+            make_tensor_set(new, SPEC, shard_size=8, seed=6, storage="int8-count-haplotypes100", haplotypes=90)
+            make_tensor_set(d46, SPEC, shard_size=8, seed=6, storage="int8-count-haplotypes100", haplotypes=464)
+            # the six v1.1 sets spell it tensor_storage_version int8-count-linear100-log2-v1, without haplotypes
+            make_tensor_set(old, SPEC, shard_size=8, seed=6, storage="int8-count-linear100-log2-v1",
+                            storage_key="tensor_storage_version")
+            with self.assertRaisesRegex(SystemExit, "code channel 6 differently"):
+                train.main(["--tensors", str(new), str(old), "--output", str(tmp / "mixed"), "--epochs", "1"] + SMALL_ARGS)
+            out = tmp / "run"
+            train.main(["--tensors", str(new), "--output", str(out), "--epochs", "1"] + SMALL_ARGS)
+            ckpt = torch.load(out / "best.pth", weights_only=False)
+            self.assertEqual((ckpt["path_count_storage"], ckpt["path_count_haplotypes"]), ("int8-count-haplotypes100", [90]))
+            args = ["--chroms", "chr1", "--num-workers", "0", "--amp", "off", "--kinds", "SNV"]
+
+            def run_predict(checkpoint, sets, output):
+                """predict.main with the floors main() gives OffrefRescue recorded, and its stdout."""
+                floors, real = [], predict.OffrefRescue
+                rescue = lambda parts, halfwidth, floor: floors.append(floor) or real(parts, halfwidth, floor)  # noqa: E731
+                with mock.patch.object(predict, "OffrefRescue", rescue), redirect_stdout(io.StringIO()) as printed:
+                    predict.main(["--checkpoint", str(checkpoint), "--tensors", *map(str, sets), "--output", str(output)]
+                                 + args)
+                return floors, printed.getvalue()
+
+            with self.assertRaisesRegex(SystemExit, "old/tensors/SNV: channel 6 is int8-count-linear100-log2, the "
+                                                    "checkpoint was trained on int8-count-haplotypes100"):
+                run_predict(out / "best.pth", [new, old], tmp / "p0")  # the new set comes first: still none predicted
+            self.assertEqual(list((tmp / "p0").glob("*.predictions.ndjson.gz")), [])
+            floors, printed = run_predict(out / "best.pth", [new], tmp / "p1")
+            self.assertEqual(floors, [100])  # the rescue rescored with the every-haplotype code of the set's storage
+            report = json.loads((tmp / "p1" / "new.tensors.SNV.metrics.json").read_text())
+            self.assertEqual(report["offref_rescue"]["floor"], 100)
+            self.assertEqual(report["path_count"], dict(storage="int8-count-haplotypes100", haplotypes=90,
+                                                        checkpoint_haplotypes=[90]))
+            self.assertNotIn("note:", printed)
+            floors, printed = run_predict(out / "best.pth", [d46], tmp / "p2")  # same storage, another H
+            self.assertEqual(floors, [100])
+            self.assertIn("was built with --haplotypes 464, the checkpoint's training sets with [90]", printed)
+            self.assertEqual(json.loads((tmp / "p2" / "d46.tensors.SNV.metrics.json").read_text())["path_count"],
+                             dict(storage="int8-count-haplotypes100", haplotypes=464, checkpoint_haplotypes=[90]))
+            index = KindIndex(new / "SNV", tmp / "cache")
+            k = int(np.flatnonzero(index.arrays["off_reference"])[0])
+            plain = TensorDataset([(index, np.array([k]))])[0][0].numpy()
+            edited = predict.OffrefRescue([(index, np.array([k]))], 10, 100)[0][0].numpy()
+            window = np.s_[predict.PATH_COUNT, :, predict.SITE - 10:predict.SITE + 11]
+            np.testing.assert_array_equal(edited[window], np.where((plain[window] > 0) & (plain[window] < 100), 100,
+                                                                   plain[window]))
+            legacy = {k: v for k, v in ckpt.items() if not k.startswith("path_count")}  # trained before the record
+            torch.save(legacy, tmp / "legacy.pth")
+            with self.assertRaisesRegex(SystemExit, "trained on int8-count-linear100-log2"):
+                run_predict(tmp / "legacy.pth", [new], tmp / "p3")
+            floors, _ = run_predict(tmp / "legacy.pth", [old], tmp / "p4")
+            self.assertEqual(floors, [90])
+            self.assertEqual(json.loads((tmp / "p4" / "old.tensors.SNV.metrics.json").read_text())["path_count"],
+                             dict(storage="int8-count-linear100-log2", haplotypes=None, checkpoint_haplotypes=[]))
+            with self.assertRaisesRegex(SystemExit, "trained on channel 6 int8-count-haplotypes100"):
+                train.main(["--tensors", str(old), "--output", str(tmp / "resume"), "--epochs", "2", "--resume",
+                            str(out / "last.pth")] + SMALL_ARGS)
+            # without the path-count plane the storage does not matter: mixed sets train, any set predicts
+            nopc = tmp / "nopc"
+            train.main(["--tensors", str(new), str(old), "--output", str(nopc), "--epochs", "1", "--drop-planes",
+                        "path_count"] + SMALL_ARGS)
+            ckpt = torch.load(nopc / "best.pth", weights_only=False)
+            self.assertEqual((ckpt["path_count_storage"], ckpt["path_count_haplotypes"]), (None, [90]))
+            floors, _ = run_predict(nopc / "best.pth", [new, old], tmp / "p5")
+            self.assertEqual(floors, [100, 90])
 
     def test_scalars_run(self):
         with tempfile.TemporaryDirectory() as tmp:

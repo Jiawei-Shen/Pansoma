@@ -24,6 +24,10 @@ middle of the anchor interval off the reference path; -1 without either) and, fo
 somatic truth ids they stand for (the representative matches and the partial truth of labels.ndjson), as
 truth_ptr / truth_ids. `somatic_truth` reads the set's somatic.recall.tsv (every truth allele, with or without a
 tensor) and `validation_truth` places each truth allele in the node block that holds its position.
+
+Channel 6 (path count) is coded by the set's tensor_storage (path_count_storage, PATH_COUNT_ALL): KindIndex keeps
+it with the build's --haplotypes; training needs one storage for all its sets (common_path_count) and the checkpoint
+records it, so predict can refuse tensors coded otherwise.
 """
 import csv
 import hashlib
@@ -45,6 +49,11 @@ TENSOR_SHAPE = (8, 200, 101)
 MAX_OPEN_SHARDS = 256  # open shard files per DataLoader worker
 INDEX_VERSION = 6  # 6: pos0, truth ids; 5: confident-region flags; 4: label reasons, off-reference flags
 EVAL_AS_NON = ("off_reference_no_truth_match",)  # -1 for training, 0 (non) when evaluating
+# Channel 6 (path count) codes of the merged sets (manifest tensor_storage) -> the code of a node every haplotype
+# visits. int8-count-linear100-log2 stores the count (exact up to 100); its sets are the HPRC v1.1 d9 builds, 90
+# haplotype paths. int8-count-haplotypes100 codes the count relative to the build's --haplotypes H: H -> 100.
+PATH_COUNT_ALL = {"int8-count-linear100-log2": 90, "int8-count-haplotypes100": 100}
+CHECKPOINT_PATH_COUNT = "int8-count-linear100-log2"  # the storage of a checkpoint that does not record one
 SCALARS = ("log_coverage", "log_site_coverage", "log_alt_count", "log_ref_count", "log_other_count", "af",
            "second_allele_af", "allele_count", "log_event_length")
 _ROW_GROUPS = re.compile(rb'"row_groups": (\[[^\]]*\])')
@@ -97,6 +106,25 @@ def confident_region(kind_dir):
     if not all(beds):
         return None, None
     return Bed.read(beds[0]).intersect(Bed.read(beds[1])), beds
+
+
+def path_count_storage(manifest):
+    """(channel-6 storage, the build's --haplotypes or None) of a merged manifest. Older sets name the storage
+    under tensor_storage_version with a -v1 suffix; an unknown storage is refused."""
+    name = manifest.get("tensor_storage") or manifest.get("tensor_storage_version") or ""
+    name = name[:-3] if name.endswith("-v1") else name
+    if name not in PATH_COUNT_ALL:
+        raise ValueError(f"unknown channel-6 storage {name or None!r} (known: {', '.join(PATH_COUNT_ALL)})")
+    return name, (manifest.get("parameters") or {}).get("haplotypes")
+
+
+def common_path_count(parts):
+    """(storage, sorted haplotype counts) shared by every part: one model reads one channel-6 code."""
+    storages = {index.path_count for index, _ in parts}
+    if len(storages) != 1:
+        raise ValueError("the tensor sets code channel 6 differently: " + "; ".join(
+            f"{index.dir} {index.path_count}" for index, _ in parts))
+    return storages.pop(), sorted({index.haplotypes for index, _ in parts if index.haplotypes is not None})
 
 
 def build_index(kind_dir):
@@ -180,6 +208,10 @@ class KindIndex:
 
     def __init__(self, kind_dir, cache_dir=None, rebuild=False):
         self.dir = Path(kind_dir).resolve()
+        try:
+            self.path_count, self.haplotypes = path_count_storage(json.loads((self.dir / "manifest.json").read_text()))
+        except ValueError as e:
+            raise ValueError(f"{self.dir}: {e}") from None
         cache = None
         if cache_dir is not None:  # e.g. COLO829T_Illumina.tensors.SNV.<hash of the path>
             key = hashlib.sha1(str(self.dir).encode()).hexdigest()[:12]

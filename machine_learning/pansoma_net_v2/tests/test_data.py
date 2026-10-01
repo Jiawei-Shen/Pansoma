@@ -47,6 +47,23 @@ class IndexTest(unittest.TestCase):
                 self.assertAlmostEqual(float(a["scalars"][k][SCALARS.index("af")]), t["af"], places=4)
             self.assertEqual(index.candidates(), [t["candidate_id"] for t in rows])
 
+    def test_channel_6_storage_of_a_set(self):
+        """Older sets name the storage tensor_storage_version with -v1; an unknown storage is refused."""
+        self.assertEqual(data.path_count_storage({"tensor_storage_version": "int8-count-linear100-log2-v1"}),
+                         ("int8-count-linear100-log2", None))
+        self.assertEqual(data.path_count_storage({"tensor_storage": "int8-count-haplotypes100",
+                                                  "parameters": {"haplotypes": 464}}), ("int8-count-haplotypes100", 464))
+        with self.assertRaisesRegex(ValueError, "unknown channel-6 storage"):
+            data.path_count_storage({"tensor_storage": "int8-count-pow0.75"})
+        index = KindIndex(self.root / "SNV", self.cache)
+        self.assertEqual((index.path_count, index.haplotypes), ("int8-count-linear100-log2", None))
+        other = Path(self.tmp.name) / "other" / "tensors"
+        make_tensor_set(other, SPEC, storage="int8-count-haplotypes100", haplotypes=464)
+        parts = load_parts([self.root, other], ["SNV"], self.cache)
+        with self.assertRaisesRegex(ValueError, "code channel 6 differently"):
+            data.common_path_count(parts)
+        self.assertEqual(data.common_path_count(parts[1:]), ("int8-count-haplotypes100", [464]))
+
     def test_cache_is_reused_and_rebuilt_when_labels_change(self):
         KindIndex(self.root / "SNV", self.cache)
         with mock.patch.object(data, "build_index", side_effect=AssertionError("rebuilt")):

@@ -179,8 +179,9 @@ Outputs in `--output`:
 
 A checkpoint holds `format: pansoma_net_v2`, `config`, `model_state_dict` (the encoder's and scalar
 statistics are buffers in it), `stats`, `somatic_threshold`, `classes`, `planes`, `scalars`, the training
-data (directories, label provenance, counts), the chromosome split and `args`. Rebuild it with
-`PansomaNetV2.from_checkpoint(path)`.
+data (directories, label provenance, counts), the channel-6 storage of those sets (`path_count_storage`,
+`path_count_haplotypes`), the chromosome split and `args`. Rebuild it with `PansomaNetV2.from_checkpoint(path)`
+(the model only; `predict` and `train --resume` check the storage).
 
 `predict` writes, for every tensor of the chosen chromosomes, `<sample>.<set>.<KIND>.predictions.ndjson.gz`.
 Each record has chrom, candidate_id, label (truth), test_label (the scored label, null when left out),
@@ -195,10 +196,13 @@ Off-reference tensors are marked for analysis only; the test scores them like th
 **Off-reference rescue (SNV).** The model learned that a low path count (ch6: how many HPRC haplotypes run
 through the node) is not somatic, and on an off-reference node every read has a low path count, so it hardly ever
 calls somatic there. `predict --offref-site90 W` (default 10; 0 turns it off) scores every SNV off-reference tensor
-again with its ch6 cells below 90 set to 90 in the site columns (the middle column ± W; uncovered cells stay 0), and
-calls it somatic when somatic is the most probable class of those probabilities. Its record adds p_offref_non,
+again with its ch6 cells below the every-haplotype code raised to it in the site columns (the middle column ± W;
+uncovered cells stay 0), and calls it somatic when somatic is the most probable class of those probabilities. The
+every-haplotype code depends on the set's channel-6 storage (`data.PATH_COUNT_ALL`): 90 on
+`int8-count-linear100-log2` (the HPRC v1.1 d9 sets: 90 haplotype paths, stored as the count), 100 on
+`int8-count-haplotypes100` (the count relative to the build's `--haplotypes` H, H → 100). Its record adds p_offref_non,
 p_offref_somatic, p_offref_germline and offref_call. `.metrics.json` adds `offref_rescue` (tensors, calls before
-and after) and the rule `pipeline`: offref_call on the off-reference tensors, the checkpoint's validation recall-0.9
+and after, `floor`) and the rule `pipeline`: offref_call on the off-reference tensors, the checkpoint's validation recall-0.9
 threshold on the others.
 
 **SNV recipe** (HG008T Illumina, PacBio, ONT): the 50.4 M model `--depths 3 3 27 3 --dims 96 192 384 768` (the
@@ -343,7 +347,8 @@ model has 199.4 M parameters. Measured bf16 training speed (a whole H100, batch 
 
 `data.KindIndex` reads each `<set>/<KIND>/`:
 
-- `manifest.json` and the label files `*_labels.npy`;
+- `manifest.json` (and from it the channel-6 storage: `tensor_storage`, or `tensor_storage_version` with a `-v1`
+  suffix as in the six existing sets, and the build's `parameters.haplotypes`) and the label files `*_labels.npy`;
 - from every summary record: `candidate_id`, `node_id`, `shard_file`, `index_within_shard`, `row_groups`,
   and the numbers behind `SCALARS` (the record's own fields, not those of its `alleles[]` entries).
 
@@ -355,6 +360,18 @@ region flag, GRCh38 position (the anchor's middle off the reference) and truth i
 evaluation labels. Jobs can share a cache: each process writes its own temporary files, then
 renames them. Reading the summaries takes about a minute per
 2.5 M tensors.
+
+**Channel 6 storage.** The path-count channel has two codes: `int8-count-linear100-log2` (HPRC v1.1 d9 sets built
+before `--haplotypes` existed, all existing checkpoints were trained on them: the count up to 100, then 100 +
+ceil(log2(count − 99))) and `int8-count-haplotypes100` (what indexed_gam_pipeline_v4 builds: relative to
+`--haplotypes` H, H → 100, one code per missing haplotype down to 51). A model reads one of them: `train` refuses
+sets that differ (`data.common_path_count`) and records it in the checkpoint (`path_count_storage`,
+`path_count_haplotypes`); `train --resume` and `predict` refuse sets coded otherwise than the checkpoint, before
+any prediction (a checkpoint without `path_count_storage` counts as `int8-count-linear100-log2`, the storage it was
+trained on). A model trained with `--drop-planes path_count` never reads channel 6 (it is the only plane made from
+it): it trains and predicts on sets of any storage, and its `path_count_storage` is null. Sets of the same storage
+built with another `--haplotypes` are predicted, with a note, and `.metrics.json` records `path_count` (the set's
+storage and H, the checkpoint's H).
 
 Loaders are persistent and their workers' start is retried (`train.retry_workers`, up to 3 times). On
 tequila, three of four jobs started together once lost their forkserver workers' semaphores in /dev/shm
@@ -422,6 +439,8 @@ cd machine_learning && $P -m unittest discover -s pansoma_net_v2/tests -t .
   valid covered cells; bf16 output.
 - `test_data`:
   - the index (node, scalars) against a synthetic merged set;
+  - the channel-6 storage of a set (`tensor_storage`, the `-v1` spelling, refusal of an unknown one) and of
+    several sets together;
   - the cache is reused and rebuilt when the labels change, and two samples' `tensors` sets share one cache
     without collisions;
   - −1 is never selected for training; evaluation adds only the off-reference no-match tensors and drops
@@ -437,7 +456,11 @@ cd machine_learning && $P -m unittest discover -s pansoma_net_v2/tests -t .
   - forkserver workers;
   - CPU runs: train 2 epochs (chr1 left out, block validation, threshold stored), resume (statistics kept),
     then predict chr1 with the stored threshold, and the truth report recomputed from the predictions; runs
-    with `--scalars`, `--select truth_f1` and `--keep-non-af`.
+    with `--scalars`, `--select truth_f1` and `--keep-non-af`;
+  - channel-6 storage: training on mixed storages and `--resume` across storages refused, the checkpoint
+    records the storage, predict refuses another storage before any output (a checkpoint without the record
+    counts as `int8-count-linear100-log2`), the rescue floor is 100 on `int8-count-haplotypes100` and 90 on
+    `int8-count-linear100-log2`.
 - `test_real_data`: runs if `PANSOMA_TEST_TENSORS` exists (default: COLO829T Illumina `tensors`); ~70 s.
   Checks the index counts against the manifests (and the region flag against the labeller's reasons, the truth
   ids against `somatic.recall.tsv`), candidates against a summary, and that the row blocks agree

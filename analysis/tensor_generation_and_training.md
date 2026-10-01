@@ -378,6 +378,8 @@ $P -m pansoma_net_v2.predict --checkpoint runs/X/best.pth --tensors $T --kinds S
 `--tensors` 可以一次给多个 set（例如同一平台的 HG008 和 COLO829T），训练一个跨样本的模型。README 的约定是一个样本一个
 模型，所以跨样本的效果需要自己比较。
 
+**channel 6 的 storage 必须一致**：一个模型只读一种 path count 编码（manifest 的 `tensor_storage`）。`int8-count-linear100-log2` 是加 `--haplotypes` 之前在 HPRC v1.1 d9 上建的 tensors，现有的 checkpoint 都是用它训练的；`int8-count-haplotypes100` 是现在的 builder 写的（按 H 编码）。`train` 拒绝把两种混在一起，checkpoint 记下 `path_count_storage`；`predict` 和 `train --resume` 遇到另一种 storage 会在预测之前退出（没有记录的旧 checkpoint 算 `int8-count-linear100-log2`）。所以旧 checkpoint 不能预测新建的 tensors，要用新 tensors 重新训练。用 `--drop-planes path_count` 训练的模型不读 channel 6，不受这个限制。
+
 ### 第 7 步：改代码前后的测试
 
 ```bash
