@@ -14,7 +14,7 @@ import numpy as np
 import pysam
 
 from .fixtures import CHR1, CHR2, CHR3, graph_files, graph_fixture, write_vcf
-from ..tensor_postprocessing.chr_index import AUTOSOMES, ChrIndex
+from ..tensor_postprocessing.chr_index import AUTOSOMES, ChrIndex, select_nodes
 from ..tensor_postprocessing import truth_labels
 from ..tensor_postprocessing.merge_shards import LAYOUT
 from ..tensor_postprocessing.reference_path import ReferencePath, rc
@@ -132,6 +132,41 @@ class ReferencePathTest(unittest.TestCase):
             (components / "chr1" / "chr1.component.nodes.raw.txt").write_text("1\n2\n4\n")
             with self.assertRaisesRegex(ValueError, "not one contiguous"):
                 graph_prep.build(components, Path(tmp) / "rp", Path(tmp) / "bad", autosomes=("chr1", "chr2"))
+
+    def test_interleaved_groups_get_one_interval_per_run(self):
+        """A graph numbered in another contig order (the GRCh38-only vg autoindex graph) interleaves the non-autosomal
+        groups: unplaced, chrEBV, unplaced, chrM, unplaced. Each run is an interval; a block may have several and
+        lookup / select_nodes see the block, not the interval."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            seq = "ACGTACGTAC"
+            names = ["chr1", "chr1", "chr1", "chrUn_A", "chrEBV", "chrUn_B", "chrUn_B", "chrM", "chrUn_C"]
+            lines = ["H\tVN:Z:1.1"] + [f"S\t{n}\t{seq}" for n in range(1, len(names) + 1)]
+            for contig in dict.fromkeys(names):
+                ids = [n for n, c in enumerate(names, 1) if c == contig]
+                lines.append(f"W\tGRCh38\t0\t{contig}\t0\t{len(seq) * len(ids)}\t" + "".join(f">{n}" for n in ids))
+            (tmp / "g.gfa").write_text("\n".join(lines) + "\n")
+            scan(tmp / "g.gfa", tmp / "rp")
+            (tmp / "components" / "chr1").mkdir(parents=True)
+            (tmp / "components" / "chr1" / "chr1.component.nodes.raw.txt").write_text("1\n2\n3\n")
+            blocks, meta = graph_prep.build(tmp / "components", tmp / "rp", tmp / "idx", autosomes=("chr1",))
+            self.assertEqual([(b["chrom"], b["first_node"], b["last_node"]) for b in blocks],
+                             [("chr1", 1, 3), ("unplaced", 4, 4), ("chrEBV", 5, 5), ("unplaced", 6, 7), ("chrM", 8, 8),
+                              ("unplaced", 9, 9)])
+            self.assertEqual((meta["covered_nodes"], meta["uncovered_nodes"]), (9, 0))
+            index = ChrIndex(tmp / "idx.tsv")
+            self.assertEqual(index.names, ["chr1", "unplaced", "chrEBV", "chrM"])  # blocks, by their first interval
+            self.assertEqual(index.names_of([1, 4, 5, 7, 8, 9, 10]), ["chr1", "unplaced", "chrEBV", "unplaced", "chrM",
+                                                                       "unplaced", None])
+            kept, report = select_nodes(np.arange(1, 11), "unplaced", tmp / "idx.tsv")
+            self.assertEqual((kept.tolist(), report["chromosomes"]), ([4, 6, 7, 9], ["unplaced"]))
+            self.assertEqual(select_nodes(np.arange(1, 11), "autosome", tmp / "idx.tsv")[0].tolist(), [1, 2, 3])
+            rows = [dict(chrom="chr1", first_node=1, last_node=3, dataset="autosome"),
+                    dict(chrom="chr1", first_node=5, last_node=6, dataset="non_autosomal")]
+            with self.assertRaisesRegex(ValueError, "two datasets"):
+                ChrIndex.from_blocks(rows)
+            with self.assertRaisesRegex(ValueError, "non-overlapping"):
+                ChrIndex.from_blocks([dict(rows[0]), dict(rows[0], chrom="chr2", first_node=3, last_node=4)])
 
 
 class GraphPrepTest(unittest.TestCase):

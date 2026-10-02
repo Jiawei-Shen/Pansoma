@@ -353,20 +353,23 @@ def _build(components_dir, reference_path, output, graph_index, graph, autosomes
     for a, b in zip(blocks, blocks[1:]):
         if a["last_node"] >= b["first_node"]:
             raise ValueError(f"Overlapping autosome blocks: {a['chrom']} and {b['chrom']}")
-    # Non-autosomal groups start at their reference contigs' smallest node.
-    starts = {}
-    for contig in path.meta["contigs"]:
-        if contig["name"] in autosomes:
-            continue
-        group = group_of(contig["name"])
-        starts[group] = min(starts.get(group, contig["min_node"]), contig["min_node"])
+    # Non-autosomal groups: every reference contig starts an interval at its smallest node, which runs to the next
+    # start (another contig or an autosome block); adjacent intervals of one group are joined. A group whose contigs
+    # are consecutive in node-ID order (HPRC graphs) is one interval, an interleaved one (the GRCh38-only vg autoindex
+    # graph) one interval per run.
     autosome_starts = [b["first_node"] for b in blocks]
-    ordered = sorted(starts.items(), key=lambda kv: kv[1])
-    for i, (group, first) in enumerate(ordered):
+    contigs = sorted(((c["min_node"], group_of(c["name"])) for c in path.meta["contigs"] if c["name"] not in autosomes))
+    intervals = []
+    for i, (first, group) in enumerate(contigs):
         if any(b["first_node"] <= first <= b["last_node"] for b in blocks):
             raise ValueError(f"Reference contigs of {group} start inside an autosome block")
-        following = [s for s in autosome_starts if s > first] + [s for _, s in ordered[i + 1:]]
+        following = [s for s in autosome_starts if s > first] + [s for s, _ in contigs[i + 1:] if s > first]
         last = min(following) - 1 if following else max_node
+        if intervals and intervals[-1][0] == group and intervals[-1][2] + 1 == first:
+            intervals[-1][2] = last
+        elif not intervals or intervals[-1][1] != first:  # contigs sharing a smallest node start one interval
+            intervals.append([group, first, last])
+    for group, first, last in intervals:
         nodes = graph_nodes_between(graph, first, last) if graph else last - first + 1
         blocks.append(dict(chrom=group, first_node=first, last_node=last, nodes=nodes,
                            dataset="non_autosomal", source="reference contigs' smallest node .. next block"))

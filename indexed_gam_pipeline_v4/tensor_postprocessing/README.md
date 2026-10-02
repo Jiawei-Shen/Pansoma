@@ -53,12 +53,16 @@ intervals have gaps (HPRC v2.1 d46: 94,468,093 nodes, IDs up to 212,734,056).
   largest ID.
 * **Non-autosomal groups** (chrEBV, chrM, chrX, chrY; `*_random`, `chrUn_*` and HPRC contigs
   assigned to no chromosome → `unplaced`) take the remaining IDs, split at each group's
-  smallest GRCh38 node.
+  smallest GRCh38 node. A table row is one node-ID interval: where a graph interleaves the
+  groups (the GRCh38-only vg autoindex graph numbers unplaced contigs before chrEBV, between
+  chrEBV and chrM and after chrM), a group gets one row per run of its contigs, and `ChrIndex`
+  looks a node up to the block (the name), whichever of its intervals holds it.
 * **Walk check:** every walk of every sample in the GFA (one walk = one assembly contig)
   must stay inside one block. A walk leaving an autosome block is an error.
 
 HPRC v1.1 d9 result: 27 blocks cover all 60,118,570 nodes. None of the 8,688 walks of 46 samples
-crosses a block.
+crosses a block. GRCh38-only linear graph: 27 blocks in 29 intervals (`unplaced` three) cover all
+96,872,672 nodes; none of its 3,315 walks (195 GRCh38 contigs, 3,120 path covers) crosses a block.
 
 The same table drives the builder's `--chromosomes all|autosome|chr1,chr2,...`
 (`select_nodes`). Target nodes outside the chosen blocks are dropped before partitioning

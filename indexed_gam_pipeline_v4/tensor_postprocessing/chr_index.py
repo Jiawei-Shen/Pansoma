@@ -13,7 +13,10 @@ IDs up to 212.7 M), so its intervals have gaps; a lookup only needs the interval
   index, an interval with no graph node of another component inside.
 * Non-autosomal groups (chrEBV, chrM, chrX, chrY; `*_random`/`chrUn_*`/alt contigs -> "unplaced")
   take the remaining IDs up to the largest node, split at the smallest node of each group's
-  reference walks.
+  reference walks. A graph numbered in another contig order (the GRCh38-only vg autoindex graph:
+  unplaced contigs before chrEBV, between chrEBV and chrM, and after chrM) interleaves the groups,
+  so a group gets one interval per run of its walks: a table row is a node-ID interval, and one
+  block (name, one dataset) may have several rows. lookup() returns the block.
 * Every walk of every sample in the GFA must stay inside one block (a walk is one
   assembly contig); a walk leaving an autosome block is an error, because it would mean
   chromosome material with IDs outside its block.
@@ -85,21 +88,28 @@ class ChrIndex:
         return self
 
     def _set(self, blocks):
-        blocks = sorted(blocks, key=lambda b: int(b["first_node"]))
-        self.names = [b["chrom"] for b in blocks]
-        self.dataset = [b["dataset"] for b in blocks]
-        self.first = np.array([int(b["first_node"]) for b in blocks], dtype=np.int64)
-        self.last = np.array([int(b["last_node"]) for b in blocks], dtype=np.int64)
+        """Rows are node-ID intervals; names/dataset are per block, in the order of each block's first interval."""
+        rows = sorted(blocks, key=lambda b: int(b["first_node"]))
+        self.first = np.array([int(b["first_node"]) for b in rows], dtype=np.int64)
+        self.last = np.array([int(b["last_node"]) for b in rows], dtype=np.int64)
         if (self.last < self.first).any() or (self.first[1:] <= self.last[:-1]).any():
             raise ValueError("Chromosome blocks must be non-empty and non-overlapping")
-        if len(set(self.names)) != len(self.names):
-            raise ValueError("Duplicate chromosome block names")
+        self.names, self.dataset, block = [], [], {}
+        for row in rows:
+            if row["chrom"] not in block:
+                block[row["chrom"]] = len(self.names)
+                self.names.append(row["chrom"])
+                self.dataset.append(row["dataset"])
+            elif self.dataset[block[row["chrom"]]] != row["dataset"]:
+                raise ValueError(f"Chromosome block {row['chrom']} has intervals of two datasets")
+        self.block_of = np.array([block[row["chrom"]] for row in rows], dtype=np.int64)
 
     def lookup(self, nodes):
+        """Block index of every node (-1 = no block)."""
         nodes = np.asarray(nodes, dtype=np.int64)
         k = np.searchsorted(self.first, nodes, side="right") - 1
         inside = (k >= 0) & (nodes <= self.last[np.maximum(k, 0)])
-        return np.where(inside, k, -1)
+        return np.where(inside, self.block_of[np.maximum(k, 0)], -1)
 
     def names_of(self, nodes):
         return [self.names[k] if k >= 0 else None for k in self.lookup(nodes)]
