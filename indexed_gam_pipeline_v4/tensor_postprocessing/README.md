@@ -81,14 +81,15 @@ labels when every kind has a `labels.manifest.json`.
 --chr-index TSV               needed for the merge and for --chromosomes other than all
 --reference-path DIR          GRCh38 coordinates in the merged summaries; needed for labels
 --somatic-vcf --somatic-bed --germline-vcf --germline-bed --reference-fasta --truth-dir   (labels; all or none)
---label-snv-min-af F          labels: lower-AF SNV tensors are -1 (short-read sets: 0.07); in [0, 1], needs the labels
+--label-snv-min-af F          labels: lower-AF SNV tensors are -1; in [0, 1], needs the labels
 --label-indel-min-af F        labels: lower-AF INDEL tensors are -1; in [0, 1], needs the labels
 ```
 
 `finalize` labels with these AF floors as `label --snv-min-af` / `--indel-min-af` does (frozen as
-`postprocess.labels.snv_min_af` / `indel_min_af`, null when unset), so a short-read run prepared
-with `--label-snv-min-af 0.07` needs no relabel. They are not the build's `--snv-min-af` /
-`--indel-min-af`, which decide which alleles become tensors. `label` and `tools/jobs/relabel.sh`
+`postprocess.labels.snv_min_af` / `indel_min_af`, null when unset), so a run prepared with them
+needs no relabel. They are not the build's `--snv-min-af` / `--indel-min-af`, which decide which
+alleles become tensors: a floor at or below the build's AF changes nothing (the sets of the main
+README, section 5, are built at 0.08 for both kinds and labelled without floors). `label` and `tools/jobs/relabel.sh`
 label a merged set again, e.g. with other floors (see [Commands](#commands)).
 
 ## Merge (`merge_shards.py`)
@@ -286,11 +287,11 @@ otherwise (step 10). Germline residuals are not tried on off-reference tensors.
 off-reference tensors (below), −1 is used only for filtered somatic truth and for tensors that the
 caller can also leave out without truth: outside the BED it calls in, no position, or a tensor
 under the AF floor of its kind. Everything else it will meet is 0 or a truth label, errors and
-artifacts next to real variants included. On HG008 PacBio, 35,259 of the 86,625 SNV 0s and 205,094
-of the 1,518,564 INDEL 0s are `near_truth_allele_mismatch`.
+artifacts next to real variants included. On HG008 PacBio, 29,018 of the 73,454 SNV 0s and 205,183
+of the 1,518,657 INDEL 0s are `near_truth_allele_mismatch`.
 
-* **`--snv-min-af`, `--indel-min-af`** (the short-read sets use an SNV floor of 0.07 and no INDEL
-  floor) label as if the build had used that AF filter for the kind: a lower-AF SNV tensor (A1 an
+* **`--snv-min-af`, `--indel-min-af`** (unset for the sets of the main README, section 5, built at
+  AF 0.08) label as if the build had used that AF filter for the kind: a lower-AF SNV tensor (A1 an
   SNP) or INDEL tensor (A1 an INS or DEL) is −1 whatever the truth, and these are the first checks;
   each floor leaves the other kind alone. `af` is in every summary record, so a caller can apply the
   same filters without truth.
@@ -354,7 +355,7 @@ $P.tensor_postprocessing merge --root /path/to/run --chr-index TSV [--shard-size
     [--workers 8] [--spots 200] [--reference-path DIR]
 $P.tensor_postprocessing label --tensors /path/to/tensors --reference-path DIR --fasta FA \
     --somatic-vcf VCF --somatic-bed BED --germline-vcf VCF --germline-bed BED --truth-dir DIR \
-    [--kinds SNV INDEL] [--recall-dir DIR] [--snv-min-af 0.07] [--indel-min-af F]
+    [--kinds SNV INDEL] [--recall-dir DIR] [--snv-min-af F] [--indel-min-af F]
 ```
 
 HPRC v1.1 d9 graph files. The files under `$G` are the current ones; the reference-path and
@@ -421,8 +422,8 @@ COLO="$D/COLO829T_truth/COLO829T_somatic_snv_indel.vcf.gz $D/COLO829T_truth/SMaH
 relabel() { sbatch -J relabel_$1 -o ${LOGDIR:-.}/relabel_$1-%j.out $J/relabel.sh $D/$1/tensors $2 $D/$1/truth $3; }
 relabel HG008T_PacBio "$HG008"            # HG008 PacBio HiFi
 relabel HG008T_ONT "$HG008"               # HG008 ONT-UL
-relabel HG008T_Illumina "$HG008" 0.07     # HG008 Illumina
-relabel COLO829T_Illumina "$COLO" 0.07
+relabel HG008T_Illumina "$HG008"          # HG008 Illumina
+relabel COLO829T_Illumina "$COLO"
 relabel COLO829T_fiberseq "$COLO"
 relabel COLO829T_ONT "$COLO"
 ```
@@ -435,16 +436,8 @@ Truth sets:
   easy/difficult/extreme `_v2` BEDs (they tile the genome, so their intersection is empty); and
   COLO829BL dipcall.
 
-Label job, 1 CPU:
-
-| set | wall time | MaxRSS |
-|---|---|---|
-| HG008 PacBio | 23 min | 12.4 GiB |
-| HG008 ONT-UL | 50 min | 12.9 GiB |
-| HG008 Illumina | 55 min | 13.2 GiB |
-| COLO829T Illumina | 33 min | 14.9 GiB |
-| COLO829T fiberseq | 34 min | 14.6 GiB |
-| COLO829T ONT (7.7 M tensors) | 2 h 26 min | 14.7 GiB |
+Labelling one of the six sets (1 CPU, in their finalize) took 17–36 min at 12–16 GiB; the
+largest earlier label job, 7.7 M COLO829T ONT tensors, 2 h 26 min at 14.7 GiB.
 
 The label counts of the six sets are in the [main README](../README.md), section 5.
 

@@ -3,7 +3,7 @@
 # reference-path directory and the GRCh38 FASTA. No backup is kept: label replaces a kind's label files only when all
 # of them are written, so a failed run leaves the current labels in place.
 # Usage: sbatch -J NAME -o LOG relabel.sh TENSORS SOMATIC_VCF SOMATIC_BED GERMLINE_VCF GERMLINE_BED TRUTH_DIR [SNV_MIN_AF [INDEL_MIN_AF]]
-# SNV_MIN_AF (short-read sets: 0.07), INDEL_MIN_AF: lower-AF SNV / INDEL tensors become -1; '' skips one (e.g. '' 0.10).
+# SNV_MIN_AF, INDEL_MIN_AF: lower-AF SNV / INDEL tensors become -1; '' skips one (e.g. '' 0.10).
 # REFERENCE_PATH (environment): the ref-path-scan directory of the set's graph; default: the one its current labels
 # used (reference_path in TENSORS/SNV/labels.manifest.json).
 # Runs the package it lives in (<package>/tools/jobs/): the checkout, or

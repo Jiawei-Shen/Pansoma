@@ -658,7 +658,7 @@ def make_parser():
     f.add_argument("--reference-fasta", help="GRCh38 FASTA with .fai (labels)")
     f.add_argument("--truth-dir", help="where the truth tables (<set>.graph.tsv) are written")
     f.add_argument("--label-snv-min-af", type=float,
-                   help="SNV tensors with a lower AF are labelled -1 (short-read sets: 0.07; needs the labels)")
+                   help="SNV tensors with a lower AF are labelled -1 (needs the labels)")
     f.add_argument("--label-indel-min-af", type=float,
                    help="INDEL tensors with a lower AF are labelled -1 (needs the labels)")
     r = commands.add_parser("run", help="execute all pending tasks")

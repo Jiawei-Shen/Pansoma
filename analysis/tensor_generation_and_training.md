@@ -28,20 +28,19 @@
 
 **标签**：1 = somatic，2 = germline，0 = non（不是真实变异），−1 = ignore（训练时不用）。
 
-### 2. 现有数据（6 套，都可以直接用来训练）
+### 2. 现有数据（6 套 HPRC v1.1 d9 tensor，都可以直接用来训练）
 
-都在 `/scratch/jshen/data/pansoma_v2_tensors/<样本>/v3_tensors/`（目录名里的 v3 是历史名字，没有改）。
+都在 `/scratch/jshen/data/pansoma_v2_tensors/<样本>/tensors/`，样本目录是 `HG008T_PacBio`、`HG008T_ONT`、
+`HG008T_Illumina`、`COLO829T_Illumina`、`COLO829T_fiberseq`、`COLO829T_ONT`。每个样本目录的 `README.txt` 写了输入、
+参数、tensor 和标签数量、relabel 命令；数据根目录的 `README.txt` 说明整体布局（还有 linear / HPRC v2.1 d46 graph 和
+P25/P50/P75 mixture 的 set）。数量和资源见 `indexed_gam_pipeline_v4/README.md` 第 5 节。
 
-| 数据集 | 目录 |
-|---|---|
-| HG008 PacBio | `Liss_lab_PacBio_Revio_20240125/v3_tensors` |
-| HG008 ONT-UL | `Liss_lab_Northeastern-ONT-UL-20241216/v3_tensors` |
-| HG008 Illumina | `Liss_lab_BCM_Illumina-WGS_20240313/v3_tensors` |
-| COLO829T Illumina / fiberseq / ONT | `COLO829T_{Illumina,fiberseq,ONT}/v3_tensors` |
-
-- **标签都是最新规则**（2026-09-28 检查）：12 个 `labels.manifest.json`（6 套 × SNV/INDEL）的 `rules_sha256` 都是
-  `197b5d25bbf4`，和 repo 里的 `truth_labels.py` 一致，包括 haplotype-overlap 修复。两套 Illumina 的 SNV AF floor
-  是 0.07。
+- **参数**：`--haplotypes 90`（channel 6 的 storage 是 `int8-count-haplotypes100`），build AF 的 SNV 和 INDEL 都是
+  0.08，标签不设 AF floor（floor 不超过 build AF 时没有作用）。
+- **标签都是最新规则**：12 个 `labels.manifest.json`（6 套 × SNV/INDEL）的 `rules_sha256` 都是 `5430533aa100`，和
+  repo 里的 `truth_labels.py` 一致。
+- 之前的一版（channel 6 是 `int8-count-linear100-log2`，SNV AF 0.06，两套 Illumina 的 SNV label floor 0.07）在
+  `pansoma_v2_tensors/backup_ch6_linear100_20261001/`，只有之前训练的 checkpoint 读它。
 - **检查一套数据的标签是否最新**：比较 `<set>/SNV/labels.manifest.json` 的 `rules_sha256` 和
   `sha256sum indexed_gam_pipeline_v4/tensor_postprocessing/truth_labels.py`。
 - relabel 正在进行时不要用那套数据训练：先确认对应的 relabel job 已经 COMPLETED。
@@ -51,12 +50,13 @@
 1. **训练的 job 脚本不在 repo 里。** `run.sh` 和 `build_index.sh` 放在 `/scratch/jshen/data/pansoma_net_v2_runs/jobs/`，
    没有进 git。`run.sh` 的 `FP32CHECK=1` 选项还调用了 `tmp/` 下的一个脚本。可以像 v4 那样挪到
    `machine_learning/pansoma_net_v2/jobs/`。
-2. **新样本没有现成的 v4 job 脚本。** v4 没有 discovery → prepare → 提交这一串的脚本。各样本目录里的
-   `discovery_job.sh`、`prepare_and_submit.sh` 是旧 run 的记录，调用冻结的 v3 代码，不要拿来跑新样本。下面第二部分
-   是完整命令，可以写成 `indexed_gam_pipeline_v4/tools/jobs/` 下的脚本。
+2. **新样本没有现成的 v4 job 脚本。** `tools/jobs/` 只有 `graph_prep.sh`、`gam_sort.sh`、`relabel.sh`，没有
+   discovery → prepare → 提交这一串。重建和 linear / d46 用的脚本在 repo 的 `tmp/`（不进 git）：
+   `tmp/rebuild_ch6_20261001/<样本>/`、`tmp/linear_hg38_20261001/`、`tmp/hprc_v21_d46_tensors_20261003/`。下面第二部分
+   是完整命令，可以整理成 `indexed_gam_pipeline_v4/tools/jobs/` 下的脚本。
 3. **未被 git 跟踪的遗留目录。** `src/`（旧的编译产物 `.so`）、`build/`、根目录的 `__pycache__/` 已被 git 忽略，可以删。
-4. **现有 6 个 run root 不要用 v4 去 resume 或 finalize。** 它们是 `indexed_gam_pipeline_v3` 准备的，v4 会拒绝
-   （package guard）。对它们只做 relabel。
+4. **现有的 checkpoint 要重新训练。** 它们都是用 backup 里的旧 channel 6 storage 训练的，不能预测现在的 tensors
+   （第三部分第 6 步最后一段）。
 
 ---
 
@@ -118,9 +118,9 @@ sbatch -p general -c 1 --mem=8G -t 1:00:00 -J prepare -o $S/prepare-%j.out --wra
    --gam $GAM --nodes $S/discovery/target_nodes.txt --node-stats $S/discovery/node_stats.json \
    --graph-index $G/hprc-v1.1-mc-grch38.d9.graph_index.sqlite --haplotypes 90 \
    --tasks $TASKS --processes 48 --gam-cache-mb 8192 \
-   --snv-min-af 0.06 --indel-min-af 0.08 \
+   --snv-min-af 0.08 --indel-min-af 0.08 \
    --chromosomes autosome --chr-index $G/hprc-v1.1-mc-grch38.d9.chr_node_ranges.tsv \
-   --merge-shard-size 32768 --keep-sources --reference-path $G/hprc-v1.1-mc-grch38.d9.grch38_path \
+   --merge-shard-size 32768 --reference-path $G/hprc-v1.1-mc-grch38.d9.grch38_path \
    --somatic-vcf  $H/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_tumorvariants.vcf.gz \
    --somatic-bed  $H/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_all.bed \
    --germline-vcf $H/dipcall_HG008N_GRCh38/HG008N_GRCh38_dipcall.dip.vcf.gz \
@@ -133,21 +133,19 @@ sbatch -p general -c 1 --mem=8G -t 1:00:00 -J prepare -o $S/prepare-%j.out --wra
 
 | 参数 | 含义 |
 |---|---|
-| `--haplotypes 90` | 这个 graph 的 haplotype path 数 H，包括 GRCh38 和 CHM13：HPRC v1.1 d9 是 90，v2.1 d46 是 464，只有 GRCh38 的 linear graph 是 1。channel 6（path count）按 H 编码：H 条 path → 100，少 1–49 条 → 99–51，更少的 → 1–50，多于 H → 101–127（见 v4 README 第 8 节）。必填，换 graph 时一定要跟着改 |
+| `--haplotypes 90` | 这个 graph 的 haplotype path 数 H，包括 GRCh38 和 CHM13：HPRC v1.1 d9 是 90，v2.1 d46 是 464，只有 GRCh38 的 vg autoindex linear graph 是 17（GRCh38 + 16 条 path cover）。channel 6（path count）按 H 编码：H 条 path → 100，少 1–49 条 → 99–51，更少的 → 1–50，多于 H → 101–127（见 v4 README 第 8 节）。必填，换 graph 时一定要跟着改 |
 | `--tasks` | task 个数；按每个 task 约 15,500 个 node 算 |
 | `--processes` | 同时跑几个 task，也就是几个 builder 进程。决定内存，见第 3 步的表 |
 | `--gam-cache-mb 8192` | 每个进程的 GAM group cache，8 GiB 足够 |
-| `--snv-min-af 0.06 --indel-min-af 0.08` | **build 阶段**的 AF 阈值：低于它的 allele 根本不生成 tensor |
+| `--snv-min-af 0.08 --indel-min-af 0.08` | **build 阶段**的 AF 阈值：低于它的 allele 根本不生成 tensor |
 | `--chromosomes autosome` | 只保留 chr1–22 上的 target node；chrX/Y/M 和 unplaced 在构建前就去掉 |
 | `--merge-shard-size 32768` | 跑完后按染色体合并，每个 shard 文件最多 32,768 个 tensor |
-| `--keep-sources` | 合并后保留各 task 自己的目录。占用约多一倍磁盘；不加这个参数，校验通过后会删掉 |
+| （不加）`--keep-sources` | 加了会在合并后保留各 task 自己的目录，占用约多一倍磁盘；不加时校验通过后删掉 |
 | 4 个 truth 文件 + `--reference-fasta` + `--truth-dir` | 合并后自动打标签。truth 表写到 `--truth-dir` |
 
-**短读长数据**（Illumina）要再加 `--label-snv-min-af 0.07`：
-
-- 这是 **label 阶段**的 AF floor：AF 低于 0.07 的 SNV tensor 保留在数据里，但标成 −1（reason `below_snv_min_af`）。
-- `--label-indel-min-af` 是 INDEL 对应的选项，现有数据都没用。
-- 这两个值会冻结进 `config.json`，finalize 时直接生效，跑完不用再单独 relabel。
+**label 阶段的 AF floor**（`--label-snv-min-af`、`--label-indel-min-af`）：AF 更低的 tensor 保留在数据里，但标成 −1
+（reason `below_snv_min_af` / `below_indel_min_af`）。build AF 已经是 0.08，floor 不超过 0.08 就没有作用，所以现在都
+不加。加了的话会冻结进 `config.json`，finalize 时直接生效，跑完不用再单独 relabel。
 
 **COLO829T 的 truth 文件**：
 
@@ -170,18 +168,21 @@ sbatch -p general --cpus-per-task=48 --mem=420G --time=14-00:00:00 \
 2. 每个 task 跑完立刻校验输出（shape、shard 长度、summary 与 manifest 是否一致）。
 3. 全部完成后执行 **finalize**：按染色体合并并逐字节校验，再对所有 tensor 打标签。
 
-**各平台设置**（来自现有 run 的实测）：
+**各平台设置**（现有 6 个 run 的实测，HG008 / COLO829T）：
 
-| 平台 | `--processes` / `--mem` | 墙钟时间 | 峰值内存 |
-|---|---|---|---|
-| PacBio HiFi | 48 / 420G | 约 8–14 小时 | 418 GiB |
-| Illumina | 48 / 420G | 约 3.3–3.6 小时 | 201–239 GiB |
-| ONT-UL | 36 / 420G，或 48 / 480G | 5.7 小时（36 进程） | 348 GiB（36 进程）/ 418 GiB（48 进程） |
-| fiberseq | 36 / 420G | — | 318 GiB |
+| 平台 | `--processes` | 峰值内存 | 用过的 `--mem` | 墙钟时间：tasks + finalize |
+|---|---|---|---|---|
+| PacBio HiFi | 48 | 305 GiB | 335G | 4.7 + 1.5 小时 |
+| Illumina | 48 | 247 / 194 GiB | 277G / 231G | 8.0 + 4.0 / 5.8 + 2.2 小时 |
+| ONT-UL | 48 | 403 / 430 GiB | 433G / 448G | 7.2 + 3.1 / 24.2 + 4.6 小时 |
+| fiberseq | 36 | 405 GiB | 454G | 4.8 + 2.5 小时 |
 
-- 48 进程的 ONT 在 420G 下会被 OOM 杀掉；想用 48 就要 `--mem=480G`。
+- fiberseq 用 48 进程 13 分钟就超过 454G 被杀，所以用 36。
+- `--mem` 按峰值加约 30 GB 给。Slurm 不能降低运行中 job 的内存：要降就取消 run job，用新的 `--mem` 重新提交
+  `run.sh --resume`，已完成的 task 会保留。
+- 6 个 run 和别的 GAM job 同时在同一个存储上跑，墙钟时间是上限。
 - `--cpus-per-task` 必须不小于 `--processes`，否则 run 会拒绝启动。
-- 标签那一步单进程，25 分钟到 2 小时 12 分钟，内存 14–16 GiB。
+- finalize 里标签那一步单进程，17–36 分钟，内存 12–16 GiB；整个 finalize（合并、标签、删除 task 输出）1.5–4.6 小时。
 
 **监控**：
 
@@ -198,7 +199,8 @@ tail $S/run/logs/task_0000.log    # 单个 task 的日志；task_NNNN.resources.
   会跳过，半成品会被移到 `incomplete/`。
 - **内存不够**：先在 `config.json` 里把 `processes` 改小（例如 48 改成 36），再 `--resume`。
 - **提前挂一个 fallback job**：用 `--dependency=afternotok:<run 的 job id> --kill-on-invalid-dep=yes`，run 失败时
-  自动降低进程数并 resume。
+  自动降低进程数并 resume。run job 因为它自己的依赖（例如 prepare）失败而被取消时，`afternotok` 也会触发，所以
+  fallback 脚本要先检查 `$S/run/config.json` 是否存在。`sbatch` 提交时就复制了脚本，提交后再改脚本不起作用。
 - **只剩合并或标签失败**：`$PY -m $P.orchestrate finalize --root $S/run`。已完成的步骤会跳过，可以重复执行。
 
 ### 第 4 步：输出和检查
@@ -232,7 +234,7 @@ sbatch -J relabel -o relabel-%j.out indexed_gam_pipeline_v4/tools/jobs/relabel.s
   $S/tensors SOMATIC_VCF SOMATIC_BED GERMLINE_VCF GERMLINE_BED $S/truth [SNV_MIN_AF [INDEL_MIN_AF]]
 ```
 
-- 运行前会先把旧的 label manifest 和 recall 文件备份到 `labels_backup_<tensors 目录名>_<时间>_<job>/`。
+- 不留备份：`label` 只在一个 kind 的标签文件全部写完后才替换旧的，失败时旧标签保持不变。
 - `''` 表示跳过其中一个 floor。
 - 用 `/scratch/jshen/data/pansoma_v2_tensors/pipeline_code/indexed_gam_pipeline_v4/tools/jobs/relabel.sh` 时，跑的是
   `pipeline_code/` 里冻结的代码（commit 在 `pipeline_code/git_head.txt`）；用 repo 里的那个，跑的是当前 checkout。
@@ -273,7 +275,7 @@ tequila 上有：
 
 ```bash
 J=/scratch/jshen/data/pansoma_net_v2_runs/jobs
-T=/scratch/jshen/data/pansoma_v2_tensors/Liss_lab_BCM_Illumina-WGS_20240313/v3_tensors     # 或者你自己的 $S/tensors
+T=/scratch/jshen/data/pansoma_v2_tensors/HG008T_Illumina/tensors     # 或者你自己的 $S/tensors
 sbatch -J index -o $J/index-%j.out $J/build_index.sh $T
 ```
 
@@ -378,12 +380,12 @@ $P -m pansoma_net_v2.predict --checkpoint runs/X/best.pth --tensors $T --kinds S
 `--tensors` 可以一次给多个 set（例如同一平台的 HG008 和 COLO829T），训练一个跨样本的模型。README 的约定是一个样本一个
 模型，所以跨样本的效果需要自己比较。
 
-**channel 6 的 storage 必须一致**：一个模型只读一种 path count 编码（manifest 的 `tensor_storage`）。`int8-count-linear100-log2` 是加 `--haplotypes` 之前在 HPRC v1.1 d9 上建的 tensors，现有的 checkpoint 都是用它训练的；`int8-count-haplotypes100` 是现在的 builder 写的（按 H 编码）。`train` 拒绝把两种混在一起，checkpoint 记下 `path_count_storage`；`predict` 和 `train --resume` 遇到另一种 storage 会在预测之前退出（没有记录的旧 checkpoint 算 `int8-count-linear100-log2`）。所以旧 checkpoint 不能预测新建的 tensors，要用新 tensors 重新训练。用 `--drop-planes path_count` 训练的模型不读 channel 6，不受这个限制。
+**channel 6 的 storage 必须一致**：一个模型只读一种 path count 编码（manifest 的 `tensor_storage`）。`int8-count-linear100-log2` 是加 `--haplotypes` 之前在 HPRC v1.1 d9 上建的 tensors（现在在 `backup_ch6_linear100_20261001/`），2026-10-01 以前的 checkpoint 都是用它训练的；`int8-count-haplotypes100` 是现在的 builder 写的（按 H 编码），现有的 6 套 tensor 都是这种。`train` 拒绝把两种混在一起，checkpoint 记下 `path_count_storage`；`predict` 和 `train --resume` 遇到另一种 storage 会在预测之前退出（没有记录的旧 checkpoint 算 `int8-count-linear100-log2`）。所以旧 checkpoint 不能预测新建的 tensors，要用新 tensors 重新训练。用 `--drop-planes path_count` 训练的模型不读 channel 6，不受这个限制。
 
 ### 第 7 步：改代码前后的测试
 
 ```bash
-cd /scratch/jshen/Github/Pansoma && $PY -m unittest discover -s indexed_gam_pipeline_v4/tests -t .      # pipeline：157 个测试，约 50 秒
+cd /scratch/jshen/Github/Pansoma && $PY -m unittest discover -s indexed_gam_pipeline_v4/tests -t .      # pipeline：168 个测试，约 70 秒
 cd machine_learning && $PY -m unittest discover -s pansoma_net_v2/tests -t .                             # 模型
 ```
 

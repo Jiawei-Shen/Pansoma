@@ -12,10 +12,10 @@ record decoder); `orchestrate` runs a whole genome on one Slurm node as many sma
 with a byte-verified per-chromosome merge and truth labels (`tensor_postprocessing`).
 
 ```
-runtime  5,069 lines of Python in 17 files + fastdecode.cpp (659 lines); frozen per run: 21 files (those 18,
+runtime  5,082 lines of Python in 17 files + fastdecode.cpp (659 lines); frozen per run: 21 files (those 18,
          the compiled decoder and the two READMEs), 2.55 MB, 2.15 MB of it the compiled decoder
-tools    1,282 lines of Python in 7 files + gbz_graph_index.cpp (75 lines); not frozen
-tests    5,207 lines of Python in 17 files (+ golden_hashes.json), 165 tests, ~55 s on a quiet node
+tools    1,362 lines of Python in 7 files + gbz_graph_index.cpp (75 lines); not frozen
+tests    5,326 lines of Python in 17 files (+ golden_hashes.json), 168 tests, ~70 s on a quiet node
 ```
 
 ---
@@ -49,24 +49,24 @@ $PY -m $P.orchestrate prepare --root /path/to/run --tensors /path/to/tensors \
     --gam sample.sorted.gam --nodes discovery/target_nodes.txt --node-stats discovery/node_stats.json \
     --graph-index $G/hprc-v1.1-mc-grch38.d9.graph_index.sqlite --haplotypes 90 \
     --tasks 1200 --processes 48 --gam-cache-mb 8192 \
-    --snv-min-af 0.06 --indel-min-af 0.08 \
+    --snv-min-af 0.08 --indel-min-af 0.08 \
     --chromosomes autosome --chr-index $G/hprc-v1.1-mc-grch38.d9.chr_node_ranges.tsv \
-    --merge-shard-size 32768 --keep-sources --reference-path $G/hprc-v1.1-mc-grch38.d9.grch38_path \
+    --merge-shard-size 32768 --reference-path $G/hprc-v1.1-mc-grch38.d9.grch38_path \
     --somatic-vcf ... --somatic-bed ... --germline-vcf ... --germline-bed ... \
-    --reference-fasta GRCh38.fasta --truth-dir /path/to/truth    # short-read sets: + --label-snv-min-af 0.07
+    --reference-fasta GRCh38.fasta --truth-dir /path/to/truth
 sbatch -p general --cpus-per-task=48 --mem=420G --time=14-00:00:00 \
        --output=/path/to/run/slurm-%j.out /path/to/run/run.sh
 sbatch ... /path/to/run/run.sh --resume               # after a failure: redo only unfinished tasks
 $PY -m $P.orchestrate finalize --root /path/to/run    # only the merge + labels (idempotent)
 
-# (re-label by hand, e.g. other AF floors) as finalize does with prepare's --label-snv-min-af / --label-indel-min-af
+# (re-label by hand, e.g. new truth sets or AF floors above the build's) as finalize does
 $PY -m $P.tensor_postprocessing label --tensors /path/to/tensors --reference-path $G/hprc-v1.1-mc-grch38.d9.grch38_path \
     --fasta GRCh38.fasta --somatic-vcf ... --somatic-bed ... --germline-vcf ... --germline-bed ... \
-    --truth-dir /path/to/truth [--snv-min-af 0.07] [--indel-min-af F]
+    --truth-dir /path/to/truth [--snv-min-af F] [--indel-min-af F]
 
 # (one task by hand, e.g. an audit) exactly what every task runs
 $PY -m $P.run build --gam sample.sorted.gam --nodes nodes.txt --graph-index $G/hprc-v1.1-mc-grch38.d9.graph_index.sqlite \
-    --haplotypes 90 --output out/shared --snv-output out/SNV --indel-output out/INDEL --snv-min-af 0.06 --indel-min-af 0.08
+    --haplotypes 90 --output out/shared --snv-output out/SNV --indel-output out/INDEL --snv-min-af 0.08 --indel-min-af 0.08
 ```
 
 The graph files (graph index, reference-path directory, chromosome block table) are made once per
@@ -206,7 +206,7 @@ Writes `target_nodes.txt` (sorted), `node_stats.json` (per node `perfect`, `not_
 required:
   --gam GAM --nodes NODES --graph-index SQLITE
   --haplotypes H             haplotype paths of that graph, references included (HPRC v1.1 d9 90, v2.1 d46 464,
-                             GRCh38-only 1): channel 6 codes path counts relative to it (section 8)
+                             GRCh38-only vg autoindex 17): channel 6 codes path counts relative to it (section 8)
   --output SHARED_DIR --snv-output DIR --indel-output DIR      new or empty, distinct, non-nested directories
   --snv-min-af F --indel-min-af F                              AF thresholds of the two outputs
   --index GAI                default GAM.gai
@@ -342,7 +342,8 @@ prepare
   --keep-sources             keep the task_* directories after the verified merge (default: delete them)
   --reference-path DIR       tools.graph_prep ref-path-scan directory: GRCh38 coordinates; needed for labels
   --somatic-vcf --somatic-bed --germline-vcf --germline-bed --reference-fasta --truth-dir     labels: all or none
-  --label-snv-min-af F       lower-AF SNV tensors are labelled -1 (short-read sets: 0.07); in [0, 1], needs the labels
+  --label-snv-min-af F       lower-AF SNV tensors are labelled -1 (only above --snv-min-af does it do anything);
+                             in [0, 1], needs the labels
   --label-indel-min-af F     lower-AF INDEL tensors are labelled -1; in [0, 1], needs the labels
 
 run --root R [--resume]      execute the tasks, then finalize (section 6)
@@ -389,7 +390,7 @@ label --tensors T --reference-path DIR --fasta FA --somatic-vcf --somatic-bed --
   `HET1`/`HET2`); **−1** ignore — a filtered somatic truth allele, outside the BEDs, no position
   (no GRCh38 coordinate and no anchor), an off-reference node without a partial somatic match, and
   with `--snv-min-af` / `--indel-min-af` every SNV / INDEL (A1 an INS or DEL) of lower AF, whatever
-  its truth (short-read sets: SNV 0.07; these two rules are checked first). Indels are
+  its truth (checked first; the sets of section 5 set neither). Indels are
   matched at every equivalent placement in their repeat; an off-reference node is placed between the
   reference nodes around it by node ID (within 200 IDs, at most 1024 GRCh38 bases apart), and
   somatic truths written differently by the graph alignment are matched by the haplotype overlap of
@@ -528,26 +529,24 @@ figure.png`.
 
 ## 5. Settings by platform (HPRC v1.1 d9)
 
-**Where the numbers come from.** The runs below were prepared by the package
-`indexed_gam_pipeline_v3`; each root keeps the code it ran in `<root>/source` (patched in place
-where a fix was brought into the started run, section 6). That code applied the read cap after the
-two prefilters (and, where a run had nodes over 10,000 mappings, built them alone from a
-10,000-record sample), except in 1 of the 1,178 COLO829T fiberseq tasks and 884 of the 1,921
-COLO829T ONT tasks, which read with the cap as described here (merged manifests, `read_cap_rules`);
-tensors of nodes over the cap can therefore differ from what this package builds. Each sample
-directory `/scratch/jshen/data/pansoma_v2_tensors/<sample>` (HG008: `HG008T_PacBio`, `HG008T_ONT`,
-`HG008T_Illumina`; COLO829T: `COLO829T_{Illumina,fiberseq,ONT}`) holds `discovery/`, the run root
-`run/`, the merged and labelled `tensors/` (the only copy of the tensors: the task outputs were
-deleted after the merge), `truth/` (the truth tables of the labels) and a `README.txt` with the
-sample's inputs, settings, counts and relabel command. HG008 PacBio differs: its `tensors/` merges
-`run/`, built by an earlier package, with `run_extra/`, and `merge/` holds that merge's bookkeeping
-(footnote ¹). The label counts are those of this package's rules (`tensor_postprocessing label` over
-the merged sets; data side `tools/jobs/relabel.sh`, section 6), the Illumina sets with
-`--snv-min-af 0.07`.
+**Where the numbers come from.** The six sets below were built by this package (each run root keeps
+the code it ran in `<root>/source`). Each sample directory `/scratch/jshen/data/pansoma_v2_tensors/<sample>`
+(HG008: `HG008T_PacBio`, `HG008T_ONT`, `HG008T_Illumina`; COLO829T: `COLO829T_{Illumina,fiberseq,ONT}`)
+holds `discovery/`, the run root `run/`, the merged and labelled `tensors/` (the only copy of the
+tensors: the task outputs are deleted after the merge), `truth/` (the truth tables of the labels)
+and a `README.txt` with the sample's inputs, settings, counts and relabel command. An earlier build
+of the same six sets, with the channel-6 storage `int8-count-linear100-log2` (section 8, "Format
+names") and SNV AF 0.06, is kept in `backup_ch6_linear100_20261001/<sample>`; models trained on it
+do not read the sets here (`machine_learning/pansoma_net_v2`).
 
-All runs: one Slurm node, `-p general`, `--mem=420G`, `--chromosomes autosome`, `--snv-min-af
-0.06 --indel-min-af 0.08`, other builder options at their defaults (except as noted),
-`--merge-shard-size 32768 --keep-sources`. Discovery: `--processes 48`, defaults otherwise.
+All runs: one Slurm node (`-p general,gpu`, no GPU requested), `--haplotypes 90`, `--chromosomes
+autosome`, `--snv-min-af 0.08 --indel-min-af 0.08`, other builder options at their defaults
+(`--gam-cache-mb 8192`), `--merge-shard-size 32768`, labels at finalize without label AF floors
+(below the build AF they change nothing). Discovery: `--processes 48`, defaults otherwise. The six
+runs, giraffe and `vg gamsort` jobs ran at the same time on the same storage, so the wall times are
+upper bounds. `--mem` was lowered to the peak so far + 30 GB while they ran (Slurm cannot lower the
+memory of a running job: the run job was cancelled and resubmitted with `run.sh --resume`, which
+keeps every finished task; cells with two `--mem` values).
 
 **HG008**
 
@@ -556,50 +555,36 @@ All runs: one Slurm node, `-p general`, `--mem=420G`, `--chromosomes autosome`, 
 | GAM | 116×, reads ~16 kb | reads up to Mb, ~100 MiB BGZF groups | 2×150 bp, many short records |
 | discovery wall time / MaxRSS (Slurm, all workers) | 18.6 min / 10.5 GB | 31 min / 16 GB | 2 h 25 min / 15 GB |
 | target nodes (all / autosomes) | 16.52 M / 15.80 M | 22.25 M / 21.33 M | 18.61 M / 17.83 M |
-| `--tasks` (~15,500 targets each, PacBio¹ aside) | 1,415 / 144¹ | 1,436 | 1,201 |
-| `--processes` | 48 / 36¹ | **36**² | 48 |
-| `--gam-cache-mb` | 6144 / 8192¹ | 8192 | 8192 |
-| nodes over 10,000 mappings | 0 | 0 | 683 |
-| run wall time (tasks) | 13.6 h / 48 min¹ | 5.7 h² | 3.6 h |
-| peak RSS of the whole run (sampled) | 418 / 312 GiB¹ | 348 GiB² | 239 GiB |
-| tensors SNV / INDEL | 1,180,343 / 1,923,744 | 2,372,506 / 2,511,013 | 5,000,888 / 151,465 |
-| SNV labels 1 / 2 / 0 / −1 | 8,836 / 350,827 / 86,677 / 734,003 | 8,848 / 370,175 / 313,784 / 1,679,699 | 10,626 / 315,438 / 2,635,897 / 2,038,927 |
-| INDEL labels 1 / 2 / 0 / −1 | 6,840 / 191,424 / 1,518,657 / 206,823 | 6,383 / 220,763 / 1,976,637 / 307,230 | 5,239 / 70,550 / 31,392 / 44,284 |
-| label job (1 CPU) / MaxRSS | 23 min / 12.4 GiB | 50 min / 12.9 GiB | 55 min / 13.2 GiB |
-
-¹ PacBio `tensors/` = `run/` + `run_extra/` (cells with two values: `run/` / `run_extra/`).
-`run/` (1,415 tasks at 48 processes: 1,024 in 7.6 h, then the 391 extra tasks of section 4's
-discovery rule in 6.0 h of a second job; peak 418 GiB sampled; 3,097,029 tensors) was built by an
-earlier package with fixed `--batch-nodes 512`, `--max-batch-alignments 20000`, `--gam-cache-mb 6144`
-and no per-read block cache, over a target list that is not this discovery's; `run_extra/` (144
-tasks at 36 processes, 48 min, peak 312 GiB, 7,058 tensors) built the 269,569 autosomal targets of
-this discovery that `run/` had not. The set also holds the tensors of 700,805 autosomal nodes that
-this discovery does not select. A whole PacBio run of this code has not been measured.
-² The HG008 ONT-UL run kept every converted column block of a read (no `CACHED_BLOCKS` bound) and ran
-with `--max-batch-alignments 20000` (no ONT batch came near it): at 48 processes it was killed under
-`--mem=420G` after 22 min and 35 tasks (MaxRSS 425 GiB; one of its 2048-node batches peaks at 41 GiB
-without the bound); at 36 it ran the other 1,401 tasks in 5.7 h and peaked at 348 GiB. With the
-bound, COLO829T ONT ran at 48 processes (below).
+| `--tasks` (all targets / 15,500) | 1,066 | 1,436 | 1,201 |
+| `--processes` | 48 | 48 | 48 |
+| nodes over the read cap (800 mappings) | 11,971 | 11,291 | 385,303 |
+| `--mem` | 480G, 335G | 480G, 433G | 420G, 277G |
+| peak RSS of the run (sampled) / largest task process | 305 / 14.1 GiB | 403 / 17.0 GiB | 247 / 9.6 GiB |
+| run wall time: tasks + finalize (merge, labels, task outputs deleted) | 4.7 h + 1.5 h | 7.2 h + 3.1 h | 8.0 h + 4.0 h |
+| tensors SNV / INDEL | 1,100,923 / 1,923,786 | 2,093,336 / 2,511,131 | 2,851,868 / 151,741 |
+| SNV labels 1 / 2 / 0 / −1 | 8,763 / 348,027 / 73,454 / 670,679 | 8,790 / 369,101 / 197,575 / 1,517,870 | 10,251 / 314,364 / 1,876,969 / 650,284 |
+| INDEL labels 1 / 2 / 0 / −1 | 6,840 / 191,424 / 1,518,657 / 206,865 | 6,383 / 220,763 / 1,976,637 / 307,348 | 5,239 / 70,556 / 31,433 / 44,513 |
 
 * **Memory is set by `--processes`.** Slurm kills the job when the summed RSS of all its processes
   exceeds `--mem` (`OverMemoryKill`). Long reads cost memory per process through the reads of one
   batch (section 7), short reads through the record count; the read cap and the 200,000-record
-  limit keep Illumina tasks at 2.6–6.4 GiB.
+  limit keep every Illumina task process under 11 GiB.
 * **Discovery** needs one core per worker and little memory; ask ~20 % over the last MaxRSS (16 GB →
   20G).
 * **A fallback job** is cheap insurance for a multi-day run: submit it with
   `--dependency=afternotok:<run job> --kill-on-invalid-dep=yes`; it lowers `processes` in
   `config.json` (e.g. 48 → 36) and runs `run.sh --resume`, or repeats `finalize` when the merge was
-  already done. The HG008 run directories keep such scripts (`fallback_job.sh`,
-  `prepare_and_submit.sh`, `common.env`, `discovery_job.sh`).
+  already done. `afternotok` also fires when the run job is cancelled because its own dependency
+  (e.g. `prepare`) failed, so the fallback should exit when the root has no `config.json`. Raising
+  `processes` needs a job with as many CPUs (`scontrol update NumCPUs` does not change CPUs per task),
+  and `sbatch` copies the script at submission: edit a fallback script before submitting it.
 * **Illumina** needs both the read cap and the 200,000-record limit: without the cap a single rDNA
   node of 5.4 M records cannot be built whole, and with a 20,000-record limit and the cap applied
   after decoding every batch was split and every fixed batch size down to 256 failed; HG008 Illumina
   1024-node batches held 25–92 k records (section 7).
-* **Labels.** `--snv-min-af 0.07` makes 1,312,554 HG008 Illumina SNV tensors −1 (`below_snv_min_af`);
-  a short-read run prepared with `--label-snv-min-af 0.07` gets this floor from finalize (no relabel).
-  Outside the confident region (−1, `outside_confident_region`) lie 55 % of the PacBio, 67 % of the
-  ONT-UL and 12 % of the Illumina SNV tensors.
+* **Labels.** Outside the confident region (−1, `outside_confident_region`) lie 54 % of the PacBio,
+  69 % of the ONT-UL and 18 % of the Illumina SNV tensors. The label pass (1 process, 12–15 GiB)
+  takes 17–36 min of finalize.
 
 **COLO829T** (`/scratch/jshen/data/pansoma_v2_tensors/COLO829T_<platform>/`, same graph and settings
 except `--processes`). Labels: somatic truth = the validated union SNV + INDEL VCFs
@@ -611,22 +596,29 @@ empty), germline = COLO829BL dipcall `dip.vcf.gz` + `dip.bed`.
 |---|---|---|---|
 | discovery wall time / MaxRSS (three at once on one node) | 3 h 25 min / 15.9 GB | 3 h 25 min / 11.6 GB | 3 h 23 min / 14.1 GB |
 | target nodes (all / autosomes) | 16.73 M / 16.05 M | 18.25 M / 17.49 M | 29.77 M / 28.60 M |
-| nodes over 10,000 mappings | 859 | 4,015 | 2,398 |
 | `--tasks` | 1,080 | 1,178 | 1,921 |
-| `--processes` (peak RSS) | 48 (201 GiB) | 15 (210 GiB), 36 (318 GiB) | 15 (215 GiB), 36 (360 GiB), 48 (418 GiB, `--mem=480G`) |
-| run jobs, wall time in total | 3 h 18 min | 14 h 35 min³ | 20 h 50 min³ |
-| tensors SNV / INDEL | 2,505,600 / 146,252 | 1,715,829 / 1,782,557 | 3,164,304 / 4,493,737 |
-| SNV labels 1 / 2 / 0 / −1 | 38,727 / 337,496 / 1,234,872 / 894,505 | 38,796 / 394,030 / 141,670 / 1,141,333 | 38,647 / 431,962 / 834,571 / 1,859,124 |
-| INDEL labels 1 / 2 / 0 / −1 | 1,349 / 75,488 / 34,595 / 34,820 | 1,639 / 208,154 / 1,310,682 / 262,082 | 1,755 / 253,857 / 3,822,960 / 415,165 |
-| label job (1 CPU) / MaxRSS | 33 min / 14.9 GiB | 34 min / 14.6 GiB | 2 h 26 min / 14.7 GiB |
+| `--processes` | 48 | **36**¹ | 48 |
+| nodes over the read cap (800 mappings) | 161,650 | 36,679 | 23,980 |
+| `--mem` | 231G | 454G | 448G |
+| peak RSS of the run (sampled) / largest task process | 194 / 10.8 GiB | 405 / 23.6 GiB | 430 / 66.9 GiB |
+| run wall time: tasks + finalize | 5.8 h + 2.2 h | 4.8 h + 2.5 h | 24.2 h + 4.6 h |
+| tensors SNV / INDEL | 1,701,348 / 146,555 | 1,576,803 / 1,782,626 | 2,464,433 / 4,493,849 |
+| SNV labels 1 / 2 / 0 / −1 | 38,299 / 336,549 / 934,450 / 392,050 | 37,984 / 390,720 / 120,489 / 1,027,610 | 37,770 / 424,445 / 410,794 / 1,591,424 |
+| INDEL labels 1 / 2 / 0 / −1 | 1,349 / 75,493 / 34,660 / 35,053 | 1,639 / 208,154 / 1,310,694 / 262,139 | 1,755 / 253,857 / 3,822,962 / 415,275 |
 
-³ The long-read runs were stopped and resumed several times (other process counts, fixes brought
-into their frozen source), so their wall times are not a clean measurement.
+¹ At 48 processes the fiberseq run was killed under `--mem=454G` after 13 min (MaxRSS 457 GiB,
+no task finished); at 36 it peaked at 405 GiB.
 
-* ONT at 48 processes peaked at 418 GiB (largest process 66 GiB) under `--mem=480G`.
-* `--snv-min-af 0.07` makes 480,878 Illumina SNV tensors −1 (`below_snv_min_af`).
-* 60 % (fiberseq) and 54 % (ONT) of the SNV tensors are outside the confident region (−1), mostly in
-  centromeric satellite arrays (chr1 120–125 Mb, chr10 38–42 Mb); Illumina 13 %.
+* 58 % (fiberseq) and 59 % (ONT) of the SNV tensors are outside the confident region (−1), mostly in
+  centromeric satellite arrays (chr1 120–125 Mb, chr10 38–42 Mb); Illumina 19 %.
+
+**Other graphs.** For the graph ablation the same samples are built from GAMs of two more graphs,
+in sibling directories with the same layout and settings except the graph files and `--haplotypes`:
+`<sample>_linear` (the GRCh38-only vg autoindex graph, graph files in
+`/scratch/jshen/data/Linear_Reference_VG_Indexes/graph_index`, made with `REFERENCE_SAMPLE=_gbwt_ref`;
+`--haplotypes 17`) and `<sample>_d46` (HPRC v2.1 d46, `pansoma_v2_tensors/graph_index_hprc-v2.1-d46`;
+`--haplotypes 464`). The linear graph's 32-bp nodes raise the target count: HG008T PacBio 1,967
+tasks, ONT-UL 4,380 (63.9 M autosomal targets).
 
 ---
 
@@ -694,26 +686,23 @@ the code that executes it), `native_decoder` (`available`, `reason`), `variant_o
   cache, a fallback that acts only where the code failed) can go into the run: copy the fixed file
   into `<root>/source/indexed_gam_pipeline_v4/`, keep the original next to the run, write the new
   SHA-256 into `config.source_sha256["source/indexed_gam_pipeline_v4/<file>"]`, then `--resume`.
-  HG008 ONT-UL's `blockfix_job.sh` is such a script; it refuses a file that is neither the recorded
-  original nor the patch. A change to `fastdecode.cpp` needs a recompiled `.so` as well (its source
-  SHA is compiled in).
+  A script doing this should refuse a file that is neither the recorded original nor the patch. A
+  change to `fastdecode.cpp` needs a recompiled `.so` as well (its source SHA is compiled in).
 * **Package guard**: `run`, `task` and `finalize` refuse a root whose `config.package` is not this
   package (`<root> was prepared by ..., not indexed_gam_pipeline_v4`), and a root without
-  `config.package`. The `run/` roots of section 5 (and PacBio `run_extra/`) were prepared by
-  `indexed_gam_pipeline_v3`: resume or finalize them only with their frozen `<root>/source` (`bash
-  <root>/run.sh --resume`; `cd <root>/source && python -m indexed_gam_pipeline_v3.orchestrate
-  finalize --root <root>`); PacBio `run/` has no `package` key, is finished and must not be
-  re-finalized. The merged sets of section 5 are relabelled by this package's
-  `tensor_postprocessing label`, which reads their merged layout under
-  its earlier name (section 8, "Format names"). On the data side this runs from
+  `config.package`. A started root runs with its frozen `<root>/source` (`bash <root>/run.sh
+  --resume`; `cd <root>/source && python -m indexed_gam_pipeline_v4.orchestrate finalize --root
+  <root>`), never with a newer checkout. The merged sets of section 5 are relabelled by
+  `tensor_postprocessing label`, which also reads merged layouts under their earlier name
+  (section 8, "Format names"). On the data side this runs from
   `/scratch/jshen/data/pansoma_v2_tensors/pipeline_code/` (a `git archive` of this package plus the
   compiled `.so`; the commit in `pipeline_code/git_head.txt`) through its `tools/jobs/relabel.sh`,
   which runs the package it is in (section 4, "Tools"): `sbatch -J NAME -o LOG
   pipeline_code/indexed_gam_pipeline_v4/tools/jobs/relabel.sh TENSORS SOMATIC_VCF SOMATIC_BED
   GERMLINE_VCF GERMLINE_BED TRUTH_DIR [SNV_MIN_AF [INDEL_MIN_AF]]` (`''` skips one); no backup is
   kept (`label` replaces a kind's label files only when all are written). Each sample's `README.txt` has its
-  relabel command. A run prepared with the label AF floors (`--label-snv-min-af 0.07` for short
-  reads) needs no relabel: its finalize applies them.
+  relabel command. A run prepared with label AF floors (`--label-snv-min-af`, `--label-indel-min-af`)
+  needs no relabel: its finalize applies them.
 * The queue ledger (`queue_status.json`: per-task state, PIDs, wall times) is written at start,
   whenever a task starts or ends, and at the end.
 
@@ -769,8 +758,8 @@ PacBio record instead of ~2 MiB with the Python decoder (the heaviest PacBio bat
 
 Knobs, in order of effect:
 
-1. `--processes`: total ≈ processes × per-process peak. On 420 GB nodes: 48 for PacBio and
-   Illumina, 36 for ONT-UL (COLO829T ONT at 48 peaked at 418 GiB under `--mem=480G`; section 5).
+1. `--processes`: total ≈ processes × per-process peak. At 48: PacBio 305 GiB, Illumina 194–247 GiB,
+   ONT-UL 403–430 GiB (section 5); fiberseq needs 36 (405 GiB; 48 went over 454 GiB).
 2. `--batch-nodes` / `--max-node-span`: fewer target nodes per batch → fewer reads decoded at once
    (long reads still bring their full length). `auto` takes larger batches only where they read
    fewer GAM bytes per node.
@@ -783,7 +772,7 @@ Knobs, in order of effect:
    3,352.
 
 Other jobs, measured (Slurm MaxRSS): `prepare` with a 6 GB node_stats.json 3.6–5.6 GB; labelling a
-genome 12.4–15.7 GiB on 1 CPU (section 5); the parallel merge of the HG008 Illumina chr22 tasks with
+genome 12–16 GiB on 1 CPU (section 5); the parallel merge of the HG008 Illumina chr22 tasks with
 8 workers 5.6 GB.
 
 ---
@@ -926,7 +915,8 @@ pipeline's call of which site allele each record carries (blank for OTHER), so b
 their strand mix (channel 7) can be read directly. The REF allele of an SNP/DEL is
 channel 5 at the site columns; an INS has an empty REF. Path counts are coded relative to the
 graph's haplotype count H (`--haplotypes`, references included: HPRC v1.1 d9 90, v2.1 d46 464 =
-462 haplotypes + GRCh38 + CHM13, a GRCh38-only graph 1; `candidates.encode_count`):
+462 haplotypes + GRCh38 + CHM13, the GRCh38-only vg autoindex graph 17 = GRCh38 + 16 path-cover
+paths on every node; `candidates.encode_count`):
 
 | distinct paths | code |
 |---|---|
@@ -994,10 +984,10 @@ to its threshold. The merged manifest (`layout` `chromosome-shards`, `kind`, `da
 `distinct-gbwt-paths`, reference-path `format` `gfa-reference-path`, chr index `format`
 `chr-node-ranges`, labels `format` `truth-labels`. Existing files name the same formats with a `-v1`
 suffix: the HPRC v1.1 d9 graph index, its reference-path directory (under the key `version`) and the
-merged sets of section 5 (`layout`). Readers accept both through the one table `common.EARLIER_FORMAT_NAMES`
-(`GraphIndex`, `ReferencePath`, `label`, the merge's check for an existing merged layout); writers
-never produce the suffixed names. (The chr-index JSON under `$G` carries its name the same way;
-`ChrIndex` reads only its `tsv_sha256`. The tensor manifests and summary records of the section 5
+earlier build of the section 5 sets in `backup_ch6_linear100_20261001` (`layout`). Readers accept
+both through the one table `common.EARLIER_FORMAT_NAMES` (`GraphIndex`, `ReferencePath`, `label`,
+the merge's check for an existing merged layout); writers never produce the suffixed names. (The chr-index JSON under `$G` carries its name the same way;
+`ChrIndex` reads only its `tsv_sha256`. The tensor manifests and summary records of the backup
 sets also spell the four tensor names and `sample_unit` the earlier way, under keys ending in
 `_version`, with a `schema_version`; `label` does not read them.) Their channel 6 is a different code,
 `tensor_storage_version` `int8-count-linear100-log2-v1`: the count itself up to 100, then
@@ -1035,7 +1025,7 @@ pass are the native graph-index builder test and the two vg cases of `test_prep_
 need the environment variables of the third command; the second pass also skips the five golden
 tests.
 
-165 tests in 14 test modules cover: GAI reading, cache/scan equivalence (limits 1, 2048 and 64 MiB),
+168 tests in 14 test modules cover: GAI reading, cache/scan equivalence (limits 1, 2048 and 64 MiB),
 refusal of cache 0, of a GAI without the `'GAI!'` magic and of an unknown GAI format number, bin
 arrays against the per-bin scan, the MAPQ-filtered cache, the capped fetch (each node its smallest
 record digests whatever else is asked for, the reader's key equal to the builder's digest); capped
@@ -1062,7 +1052,10 @@ standalone `finalize` after an interrupted one, finalize labels with the AF floo
 schema and metric opens, a reference-path directory with `version` opens, `label` and the merge's
 refusal work on a merged set with the suffixed layout); `compare_runs` itself; the once-per-graph and once-per-GAM tools (`graph_prep audit` recounting every node
 identically for 1–5 processes and more processes than bytes, a wrong count of an unsampled node, a
-wrong sequence, a P line and a path node outside the index caught and reported to `.failed`; `gam_prep check` passing a sorted GAM
+wrong sequence, a P line and a path node outside the index caught and reported to `.failed`, node IDs with
+gaps checked against the graph index; `ref-path-scan` over generic paths (P lines, `--reference-sample
+_gbwt_ref`) writing the same directory as over W lines; `chr-index` blocks, the walk check and
+interleaved non-autosomal groups (one interval per run, one block); `gam_prep check` passing a sorted GAM
 and refusing an unsorted one or another GAM's GAI; with vg: a GBZ → `gfa` keeping the node IDs,
 `components` of three chromosomes with an off-reference node, `gam_prep sort` publishing a checked
 GAM with the input's `vg stats -a` counts); and static checks (no

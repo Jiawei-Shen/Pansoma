@@ -36,9 +36,9 @@ A record is the site's representative allele A1, the allele the model scores. Th
     a PoN raises precision afterwards. --threshold T sets it. --threshold predict keeps predict's own call
     (`pred`, made with the checkpoint's best-F1 threshold before the probabilities were rounded).
   - LowAF: AF < --min-af. The default is the AF floor of the checkpoint's training labels (data[].labels
-    snv_min_af / indel_min_af; e.g. SNV 0.07 on the Illumina sets, none on the long-read sets): the model never
-    trained on tensors below it (below_snv_min_af). The labels of the predicted set do not change it (a relabel,
-    or a new sample without labels).
+    snv_min_af / indel_min_af; none on the sets built at AF 0.08, SNV 0.07 on the earlier Illumina sets): the
+    model never trained on tensors below it (below_snv_min_af). The labels of the predicted set do not change it
+    (a relabel, or a new sample without labels).
 - Tensors with p_somatic < --min-score (default 0.01) that are not called are not written. The LowQual records
   are kept so that vcfeval can draw the precision/recall curve below the threshold.
 """

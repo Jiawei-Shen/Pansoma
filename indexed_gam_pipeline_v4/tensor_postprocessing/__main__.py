@@ -31,7 +31,7 @@ def main(argv=None):
     p.add_argument("--germline-bed", required=True)
     p.add_argument("--truth-dir", required=True, help="where <set>.graph.tsv truth tables are written")
     p.add_argument("--recall-dir", help="where recall reports go (default: --tensors)")
-    p.add_argument("--snv-min-af", type=float, help="SNV tensors with a lower AF are -1 (short-read sets: 0.07)")
+    p.add_argument("--snv-min-af", type=float, help="SNV tensors with a lower AF are -1")
     p.add_argument("--indel-min-af", type=float, help="INDEL tensors with a lower AF are -1")
 
     args = parser.parse_args(argv)

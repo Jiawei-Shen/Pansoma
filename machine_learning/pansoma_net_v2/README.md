@@ -199,7 +199,7 @@ calls somatic there. `predict --offref-site90 W` (default 10; 0 turns it off) sc
 again with its ch6 cells below the every-haplotype code raised to it in the site columns (the middle column ± W;
 uncovered cells stay 0), and calls it somatic when somatic is the most probable class of those probabilities. The
 every-haplotype code depends on the set's channel-6 storage (`data.PATH_COUNT_ALL`): 90 on
-`int8-count-linear100-log2` (the HPRC v1.1 d9 sets: 90 haplotype paths, stored as the count), 100 on
+`int8-count-linear100-log2` (the earlier HPRC v1.1 d9 build: 90 haplotype paths, stored as the count), 100 on
 `int8-count-haplotypes100` (the count relative to the build's `--haplotypes` H, H → 100). Its record adds p_offref_non,
 p_offref_somatic, p_offref_germline and offref_call. `.metrics.json` adds `offref_rescue` (tensors, calls before
 and after, `floor`) and the rule `pipeline`: offref_call on the off-reference tensors, the checkpoint's validation recall-0.9
@@ -258,8 +258,9 @@ without validation thresholds (trained before `val.somatic_at_recall`), set `THR
     A record with predict's off-reference rescue is called by offref_call instead; its QUAL is from
     p_offref_somatic and INFO OFFREF_P_* keeps the rescored probabilities. INDEL predictions have no rescue.
   - LowQual: not called.
-  - LowAF: below the AF floor of the checkpoint's training labels (Illumina SNV 0.07; none for INDEL or the
-    long-read sets). A relabel of the predicted set, or a new sample without labels, does not change it.
+  - LowAF: below the AF floor of the checkpoint's training labels (none on the sets built at AF 0.08 for both
+    kinds; SNV 0.07 on the earlier Illumina sets in `backup_ch6_linear100_20261001`). A relabel of the predicted
+    set, or a new sample without labels, does not change it.
 - Tensors with p_somatic < `--min-score` (0.01) that are not called are left out. The LowQual records give
   vcfeval its curve.
 
@@ -362,8 +363,8 @@ renames them. Reading the summaries takes about a minute per
 2.5 M tensors.
 
 **Channel 6 storage.** The path-count channel has two codes: `int8-count-linear100-log2` (HPRC v1.1 d9 sets built
-before `--haplotypes` existed, all existing checkpoints were trained on them: the count up to 100, then 100 +
-ceil(log2(count − 99))) and `int8-count-haplotypes100` (what indexed_gam_pipeline_v4 builds: relative to
+before `--haplotypes` existed, now in `pansoma_v2_tensors/backup_ch6_linear100_20261001`; all checkpoints trained
+before 2026-10-01 read only them: the count up to 100, then 100 + ceil(log2(count − 99))) and `int8-count-haplotypes100` (what indexed_gam_pipeline_v4 builds: relative to
 `--haplotypes` H, H → 100, one code per missing haplotype down to 51). A model reads one of them: `train` refuses
 sets that differ (`data.common_path_count`) and records it in the checkpoint (`path_count_storage`,
 `path_count_haplotypes`); `train --resume` and `predict` refuse sets coded otherwise than the checkpoint, before
