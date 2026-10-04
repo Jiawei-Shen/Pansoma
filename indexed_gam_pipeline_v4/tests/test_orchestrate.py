@@ -340,6 +340,33 @@ class EndToEndTest(unittest.TestCase):
             self.assertEqual((second.returncode, json.loads(second.stdout)), (0, {}), second.stderr)
             self.assertFalse((run / "finalize_report.json").exists())
 
+    def test_run_without_finalize_then_a_separate_finalize(self):
+        """`run --no-finalize` stops at `complete` with the task outputs in place; `finalize` (another process,
+        as a smaller Slurm job) then merges them like `run` would have."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            gam, _ = af_gam(root)
+            graph = graph_fixture(root / "graph.sqlite", [(n, "AAAAAA", 331) for n in (10, 20, 30, 40, 50)])
+            nodes = root / "nodes.txt"
+            nodes.write_text("10\n20\n30\n40\n50\n")
+            run = root / "run"
+            self.prepare(run, gam, graph, nodes, min_variants=3, chr_index=write_chr_table(root / "chr.tsv"),
+                         chromosomes="autosome", merge_shard_size=4)
+            with patch.dict(os.environ, dict(SLURM_CPUS_PER_TASK="2")), redirect_stdout(io.StringIO()):
+                orchestrate.main(["run", "--root", str(run), "--no-finalize"])
+            status = json.loads((run / "status.json").read_text())
+            self.assertEqual((status["status"], status.get("merged")), ("complete", None))
+            self.assertNotIn("merge", json.loads((run / "outputs.json").read_text()))
+            self.assertEqual(len(list((run / "tensors").glob("SNV/task_*"))), 3)
+            command = [sys.executable, "-m", f"{orchestrate.PACKAGE}.orchestrate", "finalize", "--root", str(run)]
+            result = subprocess.run(command, cwd=REPO, env=clean_environment(), capture_output=True, text=True)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual(list(json.loads(result.stdout)), ["merge"])
+            status = json.loads((run / "status.json").read_text())
+            self.assertEqual((status["status"], status["merged"]), ("finalized", True))
+            self.assertFalse(list((run / "tensors").glob("*/task_*")))
+            self.assertEqual(set(json.loads((run / "tensors/SNV/manifest.json").read_text())["chromosomes"]), {"chr1"})
+
     def test_prepare_refuses_merge_or_selection_without_chr_index(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

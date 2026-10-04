@@ -529,7 +529,9 @@ def set_aside_partial(root, config, pending):
     return moved
 
 
-def run(root, resume=False):
+def run(root, resume=False, finalize_after=True):
+    """Run the pending tasks; then finalize (merge + labels) unless finalize_after is False, which leaves the
+    root `complete` for a separate `finalize` job (the tasks need the large memory, the merge and labels ~15 GiB)."""
     root = Path(root).resolve()
     config = read_config(root)
     if (root / "outputs.json").exists() and "merge" in read_json(root / "outputs.json"):
@@ -562,7 +564,8 @@ def run(root, resume=False):
             catalog = catalog_outputs(root, config)
             status.update(status="complete", tensors=catalog["tensors"], tensors_by_type=catalog["tensors_by_type"])
             write_json(root / "status.json", status)
-            finalize(root, config)  # a no-op with merge_shard_size 0
+            if finalize_after:
+                finalize(root, config)  # a no-op with merge_shard_size 0
             status.update({k: v for k, v in read_json(root / "status.json").items() if k not in status or
                            k in ("status", "merged", "merge_layout", "labeled")})
     except BaseException as error:
@@ -664,6 +667,9 @@ def make_parser():
     r = commands.add_parser("run", help="execute all pending tasks")
     r.add_argument("--root", required=True)
     r.add_argument("--resume", action="store_true", help="skip validated tasks; set aside partial outputs and rerun them")
+    r.add_argument("--no-finalize", action="store_true",
+                   help="stop after the tasks (status complete); merge + labels later with `finalize` in a job "
+                        "with less memory (~15 GiB at most on the genome sets, against up to ~450 GiB for the tasks)")
     z = commands.add_parser("finalize", help="merge + label a completed run (what `run` does at its end)")
     z.add_argument("--root", required=True)
     t = commands.add_parser("task", help="run and validate one task (used by `run`)")
@@ -684,7 +690,7 @@ def main(argv=None):
         verify(root, config)
         print(json.dumps(finalize(root, config), indent=2, default=str))
     else:
-        run(args.root, args.resume)
+        run(args.root, args.resume, finalize_after=not args.no_finalize)
 
 
 if __name__ == "__main__":

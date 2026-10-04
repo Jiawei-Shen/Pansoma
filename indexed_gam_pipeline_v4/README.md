@@ -57,7 +57,8 @@ $PY -m $P.orchestrate prepare --root /path/to/run --tensors /path/to/tensors \
 sbatch -p general --cpus-per-task=48 --mem=420G --time=14-00:00:00 \
        --output=/path/to/run/slurm-%j.out /path/to/run/run.sh
 sbatch ... /path/to/run/run.sh --resume               # after a failure: redo only unfinished tasks
-$PY -m $P.orchestrate finalize --root /path/to/run    # only the merge + labels (idempotent)
+sbatch ... /path/to/run/run.sh --no-finalize          # tasks only (big memory); then, as its own small job:
+$PY -m $P.orchestrate finalize --root /path/to/run    # only the merge + labels (idempotent, ~15 GiB)
 
 # (re-label by hand, e.g. new truth sets or AF floors above the build's) as finalize does
 $PY -m $P.tensor_postprocessing label --tensors /path/to/tensors --reference-path $G/hprc-v1.1-mc-grch38.d9.grch38_path \
@@ -346,7 +347,8 @@ prepare
                              in [0, 1], needs the labels
   --label-indel-min-af F     lower-AF INDEL tensors are labelled -1; in [0, 1], needs the labels
 
-run --root R [--resume]      execute the tasks, then finalize (section 6)
+run --root R [--resume] [--no-finalize]
+                             execute the tasks, then finalize (section 6); --no-finalize stops at `complete`
 task --root R --index I      one task (spawned by run)
 finalize --root R            merge + labels as frozen at prepare; skips finished steps
 ```
@@ -660,7 +662,9 @@ the code that executes it), `native_decoder` (`available`, `reason`), `variant_o
 3. `verify` again (nothing the tasks depend on changed while they ran), then `outputs.json` (every
    task directory with its tensor count; the capped nodes of all tasks gathered into
    `<root>/downsampled_nodes.tsv`) and `status.json` `complete`;
-4. **finalize**: with `--merge-shard-size N` the task outputs are merged into
+4. **finalize** (skipped with `--no-finalize`: then `orchestrate finalize --root R` as a separate job; the
+   merge and labels peak at ~15 GiB on the genome sets, the tasks at up to ~450 GiB, so a run job that
+   finalizes holds that memory for the 2–7 h of merge and labels): with `--merge-shard-size N` the task outputs are merged into
    `<tensors>/<kind>/<chrom>_shard_*` (chr1–22; other blocks under `<tensors>/non_autosomal/`) by
    `min(8, processes)` workers, byte-verified, the task directories deleted unless
    `--keep-sources`, and with the truth options every merged tensor labelled (somatic 1,
