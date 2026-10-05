@@ -12,10 +12,10 @@ record decoder); `orchestrate` runs a whole genome on one Slurm node as many sma
 with a byte-verified per-chromosome merge and truth labels (`tensor_postprocessing`).
 
 ```
-runtime  5,082 lines of Python in 17 files + fastdecode.cpp (659 lines); frozen per run: 21 files (those 18,
-         the compiled decoder and the two READMEs), 2.55 MB, 2.15 MB of it the compiled decoder
+runtime  6,250 lines of Python in 18 files + fastdecode.cpp (659 lines); frozen per run: 22 files (those 19,
+         the compiled decoder and the two READMEs), 2.64 MB, 2.15 MB of it the compiled decoder
 tools    1,362 lines of Python in 7 files + gbz_graph_index.cpp (75 lines); not frozen
-tests    5,326 lines of Python in 17 files (+ golden_hashes.json), 168 tests, ~70 s on a quiet node
+tests    6,581 lines of Python in 21 files (+ golden_hashes.json), 187 tests, ~100 s on a quiet node
 ```
 
 ---
@@ -38,6 +38,8 @@ $PY -m $P.native check                     # will the builder use it? if not, wh
 sbatch -J graph_prep -o LOG $P/tools/jobs/graph_prep.sh graph.gbz OUTDIR [FASTA]
 # (once per GAM) sort the giraffe GAM and write its GAI (vg gamsort -i), checked before publication
 sbatch -J gam_sort -o LOG $P/tools/jobs/gam_sort.sh sample.gam     # -> sample.sorted.gam + .gai
+# (once per long-read GAM) the per-record index: a fetch then reads only the records its batch uses
+sbatch -J gri -o LOG $P/tools/jobs/build_record_index.sh sample.sorted.gam   # -> sample.sorted.gam.gri
 
 # (once per sample) target nodes: > 5 % of the MAPQ>5 mappings carry an edit after the builder's
 # indel left-normalization. Parallel over GAM segments: one core per worker, 10-16 GB in total.
@@ -85,12 +87,13 @@ flowchart TD
         GBZ["GBZ graph"] --> GIDX[("graph.sqlite<br/>node_id, seq, distinct_path_count")]
         GBZ --> PREP["graph_prep: GFA, reference path,<br/>chr index, index audit"]
         RAW["giraffe GAM"] --> GAM["sorted BGZF GAM<br/>(gam_prep sort)"] --> GAI[".gam.gai (vg gamsort -i)"]
+        GAM --> GRI[".gam.gri (gam_record_index;<br/>long reads)"]
         GAM --> DISC["run discover<br/>(left-normalized edits per node)"] --> NODES["target_nodes.txt<br/>node_stats.json"]
     end
 
     NODES --> BATCH{{"batches of 512 / 1024 / 2048 nodes (auto)"}}
     subgraph batch["per batch (build.py)"]
-        F["1 fetch complete alignments touching the batch<br/>(GAI bins → BGZF groups, LRU group cache without MAPQ ≤ 10 records;<br/>read cap: per node the 800 smallest record digests)"]
+        F["1 fetch complete alignments touching the batch<br/>(GAI bins → BGZF groups, LRU group cache without MAPQ ≤ 10 records;<br/>with a .gri only the batch's records of those groups;<br/>read cap: per node the 800 smallest record digests)"]
         G["2 graph lookup: sequence + path count<br/>for target and every visited context node"]
         D["3 decode every edit → columns, visits, left-normalized<br/>candidate observations on target nodes"]
         P["4 prefilters on the capped records: ALT bound < min_variants,<br/>ALT bound / exact coverage < AF threshold"]
@@ -101,6 +104,7 @@ flowchart TD
     end
     BATCH --> F
     GAI --> F
+    GRI --> F
     GIDX --> G
     W --> OUT[("SNV, INDEL and shared directories per task")]
     OUT --> MERGE["finalize: parallel merge per chromosome (32,768 per shard), labels"]
@@ -134,7 +138,8 @@ Key invariants:
 |---|---|
 | `common.py` | `write_json` (atomic, `indent=2` plus newline), `read_json`, `stamp`, `sha256_file`, `new_output`, `load_nodes`, `batches`; `EARLIER_FORMAT_NAMES` / `format_name` (section 8, "Format names") |
 | `vg_pb2.py` | generated protobuf bindings for `vg.proto` (do not edit or regenerate; its deterministic serialization defines record digests and the read cap) |
-| `gam_reader.py` | protobuf stream framing (incl. the giraffe `PARAMS_JSON` / foreign-group skip), `scan_gam`, `IndexedGam`: GAI bins (the format with the `'GAI!'` magic, format number 1; bins tested all at once as arrays), merged virtual-offset runs, BGZF group seek, bounded LRU group cache that keeps no record with MAPQ ≤ `--min-mapq`, `fetch` (file order, each record once), `fetch_capped` (the read cap while reading: per node the records with the smallest `record_key`) |
+| `gam_reader.py` | protobuf stream framing (incl. the giraffe `PARAMS_JSON` / foreign-group skip), `scan_gam`, `BgzfReader` (pysam's BGZF seek/tell/read and errors over 16 MiB `pread`s instead of htslib's 32 KiB reads; group framing on the inflated block), `IndexedGam`: GAI bins (the format with the `'GAI!'` magic, format number 1; bins tested all at once as arrays), merged virtual-offset runs, then either the GAI walk (BGZF group seek, bounded LRU group cache that keeps no record with MAPQ ≤ `--min-mapq`) or, with a record index, the record path (only the runs' records that may visit the batch, coalesced `pread`s); `fetch` (file order, each record once), `fetch_capped` (the read cap while reading: per node the records with the smallest `record_key`) |
+| `gam_record_index.py` | the per-record index `<GAM>.gri` of a long-read GAM (section 4): format, parallel builder and its refusals, loader (record windows by smallest node ID, long-record table), `open_for` (`PANSOMA_GAM_RECORD_INDEX`); CLI `build` / `check` / `info` |
 | `graph_index.py` | read-only `GraphIndex` over the graph SQLite (sequence + distinct path count per node) |
 | `candidates.py` | the data path from GAM record to site tensor: `decode_alignment` (+ `left_align_indels`, `indel_runs`, `indel_observations`: the part `fastdecode.cpp` ports), `NodeReads`/`VisitView` support counting (with the scan fallback), `alt_support_bounds`, `exact_coverage`, `SiteLayout`, `make_site_tensor`, `average_linkage`, format constants |
 | `native.py`, `fastdecode.cpp` | optional C++ decoder: `compile`/`check`, load-time SHA + 300-record self-test, `select_decoder` (`--decoder`, `PANSOMA_DECODER`), `NativeDecoder` with per-record Python fallback, `ColumnArray` with its per-read block cache; `Discovery` counters and `group_nodes` for `run discover` |
@@ -144,7 +149,8 @@ Key invariants:
 | `orchestrate.py` | whole-genome controller: `prepare` / `run [--resume]` / `task` / `finalize`, `node_costs`, `execute_queue`, `validate_shards`, `verify`, `read_config` (package guard), `MemoryRecorder` |
 | `tensor_postprocessing/` | node → chromosome blocks (also `--chromosomes`), the GRCh38 reference-path reader, parallel per-chromosome merge, truth labels; CLI `merge`/`label` (own [README](tensor_postprocessing/README.md)) |
 
-Import order is top-down: `common` ← `gam_reader`/`graph_index` ← `candidates` ← `native` ←
+Import order is top-down: `common` ← `gam_reader` (+ `gam_record_index`, imported when a reader
+opens)/`graph_index` ← `candidates` ← `native` ←
 `build` ← `run` ← `orchestrate`; `tensor_postprocessing` uses only `common`/`graph_index` and is
 used by `build` (`--chromosomes`) and `orchestrate` (`finalize`).
 
@@ -160,7 +166,7 @@ static test enforces both):
 | `tools/validate_examples.py` | independent audit of a `--debug-rows` output against the GAM and graph |
 | `tools/binary_requirements.py` | newest GLIBC/GLIBCXX/CXXABI symbol versions and AVX/AVX-512/BMI use of a binary |
 | `tools/compare_runs.py` | byte and normalized comparison of two run roots, task or build directories (stdlib only) |
-| `tools/jobs/graph_prep.sh`, `tools/jobs/gam_sort.sh`, `tools/jobs/relabel.sh` | Slurm job scripts (shell) that run the package they are in: every once-per-graph step for one GBZ; the sort of one GAM; `tensor_postprocessing label` of one merged set |
+| `tools/jobs/graph_prep.sh`, `tools/jobs/gam_sort.sh`, `tools/jobs/build_record_index.sh`, `tools/jobs/relabel.sh` | Slurm job scripts (shell) that run the package they are in: every once-per-graph step for one GBZ; the sort of one GAM; the record index of one GAM; `tensor_postprocessing label` of one merged set |
 
 **Tests** (`tests/`, a subpackage) — section 9.
 
@@ -325,6 +331,61 @@ Compiled modules are per Python version and platform; `prepare` freezes the pack
 module included, so compile *before* `prepare`. Portability report of the module:
 `python -m indexed_gam_pipeline_v4.tools.binary_requirements indexed_gam_pipeline_v4/_fastdecode*.so`.
 
+### `gam_record_index build | check | info`
+
+```
+build --gam GAM [--index GAI] [--processes 8] [--force]    write GAM.gri (never over an existing one)
+check --gam GAM [--index GAI] [--sample 2000] [--groups 8]  verify it; exit 1 on a problem
+info  --gam GAM                                             print its header
+sbatch -J NAME -o LOG $P/tools/jobs/build_record_index.sh GAM [GAI]     build + check (8 CPUs, 16G)
+```
+
+A long-read GAM group holds 1,000 records (14–37 MB compressed), and vg's GAI files a group under the
+smallest node-ID bin that holds all of its records: with the node-ID blocks of the Minigraph-Cactus
+graphs most groups land in coarse bins, so the GAI runs of one ONT batch cover 40–100 groups (1–3 GB)
+for a few hundred records. The record index `<GAM>.gri` (next to the GAM file itself) lists every
+record that has a mapping, in file order: its virtual offsets, group, MAPQ and visited node IDs as two
+intervals (split at the largest gap between them). With it `IndexedGam` reads only the records whose
+intervals hold a batch node, whose MAPQ is above `--min-mapq` and whose group lies in the batch's merged
+GAI runs (the records the GAI walk would decode and return), with a few coalesced `pread`s, and filters
+them with the same code: the record path. Batches are still priced and split by the GAI runs, so batches,
+tensors and every output are unchanged; only the masked `gam_query` counters (`groups`,
+`decoded_alignments`) and `gam_group_cache` differ.
+
+**Which path a reader takes** (`PANSOMA_GAM_RECORD_INDEX`): `auto` (default) uses `<GAM>.gri` when its
+stamps match the GAM (size, mtime), the GAI (size, mtime, SHA-256) and `vg_pb2.py` (SHA-256), else the
+GAI walk; `off` always the GAI walk; `require` raises when the index is missing or stale; `memory` scans
+the same arrays when the reader opens (tests, and the golden check through the record path; it falls back
+like `auto` when the scan refuses the GAM). A fetch whose merged runs do not all map to group ordinals
+(bins edited after opening) takes the GAI walk. A reader prints `GAM reader: record index <path>` or
+`GAM reader: GAI walk (…)` to stderr (the task log; not under `auto` without a `<GAM>.gri`) and keeps
+`mode`, `record_index`, `reason` (why an index there is not used) and the counters `record_fetches`,
+`fallback_fetches`, `selected_records`, `record_bytes_read`, `preads` in its `cache_stats` (the
+manifests' `gam_group_cache`). `orchestrate prepare` stamps an existing index into
+`config.inputs.record_index`, so `verify` refuses a run whose index changed.
+
+**Build.** One pass over the GAM in 4 × `--processes` segments cut at GAI run starts; every record is
+parsed with the package's `vg_pb2`. It refuses (exit 1, nothing written) unless every BGZF block inflates
+with matching CRC32 and ISIZE, every record parses and visits no negative node ID, the segment walks meet,
+and every GAI run starts at a group start (in any form of its virtual offset) and ends at a group start or
+at a form of EOF after the last group: the runs the GAI walk reads without an error. For a GAM it refuses,
+the GAI walk reads and raises exactly as without an index. A GAM with less than 2 KB compressed per record
+(short reads, whose GAI walk reads less than twice the records' bytes) is refused unless `--force`. The
+index is written to `<GAM>.gri.tmp` (created exclusively), fsynced and renamed.
+
+**File** (little-endian, sections 64-byte aligned): `PGRI\0\1\r\n`, a JSON header (format
+`pansoma-gam-record-index-1`, the stamps, counts, `W`, `sorted_by_lo1`, `checkpoint_stride`, the section
+table), `groups` (each group's start as the walk's `tell()` gives it, PARAMS_JSON and empty groups
+included, then EOF), `gai_map` (every GAI run offset → the group a walk from there reads first, and the
+group before which a walk to there stops; −1 where it would fail), `records` (56 B each), `checkpoints`
+(the smallest node ID of every 4,096th record; when it never decreases, gamsort's order) or `order` (the
+records by it, read whole; fixtures and unsorted GAMs), `long` (the records whose node-ID span exceeds
+`W`, the smallest power of two ≥ 4,096 that at most 1 % of the spans exceed, at most 2^26) and a SHA-256
+trailer. A batch with nodes b0..b1 reads the records with smallest node ID in [b0 − W, b1] (a window of
+the table, extended as batches move forward) plus the long ones. `check` verifies the trailer, the
+stamps, the structure, the GAI map against the GAI, `--sample` random records re-read from the GAM and
+`--groups` random groups walked again.
+
 ### `orchestrate prepare | run | task | finalize`
 
 ```
@@ -428,6 +489,8 @@ sbatch -J graph_prep -o LOG $P/tools/jobs/graph_prep.sh GBZ OUTDIR [FASTA]
 $PY -m $P.tools.gam_prep sort --gam IN.gam --output IN.sorted.gam [--threads 8] [--tmp-dir /tmp] [--vg VG]
 $PY -m $P.tools.gam_prep check --gam IN.sorted.gam [--index GAI] [--input IN.gam] [--threads 8]
 sbatch -J gam_sort -o LOG $P/tools/jobs/gam_sort.sh GAM [OUTPUT]      # VERIFY=1: also check --input
+# per-record index of a sorted long-read GAM (once per GAM; section 4, gam_record_index)
+sbatch -J NAME -o LOG $P/tools/jobs/build_record_index.sh GAM [GAI]    # FORCE=1: a short-read GAM too
 # labels of one merged set as a Slurm job
 sbatch -J NAME -o LOG $P/tools/jobs/relabel.sh TENSORS SOMATIC_VCF SOMATIC_BED GERMLINE_VCF GERMLINE_BED TRUTH_DIR \
     [SNV_MIN_AF [INDEL_MIN_AF]]    # '' skips one: ... '' 0.10; REFERENCE_PATH=DIR: another graph's
@@ -480,7 +543,8 @@ $PY -m $P.tools.compare_runs A B [--mask DOTTED.KEY ...] [--report FILE]
   paths; `graph_prep.sh` takes it as `REFERENCE_SAMPLE`), and `components` then cuts `vg chunk -p chr1`;
   `chr-index` writes `<prefix>.tsv` plus `<prefix>.json` (`format` `chr-node-ranges`, `tsv_sha256`,
   which `ChrIndex` checks).
-* **Job scripts** (`tools/jobs/`, plain shell with `#SBATCH` defaults for `-p general`). Each runs
+* **Job scripts** (`tools/jobs/`, plain shell with `#SBATCH` defaults for `-p general`;
+  `build_record_index.sh`: `-p general,gpu --exclude=tsingtao`). Each runs
   the package it lives in: started with `bash`, the one around its own path; under `sbatch`, which
   runs a copy of the script, the one around the submitted path (job record, `scontrol show job`:
   `Command=`). So the checkout's scripts run the checkout, and
@@ -498,6 +562,9 @@ $PY -m $P.tools.compare_runs A B [--mask DOTTED.KEY ...] [--report FILE]
     `$SLURM_CPUS_PER_TASK − 2` gamsort threads and `$GAMSORT_TMP` (default `/tmp`), with `VERIFY=1`
     also `gam_prep check --input`. 10 CPUs, `--mem=64G`, 6 days. Slurm does not track the nodes' local
     disks (`TmpDisk=0`), so concurrent sorts get different nodes (`sbatch -w NODE`).
+  * `build_record_index.sh GAM [GAI]`: `gam_record_index build --processes $SLURM_CPUS_PER_TASK`, then
+    `check`; it never replaces an existing `<GAM>.gri`; `FORCE=1` indexes a short-read GAM too. 8 CPUs,
+    `--mem=16G`, 1 day.
   * `relabel.sh`: section 6; the reference path is `$REFERENCE_PATH`, else the one the set's current
     labels used (`reference_path` of `TENSORS/SNV/labels.manifest.json`); 1 CPU, `--mem=19G` (label
     peak 15.7 GiB, COLO829T), 6 h.
@@ -637,8 +704,9 @@ tasks, ONT-UL 4,380 (63.9 M autosomal targets).
    contiguous, near-equal node lists (`parts/nodes_NNNN.txt`) and, with `--node-stats`, records
    each task's `predicted_cost` (Σ discovery `not_perfect` over its nodes; reading a 6 GB
    node_stats.json takes ~1 min and ~7 GB);
-4. fingerprints every input (GAM, GAI, graph index, node list, chr index, reference path, truth
-   files) and writes `config.json` and `run.sh` (`cd <root>/source && exec <python> -m
+4. fingerprints every input (GAM, GAI, the record index `<GAM>.gri` when there is one, graph index,
+   node list, chr index, reference path, truth files; a record index that no longer matches the GAM,
+   the GAI or `vg_pb2.py` fails prepare) and writes `config.json` and `run.sh` (`cd <root>/source && exec <python> -m
    indexed_gam_pipeline_v4.orchestrate run --root <root> "$@"`). It prints a summary including
    `native_decoder`.
 
@@ -748,7 +816,7 @@ lists) and the files it names; without a merge, `<root>/outputs.json` and the
 Per builder process, the peak is roughly
 
 ```
-GAM group cache (≤ --gam-cache-mb)
+GAM group cache (≤ --gam-cache-mb; unused on the record path)
 + decoded reads of one batch      ← dominant for long reads
 + graph records for the batch's context nodes
 + shard buffer (--shard-size × 161,600 B per output)
@@ -1029,10 +1097,19 @@ pass are the native graph-index builder test and the two vg cases of `test_prep_
 need the environment variables of the third command; the second pass also skips the five golden
 tests.
 
-168 tests in 14 test modules cover: GAI reading, cache/scan equivalence (limits 1, 2048 and 64 MiB),
+187 tests in 17 test modules cover: GAI reading, cache/scan equivalence (limits 1, 2048 and 64 MiB),
 refusal of cache 0, of a GAI without the `'GAI!'` magic and of an unknown GAI format number, bin
 arrays against the per-bin scan, the MAPQ-filtered cache, the capped fetch (each node its smallest
-record digests whatever else is asked for, the reader's key equal to the builder's digest); capped
+record digests whatever else is asked for, the reader's key equal to the builder's digest); the BGZF
+reader against pysam (seek/tell/read over tiny, empty and multi-group blocks, offsets past a block,
+`read_group` against `group` on random, truncated and malformed streams, corrupt blocks failing with
+pysam's errors); the record path and the GAI walk against the reader of commit 0886f70
+(`tests/gam_reader_oracle.py`, its SHA-256 pinned) on vg-style GAMs with multi-record groups, groups
+across blocks, PARAMS_JSON and empty groups, vg's bin rule, sorted and unsorted orders, node-ID jumps,
+out-of-order annotations and identical records: 500 random batch sequences over read cap, MAPQ floor,
+cache size and reader (index file, in memory, GAI walk), GAI offsets in either form, refused GAI runs,
+stale, truncated and missing indexes, corrupt blocks and bad GAIs failing as before, `check` finding a
+damaged index, whole builds identical with every reader, prepare stamping the index; capped
 builds (nodes within the cap unchanged, a capped node equal to a GAM of its capped records only,
 independent of the batching, a collapsed repeat decoding one capped set, the batch limit on capped
 records) and capped nodes listed through a whole run; auto batches (the plan, splitting over the
@@ -1076,7 +1153,9 @@ versions). `test_golden.py` rebuilds every case — G1–G8 with `--decoder pyth
 also under `PYTHONHASHSEED` 1 and 2, O1 under `auto` with and without `PANSOMA_DECODER=python` —
 and requires identical fingerprints and constants (24 jobs). It is skipped when `PANSOMA_DECODER`
 is set (it runs both decoders itself). A mismatch prints the differing files and any environment
-difference from the recording.
+difference from the recording. The jobs inherit `PANSOMA_GAM_RECORD_INDEX`, so
+`PANSOMA_GAM_RECORD_INDEX=memory ... golden check` builds every case through the record path against
+the same hashes.
 
 ```bash
 $PY -m indexed_gam_pipeline_v4.tests.golden check [--decoder python|native] [--case G1 O1 ...] [--keep DIR] [--workers N]   # ~4 s

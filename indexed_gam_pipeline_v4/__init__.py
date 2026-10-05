@@ -7,7 +7,10 @@ run's frozen <root>/source. See README.md.
 
 Runtime (frozen into every run by `orchestrate prepare`; data flows top to bottom):
     common          atomic JSON, file stamps, node lists, batching, format names (format_name)
-    gam_reader      GAI bins, BGZF group seeking, bounded LRU group cache (IndexedGam), scan_gam
+    gam_reader      GAI bins, BGZF reads over large preads (BgzfReader), bounded LRU group cache or the record
+                    path (IndexedGam), scan_gam
+    gam_record_index
+                    per-record index <gam>.gri of a long-read GAM: build | check | info, used by IndexedGam
     graph_index     read-only graph SQLite: node sequence + distinct GBWT path count (GraphIndex)
     candidates      GAM edits -> left-normalized candidates, support counting, (8, rows, width) site tensors
     native          optional C++ record decoder (fastdecode.cpp): compile | check, load-time checks, fallback

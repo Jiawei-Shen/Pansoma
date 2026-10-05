@@ -148,6 +148,20 @@ def native_decoder_status(decoder):
     return dict(available=False, reason=info["reason"])
 
 
+def record_index_input(gam, index):
+    """{'record_index': stamp} when the GAM has a record index (<gam>.gri, gam_record_index), else {}; one that
+    does not match the GAM, its GAI or vg_pb2.py fails prepare (the tasks would not use it)."""
+    from .gam_record_index import gri_path, validate
+    path = gri_path(gam)
+    if not path.exists():
+        return {}
+    problems = validate(path, gam, index)
+    if problems:
+        raise ValueError(f"{path} is stale ({'; '.join(problems)}): rebuild it (python -m {PACKAGE}.gam_record_index "
+                         f"build) or move it aside")
+    return dict(record_index=stamp(path))
+
+
 def read_config(root):
     """config.json of a run root prepared by this package; roots of any other package are refused."""
     config = read_json(Path(root) / "config.json")
@@ -160,6 +174,8 @@ def read_config(root):
 def prepare(args):
     postprocess = postprocess_options(args)
     native_decoder = native_decoder_status(args.decoder)
+    index = args.index or str(args.gam) + ".gai"
+    record_index = record_index_input(args.gam, index)
     root = Path(args.root).resolve()
     root.mkdir(parents=True, exist_ok=False)
     if not 1 <= args.processes <= args.tasks:
@@ -192,13 +208,12 @@ def prepare(args):
         schedule = dict(order="predicted cost descending, then task index",
                         predicted_cost="sum of discovery not_perfect over the task's nodes",
                         node_stats=stamp(args.node_stats))
-    index = args.index or str(args.gam) + ".gai"
     config = dict(
         created=time.strftime("%Y-%m-%dT%H:%M:%S"),
         package=PACKAGE,
         python=sys.executable,
         tensors=str(tensors),
-        inputs=dict(gam=stamp(args.gam), index=stamp(index),
+        inputs=dict(gam=stamp(args.gam), index=stamp(index), **record_index,
                     graph_index=dict(stamp(args.graph_index), metadata=graph_metadata),
                     nodes=dict(stamp(args.nodes), sha256=sha256_file(args.nodes), count=int(selection["nodes_in"])),
                     **({"chr_index": stamp(args.chr_index)} if args.chr_index else {}),
