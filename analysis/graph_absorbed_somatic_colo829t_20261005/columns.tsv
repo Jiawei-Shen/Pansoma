@@ -1,0 +1,370 @@
+file	column	source	meaning
+per_variant.tsv	truth_id	variant_set	row id of the truth allele in analysis/tensor_recall_20260930/per_truth_COLO829T.tsv
+per_variant.tsv	chrom	variant_set	
+per_variant.tsv	vcf_pos	variant_set	truth VCF POS (1-based)
+per_variant.tsv	vcf_ref	variant_set	
+per_variant.tsv	vcf_alt	variant_set	
+per_variant.tsv	kind2	variant_set	SNV or INDEL: the GRCh38 record kind of the truth
+per_variant.tsv	VAF_Ill	variant_set	truth VAF from Illumina (truth VCF)
+per_variant.tsv	VAF_PB	variant_set	truth VAF from PacBio (truth VCF)
+per_variant.tsv	RGN	variant_set	SMaHT region of the truth: Easy / Difficult / Extreme
+per_variant.tsv	n_platforms	variant_set	number of platforms on which the truth is perfect bypass
+per_variant.tsv	vaf_bin	derived	VAF_Ill bin: <0.1 / 0.1-0.25 / 0.25-0.4 / >=0.4
+per_variant.tsv	perfect_platforms	derived	platforms on which the truth is perfect bypass, comma-separated
+per_variant.tsv	fiberseq_perfect	variant_set	fiberseq: status no_candidate and read-level reason site_bypassed:{branch,skip_edge}:no_edit
+per_variant.tsv	fiberseq_status	variant_set	fiberseq: truth status in the 2026-09-30 tensor set (per_truth_COLO829T.tsv)
+per_variant.tsv	fiberseq_class	variant_set	fiberseq: miss class of the COLO829T read-level miss analysis (I1-I7 INDEL, S1-S4c SNV)
+per_variant.tsv	fiberseq_reason	variant_set	fiberseq: read-level reason (majority of the ALT reads)
+per_variant.tsv	fiberseq_alt_reads	variant_set	fiberseq: ALT-exact + ALT-like reads of the miss analysis
+per_variant.tsv	fiberseq_spanning	variant_set	fiberseq: reads spanning the site in the miss analysis
+per_variant.tsv	ONT_perfect	variant_set	ONT: status no_candidate and read-level reason site_bypassed:{branch,skip_edge}:no_edit
+per_variant.tsv	ONT_status	variant_set	ONT: truth status in the 2026-09-30 tensor set (per_truth_COLO829T.tsv)
+per_variant.tsv	ONT_class	variant_set	ONT: miss class of the COLO829T read-level miss analysis (I1-I7 INDEL, S1-S4c SNV)
+per_variant.tsv	ONT_reason	variant_set	ONT: read-level reason (majority of the ALT reads)
+per_variant.tsv	ONT_alt_reads	variant_set	ONT: ALT-exact + ALT-like reads of the miss analysis
+per_variant.tsv	ONT_spanning	variant_set	ONT: reads spanning the site in the miss analysis
+per_variant.tsv	Illumina_perfect	variant_set	Illumina: status no_candidate and read-level reason site_bypassed:{branch,skip_edge}:no_edit
+per_variant.tsv	Illumina_status	variant_set	Illumina: truth status in the 2026-09-30 tensor set (per_truth_COLO829T.tsv)
+per_variant.tsv	Illumina_class	variant_set	Illumina: miss class of the COLO829T read-level miss analysis (I1-I7 INDEL, S1-S4c SNV)
+per_variant.tsv	Illumina_reason	variant_set	Illumina: read-level reason (majority of the ALT reads)
+per_variant.tsv	Illumina_alt_reads	variant_set	Illumina: ALT-exact + ALT-like reads of the miss analysis
+per_variant.tsv	Illumina_spanning	variant_set	Illumina: reads spanning the site in the miss analysis
+per_variant.tsv	first_node	loci	d9 GRCh38 anchor node at the window start
+per_variant.tsv	last_node	loci	d9 GRCh38 anchor node at the window end
+per_variant.tsv	n_ref_nodes	loci	GRCh38 nodes in the window
+per_variant.tsv	win_start0	loci	window start, 0-based GRCh38
+per_variant.tsv	win_end0	loci	window end, 0-based inclusive
+per_variant.tsv	ev_lo0	loci	event window start (period 1-6 stretches touching the event +-5 bp), 0-based
+per_variant.tsv	ev_hi0	loci	event window end, 0-based half-open
+per_variant.tsv	match	graph_paths	a d9 path between the anchors spells GRCh38 + truth: exact / with_germline (only with nearby COLO829BL dipcall PASS alleles applied too) / closest (no such path; the nearest graph haplotypes)
+per_variant.tsv	germline_used	graph_paths	with_germline: dipcall alleles applied (pos:REF>ALT)
+per_variant.tsv	germline_gt	graph_paths	their dipcall GT (hap1|hap2 = hapY|hapX)
+per_variant.tsv	closest_edit_distance	graph_paths	closest: edit distance of the nearest graph haplotype to the ALT haplotype
+per_variant.tsv	grch38_edit_distance	graph_paths	closest: edit distance of GRCh38 itself to the ALT haplotype (equal = nothing closer)
+per_variant.tsv	n_alt_paths	graph_paths	distinct matching paths kept (<= 50)
+per_variant.tsv	cap_hit	graph_paths	an enumeration cap was hit
+per_variant.tsv	cap_info	graph_paths	which cap
+per_variant.tsv	n_completed	graph_paths	closest: paths completed
+per_variant.tsv	n_event_sets	graph_paths	distinct sets of in-event elements over the kept paths
+per_variant.tsv	primary_n_nodes	graph_paths	nodes of the primary path (fewest in-event elements, then fewest nodes)
+per_variant.tsv	primary_event_ids	graph_paths	in-event element ids of the primary path
+per_variant.tsv	primary_d_grch38	graph_paths	edit distance of the primary path to GRCh38
+per_variant.tsv	primary_local_alt	graph_paths	the primary path spells the ALT sequence of the event window +-10 bp
+per_variant.tsv	primary_local_ref	graph_paths	the primary path spells the GRCh38 sequence of the event window +-10 bp
+per_variant.tsv	truth_net	graph_paths	len(ALT) - len(REF)
+per_variant.tsv	event_net	graph_paths	net length of the primary path's in-event elements
+per_variant.tsv	primary_path	graph_paths	primary path, oriented d9 node ids (>n forward, <n reverse)
+per_variant.tsv	graph_primary_elements	graph_paths primary_elements (compact)	every element of the primary path: id|subtype|start0-end0|seq ('B:x:y:>n..' = non-GRCh38 node run between GRCh38 nodes x and y; 'S:x:y' = edge skipping GRCh38 bases), ';'-separated
+per_variant.tsv	graph_n_primary_elements	derived	elements of the primary path
+per_variant.tsv	graph_in_event_subtypes	derived	subtypes of the primary path's in-event elements (ins_branch / del_skip / snv_branch / mnv_branch / replacing_branch / back_branch / back_edge), sorted, '+'-joined
+per_variant.tsv	graph_event_element_sets	graph_paths event_element_sets (compact)	in-event element sets over the kept paths: elements '+'-joined, (n_paths), sets ';'-separated
+per_variant.tsv	grch38_ins_del	grch38_context ins_del	INS / DEL (INDEL records)
+per_variant.tsv	grch38_indel_seq	grch38_context indel_seq	inserted / deleted bases after the shared prefix
+per_variant.tsv	grch38_unit	grch38_context indel_unit	minimal period of the inserted / deleted bases
+per_variant.tsv	grch38_len_change	grch38_context indel_len	len(ALT) - len(REF)
+per_variant.tsv	grch38_period	grch38_context ctx_period	period of the GRCh38 stretch used for the class (0: none found)
+per_variant.tsv	grch38_tract	grch38_context ctx_tract	length of that stretch (bp)
+per_variant.tsv	grch38_class	grch38_context ctx_class	GRCh38-frame class (b1 rule): HP>=7 / HP4-6 / STR2-6>=3copies / VNTR>6 / complex / none
+per_variant.tsv	grch38_b5rule_class	grch38_context b5rule_class	the patient-frame (b5) rule applied in GRCh38 (adds in_STR(pP))
+per_variant.tsv	grch38_b5rule_period	grch38_context b5rule_period	its period
+per_variant.tsv	grch38_b5rule_tract	grch38_context b5rule_tract	its tract (bp)
+per_variant.tsv	cpg	grch38_context cpg	SNV: the base is the C or G of a GRCh38 CpG
+per_variant.tsv	cpg_ti	grch38_context cpg_ti	SNV: C>T / G>A at a CpG
+per_variant.tsv	titv	grch38_context titv	SNV: Ti / Tv
+per_variant.tsv	alt_hp_len	grch38_context alt_hp_len	SNV: homopolymer of the ALT base it creates
+per_variant.tsv	tri	grch38_context tri	SNV: GRCh38 trinucleotide
+per_variant.tsv	snv_spectrum	derived	SNV: pyrimidine-normalised substitution
+per_variant.tsv	arr_lo0	normal_frame arr_lo0	tandem array start (0-based GRCh38; the event window grown by every periodic stretch of period 1-60 touching it, cap 3 kb)
+per_variant.tsv	arr_hi0	normal_frame arr_hi0	tandem array end (half-open)
+per_variant.tsv	arr_len	normal_frame arr_len	array length (bp)
+per_variant.tsv	arr_capped	normal_frame arr_capped	array hit the 3 kb cap
+per_variant.tsv	ivntr_spacing	normal_frame ivntr_spacing	imperfect tandem repeat around the truth (GRCh38 +-600 bp; 12-mers recurring 7-150 bp apart, >= 60 % over +-15 bp, run >= 40 bp holding the truth): commonest recurrence distance (unit or a multiple); 0 = none
+per_variant.tsv	ivntr_lo0	normal_frame ivntr_lo0	its start (0-based GRCh38)
+per_variant.tsv	ivntr_hi0	normal_frame ivntr_hi0	its end (half-open)
+per_variant.tsv	ivntr_beyond	normal_frame ivntr_beyond	bp of it outside the exact-period array [arr_lo0, arr_hi0)
+per_variant.tsv	in_ivntr	normal_frame in_ivntr	ivntr_spacing >= 7 and ivntr_beyond >= 20: the truth sits in an imperfect VNTR / minisatellite that the exact-period array misses (a none event there is labelled imperfect VNTR)
+per_variant.tsv	anchor_a0	normal_frame anchor_a0	left common unique 24-mer anchor (its end, 0-based)
+per_variant.tsv	anchor_b0	normal_frame anchor_b0	right common anchor start (0-based)
+per_variant.tsv	anchor_wide	normal_frame anchor_wide	no common anchor pair within 400 bp for all placed haps, found within 2 kb (wide retry)
+per_variant.tsv	len_R	normal_frame len_R	GRCh38 length between the anchors
+per_variant.tsv	hapX_place	normal_frame hapX_place	hapX: placement: cover / cover0 / bridge / empty (none)
+per_variant.tsv	hapX_place_na	normal_frame hapX_place_na	hapX: why not placed
+per_variant.tsv	hapX_unloc_better	normal_frame hapX_unloc_better	hapX: an unlocalized contig covers the array better (wrong-copy flag)
+per_variant.tsv	hapX_strand	normal_frame hapX_strand	hapX: scaffold strand of the hit
+per_variant.tsv	hapX_mapq	normal_frame hapX_mapq	hapX: minimap2 MAPQ of the hit
+per_variant.tsv	hapX_tp	normal_frame hapX_tp	hapX: PAF tp tag
+per_variant.tsv	hapX_n_cover	normal_frame hapX_n_cover	hapX: covering hits on the same-chromosome scaffold
+per_variant.tsv	hapX_n_cover_other	normal_frame hapX_n_cover_other	hapX: covering hits on other scaffolds (duplication flag)
+per_variant.tsv	hapX_phase_mismatch_ragtag	normal_frame hapX_phase_mismatch_ragtag	hapX: isolated phased het SNVs of dipcall contradicted by the ragtag copy
+per_variant.tsv	hapX_suspect	normal_frame hapX_suspect	hapX: why the ragtag copy was suspect: unplaced / mapq<20 / other_scaffold_hit / phase_mismatch (empty: kept)
+per_variant.tsv	hapX_copy	normal_frame hapX_copy	hapX: hap copy used: ragtag (same-chromosome scaffold hit) / dipcall (the contig dipcall aligned there; for suspect copies)
+per_variant.tsv	hapX_dpaf	normal_frame hapX_dpaf	hapX: the dipcall primary alignment used (contig:qs-qe strand, MAPQ); 'none': no such alignment
+per_variant.tsv	hapX_phase_mismatch	normal_frame hapX_phase_mismatch	hapX: the same for the copy used
+per_variant.tsv	hapX_contig_span	normal_frame hapX_contig_span	hapX: scaffold span between the anchors
+per_variant.tsv	hapX_asm_call	normal_frame hapX_asm_call	hapX: assembly array allele: ALT / REF / other / NA
+per_variant.tsv	hapX_asm_len_change	normal_frame hapX_asm_len_change	hapX: assembly allele length - len_R
+per_variant.tsv	hapX_asm_na	normal_frame hapX_asm_na	hapX: why no assembly allele
+per_variant.tsv	hapX_dip_call	normal_frame hapX_dip_call	hapX: dipcall-reconstructed allele: ALT / REF / other / NA
+per_variant.tsv	hapX_dip_len_change	normal_frame hapX_dip_len_change	hapX: dipcall allele length - len_R
+per_variant.tsv	hapX_dip_na	normal_frame hapX_dip_na	hapX: why no dipcall allele
+per_variant.tsv	hapX_asm_eq_dip	normal_frame hapX_asm_eq_dip	hapX: assembly allele == dipcall allele
+per_variant.tsv	hapX_asm_eq_dip_swapped	normal_frame hapX_asm_eq_dip_swapped	hapX: assembly allele == the other GT index (GT-order check)
+per_variant.tsv	hapX_src	normal_frame hapX_src	hapX: sequence used: asm / dip / NA
+per_variant.tsv	hapX_n_flank_diffs	normal_frame hapX_n_flank_diffs	hapX: germline differences outside the array (reverted to GRCh38)
+per_variant.tsv	hapX_allele	normal_frame hapX_allele	hapX: array allele: REF / ALT / germline_len<+-n> (other length) / germline_seq (same length, other bases) / NA
+per_variant.tsv	hapX_len_change	normal_frame hapX_len_change	hapX: array allele length - len_R
+per_variant.tsv	hapX_total_len_change	normal_frame hapX_total_len_change	hapX: hap length between the anchors - len_R (before reverting flank differences)
+per_variant.tsv	hapX_flank_len	normal_frame hapX_flank_len	hapX: total_len_change - len_change: length of the reverted flank differences
+per_variant.tsv	hapX_dist_A	normal_frame hapX_dist_A	hapX: Levenshtein distance of the array allele to GRCh38 + truth
+per_variant.tsv	hapY_place	normal_frame hapY_place	hapY: placement: cover / cover0 / bridge / empty (none)
+per_variant.tsv	hapY_place_na	normal_frame hapY_place_na	hapY: why not placed
+per_variant.tsv	hapY_unloc_better	normal_frame hapY_unloc_better	hapY: an unlocalized contig covers the array better (wrong-copy flag)
+per_variant.tsv	hapY_strand	normal_frame hapY_strand	hapY: scaffold strand of the hit
+per_variant.tsv	hapY_mapq	normal_frame hapY_mapq	hapY: minimap2 MAPQ of the hit
+per_variant.tsv	hapY_tp	normal_frame hapY_tp	hapY: PAF tp tag
+per_variant.tsv	hapY_n_cover	normal_frame hapY_n_cover	hapY: covering hits on the same-chromosome scaffold
+per_variant.tsv	hapY_n_cover_other	normal_frame hapY_n_cover_other	hapY: covering hits on other scaffolds (duplication flag)
+per_variant.tsv	hapY_phase_mismatch_ragtag	normal_frame hapY_phase_mismatch_ragtag	hapY: isolated phased het SNVs of dipcall contradicted by the ragtag copy
+per_variant.tsv	hapY_suspect	normal_frame hapY_suspect	hapY: why the ragtag copy was suspect: unplaced / mapq<20 / other_scaffold_hit / phase_mismatch (empty: kept)
+per_variant.tsv	hapY_copy	normal_frame hapY_copy	hapY: hap copy used: ragtag (same-chromosome scaffold hit) / dipcall (the contig dipcall aligned there; for suspect copies)
+per_variant.tsv	hapY_dpaf	normal_frame hapY_dpaf	hapY: the dipcall primary alignment used (contig:qs-qe strand, MAPQ); 'none': no such alignment
+per_variant.tsv	hapY_phase_mismatch	normal_frame hapY_phase_mismatch	hapY: the same for the copy used
+per_variant.tsv	hapY_contig_span	normal_frame hapY_contig_span	hapY: scaffold span between the anchors
+per_variant.tsv	hapY_asm_call	normal_frame hapY_asm_call	hapY: assembly array allele: ALT / REF / other / NA
+per_variant.tsv	hapY_asm_len_change	normal_frame hapY_asm_len_change	hapY: assembly allele length - len_R
+per_variant.tsv	hapY_asm_na	normal_frame hapY_asm_na	hapY: why no assembly allele
+per_variant.tsv	hapY_dip_call	normal_frame hapY_dip_call	hapY: dipcall-reconstructed allele: ALT / REF / other / NA
+per_variant.tsv	hapY_dip_len_change	normal_frame hapY_dip_len_change	hapY: dipcall allele length - len_R
+per_variant.tsv	hapY_dip_na	normal_frame hapY_dip_na	hapY: why no dipcall allele
+per_variant.tsv	hapY_asm_eq_dip	normal_frame hapY_asm_eq_dip	hapY: assembly allele == dipcall allele
+per_variant.tsv	hapY_asm_eq_dip_swapped	normal_frame hapY_asm_eq_dip_swapped	hapY: assembly allele == the other GT index (GT-order check)
+per_variant.tsv	hapY_src	normal_frame hapY_src	hapY: sequence used: asm / dip / NA
+per_variant.tsv	hapY_n_flank_diffs	normal_frame hapY_n_flank_diffs	hapY: germline differences outside the array (reverted to GRCh38)
+per_variant.tsv	hapY_allele	normal_frame hapY_allele	hapY: array allele: REF / ALT / germline_len<+-n> (other length) / germline_seq (same length, other bases) / NA
+per_variant.tsv	hapY_len_change	normal_frame hapY_len_change	hapY: array allele length - len_R
+per_variant.tsv	hapY_total_len_change	normal_frame hapY_total_len_change	hapY: hap length between the anchors - len_R (before reverting flank differences)
+per_variant.tsv	hapY_flank_len	normal_frame hapY_flank_len	hapY: total_len_change - len_change: length of the reverted flank differences
+per_variant.tsv	hapY_dist_A	normal_frame hapY_dist_A	hapY: Levenshtein distance of the array allele to GRCh38 + truth
+per_variant.tsv	alt_len_haps	normal_frame alt_len_haps	INDEL truths: haps whose array allele has exactly the ALT length but is not the ALT (the normal may already carry the ALT length, differing by substitutions)
+per_variant.tsv	event_hap	normal_frame event_hap	the COLO829BL hap whose array allele is closest to GRCh38 + truth (Levenshtein; tie -> the REF one, else hapX)
+per_variant.tsv	event_basis	normal_frame event_basis	both / only_<hap> / none: haps with a sequence
+per_variant.tsv	event_tie	normal_frame event_tie	tie_same_seq (both haps identical) / tie_REF_chosen / tie_other / empty
+per_variant.tsv	pf_kind	normal_frame pf_kind	patient-frame event kind: INDEL / SNV / complex / normal_carries_ALT / NA
+per_variant.tsv	pf_event	normal_frame pf_event	event in the array frame: offset:REF>ALT (left-normalised)
+per_variant.tsv	pf_len_change	normal_frame pf_len_change	event length change
+per_variant.tsv	pf_unit	normal_frame pf_unit	minimal period u of the inserted / deleted bases
+per_variant.tsv	pf_tract	normal_frame pf_tract	the normal's repeat length L (bp): the exact period-u stretch holding the event's bases
+per_variant.tsv	pf_tract_b5	normal_frame pf_tract_b5	the tract of the b5 rule (longest period-u stretch merely touching the event; u > 6: periods 1-6)
+per_variant.tsv	pf_tandem	normal_frame pf_tandem	a unit of the inserted / deleted bases sits next to the event
+per_variant.tsv	pf_stretch	normal_frame pf_stretch	longest period 1-6 stretch touching the event (pP:L)
+per_variant.tsv	pf_class	normal_frame pf_class	patient-frame class: HP>=7 / HP4-6 / STR2-6>=3copies / VNTR>6 / in_STR(pP) / imperfect_VNTR / none; SNV events: the class of the stretch around the base; complex; normal_carries_ALT; NA
+per_variant.tsv	pf_class_b5	normal_frame pf_class_b5	the same with the audit b5 rule verbatim (the HG008 rule; any stretch touching the event)
+per_variant.tsv	pf_label	normal_frame pf_label	the class label of the tables (INDEL: pf_class with in_STR(pP) -> in_STR, imperfect_VNTR -> imperfect VNTR; SNV: SNV in <class> / SNV; 'single hap' when only one hap has a sequence and it is not the ALT)
+per_variant.tsv	pf_label_one_hap	normal_frame pf_label_one_hap	single hap: the label the one available hap gives (pf_label is then 'single hap')
+per_variant.tsv	pf_units_changed	normal_frame pf_units_changed	|pf_len_change| / pf_unit (repeat INDEL events)
+per_variant.tsv	pf_cpg_ti	normal_frame pf_cpg_ti	SNV event: C>T / G>A at a CpG
+per_variant.tsv	pf_titv	normal_frame pf_titv	SNV event: Ti / Tv
+per_variant.tsv	other_hap_kind	normal_frame other_hap_kind	the event derived from the other hap: kind
+per_variant.tsv	other_hap_event	normal_frame other_hap_event	the event from the other hap
+per_variant.tsv	other_hap_label	normal_frame other_hap_label	its label
+per_variant.tsv	nf_flags	normal_frame flags	per-locus flags: <hap>:NA / dip_only / asm_ne_dip / mapq<20 / other_scaffold_hit / cover0 / bridge / flank_diffs>=3, tie_REF_chosen / tie_other, other_hap_single_event
+per_variant.tsv	pf_group	derived	group of pf_label: HP>=7 / STR / other repeat / SNV in repeat / non-repeat / normal carries ALT / complex / unresolved (NA, single hap)
+per_variant.tsv	label_b5	derived	pf_label with pf_class_b5 for INDEL events (the HG008 rule)
+per_variant.tsv	units_bin	derived	1 unit / 2-3 units / >3 units (HP>=7, HP4-6, STR, VNTR>6 events)
+per_variant.tsv	hp_tract_bin	derived	the normal's homopolymer length of HP>=7 events: 7-9 / 10-14 / 15-19 / 20-29 / >=30
+per_variant.tsv	germline_status	derived	COLO829BL array alleles: normal carries ALT / germline other length / germline same length, other bases / both REF / one hap NA, other REF / both NA
+per_variant.tsv	mechanism_class	derived	background class (HP>=7 1-unit by tract, STR 1-unit, ...; README 'Definitions')
+per_variant.tsv	mechanism_class_b5	derived	the same with label_b5 and the b5 tract (the HG008 rule; HG008T comparison)
+per_variant.tsv	R_seq	normal_frame R_seq	GRCh38 between the anchors
+per_variant.tsv	A_seq	normal_frame A_seq	R_seq with the truth applied
+per_variant.tsv	hapX_seq	normal_frame hapX_seq	hapX between the anchors (assembly, else dipcall)
+per_variant.tsv	hapY_seq	normal_frame hapY_seq	hapY, same
+hprc_per_variant.tsv	truth_id	c7 truth_id	row id of the truth allele in analysis/tensor_recall_20260930/per_truth_COLO829T.tsv (as per_variant.tsv)
+hprc_per_variant.tsv	chrom	c7 chrom	
+hprc_per_variant.tsv	vcf_pos	c7 vcf_pos	truth VCF POS (1-based)
+hprc_per_variant.tsv	vcf_ref	c7 vcf_ref	
+hprc_per_variant.tsv	vcf_alt	c7 vcf_alt	
+hprc_per_variant.tsv	kind2	c7 kind2	SNV or INDEL (GRCh38 record kind of the truth)
+hprc_per_variant.tsv	RGN	c7 RGN	SMaHT region: Easy / Difficult / Extreme
+hprc_per_variant.tsv	VAF_Ill	c7 VAF_Ill	truth VAF from Illumina
+hprc_per_variant.tsv	fiberseq_perfect	c7 fiberseq_perfect	fiberseq: the truth is perfect bypass on this platform (in its set)
+hprc_per_variant.tsv	ONT_perfect	c7 ONT_perfect	ONT: the truth is perfect bypass on this platform (in its set)
+hprc_per_variant.tsv	Illumina_perfect	c7 Illumina_perfect	Illumina: the truth is perfect bypass on this platform (in its set)
+hprc_per_variant.tsv	match	c7 match	c2: a d9 path spells GRCh38 + truth: exact / with_germline (only with nearby COLO829BL dipcall alleles applied too) / closest (none)
+hprc_per_variant.tsv	germline_used	c7 germline_used	with_germline: the dipcall alleles the path needs (pos:REF>ALT)
+hprc_per_variant.tsv	germline_gt	c7 germline_gt	their dipcall GT (hapY|hapX)
+hprc_per_variant.tsv	germline_phase	c7 germline_phase	with_germline: consistent (every used germline allele on the c3 event hap by the GT) / off_event_hap / no_event_hap_or_GT
+hprc_per_variant.tsv	n_candidate_paths	c7 n_candidate_paths	ALT paths of the d9 graph (c2 n_alt_paths; closest: tied closest paths)
+hprc_per_variant.tsv	path_choice	c7 path_choice	single_path / no_read_data:primary (several paths, c2 primary kept) / no_read_data:alternative:phase (the first phase-consistent path) / closest_primary
+hprc_per_variant.tsv	element_source	c7 element_source	graph (elements of the chosen exact / with_germline path) / graph_closest_primary (closest: the c2 closest primary)
+hprc_per_variant.tsv	somatic_elements	c7 somatic_elements	kept somatic elements: 'B:x:y:>n1>n2' = branch of non-GRCh38 nodes between GRCh38 nodes x and y; 'S:x:y' = edge x->y skipping GRCh38 bases
+hprc_per_variant.tsv	n_somatic_elements	c7 n_somatic_elements	number of kept somatic elements
+hprc_per_variant.tsv	element_subtypes	c7 element_subtypes	subtype per kept element (ins_branch / del_skip / snv_branch / mnv_branch / replacing_branch / back_branch / back_edge)
+hprc_per_variant.tsv	element_alone	c7 element_alone	per kept element, GRCh38 with only that element applied equals: truth / germline (a subset of the 6 nearest COLO829BL dipcall alleles) / truth+germline / partial
+hprc_per_variant.tsv	dropped_germline_elements	c7 dropped_germline_elements	path elements dropped because alone they spell the path's germline alleles (with_germline) / nearby germline (closest)
+hprc_per_variant.tsv	closest_kind	c7 closest_kind	closest: graph_allele_nearer_truth / graph_allele_not_truth (Levenshtein of the kept elements applied to GRCh38)
+hprc_per_variant.tsv	alt_path	c7 alt_path	the chosen ALT path, first to last anchor node, oriented node ids
+hprc_per_variant.tsv	allele_start0	c7 allele_lo0	allele-level window start (c3 tandem array united with the event window and the element spans, clipped to the graph window), 0-based
+hprc_per_variant.tsv	allele_end0	c7 allele_hi0	its end
+hprc_per_variant.tsv	hprc_n_complete	c7 hprc_n_complete	HPRC haplotypes (of 88) whose walk visits both window anchor nodes (complete traversal) = frequency denominator
+hprc_per_variant.tsv	hprc_n_partial	c7 hprc_n_partial	HPRC haplotypes with only part of the window (walk cut by the d9 filter or leaving the window)
+hprc_per_variant.tsv	hprc_n_absent	c7 hprc_n_absent	HPRC haplotypes with no walk through the window
+hprc_per_variant.tsv	hprc_support	c7 hprc_support	exact_allele (>= 1 complete haplotype spells the exact ALT allele) / element_set_other_allele (walks all elements of an ALT path, other allele) / recombinant_pieces (each element walked by someone, a whole set by no one) / none
+hprc_per_variant.tsv	hprc_exact_allele_carriers	c7 exact_allele_carriers	complete HPRC haplotypes whose sequence over the tandem array (bracketed by the nearest GRCh38 nodes shared with the ALT path), or over the whole window, equals GRCh38 + truth (with_germline: or the path allele = + the germline alleles)
+hprc_per_variant.tsv	hprc_exact_allele_freq	c7 exact_allele_freq	hprc_exact_allele_carriers / hprc_n_complete (the category RARE_AF = 0.20 uses this)
+hprc_per_variant.tsv	hprc_exact_allele_freq_over88	c7 exact_allele_freq_all88	hprc_exact_allele_carriers / 88 (lower bound)
+hprc_per_variant.tsv	hprc_exact_window_only	c7 exact_window_only	carriers found only by the whole-window rule (compensating graph edits outside the array bracket)
+hprc_per_variant.tsv	hprc_exact_n_individuals	c7 exact_n_individuals	HPRC samples with >= 1 exact-allele haplotype
+hprc_per_variant.tsv	hprc_exact_n_hom	c7 exact_n_hom	HPRC samples with both haplotypes exact-allele carriers
+hprc_per_variant.tsv	hprc_element_set_carriers	c7 set_carriers_any_path	complete HPRC haplotypes that walk all somatic elements of any ALT path (node level)
+hprc_per_variant.tsv	hprc_element_set_freq	c7 set_freq_any_path	hprc_element_set_carriers / hprc_n_complete
+hprc_per_variant.tsv	hprc_set_carriers_other_allele	c7 n_set_carriers_other_allele	complete haplotypes walking all elements of the chosen path but spelling another allele over the array
+hprc_per_variant.tsv	hprc_element_min_carriers	c7 elem_min_carriers	minimum over the somatic elements of the complete haplotypes walking that element
+hprc_per_variant.tsv	hprc_element_min_freq	c7 elem_freq_min	hprc_element_min_carriers / hprc_n_complete
+hprc_per_variant.tsv	hprc_element_carriers_each	c7 elem_carriers_each	complete haplotypes walking each element, in somatic_elements order
+hprc_per_variant.tsv	hprc_exact_freq_class	c7 exact_freq_class	<0.2 / 0.2-0.5 / >=0.5 / NA of hprc_exact_allele_freq
+hprc_per_variant.tsv	freq_class_agree	c7 freq_class_agree	element / set / exact / full-VCF frequencies on the same side of 0.20
+hprc_per_variant.tsv	d9_vcf_AF	c7 d9_vcf_AF	AF of the d9 VCF record whose allele alone spells the ALT haplotype (c6; snarl level, over called haplotypes)
+hprc_per_variant.tsv	full_graph_vcf_AF	c7 full_vcf_AF	same in the full (unfiltered) HPRC v1.1 vg deconstruct VCF
+hprc_per_variant.tsv	d9_vcf_agree	c7 d9_agree	d9 VCF carriers_any (on GFA-complete haplotypes) == the GFA allele-level carriers
+hprc_per_variant.tsv	d9_vcf_disagreements	c7 d9_disagreements	haplotype-level reasons when not: gfa_only:<no_matching_record / vcf_gt_missing / vcf_other_allele>, vcf_only:<gfa_set_other_allele / gfa_other_walk>
+hprc_per_variant.tsv	full_vcf_agree	c7 full_agree	the same for the full-graph VCF
+hprc_per_variant.tsv	AFR_complete	c7 AFR_complete	AFR HPRC haplotypes with a complete traversal
+hprc_per_variant.tsv	AFR_exact_carriers	c7 AFR_exact_carriers	AFR exact-allele carrier haplotypes
+hprc_per_variant.tsv	AFR_element_set_carriers	c7 AFR_anypath_carriers	AFR haplotypes walking all elements of an ALT path
+hprc_per_variant.tsv	AMR_complete	c7 AMR_complete	AMR HPRC haplotypes with a complete traversal
+hprc_per_variant.tsv	AMR_exact_carriers	c7 AMR_exact_carriers	AMR exact-allele carrier haplotypes
+hprc_per_variant.tsv	AMR_element_set_carriers	c7 AMR_anypath_carriers	AMR haplotypes walking all elements of an ALT path
+hprc_per_variant.tsv	EAS_complete	c7 EAS_complete	EAS HPRC haplotypes with a complete traversal
+hprc_per_variant.tsv	EAS_exact_carriers	c7 EAS_exact_carriers	EAS exact-allele carrier haplotypes
+hprc_per_variant.tsv	EAS_element_set_carriers	c7 EAS_anypath_carriers	EAS haplotypes walking all elements of an ALT path
+hprc_per_variant.tsv	SAS_complete	c7 SAS_complete	SAS HPRC haplotypes with a complete traversal
+hprc_per_variant.tsv	SAS_exact_carriers	c7 SAS_exact_carriers	SAS exact-allele carrier haplotypes
+hprc_per_variant.tsv	SAS_element_set_carriers	c7 SAS_anypath_carriers	SAS haplotypes walking all elements of an ALT path
+hprc_per_variant.tsv	CHM13_status	c7 CHM13_status	CHM13 traversal: complete / partial / absent
+hprc_per_variant.tsv	CHM13_carries_exact	c7 CHM13_exact	CHM13 spells the exact ALT allele (not counted in the HPRC numbers)
+hprc_per_variant.tsv	CHM13_carries_element_set	c7 CHM13_set_any_path	CHM13 walks all elements of an ALT path
+hprc_per_variant.tsv	hprc_exact_carrier_haps	c7 exact_allele_carrier_haps	the exact-allele carrier haplotypes, sample#hap
+hprc_per_variant.tsv	COLO829BL_hapX_allele	c7 hapX_allele	c3 array allele of hapX: REF / ALT / germline_len<+-n> / germline_seq / NA
+hprc_per_variant.tsv	COLO829BL_hapY_allele	c7 hapY_allele	same for hapY
+hprc_per_variant.tsv	event_hap	c7 event_hap	c3: the COLO829BL hap whose array allele is closest to GRCh38 + truth
+hprc_per_variant.tsv	pf_label	c7 pf_label	c3 patient-frame label (README section 2)
+hprc_per_variant.tsv	alt_len_haps	c7 alt_len_haps	c3: haps whose array allele has the ALT length but other bases
+hprc_per_variant.tsv	COLO829BL_pattern	c7 normal_pattern	which COLO829BL hap carries the ALT: hapX_only / hapY_only / both (+other_unresolved) / neither / unresolved
+hprc_per_variant.tsv	COLO829BL_allele_class	c7 normal_allele_class	carries_ALT / germline_other_length / germline_same_length_other_seq / both_REF / one_hap_NA / both_NA
+hprc_per_variant.tsv	germline_like_alt_len	c7 germline_like_alt_len	alt_len_haps non-empty and no hap carries the ALT: the normal may already carry the ALT length (README section 2, Two readings)
+hprc_per_variant.tsv	array_start0	c7 array_lo0	c3 tandem array start, 0-based
+hprc_per_variant.tsv	array_end0	c7 array_hi0	c3 tandem array end, 0-based exclusive
+hprc_per_variant.tsv	category	c7 category	normal_present_broad / normal_present_rare / normal_absent_HPRC_other / other_ambiguous (README section 8)
+hprc_per_variant.tsv	sub_class	c7 sub_class	present: the carrying hap; absent: hprc_support
+hprc_per_variant.tsv	sub_reason	c7 sub_reason	other_ambiguous: why
+hprc_per_variant.tsv	interpretation	c7 interpretation	one sentence per category / sub-class
+hprc_per_node.tsv	truth_id	c7 hprc_per_node truth_id	truth allele
+hprc_per_node.tsv	element_id	c7 hprc_per_node element_id	'B:x:y:>n1>n2' branch / 'S:x:y' skip edge
+hprc_per_node.tsv	type	c7 hprc_per_node type	branch / skip
+hprc_per_node.tsv	subtype	c7 hprc_per_node subtype	ins_branch / del_skip / snv_branch / mnv_branch / replacing_branch / back_branch / back_edge
+hprc_per_node.tsv	x	c7 hprc_per_node x	GRCh38 node before the element
+hprc_per_node.tsv	y	c7 hprc_per_node y	GRCh38 node after it
+hprc_per_node.tsv	nodes	c7 hprc_per_node nodes	the branch nodes, oriented
+hprc_per_node.tsv	node_seqs	c7 hprc_per_node node_seqs	their sequences
+hprc_per_node.tsv	seq	c7 hprc_per_node seq	branch sequence
+hprc_per_node.tsv	replaced	c7 hprc_per_node replaced	GRCh38 bases between x and y that the element replaces (skip: deleted bases; < 0: a back edge re-walking a repeat copy)
+hprc_per_node.tsv	grch38_start0	c7 hprc_per_node grch38_start0	GRCh38 interval replaced, 0-based start
+hprc_per_node.tsv	grch38_end0	c7 hprc_per_node grch38_end0	end (exclusive; = start for a pure insertion)
+hprc_per_node.tsv	in_event	c7 hprc_per_node in_event	overlaps the event window (c1b)
+hprc_per_node.tsv	role	c7 hprc_per_node role	snv (same length) / indel
+hprc_per_node.tsv	alone	c7 hprc_per_node alone	GRCh38 with only this element applied equals: truth / germline (a subset of the 6 nearest COLO829BL dipcall alleles) / truth+germline / partial
+hprc_per_node.tsv	element_source	c7 hprc_per_node element_source	graph / graph_closest_primary
+hprc_per_node.tsv	category	c7 hprc_per_node category	the locus category
+hprc_per_node.tsv	hprc_n_complete	c7 hprc_per_node hprc_n_complete	complete HPRC traversals of the locus window
+hprc_per_node.tsv	hprc_carriers	c7 hprc_per_node hprc_carriers	complete HPRC haplotypes whose walk contains the element (node level)
+hprc_per_node.tsv	hprc_freq	c7 hprc_per_node hprc_freq	hprc_carriers / hprc_n_complete
+hprc_per_node.tsv	AFR_carriers	c7 hprc_per_node AFR_carriers	AFR haplotypes carrying the element
+hprc_per_node.tsv	AMR_carriers	c7 hprc_per_node AMR_carriers	AMR haplotypes carrying the element
+hprc_per_node.tsv	EAS_carriers	c7 hprc_per_node EAS_carriers	EAS haplotypes carrying the element
+hprc_per_node.tsv	SAS_carriers	c7 hprc_per_node SAS_carriers	SAS haplotypes carrying the element
+hprc_per_node.tsv	AFR_complete	c7 hprc_per_node AFR_complete	AFR haplotypes with a complete traversal of the locus (denominator)
+hprc_per_node.tsv	AMR_complete	c7 hprc_per_node AMR_complete	AMR haplotypes with a complete traversal of the locus (denominator)
+hprc_per_node.tsv	EAS_complete	c7 hprc_per_node EAS_complete	EAS haplotypes with a complete traversal of the locus (denominator)
+hprc_per_node.tsv	SAS_complete	c7 hprc_per_node SAS_complete	SAS haplotypes with a complete traversal of the locus (denominator)
+hprc_per_node.tsv	hprc_any_row_carriers	c7 hprc_per_node hprc_any_row_carriers	HPRC haplotypes containing the element in any traversal row, partial ones included
+hprc_per_node.tsv	min_node_coverage	c7 hprc_per_node min_node_coverage	lower bound of haplotypes (HPRC + CHM13 + GRCh38) visiting the least-visited branch node (empty for skip edges)
+hprc_per_node.tsv	CHM13	c7 hprc_per_node CHM13	CHM13 walk contains it: True / False / partial / absent
+hprc_per_node.tsv	carrier_haps	c7 hprc_per_node carrier_haps	carrier haplotypes sample#hap
+hprc_carriers.tsv.gz	truth_id	c7 hprc_membership	truth allele
+hprc_carriers.tsv.gz	level	c7 hprc_membership	element (one somatic element) / allele (the locus: element set of any ALT path, exact allele)
+hprc_carriers.tsv.gz	element_id	c7 hprc_membership	the element (level element)
+hprc_carriers.tsv.gz	sample	c7 hprc_membership	HPRC sample or CHM13
+hprc_carriers.tsv.gz	hap	c7 hprc_membership	haplotype 1 / 2 (CHM13 0)
+hprc_carriers.tsv.gz	population_code	c7 hprc_membership	1000 Genomes population
+hprc_carriers.tsv.gz	superpopulation	c7 hprc_membership	AFR / AMR / EAS / SAS / CHM13
+hprc_carriers.tsv.gz	carries_element	c7 hprc_membership	level element: the complete walk contains the element
+hprc_carriers.tsv.gz	carries_set_any_path	c7 hprc_membership	level allele: walks all elements of an ALT path
+hprc_carriers.tsv.gz	carries_exact_allele	c7 hprc_membership	level allele: spells the exact ALT allele (= hprc_per_variant hprc_exact_carrier_haps)
+hprc_individuals.tsv	sample	c7 hprc_membership	HPRC sample (or CHM13)
+hprc_individuals.tsv	hap	c7 hprc_membership	haplotype
+hprc_individuals.tsv	population_code	c7 hprc_membership	1000G population
+hprc_individuals.tsv	population_name	c7 hprc_membership	
+hprc_individuals.tsv	superpopulation	c7 hprc_membership	
+hprc_individuals.tsv	<category>_<kind>_complete	c7 hprc_membership	loci of that category and kind the haplotype traverses completely
+hprc_individuals.tsv	<category>_<kind>_exact	c7 hprc_membership	of those, loci where it spells the exact ALT allele
+hprc_individuals.tsv	<category>_<kind>_element_set	c7 hprc_membership	of those, loci where it walks all elements of an ALT path
+hprc_populations.tsv	population_code	c7 hprc_membership	1000G population (CHM13: the sample)
+hprc_populations.tsv	population_name	c7 hprc_membership	
+hprc_populations.tsv	superpopulation	c7 hprc_membership	
+hprc_populations.tsv	haplotypes	c7 hprc_membership	HPRC haplotypes of the population
+hprc_populations.tsv	<category>_<kind>_exact_carrier_haps	c7 hprc_membership	exact-allele carrier haplotypes summed over the loci of the category and kind
+hprc_populations.tsv	<category>_<kind>_complete_haps	c7 hprc_membership	complete traversals summed over those loci
+hprc_populations.tsv	<category>_<kind>_carrier_fraction	c7 hprc_membership	their ratio
+per_locus_populations.tsv	truth_id	c8	truth allele
+per_locus_populations.tsv	chrom	c8	chrom haplotypes with a complete traversal
+per_locus_populations.tsv	vcf_pos	c8	vcf haplotypes with a complete traversal
+per_locus_populations.tsv	kind2	c8	SNV / INDEL
+per_locus_populations.tsv	category	c8	c7 category
+per_locus_populations.tsv	sub_class	c8	c7 sub_class
+per_locus_populations.tsv	group	c8	COLO829BL present, broad / rare; absent: exact allele in HPRC / only the nodes in HPRC; ambiguous
+per_locus_populations.tsv	carrier_level	c8	exact (haplotypes spelling the exact ALT allele) / nodes (group 'absent: only the nodes': haplotypes walking all elements of an ALT path)
+per_locus_populations.tsv	sp_pattern	c8	superpopulations with >= 1 carrier, + joined (none: no carrier)
+per_locus_populations.tsv	n_superpops	c8	n haplotypes with a complete traversal
+per_locus_populations.tsv	n_populations	c8	1000G populations with >= 1 carrier
+per_locus_populations.tsv	carrier_populations	c8	those populations
+per_locus_populations.tsv	n_individuals	c8	HPRC samples with >= 1 carrier haplotype
+per_locus_populations.tsv	private	c8	one individual / one population / one superpopulation / shared (>= 2 superpopulations) / none (first match)
+per_locus_populations.tsv	CHM13	c8	CHM13 carries at the same level
+per_locus_populations.tsv	fiberseq_perfect	c8	fiberseq perfect bypass
+per_locus_populations.tsv	ONT_perfect	c8	ONT perfect bypass
+per_locus_populations.tsv	Illumina_perfect	c8	Illumina perfect bypass
+per_locus_populations.tsv	AFR_carriers	c8	AFR carrier haplotypes
+per_locus_populations.tsv	AMR_carriers	c8	AMR carrier haplotypes
+per_locus_populations.tsv	EAS_carriers	c8	EAS carrier haplotypes
+per_locus_populations.tsv	SAS_carriers	c8	SAS carrier haplotypes
+per_locus_populations.tsv	AFR_complete	c8	AFR haplotypes with a complete traversal
+per_locus_populations.tsv	AMR_complete	c8	AMR haplotypes with a complete traversal
+per_locus_populations.tsv	EAS_complete	c8	EAS haplotypes with a complete traversal
+per_locus_populations.tsv	SAS_complete	c8	SAS haplotypes with a complete traversal
+per_locus_populations.tsv	ACB_carriers	c8	ACB carrier haplotypes
+per_locus_populations.tsv	ASW_carriers	c8	ASW carrier haplotypes
+per_locus_populations.tsv	ESN_carriers	c8	ESN carrier haplotypes
+per_locus_populations.tsv	GWD_carriers	c8	GWD carrier haplotypes
+per_locus_populations.tsv	MKK_carriers	c8	MKK carrier haplotypes
+per_locus_populations.tsv	MSL_carriers	c8	MSL carrier haplotypes
+per_locus_populations.tsv	YRI_carriers	c8	YRI carrier haplotypes
+per_locus_populations.tsv	CLM_carriers	c8	CLM carrier haplotypes
+per_locus_populations.tsv	PEL_carriers	c8	PEL carrier haplotypes
+per_locus_populations.tsv	PUR_carriers	c8	PUR carrier haplotypes
+per_locus_populations.tsv	CHS_carriers	c8	CHS carrier haplotypes
+per_locus_populations.tsv	KHV_carriers	c8	KHV carrier haplotypes
+per_locus_populations.tsv	PJL_carriers	c8	PJL carrier haplotypes
+per_locus_populations.tsv	ACB_complete	c8	ACB haplotypes with a complete traversal
+per_locus_populations.tsv	ASW_complete	c8	ASW haplotypes with a complete traversal
+per_locus_populations.tsv	ESN_complete	c8	ESN haplotypes with a complete traversal
+per_locus_populations.tsv	GWD_complete	c8	GWD haplotypes with a complete traversal
+per_locus_populations.tsv	MKK_complete	c8	MKK haplotypes with a complete traversal
+per_locus_populations.tsv	MSL_complete	c8	MSL haplotypes with a complete traversal
+per_locus_populations.tsv	YRI_complete	c8	YRI haplotypes with a complete traversal
+per_locus_populations.tsv	CLM_complete	c8	CLM haplotypes with a complete traversal
+per_locus_populations.tsv	PEL_complete	c8	PEL haplotypes with a complete traversal
+per_locus_populations.tsv	PUR_complete	c8	PUR haplotypes with a complete traversal
+per_locus_populations.tsv	CHS_complete	c8	CHS haplotypes with a complete traversal
+per_locus_populations.tsv	KHV_complete	c8	KHV haplotypes with a complete traversal
+per_locus_populations.tsv	PJL_complete	c8	PJL haplotypes with a complete traversal

@@ -1,0 +1,90 @@
+sample	hap	population_code	population_name	superpopulation	normal_present_broad_SNV_complete	normal_present_broad_SNV_exact	normal_present_broad_SNV_element_set	normal_present_broad_INDEL_complete	normal_present_broad_INDEL_exact	normal_present_broad_INDEL_element_set	normal_present_rare_SNV_complete	normal_present_rare_SNV_exact	normal_present_rare_SNV_element_set	normal_present_rare_INDEL_complete	normal_present_rare_INDEL_exact	normal_present_rare_INDEL_element_set	normal_absent_HPRC_other_SNV_complete	normal_absent_HPRC_other_SNV_exact	normal_absent_HPRC_other_SNV_element_set	normal_absent_HPRC_other_INDEL_complete	normal_absent_HPRC_other_INDEL_exact	normal_absent_HPRC_other_INDEL_element_set	other_ambiguous_SNV_complete	other_ambiguous_SNV_exact	other_ambiguous_SNV_element_set	other_ambiguous_INDEL_complete	other_ambiguous_INDEL_exact	other_ambiguous_INDEL_element_set
+CHM13	0		reference (T2T CHM13, hydatidiform mole)	reference	0	0	0	24	3	3	1	0	0	8	3	3	61	9	11	361	66	85	3	0	0	30	1	7
+HG00438	1	CHS	Southern Han Chinese, China	EAS	0	0	0	20	8	8	1	0	0	7	1	1	58	15	15	323	60	70	3	0	0	22	0	5
+HG00438	2	CHS	Southern Han Chinese, China	EAS	0	0	0	20	8	9	1	0	0	4	1	1	59	12	14	327	54	65	3	0	1	20	0	3
+HG00621	1	CHS	Southern Han Chinese, China	EAS	0	0	0	20	7	7	1	0	0	7	0	1	60	10	13	333	60	72	4	0	0	21	0	5
+HG00621	2	CHS	Southern Han Chinese, China	EAS	0	0	0	18	10	10	1	0	0	7	1	2	59	11	11	322	60	67	3	0	0	17	1	2
+HG00673	1	CHS	Southern Han Chinese, China	EAS	0	0	0	20	9	9	1	0	0	6	1	2	59	12	15	328	38	53	3	0	0	25	1	5
+HG00673	2	CHS	Southern Han Chinese, China	EAS	0	0	0	22	5	5	1	0	0	5	0	0	60	10	15	333	48	60	4	0	0	17	0	4
+HG00733	1	PUR	Puerto Rican in Puerto Rico	AMR	0	0	0	21	8	8	1	1	1	6	2	2	59	5	7	329	42	57	4	0	0	21	0	6
+HG00733	2	PUR	Puerto Rican in Puerto Rico	AMR	0	0	0	20	8	8	1	0	0	7	1	2	57	6	8	334	49	61	3	0	0	25	0	5
+HG00735	1	PUR	Puerto Rican in Puerto Rico	AMR	0	0	0	20	6	6	1	0	0	6	2	2	59	12	15	329	50	60	4	0	0	21	0	5
+HG00735	2	PUR	Puerto Rican in Puerto Rico	AMR	0	0	0	22	11	12	1	1	1	5	0	1	56	9	12	323	43	60	4	0	1	23	1	6
+HG00741	1	PUR	Puerto Rican in Puerto Rico	AMR	0	0	0	20	8	8	1	1	1	8	1	1	59	8	8	328	49	63	3	0	0	28	0	7
+HG00741	2	PUR	Puerto Rican in Puerto Rico	AMR	0	0	0	21	7	7	1	0	0	4	1	1	60	13	15	321	52	68	4	0	0	24	1	7
+HG01071	1	PUR	Puerto Rican in Puerto Rico	AMR	0	0	0	23	11	11	1	0	0	8	3	3	60	11	12	326	60	67	4	0	0	20	0	4
+HG01071	2	PUR	Puerto Rican in Puerto Rico	AMR	0	0	0	20	7	8	0	0	0	5	1	1	57	10	14	328	53	63	3	0	1	22	1	6
+HG01106	1	PUR	Puerto Rican in Puerto Rico	AMR	0	0	0	23	9	9	1	0	0	5	0	0	56	7	9	322	58	69	4	0	0	22	0	5
+HG01106	2	PUR	Puerto Rican in Puerto Rico	AMR	0	0	0	22	8	8	1	1	1	7	0	0	60	12	12	329	47	57	4	0	0	21	0	3
+HG01109	1	PUR	Puerto Rican in Puerto Rico	AMR	0	0	0	20	8	8	1	1	1	6	0	1	58	14	14	322	62	72	4	0	0	25	1	6
+HG01109	2	PUR	Puerto Rican in Puerto Rico	AMR	0	0	0	18	8	8	0	0	0	4	0	0	58	13	16	300	66	78	4	0	0	22	1	4
+HG01123	1	CLM	Colombian in Medellin, Colombia	AMR	0	0	0	18	7	7	1	0	0	4	0	0	61	14	15	330	56	68	4	0	0	20	2	6
+HG01123	2	CLM	Colombian in Medellin, Colombia	AMR	0	0	0	21	6	7	1	0	0	5	0	0	58	10	10	322	46	55	4	0	0	22	0	8
+HG01175	1	PUR	Puerto Rican in Puerto Rico	AMR	0	0	0	18	5	5	1	1	1	6	1	2	58	11	12	313	54	66	4	0	0	23	1	5
+HG01175	2	PUR	Puerto Rican in Puerto Rico	AMR	0	0	0	22	10	10	1	1	1	6	1	1	58	7	8	319	53	63	3	0	1	22	0	5
+HG01243	1	PUR	Puerto Rican in Puerto Rico	AMR	0	0	0	19	8	8	1	0	0	5	1	1	57	15	18	320	56	78	3	0	0	20	1	5
+HG01243	2	PUR	Puerto Rican in Puerto Rico	AMR	0	0	0	20	12	12	1	0	0	5	0	0	59	17	19	318	66	75	4	0	0	20	0	3
+HG01258	1	CLM	Colombian in Medellin, Colombia	AMR	0	0	0	20	12	12	1	0	0	7	1	1	60	9	11	326	53	65	3	0	1	22	1	5
+HG01258	2	CLM	Colombian in Medellin, Colombia	AMR	0	0	0	21	9	10	1	0	0	5	0	0	61	13	15	324	56	71	4	0	1	25	1	6
+HG01358	1	CLM	Colombian in Medellin, Colombia	AMR	0	0	0	21	6	6	1	0	0	8	2	3	59	13	14	329	45	58	3	0	0	22	0	5
+HG01358	2	CLM	Colombian in Medellin, Colombia	AMR	0	0	0	22	4	4	1	0	0	8	0	1	58	11	11	330	61	74	4	0	0	24	0	4
+HG01361	1	CLM	Colombian in Medellin, Colombia	AMR	0	0	0	20	5	5	1	0	0	6	0	1	58	16	16	321	48	60	2	0	0	27	1	7
+HG01361	2	CLM	Colombian in Medellin, Colombia	AMR	0	0	0	19	6	6	1	0	0	7	0	1	59	12	14	310	55	66	3	0	0	19	0	3
+HG01891	1	ACB	African Caribbean in Barbados	AFR	0	0	0	23	7	7	1	0	0	6	1	1	56	12	12	301	68	78	4	0	0	22	0	3
+HG01891	2	ACB	African Caribbean in Barbados	AFR	0	0	0	21	8	8	1	0	0	4	1	1	58	13	15	291	88	98	4	0	0	19	0	3
+HG01928	1	PEL	Peruvian in Lima, Peru	AMR	0	0	0	20	9	9	1	0	0	6	0	1	60	14	17	330	54	62	4	0	0	27	1	3
+HG01928	2	PEL	Peruvian in Lima, Peru	AMR	0	0	0	18	8	8	1	0	0	7	0	1	57	8	9	329	51	60	4	0	0	18	0	2
+HG01952	1	PEL	Peruvian in Lima, Peru	AMR	0	0	0	21	9	9	1	0	0	4	0	0	58	12	12	317	55	66	4	0	0	21	1	5
+HG01952	2	PEL	Peruvian in Lima, Peru	AMR	0	0	0	24	9	9	1	0	0	7	0	0	60	9	13	322	42	58	4	0	0	25	2	4
+HG01978	1	PEL	Peruvian in Lima, Peru	AMR	0	0	0	21	7	8	1	0	0	7	1	2	60	11	11	332	49	60	3	0	0	27	0	1
+HG01978	2	PEL	Peruvian in Lima, Peru	AMR	0	0	0	22	7	7	1	0	0	6	1	2	58	10	13	323	59	67	3	0	0	24	2	5
+HG02055	1	ACB	African Caribbean in Barbados	AFR	0	0	0	21	11	11	1	0	0	5	0	0	56	15	16	307	63	82	3	0	0	25	0	3
+HG02055	2	ACB	African Caribbean in Barbados	AFR	0	0	0	20	9	9	1	0	0	5	1	1	57	16	20	289	63	73	4	0	0	18	0	2
+HG02080	1	KHV	Kinh in Ho Chi Minh City, Vietnam	EAS	0	0	0	21	9	9	1	0	0	8	4	5	59	11	14	329	47	61	4	0	1	23	0	2
+HG02080	2	KHV	Kinh in Ho Chi Minh City, Vietnam	EAS	0	0	0	21	7	8	1	0	0	5	1	1	58	9	10	329	44	53	3	0	0	21	1	3
+HG02109	1	ACB	African Caribbean in Barbados	AFR	0	0	0	22	13	13	1	0	0	5	1	1	57	16	16	298	80	95	3	0	0	16	0	3
+HG02109	2	ACB	African Caribbean in Barbados	AFR	0	0	0	22	9	9	1	0	0	6	1	1	56	14	16	295	69	84	3	0	0	20	0	4
+HG02145	1	ACB	African Caribbean in Barbados	AFR	0	0	0	19	5	5	1	1	1	5	1	1	57	20	22	288	65	82	2	0	0	15	1	3
+HG02145	2	ACB	African Caribbean in Barbados	AFR	0	0	0	20	7	7	1	0	0	3	0	0	57	17	18	289	57	78	4	0	0	23	1	3
+HG02148	1	PEL	Peruvian in Lima, Peru	AMR	0	0	0	21	6	6	1	0	0	7	0	0	60	14	17	327	56	65	4	0	1	23	0	3
+HG02148	2	PEL	Peruvian in Lima, Peru	AMR	0	0	0	19	7	7	1	0	0	6	0	0	61	10	12	333	53	62	4	0	0	25	0	6
+HG02257	1	ACB	African Caribbean in Barbados	AFR	0	0	0	21	8	8	1	0	0	3	1	1	55	16	19	295	74	90	3	0	0	22	1	2
+HG02257	2	ACB	African Caribbean in Barbados	AFR	0	0	0	21	8	8	1	0	0	5	0	1	59	12	12	295	67	82	3	0	0	23	1	4
+HG02486	1	ACB	African Caribbean in Barbados	AFR	0	0	0	20	9	9	1	0	0	6	0	1	53	17	20	294	79	88	4	0	1	15	0	2
+HG02486	2	ACB	African Caribbean in Barbados	AFR	0	0	0	21	8	8	1	0	0	4	0	0	58	18	19	304	61	73	4	0	0	20	0	5
+HG02559	1	ACB	African Caribbean in Barbados	AFR	0	0	0	22	10	10	1	1	1	6	2	2	54	18	20	303	76	91	3	0	0	21	1	4
+HG02559	2	ACB	African Caribbean in Barbados	AFR	0	0	0	20	6	6	1	0	0	7	0	0	58	15	17	294	70	81	4	0	0	22	1	4
+HG02572	1	GWD	Gambian in Western Division, The Gambia	AFR	0	0	0	22	8	9	1	0	0	6	0	1	60	13	16	294	66	79	3	0	0	14	1	3
+HG02572	2	GWD	Gambian in Western Division, The Gambia	AFR	0	0	0	18	15	15	1	0	0	3	1	1	56	17	21	283	55	72	4	0	0	15	2	4
+HG02622	1	GWD	Gambian in Western Division, The Gambia	AFR	0	0	0	22	13	13	1	0	0	3	1	1	55	14	15	293	55	72	2	0	0	15	0	2
+HG02622	2	GWD	Gambian in Western Division, The Gambia	AFR	0	0	0	18	9	9	1	0	0	5	1	2	52	11	12	295	63	76	3	0	0	16	1	4
+HG02630	1	GWD	Gambian in Western Division, The Gambia	AFR	0	0	0	20	8	8	1	0	0	7	1	2	54	15	15	292	69	85	4	0	0	19	1	4
+HG02630	2	GWD	Gambian in Western Division, The Gambia	AFR	0	0	0	21	10	10	0	0	0	6	0	0	57	15	15	311	72	93	3	0	0	19	0	3
+HG02717	1	GWD	Gambian in Western Division, The Gambia	AFR	0	0	0	23	10	10	1	0	0	7	0	1	56	19	22	306	74	91	3	0	1	17	0	1
+HG02717	2	GWD	Gambian in Western Division, The Gambia	AFR	0	0	0	21	6	6	1	0	0	6	0	0	57	17	17	296	81	95	3	0	0	15	0	3
+HG02723	1	GWD	Gambian in Western Division, The Gambia	AFR	0	0	0	21	9	9	1	0	0	7	1	1	54	15	19	298	72	83	3	0	0	17	1	2
+HG02723	2	GWD	Gambian in Western Division, The Gambia	AFR	0	0	0	21	5	5	0	0	0	6	1	1	57	12	14	287	62	79	4	0	0	19	1	5
+HG02818	1	GWD	Gambian in Western Division, The Gambia	AFR	0	0	0	20	8	8	1	1	1	7	2	2	57	16	16	293	74	91	4	0	0	20	0	5
+HG02818	2	GWD	Gambian in Western Division, The Gambia	AFR	0	0	0	20	7	7	0	0	0	6	2	2	53	15	15	295	68	81	4	0	0	15	0	3
+HG02886	1	GWD	Gambian in Western Division, The Gambia	AFR	0	0	0	19	6	6	1	0	0	4	0	0	57	16	17	311	71	85	4	0	0	12	1	2
+HG02886	2	GWD	Gambian in Western Division, The Gambia	AFR	0	0	0	20	15	15	1	0	0	5	1	1	57	14	16	290	66	79	4	0	0	14	0	2
+HG03098	1	MSL	Mende in Sierra Leone	AFR	0	0	0	21	6	6	1	0	0	6	0	0	55	17	19	290	63	75	4	0	0	18	0	1
+HG03098	2	MSL	Mende in Sierra Leone	AFR	0	0	0	20	8	8	1	0	0	5	2	2	57	13	13	298	68	89	4	0	0	18	0	2
+HG03453	1	MSL	Mende in Sierra Leone	AFR	0	0	0	19	9	9	1	0	0	6	0	0	53	14	16	293	73	84	3	0	0	18	0	3
+HG03453	2	MSL	Mende in Sierra Leone	AFR	0	0	0	19	10	10	1	0	0	4	0	0	56	22	23	298	89	100	4	0	0	19	1	6
+HG03486	1	MSL	Mende in Sierra Leone	AFR	0	0	0	17	10	10	1	0	0	3	0	0	52	16	17	282	62	75	3	0	0	19	0	3
+HG03486	2	MSL	Mende in Sierra Leone	AFR	0	0	0	19	9	9	1	0	0	4	1	2	55	17	19	291	76	93	4	0	0	20	1	3
+HG03492	1	PJL	Punjabi in Lahore,Pakistan	SAS	0	0	0	20	7	7	1	0	0	6	1	2	62	10	12	317	55	67	2	0	0	24	0	4
+HG03492	2	PJL	Punjabi in Lahore,Pakistan	SAS	0	0	0	23	9	9	1	0	0	6	1	1	59	11	12	335	58	74	4	0	1	22	1	6
+HG03516	1	ESN	Esan in Nigeria	AFR	0	0	0	20	7	7	1	0	0	4	2	2	56	15	18	303	70	87	4	0	0	16	1	4
+HG03516	2	ESN	Esan in Nigeria	AFR	0	0	0	19	15	15	1	0	0	5	0	1	58	19	20	291	71	85	4	0	0	18	0	1
+HG03540	1	GWD	Gambian in Western Division, The Gambia	AFR	0	0	0	22	16	16	1	0	0	6	1	2	58	16	18	292	61	74	4	0	0	18	0	1
+HG03540	2	GWD	Gambian in Western Division, The Gambia	AFR	0	0	0	21	7	7	1	0	0	5	0	0	54	20	22	289	79	91	4	0	0	17	0	3
+HG03579	1	MSL	Mende in Sierra Leone	AFR	0	0	0	20	13	13	1	0	0	4	1	1	56	20	20	293	67	81	3	0	0	17	0	2
+HG03579	2	MSL	Mende in Sierra Leone	AFR	0	0	0	21	7	7	1	0	0	5	0	0	54	18	18	287	74	88	4	0	0	17	1	4
+NA18906	1	YRI	Yoruba in Ibadan, Nigeria	AFR	0	0	0	12	7	8	0	0	0	7	1	2	54	14	15	295	57	70	4	0	0	19	1	2
+NA18906	2	YRI	Yoruba in Ibadan, Nigeria	AFR	0	0	0	19	8	8	1	0	0	7	1	1	54	11	15	290	69	80	3	0	1	24	0	6
+NA20129	1	ASW	African Ancestry in Southwest US	AFR	0	0	0	21	8	8	1	0	0	5	1	1	55	16	18	302	75	87	3	0	1	14	1	3
+NA20129	2	ASW	African Ancestry in Southwest US	AFR	0	0	0	19	10	10	0	0	0	6	2	2	62	18	20	297	63	72	3	0	0	21	1	8
+NA21309	1	MKK	Maasai in Kinyawa, Kenya (HapMap 3)	AFR	0	0	0	20	9	9	0	0	0	6	0	0	58	13	15	301	66	76	3	0	0	20	1	6
+NA21309	2	MKK	Maasai in Kinyawa, Kenya (HapMap 3)	AFR	0	0	0	22	11	11	1	0	0	5	1	2	53	17	19	295	69	80	2	0	0	23	0	5
