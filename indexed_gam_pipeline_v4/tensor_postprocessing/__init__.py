@@ -7,6 +7,7 @@ are read from each output directory's manifest and variant summaries.
     chr_index       node ID -> chromosome block (chr1-22 from connected components, plus non-autosomal groups)
     merge_shards    task_*/shard_* (2,048 each) -> <chrom>_shard_* (32,768 each), byte-verified
     truth_labels    germline/somatic VCF -> node candidate keys -> per-tensor labels
+    recall_scan     truth_labels.label_run with the recall's filtered-stream scan in parallel (orchestrate finalize)
 
 `orchestrate finalize` runs the merge and then the labels; for a manual re-merge or re-label run
 `python -m indexed_gam_pipeline_v4.tensor_postprocessing merge|label`. The reference-path directory

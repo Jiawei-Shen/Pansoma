@@ -598,14 +598,15 @@ def run(root, resume=False, finalize_after=True):
 
 
 def finalize(root, config=None):
-    """After every task validated: merge per chromosome, then label (as configured at prepare).
+    """After every task validated: merge per chromosome, then label (as configured at prepare; recall_scan.label_run,
+    truth_labels' labels and recall with the filtered streams scanned in parallel).
 
     Each step is skipped when already done (outputs.json has `merge`; every merged directory has
     labels.manifest.json), so an interrupted finalize can simply be repeated. Returns what was
     done ({} when nothing was left, or when merge_shard_size is 0).
     """
     from .tensor_postprocessing.merge_shards import merge
-    from .tensor_postprocessing.truth_labels import label_run
+    from .tensor_postprocessing.recall_scan import label_run
     root = Path(root).resolve()
     config = config or read_config(root)
     post = config["postprocess"]

@@ -16,6 +16,7 @@ run (this package)                  merge ─▶ label
 | `chr-index` | `tools/graph_prep.py` | node ID → chromosome block table (`*.chr_node_ranges.tsv/.json`) |
 | `merge` | `merge_shards.py` | `task_*/shard_*` (2,048 each) → `<chrom>_shard_*` (32,768 each), byte-verified |
 | `label` | `truth_labels.py` | germline/somatic VCF → node candidate keys → one label per tensor, recall report |
+| (`finalize`) | `recall_scan.py` | `truth_labels.label_run` with the recall's scan of the filtered-candidate streams in parallel |
 
 Run from the repository root:
 
@@ -73,7 +74,9 @@ The same table drives the builder's `--chromosomes all|autosome|chr1,chr2,...`
 `orchestrate prepare` freezes the options below into `config.json`. When every task has validated,
 `orchestrate run` calls `orchestrate finalize` (merge, then labels). `finalize` can also be run on
 its own. It skips finished steps: the merge when `outputs.json` has a `merge` section, and the
-labels when every kind has a `labels.manifest.json`.
+labels when every kind has a `labels.manifest.json`. It labels with `recall_scan.label_run`, which
+writes what `label` writes and scans the filtered-candidate streams in parallel (the end of
+[Labels](#labels-truth_labelspy)).
 
 ```
 --merge-shard-size 32768      0 = keep the task layout (no merge, no labels)
@@ -141,6 +144,12 @@ hold:
 * totals match `outputs.json`;
 * shard headers, lengths and file sizes agree;
 * random tensors reloaded from the source task shards equal the merged ones.
+
+The checks run in `--workers` processes: every output shard's hash is one job, and every
+chromosome's summary check with its spot check is one job that reads the summary once. The
+spot-checked tensors are drawn in the parent (one `random.Random(seed)` per kind, chromosomes in name
+order, `--spots` per chromosome). Failures are reported in the order totals, summaries, shards, spot
+checks.
 
 After publishing, the task directories are deleted unless `--keep-sources` is given. `outputs.json`
 gets a `merge` section (the original is kept as `outputs.pre_merge.json`), and `status.json` becomes
@@ -337,6 +346,15 @@ go to `--recall-dir` (default: the tensor directory). Per truth allele, they giv
 * `no_candidate`
 
 Recall counts key matches only; partial matches are not in it.
+
+The `filtered` status comes from a scan of `<kind>/filtered_candidates.ndjson` (SNV, then INDEL; the
+last line of a candidate ID gives its reasons). `label` reads each file in one stream. `finalize`
+uses `recall_scan.py` instead, with the same result: the file is cut into byte ranges at line starts,
+8 processes (a forkserver pool, so no worker carries the truth sets' memory) apply the same
+`candidate_id` and `reasons` searches and test each ID against 64-bit BLAKE2b hashes of the truth
+keys, and the parent keeps the exact key matches in file order. `recall_scan.label_run` is
+`truth_labels.label_run` verbatim with that scan; a test pins `truth_labels.label_run`'s source, so a
+change there has to be copied.
 
 ## Commands
 

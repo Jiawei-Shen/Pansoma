@@ -30,7 +30,10 @@ Sources are deleted only when `keep_sources` is False and every kind verified.
 The copy runs in parallel (`workers` processes): every (kind, chromosome) group is one job that
 reads its records' rows with plain sequential file reads and appends them to its shards, and the
 audit streams are copied in slices straight to their offsets in the concatenated file. The
-bytes are those of a sequential copy.
+bytes are those of a sequential copy. The verification runs in the same number of processes:
+every output shard's hash is one job, and every group's summary check and spot check is one job
+that reads the summary once (the spot-checked lines are drawn in the parent: one
+random.Random(seed) per kind, groups in name order; spot_picks).
 """
 from collections import Counter
 from concurrent.futures import ProcessPoolExecutor
@@ -310,13 +313,14 @@ def write_kinds(sources_of, index, shard_size, work, reference_path, pool, worke
             for kind, (reference, _, totals) in planned.items()}
 
 
-def verify_summary(directory, group, result):
-    """Re-read one output summary: positions, file names, chromosome, and the stripped-record hash."""
-    digest, counts = hashlib.sha256(), Counter()
+def verify_summary(directory, group, result, keep=()):
+    """Re-read one output summary: positions, file names, chromosome, and the stripped-record hash.
+    Returns {line number: record} of the line numbers in `keep`."""
+    digest, counts, kept, keep = hashlib.sha256(), Counter(), {}, set(keep)
     expected = {s["file"]: s["tensors"] for s in result["shards"]}
     last = (-1, -1)
     with (Path(directory) / result["summary"]).open() as stream:
-        for line in stream:
+        for i, line in enumerate(stream):
             r = json.loads(line)
             position = (r["shard_index"], r["index_within_shard"])
             follows = position == (last[0], last[1] + 1) or position == (last[0] + 1, 0)
@@ -326,10 +330,42 @@ def verify_summary(directory, group, result):
             last = position
             counts[r["shard_file"]] += 1
             digest.update((stripped(r, ADDED) + "\n").encode())
+            if i in keep:
+                kept[i] = r
     if dict(counts) != expected:
         raise ValueError(f"{group}: summary counts {dict(counts)} != shards {expected}")
     if digest.hexdigest() != result["summary_sha256_stripped"]:
         raise ValueError(f"{group}: summary records differ from the source records")
+    return kept
+
+
+def spot_picks(results, spots, seed):
+    """{group: summary line numbers of its spot check, in check order} for one kind: one random.Random(seed), groups
+    in name order, rng.sample(range(n), min(spots, n)) over a group's n tensors. random.sample draws by the
+    population's size alone, so these are the lines rng.sample(<the summary's lines>, k) would take."""
+    rng = random.Random(seed)
+    return {group: rng.sample(range(result["tensors"]), min(spots, result["tensors"]))
+            for group, result in sorted(results.items())}
+
+
+def verify_group(directory, group, result, picks, source_paths):
+    """One merged group in one pass over its summary: verify_summary (its errors raise here), then the spot check of
+    the summary lines `picks` (spot_picks), in order: each merged tensor reloaded and compared with the tensor at its
+    recorded source position. Returns (number checked, the spot check's first error or None): merge reports the
+    summaries' errors, then the shards', then the spot checks' (groups in name order)."""
+    kept = verify_summary(directory, group, result, picks)
+    try:
+        for i in picks:
+            r = kept[i]
+            out = np.load(Path(directory) / r["shard_file"], mmap_mode="r")[r["index_within_shard"]]
+            folder = Path(source_paths[r["source_task"]])
+            source = np.load(folder / f"shard_{r['source_shard_index']:05d}_data.npy",
+                             mmap_mode="r")[r["source_index_within_shard"]]
+            if not np.array_equal(out, source):
+                raise ValueError(f"Spot check failed: {group} {r['shard_file']}[{r['index_within_shard']}]")
+    except Exception as error:  # deferred, not dropped
+        return len(picks), error
+    return len(picks), None
 
 
 def verify_shard(path, tensors, shape, sha256):
@@ -374,25 +410,35 @@ def merge(root, chr_index, shard_size=DEFAULT_SHARD_SIZE, keep_sources=False, wo
         written = write_kinds(sources_of, index, shard_size, {kind: plans[kind][1] for kind in sources_of},
                               reference_path, pool, workers)
     copy_seconds = time.perf_counter() - started
-    # 2. Verify every shard from disk, every summary, the totals, and a spot check.
+    # 2. Verify the totals, then in parallel every group (summary and spot check, one pass) and every shard from disk.
     t = time.perf_counter()
-    jobs = []
     for kind, (reference, results) in written.items():
-        work = plans[kind][1]
-        for group, result in results.items():
-            verify_summary(work[result["dataset"]], group, result)
-            jobs += [(work[result["dataset"]] / s["file"], s["tensors"], reference["shape"], s["sha256"])
-                     for s in result["shards"]]
         total = sum(r["tensors"] for r in results.values())
         if total != outputs["tensors_by_type"][kind] or total != sum(s["tensors"] for s in sources_of[kind]):
             raise ValueError(f"{kind}: merged {total} tensors, outputs.json lists {outputs['tensors_by_type'][kind]}")
-    with ProcessPoolExecutor(max_workers=workers) as pool:
-        list(pool.map(verify_shard, *zip(*jobs)))
-    spots_checked = {}
+    groups, shards = {}, []  # pool jobs: {(kind, group): verify_group arguments}, verify_shard arguments
     for kind, (reference, results) in written.items():
         work = plans[kind][1]
         source_paths = {s["task"]: s["path"] for s in sources_of[kind]}
-        spots_checked[kind] = spot_check_sources(work, results, source_paths, spots, seed)
+        picks = spot_picks(results, spots, seed)
+        for group, result in results.items():
+            groups[kind, group] = (work[result["dataset"]], group, result, picks[group], source_paths)
+            shards += [(work[result["dataset"]] / s["file"], s["tensors"], reference["shape"], s["sha256"])
+                       for s in result["shards"]]
+    with ProcessPoolExecutor(max_workers=workers) as pool:
+        group_jobs = {key: pool.submit(verify_group, *arguments) for key, arguments in groups.items()}
+        shard_jobs = [pool.submit(verify_shard, *arguments) for arguments in shards]
+        spot = {key: job.result() for key, job in group_jobs.items()}  # summary errors first,
+        for job in shard_jobs:  # then shard errors,
+            job.result()
+    spots_checked = {}
+    for kind, (reference, results) in written.items():  # then spot-check errors
+        spots_checked[kind] = 0
+        for group in sorted(results):
+            checked, error = spot[kind, group]
+            if error is not None:
+                raise error
+            spots_checked[kind] += checked
     verify_seconds = time.perf_counter() - t
     # 3. Publish: move verified files into place, manifests last.
     created = datetime.now(timezone.utc).isoformat()
@@ -448,26 +494,6 @@ def merge(root, chr_index, shard_size=DEFAULT_SHARD_SIZE, keep_sources=False, wo
     write_json(root / "status.json", status)
     report["total_seconds"] = time.perf_counter() - started
     return report
-
-
-def spot_check_sources(directories, results, source_paths, spots, seed):
-    """Reload random merged tensors and compare them with the tensor at their recorded source position."""
-    rng = random.Random(seed)
-    checked = 0
-    for group, result in sorted(results.items()):
-        directory = directories[result["dataset"]]
-        with (directory / result["summary"]).open() as stream:
-            lines = stream.readlines()
-        for line in rng.sample(lines, min(spots, len(lines))):
-            r = json.loads(line)
-            out = np.load(directory / r["shard_file"], mmap_mode="r")[r["index_within_shard"]]
-            folder = Path(source_paths[r["source_task"]])
-            source = np.load(folder / f"shard_{r['source_shard_index']:05d}_data.npy",
-                             mmap_mode="r")[r["source_index_within_shard"]]
-            if not np.array_equal(out, source):
-                raise ValueError(f"Spot check failed: {group} {r['shard_file']}[{r['index_within_shard']}]")
-            checked += 1
-    return checked
 
 
 def collect_batch_timing(root, tensors, sources_of):
