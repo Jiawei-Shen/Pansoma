@@ -1,0 +1,22 @@
+{
+ "records": 102423,
+ "mapq_gt5": 94688,
+ "grch38_only": 82815,
+ "branch_all_perfect": 11764,
+ "branch_some_edited": 109,
+ "whole_read_perfect": 78117,
+ "visits": 326345,
+ "branch_visits": 14576,
+ "branch_visits_perfect": 14455,
+ "grch38_visits": 311769,
+ "grch38_visits_perfect": 291541,
+ "set": "COLO829T_Illumina",
+ "gam": "/scratch/jshen/data/COLO829T/illumina/GAM/COLO829T.sorted.gam",
+ "starts_sampled": 400,
+ "per_start": 250,
+ "frac_reads_touching_branch": 0.1253907570125042,
+ "frac_of_branch_reads_all_perfect": 0.9908195064431904,
+ "frac_branch_visits_perfect": 0.991698682766191,
+ "frac_grch38_visits_perfect": 0.935118629498122,
+ "frac_whole_read_perfect": 0.8249936633997972
+}

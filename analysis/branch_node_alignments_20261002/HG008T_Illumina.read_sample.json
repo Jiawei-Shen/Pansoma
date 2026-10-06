@@ -1,0 +1,22 @@
+{
+ "records": 104558,
+ "mapq_gt5": 96043,
+ "grch38_only": 85493,
+ "branch_all_perfect": 10387,
+ "branch_some_edited": 163,
+ "whole_read_perfect": 77548,
+ "visits": 316906,
+ "branch_visits": 13123,
+ "branch_visits_perfect": 12954,
+ "grch38_visits": 303783,
+ "grch38_visits_perfect": 280821,
+ "set": "HG008T_Illumina",
+ "gam": "/scratch/jshen/data/HG008_GIAB/vg_giraffe_GAM/Liss_lab_BCM_Illumina-WGS_20240313/HG008-T_p23_BCM_IlluminaWGS_20240313.sorted.gam",
+ "starts_sampled": 400,
+ "per_start": 250,
+ "frac_reads_touching_branch": 0.10984663119644326,
+ "frac_of_branch_reads_all_perfect": 0.9845497630331753,
+ "frac_branch_visits_perfect": 0.9871218471386116,
+ "frac_grch38_visits_perfect": 0.9244131501762771,
+ "frac_whole_read_perfect": 0.8074300053101215
+}

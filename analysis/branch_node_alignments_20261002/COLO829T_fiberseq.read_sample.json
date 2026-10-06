@@ -1,0 +1,22 @@
+{
+ "records": 11666,
+ "mapq_gt5": 9794,
+ "grch38_only": 700,
+ "branch_all_perfect": 7452,
+ "branch_some_edited": 1642,
+ "whole_read_perfect": 188,
+ "visits": 3280574,
+ "branch_visits": 265976,
+ "branch_visits_perfect": 262092,
+ "grch38_visits": 3014598,
+ "grch38_visits_perfect": 2776249,
+ "set": "COLO829T_fiberseq",
+ "gam": "/scratch/jshen/data/COLO829T/COLO829T_fiberseq/GAM/COLO829T_fiberseq.sorted.gam",
+ "starts_sampled": 400,
+ "per_start": 25,
+ "frac_reads_touching_branch": 0.9285276700020421,
+ "frac_of_branch_reads_all_perfect": 0.8194413899274247,
+ "frac_branch_visits_perfect": 0.9853971786928144,
+ "frac_grch38_visits_perfect": 0.9209350633152413,
+ "frac_whole_read_perfect": 0.01919542577088013
+}

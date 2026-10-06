@@ -1,0 +1,60 @@
+# Read alignments on HPRC v1.1 d9 branch nodes, and how many are perfect (2026-10-02)
+
+Question: how many GAM alignments lie on graph branch nodes (nodes not on the GRCh38 path: alleles of the other HPRC
+haplotypes / CHM13), and how many of those are perfect (no edit)? Six GAMs on HPRC v1.1 d9 (the tensor sets).
+
+- `s1_branch_node_stats.py` (exact, every MAPQ > 5 read): from each set's `discovery/node_stats.json` (the pipeline's full
+  GAM scan: per node, read visits without / with an edit after decoding and indel left-normalization), split into GRCh38
+  and branch nodes with the pipeline's reference-path index. A visit = one read on one node. Job `s1_job.sh` (1 min, 5-7 GB).
+- `s2_read_sample.py` (estimate, per read): 400 random GAI group starts per GAM, 250 (short) / 25 (long) records each,
+  MAPQ > 5, edits as vg wrote them (no left-normalization). Job `s2_job.sh` (2-15 min, < 1.3 GB).
+
+## Exact, per node visit (s1)
+
+Visit = one MAPQ > 5 read on one node; perfect = no edit on that node (after decoding + indel left-normalization). Branch node = not on the GRCh38 path.
+
+| set | MAPQ>5 alignments | node visits | **on branch nodes** | share | **perfect on branch** | % perfect (branch) | % perfect (GRCh38 nodes) |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| HG008T_PacBio | 13,350,742 | 3,931,468,159 | 313,140,918 | 8.0% | 306,752,916 | 98.0% | 92.4% |
+| HG008T_ONT | 3,273,435 | 1,928,528,256 | 168,036,117 | 8.7% | 161,636,796 | 96.2% | 87.9% |
+| HG008T_Illumina | 2,752,806,026 | 9,589,762,025 | 498,265,292 | 5.2% | 487,379,441 | 97.8% | 92.5% |
+| COLO829T_fiberseq | 25,682,919 | 8,590,446,313 | 702,212,074 | 8.2% | 685,048,545 | 97.6% | 91.2% |
+| COLO829T_ONT | 12,136,638 | 4,483,139,412 | 379,054,180 | 8.5% | 357,607,637 | 94.3% | 77.8% |
+| COLO829T_Illumina | 2,289,863,829 | 8,309,502,362 | 409,917,599 | 4.9% | 401,951,004 | 98.1% | 93.4% |
+
+| set | branch nodes in the graph | branch nodes with reads | all visits perfect | <= 5 % edited (not a target) | discovery targets | GRCh38 nodes with reads | GRCh38 all perfect | GRCh38 <= 5 % edited |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| HG008T_PacBio | 11,026,056 | 6,150,890 (55.8%) | 4,870,516 (79.2%) | 5,410,489 (88.0%) | 740,401 | 45,966,974 | 49.1% | 65.7% |
+| HG008T_ONT | 11,026,056 | 7,298,275 (66.2%) | 5,182,373 (71.0%) | 5,827,941 (79.9%) | 1,470,334 | 46,948,367 | 40.1% | 55.7% |
+| HG008T_Illumina | 11,026,056 | 6,757,603 (61.3%) | 4,020,165 (59.5%) | 5,248,813 (77.7%) | 1,508,790 | 46,014,709 | 35.4% | 62.8% |
+| COLO829T_fiberseq | 11,026,056 | 6,806,895 (61.7%) | 4,754,800 (69.9%) | 5,777,214 (84.9%) | 1,029,681 | 46,605,562 | 41.2% | 63.0% |
+| COLO829T_ONT | 11,026,056 | 9,269,968 (84.1%) | 4,348,826 (46.9%) | 6,193,784 (66.8%) | 3,076,184 | 48,086,474 | 17.4% | 44.5% |
+| COLO829T_Illumina | 11,026,056 | 6,605,925 (59.9%) | 4,540,254 (68.7%) | 5,451,908 (82.5%) | 1,154,017 | 46,002,481 | 40.2% | 66.1% |
+
+### Perfect fraction of visits by node length (branch vs GRCh38 nodes; visits in parentheses)
+
+| set | 1 bp branch | 1 bp GRCh38 | 2-5 bp branch | 2-5 bp GRCh38 | 6-32 bp branch | 6-32 bp GRCh38 | 33-256 bp branch | 33-256 bp GRCh38 | >256 bp branch | >256 bp GRCh38 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| HG008T_PacBio | 98.5% (267 M) | 97.9% (1630 M) | 96.4% (30 M) | 97.0% (214 M) | 93.8% (12 M) | 96.1% (447 M) | 86.2% (3 M) | 87.6% (1071 M) | 65.1% (0 M) | 67.9% (257 M) |
+| HG008T_ONT | 96.9% (139 M) | 96.6% (797 M) | 95.0% (18 M) | 94.9% (113 M) | 91.4% (8 M) | 91.6% (225 M) | 80.5% (2 M) | 79.3% (507 M) | 54.1% (0 M) | 53.7% (119 M) |
+| HG008T_Illumina | 98.7% (438 M) | 98.5% (2900 M) | 95.7% (37 M) | 97.4% (373 M) | 88.0% (14 M) | 94.5% (881 M) | 79.5% (7 M) | 89.7% (3264 M) | 81.0% (2 M) | 85.6% (1674 M) |
+| COLO829T_fiberseq | 98.3% (590 M) | 97.3% (3573 M) | 96.0% (70 M) | 95.9% (501 M) | 92.6% (32 M) | 94.8% (997 M) | 83.5% (9 M) | 85.5% (2281 M) | 60.8% (1 M) | 64.0% (536 M) |
+| COLO829T_ONT | 95.8% (315 M) | 95.0% (1863 M) | 92.8% (41 M) | 92.2% (289 M) | 83.9% (18 M) | 83.9% (541 M) | 59.6% (5 M) | 56.5% (1146 M) | 24.3% (0 M) | 21.6% (265 M) |
+| COLO829T_Illumina | 98.8% (362 M) | 98.5% (2595 M) | 95.8% (29 M) | 97.5% (349 M) | 89.5% (11 M) | 95.3% (821 M) | 81.8% (6 M) | 90.9% (2780 M) | 82.3% (1 M) | 86.8% (1354 M) |
+
+Branch nodes are mostly 1 bp (SNP alleles); a visit's chance of an edit grows with node length, so compare within a
+length bin: branch and GRCh38 nodes are about equally often perfect.
+
+## Per read, sampled (s2)
+
+| set | sampled reads (MAPQ>5) | reads touching >= 1 branch node | of these, no edit on any branch node | branch visits per read | branch visits perfect | GRCh38 visits perfect | whole read without any edit |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| HG008T_PacBio | 9,855 | 93.6% | 83.6% | 23.4 | 98.5% | 92.7% | 1.6% |
+| HG008T_ONT | 9,804 | 82.9% | 61.9% | 50.6 | 97.3% | 88.5% | 2.7% |
+| HG008T_Illumina | 96,043 | 11.0% | 98.5% | 0.1 | 98.7% | 92.4% | 80.7% |
+| COLO829T_fiberseq | 9,794 | 92.9% | 81.9% | 27.2 | 98.5% | 92.1% | 1.9% |
+| COLO829T_ONT | 9,696 | 73.1% | 63.7% | 24.1 | 95.2% | 76.8% | 0.0% |
+| COLO829T_Illumina | 94,688 | 12.5% | 99.1% | 0.2 | 99.2% | 93.5% | 82.5% |
+
+Files: `<set>.json` (s1), `<set>.read_sample.json` (s2), `branch_node_alignments.md` (s1 tables). Logs:
+`tmp/branch_node_alignments_20261002/` (Slurm 380045 / 380057 s1, 380051 s2).

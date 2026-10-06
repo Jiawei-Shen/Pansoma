@@ -1,0 +1,22 @@
+{
+ "records": 10984,
+ "mapq_gt5": 9804,
+ "grch38_only": 1673,
+ "branch_all_perfect": 5033,
+ "branch_some_edited": 3098,
+ "whole_read_perfect": 267,
+ "visits": 5872231,
+ "branch_visits": 495962,
+ "branch_visits_perfect": 482371,
+ "grch38_visits": 5376269,
+ "grch38_visits_perfect": 4758672,
+ "set": "HG008T_ONT",
+ "gam": "/scratch/jshen/data/HG008_GIAB/raw_sequencing_data/Liss_lab_Northeastern-ONT-UL-20241216/HG008-T_GRCh38_GIABv3_ONT-UL-R10.4.1-dorado_0.8.1_sup.5mC_5hmC_54x_20241216.AF-HPRC.sorted.gam",
+ "starts_sampled": 400,
+ "per_start": 25,
+ "frac_reads_touching_branch": 0.8293553651570787,
+ "frac_of_branch_reads_all_perfect": 0.6189890542368712,
+ "frac_branch_visits_perfect": 0.9725966908755106,
+ "frac_grch38_visits_perfect": 0.8851253536606892,
+ "frac_whole_read_perfect": 0.02723378212974296
+}

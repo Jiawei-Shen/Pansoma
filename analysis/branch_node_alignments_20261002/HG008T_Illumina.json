@@ -1,0 +1,97 @@
+{
+ "set": "HG008T_Illumina",
+ "gam": "/scratch/jshen/data/HG008_GIAB/vg_giraffe_GAM/Liss_lab_BCM_Illumina-WGS_20240313/HG008-T_p23_BCM_IlluminaWGS_20240313.sorted.gam",
+ "alignments_scanned": 2974694440,
+ "alignments_mapq_gt5": 2752806026,
+ "graph_nodes": 60118570,
+ "graph_grch38_nodes": 49092514,
+ "all": {
+  "visits": 9589762025,
+  "perfect_visits": 8900661144,
+  "edited_visits": 689100881,
+  "perfect_fraction": 0.9281420248799135,
+  "nodes_observed": 52772312,
+  "nodes_all_perfect": 20306085,
+  "nodes_edited_le_5pct": 34161127,
+  "nodes_target": 18611185,
+  "visits_on_all_perfect_nodes": 2289851733,
+  "median_visits_per_node": 143.0
+ },
+ "grch38": {
+  "visits": 9091496733,
+  "perfect_visits": 8413281703,
+  "edited_visits": 678215030,
+  "perfect_fraction": 0.925401168815445,
+  "nodes_observed": 46014709,
+  "nodes_all_perfect": 16285920,
+  "nodes_edited_le_5pct": 28912314,
+  "nodes_target": 17102395,
+  "visits_on_all_perfect_nodes": 1983320011,
+  "median_visits_per_node": 158.0
+ },
+ "branch": {
+  "visits": 498265292,
+  "perfect_visits": 487379441,
+  "edited_visits": 10885851,
+  "perfect_fraction": 0.97815249993371,
+  "nodes_observed": 6757603,
+  "nodes_all_perfect": 4020165,
+  "nodes_edited_le_5pct": 5248813,
+  "nodes_target": 1508790,
+  "visits_on_all_perfect_nodes": 306531722,
+  "median_visits_per_node": 74.0
+ },
+ "branch_share_of_visits": 0.051958045538674356,
+ "by_length": {
+  "grch38 1 bp": {
+   "nodes": 21360300,
+   "visits": 2899675733,
+   "perfect_fraction": 0.9849031046810502
+  },
+  "branch 1 bp": {
+   "nodes": 5712948,
+   "visits": 438261712,
+   "perfect_fraction": 0.9867201540982434
+  },
+  "grch38 2-5 bp": {
+   "nodes": 2845234,
+   "visits": 372803698,
+   "perfect_fraction": 0.9735519522663104
+  },
+  "branch 2-5 bp": {
+   "nodes": 715143,
+   "visits": 37333643,
+   "perfect_fraction": 0.9568298223669198
+  },
+  "grch38 6-32 bp": {
+   "nodes": 5612286,
+   "visits": 880821001,
+   "perfect_fraction": 0.9450461842473713
+  },
+  "branch 6-32 bp": {
+   "nodes": 260966,
+   "visits": 13766921,
+   "perfect_fraction": 0.8798070389159639
+  },
+  "grch38 33-256 bp": {
+   "nodes": 13143330,
+   "visits": 3264111103,
+   "perfect_fraction": 0.8973702740411897
+  },
+  "branch 33-256 bp": {
+   "nodes": 62373,
+   "visits": 7143900,
+   "perfect_fraction": 0.794822995842607
+  },
+  "grch38 >256 bp": {
+   "nodes": 3053559,
+   "visits": 1674085198,
+   "perfect_fraction": 0.8559334397746703
+  },
+  "branch >256 bp": {
+   "nodes": 6173,
+   "visits": 1759116,
+   "perfect_fraction": 0.8103297337981122
+  }
+ }
+}

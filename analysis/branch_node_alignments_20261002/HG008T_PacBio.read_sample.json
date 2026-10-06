@@ -1,0 +1,22 @@
+{
+ "records": 10901,
+ "mapq_gt5": 9855,
+ "grch38_only": 628,
+ "branch_all_perfect": 7718,
+ "branch_some_edited": 1509,
+ "whole_read_perfect": 156,
+ "visits": 2943769,
+ "branch_visits": 230920,
+ "branch_visits_perfect": 227526,
+ "grch38_visits": 2712849,
+ "grch38_visits_perfect": 2513666,
+ "set": "HG008T_PacBio",
+ "gam": "/scratch/jshen/data/HG008_GIAB/raw_sequencing_data/Liss_lab_PacBio_Revio_20240125/HG008-T_PacBio-HiFi-Revio_20240125_116x.AF-HPRC.sorted.gam",
+ "starts_sampled": 400,
+ "per_start": 25,
+ "frac_reads_touching_branch": 0.9362760020294267,
+ "frac_of_branch_reads_all_perfect": 0.8364582204400131,
+ "frac_branch_visits_perfect": 0.985302269184133,
+ "frac_grch38_visits_perfect": 0.9265779260106257,
+ "frac_whole_read_perfect": 0.015829528158295282
+}

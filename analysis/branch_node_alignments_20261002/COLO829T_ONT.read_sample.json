@@ -1,0 +1,22 @@
+{
+ "records": 10045,
+ "mapq_gt5": 9696,
+ "grch38_only": 2609,
+ "branch_all_perfect": 4511,
+ "branch_some_edited": 2576,
+ "whole_read_perfect": 1,
+ "visits": 3169652,
+ "branch_visits": 234096,
+ "branch_visits_perfect": 222940,
+ "grch38_visits": 2935556,
+ "grch38_visits_perfect": 2253790,
+ "set": "COLO829T_ONT",
+ "gam": "/scratch/jshen/data/COLO829T/COLO829T_ONT/COLO829T_ONT_merged.sorted.gam",
+ "starts_sampled": 400,
+ "per_start": 25,
+ "frac_reads_touching_branch": 0.7309199669966997,
+ "frac_of_branch_reads_all_perfect": 0.6365175673768872,
+ "frac_branch_visits_perfect": 0.952344337365867,
+ "frac_grch38_visits_perfect": 0.767755750529031,
+ "frac_whole_read_perfect": 0.00010313531353135314
+}
