@@ -1,0 +1,15 @@
+COLO829T chr1 truth in DeepSomatic tumor-only (PacBio model, fiberseq BAM, default PoN)
+
+SNV: 2,443 truth alleles
+  PASS                      1,378 ( 56.4%)  repo-PoN tagged    17  median DeepSomatic VAF 0.49  truth VAF_PB 0.49  population AF 0.0e+00 (>= 0.01: 1)
+  GERMLINE                    854 ( 35.0%)  repo-PoN tagged    31  median DeepSomatic VAF 1.00  truth VAF_PB 1.00  population AF 0.0e+00 (>= 0.01: 5)
+  RefCall                     102 (  4.2%)  repo-PoN tagged    14  median DeepSomatic VAF 0.03  truth VAF_PB 0.03  population AF 0.0e+00 (>= 0.01: 2)
+  no record                    92 (  3.8%)  repo-PoN tagged     6  median DeepSomatic VAF nan  truth VAF_PB 0.03  population AF 0.0e+00 (>= 0.01: 1)
+  PON                          16 (  0.7%)  repo-PoN tagged    16  median DeepSomatic VAF 0.50  truth VAF_PB 0.50  population AF 5.9e-04 (>= 0.01: 3)
+  same POS, other allele        1 (  0.0%)  repo-PoN tagged     0  median DeepSomatic VAF nan  truth VAF_PB 0.06  population AF 0.0e+00 (>= 0.01: 0)
+
+INDEL: 131 truth alleles
+  GERMLINE                     72 ( 55.0%)  repo-PoN tagged    55  median DeepSomatic VAF 0.71  truth VAF_PB 0.74  population AF 1.8e-02 (>= 0.01: 42)
+  RefCall                      36 ( 27.5%)  repo-PoN tagged    31  median DeepSomatic VAF 0.48  truth VAF_PB 0.53  population AF 2.0e-02 (>= 0.01: 20)
+  PASS                         12 (  9.2%)  repo-PoN tagged     5  median DeepSomatic VAF 0.47  truth VAF_PB 0.49  population AF 0.0e+00 (>= 0.01: 1)
+  same POS, other allele       11 (  8.4%)  repo-PoN tagged     9  median DeepSomatic VAF nan  truth VAF_PB 0.69  population AF 1.8e-02 (>= 0.01: 8)

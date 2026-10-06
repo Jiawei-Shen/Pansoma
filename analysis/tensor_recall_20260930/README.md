@@ -235,6 +235,18 @@ low-VAF (S2) or Extreme-region (S1) truth, so they stay missing after the PoN.
 - **Unplaced:** label-1 tensors without a GRCh38 allele (off-reference) cannot be reached by the PoN: SNV 0.3–6.1%,
   INDEL 8.7–19.8%.
 
+**INDEL PoN rules compared** (`pon/indel_rules/README.md`, 2026-10-01):
+- Other callers' rules on our data:
+  - ClairS-TO (position matching for 1000G/CoLoRSdb) tags even more truth INDELs (87% / 73%).
+  - DeepSomatic-like exact variant keys tag 19% / 23%.
+  - Mutect2-like (1000G PoN + gnomAD AF ≥ 0.01) tags 7% / 9%.
+- The overlap is real: 84% / 72% of the truth INDEL alleles are exactly in gnomAD or CoLoRSdb (homopolymer/STR alleles).
+- A population-AF floor of 0.01 on the exact allele (gnomAD or CoLoRSdb) gives the best chr1 INDEL F1:
+  - PASS 0.186 vs 0.094 with no PoN and 0.114 with the repo rule;
+  - best 0.235 vs 0.150 / 0.126;
+  - it costs recall: the ceiling drops to 28–43%.
+- Chosen on chr1, the test chromosome. The genome-wide AF distributions support the 0.01–0.05 region.
+
 ## Files
 
 | Path | Content |
