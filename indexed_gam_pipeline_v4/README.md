@@ -740,7 +740,7 @@ the code that executes it), `native_decoder` (`available`, `reason`), `variant_o
    task directory with its tensor count; the capped nodes of all tasks gathered into
    `<root>/downsampled_nodes.tsv`) and `status.json` `complete`;
 4. **finalize** (skipped with `--no-finalize`: then `orchestrate finalize --root R` as a separate job; the
-   merge and labels peak at ~15 GiB on the genome sets, the tasks at up to ~450 GiB, so a run job that
+   merge and labels peak at ~15 GiB on the genome sets plus ~2.4 GiB for the recall scan's workers (ask 22G), the tasks at up to ~450 GiB, so a run job that
    finalizes holds that memory for the 2–7 h of merge and labels): with `--merge-shard-size N` the task outputs are merged into
    `<tensors>/<kind>/<chrom>_shard_*` (chr1–22; other blocks under `<tensors>/non_autosomal/`) by
    `min(8, processes)` workers, byte-verified, the task directories deleted unless
@@ -754,7 +754,7 @@ the code that executes it), `native_decoder` (`available`, `reason`), `variant_o
   `run`/`--resume`.
 * If the job died during the merge or labels: `orchestrate finalize --root R` (from the checkout or
   from `R/source`). It skips steps already done (`outputs.json` has `merge`; every
-  `labels.manifest.json` exists), so it can be repeated; it prints what it did (`{}` when nothing
+  `labels.manifest.json` and `truth_recall.json` exist), so it can be repeated; it prints what it did (`{}` when nothing
   was left). To re-label, delete `<tensors>/{SNV,INDEL}/labels.manifest.json` and run it again (with
   the AF floors frozen at prepare), or use `tensor_postprocessing label` (e.g. with other floors).
 * **Hand edits of `config.json`** (e.g. after running out of memory): every task re-reads it when it

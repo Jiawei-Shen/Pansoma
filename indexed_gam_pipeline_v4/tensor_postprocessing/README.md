@@ -74,7 +74,8 @@ The same table drives the builder's `--chromosomes all|autosome|chr1,chr2,...`
 `orchestrate prepare` freezes the options below into `config.json`. When every task has validated,
 `orchestrate run` calls `orchestrate finalize` (merge, then labels). `finalize` can also be run on
 its own. It skips finished steps: the merge when `outputs.json` has a `merge` section, and the
-labels when every kind has a `labels.manifest.json`. It labels with `recall_scan.label_run`, which
+labels when every kind has a `labels.manifest.json` and the tensors have `truth_recall.json` (written
+last). It labels with `recall_scan.label_run`, which
 writes what `label` writes and scans the filtered-candidate streams in parallel (the end of
 [Labels](#labels-truth_labelspy)).
 
@@ -352,7 +353,12 @@ last line of a candidate ID gives its reasons). `label` reads each file in one s
 uses `recall_scan.py` instead, with the same result: the file is cut into byte ranges at line starts,
 8 processes (a forkserver pool, so no worker carries the truth sets' memory) apply the same
 `candidate_id` and `reasons` searches and test each ID against 64-bit BLAKE2b hashes of the truth
-keys, and the parent keeps the exact key matches in file order. `recall_scan.label_run` is
+keys, and the parent keeps the exact key matches in file order. The workers import the caller's main
+module like spawn workers (`python -m` and `python -c` are safe; a script keeps its work under
+`if __name__ == "__main__":`); when the pool cannot work (main from stdin, a TMPDIR too long for the
+forkserver socket, a worker killed) the scan falls back to the one-stream scan. The 8 workers add
+~2.4 GiB of summed RSS (21 M truth keys), which `/usr/bin/time` (largest process) does not show.
+`recall_scan.label_run` is
 `truth_labels.label_run` verbatim with that scan; a test pins `truth_labels.label_run`'s source, so a
 change there has to be copied.
 

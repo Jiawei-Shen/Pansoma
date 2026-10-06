@@ -602,8 +602,9 @@ def finalize(root, config=None):
     truth_labels' labels and recall with the filtered streams scanned in parallel).
 
     Each step is skipped when already done (outputs.json has `merge`; every merged directory has
-    labels.manifest.json), so an interrupted finalize can simply be repeated. Returns what was
-    done ({} when nothing was left, or when merge_shard_size is 0).
+    labels.manifest.json and the tensors have truth_recall.json, which label_run writes last), so an
+    interrupted finalize can simply be repeated. Returns what was done ({} when nothing was left, or when
+    merge_shard_size is 0).
     """
     from .tensor_postprocessing.merge_shards import merge
     from .tensor_postprocessing.recall_scan import label_run
@@ -619,7 +620,9 @@ def finalize(root, config=None):
         labels = post["labels"]
         kinds = list(config["variant_outputs"])
         tensors = Path(config["tensors"])
-        if labels and not all((tensors / kind / "labels.manifest.json").exists() for kind in kinds):
+        done = (all((tensors / kind / "labels.manifest.json").exists() for kind in kinds)
+                and (tensors / "truth_recall.json").exists())
+        if labels and not done:
             report["labels"] = label_run(tensors, kinds, post["reference_path"], labels["reference_fasta"],
                                          labels["somatic_vcf"], labels["somatic_bed"], labels["germline_vcf"],
                                          labels["germline_bed"], labels["truth_dir"],

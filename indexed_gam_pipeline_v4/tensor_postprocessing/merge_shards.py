@@ -428,9 +428,13 @@ def merge(root, chr_index, shard_size=DEFAULT_SHARD_SIZE, keep_sources=False, wo
     with ProcessPoolExecutor(max_workers=workers) as pool:
         group_jobs = {key: pool.submit(verify_group, *arguments) for key, arguments in groups.items()}
         shard_jobs = [pool.submit(verify_shard, *arguments) for arguments in shards]
-        spot = {key: job.result() for key, job in group_jobs.items()}  # summary errors first,
-        for job in shard_jobs:  # then shard errors,
-            job.result()
+        try:
+            spot = {key: job.result() for key, job in group_jobs.items()}  # summary errors first,
+            for job in shard_jobs:  # then shard errors,
+                job.result()
+        except BaseException:
+            pool.shutdown(cancel_futures=True)  # raise now, not after every queued shard hash
+            raise
     spots_checked = {}
     for kind, (reference, results) in written.items():  # then spot-check errors
         spots_checked[kind] = 0

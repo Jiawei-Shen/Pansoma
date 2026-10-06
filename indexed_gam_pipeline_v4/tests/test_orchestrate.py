@@ -459,6 +459,13 @@ class EndToEndTest(unittest.TestCase):
                     self.assertEqual(unset_line == line, af >= 0.3, line["candidate_id"])
                 truths = [line for af, line in again[kind] if af < 0.3 and (line["somatic"] or line["germline"])]
                 self.assertEqual([line["label"] for line in truths], [1 if line["somatic"] else 2 for line in truths])
+            # A finalize that failed in the recall scan (labels.manifest.json written, truth_recall.json not yet): a
+            # repeated finalize labels again and writes the recall reports, then has nothing left to do.
+            (tensors / "truth_recall.json").unlink()
+            with redirect_stdout(io.StringIO()):
+                self.assertEqual(list(orchestrate.finalize(run)), ["labels"])
+                self.assertTrue((tensors / "truth_recall.json").exists())
+                self.assertEqual(orchestrate.finalize(run), {})
 
     def test_prepare_refuses_an_unusable_native_decoder_and_warns_under_auto(self):
         with tempfile.TemporaryDirectory() as tmp:

@@ -9,9 +9,11 @@ ONT streams are hundreds of GB). scan_filtered here returns the same dict:
   * the parent keeps the hits whose candidate_id is a truth key and applies them in file order, so the last line of
     an id gives its reasons and the dict's order is that of first appearance.
 The workers come from a forkserver (Slurm counts the RSS of every process: forked copies of a parent that holds the
-truth sets would each count them again) and load the hash array once, from a node-local temporary file. As with
-spawn, a worker imports the caller's main module (`python -m <package>.orchestrate` is import-safe), so a script
-that calls this keeps its work under `if __name__ == "__main__":`.
+truth sets would each count them again) and get the hash array once, as their initializer's argument. As with
+spawn, a worker imports the caller's main module (`python -m <package>.orchestrate` and `python -c` are
+import-safe), so a script that calls this keeps its work under `if __name__ == "__main__":`. When the pool cannot
+work (a main module read from stdin, a TMPDIR too long for the forkserver's socket, a worker killed), the scan
+falls back to truth_labels.scan_filtered: the same dict, read in one stream.
 
 label_run is truth_labels.label_run verbatim; the scan_filtered it calls is the one here, every other name it uses
 is truth_labels' own (tests/test_recall_scan.py pins both). The labels, labels.manifest.json (rules_sha256 is still
@@ -19,16 +21,18 @@ the SHA-256 of truth_labels.py) and the recall reports are those of truth_labels
 """
 from collections import defaultdict
 from concurrent.futures import ProcessPoolExecutor
+from concurrent.futures.process import BrokenProcessPool
 import hashlib
 import multiprocessing
 import os
 from pathlib import Path
-import tempfile
+import sys
 
 import numpy as np
 
 from ..common import sha256_file, write_json
 from .reference_path import ReferencePath
+from . import truth_labels
 from .truth_labels import CANDIDATE, REASONS, Locator, TruthSet, label_directory, recall
 
 WORKERS = 8  # processes of one scan: 8 streams reach a node's read rate on /scratch, 16 are no faster
@@ -58,10 +62,10 @@ def byte_ranges(path, parts):
     return [(a, b) for a, b in zip(cuts, cuts[1:]) if b > a]
 
 
-def load_table(path):
+def load_table(table):
     """Pool initializer: the worker's truth-key hashes."""
     global _TABLE
-    _TABLE = np.load(path)
+    _TABLE = table
 
 
 def match(lines, hits):
@@ -118,15 +122,18 @@ def scan_filtered(directory, keys, workers=WORKERS, parts=None, block=BLOCK):
         return found
     hashes = np.fromiter((key_hash(k.encode()) for k in keys), dtype=np.uint64, count=len(keys))
     hashes.sort()  # in place (np.unique holds several copies: +1.3 GiB at 21 M keys); a repeated hash still matches
-    with tempfile.TemporaryDirectory(prefix="recall_scan.") as temporary:
-        table = Path(temporary) / "truth_key_hashes.npy"
-        np.save(table, hashes)
+    try:
         with ProcessPoolExecutor(min(workers, len(jobs)), mp_context=multiprocessing.get_context("forkserver"),
-                                 initializer=load_table, initargs=(str(table),)) as pool:
-            for hits in pool.map(scan_range, *zip(*[(str(path), a, b, block) for a, b in jobs])):
-                for cid, r in hits:  # ranges in file order: the last line of an id wins
-                    if cid in keys:
-                        found[cid] = [x.strip().strip('"') for x in r.decode().split(",")] if r is not None else []
+                                 initializer=load_table, initargs=(hashes,)) as pool:
+            results = list(pool.map(scan_range, *zip(*[(str(path), a, b, block) for a, b in jobs])))
+    except (BrokenProcessPool, OSError) as error:  # the pool, not the data: the serial scan reads it (or raises)
+        print(f"recall_scan: parallel scan of {path} failed ({type(error).__name__}: {error}); scanning it in one "
+              f"stream", file=sys.stderr, flush=True)
+        return truth_labels.scan_filtered(directory, keys)
+    for hits in results:
+        for cid, r in hits:  # ranges in file order: the last line of an id wins
+            if cid in keys:
+                found[cid] = [x.strip().strip('"') for x in r.decode().split(",")] if r is not None else []
     return found
 
 

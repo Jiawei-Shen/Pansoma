@@ -145,6 +145,42 @@ class ScanTest(unittest.TestCase):
             self.assertEqual(str(parallel.exception), str(serial.exception))
 
 
+    def test_a_pool_that_cannot_work_falls_back_to_the_serial_scan(self):
+        """A pool that cannot start (OSError, e.g. a forkserver socket path too long) or breaks (BrokenProcessPool, e.g.
+        a main module from stdin): the one-stream scan's dict, and a note on stderr."""
+        rng = random.Random(4)
+        keys, others = id_pools(rng)
+
+        class Failing:
+            def __init__(self, error):
+                self.error = error
+
+            def __call__(self, *args, **kwargs):
+                if isinstance(self.error, OSError):
+                    raise self.error
+                return self
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return False
+
+            def map(self, *args):
+                raise self.error
+
+        with tempfile.TemporaryDirectory() as tmp:
+            (Path(tmp) / "filtered_candidates.ndjson").write_bytes(random_stream(rng, keys, others, final_newline=True))
+            expected = list(truth_labels.scan_filtered(tmp, set(keys)).items())
+            self.assertTrue(expected)
+            for error in (OSError("AF_UNIX path too long"), recall_scan.BrokenProcessPool("a worker died")):
+                stderr = io.StringIO()
+                with mock.patch.object(recall_scan, "ProcessPoolExecutor", Failing(error)), \
+                        contextlib.redirect_stderr(stderr):
+                    self.assertEqual(list(recall_scan.scan_filtered(tmp, set(keys), workers=3).items()), expected)
+                self.assertIn("scanning it in one stream", stderr.getvalue())
+
+
 class LabelRunTest(unittest.TestCase):
     def test_label_run_is_truth_labels_label_run_with_the_scan_swapped(self):
         source = inspect.getsource(truth_labels.label_run)
