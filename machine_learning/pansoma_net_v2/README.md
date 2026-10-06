@@ -49,9 +49,12 @@ P=/wanglab/jshen/anaconda3/bin/python       # torch 2.8 + timm 1.0 (GPU)
 T=/scratch/jshen/data/pansoma_v2_tensors/HG008T_Illumina/tensors
 
 # train on chr2-22 (5 % of their ~1 Mb node blocks validate), chr1 left out; -1 tensors are not used
-# (the SNV recipe: see "SNV recipe" below)
+# (the recipes: see "SNV recipe" and "INDEL recipe" below)
 $P -m pansoma_net_v2.train --tensors $T --kinds SNV --output runs/HG008_Illumina_SNV \
     --depths 3 3 27 3 --dims 96 192 384 768 --epochs 20 --batch-size 1024 --lr 1e-4 --class-weights pow:0.75 \
+    --non-fraction 1.0 --block v2 --ignore-reasons residual_partial_somatic_truth allele_partial_somatic_truth
+$P -m pansoma_net_v2.train --tensors $T --kinds INDEL --output runs/HG008_Illumina_INDEL \
+    --depths 2 2 6 2 --dims 64 128 256 512 --epochs 12 --batch-size 1024 --lr 4e-4 --class-weights sqrt \
     --non-fraction 1.0 --block v2 --ignore-reasons residual_partial_somatic_truth allele_partial_somatic_truth
 torchrun --nproc_per_node=2 -m pansoma_net_v2.train --ddp ...           # several GPUs, same options
 
@@ -213,6 +216,20 @@ included), one whole GPU; calls at the validation recall-0.9 threshold, off-refe
 epoch ~7 (validation loss 0.51 -> 2.16) and the 50.4 M model does not; with the PoN in the BED both reach P/R/F1
 0.473/0.832/0.604 (199.6 M, best epoch 5) and 0.493/0.822/0.616 (50.4 M).
 
+**INDEL recipe** (HG008T Illumina, `HG008_Illumina_INDEL_nopartial_b1024_small`): the 8.7 M model `--depths 2 2 6 2
+--dims 64 128 256 512`, `--class-weights sqrt --batch-size 1024 --lr 4e-4 --epochs 12 --non-fraction 1.0 --block v2
+--ignore-reasons residual_partial_somatic_truth allele_partial_somatic_truth`, every plane kept; calls at the
+validation recall-0.9 threshold (graph_vcf's default; no off-reference rescue for INDELs), then the INDEL PoN rule
+(gnomAD / CoLoRSdb exact allele at population AF ≥ 0.01, below). Of the three decision rules predict reports
+(validation best-F1 threshold t, argmax, validation recall-0.9 threshold) the recall-0.9 one is the only usable one
+for INDELs: on chr1 in the BED after the PoN it gives P/R/F1 0.195/0.242/0.216 against 0.383/0.101/0.159 at t, and
+argmax recalls 10 % of the somatic tensors. The INDEL models are all within noise of each other on chr1 (best F1
+0.13–0.15 without the PoN for the 199.6 M model with or without the partial labels or ch6, and the 8.7 M model);
+the small one trains in a tenth of the time. What limits INDELs is upstream of the model: 46 % of the HG008T
+Illumina truth INDELs get no candidate (the allele is a path of the HPRC graph) and the false calls are the
+patient's germline homopolymer INDELs at the same VAF as the somatic ones (`analysis/indel_20260930`,
+`analysis/tensor_recall_20260930`).
+
 ## Calls: graph VCF → GRCh38 VCF → PoN → rtg vcfeval
 
 Three steps turn `predict`'s output into VCFs and score them against the truth VCF. Each module's docstring has
@@ -291,10 +308,9 @@ merge stored as the summaries' `grch38`.
 - **Reports.** `report.json` and `report.txt`. The latter also gives the PASS calls without a GRCh38 position:
   they are not evaluated, so precision is also shown with them counted as false calls.
 
-HG008 Illumina chr1 (2026-09-30; SNV `HG008_Illumina_SNV_allnon_sqrt_b1024`, `<run>/vcf_chr1/`; INDEL
-`HG008_Illumina_INDEL_base`, `<run>/vcf_chr1_r09/`). PASS is at the validation recall-0.9 threshold: SNV p ≥ 0.254
-(the checkpoint's `val.somatic_at_recall`), INDEL p ≥ 0.034 (`THRESHOLD`, from the run's saved validation
-probabilities `val_probs_e2.npz`; its checkpoint predates `val.somatic_at_recall`). INDEL without the PoN. Best F1
+HG008 Illumina chr1. SNV: `HG008_Illumina_SNV_allnon_sqrt_b1024`, `<run>/vcf_chr1/` (2026-09-30), PASS p ≥ 0.254.
+INDEL: `HG008_Illumina_INDEL_nopartial_b1024_small`, `<run>/vcf_chr1_pon/` (2026-10-06), PASS p ≥ 0.080. PASS is
+the checkpoint's validation recall-0.9 threshold (`val.somatic_at_recall`); the PoN is the rule of each kind. Best F1
 is the best point of the chr1 curve, a test-set choice.
 
 | | PASS evaluated (unplaced) | TP | FP | P | R | F1 | best F1 (P, R) |
@@ -302,27 +318,29 @@ is the best point of the chr1 curve, a test-set choice.
 | SNV raw, in BED (697) | 5,487 (8) | 598 | 4,889 | 0.109 | 0.858 | 0.193 | 0.266 (0.222, 0.333) |
 | SNV pon, in BED | 1,212 | 575 | 637 | 0.474 | 0.825 | 0.602 | 0.615 (0.515, 0.763) |
 | SNV pon, no BED (702) | 1,259 | 579 | 680 | 0.460 | 0.825 | 0.591 | 0.606 (0.502, 0.763) |
-| INDEL raw, in BED (587) | 4,396 (1,281) | 217 | 4,179 | 0.049 | 0.370 | 0.087 | 0.150 (0.106, 0.256) |
-| INDEL raw, no BED (635) | 4,929 (1,281) | 234 | 4,695 | 0.048 | 0.368 | 0.084 | 0.143 (0.100, 0.252) |
+| INDEL raw, in BED (587) | 3,560 (543) | 211 | 3,349 | 0.059 | 0.359 | 0.102 | 0.150 (0.105, 0.266) |
+| INDEL pon, in BED | 727 | 142 | 585 | 0.195 | 0.242 | 0.216 | 0.248 (0.291, 0.216) |
+| INDEL pon, no BED (635) | 801 | 150 | 651 | 0.187 | 0.236 | 0.209 | 0.240 (0.278, 0.211) |
 
-At predict's best-F1 threshold (`--threshold predict`, `<run>/vcf_chr1/`) INDEL_base gives, raw and no BED:
-899 PASS evaluated (324 unplaced), P 0.109, R 0.154, F1 0.128.
-
-- **Agreement with the truth-level metrics** (`HG008_Illumina_SNV_keephard_w100` and INDEL_base at predict's
-  threshold). The results agree with `metrics.truth_report`:
+- **Agreement with the truth-level metrics** (`HG008_Illumina_SNV_keephard_w100` at predict's threshold). The
+  results agree with `metrics.truth_report`:
   - SNV raw: TP 315 in both.
   - FP: 1,617 against 1,627. rtg does not score the 17 unplaced false calls, counts 4 SNV tensors next to
     INS truths as FP, and 3 calls lie in the somatic BED but outside the germline BED.
-  - INDEL TP: 92 against 123. The other 31 are unplaced residual-partial tensors.
   - SNV pon, in BED, of the table: TP 575 and FP 637 here, TP 574 and FP 635 with the scorer of
     `analysis/v1_vs_v2_20260929` (same PoN rule, somatic BED ∩ germline BED).
-- **Partial labels.** The SNV run is trained without the SNV partial-match labels (`train --ignore-reasons
+- **Partial labels.** Both runs are trained without the partial-match labels (`train --ignore-reasons
   residual_partial_somatic_truth allele_partial_somatic_truth`). No partial SNV tensor is an rtg true positive:
   its allele is an SNV and its truth an INDEL.
 - **Pansoma v1** (e053) with the same PoN rule on that scorer: best F1 0.587, against 0.616 for this SNV run.
-- **The PoN on INDELs.** It tags 544 of the 635 chr1 INDEL truth records, CoLoRSdb 533 of them, most in
-  homopolymers at population AF around 0.1–1 %. So after it, no caller can recall more than 14 %. For SNV it tags
-  61 of 702.
+- **The PoN on INDELs.** The SNV rule tags 544 of the 635 chr1 INDEL truth records (CoLoRSdb 533 of them, most in
+  homopolymers at population AF 0.1–5 %), so after it no caller could recall more than 14 %. The INDEL rule
+  (gnomAD / CoLoRSdb exact allele at AF ≥ 0.01, no dbSNP or 1000G) tags 383 (recall ceiling 0.261 in the BED) and
+  doubles the PASS F1 (0.102 → 0.216). For SNV the SNV rule tags 61 of 702.
+- **Runs predicted before a tensor rebuild.** `graph_vcf` checks every candidate ID against the set's
+  `chr1_variant_summary.ndjson`, so `vcf.sh` stops on predictions made on an earlier build of the set. Their
+  existing `<run>/vcf_chr1/*.linear.vcf.gz` can still be re-scored: `jobs/vcfeval_only.sh RUN KIND vcf_chr1 OUT`
+  runs the PoN and rtg steps only.
 
 ## GPU runs (measured 2026-09-28, node tequila)
 
