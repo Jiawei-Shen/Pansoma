@@ -57,19 +57,22 @@ tensor. This analysis takes every COLO829T somatic truth allele lost this way an
   211 / 709 (29.8%) (Extreme). Easy regions hold the short homopolymers, but the gap remains at the same length
   (10-14 bp: 13.0% Easy vs 27.1% Difficult). The truth VAF hardly matters: 22.5% (0.1-0.25), 25.3% (0.25-0.4), 21.1% (>=0.4).
 - **Whose allele is it? Mostly other people's** (sections 7-8; HPRC v1.1 walks of the d9 graph, complete traversals only).
-  - **Pangenome-induced false negative: 427 (85.9%)** (62 SNVs, 365 INDELs). Neither COLO829BL haplotype carries the
-    ALT, but HPRC haplotypes walk the same nodes. At 388 of them (58 SNVs / 330 INDELs) at least one HPRC haplotype
-    carries exactly the allele: median exact-allele frequency 0.204 / 0.170 (SNV / INDEL), carried by a median of
-    15 / 12 HPRC individuals, in >= 2 superpopulations at 333 loci and by a single individual at 11.
+  - **Pangenome-induced false negative: 430 (86.5%)** (63 SNVs, 367 INDELs). Neither COLO829BL haplotype carries the
+    ALT, but HPRC haplotypes walk the same nodes. At 390 of them (58 SNVs / 332 INDELs) at least one HPRC haplotype
+    carries exactly the allele: median exact-allele frequency 0.205 / 0.171 (SNV / INDEL), carried by a median of
+    15 / 12 HPRC individuals, in >= 2 superpopulations at 336 loci and by a single individual at 11.
     The INDELs are the repeat slippages of section 2 (239 `HP>=7`, 75 `STR`); the SNVs are common graph SNP alleles.
-  - **Germline filtering: 33 (6.6%)**, the 'normal carries ALT' loci of section 2 (24 common in HPRC, 9 rare).
-  - **Ambiguous: 37 (7.4%)**, mainly the 24 'closest' loci (no d9 path spells the truth).
+  - **Germline filtering: 34 (6.8%)**, the 'normal carries ALT' loci of section 2 plus 1 `with_germline` locus (2562) whose
+    ALT path spells a COLO829BL haplotype (25 common in HPRC, 9 rare). At 2 (35165, 35166) every HPRC carrier also has a GRCh38
+    copy: probably a paralogous sequence variant, not a population allele.
+  - **Ambiguous: 33 (6.6%)**, mainly the 24 'closest' loci (no d9 path spells the truth).
   - **Populations.** The carriers of the absent alleles lean AFR, the panel's largest and most diverse group: observed / expected
-    carrier haplotypes AFR 1.18 (z +17.7), AMR 0.82 (z -13.5), EAS 0.79 (z -6.6), SAS 0.86 (z -2.2). HPRC v1.1 has no
-    EUR haplotype; the COLO829 donor is a European (white) male.
-  - **Same as HG008T**: 84.9% vs 85.0% of the absorbed INDELs are pangenome-induced false negatives,
-    7.4% vs 4.6% germline filtering; each HPRC haplotype carries the exact allele of a median
-    19.9% of the absent INDELs it traverses (HG008T 20.0%).
+    carrier haplotypes AFR 1.17 (z +17.4), AMR 0.83 (z -13.3), EAS 0.80 (z -6.5), SAS 0.86 (z -2.1) (AFR locus-bootstrap 95% CI
+    1.14-1.21). None of the 44 HPRC v1.1 samples is EUR; CHM13 (one haplotype, reported as European ancestry) is in
+    the graph and has the exact allele at 77 absent loci. The COLO829 donor is a European (white) male.
+  - **Same as HG008T**: 85.3% vs 85.0% of the absorbed INDELs are pangenome-induced false negatives,
+    7.7% vs 4.6% germline filtering; each HPRC haplotype carries the exact allele of a median
+    20.0% of the absent INDELs it traverses (HG008T 20.0%).
 - **Compared with HG008T: the same mechanism, a different truth set** (both sides classed with the HG008 b5 rule here).
   - Per-length rates are close up to 19 bp: one-base homopolymer change 4.7 vs 4.6% (7-9 bp), 20.0 vs 21.5% (10-14 bp), 25.6 vs 28.8% (15-19 bp), 31.0 vs 38.4% (20-29 bp)
     (COLO829T vs HG008T); COLO829T is lower at 20-29 bp. One-unit STR change 45.8% vs 37.8%.
@@ -113,12 +116,13 @@ tensor. This analysis takes every COLO829T somatic truth allele lost this way an
 | VAF bin | the truth's Illumina VAF (`VAF_Ill`): < 0.1, 0.1-0.25, 0.25-0.4, >= 0.4 |
 | miss classes | S3 = the ALT is an existing graph SNP allele; S4b = repeat, absorbed by a graph path; S4a = repeat, the SNV becomes an edit on another branch; S2 = ALT not seen in same-length reads; I1 = the INDEL allele is fully in the graph |
 | somatic elements | (c7) `exact`: every element of the chosen ALT path (the c2 primary; no read data to choose); `with_germline`: minus the elements that alone spell the path's germline alleles; `closest`: the c2 closest primary's elements minus germline-alone ones (the locus is ambiguous) |
-| complete traversal | an HPRC haplotype walk (c5, from the d9 GFA) that visits both window anchors in order. Only these count in HPRC frequencies: 88 HPRC haplotypes (44 samples x 2); CHM13 apart; GRCh38 never |
-| exact allele | (c7) a haplotype's sequence over the tandem array, between the nearest GRCh38 nodes it shares with the ALT path (or over the whole window), equals GRCh38 + truth; for `with_germline` also the ALT path's allele (GRCh38 + truth + the patient's germline alleles) |
+| complete traversal | an HPRC haplotype walk (c5, from the d9 GFA) that visits both window anchors in order, or (bypass rule) one anchor and then a GRCh38 node beyond the other window edge (a germline variant over the window edge skips that anchor). Only these count in HPRC frequencies: 88 HPRC haplotypes (44 samples x 2); CHM13 apart; GRCh38 never |
+| exact allele | (c7) a haplotype's sequence over the tandem array equals GRCh38 + truth: between the nearest GRCh38 nodes it shares with the ALT path, or over the whole window, or (core rule) mapped onto GRCh38 over the allele window so that germline variants just outside it do not count; for `with_germline` also the ALT path's allele (GRCh38 + truth + the patient's germline alleles) |
+| PSV-like | (`multicopy_psv_like`) every exact carrier traverses the window twice, once with the ALT and once with GRCh38: likely a paralogous sequence variant of a duplicated region, not an allele of the locus |
 | element set | a walk contains every element of an ALT path (node level; any candidate path) |
 | category | (c7, the HG008 s9 rules, section 8) `normal_present_broad` / `_rare` (germline filtering), `normal_absent_HPRC_other` (pangenome-induced false negative; sub_class `exact_allele` / `element_set_other_allele` / `recombinant_pieces`), `other_ambiguous` |
 | RARE_AF | 0.20 on the exact-allele frequency among complete traversals (broad >= 0.20 > rare) |
-| O/E | observed / expected carrier haplotypes of a superpopulation: expected = carriers x its share of the locus' complete haplotypes, summed over the loci |
+| O/E | observed / expected carrier haplotypes of a superpopulation: expected = carriers x its share of the locus' complete haplotypes, summed over the loci; 95% CI from 2,000 bootstrap resamples of the loci |
 
 ## Data
 
@@ -457,73 +461,73 @@ Compare the two b5 columns (the same rule, tract = the b5 tract). HG008T row cou
 
 ## 7. HPRC haplotypes, individuals, populations
 
-`c5_hprc_walks.py` (the HG008 s4 code) scans the d9 GFA once (P and W lines, 24 processes) and extracts every haplotype's walk between the window anchors. A median of 79 of the 88 HPRC haplotypes per locus have a complete traversal (SNV 85, INDEL 78); 37 loci have fewer than 44, and truth 28014 has none (a 'closest' locus). `c6_hprc_vcf.py` reads the HPRC genotypes of the d9 and the full-graph VCF. `c7_hprc_membership.py` (the HPRC part of HG008 s9) counts the carriers at three levels:
+`c5_hprc_walks.py` (the HG008 s4 code) scans the d9 GFA once (P and W lines, 24 processes) and extracts every haplotype's walk between the window anchors. A median of 79 of the 88 HPRC haplotypes per locus have a complete traversal (SNV 85, INDEL 78); 33 loci have fewer than 44. The bypass rule (a germline variant over the window edge skips an anchor node; the walk counts as complete when it reaches a GRCh38 node beyond that edge) adds 284 haplotype traversals at 12 loci (2562: 14, 2570: 10, 21808: 9, 22598: 29, 22742: 12, 28014: 85, 29389: 31, 29562: 18, 29579: 49, 37389: 8, 39443: 6, 41860: 13). `c6_hprc_vcf.py` reads the HPRC genotypes of the d9 and the full-graph VCF. `c7_hprc_membership.py` (the HPRC part of HG008 s9) counts the carriers at three levels:
 
 | level | carrier = | normal_absent_HPRC_other SNV / INDEL | normal_present (SNV + INDEL) |
 |---|---:|---:|---:|
-| **exact allele** (the categories use this) | the walk spells GRCh38 + truth over the tandem array (with_germline: + the germline alleles) | 0.189 / 0.159 (0.204 / 0.170 at loci with >= 1 carrier) | 0.318 |
-| element set | the walk contains all elements of any ALT path | 0.205 / 0.191 | 0.368 |
-| element (min) | the walk contains each element (minimum over the elements) | 0.205 / 0.198 | 0.364 |
+| **exact allele** (the categories use this) | the walk spells GRCh38 + truth over the tandem array (with_germline: + the germline alleles) | 0.188 / 0.159 (0.205 / 0.171 at loci with >= 1 carrier) | 0.316 |
+| element set | the walk contains all elements of any ALT path | 0.205 / 0.193 | 0.366 |
+| element (min) | the walk contains each element (minimum over the elements) | 0.205 / 0.198 | 0.341 |
 
 - **Absent loci by HPRC support** (`sub_class`; individuals and superpopulations from `per_locus_populations.tsv`):
 
 | sub_class | kind | loci | median exact-allele freq | median element-set freq | median carrier individuals | >= 2 superpops | one superpop | one population | one individual | none | CHM13 exact |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| `exact_allele` | SNV | 58 | 0.204 | 0.206 | 15 | 46 | 10 | 0 | 2 | 0 | 9 |
-| `exact_allele` | INDEL | 330 | 0.170 | 0.193 | 12 | 287 | 32 | 2 | 9 | 0 | 65 |
-| `element_set_other_allele` | SNV | 4 | 0.000 | 0.158 | 9.5 | 3 | 1 | 0 | 0 | 0 | 0 |
-| `element_set_other_allele` | INDEL | 33 | 0.000 | 0.180 | 11 | 29 | 1 | 1 | 2 | 0 | 1 |
+| `exact_allele` | SNV | 58 | 0.205 | 0.206 | 15 | 46 | 10 | 0 | 2 | 0 | 9 |
+| `exact_allele` | INDEL | 332 | 0.171 | 0.194 | 12 | 290 | 32 | 1 | 9 | 0 | 67 |
+| `element_set_other_allele` | SNV | 5 | 0.000 | 0.157 | 10 | 4 | 1 | 0 | 0 | 0 | 0 |
+| `element_set_other_allele` | INDEL | 33 | 0.000 | 0.219 | 12 | 30 | 1 | 0 | 2 | 0 | 1 |
 | `recombinant_pieces` | INDEL | 2 | 0.000 | 0.000 | 0 | 0 | 0 | 0 | 0 | 2 | 0 |
 
 Carrier individuals / superpopulations (per_locus_populations.tsv): exact-allele carriers; for `element_set_other_allele` / `recombinant_pieces` the haplotypes walking all elements of an ALT path. First match of one individual > one population > one superpopulation.
 
-  - Unlike HG008T (85 of 150 absent SNVs without an exact HPRC carrier), 58 of the 62 absent COLO829T SNVs have one: they are mostly non-repeat graph SNP alleles (section 4), so the population allele is the same allele.
+  - Unlike HG008T (85 of 150 absent SNVs without an exact HPRC carrier), 58 of the 63 absent COLO829T SNVs have one: they are mostly non-repeat graph SNP alleles (section 4), so the population allele is the same allele.
   - `element_set_other_allele`: HPRC haplotypes walk all the somatic nodes but spell another allele over the array, mostly another repeat length.
 - **'Rare'** means an exact-allele frequency below 0.20 among complete traversals. 9 present loci are rare; 1 of them (551) has no exact HPRC carrier although HPRC haplotypes walk its nodes. Rarity in large populations is gnomAD / CoLoRSdb (section 8, PoN table).
 - **d9 floor.** The d9 graph keeps nodes walked by >= ~9 of the 90 haplotypes. Of the 413 somatic branch elements, 12 have a branch node that fewer than 9 haplotypes visit in the c5 window rows: 10 of them lie on CHM13 (a reference path, which the filter keeps); the other 2 (3346: 8, 37542: 4 haplotypes) are window counts, a lower bound (no whole-GFA scan was run for them).
 - **Frequencies are conditional** on complete traversals and on the d9 graph: a haplotype cut inside the window does not count. `hprc_exact_allele_freq_over88` is the lower bound.
 - **Cross-checks.**
-  - d9 / full-graph VCF (c6 `carriers_any` vs the GFA allele-level carriers, on GFA-complete haplotypes): identical carrier sets at 53 / 65 SNV and 308 / 427 INDEL loci (d9), 53 / 65 and 312 / 427 (full). The VCF counts snarl alleles: most differences are haplotypes with the record's allele but another allele elsewhere in the array, or loci without a matching record (`with_germline`, compound repeats; `hprc_tables.md`).
-  - Sequence-level re-derivation (`c7_hprc_membership.py check`: the nearest 16-mers left and right of the allele window that are unique in GRCh38, in GRCh38 + truth and in each walk; carrier = the walk's sequence between them equals GRCh38 + truth): identical carrier sets at 473 of 474 anchored loci (34,053 locus-haplotype pairs compared; 1,467 skipped because a germline variant sits in an anchor; 17 loci have no unique anchor in the window). The exception is 29562 (10 by c7, 14 by sequence, of 43): these haplotypes spell GRCh38 + truth between the anchors but compensate beyond the array bracket, so c7 undercounts there (the category does not change).
-  - Window check: none of the 17,311 complete walks that spell GRCh38 over the whole window contains a somatic element or counts as a carrier; all 6,297 walks that spell GRCh38 + truth over the whole window are exact carriers (1 only through the whole-window rule, at 29562).
-- **Populations.** The alleles that hide somatic events (absent, exact allele) lean AFR: observed / expected carrier haplotypes AFR 1.18 (z +17.7), AMR 0.82 (z -13.5), EAS 0.79 (z -6.6), SAS 0.86 (z -2.2). AFR is the panel's largest and most diverse group. The patient's own germline alleles (present_broad, 24 loci) lean slightly AFR too (AFR 1.07 (z +2.7), AMR 0.92 (z -2.3)), unlike HG008T's (AFR 0.92, AMR 1.10). HPRC v1.1 has no EUR haplotype, so the donor's ancestry is not in the panel. CHM13 has the exact allele at 75 absent and 6 present loci.
+  - d9 / full-graph VCF (c6 `carriers_any` vs the GFA allele-level carriers, on GFA-complete haplotypes): identical carrier sets at 52 / 65 SNV and 308 / 427 INDEL loci (d9), 52 / 65 and 312 / 427 (full). The VCF counts snarl alleles: most differences are haplotypes with the record's allele but another allele elsewhere in the array, or loci without a matching record (`with_germline`, compound repeats; `hprc_tables.md`).
+  - Sequence-level re-derivation (`c7_hprc_membership.py check`: the nearest 16-mers left and right of the allele window that are unique in GRCh38, in GRCh38 + truth and in each walk; carrier = the walk's sequence between them equals GRCh38 + truth): identical carrier sets at 474 of 475 anchored loci (34,215 locus-haplotype pairs compared; 1,560 skipped because a germline variant sits in an anchor; 17 loci have no unique anchor in the window). The sequence-level check differs at 29562 (11 by c7, 14 by sequence, of 61): these haplotypes spell GRCh38 + truth over the array, plus a germline 4-bp expansion of the next (TTTC)n repeat just after it; their walk places that insertion at the end of the allele window, where the node bracket and the core rule count it as part of the allele, while the 16-mer check puts it past its right anchor. So c7 undercounts there (the category does not change).
+  - Window check: none of the 17,311 complete walks that spell GRCh38 over the whole window contains a somatic element or counts as a carrier; all 6,297 walks that spell GRCh38 + truth over the whole window are exact carriers (1 only through the whole-window rule, at 29562; the core rule, which ignores germline variants just outside the allele window, adds 54 carriers at 3 loci: 21200 +10, 2133 +13, 29389 +31).
+- **Populations.** The alleles that hide somatic events (absent, exact allele) lean AFR: observed / expected carrier haplotypes AFR 1.17 (z +17.4), AMR 0.83 (z -13.3), EAS 0.80 (z -6.5), SAS 0.86 (z -2.1). AFR is the panel's largest and most diverse group; resampling the loci keeps it (AFR 95% CI 1.14-1.21). The patient's own germline alleles (present_broad, 25 loci) show no clear lean: AFR 1.08 (95% CI 0.96-1.19), AMR 0.90 (95% CI 0.77-1.04) (the z-scores, +3.0 / -2.8, treat the 761 carrier haplotypes of 25 clustered loci as independent). HG008T's lean AMR: 1.10 (95% CI 1.03-1.17). None of the 44 HPRC v1.1 samples is EUR. CHM13 (one haplotype, reported as European ancestry; in the d9 graph, so it counts toward the frequency filter, but outside the HPRC counts) has the exact allele at 77 absent loci (68 / 364 = 0.187 of the absent INDELs it traverses, 9 / 62 of the SNVs: within the AMR / EAS range of the table below) and 7 present loci; n = 1, not a European estimate.
 
-| category | level | loci | carrier haplotypes | AFR O/E (z) | AMR O/E (z) | EAS O/E (z) | SAS O/E (z) | CHM13 carries |
+| category | level | loci | carrier haplotypes | AFR O/E (z; 95% CI) | AMR O/E (z; 95% CI) | EAS O/E (z; 95% CI) | SAS O/E (z; 95% CI) | CHM13 carries |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
-| `normal_present_broad` | exact allele | 24 | 747 | 1.07 (z +2.7) | 0.92 (z -2.3) | 0.96 (z -0.5) | 0.94 (z -0.3) | 3 |
-| `normal_present_broad` | element set | 24 | 756 | 1.06 (z +2.4) | 0.92 (z -2.2) | 0.97 (z -0.3) | 0.92 (z -0.4) | 3 |
-| `normal_present_rare` | exact allele | 9 | 73 | 1.02 (z +0.1) | 0.91 (z -0.6) | 1.24 (z +0.7) | 1.08 (z +0.1) | 3 |
-| `normal_present_rare` | element set | 9 | 101 | 1.01 (z +0.1) | 0.93 (z -0.7) | 1.19 (z +0.8) | 1.16 (z +0.3) | 3 |
-| `normal_absent_HPRC_other` | exact allele | 427 | 6594 | 1.18 (z +17.7) | 0.82 (z -13.5) | 0.79 (z -6.6) | 0.86 (z -2.2) | 75 |
-| `normal_absent_HPRC_other` | element set | 427 | 7876 | 1.17 (z +19.0) | 0.83 (z -14.6) | 0.80 (z -7.0) | 0.88 (z -2.1) | 96 |
-| `other_ambiguous` | exact allele | 31 | 44 | 1.07 (z +0.5) | 0.94 (z -0.4) | 1.14 (z +0.3) | 0.66 (z -0.5) | 1 |
-| `other_ambiguous` | element set | 31 | 358 | 0.91 (z -2.3) | 1.11 (z +2.2) | 0.97 (z -0.3) | 1.19 (z +0.8) | 7 |
-| all | exact allele | 491 | 7458 | 1.16 (z +17.6) | 0.84 (z -13.6) | 0.82 (z -6.3) | 0.86 (z -2.2) | 82 |
-| all | element set | 491 | 9091 | 1.15 (z +18.1) | 0.85 (z -14.0) | 0.83 (z -6.7) | 0.90 (z -1.9) | 109 |
+| `normal_present_broad` | exact allele | 25 | 761 | 1.08 (z +3.0; 0.96-1.19) | 0.90 (z -2.8; 0.77-1.04) | 0.96 (z -0.4; 0.72-1.18) | 0.98 (z -0.1; 0.59-1.41) | 4 |
+| `normal_present_broad` | element set | 25 | 770 | 1.07 (z +2.8; 0.95-1.18) | 0.91 (z -2.7; 0.78-1.05) | 0.98 (z -0.2; 0.74-1.19) | 0.96 (z -0.2; 0.58-1.38) | 4 |
+| `normal_present_rare` | exact allele | 9 | 73 | 1.02 (z +0.1; 0.71-1.32) | 0.91 (z -0.6; 0.63-1.28) | 1.24 (z +0.7; 0.16-2.98) | 1.08 (z +0.1; 0.00-3.07) | 3 |
+| `normal_present_rare` | element set | 9 | 101 | 1.01 (z +0.1; 0.77-1.25) | 0.93 (z -0.7; 0.70-1.19) | 1.19 (z +0.8; 0.34-2.48) | 1.16 (z +0.3; 0.34-2.52) | 3 |
+| `normal_absent_HPRC_other` | exact allele | 430 | 6656 | 1.17 (z +17.4; 1.14-1.21) | 0.83 (z -13.3; 0.79-0.87) | 0.80 (z -6.5; 0.72-0.88) | 0.86 (z -2.1; 0.73-0.99) | 77 |
+| `normal_absent_HPRC_other` | element set | 430 | 7975 | 1.17 (z +18.7; 1.13-1.20) | 0.83 (z -14.4; 0.80-0.87) | 0.81 (z -6.9; 0.74-0.88) | 0.89 (z -2.0; 0.77-1.01) | 97 |
+| `other_ambiguous` | exact allele | 28 | 47 | 1.11 (z +0.8; 0.71-1.37) | 0.92 (z -0.5; 0.73-1.20) | 0.89 (z -0.2; 0.00-1.43) | 0.65 (z -0.5; 0.00-2.00) | 1 |
+| `other_ambiguous` | element set | 28 | 373 | 0.92 (z -2.1; 0.75-1.05) | 1.09 (z +1.9; 0.95-1.24) | 1.01 (z +0.1; 0.70-1.36) | 1.12 (z +0.5; 0.57-1.70) | 7 |
+| all | exact allele | 492 | 7537 | 1.16 (z +17.5; 1.13-1.20) | 0.84 (z -13.6; 0.79-0.88) | 0.82 (z -6.2; 0.74-0.90) | 0.87 (z -2.1; 0.75-0.99) | 85 |
+| all | element set | 492 | 9219 | 1.15 (z +17.9; 1.12-1.18) | 0.85 (z -14.0; 0.82-0.89) | 0.83 (z -6.5; 0.77-0.90) | 0.90 (z -1.8; 0.80-1.01) | 111 |
 
-Expected per locus = carriers x the superpopulation's share of that locus' complete haplotypes; z hypergeometric, ignoring the pairing of haplotypes within individuals and linkage between loci (it overstates significance). HPRC v1.1: AFR 23, AMR 16, EAS 4, SAS 1 samples, no EUR; the COLO829 donor is a European (white) male.
+Expected per locus = carriers x the superpopulation's share of that locus' complete haplotypes; z hypergeometric, ignoring the pairing of haplotypes within individuals and linkage between loci (it overstates significance). 95% CI = 2.5-97.5 percentiles of O/E over 2,000 bootstrap resamples of the loci (carriers of a locus stay together; the honest measure when few loci carry many haplotypes). HPRC v1.1: AFR 23, AMR 16, EAS 4, SAS 1 samples, no EUR; CHM13 (one haplotype, reported as European ancestry) is in the graph but outside these counts; the COLO829 donor is a European (white) male.
 
   Per 1000 Genomes population (`hprc_populations.tsv`; summed over the loci):
 
 | superpop | population | name | HPRC haplotypes | absent INDEL | absent SNV | present INDEL (broad + rare) |
 |---|---:|---:|---:|---:|---:|---:|
-| AFR | ACB | African Caribbean in Barbados | 14 | 0.237 | 0.277 | 0.350 |
-| AFR | ASW | African Ancestry in Southwest US | 2 | 0.230 | 0.291 | 0.412 |
-| AFR | ESN | Esan in Nigeria | 2 | 0.237 | 0.298 | 0.500 |
-| AFR | GWD | Gambian in Western Division, The Gambia | 16 | 0.230 | 0.274 | 0.392 |
-| AFR | MKK | Maasai in Kinyawa, Kenya (HapMap 3) | 2 | 0.227 | 0.270 | 0.396 |
-| AFR | MSL | Mende in Sierra Leone | 8 | 0.245 | 0.313 | 0.394 |
-| AFR | YRI | Yoruba in Ibadan, Nigeria | 2 | 0.215 | 0.231 | 0.378 |
-| AMR | CLM | Colombian in Medellin, Colombia | 8 | 0.162 | 0.207 | 0.274 |
-| AMR | PEL | Peruvian in Lima, Peru | 8 | 0.160 | 0.186 | 0.296 |
-| AMR | PUR | Puerto Rican in Puerto Rico | 16 | 0.167 | 0.183 | 0.351 |
-| EAS | CHS | Southern Han Chinese, China | 6 | 0.163 | 0.197 | 0.327 |
-| EAS | KHV | Kinh in Ho Chi Minh City, Vietnam | 2 | 0.138 | 0.171 | 0.382 |
-| SAS | PJL | Punjabi in Lahore,Pakistan | 2 | 0.173 | 0.174 | 0.327 |
-| CHM13 | CHM13 | reference (T2T CHM13, hydatidiform mole) | 1 | 0.183 | 0.148 | 0.188 |
+| AFR | ACB | African Caribbean in Barbados | 14 | 0.236 | 0.273 | 0.343 |
+| AFR | ASW | African Ancestry in Southwest US | 2 | 0.230 | 0.286 | 0.396 |
+| AFR | ESN | Esan in Nigeria | 2 | 0.237 | 0.293 | 0.500 |
+| AFR | GWD | Gambian in Western Division, The Gambia | 16 | 0.231 | 0.270 | 0.395 |
+| AFR | MKK | Maasai in Kinyawa, Kenya (HapMap 3) | 2 | 0.226 | 0.265 | 0.389 |
+| AFR | MSL | Mende in Sierra Leone | 8 | 0.244 | 0.308 | 0.401 |
+| AFR | YRI | Yoruba in Ibadan, Nigeria | 2 | 0.215 | 0.227 | 0.362 |
+| AMR | CLM | Colombian in Medellin, Colombia | 8 | 0.164 | 0.203 | 0.268 |
+| AMR | PEL | Peruvian in Lima, Peru | 8 | 0.163 | 0.183 | 0.286 |
+| AMR | PUR | Puerto Rican in Puerto Rico | 16 | 0.167 | 0.180 | 0.340 |
+| EAS | CHS | Southern Han Chinese, China | 6 | 0.164 | 0.196 | 0.321 |
+| EAS | KHV | Kinh in Ho Chi Minh City, Vietnam | 2 | 0.141 | 0.168 | 0.386 |
+| SAS | PJL | Punjabi in Lahore,Pakistan | 2 | 0.175 | 0.171 | 0.333 |
+| CHM13 | CHM13 | reference (T2T CHM13, hydatidiform mole) | 1 | 0.187 | 0.145 | 0.212 |
 
-  The absent-INDEL exact-allele fraction is 0.215-0.245 in the AFR populations, 0.160-0.167 AMR, 0.138-0.163 EAS, 0.173 SAS (`populations.md`: loci per superpopulation, patterns, shared / private, one-superpopulation loci by population).
-- **Per individual** (`hprc_individuals.tsv`). Each HPRC haplotype carries the exact allele of a median 61 absent INDELs (19.9% of those it traverses completely; 16.7% of all 365) and 14 absent SNVs. By superpopulation: AFR 69 (23.1%), AMR 53 (16.3%), EAS 51 (15.5%), SAS 56.5 (17.3%). The range is 38 (HG00673#1, CHS) to 89 (HG03453#2, MSL); CHM13 66. `hprc_carriers.tsv.gz` lists the carrier haplotypes of every element and allele.
+  The absent-INDEL exact-allele fraction is 0.215-0.244 in the AFR populations, 0.163-0.167 AMR, 0.141-0.164 EAS, 0.175 SAS (`populations.md`: loci per superpopulation, patterns, shared / private, one-superpopulation loci by population).
+- **Per individual** (`hprc_individuals.tsv`). Each HPRC haplotype carries the exact allele of a median 62 absent INDELs (20.0% of those it traverses completely; 16.9% of all 367) and 14 absent SNVs. By superpopulation: AFR 69 (23.2%), AMR 54 (16.6%), EAS 52 (15.7%), SAS 57.5 (17.5%). The range is 38 (HG00673#1, CHS) to 90 (HG03453#2, MSL); CHM13 68. `hprc_carriers.tsv.gz` lists the carrier haplotypes of every element and allele.
 
 ## 8. Cross-evaluation with the normal: germline filtering or pangenome-induced false negative
 
@@ -536,12 +540,12 @@ Categories (`c7_hprc_membership.py`: the HG008 s9 rules, with the COLO829BL whol
 | 1 | `other_ambiguous` | the `with_germline` path needs a germline allele that dipcall phases to the other haplotype than the c3 event hap | 0 | 2 |
 | 1 | `other_ambiguous` | no HPRC haplotype traverses the window completely | 0 | 0 |
 | 1 | `other_ambiguous` | both COLO829BL haplotypes carry the ALT (homozygous germline; truth conflict) | 0 | 0 |
-| 2 | `normal_present_broad` | a COLO829BL haplotype carries the ALT over the whole tandem array ('normal carries ALT'); exact-allele HPRC frequency >= 0.20 | 0 | 24 |
+| 2 | `normal_present_broad` | a COLO829BL haplotype carries the ALT over the whole tandem array ('normal carries ALT'; `with_germline`: or the ALT path's allele, truth + the path's germline alleles); exact-allele HPRC frequency >= 0.20 | 0 | 25 |
 | 2 | `normal_present_rare` | the same, frequency < 0.20 | 1 | 8 |
 | 3 | `other_ambiguous` | a COLO829BL haplotype has no array sequence and the other one does not carry the ALT | 0 | 1 |
-| 3 | `other_ambiguous` | no complete HPRC haplotype walks every somatic element (CHM13 may) | 1 | 9 |
-| 4 | `normal_absent_HPRC_other` | both haplotypes resolved, neither carries the ALT; sub_class `exact_allele`: >= 1 complete HPRC haplotype spells the exact allele | 58 | 330 |
-| 4 | `normal_absent_HPRC_other` | `element_set_other_allele`: HPRC haplotypes walk all elements of an ALT path but spell another allele over the array | 4 | 33 |
+| 3 | `other_ambiguous` | no complete HPRC haplotype walks every somatic element (CHM13 may) | 0 | 6 |
+| 4 | `normal_absent_HPRC_other` | both haplotypes resolved, neither carries the ALT; sub_class `exact_allele`: >= 1 complete HPRC haplotype spells the exact allele | 58 | 332 |
+| 4 | `normal_absent_HPRC_other` | `element_set_other_allele`: HPRC haplotypes walk all elements of an ALT path but spell another allele over the array | 5 | 33 |
 | 4 | `normal_absent_HPRC_other` | `recombinant_pieces`: every element is walked by some HPRC haplotype, a whole ALT path by none | 0 | 2 |
 
 | category | interpretation |
@@ -554,16 +558,16 @@ Counts per category (present_broad / present_rare / absent_HPRC_other / other_am
 
 | set | SNV chr1-22 | INDEL chr1-22 | SNV chr1 | INDEL chr1 |
 |---|---:|---:|---:|---:|
-| fiberseq | 0 / 1 / 59 / 4 (64) | 18 / 8 / 175 / 17 (218) | 0 / 0 / 3 / 2 (5) | 7 / 3 / 12 / 1 (23) |
-| ONT | 0 / 1 / 54 / 3 (58) | 17 / 4 / 129 / 20 (170) | 0 / 0 / 3 / 1 (4) | 7 / 1 / 9 / 2 (19) |
-| Illumina | 0 / 1 / 50 / 2 (53) | 20 / 6 / 345 / 25 (396) | 0 / 0 / 3 / 1 (4) | 9 / 2 / 22 / 1 (34) |
-| **union** | **0 / 1 / 62 / 4 (67)** | **24 / 8 / 365 / 33 (430)** | 0 / 0 / 3 / 2 (5) | 10 / 3 / 22 / 3 (38) |
+| fiberseq | 0 / 1 / 60 / 3 (64) | 19 / 8 / 176 / 15 (218) | 0 / 0 / 4 / 1 (5) | 8 / 3 / 12 / 0 (23) |
+| ONT | 0 / 1 / 55 / 2 (58) | 18 / 4 / 130 / 18 (170) | 0 / 0 / 4 / 0 (4) | 8 / 1 / 9 / 1 (19) |
+| Illumina | 0 / 1 / 50 / 2 (53) | 20 / 6 / 347 / 23 (396) | 0 / 0 / 3 / 1 (4) | 9 / 2 / 22 / 1 (34) |
+| **union** | **0 / 1 / 63 / 3 (67)** | **25 / 8 / 367 / 30 (430)** | 0 / 0 / 4 / 1 (5) | 11 / 3 / 22 / 2 (38) |
 
 Cells: normal_present_broad / normal_present_rare / normal_absent_HPRC_other / other_ambiguous (total). chr1 = the chr1 truths (every COLO829T truth is inside the BED).
 
 - **Sub-classes per platform** (chr1-22 and chr1): `hprc_tables.md`.
-- **Present loci** (33): the carrying haplotype is hapX 31, hapY 2; 32 are in SMaHT Extreme regions. They inherit the caveats of section 2 ('Normal carries ALT': dipcall copy, duplicated-region signs). The one other 'normal carries ALT' locus, 38917, is a 'closest' locus (rule 1).
-- **Germline-like reading** (section 2, 'Two readings'). At 22 absent loci (`exact_allele` 12, `element_set_other_allele` 9, `recombinant_pieces` 1) a COLO829BL haplotype already has the ALT length with other bases (`germline_like_alt_len`); 13 more such loci are ambiguous. If these are germline length alleles, the pangenome-induced INDEL losses are between 343 and 365.
+- **Present loci** (34): the carrying haplotype is hapX 31, hapY 2, hapX:path_allele 1; 33 are in SMaHT Extreme regions. They inherit the caveats of section 2 ('Normal carries ALT': dipcall copy, duplicated-region signs). The one other 'normal carries ALT' locus, 38917, is a 'closest' locus (rule 1). 2562 (`with_germline`): the ALT path (GRCh38 + truth + the germline allele it needs) spells hapX's whole-array allele, so the perfectly aligned reads carry the patient's own germline allele (sub_class `hapX_only:path_allele`; HG008T's `patient_frame` case). PSV-like (`multicopy_psv_like`): at 35165, 35166 every HPRC exact carrier traverses the window twice, once with the ALT and once with GRCh38, and the COLO829BL copy is dipcall's with MAPQ < 20 / another-scaffold signs: the 'allele' is probably a paralogous sequence variant of a duplicated region, and the normal's ALT may be the paralog's copy.
+- **Germline-like reading** (section 2, 'Two readings'). At 24 absent loci (`exact_allele` 13, `element_set_other_allele` 10, `recombinant_pieces` 1) a COLO829BL haplotype already has the ALT length with other bases (`germline_like_alt_len`); 10 more such loci are ambiguous. If these are germline length alleles, the pangenome-induced INDEL losses are between 343 and 367.
 - **Patient-frame group per category:**
 
 | patient-frame group | SNV normal_present_broad | SNV normal_present_rare | SNV normal_absent_HPRC_other | SNV other_ambiguous | INDEL normal_present_broad | INDEL normal_present_rare | INDEL normal_absent_HPRC_other | INDEL other_ambiguous |
@@ -571,33 +575,33 @@ Cells: normal_present_broad / normal_present_rare / normal_absent_HPRC_other / o
 | HP>=7 | 0 | 0 | 0 | 0 | 0 | 0 | 239 | 2 |
 | STR | 0 | 0 | 0 | 0 | 0 | 0 | 75 | 8 |
 | other repeat | 0 | 0 | 1 | 1 | 0 | 0 | 17 | 3 |
-| SNV in repeat | 0 | 0 | 20 | 3 | 0 | 0 | 10 | 6 |
-| non-repeat | 0 | 0 | 38 | 0 | 0 | 0 | 7 | 2 |
+| SNV in repeat | 0 | 0 | 21 | 2 | 0 | 0 | 10 | 6 |
+| non-repeat | 0 | 0 | 38 | 0 | 1 | 0 | 8 | 0 |
 | normal carries ALT | 0 | 1 | 0 | 0 | 24 | 8 | 0 | 1 |
-| complex | 0 | 0 | 3 | 0 | 0 | 0 | 17 | 10 |
+| complex | 0 | 0 | 3 | 0 | 0 | 0 | 18 | 9 |
 | unresolved | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 
 ### Is the graph helping or hurting?
 
-- **Germline filtering: 33 (6.6%).** The tumor allele is a COLO829BL germline allele. COLO829T has no truth INFO event, so whether the tumor's other haplotype changed to it (HG008T's case: local conversion or recurrent slippage) or the truth is a germline allele is not decided here; either way a tumor-only caller sees a germline allele, so the graph costs nothing a tumor-only design could keep.
-- **Interference: 427 (85.9%).**
-  - INDELs (365), patient frame: `HP>=7` 239, `STR` 75, `other repeat` 17, `complex` 17, `SNV in repeat` 10, `non-repeat` 7. Mostly a one-unit slippage that recreates a length allele found in HPRC, which the d9 graph keeps as a branch or skip edge (section 3: the absorption rate rises with homopolymer length).
-  - SNVs (62): `non-repeat` 38, `SNV in repeat` 20, `complex` 3, `other repeat` 1. 58 have an exact HPRC carrier (median frequency 0.204): common population SNP alleles (S3, CpG transitions enriched, section 4).
-- **Ambiguous: 37 (7.4%)**: 24 closest (6 with a graph allele nearer the truth than GRCh38), 10 with no complete HPRC haplotype walking the elements (2 CHM13 only), 2 off-phase germline, 1 normal unresolved.
-- **What a linear-reference tumor-only caller would lose anyway (population PoN).** SNV: the repo PoN rule tags 100.0% (3.3%) of the absent SNVs (in brackets: the other chr1-22 truth SNVs), pop-AF >= 0.05 83.9% (0.1%). A linear caller would lose most of these SNVs too. INDEL: the repo INDEL path has no PoN; a population-AF filter would tag the absent INDELs 98.6% / 95.1% / 69.3% at AF 1e-3 / 0.01 / 0.05, against 58.4% / 34.2% / 9.0% of the other truth INDELs.
+- **Germline filtering: 34 (6.8%).** The tumor allele is a COLO829BL germline allele. COLO829T has no truth INFO event, so whether the tumor's other haplotype changed to it (HG008T's case: local conversion or recurrent slippage) or the truth is a germline allele is not decided here; either way a tumor-only caller sees a germline allele, so the graph costs nothing a tumor-only design could keep.
+- **Interference: 430 (86.5%).**
+  - INDELs (367), patient frame: `HP>=7` 239, `STR` 75, `complex` 18, `other repeat` 17, `SNV in repeat` 10, `non-repeat` 8. Mostly a one-unit slippage that recreates a length allele found in HPRC, which the d9 graph keeps as a branch or skip edge (section 3: the absorption rate rises with homopolymer length).
+  - SNVs (63): `non-repeat` 38, `SNV in repeat` 21, `complex` 3, `other repeat` 1. 58 have an exact HPRC carrier (median frequency 0.205): common population SNP alleles (S3, CpG transitions enriched, section 4).
+- **Ambiguous: 33 (6.6%)**: 24 closest (6 with a graph allele nearer the truth than GRCh38), 6 with no complete HPRC haplotype walking the elements (2 CHM13 only), 2 off-phase germline, 1 normal unresolved.
+- **What a linear-reference tumor-only caller would lose anyway (population PoN).** SNV: the repo PoN rule tags 100.0% (3.3%) of the absent SNVs (in brackets: the other chr1-22 truth SNVs), pop-AF >= 0.05 82.5% (0.1%). A linear caller would lose most of these SNVs too. INDEL: the repo INDEL path has no PoN; a population-AF filter would tag the absent INDELs 98.6% / 95.1% / 69.2% at AF 1e-3 / 0.01 / 0.05, against 58.4% / 34.2% / 9.0% of the other truth INDELs.
 
 | group | kind | n | repo rule % | pop AF >= 1e-3 % | pop AF >= 0.01 % | pop AF >= 0.05 % |
 |---|---:|---:|---:|---:|---:|---:|
 | `normal_present_broad` | SNV | 0 |  |  |  |  |
 | `normal_present_rare` | SNV | 1 | 100.0 | 100.0 | 100.0 | 100.0 |
-| `normal_absent_HPRC_other` | SNV | 62 | 100.0 | 100.0 | 100.0 | 83.9 |
-| `other_ambiguous` | SNV | 4 | 75.0 | 75.0 | 75.0 | 25.0 |
+| `normal_absent_HPRC_other` | SNV | 63 | 100.0 | 100.0 | 100.0 | 82.5 |
+| `other_ambiguous` | SNV | 3 | 66.7 | 66.7 | 66.7 | 33.3 |
 | all absorbed | SNV | 67 | 98.5 | 98.5 | 98.5 | 80.6 |
 | not absorbed (other COLO829T truths) | SNV | 41,968 | 3.3 | 1.2 | 0.3 | 0.1 |
-| `normal_present_broad` | INDEL | 24 | 100.0 | 100.0 | 100.0 | 100.0 |
+| `normal_present_broad` | INDEL | 25 | 96.0 | 96.0 | 96.0 | 96.0 |
 | `normal_present_rare` | INDEL | 8 | 100.0 | 100.0 | 100.0 | 75.0 |
-| `normal_absent_HPRC_other` | INDEL | 365 | 99.5 | 98.6 | 95.1 | 69.3 |
-| `other_ambiguous` | INDEL | 33 | 81.8 | 78.8 | 54.5 | 12.1 |
+| `normal_absent_HPRC_other` | INDEL | 367 | 99.5 | 98.6 | 95.1 | 69.2 |
+| `other_ambiguous` | INDEL | 30 | 83.3 | 80.0 | 53.3 | 10.0 |
 | all absorbed | INDEL | 430 | 98.1 | 97.2 | 92.3 | 66.7 |
 | not absorbed (other COLO829T truths) | INDEL | 1,482 | 63.0 | 58.4 | 34.2 | 9.0 |
 
@@ -608,26 +612,26 @@ repo rule = `scripts/filter_panel_of_normals.py` (allele match; gnomAD / CoLoRSd
 |  | COLO829T | HG008T |
 |---|---:|---:|
 | absorbed truth alleles, SNV / INDEL | 67 / 430 | 201 / 2,277 |
-| germline filtering (the normal carries the ALT: present broad + rare), SNV / INDEL | 1 (1.5%) / 32 (7.4%) | 5 (2.5%) / 105 (4.6%) |
-| pangenome-induced false negative (absent from the normal, HPRC carries), SNV / INDEL | 62 (92.5%) / 365 (84.9%) | 150 (74.6%) / 1,935 (85.0%) |
-|   of which >= 1 HPRC haplotype has the exact allele, SNV / INDEL | 58 / 330 | 65 / 1,789 |
-| ambiguous, SNV / INDEL | 4 (6.0%) / 33 (7.7%) | 46 (22.9%) / 237 (10.4%) |
+| germline filtering (the normal carries the ALT: present broad + rare), SNV / INDEL | 1 (1.5%) / 33 (7.7%) | 5 (2.5%) / 105 (4.6%) |
+| pangenome-induced false negative (absent from the normal, HPRC carries), SNV / INDEL | 63 (94.0%) / 367 (85.3%) | 150 (74.6%) / 1,935 (85.0%) |
+|   of which >= 1 HPRC haplotype has the exact allele, SNV / INDEL | 58 / 332 | 65 / 1,789 |
+| ambiguous, SNV / INDEL | 3 (4.5%) / 30 (7.0%) | 46 (22.9%) / 237 (10.4%) |
 | median complete HPRC traversals per locus (of 88) | 79 | 76 |
-| absent: median exact-allele frequency, SNV / INDEL | 0.189 / 0.159 | 0.000 / 0.167 |
-| absent: the same at loci with >= 1 carrier, SNV / INDEL | 0.204 / 0.170 | 0.105 / 0.177 |
-| present: median exact-allele frequency | 0.318 | 0.315 |
-| absent exact-allele loci carried in >= 2 superpopulations / by one HPRC individual only | 333 (85.8%) / 11 (2.8%) | 1,672 (90.2%) / 65 (3.5%) |
-| absent, exact allele: O/E (z) AFR / AMR / EAS / SAS | 1.18 (+17.7) / 0.82 (-13.5) / 0.79 (-6.6) / 0.86 (-2.2) | 1.11 (+21.4) / 0.89 (-16.7) / 0.89 (-7.4) / 0.92 (-2.5) |
-| present broad, exact allele: O/E (z) AFR / AMR | 1.07 (+2.7) / 0.92 (-2.3) | 0.92 (-5.9) / 1.10 (+5.3) |
-| CHM13 has the exact allele (absent loci) | 75 | 298 |
-| per HPRC haplotype: median share of the absent INDELs it traverses whose exact allele it carries (median count) | 0.199 (61 of 365) | 0.200 (315 of 1,935) |
+| absent: median exact-allele frequency, SNV / INDEL | 0.188 / 0.159 | 0.000 / 0.167 |
+| absent: the same at loci with >= 1 carrier, SNV / INDEL | 0.205 / 0.171 | 0.105 / 0.177 |
+| present: median exact-allele frequency | 0.316 | 0.315 |
+| absent exact-allele loci carried in >= 2 superpopulations / by one HPRC individual only | 336 (86.2%) / 11 (2.8%) | 1,672 (90.2%) / 65 (3.5%) |
+| absent, exact allele: O/E (z) AFR / AMR / EAS / SAS | 1.17 (+17.4) / 0.83 (-13.3) / 0.80 (-6.5) / 0.86 (-2.1) | 1.11 (+21.4) / 0.89 (-16.7) / 0.89 (-7.4) / 0.92 (-2.5) |
+| present broad, exact allele: O/E (z; locus-bootstrap 95% CI) AFR / AMR | 1.08 (+3.0; 0.96-1.19) / 0.90 (-2.8; 0.77-1.04) | 0.92 (-5.9; 0.86-0.97) / 1.10 (+5.3; 1.03-1.17) |
+| CHM13 has the exact allele (absent loci) | 77 | 298 |
+| per HPRC haplotype: median share of the absent INDELs it traverses whose exact allele it carries (median count) | 0.200 (62 of 367) | 0.200 (315 of 1,935) |
 
-HG008T from analysis/graph_absorbed_somatic_20261001 (s9 / s13; recomputed here with the same functions and checked against its README / tables.md). The same category rules: HG008T `HG008N_*` = COLO829T `normal_*`; closest loci are ambiguous on both sides; HG008T chose among several ALT paths with re-decoded reads, COLO829T takes the c2 primary. % = of the absorbed alleles of that kind.
+HG008T from analysis/graph_absorbed_somatic_20261001 (s9 / s13; recomputed here with the same functions and checked against its README / tables.md). The same category rules: HG008T `HG008N_*` = COLO829T `normal_*`; closest loci are ambiguous on both sides; HG008T chose among several ALT paths with re-decoded reads, COLO829T takes the c2 primary. % = of the absorbed alleles of that kind. Asymmetries: HG008T sends 7 'normal carries ALT' INDELs to ambiguous through truth-INFO conflict rules that COLO829T cannot apply (no INFO event; counted as present, HG008T germline filtering would be at most 112 / 2,277 = 4.9%); its 9 `other_hap_only:patient_frame` present loci correspond to COLO829T's `with_germline` path-allele rule (1 locus here).
 
-- **The same picture for INDELs.** 84.9% vs 85.0% of the absorbed INDELs are pangenome-induced false negatives; the exact allele is about as common in HPRC and as widely shared, and each HPRC haplotype carries it at about 20% of the absent INDELs it traverses on both sides.
-- **More germline filtering in COLO829T** (7.4% vs 4.6% of the INDELs): the 'normal carries ALT' loci, 32 of 33 in SMaHT Extreme regions.
-- **SNVs differ.** COLO829T's absent SNVs are graph SNP alleles that HPRC haplotypes carry exactly (58 of 62); HG008T's were repeat events, 85 of 150 without an exact carrier. COLO829T has fewer ambiguous SNVs (6.0% vs 22.9%; HG008T had 39 closest SNVs).
-- **Populations.** The absent alleles lean AFR on both sides (AFR O/E 1.18 vs 1.11). The patient's germline alleles (present_broad) lean AMR for HG008T (1.10, z +5.3) but not for COLO829T (0.92, z -2.3; 24 loci). Neither donor's (European) ancestry is in HPRC v1.1.
+- **The same picture for INDELs.** 85.3% vs 85.0% of the absorbed INDELs are pangenome-induced false negatives; the exact allele is about as common in HPRC and as widely shared, and each HPRC haplotype carries it at about 20% of the absent INDELs it traverses on both sides.
+- **More germline filtering in COLO829T** (7.7% vs 4.6% of the INDELs): the 'normal carries ALT' loci, 33 of 34 in SMaHT Extreme regions.
+- **SNVs differ.** COLO829T's absent SNVs are graph SNP alleles that HPRC haplotypes carry exactly (58 of 63); HG008T's were repeat events, 85 of 150 without an exact carrier. COLO829T has fewer ambiguous SNVs (4.5% vs 22.9%; HG008T had 39 closest SNVs).
+- **Populations.** The absent alleles lean AFR on both sides (AFR O/E 1.17 (95% CI 1.14-1.21) vs 1.11 (95% CI 1.09-1.13); locus bootstrap). The patient's germline alleles (present_broad) lean AMR for HG008T (1.10 (95% CI 1.03-1.17)); for COLO829T there is no clear lean (AMR 0.90 (95% CI 0.77-1.04), AFR 1.08 (95% CI 0.96-1.19); 25 loci). Neither donor is in a superpopulation of the 44 HPRC v1.1 samples (no EUR); CHM13, the one European-ancestry haplotype of the graph, is n = 1.
 
 ## Files
 
@@ -639,14 +643,14 @@ This folder (`columns.tsv` explains every column of `per_variant.tsv` and of the
 | `per_variant.tsv` | one row per absorbed truth allele (497 rows, 180 columns): truth and VAF / RGN; per platform perfect flag, status, miss class, read-level reason, read counts; d9 window, match, primary path and its elements (compact), in-event element subtypes; GRCh38-frame class / unit / tract (and the b5 rule), SNV CpG / Ti-Tv / trinucleotide; COLO829BL array, per-hap placement, assembly / dipcall calls, array allele and its distance to ALT; event hap, patient-frame event, unit, tract, class (c3 and b5 rule), group, units changed, homopolymer bin, germline status, mechanism class, the other hap's event, flags; R / A / hapX / hapY array sequences |
 | `columns.tsv` | meaning and source of every column of `per_variant.tsv`, `hprc_per_variant.tsv`, `hprc_per_node.tsv`, `hprc_carriers.tsv.gz`, `hprc_individuals.tsv`, `hprc_populations.tsv`, `per_locus_populations.tsv` |
 | `repeat_context.md` | every repeat-context table of `c4_tables.py` (2a-2h, 3a-3i, 4a-4d, 5a-5h), printed by the script too (the tables of sections 7-8 are printed only) |
-| `hprc_per_variant.tsv` | one row per absorbed truth allele (497 rows, 80 columns): perfect flags, d9 match, chosen ALT path and its somatic elements, allele window; HPRC complete / partial / absent haplotypes, exact-allele / element-set / element frequencies (and over 88), carrier individuals, d9 / full VCF AF and agreement, per-superpopulation complete / carrier haplotypes, CHM13, the carrier haplotypes; COLO829BL hapX / hapY array alleles, event hap, pattern, germline-like flag; category, sub_class, sub_reason, interpretation |
+| `hprc_per_variant.tsv` | one row per absorbed truth allele (497 rows, 85 columns): perfect flags, d9 match, chosen ALT path and its somatic elements, allele window; HPRC complete / partial / absent haplotypes, exact-allele / element-set / element frequencies (and over 88), carrier individuals, d9 / full VCF AF and agreement, per-superpopulation complete / carrier haplotypes, CHM13, the carrier haplotypes; COLO829BL hapX / hapY array alleles, event hap, pattern, germline-like flag; category, sub_class, sub_reason, interpretation |
 | `hprc_per_node.tsv` | one row per (truth allele, somatic element), 623 rows: node ids and sequences, GRCh38 interval, subtype, `alone`; HPRC carriers / frequency, per superpopulation, node coverage (d9 floor), CHM13, carrier haplotypes |
 | `hprc_carriers.tsv.gz` | one row per (truth_id, level, carrying haplotype with a complete traversal; HPRC and CHM13): `element` rows (= `hprc_per_node` carriers) and `allele` rows (`carries_set_any_path`, `carries_exact_allele` = `hprc_per_variant` `hprc_exact_carrier_haps`); denominators = `hprc_n_complete` / `{SP}_complete` |
 | `hprc_individuals.tsv` | per HPRC haplotype (and CHM13): loci per category and kind it traverses completely / carries (exact allele, element set) |
 | `hprc_populations.tsv` | per 1000 Genomes population: haplotypes, exact-allele carrier haplotypes and complete traversals per category and kind |
 | `per_locus_populations.tsv`, `populations.md` | per truth allele: carrier / complete haplotypes per superpopulation and per 1000G population, superpopulation pattern, shared vs private (one superpopulation / population / individual); `populations.md` = the tables per group (+ O/E, per-haplotype summary) |
 | `hprc_tables.md` | every table of `c7_hprc_membership.py` (categories per platform and scope, sub-classes, frequency distributions per level, O/E, crosstabs, VCF cross-check, d9 floor; `$D` column names) |
-| `audit_decisions.md` | the two audits of the first version (numbers; independent normal-frame check): every finding, the decision and what changed |
+| `audit_decisions.md` | the audits of sections 1-6 (numbers; independent normal-frame check) and of sections 7-8 (HPRC membership by an independent GBZ method; numbers and rules): every finding, the decision and what changed |
 | `c0_*.py` ... `c8_populations.py` | the scripts (below) |
 
 Intermediate data, in `$D = /scratch/jshen/data/pansoma_net_v2_runs/graph_absorbed_somatic_colo829t_20261005/`:
@@ -688,12 +692,12 @@ All inputs are read only (the COLO829BL files belong to another user: never writ
    `minimap2 -x asm5 -c --secondary=yes -N 10 -t 4 <ragtag ..._hap{X,Y}_unlocalized_normalized.fa> $D/c3_queries.fa >
    $D/c3_hap{X,Y}_unloc.paf` (16 s, 1.3 GB); then `python c3_normal_frame.py` (login, 3 min 54 s, 0.26 GB; it also reads dipcall's
    `hap{1,2}.paf.gz` and the raw verkko contigs, read only).
-4. `sbatch tmp/graph_absorbed_somatic_colo829t_20261005/c5_hprc_walks.sbatch` (24 CPUs, 16G; 8 min 6 s, MaxRSS 10.1 GB).
+4. `sbatch tmp/graph_absorbed_somatic_colo829t_20261005/c5_hprc_walks.sbatch` (24 CPUs, 12G; 14 min 35 s on tequila, MaxRSS 10.2 GB; 8 min 6 s on guinness before the bypass rule).
 5. `python c6_hprc_vcf.py` (login, 2.8 min, 2.9 GB).
-6. `python c7_hprc_membership.py 6` (login, 1.5 min, 0.16 GB per process; it imports `c2_graph_paths.py` for the d9 node index);
-   `python c7_hprc_membership.py check 6` (login, 43 s).
-7. `python c8_populations.py` (login, 2 s, 26 MB).
-8. `python c4_tables.py` (login, 11 s, 0.44 GB).
+6. `python c7_hprc_membership.py 6` (login, 2.5 min, 0.15 GB per process; it imports `c2_graph_paths.py` for the d9 node index);
+   `python c7_hprc_membership.py check 6` (login, 40 s).
+7. `python c8_populations.py` (login, 5 s, 26 MB; the locus bootstrap).
+8. `python c4_tables.py` (login, 13 s, 0.44 GB).
 
 ## Assumptions and caveats
 
@@ -739,18 +743,22 @@ All inputs are read only (the COLO829BL files belong to another user: never writ
 - **'closest' loci** (21 INDEL, 3 SNV): no d9 path spells the truth; the perfectly aligned reads were not re-decoded.
 - **HPRC frequencies** are over complete traversals, so they are conditional on the d9 graph and biased upward (a haplotype cut
   inside the window does not count); `hprc_exact_allele_freq_over88` is the lower bound. 'Rare' (< 0.20) is relative to HPRC
-  v1.1, which has no EUR haplotype; the COLO829 donor is European. The O/E z-scores ignore haplotype pairing and linkage, so
-  they overstate significance.
+  v1.1, whose 44 samples include no EUR (CHM13, in the graph, is one haplotype of reported European ancestry); the COLO829
+  donor is European. The O/E z-scores ignore haplotype pairing and linkage, so they overstate significance; the locus-bootstrap
+  intervals are the measure to read (at 25 present_broad loci they include 1).
 - **No read data for the HPRC part.** HG008T used re-decoded reads to choose among several ALT paths; COLO829T keeps the c2
   primary at the 34 multi-path loci (the element-set level uses every path; the exact-allele level compares
-  sequence over the array, so it hardly depends on the path). All 24 'closest' loci stay ambiguous.
+  sequence over the array, so it hardly depends on the path; the HPRC support rule takes an element-set carrier of any candidate
+  path, e.g. 38059: no HPRC haplotype walks the primary path's second element, 13 walk the other path). All 24 'closest' loci stay ambiguous.
 - **Event hap in the categories.** The `with_germline` phase check uses c3's derived event hap (the closest haplotype to GRCh38 +
   truth), not a truth INFO event, and 'ALT on the event hap' is no conflict here (the carrying haplotype is the closest one by
   construction). 2 loci fail the phase check.
-- **Exact-allele rule.** c7 adds one rule to the HG008 one (a walk that spells GRCh38 + truth over the whole window counts); it
-  adds 1 haplotype at 29562. The sequence-level check still finds 4 more carriers there (c7 counts 10 of 43, the sequence 14).
-- **Present = c3 'normal carries ALT'**, so the present categories inherit c3's caveats (dipcall copy, duplicated-region signs;
-  32 of 33 in SMaHT Extreme regions). The 22 absent loci flagged `germline_like_alt_len` may be germline length
+- **Exact-allele rule.** c7 adds two rules to the HG008 one: a walk that spells GRCh38 + truth over the whole window counts
+  (1 haplotype, at 29562), and the core rule: the walk's sequence mapped onto GRCh38 over the allele window, so a germline
+  variant just outside the window no longer moves the node bracket (54 haplotypes at 3 loci). Both are strict
+  supersets of the HG008 rule. The sequence-level check differs at 29562 (11 by c7, 14 by sequence, of 61): these haplotypes spell GRCh38 + truth over the array, plus a germline 4-bp expansion of the next (TTTC)n repeat just after it; their walk places that insertion at the end of the allele window, where the node bracket and the core rule count it as part of the allele, while the 16-mer check puts it past its right anchor. So c7 undercounts there (the category does not change).
+- **Present = c3 'normal carries ALT'** (plus 2562, the `with_germline` path allele on hapX), so the present categories inherit
+  c3's caveats (dipcall copy, duplicated-region signs; 33 of 34 in SMaHT Extreme regions); 35165, 35166 are PSV-like. The 24 absent loci flagged `germline_like_alt_len` may be germline length
   alleles (section 8).
 - **d9 floor.** 2 somatic branch elements not on CHM13 have fewer than 9 visiting haplotypes in the c5 window rows (3346: 8, 37542: 4);
   these are lower bounds, not checked with a whole-GFA scan.

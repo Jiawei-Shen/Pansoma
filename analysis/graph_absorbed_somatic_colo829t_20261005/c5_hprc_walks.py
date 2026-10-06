@@ -23,14 +23,19 @@ deletion of the other anchor) or continues (neither within PART_MAX nodes); part
 that point (GRCh38-forward orientation), empty for continues. Partial rows inside a complete traversal of the same line
 (an anchor revisited in the other orientation inside the window) are dropped. inner_only: partial_path = the walk from
 the first to the last interior node hit. A haplotype whose germline deletion removes an anchor node gets no complete
-traversal (left_only / right_only exits_window; its partial_path still runs from the other anchor up to the deletion).
+traversal from the anchors alone. Bypass rule (added after the HPRC audit, 2026-10-05): a left_only / right_only walk that
+leaves the window on the side of its missing anchor (left_only: a GRCh38 node of the same chromosome after win_end0;
+right_only: before win_start0) skips that anchor with a germline variant over the window edge; it spans the whole window, so
+it is a complete traversal with partial_end = bypass:<chrom>:<pos> and local_path = the walk from the anchor to that outside
+GRCh38 node, inclusive (GRCh38-forward orientation; it does not start / end on the window anchor). Exits to another
+chromosome or on the other side stay partial (exits_window).
 hap_lo0 / hap_hi0 = 0-based half-open span of the traversal on the haplotype contig (seq_start = W start, or the 4th
 PanSN field of P names = the fragment's offset on its contig; assumption, checked only as non-overlap of fragments).
 Outputs ($D): hprc_local_paths.tsv.gz (truth_id sample hap seqid seq_start traversal status strand hap_lo0 hap_hi0
 n_nodes local_path partial_end partial_path; traversal numbered per truth_id x sample x hap), hprc_haplotypes.tsv
 (every sample/hap: W and P lines, nodes, bases, contigs), hprc_window_coverage.tsv (per truth_id over the HPRC
-haplotypes = every sample/hap but GRCh38 / CHM13: complete / partial only / absent, distinct paths, GRCh38 and CHM13
-status; grch38_ok = one complete GRCh38 traversal equal to the all-GRCh38 window path at win_start0..win_end0).
+haplotypes = every sample/hap but GRCh38 / CHM13: complete (n_bypass of them by the bypass rule) / partial only / absent,
+distinct paths, GRCh38 and CHM13 status; grch38_ok = one complete GRCh38 traversal equal to the all-GRCh38 window path at win_start0..win_end0).
 Validation printed to the log: grch38_ok for every locus, and for 5 loci a few distinct haplotype walks spelled with
 oseq(), edge-checked with succ() and compared with ref_hap / alt_hap (edit distance) and with hap_hi0 - hap_lo0.
 Assumptions: HPRC v1.1 = 44 samples x 2 haplotypes (88; no EUR sample); a haplotype absent from a window here means its
@@ -90,8 +95,10 @@ def walk(ids, rev, lo, hi, flip):
     return ''.join(('<' if x else '>') + str(n) for n, x in zip(a.tolist(), o.tolist()))
 
 
-def partial(ids, li, p, step):
-    """From anchor position p in direction step (+1/-1): (partial_end, last position kept or None)."""
+def partial(ids, li, p, step, st):
+    """From anchor position p in direction step (+1/-1): (partial_end, last position kept or None). A walk that leaves the
+    window on the side of the missing anchor (st left_only: a same-chromosome GRCh38 node after the window; right_only:
+    before it) bypasses that anchor: ('bypass:<chrom>:<pos>', position of that outside node)."""
     c, lo, hi = WIN[li]
     room = ids.size - 1 - p if step == 1 else p                    # nodes left on the line beyond the anchor
     q = p + step * np.arange(1, min(room, PART_MAX) + 1)
@@ -99,7 +106,10 @@ def partial(ids, li, p, step):
     out = (G_CHROM[n] >= 0) & (G_VISITS[n] == 1) & ((G_CHROM[n] != c) | (G_START[n] < lo) | (G_START[n] > hi))
     if out.any():
         k = int(np.argmax(out))
-        return f'exits_window:{NAMES[int(G_CHROM[n[k]])]}:{int(G_START[n[k]])}', (int(q[k - 1]) if k else p)
+        x, where = int(n[k]), f'{NAMES[int(G_CHROM[n[k]])]}:{int(G_START[n[k]])}'
+        if G_CHROM[x] == c and (G_START[x] > hi if st == 'left_only' else G_START[x] < lo):
+            return f'bypass:{where}', int(q[k])
+        return f'exits_window:{where}', (int(q[k - 1]) if k else p)
     if room <= PART_MAX:
         return 'line_end', (int(q[-1]) if q.size else p)
     return 'continues', None
@@ -133,9 +143,9 @@ def traversals(li, ev, ids, rev):
         if any(a <= p <= b for a, b in spans):
             continue
         step = 1 if (st == 'left_only') != flip else -1          # direction away from the anchor along the line
-        end, q = partial(ids, li, p, step)
+        end, q = partial(ids, li, p, step, st)
         lo, hi = (p, p if q is None else q) if step == 1 else (p if q is None else q, p)
-        out.append((st, lo, hi, strand, end, '' if q is None else walk(ids, rev, lo, hi, flip)))
+        out.append(('complete' if end.startswith('bypass') else st, lo, hi, strand, end, '' if q is None else walk(ids, rev, lo, hi, flip)))
     if not out and not found:                                       # interior GRCh38 nodes only
         lo, hi = ev[0][0], ev[-1][0]
         flip = bool(rev[lo])
@@ -234,7 +244,7 @@ def main():
     for x in rows:
         by[x[0]].append(x)
     cov_cols = ['truth_id', 'chrom', 'vcf_pos', 'kind2', 'n_hprc_haps', 'n_complete', 'n_partial_only', 'n_absent',
-                'n_multi_complete', 'n_ref_path', 'n_nonref_path', 'n_distinct_paths', 'n_line_end', 'n_exits_window',
+                'n_multi_complete', 'n_ref_path', 'n_nonref_path', 'n_distinct_paths', 'n_line_end', 'n_exits_window', 'n_bypass',
                 'grch38_status', 'grch38_ok', 'chm13_status', 'chm13_ref_path']
     n_ok, cov = 0, []
     for i, r in enumerate(loci):
@@ -257,6 +267,7 @@ def main():
                         n_distinct_paths=len({p for k in c for p in comp[k]}),
                         n_line_end=sum(any(x[11] == 'line_end' for x in st[k]) for k in h),
                         n_exits_window=sum(any(x[11].startswith('exits') for x in st[k]) for k in h),
+                        n_bypass=sum(any(x[11].startswith('bypass') for x in st[k]) for k in h),
                         grch38_status=','.join(sorted({x[5] for x in g})) or 'absent', grch38_ok=gok,
                         chm13_status=','.join(sorted({x[5] for x in ch})) or 'absent',
                         chm13_ref_path=any(x[10] == REFPATH[i] for x in ch if x[5] == 'complete')))
@@ -268,7 +279,9 @@ def main():
     print(f'loci {len(loci)} coverage rows {len(cov)}; GRCh38 ok {n_ok}/{len(loci)}; HPRC haplotypes {len(hprc)}; '
           f'complete per locus median {np.median(nc)} min {nc.min()} max {nc.max()}; loci with < 80 complete '
           f'{int((nc < 80).sum())}; status counts {Counter(x[5] for x in rows)}')
-    print('partial_end', Counter(x[11].split(':')[0] for x in rows if x[5] != 'complete'))
+    print('partial_end', Counter(x[11].split(':')[0] for x in rows if x[5] != 'complete'),
+          '| complete bypass rows', Counter(x[1] in REFS for x in rows if x[11].startswith('bypass')),
+          '| loci with an HPRC bypass', sorted((c['truth_id'], c['n_bypass']) for c in cov if c['n_bypass']))
     validate(by, hprc)
     print(f'total {time.time() - t0:.0f}s')
 
@@ -301,12 +314,14 @@ if __name__ == '__main__':
 #   51,142 rows (complete 38,143, left_only 6,092, right_only 5,839, inner_only 1,068; no too_long); partial_end line_end
 #   11,642, exits_window 289; 90 haplotypes (88 HPRC + GRCh38 + CHM13; hprc_haplotypes.tsv identical to the HG008 one);
 #   W length mismatches 0; 49,641 lines touch a window, overlapping P-fragment offsets 0.
-#   GRCh38 ok 497 / 497. HPRC haplotypes with a complete traversal per locus: SNV median 85 (min 15), INDEL median 78
-#   (10th pct 50, min 0); 256 loci < 80, 37 < 44 (36 INDEL, 1 SNV); 31 loci with a haplotype traversing twice.
-#   Zero complete: truth 28014 (chr10:12247133 CCT>C): 85 HPRC haplotypes leave the window before the last anchor
-#   4662778 (exits_window: GRCh38 carries a rare allele there; CHM13 left_only too); their partial_path still spans the
-#   event window. CHM13: complete 488, absent 5, right_only 3, left_only 1; CHM13 walks the GRCh38 path at 214 loci.
+#   GRCh38 ok 497 / 497. CHM13: complete 488, absent 5, right_only 3, left_only 1; CHM13 walks the GRCh38 path at 214 loci.
 #   5 checked loci: every spelled walk has existing edges and length == hap_hi0 - hap_lo0.
 #   Format check vs c2: truths where >= 1 HPRC haplotype's complete local_path equals the c2 primary_path: INDEL exact
 #   328 / 394, with_germline 6 / 15, closest 11 / 21; SNV exact 53 / 64, closest 2 / 3 (whole-window equality is strict:
 #   other germline variants in the window change the path; carriers should be counted by elements, as in HG008 s9).
+# Re-run with the bypass rule (2026-10-05, Slurm 381233 on tequila, 12G: 14 min 35 s, MaxRSS 10.2 GB; scan 645 s):
+#   identical but for the 289 former exits_window rows, which all exit on the side of the missing anchor and are now
+#   complete (bypass:<chrom>:<pos>; 285 HPRC + 4 CHM13); no exits_window row is left. Complete 38,432. HPRC complete
+#   per locus median 79 (min 15, was 0: truth 28014, where GRCh38 carries a rare allele at the last anchor, now has 85);
+#   loci with an HPRC bypass: 2562 14, 2570 10, 21808 9, 22598 29, 22742 12, 28014 85, 29389 31, 29562 18, 29579 49,
+#   37389 8, 39443 6, 41860 13. The previous outputs are in $D/prefix_hprc_20261005/.

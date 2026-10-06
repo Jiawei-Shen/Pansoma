@@ -43,3 +43,67 @@ were re-run; `per_variant.tsv`, `columns.tsv`, `repeat_context.md` and `README.m
 - A dipcall copy is assumed to be the patient's own copy. No segmental-duplication track was used.
 - The imperfect-VNTR thresholds are the auditor's (k = 12, 7-150 bp, 60 % over +-15 bp, run >= 40 bp, >= 20 bp beyond the
   array). They were not tuned.
+
+# HPRC membership
+
+Two audits of sections 7-8 (c5-c8, first version = commit 93b91b0):
+
+- **membership_indep**: carriers re-derived from the GBZ (`vg_v1.65.0 paths -A -S`, all 44 samples, all 497 loci;
+  unique 24-mer anchors and the auditor's own alignment), compared with c7 / c6 and an O/E recount.
+- **numbers_rules**: categories, exact-allele carriers (unique 16-mer anchors), every section 7-8 number, and the HG008T
+  side, recomputed with the auditor's own code.
+
+Their scripts and tables are in `$D/audit_hprc/{hprc_membership_indep,numbers_rules}/`. The first version's c5 / c7
+outputs are kept in `$D/prefix_hprc_20261005/`.
+
+Each finding was re-checked here before acting on it. Fixes went into `c5_hprc_walks.py` (bypass rule), `c7_hprc_membership.py`
+(core rule, support order, path-allele normal rule, PSV flag, unrounded medians, locus bootstrap), `c8_populations.py`
+(new columns, locus bootstrap) and `c4_tables.py` (README text). Re-run: c5 (Slurm 381233), c7, c7 check, c8, c4.
+`per_variant.tsv` and `repeat_context.md` stayed byte-identical.
+
+## Membership audit (independent GBZ method)
+
+| # | Finding (severity) | Re-check | Decision and change | Effect |
+|---|---|---|---|---|
+| M1 | 2562 and 29389 have many exact carriers that c7 cannot see: a germline variant over the window edge bypasses the c5 anchor node, so the walk counted as partial (medium) | Confirmed. c5 had 289 `exits_window` rows at 12 loci (2562 14 HPRC, 29389 32, ...). All 289 exit on the side of the missing anchor (same chromosome, beyond the window edge) | **Fixed in c5** (bypass rule): such a walk spans the whole window and is a complete traversal (`partial_end = bypass:<chrom>:<pos>`; `local_path` runs from the anchor to that outside GRCh38 node). Exits to another chromosome or on the other side would stay partial; there are none | 289 rows (285 HPRC + 4 CHM13) became complete at 12 loci (2562 14, 2570 10, 21808 9, 22598 29, 22742 12, 28014 85, 29389 31, 29562 18, 29579 49, 37389 8, 39443 6, 41860 13). 29389: ambiguous -> absent `exact_allele`, 31 / 79 (the auditor's 30 + the 1 with a REF copy). 2562: 14 / 69 carriers of the path allele (see N2). 28014 had none complete, now 85 (still a 'closest' locus). 22598: 22 / 29 -> 22 / 58 (the 29 bypass walks carry another allele; the 16-mer check agrees) |
+| M2 | The c7 support code contradicts its docstring: 'none' is decided from the primary path's minimum element count before the any-path set (38059; 2570 after M1) (medium) | Confirmed: `support = 'none' if not keep or not emin else ...`. 38059: `elem_carriers_each` 16;0, `set_carriers_any_path` 13 | **Fixed**: exact_allele if an exact carrier; else element_set_other_allele if an element-set carrier of any candidate path; else recombinant_pieces if every element of the chosen path has a carrier; else none | 38059 ambiguous -> absent `element_set_other_allele` (13 / 31). 2570 (SNV, after M1: 10 bypass walks walk its element and carry a 41-bp deletion over the window edge) ambiguous -> absent `element_set_other_allele`. `no_HPRC_carrier` 10 -> 6 (949, 1632, 14592, 33362, 39393, 30763; the auditor's list) |
+| M3 | The node bracket rejects true carriers with a germline SNV just outside the allele interval (low) | Confirmed: 21200 has an SNV at chr7:66421387, one base before `allele_lo0`; the bracket moves to the next shared GRCh38 node and takes it in | **Fixed** (core rule, added to the bracket and whole-window rules, so a strict superset): a walk is mapped onto GRCh38 (forward GRCh38 nodes clipped to [lo, hi), plus each other-node run whose replaced span overlaps it) and compared with the ALT path / GRCh38 + truth over [lo, hi). New column `exact_core_only` | +54 carriers at 3 loci: 2133 6 -> 19 / 77, 21200 0 -> 10 / 74 (`element_set_other_allele` -> `exact_allele`), 29389 31 (needs M1 too). The auditor's 28 extra pairs: 2133 +13 and 21200 +10 match; 29389 is in the 31; at 29562 c7 still misses 4 (see N7) |
+| M4 | 35165 / 35166: every exact carrier is a two-copy haplotype with an ALT copy and a REF copy, a paralogous sequence variant (low) | Confirmed: `hprc_n_multi_complete` 77 / 80 at both; all 10 / 16 exact carriers have >= 2 complete traversals, one spelling GRCh38 over [lo, hi); no d9 VCF record; COLO829BL copies are dipcall's with MAPQ < 20 and other-scaffold hits | **Flagged, category kept**: new columns `exact_carriers_multicopy`, `exact_carriers_alt_ref_copy`, `multicopy_psv_like`; README section 8 and caveats call them likely PSVs (and the normal's ALT possibly the paralog's copy). The carrier count is not changed, so the frequency stays comparable with HG008T | exactly 35165 (present_rare) and 35166 (present_broad) are `multicopy_psv_like` |
+| M5 | 40329's carriers could not be confirmed by the auditor's anchors (info) | Agrees: the auditor's limitation (short contig pieces, Extreme region) | No change | none |
+
+## Numbers and rules audit
+
+| # | Finding (severity) | Re-check | Decision and change | Effect |
+|---|---|---|---|---|
+| N1 | 'present_broad lean slightly AFR too' is not supported: a locus bootstrap puts both AFR and AMR intervals over 1 (medium) | Confirmed with c8 `oe_ci()` (2,000 resamples of the loci, seed 20261005) | **Fixed**: the O/E tables of c7, c8 (`populations.md` 6) and README h5 carry the locus-bootstrap 95% interval; the README says 'no clear lean' for COLO829T present_broad and keeps HG008T's AMR lean with its interval | present_broad (25 loci after M1 / N2): AFR 1.08 (0.96-1.19), AMR 0.90 (0.77-1.04); absent AFR 1.17 (1.14-1.21); HG008T present_broad AMR 1.10 (1.03-1.17), absent AFR 1.11 (1.09-1.13) |
+| N2 | 2562: the `with_germline` ALT path (GRCh38 + truth + G>T) spells COLO829BL hapX's whole-array allele, so it is the patient's own allele, but c7 only compared GRCh38 + truth (low) | Confirmed: c3 `hapX_seq` = `R_seq` + truth + 248443603 G>T; the only one of the 15 `with_germline` loci | **Fixed** (HG008T's `other_hap_only:patient_frame` analogue): at `with_germline` loci a hap whose array sequence equals the path allele carries it (`normal_carries_via = path_allele`, sub_class `<hap>_only:path_allele`); `germline_like_alt_len` is false there | 2562 -> `normal_present_broad` (`hapX_only:path_allele`): 14 / 69 = 0.203 HPRC carriers of the path allele after M1, just above RARE_AF 0.20 (the auditor expected rare with 0 carriers, before M1) |
+| N3 | The README omits CHM13 (in the graph, reported European ancestry) when it says the donor's ancestry is not in HPRC (low) | Confirmed | **Fixed**: 'none of the 44 HPRC samples is EUR; CHM13 ... is in the graph (frequency filter) but outside the counts; n = 1, not a European estimate', with its exact-allele share | CHM13 carries the exact allele at 77 absent loci: 68 / 364 = 0.187 of the absent INDELs it traverses, 9 / 62 SNVs |
+| N4 | 38059's category depends on the c2 primary-path choice (low) | Confirmed (same locus as M2) | **Fixed** by M2 (support takes a set carrier of any candidate path); named in the 'No read data' caveat | as M2 |
+| N5 | Two medians off by 0.001 from double rounding (low) | Confirmed: c7 stored 4-decimal frequencies and c4 / c7 tables took medians of those | **Fixed**: c7 tables and c4 compute medians from carriers / n_complete (HG008T side too) | absent exact at loci with a carrier: SNV 0.205 (was 0.204), INDEL 0.171 (0.170, now with M1 / M3 carriers); HG008T values unchanged (0.000 / 0.167 / 0.105 / 0.177 / 0.315) |
+| N6 | The HG008T vs COLO829T germline-filtering comparison has unmentioned asymmetries (low) | Confirmed: HG008T INDEL `evidence_conflict:ALT_on_normal_event_hap` 1 + `germline_ALT_vs_truth_INFO_event_novel` 6; 9 `other_hap_only:patient_frame` present loci | **Fixed**: footnote of h8 (computed from the HG008T table): HG008T germline filtering at most 112 / 2,277 = 4.9% if the 7 counted; its 9 patient_frame loci correspond to the path-allele rule (1 locus here) | COLO829T INDEL germline filtering 33 / 430 = 7.7% vs HG008T 4.6% (<= 4.9%) |
+
+## Found here
+
+| # | Finding | Decision | Effect |
+|---|---|---|---|
+| N7 | After M1 / M3 the 16-mer check (c7 `check`) still differs at 29562: 11 by c7, 14 by sequence of 61 | Read by hand: the 4 haplotypes (HG01175#2, HG01361#2, HG02148#2, HG03453#1) spell GRCh38 + truth over the array plus a germline +4 (TTTC) of the next (TTTC)n repeat; their walk places that insertion at the allele-window end, where the bracket and the core rule count it as part of the allele, while the 16-mer check puts it past its right anchor. Not changed (any wider tolerance would also accept real boundary alleles); disclosed in the README | 474 of 475 anchored loci identical (34,215 pairs); category of 29562 unchanged |
+
+## Result (union, chr1-22, SNV / INDEL)
+
+| category | first version | now |
+|---|---|---|
+| normal_present_broad | 0 / 24 | 0 / 25 (+2562) |
+| normal_present_rare | 1 / 8 | 1 / 8 |
+| normal_absent_HPRC_other | 62 / 365 | 63 / 367 (+2570, +29389, +38059) |
+| of which exact_allele | 58 / 330 | 58 / 332 (+29389, +21200 from element_set_other_allele) |
+| other_ambiguous | 4 / 33 | 3 / 30 |
+
+chr1: present 0 / 13 -> 0 / 14, absent 3 / 22 -> 4 / 22, ambiguous 2 / 3 -> 1 / 2. Germline-like absent INDELs 22 -> 24
+(29389 and 38059 carry the flag), so the pangenome-induced INDEL count is 343-367.
+
+## Not changed
+
+- Frequencies stay conditional on complete traversals; bypass traversals are now complete, which mostly adds non-carriers
+  (e.g. 22598 22 / 29 -> 22 / 58, confirmed by the 16-mer check).
+- PSV-like loci keep their category and carrier counts (flagged only).
+- The core rule treats an insertion exactly at the window edge as part of the allele (29562, N7).

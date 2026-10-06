@@ -1,15 +1,15 @@
 population_code	population_name	superpopulation	haplotypes	normal_present_broad_SNV_exact_carrier_haps	normal_present_broad_SNV_complete_haps	normal_present_broad_SNV_carrier_fraction	normal_present_broad_INDEL_exact_carrier_haps	normal_present_broad_INDEL_complete_haps	normal_present_broad_INDEL_carrier_fraction	normal_present_rare_SNV_exact_carrier_haps	normal_present_rare_SNV_complete_haps	normal_present_rare_SNV_carrier_fraction	normal_present_rare_INDEL_exact_carrier_haps	normal_present_rare_INDEL_complete_haps	normal_present_rare_INDEL_carrier_fraction	normal_absent_HPRC_other_SNV_exact_carrier_haps	normal_absent_HPRC_other_SNV_complete_haps	normal_absent_HPRC_other_SNV_carrier_fraction	normal_absent_HPRC_other_INDEL_exact_carrier_haps	normal_absent_HPRC_other_INDEL_complete_haps	normal_absent_HPRC_other_INDEL_carrier_fraction
-ACB	African Caribbean in Barbados	AFR	14	0	0		118	293	0.403	2	14	0.143	9	70	0.129	219	791	0.277	980	4143	0.237
-ASW	African Ancestry in Southwest US	AFR	2	0	0		18	40	0.450	0	1	0.000	3	11	0.273	34	117	0.291	138	599	0.230
-ESN	Esan in Nigeria	AFR	2	0	0		22	39	0.564	0	2	0.000	2	9	0.222	34	114	0.298	141	594	0.237
-GWD	Gambian in Western Division, The Gambia	AFR	16	0	0		152	329	0.462	1	13	0.077	12	89	0.135	245	894	0.274	1088	4725	0.230
-MKK	Maasai in Kinyawa, Kenya (HapMap 3)	AFR	2	0	0		20	42	0.476	0	1	0.000	1	11	0.091	30	111	0.270	135	596	0.227
-MSL	Mende in Sierra Leone	AFR	8	0	0		72	156	0.462	0	8	0.000	4	37	0.108	137	438	0.313	572	2332	0.245
-YRI	Yoruba in Ibadan, Nigeria	AFR	2	0	0		15	31	0.484	0	1	0.000	2	14	0.143	25	108	0.231	126	585	0.215
-CLM	Colombian in Medellin, Colombia	AMR	8	0	0		55	162	0.340	0	8	0.000	3	50	0.060	98	474	0.207	420	2592	0.162
-PEL	Peruvian in Lima, Peru	AMR	8	0	0		62	166	0.373	0	8	0.000	2	50	0.040	88	474	0.186	419	2613	0.160
-PUR	Puerto Rican in Puerto Rico	AMR	16	0	0		134	329	0.407	7	14	0.500	14	93	0.151	170	931	0.183	860	5161	0.167
-CHS	Southern Han Chinese, China	EAS	6	0	0		47	120	0.392	0	6	0.000	4	36	0.111	70	355	0.197	320	1966	0.163
-KHV	Kinh in Ho Chi Minh City, Vietnam	EAS	2	0	0		16	42	0.381	0	2	0.000	5	13	0.385	20	117	0.171	91	658	0.138
-PJL	Punjabi in Lahore,Pakistan	SAS	2	0	0		16	43	0.372	0	2	0.000	2	12	0.167	21	121	0.174	113	652	0.173
-CHM13	reference (T2T CHM13, hydatidiform mole)	reference	1	0	0		3	24	0.125	0	1	0.000	3	8	0.375	9	61	0.148	66	361	0.183
+ACB	African Caribbean in Barbados	AFR	14	0	0		118	300	0.393	2	14	0.143	9	70	0.129	219	801	0.273	985	4181	0.236
+ASW	African Ancestry in Southwest US	AFR	2	0	0		18	42	0.429	0	1	0.000	3	11	0.273	34	119	0.286	139	604	0.230
+ESN	Esan in Nigeria	AFR	2	0	0		23	41	0.561	0	2	0.000	2	9	0.222	34	116	0.293	142	599	0.237
+GWD	Gambian in Western Division, The Gambia	AFR	16	0	0		158	341	0.463	1	13	0.077	12	89	0.135	245	907	0.270	1099	4761	0.231
+MKK	Maasai in Kinyawa, Kenya (HapMap 3)	AFR	2	0	0		20	43	0.465	0	1	0.000	1	11	0.091	30	113	0.265	136	602	0.226
+MSL	Mende in Sierra Leone	AFR	8	0	0		75	160	0.469	0	8	0.000	4	37	0.108	137	445	0.308	575	2353	0.244
+YRI	Yoruba in Ibadan, Nigeria	AFR	2	0	0		15	33	0.455	0	1	0.000	2	14	0.143	25	110	0.227	127	590	0.215
+CLM	Colombian in Medellin, Colombia	AMR	8	0	0		56	170	0.329	0	8	0.000	3	50	0.060	98	482	0.203	429	2616	0.164
+PEL	Peruvian in Lima, Peru	AMR	8	0	0		62	174	0.356	0	8	0.000	2	50	0.040	88	482	0.183	429	2640	0.163
+PUR	Puerto Rican in Puerto Rico	AMR	16	0	0		134	342	0.392	7	14	0.500	14	93	0.151	170	946	0.180	871	5204	0.167
+CHS	Southern Han Chinese, China	EAS	6	0	0		48	126	0.381	0	6	0.000	4	36	0.111	70	358	0.196	324	1979	0.164
+KHV	Kinh in Ho Chi Minh City, Vietnam	EAS	2	0	0		17	44	0.386	0	2	0.000	5	13	0.385	20	119	0.168	94	666	0.141
+PJL	Punjabi in Lahore,Pakistan	SAS	2	0	0		17	45	0.378	0	2	0.000	2	12	0.167	21	123	0.171	115	656	0.175
+CHM13	reference (T2T CHM13, hydatidiform mole)	reference	1	0	0		4	25	0.160	0	1	0.000	3	8	0.375	9	62	0.145	68	364	0.187

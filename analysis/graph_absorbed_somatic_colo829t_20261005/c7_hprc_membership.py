@@ -32,11 +32,19 @@ Method
    the c3 tandem array united with the event window and the elements' spans, clipped to the graph window); carrier = same
    spelled sequence from L to R as the ALT path (allele) or as GRCh38 + truth (truth_seq); COLO829T addition (a strict
    superset of the HG008 rule): a walk spelling the whole ALT path / GRCh38 + truth over the whole window also counts
-   (exact_window_only = haplotypes found only this way: compensating graph edits outside the bracket, e.g. 29562); exact
-   allele = truth_seq, or the path allele for with_germline (truth + the patient's germline alleles). Frequencies over the complete haplotypes
-   (conditional, upper-biased) and over all 88 (lower bound). hprc_support = exact_allele / element_set_other_allele
-   (>= 1 haplotype walks a full ALT element set but spells another allele over the array) / recombinant_pieces (every
-   element has carriers, no haplotype has a full set) / none. RARE_AF = 0.20 on exact_allele_freq; freq_class_agree =
+   (exact_window_only = haplotypes found only this way: compensating graph edits outside the bracket, e.g. 29562); and
+   (core rule, added after the HPRC audit) a walk whose core() over [lo, hi) equals that of the ALT path / of GRCh38 +
+   truth: core() maps the walk onto GRCh38 (forward GRCh38 nodes clipped to [lo, hi), plus each non-GRCh38 run whose
+   replaced span overlaps it), so a germline SNV / indel just outside [lo, hi) that moves the node bracket outward no
+   longer hides a carrier (exact_core_only = haplotypes found only this way). Exact allele = truth_seq, or the path
+   allele for with_germline (truth + the patient's germline alleles), per traversal; a haplotype counts if any of its
+   complete traversals does. PSV flag: exact_carriers_alt_ref_copy = carriers with another complete traversal that
+   spells GRCh38 over [lo, hi) (an ALT copy and a REF copy); multicopy_psv_like = every exact carrier is such a
+   haplotype (a paralogous sequence variant rather than an allele of the locus). Frequencies over the complete haplotypes
+   (conditional, upper-biased) and over all 88 (lower bound). hprc_support, first that applies: exact_allele (>= 1
+   exact carrier) / element_set_other_allele (>= 1 haplotype walks a full element set of any candidate ALT path but
+   spells another allele over the array) / recombinant_pieces (every element of the chosen path has carriers, no
+   haplotype has a full set) / none. RARE_AF = 0.20 on exact_allele_freq; freq_class_agree =
    the element / set-any-path / exact / full-VCF frequencies fall on the same side of 0.20.
    VCF cross-check: carriers_any of the d9 and full VCFs (c6) vs allele-level carriers, on the haplotypes complete in the
    GFA. d9 floor: haplotypes (HPRC + CHM13 + GRCh38) whose c5 rows (complete or partial paths: a lower bound) visit each
@@ -46,7 +54,10 @@ Method
    (window_alt_outside_bracket = walks spelling alt_hap whose bracket does not: the cases the addition above rescues).
  3 COLO829BL (c3; no node-level walk of the normal exists): carrying haps = array allele ALT (GRCh38 + truth over the
    whole tandem array, germline differences outside it reverted); unresolved = allele NA. Pattern hapX_only / hapY_only /
-   both (+other_unresolved) / unresolved / neither. normal_allele_class = carries_ALT / germline_other_length /
+   both (+other_unresolved) / unresolved / neither. with_germline loci (added after the audit, the analogue of HG008T's
+   other_hap_only:patient_frame): a hap whose array sequence (c3 hap*_seq) equals the ALT path's allele over the array
+   (c3 R_seq + truth + the path's germline alleles) carries it too (normal_carries_via = path_allele, sub_class
+   <hap>_only:path_allele). normal_allele_class = carries_ALT / germline_other_length /
    germline_same_length_other_seq / both_REF / one_hap_NA / both_NA (c4 germline status, same order).
    germline_like_alt_len = alt_len_haps (a hap has exactly the ALT length, other bases) and no hap carries the ALT.
  4 Category, first rule that applies -> other_ambiguous with sub_reason:
@@ -60,6 +71,8 @@ hprc_spot_checks.txt; check mode: hprc_check_kmer.tsv (kcheck(): exact-allele ca
 16-mer anchors, independent of the node bracket, compared per locus with hprc_per_variant).
 Run: python c7_hprc_membership.py [n_workers] [truth_id,...] (default 4; with ids: printout only, no files; login node);
 python c7_hprc_membership.py check [n_workers] (after the main run).
+O/E tables: + 95 % interval of O/E from 2,000 locus bootstrap resamples (oe_ci, seed 20261005).
+Complete traversals include c5's bypass rows (a germline variant over the window edge skips an anchor node).
 Assumptions: HPRC partial traversals are outside the denominators; the event hap is c3's derived one (the hap closest to
 GRCh38 + truth), not a truth INFO event, so 'ALT on the event hap' is no conflict here (the carrying hap is the closest
 by construction); dipcall GT order = hapY|hapX; multi-path loci take the c2 primary (no reads to choose).
@@ -205,6 +218,28 @@ def bracket(w, P, gi, lo, hi):
     return None
 
 
+def core(w, chrom, lo, hi):
+    """the walk's sequence over GRCh38 [lo, hi): its forward GRCh38 nodes clipped to [lo, hi), plus each run of other nodes
+    whose replaced GRCh38 span (end of the GRCh38 node before it .. start of the one after it) overlaps [lo, hi), or for an
+    insertion lies in [lo, hi] (a run crossing lo / hi is taken whole); None unless the walk has a GRCh38 node starting
+    before lo and one ending after hi. Germline variants outside [lo, hi) do not change it."""
+    out, run, prev, left, right = [], [], None, False, False
+    for n, o in w:
+        r = ref(n) if o == '+' else None
+        if not r or r[0] != chrom:
+            run.append(oseq(n, o)); continue
+        st, en = r[1], r[2] + 1
+        if prev is not None:
+            a, b = min(prev, st), max(prev, st)
+            if (a < hi and b > lo) or (a == b and lo <= a <= hi):
+                out.append(''.join(run))
+        run, prev = [], en                                  # a run before the first GRCh38 node lies before lo (left)
+        left |= st < lo; right |= en > hi
+        if en > lo and st < hi:
+            out.append(oseq(n, o)[max(st, lo) - st:min(en, hi) - st])
+    return ''.join(out).upper() if left and right else None
+
+
 def normal_class(a):
     return ('carries_ALT' if 'ALT' in a else 'germline_other_length' if any(x.startswith('germline_len') for x in a)
             else 'germline_same_length_other_seq' if 'germline_seq' in a else 'both_REF' if a == ['REF', 'REF']
@@ -268,24 +303,34 @@ def locus(X, L):
     dl = len(L['vcf_alt']) - len(L['vcf_ref'])
     H, chk = {}, collections.Counter()
     tseq = lambda b: b is not None and b[0] == L['alt_hap'][ref(b[2])[1] - b0:ref(b[3])[2] + 1 - b0 + dl]
+    chrom, wg = L['chrom'], g['match'] == 'with_germline'
+    rcore = L['ref_hap'][lo - b0:hi - b0]
+    tcore, pcore = S2.apply(rcore, lo, [som(L)]), core(P, chrom, lo, hi)
     for k in X['HAPS'] + ['CHM13#0']:
         ws = comp.get(k)
         if not ws:
             H[k] = dict(status='partial' if k in present else 'absent'); continue
-        br, wa = [bracket(w, P, gi, lo, hi) for w in ws], [spell(w) for w in ws]
+        br, wa, co = [bracket(w, P, gi, lo, hi) for w in ws], [spell(w) for w in ws], [core(w, chrom, lo, hi) for w in ws]
+        a0 = [(b is not None and b[0] == b[1]) or s == spell(P) for b, s in zip(br, wa)]          # HG008 rule + whole window
+        t0 = [tseq(b) or s == L['alt_hap'] for b, s in zip(br, wa)]
+        a1 = [a or (c is not None and c == pcore) for a, c in zip(a0, co)]                       # + the core rule
+        t1 = [t or (c is not None and c == tcore) for t, c in zip(t0, co)]
+        ex = [t or (a and wg) for t, a in zip(t1, a1)]                                            # per traversal
         h = H[k] = dict(status='complete', el={e['id']: any(has(w, e) for w in ws) for e in keep},
                         joint=bool(keep) and any(all(has(w, e) for e in keep) for w in ws),
                         anyp=any(all(has(w, e) for e in ks) for ks in alts for w in ws),
-                        allele=any((b is not None and b[0] == b[1]) or s == spell(P) for b, s in zip(br, wa)),
-                        no_bracket=all(b is None for b in br), truth_seq=any(tseq(b) or s == L['alt_hap'] for b, s in zip(br, wa)),
-                        window_only=not any(tseq(b) for b in br) and L['alt_hap'] in wa)
-        h['exact'] = bool(keep) and (h['truth_seq'] or (h['allele'] and g['match'] == 'with_germline'))
-        for w, b, s in zip(ws, br, wa) if keep else ():   # window-level checks (per traversal; violations counted, 0 expected)
+                        allele=any(a1), no_bracket=all(b is None for b in br), truth_seq=any(t1),
+                        window_only=not any(tseq(b) for b in br) and L['alt_hap'] in wa,
+                        core_only=any(ex) and not any(t or (a and wg) for t, a in zip(t0, a0)), n_trav=len(ws),
+                        ref_copy=any(not e and (c == rcore or s == L['ref_hap']) for e, c, s in zip(ex, co, wa)))
+        h['exact'] = bool(keep) and any(ex)
+        for w, b, s, c in zip(ws, br, wa, co) if keep else ():   # window-level checks (per traversal; violations counted, 0 expected)
             if s == L['alt_hap']:
                 chk['window_alt'] += 1; chk['window_alt_outside_bracket'] += not tseq(b)
             if s == L['ref_hap']:
                 chk['window_ref'] += 1
-                chk['VIOLATION_window_ref_carries'] += any(has(w, e) for e in keep) or (b is not None and b[0] == b[1]) or tseq(b)
+                chk['VIOLATION_window_ref_carries'] += (any(has(w, e) for e in keep) or (b is not None and b[0] == b[1]) or tseq(b)
+                                                        or (c is not None and c in (tcore, pcore)))
     C = [k for k in X['HAPS'] if H[k]['status'] == 'complete']
     cov = X['COV'][t]
     assert len(C) == int(cov['n_complete']), t
@@ -297,7 +342,8 @@ def locus(X, L):
     emin = min((len(c) for c in car.values()), default=None)
     fr = lambda n: round(n / nC, 4) if nC else ''
     efreq, xfreq = (fr(emin) if emin is not None else None), (fr(len(xc)) if keep and nC else None)
-    support = 'none' if not keep or not emin else 'exact_allele' if xc else 'element_set_other_allele' if pc else 'recombinant_pieces'
+    support = ('none' if not keep else 'exact_allele' if xc else 'element_set_other_allele' if pc else 'recombinant_pieces' if emin
+               else 'none')
     vaf = {so: X['VA'][(t, so)]['AF'] for so in ('d9', 'full')}
     sides = {f >= RARE_AF for f in (efreq, fr(len(pc)) if keep and nC else None, xfreq,
                                     float(vaf['full']) if vaf['full'] else None) if f is not None and f != ''}
@@ -318,7 +364,9 @@ def locus(X, L):
                exact_allele_carriers=len(xc), exact_allele_freq=xfreq if xfreq is not None else '', exact_allele_freq_all88=round(len(xc) / 88, 4),
                exact_freq_class=fcls(xfreq), freq_class_agree=len(sides) <= 1, d9_vcf_AF=vaf['d9'], full_vcf_AF=vaf['full'],
                allele_no_bracket=sum(H[k]['no_bracket'] for k in C), n_set_carriers_other_allele=sum(H[k]['joint'] and not H[k]['allele'] for k in C),
-               exact_window_only=sum(H[k]['window_only'] for k in C),
+               exact_window_only=sum(H[k]['window_only'] for k in C), exact_core_only=sum(H[k]['core_only'] for k in C if H[k]['exact']),
+               exact_carriers_multicopy=sum(H[k]['n_trav'] > 1 for k in xc), exact_carriers_alt_ref_copy=sum(H[k]['ref_copy'] for k in xc),
+               multicopy_psv_like=bool(xc) and all(H[k]['ref_copy'] for k in xc),
                allele_carrier_haps=','.join(ac), exact_allele_carrier_haps=','.join(xc),
                window_checks=';'.join(f'{a}:{b}' for a, b in sorted(chk.items()) if b))
     for nm, cs in (('allele', ac), ('set', jc), ('exact', xc)):
@@ -350,10 +398,15 @@ def locus(X, L):
     # ---- 3 COLO829BL (c3 array alleles)
     al = [nf[f'{h}_allele'] for h in NH]
     cars = [h for h, a in zip(NH, al) if a == 'ALT']
-    unres = [h for h, a in zip(NH, al) if a == 'NA']
+    via = 'ALT' if cars else ''
+    if not cars and g['match'] == 'with_germline' and used:  # the ALT path's own allele over the array (truth + its germline alleles)
+        pa = S2.apply(nf['R_seq'], a_lo, [som(L)] + list(used))
+        cars = [h for h in NH if pa is not None and nf[f'{h}_seq'] == pa]
+        via = 'path_allele' if cars else ''
+    unres = [h for h in NH if nf[f'{h}_allele'] == 'NA' and h not in cars]
     pat = ('both' if len(cars) == 2 else f'{cars[0]}_only') + ('+other_unresolved' if unres else '') if cars else 'unresolved' if unres else 'neither'
     out.update(hapX_allele=al[0], hapY_allele=al[1], hapX_src=nf['hapX_src'], hapY_src=nf['hapY_src'], event_hap=evh,
-               pf_label=nf['pf_label'], pf_event=nf['pf_event'], alt_len_haps=nf['alt_len_haps'], normal_carrying_haps='+'.join(cars),
+               pf_label=nf['pf_label'], pf_event=nf['pf_event'], alt_len_haps=nf['alt_len_haps'], normal_carrying_haps='+'.join(cars), normal_carries_via=via,
                normal_pattern=pat, normal_allele_class=normal_class(al), germline_like_alt_len=bool(nf['alt_len_haps']) and not cars,
                array_lo0=a_lo, array_hi0=a_hi, array_len=nf['arr_len'], nf_flags=nf['flags'])
     # ---- 4 category
@@ -369,7 +422,7 @@ def locus(X, L):
     elif len(cars) == 2:
         why = 'evidence_conflict:ALT_on_both_normal_haps'
     elif cars:
-        cat = 'normal_present_broad' if xfreq >= RARE_AF else 'normal_present_rare'; sub_class = pat
+        cat = 'normal_present_broad' if xfreq >= RARE_AF else 'normal_present_rare'; sub_class = pat + (':path_allele' if via == 'path_allele' else '')
     elif unres:
         why = 'normal_hap_unresolved:' + ('both_NA' if len(unres) == 2 else 'one_hap_NA')
     elif support == 'none':
@@ -406,6 +459,12 @@ INTERP = {
                  'germline allele: germline filtering by the graph',
     'hapY_only': 'the ALT allele over the whole tandem array is a COLO829BL germline allele (hapY); a tumor-only caller sees a '
                  'germline allele: germline filtering by the graph',
+    'hapX_only:path_allele': 'the d9 ALT path (GRCh38 + truth + the germline alleles it needs) spells over the whole tandem array '
+                             'the COLO829BL hapX allele; the perfectly aligned reads carry the patient\'s own germline allele: germline '
+                             'filtering by the graph (patient frame)',
+    'hapY_only:path_allele': 'the d9 ALT path (GRCh38 + truth + the germline alleles it needs) spells over the whole tandem array '
+                             'the COLO829BL hapY allele; the perfectly aligned reads carry the patient\'s own germline allele: germline '
+                             'filtering by the graph (patient frame)',
     'exact_allele': 'the patient does not carry it; >= 1 complete HPRC haplotype spells the exact ALT allele over the array '
                     '(somatic slippage / substitution recreating a population allele kept by the d9 graph): pangenome-induced false negative',
     'element_set_other_allele': 'the patient does not carry it; HPRC haplotypes walk all somatic elements but spell another '
@@ -433,7 +492,7 @@ WHY = {
 def interpret(cat, sub, why):
     if cat.startswith('normal_present'):
         return 'COLO829BL germline allele already a graph path (' + ('rare' if cat.endswith('rare') else 'common') + \
-            ' exact allele in HPRC): ' + INTERP.get(sub.split('+')[0], sub)
+            ' exact allele in HPRC): ' + INTERP.get(sub.split('+')[0].split(':')[0] + (':path_allele' if sub.endswith(':path_allele') else ''), sub)
     if cat == 'normal_absent_HPRC_other':
         return INTERP[sub]
     return 'unresolved: ' + WHY.get(why, why)
@@ -455,6 +514,20 @@ def oe(rows, nm):
             O[s] += int(r[f'{s}_{nm}_carriers']); E[s] += tot * q
             V[s] += tot * q * (1 - q) * (n - tot) / (n - 1) if n > 1 else 0
     return {s: (O[s], E[s], (O[s] - E[s]) / math.sqrt(V[s]) if V[s] else None) for s in SUPER}
+
+
+def oe_ci(rows, nm, B=2000, seed=20261005):
+    """locus bootstrap of oe(): {SP: (2.5 %, 97.5 %) of O/E} over B resamples of the loci (with replacement)."""
+    per = [oe([r], nm) for r in rows]
+    rng, res = random.Random(seed), {s: [] for s in SUPER}
+    for _ in range(B if rows else 0):
+        pick = [per[rng.randrange(len(per))] for _ in per]
+        for s in SUPER:
+            e = sum(p[s][1] for p in pick)
+            if e:
+                res[s].append(sum(p[s][0] for p in pick) / e)
+    q = lambda v, f: sorted(v)[min(len(v) - 1, int(f * len(v)))]
+    return {s: (q(v, 0.025), q(v, 0.975)) if v else None for s, v in res.items()}
 
 
 def tables(rows, nodes, X):
@@ -494,27 +567,34 @@ def tables(rows, nodes, X):
                     ('set_freq_any_path', 'set level, any ALT path (walks all somatic elements)'), ('elem_freq_min', 'element level (min over elements)'),
                     ('d9_vcf_AF', 'd9 VCF AF (called haplotypes, matching record)'), ('full_vcf_AF', 'full-graph VCF AF (all called haplotypes, matching record)')):
         body = []
+        num = dict(exact_allele_freq='exact_allele_carriers', exact_allele_freq_all88='exact_allele_carriers', set_freq_any_path='set_carriers_any_path',
+                   elem_freq_min='elem_min_carriers').get(col)      # medians from the counts (the stored frequencies are rounded)
+        val = lambda r: (float(r[col]) if num is None else int(r[num]) / (88 if col.endswith('all88') else int(r['hprc_n_complete'])))
         for c in CATS:
             for kd in K2:
-                f = [float(r[col]) for r in sel(lambda r: r['category'] == c, kd) if r[col] != '']
+                f = [val(r) for r in sel(lambda r: r['category'] == c, kd) if r[col] != '']
                 body.append([c, kd, len(f)] + [sum(g(x) for x in f) for _, g in fb] + [round(statistics.median(f), 3) if f else ''])
         out.append(md(f'HPRC frequency per category, {nm} (union, chr1-22)', ['category', 'kind', 'n'] + [b for b, _ in fb] + ['median'], body))
     body = []
     for c in CATS + ('all',):
         x = [r for r in rows if (c == 'all' or r['category'] == c) and r['n_somatic_elements'] and r['hprc_n_complete']]
         for nm, lab in (('exact', 'exact allele'), ('anypath', 'set, any ALT path')):
-            o = oe(x, nm)
+            o, ci = oe(x, nm), oe_ci(x, nm)
             body.append([c, lab, len(x), sum(v[0] for v in o.values())] +
-                        [f"{o[s][0] / o[s][1]:.3f} (z {o[s][2]:+.1f})" if o[s][1] and o[s][2] is not None else '' for s in SUPER] +
+                        [f"{o[s][0] / o[s][1]:.3f} (z {o[s][2]:+.1f}; {ci[s][0]:.2f}-{ci[s][1]:.2f})" if o[s][1] and o[s][2] is not None and ci[s] else ''
+                         for s in SUPER] +
                         [sum(r['CHM13_' + ('exact' if nm == 'exact' else 'set_any_path')] is True for r in x)])
     out.append(md('Superpopulation of HPRC carriers per category: observed / expected (union, chr1-22)',
-                  ['category', 'level', 'loci', 'carrier haps'] + [f'{s} O/E (z)' for s in SUPER] + ['CHM13 carries'], body,
+                  ['category', 'level', 'loci', 'carrier haps'] + [f'{s} O/E (z; 95% CI)' for s in SUPER] + ['CHM13 carries'], body,
                   'expected per locus = carriers x the superpopulation\'s share of the complete haplotypes at that locus (hypergeometric variance '
-                  'for z; ignores the pairing of haplotypes within individuals and linkage between loci, so z overstates significance). '
+                  'for z; ignores the pairing of haplotypes within individuals and linkage between loci, so z overstates significance); '
+                  'after z: 95 % interval of O/E from 2,000 locus bootstrap resamples (seed 20261005), which keeps the loci\'s carriers together. '
                   'COLO829 donor: European (white male); HPRC v1.1 has no EUR sample (AFR 23, AMR 16, EAS 4, SAS 1).'))
     for col, nm in (('hprc_support', 'HPRC support'), ('exact_freq_class', 'exact-allele frequency class'), ('elem_freq_class', 'element-level frequency class'),
                     ('freq_class_agree', 'frequency class agrees across element / set / exact / full-VCF'),
-                    ('normal_pattern', 'COLO829BL hap carrying the ALT (c3 array allele)'), ('normal_allele_class', 'COLO829BL allele class (locus)'),
+                    ('normal_pattern', 'COLO829BL hap carrying the ALT (c3 array allele, or the with_germline path allele)'),
+                    ('normal_carries_via', 'COLO829BL carries: the ALT (GRCh38 + truth) / the with_germline ALT path allele'),
+                    ('multicopy_psv_like', 'every exact carrier has a GRCh38 copy too (paralog-like)'), ('normal_allele_class', 'COLO829BL allele class (locus)'),
                     ('event_hap', 'c3 event hap'), ('germline_like_alt_len', 'a COLO829BL hap has the ALT length, other bases (no hap ALT)'),
                     ('germline_phase', 'with_germline: germline alleles on the event hap'), ('path_choice', 'path choice'),
                     ('element_source', 'element source'), ('closest_kind', 'closest: the graph allele'), ('match', 'c2 match'),
@@ -672,6 +752,11 @@ def main(nproc, test=None):
     S = dict(n_loci=len(rows), RARE_AF=RARE_AF, perfect=perfect, categories=summ, floor=floor, window_checks=dict(wc),
              vcf_agree={so: {kd: sum(r.get(f'{so}_agree') is True for r in rows if r['kind2'] == kd) for kd in ('SNV', 'INDEL')} for so in ('d9', 'full')},
              path_choice=dict(collections.Counter(r['path_choice'] for r in rows)),
+             exact_core_only={'haplotypes': sum(int(r['exact_core_only'] or 0) for r in rows), 'loci': sorted((r['truth_id'], r['exact_core_only']) for r in rows if r['exact_core_only'])},
+             exact_window_only={'haplotypes': sum(int(r['exact_window_only'] or 0) for r in rows), 'loci': sorted((r['truth_id'], r['exact_window_only']) for r in rows if r['exact_window_only'])},
+             multicopy_psv_like=sorted((r['truth_id'], r['category'], r['exact_allele_carriers'], r['exact_carriers_alt_ref_copy']) for r in rows if r['multicopy_psv_like']),
+             normal_path_allele=sorted((r['truth_id'], r['category'], r['sub_class']) for r in rows if r['normal_carries_via'] == 'path_allele'),
+             bypass={'loci': sorted((r['truth_id'], int(X['COV'][r['truth_id']]['n_bypass'])) for r in rows if int(X['COV'][r['truth_id']]['n_bypass']))},
              sub_class_or_reason={f'{a}|{b}|{k}': n for (a, b, k), n in sorted(collections.Counter((r['category'], r['sub_class'] or r['sub_reason'], r['kind2'])
                                                                                                  for r in rows).items())},
              germline_like_alt_len={f'{a}|{k}': n for (a, k), n in sorted(collections.Counter((r['category'], r['kind2']) for r in rows if r['germline_like_alt_len']).items())},
@@ -691,7 +776,8 @@ def main(nproc, test=None):
                       'hapX_allele', 'hapY_allele', 'event_hap', 'pf_label', 'pf_event', 'alt_len_haps', 'normal_pattern', 'sub_class', 'sub_reason'):
                 lines.append(f'  {k}: {str(r.get(k, ""))[:300]}')
     open(f'{D}/hprc_spot_checks.txt', 'w').write('\n'.join(lines) + '\n')
-    print(json.dumps({k: S[k] for k in ('perfect', 'path_choice', 'vcf_agree', 'window_checks', 'germline_like_alt_len')}, default=str))
+    print(json.dumps({k: S[k] for k in ('perfect', 'path_choice', 'vcf_agree', 'window_checks', 'germline_like_alt_len', 'exact_core_only', 'exact_window_only',
+                                         'multicopy_psv_like', 'normal_path_allele', 'bypass')}, default=str))
     print('window-check violations:', [(r['truth_id'], r['window_checks']) for r in rows if 'VIOLATION' in r['window_checks']])
     for k in [f'{p} {kd} {sc}' for sc in ('chr1-22', 'chr1') for p in PLATS + ('union',) for kd in ('SNV', 'INDEL')]:
         print(k, summ[k])
@@ -703,16 +789,23 @@ if __name__ == '__main__':
         check(int(sys.argv[2]) if sys.argv[2:] else 4); sys.exit()
     main(int(sys.argv[1]) if sys.argv[1:] else int(os.environ.get('SLURM_CPUS_PER_TASK', 4)), set(sys.argv[2].split(',')) if sys.argv[2:] else None)
 
-# Results (2026-10-05, login node, $T/c7_hprc_membership.login.log: 93 s with 6 processes, 0.16 GB per process; check 43 s,
-# $T/c7_hprc_check_kmer.login.log). 497 truths: path choice single 438, c2 primary of several 34, phase-consistent alternative 1,
-# closest 24. Categories (union, chr1-22, SNV / INDEL): normal_present_broad 0 / 24, normal_present_rare 1 / 8,
-# normal_absent_HPRC_other 62 / 365 (exact_allele 58 / 330, element_set_other_allele 4 / 33, recombinant_pieces 0 / 2),
-# other_ambiguous 4 / 33 (closest 3 / 21, no_HPRC_carrier 1 / 9 of which CHM13 only 0 / 2, off-phase germline 0 / 2, normal
-# hap unresolved 0 / 1). chr1: present 0 / 13, absent 3 / 22, ambiguous 2 / 3. Median exact-allele frequency, absent SNV /
-# INDEL 0.189 / 0.159, present 0.318. O/E (absent, exact allele) AFR 1.18 (z +17.7), AMR 0.82, EAS 0.79, SAS 0.86.
-# VCF carriers_any = GFA allele carriers: d9 SNV 53 / 65, INDEL 308 / 427 loci; full 53 / 65, 312 / 427.
-# Window checks: 17,311 walks spelling GRCh38 over the window carry nothing; all 6,297 walks spelling GRCh38 + truth are
-# exact carriers (1 only via the whole-window rule, 29562). k-mer check: identical carrier sets at 473 / 474 anchored loci
-# (34,053 locus-haplotype pairs; 17 loci without unique anchors); 29562: c7 10, sequence 14 of 43 (compensating edits
-# beyond the bracket). d9 floor: 12 of 413 branch elements have < 9 visiting haplotypes in the window rows, 10 on CHM13;
-# 3346 (8) and 37542 (4) are window lower bounds.
+# Results (2026-10-05, after the HPRC audit fixes: c5 bypass rule, core rule, support order, path-allele normal rule;
+# login node, $T/c7_hprc_membership.login.log: 149 s with 6 processes, 0.15 GB per process; check 40 s,
+# $T/c7_hprc_check_kmer.login.log). 497 truths: path choice single 438, c2 primary of several 34, phase-consistent
+# alternative 1, closest 24. Categories (union, chr1-22, SNV / INDEL): normal_present_broad 0 / 25 (hapX 23, hapY 1,
+# hapX:path_allele 1 = 2562, frequency 14 / 69 = 0.203), normal_present_rare 1 / 8, normal_absent_HPRC_other 63 / 367
+# (exact_allele 58 / 332, element_set_other_allele 5 / 33, recombinant_pieces 0 / 2), other_ambiguous 3 / 30 (closest 3 /
+# 21, no_HPRC_carrier 0 / 6 of which CHM13 only 0 / 2, off-phase germline 0 / 2, normal hap unresolved 0 / 1). chr1:
+# present 0 / 14, absent 4 / 22, ambiguous 1 / 2. Changed vs the first version: 2562 ambiguous -> present_broad
+# (path allele), 2570 / 38059 ambiguous -> absent element_set_other_allele, 29389 ambiguous -> absent exact_allele (31 /
+# 79), 21200 element_set_other_allele -> exact_allele (10 / 74); carriers / complete changed at 2133 (6 -> 19 / 77),
+# 21808, 22598, 22742, 28014, 29562, 29579, 37389, 39443, 41860. Core rule: +54 carriers (21200 10, 2133 13, 29389 31);
+# whole-window rule: 1 (29562). PSV-like: 35165, 35166 (every exact carrier has an ALT and a REF copy). Median
+# exact-allele frequency, absent SNV / INDEL 0.188 / 0.159 (0.205 / 0.171 at loci with a carrier), present 0.316.
+# O/E (absent, exact allele) AFR 1.17 (z +17.4; locus bootstrap 1.14-1.21), AMR 0.83, EAS 0.80, SAS 0.86; present_broad
+# AFR 1.08 (0.96-1.19), AMR 0.90 (0.77-1.04). VCF carriers_any = GFA allele carriers: d9 SNV 52 / 65, INDEL 308 / 427;
+# full 52 / 65, 312 / 427. Window checks: 17,311 GRCh38 walks carry nothing; all 6,297 GRCh38 + truth walks are exact
+# carriers. k-mer check: identical carrier sets at 474 / 475 anchored loci (34,215 locus-haplotype pairs; 17 loci without
+# unique anchors); 29562: c7 11, sequence 14 (the 4 carry a germline +4 of the next (TTTC)n repeat, which their walk
+# places at the allele-window end). d9 floor: 12 of 413 branch elements have < 9 visiting haplotypes in the window rows, 10 on CHM13; 3346 (8)
+# and 37542 (4) are window lower bounds. The first version's outputs are in $D/prefix_hprc_20261005/.

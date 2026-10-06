@@ -12,7 +12,8 @@ Method
   carriers / complete haplotypes of that group at those loci (pooled). CHM13 is reported apart (reference, not a
   population). Private: one individual > one population > one superpopulation (first match); shared = >= 2
   superpopulations; none = no carrier. O/E per superpopulation = c7 oe() (expected per locus = carriers x the
-  superpopulation's share of the complete haplotypes; hypergeometric z, ignores haplotype pairing and linkage).
+  superpopulation's share of the complete haplotypes; hypergeometric z, ignores haplotype pairing and linkage) with a
+  95 % interval from 2,000 locus bootstrap resamples (oe_ci).
 Outputs (this folder):
   hprc_per_variant.tsv   one row per absorbed truth (497): the columns of PV below (renamed from the $D names)
   hprc_per_node.tsv      one row per (truth, somatic graph element): $D hprc_per_node.tsv + the locus' per-superpopulation
@@ -28,7 +29,7 @@ Outputs (this folder):
   $D/hprc_columns.tsv    meaning of every column of the files above (c4 appends it to columns.tsv)
 Run: python c8_populations.py (login node, seconds).
 """
-import collections, csv, gzip, math, shutil, statistics, sys
+import collections, csv, gzip, math, random, shutil, statistics, sys
 from pathlib import Path
 sys.dont_write_bytecode = True
 A = Path(__file__).resolve().parent
@@ -50,6 +51,20 @@ def oe(rows, nm):
             O[s] += int(r[f'{s}_{nm}_carriers']); E[s] += tot * q
             V[s] += tot * q * (1 - q) * (n - tot) / (n - 1) if n > 1 else 0
     return {s: (O[s], E[s], (O[s] - E[s]) / math.sqrt(V[s]) if V[s] else None) for s in SP}
+
+
+def oe_ci(rows, nm, B=2000, seed=20261005):
+    """c7 oe_ci(): locus bootstrap of oe(), {SP: (2.5 %, 97.5 %) of O/E} over B resamples of the loci."""
+    per = [oe([r], nm) for r in rows]
+    rng, res = random.Random(seed), {s: [] for s in SP}
+    for _ in range(B if rows else 0):
+        pick = [per[rng.randrange(len(per))] for _ in per]
+        for s in SP:
+            e = sum(p[s][1] for p in pick)
+            if e:
+                res[s].append(sum(p[s][0] for p in pick) / e)
+    q = lambda v, f: sorted(v)[min(len(v) - 1, int(f * len(v)))]
+    return {s: (q(v, 0.025), q(v, 0.975)) if v else None for s, v in res.items()}
 
 
 PV = [  # ($D column, output column, meaning)
@@ -78,11 +93,15 @@ PV += [
     ('hprc_n_complete', 'hprc_n_complete', 'HPRC haplotypes (of 88) whose walk visits both window anchor nodes (complete traversal) = frequency denominator'),
     ('hprc_n_partial', 'hprc_n_partial', 'HPRC haplotypes with only part of the window (walk cut by the d9 filter or leaving the window)'),
     ('hprc_n_absent', 'hprc_n_absent', 'HPRC haplotypes with no walk through the window'),
-    ('hprc_support', 'hprc_support', 'exact_allele (>= 1 complete haplotype spells the exact ALT allele) / element_set_other_allele (walks all elements of an ALT path, other allele) / recombinant_pieces (each element walked by someone, a whole set by no one) / none'),
-    ('exact_allele_carriers', 'hprc_exact_allele_carriers', 'complete HPRC haplotypes whose sequence over the tandem array (bracketed by the nearest GRCh38 nodes shared with the ALT path), or over the whole window, equals GRCh38 + truth (with_germline: or the path allele = + the germline alleles)'),
+    ('hprc_support', 'hprc_support', 'first that applies: exact_allele (>= 1 complete haplotype spells the exact ALT allele) / element_set_other_allele (walks all elements of any candidate ALT path, other allele) / recombinant_pieces (each element of the chosen path walked by someone, a whole set by no one) / none'),
+    ('exact_allele_carriers', 'hprc_exact_allele_carriers', 'complete HPRC haplotypes whose sequence over the tandem array (bracketed by the nearest GRCh38 nodes shared with the ALT path; or mapped onto GRCh38 [allele_start0, allele_end0), germline variants outside it ignored), or over the whole window, equals GRCh38 + truth (with_germline: or the path allele = + the germline alleles)'),
     ('exact_allele_freq', 'hprc_exact_allele_freq', 'hprc_exact_allele_carriers / hprc_n_complete (the category RARE_AF = 0.20 uses this)'),
     ('exact_allele_freq_all88', 'hprc_exact_allele_freq_over88', 'hprc_exact_allele_carriers / 88 (lower bound)'),
     ('exact_window_only', 'hprc_exact_window_only', 'carriers found only by the whole-window rule (compensating graph edits outside the array bracket)'),
+    ('exact_core_only', 'hprc_exact_core_only', 'carriers found only by the core rule (sequence mapped onto GRCh38 [allele_start0, allele_end0): a germline variant just outside it moved the node bracket)'),
+    ('exact_carriers_multicopy', 'hprc_exact_carriers_multicopy', 'exact carriers with >= 2 complete traversals of the window'),
+    ('exact_carriers_alt_ref_copy', 'hprc_exact_carriers_alt_ref_copy', 'exact carriers with another complete traversal spelling GRCh38 over the allele window (an ALT copy and a REF copy)'),
+    ('multicopy_psv_like', 'multicopy_psv_like', 'every exact carrier has an ALT copy and a REF copy: a paralogous sequence variant rather than an allele of the locus'),
     ('exact_n_individuals', 'hprc_exact_n_individuals', 'HPRC samples with >= 1 exact-allele haplotype'),
     ('exact_n_hom', 'hprc_exact_n_hom', 'HPRC samples with both haplotypes exact-allele carriers'),
     ('set_carriers_any_path', 'hprc_element_set_carriers', 'complete HPRC haplotypes that walk all somatic elements of any ALT path (node level)'),
@@ -113,11 +132,12 @@ PV += [
     ('pf_label', 'pf_label', 'c3 patient-frame label (README section 2)'),
     ('alt_len_haps', 'alt_len_haps', 'c3: haps whose array allele has the ALT length but other bases'),
     ('normal_pattern', 'COLO829BL_pattern', 'which COLO829BL hap carries the ALT: hapX_only / hapY_only / both (+other_unresolved) / neither / unresolved'),
+    ('normal_carries_via', 'COLO829BL_carries_via', "ALT (the hap's array allele = GRCh38 + truth, c3 'normal carries ALT') / path_allele (with_germline: = the ALT path's allele, truth + the path's germline alleles) / empty"),
     ('normal_allele_class', 'COLO829BL_allele_class', 'carries_ALT / germline_other_length / germline_same_length_other_seq / both_REF / one_hap_NA / both_NA'),
     ('germline_like_alt_len', 'germline_like_alt_len', 'alt_len_haps non-empty and no hap carries the ALT: the normal may already carry the ALT length (README section 2, Two readings)'),
     ('array_lo0', 'array_start0', 'c3 tandem array start, 0-based'), ('array_hi0', 'array_end0', 'c3 tandem array end, 0-based exclusive'),
     ('category', 'category', 'normal_present_broad / normal_present_rare / normal_absent_HPRC_other / other_ambiguous (README section 8)'),
-    ('sub_class', 'sub_class', 'present: the carrying hap; absent: hprc_support'),
+    ('sub_class', 'sub_class', 'present: the carrying hap (:path_allele = via the with_germline path allele); absent: hprc_support'),
     ('sub_reason', 'sub_reason', 'other_ambiguous: why'),
     ('interpretation', 'interpretation', 'one sentence per category / sub-class')]
 PN_DESC = {
@@ -353,8 +373,9 @@ def main():
         out.append(f'| {g} | {s} | {pp} | {v} |')
     out += ['', '## 6. Observed / expected carrier haplotypes per superpopulation (c7 oe(); exact allele / element set)', '',
             'expected per locus = carriers x the superpopulation\'s share of the complete haplotypes at that locus; z hypergeometric, '
-            'ignoring haplotype pairing and linkage (overstates significance).', '',
-            '| group | kind | level | loci | carrier haps | ' + ' | '.join(f'{s} O/E (z)' for s in SP) + ' |', '|' + '---|' * (5 + len(SP))]
+            'ignoring haplotype pairing and linkage (overstates significance); after z the 95 % interval of O/E from 2,000 locus '
+            'bootstrap resamples (oe_ci, seed 20261005: the loci, not the haplotypes, are resampled).', '',
+            '| group | kind | level | loci | carrier haps | ' + ' | '.join(f'{s} O/E (z; 95% CI)' for s in SP) + ' |', '|' + '---|' * (5 + len(SP))]
     for g in GROUPS:
         for k in K:
             x = [by[r['truth_id']] for r in sel(g, k) if by[r['truth_id']]['n_somatic_elements'] != '0' and by[r['truth_id']]['hprc_n_complete'] != '0']
@@ -364,8 +385,10 @@ def main():
                 o = oe(x, nm)
                 if not sum(v[0] for v in o.values()):
                     continue
+                ci = oe_ci(x, nm)
                 out.append(f'| {g} | {k} | {lab} | {len(x)} | {sum(v[0] for v in o.values())} | ' +
-                           ' | '.join(f'{o[s][0] / o[s][1]:.3f} (z {o[s][2]:+.1f})' if o[s][1] and o[s][2] is not None else '' for s in SP) + ' |')
+                           ' | '.join(f'{o[s][0] / o[s][1]:.3f} (z {o[s][2]:+.1f}; {ci[s][0]:.2f}-{ci[s][1]:.2f})' if o[s][1] and o[s][2] is not None and ci[s] else ''
+                                      for s in SP) + ' |')
     out += ['', '## 7. Per HPRC haplotype: exact-allele carriers summed over the loci (hprc_individuals.tsv)', '',
             '| superpop | haplotypes | absent INDEL: median carried (range) | median share of its complete traversals | absent SNV: median carried | '
             'present INDEL: median carried |', '|---|---|---|---|---|---|']
@@ -399,11 +422,11 @@ def main():
 if __name__ == '__main__':
     main()
 
-# Results (2026-10-05, login node 2.4 s, 26 MB; $T/c8_populations.login.log): hprc_per_variant.tsv 497 x 80,
-# hprc_per_node.tsv 623 x 32, 89 haplotypes (88 HPRC + CHM13), 14 populations (13 + CHM13), per_locus_populations.tsv
-# 497 x 52, $D/hprc_columns.tsv 189 rows. Absent loci with an exact HPRC carrier (388): shared by >= 2 superpopulations
-# 333, one superpopulation 42, one population 2, one individual 11 (carried in one superpopulation only: AFR 43, AMR 11,
-# EAS 1). Pooled exact-allele frequency, absent INDEL: AFR 0.253, AMR 0.178, EAS 0.170, SAS 0.189; present broad INDEL:
-# AFR 0.448, AMR 0.382.
-# Per HPRC haplotype: median 61 absent INDEL exact alleles (19.9% of its complete traversals), AFR 69, AMR 53, EAS 51,
-# SAS 56.5; range 38 (HG00673#1, CHS) - 89 (HG03453#2, MSL); CHM13 66.
+# Results (2026-10-05, after the HPRC audit fixes; login node 5.1 s, 26 MB; $T/c8_populations.login.log):
+# hprc_per_variant.tsv 497 x 85, hprc_per_node.tsv 623 x 32, 89 haplotypes (88 HPRC + CHM13), 14 populations (13 + CHM13),
+# per_locus_populations.tsv 497 x 52, $D/hprc_columns.tsv 194 rows. Absent loci with an exact HPRC carrier (390): shared by
+# >= 2 superpopulations 336, one superpopulation 42, one population 1, one individual 11 (carried in one superpopulation
+# only: AFR 42, AMR 11, EAS 1). Pooled exact-allele frequency, absent INDEL: AFR 0.253, AMR 0.179, EAS 0.171, SAS 0.191;
+# present broad INDEL: AFR 0.445, AMR 0.367. O/E present broad INDEL AFR 1.076 (z +3.0, locus bootstrap 0.96-1.19), AMR
+# 0.902 (0.77-1.04): no clear lean. Per HPRC haplotype: median 62 absent INDEL exact alleles (20.0% of its complete
+# traversals), AFR 69, AMR 54, EAS 52, SAS 57.5; range 38 (HG00673#1, CHS) - 90 (HG03453#2, MSL); CHM13 68.

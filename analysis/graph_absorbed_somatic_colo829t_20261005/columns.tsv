@@ -209,11 +209,15 @@ hprc_per_variant.tsv	allele_end0	c7 allele_hi0	its end
 hprc_per_variant.tsv	hprc_n_complete	c7 hprc_n_complete	HPRC haplotypes (of 88) whose walk visits both window anchor nodes (complete traversal) = frequency denominator
 hprc_per_variant.tsv	hprc_n_partial	c7 hprc_n_partial	HPRC haplotypes with only part of the window (walk cut by the d9 filter or leaving the window)
 hprc_per_variant.tsv	hprc_n_absent	c7 hprc_n_absent	HPRC haplotypes with no walk through the window
-hprc_per_variant.tsv	hprc_support	c7 hprc_support	exact_allele (>= 1 complete haplotype spells the exact ALT allele) / element_set_other_allele (walks all elements of an ALT path, other allele) / recombinant_pieces (each element walked by someone, a whole set by no one) / none
-hprc_per_variant.tsv	hprc_exact_allele_carriers	c7 exact_allele_carriers	complete HPRC haplotypes whose sequence over the tandem array (bracketed by the nearest GRCh38 nodes shared with the ALT path), or over the whole window, equals GRCh38 + truth (with_germline: or the path allele = + the germline alleles)
+hprc_per_variant.tsv	hprc_support	c7 hprc_support	first that applies: exact_allele (>= 1 complete haplotype spells the exact ALT allele) / element_set_other_allele (walks all elements of any candidate ALT path, other allele) / recombinant_pieces (each element of the chosen path walked by someone, a whole set by no one) / none
+hprc_per_variant.tsv	hprc_exact_allele_carriers	c7 exact_allele_carriers	complete HPRC haplotypes whose sequence over the tandem array (bracketed by the nearest GRCh38 nodes shared with the ALT path; or mapped onto GRCh38 [allele_start0, allele_end0), germline variants outside it ignored), or over the whole window, equals GRCh38 + truth (with_germline: or the path allele = + the germline alleles)
 hprc_per_variant.tsv	hprc_exact_allele_freq	c7 exact_allele_freq	hprc_exact_allele_carriers / hprc_n_complete (the category RARE_AF = 0.20 uses this)
 hprc_per_variant.tsv	hprc_exact_allele_freq_over88	c7 exact_allele_freq_all88	hprc_exact_allele_carriers / 88 (lower bound)
 hprc_per_variant.tsv	hprc_exact_window_only	c7 exact_window_only	carriers found only by the whole-window rule (compensating graph edits outside the array bracket)
+hprc_per_variant.tsv	hprc_exact_core_only	c7 exact_core_only	carriers found only by the core rule (sequence mapped onto GRCh38 [allele_start0, allele_end0): a germline variant just outside it moved the node bracket)
+hprc_per_variant.tsv	hprc_exact_carriers_multicopy	c7 exact_carriers_multicopy	exact carriers with >= 2 complete traversals of the window
+hprc_per_variant.tsv	hprc_exact_carriers_alt_ref_copy	c7 exact_carriers_alt_ref_copy	exact carriers with another complete traversal spelling GRCh38 over the allele window (an ALT copy and a REF copy)
+hprc_per_variant.tsv	multicopy_psv_like	c7 multicopy_psv_like	every exact carrier has an ALT copy and a REF copy: a paralogous sequence variant rather than an allele of the locus
 hprc_per_variant.tsv	hprc_exact_n_individuals	c7 exact_n_individuals	HPRC samples with >= 1 exact-allele haplotype
 hprc_per_variant.tsv	hprc_exact_n_hom	c7 exact_n_hom	HPRC samples with both haplotypes exact-allele carriers
 hprc_per_variant.tsv	hprc_element_set_carriers	c7 set_carriers_any_path	complete HPRC haplotypes that walk all somatic elements of any ALT path (node level)
@@ -251,12 +255,13 @@ hprc_per_variant.tsv	event_hap	c7 event_hap	c3: the COLO829BL hap whose array al
 hprc_per_variant.tsv	pf_label	c7 pf_label	c3 patient-frame label (README section 2)
 hprc_per_variant.tsv	alt_len_haps	c7 alt_len_haps	c3: haps whose array allele has the ALT length but other bases
 hprc_per_variant.tsv	COLO829BL_pattern	c7 normal_pattern	which COLO829BL hap carries the ALT: hapX_only / hapY_only / both (+other_unresolved) / neither / unresolved
+hprc_per_variant.tsv	COLO829BL_carries_via	c7 normal_carries_via	ALT (the hap's array allele = GRCh38 + truth, c3 'normal carries ALT') / path_allele (with_germline: = the ALT path's allele, truth + the path's germline alleles) / empty
 hprc_per_variant.tsv	COLO829BL_allele_class	c7 normal_allele_class	carries_ALT / germline_other_length / germline_same_length_other_seq / both_REF / one_hap_NA / both_NA
 hprc_per_variant.tsv	germline_like_alt_len	c7 germline_like_alt_len	alt_len_haps non-empty and no hap carries the ALT: the normal may already carry the ALT length (README section 2, Two readings)
 hprc_per_variant.tsv	array_start0	c7 array_lo0	c3 tandem array start, 0-based
 hprc_per_variant.tsv	array_end0	c7 array_hi0	c3 tandem array end, 0-based exclusive
 hprc_per_variant.tsv	category	c7 category	normal_present_broad / normal_present_rare / normal_absent_HPRC_other / other_ambiguous (README section 8)
-hprc_per_variant.tsv	sub_class	c7 sub_class	present: the carrying hap; absent: hprc_support
+hprc_per_variant.tsv	sub_class	c7 sub_class	present: the carrying hap (:path_allele = via the with_germline path allele); absent: hprc_support
 hprc_per_variant.tsv	sub_reason	c7 sub_reason	other_ambiguous: why
 hprc_per_variant.tsv	interpretation	c7 interpretation	one sentence per category / sub-class
 hprc_per_node.tsv	truth_id	c7 hprc_per_node truth_id	truth allele
