@@ -106,10 +106,17 @@ python -u scripts/filter_panel_of_normals.py calls.vcf.gz calls.pon-tagged.vcf.g
 ```
 
 Every record is kept, and each match gets `FILTER=PanelOfNormals` and a `PANSOMA_PON` INFO field. Add
-`--drop-matched` to leave matched records out. The rules are like ClairS-TO's panels: a call matches a PoN record
-with its position, REF and ALT, and for gnomAD and CoLoRSdb that ALT's AF must be ≥ 0.0001; dbSNP records flagged
-somatic (`SAO=2`) do not count. Calls and PoNs must be in GRCh38 coordinates (`chr1` and `1` naming are both
-recognized).
+`--drop-matched` to leave matched records out. A call matches a PoN record with its position, REF and ALT, under
+the rule of its kind:
+
+- SNV: gnomAD and CoLoRSdb when that ALT's AF is ≥ 0.0001; dbSNP unless the record is flagged somatic (`SAO=2`);
+  1000G any match (like ClairS-TO's panels).
+- INDEL (an ALT of another length than REF): gnomAD and CoLoRSdb only, when that ALT's AF is ≥ 0.01. Most
+  somatic INDELs are homopolymer / STR length changes that exist as population alleles at AF 0.001–0.05, where
+  the germline INDELs sit mostly at ≥ 0.05, so the SNV rule would remove 71–83 % of them
+  (`analysis/tensor_recall_20260930/pon/indel_rules`).
+
+Calls and PoNs must be in GRCh38 coordinates (`chr1` and `1` naming are both recognized).
 
 ## Tests
 

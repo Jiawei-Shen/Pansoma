@@ -232,14 +232,15 @@ $P -m pansoma_net_v2.vcfeval --calls out/HG008T_Illumina.SNV.linear.vcf.gz \
     --truth <somatic truth>.vcf.gz --bed <benchmark>.bed --sdf GRCh38.sdf --rtg rtg --output out/eval_bed
 ```
 
-INDEL calls go through vcfeval without `--pon` for now.
+INDEL calls use the same command; the PoN script applies its INDEL rule (gnomAD / CoLoRSdb AF ≥ 0.01 only)
+to them.
 
 `/scratch/jshen/data/pansoma_net_v2_runs/jobs/vcf.sh RUN KIND` runs the three on a run's chr1 predictions into
-`<run>/vcf_chr1/`, with the truth VCF and BED of the set's labels. It uses the PoN for SNV only. For a checkpoint
+`<run>/vcf_chr1/`, with the truth VCF and BED of the set's labels, and the PoN for both kinds. For a checkpoint
 without validation thresholds (trained before `val.somatic_at_recall`), set `THRESHOLD=t`. vcfeval runs twice there:
 
 - `eval_bed`: inside the benchmark BED.
-- `eval_nobed`: on the whole chromosome (SNV: reusing the PoN-tagged calls through `--pon-vcf`). This is the form
+- `eval_nobed`: on the whole chromosome (reusing the PoN-tagged calls through `--pon-vcf`). This is the form
   of the earlier rtg runs of ClairS-TO, DeepSomatic and Pansoma v1 (`--squash-ploidy --sample ALT,ALT`, no BED).
 
 **graph_vcf.** One record per tensor: the site's representative allele A1, the allele the model scores.
@@ -278,8 +279,9 @@ merge stored as the summaries' `grch38`.
 
 **vcfeval.**
 
-- **PoN** (optional: `--pon` or `--pon-vcf`; SNV only for now). `scripts/filter_panel_of_normals.py` with the
-  four PoNs. All match by allele; gnomAD and CoLoRSdb only at AF ≥ 0.0001, dbSNP only records not flagged somatic.
+- **PoN** (optional: `--pon` or `--pon-vcf`). `scripts/filter_panel_of_normals.py` with the four PoNs. It matches
+  by allele, with the rule of each record's kind: SNV gnomAD / CoLoRSdb at AF ≥ 0.0001, dbSNP only records not
+  flagged somatic, 1000G; INDEL gnomAD / CoLoRSdb at AF ≥ 0.01 only (the repository README, section 5).
   It also runs over the truth records, which shows how much recall the PoN leaves to any caller.
 - **Truth.** The PASS truth records of the kind on the predicted chromosomes.
 - **rtg vcfeval.** Always with `--squash-ploidy --sample ALT,ALT -f QUAL`. For the calls without the PoN (raw)

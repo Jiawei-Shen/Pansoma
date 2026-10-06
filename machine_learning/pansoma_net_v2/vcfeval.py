@@ -4,9 +4,10 @@
     python -m pansoma_net_v2.vcfeval --calls <name>.SNV.linear.vcf.gz [--pon GNOMAD DBSNP 1000G COLORSDB] \
         --truth somatic.vcf.gz [--bed benchmark.bed] --sdf GRCh38.sdf --output <dir>
 
-1. PoN (with --pon or --pon-vcf; without either only the raw calls are evaluated, as for INDELs for now): the
-   repository's scripts/filter_panel_of_normals.py, with the four PoNs in its order (gnomAD, dbSNP, 1000G,
-   CoLoRSdb). All match by allele; gnomAD and CoLoRSdb only at AF >= 0.0001, dbSNP only non-somatic.
+1. PoN (with --pon or --pon-vcf; without either only the raw calls are evaluated): the repository's
+   scripts/filter_panel_of_normals.py, with the four PoNs in its order (gnomAD, dbSNP, 1000G, CoLoRSdb). It
+   matches by allele, with the rule of each record's kind: SNV gnomAD / CoLoRSdb at AF >= 0.0001, dbSNP
+   non-somatic, 1000G; INDEL gnomAD / CoLoRSdb at AF >= 0.01 only.
    Matched records get FILTER PanelOfNormals: <dir>/<name>.pon.vcf.gz. --pon-vcf reuses the tagged calls of an earlier run
    (e.g. to evaluate the same calls with and without a BED).
 2. Truth: the PASS (or '.') truth records of the kind on the predicted chromosomes, written to

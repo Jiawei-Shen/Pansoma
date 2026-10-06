@@ -8,6 +8,7 @@ import os
 import shutil
 import sqlite3
 import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -352,6 +353,50 @@ class VcfevalPartsTest(unittest.TestCase):
                          {"0.5": 20, "0.8": 10, "0.9": 3, "0.95": None})
 
 
+class PonFilterTest(unittest.TestCase):
+    """scripts/filter_panel_of_normals.py: the SNV rule (gnomAD / CoLoRSdb AF >= 1e-4, dbSNP non-somatic, 1000G) and
+    the INDEL rule (gnomAD / CoLoRSdb AF >= 0.01 only), chosen per record by its kind."""
+
+    def test_rules_by_kind(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            contig = ["##contig=<ID=chr1,length=100>"]
+            af = '##INFO=<ID=AF,Number=A,Type=Float,Description="AF">'
+            sao = '##INFO=<ID=SAO,Number=1,Type=Integer,Description="SAO">'
+            lowqual = '##FILTER=<ID=LowQual,Description="LowQual">'
+            calls = write_vcf_gz(Path(tmp) / "calls.vcf.gz", contig + [lowqual], [
+                ("chr1", "10", "snv_af", "A", "C", "30", "PASS", "."),       # gnomAD AF 0.0005: SNV tagged
+                ("chr1", "20", "snv_dbsnp", "A", "C", "30", "PASS", "."),    # dbSNP SAO=0: SNV tagged
+                ("chr1", "30", "snv_1000g", "A", "C", "30", "LowQual", "."), # 1000G: SNV tagged
+                ("chr1", "40", "ins_rare", "A", "AT", "30", "PASS", "."),    # gnomAD AF 0.005: INDEL not tagged
+                ("chr1", "50", "ins_common", "A", "AT", "30", "PASS", "."),  # CoLoRSdb AF 0.01: INDEL tagged
+                ("chr1", "60", "del_dbsnp", "AT", "A", "30", "PASS", "."),   # dbSNP + 1000G: INDEL not tagged
+                ("chr1", "70", "del_gnomad", "AT", "A", "30", "PASS", "."),  # gnomAD AF 0.02 on the other ALT only
+                ("chr1", "80", "mixed", "A", "AT,C", "30", "PASS", ".")])    # an INDEL record: SNV ALT in dbSNP ignored
+            pons = [write_vcf_gz(Path(tmp) / f"{name}.vcf.gz", contig + [info], records) for name, info, records in (
+                ("gnomad", af, [("chr1", "10", ".", "A", "C", ".", ".", "AF=0.0005"),
+                                ("chr1", "40", ".", "A", "AT", ".", ".", "AF=0.005"),
+                                ("chr1", "70", ".", "AT", "A,ATT", ".", ".", "AF=0.001,0.02"),
+                                ("chr1", "80", ".", "A", "AT", ".", ".", "AF=0.009")]),
+                ("dbsnp", sao, [("chr1", "20", ".", "A", "C", ".", ".", "SAO=0"),
+                                ("chr1", "60", ".", "AT", "A", ".", ".", "SAO=0"),
+                                ("chr1", "80", ".", "A", "C", ".", ".", "SAO=0")]),
+                ("1000g", af, [("chr1", "30", ".", "A", "C", ".", ".", "."),
+                               ("chr1", "60", ".", "AT", "A", ".", ".", ".")]),
+                ("colors", af, [("chr1", "50", ".", "A", "AT", ".", ".", "AF=0.01")]))]
+            out = Path(tmp) / "tagged.vcf.gz"
+            result = subprocess.run([sys.executable, str(vcfeval.PON_SCRIPT), str(calls), str(out), "--pon", *map(str, pons)],
+                                    check=True, capture_output=True, text=True)
+            self.assertIn("Input records: 8 (SNV 3, INDEL 5)", result.stdout)
+            self.assertIn("PoN-matched records tagged: 4 (SNV 3, INDEL 1)", result.stdout)
+            tagged = {r[2]: (r[6], parse_info(r[7]).get("PANSOMA_PON")) for r in read_vcf(out)[2]}
+            self.assertEqual(tagged, {"snv_af": ("PanelOfNormals", "PoN1_gnomAD"), "snv_dbsnp": ("PanelOfNormals", "PoN2_dbSNP"),
+                                      "snv_1000g": ("LowQual;PanelOfNormals", "PoN3_1000G"), "ins_rare": ("PASS", None),
+                                      "ins_common": ("PanelOfNormals", "PoN4_CoLoRSdb"), "del_dbsnp": ("PASS", None),
+                                      "del_gnomad": ("PASS", None), "mixed": ("PASS", None)})
+            self.assertEqual(vcfeval.count_pon(out), dict(records=8, tagged=4, tagged_pass=3, PoN1_gnomAD=1, PoN2_dbSNP=1,
+                                                          PoN3_1000G=1, PoN4_CoLoRSdb=1))
+
+
 @unittest.skipUnless(RTG, "rtg not found (set $RTG)")
 class VcfevalTest(unittest.TestCase):
     """PoN tagging and rtg vcfeval on the fixture's SNV calls: chr1 18 A>C PASS (a truth), chr1 24 C>A LowQual
@@ -413,7 +458,7 @@ class VcfevalTest(unittest.TestCase):
             with self.assertRaisesRegex(SystemExit, "is not the PoN-tagged"):
                 vcfeval.evaluate(vcfeval.parse_args(["--calls", str(calls), "--pon-vcf", str(stale), "--truth", str(truth),
                                                      "--sdf", str(sdf), "--rtg", RTG, "--output", str(Path(tmp) / "e3")]))
-            plain = vcfeval.evaluate(vcfeval.parse_args([   # no PoN (INDELs for now): the raw calls only
+            plain = vcfeval.evaluate(vcfeval.parse_args([   # no PoN: the raw calls only
                 "--calls", str(calls), "--truth", str(truth), "--sdf", str(sdf), "--rtg", RTG, "--rtg-mem", "1g",
                 "--threads", "1", "--output", str(Path(tmp) / "eval5")]))
             self.assertEqual(("pon" in plain, plain["pon_vcf"], plain["truth_pon_tags"]), (False, None, None))

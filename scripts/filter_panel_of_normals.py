@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 """Tag or remove Pansoma VCF records found in panels of normals.
 
-A record matches a PoN when a PoN record has its position, REF and one of its ALTs, and
-- gnomAD and CoLoRSdb: that ALT's AF is >= 0.0001;
-- dbSNP: the record is not somatic (SAO != 2);
-- 1000G: any such record."""
+A record matches a PoN when a PoN record has its position, REF and one of its ALTs, under the rule of
+the record's kind:
+- SNV (every ALT of REF's length): gnomAD and CoLoRSdb with that ALT's AF >= 0.0001; dbSNP when the
+  record is not somatic (SAO != 2); 1000G any such record.
+- INDEL (an ALT of another length): only gnomAD and CoLoRSdb, with that ALT's AF >= 0.01. dbSNP and
+  1000G are not used: most somatic INDELs are homopolymer / STR length changes that exist as population
+  alleles at AF 0.001-0.05, where the individual's germline INDELs sit mostly at AF >= 0.05
+  (analysis/tensor_recall_20260930/pon/indel_rules)."""
 
 from __future__ import annotations
 
@@ -19,12 +23,22 @@ import pysam
 
 
 PON_NAMES = ("PoN1_gnomAD", "PoN2_dbSNP", "PoN3_1000G", "PoN4_CoLoRSdb")
-PON_RULES = (  # per PoN, in PON_NAMES order
-    dict(min_af=0.0001),
-    dict(non_somatic=True),
-    dict(),
-    dict(min_af=0.0001),
-)
+SNV_MIN_AF = 0.0001
+INDEL_MIN_AF = 0.01
+PON_RULES = {  # per kind, per PoN in PON_NAMES order; None = the PoN is not used for the kind
+    "SNV": (dict(min_af=SNV_MIN_AF), dict(non_somatic=True), dict(), dict(min_af=SNV_MIN_AF)),
+    "INDEL": (dict(min_af=INDEL_MIN_AF), None, None, dict(min_af=INDEL_MIN_AF)),
+}
+
+
+def record_kind(ref: str, alts: Iterable[str]) -> str:
+    """INDEL when any (non-symbolic) ALT differs from REF in length, else SNV."""
+    for alt in alts:
+        if not alt or alt.startswith("<") or alt in ("*", "."):
+            continue
+        if len(alt) != len(ref):
+            return "INDEL"
+    return "SNV"
 
 
 def chromosome_aliases(chromosome: str) -> tuple[str, ...]:
@@ -77,7 +91,8 @@ def record_matches(
             return True
         af = candidate.info.get("AF")
         af = af if isinstance(af, tuple) else (af,) * len(candidate_alts)
-        if any(af[k] is not None and af[k] >= min_af for k in hits):
+        # VCF Float is 32-bit: an AF written as 0.01 reads back as 0.0099999998, so compare with a tolerance
+        if any(af[k] is not None and af[k] >= min_af * (1 - 1e-6) for k in hits):
             return True
     return False
 
@@ -102,8 +117,9 @@ def add_output_header(header: pysam.VariantHeader) -> None:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
-            "Tag Pansoma VCF records found in four indexed PoNs. By default all "
-            "records are retained; use --drop-matched to remove matched records."
+            "Tag Pansoma VCF records found in four indexed PoNs (SNV: gnomAD / CoLoRSdb AF >= "
+            f"{SNV_MIN_AF}, dbSNP non-somatic, 1000G; INDEL: gnomAD / CoLoRSdb AF >= {INDEL_MIN_AF} only). "
+            "By default all records are retained; use --drop-matched to remove matched records."
         )
     )
     parser.add_argument("input_vcf", help="Input .vcf.gz from Pansoma inference")
@@ -146,6 +162,8 @@ def main() -> int:
     total = 0
     matched = 0
     written = 0
+    by_kind: Counter[str] = Counter()
+    matched_by_kind: Counter[str] = Counter()
     matched_by_pon: Counter[str] = Counter()
     contig_cache: dict[tuple[int, str], str | None] = {}
     missing_contigs: set[tuple[str, str]] = set()
@@ -154,9 +172,13 @@ def main() -> int:
         with pysam.VariantFile(str(output_path), "wz", header=header) as output_vcf:
             for record in input_vcf:
                 total += 1
+                kind = record_kind(record.ref or "", record.alts or ())
+                by_kind[kind] += 1
                 matches: list[str] = []
 
-                for index, (pon, rule) in enumerate(zip(pons, PON_RULES)):
+                for index, (pon, rule) in enumerate(zip(pons, PON_RULES[kind])):
+                    if rule is None:
+                        continue
                     cache_key = (index, record.contig)
                     if cache_key not in contig_cache:
                         contig_cache[cache_key] = resolve_contig(pon, record.contig)
@@ -178,6 +200,7 @@ def main() -> int:
 
                 if matches:
                     matched += 1
+                    matched_by_kind[kind] += 1
                     if args.drop_matched:
                         continue
                     record.translate(header)
@@ -201,8 +224,8 @@ def main() -> int:
         sys.exit(f"ERROR: wrote {output_path}, but Tabix indexing failed: {exc}")
 
     action = "dropped" if args.drop_matched else "tagged"
-    print(f"Input records: {total:,}")
-    print(f"PoN-matched records {action}: {matched:,}")
+    print(f"Input records: {total:,} (SNV {by_kind['SNV']:,}, INDEL {by_kind['INDEL']:,})")
+    print(f"PoN-matched records {action}: {matched:,} (SNV {matched_by_kind['SNV']:,}, INDEL {matched_by_kind['INDEL']:,})")
     print(f"Output records: {written:,}")
     for name in PON_NAMES:
         print(f"  {name}: {matched_by_pon[name]:,}")
