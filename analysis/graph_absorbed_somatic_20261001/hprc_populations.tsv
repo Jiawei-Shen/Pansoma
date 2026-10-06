@@ -1,0 +1,15 @@
+population_code	population_name	superpopulation	haplotypes	HG008N_present_broad_SNV_exact_carrier_haps	HG008N_present_broad_SNV_complete_haps	HG008N_present_broad_SNV_carrier_fraction	HG008N_present_broad_INDEL_exact_carrier_haps	HG008N_present_broad_INDEL_complete_haps	HG008N_present_broad_INDEL_carrier_fraction	HG008N_present_rare_SNV_exact_carrier_haps	HG008N_present_rare_SNV_complete_haps	HG008N_present_rare_SNV_carrier_fraction	HG008N_present_rare_INDEL_exact_carrier_haps	HG008N_present_rare_INDEL_complete_haps	HG008N_present_rare_INDEL_carrier_fraction	HG008N_absent_HPRC_other_SNV_exact_carrier_haps	HG008N_absent_HPRC_other_SNV_complete_haps	HG008N_absent_HPRC_other_SNV_carrier_fraction	HG008N_absent_HPRC_other_INDEL_exact_carrier_haps	HG008N_absent_HPRC_other_INDEL_complete_haps	HG008N_absent_HPRC_other_INDEL_carrier_fraction
+ACB	African Caribbean in Barbados	AFR	14	10	28	0.357	355	907	0.391	7	38	0.184	36	365	0.099	107	1367	0.078	4713	21670	0.217
+ASW	African Ancestry in Southwest US	AFR	2	2	4	0.500	60	132	0.455	1	5	0.200	5	48	0.104	19	195	0.097	636	3177	0.200
+ESN	Esan in Nigeria	AFR	2	2	4	0.500	42	133	0.316	0	4	0.000	9	53	0.170	22	196	0.112	692	2981	0.232
+GWD	Gambian in Western Division, The Gambia	AFR	16	12	32	0.375	382	1036	0.369	5	43	0.116	51	423	0.121	131	1567	0.084	5270	24576	0.214
+MKK	Maasai in Kinyawa, Kenya (HapMap 3)	AFR	2	2	4	0.500	48	127	0.378	0	5	0.000	7	53	0.132	10	192	0.052	643	3155	0.204
+MSL	Mende in Sierra Leone	AFR	8	6	16	0.375	196	506	0.387	1	20	0.050	16	201	0.080	69	755	0.091	2680	12109	0.221
+YRI	Yoruba in Ibadan, Nigeria	AFR	2	2	4	0.500	58	137	0.423	2	6	0.333	1	50	0.020	15	199	0.075	699	3081	0.227
+CLM	Colombian in Medellin, Colombia	AMR	8	7	15	0.467	257	565	0.455	4	22	0.182	26	212	0.123	46	919	0.050	2267	13491	0.168
+PEL	Peruvian in Lima, Peru	AMR	8	2	16	0.125	286	566	0.505	3	22	0.136	23	213	0.108	45	899	0.050	2393	13685	0.175
+PUR	Puerto Rican in Puerto Rico	AMR	16	13	31	0.419	487	1098	0.444	5	43	0.116	59	432	0.137	107	1714	0.062	4651	26491	0.176
+CHS	Southern Han Chinese, China	EAS	6	4	12	0.333	185	420	0.440	0	13	0.000	22	158	0.139	48	660	0.073	1737	10164	0.171
+KHV	Kinh in Ho Chi Minh City, Vietnam	EAS	2	2	4	0.500	65	142	0.458	2	6	0.333	6	53	0.113	12	225	0.053	589	3383	0.174
+PJL	Punjabi in Lahore,Pakistan	SAS	2	1	4	0.250	58	136	0.426	1	6	0.167	8	54	0.148	13	224	0.058	594	3319	0.179
+CHM13	reference (T2T CHM13, hydatidiform mole)	reference	1	0	2	0.000	27	75	0.360	0	3	0.000	7	29	0.241	8	147	0.054	290	1923	0.151

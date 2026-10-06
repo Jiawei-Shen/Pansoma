@@ -1,0 +1,495 @@
+{
+ "n_loci": 2478,
+ "RARE_AF": 0.2,
+ "perfect": {
+  "PacBio": {
+   "SNV": 170,
+   "INDEL": 1363
+  },
+  "ONT": {
+   "SNV": 148,
+   "INDEL": 989
+  },
+  "Illumina": {
+   "SNV": 122,
+   "INDEL": 1916
+  }
+ },
+ "read_data": {
+  "PacBio": 2478,
+  "ONT": 1365,
+  "Illumina": 2478
+ },
+ "categories": {
+  "PacBio SNV chr1-22": {
+   "other_ambiguous": 36,
+   "HG008N_absent_HPRC_other": 129,
+   "HG008N_present_rare": 3,
+   "HG008N_present_broad": 2,
+   "total": 170
+  },
+  "PacBio INDEL chr1-22": {
+   "HG008N_present_broad": 41,
+   "HG008N_absent_HPRC_other": 1157,
+   "other_ambiguous": 148,
+   "HG008N_present_rare": 17,
+   "total": 1363
+  },
+  "ONT SNV chr1-22": {
+   "HG008N_absent_HPRC_other": 117,
+   "other_ambiguous": 26,
+   "HG008N_present_rare": 3,
+   "HG008N_present_broad": 2,
+   "total": 148
+  },
+  "ONT INDEL chr1-22": {
+   "HG008N_absent_HPRC_other": 806,
+   "other_ambiguous": 147,
+   "HG008N_present_broad": 26,
+   "HG008N_present_rare": 10,
+   "total": 989
+  },
+  "Illumina SNV chr1-22": {
+   "HG008N_absent_HPRC_other": 97,
+   "other_ambiguous": 21,
+   "HG008N_present_rare": 2,
+   "HG008N_present_broad": 2,
+   "total": 122
+  },
+  "Illumina INDEL chr1-22": {
+   "HG008N_present_broad": 68,
+   "HG008N_absent_HPRC_other": 1682,
+   "other_ambiguous": 138,
+   "HG008N_present_rare": 28,
+   "total": 1916
+  },
+  "union SNV chr1-22": {
+   "other_ambiguous": 46,
+   "HG008N_absent_HPRC_other": 150,
+   "HG008N_present_rare": 3,
+   "HG008N_present_broad": 2,
+   "total": 201
+  },
+  "union INDEL chr1-22": {
+   "HG008N_present_broad": 75,
+   "HG008N_absent_HPRC_other": 1935,
+   "other_ambiguous": 237,
+   "HG008N_present_rare": 30,
+   "total": 2277
+  },
+  "PacBio SNV chr2-22": {
+   "HG008N_absent_HPRC_other": 118,
+   "HG008N_present_rare": 3,
+   "other_ambiguous": 33,
+   "HG008N_present_broad": 2,
+   "total": 156
+  },
+  "PacBio INDEL chr2-22": {
+   "other_ambiguous": 138,
+   "HG008N_absent_HPRC_other": 1064,
+   "HG008N_present_rare": 16,
+   "HG008N_present_broad": 36,
+   "total": 1254
+  },
+  "ONT SNV chr2-22": {
+   "HG008N_absent_HPRC_other": 105,
+   "HG008N_present_rare": 3,
+   "other_ambiguous": 24,
+   "HG008N_present_broad": 2,
+   "total": 134
+  },
+  "ONT INDEL chr2-22": {
+   "other_ambiguous": 136,
+   "HG008N_absent_HPRC_other": 740,
+   "HG008N_present_broad": 24,
+   "HG008N_present_rare": 9,
+   "total": 909
+  },
+  "Illumina SNV chr2-22": {
+   "HG008N_absent_HPRC_other": 87,
+   "other_ambiguous": 19,
+   "HG008N_present_rare": 2,
+   "HG008N_present_broad": 2,
+   "total": 110
+  },
+  "Illumina INDEL chr2-22": {
+   "HG008N_absent_HPRC_other": 1555,
+   "other_ambiguous": 128,
+   "HG008N_present_rare": 26,
+   "HG008N_present_broad": 59,
+   "total": 1768
+  },
+  "union SNV chr2-22": {
+   "HG008N_absent_HPRC_other": 138,
+   "HG008N_present_rare": 3,
+   "other_ambiguous": 41,
+   "HG008N_present_broad": 2,
+   "total": 184
+  },
+  "union INDEL chr2-22": {
+   "other_ambiguous": 217,
+   "HG008N_absent_HPRC_other": 1781,
+   "HG008N_present_rare": 28,
+   "HG008N_present_broad": 66,
+   "total": 2092
+  },
+  "PacBio SNV chr1 BED": {
+   "other_ambiguous": 3,
+   "HG008N_absent_HPRC_other": 11,
+   "total": 14
+  },
+  "PacBio INDEL chr1 BED": {
+   "HG008N_present_broad": 5,
+   "HG008N_absent_HPRC_other": 86,
+   "other_ambiguous": 10,
+   "HG008N_present_rare": 1,
+   "total": 102
+  },
+  "ONT SNV chr1 BED": {
+   "HG008N_absent_HPRC_other": 12,
+   "other_ambiguous": 2,
+   "total": 14
+  },
+  "ONT INDEL chr1 BED": {
+   "HG008N_absent_HPRC_other": 60,
+   "other_ambiguous": 11,
+   "HG008N_present_broad": 2,
+   "HG008N_present_rare": 1,
+   "total": 74
+  },
+  "Illumina SNV chr1 BED": {
+   "HG008N_absent_HPRC_other": 10,
+   "other_ambiguous": 2,
+   "total": 12
+  },
+  "Illumina INDEL chr1 BED": {
+   "HG008N_present_broad": 8,
+   "HG008N_absent_HPRC_other": 117,
+   "other_ambiguous": 9,
+   "HG008N_present_rare": 2,
+   "total": 136
+  },
+  "union SNV chr1 BED": {
+   "other_ambiguous": 5,
+   "HG008N_absent_HPRC_other": 12,
+   "total": 17
+  },
+  "union INDEL chr1 BED": {
+   "HG008N_present_broad": 8,
+   "HG008N_absent_HPRC_other": 140,
+   "other_ambiguous": 19,
+   "HG008N_present_rare": 2,
+   "total": 169
+  },
+  "PacBio SNV chr1-22 nogermline BED": {
+   "HG008N_absent_HPRC_other": 55,
+   "HG008N_present_rare": 2,
+   "other_ambiguous": 2,
+   "HG008N_present_broad": 2,
+   "total": 61
+  },
+  "PacBio INDEL chr1-22 nogermline BED": {
+   "HG008N_present_broad": 16,
+   "HG008N_absent_HPRC_other": 294,
+   "HG008N_present_rare": 4,
+   "other_ambiguous": 3,
+   "total": 317
+  },
+  "ONT SNV chr1-22 nogermline BED": {
+   "HG008N_absent_HPRC_other": 49,
+   "HG008N_present_rare": 2,
+   "other_ambiguous": 3,
+   "HG008N_present_broad": 2,
+   "total": 56
+  },
+  "ONT INDEL chr1-22 nogermline BED": {
+   "HG008N_absent_HPRC_other": 198,
+   "other_ambiguous": 3,
+   "HG008N_present_broad": 9,
+   "HG008N_present_rare": 1,
+   "total": 211
+  },
+  "Illumina SNV chr1-22 nogermline BED": {
+   "HG008N_absent_HPRC_other": 49,
+   "HG008N_present_rare": 1,
+   "HG008N_present_broad": 2,
+   "other_ambiguous": 1,
+   "total": 53
+  },
+  "Illumina INDEL chr1-22 nogermline BED": {
+   "HG008N_present_broad": 42,
+   "HG008N_present_rare": 13,
+   "HG008N_absent_HPRC_other": 803,
+   "other_ambiguous": 4,
+   "total": 862
+  },
+  "union SNV chr1-22 nogermline BED": {
+   "HG008N_absent_HPRC_other": 64,
+   "HG008N_present_rare": 2,
+   "other_ambiguous": 3,
+   "HG008N_present_broad": 2,
+   "total": 71
+  },
+  "union INDEL chr1-22 nogermline BED": {
+   "HG008N_present_broad": 43,
+   "HG008N_present_rare": 14,
+   "HG008N_absent_HPRC_other": 840,
+   "other_ambiguous": 6,
+   "total": 903
+  }
+ },
+ "floor": {
+  "full_windows": 114,
+  "full_window_elements": 120,
+  "full_window_branch_node_coverage_min": 1,
+  "full_window_node_coverage_hist": {
+   "1": 1,
+   "2": 1,
+   "6": 1,
+   "8": 1,
+   "9": 5,
+   "10": 8,
+   "11": 9,
+   "12": 4,
+   "13": 4,
+   "14": 6,
+   "15": 40
+  },
+  "full_window_hprc_carriers_min": 0,
+  "full_window_hprc_carriers_hist": {
+   "0": 1,
+   "1": 1,
+   "5": 2,
+   "7": 1,
+   "9": 8,
+   "10": 10,
+   "11": 12,
+   "12": 5,
+   "13": 8,
+   "14": 8,
+   "15": 64
+  },
+  "full_window_not_on_CHM13_hprc_carriers_min": 9,
+  "full_window_on_CHM13_below9": 5,
+  "all_not_on_CHM13_node_coverage_lt9": 17,
+  "n_elements": 3368,
+  "branch_elements_node_coverage_min": 1,
+  "node_coverage_lt9": 60,
+  "node_coverage_hist": {
+   "1": 5,
+   "2": 4,
+   "3": 5,
+   "4": 7,
+   "5": 5,
+   "6": 12,
+   "7": 6,
+   "8": 16,
+   "9": 70,
+   "10": 64,
+   "11": 73,
+   "12": 61,
+   "13": 61,
+   "14": 54,
+   "15": 1889
+  },
+  "complete_carriers_min": 0,
+  "complete_carriers_lt9": 542,
+  "any_row_carriers_min": 0,
+  "any_row_carriers_lt9": 200
+ },
+ "vcf_agree": {
+  "d9": {
+   "SNV": 72,
+   "INDEL": 1667
+  },
+  "full": {
+   "SNV": 73,
+   "INDEL": 1688
+  }
+ },
+ "element_source": {
+  "reads": 222,
+  "graph": 2252,
+  "graph_closest_no_reads": 4
+ },
+ "path_choice": {
+  "pooled_majority": 222,
+  "single_path": 2071,
+  "truth_read_supported": 134,
+  "no_truth_read_support": 47,
+  "closest_primary": 4
+ },
+ "sub_class_or_reason": {
+  "HG008N_absent_HPRC_other|element_set_other_allele|INDEL": 101,
+  "HG008N_absent_HPRC_other|element_set_other_allele|SNV": 76,
+  "HG008N_absent_HPRC_other|exact_allele|INDEL": 1789,
+  "HG008N_absent_HPRC_other|exact_allele|SNV": 65,
+  "HG008N_absent_HPRC_other|recombinant_pieces|INDEL": 45,
+  "HG008N_absent_HPRC_other|recombinant_pieces|SNV": 9,
+  "HG008N_present_broad|other_hap_only|INDEL": 75,
+  "HG008N_present_broad|other_hap_only|SNV": 2,
+  "HG008N_present_rare|no_event_hap|INDEL": 1,
+  "HG008N_present_rare|other_hap_only|INDEL": 22,
+  "HG008N_present_rare|other_hap_only|SNV": 1,
+  "HG008N_present_rare|other_hap_only:patient_frame|INDEL": 7,
+  "HG008N_present_rare|other_hap_only:patient_frame|SNV": 2,
+  "other_ambiguous|HG008N_hap_unresolved:array_NA|INDEL": 6,
+  "other_ambiguous|HG008N_hap_unresolved:array_NA|SNV": 2,
+  "other_ambiguous|HG008N_hap_unresolved:conflict|SNV": 1,
+  "other_ambiguous|closest:read_allele_nearer_truth|INDEL": 21,
+  "other_ambiguous|closest:read_allele_nearer_truth|SNV": 3,
+  "other_ambiguous|closest:read_allele_not_truth|INDEL": 166,
+  "other_ambiguous|closest:read_allele_not_truth|SNV": 32,
+  "other_ambiguous|closest_no_read_element|SNV": 4,
+  "other_ambiguous|evidence_conflict:ALT_on_both_normal_haps|INDEL": 1,
+  "other_ambiguous|evidence_conflict:ALT_on_normal_event_hap|INDEL": 1,
+  "other_ambiguous|evidence_conflict:germline_ALT_vs_truth_INFO_event_novel|INDEL": 6,
+  "other_ambiguous|no_HPRC_carrier|INDEL": 13,
+  "other_ambiguous|no_HPRC_carrier|SNV": 1,
+  "other_ambiguous|no_HPRC_carrier:CHM13_carries|INDEL": 6,
+  "other_ambiguous|with_germline:germline_allele_off_event_hap|INDEL": 17,
+  "other_ambiguous|with_germline:germline_allele_off_event_hap|SNV": 3
+ },
+ "event_hap_pattern": {
+  "HG008N_present_broad|other_hap_only|INDEL": 75,
+  "HG008N_present_broad|other_hap_only|SNV": 2,
+  "HG008N_present_rare|no_event_hap|INDEL": 1,
+  "HG008N_present_rare|other_hap_only|INDEL": 22,
+  "HG008N_present_rare|other_hap_only|SNV": 1,
+  "HG008N_present_rare|other_hap_only:patient_frame|INDEL": 7,
+  "HG008N_present_rare|other_hap_only:patient_frame|SNV": 2
+ },
+ "tumor_verdict": {
+  "HG008N_absent_HPRC_other|NA|INDEL": 1,
+  "HG008N_absent_HPRC_other|NA|SNV": 1,
+  "HG008N_absent_HPRC_other|all_eq_hap1|INDEL": 1,
+  "HG008N_absent_HPRC_other|no_change_both|INDEL": 1,
+  "HG008N_absent_HPRC_other|no_change_hom|INDEL": 1,
+  "HG008N_absent_HPRC_other|novel_ALT|INDEL": 1652,
+  "HG008N_absent_HPRC_other|novel_ALT|SNV": 45,
+  "HG008N_absent_HPRC_other|novel_other|INDEL": 279,
+  "HG008N_absent_HPRC_other|novel_other|SNV": 104,
+  "HG008N_present_broad|all_eq_hap1|INDEL": 33,
+  "HG008N_present_broad|all_eq_hap1|SNV": 1,
+  "HG008N_present_broad|all_eq_hap2|INDEL": 34,
+  "HG008N_present_broad|all_eq_hap2|SNV": 1,
+  "HG008N_present_broad|novel_ALT|INDEL": 4,
+  "HG008N_present_broad|novel_other|INDEL": 4,
+  "HG008N_present_rare|all_eq_hap1|INDEL": 16,
+  "HG008N_present_rare|all_eq_hap1|SNV": 1,
+  "HG008N_present_rare|all_eq_hap2|INDEL": 13,
+  "HG008N_present_rare|all_eq_hap2|SNV": 2,
+  "HG008N_present_rare|novel_ALT|INDEL": 1,
+  "other_ambiguous|NA|INDEL": 10,
+  "other_ambiguous|NA|SNV": 2,
+  "other_ambiguous|all_eq_hap2|INDEL": 2,
+  "other_ambiguous|no_change_both|INDEL": 1,
+  "other_ambiguous|no_change_hom|INDEL": 1,
+  "other_ambiguous|novel_ALT|INDEL": 76,
+  "other_ambiguous|novel_ALT|SNV": 1,
+  "other_ambiguous|novel_other|INDEL": 147,
+  "other_ambiguous|novel_other|SNV": 43
+ },
+ "T_info_class": {
+  "HG008N_absent_HPRC_other|NA|INDEL": 12,
+  "HG008N_absent_HPRC_other|NA|SNV": 5,
+  "HG008N_absent_HPRC_other|eq_ALT|INDEL": 1642,
+  "HG008N_absent_HPRC_other|eq_ALT|SNV": 45,
+  "HG008N_absent_HPRC_other|event_outside_stretch|INDEL": 10,
+  "HG008N_absent_HPRC_other|event_outside_stretch|SNV": 10,
+  "HG008N_absent_HPRC_other|novel|INDEL": 271,
+  "HG008N_absent_HPRC_other|novel|SNV": 90,
+  "HG008N_present_broad|eq_ALT|INDEL": 4,
+  "HG008N_present_broad|eq_ALT=other_hap|INDEL": 71,
+  "HG008N_present_broad|eq_ALT=other_hap|SNV": 2,
+  "HG008N_present_rare|NA|INDEL": 1,
+  "HG008N_present_rare|eq_ALT|INDEL": 1,
+  "HG008N_present_rare|eq_ALT=other_hap|INDEL": 21,
+  "HG008N_present_rare|eq_ALT=other_hap|SNV": 1,
+  "HG008N_present_rare|eq_other_hap|INDEL": 7,
+  "HG008N_present_rare|eq_other_hap|SNV": 2,
+  "other_ambiguous|NA|INDEL": 11,
+  "other_ambiguous|NA|SNV": 1,
+  "other_ambiguous|eq_ALT|INDEL": 76,
+  "other_ambiguous|eq_ALT|SNV": 1,
+  "other_ambiguous|eq_other_hap|INDEL": 1,
+  "other_ambiguous|event_outside_stretch|INDEL": 4,
+  "other_ambiguous|event_outside_stretch|SNV": 3,
+  "other_ambiguous|novel|INDEL": 145,
+  "other_ambiguous|novel|SNV": 41
+ },
+ "truth_read_support": {
+  "HG008N_absent_HPRC_other|no_truth_spelling_read|INDEL": 79,
+  "HG008N_absent_HPRC_other|no_truth_spelling_read|SNV": 48,
+  "HG008N_absent_HPRC_other|yes|INDEL": 1856,
+  "HG008N_absent_HPRC_other|yes|SNV": 102,
+  "HG008N_present_broad|yes|INDEL": 75,
+  "HG008N_present_broad|yes|SNV": 2,
+  "HG008N_present_rare|no_truth_spelling_read|INDEL": 4,
+  "HG008N_present_rare|yes|INDEL": 26,
+  "HG008N_present_rare|yes|SNV": 3,
+  "other_ambiguous|no_truth_spelling_read|INDEL": 209,
+  "other_ambiguous|no_truth_spelling_read|SNV": 40,
+  "other_ambiguous|yes|INDEL": 28,
+  "other_ambiguous|yes|SNV": 6
+ },
+ "asm_event_kind": {
+  "HG008N_absent_HPRC_other|DEL|INDEL": 746,
+  "HG008N_absent_HPRC_other|DEL|SNV": 21,
+  "HG008N_absent_HPRC_other|INS|INDEL": 1110,
+  "HG008N_absent_HPRC_other|INS|SNV": 43,
+  "HG008N_absent_HPRC_other|SNV|INDEL": 68,
+  "HG008N_absent_HPRC_other|SNV|SNV": 82,
+  "HG008N_absent_HPRC_other|none|INDEL": 11,
+  "HG008N_absent_HPRC_other|none|SNV": 4,
+  "HG008N_present_broad|DEL|INDEL": 41,
+  "HG008N_present_broad|INS|INDEL": 34,
+  "HG008N_present_broad|SNV|SNV": 2,
+  "HG008N_present_rare|DEL|INDEL": 15,
+  "HG008N_present_rare|INS|INDEL": 11,
+  "HG008N_present_rare|SNV|INDEL": 3,
+  "HG008N_present_rare|SNV|SNV": 3,
+  "HG008N_present_rare|none|INDEL": 1,
+  "other_ambiguous|DEL|INDEL": 81,
+  "other_ambiguous|DEL|SNV": 21,
+  "other_ambiguous|INS|INDEL": 113,
+  "other_ambiguous|INS|SNV": 18,
+  "other_ambiguous|SNV|INDEL": 34,
+  "other_ambiguous|SNV|SNV": 6,
+  "other_ambiguous|none|INDEL": 9,
+  "other_ambiguous|none|SNV": 1
+ },
+ "normal_allele_class": {
+  "HG008N_absent_HPRC_other|SNV_site_deleted_on_event_hap|SNV": 30,
+  "HG008N_absent_HPRC_other|both_REF|INDEL": 656,
+  "HG008N_absent_HPRC_other|both_REF|SNV": 21,
+  "HG008N_absent_HPRC_other|germline_STR_other_length|INDEL": 1179,
+  "HG008N_absent_HPRC_other|germline_STR_other_length|SNV": 91,
+  "HG008N_absent_HPRC_other|other|INDEL": 100,
+  "HG008N_absent_HPRC_other|other|SNV": 8,
+  "HG008N_present_broad|carries_ALT|INDEL": 75,
+  "HG008N_present_broad|carries_ALT|SNV": 2,
+  "HG008N_present_rare|carries_ALT|INDEL": 30,
+  "HG008N_present_rare|carries_ALT|SNV": 3,
+  "other_ambiguous|SNV_site_deleted_on_event_hap|SNV": 8,
+  "other_ambiguous|both_REF|INDEL": 3,
+  "other_ambiguous|both_REF|SNV": 1,
+  "other_ambiguous|carries_ALT|INDEL": 9,
+  "other_ambiguous|germline_STR_other_length|INDEL": 196,
+  "other_ambiguous|germline_STR_other_length|SNV": 30,
+  "other_ambiguous|other|INDEL": 22,
+  "other_ambiguous|other|SNV": 4,
+  "other_ambiguous|unresolved|INDEL": 7,
+  "other_ambiguous|unresolved|SNV": 3
+ },
+ "narrow_vs_array": {
+  "ALT->ALT": 110,
+  "ALT->no": 10,
+  "ALT->unresolved": 5,
+  "ALT_plus_other->no": 43,
+  "no->no": 4748,
+  "unresolved->no": 30,
+  "unresolved->unresolved": 10
+ },
+ "freq_class_agree_present": 92
+}

@@ -1,0 +1,141 @@
+file	column	D_column	meaning
+per_variant.tsv	truth_id	truth_id	row id of the truth allele in analysis/tensor_recall_20260930/per_truth_HG008T.tsv
+per_variant.tsv	chrom	chrom	
+per_variant.tsv	vcf_pos	vcf_pos	truth VCF POS (1-based)
+per_variant.tsv	vcf_ref	vcf_ref	
+per_variant.tsv	vcf_alt	vcf_alt	
+per_variant.tsv	kind	kind2	SNV or INDEL (GRCh38 representation of the truth)
+per_variant.tsv	in_bed	in_bed	truth inside GIAB v0.2 _all.bed
+per_variant.tsv	in_nogermline_bed	in_nogermline_bed	truth span inside GIAB v0.2 nogermlineoverlap.bed (stricter)
+per_variant.tsv	PacBio_perfect	PacBio_perfect	PacBio: status no_candidate and read-level reason site_bypassed:{branch,skip_edge}:no_edit (= in the set for this platform)
+per_variant.tsv	PacBio_miss_class	PacBio_class	PacBio: miss class of the earlier read-level analysis (I1-I7 INDEL, S1-S4c SNV; empty if the platform built the truth)
+per_variant.tsv	ONT_perfect	ONT_perfect	ONT: status no_candidate and read-level reason site_bypassed:{branch,skip_edge}:no_edit (= in the set for this platform)
+per_variant.tsv	ONT_miss_class	ONT_class	ONT: miss class of the earlier read-level analysis (I1-I7 INDEL, S1-S4c SNV; empty if the platform built the truth)
+per_variant.tsv	Illumina_perfect	Illumina_perfect	Illumina: status no_candidate and read-level reason site_bypassed:{branch,skip_edge}:no_edit (= in the set for this platform)
+per_variant.tsv	Illumina_miss_class	Illumina_class	Illumina: miss class of the earlier read-level analysis (I1-I7 INDEL, S1-S4c SNV; empty if the platform built the truth)
+per_variant.tsv	graph_match	match	d9 path spelling the truth ALT haplotype of the window: exact / with_germline (only with nearby HG008-N germline alleles applied too) / closest (none; nearest graph haplotypes kept)
+per_variant.tsv	germline_used	germline_used	with_germline: the dipcall alleles that had to be applied (pos:REF>ALT)
+per_variant.tsv	element_source	element_source	graph (elements of the chosen exact / with_germline ALT path) / reads (closest: majority walk of the reads) / graph_closest_no_reads
+per_variant.tsv	somatic_elements	somatic_elements	kept somatic elements: 'B:x:y:>n1>n2' = branch of non-GRCh38 nodes n1,n2 between GRCh38 nodes x and y; 'S:x:y' = edge x->y skipping GRCh38 bases
+per_variant.tsv	element_subtypes	element_subtypes	ins_branch / del_skip / snv_branch / mnv_branch / replacing_branch per element (see README section 2)
+per_variant.tsv	alt_path	alt_path	the chosen ALT path, first to last anchor node, oriented node ids
+per_variant.tsv	PacBio_read_data	PacBio_read_data	PacBio: the re-decoded reads (s3) cover this locus
+per_variant.tsv	PacBio_n_truth_reads	PacBio_n_truth_reads	PacBio: no-edit spanning ALT reads whose walk spells GRCh38+ALT (or + the patient germline) over its anchor span
+per_variant.tsv	PacBio_n_germline_only_reads	PacBio_n_germline_only_reads	PacBio: no-edit spanning ALT-like reads whose walk spells only HG008-N germline alleles
+per_variant.tsv	PacBio_truth_frac_contain_set	PacBio_truth_frac_contain_set	PacBio: fraction of truth reads whose walk contains all somatic elements
+per_variant.tsv	ONT_read_data	ONT_read_data	ONT: the re-decoded reads (s3) cover this locus
+per_variant.tsv	ONT_n_truth_reads	ONT_n_truth_reads	ONT: no-edit spanning ALT reads whose walk spells GRCh38+ALT (or + the patient germline) over its anchor span
+per_variant.tsv	ONT_n_germline_only_reads	ONT_n_germline_only_reads	ONT: no-edit spanning ALT-like reads whose walk spells only HG008-N germline alleles
+per_variant.tsv	ONT_truth_frac_contain_set	ONT_truth_frac_contain_set	ONT: fraction of truth reads whose walk contains all somatic elements
+per_variant.tsv	Illumina_read_data	Illumina_read_data	Illumina: the re-decoded reads (s3) cover this locus
+per_variant.tsv	Illumina_n_truth_reads	Illumina_n_truth_reads	Illumina: no-edit spanning ALT reads whose walk spells GRCh38+ALT (or + the patient germline) over its anchor span
+per_variant.tsv	Illumina_n_germline_only_reads	Illumina_n_germline_only_reads	Illumina: no-edit spanning ALT-like reads whose walk spells only HG008-N germline alleles
+per_variant.tsv	Illumina_truth_frac_contain_set	Illumina_truth_frac_contain_set	Illumina: fraction of truth reads whose walk contains all somatic elements
+per_variant.tsv	truth_read_support	truth_read_support	yes = >= 1 truth read on a perfect platform with read data / no_truth_spelling_read / no_perfect_platform_read_data
+per_variant.tsv	hprc_n_complete	hprc_n_complete	HPRC haplotypes (of 88) whose walk visits both window anchor nodes (complete traversal) = frequency denominator
+per_variant.tsv	hprc_n_partial	hprc_n_partial	HPRC haplotypes with only one anchor in the window (walk cut by the d9 filter or a deletion of an anchor)
+per_variant.tsv	hprc_n_absent	hprc_n_absent	HPRC haplotypes with no walk through the window
+per_variant.tsv	hprc_support	hprc_support	exact_allele (>= 1 complete haplotype spells the exact ALT allele) / element_set_other_allele (walks all elements, other allele) / recombinant_pieces (each element walked by someone, the whole set by no one) / none
+per_variant.tsv	hprc_exact_allele_carriers	exact_allele_carriers	complete HPRC haplotypes whose sequence over the tandem array (bracketed by the nearest GRCh38 nodes shared with the ALT path) equals the ALT allele (with_germline: ALT + the germline alleles)
+per_variant.tsv	hprc_exact_allele_freq	exact_allele_freq	hprc_exact_allele_carriers / hprc_n_complete (category RARE_AF = 0.20 uses this)
+per_variant.tsv	hprc_exact_allele_freq_over88	exact_allele_freq_all88	hprc_exact_allele_carriers / 88 (lower bound)
+per_variant.tsv	hprc_exact_n_individuals	exact_n_individuals	HPRC samples with >= 1 exact-allele haplotype
+per_variant.tsv	hprc_exact_n_hom	exact_n_hom	HPRC samples with both haplotypes exact-allele carriers
+per_variant.tsv	hprc_element_set_carriers	set_carriers_any_path	complete HPRC haplotypes that walk all somatic elements of any ALT path (node level)
+per_variant.tsv	hprc_element_set_freq	set_freq_any_path	hprc_element_set_carriers / hprc_n_complete
+per_variant.tsv	hprc_element_min_carriers	elem_min_carriers	minimum over the somatic elements of the complete haplotypes walking that element
+per_variant.tsv	hprc_element_min_freq	elem_freq_min	hprc_element_min_carriers / hprc_n_complete
+per_variant.tsv	hprc_exact_freq_class	exact_freq_class	<0.2 / 0.2-0.5 / >=0.5 of hprc_exact_allele_freq
+per_variant.tsv	d9_vcf_AF	d9_vcf_AF	AF of the d9 VCF record whose allele alone spells the ALT haplotype (snarl level)
+per_variant.tsv	full_graph_vcf_AF	full_vcf_AF	same in the full (unfiltered) HPRC v1.1 vg deconstruct VCF, over all called haplotypes
+per_variant.tsv	AFR_complete	AFR_complete	AFR HPRC haplotypes with a complete traversal
+per_variant.tsv	AFR_exact_carriers	AFR_exact_carriers	AFR exact-allele carrier haplotypes
+per_variant.tsv	AMR_complete	AMR_complete	AMR HPRC haplotypes with a complete traversal
+per_variant.tsv	AMR_exact_carriers	AMR_exact_carriers	AMR exact-allele carrier haplotypes
+per_variant.tsv	EAS_complete	EAS_complete	EAS HPRC haplotypes with a complete traversal
+per_variant.tsv	EAS_exact_carriers	EAS_exact_carriers	EAS exact-allele carrier haplotypes
+per_variant.tsv	SAS_complete	SAS_complete	SAS HPRC haplotypes with a complete traversal
+per_variant.tsv	SAS_exact_carriers	SAS_exact_carriers	SAS exact-allele carrier haplotypes
+per_variant.tsv	CHM13_carries_exact	CHM13_exact	CHM13 spells the exact ALT allele (not counted in the HPRC numbers)
+per_variant.tsv	hprc_exact_carrier_haps	exact_allele_carrier_haps	the exact-allele carrier haplotypes, sample#hap
+per_variant.tsv	HG008N_event_hap	event_hap	the HG008-N v6.2 haplotype the truth INFO HG008Nv62SOMATICVARIANT names (the somatic event is on it)
+per_variant.tsv	HG008N_event_INFO	asm_event	truth INFO HG008Nv62SOMATICVARIANT: hap contig:pos(0-based)-REF-ALT = the event in the patient frame
+per_variant.tsv	HG008N_event_kind	asm_event_kind	SNV / INS / DEL of that patient-frame event
+per_variant.tsv	n_truths_same_event	n_truths_same_asm_event	truth alleles that share this patient-frame event (one event written as several GRCh38 records)
+per_variant.tsv	HG008N_hap1_carries_ALT	hap1_carries_alt	final allele-level call for HG008-N hap1: ALT / no / unresolved (whole tandem array, s8b)
+per_variant.tsv	HG008N_hap2_carries_ALT	hap2_carries_alt	same for hap2
+per_variant.tsv	HG008N_hap1_array_call	hap1_array_asm_call	hap1 sequence between the common unique anchors vs GRCh38 (REF) / GRCh38+truth (ALT) / ALT + the hap's own dipcall variants outside the array (ALT_plus_flank) / other / NA (not anchored)
+per_variant.tsv	HG008N_hap2_array_call	hap2_array_asm_call	same for hap2
+per_variant.tsv	HG008N_hap1_array_len_change	hap1_array_len_change	hap1 array length minus GRCh38 array length (bp)
+per_variant.tsv	HG008N_hap2_array_len_change	hap2_array_len_change	same for hap2
+per_variant.tsv	HG008N_hap1_walks_elements	hap1_walk_elements	node level: the giraffe walk (vg 1.65, d9) of the hap1 assembly window contains all / some / none of the somatic elements (not_covered: an anchor missing; no_elements). Walking the nodes is not carrying the allele
+per_variant.tsv	HG008N_hap2_walks_elements	hap2_walk_elements	same for hap2
+per_variant.tsv	HG008N_allele_class	normal_allele_class	the normal's own allele: carries_ALT / both_REF / germline_STR_other_length (>= 1 hap has another length in the array) / SNV_site_deleted_on_event_hap / other / unresolved
+per_variant.tsv	event_hap_pattern	event_hap_pattern	which HG008-N hap carries the ALT: other_hap_only / other_hap_only:patient_frame (truth INFO event on the event hap = the other hap's array allele) / event_hap_only / both / neither / no_event_hap / unresolved
+per_variant.tsv	T_info_class	T_info_class	truth INFO event applied to the event hap's array: eq_ALT (= GRCh38+truth) / eq_ALT=other_hap / eq_other_hap / novel (a third allele) / event_outside_stretch / NA
+per_variant.tsv	HG008T_verdict	tumor_verdict	HG008-T v3.2 contigs over the array: all_eq_hap1/2 (every tumor copy = that normal hap) / novel_ALT (a copy = GRCh38+truth, not in the normal) / novel_other / no_change_* / NA
+per_variant.tsv	HG008T_any_ALT_array	tumor_any_ALT_array	a tumor contig equals GRCh38+truth over the array
+per_variant.tsv	array_start0	array_lo0	tandem array (s8b) GRCh38 start, 0-based
+per_variant.tsv	array_end0	array_hi0	array end, 0-based exclusive
+per_variant.tsv	dipcall_relation	dipcall_relation	HG008-N dipcall PASS records near the truth: identical germline allele / germline variant at the same site (other allele) / germline INDEL or SNV within 10 bp / none within 10 bp
+per_variant.tsv	dipcall_records	dipcall_records	those records, pos:REF>ALT(GT hap1|hap2)
+per_variant.tsv	in_dip_bed	in_dip_bed	core span +-10 bp inside the dipcall BED
+per_variant.tsv	PoN_rule	PoN_rule	which of the four PoNs tag the truth allele under the repo rule (none = not tagged)
+per_variant.tsv	gnomAD_AF	gnomAD_AF	
+per_variant.tsv	CoLoRSdb_AF	CoLoRSdb_AF	
+per_variant.tsv	category	category	HG008N_present_broad / HG008N_present_rare / HG008N_absent_HPRC_other / other_ambiguous (README section 5)
+per_variant.tsv	sub_class	sub_class	present: event_hap_pattern; absent: hprc_support
+per_variant.tsv	sub_reason	sub_reason	other_ambiguous: why
+per_variant.tsv	interpretation	interpretation	one sentence per category / sub-class
+per_node.tsv	truth_id	truth_id	truth allele
+per_node.tsv	element_id	element_id	'B:x:y:>n1>n2' branch / 'S:x:y' skip edge
+per_node.tsv	type	type	branch / skip
+per_node.tsv	subtype	subtype	ins_branch / del_skip / snv_branch / mnv_branch / replacing_branch
+per_node.tsv	x	x	GRCh38 node before the element
+per_node.tsv	y	y	GRCh38 node after it
+per_node.tsv	nodes	nodes	the branch nodes, oriented
+per_node.tsv	node_seqs	node_seqs	their sequences
+per_node.tsv	seq	seq	branch sequence
+per_node.tsv	replaced	replaced	GRCh38 bases between x and y that the element replaces (skip: deleted bases)
+per_node.tsv	grch38_start0	grch38_start0	GRCh38 interval replaced, 0-based start
+per_node.tsv	grch38_end0	grch38_end0	end (exclusive; = start for a pure insertion)
+per_node.tsv	in_event	in_event	overlaps the event window (s1)
+per_node.tsv	role	role	snv (same length) / indel
+per_node.tsv	alone	alone	GRCh38 with only this element applied equals: truth (GRCh38+ALT) / germline (GRCh38 + a subset of the 6 nearest HG008-N dipcall alleles) / truth+germline / partial (one piece of a multi-element ALT path)
+per_node.tsv	element_source	element_source	graph / reads / graph_closest_no_reads
+per_node.tsv	category	category	the locus category
+per_node.tsv	PacBio_n_good	PacBio_n_good	PacBio: no-edit spanning ALT-like reads
+per_node.tsv	PacBio_n_testable	PacBio_n_testable	PacBio: of those, reads whose walk reaches the element
+per_node.tsv	PacBio_n_contain	PacBio_n_contain	PacBio: of those, reads whose walk contains it
+per_node.tsv	PacBio_n_truth	PacBio_n_truth	PacBio: truth-spelling reads
+per_node.tsv	PacBio_n_truth_testable	PacBio_n_truth_testable	PacBio: truth reads reaching it
+per_node.tsv	PacBio_n_truth_contain	PacBio_n_truth_contain	PacBio: truth reads containing it
+per_node.tsv	ONT_n_good	ONT_n_good	ONT: no-edit spanning ALT-like reads
+per_node.tsv	ONT_n_testable	ONT_n_testable	ONT: of those, reads whose walk reaches the element
+per_node.tsv	ONT_n_contain	ONT_n_contain	ONT: of those, reads whose walk contains it
+per_node.tsv	ONT_n_truth	ONT_n_truth	ONT: truth-spelling reads
+per_node.tsv	ONT_n_truth_testable	ONT_n_truth_testable	ONT: truth reads reaching it
+per_node.tsv	ONT_n_truth_contain	ONT_n_truth_contain	ONT: truth reads containing it
+per_node.tsv	Illumina_n_good	Illumina_n_good	Illumina: no-edit spanning ALT-like reads
+per_node.tsv	Illumina_n_testable	Illumina_n_testable	Illumina: of those, reads whose walk reaches the element
+per_node.tsv	Illumina_n_contain	Illumina_n_contain	Illumina: of those, reads whose walk contains it
+per_node.tsv	Illumina_n_truth	Illumina_n_truth	Illumina: truth-spelling reads
+per_node.tsv	Illumina_n_truth_testable	Illumina_n_truth_testable	Illumina: truth reads reaching it
+per_node.tsv	Illumina_n_truth_contain	Illumina_n_truth_contain	Illumina: truth reads containing it
+per_node.tsv	hprc_n_complete	hprc_n_complete	complete HPRC traversals of the locus window
+per_node.tsv	hprc_carriers	hprc_carriers	complete HPRC haplotypes whose walk contains the element (node level)
+per_node.tsv	hprc_freq	hprc_freq	hprc_carriers / hprc_n_complete
+per_node.tsv	AFR_carriers	AFR_carriers	AFR haplotypes carrying the element
+per_node.tsv	AMR_carriers	AMR_carriers	AMR haplotypes carrying the element
+per_node.tsv	EAS_carriers	EAS_carriers	EAS haplotypes carrying the element
+per_node.tsv	SAS_carriers	SAS_carriers	SAS haplotypes carrying the element
+per_node.tsv	AFR_complete	AFR_complete	AFR haplotypes with a complete traversal of the locus (denominator)
+per_node.tsv	AMR_complete	AMR_complete	AMR haplotypes with a complete traversal of the locus (denominator)
+per_node.tsv	EAS_complete	EAS_complete	EAS haplotypes with a complete traversal of the locus (denominator)
+per_node.tsv	SAS_complete	SAS_complete	SAS haplotypes with a complete traversal of the locus (denominator)
+per_node.tsv	hprc_any_row_carriers	hprc_any_row_carriers	haplotypes containing the element in any traversal row, partial ones included
+per_node.tsv	min_node_coverage	min_node_coverage	lower bound of haplotypes (HPRC + CHM13 + GRCh38) visiting the least-visited branch node (empty for skip edges)
+per_node.tsv	CHM13	CHM13	CHM13 walk contains it: True / False / partial / absent
+per_node.tsv	HG008N_hap1_giraffe_walk_contains	HG008N_hap1_walked	node-level HG008-N membership: the giraffe walk of the hap1 assembly window contains this element (graph containment; the allele call is per_variant HG008N_hap1_carries_ALT)
+per_node.tsv	HG008N_hap2_giraffe_walk_contains	HG008N_hap2_walked	same for hap2
+per_node.tsv	carrier_haps	carrier_haps	carrier haplotypes sample#hap

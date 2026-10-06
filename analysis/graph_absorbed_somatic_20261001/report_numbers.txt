@@ -1,0 +1,108 @@
+S1 PacBio SNV no_candidate / perfect / share / d9 path spells truth / chr1 BED perfect: 398 / 170 / 42.7% / 140 / 14
+S1 PacBio SNV perfect loci with read data / with own truth reads: 170 / 93
+S1 PacBio INDEL no_candidate / perfect / share / d9 path spells truth / chr1 BED perfect: 2976 / 1363 / 45.8% / 1252 / 102
+S1 PacBio INDEL perfect loci with read data / with own truth reads: 1363 / 1174
+S1 ONT SNV no_candidate / perfect / share / d9 path spells truth / chr1 BED perfect: 342 / 148 / 43.3% / 128 / 14
+S1 ONT SNV perfect loci with read data / with own truth reads: 148 / 85
+S1 ONT INDEL no_candidate / perfect / share / d9 path spells truth / chr1 BED perfect: 2454 / 989 / 40.3% / 876 / 74
+S1 ONT INDEL perfect loci with read data / with own truth reads: 989 / 797
+S1 Illumina SNV no_candidate / perfect / share / d9 path spells truth / chr1 BED perfect: 339 / 122 / 36.0% / 105 / 12
+S1 Illumina SNV perfect loci with read data / with own truth reads: 122 / 78
+S1 Illumina INDEL no_candidate / perfect / share / d9 path spells truth / chr1 BED perfect: 3954 / 1916 / 48.5% / 1807 / 136
+S1 Illumina INDEL perfect loci with read data / with own truth reads: 1916 / 1724
+S1 union SNV / d9 path spells truth / closest: 201 / 162 / 39
+S1 union SNV match exact / with_germline / closest: 147 / 15 / 39
+S1 union SNV truth_read_support yes / no_truth_spelling_read / no_data: 113 / 88 / 0
+S1 union INDEL / d9 path spells truth / closest: 2277 / 2090 / 187
+S1 union INDEL match exact / with_germline / closest: 2017 / 73 / 187
+S1 union INDEL truth_read_support yes / no_truth_spelling_read / no_data: 1985 / 292 / 0
+S1 read data loci PacBio / ONT / Illumina: 2478 / 1365 / 2478
+S1 all-three-platform INDEL / SNV: 704 / 93
+S1 SNVs with only S1/S2/S4a classes, by category: {'HG008N_absent_HPRC_other': 16, 'other_ambiguous': 5}
+S1 in_bed False: 168
+S1/S2 read-vs-graph PacBio SNV: perfect / read data / truth reads / germline-only majority / majority = graph: 170 / 170 / 93 / 16 / 55
+S1/S2 read-vs-graph PacBio INDEL: perfect / read data / truth reads / germline-only majority / majority = graph: 1363 / 1363 / 1174 / 184 / 1084
+S1/S2 read-vs-graph ONT SNV: perfect / read data / truth reads / germline-only majority / majority = graph: 148 / 148 / 85 / 14 / 59
+S1/S2 read-vs-graph ONT INDEL: perfect / read data / truth reads / germline-only majority / majority = graph: 989 / 989 / 797 / 190 / 724
+S1/S2 read-vs-graph Illumina SNV: perfect / read data / truth reads / germline-only majority / majority = graph: 122 / 122 / 78 / 8 / 51
+S1/S2 read-vs-graph Illumina INDEL: perfect / read data / truth reads / germline-only majority / majority = graph: 1916 / 1916 / 1724 / 160 / 1642
+S2 per_node rows / distinct elements / loci / branch nodes / skip edges: 3368 / 3309 / 2426 / 4409 / 1025
+S2 loci with 1 / 2+ elements / max / none: 1960 / 466 / 14 / 52
+S2 absent SNV loci by subtype: {'del_skip': 17, 'ins_branch': 16, 'mnv_branch': 6, 'replacing_branch': 4, 'snv_branch': 133}
+S2 absent INDEL loci by subtype: {'del_skip': 759, 'ins_branch': 1202, 'mnv_branch': 12, 'replacing_branch': 74, 'snv_branch': 146}
+S2 present SNV loci by subtype: {'snv_branch': 5}
+S2 present INDEL loci by subtype: {'del_skip': 57, 'ins_branch': 48, 'mnv_branch': 1, 'replacing_branch': 3, 'snv_branch': 3}
+S2 absent elements by alone: {'truth': 1760, 'partial': 756, 'germline': 134, 'truth+germline': 14}
+S2 path choice: {'pooled_majority': 222, 'single_path': 2071, 'truth_read_supported:primary': 68, 'truth_read_supported:alternative': 59, 'no_truth_read_support:primary': 45, 'truth_read_supported:primary:tie': 6, 'closest_primary': 4, 'no_truth_read_support:alternative:phase': 2, 'truth_read_supported:alternative:tie': 1}
+S3 normal haps carrying ALT (kind, n haps, category): {('INDEL', 'unresolved', 'other_ambiguous'): 7, ('INDEL', 0, 'HG008N_absent_HPRC_other'): 1935, ('INDEL', 0, 'HG008N_present_rare'): 7, ('INDEL', 0, 'other_ambiguous'): 222, ('INDEL', 1, 'HG008N_present_broad'): 75, ('INDEL', 1, 'HG008N_present_rare'): 23, ('INDEL', 1, 'other_ambiguous'): 7, ('INDEL', 2, 'other_ambiguous'): 1, ('SNV', 'unresolved', 'other_ambiguous'): 3, ('SNV', 0, 'HG008N_absent_HPRC_other'): 150, ('SNV', 0, 'HG008N_present_rare'): 2, ('SNV', 0, 'other_ambiguous'): 43, ('SNV', 1, 'HG008N_present_broad'): 2, ('SNV', 1, 'HG008N_present_rare'): 1}
+S3 present pattern: {'other_hap_only': 100, 'other_hap_only:patient_frame': 9, 'no_event_hap': 1}
+S3 present dipcall identical / tumor all_eq: 110 / 101 of 110
+S3 absent allele class (kind, class): {('SNV', 'SNV_site_deleted_on_event_hap'): 30, ('SNV', 'germline_STR_other_length'): 91, ('INDEL', 'germline_STR_other_length'): 1179, ('INDEL', 'both_REF'): 656, ('INDEL', 'other'): 100, ('SNV', 'both_REF'): 21, ('SNV', 'other'): 8}
+S3 absent tumor verdict: {'novel_other': 383, 'novel_ALT': 1697, 'all_eq_hap1': 1, 'no_change_hom': 1, 'NA': 2, 'no_change_both': 1}
+S3 absent novel_other with T_info novel: 356
+S3 absent loci where a normal hap walks all elements (n, by kind, by allele class) / walks >= 1: 253 {'SNV': 75, 'INDEL': 178} {'SNV_site_deleted_on_event_hap': 21, 'germline_STR_other_length': 212, 'other': 20} / 479
+S3 element rows walked by a normal hap: absent / present: 753 of 2664 / 113 of 119
+S4 median complete HPRC haplotypes: 76.0
+S4 absent SNV median exact / exact (>=1 carrier) / element set / element min: 0.0 / 0.105 / 0.322 / 0.32
+S4 absent SNV sub_class: {'exact_allele': 65, 'element_set_other_allele': 76, 'recombinant_pieces': 9}
+S4 absent SNV no exact carrier: 85
+S4 absent INDEL median exact / exact (>=1 carrier) / element set / element min: 0.167 / 0.177 / 0.193 / 0.198
+S4 absent INDEL sub_class: {'exact_allele': 1789, 'element_set_other_allele': 101, 'recombinant_pieces': 45}
+S4 absent INDEL no exact carrier: 146
+S4 present median exact: 0.315
+S4 absent median exact (INDEL+SNV): 0.159
+S4 absent exact_allele loci / median individuals / single individual: 1854 / 11.0 / 65
+S4 absent exact_allele loci by number of superpopulations: {1: 182, 2: 601, 3: 714, 4: 357}
+S4 rare exact carriers range / present_rare with 0: 0-17 / 4
+S4 CHM13 exact absent / present: 298 / 34
+S4 per haplotype absent SNV exact: median / min / max / median fraction of complete: 7.0 / (3, 'HG01071#1') / (12, 'HG03486#1') / 0.073
+S4 per haplotype absent INDEL exact: median / min / max / median fraction of complete: 315.0 / (244, 'HG01123#2') / (366, 'HG01891#2') / 0.2
+S4 population AFR: codes / haplotypes / absent INDEL / absent SNV / present_broad INDEL: ACB/ASW/ESN/GWD/MKK/MSL/YRI / 14/2/2/16/2/8/2 / 0.200-0.232 / 0.052-0.112 / 0.316-0.455
+S4 population AMR: codes / haplotypes / absent INDEL / absent SNV / present_broad INDEL: CLM/PEL/PUR / 8/8/16 / 0.168-0.176 / 0.050-0.062 / 0.444-0.505
+S4 population EAS: codes / haplotypes / absent INDEL / absent SNV / present_broad INDEL: CHS/KHV / 6/2 / 0.171-0.174 / 0.053-0.073 / 0.440-0.458
+S4 population SAS: codes / haplotypes / absent INDEL / absent SNV / present_broad INDEL: PJL / 2 / 0.179-0.179 / 0.058-0.058 / 0.426-0.426
+S4 population reference: codes / haplotypes / absent INDEL / absent SNV / present_broad INDEL: CHM13 / 1 / 0.151-0.151 / 0.054-0.054 / 0.360-0.360
+S4 O/E exact HG008N_present_broad: AFR 0.916 (z -5.9) AMR 1.098 (z +5.3) EAS 1.057 (z +1.3) SAS 1.007 (z +0.1)
+S4 O/E exact HG008N_present_rare: AFR 0.912 (z -1.7) AMR 1.073 (z +1.1) EAS 1.123 (z +0.7) SAS 1.296 (z +0.9)
+S4 O/E exact HG008N_absent_HPRC_other: AFR 1.107 (z +21.4) AMR 0.891 (z -16.7) EAS 0.885 (z -7.4) SAS 0.917 (z -2.5)
+S4 VCF identical carrier sets INDEL d9 / full: 1667 / 1688
+S5 chr1-22 PacBio SNV: 2 / 3 / 129 / 36 (170)
+S5 chr1-22 PacBio INDEL: 41 / 17 / 1157 / 148 (1363)
+S5 chr1-22 ONT SNV: 2 / 3 / 117 / 26 (148)
+S5 chr1-22 ONT INDEL: 26 / 10 / 806 / 147 (989)
+S5 chr1-22 Illumina SNV: 2 / 2 / 97 / 21 (122)
+S5 chr1-22 Illumina INDEL: 68 / 28 / 1682 / 138 (1916)
+S5 chr1-22 union SNV: 2 / 3 / 150 / 46 (201)
+S5 chr1-22 union INDEL: 75 / 30 / 1935 / 237 (2277)
+S5 chr1 BED PacBio SNV: 0 / 0 / 11 / 3 (14)
+S5 chr1 BED PacBio INDEL: 5 / 1 / 86 / 10 (102)
+S5 chr1 BED ONT SNV: 0 / 0 / 12 / 2 (14)
+S5 chr1 BED ONT INDEL: 2 / 1 / 60 / 11 (74)
+S5 chr1 BED Illumina SNV: 0 / 0 / 10 / 2 (12)
+S5 chr1 BED Illumina INDEL: 8 / 2 / 117 / 9 (136)
+S5 chr1 BED union SNV: 0 / 0 / 12 / 5 (17)
+S5 chr1 BED union INDEL: 8 / 2 / 140 / 19 (169)
+S5 chr2-22 PacBio SNV: 2 / 3 / 118 / 33 (156)
+S5 chr2-22 PacBio INDEL: 36 / 16 / 1064 / 138 (1254)
+S5 chr2-22 ONT SNV: 2 / 3 / 105 / 24 (134)
+S5 chr2-22 ONT INDEL: 24 / 9 / 740 / 136 (909)
+S5 chr2-22 Illumina SNV: 2 / 2 / 87 / 19 (110)
+S5 chr2-22 Illumina INDEL: 59 / 26 / 1555 / 128 (1768)
+S5 chr2-22 union SNV: 2 / 3 / 138 / 41 (184)
+S5 chr2-22 union INDEL: 66 / 28 / 1781 / 217 (2092)
+S5 nogermline BED PacBio SNV: 2 / 2 / 55 / 2 (61)
+S5 nogermline BED PacBio INDEL: 16 / 4 / 294 / 3 (317)
+S5 nogermline BED ONT SNV: 2 / 2 / 49 / 3 (56)
+S5 nogermline BED ONT INDEL: 9 / 1 / 198 / 3 (211)
+S5 nogermline BED Illumina SNV: 2 / 1 / 49 / 1 (53)
+S5 nogermline BED Illumina INDEL: 42 / 13 / 803 / 4 (862)
+S5 nogermline BED union SNV: 2 / 2 / 64 / 3 (71)
+S5 nogermline BED union INDEL: 43 / 14 / 840 / 6 (903)
+S5 totals absent / present / ambiguous: 2085 (84.1%) / 110 (4.4%) / 283 (11.4%)
+S5 ambiguous sub_reason: {'closest:read_allele_not_truth': 198, 'closest:read_allele_nearer_truth': 24, 'no_HPRC_carrier': 14, 'with_germline:germline_allele_off_event_hap': 20, 'no_HPRC_carrier:CHM13_carries': 6, 'HG008N_hap_unresolved:array_NA': 8, 'closest_no_read_element': 4, 'evidence_conflict:germline_ALT_vs_truth_INFO_event_novel': 6, 'evidence_conflict:ALT_on_both_normal_haps': 1, 'evidence_conflict:ALT_on_normal_event_hap': 1, 'HG008N_hap_unresolved:conflict': 1}
+S5 PoN HG008N_absent_HPRC_other SNV n / repo / 1e-3 / 0.01 / 0.05: 150 / 100.0 / 100.0 / 96.0 / 74.7
+S5 PoN not absorbed (other HG008T truths) SNV n / repo / 1e-3 / 0.01 / 0.05: 8489 / 8.4 / 5.0 / 2.7 / 1.3
+S5 PoN HG008N_absent_HPRC_other INDEL n / repo / 1e-3 / 0.01 / 0.05: 1935 / 99.0 / 98.7 / 93.5 / 69.9
+S5 PoN not absorbed (other HG008T truths) INDEL n / repo / 1e-3 / 0.01 / 0.05: 6219 / 78.2 / 74.1 / 45.3 / 12.0
+S5 mechanism absent INDEL HP>=7 1-unit / STR 1-unit (cols: present_broad SNV, INDEL, present_rare SNV, INDEL, absent SNV, INDEL, ambiguous SNV, INDEL): 0 | 67 | 0 | 21 | 53 | 1612 | 32 | 131 | 0 | 7 | 0 | 3 | 9 | 209 | 7 | 51
+S5 mechanism absent SNV rows: repeat substitution / CpG / non-repeat SNV / multi-unit / no event: 1 | 0 | 3 | 3 | 75 | 67 | 5 | 34 | 1 | 0 | 0 | 0 | 6 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 0 | 1 | 0 | 1 | 2 | 35 | 0 | 9 | 0 | 0 | 0 | 1 | 4 | 11 | 1 | 9
