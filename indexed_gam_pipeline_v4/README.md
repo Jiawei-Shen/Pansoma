@@ -12,10 +12,10 @@ record decoder); `orchestrate` runs a whole genome on one Slurm node as many sma
 with a byte-verified per-chromosome merge and truth labels (`tensor_postprocessing`).
 
 ```
-runtime  6,250 lines of Python in 18 files + fastdecode.cpp (659 lines); frozen per run: 22 files (those 19,
-         the compiled decoder and the two READMEs), 2.64 MB, 2.15 MB of it the compiled decoder
+runtime  6,498 lines of Python in 19 files + fastdecode.cpp (659 lines); frozen per run: 23 files (those 20,
+         the compiled decoder and the two READMEs), 2.66 MB, 2.15 MB of it the compiled decoder
 tools    1,362 lines of Python in 7 files + gbz_graph_index.cpp (75 lines); not frozen
-tests    6,581 lines of Python in 21 files (+ golden_hashes.json), 187 tests, ~100 s on a quiet node
+tests    7,093 lines of Python in 23 files (+ golden_hashes.json), 199 tests, ~120 s on a quiet node
 ```
 
 ---
@@ -1106,7 +1106,7 @@ pass are the native graph-index builder test and the two vg cases of `test_prep_
 need the environment variables of the third command; the second pass also skips the five golden
 tests.
 
-187 tests in 17 test modules cover: GAI reading, cache/scan equivalence (limits 1, 2048 and 64 MiB),
+199 tests in 19 test modules cover: GAI reading, cache/scan equivalence (limits 1, 2048 and 64 MiB),
 refusal of cache 0, of a GAI without the `'GAI!'` magic and of an unknown GAI format number, bin
 arrays against the per-bin scan, the MAPQ-filtered cache, the capped fetch (each node its smallest
 record digests whatever else is asked for, the reader's key equal to the builder's digest); the BGZF
@@ -1118,7 +1118,9 @@ across blocks, PARAMS_JSON and empty groups, vg's bin rule, sorted and unsorted 
 out-of-order annotations and identical records: 500 random batch sequences over read cap, MAPQ floor,
 cache size and reader (index file, in memory, GAI walk), GAI offsets in either form, refused GAI runs,
 stale, truncated and missing indexes, corrupt blocks and bad GAIs failing as before, `check` finding a
-damaged index, whole builds identical with every reader, prepare stamping the index; capped
+damaged index, whole builds identical with every reader, damaged
+headers falling back, the index opened at the first fetch, concurrent builds and leftover temporaries, prepare
+recording the index (not an input of `verify`); capped
 builds (nodes within the cap unchanged, a capped node equal to a GAM of its capped records only,
 independent of the batching, a collapsed repeat decoding one capped set, the batch limit on capped
 records) and capped nodes listed through a whole run; auto batches (the plan, splitting over the
@@ -1136,8 +1138,10 @@ cap-aware audit, early-AF exactness, multi-allelic sites and allele accounting;
 selection and fallbacks; the task queue, cost scan, partition, `prepare → run → resume`, the
 parallel merge (bytes independent of the worker count, the read cap a shared key) and labels (every
 rule, the AF floors per kind, partial matches, off-reference anchors, the `relabel.sh` arguments),
-the package guard, the native refusal at prepare, a subprocess import of the frozen source, a
-standalone `finalize` after an interrupted one, finalize labels with the AF floors frozen at prepare
+the package guard, the native refusal at prepare, a subprocess import of the frozen source, a standalone `finalize` after an interrupted one and after a failed
+recall scan, the parallel merge verification (spot picks and errors against the serial verification), the
+parallel recall scan (byte ranges, read sizes and workers against the serial scan, its serial fallback,
+`recall_scan.label_run` against `truth_labels.label_run`), finalize labels with the AF floors frozen at prepare
 (equal to `label` with the same floors); the earlier format names (a graph index with the suffixed
 schema and metric opens, a reference-path directory with `version` opens, `label` and the merge's
 refusal work on a merged set with the suffixed layout); `compare_runs` itself; the once-per-graph and once-per-GAM tools (`graph_prep audit` recounting every node
