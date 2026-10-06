@@ -7,7 +7,7 @@
 #SBATCH -p general,gpu
 #SBATCH --exclude=tsingtao
 #SBATCH -c 8
-#SBATCH --mem=16G
+#SBATCH --mem=4G
 #SBATCH -t 1-00:00:00
 set -euo pipefail
 S=${BASH_SOURCE[0]}  # sbatch runs a copy of this file; the submitted path is in the job record (always absolute)

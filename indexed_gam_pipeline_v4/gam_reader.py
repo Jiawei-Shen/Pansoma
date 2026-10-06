@@ -477,14 +477,17 @@ NO_NODES = frozenset()
 
 class IndexedGam:
     """Fetch complete alignments touching a node set: the GAI walk with a bounded LRU group cache, or the
-    record path when the GAM has a usable record index (gam_record_index.open_for; PANSOMA_GAM_RECORD_INDEX).
+    record path when the GAM has a usable record index (gam_record_index.open_for; PANSOMA_GAM_RECORD_INDEX,
+    read when the reader is made and applied at its first fetch: readers that never fetch, such as discovery
+    and gam_prep check, neither load nor require an index).
 
     The cache retains decoded-once groups (raw protobuf bytes plus a node -> record
     posting list), so consecutive node batches that hit the same BGZF groups do not
     re-decode every record. The byte budget covers the retained group data only.
     With `min_mapq`, records with MAPQ <= min_mapq are left out of the postings (and their
     bytes out of the cache) when a group is first read: fetch never yields or re-parses them.
-    cache_stats also holds the record index state (mode, record_index, reason) and its counters.
+    After the first fetch cache_stats also holds the record index state (mode, record_index, reason) and its
+    counters.
     """
 
     def __init__(self, gam, index=None, cache_bytes=64 * 1024 * 1024, min_mapq=None):
@@ -502,17 +505,22 @@ class IndexedGam:
                                 peak_accounted_bytes=0, limit_bytes=cache_bytes)
         self.bins = []
         self._load_index(stat.st_size)
-        self._open_record_index()
+        from .gam_record_index import environment_mode
+        self._records, self._record_mode, self._record_state = None, environment_mode(), None
 
     def _load_index(self, gam_size):
         self.version, self.bins, sha256 = read_gai(self.index, gam_size)
         stat = self.index.stat()
         self._index_stamp = (stat.st_size, stat.st_mtime_ns, sha256)
 
-    def _open_record_index(self):
+    def open_record_index(self):
+        """Open the record index by the reader's mode (gam_record_index.open_for), once; the first fetch does."""
+        if self._record_state is not None:
+            return
         from . import gam_record_index
         self._records, state = gam_record_index.open_for(self.gam, self._source_stamp, self.index,
-                                                         self._index_stamp, self.bins)
+                                                         self._index_stamp, self.bins, self._record_mode)
+        self._record_state = state
         self.cache_stats.update(state, record_fetches=0, fallback_fetches=0, selected_records=0,
                                 record_bytes_read=0, preads=0)
         if self._records is not None or state["reason"] or state["mode"] != "auto":  # not: auto, no <gam>.gri
@@ -669,6 +677,7 @@ class IndexedGam:
         `wanted`, in file order: hits = those nodes. With a record index whose GAI map knows every run end
         point, the record path yields one group of the selected records (`_record_hits`); otherwise (no
         index, or bins edited after opening) the GAI walk reads the groups (`_walk_hits`)."""
+        self.open_record_index()
         runs = self._ordinal_runs(ranges)
         if runs is not None:
             self.cache_stats["record_fetches"] += 1

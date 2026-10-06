@@ -148,18 +148,22 @@ def native_decoder_status(decoder):
     return dict(available=False, reason=info["reason"])
 
 
-def record_index_input(gam, index):
-    """{'record_index': stamp} when the GAM has a record index (<gam>.gri, gam_record_index), else {}; one that
-    does not match the GAM, its GAI or vg_pb2.py fails prepare (the tasks would not use it)."""
+def record_index_status(gam, index):
+    """Stamp and trailer sha256 of the GAM's record index (<gam>.gri, gam_record_index), None without one; one
+    that does not match the GAM, its GAI or vg_pb2.py, or whose content is damaged, fails prepare (the tasks
+    would not use it). Provenance only, not an input: the tasks check the index when they open it, and the
+    output is the same with or without it, so verify ignores it."""
     from .gam_record_index import gri_path, validate
     path = gri_path(gam)
     if not path.exists():
-        return {}
-    problems = validate(path, gam, index)
+        return None
+    problems = validate(path, gam, index, content=True)
     if problems:
         raise ValueError(f"{path} is stale ({'; '.join(problems)}): rebuild it (python -m {PACKAGE}.gam_record_index "
                          f"build) or move it aside")
-    return dict(record_index=stamp(path))
+    with open(path, "rb") as stream:
+        stream.seek(-32, os.SEEK_END)
+        return dict(stamp(path), sha256=stream.read(32).hex())
 
 
 def read_config(root):
@@ -175,7 +179,7 @@ def prepare(args):
     postprocess = postprocess_options(args)
     native_decoder = native_decoder_status(args.decoder)
     index = args.index or str(args.gam) + ".gai"
-    record_index = record_index_input(args.gam, index)
+    record_index = record_index_status(args.gam, index)
     root = Path(args.root).resolve()
     root.mkdir(parents=True, exist_ok=False)
     if not 1 <= args.processes <= args.tasks:
@@ -213,11 +217,12 @@ def prepare(args):
         package=PACKAGE,
         python=sys.executable,
         tensors=str(tensors),
-        inputs=dict(gam=stamp(args.gam), index=stamp(index), **record_index,
+        inputs=dict(gam=stamp(args.gam), index=stamp(index),
                     graph_index=dict(stamp(args.graph_index), metadata=graph_metadata),
                     nodes=dict(stamp(args.nodes), sha256=sha256_file(args.nodes), count=int(selection["nodes_in"])),
                     **({"chr_index": stamp(args.chr_index)} if args.chr_index else {}),
                     **postprocess.pop("inputs")),
+        record_index=record_index,
         chromosome_selection=selection,
         source_sha256={str(p.relative_to(root)): sha256_file(p) for p in sorted((root / "source").rglob("*")) if p.is_file()},
         tasks=args.tasks, processes=args.processes, schedule=schedule, parts=parts,

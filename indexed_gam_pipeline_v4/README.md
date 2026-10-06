@@ -337,7 +337,7 @@ module included, so compile *before* `prepare`. Portability report of the module
 build --gam GAM [--index GAI] [--processes 8] [--force]    write GAM.gri (never over an existing one)
 check --gam GAM [--index GAI] [--sample 2000] [--groups 8]  verify it; exit 1 on a problem
 info  --gam GAM                                             print its header
-sbatch -J NAME -o LOG $P/tools/jobs/build_record_index.sh GAM [GAI]     build + check (8 CPUs, 16G)
+sbatch -J NAME -o LOG $P/tools/jobs/build_record_index.sh GAM [GAI]     build + check (8 CPUs, 4G)
 ```
 
 A long-read GAM group holds 1,000 records (14–37 MB compressed), and vg's GAI files a group under the
@@ -352,17 +352,22 @@ them with the same code: the record path. Batches are still priced and split by 
 tensors and every output are unchanged; only the masked `gam_query` counters (`groups`,
 `decoded_alignments`) and `gam_group_cache` differ.
 
-**Which path a reader takes** (`PANSOMA_GAM_RECORD_INDEX`): `auto` (default) uses `<GAM>.gri` when its
-stamps match the GAM (size, mtime), the GAI (size, mtime, SHA-256) and `vg_pb2.py` (SHA-256), else the
-GAI walk; `off` always the GAI walk; `require` raises when the index is missing or stale; `memory` scans
-the same arrays when the reader opens (tests, and the golden check through the record path; it falls back
-like `auto` when the scan refuses the GAM). A fetch whose merged runs do not all map to group ordinals
+**Which path a reader takes** (`PANSOMA_GAM_RECORD_INDEX`, read when the reader is made and applied at its
+first fetch, so readers that never fetch, such as discovery and `gam_prep check`, neither load nor require
+an index): `auto` (default) uses `<GAM>.gri` when its stamps match the GAM (size, mtime), the GAI (size,
+mtime, SHA-256) and `vg_pb2.py` (SHA-256), else the GAI walk (a damaged header too); `off` always the GAI
+walk; `require` raises when the index is missing, stale or unreadable; `memory` scans the same arrays at
+the first fetch (tests, and the golden check through the record path; it falls back like `auto` when the
+scan refuses the GAM). A fetch whose merged runs do not all map to group ordinals
 (bins edited after opening) takes the GAI walk. A reader prints `GAM reader: record index <path>` or
 `GAM reader: GAI walk (…)` to stderr (the task log; not under `auto` without a `<GAM>.gri`) and keeps
 `mode`, `record_index`, `reason` (why an index there is not used) and the counters `record_fetches`,
 `fallback_fetches`, `selected_records`, `record_bytes_read`, `preads` in its `cache_stats` (the
-manifests' `gam_group_cache`). `orchestrate prepare` stamps an existing index into
-`config.inputs.record_index`, so `verify` refuses a run whose index changed.
+manifests' `gam_group_cache`). `orchestrate prepare` refuses an index that is stale or whose trailer
+SHA-256 does not match its content, and records an existing one in `config.record_index` (stamp and
+trailer SHA-256). That is provenance, not an input: the output is the same with or without the index and
+the tasks check it when they open it, so `verify` ignores it. An index moved aside, rebuilt, or built after
+`prepare` does not stop a run or `--resume`; under `auto` the tasks use whatever valid index is there.
 
 **Build.** One pass over the GAM in 4 × `--processes` segments cut at GAI run starts; every record is
 parsed with the package's `vg_pb2`. It refuses (exit 1, nothing written) unless every BGZF block inflates
@@ -371,7 +376,10 @@ and every GAI run starts at a group start (in any form of its virtual offset) an
 at a form of EOF after the last group: the runs the GAI walk reads without an error. For a GAM it refuses,
 the GAI walk reads and raises exactly as without an index. A GAM with less than 2 KB compressed per record
 (short reads, whose GAI walk reads less than twice the records' bytes) is refused unless `--force`. The
-index is written to `<GAM>.gri.tmp` (created exclusively), fsynced and renamed.
+index is written to `<GAM>.gri.tmp.<host>.<pid>` (created exclusively), fsynced and hard-linked to
+`<GAM>.gri`, which fails when another build published one first: a build never replaces an index. The
+temporary is removed on errors and on SIGTERM (scancel, time limit); a build killed with SIGKILL leaves it
+behind, and it can be deleted (it never blocks a later build).
 
 **File** (little-endian, sections 64-byte aligned): `PGRI\0\1\r\n`, a JSON header (format
 `pansoma-gam-record-index-1`, the stamps, counts, `W`, `sorted_by_lo1`, `checkpoint_stride`, the section
@@ -564,7 +572,7 @@ $PY -m $P.tools.compare_runs A B [--mask DOTTED.KEY ...] [--report FILE]
     disks (`TmpDisk=0`), so concurrent sorts get different nodes (`sbatch -w NODE`).
   * `build_record_index.sh GAM [GAI]`: `gam_record_index build --processes $SLURM_CPUS_PER_TASK`, then
     `check`; it never replaces an existing `<GAM>.gri`; `FORCE=1` indexes a short-read GAM too. 8 CPUs,
-    `--mem=16G`, 1 day.
+    `--mem=4G` (peak 2.6-2.7 GB for 12.5-19.7 M ONT records), 1 day.
   * `relabel.sh`: section 6; the reference path is `$REFERENCE_PATH`, else the one the set's current
     labels used (`reference_path` of `TENSORS/SNV/labels.manifest.json`); 1 CPU, `--mem=19G` (label
     peak 15.7 GiB, COLO829T), 6 h.
@@ -704,13 +712,14 @@ tasks, ONT-UL 4,380 (63.9 M autosomal targets).
    contiguous, near-equal node lists (`parts/nodes_NNNN.txt`) and, with `--node-stats`, records
    each task's `predicted_cost` (Σ discovery `not_perfect` over its nodes; reading a 6 GB
    node_stats.json takes ~1 min and ~7 GB);
-4. fingerprints every input (GAM, GAI, the record index `<GAM>.gri` when there is one, graph index,
-   node list, chr index, reference path, truth files; a record index that no longer matches the GAM,
-   the GAI or `vg_pb2.py` fails prepare) and writes `config.json` and `run.sh` (`cd <root>/source && exec <python> -m
+4. fingerprints every input (GAM, GAI, graph index, node list, chr index, reference path, truth files),
+   records the record index `<GAM>.gri` when there is one (`config.record_index`, provenance only; one
+   that no longer matches the GAM, the GAI or `vg_pb2.py`, or whose trailer does not match, fails
+   prepare) and writes `config.json` and `run.sh` (`cd <root>/source && exec <python> -m
    indexed_gam_pipeline_v4.orchestrate run --root <root> "$@"`). It prints a summary including
    `native_decoder`.
 
-`config.json` holds `created`, `package` (the guard below), `python`, `tensors`, `inputs`,
+`config.json` holds `created`, `package` (the guard below), `python`, `tensors`, `inputs`, `record_index`,
 `chromosome_selection`, `source_sha256`, `tasks`, `processes`, `schedule`, `parts`, `builder`
 (every builder option, passed explicitly to each task, so a run never depends on the CLI defaults of
 the code that executes it), `native_decoder` (`available`, `reason`), `variant_outputs`

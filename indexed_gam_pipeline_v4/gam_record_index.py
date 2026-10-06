@@ -37,8 +37,9 @@ write an index (exit 1, nothing written) unless every block inflates with matchi
 record parses, the segment walks meet, and every GAI run starts at a group start and ends at a group start
 or EOF after it: exactly the GAI runs the GAI walk reads without an error, so the record path selects the
 same groups. IndexedGam uses <gam>.gri when its stamps match the GAM (size, mtime_ns), the GAI (size,
-mtime_ns, sha256) and vg_pb2.py (sha256); PANSOMA_GAM_RECORD_INDEX: auto (default; else the GAI walk), off,
-require (a missing or stale index raises), memory (the arrays scanned when the reader opens; tests).
+mtime_ns, sha256) and vg_pb2.py (sha256); PANSOMA_GAM_RECORD_INDEX (read when the reader is made, applied at
+its first fetch): auto (default; else the GAI walk), off, require (a missing or stale index raises), memory
+(the arrays scanned at the first fetch; tests).
 """
 import argparse
 from array import array
@@ -48,6 +49,8 @@ import json
 import multiprocessing
 import os
 from pathlib import Path
+import signal
+import socket
 import sys
 import time
 
@@ -387,7 +390,8 @@ def _section_bytes(fd, offset, count, dtype):
 
 def write(path, header, sections):
     """MAGIC, header length, header JSON (offsets of the 64-byte aligned sections filled in), sections, sha256
-    trailer: into <path>.tmp (created exclusively), fsynced, then renamed to `path`."""
+    trailer: into <path>.tmp.<host>.<pid> (created exclusively), fsynced, then hard-linked to `path`, which
+    fails when `path` exists (another build finished first): never over an existing index."""
     length = 0
     while True:
         offset, table = _align(16 + length), {}
@@ -399,7 +403,7 @@ def write(path, header, sections):
         if len(text) <= length:
             break
         length = len(text) + ALIGN
-    temporary = Path(str(path) + ".tmp")
+    temporary = Path(f"{path}.tmp.{socket.gethostname()}.{os.getpid()}")
     fd = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o644)
     try:
         with os.fdopen(fd, "wb") as stream:
@@ -419,29 +423,33 @@ def write(path, header, sections):
             stream.write(digest.digest())
             stream.flush()
             os.fsync(stream.fileno())
-        temporary.replace(path)
-    except BaseException:
+        try:
+            os.link(temporary, path)
+        except FileExistsError:
+            raise ValueError(f"{path} appeared while this build ran (another build?); it is left as it is") from None
+    finally:
         temporary.unlink(missing_ok=True)
-        raise
 
 
 def read_header(fd):
     head = os.pread(fd, 16, 0)
     if len(head) != 16 or head[:8] != MAGIC:
         raise ValueError("not a GAM record index (no PGRI magic)")
-    length = int.from_bytes(head[8:], "little")
-    text = os.pread(fd, length, 16)
+    size, length = os.fstat(fd).st_size, int.from_bytes(head[8:], "little")
+    text = os.pread(fd, length, 16) if length <= size - 16 else b""
     if len(text) != length:
         raise ValueError("record index truncated")
     header = json.loads(text)
-    if header.get("format") != FORMAT:
-        raise ValueError(f"unknown record index format {header.get('format')!r}")
-    if os.fstat(fd).st_size != header["trailer_offset"] + 32:
+    if not isinstance(header, dict) or header.get("format") != FORMAT:
+        raise ValueError("not a pansoma-gam-record-index-1 header")
+    if size != header["trailer_offset"] + 32:
         raise ValueError("record index truncated or overlong")
     for name, spec in header["sections"].items():
         if np.lib.format.descr_to_dtype([tuple(f) for f in spec["dtype"]] if isinstance(spec["dtype"], list)
                                         else spec["dtype"]) != DTYPES[name]:
             raise ValueError(f"unexpected dtype of section {name}")
+        if not 0 <= spec["offset"] <= spec["offset"] + spec["count"] * DTYPES[name].itemsize <= header["trailer_offset"]:
+            raise ValueError(f"section {name} lies outside the file")
     return header
 
 
@@ -471,6 +479,21 @@ def load(path):
         raise
 
 
+def trailer_problems(path):
+    """[] when the sha256 of the bytes before the trailer equals the trailer (one sequential read), else why."""
+    digest = hashlib.sha256()
+    with Path(path).open("rb") as stream:
+        left = os.fstat(stream.fileno()).st_size - 32
+        while left > 0:
+            chunk = stream.read(min(left, 64 << 20))
+            if not chunk:
+                break
+            digest.update(chunk)
+            left -= len(chunk)
+        trailer = stream.read(32)
+    return [] if trailer == digest.digest() else ["trailer sha256 differs (the file is damaged)"]
+
+
 def stale(header, gam_stamp, index_stamp):
     """Why an index header does not describe this GAM (size, mtime_ns), GAI (size, mtime_ns, sha256) and
     vg_pb2.py; [] when it does."""
@@ -490,26 +513,33 @@ def current_stamps(gam, index):
     return _file_stamp(gam), (*_file_stamp(index), hashlib.sha256(raw).hexdigest())
 
 
-def validate(path, gam, index=None):
-    """Problems of <gam>.gri `path` against the GAM and GAI as they are now ([] = usable)."""
+def validate(path, gam, index=None, content=False):
+    """Problems of <gam>.gri `path` against the GAM and GAI as they are now ([] = usable); with `content` also
+    its trailer."""
     gam_stamp, index_stamp = current_stamps(gam, index or str(gam) + ".gai")
     fd = os.open(str(path), os.O_RDONLY)
     try:
-        return stale(read_header(fd), gam_stamp, index_stamp)
-    except ValueError as error:
-        return [str(error)]
+        problems = stale(read_header(fd), gam_stamp, index_stamp)
+    except (ValueError, KeyError, TypeError) as error:
+        return [f"unreadable ({error})"]
     finally:
         os.close(fd)
+    return problems + (trailer_problems(path) if content else [])
 
 
-def open_for(gam, gam_stamp, index, index_stamp, bins):
-    """(RecordIndex or None, {mode, record_index, reason}) of IndexedGam, by PANSOMA_GAM_RECORD_INDEX:
-    auto: <gam>.gri when it matches the GAM, the GAI and vg_pb2.py, else None (the GAI walk); off: None;
-    require: the matching <gam>.gri, else ValueError; memory: the same arrays from a scan now (None when the
-    scan refuses the GAM). reason: why an index there is not used (None when none is there)."""
+def environment_mode():
+    """PANSOMA_GAM_RECORD_INDEX (default auto); ValueError on any other value."""
     mode = os.environ.get(ENVIRONMENT) or "auto"
     if mode not in MODES:
         raise ValueError(f"{ENVIRONMENT} must be one of {', '.join(MODES)}, not {mode!r}")
+    return mode
+
+
+def open_for(gam, gam_stamp, index, index_stamp, bins, mode):
+    """(RecordIndex or None, {mode, record_index, reason}) of IndexedGam, by `mode` (environment_mode):
+    auto: <gam>.gri when it matches the GAM, the GAI and vg_pb2.py, else None (the GAI walk); off: None;
+    require: the matching <gam>.gri, else ValueError; memory: the same arrays from a scan now (None when the
+    scan refuses the GAM). reason: why an index there is not used (None when none is there)."""
     if mode == "off":
         return None, dict(mode=mode, record_index=None, reason=None)
     if mode == "memory":
@@ -526,8 +556,8 @@ def open_for(gam, gam_stamp, index, index_stamp, bins):
     try:
         records = load(path)
         problems = stale(records.header, gam_stamp, index_stamp)
-    except (OSError, ValueError, KeyError) as error:
-        problems = [f"unreadable ({error})"]
+    except Exception as error:  # any damage: auto falls back, require raises below
+        problems = [f"unreadable ({type(error).__name__}: {error})"]
     if not problems:
         return records, dict(mode=mode, record_index=str(path), reason=None)
     if records is not None:
@@ -603,18 +633,7 @@ def check(gam, index=None, sample=2000, groups=8, seed=0):
     started = time.perf_counter()
     gam, index = Path(gam), Path(index or str(gam) + ".gai")
     path = gri_path(gam)
-    digest = hashlib.sha256()
-    with path.open("rb") as stream:
-        size = os.fstat(stream.fileno()).st_size
-        left = size - 32
-        while left > 0:
-            chunk = stream.read(min(left, 64 << 20))
-            if not chunk:
-                break
-            digest.update(chunk)
-            left -= len(chunk)
-        trailer = stream.read(32)
-    problems = [] if trailer == digest.digest() else ["trailer sha256 differs (the file is damaged)"]
+    size, problems = path.stat().st_size, trailer_problems(path)
     fd = os.open(str(path), os.O_RDONLY)
     try:
         header = read_header(fd)
@@ -716,6 +735,7 @@ def make_parser():
 def main(argv=None):
     parser = make_parser()
     args = parser.parse_args(argv)
+    signal.signal(signal.SIGTERM, lambda *_: sys.exit(143))  # scancel / time limit: remove the temporary first
     try:
         if args.command == "build":
             result = build(args.gam, args.index, args.processes, args.force)

@@ -217,7 +217,9 @@ def outcome(reader, nodes, cap, method="capped"):
 def opened(path, mode, **options):
     with patch.dict(os.environ, {ENVIRONMENT: mode}), redirect_stdout(io.StringIO()), \
             patch("sys.stderr", io.StringIO()):
-        return IndexedGam(path, **options)
+        reader = IndexedGam(path, **options)
+        reader.open_record_index()  # as the first fetch does
+        return reader
 
 
 def quiet_build(path, **options):
@@ -458,6 +460,60 @@ class RefusalAndErrorTest(unittest.TestCase):
             self.assertIn("vg_pb2.py differs", opened(world.path, "auto").cache_stats["reason"])
         with patch.dict(os.environ, {ENVIRONMENT: "fast"}), self.assertRaisesRegex(ValueError, "must be one of"):
             IndexedGam(world.path)
+        os.unlink(index)
+        with patch.dict(os.environ, {ENVIRONMENT: "require"}):
+            reader = IndexedGam(world.path)  # a reader that never fetches (discovery, gam_prep check) needs none
+        self.assertNotIn("mode", reader.cache_stats)
+        with self.assertRaisesRegex(ValueError, "require, but there is no"):
+            list(reader.fetch(world.nodes[:3]))
+
+    def test_damaged_headers_fall_back_under_auto(self):
+        world = self.world("headers")
+        quiet_build(world.path)
+        index = gam_record_index.gri_path(world.path)
+        data = index.read_bytes()
+        length = int.from_bytes(data[8:16], "little")
+        header = json.loads(data[16:16 + length])
+        damaged = {"a list": data[:16] + b"[]".ljust(length) + data[16 + length:],
+                   "a huge header length": data[:8] + (1 << 62).to_bytes(8, "little") + data[16:]}
+        for name, count in (("a huge section count", 1 << 61), ("a section past the trailer", 10 ** 6)):
+            edited = json.loads(json.dumps(header))
+            edited["sections"]["groups"]["count"] = count
+            text = json.dumps(edited, indent=1).encode()
+            self.assertLessEqual(len(text), length)
+            damaged[name] = data[:16] + text.ljust(length) + data[16 + length:]
+        for name, content in damaged.items():
+            index.write_bytes(content)
+            reader = opened(world.path, "auto")
+            self.assertIsNone(reader.cache_stats["record_index"], name)
+            self.assertIn("unreadable", reader.cache_stats["reason"], name)
+            with self.assertRaisesRegex(ValueError, "require, but .*unreadable", msg=name):
+                opened(world.path, "require")
+        index.write_bytes(data)
+        self.assertEqual(opened(world.path, "require").cache_stats["record_index"], str(index))
+
+    def test_builds_never_replace_an_index_nor_trip_over_a_leftover_temporary(self):
+        world = self.world("publish")
+        index = gam_record_index.gri_path(world.path)
+        leftover = Path(f"{index}.tmp.otherhost.1")  # a build killed while it wrote
+        leftover.write_bytes(b"partial")
+        quiet_build(world.path)
+        self.assertEqual(gam_record_index.check(world.path, sample=20, groups=2)["problems"], [])
+        self.assertEqual(sorted(p.name for p in index.parent.glob(index.name + ".tmp*")), [leftover.name])
+        first = index.stat()
+        write = gam_record_index.write
+
+        def finished_first(path, header, sections):  # a concurrent build published while this one scanned
+            os.link(leftover, index)
+            write(path, header, sections)
+
+        index.unlink()
+        with patch.object(gam_record_index, "write", finished_first), \
+                self.assertRaisesRegex(ValueError, "appeared while this build ran"):
+            quiet_build(world.path)
+        self.assertEqual(index.read_bytes(), b"partial")  # the other build's file stays
+        self.assertEqual(sorted(p.name for p in index.parent.glob(index.name + ".tmp*")), [leftover.name])
+        self.assertNotEqual(first.st_ino, index.stat().st_ino)
 
     def test_corrupt_blocks_are_refused_and_raise_as_before(self):
         world = self.world("corrupt")
@@ -541,15 +597,29 @@ class PrepareTest(unittest.TestCase):
                     orchestrate.main(argv)
                 return json.loads((root / name / "config.json").read_text())
 
-            self.assertNotIn("record_index", prepare("without")["inputs"])
+            self.assertIsNone(prepare("without")["record_index"])
             quiet_build(world.path)
             config = prepare("with")
-            self.assertEqual(config["inputs"]["record_index"]["path"], str(gam_record_index.gri_path(world.path)))
+            index = gam_record_index.gri_path(world.path)
+            self.assertEqual(config["record_index"]["path"], str(index))
+            self.assertEqual(config["record_index"]["sha256"], index.read_bytes()[-32:].hex())
+            self.assertNotIn("record_index", config["inputs"])
             self.assertTrue((root / "with" / "source" / orchestrate.PACKAGE / "gam_record_index.py").exists())
+            data = index.read_bytes()
+            os.rename(index, str(index) + ".aside")  # a cache, not an input: verify does not need it
+            orchestrate.verify(root / "with", config)
+            os.rename(str(index) + ".aside", index)
+            damaged = bytearray(data)
+            damaged[config["record_index"]["size"] // 2] ^= 1
+            index.write_bytes(bytes(damaged))
+            os.utime(index, ns=(config["record_index"]["mtime_ns"],) * 2)
+            with self.assertRaisesRegex(ValueError, "is stale .*trailer sha256 differs"):
+                prepare("damaged")
+            index.write_bytes(data)
             os.utime(world.path)
             with self.assertRaisesRegex(ValueError, "is stale .*rebuild it .* or move it aside"):
                 prepare("stale")
-            self.assertFalse((root / "stale").exists())
+            self.assertFalse((root / "stale").exists() or (root / "damaged").exists())
 
 
 if __name__ == "__main__":
