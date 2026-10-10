@@ -415,6 +415,9 @@ prepare
   --label-snv-min-af F       lower-AF SNV tensors are labelled -1 (only above --snv-min-af does it do anything);
                              in [0, 1], needs the labels
   --label-indel-min-af F     lower-AF INDEL tensors are labelled -1; in [0, 1], needs the labels
+  --label-ignore-repeat-indels
+                             INDEL tensors in a GRCh38 homopolymer >= 7 bp or STR without a truth allele are
+                             labelled -1, not 0 (truth sets that leave them out: SEQC2, CASTLE); needs the labels
 
 run --root R [--resume] [--no-finalize]
                              execute the tasks, then finalize (section 6); --no-finalize stops at `complete`
@@ -424,8 +427,9 @@ finalize --root R            merge + labels as frozen at prepare; skips finished
 
 `--chr-index` is required for the merge and for `--chromosomes` other than `all`; labels need the
 merge, `--reference-path` and `--truth-dir`. The label AF floors are frozen as
-`config.postprocess.labels.snv_min_af` / `indel_min_af` (null when unset); finalize labels with
-them as `tensor_postprocessing label --snv-min-af` / `--indel-min-af` does. They are unrelated to
+`config.postprocess.labels.snv_min_af` / `indel_min_af` (null when unset), the repeat option as
+`ignore_repeat_indels` (true / false); finalize labels with them as `tensor_postprocessing label
+--snv-min-af` / `--indel-min-af` / `--ignore-repeat-indels` does. They are unrelated to
 the build's `--snv-min-af` / `--indel-min-af`, which decide which alleles become tensors.
 
 ### `tensor_postprocessing merge | label`
@@ -436,6 +440,7 @@ Manual re-merge or re-label (`orchestrate finalize` runs both as frozen at prepa
 merge --root R --chr-index TSV [--shard-size 32768] [--keep-sources] [--workers 8] [--spots 200] [--reference-path DIR]
 label --tensors T --reference-path DIR --fasta FA --somatic-vcf --somatic-bed --germline-vcf --germline-bed
       --truth-dir DIR [--kinds SNV INDEL] [--recall-dir DIR (default T)] [--snv-min-af F] [--indel-min-af F]
+      [--ignore-repeat-indels]
 ```
 
 * **Merge.** Every task directory of `outputs.json` must be complete and agree with the first on
@@ -461,13 +466,17 @@ label --tensors T --reference-path DIR --fasta FA --somatic-vcf --somatic-bed --
   `HET1`/`HET2`); **−1** ignore — a filtered somatic truth allele, outside the BEDs, no position
   (no GRCh38 coordinate and no anchor), an off-reference node without a partial somatic match, and
   with `--snv-min-af` / `--indel-min-af` every SNV / INDEL (A1 an INS or DEL) of lower AF, whatever
-  its truth (checked first; the sets of section 5 set neither). Indels are
+  its truth (checked first; the sets of section 5 set neither); with `--ignore-repeat-indels` an
+  INDEL on GRCh38 that would be 0 in a homopolymer of >= 7 bp or an STR (unit 2-6, >= 3 units;
+  reason `repeat_indel_without_truth`, `repeat_class` in labels.ndjson): truth sets built from
+  short-read calls (SEQC2, CASTLE) leave such INDELs out, so they are no reliable negative. Indels are
   matched at every equivalent placement in their repeat; an off-reference node is placed between the
   reference nodes around it by node ID (within 200 IDs, at most 1024 GRCh38 bases apart), and
   somatic truths written differently by the graph alignment are matched by the haplotype overlap of
   the A1 reads. `labels.manifest.json` records `format` `truth-labels`, `rules_sha256` (the SHA-256
   of `truth_labels.py`, which identifies the rules), the rule constants (`labels`, `near_bp`,
   `min_overlap`, `anchor_reach`, `anchor_gap`), `snv_min_af`, `indel_min_af` (null when not given),
+  `ignore_repeat_indels`,
   counts per chromosome and reason, and the truth/BED SHA-256s. −1 marks tensors a tumor-only caller
   can leave out at test time as well (outside the BEDs, no position) and tensors that are no
   reliable negative (off-reference nodes, which mostly carry no truth at all; tensors below an AF
@@ -501,7 +510,8 @@ sbatch -J gam_sort -o LOG $P/tools/jobs/gam_sort.sh GAM [OUTPUT]      # VERIFY=1
 sbatch -J NAME -o LOG $P/tools/jobs/build_record_index.sh GAM [GAI]    # FORCE=1: a short-read GAM too
 # labels of one merged set as a Slurm job
 sbatch -J NAME -o LOG $P/tools/jobs/relabel.sh TENSORS SOMATIC_VCF SOMATIC_BED GERMLINE_VCF GERMLINE_BED TRUTH_DIR \
-    [SNV_MIN_AF [INDEL_MIN_AF]]    # '' skips one: ... '' 0.10; REFERENCE_PATH=DIR: another graph's
+    [SNV_MIN_AF [INDEL_MIN_AF]]    # '' skips one: ... '' 0.10; REFERENCE_PATH=DIR: another graph's;
+                                   # IGNORE_REPEAT_INDELS=1: label --ignore-repeat-indels
 # audit of a --debug-rows build (one typed directory)
 $PY -m $P.tools.validate_examples out/SNV --gam G [--index GAI] --graph-index DB --output report.json
 # compare two run roots, task directories or build directories; exit 1 on any difference

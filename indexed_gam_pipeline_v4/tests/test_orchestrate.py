@@ -388,7 +388,9 @@ class EndToEndTest(unittest.TestCase):
             for extra, message in ((["--label-snv-min-af", "0.07"], "--label-snv-min-af needs the label options"),
                                    (["--label-indel-min-af", "0.1"], "--label-indel-min-af needs the label options"),
                                    (["--label-snv-min-af", "1.5"], r"--label-snv-min-af must be in \[0, 1\]"),
-                                   (["--label-indel-min-af=-0.1"], r"--label-indel-min-af must be in \[0, 1\]")):
+                                   (["--label-indel-min-af=-0.1"], r"--label-indel-min-af must be in \[0, 1\]"),
+                                   (["--label-ignore-repeat-indels"],
+                                    "--label-ignore-repeat-indels needs the label options")):
                 with self.subTest(extra=extra):
                     with self.assertRaisesRegex(ValueError, message):
                         self.prepare(root / "run", gam, graph, nodes, extra=extra)
@@ -408,9 +410,13 @@ class EndToEndTest(unittest.TestCase):
             with redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()):
                 orchestrate.main(["prepare", "--root", str(root / "plain"), *argv[2:]])
                 orchestrate.main(["prepare", *argv, "--label-snv-min-af", "0.3", "--label-indel-min-af", "0.3"])
-            unset, frozen = (json.loads((r / "config.json").read_text())["postprocess"]["labels"]
-                             for r in (root / "plain", run))
-            self.assertEqual(list(frozen), [*orchestrate.LABEL_INPUTS, "truth_dir", "snv_min_af", "indel_min_af"])
+                orchestrate.main(["prepare", "--root", str(root / "repeats"), *argv[2:], "--label-ignore-repeat-indels"])
+            unset, frozen, repeats = (json.loads((r / "config.json").read_text())["postprocess"]["labels"]
+                                      for r in (root / "plain", run, root / "repeats"))
+            self.assertEqual(list(frozen), [*orchestrate.LABEL_INPUTS, "truth_dir", "snv_min_af", "indel_min_af",
+                                            "ignore_repeat_indels"])
+            self.assertEqual(repeats, dict(unset, ignore_repeat_indels=True))
+            self.assertFalse(frozen["ignore_repeat_indels"])
             self.assertEqual(unset, dict(frozen, snv_min_af=None, indel_min_af=None))
             self.assertEqual((frozen["snv_min_af"], frozen["indel_min_af"]), (0.3, 0.3))
             with patch.dict(os.environ, dict(SLURM_CPUS_PER_TASK="2")), redirect_stdout(io.StringIO()):

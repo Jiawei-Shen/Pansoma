@@ -110,6 +110,9 @@ def postprocess_options(args):
             raise ValueError(f"{flag} must be in [0, 1]")
         if value is not None and not all(labels.values()):
             raise ValueError(f"{flag} needs the label options (--somatic-vcf ... --truth-dir)")
+    floors["ignore_repeat_indels"] = bool(getattr(args, "label_ignore_repeat_indels", False))
+    if floors["ignore_repeat_indels"] and not all(labels.values()):
+        raise ValueError("--label-ignore-repeat-indels needs the label options (--somatic-vcf ... --truth-dir)")
     if args.merge_shard_size < 0:
         raise ValueError("--merge-shard-size must be nonnegative (0 = no merge)")
     if (args.merge_shard_size or args.chromosomes != "all") and not args.chr_index:
@@ -626,7 +629,8 @@ def finalize(root, config=None):
             report["labels"] = label_run(tensors, kinds, post["reference_path"], labels["reference_fasta"],
                                          labels["somatic_vcf"], labels["somatic_bed"], labels["germline_vcf"],
                                          labels["germline_bed"], labels["truth_dir"],
-                                         snv_min_af=labels.get("snv_min_af"), indel_min_af=labels.get("indel_min_af"))
+                                         snv_min_af=labels.get("snv_min_af"), indel_min_af=labels.get("indel_min_af"),
+                                         ignore_repeat_indels=labels.get("ignore_repeat_indels", False))
             status = read_json(root / "status.json")
             status.update(labeled=True)
             write_json(root / "status.json", status)
@@ -688,6 +692,9 @@ def make_parser():
                    help="SNV tensors with a lower AF are labelled -1 (needs the labels)")
     f.add_argument("--label-indel-min-af", type=float,
                    help="INDEL tensors with a lower AF are labelled -1 (needs the labels)")
+    f.add_argument("--label-ignore-repeat-indels", action="store_true",
+                   help="INDEL tensors in a GRCh38 homopolymer >= 7 bp or STR without a truth allele are labelled -1 "
+                        "(needs the labels; tensor_postprocessing label --ignore-repeat-indels)")
     r = commands.add_parser("run", help="execute all pending tasks")
     r.add_argument("--root", required=True)
     r.add_argument("--resume", action="store_true", help="skip validated tasks; set aside partial outputs and rerun them")

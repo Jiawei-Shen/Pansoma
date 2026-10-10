@@ -465,6 +465,79 @@ class TruthLabelTest(unittest.TestCase):
                     self.assertEqual((value, reason), expected)
                     self.assertEqual(len(details["somatic"] + details["germline"]), 1)  # recorded when floored too
 
+    def test_repeat_context_classes(self):
+        """RepeatContext: unit = minimal period of the inserted / deleted bases, tract = its longest exact run on
+        GRCh38 touching the event (the class rule of analysis/indel_repeat_context_predictions_20261006)."""
+        import pysam
+        with tempfile.TemporaryDirectory() as tmp:
+            seq = ("TGCATG" + "A" * 8 + "GCTG" + "CAG" * 3 + "TGTC" + "A" * 4 + "CGT" + "GATCCTGAGTCA"
+                   + "ACGTTGCA" * 2 + "TCG")
+            fasta = Path(tmp) / "r.fa"
+            fasta.write_text(f">chrT\n{seq}\n")
+            pysam.faidx(str(fasta))
+            repeats = truth_labels.RepeatContext(fasta)
+            hp, cag, a4, plain, vntr = (seq.index(s) for s in ("A" * 8, "CAG" * 3, "TGTC" + "A" * 4, "GATCC",
+                                                               "ACGTTGCA"))
+            cases = [((hp + 3, "A", ""), "HP>=7"), ((hp, "", "AA"), "HP>=7"),         # DEL / INS in the 8 A
+                     ((a4 + 4, "", "A"), "HP4-6"), ((a4 + 4, "AA", ""), "HP4-6"),     # the 4 A
+                     ((cag + 3, "", "CAG"), "STR"), ((cag, "CAGCAG", ""), "STR"),
+                     ((cag, "CA", ""), "none"),                                        # unit CA: no CA run
+                     ((plain + 2, "T", ""), "none"), ((plain + 2, "", "G"), "none"),
+                     ((vntr, "", "ACGTTGCA"), "VNTR"), ((plain, "G", "TT"), "complex")]
+            for (pos0, ref, alt), expected in cases:
+                with self.subTest(pos0=pos0, ref=ref, alt=alt):
+                    self.assertEqual(repeats.classify("chrT", pos0, ref, alt), expected)
+
+    def test_ignore_repeat_indels_turns_repeat_indel_zeros_into_ignore(self):
+        """With ignore_repeat_indels an INDEL tensor in a homopolymer >= 7 bp or an STR that would be 0 is -1
+        (repeat_indel_without_truth); truth matches, SNVs, other INDELs and the default run are unchanged."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            gfa, fasta = graph_files(tmp)
+            scan(gfa, tmp / "rp")
+            path = ReferencePath(tmp / "rp")
+            locator = Locator(path)
+            # CHR1 starts ACGTTTTTGCAACACACG: T x5 at 3-7 (HP4-6), AC x3 at 11-16 (STR)
+            somatic_vcf = write_vcf(tmp / "somatic.vcf", [(13, "CAC", "C", "PASS", "0|1")])  # DEL AC in the STR
+            germline_vcf = write_vcf(tmp / "germline.vcf", [(61, CHR1[60], "A" if CHR1[60] != "A" else "C", "PASS",
+                                                             "1|1")])
+            (tmp / "all.bed").write_text("chr1\t0\t80\n")
+            somatic, germline = (TruthSet(name, vcf, tmp / "all.bed", fasta, locator, chromosomes=("chr1",))
+                                 for name, vcf in (("somatic", somatic_vcf), ("germline", germline_vcf)))
+            confident = somatic.bed.intersect(germline.bed)
+            repeats = truth_labels.RepeatContext(fasta)
+
+            def tensor(x, ref, alt, kind):
+                key = sorted(locator.keys("chr1", x, ref, alt, kind))[0]
+                node, start, _, alleles = key.split(":")
+                r, a = alleles.split(">")
+                allele = dict(candidate_id=key, node_id=int(node), start=int(start), ref=r, alt=a, event_type=kind)
+                return dict(allele, alleles=[allele])
+
+            truth_del = tensor(13, "AC", "", "DEL")                    # the somatic truth
+            str_ins = tensor(13, "", "ACAC", "INS")                   # STR, near the truth, no overlap: 0 / -1
+            hp_del = tensor(4, "T", "", "DEL")                        # T x5: HP4-6, near the truth, stays 0
+            snv = tensor(40, CHR1[40], "A" if CHR1[40] != "A" else "C", "SNP")
+            truth_1, no_truth = (1, "representative_allele_is_somatic_truth"), (0, "confident_no_truth_allele")
+            near = (0, "near_truth_allele_mismatch")
+            for record, off, on in [(truth_del, truth_1, truth_1),
+                                    (str_ins, near, (-1, "repeat_indel_without_truth")),
+                                    (hp_del, near, near), (snv, no_truth, no_truth)]:
+                with self.subTest(candidate=record["candidate_id"]):
+                    value, _, reason, details = truth_labels.classify(record, somatic, germline, path, confident)
+                    self.assertEqual((value, reason), off)
+                    self.assertNotIn("repeat_class", details)
+                    value, _, reason, details = truth_labels.classify(record, somatic, germline, path, confident,
+                                                                      repeats=repeats)
+                    self.assertEqual((value, reason), on)
+            self.assertEqual(details.get("repeat_class"), None)  # SNVs are never classed
+            _, _, _, details = truth_labels.classify(str_ins, somatic, germline, path, confident, repeats=repeats)
+            self.assertEqual(details["repeat_class"], "STR")
+            _, _, _, details = truth_labels.classify(hp_del, somatic, germline, path, confident, repeats=repeats)
+            self.assertEqual(details["repeat_class"], "HP4-6")
+            with self.assertRaises(ValueError):
+                truth_labels.label_directory(tmp, somatic, germline, path, confident, {}, ignore_repeat_indels=True)
+
     def test_relabel_job_takes_both_af_floors(self):
         """tools/jobs/relabel.sh: 6 to 8 arguments (SNV_MIN_AF, INDEL_MIN_AF; '' skips one), else its usage line;
         the reference path is $REFERENCE_PATH or the one of the set's current labels."""

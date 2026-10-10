@@ -87,11 +87,13 @@ writes what `label` writes and scans the filtered-candidate streams in parallel 
 --somatic-vcf --somatic-bed --germline-vcf --germline-bed --reference-fasta --truth-dir   (labels; all or none)
 --label-snv-min-af F          labels: lower-AF SNV tensors are -1; in [0, 1], needs the labels
 --label-indel-min-af F        labels: lower-AF INDEL tensors are -1; in [0, 1], needs the labels
+--label-ignore-repeat-indels  labels: repeat INDELs without a truth allele are -1, not 0 (below); needs the labels
 ```
 
-`finalize` labels with these AF floors as `label --snv-min-af` / `--indel-min-af` does (frozen as
-`postprocess.labels.snv_min_af` / `indel_min_af`, null when unset), so a run prepared with them
-needs no relabel. They are not the build's `--snv-min-af` / `--indel-min-af`, which decide which
+`finalize` labels with these AF floors and the repeat option as `label --snv-min-af` /
+`--indel-min-af` / `--ignore-repeat-indels` does (frozen as `postprocess.labels.snv_min_af` /
+`indel_min_af`, null when unset, and `ignore_repeat_indels`), so a run prepared with them needs no
+relabel. They are not the build's `--snv-min-af` / `--indel-min-af`, which decide which
 alleles become tensors: a floor at or below the build's AF changes nothing (the sets of the main
 README, section 5, are built at 0.08 for both kinds and labelled without floors). `label` and `tools/jobs/relabel.sh`
 label a merged set again, e.g. with other floors (see [Commands](#commands)).
@@ -191,7 +193,7 @@ from a merged manifest, so it relabels those sets as they are.
 | 1 | somatic | A1 is a somatic truth allele with FILTER PASS/`.`, inside or outside the BEDs; or A1 overlaps such an allele by more than 45 % (partial, below: another allele of the site anywhere, a truth allele at the same place inside the confident region) |
 | 2 | germline | A1 is a germline truth allele with FILTER PASS/`.` or only `GAP1`/`GAP2`, inside or outside the BEDs; or A1 overlaps such an allele by more than 45 % (partial) |
 | 0 | non | another allele of the site is such a truth allele and A1 overlaps it by 45 % or less (inside or outside the BEDs); every other tensor with a GRCh38 position inside the confident region: no truth allele, a truth allele nearby that A1 does not overlap enough (errors and artifacts next to real variants), or A1 is a germline allele with another FILTER (dipcall `HET1`/`HET2`) |
-| −1 | ignore | an SNV below `--snv-min-af` or an INDEL below `--indel-min-af` (whatever the truth); a filtered somatic truth allele; no position; outside the confident region; an off-reference tensor without a partial somatic match |
+| −1 | ignore | an SNV below `--snv-min-af` or an INDEL below `--indel-min-af` (whatever the truth); a filtered somatic truth allele; no position; outside the confident region; an off-reference tensor without a partial somatic match; with `--ignore-repeat-indels`, an INDEL on GRCh38 in a homopolymer of >= 7 bp or an STR that would be 0 by steps 4, 12 or 13 |
 
 `GAP_FILTERS` (`GAP1`/`GAP2`, dipcall): the allele is on one assembled haplotype and the other is
 uncalled. It is in the normal genome (zygosity unknown), so it counts as germline truth. `HET1`/`HET2`
@@ -221,6 +223,7 @@ reason the code returns:
 | 11 | a PASS/GAP germline truth allele at the same place that A1 overlaps by > 45 % | 2 | `residual_partial_germline_truth` |
 | 12 | a truth allele of either set, any FILTER, within 10 bp (`NEAR_BP`) | 0 | `near_truth_allele_mismatch` |
 | 13 | otherwise | 0 | `confident_no_truth_allele` |
+| | `--ignore-repeat-indels` given: a 0 of steps 4, 12, 13 for an INDEL tensor on GRCh38 whose repeat class is `HP>=7` or `STR` | −1 | `repeat_indel_without_truth` |
 
 Steps 1–5 do not look at the BEDs. A site whose other allele is a PASS somatic or PASS/GAP germline
 truth allele is labelled by that allele (1, 2 or 0) wherever it lies. Step 8 never applies to an
@@ -305,6 +308,15 @@ of the 1,518,657 INDEL 0s are `near_truth_allele_mismatch`.
   SNP) or INDEL tensor (A1 an INS or DEL) is −1 whatever the truth, and these are the first checks;
   each floor leaves the other kind alone. `af` is in every summary record, so a caller can apply the
   same filters without truth.
+* **`--ignore-repeat-indels`** (truth sets built from short-read calls, SEQC2 HCC1395 and CASTLE,
+  which leave out most homopolymer / STR INDELs: an INDEL there without a truth allele is no
+  reliable negative). `RepeatContext` classes the tensor's GRCh38 INS / DEL: unit = the minimal
+  period of the inserted / deleted bases, tract = the longest exact run of that unit touching the
+  event on GRCh38; `HP>=7` (unit 1, tract >= 7 bp), `HP4-6`, `STR` (unit 2-6, >= 3 units), `VNTR`
+  (unit > 6, >= 2 units), `none`, `complex`. `HP>=7` and `STR` turn the 0 into −1; the class is
+  written as `repeat_class` in labels.ndjson for every INDEL 0 it was computed for. The rule is the
+  class rule of `analysis/indel_repeat_context_predictions_20261006` (same classes on the HG008T and
+  SEQC2 truth INDELs).
 * **Off-reference tensors without a partial somatic match** are −1 for a different reason: they are
   not training negatives, because most branch nodes carry no truth at all (the truth sets are
   GRCh38 VCFs). A partial somatic match still makes one 1.
@@ -319,7 +331,8 @@ of the 1,518,657 INDEL 0s are `near_truth_allele_mismatch`.
     VCF fields, GT, filters, in_bed, the matched candidate and whether it is A1;
   * `grch38`;
   * `partial`, plus `overlap` and `partial_truth` when set;
-  * `anchor`, for anchored tensors.
+  * `anchor`, for anchored tensors;
+  * `repeat_class`, for INDEL tensors classed under `--ignore-repeat-indels`.
 
 The label files are written as temporaries and renamed only after every shard is covered.
 
@@ -330,7 +343,8 @@ The label files are written as temporaries and renamed only after every shard is
   so any edit of the file (comments included) changes the hash;
 * `created`, `labels` (name → value), `near_bp`, `tensors`;
 * `counts` (per chromosome and label name), `totals`, `reasons`, `partial`;
-* `min_overlap`, `anchor_reach`, `anchor_gap`, `snv_min_af`, `indel_min_af` (null when not given);
+* `min_overlap`, `anchor_reach`, `anchor_gap`, `snv_min_af`, `indel_min_af` (null when not given),
+  `ignore_repeat_indels`;
 * the provenance: `truth` (per set: VCF and BED with their SHA-256, parsing stats, truth table
   path), `confident_region` (definition and bp), `fasta`, `reference_path`.
 
@@ -379,7 +393,7 @@ $P.tensor_postprocessing merge --root /path/to/run --chr-index TSV [--shard-size
     [--workers 8] [--spots 200] [--reference-path DIR]
 $P.tensor_postprocessing label --tensors /path/to/tensors --reference-path DIR --fasta FA \
     --somatic-vcf VCF --somatic-bed BED --germline-vcf VCF --germline-bed BED --truth-dir DIR \
-    [--kinds SNV INDEL] [--recall-dir DIR] [--snv-min-af F] [--indel-min-af F]
+    [--kinds SNV INDEL] [--recall-dir DIR] [--snv-min-af F] [--indel-min-af F] [--ignore-repeat-indels]
 ```
 
 HPRC v1.1 d9 graph files. The files under `$G` are the current ones; the reference-path and
@@ -430,7 +444,7 @@ all of them are written, so a failed run leaves the current labels in place.
 It then runs `tensor_postprocessing label` with the HPRC reference-path directory and the GRCh38
 FASTA above (1 CPU, `--mem=19G`, 6 h). Its optional 7th and 8th arguments are `label`'s
 `--snv-min-af` and `--indel-min-af`; `''` skips one (`... TRUTH_DIR '' 0.10` sets the INDEL floor
-only). Each sample's `README.txt` under `/scratch/jshen/data/pansoma_v2_tensors` has its command; for all
+only). `IGNORE_REPEAT_INDELS=1` in the environment adds `--ignore-repeat-indels`. Each sample's `README.txt` under `/scratch/jshen/data/pansoma_v2_tensors` has its command; for all
 six sets:
 
 ```bash

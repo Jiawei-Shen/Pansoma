@@ -139,7 +139,7 @@ def scan_filtered(directory, keys, workers=WORKERS, parts=None, block=BLOCK):
 
 # truth_labels.label_run, verbatim (scan_filtered above).
 def label_run(tensors, kinds, reference_path, fasta, somatic_vcf, somatic_bed, germline_vcf, germline_bed, truth_dir,
-              recall_dir=None, snv_min_af=None, indel_min_af=None):
+              recall_dir=None, snv_min_af=None, indel_min_af=None, ignore_repeat_indels=False):
     """Build both truth sets, label every merged autosome directory of `kinds`, write recall reports.
 
     Truth tables (<set>.graph.tsv) depend only on the graph and the VCFs and go to `truth_dir`;
@@ -165,7 +165,7 @@ def label_run(tensors, kinds, reference_path, fasta, somatic_vcf, somatic_bed, g
     reports, matched = {}, {somatic.name: defaultdict(list), germline.name: defaultdict(list)}
     for kind in kinds:
         reports[kind], found = label_directory(Path(tensors) / kind, somatic, germline, path, confident, provenance, fasta,
-                                               snv_min_af, indel_min_af)
+                                               snv_min_af, indel_min_af, ignore_repeat_indels)
         for name, items in found.items():
             for tid, hits in items.items():
                 matched[name][tid] += hits

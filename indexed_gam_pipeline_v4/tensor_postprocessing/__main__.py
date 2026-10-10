@@ -33,6 +33,9 @@ def main(argv=None):
     p.add_argument("--recall-dir", help="where recall reports go (default: --tensors)")
     p.add_argument("--snv-min-af", type=float, help="SNV tensors with a lower AF are -1")
     p.add_argument("--indel-min-af", type=float, help="INDEL tensors with a lower AF are -1")
+    p.add_argument("--ignore-repeat-indels", action="store_true",
+                   help="INDEL tensors in a GRCh38 homopolymer >= 7 bp or STR without a truth allele are -1, not 0 "
+                        "(truth sets that leave such INDELs out, e.g. SEQC2 / CASTLE)")
 
     args = parser.parse_args(argv)
     if args.command == "merge":
@@ -43,7 +46,8 @@ def main(argv=None):
         from .truth_labels import label_run
         result = label_run(args.tensors, args.kinds, args.reference_path, args.fasta, args.somatic_vcf,
                            args.somatic_bed, args.germline_vcf, args.germline_bed, args.truth_dir, args.recall_dir,
-                           snv_min_af=args.snv_min_af, indel_min_af=args.indel_min_af)
+                           snv_min_af=args.snv_min_af, indel_min_af=args.indel_min_af,
+                           ignore_repeat_indels=args.ignore_repeat_indels)
     print(json.dumps(result, indent=2))
 
 

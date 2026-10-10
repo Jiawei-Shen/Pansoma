@@ -4,6 +4,8 @@
 # of them are written, so a failed run leaves the current labels in place.
 # Usage: sbatch -J NAME -o LOG relabel.sh TENSORS SOMATIC_VCF SOMATIC_BED GERMLINE_VCF GERMLINE_BED TRUTH_DIR [SNV_MIN_AF [INDEL_MIN_AF]]
 # SNV_MIN_AF, INDEL_MIN_AF: lower-AF SNV / INDEL tensors become -1; '' skips one (e.g. '' 0.10).
+# IGNORE_REPEAT_INDELS=1 (environment): label --ignore-repeat-indels (INDELs in a homopolymer >= 7 bp or STR without a
+# truth allele -1, for truth sets that leave them out: SEQC2, CASTLE).
 # REFERENCE_PATH (environment): the ref-path-scan directory of the set's graph; default: the one its current labels
 # used (reference_path in TENSORS/SNV/labels.manifest.json).
 # Runs the package it lives in (<package>/tools/jobs/): the checkout, or
@@ -35,4 +37,4 @@ cd "$(dirname "$PKG")"
   --reference-path "$RP" \
   --fasta /scratch/jshen/data/HapMap/GCA_000001405.15_GRCh38_no_alt_analysis_set.fasta \
   --somatic-vcf "$SV" --somatic-bed "$SB" --germline-vcf "$GV" --germline-bed "$GB" --truth-dir "$TD" \
-  ${AF:+--snv-min-af $AF} ${IAF:+--indel-min-af $IAF}
+  ${AF:+--snv-min-af $AF} ${IAF:+--indel-min-af $IAF} $([ "${IGNORE_REPEAT_INDELS:-0}" = 1 ] && echo --ignore-repeat-indels)

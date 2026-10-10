@@ -24,7 +24,7 @@ from ..tensor_postprocessing.reference_path import ReferencePath
 
 # SHA-256 of inspect.getsource(truth_labels.label_run). recall_scan.label_run is a verbatim copy: when label_run
 # changes there, copy it again and pin the new hash here.
-LABEL_RUN_SHA256 = "24e053b628be97419493331e60af6314b66b6eb69cc8dc177300c9fb2627a818"
+LABEL_RUN_SHA256 = "aeb2df5b9a850d25114eb93aa40ae968e2b70ed61fdacdd2f34a65c87003ea6e"
 
 
 def random_stream(rng, keys, others, final_newline):

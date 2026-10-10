@@ -28,13 +28,17 @@
                     on different contigs, or more than ANCHOR_GAP GRCh38 bases between them), an off-reference node
                     without a partial somatic match (not a training negative: most branch nodes carry no truth at
                     all), or, whatever the truth, a tensor with AF below the label run's floor of its kind: an SNV
-                    below snv_min_af (short-read sets: 0.07), an INDEL (A1 an INS or DEL) below indel_min_af
+                    below snv_min_af (short-read sets: 0.07), an INDEL (A1 an INS or DEL) below indel_min_af; with
+                    the label run's option ignore_repeat_indels (truth sets that leave out homopolymer / STR INDELs:
+                    SEQC2, CASTLE), an INDEL on GRCh38 that would be 0 (no truth allele of its own, none it overlaps
+                    enough) in a homopolymer >= 7 bp or an STR (unit 2-6, >= 3 units; RepeatContext)
 
    The first rule that applies decides (classify, in this order): the AF floors (snv_min_af for SNVs, indel_min_af
    for INDELs); a truth allele of A1 (somatic, then germline PASS/GAP); a truth allele as in 1/2 of another allele
    ("allele" partial, else 0), else a filtered somatic one (-1); no position; outside the BEDs; A1 a germline allele
    with another FILTER (0); a "residual" partial match (somatic, then germline; an off-reference node: somatic only,
-   else -1); otherwise 0.
+   else -1); otherwise 0. Under ignore_repeat_indels every 0 except the filtered-germline one becomes -1 for a
+   homopolymer / STR INDEL (reason repeat_indel_without_truth, labels.ndjson repeat_class).
 
    Partial (labels.ndjson `partial`, `overlap`, `partial_truth`): the same event written differently by the
    graph alignment. "allele": another allele of the site is the truth allele and A1 overlaps it by more than
@@ -78,6 +82,7 @@ EVIDENCE_ROWS = 20  # A1 reads (and half as many REF reads) compared with the ha
 MIN_EVIDENCE_BASES = 30
 HAPLOTYPE_WINDOW = 90  # GRCh38 bases on each side of a truth allele for the haplotype comparison
 MAX_SHIFTS = 5000
+IGNORED_REPEAT_CLASSES = frozenset({"HP>=7", "STR"})  # RepeatContext classes of the ignore_repeat_indels option
 CANDIDATE = re.compile(rb'"candidate_id": "([^"]+)"')
 REASONS = re.compile(rb'"reasons": \[([^\]]*)\]')
 
@@ -510,6 +515,67 @@ def truth_overlap(truth, tid, record, lin, chrom, evidence, cache):
     return max(value, h or 0.0)
 
 
+# --- INDEL repeat context (label option ignore_repeat_indels) ------------------------
+
+def minimal_period(s):
+    """Length of the shortest unit whose repeats spell `s`."""
+    for p in range(1, len(s) + 1):
+        if len(s) % p == 0 and s[:p] * (len(s) // p) == s:
+            return p
+    return len(s)
+
+
+def tract(seq, lo, hi, period):
+    """(start, end) of the longest exact run of `period` in `seq` (at least two units) touching [lo, hi]."""
+    best = (lo, lo)
+    i = max(0, lo - 200)
+    while i < min(len(seq) - period, hi + 200):
+        if seq[i] != seq[i + period]:
+            i += 1
+            continue
+        j = i
+        while j < len(seq) - period and seq[j] == seq[j + period]:
+            j += 1
+        a, b = i, j + period
+        if a <= hi and b >= lo and b - a > best[1] - best[0] and b - a >= 2 * period:
+            best = (a, b)
+        i = j + 1
+    return best
+
+
+class RepeatContext:
+    """GRCh38 repeat class of an INS / DEL: unit = the minimal period of the inserted / deleted bases, tract = the
+    longest exact run of that unit touching the event; HP>=7 (unit 1, tract >= 7 bp), HP4-6, STR (unit 2-6, >= 3
+    units), VNTR (unit > 6, >= 2 units), none; complex when both REF and ALT have bases."""
+    FLANK = 300
+
+    def __init__(self, fasta):
+        import pysam
+        self.genome = pysam.FastaFile(str(fasta))
+
+    def classify(self, chrom, pos0, ref, alt):
+        if ref and alt:
+            return "complex"
+        start = max(0, pos0 - self.FLANK)
+        seq = self.genome.fetch(chrom, start, pos0 + len(ref) + self.FLANK).upper()
+        event = ref or alt
+        unit, lo = minimal_period(event), pos0 - start
+        hi = lo + len(ref)
+        if unit <= 6:
+            a, b = tract(seq, lo if ref else lo - 1, hi if ref else hi + 1, unit)
+        else:
+            n = 0
+            while seq[hi + n * unit:hi + (n + 1) * unit] == event:
+                n += 1
+            a, b = lo, hi + n * unit
+        length = b - a
+        if unit == 1:
+            return "HP>=7" if length >= 7 else "HP4-6" if length >= 4 else "none"
+        if unit <= 6:
+            return "STR" if length >= 3 * unit else "none"
+        return "VNTR" if length >= 2 * unit else "none"
+
+
 # --- labels -------------------------------------------------------------------------
 
 def linear_interval(lin, kind):
@@ -518,8 +584,10 @@ def linear_interval(lin, kind):
     return lin["pos0"], lin["pos0"] + max(1, len(lin["ref"]))
 
 
-def classify(record, somatic, germline, path, confident, evidence=None, snv_min_af=None, indel_min_af=None):
-    """(label value, label name, reason, details) of one merged summary record (rules: module docstring)."""
+def classify(record, somatic, germline, path, confident, evidence=None, snv_min_af=None, indel_min_af=None,
+             repeats=None):
+    """(label value, label name, reason, details) of one merged summary record (rules: module docstring).
+    `repeats`: a RepeatContext when the label run ignores repeat INDELs without a truth allele (ignore_repeat_indels)."""
     representative, event_type = record["candidate_id"], record["event_type"]
     truths = (somatic, germline)
     # (candidate id, truth id) of every allele of the site that is a truth allele, per truth set
@@ -531,6 +599,15 @@ def classify(record, somatic, germline, path, confident, evidence=None, snv_min_
 
     def label(name, reason):
         return LABELS[name], name, reason, details
+
+    def non(reason):
+        """0, or -1 for an INDEL on GRCh38 in a homopolymer >= 7 bp or an STR when the run ignores repeat INDELs (a
+        truth set that leaves such INDELs out cannot tell a real one from an artifact)."""
+        if repeats is not None and lin is not None and event_type in ("INS", "DEL"):
+            details["repeat_class"] = repeats.classify(lin["chrom"], lin["pos0"], lin["ref"], lin["alt"])
+            if details["repeat_class"] in IGNORED_REPEAT_CLASSES:
+                return label("ignore", "repeat_indel_without_truth")
+        return label("non", reason)
 
     # The label run's AF floor of the tensor's kind (A1's event type): as if the build had used it, whatever the truth.
     af = record.get("af", 1.0)
@@ -570,7 +647,7 @@ def classify(record, somatic, germline, path, confident, evidence=None, snv_min_
             result = partial("allele", truth, others[truth.name], lin["chrom"] if lin else None)
             if result:
                 return result
-        return label("non", "truth_matches_non_representative_allele")
+        return non("truth_matches_non_representative_allele")
     if hits["somatic"]:  # another allele is a filtered somatic truth allele
         return label("ignore", "somatic_truth_filtered")
     # Position: GRCh38, or for an off-reference node the interval between the reference nodes around it.
@@ -605,13 +682,16 @@ def classify(record, somatic, germline, path, confident, evidence=None, snv_min_
         return result
     # 0 is every other tensor: artifacts and errors next to real variants included, as test-time calling sees them.
     if somatic.near(chrom, s, e) or germline.near(chrom, s, e):
-        return label("non", "near_truth_allele_mismatch")
-    return label("non", "confident_no_truth_allele")
+        return non("near_truth_allele_mismatch")
+    return non("confident_no_truth_allele")
 
 
 def label_directory(directory, somatic, germline, path, confident, provenance, fasta=None, snv_min_af=None,
-                    indel_min_af=None):
+                    indel_min_af=None, ignore_repeat_indels=False):
     """Write <chrom>_shard_*_labels.npy, <chrom>_labels.ndjson and labels.manifest.json for one merged directory."""
+    if ignore_repeat_indels and not fasta:
+        raise ValueError("ignore_repeat_indels needs the GRCh38 FASTA")
+    repeats = RepeatContext(fasta) if ignore_repeat_indels else None
     directory = Path(directory)
     manifest = read_json(directory / "manifest.json")
     if format_name(manifest.get("layout")) != LAYOUT:
@@ -628,7 +708,7 @@ def label_directory(directory, somatic, germline, path, confident, provenance, f
             for line in source:
                 record = json.loads(line)
                 value, name, reason, details = classify(record, somatic, germline, path, confident, evidence, snv_min_af,
-                                                        indel_min_af)
+                                                        indel_min_af, repeats)
                 if details["partial"]:
                     partials[f"{details['partial']}_{name}"] += 1
                 arrays[record["shard_file"]][record["index_within_shard"]] = value
@@ -655,7 +735,7 @@ def label_directory(directory, somatic, germline, path, confident, provenance, f
                   counts={c: dict(v) for c, v in counts.items()},
                   totals=dict(sum(counts.values(), Counter())), reasons=dict(reasons), partial=dict(partials),
                   min_overlap=MIN_OVERLAP, anchor_reach=ANCHOR_REACH, anchor_gap=ANCHOR_GAP, snv_min_af=snv_min_af,
-                  indel_min_af=indel_min_af, **provenance)
+                  indel_min_af=indel_min_af, ignore_repeat_indels=bool(ignore_repeat_indels), **provenance)
     write_json(directory / "labels.manifest.json", report)
     return report, matched
 
@@ -704,7 +784,7 @@ def recall(truth, matched, filtered, output_dir):
 
 
 def label_run(tensors, kinds, reference_path, fasta, somatic_vcf, somatic_bed, germline_vcf, germline_bed, truth_dir,
-              recall_dir=None, snv_min_af=None, indel_min_af=None):
+              recall_dir=None, snv_min_af=None, indel_min_af=None, ignore_repeat_indels=False):
     """Build both truth sets, label every merged autosome directory of `kinds`, write recall reports.
 
     Truth tables (<set>.graph.tsv) depend only on the graph and the VCFs and go to `truth_dir`;
@@ -730,7 +810,7 @@ def label_run(tensors, kinds, reference_path, fasta, somatic_vcf, somatic_bed, g
     reports, matched = {}, {somatic.name: defaultdict(list), germline.name: defaultdict(list)}
     for kind in kinds:
         reports[kind], found = label_directory(Path(tensors) / kind, somatic, germline, path, confident, provenance, fasta,
-                                               snv_min_af, indel_min_af)
+                                               snv_min_af, indel_min_af, ignore_repeat_indels)
         for name, items in found.items():
             for tid, hits in items.items():
                 matched[name][tid] += hits
