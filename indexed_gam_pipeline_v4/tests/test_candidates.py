@@ -510,7 +510,7 @@ class StorageTest(unittest.TestCase):
             (465, 464): 101, (2153, 464): 111,
             # H 100: the count itself up to 100, then 100 + ceil(log2(count - 99))
             (50, 100): 50, (51, 100): 51, (100, 100): 100, (101, 100): 101, (331, 100): 108,
-            # small H (a GRCh38-only graph: 1): every count below H is a missing-haplotype code
+            # small H (synthetic 1 and 30): every count below H is a missing-haplotype code
             (1, 1): 100, (2, 1): 101, (1, 30): 71, (29, 30): 99, (30, 30): 100,
         }
         for (count, haplotypes), code in expected.items():

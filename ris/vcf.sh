@@ -2,7 +2,7 @@
 # A run's chr1 predictions -> graph VCF -> GRCh38 VCF -> PoN + rtg vcfeval against the truth VCF of the
 # set's labels, inside the benchmark BED (eval_bed) and on the whole chromosome (eval_nobed), into <run>/vcf_chr1/.
 # PASS is graph_vcf's default (the checkpoint's validation recall-0.9 threshold); THRESHOLD (a number, or
-# "predict" for predict's own call) sets it, as needed for checkpoints trained before val.somatic_at_recall.
+# "predict" for predict's own call) overrides it.
 # Usage: vcf.sh RUN KIND [THRESHOLD]. A CPU job:
 #   ris/submit.sh -g 0 -n 4 -m 32 pnv2_vcf vcf.sh HG008_Illumina_SNV_recipe SNV
 #   ris/submit.sh -g 0 -n 4 -m 32 pnv2_vcf vcf.sh HG008_Illumina_SNV_test SNV predict
@@ -28,7 +28,8 @@ python -u -m pansoma_net_v2.graph_vcf --predictions "$P" --tensors "$T" --kind "
 python -u -m pansoma_net_v2.linear_vcf --graph-vcf "$O/$name.$KIND.graph.vcf.gz" \
     --reference-path "$G/hprc-v1.1-mc-grch38.d9.grch38_path" --fasta "$FASTA" --output "$O/$name.$KIND.linear.vcf.gz"
 rm -rf "$O/eval_bed" "$O/eval_nobed"
-# the PoN for both kinds: filter_panel_of_normals.py applies its INDEL rule (gnomAD / CoLoRSdb AF >= 0.01) to INDELs
+# the PoN for both kinds: filter_panel_of_normals.py applies its INDEL rule to INDELs (gnomAD / CoLoRSdb exact allele,
+# AF >= 0.01 in homopolymers >= 7 bp, else >= 0.001)
 pon=(--pon "$PON/af-only-gnomad.hg38.vcf.gz" "$PON/Homo_sapiens_assembly38.dbsnp138.vcf.gz" "$PON/1000g_pon.hg38.vcf.gz"
      "$PON/CoLoRSdb.GRCh38.v1.1.0.deepvariant.glnexus.vcf.gz")
 pon_vcf=(--pon-vcf "$O/eval_bed/$name.$KIND.linear.pon.vcf.gz")

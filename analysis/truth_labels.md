@@ -1,9 +1,9 @@
 # tensor 标签算法详解
 
-- 代码：`indexed_gam_pipeline_v4/tensor_postprocessing/truth_labels.py`。规则就是这个文件的模块 docstring 和常量；`labels.manifest.json` 里的 `rules_sha256` 是这个文件的 SHA-256，用来标识打标签时用的规则。
+- 代码：`indexed_gam_pipeline_v4/tensor_postprocessing/truth_labels.py`。规则就是这个文件的模块 docstring 和常量；`labels.manifest.json` 里的 `rules_sha256` 是这个文件的 SHA-256，标识打标签时这个文件的内容。文件的任何改动（注释、docstring 也算）都会改变它，所以 hash 不同不等于规则不同：规则改动对标签有没有影响，要比较标签本身（manifest 的计数、`*_labels.npy` 的字节）。
 - 坐标换算：`indexed_gam_pipeline_v4/tensor_postprocessing/reference_path.py`（`ReferencePath.linear`）。
-- 命令（在仓库根目录运行）：`python -m indexed_gam_pipeline_v4.tensor_postprocessing label --tensors … --reference-path … --fasta … --somatic-vcf … --somatic-bed … --germline-vcf … --germline-bed … --truth-dir … [--recall-dir …] [--snv-min-af …] [--indel-min-af …]`。`orchestrate finalize` 在 merge 之后用同样的规则打标签，AF 下限（floor）用 `orchestrate prepare` 时给的 `--label-snv-min-af` / `--label-indel-min-af`（存进 `config.json` 的 `postprocess.labels.snv_min_af` / `indel_min_af`，不设是 null，即不按 AF 去掉），等于 `label` 的 `--snv-min-af` / `--indel-min-af`。prepare 时设了的话，跑完不用再单独 relabel；现在的六个数据集都没设（build AF 已经是 0.08）。这两个和 build 的 `--snv-min-af` / `--indel-min-af`（决定哪些 allele 生成 tensor）无关。
-- 例子：除非另外注明，都取自 HG008 PacBio `/scratch/jshen/data/pansoma_v2_tensors/HG008T_PacBio/tensors`（2026-09-28 用现行规则打的标签），按 `candidate_id` 在 `{SNV,INDEL}/chr*_labels.ndjson` 里查到的标签、reason、`partial`/`overlap`；reads 数来自同一目录的 `chr*_variant_summary.ndjson`；单倍型重叠例子里每行 read 的 `(d_ref, d_truth)` 和 `b` 是用 `truth_labels.py` 的函数在同一个 tensor 上重算的（结果和 labels.ndjson 的 `overlap` 一致）。第 7 节的计数来自六个数据集的 `labels.manifest.json`。
+- 命令（在仓库根目录运行）：`python -m indexed_gam_pipeline_v4.tensor_postprocessing label --tensors … --reference-path … --fasta … --somatic-vcf … --somatic-bed … --germline-vcf … --germline-bed … --truth-dir … [--snv-min-af …] [--indel-min-af …] [--ignore-repeat-indels]`；作为 Slurm job 是 `indexed_gam_pipeline_v4/tools/jobs/relabel.sh`（AF 下限是它的第 7、8 个参数，环境变量 `IGNORE_REPEAT_INDELS=1` 加上 `--ignore-repeat-indels`）。`orchestrate finalize` 在 merge 之后用同样的规则打标签，AF 下限（floor）和 repeat 选项用 `orchestrate prepare` 时给的 `--label-snv-min-af` / `--label-indel-min-af` / `--label-ignore-repeat-indels`（存进 `config.json` 的 `postprocess.labels.snv_min_af` / `indel_min_af`（不设是 null，即不按 AF 去掉）和 `ignore_repeat_indels`），等于 `label` 的 `--snv-min-af` / `--indel-min-af` / `--ignore-repeat-indels`。prepare 时设了的话，跑完不用再单独 relabel；现在的六个数据集都没设（build AF 已经是 0.08）。AF 下限和 build 的 `--snv-min-af` / `--indel-min-af`（决定哪些 allele 生成 tensor）无关。`label` 和 finalize 都经 `recall_scan.label_run` 调用 `truth_labels.label_run`：标签一样，只是召回表扫描 filtered 候选时用 8 个进程。
+- 例子：除非另外注明，都取自 HG008 PacBio `/scratch/jshen/data/pansoma_v2_tensors/HG008T_PacBio/tensors`（2026-10-02 finalize 打的标签，`rules_sha256` `5430533aa100`），按 `candidate_id` 在 `{SNV,INDEL}/chr*_labels.ndjson` 里查到的标签、reason、`partial`/`overlap`；reads 数来自同一目录的 `chr*_variant_summary.ndjson`；单倍型重叠例子里每行 read 的 `(d_ref, d_truth)` 和 `b` 是用 `truth_labels.py` 的函数在同一个 tensor 上重算的（结果和 labels.ndjson 的 `overlap` 一致）。第 7 节的计数来自六个数据集的 `labels.manifest.json`。
 
 ## 0. 名词
 
@@ -38,8 +38,10 @@
 | `MIN_EVIDENCE_BASES` | 30 | 一行 read 至少要有的碱基数 |
 | `HAPLOTYPE_WINDOW` | 90 | 单倍型重叠时 truth 两侧取的 GRCh38 碱基数 |
 | `MAX_SHIFTS` | 5,000 | 一个 truth allele 最多枚举的等价位置数 |
+| `IGNORED_REPEAT_CLASSES` | `HP>=7`、`STR` | `--ignore-repeat-indels` 时变成 −1 的 repeat 类（R13） |
 | `--snv-min-af` | 不设（六个数据集 build AF 都是 0.08，不设下限） | 命令行参数，不是常量（`orchestrate prepare` 里是 `--label-snv-min-af`）；设了以后 AF 更低的 SNV tensor 是 −1（R1） |
 | `--indel-min-af` | 不设（六个数据集都没用） | 命令行参数，不是常量（`orchestrate prepare` 里是 `--label-indel-min-af`）；设了以后 AF 更低的 INDEL tensor（A1 是 INS 或 DEL）是 −1（R1），和 SNV 的下限分开设、互不影响 |
+| `--ignore-repeat-indels` | 不设（六个数据集都没用；已打标签的多癌种 set `HCC1395T_*`、`HCC1954T_*`、`H1437T_*`、`H2009T_*`（HPRC v2.1 d46；truth 是 SEQC2 / CASTLE）都用了） | 命令行参数，不是常量（`orchestrate prepare` 里是 `--label-ignore-repeat-indels`，`relabel.sh` 里是 `IGNORE_REPEAT_INDELS=1`）；设了以后 GRCh38 上同聚物 ≥ 7 bp 或 STR 里本来是 0 的 INDEL tensor 是 −1（R13） |
 
 ## 1. 整体流程
 
@@ -48,7 +50,7 @@ truth VCF ──(1) 拆分 allele、枚举等价位置、换算成节点键─�
                                                                 │
 tensor（variant_summary 的一行）──(2) 求位置：GRCh38 坐标，或分支节点的 anchor 区间 ──┐   │
                                                                                    ▼   ▼
-                                  (3) 按固定顺序判断（R1–R12），第一条符合的规则决定标签
+                                  (3) 按固定顺序判断（R1–R12；设了选项时 R13 改其中几个 0），第一条符合的规则决定标签
 ```
 
 实际顺序上，GRCh38 坐标一开始就算（R4 的 allele 重叠要用），anchor 只在走到 R5 时才算：R1–R4（AF、A1 是不是 truth、site 里别的 allele 是不是 truth）不需要 anchor。
@@ -122,7 +124,7 @@ Minigraph-Cactus 按拓扑顺序给节点编号，所以分支节点的 ID 夹�
 - `30211411:0:INS:>CC`：节点 ID 两侧 200 个以内都没有 GRCh38 节点；
 - chr17 上的 `21708846:0:SNP:A>G`（16 条 reads 里 8 条 ALT）：按 ID 最近的两个参考节点 `21708658`、`21709029` 在 `chr17:43,322,822` 和 `chr17:55,501,408`，中间隔 12,178,585 bp，超过 1,024。
 
-PacBio 上没有位置的 tensor（SNV 33,043、INDEL 8,684）绝大多数是第一种（SNV 32,519、INDEL 8,514）；因为间隔超过 1,024 bp 而没有位置的有 SNV 524、INDEL 170 个，间隔从 2,368 bp 到 173,436,931 bp（chr2 的 `29914995:0:SNP:T>A`），中位数 14,336 bp，超过 1 Mb 的 198 个，397 个在 chr9；两侧不在同一条染色体上的没有。
+PacBio 上没有位置的 tensor（SNV 29,396、INDEL 8,684）绝大多数是第一种（SNV 28,921、INDEL 8,514）；因为间隔超过 1,024 bp 而没有位置的有 SNV 475、INDEL 170 个，间隔从 2,368 bp 到 173,436,931 bp（chr2 的 `29914995:0:SNP:T>A`），中位数 14,336 bp，超过 1 Mb 的 192 个，354 个在 chr9；两侧不在同一条染色体上的没有。
 
 ## 4. 第三步：分类规则（按顺序，第一条符合的决定标签）
 
@@ -144,20 +146,22 @@ PacBio 上没有位置的 tensor（SNV 33,043、INDEL 8,684）绝大多数是第
 | R10 | （只剩有 GRCh38 坐标的）同一位置有合格 germline truth，A1 和它重叠 >0.45 | 2 | `residual_partial_germline_truth` |
 | R11 | 10 bp 内有任何 truth allele（somatic 或 germline） | 0 | `near_truth_allele_mismatch` |
 | R12 | 其它所有 | 0 | `confident_no_truth_allele` |
+| R13 | 只在设了 `--ignore-repeat-indels` 时：R4、R11、R12 要给 0 的 INDEL tensor（A1 是 INS 或 DEL，有 GRCh38 坐标），A1 在 GRCh38 上的 repeat 类是 `HP>=7` 或 `STR` | −1 | `repeat_indel_without_truth` |
 
 说明：
 - **R2–R4 的 1 和 2 不看 BED**（它们都在 R6 之前）；R8、R10 的部分匹配在 R6 之后，只在 confident 区里。R4 的 0（`truth_matches_non_representative_allele`）也不看 BED；其它的 0 都在 confident 区里。
-- **−1 的来源**：R1 AF 太低、R2'/R4' somatic truth 没 PASS、R5 没位置、R6 BED 外、R9 分支节点没对上 somatic。R1、R5、R6 是测试时不看 truth 也能做的判断（AF、有没有位置、在不在调用用的 BED 里）：tumor-only caller 在测试时会遇到每一个 tensor，所以 −1 只留给测试时同样能去掉的 tensor，BED 内 GRCh38 节点上其它没有 truth 的 tensor——包括真实变异旁边的错误和假象——都是 0。R9 另有原因：germline truth 只有 GRCh38 上的键，分支节点上"没对上 truth"说明不了什么，多数分支节点上根本没有 truth，所以不当负样本。
+- **−1 的来源**：R1 AF 太低、R2'/R4' somatic truth 没 PASS、R5 没位置、R6 BED 外、R9 分支节点没对上 somatic、R13（设了 `--ignore-repeat-indels` 时）同聚物 / STR 里没有 truth 的 INDEL。R1、R5、R6 是测试时不看 truth 也能做的判断（AF、有没有位置、在不在调用用的 BED 里）：tumor-only caller 在测试时会遇到每一个 tensor，所以 −1 只留给测试时同样能去掉的 tensor，BED 内 GRCh38 节点上其它没有 truth 的 tensor——包括真实变异旁边的错误和假象——都是 0。R9 另有原因：germline truth 只有 GRCh38 上的键，分支节点上"没对上 truth"说明不了什么，多数分支节点上根本没有 truth，所以不当负样本。
 - **somatic 优先**：A1 同时等于 somatic 和 germline truth 时，R2 先命中，标 1。
 - R4 里先试 somatic，再试 germline；同一类有几个 truth 时取重叠最大的那个。
 - R8/R10 的"同一位置"：truth 的 span 和 tensor 的区间相交（有 GRCh38 坐标时两边各放宽 1 bp，所以紧挨着也算；anchor 两边各放宽 10 bp）。
 - **分支节点上的 tensor 永远拿不到 2**：R3/R4 要 truth 键，分支节点上没有键；R10 在 R9 之后，只剩有 GRCh38 坐标的 tensor。分支节点只能是 1（R8）或 −1。
 - R11 的"10 bp 内"用的是所有 truth allele，包括没 PASS 的和 COMPLEX，并且按整个 span 算：INS 的 span 从最左到最右的插入点，因为 reads 可能把它写在重复里的任何位置。
 - R1 在最前面，但 labels.ndjson 里照样记下 `somatic`/`germline` 匹配，所以能看出被它去掉的 truth。
+- **R13 不是单独的一步**：它在 R4、R11、R12 给 0 的地方判断，所以 R4 的 0 变成的 −1 也不看 BED；R7 的 0、SNV 和分支节点上的 tensor 不受影响。repeat 类（`RepeatContext`，用 `--fasta`）：unit 是插入 / 删除碱基的最小周期，tract 是 GRCh38 上碰到这个事件的、由这个 unit 精确重复组成的最长一段；`HP>=7`（unit 1，tract ≥ 7 bp）、`HP4-6`、`STR`（unit 2–6，≥ 3 个 unit）、`VNTR`（unit > 6，≥ 2 个 unit）、`none`。只有 `HP>=7` 和 `STR` 变成 −1；每个算过的 INDEL（也包括留在 0 的）在 labels.ndjson 里记下 `repeat_class`。它是"−1 只留给测试时能去掉的 tensor"的例外，原因在 truth：SEQC2（短读长 call 的合并）和 CASTLE（INDEL 要 Illumina 和至少一个长读长的 DeepSomatic 模型都 call 到）这类 truth 漏掉很多同聚物 / STR 里的 INDEL（somatic INDEL 里 `HP>=7` 的比例：SEQC2 HCC1395 15.5%、HG008T 74.9%，见 `analysis/indel_repeat_context_predictions_20261006`；CASTLE H1437 / H2009 / HCC1954 的 truth VCF 按 `RepeatContext` 算是 20.3% / 23.8% / 50.8%），这些位置上没有 truth 的 INDEL 不是可靠的负样本。分类规则就是那个分析的规则。
 
 ### 各规则的真实例子（HG008 PacBio，另外注明的除外）
 
-**R1 AF 太低（之前一版的 HG008 Illumina：build AF 0.06、`--snv-min-af 0.07`；现在 build AF 0.08，这几个 tensor 不再生成）。** `39113762:0:SNP:C>A` = somatic `chr4:108442081 C>A`（0/1，PASS），82 条 reads 里 5 条 ALT（AF 0.061）→ **−1**。HG008 Illumina 里 A1 是 somatic truth、被 R1 去掉的只有它和 `51692207:1:SNP:T>A`（`chr7:12908284 T>A`，7/103，AF 0.068）两个。germline 也一样：`30223463:10:SNP:A>T` = germline `chr20:1258971 A>T`（1/0），3/47 条（AF 0.064）→ **−1**。
+**R1 AF 太低。** 六个数据集都没设下限（build AF 0.08 以下的 allele 本来就没有 tensor），所以没有 R1 的例子（第 7 节 `below_snv_min_af` 都是 0）。R1 在 R2 之前：设了下限时，AF 更低的 tensor 即使 A1 是 somatic truth 也是 **−1**。
 
 **R2 完全匹配 somatic。** `30217844:21:SNP:G>A` = somatic `chr20:964493 G>A`（0/1，PASS）。67 条 reads 全是 ALT → **1**。
 
@@ -252,14 +256,14 @@ PacBio 上没有位置的 tensor（SNV 33,043、INDEL 8,684）绝大多数是第
 
 每个 `<tensors>/<SNV|INDEL>/` 里（merge 之后的目录，和 `<chrom>_variant_summary.ndjson` 同序）：
 - `<chrom>_shard_NNNNN_labels.npy`（int8，和 tensor 一一对应）。
-- `<chrom>_labels.ndjson`，每个 tensor 一行：`candidate_id`、`site_id`、`chrom`、`shard_file`、`index_within_shard`、`label`、`label_name`、`reason`、`somatic`/`germline`（键等于 site 里某个 allele 的 truth，含 `matched_candidate_id` 和 `representative`，表示是不是 A1）、`grch38`、`anchor`（分支节点定了位时）、`partial`（`allele` / `residual` / null），部分匹配时再加 `overlap` 和 `partial_truth`。
-- `labels.manifest.json`：`format`（`truth-labels`）、`rules_sha256`（`truth_labels.py` 的 SHA-256）、`created`、标签值、`near_bp`、`min_overlap`、`anchor_reach`、`anchor_gap`、`snv_min_af`、`indel_min_af`（没给时是 null）、`tensors`（tensor 总数）、每条染色体和总的标签计数、每个 reason 的计数、`partial` 计数、truth VCF 和 BED 的路径与 SHA-256、truth 统计、confident 区大小、FASTA 和 reference-path 目录。
+- `<chrom>_labels.ndjson`，每个 tensor 一行：`candidate_id`、`site_id`、`chrom`、`shard_file`、`index_within_shard`、`label`、`label_name`、`reason`、`somatic`/`germline`（键等于 site 里某个 allele 的 truth，含 `matched_candidate_id` 和 `representative`，表示是不是 A1）、`grch38`、`anchor`（分支节点定了位时）、`partial`（`allele` / `residual` / null），部分匹配时再加 `overlap` 和 `partial_truth`；设了 `--ignore-repeat-indels` 时，R13 判断过的 INDEL 再加 `repeat_class`。
+- `labels.manifest.json`：`format`（`truth-labels`）、`rules_sha256`（`truth_labels.py` 的 SHA-256）、`created`、标签值、`near_bp`、`min_overlap`、`anchor_reach`、`anchor_gap`、`snv_min_af`、`indel_min_af`（没给时是 null）、`ignore_repeat_indels`（true / false；六个数据集的 manifest 早于这个选项，没有这一项）、`tensors`（tensor 总数）、每条染色体和总的标签计数、每个 reason 的计数、`partial` 计数、truth VCF 和 BED 的路径与 SHA-256、truth 统计、confident 区大小、FASTA 和 reference-path 目录。
 
-另外：`--truth-dir` 下的 `<set>.graph.tsv`（每个 truth allele 和它的键，只取决于图和 VCF）；`--recall-dir`（默认 `--tensors`）下的 `<set>.recall.tsv` 和 `truth_recall.json`（每个 truth allele：是某个 tensor 的 A1、是 site 里的其它 allele、COMPLEX、没有唯一节点键、被 filtered（带原因）、或者没有候选）。
+另外：`--truth-dir` 下的 `<set>.graph.tsv`（每个 truth allele 和它的键，只取决于图和 VCF）；`--tensors` 下的 `<set>.recall.tsv` 和 `truth_recall.json`（每个 truth allele：是某个 tensor 的 A1、是 site 里的其它 allele、COMPLEX、没有唯一节点键、被 filtered（带原因）、或者没有候选；`truth_recall.json` 最后写，finalize 靠它判断标签这一步是否做完）。
 
 ## 7. 六个数据集的计数
 
-目录都在 `/scratch/jshen/data/pansoma_v2_tensors/<数据集>/tensors/{SNV,INDEL}/labels.manifest.json`，2026-10-02/03 重建（`--haplotypes 90`，build AF SNV 和 INDEL 都是 0.08）时 finalize 按现行规则打的标签（十二个 manifest 的 `rules_sha256` 都是 `5430533aa100…`）。部分匹配的几行（`allele_partial_*`、`residual_partial_*`）和 manifest 的 `partial` 计数相同。六个数据集都没设 AF 下限（六个数据集 build 时 SNV 的 AF 阈值都是 0.06）；六个都没有用 `--indel-min-af`。
+目录都在 `/scratch/jshen/data/pansoma_v2_tensors/<数据集>/tensors/{SNV,INDEL}/labels.manifest.json`，2026-10-02/03 重建（`--haplotypes 90`，build AF SNV 和 INDEL 都是 0.08）时 finalize 按现行规则打的标签（十二个 manifest 的 `rules_sha256` 都是 `5430533aa100…`）。部分匹配的几行（`allele_partial_*`、`residual_partial_*`）和 manifest 的 `partial` 计数相同。六个数据集都没设 AF 下限（`--snv-min-af`、`--indel-min-af`），也都没有用 `--ignore-repeat-indels`。
 
 **HG008**（`HG008T_PacBio`、`HG008T_ONT`、`HG008T_Illumina`；truth：GIAB `HG008-T_somatic_smvar_benchmark_v0.2` + HG008-N dipcall）
 
@@ -316,7 +320,7 @@ PacBio 上没有位置的 tensor（SNV 33,043、INDEL 8,684）绝大多数是第
 - `somatic_truth_filtered` 在六个数据集里都是 0：没有 tensor 的 allele 只匹配到没 PASS 的 somatic truth（HG008 的 somatic truth 全部 PASS）。
 - `germline_truth_filtered` 只有 COLO829T fiberseq 和 ONT 各 1 个，是同一个 site（R7 的例子）。
 - SNV 的 `allele_partial_germline_truth`、`residual_partial_germline_truth` 都是 0：germline 只算 allele 重叠，而 SNV 对 SNV 只有完全相同才算（第 5.1 节）。SNV 的部分匹配只有 somatic，靠单倍型重叠。
-- `below_snv_min_af` 都是 0：没设下限。build AF 0.08 以下的 allele 本来就没有 tensor；之前一版（build AF 0.06）两个 Illumina 数据集用 `--snv-min-af 0.07` 标成 −1 的 SNV 里，A1 是 somatic truth 的：HG008 Illumina 2 个，COLO829T Illumina 389 个。
+- `below_snv_min_af` 都是 0：没设下限，build AF 0.08 以下的 allele 本来就没有 tensor。
 
 ## 8. 读代码时注意到、值得讨论的点
 
@@ -324,23 +328,23 @@ PacBio 上没有位置的 tensor（SNV 33,043、INDEL 8,684）绝大多数是第
 
 ### 8.1 还没定的点
 
-1. **分支节点上的 tensor 拿不到 2，没对上 somatic 的也不当 0。** 分支节点只能是 1（R8）或 −1（R5、R6、R9；短读长的 SNV 还有 R1）。PacBio 上定了 anchor 的 tensor：SNV 72,989 个、INDEL 116,695 个；其中标 1 的 SNV 322、INDEL 1,353，R9 的 −1 有 SNV 48,953、INDEL 99,441（AF ≥ 0.3 的 SNV 33,925、INDEL 41,741），其余（SNV 23,714、INDEL 15,901）在 confident 区外。AF 高的那些里应该有不少是人群分支上的真实 germline allele（例如 `30194624:0:SNP:T>C`，7/7 条 reads 是 ALT）：训练时它们既不是 2 也不是 0，而 tumor-only caller 在测试时会遇到它们。
-2. **truth 在 site 的另一个 allele 上、A1 和它重叠不够 → 0，BED 外也是 0。** PacBio INDEL 有 3,577 个，其中 3,223 个是同一位置 INS 对 DEL（A1 是缺失、truth 是插入，或反过来；类型不同，allele 重叠是 0；这里面 3,195 个只有 germline truth，germline 又不算单倍型重叠），这里面 2,731 个是同一个碱基的删一个对插一个（如 A1 `−A`、truth `+A`）；2,804 个的 truth allele reads 不少于 A1 的一半，300 个不少于 A1。例子 `31372027:40:DEL:A>`：A1 `−A` 49 条，germline truth（1/1）`+A` 46 条 → 0。site 里确实有真实 germline allele 的 reads，却当成负样本。
-3. **SNV 对 SNV 只看完全相同。** 同一位置 ALT 不同（例如 truth G>A、A1 G>C）的 allele 重叠为 0；somatic 还有单倍型重叠兜底，germline 没有。PacBio SNV 的 137 个 `truth_matches_non_representative_allele` 全是这种（136 个 germline，1 个 somatic）。
+1. **分支节点上的 tensor 拿不到 2，没对上 somatic 的也不当 0。** 分支节点只能是 1（R8）或 −1（R5、R6、R9；设了 AF 下限时还有 R1）。PacBio 上定了 anchor 的 tensor：SNV 67,425 个、INDEL 116,694 个；其中标 1 的 SNV 300、INDEL 1,353，R9 的 −1 有 SNV 46,048、INDEL 99,441（AF ≥ 0.3 的 SNV 33,925、INDEL 41,741），其余（SNV 21,077、INDEL 15,900）在 confident 区外。AF 高的那些里应该有不少是人群分支上的真实 germline allele（例如 `30194624:0:SNP:T>C`，7/7 条 reads 是 ALT）：训练时它们既不是 2 也不是 0，而 tumor-only caller 在测试时会遇到它们。
+2. **truth 在 site 的另一个 allele 上、A1 和它重叠不够 → 0，BED 外也是 0。** PacBio INDEL 有 3,577 个，其中 3,223 个是同一位置 INS 对 DEL（A1 是缺失、truth 是插入，或反过来；类型不同，allele 重叠是 0；这里面 3,195 个只有 germline truth，germline 又不算单倍型重叠），这里面 2,731 个是同一个碱基的删一个对插一个（如 A1 `−A`、truth `+A`）；2,804 个的 truth allele reads（summary `alleles` 里的 `alt_count`，有几个 truth allele 时取最多的）不少于 A1 的一半，300 个不少于 A1。例子 `31372027:40:DEL:A>`：A1 `−A` 49 条，germline truth（1/1）`+A` 46 条 → 0。site 里确实有真实 germline allele 的 reads，却当成负样本。
+3. **SNV 对 SNV 只看完全相同。** 同一位置 ALT 不同（例如 truth G>A、A1 G>C）的 allele 重叠为 0；somatic 还有单倍型重叠兜底，germline 没有。PacBio SNV 的 125 个 `truth_matches_non_representative_allele` 全是这种（124 个 germline，1 个 somatic）。
 4. **germline 不做单倍型重叠。** 所以"走分支 + 残余 edit""跳过节点 + 错配"这类写法的 germline 变异，只能靠 allele 重叠（R4、R10，且只在 GRCh38 节点上）：在 GRCh38 节点上对不上的落到 R11/R12 的 0，在分支节点上的是 R9 的 −1。
 5. **somatic 优先；但 A1 是 germline 时，site 里别的 somatic allele 不管用。** A1 同时等于 somatic 和 germline truth 时 R2 先命中，标 1：HG008 有 209 个 somatic allele 和某个 germline allele 完全相同（多为正常样本杂合，可能是肿瘤 LOH 或两个 benchmark 冲突），PacBio 上这样的 tensor 有 61 个（INDEL 51、SNV 10）。反过来，A1 等于 germline truth、site 里另一个 allele 是 somatic truth 时 R3 先命中，整个 tensor 标 2：PacBio 254、ONT 234、Illumina 40 个。
 6. **somatic 单倍型的残余 edit，重叠不够的标 0。** miss 分析（`analysis/hg008_somatic_miss_20260926`）列出了未命中的 somatic INDEL（I1–I3 类：allele 全部在图里、部分在图里留下残余 edit、GRCh38 路径上写成别的 edit）的 ALT reads 上的残余 edits（至少 3 条 ALT reads 带它的）。按不同候选计，它们所在 tensor 现在的标签：
 
    | | PacBio | ONT | Illumina |
    |---|---:|---:|---:|
-   | 1 | 3,322 | 2,668 | 1,709 |
-   | 2 | 430 | 239 | 323 |
-   | 0 | 273 | 324 | 1,684 |
-   | −1 | 406 | 424 | 729 |
-   | 没有 tensor | 1,971 | 679 | 1,762 |
+   | 1 | 3,291 | 2,648 | 1,659 |
+   | 2 | 426 | 237 | 323 |
+   | 0 | 260 | 312 | 1,411 |
+   | −1 | 400 | 421 | 333 |
+   | 没有 tensor | 2,025 | 716 | 2,481 |
 
-   0 大多是 R11 `near_truth_allele_mismatch`（231 / 237 / 1,679），其余是 R4 的 `truth_matches_non_representative_allele`（42 / 87 / 5）。这些 tensor 带的是 somatic 单倍型的 reads，却是负样本；Illumina 上标 0 的和标 1 的差不多一样多。
-7. **残余 edit 正好等于（或部分匹配）一个 germline truth → 2。** 例如 germline `TA>T`、somatic `TAA>T`，残余 edit `DEL A` 等于 germline 键，R3（和 R4）在 R8 之前 → 2。上表里的 2：PacBio 430 个（A1 正好是 germline truth 300 个、R4 allele 部分匹配 108、R10 residual 部分匹配 21、GAP 1），ONT 239，Illumina 323。像上面这个例子，reads 其实是 somatic 单倍型的残余，却标 2；另一部分是 ALT reads 上附带的真实 germline 变异，这些标 2 是对的。
+   0 大多是 R11 `near_truth_allele_mismatch`（218 / 227 / 1,406），其余是 R4 的 `truth_matches_non_representative_allele`（42 / 85 / 5）。这些 tensor 带的是 somatic 单倍型的 reads，却是负样本；Illumina 上标 0 的（1,411）接近标 1 的（1,659）。
+7. **残余 edit 正好等于（或部分匹配）一个 germline truth → 2。** 例如 germline `TA>T`、somatic `TAA>T`，残余 edit `DEL A` 等于 germline 键，R3（和 R4）在 R8 之前 → 2。上表里的 2：PacBio 426 个（A1 正好是 germline truth 296 个、R4 allele 部分匹配 108、R10 residual 部分匹配 21、GAP 1），ONT 237，Illumina 323。像上面这个例子，reads 其实是 somatic 单倍型的残余，却标 2；另一部分是 ALT reads 上附带的真实 germline 变异，这些标 2 是对的。
 8. **1/2 不看 BED，大部分 0 要看。** confident 区外的 truth 匹配（R2–R4）照样是 1/2（R4 的 0 也不看 BED），而同样位置的非 truth tensor 是 −1（R8、R10 的部分匹配也只在区内）。分支节点判断是否在 confident 区只看 anchor 区间的中点。
 9. **单倍型重叠只用 tensor 窗口里的序列。** 每条 read 大约 100 bp、最多 20 条，取中位数；A1 少于 3 条时不算。长插入（>50 bp）或跨出窗口的事件算不准。
 
@@ -348,5 +352,5 @@ PacBio 上没有位置的 tensor（SNV 33,043、INDEL 8,684）绝大多数是第
 
 - **重叠阈值是 0.45（`MIN_OVERLAP`）。** 这样同聚物里差一个碱基的短 indel（`+T` 对 `+TT`、删 1 个对删 2 个，allele 重叠 0.5）和较长的（`+TT` 对 `+TTT`，0.667）一样算同一个事件；差两个碱基的（`+T` 对 `+TTT`、删 1 个对删 3 个，0.333）不算。
 - **单倍型重叠只认离 truth 比离 GRCh38 更近的 read。** 原始 `d_truth ≥ d_ref` 的 A1 read 记 0，减去背景 b 不改变这一点（第 5.2 节）：离两条单倍型一样近的 read 不是这个 truth 的证据。所以同一位置有 somatic truth、A1 reads 却不带它的 tensor 不是部分匹配，例如 `30419351:0:DEL:A>`（R11 的 0）、`30887064:0:DEL:G>`（R9 的 −1）。
-- **分支节点上没对上 somatic truth 的 tensor 是 −1（R9），不是 0。** germline truth 只有 GRCh38 上的键，分支节点上"没有 truth"不代表没有变异，多数分支节点上根本没有 truth；部分匹配 somatic 的 1 照样保留（PacBio SNV 322、INDEL 1,353）。
+- **分支节点上没对上 somatic truth 的 tensor 是 −1（R9），不是 0。** germline truth 只有 GRCh38 上的键，分支节点上"没有 truth"不代表没有变异，多数分支节点上根本没有 truth；部分匹配 somatic 的 1 照样保留（PacBio SNV 300、INDEL 1,353）。
 - **AF 下限放在 build，不放在标签。** 六个数据集 SNV 和 INDEL 都用 build AF 0.08，AF 更低的 allele 不生成 tensor，所以标签不设下限（R1 不起作用）；AF 是测试时不看 truth 也能用的过滤条件。R1（`--snv-min-af`、`--indel-min-af`，prepare 里是 `--label-snv-min-af`、`--label-indel-min-af`）留给不重建 tensor、只想提高下限的情况；两个 kind 分开设。

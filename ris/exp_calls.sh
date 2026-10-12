@@ -2,9 +2,11 @@
 # Experiment CPU job for one set of an exp_train.sh run: calls of chr2 and chr1 with the default decision (the
 # checkpoint's validation recall-0.9 threshold, the PoN script's rules), then two decisions chosen on chr2 (the
 # training data's held-out chromosome) and applied once to chr1:
-#  - general: the threshold only (best call-level F1 on chr2); the PoN script's own rules, no read-AF floor.
+#  - general: the threshold only (best call-level F1 on chr2, tools/tune_indel.py with one flat 0.01 INDEL PoN floor),
+#    then chr1 with the PoN script's own rules; no read-AF floor.
 #    The same rule for every set: what a model would carry to an unlabelled sample.
-#  - tuned: threshold, PoN AF floor and read-AF floor (tools/tune_indel.py grid): per-set, for reference only.
+#  - tuned: threshold, a flat INDEL PoN AF floor (tools/pon_tag.py) and read-AF floor (tools/tune_indel.py grid):
+#    per-set, for reference only.
 # Usage: exp_calls.sh NAME KIND SET
 # Output: $PANSOMA_RUNS/NAME/vcf_<SET>_<chrom>[_general|_tuned]/, tune_<SET>[.general].json.
 set -euo pipefail

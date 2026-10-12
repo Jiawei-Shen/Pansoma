@@ -63,61 +63,71 @@ $P -m pansoma_net_v2.predict --checkpoint runs/HG008_Illumina_SNV/best.pth --ten
     --chroms chr1 --output runs/HG008_Illumina_SNV/test_chr1
 ```
 
-`/scratch/jshen/data/pansoma_net_v2_runs/jobs/run.sh NAME SET KIND [train options]` runs both steps as one
-Slurm job. `python -m pansoma_net_v2.summary [NAME ...]` prints each run's per-epoch table, its current step and, when
+`machine_learning/pansoma_net_v2/jobs/run.sh NAME TENSORS KIND [train options]` runs both steps as one Slurm job.
+The Slurm job scripts in `jobs/` (training + chr1 test, chr1 test again, calls, re-scoring of calls, the INDEL
+recipe's submitter, the index and chunk caches; `jobs/README.txt` lists them) are local copies for this cluster and
+not in git (`.gitignore`); their logs and `submitted.txt` go to `/scratch/jshen/data/pansoma_net_v2_runs/jobs`. On RIS the jobs are `ris/` (`ris/README.md`).
+`python -m pansoma_net_v2.summary [NAME ...]` prints each run's per-epoch table, its current step and, when
 done, its chr1 test result (per tensor and against the truth VCF) and the rtg vcfeval reports of its calls
 (`<run>/vcf_*/eval_bed`, `eval_nobed`: PASS P/R/F1 and the chr1 curve's best point, raw and after the PoN). The table
 columns are:
 
 - training loss, speed, minutes, GPU peak;
-- validation per tensor: somatic AP and s.F1 / s.P / s.R at the best threshold, and the threshold t;
+- validation per tensor: somatic AP and s.F1 / s.P / s.R at the best threshold, the threshold t, and the precision
+  where the somatic recall reaches 0.9 (P@R.9);
 - against the truth VCF at the same t: t.AP, t.F1 / t.P / t.R and the ceiling (below);
-- germline F1.
+- germline argmax F1; `*` marks the best epoch so far (by s.F1, as `best.pth`).
 
-Useful `train` options:
+Useful `train` options (the recipes, "SNV recipe" and "INDEL recipe" below, set the size, `--epochs`,
+`--batch-size`, `--lr`, `--class-weights`, `--non-fraction 1.0`, `--block v2` and `--ignore-reasons`):
 
 - **Split.**
   - `--test-chroms` (default chr1).
   - `--val-fraction 0.05` of the `--val-block-nodes 20000`-node blocks of the training chromosomes; whole
     blocks, so validation tensors share no reads with training tensors. `--val-chroms` instead validates on
-    whole chromosomes.
+    whole chromosomes; `--train-chroms` limits training to some chromosomes (a quick test).
 - **Imbalance.**
-  - `--non-fraction F`: each epoch takes every somatic and germline tensor and a fresh random fraction F of
-    the non tensors.
-  - `--keep-non-af A` (with `--non-fraction`): the non tensors with AF ≥ A are taken every epoch. The sampled
-    non tensors get loss weight 1/F, so each epoch's loss stays an unbiased estimate of the loss over all
-    non tensors, whatever their AF.
   - `--class-weights balanced|sqrt|pow:E|none|w0,w1,w2`: balanced is n / (3 n_c) over one epoch's tensors;
     sqrt is its square root, pow:E its power E. The loss is normalized by the batch's summed weights, so
     scaling all three weights changes nothing.
+  - `--non-fraction 1.0` (the default and the recipes): every tensor every epoch (smaller values: below).
 - **Label reasons left out.** `--ignore-reasons R ...` treats the tensors of those label reasons as -1 in training and
-  validation; the label files are unchanged. HG008T Illumina SNV runs leave out
-  `residual_partial_somatic_truth allele_partial_somatic_truth`: SNV tensors that partially match an INDEL truth
-  (mostly read-end SNV shadows of the INDEL) taught the model low-AF artefacts next to germline INDELs, and as SNV
-  calls they never match the truth (analysis/v1_vs_v2_20260929).
-- **Candidates left out.** `--exclude-candidates FILE` (candidate ids, first column) takes those tensors out before
-  the model, as if never built: -1 in training and validation (over `--label-overrides` too); `predict` leaves them
-  out of the test by default (their truth alleles are misses) and `graph_vcf` writes no record for them. The INDEL
-  recipe does not use it (below).
+  validation; the label files are unchanged. Both recipes leave out
+  `residual_partial_somatic_truth allele_partial_somatic_truth`. For SNV: SNV tensors that partially match an INDEL
+  truth (mostly read-end SNV shadows of the INDEL) taught the model low-AF artefacts next to germline INDELs, and as
+  SNV calls they never match the truth (analysis/v1_vs_v2_20260929).
 - **Model.**
-  - `--scalars` feeds the site scalars to the head (`data.SCALARS`: log coverage, log site coverage, log
-    ALT / REF / OTHER counts, AF, second allele AF, allele count, log event length). They are the counts
-    before the 200-row cap, z-scored with training statistics that are stored in the model.
-  - `--block v2|v1` (below, Model) and `--decay-all`.
   - `--depths`, `--dims`, `--front`, `--drop-path` set the size (defaults `3 3 27 3` / `192 384 768 1536`,
     as in v1's training script).
-- **Selection.** `--select f1|ap|truth_f1` picks the best checkpoint by the thresholded somatic F1 per tensor
-  (default), the somatic average precision, or the best F1 against the truth VCF (below). With `truth_f1` the
-  stored threshold is the one of that F1.
+  - `--block v2` (the default; below, Model).
+  - `--drop-planes PLANE ...` leaves encoder planes out of the input (e.g. `path_count`; "Channel 6 storage" below).
+- **Selection.** `best.pth` is the epoch with the highest thresholded per-tensor somatic F1 on the validation tensors
+  (ties: the lower validation loss); it stores that threshold.
 - **Speed.** `--no-compile` and `--no-channels-last` turn off the defaults on CUDA (below). Training reads
   chunks from a zstd cache (`--read-threads 16`, `--chunk-rows 512`, `--window-chunks 32`, `--chunk-cache`;
-  "Reading the training tensors" below); `--no-chunk-cache` reads the chunks from the raw shards, and
-  `--random-reads` goes back to one pread per tensor in DataLoader workers (`--num-workers`).
+  "Reading the training tensors" below). `--num-workers` sets the DataLoader workers of the statistics (0 also reads
+  the validation without workers), `--val-workers` those of the validation.
 - **Memory.** `--micro-batches K` runs the forward and backward of each batch in K parts (gradient accumulation):
   the same update as the whole batch, with the loss normalized over the whole batch, and the GPU memory of one part.
   Batch 1024 of the default model fills a 94 GB H100 NVL (about 94.7 of 95.8 GB); batch 512 takes about 49 GB.
-- Also: `--epoch-samples`, `--val-samples`, `--stats-samples 20000`, `--amp bf16|off`, `--resume` (keeps the
-  checkpoint's statistics), `--seed`.
+- Also: `--stats-samples 20000`, `--amp bf16|off`, `--resume` (keeps the checkpoint's statistics), `--seed`.
+
+Options kept for older checkpoints and experiments (no recipe uses them):
+
+- `--block v1` and `--decay-all`: the blocks and the weight decay of the checkpoints made before 2026-09-29 (below,
+  Model).
+- `--scalars` feeds the site scalars to the head (`data.SCALARS`: log coverage, log site coverage, log
+  ALT / REF / OTHER counts, AF, second allele AF, allele count, log event length). They are the counts
+  before the 200-row cap, z-scored with training statistics that are stored in the model.
+- `--non-fraction F` < 1: each epoch takes every somatic and germline tensor and a fresh random fraction F of the non
+  tensors. `--keep-non-af A` with it takes the non tensors with AF ≥ A every epoch; the sampled non tensors then get
+  loss weight 1/F, so each epoch's loss stays an unbiased estimate of the loss over all non tensors, whatever their AF.
+- `--exclude-candidates FILE` (candidate ids, first column) takes those tensors out before the model, as if never
+  built: -1 in training and validation; `predict` leaves them out of the test by default (their truth alleles are
+  misses) and `graph_vcf` writes no record for them. The INDEL recipe does not use it (below).
+- `--epoch-samples N` (a fresh random subset of the training tensors each epoch) and `--val-samples N` (a fixed random
+  subset of the validation tensors).
+- `--no-chunk-cache`: training reads the chunks from the raw shards instead of the zstd cache.
 
 **Evaluation** (`metrics.py`). The target is the somatic class; germline is reported too.
 
@@ -157,34 +167,20 @@ scores the truth alleles themselves:
 - Validation: a truth allele belongs to the validation block that holds its position (each block starts at
   its first tensor), so validation truth alleles without a tensor count as misses there too.
 
-On HG008 Illumina chr1:
+On HG008T chr1 (the recipe runs of `analysis/hg008t_snv_indel_7fc7396_20261012`; SNV Illumina: its earlier run
+`HG008_Illumina_SNV_h90`, the same recipe and set):
 
-| | truth alleles | with a tensor (ceiling) | tensors of the other kind's truth |
-|---|---|---|---|
-| SNV | 697 SNP | 662 (95.0 %) | 188 SNV tensors of 137 INDEL truth alleles |
-| INDEL | 588 DEL + INS | 317 (53.9 %) | 1 |
-
-Of those 137 INDEL truth alleles, 74 also have an INDEL tensor. Adding the two models' truth reports would
-count them twice, so `combine` scores a sample's SNV and INDEL predictions together against the whole truth
-VCF, as a pipeline's output VCF is compared with it:
-
-```bash
-$P -m pansoma_net_v2.combine HG008_Illumina_SNV_base HG008_Illumina_INDEL_base --output HG008_Illumina.json
-```
-
-- The truth alleles are those of all predicted kinds.
-- A truth allele is found when any of its test tensors, in either set, is called by its model (each model's
-  own threshold). It counts once, however many calls it has.
-- Precision, recall, F1, the ceiling, per truth kind, which sets found each truth allele, and the calls
-  repeated on a truth already found. No AP: the two models' scores are not on one scale.
-- With both sets, the INDEL truth alleles on chr1 with a tensor are 380 (64.6 %) instead of 317.
+| | truth alleles | with a tensor (ceiling): Illumina / PacBio / ONT |
+|---|---|---|
+| SNV | 697 SNP | 659 (0.945) / 658 (0.944) / 663 (0.951) |
+| INDEL | 588 DEL + INS | 317 (0.539) / 413 (0.702) / 408 (0.694) |
 
 Outputs in `--output`:
 
 - `args.json` (the options) and `train.log`.
 - `metrics.jsonl` (per epoch: train loss and accuracy, speed, GPU peak memory, and the validation report).
 - `stats.json`.
-- `last.pth`, and `best.pth` (best validation by `--select`).
+- `last.pth`, and `best.pth` (the epoch of the best thresholded validation somatic F1).
 
 A checkpoint holds `format: pansoma_net_v2`, `config`, `model_state_dict` (the encoder's and scalar
 statistics are buffers in it), `stats`, `somatic_threshold`, `classes`, `planes`, `scalars`, the training
@@ -211,9 +207,9 @@ through the node) is not somatic, and on an off-reference node every read has a 
 calls somatic there. `predict --offref-site90 W` (default 10; 0 turns it off) scores every SNV off-reference tensor
 again with its ch6 cells below the every-haplotype code raised to it in the site columns (the middle column ± W;
 uncovered cells stay 0), and calls it somatic when somatic is the most probable class of those probabilities. The
-every-haplotype code depends on the set's channel-6 storage (`data.PATH_COUNT_ALL`): 90 on
-`int8-count-linear100-log2` (the earlier HPRC v1.1 d9 build: 90 haplotype paths, stored as the count), 100 on
-`int8-count-haplotypes100` (the count relative to the build's `--haplotypes` H, H → 100). Its record adds p_offref_non,
+every-haplotype code is the set's channel-6 storage's (`data.PATH_COUNT_ALL`): 100 on `int8-count-haplotypes100` (the
+count relative to the build's `--haplotypes` H, H → 100), 90 on the older `int8-count-linear100-log2` (kept for the
+checkpoints trained on it; "Channel 6 storage" below). Its record adds p_offref_non,
 p_offref_somatic, p_offref_germline and offref_call. `.metrics.json` adds `offref_rescue` (tensors, calls before
 and after, `floor`) and the rule `pipeline`: offref_call on the off-reference tensors, the checkpoint's validation recall-0.9
 threshold on the others.
@@ -226,39 +222,38 @@ included), one whole GPU; calls at the validation recall-0.9 threshold, off-refe
 epoch ~7 (validation loss 0.51 -> 2.16) and the 50.4 M model does not; with the PoN in the BED both reach P/R/F1
 0.473/0.832/0.604 (199.6 M, best epoch 5) and 0.493/0.822/0.616 (50.4 M).
 
-**INDEL recipe** (every platform; chosen on the six P100 sets, 2026-10-11): the 8.7 M model `--depths 2 2 6 2 --dims
+**INDEL recipe** (every platform; chosen on the six P100 sets): the 8.7 M model `--depths 2 2 6 2 --dims
 64 128 256 512`, `--class-weights sqrt --batch-size 1024 --lr 1e-4 --epochs 12 --non-fraction 1.0 --block v2
 --ignore-reasons residual_partial_somatic_truth allele_partial_somatic_truth`, every plane and every candidate kept
 (no `--exclude-candidates`); calls at the validation recall-0.9 threshold (graph_vcf's default; no off-reference
 rescue for INDELs), then the INDEL PoN rule (gnomAD / CoLoRSdb exact allele: AF ≥ 0.01 in homopolymers of ≥ 7 bases,
 else AF ≥ 0.001; below). The chr1 curve's best point is recorded next to the PASS result (vcfeval's report,
 `summary`); it is chosen on the test chromosome and never used as the threshold. On a MIG 2g.24gb slice the batch
-needs `--micro-batches 4` (about 23 GB as one batch). `jobs/submit_indel.sh SET ...` submits the recipe (chunk cache,
-training + chr1 test, calls + vcfeval).
+needs `--micro-batches 4` (about 23 GB as one batch). `machine_learning/pansoma_net_v2/jobs/submit_indel.sh SET ...`
+submits the recipe per set from that directory (chunk cache, training + chr1 test, calls + vcfeval); logs and
+`submitted.txt` go to `pansoma_net_v2_runs/jobs`. The recipe's chr1 results on HG008T:
+`analysis/hg008t_snv_indel_7fc7396_20261012`.
 
-The choices, from the runs of 2026-10-10 (chr1 in the BED after the INDEL PoN; F1 at the validation recall-0.9
-threshold, then at the chr1 curve's best point; every number per rule in
-`tmp/indel_non_20261006/results_detail_20261011.md`):
+Why (chr1 in the BED after the INDEL PoN, F1 at the validation recall-0.9 threshold; the runs
+`<sample>_<platform>_INDEL_small_*` in `pansoma_net_v2_runs`):
 
-- **lr 1e-4 rather than 4e-4** (both with the candidate filter below): HG008T Illumina 0.226 → 0.241 (best 0.249 →
-  0.258), PacBio 0.130 → 0.135 (0.254 both), ONT 0.016 → 0.017 (0.139 → 0.130).
-- **sqrt rather than pow:0.8 class weights** (the long-read sets, eight pairs): pow:0.8 lowers the validation somatic
-  AP in six and the recall-0.9 F1 in seven (more calls at the same recall: HG008T PacBio 0.130 → 0.108).
-- **No candidate filter.** The filter left out the INDEL candidates with AF < 0.10, and those with AF < 0.15 whose
-  allele is not in the other sample's set of the same platform (34–49 % of the long-read tensors). It takes out
-  tensors the model already ranks low (0–1 % of the unfiltered models' calls at the chr1 best point). On HG008T the
-  unfiltered runs are equal or better (Illumina / PacBio / ONT 0.239 / 0.132 / 0.015 against 0.226 / 0.130 / 0.016).
-  On COLO829T's long reads the filtered runs score higher (fiberseq 0.055 against 0.010, where the unfiltered
-  recall-0.9 threshold fell to 7.5e-6), but at most about 33 truth INDELs are left there after the PoN.
-- **The recall-0.9 rule.** predict's other two rules: the validation best-F1 threshold t is higher on the HG008T long
-  reads (PacBio 0.214, ONT 0.101 against 0.132, 0.015 unfiltered) and lower on Illumina (0.194 against 0.239), and on
-  COLO829T it calls 9–185 tensors; argmax called 0–2 INDELs in three Illumina runs. The chr1 best points lie between
-  the two thresholds (PacBio p ≈ 0.3, Illumina 0.1–0.2).
+- **lr 1e-4.** With the candidate filter (below) HG008T Illumina / PacBio / ONT 0.241 / 0.135 / 0.017 against
+  0.226 / 0.130 / 0.016 at 4e-4; without it the two are within 0.01 (`analysis/hg008t_snv_indel_7fc7396_20261012`).
+- **sqrt class weights.** pow:0.8 lowers the validation somatic AP in six of the eight long-read pairs and the
+  recall-0.9 F1 in seven (more calls at the same recall).
+- **No candidate filter.** The filter (INDEL candidates with AF < 0.10, and with AF < 0.15 whose allele is not in the
+  other sample's set of the platform) takes out tensors the model already ranks low; on HG008T the unfiltered runs
+  are about equal or better (0.239 / 0.132 / 0.015 against 0.226 / 0.130 / 0.016). On COLO829T's long reads the filtered
+  runs score higher, but on at most about 33 truth INDELs left after the PoN.
+- **The recall-0.9 rule.** The validation best-F1 threshold t scores higher on the HG008T long reads (PacBio 0.214,
+  ONT 0.101 against 0.132, 0.015) and lower on Illumina (0.194 against 0.239), and calls only 9–185 tensors on
+  COLO829T; argmax called 0–2 INDELs in three Illumina runs.
 
 The 8.7 M model is within noise of the 199.6 M model on chr1 (best F1 0.13–0.15 without the PoN, with or without the
-partial labels or ch6) and trains in a tenth of the time. What limits INDELs is outside the model: the PoN rule
-tags 413 of the 635 HG008T chr1 truth INDELs (81 of 131 on COLO829T), so the curves' recall after it stops at
-0.24–0.26; 46 % of the HG008T Illumina truth INDELs get no candidate (the allele is a path of the HPRC graph); and
+partial labels or ch6) and trains about four times faster (HG008T Illumina: 55 s against 214 s per epoch). What
+limits INDELs is outside the model: the PoN rule tags 413 of the 635 HG008T chr1 truth INDELs (81 of 131 on
+COLO829T), so the curves' recall after it stops at 0.24–0.26; 46 % of the HG008T Illumina truth INDELs get no
+candidate (the allele is a path of the HPRC graph); and
 the false calls are the patient's germline homopolymer INDELs at the same VAF as the somatic ones
 (`analysis/indel_20260930`, `analysis/tensor_recall_20260930`).
 
@@ -281,13 +276,19 @@ $P -m pansoma_net_v2.vcfeval --calls out/HG008T_Illumina.SNV.linear.vcf.gz \
     --truth <somatic truth>.vcf.gz --bed <benchmark>.bed --sdf GRCh38.sdf --rtg rtg --output out/eval_bed
 ```
 
-INDEL calls use the same command; the PoN script applies its INDEL rule (gnomAD / CoLoRSdb only, AF ≥ 0.01 in
+The graph index is the one the set was built with (`manifest.json` `graph_index.path`), the reference path and FASTA
+those of its labels (`labels.manifest.json` `reference_path`, `fasta`); the example is HG008T_Illumina's (HPRC v1.1
+d9). INDEL calls use the same command; the PoN script applies its INDEL rule (gnomAD / CoLoRSdb only, AF ≥ 0.01 in
 homopolymers of ≥ 7 bases, else AF ≥ 0.001; the homopolymer from the calls' `##reference` FASTA)
 to them.
 
-`/scratch/jshen/data/pansoma_net_v2_runs/jobs/vcf.sh RUN KIND` runs the three on a run's chr1 predictions into
-`<run>/vcf_chr1/`, with the truth VCF and BED of the set's labels, and the PoN for both kinds. For a checkpoint
-without validation thresholds (trained before `val.somatic_at_recall`), set `THRESHOLD=t`. vcfeval runs twice there:
+`machine_learning/pansoma_net_v2/jobs/vcf.sh RUN KIND [OUT]` runs the three on a run's chr1 predictions into
+`<run>/vcf_chr1/` (or OUT), with the PoN for both kinds. The set is `pansoma_v2_tensors/<set>/tensors`, `<set>` the
+prefix of the predictions file, for a set of any graph (d9, d46, linear); the truth VCF, BED, FASTA and reference path
+come from the set's `labels.manifest.json`, the graph index from its `manifest.json`. A predictions file whose prefix
+is no set directory stops ("no tensor set"); `SET_NAME=<set>` picks one set when the run predicted several.
+`THRESHOLD=t` (a number, or `predict`) overrides the PASS threshold (needed for checkpoints without validation
+thresholds). vcfeval runs twice there:
 
 - `eval_bed`: inside the benchmark BED.
 - `eval_nobed`: on the whole chromosome (reusing the PoN-tagged calls through `--pon-vcf`). This is the form
@@ -309,9 +310,9 @@ without validation thresholds (trained before `val.somatic_at_recall`), set `THR
     A record with predict's off-reference rescue is called by offref_call instead; its QUAL is from
     p_offref_somatic and INFO OFFREF_P_* keeps the rescored probabilities. INDEL predictions have no rescue.
   - LowQual: not called.
-  - LowAF: below the AF floor of the checkpoint's training labels (none on the sets built at AF 0.08 for both
-    kinds; SNV 0.07 on the earlier Illumina sets in `backup_ch6_linear100_20261001`). A relabel of the predicted
-    set, or a new sample without labels, does not change it.
+  - LowAF: AF below `--min-af`, by default the AF floor of the checkpoint's training labels (their optional
+    `snv_min_af` / `indel_min_af`; none when the training labels had no floor, as on every current set, and then no
+    record is LowAF). A relabel of the predicted set, or a new sample without labels, does not change it.
 - Tensors with p_somatic < `--min-score` (0.01) that are not called are left out. The LowQual records give
   vcfeval its curve.
 
@@ -344,46 +345,48 @@ merge stored as the summaries' `grch38`.
   the threshold. report.txt also gives the PASS calls without a GRCh38 position: they are not evaluated, so precision
   is also shown with them counted as false calls.
 
-HG008 Illumina chr1. SNV: `HG008_Illumina_SNV_allnon_sqrt_b1024`, `<run>/vcf_chr1/` (2026-09-30), PASS p ≥ 0.254.
-INDEL: `HG008_Illumina_INDEL_nopartial_b1024_small` (lr 4e-4), `<run>/vcf_chr1_pon/` (calls 2026-10-06, the
-homopolymer PoN rule 2026-10-10), PASS p ≥ 0.080. PASS is the checkpoint's validation recall-0.9 threshold
-(`val.somatic_at_recall`); the PoN is the rule of each kind. Best F1 is the best point of the chr1 curve, with its
-p_somatic: a test-set choice, recorded for reference.
+HG008T chr1 with the recipes (`analysis/hg008t_snv_indel_7fc7396_20261012`, whose `tables.md` also has the raw and
+no-BED rows and the training; SNV Illumina from its earlier run `HG008_Illumina_SNV_h90`, the same recipe and set):
+in the benchmark BED after the PoN of each kind, PASS at the checkpoint's validation recall-0.9 threshold
+(`val.somatic_at_recall`). Best F1 is the best point of the chr1 curve, with its p_somatic: a test-set choice,
+recorded for reference.
 
-| | PASS evaluated (unplaced) | TP | FP | P | R | F1 | chr1 best F1 at p (P, R; TP / FP) |
-|---|---|---|---|---|---|---|---|
-| SNV raw, in BED (697) | 5,487 (8) | 598 | 4,889 | 0.109 | 0.858 | 0.193 | 0.266 at 0.537 (0.222, 0.333; 232 / 815) |
-| SNV pon, in BED | 1,212 | 575 | 637 | 0.474 | 0.825 | 0.602 | 0.615 at 0.322 (0.515, 0.763; 532 / 500) |
-| SNV pon, no BED (702) | 1,259 | 579 | 680 | 0.460 | 0.825 | 0.591 | 0.606 at 0.322 (0.502, 0.763; 536 / 531) |
-| INDEL raw, in BED (587) | 3,560 (543) | 211 | 3,349 | 0.059 | 0.359 | 0.102 | 0.150 at 0.270 (0.105, 0.266; 156 / 1,331) |
-| INDEL pon, in BED | 567 | 140 | 427 | 0.247 | 0.238 | 0.243 | 0.265 at 0.139 (0.329, 0.222; 130 / 265) |
-| INDEL pon, no BED (635) | 631 | 148 | 483 | 0.234 | 0.233 | 0.234 | 0.255 at 0.139 (0.313, 0.216; 137 / 301) |
+| | truth | PASS threshold | PASS evaluated (unplaced) | PoN TP / FP | PoN P / R / F1 | chr1 best F1 at p |
+|---|---|---|---|---|---|---|
+| SNV Illumina | 697 | 0.419 | 5,556 (570) | 573 / 666 | 0.463 / 0.822 / 0.592 | 0.612 at 0.563 |
+| SNV PacBio | 697 | 0.314 | 5,540 (211) | 577 / 584 | 0.497 / 0.828 / 0.621 | 0.641 at 0.395 |
+| SNV ONT | 697 | 0.449 | 5,843 (1,409) | 576 / 661 | 0.466 / 0.826 / 0.596 | 0.620 at 0.612 |
+| INDEL Illumina | 587 | 0.119 | 3,596 (563) | 140 / 434 | 0.244 / 0.238 / 0.241 | 0.264 at 0.209 |
+| INDEL PacBio | 587 | 0.040 | 11,759 (2,075) | 150 / 2,630 | 0.054 / 0.256 / 0.089 | 0.260 at 0.259 |
+| INDEL ONT | 587 | 0.018 | 41,052 (7,288) | 134 / 17,268 | 0.008 / 0.228 / 0.015 | 0.140 at 0.168 |
 
-- **Agreement with the truth-level metrics** (`HG008_Illumina_SNV_keephard_w100` at predict's threshold). The
-  results agree with `metrics.truth_report`:
-  - SNV raw: TP 315 in both.
-  - FP: 1,617 against 1,627. rtg does not score the 17 unplaced false calls, counts 4 SNV tensors next to
-    INS truths as FP, and 3 calls lie in the somatic BED but outside the germline BED.
-  - SNV pon, in BED, of the table: TP 575 and FP 637 here, TP 574 and FP 635 with the scorer of
-    `analysis/v1_vs_v2_20260929` (same PoN rule, somatic BED ∩ germline BED).
-- **Partial labels.** Both runs are trained without the partial-match labels (`train --ignore-reasons
+- **Agreement with the truth-level metrics.** For SNV, the best point of rtg's raw curve is that of
+  `metrics.truth_report` in predict's `.metrics.json` (the same p_somatic; TP / FP: PacBio 271 / 780 in both,
+  Illumina 288 / 954 against 288 / 953, ONT 259 / 783 against 258 / 779; that analysis's `summary.json`). For
+  INDEL the truth report counts the partial matches the INDEL test keeps (above) and finds more (Illumina TP 156
+  against rtg's 134); on runs whose test left them out the TP agree (`HG008_<P>_INDEL_small` in the same file: 152 /
+  106 / 70 against 152 / 107 / 70).
+- **Partial labels.** Both recipes train without the partial-match labels (`train --ignore-reasons
   residual_partial_somatic_truth allele_partial_somatic_truth`). No partial SNV tensor is an rtg true positive:
   its allele is an SNV and its truth an INDEL.
-- **Pansoma v1** (e053) with the same PoN rule on that scorer: best F1 0.587, against 0.616 for this SNV run.
-- **The PoN on INDELs.** The SNV rule tags 544 of the 635 chr1 INDEL truth records (CoLoRSdb 533 of them, most in
-  homopolymers at population AF 0.1–5 %), so after it no caller could recall more than 14 %. The INDEL rule
-  (gnomAD / CoLoRSdb exact allele, AF ≥ 0.01 in homopolymers of ≥ 7 bases and ≥ 0.001 otherwise, no dbSNP or 1000G)
-  tags 413 (recall ceiling 0.257 in the BED) and raises the PASS F1 from 0.102 to 0.243; AF ≥ 0.01 for every INDEL
-  tags 383 and gives 0.216. For SNV the SNV rule tags 61 of 702.
-- **Runs predicted before a tensor rebuild.** `graph_vcf` checks every candidate ID against the set's
-  `chr1_variant_summary.ndjson`, so `vcf.sh` stops on predictions made on an earlier build of the set. Their
-  existing `<run>/vcf_chr1/*.linear.vcf.gz` can still be re-scored: `jobs/vcfeval_only.sh RUN KIND vcf_chr1 OUT`
-  runs the PoN and rtg steps only.
+- **Pansoma v1** (e053) with the SNV PoN rule on HG008T Illumina chr1: best F1 0.587, against 0.616 for a v2 SNV run of
+  the earlier tensor build, on the scorer of `analysis/v1_vs_v2_20260929` (somatic BED ∩ germline BED;
+  `synthesis/snv_pon1e4.out`).
+- **The PoN on INDELs.** The SNV rule would tag 544 of the 635 chr1 INDEL truth records
+  (`analysis/tensor_recall_20260930`), so after it no caller could recall more than 14 %. The INDEL rule tags 413
+  (rtg's recall ceiling after it: 0.24–0.26 in the BED); AF ≥ 0.01 for every INDEL tags 383 and removes fewer false
+  calls (HG008T Illumina PASS F1 0.218 against 0.246 on the same calls). For SNV the SNV rule tags 61 of 702.
+- **Re-scoring existing calls.** `machine_learning/pansoma_net_v2/jobs/vcfeval_only.sh RUN KIND VCFDIR OUT` runs the
+  PoN and rtg steps only, on an existing `<run>/<VCFDIR>/*.linear.vcf.gz`, into OUT (a full path; `<run>/vcf_chr1`
+  re-scores in place): calls made with an earlier PoN rule get this checkout's, and runs predicted on an earlier build
+  of the set can still be scored (`graph_vcf` checks every candidate ID against the set's
+  `chr1_variant_summary.ndjson`, so `vcf.sh` stops on them).
 
 ## GPU runs (measured 2026-09-28, node tequila)
 
-`--gres=gpu:24gb:1` is an H100 NVL MIG slice (`2g.24gb`); `gpu:h100` is a whole H100 NVL (94 GB). The default
-model has 199.4 M parameters. Measured bf16 training speed (a whole H100, batch 256 unless noted):
+`--gres=gpu:24gb:1` is an H100 NVL MIG slice (`2g.24gb`); `gpu:h100` is a whole H100 NVL (94 GB). Measured bf16
+training speed of the default size, then with the v1 blocks (199.4 M parameters; with the v2 blocks 199.6 M), a whole
+H100, batch 256 unless noted:
 
 | setting | speed | GPU memory (peak) |
 |---|---|---|
@@ -406,8 +409,8 @@ model has 199.4 M parameters. Measured bf16 training speed (a whole H100, batch 
 
 `data.KindIndex` reads each `<set>/<KIND>/`:
 
-- `manifest.json` (and from it the channel-6 storage: `tensor_storage`, or `tensor_storage_version` with a `-v1`
-  suffix as in the six existing sets, and the build's `parameters.haplotypes`) and the label files `*_labels.npy`;
+- `manifest.json` (and from it the channel-6 storage `tensor_storage`, and the build's `parameters.haplotypes`; the
+  older spelling, `tensor_storage_version` with a `-v1` suffix, is still read) and the label files `*_labels.npy`;
 - from every summary record: `candidate_id`, `node_id`, `shard_file`, `index_within_shard`, `row_groups`,
   and the numbers behind `SCALARS` (the record's own fields, not those of its `alleles[]` entries).
 
@@ -420,10 +423,11 @@ evaluation labels. Jobs can share a cache: each process writes its own temporary
 renames them. Reading the summaries takes about a minute per
 2.5 M tensors.
 
-**Channel 6 storage.** The path-count channel has two codes: `int8-count-linear100-log2` (HPRC v1.1 d9 sets built
-before `--haplotypes` existed, now in `pansoma_v2_tensors/backup_ch6_linear100_20261001`; all checkpoints trained
-before 2026-10-01 read only them: the count up to 100, then 100 + ceil(log2(count − 99))) and `int8-count-haplotypes100` (what indexed_gam_pipeline_v4 builds: relative to
-`--haplotypes` H, H → 100, one code per missing haplotype down to 51). A model reads one of them: `train` refuses
+**Channel 6 storage.** The path-count channel has two codes: `int8-count-haplotypes100` (what indexed_gam_pipeline_v4
+builds, every set on disk: relative to `--haplotypes` H, H → 100, one code per missing haplotype down to 51) and
+`int8-count-linear100-log2` (the count up to 100, then 100 + ceil(log2(count − 99)): the HPRC v1.1 d9 sets built before
+`--haplotypes` existed, since deleted; kept for the checkpoints trained before 2026-10-01, which read only them).
+A model reads one of them: `train` refuses
 sets that differ (`data.common_path_count`) and records it in the checkpoint (`path_count_storage`,
 `path_count_haplotypes`); `train --resume` and `predict` refuse sets coded otherwise than the checkpoint, before
 any prediction (a checkpoint without `path_count_storage` counts as `int8-count-linear100-log2`, the storage it was
@@ -448,7 +452,7 @@ Random reads cannot keep an H100 busy (~1,400 tensors/s compiled). Measured on t
 |---|---|
 | one random 161.6 KB `pread` from BeeGFS, one thread, under load | 38 tensors/s (~26 ms per read) |
 | a whole 5.3 GB shard in one sequential read, one thread | ~1,290 tensors/s (210 MB/s) |
-| training with 48 workers and random reads (four jobs on the node) | 300–550 tensors/s, GPU busy ~20 % |
+| training with one random read per tensor in 48 DataLoader workers (the reader before the chunks; four jobs on the node) | 300–550 tensors/s, GPU busy ~20 % |
 | chunks of 512 rows, 16 threads, raw shards (other jobs running) | ~350 tensors/s: all readers of the node together got ~300 MB/s |
 
 The tensors are 45 % zero bytes; zstd level 1 packs a 512-row chunk (83 MB) 28.8× and unpacks it at ~1.1 GB/s
@@ -484,8 +488,8 @@ own truncated-normal initialization; v1's training script re-initialized them wi
   - Its GRN normalizes each read row by the norm over (positions, channels), with one scalar gamma / beta.
   - A GELU follows every residual sum (no identity path through the 39 blocks), the stem and every downsampling.
 
-AdamW decays every weight matrix but not biases, norm weights and the GRN gamma / beta; `--decay-all` decays
-every parameter, as the runs before 2026-09-29 did.
+AdamW decays every weight matrix but not biases, norm weights and the GRN gamma / beta; `--decay-all` (kept for
+comparison with the older checkpoints) decays every parameter, as the runs before 2026-09-29 did.
 
 ## Tests
 
@@ -493,9 +497,12 @@ every parameter, as the runs before 2026-09-29 did.
 cd machine_learning && $P -m unittest discover -s pansoma_net_v2/tests -t .
 ```
 
-- `test_encode`: every plane is 0 on padding; one-hot groups; masked z-score (MAPQ 0 ≠ padding, BQ −1 →
-  `bq_missing`); `differs`; row blocks fill exactly the covered cells of each read; statistics only from
-  valid covered cells; bf16 output.
+76 tests; `test_gpu` (4) needs a CUDA device, `test_real_data` (4) the real tensor set, and the rtg case of `test_vcf`
+(1) rtg, otherwise they are skipped.
+
+- `test_encode`: every plane is 0 on padding; plane names and shape; one-hot groups; masked z-score (MAPQ 0 ≠
+  padding, BQ −1 → `bq_missing`); `differs`; row blocks fill exactly the covered cells of each read; statistics only
+  from valid covered cells, their round trip and the unfitted encoder; dropped planes; bf16 output.
 - `test_data`:
   - the index (node, scalars) against a synthetic merged set;
   - the channel-6 storage of a set (`tensor_storage`, the `-v1` spelling, refusal of an unknown one) and of
@@ -506,16 +513,22 @@ cd machine_learning && $P -m unittest discover -s pansoma_net_v2/tests -t .
     labels 1 and 2 outside the region;
   - truth ids from the labels, and the validation truth alleles of the blocks;
   - the block split keeps whole blocks and is deterministic;
-  - `EpochSampler` gives disjoint evaluation slices and equal padded training slices per rank.
+  - `EpochSampler` gives disjoint evaluation slices and equal padded training slices per rank; with a non fraction
+    < 1 it takes the kept non tensors every epoch and samples the rest.
 - `test_model_train`:
-  - forward and checkpoint round trip, with and without scalars;
+  - forward and checkpoint round trip, with and without scalars, and with a dropped plane;
   - blocks v1 / v2: a v2 block with a zero branch is the identity, GRN v2 against its formula, checkpoints without
     `block` load as v1 with the same logits; the weight-decay groups;
-  - loss without −1;
-  - forkserver workers;
+  - loss without −1; the class weights (balanced, sqrt, pow:E); `--micro-batches 2` gives the whole batch's update;
+  - forkserver workers; a worker start is retried, then raised;
   - CPU runs: train 2 epochs (chr1 left out, block validation, threshold stored), resume (statistics kept),
-    then predict chr1 with the stored threshold, and the truth report recomputed from the predictions; runs
-    with `--scalars`, `--select truth_f1` and `--keep-non-af`;
+    then predict chr1 with the stored threshold (the decision rules, the SNV off-reference rescue), and the truth
+    report recomputed from the predictions; an `--ignore-reasons` run (training and validation counts, predict's
+    ignored records with label, reason and truth ids kept); runs with `--scalars` and `--keep-non-af`;
+  - `--exclude-candidates`: -1 in place, and out of training, validation and the test (predict's default is the
+    checkpoint's file; `--exclude-candidates` without a file excludes none);
+  - predict's default test: the reasons trained without stay out of the SNV test, the INDEL test keeps the partial
+    somatic matches; an explicit `--ignore-reasons` still applies;
   - channel-6 storage: training on mixed storages and `--resume` across storages refused, the checkpoint
     records the storage, predict refuses another storage before any output (a checkpoint without the record
     counts as `int8-count-linear100-log2`), the rescue floor is 100 on `int8-count-haplotypes100` and 90 on
@@ -530,16 +543,20 @@ cd machine_learning && $P -m unittest discover -s pansoma_net_v2/tests -t .
   equal shares for DDP ranks; the zstd cache gives the same tensors, is reused, and a cache of another chunk
   size is refused; read errors reach the training loop.
 - `test_metrics`: average precision (ties together, as sklearn), the best-F1 threshold, and the thresholded
-  call; the truth report against brute force, duplicates and other-kind truth counted once.
-- `test_combine`: one truth found from both sets counts once; repeated calls; other-kind truth with one set;
-  two predictions of one kind are refused.
+  call; the precision and threshold at a recall against brute force; the truth report against brute force,
+  duplicates and other-kind truth counted once.
 - `test_vcf`: a small graph (a GRCh38 walk, an off-reference node) and one tensor per case.
   - graph_vcf: node padding (offset 0, node end, NOPAD, several nodes); FILTER from the checkpoint's validation
     threshold at a recall, `--threshold` or predict's calls, and the AF floor of the checkpoint's training
-    labels (not the predicted set's), with the errors for a checkpoint without them; a summary out of line.
+    labels (not the predicted set's), with the errors for a checkpoint without them; `--min-score` and
+    `--min-af`; the off-reference rescue called by offref_call; no record for excluded tensors; a summary out of
+    line; an event that does not fit the graph.
   - linear_vcf: projection equal to `ReferencePath.linear`, left-alignment, a merged junction insertion
     (PASS kept, A1 reads summed), unplaced events, a FASTA that disagrees.
-  - vcfeval: summary parsing (no baseline, NaN), the curve points. With rtg (`$RTG` or on PATH): PoN tags on
-    calls and truth (a sites-only truth without ##contig), calls vs curve, `--pon-vcf` reuse and refusal, no PoN.
-- `test_gpu`: runs on a CUDA node. The GPU encoding equals the CPU one, a bf16 training step learns, and
-  compile + channels_last gives the eager logits and gradients in fp32.
+  - the PoN script: the rules of each kind and the homopolymer run.
+  - vcfeval: record kinds, summary parsing (no baseline, NaN), the curve points. With rtg (`$RTG` or on PATH): PoN
+    tags on calls and truth (a sites-only truth without ##contig), calls vs curve, `--pon-vcf` reuse and refusal,
+    no PoN.
+- `test_gpu`: runs on a CUDA node. The GPU encoding equals the CPU one, a bf16 training step learns,
+  compile + channels_last gives the eager logits and gradients in fp32, and the compiled model has no graph break
+  and does not recompile.

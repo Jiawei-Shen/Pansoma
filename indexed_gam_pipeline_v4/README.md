@@ -12,10 +12,10 @@ record decoder); `orchestrate` runs a whole genome on one Slurm node as many sma
 with a byte-verified per-chromosome merge and truth labels (`tensor_postprocessing`).
 
 ```
-runtime  6,498 lines of Python in 19 files + fastdecode.cpp (659 lines); frozen per run: 23 files (those 20,
-         the compiled decoder and the two READMEs), 2.66 MB, 2.15 MB of it the compiled decoder
-tools    1,362 lines of Python in 7 files + gbz_graph_index.cpp (75 lines); not frozen
-tests    7,093 lines of Python in 23 files (+ golden_hashes.json), 199 tests, ~120 s on a quiet node
+runtime  6,661 lines of Python in 19 files + fastdecode.cpp (659 lines); frozen per run: 23 files (those 20,
+         the compiled decoder and the two READMEs), 2.67 MB, 2.15 MB of it the compiled decoder
+tools    1,354 lines of Python in 7 files + gbz_graph_index.cpp (75 lines); not frozen
+tests    7,359 lines of Python in 24 files (+ golden_hashes.json), 206 tests, ~2 min
 ```
 
 ---
@@ -46,7 +46,7 @@ sbatch -J gri -o LOG $P/tools/jobs/build_record_index.sh sample.sorted.gam   # -
 $PY -m $P.run discover --gam sample.sorted.gam --output discovery/ \
     --graph-index $G/hprc-v1.1-mc-grch38.d9.graph_index.sqlite --processes 48
 
-# (whole genome, one Slurm node) prepare a run root, then submit it
+# (whole genome, one Slurm node) prepare a run root, then submit its tasks; merge + labels are a job of their own
 $PY -m $P.orchestrate prepare --root /path/to/run --tensors /path/to/tensors \
     --gam sample.sorted.gam --nodes discovery/target_nodes.txt --node-stats discovery/node_stats.json \
     --graph-index $G/hprc-v1.1-mc-grch38.d9.graph_index.sqlite --haplotypes 90 \
@@ -57,15 +57,17 @@ $PY -m $P.orchestrate prepare --root /path/to/run --tensors /path/to/tensors \
     --somatic-vcf ... --somatic-bed ... --germline-vcf ... --germline-bed ... \
     --reference-fasta GRCh38.fasta --truth-dir /path/to/truth
 sbatch -p general --cpus-per-task=48 --mem=420G --time=14-00:00:00 \
-       --output=/path/to/run/slurm-%j.out /path/to/run/run.sh
-sbatch ... /path/to/run/run.sh --resume               # after a failure: redo only unfinished tasks
-sbatch ... /path/to/run/run.sh --no-finalize          # tasks only (big memory); then, as its own small job:
-$PY -m $P.orchestrate finalize --root /path/to/run    # only the merge + labels (idempotent, ~15 GiB)
+       --output=/path/to/run/slurm-%j.out /path/to/run/run.sh --no-finalize    # the tasks (big memory)
+sbatch ... /path/to/run/run.sh --no-finalize --resume   # after a failure: redo only unfinished tasks
+# then, as its own small job (~15 GiB + ~2.4 GiB of recall-scan workers: ask 22G), from the frozen source:
+cd /path/to/run/source && $PY -m $P.orchestrate finalize --root /path/to/run    # merge + labels (idempotent)
+# (run.sh without --no-finalize finalizes at the end of the run job, which holds its memory meanwhile)
 
-# (re-label by hand, e.g. new truth sets or AF floors above the build's) as finalize does
+# (re-label by hand, e.g. new truth sets or AF floors above the build's) as finalize does; as a Slurm job:
+# $P/tools/jobs/relabel.sh (section 4, "Tools")
 $PY -m $P.tensor_postprocessing label --tensors /path/to/tensors --reference-path $G/hprc-v1.1-mc-grch38.d9.grch38_path \
     --fasta GRCh38.fasta --somatic-vcf ... --somatic-bed ... --germline-vcf ... --germline-bed ... \
-    --truth-dir /path/to/truth [--snv-min-af F] [--indel-min-af F]
+    --truth-dir /path/to/truth [--snv-min-af F] [--indel-min-af F] [--ignore-repeat-indels]
 
 # (one task by hand, e.g. an audit) exactly what every task runs
 $PY -m $P.run build --gam sample.sorted.gam --nodes nodes.txt --graph-index $G/hprc-v1.1-mc-grch38.d9.graph_index.sqlite \
@@ -136,27 +138,26 @@ Key invariants:
 
 | File | Purpose |
 |---|---|
-| `common.py` | `write_json` (atomic, `indent=2` plus newline), `read_json`, `stamp`, `sha256_file`, `new_output`, `load_nodes`, `batches`; `EARLIER_FORMAT_NAMES` / `format_name` (section 8, "Format names") |
+| `common.py` | `write_json` (atomic, `indent=2` plus newline), `read_json`, `stamp`, `sha256_file`, `new_output`, `load_nodes`, `batches`; `EARLIER_FORMAT_NAMES` / `format_name` (section 8, "Format names"); `rc` / `COMPLEMENT` (reverse complement; `candidates` and `tensor_postprocessing.reference_path` import `rc`) |
 | `vg_pb2.py` | generated protobuf bindings for `vg.proto` (do not edit or regenerate; its deterministic serialization defines record digests and the read cap) |
-| `gam_reader.py` | protobuf stream framing (incl. the giraffe `PARAMS_JSON` / foreign-group skip), `scan_gam`, `BgzfReader` (pysam's BGZF seek/tell/read and errors over 16 MiB `pread`s instead of htslib's 32 KiB reads; group framing on the inflated block), `IndexedGam`: GAI bins (the format with the `'GAI!'` magic, format number 1; bins tested all at once as arrays), merged virtual-offset runs, then either the GAI walk (BGZF group seek, bounded LRU group cache that keeps no record with MAPQ ≤ `--min-mapq`) or, with a record index, the record path (only the runs' records that may visit the batch, coalesced `pread`s); `fetch` (file order, each record once), `fetch_capped` (the read cap while reading: per node the records with the smallest `record_key`) |
+| `gam_reader.py` | protobuf stream framing (incl. the giraffe `PARAMS_JSON` / foreign-group skip), `BgzfReader` (pysam's BGZF seek/tell/read and errors over 16 MiB `pread`s instead of htslib's 32 KiB reads; group framing on the inflated block), `IndexedGam`: GAI bins (the format with the `'GAI!'` magic, format number 1; bins tested all at once as arrays), merged virtual-offset runs, then either the GAI walk (BGZF group seek, bounded LRU group cache that keeps no record with MAPQ ≤ `--min-mapq`) or, with a record index, the record path (only the runs' records that may visit the batch, coalesced `pread`s); `fetch` (file order, each record once), `fetch_capped` (the read cap while reading: per node the records with the smallest `record_key`); `MultiGam` (several GAMs read as one); `segments` / `SEGMENTS_PER_PROCESS` (GAM segments cut at GAI run starts near equal file fractions, for `run discover` and the `.gri` build); `intervals_hit` (does an interval hold a batch node: bins in `IndexedGam.ranges`, record intervals in `gam_record_index`) |
 | `gam_record_index.py` | the per-record index `<GAM>.gri` of a long-read GAM (section 4): format, parallel builder and its refusals, loader (record windows by smallest node ID, long-record table), `open_for` (`PANSOMA_GAM_RECORD_INDEX`); CLI `build` / `check` / `info` |
 | `graph_index.py` | read-only `GraphIndex` over the graph SQLite (sequence + distinct path count per node) |
 | `candidates.py` | the data path from GAM record to site tensor: `decode_alignment` (+ `left_align_indels`, `indel_runs`, `indel_observations`: the part `fastdecode.cpp` ports), `NodeReads`/`VisitView` support counting (with the scan fallback), `alt_support_bounds`, `exact_coverage`, `SiteLayout`, `make_site_tensor`, `average_linkage`, format constants |
 | `native.py`, `fastdecode.cpp` | optional C++ decoder: `compile`/`check`, load-time SHA + 300-record self-test, `select_decoder` (`--decoder`, `PANSOMA_DECODER`), `NativeDecoder` with per-record Python fallback, `ColumnArray` with its per-read block cache; `Discovery` counters and `group_nodes` for `run discover` |
 | `build.py` | the per-task builder: batch planning (`auto` sizes, halving over the record limit), the capped fetch, prefilters, `candidate_units` (sites), `count_support`, `evaluate_unit`, `OutputDir`; always shared + SNV + INDEL |
-| `discovery.py` | `run discover`: GAM segments cut at GAI group starts, native normalized per-node counts merged in first-appearance order, streamed `node_stats.json` |
+| `discovery.py` | `run discover`: GAM segments cut at GAI group starts (`gam_reader.segments`), native normalized per-node counts merged in first-appearance order, streamed `node_stats.json` |
 | `run.py` | builder CLI: `discover`, `build` |
 | `orchestrate.py` | whole-genome controller: `prepare` / `run [--resume]` / `task` / `finalize`, `node_costs`, `execute_queue`, `validate_shards`, `verify`, `read_config` (package guard), `MemoryRecorder` |
 | `tensor_postprocessing/` | node → chromosome blocks (also `--chromosomes`), the GRCh38 reference-path reader, parallel per-chromosome merge, truth labels; CLI `merge`/`label` (own [README](tensor_postprocessing/README.md)) |
 
 Import order is top-down: `common` ← `gam_reader` (+ `gam_record_index`, imported when a reader
 opens)/`graph_index` ← `candidates` ← `native` ←
-`build` ← `run` ← `orchestrate`; `tensor_postprocessing` uses only `common`/`graph_index` and is
-used by `build` (`--chromosomes`) and `orchestrate` (`finalize`).
+`build` ← `run` ← `orchestrate`; `tensor_postprocessing` uses only `common` and is
+used by `build` and `orchestrate prepare` (`--chromosomes`) and by `orchestrate finalize`.
 
-**Tools** (`tools/`) — offline, run from the checkout (the job scripts also from a `git archive`
-copy such as `pipeline_code/`, section 6), never imported by a runtime module and not frozen (a
-static test enforces both):
+**Tools** (`tools/`) — offline, run from the checkout (a job script runs the package it is in,
+section 4), never imported by a runtime module and not frozen (a static test enforces both):
 
 | File | Purpose |
 |---|---|
@@ -435,6 +436,7 @@ prepare
 
 run --root R [--resume] [--no-finalize]
                              execute the tasks, then finalize (section 6); --no-finalize stops at `complete`
+                             (the usual route: finalize is then a job of its own)
 task --root R --index I      one task (spawned by run)
 finalize --root R            merge + labels as frozen at prepare; skips finished steps
 ```
@@ -448,63 +450,33 @@ the build's `--snv-min-af` / `--indel-min-af`, which decide which alleles become
 
 ### `tensor_postprocessing merge | label`
 
-Manual re-merge or re-label (`orchestrate finalize` runs both as frozen at prepare):
+Manual re-merge or re-label (`orchestrate finalize` runs both as frozen at prepare; `tools/jobs/relabel.sh` runs
+`label` as a Slurm job, "Tools" below):
 
 ```
 merge --root R --chr-index TSV [--shard-size 32768] [--keep-sources] [--workers 8] [--spots 200] [--reference-path DIR]
 label --tensors T --reference-path DIR --fasta FA --somatic-vcf --somatic-bed --germline-vcf --germline-bed
-      --truth-dir DIR [--kinds SNV INDEL] [--recall-dir DIR (default T)] [--snv-min-af F] [--indel-min-af F]
-      [--ignore-repeat-indels]
+      --truth-dir DIR [--kinds SNV INDEL] [--snv-min-af F] [--indel-min-af F] [--ignore-repeat-indels]
 ```
 
-* **Merge.** Every task directory of `outputs.json` must be complete and agree with the first on
-  `merge_shards.SHARED_KEYS` (`tensor_format`, `tensor_storage`, `shape`, `dtype`, `channels`,
-  `encodings`, `row_selection`, `row_order`, `window_encoding`, `parameters`, `sample_unit`,
-  `site_definition`, `read_cap`, `debug_rows`), so a merged set follows one build rule. Every (kind,
-  chromosome) group is one parallel job that reads its records' rows with plain sequential reads,
-  and the audit streams are copied in slices straight to their offsets in the concatenated file; the
-  bytes are those of a sequential copy (`--workers` does not change them, tested). A single-process
-  copy runs at ~150 MB/s, ~2 h for HG008 Illumina (833 GB of tensors plus 258 GB of audit streams);
-  its chr22 takes 227 s in one process and 101 s with 8 workers. Everything is verified before it is
-  published (data SHA-256 re-read from disk, summary records, totals, random tensors reloaded from
-  the sources); a second merge of a run, and a directory that already holds a merged layout, are
-  refused.
-* **Labels**, one per tensor from its representative allele A1 (`candidate_id`): **1** somatic —
-  A1 is a somatic truth allele with FILTER PASS/`.` or overlaps one by more than 45 %
-  (`MIN_OVERLAP`, "partial"); **2** germline — A1 is a germline truth allele with FILTER PASS/`.`
-  or only `GAP1`/`GAP2`, or overlaps one by more than 45 % (1 and 2 inside or outside the BEDs when
-  the truth is an allele of the site, else inside only);
-  **0** non — another allele of the site is the truth and A1 does not overlap it enough, and every
-  other tensor on a GRCh38 node inside somatic BED ∩ germline BED (no truth allele, a truth allele
-  within 10 bp that A1 does not match, a germline allele with another FILTER such as
-  `HET1`/`HET2`); **−1** ignore — a filtered somatic truth allele, outside the BEDs, no position
-  (no GRCh38 coordinate and no anchor), an off-reference node without a partial somatic match, and
-  with `--snv-min-af` / `--indel-min-af` every SNV / INDEL (A1 an INS or DEL) of lower AF, whatever
-  its truth (checked first; the sets of section 5 set neither); with `--ignore-repeat-indels` an
-  INDEL on GRCh38 that would be 0 in a homopolymer of >= 7 bp or an STR (unit 2-6, >= 3 units;
-  reason `repeat_indel_without_truth`, `repeat_class` in labels.ndjson): truth sets built from
-  short-read calls (SEQC2, CASTLE) leave such INDELs out, so they are no reliable negative. Indels are
-  matched at every equivalent placement in their repeat; an off-reference node is placed between the
-  reference nodes around it by node ID (within 200 IDs, at most 1024 GRCh38 bases apart), and
-  somatic truths written differently by the graph alignment are matched by the haplotype overlap of
-  the A1 reads. `labels.manifest.json` records `format` `truth-labels`, `rules_sha256` (the SHA-256
-  of `truth_labels.py`, which identifies the rules), the rule constants (`labels`, `near_bp`,
-  `min_overlap`, `anchor_reach`, `anchor_gap`), `snv_min_af`, `indel_min_af` (null when not given),
-  `ignore_repeat_indels`,
-  counts per chromosome and reason, and the truth/BED SHA-256s. −1 marks tensors a tumor-only caller
-  can leave out at test time as well (outside the BEDs, no position) and tensors that are no
-  reliable negative (off-reference nodes, which mostly carry no truth at all; tensors below an AF
-  floor, e.g. short-read SNVs); every other tensor without truth is 0, so the negatives stay in the
-  training data.
-
-Details, rules and the HG008 commands: [tensor_postprocessing/README.md](tensor_postprocessing/README.md).
+`merge` copies the task shards of `<root>/outputs.json` into `<tensors>/<kind>/<chrom>_shard_*` of `--shard-size`
+tensors (`--workers` processes, the same bytes for any number), verifies everything before it publishes (`--spots`
+random tensors per chromosome reloaded from the sources) and then deletes the task directories unless
+`--keep-sources`; `--reference-path` adds GRCh38 coordinates (`grch38`) to every summary record. `label` writes one
+label per merged tensor of `--kinds` (1 somatic, 2 germline, 0 non, −1 ignore) and `labels.manifest.json` per kind,
+the truth tables `<set>.graph.tsv` to `--truth-dir` and the recall reports `<set>.recall.tsv` / `truth_recall.json`
+to `--tensors`; its recall scan reads the filtered-candidate streams in 8 processes besides the main one.
+`--snv-min-af` / `--indel-min-af` make lower-AF SNV / INDEL tensors −1 whatever their truth (above the build's AF
+only does a floor change anything); `--ignore-repeat-indels` makes an INDEL in a GRCh38 homopolymer ≥ 7 bp or STR
+without a truth allele −1 instead of 0 (truth sets that leave such INDELs out: SEQC2, CASTLE). What the merge
+checks, the merged layout and every label rule: [tensor_postprocessing/README.md](tensor_postprocessing/README.md).
 
 ### Tools
 
 ```bash
 # graph index (once per graph): nodes(node_id, seq, distinct_path_count) + graph_metadata
 $PY -m $P.tools.graph_index_build compile --deps /scratch/jshen/Github/gbz-tool/dependency \
-    --output bin/gbz_graph_index [--cxx CXX] [--no-portable]
+    --output bin/gbz_graph_index [--cxx CXX]
 $PY -m $P.tools.graph_index_build build --gbz /scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.gbz \
     --builder bin/gbz_graph_index --output /path/to/new.graph.sqlite
 # GFA, reference path, chromosome blocks, index audit (once per graph; tensor_postprocessing/README.md)
@@ -538,7 +510,8 @@ $PY -m $P.tools.compare_runs A B [--mask DOTTED.KEY ...] [--report FILE]
   `distinct-gbwt-paths`, `count_algorithm`, source path/size/mtime/SHA-256, node and path totals,
   timings) is stored in the index and copied into every tensor manifest; `GraphIndex` also opens an
   index whose metadata spells the schema and metric with a `-v1` suffix (section 8, "Format names"),
-  as the HPRC v1.1 d9 index under `$G` does. `compile` writes `<output>.build.json` next to the
+  as the HPRC v1.1 d9 index under `$G` does. `compile` links libstdc++ and libgcc statically when the
+  toolchain has their static archives, else dynamically, and writes `<output>.build.json` next to the
   binary with the compiler, flags, glibc symbol versions and CPU extensions; it warns on AVX/BMI
   instructions, which come from the gbwtgraph dependencies (sdsl-lite's `-march=native`). Our build
   (`gbz-tool/dependency`) needs glibc ≥ 2.34 and an AVX/BMI CPU; the finished SQLite is needed only
@@ -579,8 +552,8 @@ $PY -m $P.tools.compare_runs A B [--mask DOTTED.KEY ...] [--report FILE]
   `build_record_index.sh`: `-p general,gpu --exclude=tsingtao`). Each runs
   the package it lives in: started with `bash`, the one around its own path; under `sbatch`, which
   runs a copy of the script, the one around the submitted path (job record, `scontrol show job`:
-  `Command=`). So the checkout's scripts run the checkout, and
-  `pipeline_code/indexed_gam_pipeline_v4/tools/jobs/` runs `pipeline_code/`. A script prints
+  `Command=`). So the checkout's scripts run the checkout, and the scripts of a copy (e.g. a
+  `git archive`) run that copy. A script prints
   `package: <dir>`, makes relative path arguments absolute and runs `python -m <package>...` from
   the package's parent directory.
   * `graph_prep.sh GBZ OUTDIR [FASTA]`, with `<name>` the GBZ file name without `.gbz`: the builder
@@ -597,9 +570,17 @@ $PY -m $P.tools.compare_runs A B [--mask DOTTED.KEY ...] [--report FILE]
   * `build_record_index.sh GAM [GAI]`: `gam_record_index build --processes $SLURM_CPUS_PER_TASK`, then
     `check`; it never replaces an existing `<GAM>.gri`; `FORCE=1` indexes a short-read GAM too. 8 CPUs,
     `--mem=4G` (peak 2.6-2.7 GB for 12.5-19.7 M ONT records), 1 day.
-  * `relabel.sh`: section 6; the reference path is `$REFERENCE_PATH`, else the one the set's current
-    labels used (`reference_path` of `TENSORS/SNV/labels.manifest.json`); 1 CPU, `--mem=19G` (label
-    peak 15.7 GiB, COLO829T), 6 h.
+  * `relabel.sh TENSORS SOMATIC_VCF SOMATIC_BED GERMLINE_VCF GERMLINE_BED TRUTH_DIR [SNV_MIN_AF [INDEL_MIN_AF]]`:
+    `tensor_postprocessing label` of one merged set (refused unless `TENSORS/SNV/manifest.json` has a merged
+    layout) with the GRCh38 FASTA `/scratch/jshen/data/HapMap/GCA_000001405.15_GRCh38_no_alt_analysis_set.fasta`.
+    The reference path is `$REFERENCE_PATH`, else the one the set's current labels used (`reference_path` of
+    `TENSORS/SNV/labels.manifest.json`; a set without labels needs `REFERENCE_PATH`).
+    The 7th and 8th arguments are `label`'s `--snv-min-af` and `--indel-min-af`; `''` skips one (`... TRUTH_DIR ''
+    0.10` sets the INDEL floor only). `IGNORE_REPEAT_INDELS=1` in the environment adds `--ignore-repeat-indels`
+    (a set labelled with `ignore_repeat_indels` true needs it again). No backup is kept: `label` writes every
+    label file of a kind to a temporary name and replaces the current ones only when all of them are written,
+    so a failed run leaves the current labels in place. `-c 9` (the recall scan's 8 workers and the main
+    process), `--mem=22G` (label peak 15.7 GiB, COLO829T, plus ~2.4 GiB for the scan workers), 6 h.
 * **validate_examples** requires `--debug-rows`. It recounts every site allele's (and the site's)
   coverage from raw mapping intervals, re-applies the read cap from the record digests, re-derives
   the site layout, the allele blocks and the uniform sampling from the recorded audit, and checks
@@ -619,12 +600,11 @@ with the allele blocks, from a shard plus the metadata beside it: `manifest.json
 `variant_summary.ndjson` for a task shard (`task_NNNN/shard_NNNNN_data.npy`), `manifest.json` +
 `<chrom>_variant_summary.ndjson` for a merged shard (`<tensors>/<kind>/<chrom>_shard_NNNNN_data.npy`).
 `-i` is the position within that shard (the record with the shard's `shard_index` and
-`index_within_shard`), not a line number of the chromosome summary. The finished datasets' merged
-shards (older `-v6`/`-v1` names) render the same way. Reading a whole-chromosome summary takes up to
-~25 s (chr1 SNV, 1.45 GB). The base environment's matplotlib has a NumPy ABI conflict; use
-`MPLBACKEND=Agg MPLCONFIGDIR=/tmp/pansoma_matplotlib
-/wanglab/jshen/anaconda3/envs/hunyuanvideo15/bin/python scripts/visualize_tensor.py SHARD -i 0 -o
-figure.png`.
+`index_within_shard`), not a line number of the chromosome summary. Reading a whole-chromosome summary
+takes up to ~25 s (chr1 SNV, 1.45 GB). The base environment's matplotlib does not load with its NumPy;
+use a Python whose matplotlib does: `MPLBACKEND=Agg MPLCONFIGDIR=/tmp/pansoma_matplotlib PYTHON
+scripts/visualize_tensor.py SHARD -i 0 -o figure.png` (without `-o` or `--output-dir` the PNG goes to
+`tensor_figures/<shard name>/` in the repository, which git ignores).
 
 ---
 
@@ -635,10 +615,7 @@ the code it ran in `<root>/source`). Each sample directory `/scratch/jshen/data/
 (HG008: `HG008T_PacBio`, `HG008T_ONT`, `HG008T_Illumina`; COLO829T: `COLO829T_{Illumina,fiberseq,ONT}`)
 holds `discovery/`, the run root `run/`, the merged and labelled `tensors/` (the only copy of the
 tensors: the task outputs are deleted after the merge), `truth/` (the truth tables of the labels)
-and a `README.txt` with the sample's inputs, settings, counts and relabel command. An earlier build
-of the same six sets, with the channel-6 storage `int8-count-linear100-log2` (section 8, "Format
-names") and SNV AF 0.06, is kept in `backup_ch6_linear100_20261001/<sample>`; models trained on it
-do not read the sets here (`machine_learning/pansoma_net_v2`).
+and a `README.txt` with the sample's inputs, settings and counts.
 
 All runs: one Slurm node (`-p general,gpu`, no GPU requested), `--haplotypes 90`, `--chromosomes
 autosome`, `--snv-min-af 0.08 --indel-min-af 0.08`, other builder options at their defaults
@@ -684,8 +661,8 @@ keeps every finished task; cells with two `--mem` values).
   after decoding every batch was split and every fixed batch size down to 256 failed; HG008 Illumina
   1024-node batches held 25–92 k records (section 7).
 * **Labels.** Outside the confident region (−1, `outside_confident_region`) lie 54 % of the PacBio,
-  69 % of the ONT-UL and 18 % of the Illumina SNV tensors. The label pass (1 process, 12–15 GiB)
-  takes 17–36 min of finalize.
+  69 % of the ONT-UL and 18 % of the Illumina SNV tensors. The label pass took 17–36 min of their
+  finalize at 12–15 GiB, in one process (their frozen source's recall scan reads one stream).
 
 **COLO829T** (`/scratch/jshen/data/pansoma_v2_tensors/COLO829T_<platform>/`, same graph and settings
 except `--processes`). Labels: somatic truth = the validated union SNV + INDEL VCFs
@@ -748,7 +725,8 @@ tasks, ONT-UL 4,380 (63.9 M autosomal targets).
 (every builder option, passed explicitly to each task, so a run never depends on the CLI defaults of
 the code that executes it), `native_decoder` (`available`, `reason`), `variant_outputs`
 ({SNV: AF, INDEL: AF}) and `postprocess` (`merge_shard_size`, `keep_sources`, `reference_path`,
-`labels`: the label inputs, `truth_dir` and the label AF floors `snv_min_af` / `indel_min_af`).
+`labels`: the label inputs, `truth_dir`, the label AF floors `snv_min_af` / `indel_min_af` and
+`ignore_repeat_indels`).
 
 **run** (`sbatch <root>/run.sh`, or `bash <root>/run.sh [--resume]`):
 1. refuses a merged root, fewer allocated CPUs (`SLURM_CPUS_PER_TASK`) than `processes`, and any
@@ -763,24 +741,27 @@ the code that executes it), `native_decoder` (`available`, `reason`), `variant_o
 3. `verify` again (nothing the tasks depend on changed while they ran), then `outputs.json` (every
    task directory with its tensor count; the capped nodes of all tasks gathered into
    `<root>/downsampled_nodes.tsv`) and `status.json` `complete`;
-4. **finalize** (skipped with `--no-finalize`: then `orchestrate finalize --root R` as a separate job; the
-   merge and labels peak at ~15 GiB on the genome sets plus ~2.4 GiB for the recall scan's workers (ask 22G), the tasks at up to ~450 GiB, so a run job that
-   finalizes holds that memory for the 2–7 h of merge and labels): with `--merge-shard-size N` the task outputs are merged into
-   `<tensors>/<kind>/<chrom>_shard_*` (chr1–22; other blocks under `<tensors>/non_autosomal/`) by
-   `min(8, processes)` workers, byte-verified, the task directories deleted unless
-   `--keep-sources`, and with the truth options every merged tensor labelled (somatic 1,
-   germline 2, non 0, ignore −1; below `--label-snv-min-af` / `--label-indel-min-af` −1).
+4. **finalize**, unless `--no-finalize`. The usual route is `run.sh --no-finalize` and then `cd <root>/source &&
+   python -m indexed_gam_pipeline_v4.orchestrate finalize --root <root>` as a job of its own: the merge and
+   labels peak at ~15 GiB on the genome sets plus ~2.4 GiB for the recall scan's workers (ask 22G), the tasks at
+   up to ~450 GiB, so a run job that finalizes holds that memory for the 2–7 h of merge and labels. With
+   `--merge-shard-size N` the task outputs are merged into `<tensors>/<kind>/<chrom>_shard_*` (chr1–22; other
+   blocks under `<tensors>/non_autosomal/`) by `min(8, processes)` workers, byte-verified, the task directories
+   deleted unless `--keep-sources`, and with the truth options every merged tensor labelled (somatic 1,
+   germline 2, non 0, ignore −1; below `--label-snv-min-af` / `--label-indel-min-af` −1; with
+   `--label-ignore-repeat-indels` an INDEL in a GRCh38 homopolymer ≥ 7 bp or STR without a truth allele −1).
 
 **Resume and recovery.**
 * `run --resume` re-validates every task directory with `validate_shards` (serially: ~24 min for a
   genome run), skips the complete ones, moves partial outputs to `incomplete/<timestamp>/` and
   reruns only the rest. A plain `run` refuses existing task outputs; a merged root refuses
   `run`/`--resume`.
-* If the job died during the merge or labels: `orchestrate finalize --root R` (from the checkout or
-  from `R/source`). It skips steps already done (`outputs.json` has `merge`; every
+* If the job died during the merge or labels: `orchestrate finalize --root R`, from `R/source` (package
+  guard below). It skips steps already done (`outputs.json` has `merge`; every
   `labels.manifest.json` and `truth_recall.json` exist), so it can be repeated; it prints what it did (`{}` when nothing
   was left). To re-label, delete `<tensors>/{SNV,INDEL}/labels.manifest.json` and run it again (with
-  the AF floors frozen at prepare), or use `tensor_postprocessing label` (e.g. with other floors).
+  the AF floors frozen at prepare), or use `tensor_postprocessing label` / `tools/jobs/relabel.sh` (e.g. with
+  other floors).
 * **Hand edits of `config.json`** (e.g. after running out of memory): every task re-reads it when it
   starts, so `builder.gam_cache_mb` (memory only; recorded in the manifests' arguments, tensor bytes
   unchanged) applies to tasks started later; `processes` is read when `run` starts, so set it before
@@ -797,17 +778,14 @@ the code that executes it), `native_decoder` (`available`, `reason`), `variant_o
   package (`<root> was prepared by ..., not indexed_gam_pipeline_v4`), and a root without
   `config.package`. A started root runs with its frozen `<root>/source` (`bash <root>/run.sh
   --resume`; `cd <root>/source && python -m indexed_gam_pipeline_v4.orchestrate finalize --root
-  <root>`), never with a newer checkout. The merged sets of section 5 are relabelled by
-  `tensor_postprocessing label`, which also reads merged layouts under their earlier name
-  (section 8, "Format names"). On the data side this runs from
-  `/scratch/jshen/data/pansoma_v2_tensors/pipeline_code/` (a `git archive` of this package plus the
-  compiled `.so`; the commit in `pipeline_code/git_head.txt`) through its `tools/jobs/relabel.sh`,
-  which runs the package it is in (section 4, "Tools"): `sbatch -J NAME -o LOG
-  pipeline_code/indexed_gam_pipeline_v4/tools/jobs/relabel.sh TENSORS SOMATIC_VCF SOMATIC_BED
-  GERMLINE_VCF GERMLINE_BED TRUTH_DIR [SNV_MIN_AF [INDEL_MIN_AF]]` (`''` skips one); no backup is
-  kept (`label` replaces a kind's label files only when all are written). Each sample's `README.txt` has its
-  relabel command. A run prepared with label AF floors (`--label-snv-min-af`, `--label-indel-min-af`)
-  needs no relabel: its finalize applies them.
+  <root>`), never with a newer checkout. A merged set is relabelled with the checkout's
+  `tools/jobs/relabel.sh` (section 4, "Tools"); its labels record the checkout's `rules_sha256`.
+  `/scratch/jshen/data/pansoma_v2_tensors/pipeline_code/` is build provenance: the `git archive` of this
+  package at 82d0a1d (`pipeline_code/git_head.txt`) plus the compiled `.so` that the six HPRC v1.1 d9
+  sets of section 5 were built with (the runtime files of their run roots' `source/`). Its own
+  `relabel.sh`, the one the relabel commands in those sets' `README.txt` call, labels with the 82d0a1d
+  rules and has no `IGNORE_REPEAT_INDELS`. A run prepared with label AF floors (`--label-snv-min-af`,
+  `--label-indel-min-af`) or `--label-ignore-repeat-indels` needs no relabel: its finalize applies them.
 * The queue ledger (`queue_status.json`: per-task state, PIDs, wall times) is written at start,
   whenever a task starts or ends, and at the end.
 
@@ -877,8 +855,8 @@ Knobs, in order of effect:
    3,352.
 
 Other jobs, measured (Slurm MaxRSS): `prepare` with a 6 GB node_stats.json 3.6–5.6 GB; labelling a
-genome 12–16 GiB on 1 CPU (section 5); the parallel merge of the HG008 Illumina chr22 tasks with
-8 workers 5.6 GB.
+genome 12–16 GiB in its main process (sections 4 and 5), plus ~2.4 GiB summed over the recall scan's 8
+workers; the parallel merge of the HG008 Illumina chr22 tasks with 8 workers 5.6 GB.
 
 ---
 
@@ -1087,18 +1065,14 @@ to its threshold. The merged manifest (`layout` `chromosome-shards`, `kind`, `da
 **Format names.** Every name this package writes is plain: the four tensor names above,
 `sample_unit` `site`, merged `layout` `chromosome-shards`, graph index `schema` `gbz-all-nodes` and `metric`
 `distinct-gbwt-paths`, reference-path `format` `gfa-reference-path`, chr index `format`
-`chr-node-ranges`, labels `format` `truth-labels`. Existing files name the same formats with a `-v1`
-suffix: the HPRC v1.1 d9 graph index, its reference-path directory (under the key `version`) and the
-earlier build of the section 5 sets in `backup_ch6_linear100_20261001` (`layout`). Readers accept
-both through the one table `common.EARLIER_FORMAT_NAMES` (`GraphIndex`, `ReferencePath`, `label`,
-the merge's check for an existing merged layout); writers never produce the suffixed names. (The chr-index JSON under `$G` carries its name the same way;
-`ChrIndex` reads only its `tsv_sha256`. The tensor manifests and summary records of the backup
-sets also spell the four tensor names and `sample_unit` the earlier way, under keys ending in
-`_version`, with a `schema_version`; `label` does not read them.) Their channel 6 is a different code,
-`tensor_storage_version` `int8-count-linear100-log2-v1`: the count itself up to 100, then
-`min(127, 100 + ceil(log2(count − 99)))` — this package's code with H = 100, not with their graph's H = 90;
-models and tools that read channel 6 must tell the two storages apart. The graph-index metadata copied
-into manifests is the index's own, so tensors built from the HPRC index record its suffixed schema,
+`chr-node-ranges`, labels `format` `truth-labels`. The HPRC v1.1 d9 graph files under `$G` name their
+formats with a `-v1` suffix: the graph index (`gbz-all-nodes-v1`, `distinct-gbwt-paths-v1`), its
+reference-path directory (`gfa-reference-path-v1`, under the key `version`) and its chr-index JSON
+(`chr-node-ranges-v1`, under `version`; `ChrIndex` reads only its `tsv_sha256`). Readers accept both
+spellings through the one table `common.EARLIER_FORMAT_NAMES` (`GraphIndex`, `ReferencePath`), which also
+maps the merged layout `chromosome-shards-v1` (kept for older data; `label` and the merge's check for an
+existing merged layout accept it); writers never produce the suffixed names. The graph-index metadata copied
+into manifests is the index's own, so tensors built from the HPRC v1.1 index record its suffixed schema,
 metric and `count_algorithm`.
 
 What keeps the bytes stable: `parameters` and `arguments` are rendered from explicit key tables
@@ -1113,9 +1087,10 @@ closes every audit stream before any manifest says `complete`.
 ```bash
 cd /scratch/jshen/Github/Pansoma
 PY=/wanglab/jshen/anaconda3/bin/python
-$PY -m unittest discover -s indexed_gam_pipeline_v4/tests -t .                          # ~50 s (quiet node), goldens included
-PANSOMA_DECODER=python $PY -m unittest discover -s indexed_gam_pipeline_v4/tests -t .   # ~45 s, Python decoder
-GBZ_TOOL=/scratch/jshen/Github/gbz-tool/gbztool GBZ_GRAPH_INDEX=tmp/native_check/gbz_graph_index \
+$PY -m unittest discover -s indexed_gam_pipeline_v4/tests -t .                          # ~2 min, goldens included
+PANSOMA_DECODER=python $PY -m unittest discover -s indexed_gam_pipeline_v4/tests -t .   # ~2 min, Python decoder
+GBZ_TOOL=/scratch/jshen/Github/gbz-tool/gbztool \
+GBZ_GRAPH_INDEX=/scratch/jshen/data/pansoma_v2_tensors/graph_index_hprc-v2.1-d46/gbz_graph_index \
 PANSOMA_VG=/scratch/jshen/bin/vg_v1.77.0 \
     $PY -m unittest discover -s indexed_gam_pipeline_v4/tests -t .     # + the native graph-index builder and vg
 ```
@@ -1127,10 +1102,11 @@ Compile the decoder first: without a `_fastdecode*.so` the native cases are skip
 printed; with one present, a module that does not load (stale build, another package's) fails the
 suite instead of silently decoding in Python. With the decoder built, the only skips of the first
 pass are the native graph-index builder test and the two vg cases of `test_prep_tools.py`, which
-need the environment variables of the third command; the second pass also skips the five golden
-tests.
+need the environment variables of the third command (`GBZ_GRAPH_INDEX`: a `gbz_graph_index` compiled from
+`tools/gbz_graph_index.cpp`, such as the one `graph_prep.sh` compiles into its OUTDIR); the second pass also
+skips the five golden tests.
 
-199 tests in 19 test modules cover: GAI reading, cache/scan equivalence (limits 1, 2048 and 64 MiB),
+206 tests in 20 test modules cover: GAI reading, cache/scan equivalence (limits 1, 2048 and 64 MiB),
 refusal of cache 0, of a GAI without the `'GAI!'` magic and of an unknown GAI format number, bin
 arrays against the per-bin scan, the MAPQ-filtered cache, the capped fetch (each node its smallest
 record digests whatever else is asked for, the reader's key equal to the builder's digest); the BGZF
@@ -1147,7 +1123,9 @@ headers falling back, the index opened at the first fetch, concurrent builds and
 recording the index (not an input of `verify`); capped
 builds (nodes within the cap unchanged, a capped node equal to a GAM of its capped records only,
 independent of the batching, a collapsed repeat decoding one capped set, the batch limit on capped
-records) and capped nodes listed through a whole run; auto batches (the plan, splitting over the
+records) and capped nodes listed through a whole run; several GAMs read as one (fetches, the capped fetch,
+discovery counts, builds and a whole `prepare → run` equal to one GAM holding the same records; one `--gam`
+recorded as a path); auto batches (the plan, splitting over the
 record limit, larger batches only where they save reads); discovery (native counts against a Python
 reference for 1–3 processes, segment tiling, outputs independent of the process count, an indel
 counted on the node it is normalized to); decoding, N filter, limits, unsupported events,
@@ -1161,11 +1139,13 @@ cap-aware audit, early-AF exactness, multi-allelic sites and allele accounting;
 `parameters`/`arguments` bytes; the 30,000-record native == Python decoder equivalence, decoder
 selection and fallbacks; the task queue, cost scan, partition, `prepare → run → resume`, the
 parallel merge (bytes independent of the worker count, the read cap a shared key) and labels (every
-rule, the AF floors per kind, partial matches, off-reference anchors, the `relabel.sh` arguments),
+rule, the AF floors per kind, the repeat classes and `--ignore-repeat-indels`, partial matches,
+off-reference anchors, the `relabel.sh` arguments),
 the package guard, the native refusal at prepare, a subprocess import of the frozen source, a standalone `finalize` after an interrupted one and after a failed
 recall scan, the parallel merge verification (spot picks and errors against the serial verification), the
-parallel recall scan (byte ranges, read sizes and workers against the serial scan, its serial fallback,
-`recall_scan.label_run` against `truth_labels.label_run`), finalize labels with the AF floors frozen at prepare
+parallel recall scan (byte ranges, read sizes and workers against the serial scan, its serial fallback;
+on O1's world, labels, manifests, truth tables and recall reports of `recall_scan.label_run` equal to those of
+`truth_labels.label_run` with the one-stream scan), finalize labels with the AF floors frozen at prepare
 (equal to `label` with the same floors); the earlier format names (a graph index with the suffixed
 schema and metric opens, a reference-path directory with `version` opens, `label` and the merge's
 refusal work on a merged set with the suffixed layout); `compare_runs` itself; the once-per-graph and once-per-GAM tools (`graph_prep audit` recounting every node
@@ -1176,9 +1156,9 @@ _gbwt_ref`) writing the same directory as over W lines; `chr-index` blocks, the 
 interleaved non-autosomal groups (one interval per run, one block); `gam_prep check` passing a sorted GAM
 and refusing an unsorted one or another GAM's GAI; with vg: a GBZ → `gfa` keeping the node IDs,
 `components` of three chromosomes with an off-reference node, `gam_prep sort` publishing a checked
-GAM with the input's `vg stats -a` counts); and static checks (no
-runtime import of `tools`/`tests`, no module-search-path edits, no other package names in the `.py`,
-`.cpp` and `.sh` files).
+GAM with the input's `vg stats -a` counts; the `tensor_postprocessing` CLI rejecting the graph-prep
+commands); and static checks (no runtime import of `tools`/`tests`, no module-search-path edits, no other
+package names in the `.py`, `.cpp` and `.sh` files).
 
 **Goldens** (`tests/golden.py`, `tests/golden_hashes.json`). Nine production-shaped fixture builds
 and one orchestrated run, each in a subprocess, under both decoders; `golden_hashes.json` (`format`

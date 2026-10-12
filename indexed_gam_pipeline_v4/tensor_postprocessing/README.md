@@ -15,8 +15,7 @@ run (this package)                  merge ─▶ label
 | `ref-path-check` | `tools/graph_prep.py` | GFA lengths vs the GBZ graph index, reference node sequences vs the GRCh38 FASTA (100k random nodes each) |
 | `chr-index` | `tools/graph_prep.py` | node ID → chromosome block table (`*.chr_node_ranges.tsv/.json`) |
 | `merge` | `merge_shards.py` | `task_*/shard_*` (2,048 each) → `<chrom>_shard_*` (32,768 each), byte-verified |
-| `label` | `truth_labels.py` | germline/somatic VCF → node candidate keys → one label per tensor, recall report |
-| (`finalize`) | `recall_scan.py` | `truth_labels.label_run` with the recall's scan of the filtered-candidate streams in parallel |
+| `label` (and `finalize`) | `truth_labels.py`, `recall_scan.py` | germline/somatic VCF → node candidate keys → one label per tensor, recall report; `recall_scan.label_run` is `truth_labels.label_run` with the recall's scan of the filtered-candidate streams in parallel |
 
 Run from the repository root:
 
@@ -71,32 +70,23 @@ The same table drives the builder's `--chromosomes all|autosome|chr1,chr2,...`
 
 ## In a whole-genome run
 
-`orchestrate prepare` freezes the options below into `config.json`. When every task has validated,
-`orchestrate run` calls `orchestrate finalize` (merge, then labels). `finalize` can also be run on
-its own. It skips finished steps: the merge when `outputs.json` has a `merge` section, and the
-labels when every kind has a `labels.manifest.json` and the tensors have `truth_recall.json` (written
-last). It labels with `recall_scan.label_run`, which
-writes what `label` writes and scans the filtered-candidate streams in parallel (the end of
+`orchestrate prepare` freezes the merge and label options into `config.json` (the options: [v4 README,
+section 4](../README.md#4-commands-and-every-option), `orchestrate`). Once every task has validated,
+`orchestrate finalize` runs the merge, then the labels: usually as a job of its own after `run --no-finalize`,
+from `<root>/source` (v4 README, section 6), else at the end of `orchestrate run`. It skips finished steps: the
+merge when `outputs.json` has a `merge` section, and the labels when every kind has a `labels.manifest.json` and
+the tensors have `truth_recall.json` (written last). `finalize` and `label` both label with
+`recall_scan.label_run`, which scans the filtered-candidate streams in parallel (the end of
 [Labels](#labels-truth_labelspy)).
 
-```
---merge-shard-size 32768      0 = keep the task layout (no merge, no labels)
---keep-sources                keep task_* after the verified merge (default: delete them)
---chr-index TSV               needed for the merge and for --chromosomes other than all
---reference-path DIR          GRCh38 coordinates in the merged summaries; needed for labels
---somatic-vcf --somatic-bed --germline-vcf --germline-bed --reference-fasta --truth-dir   (labels; all or none)
---label-snv-min-af F          labels: lower-AF SNV tensors are -1; in [0, 1], needs the labels
---label-indel-min-af F        labels: lower-AF INDEL tensors are -1; in [0, 1], needs the labels
---label-ignore-repeat-indels  labels: repeat INDELs without a truth allele are -1, not 0 (below); needs the labels
-```
-
-`finalize` labels with these AF floors and the repeat option as `label --snv-min-af` /
-`--indel-min-af` / `--ignore-repeat-indels` does (frozen as `postprocess.labels.snv_min_af` /
-`indel_min_af`, null when unset, and `ignore_repeat_indels`), so a run prepared with them needs no
-relabel. They are not the build's `--snv-min-af` / `--indel-min-af`, which decide which
-alleles become tensors: a floor at or below the build's AF changes nothing (the sets of the main
-README, section 5, are built at 0.08 for both kinds and labelled without floors). `label` and `tools/jobs/relabel.sh`
-label a merged set again, e.g. with other floors (see [Commands](#commands)).
+`finalize` labels with the AF floors and the repeat option frozen at prepare (`--label-snv-min-af` /
+`--label-indel-min-af` / `--label-ignore-repeat-indels`, frozen as `postprocess.labels.snv_min_af` /
+`indel_min_af`, null when unset, and `ignore_repeat_indels`) as `label --snv-min-af` / `--indel-min-af` /
+`--ignore-repeat-indels` does, so a run prepared with them needs no relabel. They are not the build's
+`--snv-min-af` / `--indel-min-af`, which decide which alleles become tensors: a floor at or below the build's AF
+changes nothing (the sets of the v4 README, section 5, are built at 0.08 for both kinds and labelled without
+floors). `label` and `tools/jobs/relabel.sh` label a merged set again, e.g. with other floors
+([Commands](#commands), "Relabelling a merged set").
 
 ## Merge (`merge_shards.py`)
 
@@ -127,7 +117,9 @@ shared key, so a run whose tasks disagree on it is refused instead of merged und
 The copy runs in parallel (`--workers`, default 8): every (kind, chromosome) group is one job that
 reads its records' rows with plain sequential file reads and appends them to its shards, and the
 audit streams are copied in slices straight to their offsets in the concatenated file. The bytes
-are those of a sequential copy.
+are those of a sequential copy (`--workers` does not change them; tested). A single-process copy runs at
+~150 MB/s, ~2 h for HG008 Illumina (833 GB of tensors plus 258 GB of audit streams); its chr22 takes 227 s
+in one process and 101 s with 8 workers.
 
 Records keep source order: task index, then shard, then index within the shard. The tasks of one
 run cover contiguous node ranges in order, so its merged shards are node-sorted. A merge over tasks
@@ -159,18 +151,19 @@ gets a `merge` section (the original is kept as `outputs.pre_merge.json`), and `
 `finalized` once the sources are gone. A second merge of the same run is refused, and so is a merge
 into a directory whose manifest already has a merged layout.
 
-**Earlier layout name.** Readers accept `chromosome-shards-v1` as `chromosome-shards`
-(`common.EARLIER_FORMAT_NAMES`). The six existing merged sets (HG008 PacBio / ONT-UL / Illumina,
-COLO829T Illumina / fiberseq / ONT) use that name. `label` reads only `layout` and `chromosomes`
-from a merged manifest, so it relabels those sets as they are.
+**Earlier layout name.** `label` and the check for an existing merged layout also accept
+`chromosome-shards-v1` as `chromosome-shards` (`common.EARLIER_FORMAT_NAMES`, kept for older data); every
+merged set under `/scratch/jshen/data/pansoma_v2_tensors` has `chromosome-shards`. `label` reads only
+`layout` and `chromosomes` from a merged manifest.
 
 ## Labels (`truth_labels.py`)
 
 1. **Truth alleles**: every ALT on chr1–22 is trimmed of shared prefix/suffix bases. Symbolic
    alleles, `*`, and alleles containing N are skipped. MNVs become one SNV per differing base.
-   Complex replacements are kept only as "nearby truth". An SNV or DEL whose REF differs from the
-   FASTA is dropped (`reference_mismatch` in the truth stats). FILTER `.` counts as PASS; GT is the
-   first sample's.
+   Complex replacements get no node key (they cannot equal a candidate) and count only by place: as
+   nearby truth and, somatic ones, through the haplotype overlap in a residual partial match (below).
+   An SNV or DEL whose REF differs from the FASTA is dropped (`reference_mismatch` in the truth
+   stats). FILTER `.` counts as PASS; GT is the first sample's.
 2. **Equivalent positions**: an indel in a repeat is enumerated at every equivalent placement
    on GRCh38, shifted left and right (at most 5,000 placements). VCFs are left-aligned. The builder
    left-normalizes on the node's forward strand, which on a reverse-oriented node is the other end
@@ -303,7 +296,7 @@ under the AF floor of its kind. Everything else it will meet is 0 or a truth lab
 artifacts next to real variants included. On HG008 PacBio, 29,018 of the 73,454 SNV 0s and 205,183
 of the 1,518,657 INDEL 0s are `near_truth_allele_mismatch`.
 
-* **`--snv-min-af`, `--indel-min-af`** (unset for the sets of the main README, section 5, built at
+* **`--snv-min-af`, `--indel-min-af`** (unset for the sets of the v4 README, section 5, built at
   AF 0.08) label as if the build had used that AF filter for the kind: a lower-AF SNV tensor (A1 an
   SNP) or INDEL tensor (A1 an INS or DEL) is −1 whatever the truth, and these are the first checks;
   each floor leaves the other kind alone. `af` is in every summary record, so a caller can apply the
@@ -351,7 +344,7 @@ The label files are written as temporaries and renamed only after every shard is
 The truth tables `<set>.graph.tsv` go to `--truth-dir`. They list every truth allele with its
 trimmed form, kind, GT, filters, in_bed, number of placements and keys, and depend only on the graph
 and the truth inputs (VCF, BED, FASTA), not on the run. `<set>.recall.tsv` and `truth_recall.json`
-go to `--recall-dir` (default: the tensor directory). Per truth allele, they give one status:
+go to the tensor directory (`--tensors`), written last. Per truth allele, they give one status:
 
 * `tensor_representative`
 * `tensor_non_representative_allele`
@@ -363,8 +356,8 @@ go to `--recall-dir` (default: the tensor directory). Per truth allele, they giv
 Recall counts key matches only; partial matches are not in it.
 
 The `filtered` status comes from a scan of `<kind>/filtered_candidates.ndjson` (SNV, then INDEL; the
-last line of a candidate ID gives its reasons). `label` reads each file in one stream. `finalize`
-uses `recall_scan.py` instead, with the same result: the file is cut into byte ranges at line starts,
+last line of a candidate ID gives its reasons). `label` and `finalize` scan it with `recall_scan.py`, with the
+result of the one-stream scan (`truth_labels.scan_filtered`): the file is cut into byte ranges at line starts,
 8 processes (a forkserver pool, so no worker carries the truth sets' memory) apply the same
 `candidate_id` and `reasons` searches and test each ID against 64-bit BLAKE2b hashes of the truth
 keys, and the parent keeps the exact key matches in file order. The workers import the caller's main
@@ -372,32 +365,20 @@ module like spawn workers (`python -m` and `python -c` are safe; a script keeps 
 `if __name__ == "__main__":`); when the pool cannot work (main from stdin, a TMPDIR too long for the
 forkserver socket, a worker killed) the scan falls back to the one-stream scan. The 8 workers add
 ~2.4 GiB of summed RSS (21 M truth keys), which `/usr/bin/time` (largest process) does not show.
-`recall_scan.label_run` is
-`truth_labels.label_run` verbatim with that scan; a test pins `truth_labels.label_run`'s source, so a
-change there has to be copied.
+`recall_scan.label_run` passes that scan to `truth_labels.label_run` (keyword `scan`, default the one-stream
+scan): one body, so the labels, manifests and recall reports are those of `truth_labels.label_run` (tested on
+O1's world).
 
 ## Commands
 
-From the repository root, with `P="python -m indexed_gam_pipeline_v4"`:
-
-```bash
-# once per graph (all of them, graph index included: tools/jobs/graph_prep.sh GBZ OUTDIR [FASTA])
-$P.tools.graph_prep gfa --gbz G.gbz --output G.gfa [--threads 16] [--vg VG]
-$P.tools.graph_prep ref-path-scan --gfa G.gfa --output DIR [--reference-sample GRCh38]   # _gbwt_ref: P-line generic paths
-$P.tools.graph_prep ref-path-check --path DIR --graph-index DB --fasta FA [--samples 100000]
-$P.tools.graph_prep components --gbz G.gbz --reference-path DIR --output DIR [--threads 4] [--vg VG]
-$P.tools.graph_prep chr-index --components-dir D --reference-path DIR --output PREFIX [--graph-index DB]
-$P.tools.graph_prep audit --graph-index DB --gfa G.gfa --chr-index TSV --output graph_audit.json
-# manual re-merge / re-label of a run root (orchestrate finalize does both)
-$P.tensor_postprocessing merge --root /path/to/run --chr-index TSV [--shard-size 32768] [--keep-sources] \
-    [--workers 8] [--spots 200] [--reference-path DIR]
-$P.tensor_postprocessing label --tensors /path/to/tensors --reference-path DIR --fasta FA \
-    --somatic-vcf VCF --somatic-bed BED --germline-vcf VCF --germline-bed BED --truth-dir DIR \
-    [--kinds SNV INDEL] [--recall-dir DIR] [--snv-min-af F] [--indel-min-af F] [--ignore-repeat-indels]
-```
+The options of `merge` and `label`: [v4 README, section 4](../README.md#4-commands-and-every-option),
+`tensor_postprocessing merge | label`. The graph-prep commands (`tools.graph_prep gfa | ref-path-scan |
+ref-path-check | components | chr-index | audit`) and `tools/jobs/graph_prep.sh GBZ OUTDIR [FASTA]`, which runs
+every once-per-graph step, graph index included: same section, "Tools".
 
 HPRC v1.1 d9 graph files. The files under `$G` are the current ones; the reference-path and
-chr-index JSON record their formats under the earlier key and name (see the top of this file).
+chr-index JSON record their formats under the earlier key and name (see the top of this file). From the
+repository root, with `P="python -m indexed_gam_pipeline_v4"`:
 
 ```bash
 G=/scratch/jshen/data/pansoma_v2_tensors/graph_index
@@ -412,10 +393,8 @@ $P.tools.graph_prep chr-index \
     --graph-index $G/hprc-v1.1-mc-grch38.d9.graph_index.sqlite
 ```
 
-The chr1–22 component lists given to chr-index here were made with `scripts/build_chr_node_filters.sh`,
-the same `vg chunk -C -p GRCh38#0#chrN` call that `graph_prep components` makes.
-`tools/jobs/graph_prep.sh GBZ OUTDIR [FASTA]` runs every once-per-graph step (main README,
-section 4, "Tools").
+The chr1–22 component lists given to chr-index here are the node lists of `vg chunk -C -p GRCh38#0#chrN`, the
+call `graph_prep components` makes (chr22 reproduced byte for byte, below).
 
 Measured on HPRC v1.1 d9:
 
@@ -431,25 +410,16 @@ Measured on HPRC v1.1 d9:
   equal the index, and the GFA's 44,624,788 paths and 4,296,025,276 visits equal its `logical_paths`
   and `path_visits`.
 
-**Relabelling the six existing sets.** `tools/jobs/relabel.sh` labels one merged set with the
-package it is in (main README, section 4, "Tools"). On the data side it runs from
-`/scratch/jshen/data/pansoma_v2_tensors/pipeline_code/`, a `git archive` of this package plus the
-compiled `.so`, with the commit recorded in `pipeline_code/git_head.txt`. Before labelling, the
-script checks that `TENSORS/SNV/manifest.json` has a merged layout (either name) and takes the
-reference path of the set's current labels (`labels.manifest.json`), or `$REFERENCE_PATH` for a set of
-another graph or one without labels. It keeps no backup:
-`label` writes every label file of a kind to a temporary name and replaces the current ones only when
-all of them are written, so a failed run leaves the current labels in place.
-
-It then runs `tensor_postprocessing label` with the HPRC reference-path directory and the GRCh38
-FASTA above (1 CPU, `--mem=19G`, 6 h). Its optional 7th and 8th arguments are `label`'s
-`--snv-min-af` and `--indel-min-af`; `''` skips one (`... TRUTH_DIR '' 0.10` sets the INDEL floor
-only). `IGNORE_REPEAT_INDELS=1` in the environment adds `--ignore-repeat-indels`. Each sample's `README.txt` under `/scratch/jshen/data/pansoma_v2_tensors` has its command; for all
-six sets:
+**Relabelling a merged set.** The checkout's `tools/jobs/relabel.sh` runs `label` on one merged set as a
+Slurm job (arguments, environment, resources: v4 README, section 4, "Tools"; `pipeline_code/` under
+`/scratch/jshen/data/pansoma_v2_tensors` is build provenance, not this route: section 6, "Package guard"). Every
+labelled set's `labels.manifest.json` names its truth VCFs and BEDs (`truth`); the sets whose manifest has
+`ignore_repeat_indels` true (SEQC2 and CASTLE truth) need `IGNORE_REPEAT_INDELS=1` again. For the six HPRC v1.1
+d9 sets:
 
 ```bash
 D=/scratch/jshen/data/pansoma_v2_tensors; H=/scratch/jshen/data/HG008_GIAB; Q=/scratch/qfu/COLO829BL_DSA/dipcall_hg38
-J=$D/pipeline_code/indexed_gam_pipeline_v4/tools/jobs
+J=/scratch/jshen/Github/Pansoma/indexed_gam_pipeline_v4/tools/jobs      # the checkout's job scripts
 # sbatch -J NAME -o LOG $J/relabel.sh TENSORS SOMATIC_VCF SOMATIC_BED GERMLINE_VCF GERMLINE_BED TRUTH_DIR \
 #     [SNV_MIN_AF [INDEL_MIN_AF]]
 HG008="$H/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_tumorvariants.vcf.gz
@@ -474,11 +444,9 @@ Truth sets:
   easy/difficult/extreme `_v2` BEDs (they tile the genome, so their intersection is empty); and
   COLO829BL dipcall.
 
-Labelling one of the six sets (1 CPU, in their finalize) took 17–36 min at 12–16 GiB; the
-largest earlier label job, 7.7 M COLO829T ONT tensors, 2 h 26 min at 14.7 GiB.
-
-The label counts of the six sets are in the [main README](../README.md), section 5.
+The label counts of the six sets are in the [v4 README](../README.md), section 5; the time and memory of a
+label job in its sections 4 (`relabel.sh`), 5 and 7.
 
 A change to the label rules (any edit of `truth_labels.py`, through `rules_sha256`) or to the merged
 bytes changes the goldens (`tests/golden_hashes.json`).
-Record them again from the committed change (main README, "Testing and goldens").
+Record them again from the committed change (v4 README, section 9, "Testing and goldens").

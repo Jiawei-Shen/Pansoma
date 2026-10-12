@@ -1,7 +1,8 @@
 """python -m indexed_gam_pipeline_v4.tensor_postprocessing merge|label ...  (run from the repository root)
 
-Manual re-merge or re-label of a run root (orchestrate finalize runs both). The one-time graph
-preparation (ref-path-scan, ref-path-check, chr-index) is python -m indexed_gam_pipeline_v4.tools.graph_prep.
+Manual re-merge or re-label of a run root (orchestrate finalize runs both; label, like finalize, scans the
+recall's filtered-candidate streams in parallel). The one-time graph preparation (gfa, ref-path-scan,
+ref-path-check, components, chr-index, audit) is python -m indexed_gam_pipeline_v4.tools.graph_prep.
 """
 import argparse
 import json

@@ -1,7 +1,8 @@
 #!/bin/bash
 # The PoN + rtg vcfeval steps of vcf.sh only, on a run's existing GRCh38 calls (<run>/SRC/*.KIND.linear.vcf.gz), into
 # <run>/OUT/eval_bed and eval_nobed: re-scores calls made earlier (an earlier tensor build, an earlier PoN rule) with
-# this checkout's PoN script. As upstream's jobs/vcfeval_only.sh. Usage: vcfeval_only.sh RUN KIND SRC OUT. A CPU job:
+# this checkout's PoN script. As machine_learning/pansoma_net_v2/jobs/vcfeval_only.sh on the Slurm cluster (a local copy,
+# not in git). Usage: vcfeval_only.sh RUN KIND SRC OUT. A CPU job:
 #   ris/submit.sh -g 0 -n 4 -m 32 pnv2_rescore_INDEL_small vcfeval_only.sh HG008_Illumina_INDEL_small INDEL vcf_chr1 vcf_chr1_pon7fc7396
 set -euo pipefail
 source "$(dirname "$0")/env.sh"

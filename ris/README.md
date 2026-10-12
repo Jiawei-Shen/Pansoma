@@ -3,7 +3,8 @@
 The other READMEs were written on a Slurm cluster (`/scratch/jshen`, GPU node tequila,
 `/wanglab/jshen/anaconda3/bin/python`). RIS compute1 runs LSF, and every job runs in a Docker container. This
 directory holds the job scripts for RIS and records how the model steps (`machine_learning/pansoma_net_v2`) run
-there. The tensor pipeline itself (`indexed_gam_pipeline_v4`) has not been run on RIS.
+there. The tensor pipeline itself (`indexed_gam_pipeline_v4`) has not been run on RIS, apart from relabelling sets
+(`relabel.sh`).
 
 RIS documentation: <https://washu.atlassian.net/wiki/spaces/RUD/overview> (compute1 is retiring in July 2027).
 
@@ -12,9 +13,9 @@ RIS documentation: <https://washu.atlassian.net/wiki/spaces/RUD/overview> (compu
 | what | path |
 |---|---|
 | repository | `/storage2/fs1/epigenome/Active/jiawei.s/GitHub/Pansoma` |
-| tensor sets | `/storage2/fs1/epigenome/Active/jiawei.s/Dataset/pansoma_v2_tensors/<SET>/tensors` (`HG008T_Illumina`, `HG008T_ONT`, `HG008T_PacBio`) |
+| tensor sets | `/storage2/fs1/epigenome/Active/jiawei.s/Dataset/pansoma_v2_tensors/<SET>/tensors` (`HG008T_Illumina`, `HG008T_ONT`, `HG008T_PacBio`, `COLO829T_Illumina`, `COLO829T_ONT`, `COLO829T_fiberseq`) |
 | graph index | `Dataset/pansoma_v2_tensors/graph_index` (`hprc-v1.1-mc-grch38.d9.graph_index.sqlite`, `.grch38_path`) |
-| truth of the labels | `Dataset/HG008_GIAB/draft_v02_benchmark`, `Dataset/HG008_GIAB/dipcall_HG008N_GRCh38` |
+| truth of the labels | `Dataset/HG008_GIAB/draft_v02_benchmark`, `Dataset/HG008_GIAB/dipcall_HG008N_GRCh38`, `Dataset/pansoma_v2_tensors/COLO829T_truth`, `Dataset/COLO829BL_DSA/dipcall_hg38` |
 | PoNs | `Dataset/panel_of_normal_VCFs` (gnomAD, dbSNP, 1000G, CoLoRSdb, with `.tbi`) |
 | GRCh38 | `Dataset/REF/GCA_000001405.15_GRCh38_no_alt_analysis_set.fa` (`.fai`) and its rtg SDF `….sdf` |
 | runs, environment, logs | `/storage2/fs1/epigenome/Active/jiawei.s/pansoma_net_v2_runs` (`$PANSOMA_RUNS`) |
@@ -53,7 +54,7 @@ Measured 2026-09-29 (`bhosts -gpu -w`, `lshosts -gpu -w`, `bqueues -l`):
   `gmodel=NVIDIAH10080GBHBM3` / `NVIDIAA100_SXM4_80GB` / `NVIDIAA40` pins one model.
 - LSF sets `CUDA_VISIBLE_DEVICES` to the job's GPU, so torch sees one device; `nvidia-smi` still lists all of them.
 - Memory: every DataLoader worker holds its own copy of the dataset index (several GB for the 5 M tensors of
-  HG008T_Illumina SNV). `predict` with 12 workers passed 64 GB and swapped; `predict.sh` uses 4
+  the earlier HG008T_Illumina SNV build). `predict` with 12 workers passed 64 GB and swapped; `predict.sh` uses 4
   (`PREDICT_WORKERS`). LSF's `-M` does not kill the job at the limit: it slows down. Watch `MEM` in `bjobs -l`.
 - Free GPUs usually come with few free slots (the hosts' CPUs are taken by CPU jobs): a 16-slot GPU job pended
   where a 1-slot job started in minutes. Ask for few slots unless the host is free.
@@ -78,9 +79,11 @@ its own JRE) is in `$PANSOMA_RUNS/env/rtg-tools-3.13` (talkback off in its `rtg.
 
 ## Scripts
 
-`ris/submit.sh [-q QUEUE] [-G GROUP] [-g GPUS] [-n SLOTS] [-m MEM_GB] [-s GPU_SELECT] JOBNAME SCRIPT [args]` submits
-`ris/SCRIPT` with the image, the mounts and `-oo $PANSOMA_RUNS/logs/JOBNAME.log`. Defaults: `-q general -g 1
--n 1 -m 64 -s gmem=40G`; `-g 0` is a CPU job (no `-gpu`, no `gpuhost`).
+`ris/submit.sh [-q QUEUE] [-G GROUP] [-g GPUS] [-n SLOTS] [-m MEM_GB] [-s GPU_SELECT] [-w DEPENDENCY] [-j JOB_GROUP]
+JOBNAME SCRIPT [args]` submits `ris/SCRIPT` with the image, the mounts and `-oo $PANSOMA_RUNS/logs/JOBNAME.log`.
+Defaults: `-q general -g 1 -n 1 -m 64 -s gmem=40G`; `-g 0` is a CPU job (no `-gpu`, no `gpuhost`). `-w` is bsub's
+dependency (e.g. `"done(pnv2_NAME)"`); `-j` the LSF job group, default `$PANSOMA_JOB_GROUP`, else `/<user>/pansoma` when
+it exists ("Job groups" below).
 
 | script | what | example |
 |---|---|---|
@@ -89,13 +92,13 @@ its own JRE) is in `$PANSOMA_RUNS/env/rtg-tools-3.13` (talkback off in its `rtg.
 | `prebuild.sh SET KIND [chunks options]` | index cache and zstd chunk cache on CPU, before a GPU run | `ris/submit.sh -g 0 -n 8 -m 32 pnv2_prebuild prebuild.sh HG008T_Illumina SNV` |
 | `run.sh NAME SET KIND [train options]` | train (chr1 left out), then predict chr1 with `best.pth` | below |
 | `predict.sh NAME SET KIND [predict options]` | predict chr1 with `<run>/best.pth` (run.sh's last step) | `ris/submit.sh -n 1 -m 64 pnv2_predict_SNV_test predict.sh HG008_Illumina_SNV_test HG008T_Illumina SNV` |
-| `relabel.sh SET SNV_MIN_AF` | relabel a set (both kinds) with this checkout's rules and the truth of its current labels; backs up the current labels to `<set>/labels_backup_<date>/` first (CPU, ~19 GB, hours) | `ris/submit.sh -g 0 -n 2 -m 32 pnv2_relabel_HG008T_PacBio relabel.sh HG008T_PacBio 0.08` |
-| `snv_pipeline.sh NAME SET [train options]` (login node) | submits `run.sh` with the SNV recipe on an H100 (`epigenome`, 7 slots, 128 GB) and `vcf.sh` after it (`-w done(...)`); `WAIT=` adds a dependency to the GPU job | `WAIT='done(pnv2_relabel_HG008T_PacBio)' ris/snv_pipeline.sh HG008_PacBio_SNV_recipe HG008T_PacBio` |
+| `relabel.sh SET SNV_MIN_AF` | relabel a set (both kinds) with this checkout's rules and the truth of its current labels; `''` for no SNV floor (the current labels have none); backs up the current labels to `<set>/labels_backup_<date>/` first (CPU, 9 slots: label's recall scan reads in 8 processes besides the main one; ~22 GB, hours) | `ris/submit.sh -g 0 -n 9 -m 32 pnv2_relabel_HG008T_PacBio relabel.sh HG008T_PacBio ''` |
+| `snv_pipeline.sh NAME SET [train options]` (login node) | submits `run.sh` with the recipe of `KIND` (`SNV`, the default, or `INDEL`) on an H100 of `epigenome` and `vcf.sh` after it (`-w done(...)`); `SLOTS` / `MEM` (default 7 / 128 GB; the runs of 2026-10-03 to 10-12 used `MEM=192`, `SLOTS=5` for INDEL, and 16 / 256 on 4 GPUs), `GPUS=N` trains under DDP (`--batch-size` per GPU), `VAL_WORKERS` (default 6, per rank), `QUEUE` / `SELECT`, `WAIT=` a dependency of the GPU job | `KIND=INDEL SLOTS=5 MEM=192 ris/snv_pipeline.sh HG008_PacBio_INDEL_7fc7396 HG008T_PacBio` |
 | `vcfeval_only.sh RUN KIND SRC OUT` | the PoN + rtg steps of `vcf.sh` only, on `<run>/SRC/*.linear.vcf.gz` into `<run>/OUT/`: re-scores earlier calls with this checkout's PoN script | `ris/submit.sh -g 0 -n 4 -m 32 pnv2_rescore vcfeval_only.sh HG008_Illumina_INDEL_small INDEL vcf_chr1 vcf_chr1_pon7fc7396` |
-| `vcf.sh RUN KIND [THRESHOLD]` | graph VCF → GRCh38 VCF → PoN (SNV only) + rtg vcfeval (in the BED and without it) into `<run>/vcf_chr1/`; THRESHOLD (a number or `predict`) for checkpoints without validation thresholds (trained before 2026-09-30) | `ris/submit.sh -g 0 -n 4 -m 32 pnv2_vcf vcf.sh HG008_Illumina_SNV_test SNV` |
+| `vcf.sh RUN KIND [THRESHOLD]` | graph VCF → GRCh38 VCF (the d9 graph index and GRCh38 path) → PoN (the rule of each kind) + rtg vcfeval (in the BED and without it) into `<run>/vcf_chr1/`; THRESHOLD (a number, or `predict` for predict's own call) overrides the PASS threshold, the checkpoint's validation recall-0.9 threshold | `ris/submit.sh -g 0 -n 4 -m 32 pnv2_vcf vcf.sh HG008_Illumina_SNV_test SNV` |
 
-`run.sh` passes the train options as given; the recipe is in the v2 README ("SNV recipe"). With `-g 2` or more
-it trains under `torchrun --standalone --ddp`.
+`run.sh` passes the train options as given; the recipes are in the v2 README ("SNV recipe", "INDEL recipe";
+`snv_pipeline.sh` passes them). With `-g 2` or more it trains under `torchrun --standalone --ddp`.
 
 ## Workflow
 
@@ -112,14 +115,15 @@ ris/submit.sh -n 1 -m 64 pnv2_HG008_Illumina_SNV_test run.sh HG008_Illumina_SNV_
 
 # 2. a full run on chr2-22: build the caches on CPU first, then train on an H100 of the epigenome queue
 ris/submit.sh -g 0 -n 8 -m 32 pnv2_prebuild prebuild.sh HG008T_Illumina SNV
-ris/submit.sh -q epigenome -s gmodel=NVIDIAH10080GBHBM3 -n 16 -m 128 pnv2_HG008_Illumina_SNV_recipe \
+ris/submit.sh -q epigenome -s gmodel=NVIDIAH10080GBHBM3 -n 7 -m 192 pnv2_HG008_Illumina_SNV_recipe \
     run.sh HG008_Illumina_SNV_recipe HG008T_Illumina SNV \
     --depths 3 3 27 3 --dims 96 192 384 768 --epochs 20 --batch-size 1024 --lr 1e-4 --class-weights pow:0.75 \
-    --non-fraction 1.0 --block v2 --ignore-reasons residual_partial_somatic_truth allele_partial_somatic_truth
+    --non-fraction 1.0 --block v2 --ignore-reasons residual_partial_somatic_truth allele_partial_somatic_truth \
+    --read-threads 8 --val-workers 6
 
-# 3. calls and rtg vcfeval of the chr1 predictions (a checkpoint from before 2026-09-30: add THRESHOLD, e.g. predict)
+# 3. calls and rtg vcfeval of the chr1 predictions (a third argument THRESHOLD overrides the PASS threshold: a number
+#    or predict); step 2's GPU job and step 3 in one command: MEM=192 ris/snv_pipeline.sh HG008_Illumina_SNV_recipe HG008T_Illumina
 ris/submit.sh -g 0 -n 4 -m 32 pnv2_vcf_SNV_recipe vcf.sh HG008_Illumina_SNV_recipe SNV
-ris/submit.sh -g 0 -n 4 -m 32 pnv2_vcf_SNV_test vcf.sh HG008_Illumina_SNV_test SNV predict
 
 # watch
 bjobs -w; bpeek <jobid>; tail -f $PANSOMA_RUNS/logs/<JOBNAME>.log $PANSOMA_RUNS/<NAME>/train.log
@@ -165,7 +169,8 @@ rule and graph_vcf's PASS threshold of that commit, both changed since):
 The A40 trains at about a third of an H100's speed (1,404 tensors/s on tequila). storage2 read the 7 shards
 for the chunk cache in 17 s, much faster than the old cluster's BeeGFS.
 
-The numbers that do not depend on the model agree with the v2 README's HG008 Illumina chr1 values: 697 SNP truth
+The numbers that do not depend on the model agree with the old cluster's HG008 Illumina chr1 values of that build (v2
+README at 0cde04a): 697 SNP truth
 alleles in the BED and 702 without it, a tensor ceiling of 0.950, the PoN tagging 100 of the 702 truth records. So
 the truth files, PoNs and rtg on RIS give what they gave on the old cluster. The model scores themselves (chr1
 somatic F1 0.044 per tensor; rtg with the PoN in the BED: TP 38, FP 309) are those of a 2-epoch model trained on
@@ -275,7 +280,7 @@ INDEL on the same six sets, submitted 2026-10-03 ~20:00 while the last two SNV r
 MEM=192 ris/snv_pipeline.sh <run> <set>`): the same SNV recipe (no INDEL recipe is documented; the newest upstream INDEL
 runs, `HG008_Illumina_INDEL_nopartial_b1024*`, also leave the partial labels out). Partial labels are a large part of the
 INDEL positives (HG008T PacBio 2,742 of 6,840 somatic; `analysis/indel_partial_tensors_20260930`: on HG008T Illumina
-chr1, 97 of 128 partial tensors are in homopolymers ≥ 6, median AF 0.17). No PoN for INDEL (`vcf.sh`).
+chr1, 97 of 128 partial tensors are in homopolymers ≥ 6, median AF 0.17). No PoN for INDEL (`vcf.sh` then).
 
 | run | set (INDEL tensors; somatic) | jobs (GPU → vcf) |
 |---|---|---|
@@ -329,8 +334,8 @@ vcfeval in the BED; HG008T no-BED differs by ≤ 0.002):
 
 After pulling 45d56ad: `snv_pipeline.sh` takes the INDEL recipe for `KIND=INDEL` (8.7 M model `--depths 2 2 6 2 --dims
 64 128 256 512 --epochs 12 --batch-size 1024 --lr 4e-4 --class-weights sqrt --non-fraction 1.0 --block v2`, partials
-ignored), and `vcf.sh` passes the PoN for both kinds (the PoN script's INDEL rule: gnomAD / CoLoRSdb exact allele at
-AF ≥ 0.01). Submitted with `KIND=INDEL SLOTS=5 MEM=192 ris/snv_pipeline.sh <S>_<P>_INDEL_small <set>`:
+ignored), and `vcf.sh` passes the PoN for both kinds (the PoN script's INDEL rule at 45d56ad: a flat gnomAD /
+CoLoRSdb exact-allele AF ≥ 0.01). Submitted with `KIND=INDEL SLOTS=5 MEM=192 ris/snv_pipeline.sh <S>_<P>_INDEL_small <set>`:
 COLO829_fiberseq 938392 → 938393, COLO829_ONT 938394 → 938395, COLO829_Illumina 938396 → 938397,
 HG008_PacBio 938398 → 938399, HG008_ONT 938400 → 938401, HG008_Illumina 938402 → 938403.
 
@@ -349,7 +354,8 @@ before the single chr1 evaluation.
    length-changing allele within 6 bp (gnomAD, CoLoRSdb); repeat tract length and homopolymer >= 6; calls within 5 kb /
    20 kb (Mutect2's clustered events); LEFTSHIFT. Fitted once on chr2 of all six sets (equal weight per set),
    PoN floor (0.02) and ONE shared threshold (0.145) chosen on chr2; applied unchanged to chr1.
-3. PoN: the PoN script's exact-allele INDEL rule at that floor (`tools/pon_tag.py`), then rtg vcfeval.
+3. PoN: one flat gnomAD / CoLoRSdb exact-allele AF floor for every INDEL, at that value (`tools/pon_tag.py`; SNV rule
+   unchanged), then rtg vcfeval.
 
 **How it was chosen (chr2 only).** Upstream recall-0.9 threshold -> chr2-tuned threshold (`exp_calls.sh` general) ->
 rescorer (block CV mean 0.169 -> 0.256 on the seed-0 models, wins in 92-100% of CV repeats in every set and family).

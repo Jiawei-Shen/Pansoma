@@ -1,6 +1,7 @@
 #!/bin/bash
 # Train on a set (chr1 left out), then predict chr1 with the best checkpoint (predict.sh). Usage: run.sh NAME SET KIND [train options]
-# The train options are passed as given (the SNV recipe: machine_learning/pansoma_net_v2/README.md, "SNV recipe").
+# The train options are passed as given (the SNV or INDEL recipe: machine_learning/pansoma_net_v2/README.md,
+# "SNV recipe" / "INDEL recipe"; snv_pipeline.sh passes them).
 # With more than one GPU (submit.sh -g N) training runs under torchrun with --ddp.
 #   ris/submit.sh -n 1 -m 64 pnv2_HG008_Illumina_SNV_test run.sh HG008_Illumina_SNV_test HG008T_Illumina SNV \
 #       --train-chroms chr21 chr22 --epochs 2 --read-threads 4 --num-workers 4 --val-workers 4

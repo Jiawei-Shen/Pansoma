@@ -3,7 +3,8 @@ CoLoRSdb exact allele) and read-AF floor, by the F1 of the calls against the tru
 
     python ris/tools/tune_indel.py EVAL_DIR OUT.json [--floors F ...] [--read-af A ...]
 EVAL_DIR = a vcfeval.py --output of the tuning chromosome. The general decision tunes the threshold only:
---floors 0.01 --read-af 0 (the PoN script's INDEL rule, no read-AF floor).
+--floors 0.01 --read-af 0 (one flat 0.01 floor for every INDEL, no read-AF floor; the PoN script's own INDEL rule
+splits 0.01 / 0.001 by homopolymer, which this tool does not apply).
 
 Uses EVAL_DIR/vcfeval/raw_curve (every PASS or LowQual call, TP or FP, from graph_vcf --min-score up): a call is kept
 when p >= threshold, read AF >= floor and its population AF < PoN floor; precision = kept TP / kept, recall = kept TP /

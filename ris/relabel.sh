@@ -6,7 +6,7 @@
 # first to <set>/labels_backup_<date the current labels were made>/ (once; an existing backup is kept).
 # Usage: relabel.sh SET SNV_MIN_AF ('' for none). A CPU job, 9 slots (label's recall scan reads the filtered-candidate
 # streams in 8 processes besides the main one):
-#   ris/submit.sh -g 0 -n 9 -m 32 pnv2_relabel_HG008T_PacBio relabel.sh HG008T_PacBio 0.08
+#   ris/submit.sh -g 0 -n 9 -m 32 pnv2_relabel_HG008T_PacBio relabel.sh HG008T_PacBio ''
 set -euo pipefail
 source "$(dirname "$0")/env.sh"
 SET=$1 AF=$2

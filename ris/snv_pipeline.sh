@@ -1,6 +1,7 @@
 #!/bin/bash
-# One set's SNV pipeline as two LSF jobs: run.sh (train with the SNV recipe, predict chr1) on one H100 of the
-# epigenome queue, then vcf.sh (graph VCF, GRCh38 VCF, PoN, rtg vcfeval) on CPU once it is done.
+# One set's SNV or INDEL pipeline (KIND, default SNV) as two LSF jobs: run.sh (train with the recipe of that kind,
+# predict chr1) on one H100 of the epigenome queue (GPUS for more), then vcf.sh (graph VCF, GRCh38 VCF, PoN, rtg
+# vcfeval) on CPU once it is done.
 # Runs on the login node: ris/snv_pipeline.sh NAME SET [extra train options]
 #   ris/snv_pipeline.sh HG008_Illumina_SNV_recipe HG008T_Illumina
 # SLOTS / MEM (default 7 / 128) set the GPU job's slots and memory; QUEUE / SELECT its queue and GPU; WAIT an LSF
