@@ -493,5 +493,6 @@ class TrainPredictTest(unittest.TestCase):
             self.assertEqual(sum(d["train"] for d in ckpt_i["data"]),
                              int((index.arrays["label"][tr] >= 0).sum()) - n_tr)
 
+
 if __name__ == "__main__":
     unittest.main()

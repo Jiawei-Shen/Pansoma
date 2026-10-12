@@ -59,7 +59,9 @@ from google.protobuf.message import DecodeError
 import numpy as np
 
 from . import vg_pb2
-from .gam_reader import SEGMENTS_PER_PROCESS, BgzfReader, decode, intervals_hit, read_gai, read_records, segments
+from . import gam_reader  # segments, SEGMENTS_PER_PROCESS, intervals_hit: looked up when called, so a process that
+# loaded an older gam_reader (gam_prep check -> IndexedGam imports this module lazily) still imports it
+from .gam_reader import BgzfReader, decode, read_gai, read_records
 
 FORMAT = "pansoma-gam-record-index-1"
 MAGIC = b"PGRI\0\1\r\n"
@@ -172,7 +174,7 @@ def scan(gam, bins, processes=1):
     gai_map}. Refused unless every GAI run starts at a group start and ends at a group start or EOF after it
     (the runs the GAI walk reads without an error), every block and record reads, and the segments meet."""
     size = Path(gam).stat().st_size
-    cuts = segments(size, bins, max(1, processes) * SEGMENTS_PER_PROCESS if processes > 1 else 1)
+    cuts = gam_reader.segments(size, bins, max(1, processes) * gam_reader.SEGMENTS_PER_PROCESS if processes > 1 else 1)
     jobs = [(str(gam), start, end) for start, end in cuts]
     if processes <= 1:
         results = [_scan_segment(job) for job in jobs]
@@ -337,7 +339,8 @@ class RecordIndex:
         rows = np.concatenate([rows, self._long[near]])
         numbers, first = np.unique(np.concatenate([numbers, self._long_rows[near]]), return_index=True)
         rows = rows[first]
-        keep = intervals_hit(nodes, rows["lo1"], rows["hi1"]) | intervals_hit(nodes, rows["lo2"], rows["hi2"])
+        hit = gam_reader.intervals_hit
+        keep = hit(nodes, rows["lo1"], rows["hi1"]) | hit(nodes, rows["lo2"], rows["hi2"])
         if min_mapq is not None:
             keep &= rows["mapq"] > min_mapq
         group = rows["group"].astype(np.int64)
@@ -552,7 +555,7 @@ def mean_record_bytes(gam, bins, points=4):
     over the file (block-granular, so short reads come out near 0); None when no group has records."""
     total = count = 0
     with BgzfReader(gam) as reader:
-        for start, _ in segments(Path(gam).stat().st_size, bins, points):
+        for start, _ in gam_reader.segments(Path(gam).stat().st_size, bins, points):
             reader.seek(start)
             positions = []
             while not positions and reader.read_group(positions) is not None:

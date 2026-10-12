@@ -402,7 +402,8 @@ class TensorDataset(Dataset):
 
 class EpochSampler(Sampler):
     """A fresh random (or fixed) order each epoch, optionally only num_samples of it, split over DDP ranks:
-    shuffled training pads to equal per-rank lengths; evaluation (shuffle=False) gives disjoint slices.
+    a shuffled order is padded to equal per-rank lengths; shuffle=False (evaluation) gives disjoint slices.
+    Training uses rank 0 of 1: ChunkLoader splits the epoch over the ranks itself.
     With labels and non_fraction < 1 each epoch takes every tensor of the other classes and a fresh random
     non_fraction of the non tensors (label 0); non tensors marked in `keep` are taken every epoch too."""
 
