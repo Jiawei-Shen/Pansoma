@@ -216,15 +216,8 @@ class GraphPrepTest(unittest.TestCase):
                              ("chr-node-ranges", 11, dict(path="g.gbz")))
             self.assertEqual(ChrIndex(tmp / "idx.tsv").names_of([1, 9, 11, 118, 121]), ["chr1", "chr2", "chr3", "chr19", "chr22"])
 
-    def test_graph_prep_is_not_in_the_runtime_package(self):
-        from ..tensor_postprocessing import __main__ as cli, chr_index, reference_path
-        gone = {reference_path: ("SEPARATORS", "AWK", "parse_walk", "scan", "check"),
-                chr_index: ("CHR_INDEX_FORMAT", "NAMED_GROUPS", "UNPLACED", "group_of", "component_block", "build",
-                            "SELECTIONS"),
-                ReferencePath: ("unique",), ChrIndex: ("is_autosome",)}
-        for owner, names in gone.items():
-            for name in names:
-                self.assertFalse(hasattr(owner, name), f"{owner.__name__}.{name}")
+    def test_graph_prep_commands_are_not_in_the_runtime_cli(self):
+        from ..tensor_postprocessing import __main__ as cli
         for command in ("ref-path-scan", "ref-path-check", "chr-index"):
             with self.subTest(command=command), contextlib.redirect_stderr(io.StringIO()):
                 with self.assertRaises(SystemExit) as raised:

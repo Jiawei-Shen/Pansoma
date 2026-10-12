@@ -76,17 +76,6 @@ def decode(raw):
     return alignment
 
 
-def scan_gam(path):
-    """Sequential scan of every record; never consults the GAI."""
-    with gzip.open(path, "rb") as stream:
-        while True:
-            messages = group(stream)
-            if messages is None:
-                return
-            for raw in messages:
-                yield decode(raw)
-
-
 def equivalent_eof(stream, expected, actual):
     """Both offsets denote the same logical EOF (end of last block vs. start of EOF block)."""
     stream.seek(expected)
@@ -466,6 +455,33 @@ def read_gai(path, gam_size):
     return version, bins, hashlib.sha256(raw).hexdigest()
 
 
+SEGMENTS_PER_PROCESS = 4  # parallel GAM scans (discovery, gam_record_index build): segments per worker
+
+
+def segments(size, bins, count):
+    """Up to `count` contiguous [start, end) virtual-offset segments of a GAM of `size` bytes, cut at the GAI run
+    starts of `bins` (group starts) near equal file fractions: the first starts at 0, the last ends at EOF (None)."""
+    starts = sorted({start for _, _, runs in bins for start, _ in runs} - {0})
+    cuts, k = [0], 0
+    for i in range(1, count):
+        target = size * i // count
+        while k < len(starts) and (starts[k] >> 16) < target:
+            k += 1
+        if k < len(starts) and starts[k] > cuts[-1]:
+            cuts.append(starts[k])
+    return list(zip(cuts, cuts[1:] + [None]))
+
+
+def intervals_hit(nodes, lo, hi):
+    """Per interval [lo, hi] (arrays): does it hold a node of `nodes` (sorted unique), i.e. is the first node >= lo
+    also <= hi? Bins in IndexedGam.ranges, record node intervals in gam_record_index."""
+    first = np.searchsorted(nodes, lo, side="left")
+    inside = first < len(nodes)
+    hit = np.zeros(len(lo), dtype=bool)
+    hit[inside] = nodes[first[inside]] <= hi[inside]
+    return hit
+
+
 # --- indexed retrieval --------------------------------------------------------
 
 def record_key(alignment):
@@ -654,14 +670,8 @@ class IndexedGam:
         nodes = np.unique(np.fromiter(nodes, dtype=np.uint64))
         if not len(nodes):
             return []
-        # A bin [lo, hi] intersects the nodes if the first node >= lo is <= hi.
-        lo, hi = self._bounds()
-        first = np.searchsorted(nodes, lo, side="left")
-        inside = first < len(nodes)
-        hit = np.zeros(len(self.bins), dtype=bool)
-        hit[inside] = nodes[first[inside]] <= hi[inside]
         runs = []
-        for b in np.flatnonzero(hit).tolist():
+        for b in np.flatnonzero(intervals_hit(nodes, *self._bounds())).tolist():
             runs.extend(self.bins[b][2])
         merged = []
         for start, end in sorted(runs):

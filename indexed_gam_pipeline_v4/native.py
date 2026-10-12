@@ -9,7 +9,7 @@ candidates.decode_alignment stays the reference and the fallback. The compiled m
 otherwise the builder decodes in Python and its manifest says why (`decoder`). A record the
 native decoder raises on is decoded again in Python (any error is then the reference's), so a
 task completes whenever it would complete in pure Python. The output is identical either way
-(tests/test_native_decoder.py; README "native decoder").
+(tests/test_native_decoder.py; README section 4, "native compile | check").
 
 Decoded columns stay in the C++ struct array (ColumnArray, ~24 bytes per column instead of a
 ~120-byte Column object); candidates.Column objects are made only where downstream code reads
@@ -34,7 +34,6 @@ import argparse
 from collections import OrderedDict
 import hashlib
 import importlib
-import importlib.util
 import json
 import os
 from pathlib import Path

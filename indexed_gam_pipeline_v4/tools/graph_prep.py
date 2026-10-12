@@ -28,6 +28,7 @@ import time
 import numpy as np
 
 from ..common import read_json, stamp, write_json
+from ..graph_index import GraphIndex
 from ..tensor_postprocessing.chr_index import AUTOSOMES, FIELDS, ChrIndex
 from ..tensor_postprocessing.reference_path import FORMAT, ReferencePath, rc
 
@@ -208,7 +209,6 @@ def scan(gfa, output, reference_sample="GRCh38"):
 
 def check(directory, graph_index, fasta, samples=100000, seed=20260923):
     """GFA lengths vs the GBZ graph index, and reference node sequences vs the FASTA; recorded in meta.json."""
-    from ..graph_index import GraphIndex
     import pysam
     path = ReferencePath(directory)
     rng = random.Random(seed)
@@ -332,13 +332,11 @@ def graph_nodes_between(graph, first, last):
 def build(components_dir, reference_path, output, graph_index=None, autosomes=AUTOSOMES):
     """Write <output>.tsv + <output>.json; raises on any violated invariant. With the graph index, node IDs may have
     gaps (filtered graphs): block node counts are counted in the index, and a component interval may have gaps."""
-    from ..graph_index import GraphIndex
     with GraphIndex(graph_index) if graph_index else contextlib.nullcontext() as graph:
         return _build(components_dir, reference_path, output, graph_index, graph, autosomes)
 
 
 def _build(components_dir, reference_path, output, graph_index, graph, autosomes):
-    from ..tensor_postprocessing.reference_path import ReferencePath
     components_dir, output = Path(components_dir), Path(output)
     path = ReferencePath(reference_path)
     max_node = path.meta["max_node"]
@@ -421,10 +419,6 @@ def _build(components_dir, reference_path, output, graph_index, graph, autosomes
 
 # --- graph index audit ---------------------------------------------------------------------------
 
-WALK_SEPARATORS = bytes.maketrans(b"<>", b"  ")      # W line walk: >12<13
-PATH_SEPARATORS = bytes.maketrans(b",+-", b"   ")    # P line segments: 12+,13-
-
-
 def audit_part(gfa, start, end, size, targets):
     """One byte range of the GFA (the lines that start in [start, end)): every node's number of W/P lines visiting it
     (numpy fancy-index increments count a node once per line), the S lines of `targets`, and totals."""
@@ -450,7 +444,7 @@ def audit_part(gfa, start, end, size, targets):
                 continue
             if kind == b"W\t":
                 walk = line.split(b"\t", 7)[6].rstrip(b"\n")  # field 7; optional tags would follow
-                ids = np.fromstring(walk.translate(WALK_SEPARATORS), dtype=np.int64, sep=" ")
+                ids = np.fromstring(walk.translate(SEPARATORS), dtype=np.int64, sep=" ")
             elif kind == b"P\t":
                 ids = np.fromstring(line.split(b"\t", 3)[2].translate(PATH_SEPARATORS), dtype=np.int64, sep=" ")
             else:
@@ -476,7 +470,6 @@ def audit(graph_index, gfa, chr_index, output, random_nodes=24, seed=20260930, p
     `random_nodes` random nodes must equal its S line. Writes the report to `output` (JSON); on any difference to
     <output>.failed instead, and raises."""
     from multiprocessing import get_context
-    from ..graph_index import GraphIndex
     started = time.perf_counter()
     processes = processes or int(os.environ.get("SLURM_CPUS_PER_TASK") or 1)
     with Path(chr_index).open() as stream:

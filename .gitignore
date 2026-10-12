@@ -12,9 +12,7 @@ env/
 # Generated data and large artifacts
 /tmp/
 /pretrained_model/
-data/raw/
-data/interim/
-data/processed/
+/tensor_figures/
 *.dat
 *.idx
 *.npy
@@ -38,6 +36,7 @@ data/processed/
 *.out
 *.err
 logs/
+/machine_learning/pansoma_net_v2/jobs/
 
 # macOS / IDE
 .DS_Store

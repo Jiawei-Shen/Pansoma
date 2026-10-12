@@ -10,16 +10,15 @@ ONT streams are hundreds of GB). scan_filtered here returns the same dict:
     an id gives its reasons and the dict's order is that of first appearance.
 The workers come from a forkserver (Slurm counts the RSS of every process: forked copies of a parent that holds the
 truth sets would each count them again) and get the hash array once, as their initializer's argument. As with
-spawn, a worker imports the caller's main module (`python -m <package>.orchestrate` and `python -c` are
-import-safe), so a script that calls this keeps its work under `if __name__ == "__main__":`. When the pool cannot
-work (a main module read from stdin, a TMPDIR too long for the forkserver's socket, a worker killed), the scan
-falls back to truth_labels.scan_filtered: the same dict, read in one stream.
+spawn, a worker imports the caller's main module (`python -m <package>.orchestrate`, `python -m
+<package>.tensor_postprocessing` and `python -c` are import-safe), so a script that calls this keeps its work under
+`if __name__ == "__main__":`. When the pool cannot work (a main module read from stdin, a TMPDIR too long for the
+forkserver's socket, a worker killed), the scan falls back to truth_labels.scan_filtered: the same dict, read in one
+stream.
 
-label_run is truth_labels.label_run verbatim; the scan_filtered it calls is the one here, every other name it uses
-is truth_labels' own (tests/test_recall_scan.py pins both). The labels, labels.manifest.json (rules_sha256 is still
-the SHA-256 of truth_labels.py) and the recall reports are those of truth_labels.label_run.
+label_run is truth_labels.label_run with this scan (orchestrate finalize, `tensor_postprocessing label`): the same
+labels, labels.manifest.json (rules_sha256 is the SHA-256 of truth_labels.py) and recall reports.
 """
-from collections import defaultdict
 from concurrent.futures import ProcessPoolExecutor
 from concurrent.futures.process import BrokenProcessPool
 import hashlib
@@ -30,10 +29,8 @@ import sys
 
 import numpy as np
 
-from ..common import sha256_file, write_json
-from .reference_path import ReferencePath
 from . import truth_labels
-from .truth_labels import CANDIDATE, REASONS, Locator, TruthSet, label_directory, recall
+from .truth_labels import CANDIDATE, REASONS
 
 WORKERS = 8  # processes of one scan: 8 streams reach a node's read rate on /scratch, 16 are no faster
 PARTS = 4  # byte ranges per worker (ranges are handed out as workers free up)
@@ -137,43 +134,9 @@ def scan_filtered(directory, keys, workers=WORKERS, parts=None, block=BLOCK):
     return found
 
 
-# truth_labels.label_run, verbatim (scan_filtered above).
 def label_run(tensors, kinds, reference_path, fasta, somatic_vcf, somatic_bed, germline_vcf, germline_bed, truth_dir,
-              recall_dir=None, snv_min_af=None, indel_min_af=None, ignore_repeat_indels=False):
-    """Build both truth sets, label every merged autosome directory of `kinds`, write recall reports.
-
-    Truth tables (<set>.graph.tsv) depend only on the graph and the VCFs and go to `truth_dir`;
-    recall reports depend on the run and go to `recall_dir` (default: `tensors`).
-    """
-    truth_dir = Path(truth_dir)
-    truth_dir.mkdir(parents=True, exist_ok=True)
-    recall_dir = Path(recall_dir or tensors)
-    recall_dir.mkdir(parents=True, exist_ok=True)
-    path = ReferencePath(reference_path)
-    locator = Locator(path)
-    somatic = TruthSet("somatic", somatic_vcf, somatic_bed, fasta, locator)
-    germline = TruthSet("germline", germline_vcf, germline_bed, fasta, locator)
-    confident = somatic.bed.intersect(germline.bed)
-    for truth in (somatic, germline):
-        truth.write_table(truth_dir / f"{truth.name}.graph.tsv")
-    provenance = dict(truth={t.name: dict(vcf=str(t.vcf), vcf_sha256=sha256_file(t.vcf), bed=str(t.bed_path),
-                                          bed_sha256=sha256_file(t.bed_path), stats=dict(t.stats),
-                                          table=str(truth_dir / f"{t.name}.graph.tsv"))
-                             for t in (somatic, germline)},
-                      confident_region=dict(definition="somatic BED ∩ germline BED", bp=confident.size()),
-                      fasta=str(fasta), reference_path=str(path.directory))
-    reports, matched = {}, {somatic.name: defaultdict(list), germline.name: defaultdict(list)}
-    for kind in kinds:
-        reports[kind], found = label_directory(Path(tensors) / kind, somatic, germline, path, confident, provenance, fasta,
-                                               snv_min_af, indel_min_af, ignore_repeat_indels)
-        for name, items in found.items():
-            for tid, hits in items.items():
-                matched[name][tid] += hits
-    keys = {k for truth in (somatic, germline) for a in truth.alleles for k in a["keys"]}
-    filtered = {}
-    for kind in kinds:
-        filtered.update(scan_filtered(Path(tensors) / kind, keys))
-    recall_report = {t.name: recall(t, matched[t.name], filtered, recall_dir) for t in (somatic, germline)}
-    write_json(recall_dir / "truth_recall.json", recall_report)
-    return dict(labels={k: dict(totals=r["totals"], reasons=r["reasons"]) for k, r in reports.items()},
-                recall=recall_report, truth_stats={t.name: dict(t.stats) for t in (somatic, germline)})
+              *, snv_min_af=None, indel_min_af=None, ignore_repeat_indels=False):
+    """truth_labels.label_run with the scan_filtered above."""
+    return truth_labels.label_run(tensors, kinds, reference_path, fasta, somatic_vcf, somatic_bed, germline_vcf,
+                                  germline_bed, truth_dir, snv_min_af=snv_min_af, indel_min_af=indel_min_af,
+                                  ignore_repeat_indels=ignore_repeat_indels, scan=scan_filtered)

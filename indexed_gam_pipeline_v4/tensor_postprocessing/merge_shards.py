@@ -15,7 +15,7 @@ streams). Output, per tensor kind (SNV, INDEL):
     <tensors>/<kind>/manifest.json                     layout, per-chromosome shards with SHA-256, provenance
     <tensors>/<kind>/validation_report.json
     <tensors>/non_autosomal/<kind>/...                 same layout for chrX, chrY, chrM, chrEBV, unplaced
-    <root>/batch_timing.ndjson                         shared batch timings of every task (split runs)
+    <root>/batch_timing.ndjson                         shared batch timings of every task
 
 Records keep their source order (task, shard, index), so shards are node-sorted when the tasks are. The
 chromosome of a tensor is the block of its node (chr_index). Everything is written to a
@@ -202,7 +202,7 @@ def scan_source(source, reference, first_task, index):
     return k
 
 
-def plan_kind(sources, index, pool=None):
+def plan_kind(sources, index, pool):
     """Reference manifest, per-source group arrays and per-group totals; checks manifests agree."""
     if not sources:
         raise ValueError("No task outputs to merge")
@@ -211,8 +211,7 @@ def plan_kind(sources, index, pool=None):
     if reference.get("status") != "complete":
         raise ValueError(f"Incomplete task output: {first}")
     jobs = [(s, reference, sources[0]["task"], index) for s in sources]
-    groups = list(pool.map(scan_source, *zip(*jobs), chunksize=max(1, len(jobs) // 64)) if pool
-                  else map(scan_source, *zip(*jobs)))
+    groups = list(pool.map(scan_source, *zip(*jobs), chunksize=max(1, len(jobs) // 64)))
     totals = Counter()
     for k in groups:
         totals.update(Counter(k.tolist()))
@@ -501,19 +500,17 @@ def merge(root, chr_index, shard_size=DEFAULT_SHARD_SIZE, keep_sources=False, wo
 
 
 def collect_batch_timing(root, tensors, sources_of):
-    """Concatenate shared/task_*/batch_timing.ndjson (split runs) into <root>/batch_timing.ndjson."""
+    """Concatenate shared/task_*/batch_timing.ndjson into <root>/batch_timing.ndjson."""
     tasks = sorted({s["task"] for items in sources_of.values() for s in items})
     target, lines = Path(root) / "batch_timing.ndjson", 0
     with target.open("w") as out:
         for task in tasks:
-            for kind in ("shared", *sources_of):
-                path = Path(tensors) / kind / f"task_{task:04d}" / "batch_timing.ndjson"
-                if path.exists():
-                    with path.open() as stream:
-                        for line in stream:
-                            out.write(json.dumps(dict(task=task, **json.loads(line))) + "\n")
-                            lines += 1
-                    break
+            path = Path(tensors) / "shared" / f"task_{task:04d}" / "batch_timing.ndjson"
+            if path.exists():
+                with path.open() as stream:
+                    for line in stream:
+                        out.write(json.dumps(dict(task=task, **json.loads(line))) + "\n")
+                        lines += 1
     return dict(path=str(target), batches=lines)
 
 

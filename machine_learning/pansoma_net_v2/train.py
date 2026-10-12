@@ -9,11 +9,10 @@ the labels 0 non, 1 somatic, 2 germline; tensors labelled -1 are not used. The t
 are left out; the others train, except the validation: whole ~1 Mb node blocks (--val-fraction of them), or
 --val-chroms. The encoder's z-score statistics (and with --scalars the scalars') are fitted once on the
 training tensors (or taken from --resume) and saved in every checkpoint. Each epoch the somatic threshold of
-the best validation F1 is found (metrics.py); the best checkpoint has the highest thresholded somatic F1 (or
---select ap: somatic average precision) and stores its threshold.
+the best validation F1 is found (metrics.py); the best checkpoint has the highest thresholded somatic F1 and
+stores its threshold.
 """
 import argparse
-import csv
 import json
 import math
 import os
@@ -32,11 +31,10 @@ from .env import triton_libcuda
 from .chunks import ChunkLoader, build_cache
 from .data import (CHECKPOINT_PATH_COUNT, CLASSES, KINDS, SCALARS, EpochSampler, TensorDataset, block_split,
                    common_path_count, load_parts, read_candidate_ids, somatic_truth, validation_truth)
-
-AF = SCALARS.index("af")
 from .encode import PLANES, compute_stats
 from .model import PansomaNetV2, full_config, no_decay
 
+AF = SCALARS.index("af")
 AUTOSOMES = [f"chr{i}" for i in range(1, 23)]
 
 
@@ -51,10 +49,6 @@ def parse_args(argv=None):
     p.add_argument("--val-chroms", nargs="+", default=[], help="validation chromosomes (default: node blocks)")
     p.add_argument("--val-fraction", type=float, default=0.05, help="node blocks of the training chromosomes")
     p.add_argument("--val-block-nodes", type=int, default=20000)
-    p.add_argument("--select", choices=["f1", "ap", "truth_f1"], default="f1",
-                   help="best checkpoint by the tensor-level somatic F1 at its best threshold (default), the somatic AP, "
-                        "or the truth-level F1 at its best threshold (metrics.truth_report); the checkpoint stores "
-                        "that criterion's threshold")
     p.add_argument("--scalars", action="store_true", help="feed the site scalars (data.SCALARS) to the head")
     p.add_argument("--epochs", type=int, default=30)
     p.add_argument("--epoch-samples", type=int, help="training tensors per epoch (a fresh random subset each epoch)")
@@ -71,18 +65,10 @@ def parse_args(argv=None):
     p.add_argument("--ignore-reasons", nargs="+", default=[],
                    help="label reasons left out of training and validation, as if -1 (e.g. "
                         "residual_partial_somatic_truth allele_partial_somatic_truth); the label files are unchanged")
-    p.add_argument("--label-overrides",
-                   help="TSV with columns candidate_id and label (-1/0/1/2): these tensors' training and validation "
-                        "labels (validation: -1 outside the confident region), whatever their reason; they are exempt "
-                        "from --ignore-reasons")
     p.add_argument("--exclude-candidates",
                    help="file of candidate ids (first column; a header line candidate_id is skipped) taken out before "
-                        "the model, as if never built: left out of training and validation (-1, even over "
-                        "--label-overrides); predict leaves them out of the test and graph_vcf out of the calls "
-                        "(predict's default is this file)")
-    p.add_argument("--reason-labels", nargs="+", default=[], metavar="REASON=LABEL",
-                   help="label for every tensor of a reason inside the confident region (training and validation), "
-                        "e.g. off_reference_no_truth_match=0; --label-overrides take precedence")
+                        "the model, as if never built: left out of training and validation (-1); predict leaves them "
+                        "out of the test and graph_vcf out of the calls (predict's default is this file)")
     p.add_argument("--keep-non-af", type=float,
                    help="non tensors with AF >= this are taken every epoch; the sampled rest weigh 1/--non-fraction "
                         "in the loss and the class weights use all tensors, so the expected loss is that of all non "
@@ -105,8 +91,8 @@ def parse_args(argv=None):
                    help="skip torch.compile (default on CUDA: 3x faster on an H100, ~2 min to compile)")
     p.add_argument("--no-channels-last", dest="channels_last", action="store_false")
     p.add_argument("--num-workers", type=int, default=8,
-                   help="DataLoader workers for the statistics and, with --random-reads, training (random reads "
-                        "from BeeGFS are latency-bound: more workers read faster)")
+                   help="DataLoader workers for the statistics (random reads from BeeGFS are latency-bound: more "
+                        "workers read faster); 0 also reads the validation without workers")
     p.add_argument("--val-workers", type=int, default=8)
     p.add_argument("--micro-batches", type=int, default=1,
                    help="forward/backward each batch in this many parts (gradient accumulation: the same update as the "
@@ -120,8 +106,6 @@ def parse_args(argv=None):
                    "built where missing, see chunks.py)")
     p.add_argument("--no-chunk-cache", dest="use_chunk_cache", action="store_false",
                    help="read the chunks from the raw shards")
-    p.add_argument("--random-reads", action="store_true",
-                   help="training with one random pread per tensor (DataLoader workers) instead of chunks")
     p.add_argument("--seed", type=int, default=0)
     p.add_argument("--ddp", action="store_true")
     p.add_argument("--resume", help="checkpoint to continue from (its statistics are kept)")
@@ -296,30 +280,15 @@ def started_loader(dataset, sampler, num_workers, batch_size, log, what, prefetc
     return retry_workers(start, log, what)
 
 
-def relabel(everything, overrides, reason_labels):
-    """Set the training (label) and validation (eval_label) labels of the indexes in place, from reason_labels
-    ({reason: label}, inside the confident region) and then overrides ({candidate_id: label}). Returns, per index,
-    the positions that overrides set, and counts for the log."""
-    overridden, counts = [], []
-    for index, _ in everything:
-        a = index.arrays
-        label, evl, region = a["label"].copy(), a["eval_label"].copy(), a["in_region"].astype(bool)
-        n_reason = 0
-        for reason, value in reason_labels.items():
-            if reason not in index.meta["reasons"]:
-                continue
-            m = (a["reason"] == index.meta["reasons"].index(reason)) & region
-            label[m], evl[m] = value, value
-            n_reason += int(m.sum())
-        candidates = index.candidates()
-        pos = np.array([k for k, c in enumerate(candidates) if c in overrides], dtype=np.int64)
-        values = np.array([overrides[candidates[k]] for k in pos], dtype=np.int8)
-        label[pos] = values
-        evl[pos] = np.where((values >= 0) & region[pos], values, -1)
-        a["label"], a["eval_label"] = label, evl
-        overridden.append(pos)
-        counts.append((n_reason, len(pos), {int(v): int((values == v).sum()) for v in np.unique(values)}))
-    return overridden, counts
+def exclude(index, candidate_ids):
+    """Set the training (label) and validation (eval_label) labels of the index's tensors whose candidate id is in
+    candidate_ids to -1, in place (--exclude-candidates); returns how many."""
+    a = index.arrays
+    pos = np.array([k for k, c in enumerate(index.candidates()) if c in candidate_ids], dtype=np.int64)
+    label, evl = a["label"].copy(), a["eval_label"].copy()
+    label[pos], evl[pos] = -1, -1
+    a["label"], a["eval_label"] = label, evl
+    return len(pos)
 
 
 def main(argv=None):
@@ -343,22 +312,11 @@ def main(argv=None):
     else:  # the model never reads channel 6: sets of any storage
         path_count, haplotypes = None, sorted({i.haplotypes for i, _ in everything if i.haplotypes is not None})
         run.log("channel 6 (path count) not read (--drop-planes path_count)")
-    overridden = [np.zeros(0, np.int64) for _ in everything]
-    if args.label_overrides or args.reason_labels or args.exclude_candidates:
-        overrides = {}
-        if args.label_overrides:
-            with open(args.label_overrides) as f:
-                rows = list(csv.DictReader(f, delimiter="\t"))
-            overrides = {r["candidate_id"]: int(r["label"]) for r in rows}
-        if args.exclude_candidates:
-            excluded = read_candidate_ids(args.exclude_candidates)
-            overrides.update(dict.fromkeys(excluded, -1))
-            run.log(f"--exclude-candidates {args.exclude_candidates}: {len(excluded):,} candidate ids")
-        reason_labels = {r.split("=")[0]: int(r.split("=")[1]) for r in args.reason_labels}
-        overridden, counts = relabel(everything, overrides, reason_labels)
-        for (index, _), (n_reason, n_over, by) in zip(everything, counts):
-            run.log(f"{index.dir}: --reason-labels {n_reason:,} tensors; --label-overrides {n_over:,} of {len(overrides):,} "
-                    f"candidate ids ({by})")
+    if args.exclude_candidates:
+        excluded = read_candidate_ids(args.exclude_candidates)
+        run.log(f"--exclude-candidates {args.exclude_candidates}: {len(excluded):,} candidate ids")
+        for index, _ in everything:
+            run.log(f"{index.dir}: {exclude(index, excluded):,} tensors excluded")
     available = sorted({c for index, _ in everything for c in index.meta["chroms"]})
     train_chroms, val_chroms, test_chroms, missing = split_chroms(args, available)
     run.log(f"train {train_chroms}\nval {val_chroms}\ntest (left out) {test_chroms}"
@@ -377,12 +335,12 @@ def main(argv=None):
             val_parts.append((i, va[i.arrays["eval_label"][va] >= 0]))
         run.log(f"validation: {args.val_fraction:.0%} of the {args.val_block_nodes}-node blocks of the training chromosomes")
     if args.ignore_reasons:
-        def keep(i, pos, exempt):
+        def without_ignored(i, pos):
             codes = [k for k, r in enumerate(i.meta["reasons"]) if r in set(args.ignore_reasons)]
-            return pos[~np.isin(i.arrays["reason"][pos], codes) | np.isin(pos, exempt)]
+            return pos[~np.isin(i.arrays["reason"][pos], codes)]
         before = sum(len(p) for _, p in train_parts), sum(len(p) for _, p in val_parts)
-        train_parts = [(i, keep(i, p, o)) for (i, p), o in zip(train_parts, overridden)]
-        val_parts = [(i, keep(i, p, o)) for (i, p), o in zip(val_parts, overridden)]
+        train_parts = [(i, without_ignored(i, p)) for i, p in train_parts]
+        val_parts = [(i, without_ignored(i, p)) for i, p in val_parts]
         run.log(f"left out (--ignore-reasons {' '.join(args.ignore_reasons)}): "
                 f"{before[0] - sum(len(p) for _, p in train_parts):,} training, "
                 f"{before[1] - sum(len(p) for _, p in val_parts):,} validation tensors")
@@ -400,9 +358,9 @@ def main(argv=None):
             f"({dict(zip(CLASSES, val_set.class_counts().tolist()))})")
     if len(train_set) == 0 or len(val_set) == 0:
         raise SystemExit("empty training or validation set")
-    keep = None
+    val_keep = None
     if args.val_samples and args.val_samples < len(val_set):
-        keep = np.sort(np.random.default_rng(args.seed).choice(len(val_set), args.val_samples, replace=False))
+        val_keep = np.sort(np.random.default_rng(args.seed).choice(len(val_set), args.val_samples, replace=False))
     # truth-level validation: the truth alleles of the validation region (with or without a tensor) and, per
     # validation sample, the truth alleles its tensor stands for; keys are (part, truth id)
     # (other_keys: the truth alleles of the other kind, true calls when a validation tensor matches one)
@@ -418,14 +376,14 @@ def main(argv=None):
         truth_keys |= {(p, t) for t in vt}
         other_keys |= {(p, t) for t in somatic_truth(index, val_chroms or train_chroms, other_kind=True)}
     if truth_keys is not None:
-        ids = keep.tolist() if keep is not None else range(len(val_set))
+        ids = val_keep.tolist() if val_keep is not None else range(len(val_set))
         matches = [{(int(val_set.part[i]), int(t)) for t in val_parts[val_set.part[i]][0].truth_of(val_set.position[i])}
                    for i in ids]
         val_truth = (truth_keys, other_keys, matches)
         run.log(f"truth-level validation: {len(truth_keys):,} somatic truth alleles in the validation region "
                 f"({len(set().union(*matches) & truth_keys) if matches else 0:,} with a validation tensor)")
-    if keep is not None:
-        val_set = Subset(val_set, keep.tolist())
+    if val_keep is not None:
+        val_set = Subset(val_set, val_keep.tolist())
 
     model = PansomaNetV2(len(CLASSES), args.depths, args.dims, args.front, args.drop_path,
                          scalars=len(SCALARS) if args.scalars else 0, block=args.block, drop_planes=args.drop_planes)
@@ -473,35 +431,30 @@ def main(argv=None):
     weights = class_weights(args.class_weights, epoch_counts).to(run.device)
     criterion = nn.CrossEntropyLoss(weight=weights, ignore_index=-1)
     per_sample = nn.CrossEntropyLoss(weight=weights, ignore_index=-1, reduction="none")
-    keep = train_set.scalars[:, AF] >= args.keep_non_af if args.keep_non_af is not None else None
-    # chunked reading splits the epoch over the ranks itself
-    rank, world = (run.rank, run.world) if args.random_reads else (0, 1)
-    train_sampler = EpochSampler(len(train_set), args.epoch_samples, True, rank, world, args.seed,
-                                 labels=train_set.label, non_fraction=args.non_fraction, keep=keep)
+    keep_af = train_set.scalars[:, AF] >= args.keep_non_af if args.keep_non_af is not None else None
+    # rank 0 of 1: ChunkLoader splits the epoch over the ranks itself
+    train_sampler = EpochSampler(len(train_set), args.epoch_samples, True, 0, 1, args.seed,
+                                 labels=train_set.label, non_fraction=args.non_fraction, keep=keep_af)
     if importance:
-        n_keep = int((keep & (train_set.label == 0)).sum())
+        n_keep = int((keep_af & (train_set.label == 0)).sum())
         run.log(f"non tensors with AF >= {args.keep_non_af}: {n_keep:,} taken every epoch; the others sampled at "
                 f"{args.non_fraction} with importance weight {1 / args.non_fraction:.2f}")
     run.log(f"class weights {dict(zip(CLASSES, [round(w, 4) for w in weights.tolist()]))}; each epoch "
             f"{train_sampler.epoch_size():,} tensors (non fraction {args.non_fraction})")
     val_sampler = EpochSampler(len(val_set), None, False, run.rank, run.world)
-    if args.random_reads:
-        train_loader = started_loader(train_set, train_sampler, args.num_workers, args.batch_size, run.log,
-                                      "training", args.prefetch_factor)
-    else:
-        chunk_cache = None
-        if args.use_chunk_cache:
-            files = [train_set.files[f] for f in np.unique(train_set.shard).tolist()]
-            where = args.chunk_cache or str(Path(cache) / "chunks")
-            if run.main:  # rank 0 builds what is missing, the others wait
-                build_cache(files, where, args.chunk_rows, args.read_threads, run.log)
-            run.barrier()
-            chunk_cache = build_cache(files, where, args.chunk_rows, args.read_threads, run.log)
-        train_loader = ChunkLoader(train_set, train_sampler, args.batch_size, args.read_threads, args.chunk_rows,
-                                   args.window_chunks, run.rank, run.world, args.seed, cache=chunk_cache)
-        run.log(f"training reads chunks of {args.chunk_rows} rows with {args.read_threads} threads, "
-                f"{args.window_chunks} chunks per shuffled pool, from "
-                + (f"the zstd chunk cache {where}" if chunk_cache else "the raw shards"))
+    chunk_cache = None
+    if args.use_chunk_cache:
+        files = [train_set.files[f] for f in np.unique(train_set.shard).tolist()]
+        where = args.chunk_cache or str(Path(cache) / "chunks")
+        if run.main:  # rank 0 builds what is missing, the others wait
+            build_cache(files, where, args.chunk_rows, args.read_threads, run.log)
+        run.barrier()
+        chunk_cache = build_cache(files, where, args.chunk_rows, args.read_threads, run.log)
+    train_loader = ChunkLoader(train_set, train_sampler, args.batch_size, args.read_threads, args.chunk_rows,
+                               args.window_chunks, run.rank, run.world, args.seed, cache=chunk_cache)
+    run.log(f"training reads chunks of {args.chunk_rows} rows with {args.read_threads} threads, "
+            f"{args.window_chunks} chunks per shuffled pool, from "
+            + (f"the zstd chunk cache {where}" if chunk_cache else "the raw shards"))
     val_loader = started_loader(val_set, val_sampler, args.val_workers if args.num_workers else 0, args.batch_size,
                                 run.log, "validation", args.prefetch_factor)
     steps_per_epoch = max(1, len(train_loader))
@@ -585,15 +538,10 @@ def main(argv=None):
                       flush=True)
         train_time = time.time() - t0
         val = evaluate(net, val_loader, criterion, run, amp, val_truth)
-        if args.select == "truth_f1" and val.get("truth"):
-            score, threshold = val["truth"]["best"]["f1"], val["truth"]["best"]["threshold"]
-        else:
-            score = val["thresholded"]["somatic"]["f1"] if args.select == "f1" else val["somatic_ap"]
-            threshold = val["threshold"]
+        score, threshold = val["thresholded"]["somatic"]["f1"], val["threshold"]
         improved = score > best["score"] or (score == best["score"] and val["loss"] < best["loss"])
         if improved:
-            best = {"score": score, "select": args.select, "loss": val["loss"], "epoch": epoch + 1,
-                    "threshold": threshold}
+            best = {"score": score, "select": "f1", "loss": val["loss"], "epoch": epoch + 1, "threshold": threshold}
         gpu = gpu_peak(run)
         row = dict(epoch=epoch + 1, train_loss=loss_sum / max(seen, 1), train_accuracy=correct / max(seen, 1),
                    train_seconds=round(train_time, 1), tensors_per_second=round(seen * run.world / train_time, 1),
@@ -606,7 +554,7 @@ def main(argv=None):
         save("last.pth", epoch + 1, val, threshold)
         if improved:
             save("best.pth", epoch + 1, val, threshold)
-    run.log(f"done; best epoch {best['epoch']} ({best.get('select', args.select)} {best['score']:.4f}, "
+    run.log(f"done; best epoch {best['epoch']} ({best.get('select', 'f1')} {best['score']:.4f}, "
             f"somatic threshold {best['threshold']}) -> {run.out / 'best.pth'}")
     if run.ddp:
         dist.destroy_process_group()

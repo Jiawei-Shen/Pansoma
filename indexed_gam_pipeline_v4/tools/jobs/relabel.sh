@@ -10,9 +10,11 @@
 # used (reference_path in TENSORS/SNV/labels.manifest.json).
 # Runs the package it lives in (<package>/tools/jobs/): the checkout, or
 # /scratch/jshen/data/pansoma_v2_tensors/pipeline_code/ (git archive, commit in pipeline_code/git_head.txt).
+# -c 9 / --mem=22G: label's recall scan reads the filtered-candidate streams in 8 processes besides the main one
+# (recall_scan), ~2.4 GiB more summed RSS than the one-stream scan.
 #SBATCH -p general
-#SBATCH -c 1
-#SBATCH --mem=19G
+#SBATCH -c 9
+#SBATCH --mem=22G
 #SBATCH -t 6:00:00
 set -euo pipefail
 S=${BASH_SOURCE[0]}  # sbatch runs a copy of this file; the submitted path is in the job record (always absolute)

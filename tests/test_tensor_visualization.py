@@ -288,6 +288,9 @@ class VisualizationTest(unittest.TestCase):
             with Image.open(output) as im:
                 im.verify()
 
+    def test_default_output_dir_is_the_repository_tensor_figures(self):
+        self.assertEqual(Path(v.DEFAULT_OUTPUT_ROOT),ROOT/'tensor_figures')
+
     def test_metadata_auto_loading_and_custom_shard_index(self):
         _,m=example()
         with tempfile.TemporaryDirectory() as d:

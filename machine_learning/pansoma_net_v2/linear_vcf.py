@@ -90,7 +90,7 @@ def convert(args):
     header, columns, records = read_vcf(args.graph_vcf)
     if meta(header, "source") != "pansoma_net_v2.graph_vcf":
         raise SystemExit(f"{args.graph_vcf} is not a graph_vcf output")
-    unplaced_out = args.unplaced or str(args.output)[:-len(".vcf.gz")] + ".unplaced.vcf.gz"
+    unplaced_out = str(args.output)[:-len(".vcf.gz")] + ".unplaced.vcf.gz"
     placed, unplaced = {}, []
     stats = dict(graph_records=0, unplaced=0, unplaced_pass=0, left_shifted=0, merged=0)
     for record in records:
@@ -166,8 +166,7 @@ def parse_args(argv=None):
     p.add_argument("--graph-vcf", required=True)
     p.add_argument("--reference-path", required=True, help="reference path directory of tools.graph_prep ref-path-scan")
     p.add_argument("--fasta", required=True, help="GRCh38 FASTA with .fai (the one the reference path was checked with)")
-    p.add_argument("--output", required=True, help="<name>.linear.vcf.gz")
-    p.add_argument("--unplaced", help="default: <output without .vcf.gz>.unplaced.vcf.gz")
+    p.add_argument("--output", required=True, help="<name>.linear.vcf.gz (records without a GRCh38 position: <name>.linear.unplaced.vcf.gz)")
     return p.parse_args(argv)
 
 

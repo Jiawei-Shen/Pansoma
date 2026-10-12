@@ -53,8 +53,8 @@ def make_tensor_set(root, spec, shard_size=4, seed=0, labels_created="2026-09-28
     somatic.recall.tsv (every truth allele, some without a tensor); returns {kind: [dict per tensor]}.
     Tensor k of a kind sits at node / GRCh38 position 1000 + 7k. Inside GAP a label 0 or -1 becomes -1
     outside_confident_region (as the labeller does); labels 1 and 2 keep theirs but are out of the region.
-    The manifest names the channel-6 `storage` under `storage_key` (the six v1.1 sets: tensor_storage_version, with
-    a -v1 suffix) and, when given, parameters.haplotypes."""
+    The manifest names the channel-6 `storage` under `storage_key` (the deleted HPRC v1.1 d9 linear100 sets used
+    tensor_storage_version, with a -v1 suffix) and, when given, parameters.haplotypes."""
     rng = np.random.default_rng(seed)
     root = Path(root)
     root.mkdir(parents=True, exist_ok=True)

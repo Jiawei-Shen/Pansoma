@@ -35,6 +35,8 @@ from types import SimpleNamespace
 
 import numpy as np
 
+from .common import rc
+
 TENSOR_FORMAT = "indexed-gam-candidate"
 TENSOR_STORAGE = "int8-count-haplotypes100"
 ROW_SELECTION = "site-allele-blocks-uniform-similarity"
@@ -49,11 +51,6 @@ STRAND = {"forward": 1, "reverse": 2}
 COUNT_ALL = 100  # channel 6 code of a node every haplotype visits (count == H)
 COUNT_EXACT = 49  # H-1 .. H-49 paths: one code per missing haplotype, 99 .. 51
 COUNT_LOW = 50  # 1 .. H-50 paths: codes 1 .. 50, exact when they fit (H <= 100), else pow 0.5
-COMPLEMENT = str.maketrans("ACGTNacgtn", "TGCANtgcan")
-
-
-def rc(sequence):
-    return sequence.translate(COMPLEMENT)[::-1]
 
 
 def int8_quality(value):
@@ -63,7 +60,7 @@ def int8_quality(value):
 
 def encode_count(value, haplotypes):
     """int8 code of a node's distinct path count relative to H = `haplotypes`, the graph's haplotype paths
-    (references included: HPRC v1.1 d9 90, v2.1 d46 464, a GRCh38-only graph 1).
+    (references included: HPRC v1.1 d9 90, v2.1 d46 464, the GRCh38-only vg autoindex graph 17).
 
         count == H              100                      every haplotype
         H-49 <= count < H       100 - (H - count)        99 .. 51, one code per missing haplotype

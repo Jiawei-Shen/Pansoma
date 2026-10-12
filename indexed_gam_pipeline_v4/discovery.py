@@ -23,10 +23,10 @@ import sys
 import numpy as np
 import pysam
 
+from . import gam_reader
 from .common import new_output, write_json
-from .gam_reader import IndexedGam, gam_pairs, group
+from .gam_reader import SEGMENTS_PER_PROCESS, IndexedGam, gam_pairs, group
 
-SEGMENTS_PER_PROCESS = 4
 CHUNK = 1_000_000
 
 
@@ -38,18 +38,10 @@ def default_processes():
 
 def segments(gam, index, count):
     """[(start, end)] virtual offsets of `count` (or fewer) contiguous segments that tile the
-    GAM at group starts (GAI run starts); the first starts at 0, the last ends at EOF (None)."""
-    reader = IndexedGam(gam, index, cache_bytes=1)
-    starts = sorted({start for _, _, runs in reader.bins for start, _ in runs} - {0})
-    size = Path(gam).stat().st_size
-    cuts, k = [0], 0
-    for i in range(1, count):
-        target = size * i // count
-        while k < len(starts) and (starts[k] >> 16) < target:
-            k += 1
-        if k < len(starts) and starts[k] > cuts[-1]:
-            cuts.append(starts[k])
-    return list(zip(cuts, cuts[1:] + [None]))
+    GAM at group starts (GAI run starts); the first starts at 0, the last ends at EOF (None).
+    gam_reader.segments of the file and its GAI (`index` None: the GAM path + .gai)."""
+    bins = IndexedGam(gam, index, cache_bytes=1).bins
+    return gam_reader.segments(Path(gam).stat().st_size, bins, count)
 
 
 def _scan_segment(job):

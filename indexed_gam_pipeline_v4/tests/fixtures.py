@@ -1,6 +1,6 @@
 """Synthetic data and helpers shared by the tests and the golden cases (tests/golden.py).
 
-    GAM/GAI writers   write_gam, build_index (vg's GAI with the 'GAI!' magic), encode_varint
+    GAM/GAI writers   write_gam, build_index (vg's GAI with the 'GAI!' magic), encode_varint; scan_gam (every record)
     alignments        simple_alignment, spec_alignment, mirror
     datasets          tiny_gam, af_gam, graph_fixture; SEQ, site_rows, mixed_af_rows
     arguments         build_args (a complete builder Namespace), split_args (shared/SNV/INDEL outputs)
@@ -84,6 +84,17 @@ def write_gam(path, alignments, foreign_groups=()):
             stream.flush()
     build_index(path, str(path) + ".gai")
     return path
+
+
+def scan_gam(path):
+    """Sequential scan of every record; never consults the GAI (the reference of the reader tests)."""
+    with gzip.open(path, "rb") as stream:
+        while True:
+            messages = group(stream)
+            if messages is None:
+                return
+            for raw in messages:
+                yield decode(raw)
 
 
 def simple_alignment(nodes=(10,), reverse=False, mapq=60, mutation=True, name="same-name"):

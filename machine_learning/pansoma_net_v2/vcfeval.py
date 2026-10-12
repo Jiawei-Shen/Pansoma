@@ -15,8 +15,8 @@
 2. Truth: the PASS (or '.') truth records of the kind on the predicted chromosomes, written to
    <dir>/truth.<KIND>.vcf.gz, with the calls' ##contig lines and a declaration of every INFO key where the truth
    has none (COLO829T's truth declares neither).
-   - SNV: a record with an ALT of REF's length. INDEL: an ALT of another length. ALL: every record.
-   - The predicted chromosomes are the calls' ##pansoma_chromosomes, or --regions.
+   - SNV: a record with an ALT of REF's length. INDEL: an ALT of another length.
+   - The predicted chromosomes are the calls' ##pansoma_chromosomes.
    - With --pon the PoN filter also runs over these truth records (truth_pon_tags): the share it tags bounds
      the recall of any caller after the PoN.
 3. rtg vcfeval compares alleles only: --squash-ploidy --sample ALT,ALT. The truth is phased and the calls are
@@ -42,11 +42,11 @@ import subprocess
 import sys
 from pathlib import Path
 
+from .metrics import RECALLS
 from .vcfio import REPO, meta, read_vcf, stats_path, write_vcf
 
 PON_SCRIPT = REPO / "scripts" / "filter_panel_of_normals.py"
 PON_NAMES = ("PoN1_gnomAD", "PoN2_dbSNP", "PoN3_1000G", "PoN4_CoLoRSdb")
-RECALLS = (0.5, 0.8, 0.9, 0.95)
 CURVE_FILTERS = {"PASS", "LowQual"}
 
 
@@ -70,7 +70,7 @@ def write_truth(truth, kind, chroms, output, contigs):
     header, columns, records = read_vcf(truth)
     kept, filtered = [], 0
     for r in records:
-        if r[0] in chroms and (kind == "ALL" or kind in record_kinds(r[3], r[4])):
+        if r[0] in chroms and kind in record_kinds(r[3], r[4]):
             if r[6] in ("PASS", "."):
                 kept.append(r)
             else:
@@ -245,7 +245,7 @@ def evaluate(args):
     if meta(header, "source") != "pansoma_net_v2.linear_vcf":
         raise SystemExit(f"{calls} is not a linear_vcf output")
     kind = args.kind or meta(header, "pansoma_kind")
-    chroms = args.regions or meta(header, "pansoma_chromosomes").split(",")
+    chroms = meta(header, "pansoma_chromosomes").split(",")
     out = Path(args.output)
     work = out / "vcfeval"
     if work.exists():
@@ -314,8 +314,7 @@ def parse_args(argv=None):
     p.add_argument("--sdf", required=True, help="rtg SDF of the FASTA used by linear_vcf")
     p.add_argument("--fasta", help="reference FASTA for the PoN's INDEL homopolymer rule (default: the calls' ##reference)")
     p.add_argument("--output", required=True, help="directory; its vcfeval/ must not exist")
-    p.add_argument("--kind", choices=["SNV", "INDEL", "ALL"], help="truth records to compare (default: the calls' kind)")
-    p.add_argument("--regions", nargs="+", help="chromosomes (default: those predicted)")
+    p.add_argument("--kind", choices=["SNV", "INDEL"], help="truth records to compare (default: the calls' kind)")
     p.add_argument("--rtg", default="rtg")
     p.add_argument("--rtg-mem", default="4g")
     p.add_argument("--threads", type=int, default=4)

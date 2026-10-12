@@ -20,8 +20,7 @@ from matplotlib.lines import Line2D
 import numpy as np
 
 
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_DIR = str(Path(__file__).resolve().parents[3])
+PROJECT_DIR = str(Path(__file__).resolve().parents[1])
 DEFAULT_OUTPUT_ROOT = os.path.join(PROJECT_DIR, "tensor_figures")
 BASE_LABELS = {
     0: "Padding",

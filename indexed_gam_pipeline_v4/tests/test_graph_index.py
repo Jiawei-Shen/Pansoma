@@ -8,7 +8,7 @@ import subprocess
 import tempfile
 import unittest
 
-from .fixtures import graph_fixture  # noqa: F401
+from .fixtures import graph_fixture
 from .. import graph_index
 from ..graph_index import GraphIndex
 from ..tools import graph_index_build

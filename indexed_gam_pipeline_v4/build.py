@@ -56,7 +56,7 @@ from .gam_reader import IndexedGam, MultiGam, gam_pairs
 from .graph_index import GraphIndex
 from .native import select_decoder
 
-KIND ={"SNP": "SNV", "INS": "INDEL", "DEL": "INDEL"}
+KIND = {"SNP": "SNV", "INS": "INDEL", "DEL": "INDEL"}
 SITE_UNIT = "site"
 PARAMETERS = ("haplotypes", "min_mapq", "min_af", "min_variants", "min_allele_bq", "max_indel_len", "rows",
               "width", "max_node_reads", "early_af_filter")
@@ -328,7 +328,6 @@ def build(args):
 def _build_batches(args, nodes, reader, graph, shared, typed, started, decode):
     """The batch loop. `typed` is {'SNV': OutputDir, 'INDEL': OutputDir}; `decode` is
     decode_alignment or a native.NativeDecoder (select_decoder)."""
-    sinks = typed
 
     def record(stream, meta):
         """Audit records go to the shared directory; SNP/INS/DEL records also to their typed one."""
@@ -337,7 +336,7 @@ def _build_batches(args, nodes, reader, graph, shared, typed, started, decode):
             typed[KIND[meta["event_type"]]].record(stream, meta)
 
     def written():
-        return sum(s.manifest["tensors"] + s.buffered for s in sinks.values())
+        return sum(s.manifest["tensors"] + s.buffered for s in typed.values())
 
     timings = defaultdict(float)
     auto = args.batch_nodes == "auto"
@@ -443,7 +442,7 @@ def _build_batches(args, nodes, reader, graph, shared, typed, started, decode):
                 continue
             if node in sampled:
                 meta["downsampled_from"] = sampled[node]
-            sinks[KIND[meta["event_type"]]].add(tensor, meta)
+            typed[KIND[meta["event_type"]]].add(tensor, meta)
         timings["candidate_tensors_and_shard_writes_seconds"] += time.perf_counter() - t
         shared.save(timing=dict(timings))
         with (shared.path / "batch_timing.ndjson").open("a") as log:
@@ -466,7 +465,7 @@ def _build_batches(args, nodes, reader, graph, shared, typed, started, decode):
             f"{n}\t{records}\t{args.max_node_reads}\tmax_node_reads\n" for n, records in sorted(sampled.items())))
         shared.manifest["downsampled_nodes"] = len(sampled)
     t = time.perf_counter()
-    for sink in sinks.values():
+    for sink in typed.values():
         sink.flush()
     timings["candidate_tensors_and_shard_writes_seconds"] += time.perf_counter() - t
     timings["total_wall_seconds"] = time.perf_counter() - started

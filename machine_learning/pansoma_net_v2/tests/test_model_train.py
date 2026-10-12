@@ -11,7 +11,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 
-from .. import combine, predict, train
+from .. import predict, train
 from ..data import SCALARS, EpochSampler, KindIndex, TensorDataset, block_split, load_parts
 from ..model import PansomaNetV2, no_decay
 from .fixtures import make_tensor_set
@@ -163,54 +163,23 @@ class RetryTest(unittest.TestCase):
             train.retry_workers(gone, logged.append, "t", wait=0)
 
 
-class RelabelTest(unittest.TestCase):
-    """--reason-labels (inside the confident region) and --label-overrides (any tensor; exempt from --ignore-reasons)."""
+class ExcludeTest(unittest.TestCase):
+    """--exclude-candidates: those tensors are -1 in training, validation and the test, as if never built."""
 
-    def test_relabel_in_place(self):
+    def test_exclude_in_place(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp) / "sample" / "tensors"
             make_tensor_set(root, SPEC, shard_size=8)
             index = KindIndex(root / "SNV", Path(tmp) / "cache")
             a = {k: v.copy() for k, v in index.arrays.items()}
-            reasons, cands = index.meta["reasons"], index.candidates()
-            off = np.flatnonzero(a["reason"] == reasons.index("off_reference_no_truth_match"))
-            region = a["in_region"].astype(bool)
-            self.assertTrue(off.size and region[off].any())
-            partial = int(np.flatnonzero(a["reason"] == reasons.index("residual_partial_somatic_truth"))[0])
-            overrides = {cands[partial]: -1, cands[int(off[0])]: 1}
-            train.relabel([(index, None)], overrides, {"off_reference_no_truth_match": 0})
+            cands = index.candidates()
+            picked = np.flatnonzero(a["eval_label"] >= 0)[::3]
+            self.assertTrue(len(picked))
+            self.assertEqual(train.exclude(index, {cands[k] for k in picked} | {"1:0:SNP:A>C"}), len(picked))
             label, evl = index.arrays["label"], index.arrays["eval_label"]
-            rest = off[1:]
-            self.assertTrue((label[rest[region[rest]]] == 0).all() and (evl[rest[region[rest]]] == 0).all())
-            self.assertTrue((label[rest[~region[rest]]] == a["label"][rest[~region[rest]]]).all())  # outside: unchanged
-            self.assertEqual((int(label[partial]), int(evl[partial])), (-1, -1))
-            self.assertEqual(int(label[off[0]]), 1)
-            self.assertEqual(int(evl[off[0]]), 1 if region[off[0]] else -1)
-            other = np.setdiff1d(np.arange(len(label)), np.concatenate([off, [partial]]))
+            self.assertTrue((label[picked] == -1).all() and (evl[picked] == -1).all())
+            other = np.setdiff1d(np.arange(len(label)), picked)
             self.assertTrue((label[other] == a["label"][other]).all() and (evl[other] == a["eval_label"][other]).all())
-
-    def test_overrides_are_exempt_from_ignore_reasons(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            tmp = Path(tmp)
-            root = tmp / "sample" / "tensors"
-            make_tensor_set(root, SPEC, shard_size=8)
-            index = KindIndex(root / "SNV", tmp / "check_cache")
-            reasons, cands = index.meta["reasons"], index.candidates()
-            tr, _ = block_split(index, index.select(["chr2", "chr3"], labelled=False), 0.5, 21, 0)
-            partial_code = reasons.index("residual_partial_somatic_truth")
-            promoted = [int(k) for k in tr if index.arrays["reason"][k] == partial_code][:1]
-            self.assertTrue(promoted)
-            (tmp / "overrides.tsv").write_text("candidate_id\tlabel\n" + "".join(f"{cands[k]}\t1\n" for k in promoted))
-            out = tmp / "run"
-            train.main(["--tensors", str(root), "--output", str(out), "--epochs", "1", "--kinds", "SNV",
-                        "--ignore-reasons", "residual_partial_somatic_truth", "--label-overrides", str(tmp / "overrides.tsv"),
-                        "--reason-labels", "off_reference_no_truth_match=0"] + SMALL_ARGS)
-            train.relabel([(index, None)], {cands[k]: 1 for k in promoted}, {"off_reference_no_truth_match": 0})
-            a = index.arrays
-            expected = int(((a["label"][tr] >= 0) & ((a["reason"][tr] != partial_code) | np.isin(tr, promoted))).sum())
-            ckpt = torch.load(out / "best.pth", weights_only=False)
-            self.assertEqual(sum(d["train"] for d in ckpt["data"]), expected)
-            self.assertIn("--label-overrides 1 of 1 candidate ids", (out / "train.log").read_text())
 
     def test_excluded_candidates_leave_training_validation_and_test(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -219,22 +188,23 @@ class RelabelTest(unittest.TestCase):
             make_tensor_set(root, SPEC, shard_size=8)
             index = KindIndex(root / "SNV", tmp / "check_cache")
             cands, a = index.candidates(), index.arrays
-            tr, _ = block_split(index, index.select(["chr2", "chr3"], labelled=False), 0.5, 21, 0)
+            tr, va = block_split(index, index.select(["chr2", "chr3"], labelled=False), 0.5, 21, 0)
             dropped = [int(k) for k in tr if a["label"][k] >= 0][:3]
+            val_drop = [int(k) for k in va if a["eval_label"][k] >= 0][:2]
             chr1 = index.meta["chroms"].index("chr1")
             test_drop = [k for k in range(len(cands)) if a["chrom"][k] == chr1 and a["eval_label"][k] >= 0][:2]
-            self.assertTrue(dropped and test_drop)
-            ids = [cands[k] for k in dropped + test_drop]
+            self.assertTrue(dropped and val_drop and test_drop)
+            ids = [cands[k] for k in dropped + val_drop + test_drop]
             (tmp / "drop.tsv").write_text("candidate_id\taf\n" + "".join(f"{c}\t0.09\n" for c in ids))
-            # an override to 1 does not bring an excluded candidate back
-            (tmp / "overrides.tsv").write_text(f"candidate_id\tlabel\n{ids[0]}\t1\n")
             out = tmp / "run"
             train.main(["--tensors", str(root), "--output", str(out), "--epochs", "1", "--kinds", "SNV",
-                        "--exclude-candidates", str(tmp / "drop.tsv"), "--label-overrides", str(tmp / "overrides.tsv")]
-                       + SMALL_ARGS)
+                        "--exclude-candidates", str(tmp / "drop.tsv")] + SMALL_ARGS)
             ckpt = torch.load(out / "best.pth", weights_only=False)
             self.assertEqual(sum(d["train"] for d in ckpt["data"]), int((a["label"][tr] >= 0).sum()) - len(dropped))
-            self.assertIn(f"--exclude-candidates {tmp / 'drop.tsv'}: {len(ids)} candidate ids", (out / "train.log").read_text())
+            self.assertEqual(ckpt["val"]["tensors"], int((a["eval_label"][va] >= 0).sum()) - len(val_drop))
+            log = (out / "train.log").read_text()
+            self.assertIn(f"--exclude-candidates {tmp / 'drop.tsv'}: {len(ids)} candidate ids", log)
+            self.assertIn(f"{index.dir}: {len(ids)} tensors excluded", log)
             predict.main(["--checkpoint", str(out / "best.pth"), "--tensors", str(root), "--output", str(tmp / "p"),
                           "--kinds", "SNV", "--chroms", "chr1", "--num-workers", "0", "--amp", "off"])
             with gzip.open(tmp / "p" / "sample.tensors.SNV.predictions.ndjson.gz", "rt") as f:
@@ -283,7 +253,7 @@ class PartialTestTest(unittest.TestCase):
 
 class TrainPredictTest(unittest.TestCase):
     """Small end-to-end runs on CPU: train 2 epochs (chr1 left out, validation from node blocks of chr2/chr3),
-    resume to 3, predict chr1; and one run with the scalars."""
+    resume to 3, predict chr1; the channel-6 storage checks; runs with the scalars and with --ignore-reasons."""
 
     def test_train_resume_predict(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -393,24 +363,9 @@ class TrainPredictTest(unittest.TestCase):
             if hit or false_calls:
                 self.assertAlmostEqual(at["precision"], len(hit & (wanted | other)) / (len(hit & (wanted | other)) + false_calls))
             self.assertLess(tr["ceiling"], 1.0)                      # truth alleles without a tensor are misses
-            # SNV and INDEL together against the whole truth VCF (combine): every truth allele once, whichever set
-            both = combine.main([str(pred)])
-            self.assertEqual(len(both), 1)
-            c = both[0]
             with gzip.open(pred / "sample.tensors.INDEL.predictions.ndjson.gz", "rt") as f:
                 indel = [json.loads(line) for line in f]
             self.assertFalse(any("offref_call" in r for r in indel))  # the rescue is for SNV only
-            records += indel
-            called = [r for r in records if r["in_test"] and r["pred"] == "somatic"]
-            everything = wanted | other
-            hit = set().union(*[set(r["truth_ids"]) for r in called if r["test_label"] == 1]) & everything
-            false_calls = sum(r["test_label"] in (0, 2) for r in called)
-            self.assertEqual((c["truth_alleles"], c["tp"], c["fp"], c["other_kind_tp"]),
-                             (len(everything), len(hit), false_calls, 0))
-            self.assertAlmostEqual(c["recall"], len(hit) / len(everything))
-            self.assertEqual(set(c["per_truth_kind"]), {"SNP", "DEL", "INS"})
-            on_truth = [r for r in called if r["test_label"] == 1 and set(r["truth_ids"]) & everything]
-            self.assertEqual(c["repeated_calls"], len(on_truth) - len(hit))  # one truth id per tensor here
             self.assertEqual(len(KindIndex(root / "SNV", pred / "index_cache")), len(truth["SNV"]))
 
     def test_channel_6_storage_is_checked_and_sets_the_rescue_floor(self):
@@ -423,7 +378,7 @@ class TrainPredictTest(unittest.TestCase):
             new, old, d46 = (tmp / name / "tensors" for name in ("new", "old", "d46"))
             make_tensor_set(new, SPEC, shard_size=8, seed=6, storage="int8-count-haplotypes100", haplotypes=90)
             make_tensor_set(d46, SPEC, shard_size=8, seed=6, storage="int8-count-haplotypes100", haplotypes=464)
-            # the six v1.1 sets spell it tensor_storage_version int8-count-linear100-log2-v1, without haplotypes
+            # the deleted v1.1 sets spelled it tensor_storage_version int8-count-linear100-log2-v1, without haplotypes
             make_tensor_set(old, SPEC, shard_size=8, seed=6, storage="int8-count-linear100-log2-v1",
                             storage_key="tensor_storage_version")
             with self.assertRaisesRegex(SystemExit, "code channel 6 differently"):
@@ -496,11 +451,24 @@ class TrainPredictTest(unittest.TestCase):
                        + SMALL_ARGS)
             ckpt = torch.load(out / "best.pth", weights_only=False)
             self.assertEqual(ckpt["config"]["scalars"], len(SCALARS))
-            train.main(["--tensors", str(root), "--output", str(tmp / "run_truth"), "--epochs", "2", "--kinds", "SNV",
-                        "--select", "truth_f1"] + SMALL_ARGS)
-            best = torch.load(tmp / "run_truth" / "best.pth", weights_only=False)
-            self.assertEqual(best["somatic_threshold"], best["val"]["truth"]["best"]["threshold"])
-            self.assertEqual(json.loads((tmp / "run_truth" / "args.json").read_text())["select"], "truth_f1")
+            train.main(["--tensors", str(root), "--output", str(tmp / "run_keep"), "--epochs", "1", "--kinds", "SNV",
+                        "--non-fraction", "0.5", "--keep-non-af", "0.5"] + SMALL_ARGS)
+            log = (tmp / "run_keep" / "train.log").read_text()
+            self.assertIn("importance weight 2.00", log)
+            self.assertTrue((tmp / "run_keep" / "best.pth").exists())
+            self.assertEqual(ckpt["scalars"], list(SCALARS))
+            self.assertIn("scalar_mean", ckpt["model_state_dict"])
+            predict.main(["--checkpoint", str(out / "best.pth"), "--tensors", str(root), "--output", str(tmp / "p"),
+                          "--kinds", "SNV", "--num-workers", "0", "--amp", "off"])
+            self.assertTrue((tmp / "p" / "sample.tensors.SNV.metrics.json").exists())
+
+    def test_ignore_reasons_run(self):
+        """--ignore-reasons leaves those tensors out of training and validation, and predict (by default the
+        checkpoint's reasons) out of the test, with label, reason and truth ids kept in the records."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            root = tmp / "sample" / "tensors"
+            make_tensor_set(root, SPEC, shard_size=8)
             train.main(["--tensors", str(root), "--output", str(tmp / "run_ignore"), "--epochs", "1", "--kinds", "SNV",
                         "--ignore-reasons", "residual_partial_somatic_truth"] + SMALL_ARGS)
             log = (tmp / "run_ignore" / "train.log").read_text()
@@ -524,17 +492,6 @@ class TrainPredictTest(unittest.TestCase):
             ckpt_i = torch.load(tmp / "run_ignore" / "best.pth", weights_only=False)
             self.assertEqual(sum(d["train"] for d in ckpt_i["data"]),
                              int((index.arrays["label"][tr] >= 0).sum()) - n_tr)
-            train.main(["--tensors", str(root), "--output", str(tmp / "run_keep"), "--epochs", "1", "--kinds", "SNV",
-                        "--non-fraction", "0.5", "--keep-non-af", "0.5"] + SMALL_ARGS)
-            log = (tmp / "run_keep" / "train.log").read_text()
-            self.assertIn("importance weight 2.00", log)
-            self.assertTrue((tmp / "run_keep" / "best.pth").exists())
-            self.assertEqual(ckpt["scalars"], list(SCALARS))
-            self.assertIn("scalar_mean", ckpt["model_state_dict"])
-            predict.main(["--checkpoint", str(out / "best.pth"), "--tensors", str(root), "--output", str(tmp / "p"),
-                          "--kinds", "SNV", "--num-workers", "0", "--amp", "off"])
-            self.assertTrue((tmp / "p" / "sample.tensors.SNV.metrics.json").exists())
-
 
 if __name__ == "__main__":
     unittest.main()

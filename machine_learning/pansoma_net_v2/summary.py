@@ -8,8 +8,8 @@ RUNS is $PANSOMA_RUNS or /scratch/jshen/data/pansoma_net_v2_runs. Columns: train
 of the epoch, GPU peak (allocated GiB); validation per tensor: somatic AP, F1 / precision / recall at the
 best-F1 threshold t (s.*), t itself, the precision where the somatic recall reaches 0.9 (P@R.9); against the truth VCF at the same t (t.*, metrics.truth_report: every
 truth allele once, truth alleles without a tensor are misses, found truth of the other kind are true calls)
-and its ceiling; germline argmax F1; "*" marks the best epoch so far by the run's --select. combine scores a
-sample's SNV and INDEL models together. Below the test: each rtg vcfeval report of the run's calls
+and its ceiling; germline argmax F1; "*" marks the best epoch so far (by s.F1, the criterion of best.pth). Below the
+test: each rtg vcfeval report of the run's calls
 (<run>/vcf_*/eval_bed and eval_nobed, vcfeval.py), raw and after the PoN: the PASS result and the best point of the
 curve (its p_somatic; chosen on the test chromosomes, so for reference only).
 """
@@ -46,14 +46,13 @@ def show(d):
     if rows:
         print(f"{'epoch':>5} {'loss':>7} {'t/s':>6} {'min':>5} {'GPU':>5} | {'s.AP':>6} {'s.F1':>6} {'s.P':>6} {'s.R':>6} "
               f"{'t':>6} {'P@R.9':>6} | {'t.AP':>6} {'t.F1':>6} {'t.P':>6} {'t.R':>6} {'ceil':>6} | {'g.F1':>6}")
-        best, select = -1.0, _select(d)
+        best = -1.0
         for r in rows:
             v = r["val"]
             s = v["thresholded"]["somatic"]
             tr = v.get("truth")
-            score = (tr["best"]["f1"] if select == "truth_f1" and tr else v["somatic_ap"] if select == "ap" else s["f1"])
-            mark = "*" if score > best else " "
-            best = max(best, score)
+            mark = "*" if s["f1"] > best else " "
+            best = max(best, s["f1"])
             gpu = (r.get("gpu_peak_gib") or {}).get("allocated")
             truth = (f"{tr['ap']:>6.3f} {tr['at_threshold']['f1']:>6.3f} {tr['at_threshold']['precision']:>6.3f} "
                      f"{tr['at_threshold']['recall']:>6.3f} {tr['ceiling']:>6.3f}") if tr else f"{'-':>6} " * 4 + f"{'-':>6}"
@@ -115,14 +114,6 @@ def _p_at(v, recall):
     """Somatic precision at the lowest threshold with recall >= `recall` (metrics.somatic_at_recall), or '-'."""
     x = (v.get("somatic_at_recall") or {}).get(recall)
     return f"{x['precision']:.3f}" if x else "-"
-
-
-def _select(d):
-    """The run's --select, from the args.json that train writes at its start (f1 for older runs)."""
-    try:
-        return json.loads((d / "args.json").read_text()).get("select", "f1")
-    except (OSError, ValueError):
-        return "f1"
 
 
 def main(argv=None):

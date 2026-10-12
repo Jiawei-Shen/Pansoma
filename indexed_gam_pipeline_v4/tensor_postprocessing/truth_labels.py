@@ -1,8 +1,9 @@
 """Germline / somatic truth VCFs -> graph-node candidate keys -> one label per merged tensor.
 
 1. Truth alleles. Every ALT of every record on chr1-22 is split off, trimmed of shared
-   prefix/suffix bases, MNVs become one SNV per differing base; complex replacements are
-   kept only as "nearby truth" (they cannot equal a candidate).
+   prefix/suffix bases, MNVs become one SNV per differing base; complex replacements get no
+   node key (they cannot equal a candidate) and count only by place: as nearby truth and, somatic
+   ones, through the A1 reads' haplotype overlap in a "residual" partial match (4).
 2. Equivalent positions. An indel in a repeat has several equivalent placements (vg puts
    it at one end of the repeat in read orientation, VCFs are left-aligned); all of them,
    shifted left and right on GRCh38, are enumerated.
@@ -28,7 +29,7 @@
                     on different contigs, or more than ANCHOR_GAP GRCh38 bases between them), an off-reference node
                     without a partial somatic match (not a training negative: most branch nodes carry no truth at
                     all), or, whatever the truth, a tensor with AF below the label run's floor of its kind: an SNV
-                    below snv_min_af (short-read sets: 0.07), an INDEL (A1 an INS or DEL) below indel_min_af; with
+                    below snv_min_af, an INDEL (A1 an INS or DEL) below indel_min_af; with
                     the label run's option ignore_repeat_indels (truth sets that leave out homopolymer / STR INDELs:
                     SEQC2, CASTLE), an INDEL on GRCh38 that would be 0 (no truth allele of its own, none it overlaps
                     enough) in a homopolymer >= 7 bp or an STR (unit 2-6, >= 3 units; RepeatContext)
@@ -51,8 +52,9 @@
 
 Outputs next to the merged shards (per chromosome, same order as <chrom>_variant_summary.ndjson):
 <chrom>_shard_NNNNN_labels.npy (int8) and <chrom>_labels.ndjson; labels.manifest.json (counts, reasons, the rule
-constants, the AF floors snv_min_af / indel_min_af (null when unset), rules_sha256 = SHA-256 of this file, provenance);
-<truth dir>/<set>.graph.tsv (every truth allele with its keys) and <set>.recall.tsv / recall.json.
+constants, the AF floors snv_min_af / indel_min_af (null when unset), ignore_repeat_indels, rules_sha256 = SHA-256 of
+this file, provenance). <truth dir>/<set>.graph.tsv (every truth allele with its keys). In the tensor root, the recall
+reports <set>.recall.tsv and truth_recall.json (written last).
 """
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
@@ -784,16 +786,15 @@ def recall(truth, matched, filtered, output_dir):
 
 
 def label_run(tensors, kinds, reference_path, fasta, somatic_vcf, somatic_bed, germline_vcf, germline_bed, truth_dir,
-              recall_dir=None, snv_min_af=None, indel_min_af=None, ignore_repeat_indels=False):
+              *, snv_min_af=None, indel_min_af=None, ignore_repeat_indels=False, scan=scan_filtered):
     """Build both truth sets, label every merged autosome directory of `kinds`, write recall reports.
 
     Truth tables (<set>.graph.tsv) depend only on the graph and the VCFs and go to `truth_dir`;
-    recall reports depend on the run and go to `recall_dir` (default: `tensors`).
+    recall reports depend on the run and go to `tensors`. `scan`: the recall's scan of a kind's filtered
+    candidates (recall_scan.scan_filtered gives this scan_filtered's dict in parallel).
     """
-    truth_dir = Path(truth_dir)
+    tensors, truth_dir = Path(tensors), Path(truth_dir)
     truth_dir.mkdir(parents=True, exist_ok=True)
-    recall_dir = Path(recall_dir or tensors)
-    recall_dir.mkdir(parents=True, exist_ok=True)
     path = ReferencePath(reference_path)
     locator = Locator(path)
     somatic = TruthSet("somatic", somatic_vcf, somatic_bed, fasta, locator)
@@ -809,7 +810,7 @@ def label_run(tensors, kinds, reference_path, fasta, somatic_vcf, somatic_bed, g
                       fasta=str(fasta), reference_path=str(path.directory))
     reports, matched = {}, {somatic.name: defaultdict(list), germline.name: defaultdict(list)}
     for kind in kinds:
-        reports[kind], found = label_directory(Path(tensors) / kind, somatic, germline, path, confident, provenance, fasta,
+        reports[kind], found = label_directory(tensors / kind, somatic, germline, path, confident, provenance, fasta,
                                                snv_min_af, indel_min_af, ignore_repeat_indels)
         for name, items in found.items():
             for tid, hits in items.items():
@@ -817,8 +818,8 @@ def label_run(tensors, kinds, reference_path, fasta, somatic_vcf, somatic_bed, g
     keys = {k for truth in (somatic, germline) for a in truth.alleles for k in a["keys"]}
     filtered = {}
     for kind in kinds:
-        filtered.update(scan_filtered(Path(tensors) / kind, keys))
-    recall_report = {t.name: recall(t, matched[t.name], filtered, recall_dir) for t in (somatic, germline)}
-    write_json(recall_dir / "truth_recall.json", recall_report)
+        filtered.update(scan(tensors / kind, keys))
+    recall_report = {t.name: recall(t, matched[t.name], filtered, tensors) for t in (somatic, germline)}
+    write_json(tensors / "truth_recall.json", recall_report)
     return dict(labels={k: dict(totals=r["totals"], reasons=r["reasons"]) for k, r in reports.items()},
                 recall=recall_report, truth_stats={t.name: dict(t.stats) for t in (somatic, germline)})

@@ -22,16 +22,11 @@ from pathlib import Path
 
 import numpy as np
 
-from ..common import format_name, read_json
+from ..common import format_name, rc, read_json
 
 FORMAT = "gfa-reference-path"
 ARRAYS = ("lengths", "chrom", "start0", "reverse", "visits")
 PATH_ARRAYS = ("path_nodes", "path_starts", "path_reverse")
-COMPLEMENT = str.maketrans("ACGTNacgtn", "TGCANtgcan")
-
-
-def rc(sequence):
-    return sequence.translate(COMPLEMENT)[::-1]
 
 
 class ReferencePath:

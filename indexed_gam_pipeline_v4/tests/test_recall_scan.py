@@ -1,9 +1,7 @@
 """tensor_postprocessing.recall_scan: the parallel scan of the filtered streams gives truth_labels.scan_filtered's dict
 (items and order) whatever the byte ranges, read blocks and workers, and recall_scan.label_run (truth_labels.label_run
-verbatim, the scan swapped) writes truth_labels.label_run's labels, manifests, truth tables and recall reports."""
+with that scan) writes truth_labels.label_run's labels, manifests, truth tables and recall reports."""
 import contextlib
-import hashlib
-import inspect
 import io
 import json
 import os
@@ -21,10 +19,6 @@ from . import golden
 from .. import orchestrate
 from ..tensor_postprocessing import recall_scan, truth_labels
 from ..tensor_postprocessing.reference_path import ReferencePath
-
-# SHA-256 of inspect.getsource(truth_labels.label_run). recall_scan.label_run is a verbatim copy: when label_run
-# changes there, copy it again and pin the new hash here.
-LABEL_RUN_SHA256 = "aeb2df5b9a850d25114eb93aa40ae968e2b70ed61fdacdd2f34a65c87003ea6e"
 
 
 def random_stream(rng, keys, others, final_newline):
@@ -182,30 +176,12 @@ class ScanTest(unittest.TestCase):
 
 
 class LabelRunTest(unittest.TestCase):
-    def test_label_run_is_truth_labels_label_run_with_the_scan_swapped(self):
-        source = inspect.getsource(truth_labels.label_run)
-        self.assertEqual(hashlib.sha256(source.encode()).hexdigest(), LABEL_RUN_SHA256,
-                         "truth_labels.label_run changed: copy it into recall_scan.label_run, then pin its new SHA-256")
-        self.assertEqual(inspect.getsource(recall_scan.label_run), source)
-
-        def names(code):
-            found = set(code.co_names)
-            for constant in code.co_consts:
-                if inspect.iscode(constant):
-                    found |= names(constant)
-            return found
-
-        used = names(truth_labels.label_run.__code__) & set(vars(truth_labels))
-        self.assertIn("scan_filtered", used)
-        for name in sorted(used - {"scan_filtered"}):
-            self.assertIs(vars(recall_scan).get(name), vars(truth_labels)[name], name)
-        self.assertIs(recall_scan.label_run.__globals__["scan_filtered"], recall_scan.scan_filtered)
-
     def test_labels_and_recall_equal_truth_labels_on_the_o1_world(self):
         """O1's world (golden.mini_world), finalized by orchestrate (recall_scan.label_run), then labelled again by
-        truth_labels.label_run and recall_scan.label_run on two copies, with truth alleles that have no tensor and
-        whose keys the filtered streams name (repeated, other reasons, no reasons, an id in both kinds, no final
-        newline): every file the same, labels.manifest.json apart from `created`, the same return value."""
+        truth_labels.label_run (the one-stream scan) and recall_scan.label_run (the parallel scan, once per kind) on
+        two copies, with truth alleles that have no tensor and whose keys the filtered streams name (repeated, other
+        reasons, no reasons, an id in both kinds, no final newline): every file the same, labels.manifest.json apart
+        from `created`, the same return value."""
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             inputs, run = root / "inputs", root / "run"
@@ -253,7 +229,9 @@ class LabelRunTest(unittest.TestCase):
                          labels["germline_bed"], root / "truth")
             serial = truth_labels.label_run(copies["serial"], kinds, *arguments)
             tables = {p.name: p.read_bytes() for p in (root / "truth").iterdir()}
-            parallel = recall_scan.label_run(copies["parallel"], kinds, *arguments)
+            with mock.patch.object(recall_scan, "scan_filtered", wraps=recall_scan.scan_filtered) as scan:
+                parallel = recall_scan.label_run(copies["parallel"], kinds, *arguments)
+            self.assertEqual([c.args[0] for c in scan.call_args_list], [copies["parallel"] / kind for kind in kinds])
             self.assertEqual(parallel, serial)
             self.assertEqual({p.name: p.read_bytes() for p in (root / "truth").iterdir()}, tables)
             # the added alleles (the last of each table) are filtered with the reasons of their ids' last lines

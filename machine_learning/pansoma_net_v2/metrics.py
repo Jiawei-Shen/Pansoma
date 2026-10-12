@@ -8,7 +8,7 @@ highest somatic F1 (on validation; the same t is then applied to the test set).
 alleles without any tensor are misses, and a false positive is a somatic call on a tensor labelled 0 or 2."""
 import numpy as np
 
-CLASSES = ("non", "somatic", "germline")
+CLASSES = ("non", "somatic", "germline")  # label values 0, 1, 2; -1 = ignore (data.CLASSES)
 SOMATIC = 1
 
 

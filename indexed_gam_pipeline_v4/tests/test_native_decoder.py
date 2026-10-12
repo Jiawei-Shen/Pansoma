@@ -13,7 +13,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from .fixtures import af_gam, build_args, graph_fixture, spec_alignment  # noqa: F401
+from .fixtures import af_gam, build_args, graph_fixture, spec_alignment
 from .. import native
 from ..build import build
 from ..candidates import decode_alignment

@@ -12,9 +12,9 @@ import struct
 import tempfile
 import unittest
 
-from .fixtures import build_args, build_index, encode_varint, simple_alignment, tiny_gam, write_gam
+from .fixtures import build_args, build_index, encode_varint, scan_gam, simple_alignment, tiny_gam, write_gam
 from ..common import batches, load_nodes
-from ..gam_reader import IndexedGam, decode, record_key, scan_gam, varint
+from ..gam_reader import IndexedGam, decode, record_key, varint
 from ..run import discover
 
 
@@ -135,7 +135,7 @@ class GamReaderTest(unittest.TestCase):
                 if limit == 64 * 1024 * 1024:
                     self.assertGreater(reader.cache_stats["group_hits"], 0)
                     self.assertEqual(reader.cache_stats["indexed_records"], 6)
-            for limit in (0, -1):  # the uncached mode is gone; --gam-cache-mb must be >= 1
+            for limit in (0, -1):  # --gam-cache-mb must be >= 1
                 with self.assertRaisesRegex(ValueError, "positive"):
                     IndexedGam(path, cache_bytes=limit)
             reader = IndexedGam(path)

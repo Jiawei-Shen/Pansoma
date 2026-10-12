@@ -1,4 +1,5 @@
-"""Small helpers shared across the package: atomic JSON, file stamps, format names, node lists, batching."""
+"""Small helpers shared across the package: atomic JSON, file stamps, format names, node lists, batching,
+reverse complement."""
 import hashlib
 import json
 from pathlib import Path
@@ -13,6 +14,13 @@ def format_name(value):
     """A format name as this package writes it (see EARLIER_FORMAT_NAMES); a non-string value is returned as is,
     so the reader refuses it like any other unknown name."""
     return EARLIER_FORMAT_NAMES.get(value, value) if isinstance(value, str) else value
+
+
+COMPLEMENT = str.maketrans("ACGTNacgtn", "TGCANtgcan")
+
+
+def rc(sequence):
+    return sequence.translate(COMPLEMENT)[::-1]
 
 
 def write_json(path, value):

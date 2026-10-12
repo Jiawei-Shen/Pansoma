@@ -42,16 +42,18 @@ import torch
 from torch.utils.data import Dataset, Sampler
 
 from .bed import Bed, in_region
+from .metrics import CLASSES  # label values 0, 1, 2; -1 = ignore
 
-CLASSES = ("non", "somatic", "germline")  # label values 0, 1, 2; -1 = ignore
 KINDS = ("SNV", "INDEL")
 TENSOR_SHAPE = (8, 200, 101)
 MAX_OPEN_SHARDS = 256  # open shard files per DataLoader worker
 INDEX_VERSION = 6  # 6: pos0, truth ids; 5: confident-region flags; 4: label reasons, off-reference flags
 EVAL_AS_NON = ("off_reference_no_truth_match",)  # -1 for training, 0 (non) when evaluating
 # Channel 6 (path count) codes of the merged sets (manifest tensor_storage) -> the code of a node every haplotype
-# visits. int8-count-linear100-log2 stores the count (exact up to 100); its sets are the HPRC v1.1 d9 builds, 90
-# haplotype paths. int8-count-haplotypes100 codes the count relative to the build's --haplotypes H: H -> 100.
+# visits. int8-count-haplotypes100 codes the count relative to the build's --haplotypes H: H -> 100 (every set on
+# disk). int8-count-linear100-log2 stored the count (exact up to 100; 90 = HPRC v1.1 d9's haplotype paths): the
+# HPRC v1.1 d9 builds before 2026-10-01, since deleted; it stays for the checkpoints trained on them, which record
+# no storage (CHECKPOINT_PATH_COUNT).
 PATH_COUNT_ALL = {"int8-count-linear100-log2": 90, "int8-count-haplotypes100": 100}
 CHECKPOINT_PATH_COUNT = "int8-count-linear100-log2"  # the storage of a checkpoint that does not record one
 SCALARS = ("log_coverage", "log_site_coverage", "log_alt_count", "log_ref_count", "log_other_count", "af",

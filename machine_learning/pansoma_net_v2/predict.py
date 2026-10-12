@@ -26,8 +26,7 @@ Writes, per <sample>.<set>.<KIND>:
   and so rtg vcfeval do not depend on this. Candidates in --exclude-candidates (default: the checkpoint's train
   --exclude-candidates) are left out of the test too, as if never built (their truth alleles are misses), and say
   excluded: true; graph_vcf writes no record for them. A found truth allele of the other kind (an SNV tensor matching
-  an INDEL truth partially) is a true call too, once. `ceiling` is the recall of a perfect model. `combine` scores the SNV and
-  INDEL predictions of a sample together against the whole truth VCF.
+  an INDEL truth partially) is a true call too, once. `ceiling` is the recall of a perfect model.
 
 Off-reference rescue (SNV, --offref-site90 W, default 10; 0 turns it off). The model learned that a low path count
 (ch6, how many HPRC haplotypes run through the node) is not somatic, so it does not call somatic on an
@@ -117,6 +116,14 @@ def main(argv=None):
     out.mkdir(parents=True, exist_ok=True)
     print(f"checkpoint {args.checkpoint} (epoch {checkpoint['epoch']}), statistics {json.dumps(model.encoder.stats())}",
           flush=True)
+
+    def probs_of(dataset, what):
+        """(labels, probabilities) of every sample of dataset, in order."""
+        return retry_workers(
+            lambda: predict_probs(model, make_loader(dataset, EpochSampler(len(dataset), shuffle=False), args.num_workers,
+                                                     args.batch_size, persistent=False), device, amp),
+            lambda m: print(m, flush=True), what)
+
     trained = checkpoint.get("path_count_storage", CHECKPOINT_PATH_COUNT)
     trained_haplotypes = checkpoint.get("path_count_haplotypes") or []
     reads_path_count = "path_count" not in model.config["drop_planes"]  # the only plane made from channel 6
@@ -147,10 +154,7 @@ def main(argv=None):
         excluded = np.array([index.candidates()[p] in exclude for p in positions], bool) if exclude else \
             np.zeros(len(positions), bool)
         dataset.label[excluded] = -1  # never built, as far as the test and the calls are concerned
-        labels, probs = retry_workers(
-            lambda: predict_probs(model, make_loader(dataset, EpochSampler(len(dataset), shuffle=False), args.num_workers,
-                                                     args.batch_size, persistent=False), device, amp),
-            lambda m: print(m, flush=True), f"{index.dir}")
+        labels, probs = probs_of(dataset, f"{index.dir}")
         threshold = args.threshold if args.threshold is not None else checkpoint.get("somatic_threshold")
         pred = metrics.call(probs, threshold)
         name = f"{index.dir.parent.parent.name}.{index.dir.parent.name}.{index.kind}"
@@ -160,10 +164,7 @@ def main(argv=None):
         off_probs = {}
         if len(off_k):
             edited = OffrefRescue([(index, positions[off_k])], args.offref_site90, PATH_COUNT_ALL[index.path_count])
-            _, probs2 = retry_workers(
-                lambda: predict_probs(model, make_loader(edited, EpochSampler(len(edited), shuffle=False), args.num_workers,
-                                                         args.batch_size, persistent=False), device, amp),
-                lambda m: print(m, flush=True), f"{index.dir} off-reference rescue")
+            _, probs2 = probs_of(edited, f"{index.dir} off-reference rescue")
             off_probs = dict(zip(off_k.tolist(), probs2))
         with gzip.open(out / f"{name}.predictions.ndjson.gz", "wt") as f:
             for k, pos in enumerate(positions):

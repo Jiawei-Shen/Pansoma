@@ -59,7 +59,7 @@ from google.protobuf.message import DecodeError
 import numpy as np
 
 from . import vg_pb2
-from .gam_reader import BgzfReader, decode, read_gai, read_records
+from .gam_reader import SEGMENTS_PER_PROCESS, BgzfReader, decode, intervals_hit, read_gai, read_records, segments
 
 FORMAT = "pansoma-gam-record-index-1"
 MAGIC = b"PGRI\0\1\r\n"
@@ -75,7 +75,6 @@ CHECKPOINT_STRIDE = 4096
 W_BITS = (12, 26)
 LONG_FRACTION = 0.01
 SHORT_READ_BYTES = 2048  # mean compressed bytes per record below which build refuses without --force
-SEGMENTS_PER_PROCESS = 4
 ALIGN = 64
 
 
@@ -111,20 +110,6 @@ def default_processes():
 
 
 # --- scan ----------------------------------------------------------------------
-
-def segments(size, bins, count):
-    """discovery.segments from the GAI bins: up to `count` contiguous [start, end) segments cut at GAI run
-    starts near equal file fractions (the last ends at EOF: None)."""
-    starts = sorted({start for _, _, runs in bins for start, _ in runs} - {0})
-    cuts, k = [0], 0
-    for i in range(1, count):
-        target = size * i // count
-        while k < len(starts) and (starts[k] >> 16) < target:
-            k += 1
-        if k < len(starts) and starts[k] > cuts[-1]:
-            cuts.append(starts[k])
-    return list(zip(cuts, cuts[1:] + [None]))
-
 
 def intervals(nodes):
     """(lo1, hi1, lo2, hi2) of sorted unique node IDs: split at the largest gap (the first of equal ones) when
@@ -275,15 +260,6 @@ def long_table(records, rows):
 
 # --- the index as the reader uses it ---------------------------------------------
 
-def _hit(nodes, lo, hi):
-    """Per interval [lo, hi]: does it hold a node of `nodes` (sorted unique)? ranges()' test."""
-    first = np.searchsorted(nodes, lo, side="left")
-    inside = first < len(nodes)
-    hit = np.zeros(len(lo), dtype=bool)
-    hit[inside] = nodes[first[inside]] <= hi[inside]
-    return hit
-
-
 class RecordIndex:
     """A record index: a .gri (`load`; a sorted file's records read in lo1 windows on demand) or a scan held in
     memory (`from_scan`). select() picks the rows of one batch; ordinal() maps GAI offsets to groups."""
@@ -361,7 +337,7 @@ class RecordIndex:
         rows = np.concatenate([rows, self._long[near]])
         numbers, first = np.unique(np.concatenate([numbers, self._long_rows[near]]), return_index=True)
         rows = rows[first]
-        keep = _hit(nodes, rows["lo1"], rows["hi1"]) | _hit(nodes, rows["lo2"], rows["hi2"])
+        keep = intervals_hit(nodes, rows["lo1"], rows["hi1"]) | intervals_hit(nodes, rows["lo2"], rows["hi2"])
         if min_mapq is not None:
             keep &= rows["mapq"] > min_mapq
         group = rows["group"].astype(np.int64)

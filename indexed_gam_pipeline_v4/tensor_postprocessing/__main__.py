@@ -30,7 +30,6 @@ def main(argv=None):
     p.add_argument("--germline-vcf", required=True)
     p.add_argument("--germline-bed", required=True)
     p.add_argument("--truth-dir", required=True, help="where <set>.graph.tsv truth tables are written")
-    p.add_argument("--recall-dir", help="where recall reports go (default: --tensors)")
     p.add_argument("--snv-min-af", type=float, help="SNV tensors with a lower AF are -1")
     p.add_argument("--indel-min-af", type=float, help="INDEL tensors with a lower AF are -1")
     p.add_argument("--ignore-repeat-indels", action="store_true",
@@ -43,9 +42,9 @@ def main(argv=None):
         result = merge(args.root, args.chr_index, args.shard_size, args.keep_sources, args.workers, args.spots,
                        reference_path=args.reference_path)
     elif args.command == "label":
-        from .truth_labels import label_run
+        from .recall_scan import label_run
         result = label_run(args.tensors, args.kinds, args.reference_path, args.fasta, args.somatic_vcf,
-                           args.somatic_bed, args.germline_vcf, args.germline_bed, args.truth_dir, args.recall_dir,
+                           args.somatic_bed, args.germline_vcf, args.germline_bed, args.truth_dir,
                            snv_min_af=args.snv_min_af, indel_min_af=args.indel_min_af,
                            ignore_repeat_indels=args.ignore_repeat_indels)
     print(json.dumps(result, indent=2))

@@ -24,12 +24,12 @@ COUNT_DEFINITION = ("distinct logical GBWT paths visiting the node in either ori
                     "including reference paths; repeated visits count once")
 
 
-def compile_builder(deps, output, cxx=None, portable=True):
+def compile_builder(deps, output, cxx=None):
     """Compile gbz_graph_index.cpp against an installed gbwtgraph dependency prefix.
 
-    cxx: $CXX, else g++. portable: link libstdc++ and libgcc statically when the toolchain has
-    their static archives (else dynamically), so the builder needs little beyond glibc, libgomp
-    and libsqlite3. Writes <output>.build.json (compiler, flags, the glibc / libstdc++ symbol
+    cxx: $CXX, else g++. Links libstdc++ and libgcc statically when the toolchain has their
+    static archives (else dynamically), so the builder needs little beyond glibc, libgomp and
+    libsqlite3. Writes <output>.build.json (compiler, flags, the glibc / libstdc++ symbol
     versions and CPU extensions the binary requires) and warns when it uses AVX/BMI
     instructions: those come from dependencies built with -march=native (sdsl-lite's default
     and inherited by gbwt/gbwtgraph), and then the builder only runs on CPUs like the build
@@ -44,7 +44,7 @@ def compile_builder(deps, output, cxx=None, portable=True):
             for lib in ("gbwtgraph", "gbwt", "sdsl", "handlegraph", "divsufsort", "divsufsort64")]
     command = [cxx, "-O3", "-std=c++17", "-fopenmp", "-I" + str(deps / "include"), str(source),
                "-Wl,--start-group", *libs, "-Wl,--end-group", "-pthread", "-lsqlite3"]
-    attempts = ([["-static-libstdc++", "-static-libgcc"]] if portable and sys.platform.startswith("linux") else []) + [[]]
+    attempts = ([["-static-libstdc++", "-static-libgcc"]] if sys.platform.startswith("linux") else []) + [[]]
     errors = []
     for extra in attempts:
         result = subprocess.run(command + extra + ["-o", str(output)], capture_output=True, text=True)
@@ -113,14 +113,13 @@ def main():
     c.add_argument("--deps", required=True, help="prefix containing include/ and lib/ of gbwtgraph")
     c.add_argument("--output", required=True)
     c.add_argument("--cxx", help="C++17 compiler (default: $CXX, else g++)")
-    c.add_argument("--no-portable", action="store_true", help="link libstdc++/libgcc dynamically")
     b = commands.add_parser("build", help="build the SQLite index from a GBZ")
     b.add_argument("--gbz", required=True)
     b.add_argument("--builder", required=True, help="executable produced by `compile`")
     b.add_argument("--output", required=True, help="new .sqlite path")
     args = parser.parse_args()
     if args.command == "compile":
-        print(compile_builder(args.deps, args.output, args.cxx, portable=not args.no_portable))
+        print(compile_builder(args.deps, args.output, args.cxx))
     else:
         print(json.dumps(build_index(args.gbz, args.output, args.builder), indent=2))
 
