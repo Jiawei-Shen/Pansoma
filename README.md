@@ -111,10 +111,12 @@ the rule of its kind:
 
 - SNV: gnomAD and CoLoRSdb when that ALT's AF is ≥ 0.0001; dbSNP unless the record is flagged somatic (`SAO=2`);
   1000G any match (like ClairS-TO's panels).
-- INDEL (an ALT of another length than REF): gnomAD and CoLoRSdb only, when that ALT's AF is ≥ 0.01. Most
-  somatic INDELs are homopolymer / STR length changes that exist as population alleles at AF 0.001–0.05, where
-  the germline INDELs sit mostly at ≥ 0.05, so the SNV rule would remove 71–83 % of them
-  (`analysis/tensor_recall_20260930/pon/indel_rules`).
+- INDEL (an ALT of another length than REF): gnomAD and CoLoRSdb only. The AF floor depends on the ALT: ≥ 0.01
+  when it changes the length of a homopolymer of ≥ 7 bases on the reference, ≥ 0.001 otherwise. Somatic
+  homopolymer INDELs are often population alleles at AF 0.001–0.05 and need the higher floor (the SNV rule would
+  remove 71–83 % of the truth INDELs); other somatic INDELs rarely are, and the lower floor removes more germline
+  (`analysis/tensor_recall_20260930/pon/indel_rules`, `tmp/indel_pon_recheck_20261010`). The homopolymer is read
+  from the reference FASTA: `--fasta`, or the input VCF's `##reference=file://...` line (linear_vcf writes it).
 
 Calls and PoNs must be in GRCh38 coordinates (`chr1` and `1` naming are both recognized).
 

@@ -463,6 +463,13 @@ class EpochSampler(Sampler):
         return max(0, math.ceil((m - self.rank) / self.world))
 
 
+def read_candidate_ids(path):
+    """Candidate ids of a file: the first tab-separated column of each line; a header candidate_id is skipped."""
+    with open(path) as f:
+        ids = {line.split("\t", 1)[0].strip() for line in f}
+    return ids - {"", "candidate_id"}
+
+
 def load_parts(tensor_sets, kinds, cache_dir, chroms=None, labelled=True, rebuild=False):
     """[(KindIndex, positions)] for every set x kind present."""
     parts = []

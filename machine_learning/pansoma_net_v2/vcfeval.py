@@ -7,7 +7,9 @@
 1. PoN (with --pon or --pon-vcf; without either only the raw calls are evaluated): the repository's
    scripts/filter_panel_of_normals.py, with the four PoNs in its order (gnomAD, dbSNP, 1000G, CoLoRSdb). It
    matches by allele, with the rule of each record's kind: SNV gnomAD / CoLoRSdb at AF >= 0.0001, dbSNP
-   non-somatic, 1000G; INDEL gnomAD / CoLoRSdb at AF >= 0.01 only.
+   non-somatic, 1000G; INDEL gnomAD / CoLoRSdb only, at AF >= 0.01 when the ALT changes a homopolymer of >= 7
+   bases and at AF >= 0.001 otherwise. The homopolymer comes from the reference FASTA: --fasta, default the
+   calls' ##reference (linear_vcf writes it); the truth records are tagged with the same FASTA.
    Matched records get FILTER PanelOfNormals: <dir>/<name>.pon.vcf.gz. --pon-vcf reuses the tagged calls of an earlier run
    (e.g. to evaluate the same calls with and without a BED).
 2. Truth: the PASS (or '.') truth records of the kind on the predicted chromosomes, written to
@@ -25,9 +27,10 @@
      - <set>_calls: the PASS records, i.e. the call set at the model threshold. Its None row is the result.
      - <set>_curve: every PASS or LowQual record (not LowAF, not PanelOfNormals), with --all-records. This
        gives the precision/recall curve down to graph_vcf's --min-score.
-4. <dir>/report.json and report.txt. For each set: the result at the threshold, the best F1 on the curve,
-   precision at recall 0.5/0.8/0.9/0.95 (at the highest threshold that reaches it), and the ceiling (the
-   curve's recall at the lowest score). Below the table: the truth records the PoN tags (with a PoN), and the
+4. <dir>/report.json and report.txt. For each set: the result at the threshold; the best F1 on the curve with
+   its p_somatic, P, R, TP, FP and FN (a choice on the evaluated chromosomes: for reference only, never a threshold);
+   precision at recall 0.5/0.8/0.9/0.95 (at the highest threshold that reaches it); and the ceiling (the curve's
+   recall at the lowest score). Below the table: the truth records the PoN tags (with a PoN), and the
    PASS calls without a GRCh38 position (linear_vcf's unplaced records), which are not evaluated, with the
    precision they would give as false calls.
 """
@@ -107,10 +110,20 @@ def regions_bed(header, chroms, path):
     Path(path).write_text("".join(f"{c}\t0\t{lengths[c]}\n" for c in chroms))
 
 
-def run_pon(calls, output, pons):
-    subprocess.run([sys.executable, str(PON_SCRIPT), str(calls), str(output), "--pon", *map(str, pons)], check=True,
-                   stdout=subprocess.DEVNULL)
+def run_pon(calls, output, pons, fasta=None):
+    command = [sys.executable, str(PON_SCRIPT), str(calls), str(output), "--pon", *map(str, pons)]
+    if fasta:
+        command += ["--fasta", str(fasta)]
+    subprocess.run(command, check=True, stdout=subprocess.DEVNULL)
     return count_pon(output)
+
+
+def reference_fasta(header):
+    """The FASTA of a VCF header's ##reference=file://... line, or None."""
+    for line in header:
+        if line.startswith("##reference=file://"):
+            return line[len("##reference=file://"):].strip()
+    return None
 
 
 def count_pon(output):
@@ -193,8 +206,8 @@ def fmt(value, digits=3):
 
 def table(report):
     lines = [f"{'set':<5} {'records':>8} {'TP':>5} {'FP':>6} {'FN':>5} {'P':>6} {'R':>6} {'F1':>6} | "
-             f"{'best F1':>7} {'(p':>7} {'P':>6} {'R)':>6} | " + " ".join(f"{'P@R' + str(r):>7}" for r in RECALLS)
-             + f" | {'ceiling':>7}"]
+             f"{'best F1':>7} {'(p':>7} {'P':>6} {'R':>6} {'TP':>5} {'FP':>6} {'FN)':>5} | "
+             + " ".join(f"{'P@R' + str(r):>7}" for r in RECALLS) + f" | {'ceiling':>7}"]
     sets = [name for name in ("raw", "pon") if name in report]
     for name in sets:
         d = report[name]
@@ -202,7 +215,8 @@ def table(report):
         par = [d["precision_at_recall"][str(r)] for r in RECALLS]
         lines.append(f"{name:<5} {a['tp_call'] + a['fp']:>8,} {a['tp_baseline']:>5} {a['fp']:>6} {a['fn']:>5} "
                      f"{fmt(a['precision']):>6} {fmt(a['recall']):>6} {fmt(a['f1']):>6} | {fmt(b.get('f1')):>7} "
-                     f"{fmt(b.get('p_somatic'), 4):>7} {fmt(b.get('precision')):>6} {fmt(b.get('recall')):>6} | "
+                     f"{fmt(b.get('p_somatic'), 4):>7} {fmt(b.get('precision')):>6} {fmt(b.get('recall')):>6} "
+                     f"{b.get('tp_baseline', '-'):>5} {b.get('fp', '-'):>6} {b.get('fn', '-'):>5} | "
                      + " ".join(f"{fmt(p['precision'] if p else None):>7}" for p in par) + f" | {fmt(d['ceiling']):>7}")
     t, u = report.get("truth_pon_tags"), report.get("unplaced_pass")
     if t:
@@ -255,8 +269,9 @@ def evaluate(args):
     elif args.pon:
         pon_vcf = out / f"{calls.name[:-len('.vcf.gz')]}.pon.vcf.gz"
         print(f"PoN filter -> {pon_vcf}", flush=True)
-        pon = run_pon(calls, pon_vcf, args.pon)
-        truth_pon = run_pon(truth, out / f"truth.{kind}.pon.vcf.gz", args.pon)
+        fasta = args.fasta or reference_fasta(header)
+        pon = run_pon(calls, pon_vcf, args.pon, fasta)
+        truth_pon = run_pon(truth, out / f"truth.{kind}.pon.vcf.gz", args.pon, fasta)
         pon_files = [str(Path(p).resolve()) for p in args.pon]
     steps = {}
     for step, vcf in (("graph_vcf", meta(header, "pansoma_graph_vcf")), ("linear_vcf", calls)):
@@ -297,6 +312,7 @@ def parse_args(argv=None):
     p.add_argument("--truth", required=True, help="somatic truth VCF (bgzipped)")
     p.add_argument("--bed", help="evaluate inside these regions only (rtg -e), e.g. the benchmark BED")
     p.add_argument("--sdf", required=True, help="rtg SDF of the FASTA used by linear_vcf")
+    p.add_argument("--fasta", help="reference FASTA for the PoN's INDEL homopolymer rule (default: the calls' ##reference)")
     p.add_argument("--output", required=True, help="directory; its vcfeval/ must not exist")
     p.add_argument("--kind", choices=["SNV", "INDEL", "ALL"], help="truth records to compare (default: the calls' kind)")
     p.add_argument("--regions", nargs="+", help="chromosomes (default: those predicted)")

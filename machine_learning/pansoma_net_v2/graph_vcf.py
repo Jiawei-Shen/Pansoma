@@ -41,6 +41,8 @@ A record is the site's representative allele A1, the allele the model scores. Th
     (a relabel, or a new sample without labels).
 - Tensors with p_somatic < --min-score (default 0.01) that are not called are not written. The LowQual records
   are kept so that vcfeval can draw the precision/recall curve below the threshold.
+- Tensors that predict marked excluded (train / predict --exclude-candidates: taken out before the model) are not
+  written either, whatever their probabilities: as if they had never been built.
 """
 import argparse
 import gzip
@@ -154,7 +156,7 @@ def select(predictions, summaries_dir, kind, called, min_score, threshold, stats
                 line = f.readline()
                 if not line:
                     raise ValueError(f"{summary_path} has {k} records, the predictions {len(block)}")
-                if p["p_somatic"] < min_score and not called(p):
+                if p.get("excluded") or (p["p_somatic"] < min_score and not called(p)):
                     m = FIRST_ID.match(line)  # the first key; the full parse is only for kept records
                     if (m.group(1) if m else json.loads(line)["candidate_id"]) != p["candidate_id"]:
                         raise ValueError(f"{summary_path} line {k + 1} is not {p['candidate_id']}")
@@ -169,8 +171,9 @@ def select(predictions, summaries_dir, kind, called, min_score, threshold, stats
             if f.readline():
                 raise ValueError(f"{summary_path} has more records than the {len(block)} predictions of {chrom}")
         stats["predictions"] += len(block)
+        stats["excluded"] += sum(bool(p.get("excluded")) for p in block)
         stats["called_by_predict"] += sum(p["pred"] == "somatic" for p in block)
-        stats["called"] += sum(called(p) for p in block)
+        stats["called"] += sum(called(p) and not p.get("excluded") for p in block)
         stats["offref_rescored"] += sum("offref_call" in p for p in block)
         stats["offref_called"] += sum(bool(p.get("offref_call")) for p in block)
         stats["pred_differs_from_threshold"] += sum((p["pred"] == "somatic") != (p["p_somatic"] >= threshold)
@@ -239,8 +242,8 @@ def build(args):
         min_af = training_min_af(checkpoint, checkpoint_path, args.kind)
         min_af_source = f"checkpoint training labels {LABEL_FLOOR[args.kind]}"
     sample = args.sample or Path(args.tensors).resolve().parent.name
-    stats = dict(predictions=0, called_by_predict=0, called=0, pred_differs_from_threshold=0, offref_rescored=0,
-                 offref_called=0)
+    stats = dict(predictions=0, excluded=0, called_by_predict=0, called=0, pred_differs_from_threshold=0,
+                 offref_rescored=0, offref_called=0)
     kept, chroms = select(args.predictions, Path(args.tensors) / args.kind, args.kind, called, args.min_score,
                           threshold, stats)
     if stats["offref_rescored"]:

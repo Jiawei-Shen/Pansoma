@@ -5,10 +5,14 @@ A record matches a PoN when a PoN record has its position, REF and one of its AL
 the record's kind:
 - SNV (every ALT of REF's length): gnomAD and CoLoRSdb with that ALT's AF >= 0.0001; dbSNP when the
   record is not somatic (SAO != 2); 1000G any such record.
-- INDEL (an ALT of another length): only gnomAD and CoLoRSdb, with that ALT's AF >= 0.01. dbSNP and
-  1000G are not used: most somatic INDELs are homopolymer / STR length changes that exist as population
-  alleles at AF 0.001-0.05, where the individual's germline INDELs sit mostly at AF >= 0.05
-  (analysis/tensor_recall_20260930/pon/indel_rules)."""
+- INDEL (an ALT of another length): only gnomAD and CoLoRSdb, with that ALT's AF >= 0.01 when the ALT
+  changes the length of a homopolymer of >= 7 bases on the reference, and >= 0.001 otherwise. dbSNP and
+  1000G are not used. Somatic homopolymer INDELs are often population alleles at AF 0.001-0.05, so they
+  need the higher floor; other somatic INDELs rarely are, and the lower floor removes more germline
+  (analysis/tensor_recall_20260930/pon/indel_rules, tmp/indel_pon_recheck_20261010).
+  The homopolymer of an ALT: its inserted or deleted bases (after the shared first base) are one repeated
+  base b, and the run of b on the reference at POS + 1, extended both ways, counting the deleted bases.
+  This needs the reference FASTA: --fasta, or the input VCF's ##reference=file://... line."""
 
 from __future__ import annotations
 
@@ -24,11 +28,42 @@ import pysam
 
 PON_NAMES = ("PoN1_gnomAD", "PoN2_dbSNP", "PoN3_1000G", "PoN4_CoLoRSdb")
 SNV_MIN_AF = 0.0001
-INDEL_MIN_AF = 0.01
-PON_RULES = {  # per kind, per PoN in PON_NAMES order; None = the PoN is not used for the kind
+INDEL_MIN_AF_HOMOPOLYMER = 0.01   # the ALT changes a homopolymer of >= INDEL_HOMOPOLYMER bases
+INDEL_MIN_AF = 0.001              # any other INDEL ALT
+INDEL_HOMOPOLYMER = 7
+PON_RULES = {  # per kind, per PoN in PON_NAMES order; None = the PoN is not used for the kind; "indel_af" = per ALT
     "SNV": (dict(min_af=SNV_MIN_AF), dict(non_somatic=True), dict(), dict(min_af=SNV_MIN_AF)),
-    "INDEL": (dict(min_af=INDEL_MIN_AF), None, None, dict(min_af=INDEL_MIN_AF)),
+    "INDEL": ("indel_af", None, None, "indel_af"),
 }
+
+
+def homopolymer_run(fasta, contig: str, position: int, ref: str, alt: str) -> int:
+    """Run length on the reference of the one base an INDEL ALT inserts or deletes (0 when the inserted or deleted
+    bases are not one repeated base). position is the VCF POS (1-based) of the shared first base."""
+    ref, alt = ref.upper(), alt.upper()
+    if not ref or not alt or ref[0] != alt[0]:
+        return 0
+    changed = ref[1:] if len(ref) > len(alt) else alt[1:]
+    if not changed or len(set(changed)) != 1 or (len(ref) > 1 and len(alt) > 1):
+        return 0
+    base = changed[0]
+    start = position  # 0-based index of the base after the shared first one
+    window = 200
+    lo = max(0, start - window)
+    seq = fasta.fetch(contig, lo, start + len(ref) + window).upper()
+    i = start - lo
+    left = 0
+    while i - 1 - left >= 0 and seq[i - 1 - left] == base:
+        left += 1
+    right = 0
+    while i + right < len(seq) and seq[i + right] == base:
+        right += 1
+    return max(left + right, len(ref) - 1)
+
+
+def indel_min_af(fasta, contig: str, position: int, ref: str, alt: str) -> float:
+    return INDEL_MIN_AF_HOMOPOLYMER if homopolymer_run(fasta, contig, position, ref, alt) >= INDEL_HOMOPOLYMER \
+        else INDEL_MIN_AF
 
 
 def record_kind(ref: str, alts: Iterable[str]) -> str:
@@ -118,7 +153,8 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
             "Tag Pansoma VCF records found in four indexed PoNs (SNV: gnomAD / CoLoRSdb AF >= "
-            f"{SNV_MIN_AF}, dbSNP non-somatic, 1000G; INDEL: gnomAD / CoLoRSdb AF >= {INDEL_MIN_AF} only). "
+            f"{SNV_MIN_AF}, dbSNP non-somatic, 1000G; INDEL: gnomAD / CoLoRSdb only, AF >= {INDEL_MIN_AF_HOMOPOLYMER} "
+            f"in homopolymers of >= {INDEL_HOMOPOLYMER} bases, else AF >= {INDEL_MIN_AF}). "
             "By default all records are retained; use --drop-matched to remove matched records."
         )
     )
@@ -130,6 +166,10 @@ def parse_args() -> argparse.Namespace:
         required=True,
         metavar=("PON1", "PON2", "PON3", "PON4"),
         help="Indexed gnomAD, dbSNP, 1000G, and CoLoRSdb PoN VCFs, in that order",
+    )
+    parser.add_argument(
+        "--fasta",
+        help="Reference FASTA (indexed) for the INDEL homopolymer rule; default: the input VCF's ##reference=file://",
     )
     parser.add_argument(
         "--drop-matched",
@@ -156,6 +196,12 @@ def main() -> int:
 
     input_vcf = pysam.VariantFile(str(input_path))
     pons = [pysam.VariantFile(str(path)) for path in pon_paths]
+    fasta_path = args.fasta
+    if fasta_path is None:
+        for line in str(input_vcf.header).splitlines():
+            if line.startswith("##reference=file://"):
+                fasta_path = line[len("##reference=file://"):].strip()
+    fasta = pysam.FastaFile(fasta_path) if fasta_path else None
     header = input_vcf.header.copy()
     add_output_header(header)
 
@@ -179,6 +225,8 @@ def main() -> int:
                 for index, (pon, rule) in enumerate(zip(pons, PON_RULES[kind])):
                     if rule is None:
                         continue
+                    if rule == "indel_af" and fasta is None:
+                        sys.exit("ERROR: INDEL records need the reference FASTA (--fasta or ##reference=file://)")
                     cache_key = (index, record.contig)
                     if cache_key not in contig_cache:
                         contig_cache[cache_key] = resolve_contig(pon, record.contig)
@@ -187,14 +235,14 @@ def main() -> int:
                         missing_contigs.add((PON_NAMES[index], record.contig))
                         continue
 
-                    if record_matches(
-                        pon,
-                        pon_contig,
-                        record.pos,
-                        record.ref or "",
-                        record.alts or (),
-                        **rule,
-                    ):
+                    if rule == "indel_af":  # each ALT with its own floor
+                        hit = any(record_matches(pon, pon_contig, record.pos, record.ref or "", (alt,),
+                                                 min_af=indel_min_af(fasta, record.contig, record.pos,
+                                                                     record.ref or "", alt))
+                                  for alt in record.alts or () if alt)
+                    else:
+                        hit = record_matches(pon, pon_contig, record.pos, record.ref or "", record.alts or (), **rule)
+                    if hit:
                         matches.append(PON_NAMES[index])
                         matched_by_pon[PON_NAMES[index]] += 1
 
@@ -217,6 +265,8 @@ def main() -> int:
         input_vcf.close()
         for pon in pons:
             pon.close()
+        if fasta is not None:
+            fasta.close()
 
     try:
         pysam.tabix_index(str(output_path), preset="vcf", force=True)

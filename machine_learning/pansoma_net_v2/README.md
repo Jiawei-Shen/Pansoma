@@ -54,7 +54,7 @@ $P -m pansoma_net_v2.train --tensors $T --kinds SNV --output runs/HG008_Illumina
     --depths 3 3 27 3 --dims 96 192 384 768 --epochs 20 --batch-size 1024 --lr 1e-4 --class-weights pow:0.75 \
     --non-fraction 1.0 --block v2 --ignore-reasons residual_partial_somatic_truth allele_partial_somatic_truth
 $P -m pansoma_net_v2.train --tensors $T --kinds INDEL --output runs/HG008_Illumina_INDEL \
-    --depths 2 2 6 2 --dims 64 128 256 512 --epochs 12 --batch-size 1024 --lr 4e-4 --class-weights sqrt \
+    --depths 2 2 6 2 --dims 64 128 256 512 --epochs 12 --batch-size 1024 --lr 1e-4 --class-weights sqrt \
     --non-fraction 1.0 --block v2 --ignore-reasons residual_partial_somatic_truth allele_partial_somatic_truth
 torchrun --nproc_per_node=2 -m pansoma_net_v2.train --ddp ...           # several GPUs, same options
 
@@ -65,7 +65,9 @@ $P -m pansoma_net_v2.predict --checkpoint runs/HG008_Illumina_SNV/best.pth --ten
 
 `/scratch/jshen/data/pansoma_net_v2_runs/jobs/run.sh NAME SET KIND [train options]` runs both steps as one
 Slurm job. `python -m pansoma_net_v2.summary [NAME ...]` prints each run's per-epoch table, its current step and, when
-done, its chr1 test result (per tensor and against the truth VCF). The table columns are:
+done, its chr1 test result (per tensor and against the truth VCF) and the rtg vcfeval reports of its calls
+(`<run>/vcf_*/eval_bed`, `eval_nobed`: PASS P/R/F1 and the chr1 curve's best point, raw and after the PoN). The table
+columns are:
 
 - training loss, speed, minutes, GPU peak;
 - validation per tensor: somatic AP and s.F1 / s.P / s.R at the best threshold, and the threshold t;
@@ -93,6 +95,10 @@ Useful `train` options:
   `residual_partial_somatic_truth allele_partial_somatic_truth`: SNV tensors that partially match an INDEL truth
   (mostly read-end SNV shadows of the INDEL) taught the model low-AF artefacts next to germline INDELs, and as SNV
   calls they never match the truth (analysis/v1_vs_v2_20260929).
+- **Candidates left out.** `--exclude-candidates FILE` (candidate ids, first column) takes those tensors out before
+  the model, as if never built: -1 in training and validation (over `--label-overrides` too); `predict` leaves them
+  out of the test by default (their truth alleles are misses) and `graph_vcf` writes no record for them. The INDEL
+  recipe does not use it (below).
 - **Model.**
   - `--scalars` feeds the site scalars to the head (`data.SCALARS`: log coverage, log site coverage, log
     ALT / REF / OTHER counts, AF, second allele AF, allele count, log event length). They are the counts
@@ -193,7 +199,11 @@ truth_ids (the somatic truth alleles of a labelled-1 tensor), p_non, p_somatic, 
 the threshold). It also writes `.metrics.json`: the same report over the test tensors, with the truth report
 and the counts of test tensors on off-reference nodes (`--threshold` overrides t). `--ignore-reasons` (default: the
 checkpoint's training `--ignore-reasons`) leaves those reasons out of the test like -1; their records keep label,
-reason and truth_ids and say `ignored: true`.
+reason and truth_ids and say `ignored: true`. INDEL sets are the exception to the default: the partial somatic matches
+(`residual_partial_somatic_truth`, `allele_partial_somatic_truth`) stay in the INDEL test as 1, so a called INDEL
+tensor of another length in the same homopolymer (or a residual edit next to a graph allele) counts its truth as
+found in the per-tensor and truth-level numbers. SNV tests leave them out. The calls, and so rtg vcfeval, do not
+change: there such a call is an allele of the wrong length.
 Off-reference tensors are marked for analysis only; the test scores them like the others.
 
 **Off-reference rescue (SNV).** The model learned that a low path count (ch6: how many HPRC haplotypes run
@@ -216,19 +226,41 @@ included), one whole GPU; calls at the validation recall-0.9 threshold, off-refe
 epoch ~7 (validation loss 0.51 -> 2.16) and the 50.4 M model does not; with the PoN in the BED both reach P/R/F1
 0.473/0.832/0.604 (199.6 M, best epoch 5) and 0.493/0.822/0.616 (50.4 M).
 
-**INDEL recipe** (HG008T Illumina, `HG008_Illumina_INDEL_nopartial_b1024_small`): the 8.7 M model `--depths 2 2 6 2
---dims 64 128 256 512`, `--class-weights sqrt --batch-size 1024 --lr 4e-4 --epochs 12 --non-fraction 1.0 --block v2
---ignore-reasons residual_partial_somatic_truth allele_partial_somatic_truth`, every plane kept; calls at the
-validation recall-0.9 threshold (graph_vcf's default; no off-reference rescue for INDELs), then the INDEL PoN rule
-(gnomAD / CoLoRSdb exact allele at population AF ≥ 0.01, below). Of the three decision rules predict reports
-(validation best-F1 threshold t, argmax, validation recall-0.9 threshold) the recall-0.9 one is the only usable one
-for INDELs: on chr1 in the BED after the PoN it gives P/R/F1 0.195/0.242/0.216 against 0.383/0.101/0.159 at t, and
-argmax recalls 10 % of the somatic tensors. The INDEL models are all within noise of each other on chr1 (best F1
-0.13–0.15 without the PoN for the 199.6 M model with or without the partial labels or ch6, and the 8.7 M model);
-the small one trains in a tenth of the time. What limits INDELs is upstream of the model: 46 % of the HG008T
-Illumina truth INDELs get no candidate (the allele is a path of the HPRC graph) and the false calls are the
-patient's germline homopolymer INDELs at the same VAF as the somatic ones (`analysis/indel_20260930`,
-`analysis/tensor_recall_20260930`).
+**INDEL recipe** (every platform; chosen on the six P100 sets, 2026-10-11): the 8.7 M model `--depths 2 2 6 2 --dims
+64 128 256 512`, `--class-weights sqrt --batch-size 1024 --lr 1e-4 --epochs 12 --non-fraction 1.0 --block v2
+--ignore-reasons residual_partial_somatic_truth allele_partial_somatic_truth`, every plane and every candidate kept
+(no `--exclude-candidates`); calls at the validation recall-0.9 threshold (graph_vcf's default; no off-reference
+rescue for INDELs), then the INDEL PoN rule (gnomAD / CoLoRSdb exact allele: AF ≥ 0.01 in homopolymers of ≥ 7 bases,
+else AF ≥ 0.001; below). The chr1 curve's best point is recorded next to the PASS result (vcfeval's report,
+`summary`); it is chosen on the test chromosome and never used as the threshold. On a MIG 2g.24gb slice the batch
+needs `--micro-batches 4` (about 23 GB as one batch). `jobs/submit_indel.sh SET ...` submits the recipe (chunk cache,
+training + chr1 test, calls + vcfeval).
+
+The choices, from the runs of 2026-10-10 (chr1 in the BED after the INDEL PoN; F1 at the validation recall-0.9
+threshold, then at the chr1 curve's best point; every number per rule in
+`tmp/indel_non_20261006/results_detail_20261011.md`):
+
+- **lr 1e-4 rather than 4e-4** (both with the candidate filter below): HG008T Illumina 0.226 → 0.241 (best 0.249 →
+  0.258), PacBio 0.130 → 0.135 (0.254 both), ONT 0.016 → 0.017 (0.139 → 0.130).
+- **sqrt rather than pow:0.8 class weights** (the long-read sets, eight pairs): pow:0.8 lowers the validation somatic
+  AP in six and the recall-0.9 F1 in seven (more calls at the same recall: HG008T PacBio 0.130 → 0.108).
+- **No candidate filter.** The filter left out the INDEL candidates with AF < 0.10, and those with AF < 0.15 whose
+  allele is not in the other sample's set of the same platform (34–49 % of the long-read tensors). It takes out
+  tensors the model already ranks low (0–1 % of the unfiltered models' calls at the chr1 best point). On HG008T the
+  unfiltered runs are equal or better (Illumina / PacBio / ONT 0.239 / 0.132 / 0.015 against 0.226 / 0.130 / 0.016).
+  On COLO829T's long reads the filtered runs score higher (fiberseq 0.055 against 0.010, where the unfiltered
+  recall-0.9 threshold fell to 7.5e-6), but at most about 33 truth INDELs are left there after the PoN.
+- **The recall-0.9 rule.** predict's other two rules: the validation best-F1 threshold t is higher on the HG008T long
+  reads (PacBio 0.214, ONT 0.101 against 0.132, 0.015 unfiltered) and lower on Illumina (0.194 against 0.239), and on
+  COLO829T it calls 9–185 tensors; argmax called 0–2 INDELs in three Illumina runs. The chr1 best points lie between
+  the two thresholds (PacBio p ≈ 0.3, Illumina 0.1–0.2).
+
+The 8.7 M model is within noise of the 199.6 M model on chr1 (best F1 0.13–0.15 without the PoN, with or without the
+partial labels or ch6) and trains in a tenth of the time. What limits INDELs is outside the model: the PoN rule
+tags 413 of the 635 HG008T chr1 truth INDELs (81 of 131 on COLO829T), so the curves' recall after it stops at
+0.24–0.26; 46 % of the HG008T Illumina truth INDELs get no candidate (the allele is a path of the HPRC graph); and
+the false calls are the patient's germline homopolymer INDELs at the same VAF as the somatic ones
+(`analysis/indel_20260930`, `analysis/tensor_recall_20260930`).
 
 ## Calls: graph VCF → GRCh38 VCF → PoN → rtg vcfeval
 
@@ -249,7 +281,8 @@ $P -m pansoma_net_v2.vcfeval --calls out/HG008T_Illumina.SNV.linear.vcf.gz \
     --truth <somatic truth>.vcf.gz --bed <benchmark>.bed --sdf GRCh38.sdf --rtg rtg --output out/eval_bed
 ```
 
-INDEL calls use the same command; the PoN script applies its INDEL rule (gnomAD / CoLoRSdb AF ≥ 0.01 only)
+INDEL calls use the same command; the PoN script applies its INDEL rule (gnomAD / CoLoRSdb only, AF ≥ 0.01 in
+homopolymers of ≥ 7 bases, else AF ≥ 0.001; the homopolymer from the calls' `##reference` FASTA)
 to them.
 
 `/scratch/jshen/data/pansoma_net_v2_runs/jobs/vcf.sh RUN KIND` runs the three on a run's chr1 predictions into
@@ -298,29 +331,33 @@ merge stored as the summaries' `grch38`.
 
 - **PoN** (optional: `--pon` or `--pon-vcf`). `scripts/filter_panel_of_normals.py` with the four PoNs. It matches
   by allele, with the rule of each record's kind: SNV gnomAD / CoLoRSdb at AF ≥ 0.0001, dbSNP only records not
-  flagged somatic, 1000G; INDEL gnomAD / CoLoRSdb at AF ≥ 0.01 only (the repository README, section 5).
+  flagged somatic, 1000G; INDEL gnomAD / CoLoRSdb only, at AF ≥ 0.01 in homopolymers of ≥ 7 bases and AF ≥ 0.001
+  otherwise (the repository README, section 5). vcfeval passes the calls' `##reference` FASTA (or `--fasta`).
   It also runs over the truth records, which shows how much recall the PoN leaves to any caller.
 - **Truth.** The PASS truth records of the kind on the predicted chromosomes.
 - **rtg vcfeval.** Always with `--squash-ploidy --sample ALT,ALT -f QUAL`. For the calls without the PoN (raw)
   and, with a PoN, with it (pon), it runs twice:
   - once on the PASS records: the result at the threshold;
   - once with `--all-records` on PASS + LowQual: the curve (best F1, precision at recall 0.5–0.95, ceiling).
-- **Reports.** `report.json` and `report.txt`. The latter also gives the PASS calls without a GRCh38 position:
-  they are not evaluated, so precision is also shown with them counted as false calls.
+- **Reports.** `report.json` and `report.txt`. Each set's row has the result at the threshold and the curve's best
+  F1 with its p_somatic, P, R, TP, FP and FN: a choice on the test chromosomes, recorded for reference, never used as
+  the threshold. report.txt also gives the PASS calls without a GRCh38 position: they are not evaluated, so precision
+  is also shown with them counted as false calls.
 
 HG008 Illumina chr1. SNV: `HG008_Illumina_SNV_allnon_sqrt_b1024`, `<run>/vcf_chr1/` (2026-09-30), PASS p ≥ 0.254.
-INDEL: `HG008_Illumina_INDEL_nopartial_b1024_small`, `<run>/vcf_chr1_pon/` (2026-10-06), PASS p ≥ 0.080. PASS is
-the checkpoint's validation recall-0.9 threshold (`val.somatic_at_recall`); the PoN is the rule of each kind. Best F1
-is the best point of the chr1 curve, a test-set choice.
+INDEL: `HG008_Illumina_INDEL_nopartial_b1024_small` (lr 4e-4), `<run>/vcf_chr1_pon/` (calls 2026-10-06, the
+homopolymer PoN rule 2026-10-10), PASS p ≥ 0.080. PASS is the checkpoint's validation recall-0.9 threshold
+(`val.somatic_at_recall`); the PoN is the rule of each kind. Best F1 is the best point of the chr1 curve, with its
+p_somatic: a test-set choice, recorded for reference.
 
-| | PASS evaluated (unplaced) | TP | FP | P | R | F1 | best F1 (P, R) |
+| | PASS evaluated (unplaced) | TP | FP | P | R | F1 | chr1 best F1 at p (P, R; TP / FP) |
 |---|---|---|---|---|---|---|---|
-| SNV raw, in BED (697) | 5,487 (8) | 598 | 4,889 | 0.109 | 0.858 | 0.193 | 0.266 (0.222, 0.333) |
-| SNV pon, in BED | 1,212 | 575 | 637 | 0.474 | 0.825 | 0.602 | 0.615 (0.515, 0.763) |
-| SNV pon, no BED (702) | 1,259 | 579 | 680 | 0.460 | 0.825 | 0.591 | 0.606 (0.502, 0.763) |
-| INDEL raw, in BED (587) | 3,560 (543) | 211 | 3,349 | 0.059 | 0.359 | 0.102 | 0.150 (0.105, 0.266) |
-| INDEL pon, in BED | 727 | 142 | 585 | 0.195 | 0.242 | 0.216 | 0.248 (0.291, 0.216) |
-| INDEL pon, no BED (635) | 801 | 150 | 651 | 0.187 | 0.236 | 0.209 | 0.240 (0.278, 0.211) |
+| SNV raw, in BED (697) | 5,487 (8) | 598 | 4,889 | 0.109 | 0.858 | 0.193 | 0.266 at 0.537 (0.222, 0.333; 232 / 815) |
+| SNV pon, in BED | 1,212 | 575 | 637 | 0.474 | 0.825 | 0.602 | 0.615 at 0.322 (0.515, 0.763; 532 / 500) |
+| SNV pon, no BED (702) | 1,259 | 579 | 680 | 0.460 | 0.825 | 0.591 | 0.606 at 0.322 (0.502, 0.763; 536 / 531) |
+| INDEL raw, in BED (587) | 3,560 (543) | 211 | 3,349 | 0.059 | 0.359 | 0.102 | 0.150 at 0.270 (0.105, 0.266; 156 / 1,331) |
+| INDEL pon, in BED | 567 | 140 | 427 | 0.247 | 0.238 | 0.243 | 0.265 at 0.139 (0.329, 0.222; 130 / 265) |
+| INDEL pon, no BED (635) | 631 | 148 | 483 | 0.234 | 0.233 | 0.234 | 0.255 at 0.139 (0.313, 0.216; 137 / 301) |
 
 - **Agreement with the truth-level metrics** (`HG008_Illumina_SNV_keephard_w100` at predict's threshold). The
   results agree with `metrics.truth_report`:
@@ -335,8 +372,9 @@ is the best point of the chr1 curve, a test-set choice.
 - **Pansoma v1** (e053) with the same PoN rule on that scorer: best F1 0.587, against 0.616 for this SNV run.
 - **The PoN on INDELs.** The SNV rule tags 544 of the 635 chr1 INDEL truth records (CoLoRSdb 533 of them, most in
   homopolymers at population AF 0.1–5 %), so after it no caller could recall more than 14 %. The INDEL rule
-  (gnomAD / CoLoRSdb exact allele at AF ≥ 0.01, no dbSNP or 1000G) tags 383 (recall ceiling 0.261 in the BED) and
-  doubles the PASS F1 (0.102 → 0.216). For SNV the SNV rule tags 61 of 702.
+  (gnomAD / CoLoRSdb exact allele, AF ≥ 0.01 in homopolymers of ≥ 7 bases and ≥ 0.001 otherwise, no dbSNP or 1000G)
+  tags 413 (recall ceiling 0.257 in the BED) and raises the PASS F1 from 0.102 to 0.243; AF ≥ 0.01 for every INDEL
+  tags 383 and gives 0.216. For SNV the SNV rule tags 61 of 702.
 - **Runs predicted before a tensor rebuild.** `graph_vcf` checks every candidate ID against the set's
   `chr1_variant_summary.ndjson`, so `vcf.sh` stops on predictions made on an earlier build of the set. Their
   existing `<run>/vcf_chr1/*.linear.vcf.gz` can still be re-scored: `jobs/vcfeval_only.sh RUN KIND vcf_chr1 OUT`

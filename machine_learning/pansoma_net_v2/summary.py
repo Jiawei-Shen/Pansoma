@@ -9,7 +9,9 @@ of the epoch, GPU peak (allocated GiB); validation per tensor: somatic AP, F1 / 
 best-F1 threshold t (s.*), t itself, the precision where the somatic recall reaches 0.9 (P@R.9); against the truth VCF at the same t (t.*, metrics.truth_report: every
 truth allele once, truth alleles without a tensor are misses, found truth of the other kind are true calls)
 and its ceiling; germline argmax F1; "*" marks the best epoch so far by the run's --select. combine scores a
-sample's SNV and INDEL models together.
+sample's SNV and INDEL models together. Below the test: each rtg vcfeval report of the run's calls
+(<run>/vcf_*/eval_bed and eval_nobed, vcfeval.py), raw and after the PoN: the PASS result and the best point of the
+curve (its p_somatic; chosen on the test chromosomes, so for reference only).
 """
 import argparse
 import glob
@@ -89,6 +91,25 @@ def show(d):
             if "other_kind_tensors" in tr:
                 print(f"                   + {at['other_tp']:,} truth of the other kind found (true calls, each once; "
                       f"{tr['other_kind_tensors']:,} tensors of {tr['other_kind_truth_with_tensor']:,} such truth)")
+    for path in sorted([*d.glob("vcf_*/eval_bed/report.json"), *d.glob("vcf_*/eval_nobed/report.json")]):
+        _rtg(d, path)
+
+
+def _rtg(d, path):
+    """One vcfeval report: PASS P/R/F1 and the curve's best point, raw and after the PoN."""
+    r = json.loads(path.read_text())
+    where = "in the BED" if r.get("bed") else "whole chromosomes"
+    print(f"  rtg {path.parent.relative_to(d)}: {r['kind']} {','.join(r['chromosomes'])}, {where}, "
+          f"{r['raw']['baseline']:,} truth, PASS p>={r['threshold']:.3f}")
+    count = lambda x: f"TP {x['tp_baseline']:,} FP {x['fp']:,} FN {x['fn']:,}"  # noqa: E731
+    for name in ("raw", "pon"):
+        if name not in r:
+            continue
+        a, b = r[name]["at_threshold"], r[name]["best"]
+        best = (f"curve best F1 {b['f1']:.3f} at p>={b['p_somatic']:.3f}: P {b['precision']:.3f} R {b['recall']:.3f} "
+                f"({count(b)})") if b else "no curve"
+        print(f"    {name:<4} PASS P {a['precision']:.3f} R {a['recall']:.3f} F1 {a['f1']:.3f} ({count(a)}) | {best}; "
+              f"ceiling {r[name]['ceiling']:.3f}")
 
 def _p_at(v, recall):
     """Somatic precision at the lowest threshold with recall >= `recall` (metrics.somatic_at_recall), or '-'."""

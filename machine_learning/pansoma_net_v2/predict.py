@@ -18,9 +18,15 @@ Writes, per <sample>.<set>.<KIND>:
   BED, the chromosomes, this kind), at the same threshold. Every truth allele counts once: it is found when its
   best tensor (a labelled-1 tensor matching it, exactly or partially) is called somatic, so duplicate tensors of
   one truth do not count twice; truth alleles without a tensor are misses; a false positive is a somatic call on
-  a tensor labelled 0 or 2. Reasons in --ignore-reasons (default: those the model was trained without) are left out
-  like -1; their records say ignored: true and keep label, reason and truth_ids. A found truth allele of the other kind (an SNV tensor matching an INDEL truth
-  partially) is a true call too, once. `ceiling` is the recall of a perfect model. `combine` scores the SNV and
+  a tensor labelled 0 or 2. Reasons in --ignore-reasons are left out like -1; their records say ignored: true and
+  keep label, reason and truth_ids. The default is the reasons the model was trained without, except that INDEL
+  sets keep the partial somatic matches (residual_partial_somatic_truth, allele_partial_somatic_truth) in the test
+  as 1: an INDEL tensor that partly matches a somatic truth (another length in the same homopolymer, or a residual
+  edit next to a graph allele) counts that truth as found when called. SNV sets leave them out. The calls (graph_vcf)
+  and so rtg vcfeval do not depend on this. Candidates in --exclude-candidates (default: the checkpoint's train
+  --exclude-candidates) are left out of the test too, as if never built (their truth alleles are misses), and say
+  excluded: true; graph_vcf writes no record for them. A found truth allele of the other kind (an SNV tensor matching
+  an INDEL truth partially) is a true call too, once. `ceiling` is the recall of a perfect model. `combine` scores the SNV and
   INDEL predictions of a sample together against the whole truth VCF.
 
 Off-reference rescue (SNV, --offref-site90 W, default 10; 0 turns it off). The model learned that a low path count
@@ -49,7 +55,7 @@ import torch
 
 from . import metrics
 from .data import (CHECKPOINT_PATH_COUNT, CLASSES, KINDS, PATH_COUNT_ALL, TENSOR_SHAPE, EpochSampler, TensorDataset,
-                   load_parts, somatic_truth)
+                   load_parts, read_candidate_ids, somatic_truth)
 from .encode import CONTINUOUS
 from .model import PansomaNetV2
 from .train import describe, make_loader, predict_probs, retry_workers
@@ -71,13 +77,19 @@ def parse_args(argv=None):
                    help="SNV off-reference rescue: score the off-reference tensors again with ch6 below the "
                         "every-haplotype code (90 on int8-count-linear100-log2 sets, 100 on int8-count-haplotypes100) "
                         "raised to it in the site columns +- W and call them by argmax (0: off)")
+    p.add_argument("--exclude-candidates", nargs="?", const="",
+                   help="file of candidate ids taken out before the model (train --exclude-candidates): left out of "
+                        "the test like -1, records get excluded: true and graph_vcf leaves them out of the calls "
+                        "(default: the checkpoint's train --exclude-candidates; the option without a file: none)")
     p.add_argument("--ignore-reasons", nargs="*",
-                   help="label reasons left out of the test, as if -1 (default: the checkpoint's train --ignore-reasons); "
-                        "their records keep label, reason and truth_ids and get ignored: true")
+                   help="label reasons left out of the test, as if -1 (default: the checkpoint's train --ignore-reasons, "
+                        "minus the partial somatic reasons for INDEL sets); their records keep label, reason and "
+                        "truth_ids and get ignored: true")
     return p.parse_args(argv)
 
 
 PATH_COUNT = dict((name, channel) for name, channel, _ in CONTINUOUS)["path_count"]
+PARTIAL_SOMATIC = ("residual_partial_somatic_truth", "allele_partial_somatic_truth")
 SITE = TENSOR_SHAPE[2] // 2
 
 
@@ -113,15 +125,28 @@ def main(argv=None):
     for index, _ in parts:  # before any prediction: every set must code channel 6 like the training sets
         if reads_path_count and index.path_count != trained:
             raise SystemExit(f"{index.dir}: channel 6 is {index.path_count}, the checkpoint was trained on {trained}")
+    exclude_path = args.exclude_candidates if args.exclude_candidates is not None else \
+        checkpoint.get("args", {}).get("exclude_candidates")
+    exclude = read_candidate_ids(exclude_path) if exclude_path else set()
+    if exclude:
+        print(f"--exclude-candidates {exclude_path}: {len(exclude):,} candidate ids", flush=True)
     for index, positions in parts:
         if reads_path_count and index.haplotypes is not None and index.haplotypes not in trained_haplotypes:
             print(f"note: {index.dir} was built with --haplotypes {index.haplotypes}, the checkpoint's training sets "
                   f"with {trained_haplotypes or 'none recorded'}", flush=True)
         dataset = TensorDataset([(index, positions)], labels="eval_label")
-        ignore = args.ignore_reasons if args.ignore_reasons is not None else checkpoint.get("args", {}).get("ignore_reasons", [])
+        if args.ignore_reasons is not None:
+            ignore = args.ignore_reasons
+        else:  # the training's; INDEL tests count the partial somatic matches as found truth (see above)
+            ignore = checkpoint.get("args", {}).get("ignore_reasons", [])
+            if index.kind == "INDEL":
+                ignore = [r for r in ignore if r not in PARTIAL_SOMATIC]
         ignored = np.isin(index.arrays["reason"][positions],
                           [k for k, r in enumerate(index.meta["reasons"]) if r in set(ignore)])
         dataset.label[ignored] = -1  # out of the test like the other -1; the record keeps its label and reason
+        excluded = np.array([index.candidates()[p] in exclude for p in positions], bool) if exclude else \
+            np.zeros(len(positions), bool)
+        dataset.label[excluded] = -1  # never built, as far as the test and the calls are concerned
         labels, probs = retry_workers(
             lambda: predict_probs(model, make_loader(dataset, EpochSampler(len(dataset), shuffle=False), args.num_workers,
                                                      args.batch_size, persistent=False), device, amp),
@@ -145,7 +170,8 @@ def main(argv=None):
                 f.write(json.dumps(dict(
                     chrom=chroms[a["chrom"][pos]], candidate_id=candidates[pos], label=int(a["label"][pos]),
                     test_label=int(labels[k]) if labels[k] >= 0 else None, in_test=bool(labels[k] >= 0),
-                    reason=index.reason(pos), ignored=bool(ignored[k]), off_reference=bool(a["off_reference"][pos]),
+                    reason=index.reason(pos), ignored=bool(ignored[k]), excluded=bool(excluded[k]),
+                    off_reference=bool(a["off_reference"][pos]),
                     truth_ids=index.truth_of(pos).tolist(),
                     **{f"p_{c}": round(float(probs[k][j]), 5) for j, c in enumerate(CLASSES)},
                     pred=CLASSES[pred[k]],
@@ -182,6 +208,7 @@ def main(argv=None):
                       off_reference_in_test=int((in_test & off).sum()),
                       off_reference_somatic_in_test=int((in_test & off & (labels == 1)).sum()),
                       ignored_reasons=list(ignore), ignored=int(ignored.sum()),
+                      exclude_candidates=exclude_path or None, excluded=int(excluded.sum()),
                       directory=str(index.dir), labels=index.meta["labels"],
                       path_count=dict(storage=index.path_count, haplotypes=index.haplotypes,
                                       checkpoint_haplotypes=trained_haplotypes),

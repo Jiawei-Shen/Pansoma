@@ -212,6 +212,74 @@ class RelabelTest(unittest.TestCase):
             self.assertEqual(sum(d["train"] for d in ckpt["data"]), expected)
             self.assertIn("--label-overrides 1 of 1 candidate ids", (out / "train.log").read_text())
 
+    def test_excluded_candidates_leave_training_validation_and_test(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            root = tmp / "sample" / "tensors"
+            make_tensor_set(root, SPEC, shard_size=8)
+            index = KindIndex(root / "SNV", tmp / "check_cache")
+            cands, a = index.candidates(), index.arrays
+            tr, _ = block_split(index, index.select(["chr2", "chr3"], labelled=False), 0.5, 21, 0)
+            dropped = [int(k) for k in tr if a["label"][k] >= 0][:3]
+            chr1 = index.meta["chroms"].index("chr1")
+            test_drop = [k for k in range(len(cands)) if a["chrom"][k] == chr1 and a["eval_label"][k] >= 0][:2]
+            self.assertTrue(dropped and test_drop)
+            ids = [cands[k] for k in dropped + test_drop]
+            (tmp / "drop.tsv").write_text("candidate_id\taf\n" + "".join(f"{c}\t0.09\n" for c in ids))
+            # an override to 1 does not bring an excluded candidate back
+            (tmp / "overrides.tsv").write_text(f"candidate_id\tlabel\n{ids[0]}\t1\n")
+            out = tmp / "run"
+            train.main(["--tensors", str(root), "--output", str(out), "--epochs", "1", "--kinds", "SNV",
+                        "--exclude-candidates", str(tmp / "drop.tsv"), "--label-overrides", str(tmp / "overrides.tsv")]
+                       + SMALL_ARGS)
+            ckpt = torch.load(out / "best.pth", weights_only=False)
+            self.assertEqual(sum(d["train"] for d in ckpt["data"]), int((a["label"][tr] >= 0).sum()) - len(dropped))
+            self.assertIn(f"--exclude-candidates {tmp / 'drop.tsv'}: {len(ids)} candidate ids", (out / "train.log").read_text())
+            predict.main(["--checkpoint", str(out / "best.pth"), "--tensors", str(root), "--output", str(tmp / "p"),
+                          "--kinds", "SNV", "--chroms", "chr1", "--num-workers", "0", "--amp", "off"])
+            with gzip.open(tmp / "p" / "sample.tensors.SNV.predictions.ndjson.gz", "rt") as f:
+                recs = {r["candidate_id"]: r for r in map(json.loads, f)}
+            for k in test_drop:   # the checkpoint's list is predict's default
+                self.assertTrue(recs[cands[k]]["excluded"] and not recs[cands[k]]["in_test"])
+            self.assertEqual(sum(r["excluded"] for r in recs.values()), len(test_drop))
+            rep = json.loads((tmp / "p" / "sample.tensors.SNV.metrics.json").read_text())
+            self.assertEqual((rep["excluded"], rep["exclude_candidates"]), (len(test_drop), str(tmp / "drop.tsv")))
+            predict.main(["--checkpoint", str(out / "best.pth"), "--tensors", str(root), "--output", str(tmp / "p0"),
+                          "--kinds", "SNV", "--chroms", "chr1", "--num-workers", "0", "--amp", "off",
+                          "--exclude-candidates"])   # without a file: none
+            rep0 = json.loads((tmp / "p0" / "sample.tensors.SNV.metrics.json").read_text())
+            self.assertEqual((rep0["excluded"], rep0["tensors"]), (0, rep["tensors"] + len(test_drop)))
+
+
+class PartialTestTest(unittest.TestCase):
+    """predict's default: the reasons trained without stay out of the SNV test; INDEL keeps the partial somatic matches."""
+
+    def test_indel_test_keeps_partial_somatic(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            root = tmp / "sample" / "tensors"
+            make_tensor_set(root, SPEC, shard_size=8)
+            out = tmp / "run"
+            train.main(["--tensors", str(root), "--output", str(out), "--epochs", "1",
+                        "--ignore-reasons", "residual_partial_somatic_truth", "allele_partial_somatic_truth"] + SMALL_ARGS)
+            predict.main(["--checkpoint", str(out / "best.pth"), "--tensors", str(root), "--output", str(tmp / "p"),
+                          "--num-workers", "0", "--amp", "off"])
+            recs, reps = {}, {}
+            for kind in ("SNV", "INDEL"):
+                with gzip.open(tmp / "p" / f"sample.tensors.{kind}.predictions.ndjson.gz", "rt") as f:
+                    recs[kind] = [r for r in map(json.loads, f) if r["reason"] == "residual_partial_somatic_truth"]
+                reps[kind] = json.loads((tmp / "p" / f"sample.tensors.{kind}.metrics.json").read_text())
+                self.assertTrue(recs[kind])
+            self.assertTrue(all(r["ignored"] and not r["in_test"] for r in recs["SNV"]))
+            self.assertTrue(all(not r["ignored"] and r["in_test"] and r["test_label"] == 1 for r in recs["INDEL"]))
+            self.assertEqual(reps["SNV"]["ignored_reasons"], ["residual_partial_somatic_truth", "allele_partial_somatic_truth"])
+            self.assertEqual((reps["INDEL"]["ignored_reasons"], reps["INDEL"]["ignored"]), ([], 0))
+            predict.main(["--checkpoint", str(out / "best.pth"), "--tensors", str(root), "--output", str(tmp / "p2"),
+                          "--kinds", "INDEL", "--num-workers", "0", "--amp", "off",
+                          "--ignore-reasons", "residual_partial_somatic_truth"])   # an explicit list still applies
+            rep = json.loads((tmp / "p2" / "sample.tensors.INDEL.metrics.json").read_text())
+            self.assertEqual(rep["ignored"], len(recs["INDEL"]))
+
 
 class TrainPredictTest(unittest.TestCase):
     """Small end-to-end runs on CPU: train 2 epochs (chr1 left out, validation from node blocks of chr2/chr3),

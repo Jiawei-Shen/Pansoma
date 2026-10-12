@@ -146,6 +146,16 @@ class GraphVcfTest(unittest.TestCase):
         self.assertIn("##contig=<ID=4,length=10>", header)
         self.assertIn("##pansoma_chromosomes=chr1", header)
 
+    def test_excluded_tensors_get_no_record(self):
+        lines = [json.loads(x) for x in gzip.open(self.f.predictions["SNV"], "rt")]
+        lines[0]["excluded"] = True   # 4:6:SNP:A>C, a PASS call otherwise
+        with gzip.open(self.f.predictions["SNV"], "wt") as f:
+            f.write("".join(json.dumps(x) + "\n" for x in lines))
+        stats, out = self.f.graph("SNV")
+        self.assertEqual(sorted(r[2] for r in columns(out)), ["1:4:SNP:A>G", "3:0:SNP:T>G", "7:0:SNP:C>A"])
+        self.assertEqual((stats["excluded"], stats["called"], stats["filters"]),
+                         (1, 2, {"PASS": 1, "LowQual": 1, "LowAF": 1}))
+
     def test_indel_padding_in_node_coordinates(self):
         _, out = self.f.graph("INDEL")
         got = {r[2]: (r[0], r[1], r[3], r[4], "NOPAD" in parse_info(r[7])) for r in columns(out)}
@@ -355,46 +365,92 @@ class VcfevalPartsTest(unittest.TestCase):
 
 class PonFilterTest(unittest.TestCase):
     """scripts/filter_panel_of_normals.py: the SNV rule (gnomAD / CoLoRSdb AF >= 1e-4, dbSNP non-somatic, 1000G) and
-    the INDEL rule (gnomAD / CoLoRSdb AF >= 0.01 only), chosen per record by its kind."""
+    the INDEL rule (gnomAD / CoLoRSdb only: AF >= 0.01 in homopolymers of >= 7 bases, else AF >= 0.001), chosen per
+    record by its kind; the homopolymer from the FASTA of ##reference or --fasta."""
+
+    @staticmethod
+    def reference(tmp):
+        seq = ["G"] * 100                       # 1-based positions below
+        for pos, base in {10: "A", 20: "A", 30: "A", 40: "A", 50: "A", 51: "C", 55: "A", 56: "T", 60: "A", 61: "T",
+                          70: "A", 71: "T", 80: "A", 90: "A"}.items():
+            seq[pos - 1] = base
+        for pos in list(range(41, 49)) + list(range(81, 89)) + list(range(91, 98)):  # T x 8, T x 8, T x 7
+            seq[pos - 1] = "T"
+        fasta = Path(tmp) / "ref.fa"
+        fasta.write_text(">chr1\n" + "".join(seq) + "\n")
+        pysam.faidx(str(fasta))
+        return fasta
 
     def test_rules_by_kind(self):
         with tempfile.TemporaryDirectory() as tmp:
+            fasta = self.reference(tmp)
             contig = ["##contig=<ID=chr1,length=100>"]
             af = '##INFO=<ID=AF,Number=A,Type=Float,Description="AF">'
             sao = '##INFO=<ID=SAO,Number=1,Type=Integer,Description="SAO">'
             lowqual = '##FILTER=<ID=LowQual,Description="LowQual">'
-            calls = write_vcf_gz(Path(tmp) / "calls.vcf.gz", contig + [lowqual], [
-                ("chr1", "10", "snv_af", "A", "C", "30", "PASS", "."),       # gnomAD AF 0.0005: SNV tagged
-                ("chr1", "20", "snv_dbsnp", "A", "C", "30", "PASS", "."),    # dbSNP SAO=0: SNV tagged
-                ("chr1", "30", "snv_1000g", "A", "C", "30", "LowQual", "."), # 1000G: SNV tagged
-                ("chr1", "40", "ins_rare", "A", "AT", "30", "PASS", "."),    # gnomAD AF 0.005: INDEL not tagged
-                ("chr1", "50", "ins_common", "A", "AT", "30", "PASS", "."),  # CoLoRSdb AF 0.01: INDEL tagged
-                ("chr1", "60", "del_dbsnp", "AT", "A", "30", "PASS", "."),   # dbSNP + 1000G: INDEL not tagged
-                ("chr1", "70", "del_gnomad", "AT", "A", "30", "PASS", "."),  # gnomAD AF 0.02 on the other ALT only
-                ("chr1", "80", "mixed", "A", "AT,C", "30", "PASS", ".")])    # an INDEL record: SNV ALT in dbSNP ignored
-            pons = [write_vcf_gz(Path(tmp) / f"{name}.vcf.gz", contig + [info], records) for name, info, records in (
+            records = [
+                ("chr1", "10", "snv_af", "A", "C", "30", "PASS", "."),          # gnomAD AF 0.0005: SNV tagged
+                ("chr1", "20", "snv_dbsnp", "A", "C", "30", "PASS", "."),       # dbSNP SAO=0: SNV tagged
+                ("chr1", "30", "snv_1000g", "A", "C", "30", "LowQual", "."),    # 1000G: SNV tagged
+                ("chr1", "40", "ins_hp_rare", "A", "AT", "30", "PASS", "."),    # HP 8, gnomAD AF 0.005 < 0.01: not tagged
+                ("chr1", "50", "ins_nonhp", "A", "AT", "30", "PASS", "."),      # no HP, CoLoRSdb AF 0.002 >= 0.001: tagged
+                ("chr1", "55", "del_nonhp_low", "AT", "A", "30", "PASS", "."),  # HP 1, gnomAD AF 0.0005 < 0.001: not tagged
+                ("chr1", "60", "del_dbsnp", "AT", "A", "30", "PASS", "."),      # dbSNP + 1000G only: not tagged
+                ("chr1", "70", "del_gnomad", "AT", "A", "30", "PASS", "."),     # AF 0.02 on the other ALT only: not tagged
+                ("chr1", "80", "mixed", "A", "AT,C", "30", "PASS", "."),        # INDEL record, HP 8, AF 0.009; SNV ALT in dbSNP ignored
+                ("chr1", "90", "ins_hp_common", "A", "AT", "30", "PASS", ".")]  # HP 7, CoLoRSdb AF 0.01: tagged
+            calls = write_vcf_gz(Path(tmp) / "calls.vcf.gz", contig + [lowqual, f"##reference=file://{fasta}"], records)
+            bare = write_vcf_gz(Path(tmp) / "bare.vcf.gz", contig + [lowqual], records)   # no ##reference
+            pons = [write_vcf_gz(Path(tmp) / f"{name}.vcf.gz", contig + [info], recs) for name, info, recs in (
                 ("gnomad", af, [("chr1", "10", ".", "A", "C", ".", ".", "AF=0.0005"),
                                 ("chr1", "40", ".", "A", "AT", ".", ".", "AF=0.005"),
-                                ("chr1", "70", ".", "AT", "A,ATT", ".", ".", "AF=0.001,0.02"),
+                                ("chr1", "55", ".", "AT", "A", ".", ".", "AF=0.0005"),
+                                ("chr1", "70", ".", "AT", "A,ATT", ".", ".", "AF=0.0005,0.02"),
                                 ("chr1", "80", ".", "A", "AT", ".", ".", "AF=0.009")]),
                 ("dbsnp", sao, [("chr1", "20", ".", "A", "C", ".", ".", "SAO=0"),
                                 ("chr1", "60", ".", "AT", "A", ".", ".", "SAO=0"),
                                 ("chr1", "80", ".", "A", "C", ".", ".", "SAO=0")]),
                 ("1000g", af, [("chr1", "30", ".", "A", "C", ".", ".", "."),
                                ("chr1", "60", ".", "AT", "A", ".", ".", ".")]),
-                ("colors", af, [("chr1", "50", ".", "A", "AT", ".", ".", "AF=0.01")]))]
-            out = Path(tmp) / "tagged.vcf.gz"
-            result = subprocess.run([sys.executable, str(vcfeval.PON_SCRIPT), str(calls), str(out), "--pon", *map(str, pons)],
-                                    check=True, capture_output=True, text=True)
-            self.assertIn("Input records: 8 (SNV 3, INDEL 5)", result.stdout)
-            self.assertIn("PoN-matched records tagged: 4 (SNV 3, INDEL 1)", result.stdout)
-            tagged = {r[2]: (r[6], parse_info(r[7]).get("PANSOMA_PON")) for r in read_vcf(out)[2]}
-            self.assertEqual(tagged, {"snv_af": ("PanelOfNormals", "PoN1_gnomAD"), "snv_dbsnp": ("PanelOfNormals", "PoN2_dbSNP"),
-                                      "snv_1000g": ("LowQual;PanelOfNormals", "PoN3_1000G"), "ins_rare": ("PASS", None),
-                                      "ins_common": ("PanelOfNormals", "PoN4_CoLoRSdb"), "del_dbsnp": ("PASS", None),
-                                      "del_gnomad": ("PASS", None), "mixed": ("PASS", None)})
-            self.assertEqual(vcfeval.count_pon(out), dict(records=8, tagged=4, tagged_pass=3, PoN1_gnomAD=1, PoN2_dbSNP=1,
-                                                          PoN3_1000G=1, PoN4_CoLoRSdb=1))
+                ("colors", af, [("chr1", "50", ".", "A", "AT", ".", ".", "AF=0.002"),
+                                ("chr1", "90", ".", "A", "AT", ".", ".", "AF=0.01")]))]
+            script = [sys.executable, str(vcfeval.PON_SCRIPT)]
+            expected = {"snv_af": ("PanelOfNormals", "PoN1_gnomAD"), "snv_dbsnp": ("PanelOfNormals", "PoN2_dbSNP"),
+                        "snv_1000g": ("LowQual;PanelOfNormals", "PoN3_1000G"), "ins_hp_rare": ("PASS", None),
+                        "ins_nonhp": ("PanelOfNormals", "PoN4_CoLoRSdb"), "del_nonhp_low": ("PASS", None),
+                        "del_dbsnp": ("PASS", None), "del_gnomad": ("PASS", None), "mixed": ("PASS", None),
+                        "ins_hp_common": ("PanelOfNormals", "PoN4_CoLoRSdb")}
+            for name, source, extra in (("header", calls, []), ("option", bare, ["--fasta", str(fasta)])):
+                out = Path(tmp) / f"tagged_{name}.vcf.gz"
+                result = subprocess.run(script + [str(source), str(out), "--pon", *map(str, pons), *extra],
+                                        check=True, capture_output=True, text=True)
+                self.assertIn("Input records: 10 (SNV 3, INDEL 7)", result.stdout)
+                self.assertIn("PoN-matched records tagged: 5 (SNV 3, INDEL 2)", result.stdout)
+                tagged = {r[2]: (r[6], parse_info(r[7]).get("PANSOMA_PON")) for r in read_vcf(out)[2]}
+                self.assertEqual(tagged, expected)
+                self.assertEqual(vcfeval.count_pon(out), dict(records=10, tagged=5, tagged_pass=4, PoN1_gnomAD=1,
+                                                              PoN2_dbSNP=1, PoN3_1000G=1, PoN4_CoLoRSdb=2))
+            result = subprocess.run(script + [str(bare), str(Path(tmp) / "x.vcf.gz"), "--pon", *map(str, pons)],
+                                    capture_output=True, text=True)   # INDEL records without a FASTA
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("need the reference FASTA", result.stderr + result.stdout)
+
+    def test_homopolymer_run(self):
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("pon_filter", vcfeval.PON_SCRIPT)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        with tempfile.TemporaryDirectory() as tmp:
+            fasta = pysam.FastaFile(str(self.reference(tmp)))
+            run = module.homopolymer_run
+            self.assertEqual(run(fasta, "chr1", 40, "A", "AT"), 8)        # +T before T x 8
+            self.assertEqual(run(fasta, "chr1", 40, "ATTT", "A"), 8)      # -TTT inside it
+            self.assertEqual(run(fasta, "chr1", 41, "T", "TT"), 8)        # not left-aligned: extended both ways
+            self.assertEqual(run(fasta, "chr1", 90, "A", "AT"), 7)
+            self.assertEqual(run(fasta, "chr1", 50, "A", "AT"), 0)        # no T after it
+            self.assertEqual(run(fasta, "chr1", 40, "A", "ATG"), 0)       # two different bases
+            self.assertEqual(module.indel_min_af(fasta, "chr1", 90, "A", "AT"), 0.01)
+            self.assertEqual(module.indel_min_af(fasta, "chr1", 50, "A", "AT"), 0.001)
 
 
 @unittest.skipUnless(RTG, "rtg not found (set $RTG)")

@@ -31,7 +31,7 @@ from . import metrics
 from .env import triton_libcuda
 from .chunks import ChunkLoader, build_cache
 from .data import (CHECKPOINT_PATH_COUNT, CLASSES, KINDS, SCALARS, EpochSampler, TensorDataset, block_split,
-                   common_path_count, load_parts, somatic_truth, validation_truth)
+                   common_path_count, load_parts, read_candidate_ids, somatic_truth, validation_truth)
 
 AF = SCALARS.index("af")
 from .encode import PLANES, compute_stats
@@ -75,6 +75,11 @@ def parse_args(argv=None):
                    help="TSV with columns candidate_id and label (-1/0/1/2): these tensors' training and validation "
                         "labels (validation: -1 outside the confident region), whatever their reason; they are exempt "
                         "from --ignore-reasons")
+    p.add_argument("--exclude-candidates",
+                   help="file of candidate ids (first column; a header line candidate_id is skipped) taken out before "
+                        "the model, as if never built: left out of training and validation (-1, even over "
+                        "--label-overrides); predict leaves them out of the test and graph_vcf out of the calls "
+                        "(predict's default is this file)")
     p.add_argument("--reason-labels", nargs="+", default=[], metavar="REASON=LABEL",
                    help="label for every tensor of a reason inside the confident region (training and validation), "
                         "e.g. off_reference_no_truth_match=0; --label-overrides take precedence")
@@ -339,12 +344,16 @@ def main(argv=None):
         path_count, haplotypes = None, sorted({i.haplotypes for i, _ in everything if i.haplotypes is not None})
         run.log("channel 6 (path count) not read (--drop-planes path_count)")
     overridden = [np.zeros(0, np.int64) for _ in everything]
-    if args.label_overrides or args.reason_labels:
+    if args.label_overrides or args.reason_labels or args.exclude_candidates:
         overrides = {}
         if args.label_overrides:
             with open(args.label_overrides) as f:
                 rows = list(csv.DictReader(f, delimiter="\t"))
             overrides = {r["candidate_id"]: int(r["label"]) for r in rows}
+        if args.exclude_candidates:
+            excluded = read_candidate_ids(args.exclude_candidates)
+            overrides.update(dict.fromkeys(excluded, -1))
+            run.log(f"--exclude-candidates {args.exclude_candidates}: {len(excluded):,} candidate ids")
         reason_labels = {r.split("=")[0]: int(r.split("=")[1]) for r in args.reason_labels}
         overridden, counts = relabel(everything, overrides, reason_labels)
         for (index, _), (n_reason, n_over, by) in zip(everything, counts):
