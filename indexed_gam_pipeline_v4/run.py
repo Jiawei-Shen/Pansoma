@@ -34,6 +34,14 @@ def batch_size(value):
     return "auto" if value == "auto" else positive(value)
 
 
+class OneOrMore(argparse.Action):
+    """nargs='+' that stores one value as itself and several as a list: --gam/--index of one GAM record exactly
+    what they did before several GAMs were accepted (manifests, config.json)."""
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        setattr(namespace, self.dest, values[0] if len(values) == 1 else list(values))
+
+
 def fraction(value):
     number = float(value)
     if not 0 <= number <= 1:
@@ -93,13 +101,15 @@ def make_parser():
     commands = parser.add_subparsers(dest="command", required=True)
     for name in ("discover", "build"):
         sub = commands.add_parser(name)
-        sub.add_argument("--gam", required=True, help="sorted BGZF GAM")
+        sub.add_argument("--gam", required=True, nargs="+", action=OneOrMore,
+                         help="sorted BGZF GAM, or several (e.g. one per library) read as one")
         sub.add_argument("--output", required=True, help="new or empty directory")
         if name == "discover":
             sub.add_argument("--min-mapq", type=int, default=5, help="exclusive MAPQ threshold")
             sub.add_argument("--node-alt", type=fraction, default=0.05, help="select nodes with imperfect fraction > this")
             sub.add_argument("--processes", type=positive, help="parallel scan workers (default: $SLURM_CPUS_PER_TASK, else all CPUs)")
-            sub.add_argument("--index", help="GAI of the GAM, to cut it into segments (default: GAM path + .gai)")
+            sub.add_argument("--index", nargs="+", action=OneOrMore,
+                             help="GAI of each GAM, to cut it into segments (default: GAM path + .gai)")
             sub.add_argument("--graph-index", required=True,
                              help="unified graph index SQLite: node sequences for the builder's left-normalization, "
                                   "so each indel counts on the node the builder sees it on")
@@ -107,7 +117,7 @@ def make_parser():
                              help="indels longer than this are not moved (the builder's --max-indel-len)")
         else:
             sub.add_argument("--nodes", required=True, help="target node IDs, one per line")
-            sub.add_argument("--index", help="default: GAM path + .gai")
+            sub.add_argument("--index", nargs="+", action=OneOrMore, help="one per GAM; default: GAM path + .gai")
             add_build_arguments(sub)
     return parser
 

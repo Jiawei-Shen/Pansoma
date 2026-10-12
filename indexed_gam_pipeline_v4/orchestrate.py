@@ -41,6 +41,7 @@ import numpy as np
 from .build import KIND, SITE_UNIT
 from .candidates import TENSOR_FORMAT, TENSOR_STORAGE
 from .common import read_json, sha256_file, stamp, write_json
+from .gam_reader import gam_pairs
 from .graph_index import GraphIndex
 from .tensor_postprocessing.chr_index import select_nodes
 
@@ -169,6 +170,26 @@ def record_index_status(gam, index):
         return dict(stamp(path), sha256=stream.read(32).hex())
 
 
+def gam_inputs(gams):
+    """config inputs of the GAMs: gam / index, then gam_2 / index_2, ... for further GAMs (several GAMs read as
+    one, gam_reader.MultiGam); config_gams reads them back in that order."""
+    inputs = {}
+    for k, (gam, index) in enumerate(gams, 1):
+        suffix = "" if k == 1 else f"_{k}"
+        inputs["gam" + suffix], inputs["index" + suffix] = stamp(gam), stamp(index)
+    return inputs
+
+
+def config_gams(config):
+    """[(GAM path, GAI path)] of a run root's config, in the order given to prepare."""
+    inputs, gams, k = config["inputs"], [], 1
+    while ("gam" if k == 1 else f"gam_{k}") in inputs:
+        suffix = "" if k == 1 else f"_{k}"
+        gams.append((inputs["gam" + suffix]["path"], inputs["index" + suffix]["path"]))
+        k += 1
+    return gams
+
+
 def read_config(root):
     """config.json of a run root prepared by this package; roots of any other package are refused."""
     config = read_json(Path(root) / "config.json")
@@ -181,8 +202,9 @@ def read_config(root):
 def prepare(args):
     postprocess = postprocess_options(args)
     native_decoder = native_decoder_status(args.decoder)
-    index = args.index or str(args.gam) + ".gai"
-    record_index = record_index_status(args.gam, index)
+    gams = [(gam, index or str(gam) + ".gai") for gam, index in gam_pairs(args.gam, args.index)]
+    record_index = [record_index_status(gam, index) for gam, index in gams]
+    record_index = record_index[0] if len(gams) == 1 else record_index
     root = Path(args.root).resolve()
     root.mkdir(parents=True, exist_ok=False)
     if not 1 <= args.processes <= args.tasks:
@@ -220,7 +242,7 @@ def prepare(args):
         package=PACKAGE,
         python=sys.executable,
         tensors=str(tensors),
-        inputs=dict(gam=stamp(args.gam), index=stamp(index),
+        inputs=dict(gam_inputs(gams),
                     graph_index=dict(stamp(args.graph_index), metadata=graph_metadata),
                     nodes=dict(stamp(args.nodes), sha256=sha256_file(args.nodes), count=int(selection["nodes_in"])),
                     **({"chr_index": stamp(args.chr_index)} if args.chr_index else {}),
@@ -274,8 +296,9 @@ def task_outputs(root, config, index):
 def build_command(root, config, index):
     b = config["builder"]
     outputs = task_outputs(root, config, index)
+    gams = config_gams(config)
     command = [config["python"], "-m", f"{PACKAGE}.run", "build",
-               "--gam", config["inputs"]["gam"]["path"], "--index", config["inputs"]["index"]["path"],
+               "--gam", *(gam for gam, _ in gams), "--index", *(gai for _, gai in gams),
                "--graph-index", config["inputs"]["graph_index"]["path"],
                "--nodes", config["parts"][index]["nodes_file"],
                "--output", str(outputs["shared"])]
@@ -663,14 +686,15 @@ def catalog_outputs(root, config):
 
 
 def make_parser():
-    from .run import add_build_arguments
+    from .run import OneOrMore, add_build_arguments
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     commands = parser.add_subparsers(dest="action", required=True)
     p = commands.add_parser("prepare", help="freeze source, partition nodes, write config.json and run.sh")
     p.add_argument("--root", required=True, help="new run directory (config, frozen source, partitions, logs, status)")
     p.add_argument("--tensors", help="tensor output directory (default: <root>/tensors)")
-    p.add_argument("--gam", required=True)
-    p.add_argument("--index", help="default: GAM path + .gai")
+    p.add_argument("--gam", required=True, nargs="+", action=OneOrMore,
+                   help="sorted GAM, or several (e.g. one per library) read as one by every task")
+    p.add_argument("--index", nargs="+", action=OneOrMore, help="one per GAM; default: GAM path + .gai")
     p.add_argument("--nodes", required=True, help="sorted target node list, e.g. discovery output")
     p.add_argument("--node-stats", help="discovery node_stats.json: predict task costs and run expensive tasks first")
     p.add_argument("--tasks", type=int, default=512)

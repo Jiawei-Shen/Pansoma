@@ -10,6 +10,9 @@ The records are found one of two ways, with the same result:
 * record path, when the GAM has a per-record index (<gam>.gri, gam_record_index; built for long reads): only
   the records of those groups whose node intervals hold a requested node and whose MAPQ passes are read
   (coalesced preads of their BGZF blocks) and indexed by the same `_postings`.
+
+Several GAMs (e.g. one sorted GAM per library) are read as one by MultiGam (open_gams): each query joins the
+records of every GAM, and the read cap is applied once over all of them.
 """
 import bisect
 from collections import OrderedDict, defaultdict
@@ -475,6 +478,115 @@ def record_key(alignment):
 NO_NODES = frozenset()
 
 
+def select_capped(raws, groups, counts, cap, metrics):
+    """fetch_capped's selection half over the records IndexedGam._collect gathered (of one GAM, or of several
+    one after another): a node visited by more than `cap` records keeps the `cap` with the smallest record_key,
+    ties in the order of `raws`. Returns [(alignment, left_out)] in that order (see IndexedGam.fetch_capped)."""
+    capped = sorted(n for n, c in counts.items() if cap and c > cap)
+    left_out = defaultdict(set)
+    visits = None
+    if capped:
+        members, visits, capped_set = defaultdict(list), np.zeros(len(raws), dtype=np.int64), set(capped)
+        for base, local, hits in groups:
+            for n, posting in hits:
+                at = base + np.searchsorted(local, np.asarray(posting, dtype=np.int64))
+                visits[at] += 1  # visited nodes of `nodes` per record
+                if n in capped_set:
+                    members[n].append(at)
+        keys, keyed = np.zeros(len(raws), dtype=np.uint64), np.zeros(len(raws), dtype=bool)
+        for n in capped:
+            at = np.concatenate(members[n])
+            todo = at[~keyed[at]]
+            for i in todo.tolist():
+                keys[i] = record_key(decode(raws[i]))
+            keyed[todo] = True
+            metrics["decoded_alignments"] += len(todo)
+            for i in at[np.lexsort((at, keys[at]))[cap:]].tolist():
+                left_out[i].add(n)
+    metrics["sampled"] = {n: counts[n] for n in capped}
+    fetched = []
+    for i, raw in enumerate(raws):
+        out = left_out.get(i)
+        if out and len(out) == visits[i]:
+            continue  # every visited node of the batch leaves it out
+        fetched.append((decode(raw), frozenset(out) if out else NO_NODES))
+    metrics["decoded_alignments"] += len(fetched)
+    metrics["returned_alignments"] += len(fetched)
+    return fetched
+
+
+def gam_pairs(gam, index=None):
+    """[(GAM, GAI or None)] of one GAM path or a list of them; `index` is None (each GAM path + .gai), one path
+    (one GAM) or a list with one entry per GAM. The same GAM twice is an error (its records would count twice)."""
+    gams = [gam] if isinstance(gam, (str, os.PathLike)) else list(gam)
+    indexes = ([None] * len(gams) if index is None
+               else [index] if isinstance(index, (str, os.PathLike)) else list(index))
+    if not gams or len(indexes) != len(gams):
+        raise ValueError(f"{len(gams)} GAM(s) but {len(indexes)} GAI(s): give no --index or one per GAM")
+    resolved = [Path(g).resolve() for g in gams]
+    if len(set(resolved)) != len(resolved):
+        raise ValueError("The same GAM is given twice")
+    return list(zip(gams, indexes))
+
+
+def open_gams(gam, index=None, **options):
+    """IndexedGam of one GAM, MultiGam of several (gam_pairs); `options` go to every IndexedGam."""
+    pairs = gam_pairs(gam, index)
+    return IndexedGam(*pairs[0], **options) if len(pairs) == 1 else MultiGam(pairs, **options)
+
+
+class MultiGam:
+    """Several sorted GAMs (e.g. one per sequencing library) read as one: every query asks each GAM in the order
+    given and joins the records, so fetch yields the records of the first GAM, then of the second, ...; and
+    fetch_capped applies the read cap once over all of them (select_capped, ties in that order), so a node's
+    sample is the one a single GAM holding the same records would give. Each GAM keeps its own GAI, record
+    index (<gam>.gri) and group cache (cache_bytes split evenly)."""
+
+    def __init__(self, pairs, cache_bytes=64 * 1024 * 1024, min_mapq=None):
+        share = max(1, cache_bytes // len(pairs))
+        self.readers = [IndexedGam(gam, index, cache_bytes=share, min_mapq=min_mapq) for gam, index in pairs]
+        versions = {r.version for r in self.readers}
+        if len(versions) != 1:
+            raise ValueError(f"GAI format numbers differ between the GAMs: {sorted(versions)}")
+        self.version = versions.pop()
+
+    @property
+    def cache_stats(self):
+        return dict(gams=[dict(r.cache_stats, gam=str(r.gam)) for r in self.readers])
+
+    def open_record_index(self):
+        for reader in self.readers:
+            reader.open_record_index()
+
+    def ranges(self, nodes):
+        """Each GAM's merged runs, one GAM after the other (offsets of different files: only their sizes add up,
+        as build.fetch_estimate uses them)."""
+        return [run for reader in self.readers for run in reader.ranges(nodes)]
+
+    @staticmethod
+    def _add(metrics, part):
+        for key, value in part.items():
+            metrics[key] = metrics.get(key, 0) + value
+
+    def fetch(self, nodes, metrics=None):
+        metrics = {} if metrics is None else metrics
+        metrics.update(runs=0, groups=0, decoded_alignments=0, returned_alignments=0)
+        for reader in self.readers:
+            part = {}
+            yield from reader.fetch(nodes, part)
+            self._add(metrics, part)
+
+    def fetch_capped(self, nodes, cap, metrics=None):
+        metrics = {} if metrics is None else metrics
+        metrics.update(runs=0, groups=0, decoded_alignments=0, returned_alignments=0)
+        raws, groups, counts = [], [], defaultdict(int)
+        for reader in self.readers:
+            part = {}
+            reader._collect(nodes, part, raws, groups, counts)
+            self._add(metrics, part)
+        return select_capped(raws, groups, counts, cap, metrics)
+
+
 class IndexedGam:
     """Fetch complete alignments touching a node set: the GAI walk with a bounded LRU group cache, or the
     record path when the GAM has a usable record index (gam_record_index.open_for; PANSOMA_GAM_RECORD_INDEX,
@@ -632,45 +744,21 @@ class IndexedGam:
         metrics gets sampled = {node: records} of the capped nodes. cap=0: every record, nothing left out.
         """
         metrics = {} if metrics is None else metrics
-        wanted, ranges = self._query(nodes, metrics)
         raws, groups, counts = [], [], defaultdict(int)
+        self._collect(nodes, metrics, raws, groups, counts)
+        return select_capped(raws, groups, counts, cap, metrics)
+
+    def _collect(self, nodes, metrics, raws, groups, counts):
+        """fetch_capped's reading half: appends the raw records visiting `nodes` to `raws` (file order), one
+        (base, local record indices, [(node, posting)]) per group to `groups`, and the records per node to
+        `counts`; select_capped applies the cap. MultiGam collects several GAMs into the same lists."""
+        wanted, ranges = self._query(nodes, metrics)
         for messages, postings, hits in self._group_hits(wanted, ranges, metrics):
             local = np.unique(np.fromiter((i for n in hits for i in postings[n]), dtype=np.int64))
             groups.append((len(raws), local, [(n, postings[n]) for n in hits]))
             raws.extend(messages[i] for i in local.tolist())
             for n in hits:
                 counts[n] += len(postings[n])
-        capped = sorted(n for n, c in counts.items() if cap and c > cap)
-        left_out = defaultdict(set)
-        visits = None
-        if capped:
-            members, visits, capped_set = defaultdict(list), np.zeros(len(raws), dtype=np.int64), set(capped)
-            for base, local, hits in groups:
-                for n, posting in hits:
-                    at = base + np.searchsorted(local, np.asarray(posting, dtype=np.int64))
-                    visits[at] += 1  # visited nodes of `nodes` per record
-                    if n in capped_set:
-                        members[n].append(at)
-            keys, keyed = np.zeros(len(raws), dtype=np.uint64), np.zeros(len(raws), dtype=bool)
-            for n in capped:
-                at = np.concatenate(members[n])
-                todo = at[~keyed[at]]
-                for i in todo.tolist():
-                    keys[i] = record_key(decode(raws[i]))
-                keyed[todo] = True
-                metrics["decoded_alignments"] += len(todo)
-                for i in at[np.lexsort((at, keys[at]))[cap:]].tolist():
-                    left_out[i].add(n)
-        metrics["sampled"] = {n: counts[n] for n in capped}
-        fetched = []
-        for i, raw in enumerate(raws):
-            out = left_out.get(i)
-            if out and len(out) == visits[i]:
-                continue  # every visited node of the batch leaves it out
-            fetched.append((decode(raw), frozenset(out) if out else NO_NODES))
-        metrics["decoded_alignments"] += len(fetched)
-        metrics["returned_alignments"] += len(fetched)
-        return fetched
 
     def _group_hits(self, wanted, ranges, metrics):
         """(records, postings, hits) of every GAM group in `ranges` that holds a record visiting a node of

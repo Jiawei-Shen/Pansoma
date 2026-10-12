@@ -52,7 +52,7 @@ from .candidates import (TENSOR_FORMAT, TENSOR_STORAGE, ROW_SELECTION, WINDOW_EN
     OPS, STRAND, NodeReads, decode_alignment, alt_support_bounds, exact_coverage, make_site_tensor)
 from .common import batches, load_nodes, new_output, write_json
 from .tensor_postprocessing.chr_index import select_nodes
-from .gam_reader import IndexedGam
+from .gam_reader import IndexedGam, MultiGam, gam_pairs
 from .graph_index import GraphIndex
 from .native import select_decoder
 
@@ -278,7 +278,11 @@ def build(args):
     nodes = nodes.tolist()
     if not nodes:
         raise ValueError(f"No target nodes left after --chromosomes {args.chromosomes}")
-    reader = IndexedGam(args.gam, args.index, cache_bytes=args.gam_cache_mb * 1024 * 1024, min_mapq=args.min_mapq)
+    # --gam may name several GAMs (one per library): MultiGam reads them as one, the read cap over all of them.
+    pairs = gam_pairs(args.gam, args.index)
+    reader = (IndexedGam(*pairs[0], cache_bytes=args.gam_cache_mb * 1024 * 1024, min_mapq=args.min_mapq)
+              if len(pairs) == 1 else
+              MultiGam(pairs, cache_bytes=args.gam_cache_mb * 1024 * 1024, min_mapq=args.min_mapq))
     parameters = recorded(args, PARAMETERS)
     typed = {}
     with GraphIndex(args.graph_index) as graph:

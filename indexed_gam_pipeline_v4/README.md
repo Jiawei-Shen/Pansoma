@@ -180,8 +180,8 @@ All entry points are `python -m indexed_gam_pipeline_v4.<module>`, run from the 
 ### `run discover`
 
 ```
---gam GAM --output DIR --graph-index SQLITE     (required; DIR new or empty)
---index GAI            default GAM.gai; used to cut the GAM into segments
+--gam GAM --output DIR --graph-index SQLITE     (required; DIR new or empty; --gam may name several GAMs)
+--index GAI            default GAM.gai; used to cut the GAM into segments (several GAMs: one per GAM, or none)
 --processes N          scan workers (default $SLURM_CPUS_PER_TASK, else all CPUs)
 --min-mapq 5           exclusive: mappings with MAPQ <= 5 are not counted
 --node-alt 0.05        select a node when imperfect / (perfect + imperfect) > this (and imperfect >= 1)
@@ -206,17 +206,21 @@ Writes `target_nodes.txt` (sorted), `node_stats.json` (per node `perfect`, `not_
   contiguous segments; each worker reads its segment once with pysam and counts in C++ (node
   sequences per group from the graph index); counts are merged in order of first appearance, so
   the outputs do not depend on `--processes` (tests/test_discovery.py). Requires the native module.
+* **Several GAMs.** `--gam A.sorted.gam B.sorted.gam ...` (e.g. one sorted GAM per sequencing library,
+  when one GAM of all reads is too large to sort on a node's /tmp) cuts each GAM into segments the same way
+  and adds up the counts: the target list equals that of one GAM holding the same records
+  (tests/test_multi_gam.py); `discovery_report.json` `gam` is then the list.
 
 ### `run build`
 
 ```
 required:
-  --gam GAM --nodes NODES --graph-index SQLITE
+  --gam GAM [GAM ...] --nodes NODES --graph-index SQLITE     several GAMs are read as one (below)
   --haplotypes H             haplotype paths of that graph, references included (HPRC v1.1 d9 90, v2.1 d46 464,
                              GRCh38-only vg autoindex 17): channel 6 codes path counts relative to it (section 8)
   --output SHARED_DIR --snv-output DIR --indel-output DIR      new or empty, distinct, non-nested directories
   --snv-min-af F --indel-min-af F                              AF thresholds of the two outputs
-  --index GAI                default GAM.gai
+  --index GAI [GAI ...]      default GAM.gai (several GAMs: one per GAM, or none)
 
 target nodes:
   --chromosomes all          all | autosome | chr1,chr2,... (chromosome blocks of the node IDs)
@@ -251,6 +255,14 @@ tensor / output:
 
 `--min-allele-bq` is a float option with the int default 10: a standalone build records
 `"min_allele_bq": 10`, an orchestrated task `10.0`.
+
+**Several GAMs.** `--gam A.sorted.gam B.sorted.gam ...` (each sorted, with its own GAI and optional .gri)
+reads them as one (gam_reader.MultiGam): every fetch joins the records of each GAM in the order given, and
+the read cap is applied once over all of them, so the tensors equal those of one GAM holding the same
+records (tests/test_multi_gam.py; only file-order bookkeeping differs: the audit `record_index` and the
+`--debug-rows` `selection_audit` order). With one GAM the manifests record `gam`/`index` as a path, with
+several as lists; `gam_group_cache` then holds one entry per GAM. Use it when one GAM of all reads is too
+large to sort (gamsort needs about 2x the GAM on a node's /tmp), e.g. one GAM per sequencing library.
 
 **`--batch-nodes auto`.** At each position the builder prices the next 512, 1024 and 2048 target
 nodes by the compressed GAM bytes their fetch reads (from the GAI alone) and takes a larger batch
@@ -400,7 +412,9 @@ stamps, the structure, the GAI map against the GAI, `--sample` random records re
 prepare
   --root DIR                 new run directory (config, frozen source, partitions, logs, status)
   --tensors DIR              tensor output directory, new or empty (default <root>/tensors)
-  --gam GAM [--index GAI]  --nodes target_nodes.txt  --graph-index SQLITE     (required, except --index)
+  --gam GAM [GAM ...] [--index GAI [GAI ...]]  --nodes target_nodes.txt  --graph-index SQLITE
+                             (required, except --index; several GAMs: config.json inputs gam/index, gam_2/index_2,
+                             ..., every task reads them as one)
   --node-stats JSON          discovery node_stats.json: task costs (expensive tasks first)
   --tasks 512                contiguous near-equal node lists; use ~15,500 target nodes per task
   --processes 32             tasks at once (= builder processes; 1 <= processes <= tasks); the job needs as many CPUs

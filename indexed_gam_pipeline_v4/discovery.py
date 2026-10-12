@@ -1,4 +1,5 @@
-"""Discovery: select target nodes from one full scan of a sorted GAM.
+"""Discovery: select target nodes from one full scan of a sorted GAM (or of several read as one, e.g. one GAM
+per library: their counts add up).
 
 A node is selected when more than `node_alt` of its MAPQ-passing mappings carry an edit
 (node_stats.json counts `perfect` / `not_perfect` per node). Each record is first decoded and
@@ -9,7 +10,8 @@ report's `normalization_fallbacks`).
 The native module (native.py compile; required) scans the GAM in parallel: the file is cut at
 group starts taken from the GAI into contiguous segments, every record is read exactly once by
 one worker, and the per-node counts are merged in order of first appearance, so node_stats.json
-and target_nodes.txt do not depend on the number of processes.
+and target_nodes.txt do not depend on the number of processes. Several GAMs are cut one after the other (in the
+order given) and merged the same way.
 """
 from concurrent.futures import ProcessPoolExecutor
 import json
@@ -22,7 +24,7 @@ import numpy as np
 import pysam
 
 from .common import new_output, write_json
-from .gam_reader import IndexedGam, group
+from .gam_reader import IndexedGam, gam_pairs, group
 
 SEGMENTS_PER_PROCESS = 4
 CHUNK = 1_000_000
@@ -97,8 +99,10 @@ def merge(results):
 
 
 def native_counts(gam, index, processes, graph_index, min_mapq=5, max_indel=50):
-    jobs = [(str(gam), segment, min_mapq, max_indel, graph_index)
-            for segment in segments(gam, index, max(1, processes) * SEGMENTS_PER_PROCESS)]
+    """Counts of one GAM or several (gam_reader.gam_pairs): each is cut into segments, all in one pool."""
+    jobs = [(str(path), segment, min_mapq, max_indel, graph_index)
+            for path, gai in gam_pairs(gam, index)
+            for segment in segments(path, gai, max(1, processes) * SEGMENTS_PER_PROCESS)]
     if processes <= 1:
         results = [_scan_segment(job) for job in jobs]
     else:
@@ -149,7 +153,8 @@ def discover(args):
     selected = np.sort(nodes[chosen])
     (out / "target_nodes.txt").write_text("".join(f"{n}\n" for n in selected.tolist()))
     write_node_stats(out / "node_stats.json", nodes, perfect, not_perfect, max_len)
-    report = dict(gam=str(Path(args.gam).resolve()), alignments_scanned=counters["alignments"],
+    gams = [str(Path(path).resolve()) for path, _ in gam_pairs(args.gam, getattr(args, "index", None))]
+    report = dict(gam=gams[0] if len(gams) == 1 else gams, alignments_scanned=counters["alignments"],
                   nodes_observed=int(len(nodes)), nodes_selected=int(len(selected)), min_mapq=args.min_mapq,
                   node_alt=args.node_alt, rule="normalized", processes=processes, segments=counters["segments"],
                   alignments_passing_mapq=counters["used"], max_indel_len=max_indel,
