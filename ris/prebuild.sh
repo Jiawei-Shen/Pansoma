@@ -10,4 +10,4 @@ cd "$REPO/machine_learning"
 time python -u -m pansoma_net_v2.chunks --tensors "$PANSOMA_DATA/pansoma_v2_tensors/$SET/tensors" --kinds "$KIND" \
     --index-cache "$PANSOMA_RUNS/index_cache" --cache "$PANSOMA_RUNS/index_cache/chunks" \
     --threads "${LSB_DJOB_NUMPROC:-8}" "$@"
-du -sh "$PANSOMA_RUNS/index_cache/chunks"
+du -sh "$PANSOMA_RUNS/index_cache/chunks" 2>/dev/null || true  # other builds may be writing temporaries there
