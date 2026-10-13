@@ -96,6 +96,10 @@ threshold). In the GIAB benchmark BED after the PoN of each kind:
 | INDEL PacBio | 0.040 | 11,759 (2,075) | 150 / 2,630 | 0.054 / 0.256 / **0.089** | 0.260 (0.259) | 0.082 | 0.097 (0.231) |
 | INDEL ONT | 0.018 | 41,052 (7,288) | 134 / 17,268 | 0.008 / 0.228 / **0.015** | 0.140 (0.168) | 0.015 | 0.016 (0.147) |
 
+**INDELs are compared by the chr1 best F1 column** (0.264 / 0.260 / 0.140 for Illumina / PacBio / ONT): the PASS
+threshold, the validation recall-0.9 point, lands far below the best point on the long reads (PacBio 0.089 vs 0.260,
+ONT 0.015 vs 0.140). The best point is chosen on chr1: an upper bound for a threshold rule, not a held-out result.
+
 Truth on chr1: 697 SNP / 587 INDEL records in the BED (702 / 635 without it). "PASS evaluated" is before the PoN;
 unplaced = PASS calls without a GRCh38 position (not scored by rtg; for SNV mostly the off-reference rescue).
 

@@ -1,0 +1,242 @@
+{
+ "COLO829T_Illumina": {
+  "raw": {
+   "somatic_n": 988,
+   "somatic_median": 0.6466026306152344,
+   "germline_median": 0.27692413330078125,
+   "auc": 0.43592723412139783
+  },
+  "read_centered": {
+   "somatic_n": 988,
+   "somatic_median": 0.5901931524276733,
+   "germline_median": 0.2522321343421936,
+   "auc": 0.4339527246473729
+  },
+  "read_rank": {
+   "somatic_n": 988,
+   "somatic_median": 0.1532609760761261,
+   "germline_median": 0.05123665928840637,
+   "auc": 0.4163794039787284
+  }
+ },
+ "COLO829T_Illumina_P75": {
+  "raw": {
+   "somatic_n": 1031,
+   "somatic_median": -0.07692337036132812,
+   "germline_median": 0.2311687469482422,
+   "auc": 0.566735088695167
+  },
+  "read_centered": {
+   "somatic_n": 1031,
+   "somatic_median": 0.5701754093170166,
+   "germline_median": 0.19863945245742798,
+   "auc": 0.42532738060693326
+  },
+  "read_rank": {
+   "somatic_n": 1031,
+   "somatic_median": 0.13751724362373352,
+   "germline_median": 0.04033750295639038,
+   "auc": 0.4076675131871382
+  }
+ },
+ "COLO829T_Illumina_P50": {
+  "raw": {
+   "somatic_n": 1005,
+   "somatic_median": -0.4952964782714844,
+   "germline_median": 0.20588302612304688,
+   "auc": 0.6492855417293747
+  },
+  "read_centered": {
+   "somatic_n": 1005,
+   "somatic_median": 0.5919473171234131,
+   "germline_median": 0.1707446575164795,
+   "auc": 0.41909243367959637
+  },
+  "read_rank": {
+   "somatic_n": 1005,
+   "somatic_median": 0.13357210159301758,
+   "germline_median": 0.03118869662284851,
+   "auc": 0.396418630682918
+  }
+ },
+ "COLO829T_Illumina_P25": {
+  "raw": {
+   "somatic_n": 743,
+   "somatic_median": -0.8435878753662109,
+   "germline_median": 0.18927574157714844,
+   "auc": 0.7059499550648212
+  },
+  "read_centered": {
+   "somatic_n": 743,
+   "somatic_median": 0.5547618865966797,
+   "germline_median": 0.15010446310043335,
+   "auc": 0.41868487909628443
+  },
+  "read_rank": {
+   "somatic_n": 743,
+   "somatic_median": 0.13208937644958496,
+   "germline_median": 0.029668375849723816,
+   "auc": 0.38712628729565834
+  }
+ },
+ "COLO829T_fiberseq": {
+  "raw": {
+   "somatic_n": 1849,
+   "somatic_median": 0.7724533081054688,
+   "germline_median": 0.4354114532470703,
+   "auc": 0.4555706341114875
+  },
+  "read_centered": {
+   "somatic_n": 1849,
+   "somatic_median": 0.7503607273101807,
+   "germline_median": 0.40499842166900635,
+   "auc": 0.4530295612589359
+  },
+  "read_rank": {
+   "somatic_n": 1849,
+   "somatic_median": 0.03089842200279236,
+   "germline_median": 0.01612497866153717,
+   "auc": 0.4394068177918293
+  }
+ },
+ "COLO829T_fiberseq_P75": {
+  "raw": {
+   "somatic_n": 2044,
+   "somatic_median": 0.7246322631835938,
+   "germline_median": 0.376068115234375,
+   "auc": 0.458622841693334
+  },
+  "read_centered": {
+   "somatic_n": 2044,
+   "somatic_median": 0.7487256526947021,
+   "germline_median": 0.3494753837585449,
+   "auc": 0.455166328594882
+  },
+  "read_rank": {
+   "somatic_n": 2044,
+   "somatic_median": 0.028551459312438965,
+   "germline_median": 0.013185948133468628,
+   "auc": 0.4423244230795633
+  }
+ },
+ "COLO829T_fiberseq_P50": {
+  "raw": {
+   "somatic_n": 1890,
+   "somatic_median": 0.77020263671875,
+   "germline_median": 0.3707313537597656,
+   "auc": 0.45334892774328894
+  },
+  "read_centered": {
+   "somatic_n": 1890,
+   "somatic_median": 0.7928739786148071,
+   "germline_median": 0.35391807556152344,
+   "auc": 0.45232587365205973
+  },
+  "read_rank": {
+   "somatic_n": 1890,
+   "somatic_median": 0.031079545617103577,
+   "germline_median": 0.012815654277801514,
+   "auc": 0.43700441287955355
+  }
+ },
+ "COLO829T_fiberseq_P25": {
+  "raw": {
+   "somatic_n": 1442,
+   "somatic_median": 0.9004631042480469,
+   "germline_median": 0.33193206787109375,
+   "auc": 0.439436642381413
+  },
+  "read_centered": {
+   "somatic_n": 1442,
+   "somatic_median": 0.9094251394271851,
+   "germline_median": 0.3136062026023865,
+   "auc": 0.4393265335808999
+  },
+  "read_rank": {
+   "somatic_n": 1442,
+   "somatic_median": 0.03292857110500336,
+   "germline_median": 0.012026548385620117,
+   "auc": 0.43061845770378737
+  }
+ },
+ "COLO829T_ONT": {
+  "raw": {
+   "somatic_n": 1434,
+   "somatic_median": 1.479288101196289,
+   "germline_median": 1.3202705383300781,
+   "auc": 0.49342453999514907
+  },
+  "read_centered": {
+   "somatic_n": 1434,
+   "somatic_median": 0.571707546710968,
+   "germline_median": 0.46524935960769653,
+   "auc": 0.48836014022784896
+  },
+  "read_rank": {
+   "somatic_n": 1434,
+   "somatic_median": 0.01992596685886383,
+   "germline_median": 0.010553047060966492,
+   "auc": 0.4894469952144947
+  }
+ },
+ "COLO829T_ONT_P75": {
+  "raw": {
+   "somatic_n": 1409,
+   "somatic_median": -0.30296897888183594,
+   "germline_median": 1.286529541015625,
+   "auc": 0.6101960962772015
+  },
+  "read_centered": {
+   "somatic_n": 1409,
+   "somatic_median": 0.6428570747375488,
+   "germline_median": 0.44452986121177673,
+   "auc": 0.4898690280796246
+  },
+  "read_rank": {
+   "somatic_n": 1409,
+   "somatic_median": 0.01655346155166626,
+   "germline_median": 0.00933748483657837,
+   "auc": 0.4934317915955207
+  }
+ },
+ "COLO829T_ONT_P50": {
+  "raw": {
+   "somatic_n": 1351,
+   "somatic_median": -1.2579689025878906,
+   "germline_median": 1.2185325622558594,
+   "auc": 0.6568355884317812
+  },
+  "read_centered": {
+   "somatic_n": 1351,
+   "somatic_median": 0.5623188018798828,
+   "germline_median": 0.39267241954803467,
+   "auc": 0.4941769051999382
+  },
+  "read_rank": {
+   "somatic_n": 1351,
+   "somatic_median": 0.013028979301452637,
+   "germline_median": 0.007143855094909668,
+   "auc": 0.4941443908343435
+  }
+ },
+ "COLO829T_ONT_P25": {
+  "raw": {
+   "somatic_n": 952,
+   "somatic_median": -2.129436492919922,
+   "germline_median": 1.2100639343261719,
+   "auc": 0.689088089820241
+  },
+  "read_centered": {
+   "somatic_n": 952,
+   "somatic_median": 0.6464430093765259,
+   "germline_median": 0.35132288932800293,
+   "auc": 0.48520910822118973
+  },
+  "read_rank": {
+   "somatic_n": 952,
+   "somatic_median": 0.013653472065925598,
+   "germline_median": 0.006727874279022217,
+   "auc": 0.480830860876088
+  }
+ }
+}

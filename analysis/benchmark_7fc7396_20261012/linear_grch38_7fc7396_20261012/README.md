@@ -73,23 +73,26 @@ at lr 4e-4), so linear vs d46 is the cleanest of the three comparisons.
 
 ## Results (chr1, all 12 runs)
 
-All numbers: `tables.md`. In the BED, PASS at each model's validation recall-0.9 threshold, the chr1 curve's best F1 in
-brackets (a test-set choice, for reference):
+All numbers: `tables.md`. In the BED. SNV rows: PASS F1 at each model's validation recall-0.9 threshold (the chr1
+curve's best F1 in brackets). INDEL rows: the chr1 curve's best F1 after the PoN (PASS F1 in brackets), because the
+recall-0.9 threshold lands far below the best point for INDELs; the best point is chosen on the test chromosome, an
+upper bound for a threshold rule, not a held-out result. The raw and no-BED columns are PASS F1 for SNV and best F1 for
+INDEL:
 
 | sample | platform | kind | after the PoN: linear / d9 / d46 | before the PoN (raw): linear / d9 / d46 | without the BED, after the PoN: linear / d9 / d46 |
 |---|---|---|---|---|---|
 | HG008T | Illumina | SNV | **0.469** (0.544) / 0.585 / 0.570 | 0.009 / 0.188 / 0.295 | 0.197 / 0.577 / 0.561 |
 | HG008T | PacBio | SNV | **0.513** (0.596) / 0.621 / 0.605 | 0.009 / 0.191 / 0.310 | 0.359 / 0.614 / 0.600 |
 | HG008T | ONT | SNV | **0.537** (0.570) / 0.596 / 0.575 | 0.008 / 0.182 / 0.287 | 0.365 / 0.586 / 0.563 |
-| HG008T | Illumina | INDEL | **0.133** (0.199) / 0.241 / 0.244 | 0.021 / 0.101 / 0.119 | 0.127 / 0.233 / 0.235 |
-| HG008T | PacBio | INDEL | **0.125** (0.173) / 0.089 (0.260) / 0.095 (0.269) | 0.024 / 0.041 / 0.046 | 0.121 / 0.082 / 0.056 |
-| HG008T | ONT | INDEL | **0.022** (0.082) / 0.015 (0.140) / 0.015 (0.155) | 0.009 / 0.011 / 0.011 | 0.020 / 0.015 / 0.013 |
+| HG008T | Illumina | INDEL | **0.199** (0.133) / 0.264 (0.241) / 0.249 (0.244) | 0.048 / 0.147 / 0.173 | 0.192 / 0.252 / 0.239 |
+| HG008T | PacBio | INDEL | **0.173** (0.125) / 0.260 (0.089) / 0.269 (0.095) | 0.056 / 0.150 / 0.159 | 0.163 / 0.247 / 0.254 |
+| HG008T | ONT | INDEL | **0.082** (0.022) / 0.140 (0.015) / 0.155 (0.015) | 0.030 / 0.090 / 0.104 | 0.077 / 0.134 / 0.153 |
 | COLO829T | Illumina | SNV | **0.468** (0.554) / 0.778 / 0.783 | 0.073 / 0.571 / 0.685 | 0.468 / 0.778 / 0.783 |
 | COLO829T | fiberseq | SNV | **0.680** (0.682) / 0.781 / 0.779 | 0.075 / 0.555 / 0.683 | 0.680 / 0.781 / 0.779 |
 | COLO829T | ONT | SNV | **0.418** (0.511) / 0.706 / 0.737 | 0.066 / 0.494 / 0.626 | 0.418 / 0.706 / 0.737 |
-| COLO829T | Illumina | INDEL | **0.032** (0.069) / 0.115 / 0.109 | 0.007 / 0.031 / 0.037 | 0.032 / 0.115 / 0.109 |
-| COLO829T | fiberseq | INDEL | **0.040** (0.092) / 0.016 (0.120) / 0.020 (0.129) | 0.005 / 0.010 / 0.010 | 0.040 / 0.016 / 0.020 |
-| COLO829T | ONT | INDEL | **0.004** (0.019) / 0.003 (0.071) / 0.002 (0.085) | 0.002 / 0.002 / 0.002 | 0.004 / 0.003 / 0.002 |
+| COLO829T | Illumina | INDEL | **0.069** (0.032) / 0.195 (0.115) / 0.163 (0.109) | 0.071 / 0.125 / 0.105 | 0.069 / 0.195 / 0.163 |
+| COLO829T | fiberseq | INDEL | **0.092** (0.040) / 0.120 (0.016) / 0.129 (0.020) | 0.027 / 0.069 / 0.081 | 0.092 / 0.120 / 0.129 |
+| COLO829T | ONT | INDEL | **0.019** (0.004) / 0.071 (0.003) / 0.085 (0.002) | 0.018 / 0.051 / 0.056 | 0.019 / 0.071 / 0.085 |
 
 **SNV: the pangenome matters, also after the PoN.** The linear graph is below both HPRC graphs on every SNV set after
 the PoN: HG008T -0.06 to -0.12, COLO829T -0.10 to -0.31 against d9. Without population alleles in the graph every germline
@@ -103,15 +106,16 @@ somatic INDELs that the pangenome absorbs (`analysis/graph_absorbed_somatic_2026
 with a tensor 0.83 / 0.87 / 0.75 on HG008T Illumina / PacBio / ONT against 0.54 / 0.70 / 0.69 (d9) and 0.61 / 0.76 / 0.72
 (d46); the rtg curve ceilings before the PoN 0.80 / 0.84 / 0.54 against 0.40 / 0.47 / 0.42 (d9). Part survives the PoN
 (ceilings after it 0.284 / 0.301 / 0.238 against 0.257 / 0.259 / 0.238; COLO829T fiberseq / ONT 0.298 / 0.282 against
-0.244 / 0.237). The ranking is worse, though: the curves' best F1 after the PoN is below d9 / d46 on every INDEL set
-(HG008T PacBio 0.173 vs 0.260 / 0.269, ONT 0.082 vs 0.140 / 0.155). On the long reads the linear models' PASS F1 is
-nonetheless higher (HG008T PacBio 0.125 vs 0.089, COLO829T fiberseq 0.040 vs 0.016), because their recall-0.9
-threshold lands at fewer false calls (PacBio 1,703 vs 2,630 at about the same 150 true calls), not because they
-separate somatic from germline better; on Illumina linear is lower at PASS too (0.133 vs 0.241, 1,575 vs 434 false
-calls).
+0.244 / 0.237). Compared by the best point of the chr1 curve after the PoN, linear is below both HPRC graphs on every
+INDEL set: HG008T 0.199 / 0.173 / 0.082 against 0.264 / 0.260 / 0.140 (d9) and 0.249 / 0.269 / 0.155 (d46) on Illumina /
+PacBio / ONT; COLO829T 0.069 / 0.092 / 0.019 against 0.195 / 0.120 / 0.071 (d9) and 0.163 / 0.129 / 0.085 (d46). At its
+best point linear has 1.6-2.9x d9's false calls on HG008T (1.9-8.9x on COLO829T) for no more true calls (HG008T PacBio
+97 TP / 437 FP against 120 / 217 on d9; ONT 57 / 747 against 64 / 262). Only at the PASS threshold does linear score higher on the long reads (HG008T PacBio
+0.125 vs 0.089), because its recall-0.9 threshold happens to land at fewer false calls than d9's (1,703 vs 2,630 at
+about the same 150 true calls), not because it separates somatic from germline better.
 
-**So**: linear < d9 = d46 for SNV, after the PoN and before it; for INDEL linear gives more candidates and a higher
-ceiling but a worse ranking, and the PASS differences on the long reads come from the threshold. Training: the linear
+**So**: linear < d9 = d46 for SNV (PASS F1) and for INDEL (best F1), after the PoN; before it linear << d9 < d46. For
+INDEL the linear graph gives more candidates and a slightly higher ceiling after the PoN, but ranks them worse. Training: the linear
 SNV sets are 2.9-4.6 M training tensors (HG008T 7.4 k somatic), 76-266 min on 4 H100s; validation somatic AP 0.011-0.012
 on HG008T (0.17-0.26 COLO829T).
 

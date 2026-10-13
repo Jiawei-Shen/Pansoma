@@ -149,6 +149,14 @@ def collect():
     return res
 
 
+def best_cell(e):
+    """The chr1 curve's best point after the PoN: F1 (P / R; TP / FP; at p_somatic)."""
+    if not e or not e.get("pon"):
+        return "-"
+    b = e["pon"]["best"]
+    return f"**{b['f1']:.3f}** ({b['precision']:.3f} / {b['recall']:.3f}; {b['tp_baseline']} / {b['fp']:,}; p {b['p_somatic']:.3g})"
+
+
 def tables(res):
     J, E = res["joint"], res["earlier"]
     L = ["## chr1 PASS F1 after the PoN, per purity (rtg vcfeval in the BED; the chr1 curve's best F1 in brackets)\n",
@@ -160,6 +168,17 @@ def tables(res):
             e = j["purity"][q]["eval_bed"]
             cells.append(f"**{f3(e['pon']['f1'])}** ({f3(e['pon']['best']['f1'])})" if e and e.get("pon") else "-")
         L.append(f"| {p} | {k} | " + " | ".join(cells) + " |")
+    L.append("\n## INDEL: the chr1 curve's best F1 after the PoN, per purity (in the BED): F1 (P / R; TP / FP; at p_somatic)\n")
+    L.append("INDELs are compared by the best point of the chr1 rtg curve after the PoN (the PASS threshold, the validation recall-0.9 point, falls far below it on the long reads). The best point is chosen on the test chromosome: an upper bound for a threshold rule, not a held-out result.\n")
+    L.append("| platform | P100 | P75 | P50 | P25 | P100 single-set model (earlier run) |")
+    L.append("|---|---:|---:|---:|---:|---:|")
+    for key, j in J.items():
+        p, k = key.split()
+        if k != "INDEL":
+            continue
+        o = E.get(key)
+        L.append(f"| {p} | " + " | ".join(best_cell(j["purity"][q]["eval_bed"]) for q in PURITIES)
+                 + f" | {best_cell(o and o['eval_bed'])} |")
     L.append("\n## Training (one joint model per platform and kind: P100 + P75 + P50 + P25, chr2-22; 5 % of the node "
              "blocks validate, the same blocks in every set)\n")
     L.append("| run | GPUs | training tensors (somatic) | validation (somatic) | epochs | best epoch | val somatic AP | "

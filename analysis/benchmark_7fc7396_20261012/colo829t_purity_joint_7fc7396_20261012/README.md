@@ -113,17 +113,19 @@ GPUS=2 SLOTS=14 MEM=384 sub fiberseq INDEL;    GPUS=1 SLOTS=5 MEM=128 sub Illumi
 
 All numbers: `tables.md` (per purity: tensors, truth ceiling, rtg raw and after the PoN, in the BED and without it;
 COLO829T's BED covers each chromosome whole, so the two agree). PASS = the joint checkpoint's validation recall-0.9
-threshold, one threshold for all four purities. In the BED after the PoN, PASS F1 (the chr1 curve's best F1, a
-test-set choice, in brackets):
+threshold, one threshold for all four purities. In the BED after the PoN. SNV: PASS F1 (the chr1 curve's best F1 in
+brackets). INDEL: the chr1 curve's best F1 (PASS F1 in brackets), because the recall-0.9 threshold lands far below the
+best point for INDELs; the best point is chosen on the test chromosome, an upper bound for a threshold rule, not a
+held-out result:
 
 | platform | kind | P100 | P75 | P50 | P25 | P100 single-set model (earlier run) |
 |---|---|---:|---:|---:|---:|---:|
 | Illumina | SNV | **0.675** (0.784) | **0.840** (0.841) | **0.833** (0.834) | **0.804** (0.805) | 0.778 (0.780) |
-| Illumina | INDEL | **0.121** (0.163) | **0.191** (0.308) | **0.232** (0.330) | **0.192** (0.233) | 0.115 (0.195), lr 4e-4 |
+| Illumina | INDEL | **0.163** (0.121) | **0.308** (0.191) | **0.330** (0.232) | **0.233** (0.192) | 0.195 (0.115), lr 4e-4 |
 | fiberseq | SNV | **0.779** (0.790) | **0.687** (0.703) | **0.665** (0.671) | **0.720** (0.729) | 0.781 (0.784) |
-| fiberseq | INDEL | **0.007** (0.068) | **0.004** (0.047) | **0.004** (0.053) | **0.003** (0.073) | 0.016 (0.120), lr 4e-4 |
+| fiberseq | INDEL | **0.068** (0.007) | **0.047** (0.004) | **0.053** (0.004) | **0.073** (0.003) | 0.120 (0.016), lr 4e-4 |
 | ONT | SNV | **0.677** (0.681) | **0.654** (0.665) | **0.639** (0.654) | **0.666** (0.711) | 0.706 (0.717) |
-| ONT | INDEL | **0.001** (0.054) | **0.001** (0.051) | **0.001** (0.068) | **0.001** (0.060) | 0.003 (0.071), lr 4e-4 |
+| ONT | INDEL | **0.054** (0.001) | **0.051** (0.001) | **0.068** (0.001) | **0.060** (0.001) | 0.071 (0.003), lr 4e-4 |
 
 Truth on chr1: 2,443 SNVs and 131 INDELs for every purity. **What each purity gives any model** (`purity.md`, before
 calling): the SNV recall ceiling falls from 0.82 (P100) to 0.72 / 0.71 (P25, Illumina / fiberseq): the build's AF 0.08
@@ -137,7 +139,7 @@ SNVs alike: 0.659 / 0.668), so P100 recall falls to 0.530 at precision 0.931. At
 reaches 0.784, the single-set P100 model's 0.778. Three quarters of the validation tensors are dilution tensors, so
 the pooled threshold follows them; a threshold per purity (from that purity's validation blocks) would be needed.
 
-**2. Illumina dilutions carry a read-source signature.** The base quality of the Illumina reads shifts with purity (BQ
+**2. The Illumina and ONT dilutions carry a read-source artefact (not a biological mechanism; to be fixed).** The base quality of the Illumina reads shifts with purity (BQ
 mode 30 at P100, 32-33 at P25: the COLO829BL normal reads have higher BQ than the COLO829T tumor reads;
 `bq_hist.py`). In a dilution every ALT read of a somatic SNV comes from the tumor read set, while germline ALT reads
 come from both, so the ALT reads' BQ marks somatic variants. On chr2 (training data, `bq_alt_ref.py` ->
@@ -147,11 +149,19 @@ come from both, so the ALT reads' BQ marks somatic variants. On chr2 (training d
 |---|---:|---:|---:|
 | Illumina P100 / P75 / P50 / P25 | +0.65 / -0.08 / -0.50 / -0.84 | +0.28 / +0.23 / +0.21 / +0.19 | 0.436 / 0.567 / 0.649 / 0.706 |
 | fiberseq P100 / P75 / P50 / P25 | +0.77 / +0.72 / +0.77 / +0.90 | +0.44 / +0.38 / +0.37 / +0.33 | 0.456 / 0.459 / 0.453 / 0.439 |
+| ONT P100 / P75 / P50 / P25 | +1.48 / -0.30 / -1.26 / -2.13 | +1.32 / +1.29 / +1.22 / +1.21 | 0.493 / 0.610 / 0.657 / 0.689 |
 
-fiberseq reads use the same 7 binned BQ values in tumor and normal, so its dilutions have no such cue. The Illumina
-dilution scores (precision 0.97, chr1 somatic AP 0.98-0.99 against 0.70 at P100; validation somatic AP 0.961) are
-therefore likely optimistic for a real low-purity tumor: part of what the model separates in an in-silico mix is the
-sequencing run of the reads.
+(ONT from `bq_relative_check.py` -> `bq_relative_check.json`, the same test, "raw".) fiberseq reads use the same 7
+binned BQ values in tumor and normal, so its dilutions have no such cue; ONT has it as strongly as Illumina. The
+Illumina mixture BAMs (`read_source.py` -> `read_source.json`) hold two read groups, `tumor.sub` (NovaSeq X flowcell
+LH00266_46_22GM3HLT3) and `normal.sub`, that differ only in BQ (mean 29.43 vs 30.77; the same 30-value alphabet,
+MAPQ 59.81 vs 59.84, read length 151, soft-clipped 3.0 % vs 2.6 %). The Illumina (and ONT) dilution scores (Illumina
+precision 0.97, chr1 somatic AP 0.98-0.99 against 0.70 at P100; validation somatic AP 0.961) are therefore likely
+optimistic for a real low-purity tumor: part of what the model separates in an in-silico mix is the sequencing run of
+the reads. A per-read BQ normalization (each read's BQ minus its own median in the window) removes the cue in these
+tensors: the AUC is 0.42-0.43 at every Illumina purity and 0.49 at every ONT purity (`bq_relative_check.json`,
+"read_centered"), but it also hides wholly low-quality reads (13-33 % of ONT reads sit > 5 Q below the set's typical
+read, `read_quality_dist.json`); how to fix it is open.
 
 **3. Long reads (fiberseq, ONT) SNV: P75 and P50 below P25, reproduced and explained.** The pattern of the earlier fiberseq joint model
 (0.785 / 0.699 / 0.663 / 0.722 in `analysis/reviewer_response_20261011`) is reproduced (0.779 / 0.687 / 0.665 /
@@ -171,14 +181,26 @@ Where the tumor lost the ALT copy of a germline het SNV, the ALT reads come only
 most of these calls (false calls after it: 230 / 545 / 605 / 440), but the order P100 > P25 > P75 > P50 stays.
 ONT shows the same pattern (0.677 / 0.654 / 0.639 / 0.666; germline tensors called at its threshold 0.500: 1,396 at
 P100, mostly AF 0.8-1.0; 3,239 at P75, peak 0.1-0.2 (1,401) and 0.0-0.1 (593); 4,011 at P50, 0.1-0.3 (2,582); 2,594
-at P25, 0.2-0.6 (2,148)). Illumina does not show the dip, plausibly because there the BQ cue (2.) marks such ALT reads
-as normal-derived.
+at P25, 0.2-0.6 (2,148)), although ONT also carries the BQ cue (2.). Illumina does not show the dip, plausibly because
+there the BQ cue marks such ALT reads as normal-derived.
 
-**4. INDEL.** Illumina: 0.121 / 0.191 / 0.232 / 0.192 on 131 truth INDELs (19-34 true calls after the PoN), the
-recall ceiling after the PoN 0.24-0.26 (0.145 at P25). The long-read INDEL models fail at every purity, like the
-single-set long-read COLO829T INDEL models: the validation recall-0.9 threshold is 0.007 (fiberseq) and 8.4e-6 (ONT),
-so 20,000-37,500 (fiberseq) and 96,000-107,000 (ONT) calls PASS per purity's chr1 (9,900-19,500 and 54,000-65,500
-false calls after the PoN), and even the best chr1 point stays at F1 0.047-0.073 (fiberseq), 0.051-0.068 (ONT).
+**4. INDEL, by the best point of each purity's chr1 curve after the PoN** (`tables.md`, "INDEL: the chr1 curve's best
+F1": F1, P / R, TP / FP and the p_somatic of the point; 131 truth INDELs, recall ceiling after the PoN 0.24-0.28,
+0.145-0.23 at P25):
+
+| platform | P100 | P75 | P50 | P25 | P100 single-set model |
+|---|---|---|---|---|---|
+| Illumina | 0.163 (P 0.200, R 0.137; 18 TP / 72 FP) | 0.308 (0.509, 0.221; 29 / 28) | 0.330 (0.544, 0.237; 31 / 26) | 0.233 (0.594, 0.145; 19 / 13) | 0.195 (0.200, 0.191; 25 / 100) |
+| fiberseq | 0.068 (0.077, 0.061; 8 / 96) | 0.047 (0.029, 0.130; 17 / 573) | 0.053 (0.047, 0.061; 8 / 163) | 0.073 (0.115, 0.053; 7 / 54) | 0.120 (0.151, 0.099; 13 / 73) |
+| ONT | 0.054 (0.093, 0.038; 5 / 49) | 0.051 (0.148, 0.030; 4 / 23) | 0.068 (0.133, 0.046; 6 / 39) | 0.060 (0.143, 0.038; 5 / 30) | 0.071 (0.162, 0.046; 6 / 31) |
+
+- Illumina: the dilutions score above P100 (0.308 / 0.330 / 0.233 against 0.163), with precision 0.51-0.59 against
+  0.20, like the Illumina SNVs; the read-source BQ cue (2.) applies to INDEL reads as well, so the dilution numbers are
+  likely optimistic. At P100 the joint model is below the single-set model (0.163 vs 0.195).
+- Long reads: 0.047-0.073 (fiberseq) and 0.051-0.068 (ONT) at every purity, below the single-set P100 models (0.120,
+  0.071); the best points hold 4-17 true calls, so the purity trend is within noise. At PASS (the validation recall-0.9
+  threshold, 0.007 fiberseq, 8.4e-6 ONT) 20,000-37,500 / 96,000-107,000 calls pass per purity's chr1 and F1 is
+  0.001-0.007.
 
 **Training** (`tables.md`): Illumina SNV 4.53 M training tensors (125,916 somatic), 113 min on 4 H100s, best epoch 7,
 validation somatic AP 0.961; fiberseq SNV 2.07 M (125,734), 133 min on 4, best epoch 5, AP 0.789; Illumina INDEL 0.43

@@ -9,6 +9,16 @@
 | ONT | SNV | **0.677** (0.681) | **0.654** (0.665) | **0.639** (0.654) | **0.666** (0.711) |
 | ONT | INDEL | **0.001** (0.054) | **0.001** (0.051) | **0.001** (0.068) | **0.001** (0.060) |
 
+## INDEL: the chr1 curve's best F1 after the PoN, per purity (in the BED): F1 (P / R; TP / FP; at p_somatic)
+
+INDELs are compared by the best point of the chr1 rtg curve after the PoN (the PASS threshold, the validation recall-0.9 point, falls far below it on the long reads). The best point is chosen on the test chromosome: an upper bound for a threshold rule, not a held-out result.
+
+| platform | P100 | P75 | P50 | P25 | P100 single-set model (earlier run) |
+|---|---:|---:|---:|---:|---:|
+| Illumina | **0.163** (0.200 / 0.137; 18 / 72; p 0.156) | **0.308** (0.509 / 0.221; 29 / 28; p 0.275) | **0.330** (0.544 / 0.237; 31 / 26; p 0.15) | **0.233** (0.594 / 0.145; 19 / 13; p 0.11) | **0.195** (0.200 / 0.191; 25 / 100; p 0.117) |
+| fiberseq | **0.068** (0.077 / 0.061; 8 / 96; p 0.319) | **0.047** (0.029 / 0.130; 17 / 573; p 0.128) | **0.053** (0.047 / 0.061; 8 / 163; p 0.349) | **0.073** (0.115 / 0.053; 7 / 54; p 0.521) | **0.120** (0.151 / 0.099; 13 / 73; p 0.343) |
+| ONT | **0.054** (0.093 / 0.038; 5 / 49; p 0.505) | **0.051** (0.148 / 0.030; 4 / 23; p 0.804) | **0.068** (0.133 / 0.046; 6 / 39; p 0.757) | **0.060** (0.143 / 0.038; 5 / 30; p 0.636) | **0.071** (0.162 / 0.046; 6 / 31; p 0.316) |
+
 ## Training (one joint model per platform and kind: P100 + P75 + P50 + P25, chr2-22; 5 % of the node blocks validate, the same blocks in every set)
 
 | run | GPUs | training tensors (somatic) | validation (somatic) | epochs | best epoch | val somatic AP | val somatic F1 (t) | PASS threshold (val recall 0.9) | train min | tensors/s |

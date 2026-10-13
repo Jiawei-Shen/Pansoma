@@ -134,6 +134,14 @@ def pon(x, where="eval_bed"):
     return e["pon"] if e and e.get("pon") else None
 
 
+def best_cell(e):
+    """The chr1 curve's best point after the PoN: F1 (P / R; TP / FP; at p_somatic)."""
+    if not e or not e.get("pon"):
+        return "-"
+    b = e["pon"]["best"]
+    return f"**{b['f1']:.3f}** ({b['precision']:.3f} / {b['recall']:.3f}; {b['tp_baseline']} / {b['fp']:,}; p {b['p_somatic']:.3g})"
+
+
 def tables(rows):
     G = ("linear", "d9", "d46")
     L = ["## chr1 PASS F1 after the PoN, in the BED: linear GRCh38 / HPRC v1.1 d9 / HPRC v2.1 d46 (the chr1 curve's best "
@@ -145,6 +153,14 @@ def tables(rows):
             p = pon(r[g])
             cells.append(f"**{f3(p['f1'])}** ({f3(p['best']['f1'])})" if p else "-")
         L.append(f"| {r['sample']} | {r['platform']} | {r['kind']} | " + " | ".join(cells) + " |")
+    L.append("\n## INDEL: the chr1 curve's best F1 after the PoN (in the BED): F1 (P / R; TP / FP; at p_somatic)\n")
+    L.append("INDELs are compared by the best point of the chr1 rtg curve after the PoN (the PASS threshold, the validation recall-0.9 point, falls far below it on the long reads). The best point is chosen on the test chromosome: an upper bound for a threshold rule, not a held-out result.\n")
+    L.append("| sample | platform | linear | d9 | d46 |")
+    L.append("|---|---|---:|---:|---:|")
+    for r in rows:
+        if r["kind"] != "INDEL":
+            continue
+        L.append(f"| {r['sample']} | {r['platform']} | " + " | ".join(best_cell(r[g]["eval_bed"]) for g in G) + " |")
     L.append("\n## Before the PoN (raw), in the BED: PASS F1 (best F1); rtg curve ceiling\n")
     L.append("| sample | platform | kind | linear | d9 | d46 |")
     L.append("|---|---|---|---:|---:|---:|")

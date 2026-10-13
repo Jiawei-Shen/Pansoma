@@ -1,0 +1,205 @@
+{
+ "HG008T_Illumina": {
+  "rows": 275499,
+  "read_median_quantiles": {
+   "0.01": 11.0,
+   "0.05": 25.0,
+   "0.25": 37.0,
+   "0.5": 37.0,
+   "0.75": 37.0
+  },
+  "set_reference": 37.0,
+  "below_ref_minus5": 0.0793,
+  "below_ref_minus10": 0.0765,
+  "below_20": 0.0106,
+  "somatic_A1_rows": {
+   "n": 1035,
+   "below_ref_minus5": 0.0155,
+   "below_ref_minus10": 0.0135
+  },
+  "germline_A1_rows": {
+   "n": 14758,
+   "below_ref_minus5": 0.0088,
+   "below_ref_minus10": 0.0085
+  },
+  "all_REF_or_other_rows": {
+   "n": 227956,
+   "below_ref_minus5": 0.0677,
+   "below_ref_minus10": 0.0654
+  }
+ },
+ "HG008T_PacBio": {
+  "rows": 192745,
+  "read_median_quantiles": {
+   "0.01": 35.0,
+   "0.05": 35.0,
+   "0.25": 40.0,
+   "0.5": 40.0,
+   "0.75": 40.0
+  },
+  "set_reference": 40.0,
+  "below_ref_minus5": 0.01,
+  "below_ref_minus10": 0.0096,
+  "below_20": 0.0005,
+  "somatic_A1_rows": {
+   "n": 1280,
+   "below_ref_minus5": 0.0125,
+   "below_ref_minus10": 0.0125
+  },
+  "germline_A1_rows": {
+   "n": 28656,
+   "below_ref_minus5": 0.0103,
+   "below_ref_minus10": 0.0102
+  },
+  "all_REF_or_other_rows": {
+   "n": 120194,
+   "below_ref_minus5": 0.0095,
+   "below_ref_minus10": 0.0091
+  }
+ },
+ "HG008T_ONT": {
+  "rows": 99817,
+  "read_median_quantiles": {
+   "0.01": 10.0,
+   "0.05": 20.5,
+   "0.25": 35.0,
+   "0.5": 43.0,
+   "0.75": 48.0
+  },
+  "set_reference": 43.0,
+  "below_ref_minus5": 0.3172,
+  "below_ref_minus10": 0.1925,
+  "below_20": 0.0463,
+  "somatic_A1_rows": {
+   "n": 442,
+   "below_ref_minus5": 0.1538,
+   "below_ref_minus10": 0.0656
+  },
+  "germline_A1_rows": {
+   "n": 11024,
+   "below_ref_minus5": 0.1701,
+   "below_ref_minus10": 0.0654
+  },
+  "all_REF_or_other_rows": {
+   "n": 66188,
+   "below_ref_minus5": 0.3303,
+   "below_ref_minus10": 0.214
+  }
+ },
+ "COLO829T_Illumina": {
+  "rows": 282435,
+  "read_median_quantiles": {
+   "0.01": 17.0,
+   "0.05": 26.0,
+   "0.25": 30.0,
+   "0.5": 30.0,
+   "0.75": 30.0
+  },
+  "set_reference": 30.0,
+  "below_ref_minus5": 0.0397,
+  "below_ref_minus10": 0.0206,
+  "below_20": 0.0206,
+  "somatic_A1_rows": {
+   "n": 7335,
+   "below_ref_minus5": 0.0082,
+   "below_ref_minus10": 0.0034
+  },
+  "germline_A1_rows": {
+   "n": 49839,
+   "below_ref_minus5": 0.0096,
+   "below_ref_minus10": 0.0042
+  },
+  "all_REF_or_other_rows": {
+   "n": 201204,
+   "below_ref_minus5": 0.0405,
+   "below_ref_minus10": 0.0212
+  }
+ },
+ "COLO829T_Illumina_P25": {
+  "rows": 253768,
+  "read_median_quantiles": {
+   "0.01": 18.0,
+   "0.05": 23.0,
+   "0.25": 30.0,
+   "0.5": 31.0,
+   "0.75": 32.0
+  },
+  "set_reference": 31.0,
+  "below_ref_minus5": 0.0636,
+  "below_ref_minus10": 0.0383,
+  "below_20": 0.0308,
+  "somatic_A1_rows": {
+   "n": 1725,
+   "below_ref_minus5": 0.0122,
+   "below_ref_minus10": 0.0046
+  },
+  "germline_A1_rows": {
+   "n": 48771,
+   "below_ref_minus5": 0.013,
+   "below_ref_minus10": 0.0069
+  },
+  "all_REF_or_other_rows": {
+   "n": 182025,
+   "below_ref_minus5": 0.0634,
+   "below_ref_minus10": 0.0383
+  }
+ },
+ "COLO829T_fiberseq": {
+  "rows": 265811,
+  "read_median_quantiles": {
+   "0.01": 27.0,
+   "0.05": 35.0,
+   "0.25": 40.0,
+   "0.5": 40.0,
+   "0.75": 40.0
+  },
+  "set_reference": 40.0,
+  "below_ref_minus5": 0.0125,
+  "below_ref_minus10": 0.012,
+  "below_20": 0.0005,
+  "somatic_A1_rows": {
+   "n": 7310,
+   "below_ref_minus5": 0.0134,
+   "below_ref_minus10": 0.013
+  },
+  "germline_A1_rows": {
+   "n": 44492,
+   "below_ref_minus5": 0.0138,
+   "below_ref_minus10": 0.0132
+  },
+  "all_REF_or_other_rows": {
+   "n": 155563,
+   "below_ref_minus5": 0.0136,
+   "below_ref_minus10": 0.0131
+  }
+ },
+ "COLO829T_ONT": {
+  "rows": 166138,
+  "read_median_quantiles": {
+   "0.01": 6.0,
+   "0.05": 13.0,
+   "0.25": 19.0,
+   "0.5": 27.0,
+   "0.75": 35.0
+  },
+  "set_reference": 27.0,
+  "below_ref_minus5": 0.3303,
+  "below_ref_minus10": 0.1287,
+  "below_20": 0.2755,
+  "somatic_A1_rows": {
+   "n": 3050,
+   "below_ref_minus5": 0.42,
+   "below_ref_minus10": 0.0915
+  },
+  "germline_A1_rows": {
+   "n": 19360,
+   "below_ref_minus5": 0.3919,
+   "below_ref_minus10": 0.098
+  },
+  "all_REF_or_other_rows": {
+   "n": 116595,
+   "below_ref_minus5": 0.3332,
+   "below_ref_minus10": 0.1441
+  }
+ }
+}

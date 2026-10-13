@@ -15,6 +15,19 @@
 | COLO829T | fiberseq | INDEL | **0.040** (0.092) | **0.016** (0.120) | **0.020** (0.129) |
 | COLO829T | ONT | INDEL | **0.004** (0.019) | **0.003** (0.071) | **0.002** (0.085) |
 
+## INDEL: the chr1 curve's best F1 after the PoN (in the BED): F1 (P / R; TP / FP; at p_somatic)
+
+INDELs are compared by the best point of the chr1 rtg curve after the PoN (the PASS threshold, the validation recall-0.9 point, falls far below it on the long reads). The best point is chosen on the test chromosome: an upper bound for a threshold rule, not a held-out result.
+
+| sample | platform | linear | d9 | d46 |
+|---|---|---:|---:|---:|
+| HG008T | Illumina | **0.199** (0.218 / 0.184; 108 / 388; p 0.139) | **0.264** (0.346 / 0.213; 125 / 236; p 0.209) | **0.249** (0.331 / 0.199; 117 / 236; p 0.211) |
+| HG008T | PacBio | **0.173** (0.182 / 0.165; 97 / 437; p 0.116) | **0.260** (0.356 / 0.204; 120 / 217; p 0.259) | **0.269** (0.354 / 0.216; 127 / 232; p 0.23) |
+| HG008T | ONT | **0.082** (0.071 / 0.097; 57 / 747; p 0.0609) | **0.140** (0.196 / 0.109; 64 / 262; p 0.168) | **0.155** (0.197 / 0.128; 75 / 305; p 0.248) |
+| COLO829T | Illumina | **0.069** (0.055 / 0.092; 12 / 207; p 0.0494) | **0.195** (0.200 / 0.191; 25 / 100; p 0.117) | **0.163** (0.174 / 0.153; 20 / 95; p 0.103) |
+| COLO829T | fiberseq | **0.092** (0.086 / 0.099; 13 / 138; p 0.0559) | **0.120** (0.151 / 0.099; 13 / 73; p 0.343) | **0.129** (0.108 / 0.160; 21 / 173; p 0.201) |
+| COLO829T | ONT | **0.019** (0.014 / 0.030; 4 / 275; p 0.14) | **0.071** (0.162 / 0.046; 6 / 31; p 0.316) | **0.085** (0.086 / 0.084; 11 / 117; p 0.192) |
+
 ## Before the PoN (raw), in the BED: PASS F1 (best F1); rtg curve ceiling
 
 | sample | platform | kind | linear | d9 | d46 |

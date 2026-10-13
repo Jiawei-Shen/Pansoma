@@ -15,6 +15,19 @@
 | COLO829T | fiberseq | INDEL | 0.016 (0.120) | **0.020** (0.129) | +0.005 | `COLO829_fiberseq_INDEL_small` (45d56ad lr 4e-4, 1 GPU) |
 | COLO829T | ONT | INDEL | 0.003 (0.071) | **0.002** (0.085) | -0.001 | `COLO829_ONT_INDEL_small` (45d56ad lr 4e-4, 1 GPU) |
 
+## INDEL: the chr1 curve's best F1 after the PoN (in the BED): F1 (P / R; TP / FP; at p_somatic)
+
+INDELs are compared by the best point of the chr1 rtg curve after the PoN (the PASS threshold, the validation recall-0.9 point, falls far below it on the long reads). The best point is chosen on the test chromosome: an upper bound for a threshold rule, not a held-out result.
+
+| sample | platform | d9 | d46 | Δ best F1 |
+|---|---|---:|---:|---:|
+| HG008T | Illumina | **0.264** (0.346 / 0.213; 125 / 236; p 0.209) | **0.249** (0.331 / 0.199; 117 / 236; p 0.211) | -0.015 |
+| HG008T | PacBio | **0.260** (0.356 / 0.204; 120 / 217; p 0.259) | **0.269** (0.354 / 0.216; 127 / 232; p 0.23) | +0.009 |
+| HG008T | ONT | **0.140** (0.196 / 0.109; 64 / 262; p 0.168) | **0.155** (0.197 / 0.128; 75 / 305; p 0.248) | +0.015 |
+| COLO829T | Illumina | **0.195** (0.200 / 0.191; 25 / 100; p 0.117) | **0.163** (0.174 / 0.153; 20 / 95; p 0.103) | -0.033 |
+| COLO829T | fiberseq | **0.120** (0.151 / 0.099; 13 / 73; p 0.343) | **0.129** (0.108 / 0.160; 21 / 173; p 0.201) | +0.009 |
+| COLO829T | ONT | **0.071** (0.162 / 0.046; 6 / 31; p 0.316) | **0.085** (0.086 / 0.084; 11 / 117; p 0.192) | +0.013 |
+
 ## chr1 details, both graphs (rtg vcfeval in the BED; PASS = validation recall-0.9 threshold)
 
 | sample | platform | kind | graph | test tensors (somatic) | truth with a tensor (ceiling) | PASS evaluated (unplaced) | raw F1 | PoN TP / FP | PoN P / R / F1 | PoN best F1 at p | PoN ceiling | no BED: PoN F1 |

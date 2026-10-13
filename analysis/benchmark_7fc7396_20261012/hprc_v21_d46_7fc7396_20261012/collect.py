@@ -131,6 +131,14 @@ def pon(x, where="eval_bed"):
     return e["pon"] if e and e.get("pon") else None
 
 
+def best_cell(e):
+    """The chr1 curve's best point after the PoN: F1 (P / R; TP / FP; at p_somatic)."""
+    if not e or not e.get("pon"):
+        return "-"
+    b = e["pon"]["best"]
+    return f"**{b['f1']:.3f}** ({b['precision']:.3f} / {b['recall']:.3f}; {b['tp_baseline']} / {b['fp']:,}; p {b['p_somatic']:.3g})"
+
+
 def tables(rows):
     L = ["## chr1 PASS F1 after the PoN, in the BED: HPRC v2.1 d46 against HPRC v1.1 d9 (the chr1 curve's best F1 in "
          "brackets)\n",
@@ -140,6 +148,16 @@ def tables(rows):
         L.append(f"| {r['sample']} | {r['platform']} | {r['kind']} | "
                  f"{f3(a and a['f1'])} ({f3(a and a['best']['f1'])}) | **{f3(b and b['f1'])}** ({f3(b and b['best']['f1'])}) | "
                  f"{'-' if not (a and b) else f'{b['f1'] - a['f1']:+.3f}'} | `{r['d9']['run']}` ({r['d9_note']}) |")
+    L.append("\n## INDEL: the chr1 curve's best F1 after the PoN (in the BED): F1 (P / R; TP / FP; at p_somatic)\n")
+    L.append("INDELs are compared by the best point of the chr1 rtg curve after the PoN (the PASS threshold, the validation recall-0.9 point, falls far below it on the long reads). The best point is chosen on the test chromosome: an upper bound for a threshold rule, not a held-out result.\n")
+    L.append("| sample | platform | d9 | d46 | Δ best F1 |")
+    L.append("|---|---|---:|---:|---:|")
+    for r in rows:
+        if r["kind"] != "INDEL":
+            continue
+        a, b = pon(r["d9"]), pon(r["d46"])
+        d = f"{b['best']['f1'] - a['best']['f1']:+.3f}" if a and b else "-"
+        L.append(f"| {r['sample']} | {r['platform']} | {best_cell(r['d9']['eval_bed'])} | {best_cell(r['d46']['eval_bed'])} | {d} |")
     L.append("\n## chr1 details, both graphs (rtg vcfeval in the BED; PASS = validation recall-0.9 threshold)\n")
     L.append("| sample | platform | kind | graph | test tensors (somatic) | truth with a tensor (ceiling) | "
              "PASS evaluated (unplaced) | raw F1 | PoN TP / FP | PoN P / R / F1 | PoN best F1 at p | PoN ceiling | "

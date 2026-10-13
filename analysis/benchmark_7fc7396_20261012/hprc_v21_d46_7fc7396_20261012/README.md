@@ -109,6 +109,8 @@ the population's variation, so fewer germline variants of the sample become cand
 32,880 -> 27,501, COLO829T fiberseq 33,589 -> 26,608) and fewer reach the somatic call. Those are the variants the PoN
 removes, so after it the advantage is gone: the graph and the PoN do the same job here.
 
+**INDEL, by the chr1 curve's best F1 after the PoN** (`tables.md`, "INDEL: the chr1 curve's best F1"; the PASS threshold falls far below the best point for INDELs; the best point is chosen on chr1, an upper bound, not a held-out result): d9 -> d46 HG008T 0.264 -> 0.249 (-0.015), 0.260 -> 0.269 (+0.009), 0.140 -> 0.155 (+0.015) on Illumina / PacBio / ONT; COLO829T 0.195 -> 0.163 (-0.033), 0.120 -> 0.129 (+0.009), 0.071 -> 0.085 (+0.013) (COLO829T d9 at lr 4e-4; 6-25 true calls at its best points). The two graphs are equal within noise for INDEL too.
+
 **INDEL: more truth INDELs get a tensor, which the PoN takes away again.** On HG008T the truth INDELs with a tensor
 rise from 0.539 / 0.702 / 0.694 to 0.611 / 0.757 / 0.724 (predict's truth report, partial matches counted), raw best F1
 by 0.009-0.026, but the PoN tags 413 of the 635 chr1 truth INDELs whatever the graph and the ceilings after it are
