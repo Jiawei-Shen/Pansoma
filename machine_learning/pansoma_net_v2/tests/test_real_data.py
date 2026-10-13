@@ -78,7 +78,7 @@ class RealDataTest(unittest.TestCase):
         ds = TensorDataset([(index, picks)])
         checked = Counter()
         for k, p in enumerate(picks):
-            x, blocks, _, _ = ds[k]
+            x, blocks, _, _, _ = ds[k]
             x, (a1, alt, ref, other) = x.numpy(), blocks.tolist()
             has_read = x[4].max(1) > 0
             self.assertTrue(has_read[:other].all() and not has_read[other:].any(), index.candidates()[p])

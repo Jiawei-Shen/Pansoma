@@ -177,7 +177,7 @@ class ChunkLoader:
         return chunk[rows - c * self.chunk_rows].copy() if len(rows) < n else chunk.copy()
 
     def _batches(self, out, stop):
-        """Producer: puts (x, blocks, scalars, y) batches on `out`, then None (or the exception)."""
+        """Producer: puts (x, blocks, scalars, y, part) batches on `out`, then None (or the exception)."""
         pool_exec = ThreadPoolExecutor(self.threads, thread_name_prefix="chunk-read")
         try:
             sel, starts, ends, chunks = self.plan()
@@ -241,7 +241,7 @@ class ChunkLoader:
     def _pack(self, idx, x):
         ds = self.ds
         t = (torch.from_numpy(x), torch.from_numpy(ds.blocks[idx]), torch.from_numpy(ds.scalars[idx]),
-             torch.from_numpy(ds.label[idx].astype(np.int64)))
+             torch.from_numpy(ds.label[idx].astype(np.int64)), torch.from_numpy(ds.part[idx].astype(np.int64)))
         return tuple(v.pin_memory() for v in t) if self.pin else t
 
     def __iter__(self):

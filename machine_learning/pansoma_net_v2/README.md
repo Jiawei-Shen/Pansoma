@@ -18,9 +18,20 @@ fixed means) in three input changes, all done on the GPU. The tensors on disk do
      mixes cells.
 3. **Normalization that keeps 0.**
    - One-hot planes are not normalized.
-   - BQ, MAPQ and path count get a masked z-score. The statistics are fitted once on the covered, valid
-     cells of the training tensors and stored in the model (checkpoint `stats`); they are never refitted on
-     other data. Valid cells are BQ ≥ 0, MAPQ ≥ 0 and path count > 0; the z-score is 0 elsewhere.
+   - BQ, MAPQ and path count get a masked z-score. Valid cells are BQ ≥ 0, MAPQ ≥ 0 and path count > 0; the
+     z-score is 0 elsewhere.
+   - **BQ and MAPQ are z-scored per dataset** (`train --norm dataset`, the default from 2026-10-13): each
+     dataset (a set's `SNV/` or `INDEL/`) with the mean and std of its own valid cells, from up to `--stats-samples`
+     (20,000) of its tensors, labels not used. Training fits one row per training dataset (a joint run on P100 + P75
+     + P50 + P25: four rows; checkpoint `dataset_stats`, `dataset_stats.json`, kept on `--resume`); `predict` fits
+     one on each predicted dataset (`.metrics.json` `normalization`). BQ and MAPQ scales depend on the
+     instrument, run and aligner (4-level binned BQ on HG008T Illumina, a median of 30 on COLO829T Illumina; MAPQ
+     std 2.3 on HG008T PacBio, 8.9 on COLO829T Illumina), so with the training statistics a model saw another
+     dataset's values shifted. This aligns datasets' means and spreads, not the shape of their distributions, and
+     not the reads of two runs mixed inside one dataset.
+   - Path count keeps the training statistics (checkpoint `stats`, fitted once on the training tensors): it is a
+     property of the graph, stored relative to its haplotypes, not of the sequencing. `--norm train` (and every
+     checkpoint before 2026-10-13, config without `norm`) z-scores BQ and MAPQ with the training statistics too.
    - A `covered` plane (ch4 > 0) and a `bq_missing` plane (a read cell with BQ −1) mark real data, because
      MAPQ 0 and BQ 0 are legal values.
    - Every plane is exactly 0 on padding.
@@ -110,7 +121,8 @@ Useful `train` options (the recipes, "SNV recipe" and "INDEL recipe" below, set 
 - **Memory.** `--micro-batches K` runs the forward and backward of each batch in K parts (gradient accumulation):
   the same update as the whole batch, with the loss normalized over the whole batch, and the GPU memory of one part.
   Batch 1024 of the default model fills a 94 GB H100 NVL (about 94.7 of 95.8 GB); batch 512 takes about 49 GB.
-- Also: `--stats-samples 20000`, `--amp bf16|off`, `--resume` (keeps the checkpoint's statistics), `--seed`.
+- **Normalization.** `--norm dataset|train` (above, "Normalization that keeps 0"); `--stats-samples 20000`.
+- Also: `--amp bf16|off`, `--resume` (keeps the checkpoint's statistics, the per-dataset ones too), `--seed`.
 
 Options kept for older checkpoints and experiments (no recipe uses them):
 
@@ -179,11 +191,13 @@ Outputs in `--output`:
 
 - `args.json` (the options) and `train.log`.
 - `metrics.jsonl` (per epoch: train loss and accuracy, speed, GPU peak memory, and the validation report).
-- `stats.json`.
+- `stats.json` (the training statistics) and, with `--norm dataset`, `dataset_stats.json` (one row per training
+  dataset).
 - `last.pth`, and `best.pth` (the epoch of the best thresholded validation somatic F1).
 
 A checkpoint holds `format: pansoma_net_v2`, `config`, `model_state_dict` (the encoder's and scalar
-statistics are buffers in it), `stats`, `somatic_threshold`, `classes`, `planes`, `scalars`, the training
+statistics are buffers in it), `stats`, `dataset_stats` (norm dataset: the training datasets' BQ / MAPQ statistics;
+config `norm`), `somatic_threshold`, `classes`, `planes`, `scalars`, the training
 data (directories, label provenance, counts), the channel-6 storage of those sets (`path_count_storage`,
 `path_count_haplotypes`), the chromosome split and `args`. Rebuild it with `PansomaNetV2.from_checkpoint(path)`
 (the model only; `predict` and `train --resume` check the storage).
@@ -193,7 +207,9 @@ Each record has chrom, candidate_id, label (truth), test_label (the scored label
 in_test, reason, off_reference (the node is off the GRCh38 path, as in the paper's pangenome-only calls),
 truth_ids (the somatic truth alleles of a labelled-1 tensor), p_non, p_somatic, p_germline, and pred (with
 the threshold). It also writes `.metrics.json`: the same report over the test tensors, with the truth report
-and the counts of test tensors on off-reference nodes (`--threshold` overrides t). `--ignore-reasons` (default: the
+and the counts of test tensors on off-reference nodes (`--threshold` overrides t), and `normalization`: the BQ / MAPQ
+z-score used (`norm`; for norm dataset the statistics fitted on this dataset's predicted tensors, `--stats-samples`
+of them; `--norm` overrides the checkpoint's). `--ignore-reasons` (default: the
 checkpoint's training `--ignore-reasons`) leaves those reasons out of the test like -1; their records keep label,
 reason and truth_ids and say `ignored: true`. INDEL sets are the exception to the default: the partial somatic matches
 (`residual_partial_somatic_truth`, `allele_partial_somatic_truth`) stay in the INDEL test as 1, so a called INDEL
@@ -497,12 +513,14 @@ comparison with the older checkpoints) decays every parameter, as the runs befor
 cd machine_learning && $P -m unittest discover -s pansoma_net_v2/tests -t .
 ```
 
-76 tests; `test_gpu` (4) needs a CUDA device, `test_real_data` (4) the real tensor set, and the rtg case of `test_vcf`
+78 tests; `test_gpu` (4) needs a CUDA device, `test_real_data` (4) the real tensor set, and the rtg case of `test_vcf`
 (1) rtg, otherwise they are skipped.
 
 - `test_encode`: every plane is 0 on padding; plane names and shape; one-hot groups; masked z-score (MAPQ 0 ≠
   padding, BQ −1 → `bq_missing`); `differs`; row blocks fill exactly the covered cells of each read; statistics only
-  from valid covered cells, their round trip and the unfitted encoder; dropped planes; bf16 output.
+  from valid covered cells, their round trip and the unfitted encoder; dropped planes; bf16 output; per-dataset
+  statistics: a dataset with BQ and MAPQ doubled and shifted encodes like the original with its own statistics,
+  per sample in a mixed batch, path count on the encoder's statistics, no table = the buffers, not in the state dict.
 - `test_data`:
   - the index (node, scalars) against a synthetic merged set;
   - the channel-6 storage of a set (`tensor_storage`, the `-v1` spelling, refusal of an unknown one) and of
@@ -521,8 +539,11 @@ cd machine_learning && $P -m unittest discover -s pansoma_net_v2/tests -t .
     `block` load as v1 with the same logits; the weight-decay groups;
   - loss without −1; the class weights (balanced, sqrt, pow:E); `--micro-batches 2` gives the whole batch's update;
   - forkserver workers; a worker start is retried, then raised;
-  - CPU runs: train 2 epochs (chr1 left out, block validation, threshold stored), resume (statistics kept),
-    then predict chr1 with the stored threshold (the decision rules, the SNV off-reference rescue), and the truth
+  - CPU runs: train 2 epochs (chr1 left out, block validation, threshold stored, one BQ / MAPQ statistics row per
+    training dataset), resume (statistics kept, the per-dataset ones too), then predict chr1 with the stored
+    threshold and statistics fitted on the predicted dataset (the decision rules, the SNV off-reference rescue);
+    `--norm train` and a checkpoint without `norm` predict with the training statistics, the old one as before,
+    and `predict --norm dataset` fits the dataset's for it; and the truth
     report recomputed from the predictions; an `--ignore-reasons` run (training and validation counts, predict's
     ignored records with label, reason and truth ids kept); runs with `--scalars` and `--keep-non-af`;
   - `--exclude-candidates`: -1 in place, and out of training, validation and the test (predict's default is the

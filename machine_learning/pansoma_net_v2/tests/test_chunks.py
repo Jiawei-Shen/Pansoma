@@ -28,15 +28,17 @@ class ChunkLoaderTest(unittest.TestCase):
         return EpochSampler(len(self.ds), shuffle=True, seed=3, labels=self.ds.label, non_fraction=0.5, keep=keep, **kw)
 
     def check(self, batches, want):
-        """Every batch holds the dataset's own tensor, blocks, scalars and label for its index."""
+        """Every batch holds the dataset's own tensor, blocks, scalars, label and part for its index."""
         got = []
-        for x, blocks, scalars, y in batches:
-            self.assertEqual((x.dtype, blocks.dtype, scalars.dtype, y.dtype), (torch.int8, torch.int16, torch.float32, torch.int64))
+        for x, blocks, scalars, y, part in batches:
+            self.assertEqual((x.dtype, blocks.dtype, scalars.dtype, y.dtype, part.dtype),
+                             (torch.int8, torch.int16, torch.float32, torch.int64, torch.int64))
             for k in range(len(y)):  # find the index by the tensor itself (tensors are distinct)
                 i = int(np.flatnonzero((self.x == x[k].numpy()).all(axis=(1, 2, 3)))[0])
                 self.assertEqual(blocks[k].tolist(), self.ds.blocks[i].tolist())
                 self.assertTrue(np.array_equal(scalars[k].numpy(), self.ds.scalars[i]))
                 self.assertEqual(int(y[k]), int(self.ds.label[i]))
+                self.assertEqual(int(part[k]), int(self.ds.part[i]))
                 got.append(i)
         self.assertEqual(sorted(got), sorted(want))
         return got

@@ -346,7 +346,8 @@ def read_shard_header(path):
 
 class TensorDataset(Dataset):
     """Samples from several KindIndex selections: (x int8 (8, 200, 101), blocks int16 (4,), scalars float32 (9,),
-    label int)."""
+    label int, part int). part is the sample's selection (dataset) in `parts`: its row of the encoder's per-dataset
+    statistics."""
 
     def __init__(self, parts, labels="label"):
         """parts: [(KindIndex, positions)]; labels: "label" (training) or "eval_label" (evaluation)."""
@@ -389,7 +390,7 @@ class TensorDataset(Dataset):
         if os.preadv(fd, [x], offset + int(self.row[i]) * x.nbytes) != x.nbytes:
             raise IOError(f"{self.files[self.shard[i]]}: short read at row {self.row[i]}")
         return (torch.from_numpy(x), torch.from_numpy(self.blocks[i].copy()), torch.from_numpy(self.scalars[i].copy()),
-                int(self.label[i]))
+                int(self.label[i]), int(self.part[i]))
 
     def __getstate__(self):  # workers open their own files
         state = dict(self.__dict__)

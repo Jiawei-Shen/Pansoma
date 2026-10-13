@@ -16,10 +16,18 @@ Planes, in order (`PLANES`):
 
 `drop` leaves planes out of the output (e.g. path_count: the path count says how common the node is in HPRC,
 which separates GRCh38 nodes shared by all haplotypes from alternative-branch nodes). Every plane is 0 where there
-is no evidence, so padding stays 0 after encoding. The z-score statistics are
-fitted once on covered cells of the training set (`compute_stats`) and live in the encoder's buffers, i.e. in
-the model checkpoint; they are never refitted on other data. The width is zero-padded from 101 to 104 so the
-4 x 4, stride 4 stem covers the last column.
+is no evidence, so padding stays 0 after encoding. The width is zero-padded from 101 to 104 so the 4 x 4, stride 4
+stem covers the last column.
+
+Z-score statistics (`compute_stats`: mean and std over the valid covered cells of a sample of tensors):
+  - the encoder's buffers `mean` / `std`, fitted on the training tensors and saved in the checkpoint, are used for
+    path count always (a property of the graph, stored relative to its haplotypes) and, without a dataset table, for
+    BQ and MAPQ too (checkpoints with config norm "train", the only kind before 2026-10-13);
+  - with norm "dataset" (`set_part_stats`), BQ and MAPQ (`DATASET_NORM`) are z-scored with the statistics of the
+    sample's own dataset (a set's SNV/ or INDEL/ directory): `forward(..., part)` picks each sample's row of the table.
+    Training fits one row per training dataset; predict fits one on each predicted dataset. BQ and MAPQ scales
+    depend on the instrument, run and aligner (binned or full-range BQ, MAPQ spread), so a model then sees each
+    dataset's values relative to that dataset, not to its training data.
 """
 import torch
 import torch.nn as nn
@@ -28,6 +36,7 @@ import torch.nn.functional as F
 CATEGORICAL = (("read_base", 0, 6), ("site_allele", 2, 6), ("graph_base", 5, 6), ("operation", 4, 6),
                ("strand", 7, 2))
 CONTINUOUS = (("base_quality", 1, 0), ("mapping_quality", 3, 0), ("path_count", 6, 1))  # (name, channel, min valid)
+DATASET_NORM = ("base_quality", "mapping_quality")  # z-scored per dataset under norm "dataset"; path count never
 BLOCKS = ("A1", "ALT", "REF", "OTHER")
 PLANES = tuple([f"{name}={code}" for name, _, k in CATEGORICAL for code in range(1, k + 1)]
                + [name for name, _, _ in CONTINUOUS]
@@ -54,6 +63,10 @@ class TensorEncoder(nn.Module):
         self.register_buffer("mean", torch.zeros(len(CONTINUOUS)))
         self.register_buffer("std", torch.ones(len(CONTINUOUS)))
         self.register_buffer("fitted", torch.zeros((), dtype=torch.bool))
+        # per-dataset statistics (norm "dataset"): one row per dataset, set by train / predict for the data at hand;
+        # not part of the state dict (they belong to the data, not to the model)
+        self.register_buffer("part_mean", torch.zeros(0, len(CONTINUOUS)), persistent=False)
+        self.register_buffer("part_std", torch.ones(0, len(CONTINUOUS)), persistent=False)
         if stats is not None:
             self.set_stats(stats)
 
@@ -68,8 +81,30 @@ class TensorEncoder(nn.Module):
         return {name: {"mean": float(self.mean[j]), "std": float(self.std[j])}
                 for j, (name, _, _) in enumerate(CONTINUOUS)}
 
-    def forward(self, x, blocks, dtype=torch.float32):
-        """x: (B, 8, H, W) int8; blocks: (B, 4) row ends of the A1, ALT, REF and OTHER blocks."""
+    def set_part_stats(self, part_stats):
+        """part_stats: [compute_stats result] per dataset (row p for samples of part p). The DATASET_NORM channels take
+        the dataset's mean and std, the others the encoder's (fitted) buffers. An empty list removes the table."""
+        if part_stats and not bool(self.fitted):
+            raise RuntimeError("set the encoder's statistics (set_stats) before the per-dataset ones")
+        mean = torch.zeros(len(part_stats), len(CONTINUOUS))
+        std = torch.ones(len(part_stats), len(CONTINUOUS))
+        for p, st in enumerate(part_stats):
+            for j, (name, _, _) in enumerate(CONTINUOUS):
+                if name in DATASET_NORM:
+                    mean[p, j], std[p, j] = float(st[name]["mean"]), max(float(st[name]["std"]), 1e-6)
+                else:
+                    mean[p, j], std[p, j] = self.mean[j], self.std[j]
+        self.part_mean = mean.to(self.mean.device)
+        self.part_std = std.to(self.std.device)
+
+    def part_stats(self):
+        """The per-dataset table as [{name: {"mean", "std"}}], empty without one."""
+        return [{name: {"mean": float(self.part_mean[p, j]), "std": float(self.part_std[p, j])}
+                 for j, (name, _, _) in enumerate(CONTINUOUS)} for p in range(self.part_mean.shape[0])]
+
+    def forward(self, x, blocks, dtype=torch.float32, part=None):
+        """x: (B, 8, H, W) int8; blocks: (B, 4) row ends of the A1, ALT, REF and OTHER blocks; part: (B,) dataset of
+        each sample, a row of the per-dataset table (ignored without a table: the buffers for every sample)."""
         # checked only in eager mode: bool() of a GPU buffer is a graph break, and under torch.compile the
         # code after it was recompiled every step until Dynamo gave up (recompile_limit) and ran it eagerly
         if not torch.compiler.is_compiling() and not bool(self.fitted):
@@ -78,8 +113,13 @@ class TensorEncoder(nn.Module):
         covered = x[:, 4] > 0
         planes = [x[:, c] == code for _, c, k in CATEGORICAL for code in range(1, k + 1)]
         valid = valid_masks(x)
+        if part is not None and self.part_mean.shape[0]:
+            row = part.to(device=x.device, dtype=torch.long)
+            mean, std = self.part_mean[row][:, :, None, None], self.part_std[row][:, :, None, None]  # (B, C, 1, 1)
+        else:
+            mean, std = self.mean[None, :, None, None], self.std[None, :, None, None]
         for j, (name, c, _) in enumerate(CONTINUOUS):
-            z = (x[:, c].to(torch.float32) - self.mean[j]) / self.std[j]
+            z = (x[:, c].to(torch.float32) - mean[:, j]) / std[:, j]
             planes.append(torch.where(valid[name], z, torch.zeros((), device=z.device)))
         planes += [covered, covered & (x[:, 1] < 0), covered & (x[:, 0] != x[:, 5])]
         rows = torch.arange(x.shape[2], device=x.device)[None, :]            # (1, H)

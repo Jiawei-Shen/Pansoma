@@ -185,8 +185,9 @@ class ConvNeXtCBAM(nn.Module):
 
 
 def full_config(config):
-    """A checkpoint's config with the defaults of keys added later (checkpoints before "block" are v1)."""
-    return {"scalars": 0, "block": "v1", "drop_planes": [], **config}
+    """A checkpoint's config with the defaults of keys added later (checkpoints before "block" are v1, before "norm"
+    z-score BQ and MAPQ with the training statistics: "train")."""
+    return {"scalars": 0, "block": "v1", "drop_planes": [], "norm": "train", **config}
 
 
 def no_decay(name, param):
@@ -197,13 +198,19 @@ def no_decay(name, param):
 class PansomaNetV2(nn.Module):
     """scalars > 0: the site's scalars (data.SCALARS), z-scored with statistics fitted on the training tensors
     (buffers, like the encoder's), go through a Linear(scalars, 64) + GELU and join the pooled features before the
-    head."""
+    head.
+
+    norm: "dataset" z-scores BQ and MAPQ with the statistics of each sample's own dataset (the encoder's per-dataset
+    table, set by train / predict); "train" with the training statistics (encode.py)."""
 
     def __init__(self, num_classes=3, depths=(3, 3, 27, 3), dims=(192, 384, 768, 1536), front=(64, 64),
-                 drop_path_rate=0.1, stats=None, scalars=0, block="v2", drop_planes=()):
+                 drop_path_rate=0.1, stats=None, scalars=0, block="v2", drop_planes=(), norm="train"):
         super().__init__()
+        if norm not in ("train", "dataset"):
+            raise ValueError(f"norm must be train or dataset, not {norm!r}")
         self.config = dict(num_classes=num_classes, depths=list(depths), dims=list(dims), front=list(front),
-                           drop_path_rate=drop_path_rate, scalars=scalars, block=block, drop_planes=list(drop_planes))
+                           drop_path_rate=drop_path_rate, scalars=scalars, block=block, drop_planes=list(drop_planes),
+                           norm=norm)
         self.encoder = TensorEncoder(stats, drop_planes)
         layers, c = [], self.encoder.n_planes
         for width in front:
@@ -225,9 +232,10 @@ class PansomaNetV2(nn.Module):
         self.scalar_mean.copy_(torch.as_tensor(mean, dtype=torch.float32))
         self.scalar_std.copy_(torch.clamp(torch.as_tensor(std, dtype=torch.float32), min=1e-6))
 
-    def forward(self, x, blocks, scalars=None):
-        """x: (B, 8, 200, 101) int8 tensors; blocks: (B, 4) row-block ends; scalars: (B, S) -> logits (B, classes)."""
-        features = self.backbone.forward_features(self.front(self.encoder(x, blocks)))
+    def forward(self, x, blocks, scalars=None, part=None):
+        """x: (B, 8, 200, 101) int8 tensors; blocks: (B, 4) row-block ends; scalars: (B, S); part: (B,) dataset of each
+        sample (the encoder's per-dataset table) -> logits (B, classes)."""
+        features = self.backbone.forward_features(self.front(self.encoder(x, blocks, part=part)))
         if self.config["scalars"]:
             z = (scalars.to(features.device, torch.float32) - self.scalar_mean) / self.scalar_std
             features = torch.cat([features, self.scalar_mlp(z).to(features.dtype)], 1)

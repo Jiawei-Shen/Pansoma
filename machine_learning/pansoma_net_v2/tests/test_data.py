@@ -106,8 +106,10 @@ class IndexTest(unittest.TestCase):
         ds = TensorDataset(parts)
         self.assertEqual(len(ds), sum(len(v) for v in self.truth.values()))
         flat = self.truth["SNV"] + self.truth["INDEL"]
+        n_snv = len(self.truth["SNV"])
         for k in (0, 5, len(ds) - 1):
-            x, blocks, scalars, label = ds[k]
+            x, blocks, scalars, label, part = ds[k]
+            self.assertEqual(part, 0 if k < n_snv else 1)  # the sample's dataset: SNV/ is part 0, INDEL/ part 1
             self.assertTrue(np.array_equal(x.numpy(), flat[k]["x"]))
             self.assertEqual(blocks.tolist(), flat[k]["blocks"])
             self.assertTrue(np.allclose(scalars.numpy(), site_scalars(flat[k]["numbers"]), atol=1e-5))

@@ -8,7 +8,9 @@ A <set> is a directory holding merged SNV/ and INDEL/ (e.g. .../COLO829T_Illumin
 the labels 0 non, 1 somatic, 2 germline; tensors labelled -1 are not used. The test chromosomes (default chr1)
 are left out; the others train, except the validation: whole ~1 Mb node blocks (--val-fraction of them), or
 --val-chroms. The encoder's z-score statistics (and with --scalars the scalars') are fitted once on the
-training tensors (or taken from --resume) and saved in every checkpoint. Each epoch the somatic threshold of
+training tensors (or taken from --resume) and saved in every checkpoint; with --norm dataset (the default) BQ and
+MAPQ are z-scored per dataset instead, each training dataset (set x kind) with statistics fitted on its own tensors,
+and predict fits them on each predicted dataset (encode.py). Each epoch the somatic threshold of
 the best validation F1 is found (metrics.py); the best checkpoint has the highest thresholded somatic F1 and
 stores its threshold.
 """
@@ -31,7 +33,7 @@ from .env import triton_libcuda
 from .chunks import ChunkLoader, build_cache
 from .data import (CHECKPOINT_PATH_COUNT, CLASSES, KINDS, SCALARS, EpochSampler, TensorDataset, block_split,
                    common_path_count, load_parts, read_candidate_ids, somatic_truth, validation_truth)
-from .encode import PLANES, compute_stats
+from .encode import DATASET_NORM, PLANES, compute_stats
 from .model import PansomaNetV2, full_config, no_decay
 
 AF = SCALARS.index("af")
@@ -85,7 +87,13 @@ def parse_args(argv=None):
     p.add_argument("--decay-all", action="store_true",
                    help="weight decay on every parameter (as runs before 2026-09-29); default: not on biases, norm "
                         "weights and GRN gamma / beta")
-    p.add_argument("--stats-samples", type=int, default=20000, help="training tensors used to fit the z-score")
+    p.add_argument("--stats-samples", type=int, default=20000,
+                   help="tensors used to fit the z-score: of the training data, and with --norm dataset of each dataset")
+    p.add_argument("--norm", choices=["dataset", "train"], default="dataset",
+                   help="dataset: BQ and MAPQ z-scored with the statistics of each sample's own dataset (a set's SNV/ or "
+                        "INDEL/), fitted on its tensors here and by predict on each predicted dataset; train: with the "
+                        "training statistics for every dataset (every checkpoint before 2026-10-13). Path count always "
+                        "uses the training statistics")
     p.add_argument("--amp", choices=["bf16", "off"], default="bf16")
     p.add_argument("--no-compile", dest="compile", action="store_false",
                    help="skip torch.compile (default on CUDA: 3x faster on an H100, ~2 min to compile)")
@@ -180,10 +188,10 @@ def predict_probs(model, loader, device, amp):
     model.eval()
     labels, probs = [], []
     with torch.no_grad():
-        for x, blocks, scalars, y in loader:
+        for x, blocks, scalars, y, part in loader:
             with torch.autocast(device.type, dtype=torch.bfloat16, enabled=amp):
                 logits = model(x.to(device, non_blocking=True), blocks.to(device, non_blocking=True),
-                               scalars.to(device, non_blocking=True))
+                               scalars.to(device, non_blocking=True), part.to(device, non_blocking=True))
             probs.append(torch.softmax(logits.float(), 1).cpu().numpy())
             labels.append(y.numpy())
     return (np.concatenate(labels) if labels else np.zeros(0, np.int64),
@@ -267,6 +275,17 @@ def retry_workers(action, log, what, tries=3, wait=5.0):
                 raise
             log(f"{what}: DataLoader workers failed to start ({type(e).__name__}: {str(e)[:160]}); retry {attempt}")
             time.sleep(wait)
+
+
+def dataset_stats(index, positions, samples, seed, num_workers, log, what):
+    """The z-score statistics of one dataset (compute_stats over up to `samples` random tensors of index's positions,
+    labels not used): a row of the encoder's per-dataset table under --norm dataset."""
+    if not len(positions):
+        raise SystemExit(f"{what}: no tensors to fit the statistics on")
+    dataset = TensorDataset([(index, np.asarray(positions))])
+    order = EpochSampler(len(dataset), samples, shuffle=True, seed=seed)
+    return retry_workers(lambda: compute_stats(make_loader(dataset, order, num_workers, 256, persistent=False), samples),
+                         log, what)
 
 
 def started_loader(dataset, sampler, num_workers, batch_size, log, what, prefetch_factor=2):
@@ -386,7 +405,8 @@ def main(argv=None):
         val_set = Subset(val_set, val_keep.tolist())
 
     model = PansomaNetV2(len(CLASSES), args.depths, args.dims, args.front, args.drop_path,
-                         scalars=len(SCALARS) if args.scalars else 0, block=args.block, drop_planes=args.drop_planes)
+                         scalars=len(SCALARS) if args.scalars else 0, block=args.block, drop_planes=args.drop_planes,
+                         norm=args.norm)
     checkpoint = torch.load(args.resume, map_location="cpu", weights_only=False) if args.resume else None
     if checkpoint is not None:
         if full_config(checkpoint["config"]) != model.config:
@@ -412,6 +432,29 @@ def main(argv=None):
             dist.broadcast_object_list(stats, src=0)
         stats = stats[0]
     model.encoder.set_stats(stats)
+    part_stats = []
+    if args.norm == "dataset":  # one row per training dataset (TensorDataset part order), kept on --resume
+        saved = {d["directory"]: d["stats"] for d in (checkpoint or {}).get("dataset_stats", [])}
+        box = [None]
+        if run.main:
+            box[0] = []
+            for i, _ in train_parts:
+                if str(i.dir) in saved:
+                    box[0].append(saved[str(i.dir)])
+                    run.log(f"dataset statistics of {i.dir} kept from --resume")
+                    continue
+                t0 = time.time()
+                st = dataset_stats(i, i.select(train_chroms, labelled=False), args.stats_samples, args.seed + 12345,
+                                   args.num_workers, run.log, f"dataset statistics of {i.dir}")
+                box[0].append(st)
+                run.log(f"dataset statistics of {i.dir} from {st['tensors']:,} tensors of the training chromosomes "
+                        f"({time.time() - t0:.0f} s): " + json.dumps({k: st[k] for k in DATASET_NORM}))
+            (run.out / "dataset_stats.json").write_text(json.dumps(
+                [dict(directory=str(i.dir), stats=st) for (i, _), st in zip(train_parts, box[0])], indent=2) + "\n")
+        if run.ddp:
+            dist.broadcast_object_list(box, src=0)
+        part_stats = box[0]
+    model.encoder.set_part_stats(part_stats)
     if args.scalars and checkpoint is None:  # all training tensors (the arrays are in memory)
         s = train_set.scalars.astype(np.float64)
         model.set_scalar_stats(s.mean(0), s.std(0))
@@ -489,6 +532,7 @@ def main(argv=None):
                            epoch=epoch, best=best, val=val, somatic_threshold=threshold, classes=list(CLASSES),
                            planes=list(PLANES), scalars=list(SCALARS) if args.scalars else [],
                            stats=model.encoder.stats(), args=vars(args), path_count_storage=path_count,
+                           dataset_stats=[dict(directory=str(i.dir), stats=st) for (i, _), st in zip(train_parts, part_stats)],
                            path_count_haplotypes=haplotypes,
                            data=[dict(directory=str(i.dir), labels=i.meta["labels"], train=int(len(p)))
                                  for i, p in train_parts],
@@ -503,12 +547,12 @@ def main(argv=None):
         if run.device.type == "cuda":
             torch.cuda.reset_peak_memory_stats(run.device)
         t0, loss_sum, seen, correct = time.time(), 0.0, 0, 0
-        for step, (x, blocks, scalars, y) in enumerate(train_loader):
-            x, blocks, scalars, y = (t.to(run.device, non_blocking=True) for t in (x, blocks, scalars, y))
+        for step, (x, blocks, scalars, y, part) in enumerate(train_loader):
+            x, blocks, scalars, y, part = (t.to(run.device, non_blocking=True) for t in (x, blocks, scalars, y, part))
             optimizer.zero_grad(set_to_none=True)
             if args.micro_batches == 1:
                 with torch.autocast(run.device.type, dtype=torch.bfloat16, enabled=amp):
-                    logits = net(x, blocks, scalars)
+                    logits = net(x, blocks, scalars, part)
                 if importance:  # a sampled low-AF non tensor stands for 1 / non_fraction of them
                     iw = torch.where((y == 0) & (scalars[:, AF] < args.keep_non_af), 1.0 / args.non_fraction, 1.0)
                     loss = (per_sample(logits.float(), y) * iw).sum() / (weights[y] * iw).sum()
@@ -521,13 +565,13 @@ def main(argv=None):
                       if importance else torch.ones_like(y, dtype=torch.float32))
                 denom = (weights[y] * iw).sum()
                 loss = torch.zeros((), device=run.device)
-                for part in torch.arange(len(y), device=run.device).chunk(args.micro_batches):
+                for piece in torch.arange(len(y), device=run.device).chunk(args.micro_batches):
                     with torch.autocast(run.device.type, dtype=torch.bfloat16, enabled=amp):
-                        logits = net(x[part], blocks[part], scalars[part])
-                    part_loss = (per_sample(logits.float(), y[part]) * iw[part]).sum() / denom
-                    part_loss.backward()
-                    loss += part_loss.detach()
-                    correct += int((logits.argmax(1) == y[part]).sum())
+                        logits = net(x[piece], blocks[piece], scalars[piece], part[piece])
+                    piece_loss = (per_sample(logits.float(), y[piece]) * iw[piece]).sum() / denom
+                    piece_loss.backward()
+                    loss += piece_loss.detach()
+                    correct += int((logits.argmax(1) == y[piece]).sum())
             optimizer.step()
             scheduler.step()
             loss_sum += loss.item() * y.numel()

@@ -38,7 +38,10 @@ sets (data.PATH_COUNT_ALL). It is called somatic when somatic is the most probab
 the off-reference tensors and the checkpoint's validation recall-0.9 threshold on the others; `offref_rescue`
 counts the tensors and calls and gives the floor.
 
-The encoder uses the checkpoint's statistics; they are not refitted on these tensors. If any set codes channel 6
+Z-score statistics: with a checkpoint of norm "dataset" (train --norm dataset, the default from 2026-10-13), BQ and MAPQ
+are z-scored with statistics fitted on each predicted dataset's own tensors (--stats-samples of the predicted
+chromosomes, labels not used; recorded in .metrics.json "normalization"); path count, and every channel of a norm
+"train" checkpoint, use the checkpoint's training statistics. --norm overrides the checkpoint's choice. If any set codes channel 6
 otherwise than the checkpoint's training sets (checkpoint path_count_storage; int8-count-linear100-log2 when it
 records none), predict exits before predicting anything (a model trained with --drop-planes path_count never reads
 channel 6 and takes sets of any storage); a set built with another --haplotypes is predicted with a
@@ -55,9 +58,9 @@ import torch
 from . import metrics
 from .data import (CHECKPOINT_PATH_COUNT, CLASSES, KINDS, PATH_COUNT_ALL, TENSOR_SHAPE, EpochSampler, TensorDataset,
                    load_parts, read_candidate_ids, somatic_truth)
-from .encode import CONTINUOUS
+from .encode import CONTINUOUS, DATASET_NORM
 from .model import PansomaNetV2
-from .train import describe, make_loader, predict_probs, retry_workers
+from .train import dataset_stats, describe, make_loader, predict_probs, retry_workers
 
 
 def parse_args(argv=None):
@@ -80,6 +83,11 @@ def parse_args(argv=None):
                    help="file of candidate ids taken out before the model (train --exclude-candidates): left out of "
                         "the test like -1, records get excluded: true and graph_vcf leaves them out of the calls "
                         "(default: the checkpoint's train --exclude-candidates; the option without a file: none)")
+    p.add_argument("--norm", choices=["dataset", "train"],
+                   help="BQ / MAPQ z-score: dataset (fitted on each predicted dataset) or train (the checkpoint's "
+                        "training statistics); default: the checkpoint's config norm")
+    p.add_argument("--stats-samples", type=int, default=20000,
+                   help="tensors of each predicted dataset used to fit its statistics (norm dataset)")
     p.add_argument("--ignore-reasons", nargs="*",
                    help="label reasons left out of the test, as if -1 (default: the checkpoint's train --ignore-reasons, "
                         "minus the partial somatic reasons for INDEL sets); their records keep label, reason and "
@@ -100,10 +108,10 @@ class OffrefRescue(TensorDataset):
         self.halfwidth, self.floor = halfwidth, floor
 
     def __getitem__(self, i):
-        x, blocks, scalars, label = super().__getitem__(i)
+        x, blocks, scalars, label, part = super().__getitem__(i)
         window = x[PATH_COUNT, :, SITE - self.halfwidth:SITE + self.halfwidth + 1]
         window[(window > 0) & (window < self.floor)] = self.floor
-        return x, blocks, scalars, label
+        return x, blocks, scalars, label, part
 
 
 def main(argv=None):
@@ -114,8 +122,9 @@ def main(argv=None):
     amp = args.amp == "bf16" and device.type == "cuda"
     out = Path(args.output)
     out.mkdir(parents=True, exist_ok=True)
-    print(f"checkpoint {args.checkpoint} (epoch {checkpoint['epoch']}), statistics {json.dumps(model.encoder.stats())}",
-          flush=True)
+    norm = args.norm or model.config["norm"]
+    print(f"checkpoint {args.checkpoint} (epoch {checkpoint['epoch']}), statistics {json.dumps(model.encoder.stats())}"
+          f"; BQ / MAPQ z-score: {norm}", flush=True)
 
     def probs_of(dataset, what):
         """(labels, probabilities) of every sample of dataset, in order."""
@@ -142,6 +151,13 @@ def main(argv=None):
             print(f"note: {index.dir} was built with --haplotypes {index.haplotypes}, the checkpoint's training sets "
                   f"with {trained_haplotypes or 'none recorded'}", flush=True)
         dataset = TensorDataset([(index, positions)], labels="eval_label")
+        part_stats = None
+        if norm == "dataset":  # this dataset's statistics: row 0 of the table, the part of every sample here
+            part_stats = dataset_stats(index, positions, args.stats_samples, 12345, args.num_workers,
+                                       lambda m: print(m, flush=True), f"statistics of {index.dir}")
+            print(f"{index.dir}: statistics from {part_stats['tensors']:,} tensors: "
+                  + json.dumps({k: part_stats[k] for k in DATASET_NORM}), flush=True)
+        model.encoder.set_part_stats([part_stats] if part_stats else [])
         if args.ignore_reasons is not None:
             ignore = args.ignore_reasons
         else:  # the training's; INDEL tests count the partial somatic matches as found truth (see above)
@@ -213,7 +229,8 @@ def main(argv=None):
                       directory=str(index.dir), labels=index.meta["labels"],
                       path_count=dict(storage=index.path_count, haplotypes=index.haplotypes,
                                       checkpoint_haplotypes=trained_haplotypes),
-                      checkpoint=str(Path(args.checkpoint).resolve()), chroms=args.chroms)
+                      checkpoint=str(Path(args.checkpoint).resolve()), chroms=args.chroms,
+                      normalization=dict(norm=norm, dataset_stats=part_stats, checkpoint_stats=model.encoder.stats()))
         (out / f"{name}.metrics.json").write_text(json.dumps(report, indent=2) + "\n")
         print(f"{name}: {len(labels):,} tensors, {report['tensors']:,} in the test "
               f"({report['off_reference_in_test']:,} off-reference) | {describe(report)}", flush=True)
