@@ -19,14 +19,153 @@
     },
     "val_truth": 487,
     "val_truth_with_tensor": 452,
-    "epochs": 9,
-    "train_minutes": 57.5,
-    "tensors_per_second": 5424,
-    "gpu_peak_gib": 49.42
+    "best_epoch": 4,
+    "epochs": 20,
+    "train_minutes": 125.0,
+    "tensors_per_second": 5280,
+    "gpu_peak_gib": 49.42,
+    "val": {
+     "somatic_ap": 0.19039709796478674,
+     "somatic_f1": 0.2850877192982456,
+     "somatic_support": 469,
+     "threshold_t": 0.6722273826599121,
+     "threshold_r09": 0.25126704573631287,
+     "truth_f1": 0.27266134880348075,
+     "truth_best_f1": 0.27266134880348075,
+     "truth_ceiling": 0.9281314168377823
+    }
    },
-   "test": {},
-   "eval_bed": null,
-   "eval_nobed": null
+   "test": {
+    "tensors": 190697,
+    "somatic_tensors": 659,
+    "somatic_ap": 0.1987391492368688,
+    "threshold_t": 0.6722273826599121,
+    "truth_alleles": 697,
+    "with_tensor": 659,
+    "ceiling": 0.945480631276901,
+    "truth_ap": 0.187904016279909,
+    "truth_at_t": {
+     "threshold": 0.6722273826599121,
+     "tp": 291,
+     "other_tp": 0,
+     "fp": 1095,
+     "fn": 406,
+     "precision": 0.20995670995670995,
+     "recall": 0.41750358680057387,
+     "f1": 0.27940470475276047
+    },
+    "truth_best": {
+     "threshold": 0.6692020893096924,
+     "tp": 302,
+     "other_tp": 0,
+     "fp": 1119,
+     "fn": 395,
+     "precision": 0.21252638986629135,
+     "recall": 0.4332855093256815,
+     "f1": 0.28517469310670446
+    },
+    "offref_rescue": {
+     "site_halfwidth": 10,
+     "floor": 100,
+     "tensors": 13764,
+     "in_test": 9111,
+     "calls": 116,
+     "calls_in_test": 104,
+     "calls_before": 3
+    }
+   },
+   "eval_bed": {
+    "truth_records": 702,
+    "threshold": 0.25126704573631287,
+    "unplaced_pass": 116,
+    "truth_pon_tagged": 61,
+    "raw": {
+     "baseline": 697,
+     "evaluated": 5682,
+     "tp": 601,
+     "fp": 5081,
+     "fn": 96,
+     "p": 0.1058,
+     "r": 0.8623,
+     "f1": 0.1884,
+     "ceiling": 0.9383,
+     "best": {
+      "f1": 0.285,
+      "p_somatic": 0.66917,
+      "precision": 0.2124,
+      "recall": 0.4333,
+      "tp_baseline": 302,
+      "fp": 1120,
+      "fn": 395
+     }
+    },
+    "pon": {
+     "baseline": 697,
+     "evaluated": 1282,
+     "tp": 579,
+     "fp": 703,
+     "fn": 118,
+     "p": 0.4516,
+     "r": 0.8307,
+     "f1": 0.5851,
+     "ceiling": 0.8881,
+     "best": {
+      "f1": 0.6073,
+      "p_somatic": 0.38793,
+      "precision": 0.5062,
+      "recall": 0.759,
+      "tp_baseline": 529,
+      "fp": 516,
+      "fn": 168
+     }
+    }
+   },
+   "eval_nobed": {
+    "truth_records": 702,
+    "threshold": 0.25126704573631287,
+    "unplaced_pass": 116,
+    "truth_pon_tagged": 61,
+    "raw": {
+     "baseline": 702,
+     "evaluated": 5786,
+     "tp": 605,
+     "fp": 5181,
+     "fn": 97,
+     "p": 0.1046,
+     "r": 0.8618,
+     "f1": 0.1865,
+     "ceiling": 0.9387,
+     "best": {
+      "f1": 0.2838,
+      "p_somatic": 0.66917,
+      "precision": 0.2114,
+      "recall": 0.4316,
+      "tp_baseline": 303,
+      "fp": 1130,
+      "fn": 399
+     }
+    },
+    "pon": {
+     "baseline": 702,
+     "evaluated": 1318,
+     "tp": 583,
+     "fp": 735,
+     "fn": 119,
+     "p": 0.4423,
+     "r": 0.8305,
+     "f1": 0.5772,
+     "ceiling": 0.8875,
+     "best": {
+      "f1": 0.6022,
+      "p_somatic": 0.39438,
+      "precision": 0.5014,
+      "recall": 0.7536,
+      "tp_baseline": 529,
+      "fp": 526,
+      "fn": 173
+     }
+    }
+   }
   },
   {
    "label": "SNV PacBio",

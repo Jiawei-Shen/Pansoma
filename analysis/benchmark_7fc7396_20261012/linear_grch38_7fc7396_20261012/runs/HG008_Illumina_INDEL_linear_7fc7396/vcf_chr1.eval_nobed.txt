@@ -1,0 +1,4 @@
+set    records    TP     FP    FN      P      R     F1 | best F1      (p      P      R    TP     FP   FN) |  P@R0.5  P@R0.8  P@R0.9 P@R0.95 | ceiling
+raw     42,622   463  42159   172  0.011  0.729  0.021 |   0.049  0.2702  0.028  0.195   124   4353   511 |   0.019       -       -       - |   0.789
+pon      1,912   162   1750   473  0.085  0.255  0.127 |   0.192  0.1390  0.202  0.183   116    458   519 |       -       -       -       - |   0.279
+PoN tags 413 of 635 truth records of the chromosomes (PoN1_gnomAD 50, PoN2_dbSNP 0, PoN3_1000G 0, PoN4_CoLoRSdb 405): after the PoN any caller's recall <= 0.350

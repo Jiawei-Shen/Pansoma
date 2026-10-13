@@ -83,13 +83,13 @@ learning rate; `vcf_chr1` keeps their scores under the earlier INDEL PoN rule (A
 
 ## Results (chr1)
 
-All tables, both BED settings and the training columns: `tables.md` (a snapshot from `collect.py`; the HG008T Illumina SNV rows are filled when its run ends). PASS = the checkpoint's validation recall-0.9
+All tables, both BED settings and the training columns: `tables.md`. PASS = the checkpoint's validation recall-0.9
 threshold; "best" = the best point of the chr1 rtg curve (chosen on the test chromosome: for reference only, never a
 threshold). In the GIAB benchmark BED after the PoN of each kind:
 
 | run | PASS threshold | PASS evaluated (unplaced) | PoN TP / FP | PoN P / R / **F1** | chr1 best F1 (at p) | no BED, PoN F1 | earlier run, same PoN: PASS F1 (best) |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| SNV Illumina (4 GPUs) | still training at the time of this commit (job 40970, 9 of 20 epochs done) | | | | | | 0.592 (0.612) |
+| SNV Illumina (4 GPUs) | 0.251 | 5,682 (116) | 579 / 703 | 0.452 / 0.831 / **0.585** | 0.607 (0.388) | 0.577 | 0.592 (0.612) |
 | SNV PacBio | 0.314 | 5,540 (211) | 577 / 584 | 0.497 / 0.828 / **0.621** | 0.641 (0.395) | 0.614 | 0.621 (0.641) |
 | SNV ONT | 0.449 | 5,843 (1,409) | 576 / 661 | 0.466 / 0.826 / **0.596** | 0.620 (0.612) | 0.586 | 0.596 (0.620) |
 | INDEL Illumina | 0.119 | 3,596 (563) | 140 / 434 | 0.244 / 0.238 / **0.241** | 0.264 (0.209) | 0.233 | 0.246 (0.263) |
@@ -105,6 +105,11 @@ unplaced = PASS calls without a GRCh38 position (not scored by rtg; for SNV most
 7fc7396 (`--exclude-candidates`, the INDEL partial default), which an SNV run without an exclusion file does not
 touch, the SNV PoN rule is unchanged, and training is deterministic for a given seed and set. PoN F1 0.621 / 0.596, best 0.641 / 0.620; the PoN tags 61 of the 702 chr1 truth SNVs (recall
 bound 0.913).
+
+**SNV Illumina on 4 GPUs.** Global batch 4,096 (`--batch-size 1024` per GPU), so a quarter of the 1-GPU steps per
+epoch at the same lr: best epoch 4, PoN F1 0.585 (best 0.607) against 0.592 (0.612) for the 1-GPU run of 2026-10-03,
+the same recipe otherwise. Training took 125 min (20 epochs, ~6 min each, 5,280 tensors/s on 4 H100s, other runs sharing
+the host throughout) against ~3 h on one GPU.
 
 **INDEL, lr 1e-4 (the 7fc7396 recipe) against lr 4e-4 (45d56ad), both scored with the 7fc7396 PoN.** On RIS the lower
 learning rate does not change the PASS F1: Illumina 0.241 vs 0.246, PacBio 0.089 vs 0.097, ONT 0.015 vs 0.016; the
@@ -128,6 +133,6 @@ under the earlier PoN rule) reached 0.275 / 0.274 / 0.180 on the same sets.
 somatic matches in the INDEL test as 1 (somatic test tensors: Illumina 364, earlier 236; truth ceiling 0.539, earlier
 0.400). The rtg results do not depend on it.
 
-**Run times** (H100 80GB, training only, six runs on one host): SNV PacBio 36 min, ONT 48 min (20 epochs, ~3,610
+**Run times** (H100 80GB, training only, six runs on one host): SNV Illumina 125 min on 4 GPUs, PacBio 36 min, ONT 48 min (20 epochs, ~3,610
 tensors/s); INDEL Illumina 3 min, PacBio 33 min, ONT 44 min (12 epochs, ~8,800 tensors/s). Then predict chr1 and
 `vcf.sh` (a few minutes each).

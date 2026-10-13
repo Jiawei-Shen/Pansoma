@@ -1,0 +1,5042 @@
+[
+ {
+  "sample": "HG008T",
+  "platform": "Illumina",
+  "kind": "SNV",
+  "d9_note": "7fc7396, 4 GPUs",
+  "d9": {
+   "run": "HG008_Illumina_SNV_7fc7396_ddp4_b1024",
+   "vcf_dir": "vcf_chr1",
+   "training": {
+    "train_tensors": 1903802,
+    "train_counts": {
+     "non": 1620829,
+     "somatic": 7134,
+     "germline": 275839
+    },
+    "val_tensors": 118218,
+    "val_counts": {
+     "non": 103012,
+     "somatic": 469,
+     "germline": 14737
+    },
+    "best_epoch": 4,
+    "gpus": 4,
+    "epochs": 20,
+    "train_minutes": 125.0,
+    "tensors_per_second": 5280,
+    "val": {
+     "somatic_ap": 0.19039709796478674,
+     "somatic_f1": 0.2850877192982456,
+     "threshold_r09": 0.25126704573631287
+    }
+   },
+   "test": {
+    "tensors": 190697,
+    "somatic_tensors": 659,
+    "somatic_ap": 0.1987391492368688,
+    "truth_alleles": 697,
+    "with_tensor": 659,
+    "ceiling": 0.945480631276901,
+    "truth_best": {
+     "threshold": 0.6692020893096924,
+     "tp": 302,
+     "other_tp": 0,
+     "fp": 1119,
+     "fn": 395,
+     "precision": 0.21252638986629135,
+     "recall": 0.4332855093256815,
+     "f1": 0.28517469310670446
+    }
+   },
+   "eval_bed": {
+    "truth_records": 702,
+    "threshold": 0.25126704573631287,
+    "unplaced_pass": 116,
+    "truth_pon_tagged": 61,
+    "raw": {
+     "baseline": 697,
+     "evaluated": 5682,
+     "tp": 601,
+     "fp": 5081,
+     "fn": 96,
+     "p": 0.1058,
+     "r": 0.8623,
+     "f1": 0.1884,
+     "ceiling": 0.9383,
+     "best": {
+      "f1": 0.285,
+      "p_somatic": 0.66917,
+      "precision": 0.2124,
+      "recall": 0.4333,
+      "tp_baseline": 302,
+      "fp": 1120,
+      "fn": 395
+     }
+    },
+    "pon": {
+     "baseline": 697,
+     "evaluated": 1282,
+     "tp": 579,
+     "fp": 703,
+     "fn": 118,
+     "p": 0.4516,
+     "r": 0.8307,
+     "f1": 0.5851,
+     "ceiling": 0.8881,
+     "best": {
+      "f1": 0.6073,
+      "p_somatic": 0.38793,
+      "precision": 0.5062,
+      "recall": 0.759,
+      "tp_baseline": 529,
+      "fp": 516,
+      "fn": 168
+     }
+    }
+   },
+   "eval_nobed": {
+    "truth_records": 702,
+    "threshold": 0.25126704573631287,
+    "unplaced_pass": 116,
+    "truth_pon_tagged": 61,
+    "raw": {
+     "baseline": 702,
+     "evaluated": 5786,
+     "tp": 605,
+     "fp": 5181,
+     "fn": 97,
+     "p": 0.1046,
+     "r": 0.8618,
+     "f1": 0.1865,
+     "ceiling": 0.9387,
+     "best": {
+      "f1": 0.2838,
+      "p_somatic": 0.66917,
+      "precision": 0.2114,
+      "recall": 0.4316,
+      "tp_baseline": 303,
+      "fp": 1130,
+      "fn": 399
+     }
+    },
+    "pon": {
+     "baseline": 702,
+     "evaluated": 1318,
+     "tp": 583,
+     "fp": 735,
+     "fn": 119,
+     "p": 0.4423,
+     "r": 0.8305,
+     "f1": 0.5772,
+     "ceiling": 0.8875,
+     "best": {
+      "f1": 0.6022,
+      "p_somatic": 0.39438,
+      "precision": 0.5014,
+      "recall": 0.7536,
+      "tp_baseline": 529,
+      "fp": 526,
+      "fn": 173
+     }
+    }
+   }
+  },
+  "d46": {
+   "run": "HG008_Illumina_SNV_d46_7fc7396",
+   "vcf_dir": "vcf_chr1",
+   "training": {
+    "train_tensors": 1883340,
+    "train_counts": {
+     "non": 1619483,
+     "somatic": 7274,
+     "germline": 256583
+    },
+    "val_tensors": 93488,
+    "val_counts": {
+     "non": 80578,
+     "somatic": 357,
+     "germline": 12553
+    },
+    "best_epoch": 5,
+    "gpus": 4,
+    "epochs": 20,
+    "train_minutes": 48.8,
+    "tensors_per_second": 13177,
+    "val": {
+     "somatic_ap": 0.275049832289151,
+     "somatic_f1": 0.3928571428571429,
+     "threshold_r09": 0.32374927401542664
+    }
+   },
+   "test": {
+    "tensors": 185402,
+    "somatic_tensors": 665,
+    "somatic_ap": 0.3099160880877694,
+    "truth_alleles": 697,
+    "with_tensor": 665,
+    "ceiling": 0.9540889526542324,
+    "truth_best": {
+     "threshold": 0.8266547322273254,
+     "tp": 362,
+     "other_tp": 0,
+     "fp": 724,
+     "fn": 335,
+     "precision": 0.3333333333333333,
+     "recall": 0.5193687230989957,
+     "f1": 0.4060572069545709
+    }
+   },
+   "eval_bed": {
+    "truth_records": 702,
+    "threshold": 0.32374927401542664,
+    "unplaced_pass": 754,
+    "truth_pon_tagged": 61,
+    "raw": {
+     "baseline": 697,
+     "evaluated": 3486,
+     "tp": 618,
+     "fp": 2868,
+     "fn": 79,
+     "p": 0.1773,
+     "r": 0.8867,
+     "f1": 0.2955,
+     "ceiling": 0.9484,
+     "best": {
+      "f1": 0.4058,
+      "p_somatic": 0.82666,
+      "precision": 0.333,
+      "recall": 0.5194,
+      "tp_baseline": 362,
+      "fp": 725,
+      "fn": 335
+     }
+    },
+    "pon": {
+     "baseline": 697,
+     "evaluated": 1386,
+     "tp": 594,
+     "fp": 792,
+     "fn": 103,
+     "p": 0.4286,
+     "r": 0.8522,
+     "f1": 0.5703,
+     "ceiling": 0.8924,
+     "best": {
+      "f1": 0.6133,
+      "p_somatic": 0.61452,
+      "precision": 0.5125,
+      "recall": 0.7633,
+      "tp_baseline": 532,
+      "fp": 506,
+      "fn": 165
+     }
+    }
+   },
+   "eval_nobed": {
+    "truth_records": 702,
+    "threshold": 0.32374927401542664,
+    "unplaced_pass": 754,
+    "truth_pon_tagged": 61,
+    "raw": {
+     "baseline": 702,
+     "evaluated": 3569,
+     "tp": 622,
+     "fp": 2947,
+     "fn": 80,
+     "p": 0.1743,
+     "r": 0.886,
+     "f1": 0.2913,
+     "ceiling": 0.9487,
+     "best": {
+      "f1": 0.4007,
+      "p_somatic": 0.82666,
+      "precision": 0.327,
+      "recall": 0.5171,
+      "tp_baseline": 363,
+      "fp": 747,
+      "fn": 339
+     }
+    },
+    "pon": {
+     "baseline": 702,
+     "evaluated": 1431,
+     "tp": 598,
+     "fp": 833,
+     "fn": 104,
+     "p": 0.4179,
+     "r": 0.8519,
+     "f1": 0.5607,
+     "ceiling": 0.8917,
+     "best": {
+      "f1": 0.6056,
+      "p_somatic": 0.61452,
+      "precision": 0.5019,
+      "recall": 0.7635,
+      "tp_baseline": 536,
+      "fp": 532,
+      "fn": 166
+     }
+    }
+   }
+  },
+  "linear": {
+   "run": "HG008_Illumina_SNV_linear_7fc7396",
+   "vcf_dir": "vcf_chr1",
+   "training": {
+    "train_tensors": 4550999,
+    "train_counts": {
+     "non": 1832960,
+     "somatic": 7371,
+     "germline": 2710668
+    },
+    "val_tensors": 264021,
+    "val_counts": {
+     "non": 107131,
+     "somatic": 484,
+     "germline": 156406
+    },
+    "best_epoch": 6,
+    "gpus": 4,
+    "epochs": 20,
+    "train_minutes": 113.7,
+    "tensors_per_second": 13488,
+    "val": {
+     "somatic_ap": 0.011233847616616183,
+     "somatic_f1": 0.04327666151468315,
+     "threshold_r09": 0.06399419158697128
+    }
+   },
+   "test": {
+    "tensors": 414453,
+    "somatic_tensors": 683,
+    "somatic_ap": 0.011782438132900001,
+    "truth_alleles": 697,
+    "with_tensor": 683,
+    "ceiling": 0.9799139167862266,
+    "truth_best": {
+     "threshold": 0.618248462677002,
+     "tp": 79,
+     "other_tp": 0,
+     "fp": 3101,
+     "fn": 618,
+     "precision": 0.024842767295597486,
+     "recall": 0.1133428981348637,
+     "f1": 0.04075315965953057
+    }
+   },
+   "eval_bed": {
+    "truth_records": 702,
+    "threshold": 0.06399419158697128,
+    "unplaced_pass": 0,
+    "truth_pon_tagged": 61,
+    "raw": {
+     "baseline": 697,
+     "evaluated": 121717,
+     "tp": 583,
+     "fp": 121134,
+     "fn": 114,
+     "p": 0.0048,
+     "r": 0.8364,
+     "f1": 0.0095,
+     "ceiling": 0.9426,
+     "best": {
+      "f1": 0.0406,
+      "p_somatic": 0.61823,
+      "precision": 0.0247,
+      "recall": 0.1133,
+      "tp_baseline": 79,
+      "fp": 3116,
+      "fn": 618
+     }
+    },
+    "pon": {
+     "baseline": 697,
+     "evaluated": 1639,
+     "tp": 548,
+     "fp": 1091,
+     "fn": 149,
+     "p": 0.3344,
+     "r": 0.7862,
+     "f1": 0.4692,
+     "ceiling": 0.8737,
+     "best": {
+      "f1": 0.5442,
+      "p_somatic": 0.18717,
+      "precision": 0.4807,
+      "recall": 0.627,
+      "tp_baseline": 437,
+      "fp": 472,
+      "fn": 260
+     }
+    }
+   },
+   "eval_nobed": {
+    "truth_records": 702,
+    "threshold": 0.06399419158697128,
+    "unplaced_pass": 0,
+    "truth_pon_tagged": 61,
+    "raw": {
+     "baseline": 702,
+     "evaluated": 130348,
+     "tp": 587,
+     "fp": 129761,
+     "fn": 115,
+     "p": 0.0045,
+     "r": 0.8362,
+     "f1": 0.009,
+     "ceiling": 0.943,
+     "best": {
+      "f1": 0.0405,
+      "p_somatic": 0.61823,
+      "precision": 0.0246,
+      "recall": 0.114,
+      "tp_baseline": 80,
+      "fp": 3168,
+      "fn": 622
+     }
+    },
+    "pon": {
+     "baseline": 702,
+     "evaluated": 4892,
+     "tp": 551,
+     "fp": 4341,
+     "fn": 151,
+     "p": 0.1126,
+     "r": 0.7849,
+     "f1": 0.197,
+     "ceiling": 0.8732,
+     "best": {
+      "f1": 0.4487,
+      "p_somatic": 0.27656,
+      "precision": 0.4148,
+      "recall": 0.4886,
+      "tp_baseline": 343,
+      "fp": 484,
+      "fn": 359
+     }
+    }
+   }
+  }
+ },
+ {
+  "sample": "HG008T",
+  "platform": "PacBio",
+  "kind": "SNV",
+  "d9_note": "7fc7396, 1 GPU",
+  "d9": {
+   "run": "HG008_PacBio_SNV_7fc7396",
+   "vcf_dir": "vcf_chr1",
+   "training": {
+    "train_tensors": 381661,
+    "train_counts": {
+     "non": 67735,
+     "somatic": 7098,
+     "germline": 306828
+    },
+    "val_tensors": 18851,
+    "val_counts": {
+     "non": 3339,
+     "somatic": 465,
+     "germline": 15047
+    },
+    "best_epoch": 7,
+    "gpus": 1,
+    "epochs": 20,
+    "train_minutes": 35.8,
+    "tensors_per_second": 3614,
+    "val": {
+     "somatic_ap": 0.2269672323638408,
+     "somatic_f1": 0.32976827094474154,
+     "threshold_r09": 0.3141991198062897
+    }
+   },
+   "test": {
+    "tensors": 32880,
+    "somatic_tensors": 658,
+    "somatic_ap": 0.23313669362376907,
+    "truth_alleles": 697,
+    "with_tensor": 658,
+    "ceiling": 0.9440459110473458,
+    "truth_best": {
+     "threshold": 0.7210527658462524,
+     "tp": 271,
+     "other_tp": 0,
+     "fp": 780,
+     "fn": 426,
+     "precision": 0.25784966698382494,
+     "recall": 0.38880918220946914,
+     "f1": 0.3100686498855835
+    }
+   },
+   "eval_bed": {
+    "truth_records": 702,
+    "threshold": 0.3141991198062897,
+    "unplaced_pass": 211,
+    "truth_pon_tagged": 61,
+    "raw": {
+     "baseline": 697,
+     "evaluated": 5540,
+     "tp": 597,
+     "fp": 4943,
+     "fn": 100,
+     "p": 0.1078,
+     "r": 0.8565,
+     "f1": 0.1914,
+     "ceiling": 0.9354,
+     "best": {
+      "f1": 0.3101,
+      "p_somatic": 0.72107,
+      "precision": 0.2578,
+      "recall": 0.3888,
+      "tp_baseline": 271,
+      "fp": 780,
+      "fn": 426
+     }
+    },
+    "pon": {
+     "baseline": 697,
+     "evaluated": 1161,
+     "tp": 577,
+     "fp": 584,
+     "fn": 120,
+     "p": 0.497,
+     "r": 0.8278,
+     "f1": 0.6211,
+     "ceiling": 0.8881,
+     "best": {
+      "f1": 0.6409,
+      "p_somatic": 0.39494,
+      "precision": 0.5356,
+      "recall": 0.7977,
+      "tp_baseline": 556,
+      "fp": 482,
+      "fn": 141
+     }
+    }
+   },
+   "eval_nobed": {
+    "truth_records": 702,
+    "threshold": 0.3141991198062897,
+    "unplaced_pass": 211,
+    "truth_pon_tagged": 61,
+    "raw": {
+     "baseline": 702,
+     "evaluated": 5624,
+     "tp": 601,
+     "fp": 5023,
+     "fn": 101,
+     "p": 0.1069,
+     "r": 0.8561,
+     "f1": 0.19,
+     "ceiling": 0.9345,
+     "best": {
+      "f1": 0.3077,
+      "p_somatic": 0.71,
+      "precision": 0.2462,
+      "recall": 0.4103,
+      "tp_baseline": 288,
+      "fp": 882,
+      "fn": 414
+     }
+    },
+    "pon": {
+     "baseline": 702,
+     "evaluated": 1190,
+     "tp": 581,
+     "fp": 609,
+     "fn": 121,
+     "p": 0.4882,
+     "r": 0.8276,
+     "f1": 0.6142,
+     "ceiling": 0.8875,
+     "best": {
+      "f1": 0.6356,
+      "p_somatic": 0.39494,
+      "precision": 0.5283,
+      "recall": 0.7977,
+      "tp_baseline": 560,
+      "fp": 500,
+      "fn": 142
+     }
+    }
+   }
+  },
+  "d46": {
+   "run": "HG008_PacBio_SNV_d46_7fc7396",
+   "vcf_dir": "vcf_chr1",
+   "training": {
+    "train_tensors": 348975,
+    "train_counts": {
+     "non": 71573,
+     "somatic": 7227,
+     "germline": 270175
+    },
+    "val_tensors": 17490,
+    "val_counts": {
+     "non": 4509,
+     "somatic": 350,
+     "germline": 12631
+    },
+    "best_epoch": 7,
+    "gpus": 4,
+    "epochs": 20,
+    "train_minutes": 21.5,
+    "tensors_per_second": 5670,
+    "val": {
+     "somatic_ap": 0.2965752617828233,
+     "somatic_f1": 0.39140271493212675,
+     "threshold_r09": 0.29122111201286316
+    }
+   },
+   "test": {
+    "tensors": 27501,
+    "somatic_tensors": 661,
+    "somatic_ap": 0.3527543456144833,
+    "truth_alleles": 697,
+    "with_tensor": 661,
+    "ceiling": 0.9483500717360115,
+    "truth_best": {
+     "threshold": 0.7399027943611145,
+     "tp": 404,
+     "other_tp": 0,
+     "fp": 850,
+     "fn": 293,
+     "precision": 0.32216905901116427,
+     "recall": 0.5796269727403156,
+     "f1": 0.4141465914915428
+    }
+   },
+   "eval_bed": {
+    "truth_records": 702,
+    "threshold": 0.29122111201286316,
+    "unplaced_pass": 244,
+    "truth_pon_tagged": 61,
+    "raw": {
+     "baseline": 697,
+     "evaluated": 3234,
+     "tp": 610,
+     "fp": 2624,
+     "fn": 87,
+     "p": 0.1886,
+     "r": 0.8752,
+     "f1": 0.3104,
+     "ceiling": 0.9397,
+     "best": {
+      "f1": 0.4145,
+      "p_somatic": 0.73992,
+      "precision": 0.3222,
+      "recall": 0.5811,
+      "tp_baseline": 405,
+      "fp": 852,
+      "fn": 292
+     }
+    },
+    "pon": {
+     "baseline": 697,
+     "evaluated": 1237,
+     "tp": 585,
+     "fp": 652,
+     "fn": 112,
+     "p": 0.4729,
+     "r": 0.8393,
+     "f1": 0.605,
+     "ceiling": 0.8895,
+     "best": {
+      "f1": 0.6224,
+      "p_somatic": 0.456,
+      "precision": 0.5145,
+      "recall": 0.7877,
+      "tp_baseline": 549,
+      "fp": 518,
+      "fn": 148
+     }
+    }
+   },
+   "eval_nobed": {
+    "truth_records": 702,
+    "threshold": 0.29122111201286316,
+    "unplaced_pass": 244,
+    "truth_pon_tagged": 61,
+    "raw": {
+     "baseline": 702,
+     "evaluated": 3284,
+     "tp": 614,
+     "fp": 2670,
+     "fn": 88,
+     "p": 0.187,
+     "r": 0.8746,
+     "f1": 0.3081,
+     "ceiling": 0.9402,
+     "best": {
+      "f1": 0.4146,
+      "p_somatic": 0.73992,
+      "precision": 0.3218,
+      "recall": 0.5826,
+      "tp_baseline": 409,
+      "fp": 862,
+      "fn": 293
+     }
+    },
+    "pon": {
+     "baseline": 702,
+     "evaluated": 1263,
+     "tp": 589,
+     "fp": 674,
+     "fn": 113,
+     "p": 0.4663,
+     "r": 0.839,
+     "f1": 0.5995,
+     "ceiling": 0.8889,
+     "best": {
+      "f1": 0.6175,
+      "p_somatic": 0.456,
+      "precision": 0.5078,
+      "recall": 0.7877,
+      "tp_baseline": 553,
+      "fp": 536,
+      "fn": 149
+     }
+    }
+   }
+  },
+  "linear": {
+   "run": "HG008_PacBio_SNV_linear_7fc7396",
+   "vcf_dir": "vcf_chr1",
+   "training": {
+    "train_tensors": 2918452,
+    "train_counts": {
+     "non": 165119,
+     "somatic": 7370,
+     "germline": 2745963
+    },
+    "val_tensors": 170987,
+    "val_counts": {
+     "non": 13161,
+     "somatic": 477,
+     "germline": 157349
+    },
+    "best_epoch": 7,
+    "gpus": 4,
+    "epochs": 20,
+    "train_minutes": 189.3,
+    "tensors_per_second": 5152,
+    "val": {
+     "somatic_ap": 0.012212808358713273,
+     "somatic_f1": 0.042379788101059496,
+     "threshold_r09": 0.039716336876153946
+    }
+   },
+   "test": {
+    "tensors": 251303,
+    "somatic_tensors": 682,
+    "somatic_ap": 0.011514109324375224,
+    "truth_alleles": 697,
+    "with_tensor": 682,
+    "ceiling": 0.9784791965566715,
+    "truth_best": {
+     "threshold": 0.777000367641449,
+     "tp": 37,
+     "other_tp": 0,
+     "fp": 1335,
+     "fn": 660,
+     "precision": 0.02696793002915452,
+     "recall": 0.05308464849354376,
+     "f1": 0.035766070565490575
+    }
+   },
+   "eval_bed": {
+    "truth_records": 702,
+    "threshold": 0.039716336876153946,
+    "unplaced_pass": 0,
+    "truth_pon_tagged": 61,
+    "raw": {
+     "baseline": 697,
+     "evaluated": 131346,
+     "tp": 615,
+     "fp": 130731,
+     "fn": 82,
+     "p": 0.0047,
+     "r": 0.8824,
+     "f1": 0.0093,
+     "ceiling": 0.9412,
+     "best": {
+      "f1": 0.0357,
+      "p_somatic": 0.777,
+      "precision": 0.0269,
+      "recall": 0.0531,
+      "tp_baseline": 37,
+      "fp": 1337,
+      "fn": 660
+     }
+    },
+    "pon": {
+     "baseline": 697,
+     "evaluated": 1549,
+     "tp": 576,
+     "fp": 973,
+     "fn": 121,
+     "p": 0.3719,
+     "r": 0.8264,
+     "f1": 0.5129,
+     "ceiling": 0.878,
+     "best": {
+      "f1": 0.5955,
+      "p_somatic": 0.11794,
+      "precision": 0.5076,
+      "recall": 0.7202,
+      "tp_baseline": 502,
+      "fp": 487,
+      "fn": 195
+     }
+    }
+   },
+   "eval_nobed": {
+    "truth_records": 702,
+    "threshold": 0.039716336876153946,
+    "unplaced_pass": 0,
+    "truth_pon_tagged": 61,
+    "raw": {
+     "baseline": 702,
+     "evaluated": 136526,
+     "tp": 619,
+     "fp": 135907,
+     "fn": 83,
+     "p": 0.0045,
+     "r": 0.8818,
+     "f1": 0.009,
+     "ceiling": 0.9402,
+     "best": {
+      "f1": 0.0354,
+      "p_somatic": 0.777,
+      "precision": 0.0266,
+      "recall": 0.0527,
+      "tp_baseline": 37,
+      "fp": 1353,
+      "fn": 665
+     }
+    },
+    "pon": {
+     "baseline": 702,
+     "evaluated": 2527,
+     "tp": 579,
+     "fp": 1948,
+     "fn": 123,
+     "p": 0.2291,
+     "r": 0.8248,
+     "f1": 0.3586,
+     "ceiling": 0.8761,
+     "best": {
+      "f1": 0.5804,
+      "p_somatic": 0.13563,
+      "precision": 0.4975,
+      "recall": 0.6966,
+      "tp_baseline": 489,
+      "fp": 494,
+      "fn": 213
+     }
+    }
+   }
+  }
+ },
+ {
+  "sample": "HG008T",
+  "platform": "ONT",
+  "kind": "SNV",
+  "d9_note": "7fc7396, 1 GPU",
+  "d9": {
+   "run": "HG008_ONT_SNV_7fc7396",
+   "vcf_dir": "vcf_chr1",
+   "training": {
+    "train_tensors": 509038,
+    "train_counts": {
+     "non": 175573,
+     "somatic": 7124,
+     "germline": 326341
+    },
+    "val_tensors": 24767,
+    "val_counts": {
+     "non": 9067,
+     "somatic": 470,
+     "germline": 15230
+    },
+    "best_epoch": 8,
+    "gpus": 1,
+    "epochs": 20,
+    "train_minutes": 47.5,
+    "tensors_per_second": 3611,
+    "val": {
+     "somatic_ap": 0.20972300288901574,
+     "somatic_f1": 0.3009118541033434,
+     "threshold_r09": 0.4492301940917969
+    }
+   },
+   "test": {
+    "tensors": 44116,
+    "somatic_tensors": 663,
+    "somatic_ap": 0.23228466818251325,
+    "truth_alleles": 697,
+    "with_tensor": 663,
+    "ceiling": 0.9512195121951219,
+    "truth_best": {
+     "threshold": 0.8171356916427612,
+     "tp": 258,
+     "other_tp": 0,
+     "fp": 779,
+     "fn": 439,
+     "precision": 0.24879459980713597,
+     "recall": 0.3701578192252511,
+     "f1": 0.2975778546712803
+    }
+   },
+   "eval_bed": {
+    "truth_records": 702,
+    "threshold": 0.4492301940917969,
+    "unplaced_pass": 1409,
+    "truth_pon_tagged": 61,
+    "raw": {
+     "baseline": 697,
+     "evaluated": 5843,
+     "tp": 596,
+     "fp": 5247,
+     "fn": 101,
+     "p": 0.102,
+     "r": 0.8551,
+     "f1": 0.1823,
+     "ceiling": 0.9469,
+     "best": {
+      "f1": 0.2979,
+      "p_somatic": 0.81715,
+      "precision": 0.2486,
+      "recall": 0.3716,
+      "tp_baseline": 259,
+      "fp": 783,
+      "fn": 438
+     }
+    },
+    "pon": {
+     "baseline": 697,
+     "evaluated": 1237,
+     "tp": 576,
+     "fp": 661,
+     "fn": 121,
+     "p": 0.4656,
+     "r": 0.8264,
+     "f1": 0.5957,
+     "ceiling": 0.8967,
+     "best": {
+      "f1": 0.6196,
+      "p_somatic": 0.61212,
+      "precision": 0.5381,
+      "recall": 0.7303,
+      "tp_baseline": 509,
+      "fp": 437,
+      "fn": 188
+     }
+    }
+   },
+   "eval_nobed": {
+    "truth_records": 702,
+    "threshold": 0.4492301940917969,
+    "unplaced_pass": 1409,
+    "truth_pon_tagged": 61,
+    "raw": {
+     "baseline": 702,
+     "evaluated": 5971,
+     "tp": 600,
+     "fp": 5371,
+     "fn": 102,
+     "p": 0.1005,
+     "r": 0.8547,
+     "f1": 0.1798,
+     "ceiling": 0.9459,
+     "best": {
+      "f1": 0.2937,
+      "p_somatic": 0.81715,
+      "precision": 0.2439,
+      "recall": 0.3689,
+      "tp_baseline": 259,
+      "fp": 803,
+      "fn": 443
+     }
+    },
+    "pon": {
+     "baseline": 702,
+     "evaluated": 1278,
+     "tp": 580,
+     "fp": 698,
+     "fn": 122,
+     "p": 0.4538,
+     "r": 0.8262,
+     "f1": 0.5859,
+     "ceiling": 0.896,
+     "best": {
+      "f1": 0.608,
+      "p_somatic": 0.61212,
+      "precision": 0.522,
+      "recall": 0.7279,
+      "tp_baseline": 511,
+      "fp": 468,
+      "fn": 191
+     }
+    }
+   }
+  },
+  "d46": {
+   "run": "HG008_ONT_SNV_d46_7fc7396",
+   "vcf_dir": "vcf_chr1",
+   "training": {
+    "train_tensors": 493391,
+    "train_counts": {
+     "non": 183510,
+     "somatic": 7259,
+     "germline": 302622
+    },
+    "val_tensors": 22659,
+    "val_counts": {
+     "non": 9488,
+     "somatic": 355,
+     "germline": 12816
+    },
+    "best_epoch": 9,
+    "gpus": 4,
+    "epochs": 20,
+    "train_minutes": 20.9,
+    "tensors_per_second": 8269,
+    "val": {
+     "somatic_ap": 0.28389620191674314,
+     "somatic_f1": 0.37875751503006005,
+     "threshold_r09": 0.23086291551589966
+    }
+   },
+   "test": {
+    "tensors": 40252,
+    "somatic_tensors": 665,
+    "somatic_ap": 0.32831570700720464,
+    "truth_alleles": 697,
+    "with_tensor": 665,
+    "ceiling": 0.9540889526542324,
+    "truth_best": {
+     "threshold": 0.7048541903495789,
+     "tp": 413,
+     "other_tp": 0,
+     "fp": 940,
+     "fn": 284,
+     "precision": 0.30524759793052475,
+     "recall": 0.5925394548063128,
+     "f1": 0.4029268292682927
+    }
+   },
+   "eval_bed": {
+    "truth_records": 702,
+    "threshold": 0.23086291551589966,
+    "unplaced_pass": 1261,
+    "truth_pon_tagged": 61,
+    "raw": {
+     "baseline": 697,
+     "evaluated": 3664,
+     "tp": 627,
+     "fp": 3037,
+     "fn": 70,
+     "p": 0.1711,
+     "r": 0.8996,
+     "f1": 0.2875,
+     "ceiling": 0.9512,
+     "best": {
+      "f1": 0.4035,
+      "p_somatic": 0.70488,
+      "precision": 0.3055,
+      "recall": 0.594,
+      "tp_baseline": 414,
+      "fp": 941,
+      "fn": 283
+     }
+    },
+    "pon": {
+     "baseline": 697,
+     "evaluated": 1387,
+     "tp": 599,
+     "fp": 788,
+     "fn": 98,
+     "p": 0.4319,
+     "r": 0.8594,
+     "f1": 0.5749,
+     "ceiling": 0.8996,
+     "best": {
+      "f1": 0.6038,
+      "p_somatic": 0.52707,
+      "precision": 0.5058,
+      "recall": 0.7489,
+      "tp_baseline": 522,
+      "fp": 510,
+      "fn": 175
+     }
+    }
+   },
+   "eval_nobed": {
+    "truth_records": 702,
+    "threshold": 0.23086291551589966,
+    "unplaced_pass": 1261,
+    "truth_pon_tagged": 61,
+    "raw": {
+     "baseline": 702,
+     "evaluated": 3775,
+     "tp": 631,
+     "fp": 3144,
+     "fn": 71,
+     "p": 0.1672,
+     "r": 0.8989,
+     "f1": 0.2819,
+     "ceiling": 0.9516,
+     "best": {
+      "f1": 0.3987,
+      "p_somatic": 0.70488,
+      "precision": 0.3004,
+      "recall": 0.5926,
+      "tp_baseline": 416,
+      "fp": 969,
+      "fn": 286
+     }
+    },
+    "pon": {
+     "baseline": 702,
+     "evaluated": 1439,
+     "tp": 603,
+     "fp": 836,
+     "fn": 99,
+     "p": 0.419,
+     "r": 0.859,
+     "f1": 0.5633,
+     "ceiling": 0.8989,
+     "best": {
+      "f1": 0.5936,
+      "p_somatic": 0.52707,
+      "precision": 0.492,
+      "recall": 0.7479,
+      "tp_baseline": 525,
+      "fp": 542,
+      "fn": 177
+     }
+    }
+   }
+  },
+  "linear": {
+   "run": "HG008_ONT_SNV_linear_7fc7396",
+   "vcf_dir": "vcf_chr1",
+   "training": {
+    "train_tensors": 3089337,
+    "train_counts": {
+     "non": 295571,
+     "somatic": 7391,
+     "germline": 2786375
+    },
+    "val_tensors": 178489,
+    "val_counts": {
+     "non": 19218,
+     "somatic": 479,
+     "germline": 158792
+    },
+    "best_epoch": 8,
+    "gpus": 4,
+    "epochs": 20,
+    "train_minutes": 76.3,
+    "tensors_per_second": 13721,
+    "val": {
+     "somatic_ap": 0.01185366326246682,
+     "somatic_f1": 0.04366812227074236,
+     "threshold_r09": 0.04177317023277283
+    }
+   },
+   "test": {
+    "tensors": 268258,
+    "somatic_tensors": 680,
+    "somatic_ap": 0.015998551481457905,
+    "truth_alleles": 697,
+    "with_tensor": 680,
+    "ceiling": 0.975609756097561,
+    "truth_best": {
+     "threshold": 0.6755769848823547,
+     "tp": 57,
+     "other_tp": 0,
+     "fp": 1939,
+     "fn": 640,
+     "precision": 0.028557114228456915,
+     "recall": 0.08177905308464849,
+     "f1": 0.04233197177868548
+    }
+   },
+   "eval_bed": {
+    "truth_records": 702,
+    "threshold": 0.04177317023277283,
+    "unplaced_pass": 0,
+    "truth_pon_tagged": 61,
+    "raw": {
+     "baseline": 697,
+     "evaluated": 148156,
+     "tp": 622,
+     "fp": 147534,
+     "fn": 75,
+     "p": 0.0042,
+     "r": 0.8924,
+     "f1": 0.0084,
+     "ceiling": 0.9354,
+     "best": {
+      "f1": 0.0421,
+      "p_somatic": 0.67559,
+      "precision": 0.0283,
+      "recall": 0.0818,
+      "tp_baseline": 57,
+      "fp": 1954,
+      "fn": 640
+     }
+    },
+    "pon": {
+     "baseline": 697,
+     "evaluated": 1491,
+     "tp": 587,
+     "fp": 904,
+     "fn": 110,
+     "p": 0.3937,
+     "r": 0.8422,
+     "f1": 0.5366,
+     "ceiling": 0.8737,
+     "best": {
+      "f1": 0.5698,
+      "p_somatic": 0.11346,
+      "precision": 0.469,
+      "recall": 0.726,
+      "tp_baseline": 506,
+      "fp": 573,
+      "fn": 191
+     }
+    }
+   },
+   "eval_nobed": {
+    "truth_records": 702,
+    "threshold": 0.04177317023277283,
+    "unplaced_pass": 0,
+    "truth_pon_tagged": 61,
+    "raw": {
+     "baseline": 702,
+     "evaluated": 153962,
+     "tp": 625,
+     "fp": 153337,
+     "fn": 77,
+     "p": 0.0041,
+     "r": 0.8903,
+     "f1": 0.0081,
+     "ceiling": 0.9345,
+     "best": {
+      "f1": 0.0416,
+      "p_somatic": 0.71842,
+      "precision": 0.0319,
+      "recall": 0.0598,
+      "tp_baseline": 42,
+      "fp": 1273,
+      "fn": 660
+     }
+    },
+    "pon": {
+     "baseline": 702,
+     "evaluated": 2527,
+     "tp": 589,
+     "fp": 1938,
+     "fn": 113,
+     "p": 0.2331,
+     "r": 0.839,
+     "f1": 0.3648,
+     "ceiling": 0.8718,
+     "best": {
+      "f1": 0.5236,
+      "p_somatic": 0.12179,
+      "precision": 0.4169,
+      "recall": 0.7037,
+      "tp_baseline": 494,
+      "fp": 691,
+      "fn": 208
+     }
+    }
+   }
+  }
+ },
+ {
+  "sample": "HG008T",
+  "platform": "Illumina",
+  "kind": "INDEL",
+  "d9_note": "7fc7396, 1 GPU",
+  "d9": {
+   "run": "HG008_Illumina_INDEL_7fc7396",
+   "vcf_dir": "vcf_chr1",
+   "training": {
+    "train_tensors": 92108,
+    "train_counts": {
+     "non": 27729,
+     "somatic": 3121,
+     "germline": 61258
+    },
+    "val_tensors": 6009,
+    "val_counts": {
+     "non": 2363,
+     "somatic": 175,
+     "germline": 3471
+    },
+    "best_epoch": 3,
+    "gpus": 1,
+    "epochs": 12,
+    "train_minutes": 2.6,
+    "tensors_per_second": 8719,
+    "val": {
+     "somatic_ap": 0.10992514423939852,
+     "somatic_f1": 0.21370499419279906,
+     "threshold_r09": 0.11949265748262405
+    }
+   },
+   "test": {
+    "tensors": 9577,
+    "somatic_tensors": 364,
+    "somatic_ap": 0.09365253010905597,
+    "truth_alleles": 588,
+    "with_tensor": 317,
+    "ceiling": 0.5391156462585034,
+    "truth_best": {
+     "threshold": 0.3524070084095001,
+     "tp": 156,
+     "other_tp": 0,
+     "fp": 1294,
+     "fn": 432,
+     "precision": 0.10758620689655173,
+     "recall": 0.2653061224489796,
+     "f1": 0.15309126594700687
+    }
+   },
+   "eval_bed": {
+    "truth_records": 635,
+    "threshold": 0.11949265748262405,
+    "unplaced_pass": 563,
+    "truth_pon_tagged": 413,
+    "raw": {
+     "baseline": 587,
+     "evaluated": 3596,
+     "tp": 211,
+     "fp": 3385,
+     "fn": 376,
+     "p": 0.0587,
+     "r": 0.3595,
+     "f1": 0.1009,
+     "ceiling": 0.402,
+     "best": {
+      "f1": 0.1467,
+      "p_somatic": 0.36962,
+      "precision": 0.1081,
+      "recall": 0.2283,
+      "tp_baseline": 134,
+      "fp": 1106,
+      "fn": 453
+     }
+    },
+    "pon": {
+     "baseline": 587,
+     "evaluated": 574,
+     "tp": 140,
+     "fp": 434,
+     "fn": 447,
+     "p": 0.2439,
+     "r": 0.2385,
+     "f1": 0.2412,
+     "ceiling": 0.2572,
+     "best": {
+      "f1": 0.2637,
+      "p_somatic": 0.20896,
+      "precision": 0.3463,
+      "recall": 0.2129,
+      "tp_baseline": 125,
+      "fp": 236,
+      "fn": 462
+     }
+    }
+   },
+   "eval_nobed": {
+    "truth_records": 635,
+    "threshold": 0.11949265748262405,
+    "unplaced_pass": 563,
+    "truth_pon_tagged": 413,
+    "raw": {
+     "baseline": 635,
+     "evaluated": 3889,
+     "tp": 227,
+     "fp": 3662,
+     "fn": 408,
+     "p": 0.0584,
+     "r": 0.3575,
+     "f1": 0.1004,
+     "ceiling": 0.4,
+     "best": {
+      "f1": 0.1434,
+      "p_somatic": 0.36525,
+      "precision": 0.1051,
+      "recall": 0.2252,
+      "tp_baseline": 143,
+      "fp": 1217,
+      "fn": 492
+     }
+    },
+    "pon": {
+     "baseline": 635,
+     "evaluated": 634,
+     "tp": 148,
+     "fp": 486,
+     "fn": 487,
+     "p": 0.2334,
+     "r": 0.2331,
+     "f1": 0.2333,
+     "ceiling": 0.2535,
+     "best": {
+      "f1": 0.2524,
+      "p_somatic": 0.20896,
+      "precision": 0.3251,
+      "recall": 0.2063,
+      "tp_baseline": 131,
+      "fp": 272,
+      "fn": 504
+     }
+    }
+   }
+  },
+  "d46": {
+   "run": "HG008_Illumina_INDEL_d46_7fc7396",
+   "vcf_dir": "vcf_chr1",
+   "training": {
+    "train_tensors": 79194,
+    "train_counts": {
+     "non": 20551,
+     "somatic": 3383,
+     "germline": 55260
+    },
+    "val_tensors": 4551,
+    "val_counts": {
+     "non": 1767,
+     "somatic": 162,
+     "germline": 2622
+    },
+    "best_epoch": 3,
+    "gpus": 1,
+    "epochs": 12,
+    "train_minutes": 2.3,
+    "tensors_per_second": 8358,
+    "val": {
+     "somatic_ap": 0.12980790934965156,
+     "somatic_f1": 0.2297496318114875,
+     "threshold_r09": 0.10646037012338638
+    }
+   },
+   "test": {
+    "tensors": 8602,
+    "somatic_tensors": 390,
+    "somatic_ap": 0.12271649123030966,
+    "truth_alleles": 588,
+    "with_tensor": 359,
+    "ceiling": 0.6105442176870748,
+    "truth_best": {
+     "threshold": 0.411880224943161,
+     "tp": 128,
+     "other_tp": 0,
+     "fp": 686,
+     "fn": 460,
+     "precision": 0.15724815724815724,
+     "recall": 0.21768707482993196,
+     "f1": 0.1825962910128388
+    }
+   },
+   "eval_bed": {
+    "truth_records": 635,
+    "threshold": 0.10646037012338638,
+    "unplaced_pass": 583,
+    "truth_pon_tagged": 413,
+    "raw": {
+     "baseline": 587,
+     "evaluated": 3086,
+     "tp": 219,
+     "fp": 2867,
+     "fn": 368,
+     "p": 0.071,
+     "r": 0.3731,
+     "f1": 0.1192,
+     "ceiling": 0.4225,
+     "best": {
+      "f1": 0.1727,
+      "p_somatic": 0.41183,
+      "precision": 0.1494,
+      "recall": 0.2044,
+      "tp_baseline": 120,
+      "fp": 683,
+      "fn": 467
+     }
+    },
+    "pon": {
+     "baseline": 587,
+     "evaluated": 568,
+     "tp": 141,
+     "fp": 427,
+     "fn": 446,
+     "p": 0.2482,
+     "r": 0.2402,
+     "f1": 0.2442,
+     "ceiling": 0.2572,
+     "best": {
+      "f1": 0.2489,
+      "p_somatic": 0.21059,
+      "precision": 0.3314,
+      "recall": 0.1993,
+      "tp_baseline": 117,
+      "fp": 236,
+      "fn": 470
+     }
+    }
+   },
+   "eval_nobed": {
+    "truth_records": 635,
+    "threshold": 0.10646037012338638,
+    "unplaced_pass": 583,
+    "truth_pon_tagged": 413,
+    "raw": {
+     "baseline": 635,
+     "evaluated": 3387,
+     "tp": 237,
+     "fp": 3150,
+     "fn": 398,
+     "p": 0.07,
+     "r": 0.3732,
+     "f1": 0.1179,
+     "ceiling": 0.4205,
+     "best": {
+      "f1": 0.1645,
+      "p_somatic": 0.41075,
+      "precision": 0.1405,
+      "recall": 0.1984,
+      "tp_baseline": 126,
+      "fp": 771,
+      "fn": 509
+     }
+    },
+    "pon": {
+     "baseline": 635,
+     "evaluated": 640,
+     "tp": 150,
+     "fp": 490,
+     "fn": 485,
+     "p": 0.2344,
+     "r": 0.2362,
+     "f1": 0.2353,
+     "ceiling": 0.252,
+     "best": {
+      "f1": 0.2386,
+      "p_somatic": 0.21059,
+      "precision": 0.3106,
+      "recall": 0.1937,
+      "tp_baseline": 123,
+      "fp": 273,
+      "fn": 512
+     }
+    }
+   }
+  },
+  "linear": {
+   "run": "HG008_Illumina_INDEL_linear_7fc7396",
+   "vcf_dir": "vcf_chr1",
+   "training": {
+    "train_tensors": 745176,
+    "train_counts": {
+     "non": 122745,
+     "somatic": 5893,
+     "germline": 616538
+    },
+    "val_tensors": 42752,
+    "val_counts": {
+     "non": 7225,
+     "somatic": 322,
+     "germline": 35205
+    },
+    "best_epoch": 2,
+    "gpus": 1,
+    "epochs": 12,
+    "train_minutes": 17.2,
+    "tensors_per_second": 8913,
+    "val": {
+     "somatic_ap": 0.025716253100896733,
+     "somatic_f1": 0.06740389678778304,
+     "threshold_r09": 0.04801846295595169
+    }
+   },
+   "test": {
+    "tensors": 68365,
+    "somatic_tensors": 508,
+    "somatic_ap": 0.020662407489509906,
+    "truth_alleles": 588,
+    "with_tensor": 486,
+    "ceiling": 0.826530612244898,
+    "truth_best": {
+     "threshold": 0.25670066475868225,
+     "tp": 129,
+     "other_tp": 0,
+     "fp": 4677,
+     "fn": 459,
+     "precision": 0.026841448189762796,
+     "recall": 0.2193877551020408,
+     "f1": 0.047830923248053395
+    }
+   },
+   "eval_bed": {
+    "truth_records": 635,
+    "threshold": 0.04801846295595169,
+    "unplaced_pass": 0,
+    "truth_pon_tagged": 413,
+    "raw": {
+     "baseline": 587,
+     "evaluated": 40351,
+     "tp": 433,
+     "fp": 39918,
+     "fn": 154,
+     "p": 0.0107,
+     "r": 0.7376,
+     "f1": 0.0212,
+     "ceiling": 0.7973,
+     "best": {
+      "f1": 0.048,
+      "p_somatic": 0.25647,
+      "precision": 0.0269,
+      "recall": 0.2232,
+      "tp_baseline": 131,
+      "fp": 4742,
+      "fn": 456
+     }
+    },
+    "pon": {
+     "baseline": 587,
+     "evaluated": 1729,
+     "tp": 154,
+     "fp": 1575,
+     "fn": 433,
+     "p": 0.0891,
+     "r": 0.2624,
+     "f1": 0.133,
+     "ceiling": 0.2845,
+     "best": {
+      "f1": 0.1994,
+      "p_somatic": 0.13901,
+      "precision": 0.2177,
+      "recall": 0.184,
+      "tp_baseline": 108,
+      "fp": 388,
+      "fn": 479
+     }
+    }
+   },
+   "eval_nobed": {
+    "truth_records": 635,
+    "threshold": 0.04801846295595169,
+    "unplaced_pass": 0,
+    "truth_pon_tagged": 413,
+    "raw": {
+     "baseline": 635,
+     "evaluated": 42622,
+     "tp": 463,
+     "fp": 42159,
+     "fn": 172,
+     "p": 0.0109,
+     "r": 0.7291,
+     "f1": 0.0214,
+     "ceiling": 0.789,
+     "best": {
+      "f1": 0.0485,
+      "p_somatic": 0.27021,
+      "precision": 0.0277,
+      "recall": 0.1953,
+      "tp_baseline": 124,
+      "fp": 4353,
+      "fn": 511
+     }
+    },
+    "pon": {
+     "baseline": 635,
+     "evaluated": 1912,
+     "tp": 162,
+     "fp": 1750,
+     "fn": 473,
+     "p": 0.0847,
+     "r": 0.2551,
+     "f1": 0.1272,
+     "ceiling": 0.2787,
+     "best": {
+      "f1": 0.1919,
+      "p_somatic": 0.13901,
+      "precision": 0.2021,
+      "recall": 0.1827,
+      "tp_baseline": 116,
+      "fp": 458,
+      "fn": 519
+     }
+    }
+   }
+  }
+ },
+ {
+  "sample": "HG008T",
+  "platform": "PacBio",
+  "kind": "INDEL",
+  "d9_note": "7fc7396, 1 GPU",
+  "d9": {
+   "run": "HG008_PacBio_INDEL_7fc7396",
+   "vcf_dir": "vcf_chr1",
+   "training": {
+    "train_tensors": 1477288,
+    "train_counts": {
+     "non": 1307921,
+     "somatic": 3588,
+     "germline": 165779
+    },
+    "val_tensors": 98097,
+    "val_counts": {
+     "non": 88590,
+     "somatic": 194,
+     "germline": 9313
+    },
+    "best_epoch": 4,
+    "gpus": 1,
+    "epochs": 12,
+    "train_minutes": 33.3,
+    "tensors_per_second": 8992,
+    "val": {
+     "somatic_ap": 0.09310588883081426,
+     "somatic_f1": 0.19298245614035087,
+     "threshold_r09": 0.03972123563289642
+    }
+   },
+   "test": {
+    "tensors": 151524,
+    "somatic_tensors": 481,
+    "somatic_ap": 0.07573267859200022,
+    "truth_alleles": 588,
+    "with_tensor": 413,
+    "ceiling": 0.7023809523809523,
+    "truth_best": {
+     "threshold": 0.39006945490837097,
+     "tp": 158,
+     "other_tp": 0,
+     "fp": 1238,
+     "fn": 430,
+     "precision": 0.11318051575931232,
+     "recall": 0.2687074829931973,
+     "f1": 0.1592741935483871
+    }
+   },
+   "eval_bed": {
+    "truth_records": 635,
+    "threshold": 0.03972123563289642,
+    "unplaced_pass": 2075,
+    "truth_pon_tagged": 413,
+    "raw": {
+     "baseline": 587,
+     "evaluated": 11759,
+     "tp": 253,
+     "fp": 11506,
+     "fn": 334,
+     "p": 0.0215,
+     "r": 0.431,
+     "f1": 0.041,
+     "ceiling": 0.4651,
+     "best": {
+      "f1": 0.1503,
+      "p_somatic": 0.3913,
+      "precision": 0.1101,
+      "recall": 0.2368,
+      "tp_baseline": 139,
+      "fp": 1124,
+      "fn": 448
+     }
+    },
+    "pon": {
+     "baseline": 587,
+     "evaluated": 2780,
+     "tp": 150,
+     "fp": 2630,
+     "fn": 437,
+     "p": 0.054,
+     "r": 0.2555,
+     "f1": 0.0891,
+     "ceiling": 0.2589,
+     "best": {
+      "f1": 0.2597,
+      "p_somatic": 0.2592,
+      "precision": 0.3561,
+      "recall": 0.2044,
+      "tp_baseline": 120,
+      "fp": 217,
+      "fn": 467
+     }
+    }
+   },
+   "eval_nobed": {
+    "truth_records": 635,
+    "threshold": 0.03972123563289642,
+    "unplaced_pass": 2075,
+    "truth_pon_tagged": 413,
+    "raw": {
+     "baseline": 635,
+     "evaluated": 13300,
+     "tp": 275,
+     "fp": 13025,
+     "fn": 360,
+     "p": 0.0207,
+     "r": 0.4331,
+     "f1": 0.0395,
+     "ceiling": 0.4661,
+     "best": {
+      "f1": 0.1452,
+      "p_somatic": 0.3913,
+      "precision": 0.1058,
+      "recall": 0.2315,
+      "tp_baseline": 147,
+      "fp": 1243,
+      "fn": 488
+     }
+    },
+    "pon": {
+     "baseline": 635,
+     "evaluated": 3290,
+     "tp": 161,
+     "fp": 3129,
+     "fn": 474,
+     "p": 0.0489,
+     "r": 0.2535,
+     "f1": 0.082,
+     "ceiling": 0.2567,
+     "best": {
+      "f1": 0.2473,
+      "p_somatic": 0.2592,
+      "precision": 0.3281,
+      "recall": 0.1984,
+      "tp_baseline": 126,
+      "fp": 258,
+      "fn": 509
+     }
+    }
+   }
+  },
+  "d46": {
+   "run": "HG008_PacBio_INDEL_d46_7fc7396",
+   "vcf_dir": "vcf_chr1",
+   "training": {
+    "train_tensors": 1495804,
+    "train_counts": {
+     "non": 1329154,
+     "somatic": 3761,
+     "germline": 162889
+    },
+    "val_tensors": 78180,
+    "val_counts": {
+     "non": 70488,
+     "somatic": 181,
+     "germline": 7511
+    },
+    "best_epoch": 4,
+    "gpus": 1,
+    "epochs": 12,
+    "train_minutes": 33.8,
+    "tensors_per_second": 8981,
+    "val": {
+     "somatic_ap": 0.12868406023768053,
+     "somatic_f1": 0.2205029013539652,
+     "threshold_r09": 0.026991212740540504
+    }
+   },
+   "test": {
+    "tensors": 153773,
+    "somatic_tensors": 489,
+    "somatic_ap": 0.10201567938907674,
+    "truth_alleles": 588,
+    "with_tensor": 445,
+    "ceiling": 0.7568027210884354,
+    "truth_best": {
+     "threshold": 0.2850108742713928,
+     "tp": 211,
+     "other_tp": 0,
+     "fp": 1652,
+     "fn": 377,
+     "precision": 0.11325818572195384,
+     "recall": 0.358843537414966,
+     "f1": 0.1721746226030192
+    }
+   },
+   "eval_bed": {
+    "truth_records": 635,
+    "threshold": 0.026991212740540504,
+    "unplaced_pass": 3351,
+    "truth_pon_tagged": 413,
+    "raw": {
+     "baseline": 587,
+     "evaluated": 10287,
+     "tp": 253,
+     "fp": 10034,
+     "fn": 334,
+     "p": 0.0246,
+     "r": 0.431,
+     "f1": 0.0465,
+     "ceiling": 0.4617,
+     "best": {
+      "f1": 0.1587,
+      "p_somatic": 0.28534,
+      "precision": 0.1095,
+      "recall": 0.2879,
+      "tp_baseline": 169,
+      "fp": 1374,
+      "fn": 418
+     }
+    },
+    "pon": {
+     "baseline": 587,
+     "evaluated": 2605,
+     "tp": 151,
+     "fp": 2454,
+     "fn": 436,
+     "p": 0.058,
+     "r": 0.2572,
+     "f1": 0.0946,
+     "ceiling": 0.2589,
+     "best": {
+      "f1": 0.2685,
+      "p_somatic": 0.23034,
+      "precision": 0.3538,
+      "recall": 0.2164,
+      "tp_baseline": 127,
+      "fp": 232,
+      "fn": 460
+     }
+    }
+   },
+   "eval_nobed": {
+    "truth_records": 635,
+    "threshold": 0.026991212740540504,
+    "unplaced_pass": 3351,
+    "truth_pon_tagged": 413,
+    "raw": {
+     "baseline": 635,
+     "evaluated": 14440,
+     "tp": 274,
+     "fp": 14166,
+     "fn": 361,
+     "p": 0.019,
+     "r": 0.4315,
+     "f1": 0.0364,
+     "ceiling": 0.463,
+     "best": {
+      "f1": 0.1546,
+      "p_somatic": 0.43219,
+      "precision": 0.1386,
+      "recall": 0.1748,
+      "tp_baseline": 111,
+      "fp": 690,
+      "fn": 524
+     }
+    },
+    "pon": {
+     "baseline": 635,
+     "evaluated": 5167,
+     "tp": 161,
+     "fp": 5006,
+     "fn": 474,
+     "p": 0.0312,
+     "r": 0.2535,
+     "f1": 0.0555,
+     "ceiling": 0.2551,
+     "best": {
+      "f1": 0.2538,
+      "p_somatic": 0.2344,
+      "precision": 0.3259,
+      "recall": 0.2079,
+      "tp_baseline": 132,
+      "fp": 273,
+      "fn": 503
+     }
+    }
+   }
+  },
+  "linear": {
+   "run": "HG008_PacBio_INDEL_linear_7fc7396",
+   "vcf_dir": "vcf_chr1",
+   "training": {
+    "train_tensors": 2015138,
+    "train_counts": {
+     "non": 1326439,
+     "somatic": 6224,
+     "germline": 682475
+    },
+    "val_tensors": 116128,
+    "val_counts": {
+     "non": 77410,
+     "somatic": 349,
+     "germline": 38369
+    },
+    "best_epoch": 4,
+    "gpus": 1,
+    "epochs": 12,
+    "train_minutes": 45.4,
+    "tensors_per_second": 8975,
+    "val": {
+     "somatic_ap": 0.029228816274226337,
+     "somatic_f1": 0.0675818373812038,
+     "threshold_r09": 0.036697905510663986
+    }
+   },
+   "test": {
+    "tensors": 190022,
+    "somatic_tensors": 558,
+    "somatic_ap": 0.022991084048806017,
+    "truth_alleles": 588,
+    "with_tensor": 513,
+    "ceiling": 0.8724489795918368,
+    "truth_best": {
+     "threshold": 0.18715503811836243,
+     "tp": 128,
+     "other_tp": 0,
+     "fp": 3884,
+     "fn": 460,
+     "precision": 0.031904287138584245,
+     "recall": 0.21768707482993196,
+     "f1": 0.05565217391304347
+    }
+   },
+   "eval_bed": {
+    "truth_records": 635,
+    "threshold": 0.036697905510663986,
+    "unplaced_pass": 0,
+    "truth_pon_tagged": 413,
+    "raw": {
+     "baseline": 587,
+     "evaluated": 36811,
+     "tp": 443,
+     "fp": 36368,
+     "fn": 144,
+     "p": 0.012,
+     "r": 0.7547,
+     "f1": 0.0237,
+     "ceiling": 0.8365,
+     "best": {
+      "f1": 0.0555,
+      "p_somatic": 0.20805,
+      "precision": 0.034,
+      "recall": 0.1516,
+      "tp_baseline": 89,
+      "fp": 2532,
+      "fn": 498
+     }
+    },
+    "pon": {
+     "baseline": 587,
+     "evaluated": 1856,
+     "tp": 153,
+     "fp": 1703,
+     "fn": 434,
+     "p": 0.0824,
+     "r": 0.2606,
+     "f1": 0.1253,
+     "ceiling": 0.3015,
+     "best": {
+      "f1": 0.1731,
+      "p_somatic": 0.1159,
+      "precision": 0.1816,
+      "recall": 0.1652,
+      "tp_baseline": 97,
+      "fp": 437,
+      "fn": 490
+     }
+    }
+   },
+   "eval_nobed": {
+    "truth_records": 635,
+    "threshold": 0.036697905510663986,
+    "unplaced_pass": 0,
+    "truth_pon_tagged": 413,
+    "raw": {
+     "baseline": 635,
+     "evaluated": 39448,
+     "tp": 472,
+     "fp": 38976,
+     "fn": 163,
+     "p": 0.012,
+     "r": 0.7433,
+     "f1": 0.0236,
+     "ceiling": 0.8236,
+     "best": {
+      "f1": 0.0546,
+      "p_somatic": 0.20805,
+      "precision": 0.0332,
+      "recall": 0.1543,
+      "tp_baseline": 98,
+      "fp": 2858,
+      "fn": 537
+     }
+    },
+    "pon": {
+     "baseline": 635,
+     "evaluated": 2081,
+     "tp": 164,
+     "fp": 1917,
+     "fn": 471,
+     "p": 0.0788,
+     "r": 0.2583,
+     "f1": 0.1208,
+     "ceiling": 0.2976,
+     "best": {
+      "f1": 0.1632,
+      "p_somatic": 0.1159,
+      "precision": 0.161,
+      "recall": 0.1654,
+      "tp_baseline": 105,
+      "fp": 547,
+      "fn": 530
+     }
+    }
+   }
+  }
+ },
+ {
+  "sample": "HG008T",
+  "platform": "ONT",
+  "kind": "INDEL",
+  "d9_note": "7fc7396, 1 GPU",
+  "d9": {
+   "run": "HG008_ONT_INDEL_7fc7396",
+   "vcf_dir": "vcf_chr1",
+   "training": {
+    "train_tensors": 1890765,
+    "train_counts": {
+     "non": 1696693,
+     "somatic": 3203,
+     "germline": 190869
+    },
+    "val_tensors": 124585,
+    "val_counts": {
+     "non": 113648,
+     "somatic": 181,
+     "germline": 10756
+    },
+    "best_epoch": 5,
+    "gpus": 1,
+    "epochs": 12,
+    "train_minutes": 43.5,
+    "tensors_per_second": 8771,
+    "val": {
+     "somatic_ap": 0.05467744847796327,
+     "somatic_f1": 0.16771488469601678,
+     "threshold_r09": 0.01780148223042488
+    }
+   },
+   "test": {
+    "tensors": 204120,
+    "somatic_tensors": 471,
+    "somatic_ap": 0.031483093014868714,
+    "truth_alleles": 588,
+    "with_tensor": 408,
+    "ceiling": 0.6938775510204082,
+    "truth_best": {
+     "threshold": 0.2260165810585022,
+     "tp": 56,
+     "other_tp": 0,
+     "fp": 587,
+     "fn": 532,
+     "precision": 0.08709175738724728,
+     "recall": 0.09523809523809523,
+     "f1": 0.09098294069861901
+    }
+   },
+   "eval_bed": {
+    "truth_records": 635,
+    "threshold": 0.01780148223042488,
+    "unplaced_pass": 7288,
+    "truth_pon_tagged": 413,
+    "raw": {
+     "baseline": 587,
+     "evaluated": 41052,
+     "tp": 235,
+     "fp": 40815,
+     "fn": 352,
+     "p": 0.0058,
+     "r": 0.4003,
+     "f1": 0.0114,
+     "ceiling": 0.4242,
+     "best": {
+      "f1": 0.0899,
+      "p_somatic": 0.22607,
+      "precision": 0.0865,
+      "recall": 0.0937,
+      "tp_baseline": 55,
+      "fp": 581,
+      "fn": 532
+     }
+    },
+    "pon": {
+     "baseline": 587,
+     "evaluated": 17402,
+     "tp": 134,
+     "fp": 17268,
+     "fn": 453,
+     "p": 0.0077,
+     "r": 0.2283,
+     "f1": 0.0149,
+     "ceiling": 0.2385,
+     "best": {
+      "f1": 0.1402,
+      "p_somatic": 0.16785,
+      "precision": 0.1963,
+      "recall": 0.109,
+      "tp_baseline": 64,
+      "fp": 262,
+      "fn": 523
+     }
+    }
+   },
+   "eval_nobed": {
+    "truth_records": 635,
+    "threshold": 0.01780148223042488,
+    "unplaced_pass": 7288,
+    "truth_pon_tagged": 413,
+    "raw": {
+     "baseline": 635,
+     "evaluated": 44712,
+     "tp": 255,
+     "fp": 44454,
+     "fn": 380,
+     "p": 0.0058,
+     "r": 0.4016,
+     "f1": 0.0114,
+     "ceiling": 0.4252,
+     "best": {
+      "f1": 0.0883,
+      "p_somatic": 0.22607,
+      "precision": 0.0869,
+      "recall": 0.0898,
+      "tp_baseline": 57,
+      "fp": 599,
+      "fn": 578
+     }
+    },
+    "pon": {
+     "baseline": 635,
+     "evaluated": 18968,
+     "tp": 143,
+     "fp": 18825,
+     "fn": 492,
+     "p": 0.0075,
+     "r": 0.2252,
+     "f1": 0.0146,
+     "ceiling": 0.2346,
+     "best": {
+      "f1": 0.1343,
+      "p_somatic": 0.1751,
+      "precision": 0.2013,
+      "recall": 0.1008,
+      "tp_baseline": 64,
+      "fp": 254,
+      "fn": 571
+     }
+    }
+   }
+  },
+  "d46": {
+   "run": "HG008_ONT_INDEL_d46_7fc7396",
+   "vcf_dir": "vcf_chr1",
+   "training": {
+    "train_tensors": 1889740,
+    "train_counts": {
+     "non": 1710450,
+     "somatic": 3249,
+     "germline": 176041
+    },
+    "val_tensors": 99615,
+    "val_counts": {
+     "non": 91378,
+     "somatic": 156,
+     "germline": 8081
+    },
+    "best_epoch": 5,
+    "gpus": 1,
+    "epochs": 12,
+    "train_minutes": 43.7,
+    "tensors_per_second": 8737,
+    "val": {
+     "somatic_ap": 0.07984242428255713,
+     "somatic_f1": 0.17816091954022986,
+     "threshold_r09": 0.013545623049139977
+    }
+   },
+   "test": {
+    "tensors": 205709,
+    "somatic_tensors": 462,
+    "somatic_ap": 0.03721136439544054,
+    "truth_alleles": 588,
+    "with_tensor": 426,
+    "ceiling": 0.7244897959183674,
+    "truth_best": {
+     "threshold": 0.32568058371543884,
+     "tp": 65,
+     "other_tp": 0,
+     "fp": 608,
+     "fn": 523,
+     "precision": 0.09658246656760773,
+     "recall": 0.11054421768707483,
+     "f1": 0.10309278350515465
+    }
+   },
+   "eval_bed": {
+    "truth_records": 635,
+    "threshold": 0.013545623049139977,
+    "unplaced_pass": 9906,
+    "truth_pon_tagged": 413,
+    "raw": {
+     "baseline": 587,
+     "evaluated": 41311,
+     "tp": 226,
+     "fp": 41084,
+     "fn": 361,
+     "p": 0.0055,
+     "r": 0.385,
+     "f1": 0.0108,
+     "ceiling": 0.3901,
+     "best": {
+      "f1": 0.1043,
+      "p_somatic": 0.32563,
+      "precision": 0.0985,
+      "recall": 0.1107,
+      "tp_baseline": 65,
+      "fp": 595,
+      "fn": 522
+     }
+    },
+    "pon": {
+     "baseline": 587,
+     "evaluated": 18559,
+     "tp": 139,
+     "fp": 18420,
+     "fn": 448,
+     "p": 0.0075,
+     "r": 0.2368,
+     "f1": 0.0145,
+     "ceiling": 0.2368,
+     "best": {
+      "f1": 0.1551,
+      "p_somatic": 0.24751,
+      "precision": 0.1974,
+      "recall": 0.1278,
+      "tp_baseline": 75,
+      "fp": 305,
+      "fn": 512
+     }
+    }
+   },
+   "eval_nobed": {
+    "truth_records": 635,
+    "threshold": 0.013545623049139977,
+    "unplaced_pass": 9906,
+    "truth_pon_tagged": 413,
+    "raw": {
+     "baseline": 635,
+     "evaluated": 47139,
+     "tp": 244,
+     "fp": 46894,
+     "fn": 391,
+     "p": 0.0052,
+     "r": 0.3843,
+     "f1": 0.0103,
+     "ceiling": 0.389,
+     "best": {
+      "f1": 0.1033,
+      "p_somatic": 0.32563,
+      "precision": 0.0997,
+      "recall": 0.1071,
+      "tp_baseline": 68,
+      "fp": 614,
+      "fn": 567
+     }
+    },
+    "pon": {
+     "baseline": 635,
+     "evaluated": 22262,
+     "tp": 147,
+     "fp": 22115,
+     "fn": 488,
+     "p": 0.0066,
+     "r": 0.2315,
+     "f1": 0.0128,
+     "ceiling": 0.2315,
+     "best": {
+      "f1": 0.1527,
+      "p_somatic": 0.24751,
+      "precision": 0.1975,
+      "recall": 0.1244,
+      "tp_baseline": 79,
+      "fp": 321,
+      "fn": 556
+     }
+    }
+   }
+  },
+  "linear": {
+   "run": "HG008_ONT_INDEL_linear_7fc7396",
+   "vcf_dir": "vcf_chr1",
+   "training": {
+    "train_tensors": 2340770,
+    "train_counts": {
+     "non": 1683055,
+     "somatic": 4242,
+     "germline": 653473
+    },
+    "val_tensors": 134969,
+    "val_counts": {
+     "non": 97780,
+     "somatic": 251,
+     "germline": 36938
+    },
+    "best_epoch": 5,
+    "gpus": 1,
+    "epochs": 12,
+    "train_minutes": 52.6,
+    "tensors_per_second": 8993,
+    "val": {
+     "somatic_ap": 0.014003465678557972,
+     "somatic_f1": 0.04887585532746822,
+     "threshold_r09": 0.008446893654763699
+    }
+   },
+   "test": {
+    "tensors": 230760,
+    "somatic_tensors": 480,
+    "somatic_ap": 0.011467896786580604,
+    "truth_alleles": 588,
+    "with_tensor": 440,
+    "ceiling": 0.7482993197278912,
+    "truth_best": {
+     "threshold": 0.10558120161294937,
+     "tp": 44,
+     "other_tp": 0,
+     "fp": 2315,
+     "fn": 544,
+     "precision": 0.018651971174226366,
+     "recall": 0.07482993197278912,
+     "f1": 0.029860875466576176
+    }
+   },
+   "eval_bed": {
+    "truth_records": 635,
+    "threshold": 0.008446893654763699,
+    "unplaced_pass": 0,
+    "truth_pon_tagged": 413,
+    "raw": {
+     "baseline": 587,
+     "evaluated": 66045,
+     "tp": 316,
+     "fp": 65729,
+     "fn": 271,
+     "p": 0.0048,
+     "r": 0.5383,
+     "f1": 0.0095,
+     "ceiling": 0.5383,
+     "best": {
+      "f1": 0.0298,
+      "p_somatic": 0.10567,
+      "precision": 0.0186,
+      "recall": 0.075,
+      "tp_baseline": 44,
+      "fp": 2321,
+      "fn": 543
+     }
+    },
+    "pon": {
+     "baseline": 587,
+     "evaluated": 12025,
+     "tp": 140,
+     "fp": 11885,
+     "fn": 447,
+     "p": 0.0116,
+     "r": 0.2385,
+     "f1": 0.0222,
+     "ceiling": 0.2385,
+     "best": {
+      "f1": 0.082,
+      "p_somatic": 0.06093,
+      "precision": 0.0709,
+      "recall": 0.0971,
+      "tp_baseline": 57,
+      "fp": 747,
+      "fn": 530
+     }
+    }
+   },
+   "eval_nobed": {
+    "truth_records": 635,
+    "threshold": 0.008446893654763699,
+    "unplaced_pass": 0,
+    "truth_pon_tagged": 413,
+    "raw": {
+     "baseline": 635,
+     "evaluated": 73448,
+     "tp": 339,
+     "fp": 73109,
+     "fn": 296,
+     "p": 0.0046,
+     "r": 0.5339,
+     "f1": 0.0092,
+     "ceiling": 0.5339,
+     "best": {
+      "f1": 0.0299,
+      "p_somatic": 0.10567,
+      "precision": 0.0189,
+      "recall": 0.0724,
+      "tp_baseline": 46,
+      "fp": 2393,
+      "fn": 589
+     }
+    },
+    "pon": {
+     "baseline": 635,
+     "evaluated": 14211,
+     "tp": 147,
+     "fp": 14064,
+     "fn": 488,
+     "p": 0.0103,
+     "r": 0.2315,
+     "f1": 0.0198,
+     "ceiling": 0.2315,
+     "best": {
+      "f1": 0.0771,
+      "p_somatic": 0.06179,
+      "precision": 0.0667,
+      "recall": 0.0913,
+      "tp_baseline": 58,
+      "fp": 811,
+      "fn": 577
+     }
+    }
+   }
+  }
+ },
+ {
+  "sample": "COLO829T",
+  "platform": "Illumina",
+  "kind": "SNV",
+  "d9_note": "9d6bd8d, 1 GPU",
+  "d9": {
+   "run": "COLO829_Illumina_SNV_h90",
+   "vcf_dir": "vcf_chr1",
+   "training": {
+    "train_tensors": 1143255,
+    "train_counts": {
+     "non": 807850,
+     "somatic": 33782,
+     "germline": 301623
+    },
+    "val_tensors": 68666,
+    "val_counts": {
+     "non": 49537,
+     "somatic": 2060,
+     "germline": 17069
+    },
+    "best_epoch": 6,
+    "gpus": 1,
+    "epochs": 20,
+    "train_minutes": 107.6,
+    "tensors_per_second": 3584,
+    "val": {
+     "somatic_ap": 0.720212225335335,
+     "somatic_f1": 0.6870916873169634,
+     "threshold_r09": 0.3302847445011139
+    }
+   },
+   "test": {
+    "tensors": 103268,
+    "somatic_tensors": 1993,
+    "somatic_ap": 0.724967082527324,
+    "truth_alleles": 2443,
+    "with_tensor": 1993,
+    "ceiling": 0.8158002455996726,
+    "truth_best": {
+     "threshold": 0.6683807969093323,
+     "tp": 1515,
+     "other_tp": 0,
+     "fp": 857,
+     "fn": 928,
+     "precision": 0.6387015177065767,
+     "recall": 0.6201391731477691,
+     "f1": 0.6292834890965732
+    }
+   },
+   "eval_bed": {
+    "truth_records": 2443,
+    "threshold": 0.3302847445011139,
+    "unplaced_pass": 425,
+    "truth_pon_tagged": 84,
+    "raw": {
+     "baseline": 2443,
+     "evaluated": 3798,
+     "tp": 1782,
+     "fp": 2016,
+     "fn": 661,
+     "p": 0.4692,
+     "r": 0.7294,
+     "f1": 0.5711,
+     "ceiling": 0.8195,
+     "best": {
+      "f1": 0.6278,
+      "p_somatic": 0.69211,
+      "precision": 0.6463,
+      "recall": 0.6103,
+      "tp_baseline": 1491,
+      "fp": 816,
+      "fn": 952
+     }
+    },
+    "pon": {
+     "baseline": 2443,
+     "evaluated": 2022,
+     "tp": 1738,
+     "fp": 284,
+     "fn": 705,
+     "p": 0.8595,
+     "r": 0.7114,
+     "f1": 0.7785,
+     "ceiling": 0.7953,
+     "best": {
+      "f1": 0.7803,
+      "p_somatic": 0.32064,
+      "precision": 0.8574,
+      "recall": 0.7159,
+      "tp_baseline": 1749,
+      "fp": 291,
+      "fn": 694
+     }
+    }
+   },
+   "eval_nobed": {
+    "truth_records": 2443,
+    "threshold": 0.3302847445011139,
+    "unplaced_pass": 425,
+    "truth_pon_tagged": 84,
+    "raw": {
+     "baseline": 2443,
+     "evaluated": 3798,
+     "tp": 1782,
+     "fp": 2016,
+     "fn": 661,
+     "p": 0.4692,
+     "r": 0.7294,
+     "f1": 0.5711,
+     "ceiling": 0.8195,
+     "best": {
+      "f1": 0.6278,
+      "p_somatic": 0.69211,
+      "precision": 0.6463,
+      "recall": 0.6103,
+      "tp_baseline": 1491,
+      "fp": 816,
+      "fn": 952
+     }
+    },
+    "pon": {
+     "baseline": 2443,
+     "evaluated": 2022,
+     "tp": 1738,
+     "fp": 284,
+     "fn": 705,
+     "p": 0.8595,
+     "r": 0.7114,
+     "f1": 0.7785,
+     "ceiling": 0.7953,
+     "best": {
+      "f1": 0.7803,
+      "p_somatic": 0.32064,
+      "precision": 0.8574,
+      "recall": 0.7159,
+      "tp_baseline": 1749,
+      "fp": 291,
+      "fn": 694
+     }
+    }
+   }
+  },
+  "d46": {
+   "run": "COLO829_Illumina_SNV_d46_7fc7396",
+   "vcf_dir": "vcf_chr1",
+   "training": {
+    "train_tensors": 1118416,
+    "train_counts": {
+     "non": 803764,
+     "somatic": 34110,
+     "germline": 280542
+    },
+    "val_tensors": 55174,
+    "val_counts": {
+     "non": 40055,
+     "somatic": 1737,
+     "germline": 13382
+    },
+    "best_epoch": 7,
+    "gpus": 4,
+    "epochs": 20,
+    "train_minutes": 69.7,
+    "tensors_per_second": 5402,
+    "val": {
+     "somatic_ap": 0.8115075103949131,
+     "somatic_f1": 0.7652221612726274,
+     "threshold_r09": 0.639503002166748
+    }
+   },
+   "test": {
+    "tensors": 98961,
+    "somatic_tensors": 1990,
+    "somatic_ap": 0.8176541706931846,
+    "truth_alleles": 2443,
+    "with_tensor": 1990,
+    "ceiling": 0.8145722472370037,
+    "truth_best": {
+     "threshold": 0.8274879455566406,
+     "tp": 1580,
+     "other_tp": 0,
+     "fp": 517,
+     "fn": 863,
+     "precision": 0.7534573199809251,
+     "recall": 0.6467458043389276,
+     "f1": 0.6960352422907489
+    }
+   },
+   "eval_bed": {
+    "truth_records": 2443,
+    "threshold": 0.639503002166748,
+    "unplaced_pass": 516,
+    "truth_pon_tagged": 84,
+    "raw": {
+     "baseline": 2443,
+     "evaluated": 2771,
+     "tp": 1785,
+     "fp": 986,
+     "fn": 658,
+     "p": 0.6442,
+     "r": 0.7307,
+     "f1": 0.6847,
+     "ceiling": 0.8158,
+     "best": {
+      "f1": 0.6958,
+      "p_somatic": 0.8275,
+      "precision": 0.7495,
+      "recall": 0.6492,
+      "tp_baseline": 1586,
+      "fp": 530,
+      "fn": 857
+     }
+    },
+    "pon": {
+     "baseline": 2443,
+     "evaluated": 2014,
+     "tp": 1746,
+     "fp": 268,
+     "fn": 697,
+     "p": 0.8669,
+     "r": 0.7147,
+     "f1": 0.7835,
+     "ceiling": 0.7929,
+     "best": {
+      "f1": 0.7863,
+      "p_somatic": 0.55012,
+      "precision": 0.8462,
+      "recall": 0.7343,
+      "tp_baseline": 1794,
+      "fp": 326,
+      "fn": 649
+     }
+    }
+   },
+   "eval_nobed": {
+    "truth_records": 2443,
+    "threshold": 0.639503002166748,
+    "unplaced_pass": 516,
+    "truth_pon_tagged": 84,
+    "raw": {
+     "baseline": 2443,
+     "evaluated": 2771,
+     "tp": 1785,
+     "fp": 986,
+     "fn": 658,
+     "p": 0.6442,
+     "r": 0.7307,
+     "f1": 0.6847,
+     "ceiling": 0.8158,
+     "best": {
+      "f1": 0.6958,
+      "p_somatic": 0.8275,
+      "precision": 0.7495,
+      "recall": 0.6492,
+      "tp_baseline": 1586,
+      "fp": 530,
+      "fn": 857
+     }
+    },
+    "pon": {
+     "baseline": 2443,
+     "evaluated": 2014,
+     "tp": 1746,
+     "fp": 268,
+     "fn": 697,
+     "p": 0.8669,
+     "r": 0.7147,
+     "f1": 0.7835,
+     "ceiling": 0.7929,
+     "best": {
+      "f1": 0.7863,
+      "p_somatic": 0.55012,
+      "precision": 0.8462,
+      "recall": 0.7343,
+      "tp_baseline": 1794,
+      "fp": 326,
+      "fn": 649
+     }
+    }
+   }
+  },
+  "linear": {
+   "run": "COLO829_Illumina_SNV_linear_7fc7396",
+   "vcf_dir": "vcf_chr1",
+   "training": {
+    "train_tensors": 4041906,
+    "train_counts": {
+     "non": 1115204,
+     "somatic": 34341,
+     "germline": 2892361
+    },
+    "val_tensors": 230955,
+    "val_counts": {
+     "non": 65265,
+     "somatic": 1775,
+     "germline": 163915
+    },
+    "best_epoch": 7,
+    "gpus": 4,
+    "epochs": 20,
+    "train_minutes": 266.4,
+    "tensors_per_second": 5076,
+    "val": {
+     "somatic_ap": 0.2273468938972157,
+     "somatic_f1": 0.28718212175699975,
+     "threshold_r09": 0.08059561997652054
+    }
+   },
+   "test": {
+    "tensors": 305975,
+    "somatic_tensors": 2013,
+    "somatic_ap": 0.22725933394726835,
+    "truth_alleles": 2443,
+    "with_tensor": 2013,
+    "ceiling": 0.8239869013507982,
+    "truth_best": {
+     "threshold": 0.7497454285621643,
+     "tp": 597,
+     "other_tp": 0,
+     "fp": 1349,
+     "fn": 1846,
+     "precision": 0.3067831449126413,
+     "recall": 0.24437167417110112,
+     "f1": 0.27204374572795625
+    }
+   },
+   "eval_bed": {
+    "truth_records": 2443,
+    "threshold": 0.08059561997652054,
+    "unplaced_pass": 0,
+    "truth_pon_tagged": 84,
+    "raw": {
+     "baseline": 2443,
+     "evaluated": 37586,
+     "tp": 1464,
+     "fp": 36122,
+     "fn": 979,
+     "p": 0.039,
+     "r": 0.5993,
+     "f1": 0.0731,
+     "ceiling": 0.7388,
+     "best": {
+      "f1": 0.261,
+      "p_somatic": 0.75197,
+      "precision": 0.2833,
+      "recall": 0.2419,
+      "tp_baseline": 591,
+      "fp": 1495,
+      "fn": 1852
+     }
+    },
+    "pon": {
+     "baseline": 2443,
+     "evaluated": 3639,
+     "tp": 1423,
+     "fp": 2216,
+     "fn": 1020,
+     "p": 0.391,
+     "r": 0.5825,
+     "f1": 0.4679,
+     "ceiling": 0.7167,
+     "best": {
+      "f1": 0.5542,
+      "p_somatic": 0.28862,
+      "precision": 0.6568,
+      "recall": 0.4793,
+      "tp_baseline": 1171,
+      "fp": 612,
+      "fn": 1272
+     }
+    }
+   },
+   "eval_nobed": {
+    "truth_records": 2443,
+    "threshold": 0.08059561997652054,
+    "unplaced_pass": 0,
+    "truth_pon_tagged": 84,
+    "raw": {
+     "baseline": 2443,
+     "evaluated": 37586,
+     "tp": 1464,
+     "fp": 36122,
+     "fn": 979,
+     "p": 0.039,
+     "r": 0.5993,
+     "f1": 0.0731,
+     "ceiling": 0.7388,
+     "best": {
+      "f1": 0.261,
+      "p_somatic": 0.75197,
+      "precision": 0.2833,
+      "recall": 0.2419,
+      "tp_baseline": 591,
+      "fp": 1495,
+      "fn": 1852
+     }
+    },
+    "pon": {
+     "baseline": 2443,
+     "evaluated": 3639,
+     "tp": 1423,
+     "fp": 2216,
+     "fn": 1020,
+     "p": 0.391,
+     "r": 0.5825,
+     "f1": 0.4679,
+     "ceiling": 0.7167,
+     "best": {
+      "f1": 0.5542,
+      "p_somatic": 0.28862,
+      "precision": 0.6568,
+      "recall": 0.4793,
+      "tp_baseline": 1171,
+      "fp": 612,
+      "fn": 1272
+     }
+    }
+   }
+  }
+ },
+ {
+  "sample": "COLO829T",
+  "platform": "fiberseq",
+  "kind": "SNV",
+  "d9_note": "9d6bd8d, 1 GPU",
+  "d9": {
+   "run": "COLO829_fiberseq_SNV_h90",
+   "vcf_dir": "vcf_chr1",
+   "training": {
+    "train_tensors": 495977,
+    "train_counts": {
+     "non": 111360,
+     "somatic": 33669,
+     "germline": 350948
+    },
+    "val_tensors": 26027,
+    "val_counts": {
+     "non": 6285,
+     "somatic": 2066,
+     "germline": 17676
+    },
+    "best_epoch": 12,
+    "gpus": 1,
+    "epochs": 20,
+    "train_minutes": 73.8,
+    "tensors_per_second": 2273,
+    "val": {
+     "somatic_ap": 0.7113780516816773,
+     "somatic_f1": 0.691736304549675,
+     "threshold_r09": 0.393819123506546
+    }
+   },
+   "test": {
+    "tensors": 33589,
+    "somatic_tensors": 1993,
+    "somatic_ap": 0.7243336144418822,
+    "truth_alleles": 2443,
+    "with_tensor": 1993,
+    "ceiling": 0.8158002455996726,
+    "truth_best": {
+     "threshold": 0.7363191246986389,
+     "tp": 1501,
+     "other_tp": 0,
+     "fp": 832,
+     "fn": 942,
+     "precision": 0.6433776253750536,
+     "recall": 0.6144085141219812,
+     "f1": 0.6285594639865997
+    }
+   },
+   "eval_bed": {
+    "truth_records": 2443,
+    "threshold": 0.393819123506546,
+    "unplaced_pass": 1018,
+    "truth_pon_tagged": 84,
+    "raw": {
+     "baseline": 2443,
+     "evaluated": 4037,
+     "tp": 1798,
+     "fp": 2239,
+     "fn": 645,
+     "p": 0.4454,
+     "r": 0.736,
+     "f1": 0.5549,
+     "ceiling": 0.815,
+     "best": {
+      "f1": 0.6285,
+      "p_somatic": 0.73631,
+      "precision": 0.6419,
+      "recall": 0.6156,
+      "tp_baseline": 1504,
+      "fp": 839,
+      "fn": 939
+     }
+    },
+    "pon": {
+     "baseline": 2443,
+     "evaluated": 2045,
+     "tp": 1752,
+     "fp": 293,
+     "fn": 691,
+     "p": 0.8567,
+     "r": 0.7172,
+     "f1": 0.7807,
+     "ceiling": 0.7916,
+     "best": {
+      "f1": 0.7838,
+      "p_somatic": 0.35687,
+      "precision": 0.8491,
+      "recall": 0.7278,
+      "tp_baseline": 1778,
+      "fp": 316,
+      "fn": 665
+     }
+    }
+   },
+   "eval_nobed": {
+    "truth_records": 2443,
+    "threshold": 0.393819123506546,
+    "unplaced_pass": 1018,
+    "truth_pon_tagged": 84,
+    "raw": {
+     "baseline": 2443,
+     "evaluated": 4037,
+     "tp": 1798,
+     "fp": 2239,
+     "fn": 645,
+     "p": 0.4454,
+     "r": 0.736,
+     "f1": 0.5549,
+     "ceiling": 0.815,
+     "best": {
+      "f1": 0.6285,
+      "p_somatic": 0.73631,
+      "precision": 0.6419,
+      "recall": 0.6156,
+      "tp_baseline": 1504,
+      "fp": 839,
+      "fn": 939
+     }
+    },
+    "pon": {
+     "baseline": 2443,
+     "evaluated": 2045,
+     "tp": 1752,
+     "fp": 293,
+     "fn": 691,
+     "p": 0.8567,
+     "r": 0.7172,
+     "f1": 0.7807,
+     "ceiling": 0.7916,
+     "best": {
+      "f1": 0.7838,
+      "p_somatic": 0.35687,
+      "precision": 0.8491,
+      "recall": 0.7278,
+      "tp_baseline": 1778,
+      "fp": 316,
+      "fn": 665
+     }
+    }
+   }
+  },
+  "d46": {
+   "run": "COLO829_fiberseq_SNV_d46_7fc7396",
+   "vcf_dir": "vcf_chr1",
+   "training": {
+    "train_tensors": 507150,
+    "train_counts": {
+     "non": 152721,
+     "somatic": 33998,
+     "germline": 320431
+    },
+    "val_tensors": 23653,
+    "val_counts": {
+     "non": 8016,
+     "somatic": 1725,
+     "germline": 13912
+    },
+    "best_epoch": 9,
+    "gpus": 4,
+    "epochs": 20,
+    "train_minutes": 14.6,
+    "tensors_per_second": 12637,
+    "val": {
+     "somatic_ap": 0.8220971852786182,
+     "somatic_f1": 0.7735583684950774,
+     "threshold_r09": 0.4811917543411255
+    }
+   },
+   "test": {
+    "tensors": 26608,
+    "somatic_tensors": 1995,
+    "somatic_ap": 0.8291372623386666,
+    "truth_alleles": 2443,
+    "with_tensor": 1995,
+    "ceiling": 0.8166189111747851,
+    "truth_best": {
+     "threshold": 0.6724296808242798,
+     "tp": 1620,
+     "other_tp": 0,
+     "fp": 547,
+     "fn": 823,
+     "precision": 0.747577295800646,
+     "recall": 0.6631191158411789,
+     "f1": 0.7028199566160521
+    }
+   },
+   "eval_bed": {
+    "truth_records": 2443,
+    "threshold": 0.4811917543411255,
+    "unplaced_pass": 258,
+    "truth_pon_tagged": 84,
+    "raw": {
+     "baseline": 2443,
+     "evaluated": 2734,
+     "tp": 1768,
+     "fp": 966,
+     "fn": 675,
+     "p": 0.6467,
+     "r": 0.7237,
+     "f1": 0.683,
+     "ceiling": 0.8191,
+     "best": {
+      "f1": 0.7,
+      "p_somatic": 0.67243,
+      "precision": 0.7392,
+      "recall": 0.6648,
+      "tp_baseline": 1624,
+      "fp": 573,
+      "fn": 819
+     }
+    },
+    "pon": {
+     "baseline": 2443,
+     "evaluated": 1996,
+     "tp": 1728,
+     "fp": 268,
+     "fn": 715,
+     "p": 0.8657,
+     "r": 0.7073,
+     "f1": 0.7786,
+     "ceiling": 0.7953,
+     "best": {
+      "f1": 0.783,
+      "p_somatic": 0.33243,
+      "precision": 0.825,
+      "recall": 0.745,
+      "tp_baseline": 1820,
+      "fp": 386,
+      "fn": 623
+     }
+    }
+   },
+   "eval_nobed": {
+    "truth_records": 2443,
+    "threshold": 0.4811917543411255,
+    "unplaced_pass": 258,
+    "truth_pon_tagged": 84,
+    "raw": {
+     "baseline": 2443,
+     "evaluated": 2734,
+     "tp": 1768,
+     "fp": 966,
+     "fn": 675,
+     "p": 0.6467,
+     "r": 0.7237,
+     "f1": 0.683,
+     "ceiling": 0.8191,
+     "best": {
+      "f1": 0.7,
+      "p_somatic": 0.67243,
+      "precision": 0.7392,
+      "recall": 0.6648,
+      "tp_baseline": 1624,
+      "fp": 573,
+      "fn": 819
+     }
+    },
+    "pon": {
+     "baseline": 2443,
+     "evaluated": 1996,
+     "tp": 1728,
+     "fp": 268,
+     "fn": 715,
+     "p": 0.8657,
+     "r": 0.7073,
+     "f1": 0.7786,
+     "ceiling": 0.7953,
+     "best": {
+      "f1": 0.783,
+      "p_somatic": 0.33243,
+      "precision": 0.825,
+      "recall": 0.745,
+      "tp_baseline": 1820,
+      "fp": 386,
+      "fn": 623
+     }
+    }
+   }
+  },
+  "linear": {
+   "run": "COLO829_fiberseq_SNV_linear_7fc7396",
+   "vcf_dir": "vcf_chr1",
+   "training": {
+    "train_tensors": 3206766,
+    "train_counts": {
+     "non": 221989,
+     "somatic": 34100,
+     "germline": 2950677
+    },
+    "val_tensors": 180706,
+    "val_counts": {
+     "non": 13452,
+     "somatic": 1774,
+     "germline": 165480
+    },
+    "best_epoch": 10,
+    "gpus": 4,
+    "epochs": 20,
+    "train_minutes": 80.6,
+    "tensors_per_second": 13442,
+    "val": {
+     "somatic_ap": 0.25640133655857217,
+     "somatic_f1": 0.2971931755641167,
+     "threshold_r09": 0.0851980671286583
+    }
+   },
+   "test": {
+    "tensors": 218042,
+    "somatic_tensors": 2001,
+    "somatic_ap": 0.2878526924234909,
+    "truth_alleles": 2443,
+    "with_tensor": 2001,
+    "ceiling": 0.8190749079001228,
+    "truth_best": {
+     "threshold": 0.8128407001495361,
+     "tp": 625,
+     "other_tp": 0,
+     "fp": 1202,
+     "fn": 1818,
+     "precision": 0.34209085933223865,
+     "recall": 0.255832992222677,
+     "f1": 0.2927400468384075
+    }
+   },
+   "eval_bed": {
+    "truth_records": 2443,
+    "threshold": 0.0851980671286583,
+    "unplaced_pass": 0,
+    "truth_pon_tagged": 84,
+    "raw": {
+     "baseline": 2443,
+     "evaluated": 39196,
+     "tp": 1569,
+     "fp": 37627,
+     "fn": 874,
+     "p": 0.04,
+     "r": 0.6422,
+     "f1": 0.0754,
+     "ceiling": 0.765,
+     "best": {
+      "f1": 0.2828,
+      "p_somatic": 0.81285,
+      "precision": 0.3155,
+      "recall": 0.2562,
+      "tp_baseline": 626,
+      "fp": 1358,
+      "fn": 1817
+     }
+    },
+    "pon": {
+     "baseline": 2443,
+     "evaluated": 2048,
+     "tp": 1526,
+     "fp": 522,
+     "fn": 917,
+     "p": 0.7451,
+     "r": 0.6246,
+     "f1": 0.6796,
+     "ceiling": 0.7405,
+     "best": {
+      "f1": 0.6816,
+      "p_somatic": 0.0926,
+      "precision": 0.7596,
+      "recall": 0.6181,
+      "tp_baseline": 1510,
+      "fp": 478,
+      "fn": 933
+     }
+    }
+   },
+   "eval_nobed": {
+    "truth_records": 2443,
+    "threshold": 0.0851980671286583,
+    "unplaced_pass": 0,
+    "truth_pon_tagged": 84,
+    "raw": {
+     "baseline": 2443,
+     "evaluated": 39196,
+     "tp": 1569,
+     "fp": 37627,
+     "fn": 874,
+     "p": 0.04,
+     "r": 0.6422,
+     "f1": 0.0754,
+     "ceiling": 0.765,
+     "best": {
+      "f1": 0.2828,
+      "p_somatic": 0.81285,
+      "precision": 0.3155,
+      "recall": 0.2562,
+      "tp_baseline": 626,
+      "fp": 1358,
+      "fn": 1817
+     }
+    },
+    "pon": {
+     "baseline": 2443,
+     "evaluated": 2048,
+     "tp": 1526,
+     "fp": 522,
+     "fn": 917,
+     "p": 0.7451,
+     "r": 0.6246,
+     "f1": 0.6796,
+     "ceiling": 0.7405,
+     "best": {
+      "f1": 0.6816,
+      "p_somatic": 0.0926,
+      "precision": 0.7596,
+      "recall": 0.6181,
+      "tp_baseline": 1510,
+      "fp": 478,
+      "fn": 933
+     }
+    }
+   }
+  }
+ },
+ {
+  "sample": "COLO829T",
+  "platform": "ONT",
+  "kind": "SNV",
+  "d9_note": "9d6bd8d, 1 GPU",
+  "d9": {
+   "run": "COLO829_ONT_SNV_h90",
+   "vcf_dir": "vcf_chr1",
+   "training": {
+    "train_tensors": 777861,
+    "train_counts": {
+     "non": 363230,
+     "somatic": 33472,
+     "germline": 381159
+    },
+    "val_tensors": 41606,
+    "val_counts": {
+     "non": 21065,
+     "somatic": 2037,
+     "germline": 18504
+    },
+    "best_epoch": 8,
+    "gpus": 1,
+    "epochs": 20,
+    "train_minutes": 73.1,
+    "tensors_per_second": 3600,
+    "val": {
+     "somatic_ap": 0.6900812708745231,
+     "somatic_f1": 0.6778801843317973,
+     "threshold_r09": 0.46326810121536255
+    }
+   },
+   "test": {
+    "tensors": 61531,
+    "somatic_tensors": 1984,
+    "somatic_ap": 0.6666750294990333,
+    "truth_alleles": 2443,
+    "with_tensor": 1984,
+    "ceiling": 0.812116250511666,
+    "truth_best": {
+     "threshold": 0.743262767791748,
+     "tp": 1431,
+     "other_tp": 0,
+     "fp": 933,
+     "fn": 1012,
+     "precision": 0.6053299492385786,
+     "recall": 0.5857552189930414,
+     "f1": 0.5953817349698357
+    }
+   },
+   "eval_bed": {
+    "truth_records": 2443,
+    "threshold": 0.46326810121536255,
+    "unplaced_pass": 1675,
+    "truth_pon_tagged": 84,
+    "raw": {
+     "baseline": 2443,
+     "evaluated": 4520,
+     "tp": 1721,
+     "fp": 2799,
+     "fn": 722,
+     "p": 0.3808,
+     "r": 0.7045,
+     "f1": 0.4943,
+     "ceiling": 0.8121,
+     "best": {
+      "f1": 0.586,
+      "p_somatic": 0.77081,
+      "precision": 0.6044,
+      "recall": 0.5686,
+      "tp_baseline": 1389,
+      "fp": 909,
+      "fn": 1054
+     }
+    },
+    "pon": {
+     "baseline": 2443,
+     "evaluated": 2306,
+     "tp": 1676,
+     "fp": 630,
+     "fn": 767,
+     "p": 0.7268,
+     "r": 0.686,
+     "f1": 0.7058,
+     "ceiling": 0.7896,
+     "best": {
+      "f1": 0.7165,
+      "p_somatic": 0.61078,
+      "precision": 0.8201,
+      "recall": 0.6361,
+      "tp_baseline": 1554,
+      "fp": 341,
+      "fn": 889
+     }
+    }
+   },
+   "eval_nobed": {
+    "truth_records": 2443,
+    "threshold": 0.46326810121536255,
+    "unplaced_pass": 1675,
+    "truth_pon_tagged": 84,
+    "raw": {
+     "baseline": 2443,
+     "evaluated": 4520,
+     "tp": 1721,
+     "fp": 2799,
+     "fn": 722,
+     "p": 0.3808,
+     "r": 0.7045,
+     "f1": 0.4943,
+     "ceiling": 0.8121,
+     "best": {
+      "f1": 0.586,
+      "p_somatic": 0.77081,
+      "precision": 0.6044,
+      "recall": 0.5686,
+      "tp_baseline": 1389,
+      "fp": 909,
+      "fn": 1054
+     }
+    },
+    "pon": {
+     "baseline": 2443,
+     "evaluated": 2306,
+     "tp": 1676,
+     "fp": 630,
+     "fn": 767,
+     "p": 0.7268,
+     "r": 0.686,
+     "f1": 0.7058,
+     "ceiling": 0.7896,
+     "best": {
+      "f1": 0.7165,
+      "p_somatic": 0.61078,
+      "precision": 0.8201,
+      "recall": 0.6361,
+      "tp_baseline": 1554,
+      "fp": 341,
+      "fn": 889
+     }
+    }
+   }
+  },
+  "d46": {
+   "run": "COLO829_ONT_SNV_d46_7fc7396",
+   "vcf_dir": "vcf_chr1",
+   "training": {
+    "train_tensors": 865903,
+    "train_counts": {
+     "non": 476300,
+     "somatic": 33779,
+     "germline": 355824
+    },
+    "val_tensors": 45760,
+    "val_counts": {
+     "non": 29549,
+     "somatic": 1717,
+     "germline": 14494
+    },
+    "best_epoch": 10,
+    "gpus": 4,
+    "epochs": 20,
+    "train_minutes": 23.2,
+    "tensors_per_second": 13131,
+    "val": {
+     "somatic_ap": 0.793770499667991,
+     "somatic_f1": 0.7384954532929181,
+     "threshold_r09": 0.5676898956298828
+    }
+   },
+   "test": {
+    "tensors": 69771,
+    "somatic_tensors": 1983,
+    "somatic_ap": 0.7545264250437871,
+    "truth_alleles": 2443,
+    "with_tensor": 1983,
+    "ceiling": 0.8117069177241097,
+    "truth_best": {
+     "threshold": 0.7706212401390076,
+     "tp": 1549,
+     "other_tp": 0,
+     "fp": 751,
+     "fn": 894,
+     "precision": 0.6734782608695652,
+     "recall": 0.6340564879246827,
+     "f1": 0.6531730971958676
+    }
+   },
+   "eval_bed": {
+    "truth_records": 2443,
+    "threshold": 0.5676898956298828,
+    "unplaced_pass": 4566,
+    "truth_pon_tagged": 84,
+    "raw": {
+     "baseline": 2443,
+     "evaluated": 3082,
+     "tp": 1730,
+     "fp": 1352,
+     "fn": 713,
+     "p": 0.5613,
+     "r": 0.7081,
+     "f1": 0.6262,
+     "ceiling": 0.8146,
+     "best": {
+      "f1": 0.652,
+      "p_somatic": 0.80084,
+      "precision": 0.6879,
+      "recall": 0.6197,
+      "tp_baseline": 1514,
+      "fp": 687,
+      "fn": 929
+     }
+    },
+    "pon": {
+     "baseline": 2443,
+     "evaluated": 2144,
+     "tp": 1690,
+     "fp": 454,
+     "fn": 753,
+     "p": 0.7882,
+     "r": 0.6918,
+     "f1": 0.7369,
+     "ceiling": 0.7916,
+     "best": {
+      "f1": 0.7387,
+      "p_somatic": 0.60826,
+      "precision": 0.8039,
+      "recall": 0.6832,
+      "tp_baseline": 1669,
+      "fp": 407,
+      "fn": 774
+     }
+    }
+   },
+   "eval_nobed": {
+    "truth_records": 2443,
+    "threshold": 0.5676898956298828,
+    "unplaced_pass": 4566,
+    "truth_pon_tagged": 84,
+    "raw": {
+     "baseline": 2443,
+     "evaluated": 3082,
+     "tp": 1730,
+     "fp": 1352,
+     "fn": 713,
+     "p": 0.5613,
+     "r": 0.7081,
+     "f1": 0.6262,
+     "ceiling": 0.8146,
+     "best": {
+      "f1": 0.652,
+      "p_somatic": 0.80084,
+      "precision": 0.6879,
+      "recall": 0.6197,
+      "tp_baseline": 1514,
+      "fp": 687,
+      "fn": 929
+     }
+    },
+    "pon": {
+     "baseline": 2443,
+     "evaluated": 2144,
+     "tp": 1690,
+     "fp": 454,
+     "fn": 753,
+     "p": 0.7882,
+     "r": 0.6918,
+     "f1": 0.7369,
+     "ceiling": 0.7916,
+     "best": {
+      "f1": 0.7387,
+      "p_somatic": 0.60826,
+      "precision": 0.8039,
+      "recall": 0.6832,
+      "tp_baseline": 1669,
+      "fp": 407,
+      "fn": 774
+     }
+    }
+   }
+  },
+  "linear": {
+   "run": "COLO829_ONT_SNV_linear_7fc7396",
+   "vcf_dir": "vcf_chr1",
+   "training": {
+    "train_tensors": 3547357,
+    "train_counts": {
+     "non": 505321,
+     "somatic": 33852,
+     "germline": 3008184
+    },
+    "val_tensors": 198384,
+    "val_counts": {
+     "non": 28773,
+     "somatic": 1750,
+     "germline": 167861
+    },
+    "best_epoch": 6,
+    "gpus": 4,
+    "epochs": 20,
+    "train_minutes": 87.6,
+    "tensors_per_second": 13681,
+    "val": {
+     "somatic_ap": 0.17006357454423005,
+     "somatic_f1": 0.2465567848272748,
+     "threshold_r09": 0.09195131808519363
+    }
+   },
+   "test": {
+    "tensors": 252892,
+    "somatic_tensors": 1991,
+    "somatic_ap": 0.12126273470502567,
+    "truth_alleles": 2443,
+    "with_tensor": 1991,
+    "ceiling": 0.81498158002456,
+    "truth_best": {
+     "threshold": 0.6695296168327332,
+     "tp": 537,
+     "other_tp": 0,
+     "fp": 3029,
+     "fn": 1906,
+     "precision": 0.1505888951205833,
+     "recall": 0.21981170691772411,
+     "f1": 0.17873190214677984
+    }
+   },
+   "eval_bed": {
+    "truth_records": 2443,
+    "threshold": 0.09195131808519363,
+    "unplaced_pass": 0,
+    "truth_pon_tagged": 84,
+    "raw": {
+     "baseline": 2443,
+     "evaluated": 38560,
+     "tp": 1362,
+     "fp": 37198,
+     "fn": 1081,
+     "p": 0.0353,
+     "r": 0.5575,
+     "f1": 0.0664,
+     "ceiling": 0.7008,
+     "best": {
+      "f1": 0.1757,
+      "p_somatic": 0.66955,
+      "precision": 0.1458,
+      "recall": 0.221,
+      "tp_baseline": 540,
+      "fp": 3163,
+      "fn": 1903
+     }
+    },
+    "pon": {
+     "baseline": 2443,
+     "evaluated": 3902,
+     "tp": 1327,
+     "fp": 2575,
+     "fn": 1116,
+     "p": 0.3401,
+     "r": 0.5432,
+     "f1": 0.4183,
+     "ceiling": 0.6799,
+     "best": {
+      "f1": 0.5107,
+      "p_somatic": 0.23897,
+      "precision": 0.5802,
+      "recall": 0.456,
+      "tp_baseline": 1114,
+      "fp": 806,
+      "fn": 1329
+     }
+    }
+   },
+   "eval_nobed": {
+    "truth_records": 2443,
+    "threshold": 0.09195131808519363,
+    "unplaced_pass": 0,
+    "truth_pon_tagged": 84,
+    "raw": {
+     "baseline": 2443,
+     "evaluated": 38560,
+     "tp": 1362,
+     "fp": 37198,
+     "fn": 1081,
+     "p": 0.0353,
+     "r": 0.5575,
+     "f1": 0.0664,
+     "ceiling": 0.7008,
+     "best": {
+      "f1": 0.1757,
+      "p_somatic": 0.66955,
+      "precision": 0.1458,
+      "recall": 0.221,
+      "tp_baseline": 540,
+      "fp": 3163,
+      "fn": 1903
+     }
+    },
+    "pon": {
+     "baseline": 2443,
+     "evaluated": 3902,
+     "tp": 1327,
+     "fp": 2575,
+     "fn": 1116,
+     "p": 0.3401,
+     "r": 0.5432,
+     "f1": 0.4183,
+     "ceiling": 0.6799,
+     "best": {
+      "f1": 0.5107,
+      "p_somatic": 0.23897,
+      "precision": 0.5802,
+      "recall": 0.456,
+      "tp_baseline": 1114,
+      "fp": 806,
+      "fn": 1329
+     }
+    }
+   }
+  }
+ },
+ {
+  "sample": "COLO829T",
+  "platform": "Illumina",
+  "kind": "INDEL",
+  "d9_note": "45d56ad lr 4e-4, 1 GPU",
+  "d9": {
+   "run": "COLO829_Illumina_INDEL_small",
+   "vcf_dir": "vcf_chr1_pon7fc7396",
+   "training": {
+    "train_tensors": 98773,
+    "train_counts": {
+     "non": 30775,
+     "somatic": 971,
+     "germline": 67027
+    },
+    "val_tensors": 6736,
+    "val_counts": {
+     "non": 2648,
+     "somatic": 65,
+     "germline": 4023
+    },
+    "best_epoch": 5,
+    "gpus": 1,
+    "epochs": 12,
+    "train_minutes": 4.3,
+    "tensors_per_second": 8359,
+    "val": {
+     "somatic_ap": 0.06491662852300975,
+     "somatic_f1": 0.1388888888888889,
+     "threshold_r09": 0.020393118262290955
+    }
+   },
+   "test": {
+    "tensors": 7939,
+    "somatic_tensors": 56,
+    "somatic_ap": 0.07065548846000277,
+    "truth_alleles": 131,
+    "with_tensor": 56,
+    "ceiling": 0.42748091603053434,
+    "truth_best": {
+     "threshold": 0.2063528299331665,
+     "tp": 14,
+     "other_tp": 0,
+     "fp": 84,
+     "fn": 117,
+     "precision": 0.14285714285714285,
+     "recall": 0.10687022900763359,
+     "f1": 0.1222707423580786
+    }
+   },
+   "eval_bed": {
+    "truth_records": 131,
+    "threshold": 0.020393118262290955,
+    "unplaced_pass": 260,
+    "truth_pon_tagged": 81,
+    "raw": {
+     "baseline": 131,
+     "evaluated": 3087,
+     "tp": 50,
+     "fp": 3037,
+     "fn": 81,
+     "p": 0.0162,
+     "r": 0.3817,
+     "f1": 0.0311,
+     "ceiling": 0.4046,
+     "best": {
+      "f1": 0.125,
+      "p_somatic": 0.2064,
+      "precision": 0.1505,
+      "recall": 0.1069,
+      "tp_baseline": 14,
+      "fp": 79,
+      "fn": 117
+     }
+    },
+    "pon": {
+     "baseline": 131,
+     "evaluated": 476,
+     "tp": 35,
+     "fp": 441,
+     "fn": 96,
+     "p": 0.0735,
+     "r": 0.2672,
+     "f1": 0.1153,
+     "ceiling": 0.2748,
+     "best": {
+      "f1": 0.1953,
+      "p_somatic": 0.11733,
+      "precision": 0.2,
+      "recall": 0.1908,
+      "tp_baseline": 25,
+      "fp": 100,
+      "fn": 106
+     }
+    }
+   },
+   "eval_nobed": {
+    "truth_records": 131,
+    "threshold": 0.020393118262290955,
+    "unplaced_pass": 260,
+    "truth_pon_tagged": 81,
+    "raw": {
+     "baseline": 131,
+     "evaluated": 3087,
+     "tp": 50,
+     "fp": 3037,
+     "fn": 81,
+     "p": 0.0162,
+     "r": 0.3817,
+     "f1": 0.0311,
+     "ceiling": 0.4046,
+     "best": {
+      "f1": 0.125,
+      "p_somatic": 0.2064,
+      "precision": 0.1505,
+      "recall": 0.1069,
+      "tp_baseline": 14,
+      "fp": 79,
+      "fn": 117
+     }
+    },
+    "pon": {
+     "baseline": 131,
+     "evaluated": 476,
+     "tp": 35,
+     "fp": 441,
+     "fn": 96,
+     "p": 0.0735,
+     "r": 0.2672,
+     "f1": 0.1153,
+     "ceiling": 0.2748,
+     "best": {
+      "f1": 0.1953,
+      "p_somatic": 0.11733,
+      "precision": 0.2,
+      "recall": 0.1908,
+      "tp_baseline": 25,
+      "fp": 100,
+      "fn": 106
+     }
+    }
+   }
+  },
+  "d46": {
+   "run": "COLO829_Illumina_INDEL_d46_7fc7396",
+   "vcf_dir": "vcf_chr1",
+   "training": {
+    "train_tensors": 85544,
+    "train_counts": {
+     "non": 23386,
+     "somatic": 1048,
+     "germline": 61110
+    },
+    "val_tensors": 4937,
+    "val_counts": {
+     "non": 1928,
+     "somatic": 52,
+     "germline": 2957
+    },
+    "best_epoch": 7,
+    "gpus": 1,
+    "epochs": 12,
+    "train_minutes": 2.4,
+    "tensors_per_second": 8572,
+    "val": {
+     "somatic_ap": 0.05739578008461973,
+     "somatic_f1": 0.1616161616161616,
+     "threshold_r09": 0.02222439832985401
+    }
+   },
+   "test": {
+    "tensors": 6967,
+    "somatic_tensors": 81,
+    "somatic_ap": 0.056965592573399275,
+    "truth_alleles": 131,
+    "with_tensor": 74,
+    "ceiling": 0.5648854961832062,
+    "truth_best": {
+     "threshold": 0.22821469604969025,
+     "tp": 12,
+     "other_tp": 0,
+     "fp": 70,
+     "fn": 119,
+     "precision": 0.14634146341463414,
+     "recall": 0.0916030534351145,
+     "f1": 0.11267605633802816
+    }
+   },
+   "eval_bed": {
+    "truth_records": 131,
+    "threshold": 0.02222439832985401,
+    "unplaced_pass": 366,
+    "truth_pon_tagged": 81,
+    "raw": {
+     "baseline": 131,
+     "evaluated": 2626,
+     "tp": 51,
+     "fp": 2575,
+     "fn": 80,
+     "p": 0.0194,
+     "r": 0.3893,
+     "f1": 0.037,
+     "ceiling": 0.4275,
+     "best": {
+      "f1": 0.1048,
+      "p_somatic": 0.22821,
+      "precision": 0.1392,
+      "recall": 0.084,
+      "tp_baseline": 11,
+      "fp": 68,
+      "fn": 120
+     }
+    },
+    "pon": {
+     "baseline": 131,
+     "evaluated": 454,
+     "tp": 32,
+     "fp": 422,
+     "fn": 99,
+     "p": 0.0705,
+     "r": 0.2443,
+     "f1": 0.1094,
+     "ceiling": 0.2672,
+     "best": {
+      "f1": 0.1626,
+      "p_somatic": 0.1034,
+      "precision": 0.1739,
+      "recall": 0.1527,
+      "tp_baseline": 20,
+      "fp": 95,
+      "fn": 111
+     }
+    }
+   },
+   "eval_nobed": {
+    "truth_records": 131,
+    "threshold": 0.02222439832985401,
+    "unplaced_pass": 366,
+    "truth_pon_tagged": 81,
+    "raw": {
+     "baseline": 131,
+     "evaluated": 2626,
+     "tp": 51,
+     "fp": 2575,
+     "fn": 80,
+     "p": 0.0194,
+     "r": 0.3893,
+     "f1": 0.037,
+     "ceiling": 0.4275,
+     "best": {
+      "f1": 0.1048,
+      "p_somatic": 0.22821,
+      "precision": 0.1392,
+      "recall": 0.084,
+      "tp_baseline": 11,
+      "fp": 68,
+      "fn": 120
+     }
+    },
+    "pon": {
+     "baseline": 131,
+     "evaluated": 454,
+     "tp": 32,
+     "fp": 422,
+     "fn": 99,
+     "p": 0.0705,
+     "r": 0.2443,
+     "f1": 0.1094,
+     "ceiling": 0.2672,
+     "best": {
+      "f1": 0.1626,
+      "p_somatic": 0.1034,
+      "precision": 0.1739,
+      "recall": 0.1527,
+      "tp_baseline": 20,
+      "fp": 95,
+      "fn": 111
+     }
+    }
+   }
+  },
+  "linear": {
+   "run": "COLO829_Illumina_INDEL_linear_7fc7396",
+   "vcf_dir": "vcf_chr1",
+   "training": {
+    "train_tensors": 777809,
+    "train_counts": {
+     "non": 120648,
+     "somatic": 1555,
+     "germline": 655606
+    },
+    "val_tensors": 44526,
+    "val_counts": {
+     "non": 6866,
+     "somatic": 91,
+     "germline": 37569
+    },
+    "best_epoch": 4,
+    "gpus": 1,
+    "epochs": 12,
+    "train_minutes": 17.8,
+    "tensors_per_second": 8973,
+    "val": {
+     "somatic_ap": 0.00716077229082478,
+     "somatic_f1": 0.029325513196480937,
+     "threshold_r09": 0.010956976562738419
+    }
+   },
+   "test": {
+    "tensors": 60687,
+    "somatic_tensors": 116,
+    "somatic_ap": 0.02610926097857632,
+    "truth_alleles": 131,
+    "with_tensor": 110,
+    "ceiling": 0.8396946564885496,
+    "truth_best": {
+     "threshold": 0.0739012137055397,
+     "tp": 12,
+     "other_tp": 0,
+     "fp": 145,
+     "fn": 119,
+     "precision": 0.07643312101910828,
+     "recall": 0.0916030534351145,
+     "f1": 0.08333333333333333
+    }
+   },
+   "eval_bed": {
+    "truth_records": 131,
+    "threshold": 0.010956976562738419,
+    "unplaced_pass": 0,
+    "truth_pon_tagged": 81,
+    "raw": {
+     "baseline": 131,
+     "evaluated": 22349,
+     "tp": 81,
+     "fp": 22268,
+     "fn": 50,
+     "p": 0.0036,
+     "r": 0.6183,
+     "f1": 0.0072,
+     "ceiling": 0.6412,
+     "best": {
+      "f1": 0.0714,
+      "p_somatic": 0.09009,
+      "precision": 0.1622,
+      "recall": 0.0458,
+      "tp_baseline": 6,
+      "fp": 31,
+      "fn": 125
+     }
+    },
+    "pon": {
+     "baseline": 131,
+     "evaluated": 1670,
+     "tp": 29,
+     "fp": 1641,
+     "fn": 102,
+     "p": 0.0174,
+     "r": 0.2214,
+     "f1": 0.0322,
+     "ceiling": 0.2443,
+     "best": {
+      "f1": 0.0686,
+      "p_somatic": 0.0494,
+      "precision": 0.0548,
+      "recall": 0.0916,
+      "tp_baseline": 12,
+      "fp": 207,
+      "fn": 119
+     }
+    }
+   },
+   "eval_nobed": {
+    "truth_records": 131,
+    "threshold": 0.010956976562738419,
+    "unplaced_pass": 0,
+    "truth_pon_tagged": 81,
+    "raw": {
+     "baseline": 131,
+     "evaluated": 22349,
+     "tp": 81,
+     "fp": 22268,
+     "fn": 50,
+     "p": 0.0036,
+     "r": 0.6183,
+     "f1": 0.0072,
+     "ceiling": 0.6412,
+     "best": {
+      "f1": 0.0714,
+      "p_somatic": 0.09009,
+      "precision": 0.1622,
+      "recall": 0.0458,
+      "tp_baseline": 6,
+      "fp": 31,
+      "fn": 125
+     }
+    },
+    "pon": {
+     "baseline": 131,
+     "evaluated": 1670,
+     "tp": 29,
+     "fp": 1641,
+     "fn": 102,
+     "p": 0.0174,
+     "r": 0.2214,
+     "f1": 0.0322,
+     "ceiling": 0.2443,
+     "best": {
+      "f1": 0.0686,
+      "p_somatic": 0.0494,
+      "precision": 0.0548,
+      "recall": 0.0916,
+      "tp_baseline": 12,
+      "fp": 207,
+      "fn": 119
+     }
+    }
+   }
+  }
+ },
+ {
+  "sample": "COLO829T",
+  "platform": "fiberseq",
+  "kind": "INDEL",
+  "d9_note": "45d56ad lr 4e-4, 1 GPU",
+  "d9": {
+   "run": "COLO829_fiberseq_INDEL_small",
+   "vcf_dir": "vcf_chr1_pon7fc7396",
+   "training": {
+    "train_tensors": 1307003,
+    "train_counts": {
+     "non": 1124518,
+     "somatic": 1078,
+     "germline": 181407
+    },
+    "val_tensors": 89234,
+    "val_counts": {
+     "non": 78510,
+     "somatic": 73,
+     "germline": 10651
+    },
+    "best_epoch": 7,
+    "gpus": 1,
+    "epochs": 12,
+    "train_minutes": 43.7,
+    "tensors_per_second": 6191,
+    "val": {
+     "somatic_ap": 0.0350700351043377,
+     "somatic_f1": 0.09142857142857143,
+     "threshold_r09": 0.005995212588459253
+    }
+   },
+   "test": {
+    "tensors": 143534,
+    "somatic_tensors": 60,
+    "somatic_ap": 0.02919582286924848,
+    "truth_alleles": 131,
+    "with_tensor": 60,
+    "ceiling": 0.4580152671755725,
+    "truth_best": {
+     "threshold": 0.3818938434123993,
+     "tp": 14,
+     "other_tp": 0,
+     "fp": 274,
+     "fn": 117,
+     "precision": 0.04861111111111111,
+     "recall": 0.10687022900763359,
+     "f1": 0.06682577565632457
+    }
+   },
+   "eval_bed": {
+    "truth_records": 131,
+    "threshold": 0.005995212588459253,
+    "unplaced_pass": 2662,
+    "truth_pon_tagged": 81,
+    "raw": {
+     "baseline": 131,
+     "evaluated": 11374,
+     "tp": 55,
+     "fp": 11319,
+     "fn": 76,
+     "p": 0.0048,
+     "r": 0.4198,
+     "f1": 0.0096,
+     "ceiling": 0.4198,
+     "best": {
+      "f1": 0.0687,
+      "p_somatic": 0.34295,
+      "precision": 0.0458,
+      "recall": 0.1374,
+      "tp_baseline": 18,
+      "fp": 375,
+      "fn": 113
+     }
+    },
+    "pon": {
+     "baseline": 131,
+     "evaluated": 3898,
+     "tp": 32,
+     "fp": 3866,
+     "fn": 99,
+     "p": 0.0082,
+     "r": 0.2443,
+     "f1": 0.0159,
+     "ceiling": 0.2443,
+     "best": {
+      "f1": 0.1198,
+      "p_somatic": 0.34295,
+      "precision": 0.1512,
+      "recall": 0.0992,
+      "tp_baseline": 13,
+      "fp": 73,
+      "fn": 118
+     }
+    }
+   },
+   "eval_nobed": {
+    "truth_records": 131,
+    "threshold": 0.005995212588459253,
+    "unplaced_pass": 2662,
+    "truth_pon_tagged": 81,
+    "raw": {
+     "baseline": 131,
+     "evaluated": 11374,
+     "tp": 55,
+     "fp": 11319,
+     "fn": 76,
+     "p": 0.0048,
+     "r": 0.4198,
+     "f1": 0.0096,
+     "ceiling": 0.4198,
+     "best": {
+      "f1": 0.0687,
+      "p_somatic": 0.34295,
+      "precision": 0.0458,
+      "recall": 0.1374,
+      "tp_baseline": 18,
+      "fp": 375,
+      "fn": 113
+     }
+    },
+    "pon": {
+     "baseline": 131,
+     "evaluated": 3898,
+     "tp": 32,
+     "fp": 3866,
+     "fn": 99,
+     "p": 0.0082,
+     "r": 0.2443,
+     "f1": 0.0159,
+     "ceiling": 0.2443,
+     "best": {
+      "f1": 0.1198,
+      "p_somatic": 0.34295,
+      "precision": 0.1512,
+      "recall": 0.0992,
+      "tp_baseline": 13,
+      "fp": 73,
+      "fn": 118
+     }
+    }
+   }
+  },
+  "d46": {
+   "run": "COLO829_fiberseq_INDEL_d46_7fc7396",
+   "vcf_dir": "vcf_chr1",
+   "training": {
+    "train_tensors": 1331922,
+    "train_counts": {
+     "non": 1149976,
+     "somatic": 1141,
+     "germline": 180805
+    },
+    "val_tensors": 71790,
+    "val_counts": {
+     "non": 63255,
+     "somatic": 58,
+     "germline": 8477
+    },
+    "best_epoch": 2,
+    "gpus": 1,
+    "epochs": 12,
+    "train_minutes": 30.2,
+    "tensors_per_second": 8957,
+    "val": {
+     "somatic_ap": 0.03855718729393613,
+     "somatic_f1": 0.13978494623655913,
+     "threshold_r09": 0.011724080890417099
+    }
+   },
+   "test": {
+    "tensors": 146463,
+    "somatic_tensors": 103,
+    "somatic_ap": 0.02313005824644124,
+    "truth_alleles": 131,
+    "with_tensor": 91,
+    "ceiling": 0.6946564885496184,
+    "truth_best": {
+     "threshold": 0.4059198796749115,
+     "tp": 11,
+     "other_tp": 0,
+     "fp": 107,
+     "fn": 120,
+     "precision": 0.09322033898305085,
+     "recall": 0.08396946564885496,
+     "f1": 0.08835341365461846
+    }
+   },
+   "eval_bed": {
+    "truth_records": 131,
+    "threshold": 0.011724080890417099,
+    "unplaced_pass": 2078,
+    "truth_pon_tagged": 81,
+    "raw": {
+     "baseline": 131,
+     "evaluated": 11755,
+     "tp": 58,
+     "fp": 11697,
+     "fn": 73,
+     "p": 0.0049,
+     "r": 0.4427,
+     "f1": 0.0098,
+     "ceiling": 0.4427,
+     "best": {
+      "f1": 0.0806,
+      "p_somatic": 0.40598,
+      "precision": 0.0855,
+      "recall": 0.0763,
+      "tp_baseline": 10,
+      "fp": 107,
+      "fn": 121
+     }
+    },
+    "pon": {
+     "baseline": 131,
+     "evaluated": 3198,
+     "tp": 34,
+     "fp": 3164,
+     "fn": 97,
+     "p": 0.0106,
+     "r": 0.2595,
+     "f1": 0.0204,
+     "ceiling": 0.2595,
+     "best": {
+      "f1": 0.1292,
+      "p_somatic": 0.2009,
+      "precision": 0.1082,
+      "recall": 0.1603,
+      "tp_baseline": 21,
+      "fp": 173,
+      "fn": 110
+     }
+    }
+   },
+   "eval_nobed": {
+    "truth_records": 131,
+    "threshold": 0.011724080890417099,
+    "unplaced_pass": 2078,
+    "truth_pon_tagged": 81,
+    "raw": {
+     "baseline": 131,
+     "evaluated": 11755,
+     "tp": 58,
+     "fp": 11697,
+     "fn": 73,
+     "p": 0.0049,
+     "r": 0.4427,
+     "f1": 0.0098,
+     "ceiling": 0.4427,
+     "best": {
+      "f1": 0.0806,
+      "p_somatic": 0.40598,
+      "precision": 0.0855,
+      "recall": 0.0763,
+      "tp_baseline": 10,
+      "fp": 107,
+      "fn": 121
+     }
+    },
+    "pon": {
+     "baseline": 131,
+     "evaluated": 3198,
+     "tp": 34,
+     "fp": 3164,
+     "fn": 97,
+     "p": 0.0106,
+     "r": 0.2595,
+     "f1": 0.0204,
+     "ceiling": 0.2595,
+     "best": {
+      "f1": 0.1292,
+      "p_somatic": 0.2009,
+      "precision": 0.1082,
+      "recall": 0.1603,
+      "tp_baseline": 21,
+      "fp": 173,
+      "fn": 110
+     }
+    }
+   }
+  },
+  "linear": {
+   "run": "COLO829_fiberseq_INDEL_linear_7fc7396",
+   "vcf_dir": "vcf_chr1",
+   "training": {
+    "train_tensors": 1827687,
+    "train_counts": {
+     "non": 1096037,
+     "somatic": 1641,
+     "germline": 730009
+    },
+    "val_tensors": 104696,
+    "val_counts": {
+     "non": 62991,
+     "somatic": 92,
+     "germline": 41613
+    },
+    "best_epoch": 6,
+    "gpus": 1,
+    "epochs": 12,
+    "train_minutes": 41.2,
+    "tensors_per_second": 9008,
+    "val": {
+     "somatic_ap": 0.011405691092546076,
+     "somatic_f1": 0.03669724770642201,
+     "threshold_r09": 0.008109658025205135
+    }
+   },
+   "test": {
+    "tensors": 172206,
+    "somatic_tensors": 135,
+    "somatic_ap": 0.0075188361213121046,
+    "truth_alleles": 131,
+    "with_tensor": 119,
+    "ceiling": 0.9083969465648855,
+    "truth_best": {
+     "threshold": 0.16109076142311096,
+     "tp": 2,
+     "other_tp": 0,
+     "fp": 16,
+     "fn": 129,
+     "precision": 0.1111111111111111,
+     "recall": 0.015267175572519083,
+     "f1": 0.026845637583892617
+    }
+   },
+   "eval_bed": {
+    "truth_records": 131,
+    "threshold": 0.008109658025205135,
+    "unplaced_pass": 0,
+    "truth_pon_tagged": 81,
+    "raw": {
+     "baseline": 131,
+     "evaluated": 37634,
+     "tp": 99,
+     "fp": 37535,
+     "fn": 32,
+     "p": 0.0026,
+     "r": 0.7557,
+     "f1": 0.0052,
+     "ceiling": 0.7557,
+     "best": {
+      "f1": 0.0267,
+      "p_somatic": 0.16112,
+      "precision": 0.1053,
+      "recall": 0.0153,
+      "tp_baseline": 2,
+      "fp": 17,
+      "fn": 129
+     }
+    },
+    "pon": {
+     "baseline": 131,
+     "evaluated": 1820,
+     "tp": 39,
+     "fp": 1781,
+     "fn": 92,
+     "p": 0.0214,
+     "r": 0.2977,
+     "f1": 0.04,
+     "ceiling": 0.2977,
+     "best": {
+      "f1": 0.0922,
+      "p_somatic": 0.05594,
+      "precision": 0.0861,
+      "recall": 0.0992,
+      "tp_baseline": 13,
+      "fp": 138,
+      "fn": 118
+     }
+    }
+   },
+   "eval_nobed": {
+    "truth_records": 131,
+    "threshold": 0.008109658025205135,
+    "unplaced_pass": 0,
+    "truth_pon_tagged": 81,
+    "raw": {
+     "baseline": 131,
+     "evaluated": 37634,
+     "tp": 99,
+     "fp": 37535,
+     "fn": 32,
+     "p": 0.0026,
+     "r": 0.7557,
+     "f1": 0.0052,
+     "ceiling": 0.7557,
+     "best": {
+      "f1": 0.0267,
+      "p_somatic": 0.16112,
+      "precision": 0.1053,
+      "recall": 0.0153,
+      "tp_baseline": 2,
+      "fp": 17,
+      "fn": 129
+     }
+    },
+    "pon": {
+     "baseline": 131,
+     "evaluated": 1820,
+     "tp": 39,
+     "fp": 1781,
+     "fn": 92,
+     "p": 0.0214,
+     "r": 0.2977,
+     "f1": 0.04,
+     "ceiling": 0.2977,
+     "best": {
+      "f1": 0.0922,
+      "p_somatic": 0.05594,
+      "precision": 0.0861,
+      "recall": 0.0992,
+      "tp_baseline": 13,
+      "fp": 138,
+      "fn": 118
+     }
+    }
+   }
+  }
+ },
+ {
+  "sample": "COLO829T",
+  "platform": "ONT",
+  "kind": "INDEL",
+  "d9_note": "45d56ad lr 4e-4, 1 GPU",
+  "d9": {
+   "run": "COLO829_ONT_INDEL_small",
+   "vcf_dir": "vcf_chr1_pon7fc7396",
+   "training": {
+    "train_tensors": 3506781,
+    "train_counts": {
+     "non": 3285172,
+     "somatic": 999,
+     "germline": 220610
+    },
+    "val_tensors": 231769,
+    "val_counts": {
+     "non": 218747,
+     "somatic": 65,
+     "germline": 12957
+    },
+    "best_epoch": 5,
+    "gpus": 1,
+    "epochs": 12,
+    "train_minutes": 79.0,
+    "tensors_per_second": 9016,
+    "val": {
+     "somatic_ap": 0.023690785608444592,
+     "somatic_f1": 0.09615384615384616,
+     "threshold_r09": 0.01193626131862402
+    }
+   },
+   "test": {
+    "tensors": 373392,
+    "somatic_tensors": 52,
+    "somatic_ap": 0.014039652196744004,
+    "truth_alleles": 131,
+    "with_tensor": 52,
+    "ceiling": 0.3969465648854962,
+    "truth_best": {
+     "threshold": 0.31562963128089905,
+     "tp": 6,
+     "other_tp": 0,
+     "fp": 96,
+     "fn": 125,
+     "precision": 0.058823529411764705,
+     "recall": 0.04580152671755725,
+     "f1": 0.051502145922746774
+    }
+   },
+   "eval_bed": {
+    "truth_records": 131,
+    "threshold": 0.01193626131862402,
+    "unplaced_pass": 3409,
+    "truth_pon_tagged": 81,
+    "raw": {
+     "baseline": 131,
+     "evaluated": 38917,
+     "tp": 42,
+     "fp": 38875,
+     "fn": 89,
+     "p": 0.0011,
+     "r": 0.3206,
+     "f1": 0.0022,
+     "ceiling": 0.3435,
+     "best": {
+      "f1": 0.0515,
+      "p_somatic": 0.31562,
+      "precision": 0.0588,
+      "recall": 0.0458,
+      "tp_baseline": 6,
+      "fp": 96,
+      "fn": 125
+     }
+    },
+    "pon": {
+     "baseline": 131,
+     "evaluated": 20125,
+     "tp": 31,
+     "fp": 20094,
+     "fn": 100,
+     "p": 0.0015,
+     "r": 0.2366,
+     "f1": 0.0031,
+     "ceiling": 0.2366,
+     "best": {
+      "f1": 0.0714,
+      "p_somatic": 0.31562,
+      "precision": 0.1622,
+      "recall": 0.0458,
+      "tp_baseline": 6,
+      "fp": 31,
+      "fn": 125
+     }
+    }
+   },
+   "eval_nobed": {
+    "truth_records": 131,
+    "threshold": 0.01193626131862402,
+    "unplaced_pass": 3409,
+    "truth_pon_tagged": 81,
+    "raw": {
+     "baseline": 131,
+     "evaluated": 38917,
+     "tp": 42,
+     "fp": 38875,
+     "fn": 89,
+     "p": 0.0011,
+     "r": 0.3206,
+     "f1": 0.0022,
+     "ceiling": 0.3435,
+     "best": {
+      "f1": 0.0515,
+      "p_somatic": 0.31562,
+      "precision": 0.0588,
+      "recall": 0.0458,
+      "tp_baseline": 6,
+      "fp": 96,
+      "fn": 125
+     }
+    },
+    "pon": {
+     "baseline": 131,
+     "evaluated": 20125,
+     "tp": 31,
+     "fp": 20094,
+     "fn": 100,
+     "p": 0.0015,
+     "r": 0.2366,
+     "f1": 0.0031,
+     "ceiling": 0.2366,
+     "best": {
+      "f1": 0.0714,
+      "p_somatic": 0.31562,
+      "precision": 0.1622,
+      "recall": 0.0458,
+      "tp_baseline": 6,
+      "fp": 31,
+      "fn": 125
+     }
+    }
+   }
+  },
+  "d46": {
+   "run": "COLO829_ONT_INDEL_d46_7fc7396",
+   "vcf_dir": "vcf_chr1",
+   "training": {
+    "train_tensors": 3503164,
+    "train_counts": {
+     "non": 3289717,
+     "somatic": 1018,
+     "germline": 212429
+    },
+    "val_tensors": 183285,
+    "val_counts": {
+     "non": 173128,
+     "somatic": 53,
+     "germline": 10104
+    },
+    "best_epoch": 4,
+    "gpus": 1,
+    "epochs": 12,
+    "train_minutes": 80.8,
+    "tensors_per_second": 8757,
+    "val": {
+     "somatic_ap": 0.04586938721214758,
+     "somatic_f1": 0.14814814814814814,
+     "threshold_r09": 0.012749798595905304
+    }
+   },
+   "test": {
+    "tensors": 372209,
+    "somatic_tensors": 105,
+    "somatic_ap": 0.015441089584909022,
+    "truth_alleles": 131,
+    "with_tensor": 85,
+    "ceiling": 0.648854961832061,
+    "truth_best": {
+     "threshold": 0.27876242995262146,
+     "tp": 6,
+     "other_tp": 0,
+     "fp": 101,
+     "fn": 125,
+     "precision": 0.056074766355140186,
+     "recall": 0.04580152671755725,
+     "f1": 0.050420168067226885
+    }
+   },
+   "eval_bed": {
+    "truth_records": 131,
+    "threshold": 0.012749798595905304,
+    "unplaced_pass": 9266,
+    "truth_pon_tagged": 81,
+    "raw": {
+     "baseline": 131,
+     "evaluated": 57770,
+     "tp": 50,
+     "fp": 57720,
+     "fn": 81,
+     "p": 0.0009,
+     "r": 0.3817,
+     "f1": 0.0017,
+     "ceiling": 0.3969,
+     "best": {
+      "f1": 0.0563,
+      "p_somatic": 0.25304,
+      "precision": 0.0523,
+      "recall": 0.0611,
+      "tp_baseline": 8,
+      "fp": 145,
+      "fn": 123
+     }
+    },
+    "pon": {
+     "baseline": 131,
+     "evaluated": 28335,
+     "tp": 30,
+     "fp": 28305,
+     "fn": 101,
+     "p": 0.0011,
+     "r": 0.229,
+     "f1": 0.0021,
+     "ceiling": 0.2443,
+     "best": {
+      "f1": 0.0849,
+      "p_somatic": 0.19239,
+      "precision": 0.0859,
+      "recall": 0.084,
+      "tp_baseline": 11,
+      "fp": 117,
+      "fn": 120
+     }
+    }
+   },
+   "eval_nobed": {
+    "truth_records": 131,
+    "threshold": 0.012749798595905304,
+    "unplaced_pass": 9266,
+    "truth_pon_tagged": 81,
+    "raw": {
+     "baseline": 131,
+     "evaluated": 57770,
+     "tp": 50,
+     "fp": 57720,
+     "fn": 81,
+     "p": 0.0009,
+     "r": 0.3817,
+     "f1": 0.0017,
+     "ceiling": 0.3969,
+     "best": {
+      "f1": 0.0563,
+      "p_somatic": 0.25304,
+      "precision": 0.0523,
+      "recall": 0.0611,
+      "tp_baseline": 8,
+      "fp": 145,
+      "fn": 123
+     }
+    },
+    "pon": {
+     "baseline": 131,
+     "evaluated": 28335,
+     "tp": 30,
+     "fp": 28305,
+     "fn": 101,
+     "p": 0.0011,
+     "r": 0.229,
+     "f1": 0.0021,
+     "ceiling": 0.2443,
+     "best": {
+      "f1": 0.0849,
+      "p_somatic": 0.19239,
+      "precision": 0.0859,
+      "recall": 0.084,
+      "tp_baseline": 11,
+      "fp": 117,
+      "fn": 120
+     }
+    }
+   }
+  },
+  "linear": {
+   "run": "COLO829_ONT_INDEL_linear_7fc7396",
+   "vcf_dir": "vcf_chr1",
+   "training": {
+    "train_tensors": 3893476,
+    "train_counts": {
+     "non": 3204105,
+     "somatic": 1276,
+     "germline": 688095
+    },
+    "val_tensors": 225078,
+    "val_counts": {
+     "non": 185957,
+     "somatic": 66,
+     "germline": 39055
+    },
+    "best_epoch": 5,
+    "gpus": 1,
+    "epochs": 12,
+    "train_minutes": 88.8,
+    "tensors_per_second": 8805,
+    "val": {
+     "somatic_ap": 0.0068595454704858325,
+     "somatic_f1": 0.04210526315789474,
+     "threshold_r09": 0.004976289812475443
+    }
+   },
+   "test": {
+    "tensors": 381592,
+    "somatic_tensors": 133,
+    "somatic_ap": 0.0028144032096274895,
+    "truth_alleles": 131,
+    "with_tensor": 109,
+    "ceiling": 0.8320610687022901,
+    "truth_best": {
+     "threshold": 0.23684103786945343,
+     "tp": 3,
+     "other_tp": 0,
+     "fp": 187,
+     "fn": 128,
+     "precision": 0.015789473684210527,
+     "recall": 0.022900763358778626,
+     "f1": 0.018691588785046728
+    }
+   },
+   "eval_bed": {
+    "truth_records": 131,
+    "threshold": 0.004976289812475443,
+    "unplaced_pass": 0,
+    "truth_pon_tagged": 81,
+    "raw": {
+     "baseline": 131,
+     "evaluated": 70611,
+     "tp": 81,
+     "fp": 70530,
+     "fn": 50,
+     "p": 0.0011,
+     "r": 0.6183,
+     "f1": 0.0023,
+     "ceiling": 0.6183,
+     "best": {
+      "f1": 0.0185,
+      "p_somatic": 0.23687,
+      "precision": 0.0155,
+      "recall": 0.0229,
+      "tp_baseline": 3,
+      "fp": 191,
+      "fn": 128
+     }
+    },
+    "pon": {
+     "baseline": 131,
+     "evaluated": 19159,
+     "tp": 37,
+     "fp": 19122,
+     "fn": 94,
+     "p": 0.0019,
+     "r": 0.2824,
+     "f1": 0.0038,
+     "ceiling": 0.2824,
+     "best": {
+      "f1": 0.0195,
+      "p_somatic": 0.14019,
+      "precision": 0.0143,
+      "recall": 0.0305,
+      "tp_baseline": 4,
+      "fp": 275,
+      "fn": 127
+     }
+    }
+   },
+   "eval_nobed": {
+    "truth_records": 131,
+    "threshold": 0.004976289812475443,
+    "unplaced_pass": 0,
+    "truth_pon_tagged": 81,
+    "raw": {
+     "baseline": 131,
+     "evaluated": 70611,
+     "tp": 81,
+     "fp": 70530,
+     "fn": 50,
+     "p": 0.0011,
+     "r": 0.6183,
+     "f1": 0.0023,
+     "ceiling": 0.6183,
+     "best": {
+      "f1": 0.0185,
+      "p_somatic": 0.23687,
+      "precision": 0.0155,
+      "recall": 0.0229,
+      "tp_baseline": 3,
+      "fp": 191,
+      "fn": 128
+     }
+    },
+    "pon": {
+     "baseline": 131,
+     "evaluated": 19159,
+     "tp": 37,
+     "fp": 19122,
+     "fn": 94,
+     "p": 0.0019,
+     "r": 0.2824,
+     "f1": 0.0038,
+     "ceiling": 0.2824,
+     "best": {
+      "f1": 0.0195,
+      "p_somatic": 0.14019,
+      "precision": 0.0143,
+      "recall": 0.0305,
+      "tp_baseline": 4,
+      "fp": 275,
+      "fn": 127
+     }
+    }
+   }
+  }
+ }
+]

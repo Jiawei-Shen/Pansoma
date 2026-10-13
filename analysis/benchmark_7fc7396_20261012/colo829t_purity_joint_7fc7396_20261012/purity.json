@@ -1,0 +1,590 @@
+{
+ "Illumina P100": {
+  "set": "COLO829T_Illumina",
+  "truth": {
+   "SNV": {
+    "truth": 2443,
+    "with_tensor": 2008,
+    "filtered": 384,
+    "no_candidate": 51,
+    "ceiling": 0.8219
+   },
+   "INDEL": {
+    "truth": 131,
+    "with_tensor": 57,
+    "filtered": 3,
+    "no_candidate": 71,
+    "ceiling": 0.4351
+   }
+  },
+  "af": {
+   "SNV": {
+    "somatic": {
+     "n": 2043,
+     "q1": 0.4926,
+     "median": 0.9726,
+     "q3": 1.0
+    },
+    "germline": {
+     "n": 17710,
+     "q1": 0.9718,
+     "median": 0.9904,
+     "q3": 1.0
+    }
+   },
+   "INDEL": {
+    "somatic": {
+     "n": 81,
+     "q1": 0.2962,
+     "median": 0.4122,
+     "q3": 0.7225
+    },
+    "germline": {
+     "n": 4429,
+     "q1": 0.3333,
+     "median": 0.6216,
+     "q3": 0.8208
+    }
+   }
+  }
+ },
+ "Illumina P75": {
+  "set": "COLO829T_Illumina_P75",
+  "truth": {
+   "SNV": {
+    "truth": 2443,
+    "with_tensor": 1936,
+    "filtered": 438,
+    "no_candidate": 69,
+    "ceiling": 0.7925
+   },
+   "INDEL": {
+    "truth": 131,
+    "with_tensor": 55,
+    "filtered": 4,
+    "no_candidate": 72,
+    "ceiling": 0.4198
+   }
+  },
+  "af": {
+   "SNV": {
+    "somatic": {
+     "n": 1968,
+     "q1": 0.4036,
+     "median": 0.6404,
+     "q3": 0.7469
+    },
+    "germline": {
+     "n": 29456,
+     "q1": 0.1625,
+     "median": 0.7895,
+     "q3": 0.882
+    }
+   },
+   "INDEL": {
+    "somatic": {
+     "n": 80,
+     "q1": 0.2372,
+     "median": 0.317,
+     "q3": 0.4984
+    },
+    "germline": {
+     "n": 6198,
+     "q1": 0.1548,
+     "median": 0.3728,
+     "q3": 0.6625
+    }
+   }
+  }
+ },
+ "Illumina P50": {
+  "set": "COLO829T_Illumina_P50",
+  "truth": {
+   "SNV": {
+    "truth": 2443,
+    "with_tensor": 1864,
+    "filtered": 468,
+    "no_candidate": 111,
+    "ceiling": 0.763
+   },
+   "INDEL": {
+    "truth": 131,
+    "with_tensor": 53,
+    "filtered": 6,
+    "no_candidate": 72,
+    "ceiling": 0.4046
+   }
+  },
+  "af": {
+   "SNV": {
+    "somatic": {
+     "n": 1891,
+     "q1": 0.2983,
+     "median": 0.3874,
+     "q3": 0.5077
+    },
+    "germline": {
+     "n": 31302,
+     "q1": 0.2667,
+     "median": 0.6364,
+     "q3": 0.76
+    }
+   },
+   "INDEL": {
+    "somatic": {
+     "n": 71,
+     "q1": 0.1719,
+     "median": 0.24,
+     "q3": 0.3453
+    },
+    "germline": {
+     "n": 7120,
+     "q1": 0.1793,
+     "median": 0.2915,
+     "q3": 0.5517
+    }
+   }
+  }
+ },
+ "Illumina P25": {
+  "set": "COLO829T_Illumina_P25",
+  "truth": {
+   "SNV": {
+    "truth": 2443,
+    "with_tensor": 1748,
+    "filtered": 482,
+    "no_candidate": 213,
+    "ceiling": 0.7155
+   },
+   "INDEL": {
+    "truth": 131,
+    "with_tensor": 36,
+    "filtered": 22,
+    "no_candidate": 73,
+    "ceiling": 0.2748
+   }
+  },
+  "af": {
+   "SNV": {
+    "somatic": {
+     "n": 1770,
+     "q1": 0.1504,
+     "median": 0.191,
+     "q3": 0.2637
+    },
+    "germline": {
+     "n": 31437,
+     "q1": 0.3774,
+     "median": 0.5324,
+     "q3": 0.6379
+    }
+   },
+   "INDEL": {
+    "somatic": {
+     "n": 51,
+     "q1": 0.1197,
+     "median": 0.155,
+     "q3": 0.2016
+    },
+    "germline": {
+     "n": 7307,
+     "q1": 0.2119,
+     "median": 0.3238,
+     "q3": 0.4742
+    }
+   }
+  }
+ },
+ "fiberseq P100": {
+  "set": "COLO829T_fiberseq",
+  "truth": {
+   "SNV": {
+    "truth": 2443,
+    "with_tensor": 2006,
+    "filtered": 397,
+    "no_candidate": 40,
+    "ceiling": 0.8211
+   },
+   "INDEL": {
+    "truth": 131,
+    "with_tensor": 67,
+    "filtered": 11,
+    "no_candidate": 53,
+    "ceiling": 0.5115
+   }
+  },
+  "af": {
+   "SNV": {
+    "somatic": {
+     "n": 2022,
+     "q1": 0.4928,
+     "median": 0.9612,
+     "q3": 0.9881
+    },
+    "germline": {
+     "n": 21859,
+     "q1": 0.9568,
+     "median": 0.9859,
+     "q3": 0.9962
+    }
+   },
+   "INDEL": {
+    "somatic": {
+     "n": 97,
+     "q1": 0.2615,
+     "median": 0.45,
+     "q3": 0.6549
+    },
+    "germline": {
+     "n": 16066,
+     "q1": 0.1313,
+     "median": 0.2117,
+     "q3": 0.5281
+    }
+   }
+  }
+ },
+ "fiberseq P75": {
+  "set": "COLO829T_fiberseq_P75",
+  "truth": {
+   "SNV": {
+    "truth": 2443,
+    "with_tensor": 1940,
+    "filtered": 412,
+    "no_candidate": 91,
+    "ceiling": 0.7941
+   },
+   "INDEL": {
+    "truth": 131,
+    "with_tensor": 65,
+    "filtered": 14,
+    "no_candidate": 52,
+    "ceiling": 0.4962
+   }
+  },
+  "af": {
+   "SNV": {
+    "somatic": {
+     "n": 1956,
+     "q1": 0.4019,
+     "median": 0.6318,
+     "q3": 0.7421
+    },
+    "germline": {
+     "n": 32863,
+     "q1": 0.1692,
+     "median": 0.7848,
+     "q3": 0.883
+    }
+   },
+   "INDEL": {
+    "somatic": {
+     "n": 92,
+     "q1": 0.2171,
+     "median": 0.3729,
+     "q3": 0.5091
+    },
+    "germline": {
+     "n": 17656,
+     "q1": 0.1266,
+     "median": 0.1962,
+     "q3": 0.3856
+    }
+   }
+  }
+ },
+ "fiberseq P50": {
+  "set": "COLO829T_fiberseq_P50",
+  "truth": {
+   "SNV": {
+    "truth": 2443,
+    "with_tensor": 1870,
+    "filtered": 444,
+    "no_candidate": 129,
+    "ceiling": 0.7655
+   },
+   "INDEL": {
+    "truth": 131,
+    "with_tensor": 61,
+    "filtered": 18,
+    "no_candidate": 52,
+    "ceiling": 0.4656
+   }
+  },
+  "af": {
+   "SNV": {
+    "somatic": {
+     "n": 1886,
+     "q1": 0.2912,
+     "median": 0.3846,
+     "q3": 0.5119
+    },
+    "germline": {
+     "n": 34480,
+     "q1": 0.2667,
+     "median": 0.6455,
+     "q3": 0.7692
+    }
+   },
+   "INDEL": {
+    "somatic": {
+     "n": 86,
+     "q1": 0.1816,
+     "median": 0.2935,
+     "q3": 0.3996
+    },
+    "germline": {
+     "n": 18565,
+     "q1": 0.13,
+     "median": 0.2063,
+     "q3": 0.3522
+    }
+   }
+  }
+ },
+ "fiberseq P25": {
+  "set": "COLO829T_fiberseq_P25",
+  "truth": {
+   "SNV": {
+    "truth": 2443,
+    "with_tensor": 1737,
+    "filtered": 489,
+    "no_candidate": 217,
+    "ceiling": 0.711
+   },
+   "INDEL": {
+    "truth": 131,
+    "with_tensor": 58,
+    "filtered": 18,
+    "no_candidate": 55,
+    "ceiling": 0.4427
+   }
+  },
+  "af": {
+   "SNV": {
+    "somatic": {
+     "n": 1751,
+     "q1": 0.1505,
+     "median": 0.1881,
+     "q3": 0.2696
+    },
+    "germline": {
+     "n": 34533,
+     "q1": 0.375,
+     "median": 0.5422,
+     "q3": 0.6484
+    }
+   },
+   "INDEL": {
+    "somatic": {
+     "n": 79,
+     "q1": 0.1167,
+     "median": 0.1887,
+     "q3": 0.2917
+    },
+    "germline": {
+     "n": 19007,
+     "q1": 0.1277,
+     "median": 0.2118,
+     "q3": 0.3704
+    }
+   }
+  }
+ },
+ "ONT P100": {
+  "set": "COLO829T_ONT",
+  "truth": {
+   "SNV": {
+    "truth": 2443,
+    "with_tensor": 1998,
+    "filtered": 393,
+    "no_candidate": 52,
+    "ceiling": 0.8178
+   },
+   "INDEL": {
+    "truth": 131,
+    "with_tensor": 69,
+    "filtered": 23,
+    "no_candidate": 39,
+    "ceiling": 0.5267
+   }
+  },
+  "af": {
+   "SNV": {
+    "somatic": {
+     "n": 2017,
+     "q1": 0.4492,
+     "median": 0.8226,
+     "q3": 0.9019
+    },
+    "germline": {
+     "n": 24496,
+     "q1": 0.7231,
+     "median": 0.8654,
+     "q3": 0.9213
+    }
+   },
+   "INDEL": {
+    "somatic": {
+     "n": 110,
+     "q1": 0.1523,
+     "median": 0.2359,
+     "q3": 0.3867
+    },
+    "germline": {
+     "n": 20251,
+     "q1": 0.1273,
+     "median": 0.1742,
+     "q3": 0.25
+    }
+   }
+  }
+ },
+ "ONT P75": {
+  "set": "COLO829T_ONT_P75",
+  "truth": {
+   "SNV": {
+    "truth": 2443,
+    "with_tensor": 1922,
+    "filtered": 462,
+    "no_candidate": 59,
+    "ceiling": 0.7867
+   },
+   "INDEL": {
+    "truth": 131,
+    "with_tensor": 69,
+    "filtered": 23,
+    "no_candidate": 39,
+    "ceiling": 0.5267
+   }
+  },
+  "af": {
+   "SNV": {
+    "somatic": {
+     "n": 1941,
+     "q1": 0.3746,
+     "median": 0.5758,
+     "q3": 0.6811
+    },
+    "germline": {
+     "n": 34791,
+     "q1": 0.1744,
+     "median": 0.6667,
+     "q3": 0.8015
+    }
+   },
+   "INDEL": {
+    "somatic": {
+     "n": 104,
+     "q1": 0.1382,
+     "median": 0.2277,
+     "q3": 0.3239
+    },
+    "germline": {
+     "n": 21360,
+     "q1": 0.1268,
+     "median": 0.1712,
+     "q3": 0.2405
+    }
+   }
+  }
+ },
+ "ONT P50": {
+  "set": "COLO829T_ONT_P50",
+  "truth": {
+   "SNV": {
+    "truth": 2443,
+    "with_tensor": 1838,
+    "filtered": 510,
+    "no_candidate": 95,
+    "ceiling": 0.7524
+   },
+   "INDEL": {
+    "truth": 131,
+    "with_tensor": 64,
+    "filtered": 27,
+    "no_candidate": 40,
+    "ceiling": 0.4885
+   }
+  },
+  "af": {
+   "SNV": {
+    "somatic": {
+     "n": 1853,
+     "q1": 0.277,
+     "median": 0.36,
+     "q3": 0.4661
+    },
+    "germline": {
+     "n": 37423,
+     "q1": 0.2346,
+     "median": 0.5366,
+     "q3": 0.6952
+    }
+   },
+   "INDEL": {
+    "somatic": {
+     "n": 90,
+     "q1": 0.1421,
+     "median": 0.2199,
+     "q3": 0.2999
+    },
+    "germline": {
+     "n": 21821,
+     "q1": 0.1298,
+     "median": 0.175,
+     "q3": 0.2466
+    }
+   }
+  }
+ },
+ "ONT P25": {
+  "set": "COLO829T_ONT_P25",
+  "truth": {
+   "SNV": {
+    "truth": 2443,
+    "with_tensor": 1736,
+    "filtered": 530,
+    "no_candidate": 177,
+    "ceiling": 0.7106
+   },
+   "INDEL": {
+    "truth": 131,
+    "with_tensor": 63,
+    "filtered": 22,
+    "no_candidate": 46,
+    "ceiling": 0.4809
+   }
+  },
+  "af": {
+   "SNV": {
+    "somatic": {
+     "n": 1749,
+     "q1": 0.1429,
+     "median": 0.18,
+     "q3": 0.247
+    },
+    "germline": {
+     "n": 37258,
+     "q1": 0.3302,
+     "median": 0.47,
+     "q3": 0.5921
+    }
+   },
+   "INDEL": {
+    "somatic": {
+     "n": 77,
+     "q1": 0.127,
+     "median": 0.1746,
+     "q3": 0.2355
+    },
+    "germline": {
+     "n": 22044,
+     "q1": 0.13,
+     "median": 0.1774,
+     "q3": 0.2597
+    }
+   }
+  }
+ }
+}
