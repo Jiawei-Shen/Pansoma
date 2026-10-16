@@ -277,42 +277,49 @@ We removed it from the main benchmark, and no claim of the revised manuscript re
 
 **Response.**
 
-We added a Supplementary Note on each truth set. Calls are scored with rtg vcfeval inside each benchmark's regions;
-training negatives come from regions confident in both the somatic and the germline truth. Germline truth is the
-dipcall of the matched-normal assembly (HG008-N, COLO829BL) or, for the other four lines, DeepSomatic's DeepVariant
-calls of the normal (QUAL ≥ 10).
+We substantially revised the pipeline, including how training sets are built (Methods, Supplementary Note).
 
-- *HG008T:* GIAB HG008-T somatic small-variant draft benchmark v0.2 (9,609 SNVs, 9,343 INDELs), a pre-release draft
-  provided by GIAB, derived from comparing the HG008-T tumor assembly with the HG008-N normal assembly (v6.2).
-- *COLO829T:* the SMaHT COLO829 reference set (Ha et al., 2025): candidates from four Illumina somatic callers
-  (Mutect2, Strelka2, RUFUS, VarNet; COLO829 200× vs COLO829BL 300×), kept when PacBio reads show the ALT in the tumor
-  and not in the normal (44,005 SNVs, 2,059 INDELs). It is scored genome-wide: the SMaHT easy, difficult and extreme
-  regions together tile the genome.
-- *HCC1395:* SEQC2 v1.2.1 high- and medium-confidence somatic SNVs and INDELs in the SEQC2 high-confidence regions v1.2,
-  built from 378 Illumina call sets (21 replicates × 3 aligners × 6 callers) scored by SomaticSeq and NeuSomatic; it
-  covers only regions analysable with Illumina data.
-- *HCC1954, H1437, H2009:* the CASTLE somatic truth and high-confidence regions released with DeepSomatic. Made with
-  DeepSomatic models, they favour DeepSomatic, as its authors note; we say so wherever these lines are compared with it.
+*Three labels.* Replacing the original binary labels, training examples now carry one of three: somatic (1), germline
+(2) or other (0: sequencing and alignment errors); examples that cannot be labelled reliably are excluded (−1).
 
-The short-read SEQC2 truth has few homopolymer INDELs (15.5% in homopolymers of ≥ 7 bp, against 74.9% for HG008T), so
-for HCC1395 and the CASTLE lines unmatched INDEL candidates in such homopolymers or in short tandem repeats are not used
-as negatives.
+*Building a training set.* Tumor reads are aligned to the graph with vg Giraffe. On nodes where more than 5% of
+alignments differ from the node, alleles with ≥ 3 supporting reads and allele fraction ≥ 0.08 become candidates, and
+each candidate site gives one tensor of up to 200 reads along their graph walks (R1.1). Truth alleles are projected
+into node coordinates along the graph's GRCh38 path. A tensor is somatic or germline when its representative allele
+(most ALT reads) equals such a truth allele, and other when it lies in regions confident in both truths and matches
+none. Tensors outside these regions, on off-reference nodes without a somatic match, or matching a somatic allele only
+partially are excluded (R1.8). Models are trained on chr2–22 (5% of node blocks for validation) and tested on chr1.
 
-We removed the claim about sequencing artefacts, for which we have no direct evidence, and state the germline claim
-only where it is measured:
+*Datasets.* Six tumor cell lines from four cancer types, each sequenced with short and long reads; only tumor reads are
+used, the matched normal only for the truth.
 
-- 209 HG008T somatic truth alleles are identical to an HG008-N germline allele.
-- Of the 110 graph-absorbed HG008T truth alleles carried by the normal, 109 are the germline allele of the other normal
-  haplotype; flanking phased SNPs indicate local changes, not regional LOH. They are somatic by GIAB's definition but
-  germline-like to a tumor-only caller.
-- At 55 COLO829T truth INDELs a COLO829BL haplotype already carries the truth allele over the whole repeat.
-- In the CASTLE H1437 truth, about 30% of SNVs are probably germline: 27.8% are common population alleles, 97.5% of
-  them in two regions where the B-lymphoblastoid normal lost heterozygosity (chr9q, chr1:9–12 Mb), so the tumor–normal
-  comparison called them somatic. H2009 shows this at about 5%, HCC1954 not at all.
+- *HG008T* (pancreatic ductal adenocarcinoma): GIAB PacBio HiFi Revio (116×), ONT ultra-long R10.4.1 (54×) and Illumina
+  2 × 150 bp. Somatic truth: the GIAB draft benchmark v0.2 (9,609 SNVs, 9,343 INDELs in 2.81 Gb), a pre-release draft
+  derived from comparing the tumor and normal (HG008-N v6.2) assemblies. Germline truth: dipcall of the HG008-N assembly.
+- *COLO829T* (melanoma): Illumina, PacBio Fiber-seq and ONT, plus in-silico mixtures with COLO829BL reads at 25–75%
+  purity. Somatic truth: the SMaHT COLO829 reference set (Ha et al., 2025; 44,005 SNVs, 2,059 INDELs), calls of four
+  Illumina somatic callers kept when PacBio reads show the ALT in the tumor but not the normal; scored genome-wide.
+  Germline truth: dipcall of the COLO829BL assembly.
+- *HCC1395* (triple-negative breast cancer): CASTLE PacBio HiFi and ONT, SEQC2 Illumina (about 108×). Somatic truth:
+  SEQC2 v1.2.1 (41,072 high- and medium-confidence variants in 2.49 Gb), from 378 Illumina call sets and therefore
+  limited to regions analysable with short reads.
+- *HCC1954* (breast), *H1437*, *H2009* (lung adenocarcinoma): CASTLE PacBio HiFi (about 60×), ONT (about 90×) and
+  Illumina (100×). Somatic truth: CASTLE (26,578, 87,410 and 168,397 variants in 2.51 Gb), made with DeepSomatic models
+  and so favouring DeepSomatic, as its authors note.
 
-For HG008T and COLO829T these are benchmark ambiguities at a small number of sites, not errors of the truth sets, and
-we no longer use them to explain the lower recall (R2.3, R3.7). On chr1, our test chromosome, the H1437 effect is
-negligible (19 common alleles among 4,266 truth SNVs), but it affects about 10% of the line's training positives.
+For these four lines, germline truth is hybrid DeepVariant calls of the matched normal (QUAL ≥ 10), and unmatched
+INDELs in homopolymers ≥ 7 bp or STRs are excluded, as the SEQC2 truth has few (15.5% of its INDELs, against 74.9% for
+HG008T). HG008T and COLO829T are processed on all three references (R1.2); the other four lines, on the HPRC v2.1 graph,
+serve as cross-sample tests (R1.7).
+
+*Germline alleles in the truth sets.* We removed the artefact claim, for which we have no direct evidence, and state the
+germline claim only where measured. 209 HG008T truth alleles equal an HG008-N germline allele; of the 110 that the graph
+absorbs and the normal carries, 109 are the allele of the normal's other haplotype, and flanking phased SNPs indicate
+local changes rather than regional LOH. At 55 COLO829T truth INDELs a COLO829BL haplotype carries the truth allele over
+the whole repeat. These are ambiguities at a few sites, not errors of the truth sets. In contrast, about 30% of H1437
+truth SNVs are probably germline: 27.8% are common population alleles, 97.5% of them where the B-lymphoblastoid normal
+lost heterozygosity (chr9q, chr1:9–12 Mb), so the tumor–normal comparison called them somatic (H2009 about 5%, HCC1954
+none). On chr1, our test chromosome, this is negligible (19 of 4,266 truth SNVs).
 
 ### R2.3 Explaining the lower recall; normal sample at missed sites
 
