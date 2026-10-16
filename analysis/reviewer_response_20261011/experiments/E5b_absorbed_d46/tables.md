@@ -7,23 +7,23 @@ Not PoN-tagged with a tensor = the most a caller on that arm can still report af
 | sample | platform | kind | n (not tagged) | tensor: linear / d9 / d46 | tensor and not tagged: linear / d9 / d46 | d9 - linear, d46 - linear (not tagged) |
 |---|---|---|---|---|---|---|
 | HG008T | Illumina | SNV | 8,690 (7,780) | 8,552 (0.984) / 8,273 (0.952) / 8,307 (0.956) | 7,714 (0.992) / 7,684 (0.988) / 7,686 (0.988) | -30 (-0.3% of truth), -28 (-0.3%) |
-| HG008T | Illumina | INDEL | 8,496 (3,251) | 6,720 (0.791) / 3,555 (0.418) / 3,821 (0.450) | 2,683 (0.825) / 2,276 (0.700) / 2,306 (0.709) | -407 (-4.8% of truth), -377 (-4.4%) |
+| HG008T | Illumina | INDEL | 8,496 (3,170) | 6,720 (0.791) / 3,555 (0.418) / 3,821 (0.450) | 2,638 (0.832) / 2,249 (0.709) / 2,274 (0.717) | -389 (-4.6% of truth), -364 (-4.3%) |
 | HG008T | PacBio | SNV | 8,690 (7,780) | 8,545 (0.983) / 8,231 (0.947) / 8,249 (0.949) | 7,704 (0.990) / 7,681 (0.987) / 7,680 (0.987) | -23 (-0.3% of truth), -24 (-0.3%) |
-| HG008T | PacBio | INDEL | 8,496 (3,251) | 7,077 (0.833) / 4,062 (0.478) / 4,226 (0.497) | 2,807 (0.863) / 2,294 (0.706) / 2,313 (0.711) | -513 (-6.0% of truth), -494 (-5.8%) |
+| HG008T | PacBio | INDEL | 8,496 (3,170) | 7,077 (0.833) / 4,062 (0.478) / 4,226 (0.497) | 2,746 (0.866) / 2,261 (0.713) / 2,280 (0.719) | -485 (-5.7% of truth), -466 (-5.5%) |
 | HG008T | ONT | SNV | 8,690 (7,780) | 8,567 (0.986) / 8,268 (0.951) / 8,290 (0.954) | 7,741 (0.995) / 7,718 (0.992) / 7,725 (0.993) | -23 (-0.3% of truth), -16 (-0.2%) |
-| HG008T | ONT | INDEL | 8,496 (3,251) | 4,848 (0.571) / 3,628 (0.427) / 3,642 (0.429) | 2,241 (0.689) / 2,074 (0.638) / 2,075 (0.638) | -167 (-2.0% of truth), -166 (-2.0%) |
+| HG008T | ONT | INDEL | 8,496 (3,170) | 4,848 (0.571) / 3,628 (0.427) / 3,642 (0.429) | 2,191 (0.691) / 2,044 (0.645) / 2,045 (0.645) | -147 (-1.7% of truth), -146 (-1.7%) |
 | COLO829T | Illumina | SNV | 42,035 (40,593) | 38,222 (0.909) / 37,864 (0.901) / 37,861 (0.901) | 36,871 (0.908) / 36,608 (0.902) / 36,598 (0.902) | -263 (-0.6% of truth), -273 (-0.6%) |
-| COLO829T | Illumina | INDEL | 1,912 (929) | 1,747 (0.914) / 1,092 (0.571) / 1,155 (0.604) | 869 (0.935) / 739 (0.795) / 751 (0.808) | -130 (-6.8% of truth), -118 (-6.2%) |
+| COLO829T | Illumina | INDEL | 1,912 (907) | 1,747 (0.914) / 1,092 (0.571) / 1,155 (0.604) | 853 (0.940) / 730 (0.805) / 740 (0.816) | -123 (-6.4% of truth), -113 (-5.9%) |
 | COLO829T | fiberseq | SNV | 42,035 (40,593) | 37,945 (0.903) / 37,756 (0.898) / 37,736 (0.898) | 36,635 (0.902) / 36,514 (0.900) / 36,491 (0.899) | -121 (-0.3% of truth), -144 (-0.3%) |
-| COLO829T | fiberseq | INDEL | 1,912 (929) | 1,842 (0.963) / 1,210 (0.633) / 1,260 (0.659) | 910 (0.980) / 753 (0.811) / 755 (0.813) | -157 (-8.2% of truth), -155 (-8.1%) |
+| COLO829T | fiberseq | INDEL | 1,912 (907) | 1,842 (0.963) / 1,210 (0.633) / 1,260 (0.659) | 891 (0.982) / 744 (0.820) / 746 (0.822) | -147 (-7.7% of truth), -145 (-7.6%) |
 | COLO829T | ONT | SNV | 42,035 (40,593) | 37,665 (0.896) / 37,523 (0.893) / 37,514 (0.892) | 36,354 (0.896) / 36,276 (0.894) / 36,263 (0.893) | -78 (-0.2% of truth), -91 (-0.2%) |
-| COLO829T | ONT | INDEL | 1,912 (929) | 1,441 (0.754) / 1,108 (0.579) / 1,116 (0.584) | 789 (0.849) / 701 (0.755) / 695 (0.748) | -88 (-4.6% of truth), -94 (-4.9%) |
+| COLO829T | ONT | INDEL | 1,912 (907) | 1,441 (0.754) / 1,108 (0.579) / 1,116 (0.584) | 772 (0.851) / 693 (0.764) / 688 (0.759) | -79 (-4.1% of truth), -84 (-4.4%) |
 | HCC1395T | Illumina | SNV | 39,447 (38,345) | - / - / 35,266 (0.894) | - / - / 34,455 (0.899) | - |
-| HCC1395T | Illumina | INDEL | 1,625 (1,506) | - / - / 1,346 (0.828) | - / - / 1,280 (0.850) | - |
+| HCC1395T | Illumina | INDEL | 1,625 (1,497) | - / - / 1,346 (0.828) | - / - / 1,273 (0.850) | - |
 | HCC1395T | PacBio | SNV | 39,447 (38,345) | - / - / 34,374 (0.871) | - / - / 33,604 (0.876) | - |
-| HCC1395T | PacBio | INDEL | 1,625 (1,506) | - / - / 1,375 (0.846) | - / - / 1,307 (0.868) | - |
+| HCC1395T | PacBio | INDEL | 1,625 (1,497) | - / - / 1,375 (0.846) | - / - / 1,298 (0.867) | - |
 | HCC1395T | ONT | SNV | 39,447 (38,345) | - / - / 30,869 (0.783) | - / - / 30,125 (0.786) | - |
-| HCC1395T | ONT | INDEL | 1,625 (1,506) | - / - / 1,239 (0.762) | - / - / 1,171 (0.778) | - |
+| HCC1395T | ONT | INDEL | 1,625 (1,497) | - / - / 1,239 (0.762) | - / - / 1,165 (0.778) | - |
 
 ## 2. Lost on a pangenome arm against linear (tensor on linear, none on the arm), per platform
 
@@ -37,24 +37,24 @@ Each cell: alleles (PoN-tagged, share tagged; not tagged = graph-specific loss a
 | HG008T | PacBio | SNV | d46 | 314 (280 tagged, 89.2 %; 34 after PoN) | 124 (124 tagged, 100.0 %; 0 after PoN) | 151 (125 tagged, 82.8 %; 26 after PoN) | 38 (30 tagged, 78.9 %; 8 after PoN) | 1 (1 tagged, 100.0 %; 0 after PoN) | 18 (8 tagged, 44.4 %; 10 after PoN) |
 | HG008T | ONT | SNV | d9 | 317 (286 tagged, 90.2 %; 31 after PoN) | 153 (153 tagged, 100.0 %; 0 after PoN) | 102 (85 tagged, 83.3 %; 17 after PoN) | 60 (47 tagged, 78.3 %; 13 after PoN) | 2 (1 tagged, 50.0 %; 1 after PoN) | 18 (10 tagged, 55.6 %; 8 after PoN) |
 | HG008T | ONT | SNV | d46 | 290 (268 tagged, 92.4 %; 22 after PoN) | 121 (121 tagged, 100.0 %; 0 after PoN) | 119 (104 tagged, 87.4 %; 15 after PoN) | 48 (42 tagged, 87.5 %; 6 after PoN) | 2 (1 tagged, 50.0 %; 1 after PoN) | 13 (7 tagged, 53.8 %; 6 after PoN) |
-| HG008T | Illumina | INDEL | d9 | 3,341 (2,860 tagged, 85.6 %; 481 after PoN) | 1,613 (1,578 tagged, 97.8 %; 35 after PoN) | 987 (713 tagged, 72.2 %; 274 after PoN) | 681 (528 tagged, 77.5 %; 153 after PoN) | 60 (41 tagged, 68.3 %; 19 after PoN) | 176 (102 tagged, 58.0 %; 74 after PoN) |
-| HG008T | Illumina | INDEL | d46 | 3,104 (2,640 tagged, 85.1 %; 464 after PoN) | 1,301 (1,262 tagged, 97.0 %; 39 after PoN) | 1,139 (859 tagged, 75.4 %; 280 after PoN) | 577 (454 tagged, 78.7 %; 123 after PoN) | 87 (65 tagged, 74.7 %; 22 after PoN) | 205 (118 tagged, 57.6 %; 87 after PoN) |
-| HG008T | PacBio | INDEL | d9 | 3,229 (2,648 tagged, 82.0 %; 581 after PoN) | 935 (901 tagged, 96.4 %; 34 after PoN) | 1,203 (864 tagged, 71.8 %; 339 after PoN) | 835 (710 tagged, 85.0 %; 125 after PoN) | 256 (173 tagged, 67.6 %; 83 after PoN) | 214 (146 tagged, 68.2 %; 68 after PoN) |
-| HG008T | PacBio | INDEL | d46 | 3,078 (2,507 tagged, 81.4 %; 571 after PoN) | 839 (807 tagged, 96.2 %; 32 after PoN) | 1,433 (1,072 tagged, 74.8 %; 361 after PoN) | 546 (451 tagged, 82.6 %; 95 after PoN) | 260 (177 tagged, 68.1 %; 83 after PoN) | 227 (150 tagged, 66.1 %; 77 after PoN) |
-| HG008T | ONT | INDEL | d9 | 1,847 (1,548 tagged, 83.8 %; 299 after PoN) | 441 (421 tagged, 95.5 %; 20 after PoN) | 583 (438 tagged, 75.1 %; 145 after PoN) | 591 (507 tagged, 85.8 %; 84 after PoN) | 232 (182 tagged, 78.4 %; 50 after PoN) | 627 (495 tagged, 78.9 %; 132 after PoN) |
-| HG008T | ONT | INDEL | d46 | 1,752 (1,462 tagged, 83.4 %; 290 after PoN) | 472 (452 tagged, 95.8 %; 20 after PoN) | 687 (541 tagged, 78.7 %; 146 after PoN) | 364 (304 tagged, 83.5 %; 60 after PoN) | 229 (165 tagged, 72.1 %; 64 after PoN) | 546 (422 tagged, 77.3 %; 124 after PoN) |
+| HG008T | Illumina | INDEL | d9 | 3,341 (2,880 tagged, 86.2 %; 461 after PoN) | 1,613 (1,578 tagged, 97.8 %; 35 after PoN) | 987 (730 tagged, 74.0 %; 257 after PoN) | 681 (531 tagged, 78.0 %; 150 after PoN) | 60 (41 tagged, 68.3 %; 19 after PoN) | 176 (104 tagged, 59.1 %; 72 after PoN) |
+| HG008T | Illumina | INDEL | d46 | 3,104 (2,658 tagged, 85.6 %; 446 after PoN) | 1,301 (1,263 tagged, 97.1 %; 38 after PoN) | 1,139 (872 tagged, 76.6 %; 267 after PoN) | 577 (458 tagged, 79.4 %; 119 after PoN) | 87 (65 tagged, 74.7 %; 22 after PoN) | 205 (123 tagged, 60.0 %; 82 after PoN) |
+| HG008T | PacBio | INDEL | d9 | 3,229 (2,679 tagged, 83.0 %; 550 after PoN) | 935 (905 tagged, 96.8 %; 30 after PoN) | 1,203 (887 tagged, 73.7 %; 316 after PoN) | 835 (713 tagged, 85.4 %; 122 after PoN) | 256 (174 tagged, 68.0 %; 82 after PoN) | 214 (149 tagged, 69.6 %; 65 after PoN) |
+| HG008T | PacBio | INDEL | d46 | 3,078 (2,536 tagged, 82.4 %; 542 after PoN) | 839 (808 tagged, 96.3 %; 31 after PoN) | 1,433 (1,098 tagged, 76.6 %; 335 after PoN) | 546 (452 tagged, 82.8 %; 94 after PoN) | 260 (178 tagged, 68.5 %; 82 after PoN) | 227 (151 tagged, 66.5 %; 76 after PoN) |
+| HG008T | ONT | INDEL | d9 | 1,847 (1,571 tagged, 85.1 %; 276 after PoN) | 441 (425 tagged, 96.4 %; 16 after PoN) | 583 (456 tagged, 78.2 %; 127 after PoN) | 591 (507 tagged, 85.8 %; 84 after PoN) | 232 (183 tagged, 78.9 %; 49 after PoN) | 627 (498 tagged, 79.4 %; 129 after PoN) |
+| HG008T | ONT | INDEL | d46 | 1,752 (1,484 tagged, 84.7 %; 268 after PoN) | 472 (453 tagged, 96.0 %; 19 after PoN) | 687 (560 tagged, 81.5 %; 127 after PoN) | 364 (306 tagged, 84.1 %; 58 after PoN) | 229 (165 tagged, 72.1 %; 64 after PoN) | 546 (424 tagged, 77.7 %; 122 after PoN) |
 | COLO829T | Illumina | SNV | d9 | 395 (98 tagged, 24.8 %; 297 after PoN) | 55 (54 tagged, 98.2 %; 1 after PoN) | 287 (38 tagged, 13.2 %; 249 after PoN) | 53 (6 tagged, 11.3 %; 47 after PoN) | 0 (0 tagged, -; 0 after PoN) | 37 (3 tagged, 8.1 %; 34 after PoN) |
 | COLO829T | Illumina | SNV | d46 | 398 (93 tagged, 23.4 %; 305 after PoN) | 45 (45 tagged, 100.0 %; 0 after PoN) | 297 (40 tagged, 13.5 %; 257 after PoN) | 56 (8 tagged, 14.3 %; 48 after PoN) | 0 (0 tagged, -; 0 after PoN) | 37 (5 tagged, 13.5 %; 32 after PoN) |
 | COLO829T | fiberseq | SNV | d9 | 244 (72 tagged, 29.5 %; 172 after PoN) | 56 (56 tagged, 100.0 %; 0 after PoN) | 154 (12 tagged, 7.8 %; 142 after PoN) | 34 (4 tagged, 11.8 %; 30 after PoN) | 0 (0 tagged, -; 0 after PoN) | 55 (4 tagged, 7.3 %; 51 after PoN) |
 | COLO829T | fiberseq | SNV | d46 | 281 (72 tagged, 25.6 %; 209 after PoN) | 49 (49 tagged, 100.0 %; 0 after PoN) | 173 (17 tagged, 9.8 %; 156 after PoN) | 59 (6 tagged, 10.2 %; 53 after PoN) | 0 (0 tagged, -; 0 after PoN) | 72 (7 tagged, 9.7 %; 65 after PoN) |
 | COLO829T | ONT | SNV | d9 | 204 (69 tagged, 33.8 %; 135 after PoN) | 50 (50 tagged, 100.0 %; 0 after PoN) | 84 (11 tagged, 13.1 %; 73 after PoN) | 69 (8 tagged, 11.6 %; 61 after PoN) | 1 (0 tagged, 0.0 %; 1 after PoN) | 62 (5 tagged, 8.1 %; 57 after PoN) |
 | COLO829T | ONT | SNV | d46 | 221 (68 tagged, 30.8 %; 153 after PoN) | 45 (45 tagged, 100.0 %; 0 after PoN) | 57 (10 tagged, 17.5 %; 47 after PoN) | 118 (13 tagged, 11.0 %; 105 after PoN) | 1 (0 tagged, 0.0 %; 1 after PoN) | 70 (8 tagged, 11.4 %; 62 after PoN) |
-| COLO829T | Illumina | INDEL | d9 | 666 (533 tagged, 80.0 %; 133 after PoN) | 354 (350 tagged, 98.9 %; 4 after PoN) | 199 (107 tagged, 53.8 %; 92 after PoN) | 103 (70 tagged, 68.0 %; 33 after PoN) | 10 (6 tagged, 60.0 %; 4 after PoN) | 11 (8 tagged, 72.7 %; 3 after PoN) |
-| COLO829T | Illumina | INDEL | d46 | 609 (485 tagged, 79.6 %; 124 after PoN) | 315 (309 tagged, 98.1 %; 6 after PoN) | 194 (105 tagged, 54.1 %; 89 after PoN) | 88 (65 tagged, 73.9 %; 23 after PoN) | 12 (6 tagged, 50.0 %; 6 after PoN) | 17 (11 tagged, 64.7 %; 6 after PoN) |
-| COLO829T | fiberseq | INDEL | d9 | 642 (483 tagged, 75.2 %; 159 after PoN) | 183 (180 tagged, 98.4 %; 3 after PoN) | 203 (112 tagged, 55.2 %; 91 after PoN) | 219 (173 tagged, 79.0 %; 46 after PoN) | 37 (18 tagged, 48.6 %; 19 after PoN) | 10 (8 tagged, 80.0 %; 2 after PoN) |
-| COLO829T | fiberseq | INDEL | d46 | 591 (434 tagged, 73.4 %; 157 after PoN) | 198 (193 tagged, 97.5 %; 5 after PoN) | 214 (123 tagged, 57.5 %; 91 after PoN) | 142 (96 tagged, 67.6 %; 46 after PoN) | 37 (22 tagged, 59.5 %; 15 after PoN) | 9 (7 tagged, 77.8 %; 2 after PoN) |
-| COLO829T | ONT | INDEL | d9 | 444 (330 tagged, 74.3 %; 114 after PoN) | 115 (114 tagged, 99.1 %; 1 after PoN) | 142 (75 tagged, 52.8 %; 67 after PoN) | 144 (116 tagged, 80.6 %; 28 after PoN) | 43 (25 tagged, 58.1 %; 18 after PoN) | 111 (85 tagged, 76.6 %; 26 after PoN) |
-| COLO829T | ONT | INDEL | d46 | 429 (313 tagged, 73.0 %; 116 after PoN) | 128 (126 tagged, 98.4 %; 2 after PoN) | 149 (84 tagged, 56.4 %; 65 after PoN) | 104 (71 tagged, 68.3 %; 33 after PoN) | 48 (32 tagged, 66.7 %; 16 after PoN) | 104 (82 tagged, 78.8 %; 22 after PoN) |
+| COLO829T | Illumina | INDEL | d9 | 666 (540 tagged, 81.1 %; 126 after PoN) | 354 (350 tagged, 98.9 %; 4 after PoN) | 199 (114 tagged, 57.3 %; 85 after PoN) | 103 (70 tagged, 68.0 %; 33 after PoN) | 10 (6 tagged, 60.0 %; 4 after PoN) | 11 (8 tagged, 72.7 %; 3 after PoN) |
+| COLO829T | Illumina | INDEL | d46 | 609 (491 tagged, 80.6 %; 118 after PoN) | 315 (310 tagged, 98.4 %; 5 after PoN) | 194 (110 tagged, 56.7 %; 84 after PoN) | 88 (65 tagged, 73.9 %; 23 after PoN) | 12 (6 tagged, 50.0 %; 6 after PoN) | 17 (12 tagged, 70.6 %; 5 after PoN) |
+| COLO829T | fiberseq | INDEL | d9 | 642 (493 tagged, 76.8 %; 149 after PoN) | 183 (181 tagged, 98.9 %; 2 after PoN) | 203 (119 tagged, 58.6 %; 84 after PoN) | 219 (175 tagged, 79.9 %; 44 after PoN) | 37 (18 tagged, 48.6 %; 19 after PoN) | 10 (8 tagged, 80.0 %; 2 after PoN) |
+| COLO829T | fiberseq | INDEL | d46 | 591 (444 tagged, 75.1 %; 147 after PoN) | 198 (194 tagged, 98.0 %; 4 after PoN) | 214 (130 tagged, 60.7 %; 84 after PoN) | 142 (98 tagged, 69.0 %; 44 after PoN) | 37 (22 tagged, 59.5 %; 15 after PoN) | 9 (7 tagged, 77.8 %; 2 after PoN) |
+| COLO829T | ONT | INDEL | d9 | 444 (339 tagged, 76.4 %; 105 after PoN) | 115 (114 tagged, 99.1 %; 1 after PoN) | 142 (82 tagged, 57.7 %; 60 after PoN) | 144 (118 tagged, 81.9 %; 26 after PoN) | 43 (25 tagged, 58.1 %; 18 after PoN) | 111 (85 tagged, 76.6 %; 26 after PoN) |
+| COLO829T | ONT | INDEL | d46 | 429 (323 tagged, 75.3 %; 106 after PoN) | 128 (126 tagged, 98.4 %; 2 after PoN) | 149 (89 tagged, 59.7 %; 60 after PoN) | 104 (75 tagged, 72.1 %; 29 after PoN) | 48 (33 tagged, 68.8 %; 15 after PoN) | 104 (82 tagged, 78.8 %; 22 after PoN) |
 
 ## 2b. Lost on d9 against linear, split by the read-level absorbed set of the earlier analyses (ALT reads align with no edit to a d9 branch / skip edge on >= 1 platform; graph_absorbed_somatic_20261001 / _colo829t_20261005)
 
@@ -63,15 +63,15 @@ Each cell: alleles (PoN-tagged, share tagged; not tagged = graph-specific loss a
 | HG008T | Illumina | SNV | 293 (257 tagged, 87.7 %; 36 after PoN) | 163 (162 tagged, 99.4 %; 1 after PoN) | 130 (95 tagged, 73.1 %; 35 after PoN) | 189 of 201 | 26 |
 | HG008T | PacBio | SNV | 333 (301 tagged, 90.4 %; 32 after PoN) | 179 (178 tagged, 99.4 %; 1 after PoN) | 154 (123 tagged, 79.9 %; 31 after PoN) | 186 of 201 | 7 |
 | HG008T | ONT | SNV | 317 (286 tagged, 90.2 %; 31 after PoN) | 169 (168 tagged, 99.4 %; 1 after PoN) | 148 (118 tagged, 79.7 %; 30 after PoN) | 176 of 201 | 8 |
-| HG008T | Illumina | INDEL | 3,341 (2,860 tagged, 85.6 %; 481 after PoN) | 1,749 (1,700 tagged, 97.2 %; 49 after PoN) | 1,592 (1,160 tagged, 72.9 %; 432 after PoN) | 1,762 of 2,277 | 13 |
-| HG008T | PacBio | INDEL | 3,229 (2,648 tagged, 82.0 %; 581 after PoN) | 1,539 (1,465 tagged, 95.2 %; 74 after PoN) | 1,690 (1,183 tagged, 70.0 %; 507 after PoN) | 1,856 of 2,277 | 352 |
-| HG008T | ONT | INDEL | 1,847 (1,548 tagged, 83.8 %; 299 after PoN) | 889 (849 tagged, 95.5 %; 40 after PoN) | 958 (699 tagged, 73.0 %; 259 after PoN) | 1,119 of 2,277 | 423 |
+| HG008T | Illumina | INDEL | 3,341 (2,880 tagged, 86.2 %; 461 after PoN) | 1,749 (1,702 tagged, 97.3 %; 47 after PoN) | 1,592 (1,178 tagged, 74.0 %; 414 after PoN) | 1,762 of 2,277 | 13 |
+| HG008T | PacBio | INDEL | 3,229 (2,679 tagged, 83.0 %; 550 after PoN) | 1,539 (1,471 tagged, 95.6 %; 68 after PoN) | 1,690 (1,208 tagged, 71.5 %; 482 after PoN) | 1,856 of 2,277 | 352 |
+| HG008T | ONT | INDEL | 1,847 (1,571 tagged, 85.1 %; 276 after PoN) | 889 (852 tagged, 95.8 %; 37 after PoN) | 958 (719 tagged, 75.1 %; 239 after PoN) | 1,119 of 2,277 | 423 |
 | COLO829T | Illumina | SNV | 395 (98 tagged, 24.8 %; 297 after PoN) | 60 (59 tagged, 98.3 %; 1 after PoN) | 335 (39 tagged, 11.6 %; 296 after PoN) | 66 of 67 | 6 |
 | COLO829T | fiberseq | SNV | 244 (72 tagged, 29.5 %; 172 after PoN) | 60 (59 tagged, 98.3 %; 1 after PoN) | 184 (13 tagged, 7.1 %; 171 after PoN) | 61 of 67 | 1 |
 | COLO829T | ONT | SNV | 204 (69 tagged, 33.8 %; 135 after PoN) | 55 (54 tagged, 98.2 %; 1 after PoN) | 149 (15 tagged, 10.1 %; 134 after PoN) | 57 of 67 | 2 |
-| COLO829T | Illumina | INDEL | 666 (533 tagged, 80.0 %; 133 after PoN) | 368 (361 tagged, 98.1 %; 7 after PoN) | 298 (172 tagged, 57.7 %; 126 after PoN) | 368 of 430 | 0 |
-| COLO829T | fiberseq | INDEL | 642 (483 tagged, 75.2 %; 159 after PoN) | 343 (330 tagged, 96.2 %; 13 after PoN) | 299 (153 tagged, 51.2 %; 146 after PoN) | 406 of 430 | 64 |
-| COLO829T | ONT | INDEL | 444 (330 tagged, 74.3 %; 114 after PoN) | 236 (227 tagged, 96.2 %; 9 after PoN) | 208 (103 tagged, 49.5 %; 105 after PoN) | 299 of 430 | 103 |
+| COLO829T | Illumina | INDEL | 666 (540 tagged, 81.1 %; 126 after PoN) | 368 (362 tagged, 98.4 %; 6 after PoN) | 298 (178 tagged, 59.7 %; 120 after PoN) | 368 of 430 | 0 |
+| COLO829T | fiberseq | INDEL | 642 (493 tagged, 76.8 %; 149 after PoN) | 343 (333 tagged, 97.1 %; 10 after PoN) | 299 (160 tagged, 53.5 %; 139 after PoN) | 406 of 430 | 64 |
+| COLO829T | ONT | INDEL | 444 (339 tagged, 76.4 %; 105 after PoN) | 236 (229 tagged, 97.0 %; 7 after PoN) | 208 (110 tagged, 52.9 %; 98 after PoN) | 299 of 430 | 103 |
 
 ## 3. Union over the three platforms (lost on >= 1 platform; absorbed on >= 1 platform), and lost on all three
 
@@ -79,12 +79,12 @@ Each cell: alleles (PoN-tagged, share tagged; not tagged = graph-specific loss a
 |---|---|---|---|---|---|---|---|---|---|
 | HG008T | SNV | d9 | 8,690 (910 tagged, 10.5 %; 7,780 after PoN) | 426 (359 tagged, 84.3 %; 67 after PoN) | 184 (184 tagged, 100.0 %; 0 after PoN) | 200 (193 tagged, 96.5 %; 7 after PoN) | 113 (113 tagged, 100.0 %; 0 after PoN) | 63 (56 tagged, 88.9 %; 7 after PoN) | 0 (0 tagged, -; 0 after PoN) |
 | HG008T | SNV | d46 | 8,690 (910 tagged, 10.5 %; 7,780 after PoN) | 396 (333 tagged, 84.1 %; 63 after PoN) | 140 (140 tagged, 100.0 %; 0 after PoN) | 180 (172 tagged, 95.6 %; 8 after PoN) | 91 (91 tagged, 100.0 %; 0 after PoN) | 74 (66 tagged, 89.2 %; 8 after PoN) | 0 (0 tagged, -; 0 after PoN) |
-| HG008T | INDEL | d9 | 8,496 (5,245 tagged, 61.7 %; 3,251 after PoN) | 4,275 (3,555 tagged, 83.2 %; 720 after PoN) | 1,818 (1,759 tagged, 96.8 %; 59 after PoN) | 1,188 (1,013 tagged, 85.3 %; 175 after PoN) | 315 (309 tagged, 98.1 %; 6 after PoN) | 601 (443 tagged, 73.7 %; 158 after PoN) | 30 (18 tagged, 60.0 %; 12 after PoN) |
-| HG008T | INDEL | d46 | 8,496 (5,245 tagged, 61.7 %; 3,251 after PoN) | 4,039 (3,335 tagged, 82.6 %; 704 after PoN) | 1,467 (1,416 tagged, 96.5 %; 51 after PoN) | 1,126 (956 tagged, 84.9 %; 170 after PoN) | 345 (333 tagged, 96.5 %; 12 after PoN) | 628 (473 tagged, 75.3 %; 155 after PoN) | 39 (25 tagged, 64.1 %; 14 after PoN) |
+| HG008T | INDEL | d9 | 8,496 (5,326 tagged, 62.7 %; 3,170 after PoN) | 4,275 (3,594 tagged, 84.1 %; 681 after PoN) | 1,818 (1,763 tagged, 97.0 %; 55 after PoN) | 1,188 (1,021 tagged, 85.9 %; 167 after PoN) | 315 (309 tagged, 98.1 %; 6 after PoN) | 601 (451 tagged, 75.0 %; 150 after PoN) | 30 (18 tagged, 60.0 %; 12 after PoN) |
+| HG008T | INDEL | d46 | 8,496 (5,326 tagged, 62.7 %; 3,170 after PoN) | 4,039 (3,371 tagged, 83.5 %; 668 after PoN) | 1,467 (1,418 tagged, 96.7 %; 49 after PoN) | 1,126 (964 tagged, 85.6 %; 162 after PoN) | 345 (333 tagged, 96.5 %; 12 after PoN) | 628 (481 tagged, 76.6 %; 147 after PoN) | 39 (25 tagged, 64.1 %; 14 after PoN) |
 | COLO829T | SNV | d9 | 42,035 (1,442 tagged, 3.4 %; 40,593 after PoN) | 489 (113 tagged, 23.1 %; 376 after PoN) | 64 (63 tagged, 98.4 %; 1 after PoN) | 119 (51 tagged, 42.9 %; 68 after PoN) | 41 (41 tagged, 100.0 %; 0 after PoN) | 72 (4 tagged, 5.6 %; 68 after PoN) | 2 (0 tagged, 0.0 %; 2 after PoN) |
 | COLO829T | SNV | d46 | 42,035 (1,442 tagged, 3.4 %; 40,593 after PoN) | 552 (114 tagged, 20.7 %; 438 after PoN) | 54 (54 tagged, 100.0 %; 0 after PoN) | 101 (45 tagged, 44.6 %; 56 after PoN) | 35 (35 tagged, 100.0 %; 0 after PoN) | 65 (9 tagged, 13.8 %; 56 after PoN) | 3 (1 tagged, 33.3 %; 2 after PoN) |
-| COLO829T | INDEL | d9 | 1,912 (983 tagged, 51.4 %; 929 after PoN) | 799 (615 tagged, 77.0 %; 184 after PoN) | 382 (376 tagged, 98.4 %; 6 after PoN) | 323 (251 tagged, 77.7 %; 72 after PoN) | 89 (89 tagged, 100.0 %; 0 after PoN) | 150 (80 tagged, 53.3 %; 70 after PoN) | 5 (5 tagged, 100.0 %; 0 after PoN) |
-| COLO829T | INDEL | d46 | 1,912 (983 tagged, 51.4 %; 929 after PoN) | 757 (577 tagged, 76.2 %; 180 after PoN) | 347 (340 tagged, 98.0 %; 7 after PoN) | 298 (227 tagged, 76.2 %; 71 after PoN) | 99 (97 tagged, 98.0 %; 2 after PoN) | 148 (80 tagged, 54.1 %; 68 after PoN) | 6 (6 tagged, 100.0 %; 0 after PoN) |
+| COLO829T | INDEL | d9 | 1,912 (1,005 tagged, 52.6 %; 907 after PoN) | 799 (626 tagged, 78.3 %; 173 after PoN) | 382 (377 tagged, 98.7 %; 5 after PoN) | 323 (257 tagged, 79.6 %; 66 after PoN) | 89 (89 tagged, 100.0 %; 0 after PoN) | 150 (86 tagged, 57.3 %; 64 after PoN) | 5 (5 tagged, 100.0 %; 0 after PoN) |
+| COLO829T | INDEL | d46 | 1,912 (1,005 tagged, 52.6 %; 907 after PoN) | 757 (589 tagged, 77.8 %; 168 after PoN) | 347 (341 tagged, 98.3 %; 6 after PoN) | 298 (232 tagged, 77.9 %; 66 after PoN) | 99 (97 tagged, 98.0 %; 2 after PoN) | 148 (85 tagged, 57.4 %; 63 after PoN) | 6 (6 tagged, 100.0 %; 0 after PoN) |
 
 ## 4. d46 against d9, per platform
 
@@ -95,24 +95,24 @@ d46_only = tensor on d46, none on d9 (the d9 status class); d9_only = tensor on 
 | HG008T | Illumina | SNV | 79 (69 tagged, 87.3 %; 10 after PoN) | 32 (32 tagged, 100.0 %; 0 after PoN) | 30 (22 tagged, 73.3 %; 8 after PoN) | 16 (15 tagged, 93.8 %; 1 after PoN) | 45 (37 tagged, 82.2 %; 8 after PoN) | 15 (15 tagged, 100.0 %; 0 after PoN) | 17 (13 tagged, 76.5 %; 4 after PoN) | 13 (9 tagged, 69.2 %; 4 after PoN) | +2 |
 | HG008T | PacBio | SNV | 71 (59 tagged, 83.1 %; 12 after PoN) | 36 (36 tagged, 100.0 %; 0 after PoN) | 18 (11 tagged, 61.1 %; 7 after PoN) | 16 (12 tagged, 75.0 %; 4 after PoN) | 53 (40 tagged, 75.5 %; 13 after PoN) | 14 (14 tagged, 100.0 %; 0 after PoN) | 28 (19 tagged, 67.9 %; 9 after PoN) | 9 (6 tagged, 66.7 %; 3 after PoN) | -1 |
 | HG008T | ONT | SNV | 71 (55 tagged, 77.5 %; 16 after PoN) | 27 (27 tagged, 100.0 %; 0 after PoN) | 20 (14 tagged, 70.0 %; 6 after PoN) | 22 (14 tagged, 63.6 %; 8 after PoN) | 49 (40 tagged, 81.6 %; 9 after PoN) | 15 (15 tagged, 100.0 %; 0 after PoN) | 18 (15 tagged, 83.3 %; 3 after PoN) | 15 (10 tagged, 66.7 %; 5 after PoN) | +7 |
-| HG008T | Illumina | INDEL | 466 (379 tagged, 81.3 %; 87 after PoN) | 266 (246 tagged, 92.5 %; 20 after PoN) | 56 (26 tagged, 46.4 %; 30 after PoN) | 117 (90 tagged, 76.9 %; 27 after PoN) | 200 (143 tagged, 71.5 %; 57 after PoN) | 64 (53 tagged, 82.8 %; 11 after PoN) | 54 (34 tagged, 63.0 %; 20 after PoN) | 53 (36 tagged, 67.9 %; 17 after PoN) | +30 |
-| HG008T | PacBio | INDEL | 396 (329 tagged, 83.1 %; 67 after PoN) | 132 (120 tagged, 90.9 %; 12 after PoN) | 45 (31 tagged, 68.9 %; 14 after PoN) | 170 (146 tagged, 85.9 %; 24 after PoN) | 232 (184 tagged, 79.3 %; 48 after PoN) | 76 (67 tagged, 88.2 %; 9 after PoN) | 57 (38 tagged, 66.7 %; 19 after PoN) | 64 (53 tagged, 82.8 %; 11 after PoN) | +19 |
-| HG008T | ONT | INDEL | 415 (349 tagged, 84.1 %; 66 after PoN) | 92 (84 tagged, 91.3 %; 8 after PoN) | 45 (28 tagged, 62.2 %; 17 after PoN) | 163 (140 tagged, 85.9 %; 23 after PoN) | 401 (336 tagged, 83.8 %; 65 after PoN) | 106 (102 tagged, 96.2 %; 4 after PoN) | 57 (38 tagged, 66.7 %; 19 after PoN) | 83 (72 tagged, 86.7 %; 11 after PoN) | +1 |
+| HG008T | Illumina | INDEL | 466 (384 tagged, 82.4 %; 82 after PoN) | 266 (246 tagged, 92.5 %; 20 after PoN) | 56 (30 tagged, 53.6 %; 26 after PoN) | 117 (91 tagged, 77.8 %; 26 after PoN) | 200 (143 tagged, 71.5 %; 57 after PoN) | 64 (53 tagged, 82.8 %; 11 after PoN) | 54 (34 tagged, 63.0 %; 20 after PoN) | 53 (36 tagged, 67.9 %; 17 after PoN) | +25 |
+| HG008T | PacBio | INDEL | 396 (331 tagged, 83.6 %; 65 after PoN) | 132 (120 tagged, 90.9 %; 12 after PoN) | 45 (31 tagged, 68.9 %; 14 after PoN) | 170 (147 tagged, 86.5 %; 23 after PoN) | 232 (186 tagged, 80.2 %; 46 after PoN) | 76 (68 tagged, 89.5 %; 8 after PoN) | 57 (38 tagged, 66.7 %; 19 after PoN) | 64 (53 tagged, 82.8 %; 11 after PoN) | +19 |
+| HG008T | ONT | INDEL | 415 (350 tagged, 84.3 %; 65 after PoN) | 92 (84 tagged, 91.3 %; 8 after PoN) | 45 (28 tagged, 62.2 %; 17 after PoN) | 163 (140 tagged, 85.9 %; 23 after PoN) | 401 (337 tagged, 84.0 %; 64 after PoN) | 106 (103 tagged, 97.2 %; 3 after PoN) | 57 (38 tagged, 66.7 %; 19 after PoN) | 83 (72 tagged, 86.7 %; 11 after PoN) | +1 |
 | COLO829T | Illumina | SNV | 100 (20 tagged, 20.0 %; 80 after PoN) | 10 (10 tagged, 100.0 %; 0 after PoN) | 60 (6 tagged, 10.0 %; 54 after PoN) | 30 (4 tagged, 13.3 %; 26 after PoN) | 103 (13 tagged, 12.6 %; 90 after PoN) | 4 (4 tagged, 100.0 %; 0 after PoN) | 68 (5 tagged, 7.4 %; 63 after PoN) | 31 (4 tagged, 12.9 %; 27 after PoN) | -10 |
 | COLO829T | fiberseq | SNV | 95 (18 tagged, 18.9 %; 77 after PoN) | 10 (10 tagged, 100.0 %; 0 after PoN) | 54 (5 tagged, 9.3 %; 49 after PoN) | 31 (3 tagged, 9.7 %; 28 after PoN) | 115 (15 tagged, 13.0 %; 100 after PoN) | 4 (4 tagged, 100.0 %; 0 after PoN) | 67 (6 tagged, 9.0 %; 61 after PoN) | 44 (5 tagged, 11.4 %; 39 after PoN) | -23 |
 | COLO829T | ONT | SNV | 120 (18 tagged, 15.0 %; 102 after PoN) | 11 (11 tagged, 100.0 %; 0 after PoN) | 48 (5 tagged, 10.4 %; 43 after PoN) | 61 (2 tagged, 3.3 %; 59 after PoN) | 129 (14 tagged, 10.9 %; 115 after PoN) | 3 (3 tagged, 100.0 %; 0 after PoN) | 32 (5 tagged, 15.6 %; 27 after PoN) | 94 (6 tagged, 6.4 %; 88 after PoN) | -13 |
-| COLO829T | Illumina | INDEL | 96 (80 tagged, 83.3 %; 16 after PoN) | 54 (52 tagged, 96.3 %; 2 after PoN) | 16 (8 tagged, 50.0 %; 8 after PoN) | 22 (16 tagged, 72.7 %; 6 after PoN) | 33 (29 tagged, 87.9 %; 4 after PoN) | 18 (18 tagged, 100.0 %; 0 after PoN) | 8 (5 tagged, 62.5 %; 3 after PoN) | 5 (4 tagged, 80.0 %; 1 after PoN) | +12 |
+| COLO829T | Illumina | INDEL | 96 (82 tagged, 85.4 %; 14 after PoN) | 54 (53 tagged, 98.1 %; 1 after PoN) | 16 (9 tagged, 56.2 %; 7 after PoN) | 22 (16 tagged, 72.7 %; 6 after PoN) | 33 (29 tagged, 87.9 %; 4 after PoN) | 18 (18 tagged, 100.0 %; 0 after PoN) | 8 (5 tagged, 62.5 %; 3 after PoN) | 5 (4 tagged, 80.0 %; 1 after PoN) | +10 |
 | COLO829T | fiberseq | INDEL | 88 (77 tagged, 87.5 %; 11 after PoN) | 26 (26 tagged, 100.0 %; 0 after PoN) | 14 (10 tagged, 71.4 %; 4 after PoN) | 41 (38 tagged, 92.7 %; 3 after PoN) | 38 (29 tagged, 76.3 %; 9 after PoN) | 12 (12 tagged, 100.0 %; 0 after PoN) | 11 (6 tagged, 54.5 %; 5 after PoN) | 13 (9 tagged, 69.2 %; 4 after PoN) | +2 |
-| COLO829T | ONT | INDEL | 84 (69 tagged, 82.1 %; 15 after PoN) | 14 (14 tagged, 100.0 %; 0 after PoN) | 12 (8 tagged, 66.7 %; 4 after PoN) | 38 (34 tagged, 89.5 %; 4 after PoN) | 76 (55 tagged, 72.4 %; 21 after PoN) | 11 (11 tagged, 100.0 %; 0 after PoN) | 10 (3 tagged, 30.0 %; 7 after PoN) | 20 (13 tagged, 65.0 %; 7 after PoN) | -6 |
+| COLO829T | ONT | INDEL | 84 (69 tagged, 82.1 %; 15 after PoN) | 14 (14 tagged, 100.0 %; 0 after PoN) | 12 (8 tagged, 66.7 %; 4 after PoN) | 38 (34 tagged, 89.5 %; 4 after PoN) | 76 (56 tagged, 73.7 %; 20 after PoN) | 11 (11 tagged, 100.0 %; 0 after PoN) | 10 (3 tagged, 30.0 %; 7 after PoN) | 20 (13 tagged, 65.0 %; 7 after PoN) | -5 |
 
 ## 5. Truth ALT spelled by a graph path at its locus (all truth alleles, independent of the reads)
 
 | sample | kind | n | spelled by d9 | spelled by d46 | d9 only | d46 only | both | spelled by d46, PoN-tagged |
 |---|---|---:|---|---|---:|---:|---:|---|
 | HG008T | SNV | 8,690 | 215 (2.5 %) | 153 (1.8 %) | 87 | 25 | 128 | 153 (153 tagged, 100.0 %; 0 after PoN) |
-| HG008T | INDEL | 8,496 | 2,319 (27.3 %) | 1,809 (21.3 %) | 716 | 206 | 1,603 | 1,809 (1,740 tagged, 96.2 %; 69 after PoN) |
+| HG008T | INDEL | 8,496 | 2,319 (27.3 %) | 1,809 (21.3 %) | 716 | 206 | 1,603 | 1,809 (1,743 tagged, 96.4 %; 66 after PoN) |
 | COLO829T | SNV | 42,035 | 83 (0.2 %) | 70 (0.2 %) | 18 | 5 | 65 | 70 (69 tagged, 98.6 %; 1 after PoN) |
-| COLO829T | INDEL | 1,912 | 457 (23.9 %) | 398 (20.8 %) | 112 | 53 | 345 | 398 (389 tagged, 97.7 %; 9 after PoN) |
+| COLO829T | INDEL | 1,912 | 457 (23.9 %) | 398 (20.8 %) | 112 | 53 | 345 | 398 (390 tagged, 98.0 %; 8 after PoN) |
 | HCC1395T | SNV | 39,447 | 202 (0.5 %) | 228 (0.6 %) | 9 | 35 | 193 | 228 (228 tagged, 100.0 %; 0 after PoN) |
 | HCC1395T | INDEL | 1,625 | 52 (3.2 %) | 47 (2.9 %) | 8 | 3 | 44 | 47 (47 tagged, 100.0 %; 0 after PoN) |
 
@@ -129,40 +129,40 @@ Validation against the read-level d9 analysis (graph_absorbed_somatic_20261001 /
 
 | sample | arm | class | HP>=7: n (tagged) | other INDEL: n (tagged) |
 |---|---|---|---|---|
-| HG008T | d9 | all truth | 6,229 (4,009 tagged, 64.4 %; 2,220 after PoN) | 2,267 (1,236 tagged, 54.5 %; 1,031 after PoN) |
-| HG008T | d9 | lost on >= 1 platform | 3,155 (2,627 tagged, 83.3 %; 528 after PoN) | 1,120 (928 tagged, 82.9 %; 192 after PoN) |
-| HG008T | d9 | absorbed on >= 1 platform | 1,473 (1,429 tagged, 97.0 %; 44 after PoN) | 345 (330 tagged, 95.7 %; 15 after PoN) |
-| HG008T | d46 | all truth | 6,229 (4,009 tagged, 64.4 %; 2,220 after PoN) | 2,267 (1,236 tagged, 54.5 %; 1,031 after PoN) |
-| HG008T | d46 | lost on >= 1 platform | 2,924 (2,412 tagged, 82.5 %; 512 after PoN) | 1,115 (923 tagged, 82.8 %; 192 after PoN) |
-| HG008T | d46 | absorbed on >= 1 platform | 1,171 (1,138 tagged, 97.2 %; 33 after PoN) | 296 (278 tagged, 93.9 %; 18 after PoN) |
-| COLO829T | d9 | all truth | 1,110 (644 tagged, 58.0 %; 466 after PoN) | 802 (339 tagged, 42.3 %; 463 after PoN) |
-| COLO829T | d9 | lost on >= 1 platform | 428 (345 tagged, 80.6 %; 83 after PoN) | 371 (270 tagged, 72.8 %; 101 after PoN) |
-| COLO829T | d9 | absorbed on >= 1 platform | 235 (233 tagged, 99.1 %; 2 after PoN) | 147 (143 tagged, 97.3 %; 4 after PoN) |
-| COLO829T | d46 | all truth | 1,110 (644 tagged, 58.0 %; 466 after PoN) | 802 (339 tagged, 42.3 %; 463 after PoN) |
-| COLO829T | d46 | lost on >= 1 platform | 387 (308 tagged, 79.6 %; 79 after PoN) | 370 (269 tagged, 72.7 %; 101 after PoN) |
-| COLO829T | d46 | absorbed on >= 1 platform | 215 (212 tagged, 98.6 %; 3 after PoN) | 132 (128 tagged, 97.0 %; 4 after PoN) |
+| HG008T | d9 | all truth | 6,229 (4,027 tagged, 64.6 %; 2,202 after PoN) | 2,267 (1,299 tagged, 57.3 %; 968 after PoN) |
+| HG008T | d9 | lost on >= 1 platform | 3,155 (2,631 tagged, 83.4 %; 524 after PoN) | 1,120 (963 tagged, 86.0 %; 157 after PoN) |
+| HG008T | d9 | absorbed on >= 1 platform | 1,473 (1,429 tagged, 97.0 %; 44 after PoN) | 345 (334 tagged, 96.8 %; 11 after PoN) |
+| HG008T | d46 | all truth | 6,229 (4,027 tagged, 64.6 %; 2,202 after PoN) | 2,267 (1,299 tagged, 57.3 %; 968 after PoN) |
+| HG008T | d46 | lost on >= 1 platform | 2,924 (2,415 tagged, 82.6 %; 509 after PoN) | 1,115 (956 tagged, 85.7 %; 159 after PoN) |
+| HG008T | d46 | absorbed on >= 1 platform | 1,171 (1,138 tagged, 97.2 %; 33 after PoN) | 296 (280 tagged, 94.6 %; 16 after PoN) |
+| COLO829T | d9 | all truth | 1,110 (647 tagged, 58.3 %; 463 after PoN) | 802 (358 tagged, 44.6 %; 444 after PoN) |
+| COLO829T | d9 | lost on >= 1 platform | 428 (346 tagged, 80.8 %; 82 after PoN) | 371 (280 tagged, 75.5 %; 91 after PoN) |
+| COLO829T | d9 | absorbed on >= 1 platform | 235 (233 tagged, 99.1 %; 2 after PoN) | 147 (144 tagged, 98.0 %; 3 after PoN) |
+| COLO829T | d46 | all truth | 1,110 (647 tagged, 58.3 %; 463 after PoN) | 802 (358 tagged, 44.6 %; 444 after PoN) |
+| COLO829T | d46 | lost on >= 1 platform | 387 (309 tagged, 79.8 %; 78 after PoN) | 370 (280 tagged, 75.7 %; 90 after PoN) |
+| COLO829T | d46 | absorbed on >= 1 platform | 215 (212 tagged, 98.6 %; 3 after PoN) | 132 (129 tagged, 97.7 %; 3 after PoN) |
 
 ## 7. HCC1395T (SEQC2 v1.2.1 truth), d46 only (no d9 / linear tensor sets)
 
 | platform | kind | n (tagged) | tensor | no candidate | no candidate, ALT spelled by d46 (absorbed) | no candidate, not spelled | filtered |
 |---|---|---|---|---|---|---|---|
 | Illumina | SNV | 39,447 (1,102 tagged, 2.8 %; 38,345 after PoN) | 35,266 (0.894) | 436 (248 tagged, 56.9 %; 188 after PoN) | 225 (225 tagged, 100.0 %; 0 after PoN) (0.6 % of truth) | 211 (23 tagged, 10.9 %; 188 after PoN) | 3,745 (43 tagged, 1.1 %; 3,702 after PoN) |
-| Illumina | INDEL | 1,625 (119 tagged, 7.3 %; 1,506 after PoN) | 1,346 (0.828) | 77 (50 tagged, 64.9 %; 27 after PoN) | 46 (46 tagged, 100.0 %; 0 after PoN) (2.8 % of truth) | 31 (4 tagged, 12.9 %; 27 after PoN) | 198 (2 tagged, 1.0 %; 196 after PoN) |
+| Illumina | INDEL | 1,625 (128 tagged, 7.9 %; 1,497 after PoN) | 1,346 (0.828) | 77 (50 tagged, 64.9 %; 27 after PoN) | 46 (46 tagged, 100.0 %; 0 after PoN) (2.8 % of truth) | 31 (4 tagged, 12.9 %; 27 after PoN) | 198 (4 tagged, 2.0 %; 194 after PoN) |
 | PacBio | SNV | 39,447 (1,102 tagged, 2.8 %; 38,345 after PoN) | 34,374 (0.871) | 824 (263 tagged, 31.9 %; 561 after PoN) | 225 (225 tagged, 100.0 %; 0 after PoN) (0.6 % of truth) | 599 (38 tagged, 6.3 %; 561 after PoN) | 4,248 (69 tagged, 1.6 %; 4,179 after PoN) |
-| PacBio | INDEL | 1,625 (119 tagged, 7.3 %; 1,506 after PoN) | 1,375 (0.846) | 75 (36 tagged, 48.0 %; 39 after PoN) | 33 (33 tagged, 100.0 %; 0 after PoN) (2.0 % of truth) | 42 (3 tagged, 7.1 %; 39 after PoN) | 166 (13 tagged, 7.8 %; 153 after PoN) |
+| PacBio | INDEL | 1,625 (128 tagged, 7.9 %; 1,497 after PoN) | 1,375 (0.846) | 75 (36 tagged, 48.0 %; 39 after PoN) | 33 (33 tagged, 100.0 %; 0 after PoN) (2.0 % of truth) | 42 (3 tagged, 7.1 %; 39 after PoN) | 166 (13 tagged, 7.8 %; 153 after PoN) |
 | ONT | SNV | 39,447 (1,102 tagged, 2.8 %; 38,345 after PoN) | 30,869 (0.783) | 2,481 (272 tagged, 11.0 %; 2,209 after PoN) | 226 (226 tagged, 100.0 %; 0 after PoN) (0.6 % of truth) | 2,255 (46 tagged, 2.0 %; 2,209 after PoN) | 6,095 (86 tagged, 1.4 %; 6,009 after PoN) |
-| ONT | INDEL | 1,625 (119 tagged, 7.3 %; 1,506 after PoN) | 1,239 (0.762) | 130 (29 tagged, 22.3 %; 101 after PoN) | 26 (26 tagged, 100.0 %; 0 after PoN) (1.6 % of truth) | 104 (3 tagged, 2.9 %; 101 after PoN) | 235 (13 tagged, 5.5 %; 222 after PoN) |
+| ONT | INDEL | 1,625 (128 tagged, 7.9 %; 1,497 after PoN) | 1,239 (0.762) | 130 (29 tagged, 22.3 %; 101 after PoN) | 26 (26 tagged, 100.0 %; 0 after PoN) (1.6 % of truth) | 104 (3 tagged, 2.9 %; 101 after PoN) | 235 (16 tagged, 6.8 %; 219 after PoN) |
 
 Same definition (no candidate on d46 and ALT spelled by d46, share of all truth alleles of the kind) on every sample:
 
 | sample | platform | SNV absorbed (share) | INDEL absorbed (share) | INDEL absorbed after PoN (share of truth INDELs) |
 |---|---|---|---|---|
-| HG008T | Illumina | 111 (1.3 %) | 1,576 (18.5 %) | 61 (0.7 %) |
-| HG008T | PacBio | 128 (1.5 %) | 998 (11.7 %) | 44 (0.5 %) |
-| HG008T | ONT | 131 (1.5 %) | 833 (9.8 %) | 38 (0.4 %) |
-| COLO829T | Illumina | 48 (0.1 %) | 363 (19.0 %) | 7 (0.4 %) |
-| COLO829T | fiberseq | 55 (0.1 %) | 220 (11.5 %) | 5 (0.3 %) |
-| COLO829T | ONT | 54 (0.1 %) | 172 (9.0 %) | 4 (0.2 %) |
+| HG008T | Illumina | 111 (1.3 %) | 1,576 (18.5 %) | 58 (0.7 %) |
+| HG008T | PacBio | 128 (1.5 %) | 998 (11.7 %) | 41 (0.5 %) |
+| HG008T | ONT | 131 (1.5 %) | 833 (9.8 %) | 36 (0.4 %) |
+| COLO829T | Illumina | 48 (0.1 %) | 363 (19.0 %) | 6 (0.3 %) |
+| COLO829T | fiberseq | 55 (0.1 %) | 220 (11.5 %) | 4 (0.2 %) |
+| COLO829T | ONT | 54 (0.1 %) | 172 (9.0 %) | 3 (0.2 %) |
 | HCC1395T | Illumina | 225 (0.6 %) | 46 (2.8 %) | 0 (0.0 %) |
 | HCC1395T | PacBio | 225 (0.6 %) | 33 (2.0 %) | 0 (0.0 %) |
 | HCC1395T | ONT | 226 (0.6 %) | 26 (1.6 %) | 0 (0.0 %) |
@@ -171,9 +171,9 @@ Same definition (no candidate on d46 and ALT spelled by d46, share of all truth 
 
 | sample | platform | truth INDEL (not tagged) | tensor & not tagged: linear / d9 / d46 | lost on d9 vs linear, not tagged (absorbed) | lost on d46 vs linear, not tagged (absorbed) |
 |---|---|---|---|---|---|
-| HG008T | Illumina | 588 (209) | 170 / 151 / 153 | 27 (0) | 25 (2) |
-| HG008T | PacBio | 588 (209) | 181 / 153 / 153 | 30 (1) | 31 (2) |
-| HG008T | ONT | 588 (209) | 157 / 148 / 145 | 18 (1) | 20 (2) |
+| HG008T | Illumina | 588 (204) | 168 / 151 / 152 | 25 (0) | 24 (2) |
+| HG008T | PacBio | 588 (204) | 178 / 152 / 152 | 28 (1) | 29 (2) |
+| HG008T | ONT | 588 (204) | 155 / 148 / 145 | 16 (1) | 18 (2) |
 | COLO829T | Illumina | 131 (50) | 47 / 36 / 36 | 11 (1) | 11 (1) |
 | COLO829T | fiberseq | 131 (50) | 50 / 37 / 37 | 13 (1) | 13 (1) |
 | COLO829T | ONT | 131 (50) | 44 / 34 / 34 | 10 (0) | 10 (1) |

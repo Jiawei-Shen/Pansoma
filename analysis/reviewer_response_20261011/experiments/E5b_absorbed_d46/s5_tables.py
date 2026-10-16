@@ -1,10 +1,12 @@
 """E5b step 5: classes of somatic truth alleles lost on the pangenome graphs, graph spelling, PoN share; tables.
 
 Inputs (data dir): status_matrix.tsv.gz (s1), spell_d9.tsv.gz / spell_d46.tsv.gz (s4), and the PoN tags of the truth VCFs
-(scripts/filter_panel_of_normals.py, rule of 7fc7396):
-  HG008T   tmp/graph_absorbed_pon_20261012/truth.pon.vcf.gz (multi-allelic records split per ALT, 2026-10-12)
-  COLO829T tmp/graph_absorbed_pon_20261012/colo.truth.pon.vcf.gz (sites only, 2026-10-12)
-  HCC1395T hcc1395.truth.pon.vcf.gz (this experiment, SEQC2 v1.2.1 truth)
+(scripts/filter_panel_of_normals.py; since 2026-10-16 the current INDEL rule, AF >= 0.01 in homopolymers >= 8 bp, else
+AF >= 1e-4, on the same inputs as before: tmp/reviewer_cpu_20261013/pon_hp8_20261016/truth_pon.sh):
+  HG008T   tmp/reviewer_cpu_20261013/pon_hp8_20261016/truth/HG008T.truth.pon.vcf.gz (multi-allelic records split per ALT)
+  COLO829T tmp/reviewer_cpu_20261013/pon_hp8_20261016/truth/COLO829T.truth.pon.vcf.gz (sites only)
+  HCC1395T tmp/reviewer_cpu_20261013/pon_hp8_20261016/truth/HCC1395T.truth.pon.vcf.gz (SEQC2 v1.2.1 truth)
+The tags of the earlier rule (HP >= 7: 0.01, else 1e-3) stay in tmp/graph_absorbed_pon_20261012 and DATA/hcc1395.truth.pon.vcf.gz.
 Classes, per platform, for an arm X in (d9, d46) against the GRCh38-only arm (linear):
   lost_X        = a tensor (tensor_representative) on linear, none on X
     absorbed    = X status no_candidate and the ALT is spelled by an X graph path (s4)
@@ -26,9 +28,8 @@ from filter_panel_of_normals import homopolymer_run      # the PoN's own homopol
 from e5b_common import DATA, FASTA
 
 EXP = os.path.dirname(os.path.abspath(__file__))
-PON = {'HG008T': '/scratch/jshen/Github/Pansoma/tmp/graph_absorbed_pon_20261012/truth.pon.vcf.gz',
-       'COLO829T': '/scratch/jshen/Github/Pansoma/tmp/graph_absorbed_pon_20261012/colo.truth.pon.vcf.gz',
-       'HCC1395T': f'{DATA}/hcc1395.truth.pon.vcf.gz'}
+PON_DIR = '/scratch/jshen/Github/Pansoma/tmp/reviewer_cpu_20261013/pon_hp8_20261016/truth'
+PON = {s: f'{PON_DIR}/{s}.truth.pon.vcf.gz' for s in ('HG008T', 'COLO829T', 'HCC1395T')}
 PLATS = {'HG008T': ['Illumina', 'PacBio', 'ONT'], 'COLO829T': ['Illumina', 'fiberseq', 'ONT'], 'HCC1395T': ['Illumina', 'PacBio', 'ONT']}
 ABSORBED_D9 = {'HG008T': '/scratch/jshen/Github/Pansoma/analysis/graph_absorbed_somatic_20261001/per_variant.tsv',
                'COLO829T': '/scratch/jshen/Github/Pansoma/analysis/graph_absorbed_somatic_colo829t_20261005/per_variant.tsv'}

@@ -41,7 +41,7 @@
 | R2.3 | recall 偏低；漏检位点上的 normal | 部分解决 | E1.6：各阶段的损失；normal 的组装证据 | 同步：和 DeepSomatic 的差距（等比较器结果） |
 | R2.4 | 低 VAF | 部分解决 | E2.4：按 VAF 分档的 recall，purity 系列（低于下限的比例从 16% 升到 27%） | GPU：BQ 伪影修好后重训；决定：E15 低 AF 配置、用哪个第二肿瘤 |
 | R2.5 | 精度提升从哪来 | 部分解决 | E4b / E10 / E19：graph 臂少了 germline candidate，GRCh38-only 多了着丝粒附近和 extreme 区域的 FP；附近 germline 越多，SNV 增益越大 | GPU：去掉 ch6；同步：COLO829T d9 |
-| R2.6 | PoN | 部分解决 | E8b：资源组成；E17c：SNV 规则就是 chr2–22 选出的，INDEL 留出肿瘤选出的相邻规则在每个留出 call set 上都不变差 | 决定：INDEL 规则保持还是换 |
+| R2.6 | PoN | 部分解决 | E8b：资源组成；E17c：SNV 规则就是 chr2–22 选出的；INDEL 换成留出肿瘤选出的规则（HP ≥ 8: AF ≥ 0.01，其余 ≥ 1e-4；用户 10-16 决定，pipeline 已改） | 重算：依赖 INDEL PoN 的数（第 1、3 段及其他条目） |
 | R2.7 | 比对统计夸大 | **已解决** | E11a：两个肿瘤 × 三个平台 × 四个参考；E11b：放错率 | 只剩改稿 |
 | R2.m | Minor 1–8 | 部分解决 | 大部分只是改图改字；E18 补了 SBS96 | 决定：第 5 条 "truth overlapping" 的原意；同步：比较器的 SBS96 |
 | R3.1 | 参考层面的 ablation | 部分解决 | E3 / E16 / E3b：关掉 rescue 后 9/9 个 run 都高于 GRCh38-only；着丝粒是一项 caveat；CHM13 是一项 limitation；vg 版本已核实（E22） | GPU：matched d9、去掉 ch6、多 seed；决定：vg 1.77 对照 |
@@ -130,7 +130,7 @@
 ## 4. 要你决定的事
 
 1. **SNV off-ref rescue 是否默认开启。** response 里写成两种都报。E9h 之后，开启的好处和代价都有数字了，见 §2 第 4 条。
-2. **INDEL PoN 规则**：保持现行规则，还是换成留出肿瘤选出的那个相邻规则。保持的话，R2.6 就算解决。
+2. ~~**INDEL PoN 规则**~~：已决定（2026-10-16）：换成留出肿瘤选出的规则（HP ≥ 8: AF ≥ 0.01，其余 AF ≥ 1e-4），以后都用它；pipeline 已改，依赖 INDEL PoN 的数待重算。
 3. **INDEL 的 operating point**：用 recall-0.9 validation 阈值还是 validation best-F1 阈值，结果好坏参半；test-tuned best F1 只作上界。
 4. **主图和主评估**：主图用 d9 还是 d46（两者很接近，d9 略高）；主结果是否用跨样本，in-sample 只作上界。
 5. **HapMap**：直接去掉，还是把内存提到约 40G 重跑 donor-free 图后放进 Supplement。
@@ -1850,10 +1850,11 @@ Limitations are those of R3.1 [待补: matched reruns and seeds (R3.9)].
 
 *3. HG008T without filtering*, now reported for every dataset and reference. HG008T SNV, v1.1, chr1, benchmark regions (graph-coordinate calls not scored; R3.4): F1 0.182–0.191 without filtering and 0.585–0.621 with it. INDEL F1 at the recall-0.9 validation threshold is 0.011–0.101 against 0.015–0.241, and test-tuned best F1 (upper bound) 0.090–0.150 against 0.140–0.264.
 
-*Rules* (listed in R3.m1; renamed in R3.m4). Both rules were chosen on chr1, our test chromosome, so we re-selected them without it. On chr2–22 (labelled candidates, objective fixed in advance) the SNV choice is the current rule; the INDEL choice there, a more lenient homopolymer floor, lowers chr1 PASS F1 in 29 of 44 call sets. Selected on one tumor's chr1 calls and scored on the other's, the INDEL choice is a close neighbour of the current rule (≥ 8 bp: 0.01, else 1e-4) that does at least as well on every held-out call set (mean PASS F1 +0.002 on COLO829T, +0.005 on HG008T). The current rule is therefore not flattered by chr1. Graph-coordinate calls cannot be filtered this way and are classified separately (R3.3, R3.4).
+*Rules* (listed in R3.m1; renamed in R3.m4). Both rules had been chosen on chr1, our test chromosome, so we re-selected them without it. On chr2–22 (labelled candidates, objective fixed in advance) the SNV selection is the rule we use. For indels we now select the rule on one tumor's chr1 calls and score it on the other's: chosen on HG008T or on COLO829T, both directions pick the same rule, which we adopt: an exact gnomAD or CoLoRSdb allele at AF ≥ 0.01 for indels that change a homopolymer of ≥ 8 bp, else AF ≥ 1e-4 (previously ≥ 7 bp and 1e-3). On the held-out tumor it raises mean chr1 PASS F1 (+0.002 on COLO829T, +0.005 on HG008T) and lowers it on no call set. Graph-coordinate calls cannot be filtered this way and are classified separately (R3.3, R3.4).
 
 **证据（内部）。**
 
+- 2026-10-16 用户决定：INDEL PoN 换成留出肿瘤选出的规则（HP ≥ 8: AF ≥ 0.01，其余 AF ≥ 1e-4），以后都用它；不再测 COLO829T 各 purity（417967 / 417975 已取消）。pipeline 已改：`scripts/filter_panel_of_normals.py`（`INDEL_HOMOPOLYMER = 8`、`INDEL_MIN_AF = 0.0001`）、`machine_learning/pansoma_net_v2/{vcfeval.py, README.md, jobs/vcf.sh}`、仓库 README §5、`tests/test_vcf.py`（PonFilterTest 改了三处 fixture：chr1:55 和 chr1:70 的 gnomAD AF 0.0005 → 0.00005，chr1:90 HP 7 的 CoLoRSdb AF 0.01 → 0.005，让测试仍能分开两个阈值）。Response 的 Rules 段改成 "we adopt"。选择依据：E17c `heldout.md`（run threshold，两个方向都选这条：COLO829T 0.0307 → 0.0328，6 好 / 0 差 / 1 平；HG008T 0.1087 → 0.1139，9 好 / 0 差）。现行规则 chr2–22 tensor 上 rank 5（0.5972），新规则 rank 9（0.5963），差 0.0009；chr1 tensor 上新规则 rank 5、现行 rank 9。chr2–22 tensor 目标函数选的 HP ≥ 8: 0.05 / 1e-3 在 44 个 chr1 call set 里 29 个变差，所以没用（Response 去掉了这句，留在证据里）。**注意**：本条第 1、3 段（truth 被 PoN 标的比例 61.8 % / 52.0 % / 7.3 %，INDEL F1）是旧规则下的数，换规则后要重算（见还缺什么）。
 - 2026-10-15 E1.6/E9h/E22/E11b-ONT（本条用到 E22 check 1；Response 481 → 490 词）：
   - 第 1 条加了 H1437 一句（`experiments/E22_truth_and_version_checks/README.md` check 1、`tables.md` T1 / T2）。30.7 % = Pansoma 规则标的 25,323 / 82,529 个 H1437 truth SNV（下面 E8b 4.5 一条，全部记录、全染色体）。"mostly germline alleles its normal lost through loss of heterozygosity"：E22 里 gnomAD AF ≥ 1 % 的 22,982 个里 22,397 个在 normal-LOH 段（chr9:68–139 Mb、chr1:9–12 Mb）；AF ≥ 1 % 一定满足 PoN 的 AF ≥ 1e-4（同一套 gnomAD 文件，`/scratch/jshen/data/Pansoma/panel_of_normal_VCFs`），所以被标的 25,323 个里至少 22,397 个（88 %，我算的）是这两段里的常见 allele。这些不是 PoN 里混进了 H1437 的 somatic 变异（审稿人第 1 问的担心），而是 truth 里的 germline 来源 allele：truth SNV 里 0 个是 normal genotype 的 allele，B-lymphoblastoid normal 在这两段里几乎全是纯合（chr9q het 比例 0.061）。E22 的解释细节见 R2.2 证据。
   - 原来的 "Filtering tags 61 of 702 chr1 truth SNVs and 413 of 635 truth INDELs"（第 3 条）为了字数删了，数在下面 "HG008T 不加 PoN" 一条（`truth_pon_tagged`），R1.6 / R3.10 的 Response 有 413 / 635。"which are therefore likely represented" 压成 "which are likely represented"。
@@ -1938,6 +1939,7 @@ Limitations are those of R3.1 [待补: matched reruns and seeds (R3.9)].
 
 **还缺什么。**
 
+- [重算] INDEL PoN 换成新规则（2026-10-16）后：第 1 段 truth 被标比例（HG008T 61.8 %、COLO829T 52.0 %、HCC1395 7.3 %）和第 3 段 INDEL F1（PASS 和 best）要用新规则重算；其他条目里依赖 INDEL PoN 的数（R1.2、R1.4、R1.6、R3.1、R3.10、R1.m1、R2.2、R3.9 等）同样。
 - 已完成，删掉（2026-10-15）：E17c 的规则重选（SNV 和 INDEL，tensor 层面 chr2–22 + chr1 calls 上 leave-one-tumor-out；不再需要 RIS 上的 validation predictions 才能回答）；E3b 的 INDEL valbest（只有 PoN 后的数，没进第 3 条，见证据）；第 2 条按图成员的拆分（E4b，call 层面）。
 - [用户决定] INDEL PoN 规则：保留现行（HP ≥ 7: 0.01，其余 1e-3），还是换成 E17c leave-one-tumor-out 选出的近邻（HP ≥ 8: 0.01，其余 1e-4；两个 held-out 肿瘤都不更差，+0.002 / +0.005）。换的话：`scripts/filter_panel_of_normals.py` 的 INDEL 规则、所有 INDEL 的 PoN 后数字（R1.2、R1.6、R3.1、R3.10 等）都要重算（E17c 的 `calls_chr1.json` 已有 16 个 in-sample call set 在近邻规则下的 PASS F1），memory 里的 INDEL PoN 规则也要改。不换的话本条状态可改成已解决。
 - [CPU 本地] `bash experiments/E8b_literature_facts/collect.sh` 把 task 6（HapMap positives）汇进 §4.5 的表（Response 第 1 条已用）。
@@ -3157,13 +3159,14 @@ We agree. One parameter table (Supplementary Table [待补]) now serves the main
 - *Training:* chromosomes 2–22, 5% of their ~1-Mb blocks held out for validation; chromosome 1 is the test chromosome. SNV: 50.4 M-parameter ConvNeXt, 20 epochs, class weights pow 0.75. INDEL: 8.7 M parameters, 12 epochs, square-root class weights. Both: learning rate 1e-4, batch 1,024 per GPU. The table lists the GPU count of every model and the deviations of eight HPRC v1.1 models [待补: matched reruns]. The checkpoint is the epoch with the best thresholded validation somatic F1.
 - *Normalisation:* base and mapping quality z-scored with the training statistics in the models reported so far, per dataset in newer models (now the default; R1.7); the haplotype-count channel always with the training statistics. [待补: the setting of each final model]
 - *Calls:* PASS at the recall-0.9 validation threshold; for INDELs we also report the validation best-F1 threshold (R3.10) [待补: which of the two is the INDEL default]. An optional off-reference rescue calls SNVs on off-reference nodes by argmax after their path counts in the 21 central columns are raised to the all-haplotype code; we report every SNV result with and without the rescue (R3.4).
-- *Population filtering resources (R2.6):* exact-allele matches. SNVs: gnomAD or CoLoRSdb at AF ≥ 1e-4, dbSNP records not flagged somatic, the 1000 Genomes panel. INDELs: gnomAD or CoLoRSdb at AF ≥ 0.01 in homopolymers of ≥ 7 bp, else ≥ 0.001.
+- *Population filtering resources (R2.6):* exact-allele matches. SNVs: gnomAD or CoLoRSdb at AF ≥ 1e-4, dbSNP records not flagged somatic, the 1000 Genomes panel. INDELs: gnomAD or CoLoRSdb at AF ≥ 0.01 in homopolymers of ≥ 8 bp, else ≥ 1e-4 (selected with one tumor held out; R2.6).
 - *Evaluation:* rtg vcfeval against each truth set in its benchmark regions, and on the whole chromosome. Graph-coordinate calls go to a separate VCF that vcfeval does not score; a complete-output metric counts them as false positives (R3.4).
 
 The Methods now describe these upstream and downstream steps in the same detail as the network.
 
 **证据（内部）。**
 
+- 2026-10-16 用户决定：INDEL PoN 换成留出肿瘤选出的规则（HP ≥ 8: AF ≥ 0.01，其余 AF ≥ 1e-4），以后都用它；不再测 COLO829T 各 purity（417967 / 417975 已取消）。pipeline 已改：`scripts/filter_panel_of_normals.py`（`INDEL_HOMOPOLYMER = 8`、`INDEL_MIN_AF = 0.0001`）、`machine_learning/pansoma_net_v2/{vcfeval.py, README.md, jobs/vcf.sh}`、仓库 README §5、`tests/test_vcf.py`（PonFilterTest 改了三处 fixture：chr1:55 和 chr1:70 的 gnomAD AF 0.0005 → 0.00005，chr1:90 HP 7 的 CoLoRSdb AF 0.01 → 0.005，让测试仍能分开两个阈值）。Response 的 Rules 段改成 "we adopt"。选择依据：E17c `heldout.md`（run threshold，两个方向都选这条：COLO829T 0.0307 → 0.0328，6 好 / 0 差 / 1 平；HG008T 0.1087 → 0.1139，9 好 / 0 差）。现行规则 chr2–22 tensor 上 rank 5（0.5972），新规则 rank 9（0.5963），差 0.0009；chr1 tensor 上新规则 rank 5、现行 rank 9。chr2–22 tensor 目标函数选的 HP ≥ 8: 0.05 / 1e-3 在 44 个 chr1 call set 里 29 个变差，所以没用（Response 去掉了这句，留在证据里）。**注意**：本条第 1、3 段（truth 被 PoN 标的比例 61.8 % / 52.0 % / 7.3 %，INDEL F1）是旧规则下的数，换规则后要重算（见还缺什么）。
 - 2026-10-15 E1.6/E9h/E22/E11b-ONT（本条用到 E22 check 2；Response 468 → 481 词）：
   - Alignment 一行的 [待补: COLO829T] 用 E22 check 2 填（`experiments/E22_truth_and_version_checks/README.md` "Check 2"、`vg_fingerprint.tsv`）：三个 COLO829T d9 GAM 都没有 giraffe 日志或脚本。vg ≥ 1.63 的 giraffe 往 GAM 里写一个 `PARAMS_JSON` group；在 300 kb 测试图上用 1.50.0–1.66.0 和 1.77.0 每个本地版本跑一遍，得到各版本的指纹。HG008T 的三个 1.66.0 GAM 和这些指纹对得上（方法验证）。
     - COLO829T_fiberseq：`PARAMS_JSON` md5 fd3a08426553，和 1.64.0–1.66.0 的 `-b hifi` 完全一样；stderr 里 "Cannot find an acceptable path ..." 这条信息只在 1.64.1 / 1.65.0 / 1.66.0 里有 → 1.64.1–1.66.0。

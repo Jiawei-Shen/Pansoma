@@ -1,5 +1,8 @@
 # E5b: somatic truth alleles absorbed by the graph, on HPRC v2.1 d46 and HPRC v1.1 d9, against the GRCh38-only arm; HCC1395T
 
+> **2026-10-16, INDEL PoN rule changed** (user decision: AF >= 0.01 in homopolymers >= 8 bp, else AF >= 1e-4). `s5_tables.py` now reads truth tags made with that rule (`tmp/reviewer_cpu_20261013/pon_hp8_20261016/truth/`), and `tables.md`, `summary.json` and `lost_alleles.tsv.gz` were regenerated with it. The PoN-tagged shares in the prose below are still those of the earlier rule (HP >= 7: 0.01, else 1e-3); they change by about one point (e.g. HG008T truth INDELs tagged 61.7 -> 62.7 %, absorbed INDELs tagged on d46 96.5 -> 96.7 %). `s6` (linear_recovery.md) is rerun after the call sets are re-scored.
+
+
 **Status (2026-10-13, 23:00).**
 
 - DONE: absorption classification on d9 and d46 for HG008T and COLO829T (3 platforms each), and on d46 for HCC1395T
