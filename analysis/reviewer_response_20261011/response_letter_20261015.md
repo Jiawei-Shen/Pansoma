@@ -378,19 +378,37 @@ Recall falls below 50% in the 0.05–0.10 bin, where only 34–68 truth SNVs hav
 
 **Response.**
 
-Before population filtering the gain is almost entirely reduced germline contamination; after it, which is what our F1 measures, fewer artefactual calls in difficult regions also contribute, by dataset.
+We compared three references built from the same reads, tensor code and labels: a GRCh38-only graph and the HPRC v1.1
+and v2.1 graphs (R1.2, R3.1). The precision gain comes mainly from fewer germline candidates, and it is largest in
+difficult regions and where germline variants cluster.
 
-*Fewer germline candidates* (chr1; R3.1 ablation: GRCh38-only graph, HPRC v1.1 graph with d9 filter, HPRC v2.1 graph with d46 filter).
+*Fewer germline candidates.* At candidate generation the HPRC v1.1 and v2.1 graphs produce 84–90% and 85–91% fewer
+germline candidates than the GRCh38-only graph, because reads carrying a germline allele already in the graph follow its
+path without a mismatch. Before population filtering, the HG008T models call 117,205–144,251 germline tensors somatic on
+GRCh38-only, against 2,528–5,147 on the HPRC graphs. After filtering, in the benchmark regions, the HPRC graphs lead by
++0.038 to +0.319 SNV F1 (paired block-bootstrap intervals exclude zero in all nine comparisons; R3.9).
 
-- 75.7–82.2% of matched-normal germline variants become candidates on the GRCh38-only graph, against 7.7–13.1% on v1.1 and 7.2–12.4% on v2.1 (R1.2). Before filtering, the HG008T models call 117,205–144,251 germline tensors somatic at PASS on GRCh38-only, against 2,528–5,147 on the HPRC graphs.
-- Channel 6 (HPRC haplotypes through each node) adds a second germline prior: set to "every haplotype", it lets 3.4–7.6 times as many germline tensors pass the threshold, most later tagged by filtering (R1.1). [待补: how much channel 6 gains, by retraining without it (R1.1)]
-- After filtering, in the benchmark regions, the HPRC graphs lead by +0.038 to +0.319 SNV F1, and paired block-bootstrap intervals exclude zero in all nine comparisons re-run (R3.1, R3.9). Graph-coordinate calls, mostly produced by the off-reference rescue, reverse four of twelve SNV comparisons when all count as false positives (no benchmark regions); without the rescue all nine HPRC runs re-called locally lead, except HG008T ONT on v2.1 inside the benchmark regions (0.533 against 0.537; R3.4). We report every SNV result with and without the rescue.
+*Difficult regions.* We stratified chr1 by the SMaHT easy, difficult and extreme regions. They are defined on GRCh38
+from the 1000 Genomes accessibility mask and a pangenome mask, not from any sample, so they apply to HG008T as well as
+COLO829T (R1.3). The gain grows with difficulty: in extreme regions the HPRC graphs raise SNV precision from 0.056–0.253
+to 0.161–0.764 (F1 +0.099 to +0.531 in all nine graph–dataset comparisons; COLO829T Illumina: 39 instead of 2,087 false
+calls); in difficult regions F1 rises in eight of nine (−0.005 to +0.259); in easy regions HG008T changes by −0.003 to
++0.020.
 
-*False calls left after filtering* (R3.2). On the HPRC graphs, 82.7–97.9% of the HG008T false calls (COLO829T: 42.7–71.3%) carry exactly a germline allele of the normal, and at most two of these germline calls per call set are also HPRC v1.1 alleles; neither the graph nor the filter carries such rare germline variants (R2.6). Of the additional false calls of GRCh38-only, 60.3–73.3% are at or within 10 bp of the patient's germline variants on HG008T PacBio and ONT. On HG008T Illumina and COLO829T most match no germline or population allele, have low allele fractions and concentrate in SMaHT extreme regions (R1.3). This fits reads misplaced on a reference that lacks their sequence (inferred, not verified per call).
+*Clustered germline variation.* We grouped calls by the number of the normal's germline variants within 50 bp (0, 1,
+2+). For HG008T SNVs the F1 gain is largest with two or more nearby (0.107–0.204, against 0.022–0.087 with none), through
+precision; recall stays 0.256–0.308 on every reference. The reads show why. At truth SNVs with two or more germline
+variants nearby, reads differ from the reference at 1.8–3.0 positions each on GRCh38-only, against 0.4–1.8 on the HPRC
+graphs, and the share of reads with at least two differences falls from 53–74% to 5–30%; with none nearby the
+references give the same reads, and mapping quality is the same throughout (mean 58–60). The GRCh38-only false calls at
+such sites (125–236 per HG008T platform) are 82–97% germline alleles of the normal or calls within 10 bp of one; 86–94%
+of them are not called on the HPRC graphs, and 41–87% are not even candidates there. COLO829T agrees (94–97% of 23–49
+false calls removed).
 
-*Clustered germline variation* (the normal's germline variants within ±50 bp: 0, 1, 2+). For HG008T SNVs the HPRC graphs' F1 gain is largest in the 2+ stratum on all three platforms (0.107–0.204, against 0.022–0.087 with none nearby), through precision (125–236 false calls on GRCh38-only, 18–73 on the HPRC graphs); recall stays 0.256–0.308 on every reference (McNemar p ≥ 0.5); at ±500 bp the gain is not monotonic. COLO829T Fiber-seq agrees (0.211); for COLO829T Illumina and ONT the test is uninformative (most GRCh38-only false calls lie outside the germline truth regions). For INDELs the graphs lose: in the 2+ stratum only 5.9–21.6% of truth INDELs get an exact candidate (GRCh38-only: 62.7–94.1%), costing HG008T PacBio recall (McNemar p 0.002 and 0.004).
-
-Limitations are those of R3.1 [待补: matched reruns and seeds (R3.9)].
+*Limits.* For indels the graphs lose where germline variants cluster: only 5.9–21.6% of the truth indels in that
+stratum get an exact candidate, against 62.7–94.1% on GRCh38-only (R1.4). The false calls left after filtering are
+mostly the patient's rare germline alleles, which neither the graph nor the filter contains (R2.6), and v2.1 adds no
+precision over v1.1 after filtering (R1.2).
 
 ### R2.6 Panels of normals
 

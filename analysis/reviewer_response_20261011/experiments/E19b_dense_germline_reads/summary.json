@@ -1,0 +1,1364 @@
+{
+ "HG008T Illumina": {
+  "A": {
+   "truth": {
+    "0": 561,
+    "1": 97,
+    "2+": 39
+   },
+   "paired": {
+    "0": 551,
+    "1": 90,
+    "2+": 15
+   },
+   "arms": {
+    "linear": {
+     "0": {
+      "n": 551,
+      "edits_mean": 0.287685339343687,
+      "edits_median": 0.18857142857142858,
+      "reads_ge2_edits": 0.04704081229754775,
+      "mapq_mean": 58.76879372530163,
+      "mapq_lt20": 0.010158897221629415,
+      "reads": 155.39382940108894
+     },
+     "1": {
+      "n": 90,
+      "edits_mean": 1.0262053735830998,
+      "edits_median": 0.938698455795011,
+      "reads_ge2_edits": 0.18986316854354868,
+      "mapq_mean": 57.94359611766506,
+      "mapq_lt20": 0.020032295732014392,
+      "reads": 148.0222222222222
+     },
+     "2+": {
+      "n": 15,
+      "edits_mean": 1.9437295339235197,
+      "edits_median": 1.5776397515527951,
+      "reads_ge2_edits": 0.5396539472324693,
+      "mapq_mean": 59.000377978244295,
+      "mapq_lt20": 0.004625587363753653,
+      "reads": 153.8
+     }
+    },
+    "d9": {
+     "0": {
+      "n": 551,
+      "edits_mean": 0.2876621765549868,
+      "edits_median": 0.18857142857142858,
+      "reads_ge2_edits": 0.04652944672352337,
+      "mapq_mean": 58.8446554371297,
+      "mapq_lt20": 0.00890955206377296,
+      "reads": 149.22867513611615
+     },
+     "1": {
+      "n": 90,
+      "edits_mean": 0.5421178188431489,
+      "edits_median": 0.253125,
+      "reads_ge2_edits": 0.10608212515898345,
+      "mapq_mean": 58.28464931215855,
+      "mapq_lt20": 0.016166031730157147,
+      "reads": 148.7888888888889
+     },
+     "2+": {
+      "n": 15,
+      "edits_mean": 0.7993832236702647,
+      "edits_median": 0.3333333333333333,
+      "reads_ge2_edits": 0.15795648241091192,
+      "mapq_mean": 58.473177346855756,
+      "mapq_lt20": 0.015646626287499823,
+      "reads": 145.2
+     }
+    },
+    "d46": {
+     "0": {
+      "n": 551,
+      "edits_mean": 0.2863984671646297,
+      "edits_median": 0.1888111888111888,
+      "reads_ge2_edits": 0.046493100422458196,
+      "mapq_mean": 58.745971511555744,
+      "mapq_lt20": 0.009464968631838483,
+      "reads": 154.46642468239565
+     },
+     "1": {
+      "n": 90,
+      "edits_mean": 0.5396625034325345,
+      "edits_median": 0.24308823529411766,
+      "reads_ge2_edits": 0.10622712741067208,
+      "mapq_mean": 58.298555620997945,
+      "mapq_lt20": 0.014230065448025781,
+      "reads": 149.11111111111111
+     },
+     "2+": {
+      "n": 15,
+      "edits_mean": 0.7214352945838728,
+      "edits_median": 0.33513513513513515,
+      "reads_ge2_edits": 0.1289638341312921,
+      "mapq_mean": 58.7583166584388,
+      "mapq_lt20": 0.009451378182806525,
+      "reads": 155.86666666666667
+     }
+    }
+   }
+  },
+  "B": {
+   "d9": {
+    "0": {
+     "no_tensor": 101,
+     "class:other": 160,
+     "n": 693,
+     "no_tensor|other": 65,
+     "tensor_not_called": 184,
+     "tensor_not_called|other": 93,
+     "other_allele_tensor": 1,
+     "other_allele_tensor|other": 1,
+     "also_fp": 407,
+     "class:germline_same": 477,
+     "also_fp|germline_same": 406,
+     "class:germline_overlap": 27,
+     "no_tensor|germline_overlap": 7,
+     "class:repeat": 19,
+     "no_tensor|repeat": 10,
+     "tensor_not_called|germline_overlap": 20,
+     "tensor_not_called|germline_same": 61,
+     "also_fp|other": 1,
+     "class:pop_other_repr": 2,
+     "no_tensor|pop_other_repr": 1,
+     "class:pop_below_floor": 4,
+     "no_tensor|pop_below_floor": 4,
+     "tensor_not_called|repeat": 9,
+     "tensor_not_called|pop_other_repr": 1,
+     "no_tensor|germline_same": 10,
+     "class:hprc": 4,
+     "no_tensor|hprc": 4
+    },
+    "1": {
+     "no_tensor": 41,
+     "class:other": 33,
+     "n": 160,
+     "no_tensor|other": 9,
+     "also_fp": 70,
+     "class:germline_same": 84,
+     "also_fp|germline_same": 69,
+     "no_tensor|germline_same": 4,
+     "tensor_not_called": 48,
+     "class:pop_other_repr": 5,
+     "tensor_not_called|pop_other_repr": 1,
+     "class:near_germline": 11,
+     "no_tensor|near_germline": 7,
+     "class:germline_overlap": 19,
+     "no_tensor|germline_overlap": 12,
+     "tensor_not_called|near_germline": 4,
+     "tensor_not_called|germline_same": 11,
+     "class:repeat": 5,
+     "no_tensor|repeat": 4,
+     "tensor_not_called|germline_overlap": 7,
+     "no_tensor|pop_other_repr": 2,
+     "other_allele_tensor": 1,
+     "other_allele_tensor|pop_other_repr": 1,
+     "tensor_not_called|other": 24,
+     "tensor_not_called|repeat": 1,
+     "also_fp|pop_other_repr": 1,
+     "class:hprc": 2,
+     "no_tensor|hprc": 2,
+     "class:pop_below_floor": 1,
+     "no_tensor|pop_below_floor": 1
+    },
+    "2+": {
+     "no_tensor": 115,
+     "class:near_germline": 68,
+     "n": 236,
+     "no_tensor|near_germline": 26,
+     "class:germline_same": 81,
+     "no_tensor|germline_same": 45,
+     "class:repeat": 9,
+     "no_tensor|repeat": 7,
+     "class:germline_overlap": 44,
+     "no_tensor|germline_overlap": 34,
+     "tensor_not_called": 99,
+     "tensor_not_called|near_germline": 39,
+     "also_fp": 17,
+     "also_fp|germline_same": 15,
+     "tensor_not_called|germline_overlap": 9,
+     "tensor_not_called|germline_same": 20,
+     "class:pop_other_repr": 2,
+     "tensor_not_called|pop_other_repr": 1,
+     "class:other": 31,
+     "tensor_not_called|other": 29,
+     "tensor_not_called|repeat": 1,
+     "no_tensor|other": 2,
+     "other_allele_tensor": 5,
+     "other_allele_tensor|germline_same": 1,
+     "other_allele_tensor|near_germline": 2,
+     "also_fp|germline_overlap": 1,
+     "also_fp|near_germline": 1,
+     "other_allele_tensor|pop_other_repr": 1,
+     "class:pop_below_floor": 1,
+     "no_tensor|pop_below_floor": 1,
+     "other_allele_tensor|repeat": 1
+    }
+   },
+   "d46": {
+    "0": {
+     "no_tensor": 113,
+     "class:other": 160,
+     "n": 693,
+     "no_tensor|other": 78,
+     "tensor_not_called": 140,
+     "tensor_not_called|other": 75,
+     "other_allele_tensor": 1,
+     "other_allele_tensor|other": 1,
+     "also_fp": 439,
+     "class:germline_same": 477,
+     "also_fp|germline_same": 432,
+     "class:germline_overlap": 27,
+     "no_tensor|germline_overlap": 7,
+     "class:repeat": 19,
+     "no_tensor|repeat": 11,
+     "tensor_not_called|germline_same": 38,
+     "tensor_not_called|germline_overlap": 19,
+     "also_fp|germline_overlap": 1,
+     "class:pop_other_repr": 2,
+     "no_tensor|pop_other_repr": 2,
+     "class:pop_below_floor": 4,
+     "no_tensor|pop_below_floor": 4,
+     "tensor_not_called|repeat": 8,
+     "no_tensor|germline_same": 7,
+     "also_fp|other": 6,
+     "class:hprc": 4,
+     "no_tensor|hprc": 4
+    },
+    "1": {
+     "no_tensor": 42,
+     "class:other": 33,
+     "n": 160,
+     "no_tensor|other": 9,
+     "also_fp": 68,
+     "class:germline_same": 84,
+     "also_fp|germline_same": 67,
+     "tensor_not_called": 49,
+     "tensor_not_called|germline_same": 13,
+     "class:pop_other_repr": 5,
+     "tensor_not_called|pop_other_repr": 2,
+     "class:near_germline": 11,
+     "no_tensor|near_germline": 6,
+     "class:germline_overlap": 19,
+     "no_tensor|germline_overlap": 15,
+     "tensor_not_called|near_germline": 4,
+     "class:repeat": 5,
+     "no_tensor|repeat": 3,
+     "tensor_not_called|germline_overlap": 4,
+     "tensor_not_called|repeat": 2,
+     "also_fp|near_germline": 1,
+     "no_tensor|pop_other_repr": 2,
+     "other_allele_tensor": 1,
+     "other_allele_tensor|pop_other_repr": 1,
+     "tensor_not_called|other": 24,
+     "no_tensor|germline_same": 4,
+     "class:hprc": 2,
+     "no_tensor|hprc": 2,
+     "class:pop_below_floor": 1,
+     "no_tensor|pop_below_floor": 1
+    },
+    "2+": {
+     "no_tensor": 112,
+     "class:near_germline": 68,
+     "n": 236,
+     "no_tensor|near_germline": 25,
+     "class:germline_same": 81,
+     "no_tensor|germline_same": 45,
+     "class:repeat": 9,
+     "no_tensor|repeat": 7,
+     "tensor_not_called": 98,
+     "tensor_not_called|near_germline": 39,
+     "class:germline_overlap": 44,
+     "no_tensor|germline_overlap": 32,
+     "also_fp": 20,
+     "also_fp|near_germline": 1,
+     "tensor_not_called|germline_overlap": 10,
+     "also_fp|germline_same": 17,
+     "tensor_not_called|germline_same": 18,
+     "class:pop_other_repr": 2,
+     "tensor_not_called|pop_other_repr": 1,
+     "other_allele_tensor": 6,
+     "other_allele_tensor|near_germline": 3,
+     "class:other": 31,
+     "tensor_not_called|other": 29,
+     "tensor_not_called|repeat": 1,
+     "no_tensor|other": 2,
+     "other_allele_tensor|germline_same": 1,
+     "also_fp|germline_overlap": 2,
+     "other_allele_tensor|pop_other_repr": 1,
+     "class:pop_below_floor": 1,
+     "no_tensor|pop_below_floor": 1,
+     "other_allele_tensor|repeat": 1
+    }
+   }
+  }
+ },
+ "HG008T PacBio": {
+  "A": {
+   "truth": {
+    "0": 561,
+    "1": 97,
+    "2+": 39
+   },
+   "paired": {
+    "0": 547,
+    "1": 89,
+    "2+": 15
+   },
+   "arms": {
+    "linear": {
+     "0": {
+      "n": 547,
+      "edits_mean": 0.1968113288072075,
+      "edits_median": 0.12745098039215685,
+      "reads_ge2_edits": 0.024936643843250648,
+      "mapq_mean": 59.78389745991244,
+      "mapq_lt20": 0.001629627049124463,
+      "reads": 88.9926873857404
+     },
+     "1": {
+      "n": 89,
+      "edits_mean": 0.9569618903365777,
+      "edits_median": 1.009433962264151,
+      "reads_ge2_edits": 0.17360561683388548,
+      "mapq_mean": 59.863908505372756,
+      "mapq_lt20": 0.0003244606916429704,
+      "reads": 89.17977528089888
+     },
+     "2+": {
+      "n": 15,
+      "edits_mean": 1.7833072692375476,
+      "edits_median": 1.7037037037037037,
+      "reads_ge2_edits": 0.6351777728273833,
+      "mapq_mean": 59.987200479832055,
+      "mapq_lt20": 0.0,
+      "reads": 94.0
+     }
+    },
+    "d9": {
+     "0": {
+      "n": 547,
+      "edits_mean": 0.19168417287064546,
+      "edits_median": 0.12745098039215685,
+      "reads_ge2_edits": 0.0244500981591931,
+      "mapq_mean": 59.85443737449348,
+      "mapq_lt20": 0.001159647819245292,
+      "reads": 88.84826325411335
+     },
+     "1": {
+      "n": 89,
+      "edits_mean": 0.36336292832544925,
+      "edits_median": 0.16981132075471697,
+      "reads_ge2_edits": 0.06579714394101456,
+      "mapq_mean": 59.96293078861638,
+      "mapq_lt20": 0.00043911329425704975,
+      "reads": 88.62921348314607
+     },
+     "2+": {
+      "n": 15,
+      "edits_mean": 0.4373083452694858,
+      "edits_median": 0.16129032258064516,
+      "reads_ge2_edits": 0.0757207085295257,
+      "mapq_mean": 59.98975408606987,
+      "mapq_lt20": 0.0,
+      "reads": 94.0
+     }
+    },
+    "d46": {
+     "0": {
+      "n": 547,
+      "edits_mean": 0.19164683697505774,
+      "edits_median": 0.12745098039215685,
+      "reads_ge2_edits": 0.02452367152880748,
+      "mapq_mean": 59.05665975931717,
+      "mapq_lt20": 0.004946359231010693,
+      "reads": 88.80255941499085
+     },
+     "1": {
+      "n": 89,
+      "edits_mean": 0.36430211157749987,
+      "edits_median": 0.1694915254237288,
+      "reads_ge2_edits": 0.06520214879599442,
+      "mapq_mean": 58.6741997106223,
+      "mapq_lt20": 0.01044532078532756,
+      "reads": 88.38202247191012
+     },
+     "2+": {
+      "n": 15,
+      "edits_mean": 0.3703332760739919,
+      "edits_median": 0.2,
+      "reads_ge2_edits": 0.05239951738586037,
+      "mapq_mean": 59.60056455034331,
+      "mapq_lt20": 0.0,
+      "reads": 94.0
+     }
+    }
+   }
+  },
+  "B": {
+   "d9": {
+    "2+": {
+     "no_tensor": 74,
+     "class:germline_same": 147,
+     "n": 180,
+     "no_tensor|germline_same": 49,
+     "tensor_not_called": 96,
+     "tensor_not_called|germline_same": 89,
+     "class:germline_overlap": 12,
+     "no_tensor|germline_overlap": 11,
+     "also_fp": 10,
+     "also_fp|germline_same": 9,
+     "class:near_germline": 16,
+     "tensor_not_called|near_germline": 4,
+     "tensor_not_called|germline_overlap": 1,
+     "no_tensor|near_germline": 11,
+     "class:other": 4,
+     "no_tensor|other": 2,
+     "tensor_not_called|other": 2,
+     "also_fp|near_germline": 1,
+     "class:repeat": 1,
+     "no_tensor|repeat": 1
+    },
+    "1": {
+     "no_tensor": 33,
+     "class:other": 7,
+     "n": 144,
+     "no_tensor|other": 4,
+     "also_fp": 58,
+     "class:germline_same": 122,
+     "also_fp|germline_same": 58,
+     "class:near_germline": 11,
+     "no_tensor|near_germline": 8,
+     "no_tensor|germline_same": 17,
+     "class:germline_overlap": 2,
+     "no_tensor|germline_overlap": 2,
+     "tensor_not_called": 53,
+     "tensor_not_called|germline_same": 47,
+     "class:repeat": 1,
+     "no_tensor|repeat": 1,
+     "tensor_not_called|near_germline": 3,
+     "tensor_not_called|other": 3,
+     "class:hprc": 1,
+     "no_tensor|hprc": 1
+    },
+    "0": {
+     "no_tensor": 56,
+     "class:other": 72,
+     "n": 645,
+     "no_tensor|other": 17,
+     "also_fp": 435,
+     "class:germline_same": 547,
+     "also_fp|germline_same": 435,
+     "tensor_not_called": 153,
+     "tensor_not_called|germline_same": 96,
+     "class:hprc": 15,
+     "no_tensor|hprc": 15,
+     "class:germline_overlap": 8,
+     "no_tensor|germline_overlap": 7,
+     "no_tensor|germline_same": 16,
+     "tensor_not_called|germline_overlap": 1,
+     "tensor_not_called|other": 54,
+     "class:repeat": 3,
+     "tensor_not_called|repeat": 2,
+     "no_tensor|repeat": 1,
+     "other_allele_tensor": 1,
+     "other_allele_tensor|other": 1
+    }
+   },
+   "d46": {
+    "2+": {
+     "no_tensor": 156,
+     "class:germline_same": 147,
+     "n": 180,
+     "no_tensor|germline_same": 128,
+     "tensor_not_called": 12,
+     "tensor_not_called|germline_same": 8,
+     "class:germline_overlap": 12,
+     "no_tensor|germline_overlap": 10,
+     "also_fp": 12,
+     "also_fp|germline_same": 11,
+     "class:near_germline": 16,
+     "no_tensor|near_germline": 14,
+     "class:other": 4,
+     "no_tensor|other": 3,
+     "tensor_not_called|near_germline": 1,
+     "also_fp|near_germline": 1,
+     "tensor_not_called|germline_overlap": 2,
+     "tensor_not_called|other": 1,
+     "class:repeat": 1,
+     "no_tensor|repeat": 1
+    },
+    "1": {
+     "no_tensor": 58,
+     "class:other": 7,
+     "n": 144,
+     "no_tensor|other": 6,
+     "also_fp": 63,
+     "class:germline_same": 122,
+     "also_fp|germline_same": 63,
+     "class:near_germline": 11,
+     "no_tensor|near_germline": 11,
+     "no_tensor|germline_same": 38,
+     "class:germline_overlap": 2,
+     "no_tensor|germline_overlap": 2,
+     "tensor_not_called": 23,
+     "tensor_not_called|germline_same": 21,
+     "class:repeat": 1,
+     "tensor_not_called|repeat": 1,
+     "tensor_not_called|other": 1,
+     "class:hprc": 1,
+     "no_tensor|hprc": 1
+    },
+    "0": {
+     "no_tensor": 101,
+     "class:other": 72,
+     "n": 645,
+     "no_tensor|other": 43,
+     "also_fp": 445,
+     "class:germline_same": 547,
+     "also_fp|germline_same": 443,
+     "tensor_not_called": 99,
+     "tensor_not_called|germline_same": 70,
+     "class:hprc": 15,
+     "no_tensor|hprc": 15,
+     "class:germline_overlap": 8,
+     "no_tensor|germline_overlap": 7,
+     "no_tensor|germline_same": 34,
+     "tensor_not_called|germline_overlap": 1,
+     "class:repeat": 3,
+     "no_tensor|repeat": 2,
+     "tensor_not_called|other": 27,
+     "tensor_not_called|repeat": 1,
+     "also_fp|other": 2
+    }
+   }
+  }
+ },
+ "HG008T ONT": {
+  "A": {
+   "truth": {
+    "0": 561,
+    "1": 97,
+    "2+": 39
+   },
+   "paired": {
+    "0": 552,
+    "1": 88,
+    "2+": 16
+   },
+   "arms": {
+    "linear": {
+     "0": {
+      "n": 552,
+      "edits_mean": 0.7590131380863168,
+      "edits_median": 0.6840463458110517,
+      "reads_ge2_edits": 0.1130790785525653,
+      "mapq_mean": 59.780968278483286,
+      "mapq_lt20": 0.001023967344684733,
+      "reads": 41.33695652173913
+     },
+     "1": {
+      "n": 88,
+      "edits_mean": 1.5200702741819165,
+      "edits_median": 1.5183150183150182,
+      "reads_ge2_edits": 0.25223102307234363,
+      "mapq_mean": 59.864209889813495,
+      "mapq_lt20": 0.000648292530796819,
+      "reads": 41.21590909090909
+     },
+     "2+": {
+      "n": 16,
+      "edits_mean": 2.155287187919231,
+      "edits_median": 1.9918946301925025,
+      "reads_ge2_edits": 0.6682108533023114,
+      "mapq_mean": 59.66218602825746,
+      "mapq_lt20": 0.002551020408163265,
+      "reads": 42.5625
+     }
+    },
+    "d9": {
+     "0": {
+      "n": 552,
+      "edits_mean": 0.7605445930275261,
+      "edits_median": 0.70076726342711,
+      "reads_ge2_edits": 0.11264424211499628,
+      "mapq_mean": 59.75523183754891,
+      "mapq_lt20": 0.0017355589413638895,
+      "reads": 41.344202898550726
+     },
+     "1": {
+      "n": 88,
+      "edits_mean": 0.9547603464840861,
+      "edits_median": 0.9178197064989517,
+      "reads_ge2_edits": 0.14707913496366237,
+      "mapq_mean": 59.88653134041963,
+      "mapq_lt20": 0.0004338842975206611,
+      "reads": 41.14772727272727
+     },
+     "2+": {
+      "n": 16,
+      "edits_mean": 0.9379541865199291,
+      "edits_median": 0.9886363636363636,
+      "reads_ge2_edits": 0.16994660718964616,
+      "mapq_mean": 59.47155140973723,
+      "mapq_lt20": 0.009947453861927545,
+      "reads": 40.875
+     }
+    },
+    "d46": {
+     "0": {
+      "n": 552,
+      "edits_mean": 0.7852764531772165,
+      "edits_median": 0.7333333333333333,
+      "reads_ge2_edits": 0.11445154502587239,
+      "mapq_mean": 59.810364734668944,
+      "mapq_lt20": 0.001648927021497385,
+      "reads": 41.41304347826087
+     },
+     "1": {
+      "n": 88,
+      "edits_mean": 0.9566564960479376,
+      "edits_median": 0.9101010101010101,
+      "reads_ge2_edits": 0.14746300158539782,
+      "mapq_mean": 59.89825303868013,
+      "mapq_lt20": 0.0002228163992869875,
+      "reads": 41.05681818181818
+     },
+     "2+": {
+      "n": 16,
+      "edits_mean": 0.9848895254971879,
+      "edits_median": 1.0267616480554485,
+      "reads_ge2_edits": 0.17527410340561544,
+      "mapq_mean": 58.80787037037037,
+      "mapq_lt20": 0.013888888888888888,
+      "reads": 41.5625
+     }
+    }
+   }
+  },
+  "B": {
+   "d9": {
+    "0": {
+     "also_fp": 471,
+     "class:germline_same": 551,
+     "n": 650,
+     "also_fp|germline_same": 470,
+     "no_tensor": 45,
+     "class:other": 75,
+     "no_tensor|other": 22,
+     "tensor_not_called": 133,
+     "tensor_not_called|germline_same": 71,
+     "class:germline_overlap": 7,
+     "no_tensor|germline_overlap": 7,
+     "class:repeat": 5,
+     "tensor_not_called|repeat": 3,
+     "class:hprc": 7,
+     "no_tensor|hprc": 4,
+     "no_tensor|repeat": 2,
+     "class:pop_other_repr": 4,
+     "tensor_not_called|pop_other_repr": 4,
+     "tensor_not_called|other": 51,
+     "also_fp|other": 1,
+     "no_tensor|germline_same": 10,
+     "class:pop_below_floor": 1,
+     "tensor_not_called|pop_below_floor": 1,
+     "tensor_not_called|hprc": 3,
+     "other_allele_tensor": 1,
+     "other_allele_tensor|other": 1
+    },
+    "1": {
+     "no_tensor": 35,
+     "class:near_germline": 9,
+     "n": 129,
+     "no_tensor|near_germline": 7,
+     "also_fp": 72,
+     "class:germline_same": 104,
+     "also_fp|germline_same": 72,
+     "tensor_not_called": 22,
+     "tensor_not_called|germline_same": 16,
+     "no_tensor|germline_same": 16,
+     "class:hprc": 4,
+     "no_tensor|hprc": 3,
+     "class:other": 6,
+     "no_tensor|other": 4,
+     "tensor_not_called|near_germline": 2,
+     "tensor_not_called|hprc": 1,
+     "tensor_not_called|other": 2,
+     "class:germline_overlap": 4,
+     "tensor_not_called|germline_overlap": 1,
+     "class:repeat": 1,
+     "no_tensor|repeat": 1,
+     "no_tensor|germline_overlap": 3,
+     "class:pop_other_repr": 1,
+     "no_tensor|pop_other_repr": 1
+    },
+    "2+": {
+     "no_tensor": 86,
+     "class:germline_same": 52,
+     "n": 125,
+     "no_tensor|germline_same": 31,
+     "class:near_germline": 50,
+     "no_tensor|near_germline": 38,
+     "class:germline_overlap": 19,
+     "no_tensor|germline_overlap": 16,
+     "tensor_not_called": 28,
+     "tensor_not_called|near_germline": 9,
+     "tensor_not_called|germline_same": 13,
+     "also_fp": 11,
+     "also_fp|germline_same": 8,
+     "class:hprc": 1,
+     "tensor_not_called|hprc": 1,
+     "also_fp|near_germline": 3,
+     "tensor_not_called|germline_overlap": 3,
+     "class:other": 2,
+     "tensor_not_called|other": 2,
+     "class:repeat": 1,
+     "no_tensor|repeat": 1
+    }
+   },
+   "d46": {
+    "0": {
+     "also_fp": 491,
+     "class:germline_same": 551,
+     "n": 650,
+     "also_fp|germline_same": 484,
+     "no_tensor": 42,
+     "class:other": 75,
+     "no_tensor|other": 19,
+     "tensor_not_called": 117,
+     "tensor_not_called|germline_same": 56,
+     "class:germline_overlap": 7,
+     "no_tensor|germline_overlap": 6,
+     "class:repeat": 5,
+     "tensor_not_called|repeat": 3,
+     "class:hprc": 7,
+     "no_tensor|hprc": 4,
+     "no_tensor|repeat": 2,
+     "class:pop_other_repr": 4,
+     "tensor_not_called|pop_other_repr": 3,
+     "tensor_not_called|other": 51,
+     "also_fp|other": 5,
+     "no_tensor|germline_same": 11,
+     "class:pop_below_floor": 1,
+     "tensor_not_called|pop_below_floor": 1,
+     "tensor_not_called|hprc": 2,
+     "also_fp|pop_other_repr": 1,
+     "also_fp|hprc": 1,
+     "tensor_not_called|germline_overlap": 1
+    },
+    "1": {
+     "tensor_not_called": 24,
+     "class:near_germline": 9,
+     "n": 129,
+     "tensor_not_called|near_germline": 2,
+     "also_fp": 76,
+     "class:germline_same": 104,
+     "also_fp|germline_same": 74,
+     "tensor_not_called|germline_same": 18,
+     "no_tensor": 29,
+     "no_tensor|germline_same": 12,
+     "class:hprc": 4,
+     "no_tensor|hprc": 3,
+     "class:other": 6,
+     "no_tensor|other": 3,
+     "no_tensor|near_germline": 6,
+     "tensor_not_called|hprc": 1,
+     "tensor_not_called|other": 2,
+     "class:germline_overlap": 4,
+     "tensor_not_called|germline_overlap": 1,
+     "also_fp|other": 1,
+     "class:repeat": 1,
+     "no_tensor|repeat": 1,
+     "no_tensor|germline_overlap": 3,
+     "class:pop_other_repr": 1,
+     "no_tensor|pop_other_repr": 1,
+     "also_fp|near_germline": 1
+    },
+    "2+": {
+     "no_tensor": 92,
+     "class:germline_same": 52,
+     "n": 125,
+     "no_tensor|germline_same": 31,
+     "class:near_germline": 50,
+     "no_tensor|near_germline": 40,
+     "class:germline_overlap": 19,
+     "no_tensor|germline_overlap": 18,
+     "tensor_not_called": 15,
+     "tensor_not_called|near_germline": 9,
+     "also_fp": 18,
+     "also_fp|germline_same": 15,
+     "class:hprc": 1,
+     "also_fp|hprc": 1,
+     "tensor_not_called|germline_same": 6,
+     "class:other": 2,
+     "no_tensor|other": 2,
+     "also_fp|near_germline": 1,
+     "also_fp|germline_overlap": 1,
+     "class:repeat": 1,
+     "no_tensor|repeat": 1
+    }
+   }
+  }
+ },
+ "COLO829T Illumina": {
+  "A": {
+   "truth": {
+    "0": 2091,
+    "1": 282,
+    "2+": 70
+   },
+   "paired": {
+    "0": 1724,
+    "1": 226,
+    "2+": 51
+   },
+   "arms": {
+    "linear": {
+     "0": {
+      "n": 1724,
+      "edits_mean": 0.21098364094361888,
+      "edits_median": 0.13914141414141415,
+      "reads_ge2_edits": 0.0367687875484226,
+      "mapq_mean": 58.959809730544364,
+      "mapq_lt20": 0.00819444557781187,
+      "reads": 125.7639211136891
+     },
+     "1": {
+      "n": 226,
+      "edits_mean": 0.9132611298744666,
+      "edits_median": 0.9336996336996337,
+      "reads_ge2_edits": 0.1361697127425935,
+      "mapq_mean": 58.61458697145065,
+      "mapq_lt20": 0.010908885655254344,
+      "reads": 121.2433628318584
+     },
+     "2+": {
+      "n": 51,
+      "edits_mean": 1.8133036387604524,
+      "edits_median": 1.7230769230769232,
+      "reads_ge2_edits": 0.526001767220423,
+      "mapq_mean": 58.42927233398488,
+      "mapq_lt20": 0.007485698391275404,
+      "reads": 117.80392156862744
+     }
+    },
+    "d9": {
+     "0": {
+      "n": 1724,
+      "edits_mean": 0.2111056406425398,
+      "edits_median": 0.13931722286152665,
+      "reads_ge2_edits": 0.03649233594124936,
+      "mapq_mean": 58.95263284040156,
+      "mapq_lt20": 0.009263315338452295,
+      "reads": 124.14733178654292
+     },
+     "1": {
+      "n": 226,
+      "edits_mean": 0.33284820247350716,
+      "edits_median": 0.15961199294532627,
+      "reads_ge2_edits": 0.06031200308112151,
+      "mapq_mean": 58.64039409784033,
+      "mapq_lt20": 0.009978091864018379,
+      "reads": 121.48672566371681
+     },
+     "2+": {
+      "n": 51,
+      "edits_mean": 0.5544844474683659,
+      "edits_median": 0.17592592592592593,
+      "reads_ge2_edits": 0.09640862035721354,
+      "mapq_mean": 58.88953750142341,
+      "mapq_lt20": 0.006851571917333151,
+      "reads": 120.7843137254902
+     }
+    },
+    "d46": {
+     "0": {
+      "n": 1724,
+      "edits_mean": 0.21036922925529733,
+      "edits_median": 0.1392333935380293,
+      "reads_ge2_edits": 0.036465732375584294,
+      "mapq_mean": 58.94754355259976,
+      "mapq_lt20": 0.008639969076363099,
+      "reads": 125.42111368909512
+     },
+     "1": {
+      "n": 226,
+      "edits_mean": 0.3344151018637475,
+      "edits_median": 0.16129032258064516,
+      "reads_ge2_edits": 0.059738718448503,
+      "mapq_mean": 58.59197397849162,
+      "mapq_lt20": 0.010195094008249061,
+      "reads": 121.82300884955752
+     },
+     "2+": {
+      "n": 51,
+      "edits_mean": 0.5713568961954801,
+      "edits_median": 0.17592592592592593,
+      "reads_ge2_edits": 0.09843157682128774,
+      "mapq_mean": 58.89546885794488,
+      "mapq_lt20": 0.005865407720652075,
+      "reads": 120.90196078431373
+     }
+    }
+   }
+  },
+  "B": {
+   "d46": {
+    "0": {
+     "no_tensor": 465,
+     "class:other": 1961,
+     "n": 2163,
+     "no_tensor|other": 431,
+     "tensor_not_called": 1584,
+     "tensor_not_called|other": 1496,
+     "class:hprc": 7,
+     "no_tensor|hprc": 6,
+     "also_fp": 111,
+     "class:germline_same": 90,
+     "also_fp|germline_same": 72,
+     "class:pop_other_repr": 6,
+     "tensor_not_called|pop_other_repr": 3,
+     "tensor_not_called|germline_same": 16,
+     "also_fp|other": 32,
+     "class:repeat": 90,
+     "also_fp|repeat": 5,
+     "no_tensor|germline_same": 2,
+     "no_tensor|pop_other_repr": 2,
+     "class:pop_below_floor": 5,
+     "no_tensor|pop_below_floor": 4,
+     "tensor_not_called|repeat": 68,
+     "class:germline_overlap": 4,
+     "no_tensor|germline_overlap": 4,
+     "also_fp|pop_below_floor": 1,
+     "no_tensor|repeat": 16,
+     "other_allele_tensor": 3,
+     "other_allele_tensor|other": 2,
+     "other_allele_tensor|repeat": 1,
+     "tensor_not_called|hprc": 1,
+     "also_fp|pop_other_repr": 1
+    },
+    "1": {
+     "also_fp": 15,
+     "class:other": 16,
+     "n": 35,
+     "also_fp|other": 5,
+     "tensor_not_called": 13,
+     "class:germline_same": 11,
+     "tensor_not_called|germline_same": 2,
+     "class:repeat": 4,
+     "tensor_not_called|repeat": 3,
+     "no_tensor": 7,
+     "no_tensor|other": 4,
+     "also_fp|germline_same": 8,
+     "class:germline_overlap": 2,
+     "no_tensor|germline_overlap": 2,
+     "also_fp|repeat": 1,
+     "no_tensor|germline_same": 1,
+     "tensor_not_called|other": 7,
+     "class:near_germline": 2,
+     "tensor_not_called|near_germline": 1,
+     "also_fp|near_germline": 1
+    },
+    "2+": {
+     "no_tensor": 5,
+     "class:other": 17,
+     "n": 23,
+     "no_tensor|other": 2,
+     "class:repeat": 1,
+     "no_tensor|repeat": 1,
+     "also_fp": 1,
+     "also_fp|other": 1,
+     "class:near_germline": 5,
+     "no_tensor|near_germline": 2,
+     "tensor_not_called": 17,
+     "tensor_not_called|other": 14,
+     "tensor_not_called|near_germline": 3
+    }
+   }
+  }
+ },
+ "COLO829T fiberseq": {
+  "A": {
+   "truth": {
+    "0": 2091,
+    "1": 282,
+    "2+": 70
+   },
+   "paired": {
+    "0": 1721,
+    "1": 227,
+    "2+": 52
+   },
+   "arms": {
+    "linear": {
+     "0": {
+      "n": 1721,
+      "edits_mean": 0.19703748855501405,
+      "edits_median": 0.15789473684210525,
+      "reads_ge2_edits": 0.027616958380490716,
+      "mapq_mean": 59.81599344640789,
+      "mapq_lt20": 0.001352742251661016,
+      "reads": 163.37594421847763
+     },
+     "1": {
+      "n": 227,
+      "edits_mean": 0.9986737964809579,
+      "edits_median": 1.125,
+      "reads_ge2_edits": 0.1620054473377337,
+      "mapq_mean": 59.677023333181836,
+      "mapq_lt20": 0.002621406709915368,
+      "reads": 159.7092511013216
+     },
+     "2+": {
+      "n": 52,
+      "edits_mean": 1.947832354425659,
+      "edits_median": 2.092857142857143,
+      "reads_ge2_edits": 0.6654181709235769,
+      "mapq_mean": 59.464752959395746,
+      "mapq_lt20": 0.008074601454883146,
+      "reads": 157.19230769230768
+     }
+    },
+    "d9": {
+     "0": {
+      "n": 1721,
+      "edits_mean": 0.19548049601478718,
+      "edits_median": 0.16,
+      "reads_ge2_edits": 0.027542485362128465,
+      "mapq_mean": 59.82983816341764,
+      "mapq_lt20": 0.001412479600025786,
+      "reads": 163.23126089482858
+     },
+     "1": {
+      "n": 227,
+      "edits_mean": 0.2798451954998872,
+      "edits_median": 0.165,
+      "reads_ge2_edits": 0.0422948341139582,
+      "mapq_mean": 59.56743203339521,
+      "mapq_lt20": 0.004377248610856837,
+      "reads": 158.94273127753303
+     },
+     "2+": {
+      "n": 52,
+      "edits_mean": 0.37055102714948396,
+      "edits_median": 0.20465116279069767,
+      "reads_ge2_edits": 0.05313680869049157,
+      "mapq_mean": 59.629642310649,
+      "mapq_lt20": 0.005697348767737117,
+      "reads": 157.76923076923077
+     }
+    },
+    "d46": {
+     "0": {
+      "n": 1721,
+      "edits_mean": 0.19656824421011374,
+      "edits_median": 0.16,
+      "reads_ge2_edits": 0.027674930065271892,
+      "mapq_mean": 58.8779269230463,
+      "mapq_lt20": 0.005466258830479977,
+      "reads": 163.29459616502032
+     },
+     "1": {
+      "n": 227,
+      "edits_mean": 0.27915326913945043,
+      "edits_median": 0.16853932584269662,
+      "reads_ge2_edits": 0.042469621730435114,
+      "mapq_mean": 58.30962060524715,
+      "mapq_lt20": 0.013485609840454691,
+      "reads": 159.23788546255506
+     },
+     "2+": {
+      "n": 52,
+      "edits_mean": 0.3824981680318198,
+      "edits_median": 0.20215116279069767,
+      "reads_ge2_edits": 0.05301314016318633,
+      "mapq_mean": 58.404807124026895,
+      "mapq_lt20": 0.015117857760722204,
+      "reads": 157.92307692307693
+     }
+    }
+   }
+  },
+  "B": {
+   "d46": {
+    "0": {
+     "no_tensor": 212,
+     "class:other": 290,
+     "n": 440,
+     "no_tensor|other": 194,
+     "tensor_not_called": 119,
+     "class:germline_same": 113,
+     "tensor_not_called|germline_same": 36,
+     "also_fp": 106,
+     "also_fp|germline_same": 73,
+     "also_fp|other": 25,
+     "class:repeat": 19,
+     "tensor_not_called|repeat": 5,
+     "tensor_not_called|other": 68,
+     "class:pop_other_repr": 4,
+     "no_tensor|pop_other_repr": 2,
+     "no_tensor|germline_same": 4,
+     "class:hprc": 11,
+     "no_tensor|hprc": 3,
+     "no_tensor|repeat": 8,
+     "also_fp|repeat": 6,
+     "tensor_not_called|pop_other_repr": 1,
+     "class:pop_below_floor": 2,
+     "also_fp|pop_below_floor": 1,
+     "other_allele_tensor": 3,
+     "other_allele_tensor|other": 3,
+     "tensor_not_called|hprc": 8,
+     "also_fp|pop_other_repr": 1,
+     "class:germline_overlap": 1,
+     "tensor_not_called|germline_overlap": 1,
+     "no_tensor|pop_below_floor": 1
+    },
+    "1": {
+     "no_tensor": 26,
+     "class:near_germline": 7,
+     "n": 48,
+     "no_tensor|near_germline": 5,
+     "also_fp": 12,
+     "class:other": 22,
+     "also_fp|other": 3,
+     "class:germline_same": 15,
+     "also_fp|germline_same": 6,
+     "tensor_not_called": 10,
+     "tensor_not_called|other": 4,
+     "no_tensor|germline_same": 3,
+     "class:pop_below_floor": 2,
+     "no_tensor|pop_below_floor": 2,
+     "tensor_not_called|germline_same": 6,
+     "class:repeat": 1,
+     "also_fp|repeat": 1,
+     "also_fp|near_germline": 2,
+     "no_tensor|other": 15,
+     "class:hprc": 1,
+     "no_tensor|hprc": 1
+    },
+    "2+": {
+     "tensor_not_called": 6,
+     "class:repeat": 3,
+     "n": 33,
+     "tensor_not_called|repeat": 2,
+     "class:other": 14,
+     "tensor_not_called|other": 3,
+     "class:hprc": 1,
+     "tensor_not_called|hprc": 1,
+     "no_tensor": 26,
+     "no_tensor|other": 10,
+     "no_tensor|repeat": 1,
+     "class:germline_same": 5,
+     "no_tensor|germline_same": 5,
+     "also_fp": 1,
+     "also_fp|other": 1,
+     "class:near_germline": 10,
+     "no_tensor|near_germline": 10
+    }
+   }
+  }
+ },
+ "COLO829T ONT": {
+  "A": {
+   "truth": {
+    "0": 2091,
+    "1": 282,
+    "2+": 70
+   },
+   "paired": {
+    "0": 1710,
+    "1": 230,
+    "2+": 51
+   },
+   "arms": {
+    "linear": {
+     "0": {
+      "n": 1710,
+      "edits_mean": 1.5842558264631323,
+      "edits_median": 1.5864367816091955,
+      "reads_ge2_edits": 0.2861802900000978,
+      "mapq_mean": 59.719325087291196,
+      "mapq_lt20": 0.0019131001563279357,
+      "reads": 90.46842105263158
+     },
+     "1": {
+      "n": 230,
+      "edits_mean": 2.3138250899657242,
+      "edits_median": 2.3476089588377724,
+      "reads_ge2_edits": 0.43371873559006147,
+      "mapq_mean": 59.753372251505375,
+      "mapq_lt20": 0.0014868908916274369,
+      "reads": 87.52173913043478
+     },
+     "2+": {
+      "n": 51,
+      "edits_mean": 2.9763236721604343,
+      "edits_median": 2.7796610169491527,
+      "reads_ge2_edits": 0.7403176388736538,
+      "mapq_mean": 59.716571064630315,
+      "mapq_lt20": 0.0004866105271784785,
+      "reads": 92.62745098039215
+     }
+    },
+    "d9": {
+     "0": {
+      "n": 1710,
+      "edits_mean": 1.6037748690994853,
+      "edits_median": 1.6074929971988796,
+      "reads_ge2_edits": 0.2860835913075239,
+      "mapq_mean": 59.666444351639534,
+      "mapq_lt20": 0.002272826692408266,
+      "reads": 90.60643274853801
+     },
+     "1": {
+      "n": 230,
+      "edits_mean": 1.6627431331328792,
+      "edits_median": 1.6376026885735624,
+      "reads_ge2_edits": 0.30367666342339383,
+      "mapq_mean": 59.64628665767232,
+      "mapq_lt20": 0.0018287177231292116,
+      "reads": 87.7304347826087
+     },
+     "2+": {
+      "n": 51,
+      "edits_mean": 1.605181445863971,
+      "edits_median": 1.5045871559633028,
+      "reads_ge2_edits": 0.2936240931587192,
+      "mapq_mean": 59.7595539458205,
+      "mapq_lt20": 0.0015444788603247756,
+      "reads": 92.90196078431373
+     }
+    },
+    "d46": {
+     "0": {
+      "n": 1710,
+      "edits_mean": 1.7248376717183738,
+      "edits_median": 1.7281553398058251,
+      "reads_ge2_edits": 0.29275908474371765,
+      "mapq_mean": 59.7136773852319,
+      "mapq_lt20": 0.0019670981050280045,
+      "reads": 91.18245614035088
+     },
+     "1": {
+      "n": 230,
+      "edits_mean": 1.7896246048218527,
+      "edits_median": 1.7866050161132128,
+      "reads_ge2_edits": 0.3120447124129549,
+      "mapq_mean": 59.73623622359361,
+      "mapq_lt20": 0.0019825317030185852,
+      "reads": 88.70434782608696
+     },
+     "2+": {
+      "n": 51,
+      "edits_mean": 1.749020721077167,
+      "edits_median": 1.619047619047619,
+      "reads_ge2_edits": 0.3022412874701357,
+      "mapq_mean": 59.77327850797823,
+      "mapq_lt20": 0.0012877926867946473,
+      "reads": 92.50980392156863
+     }
+    }
+   }
+  },
+  "B": {
+   "d46": {
+    "0": {
+     "no_tensor": 847,
+     "class:other": 2018,
+     "n": 2386,
+     "no_tensor|other": 734,
+     "class:pop_below_floor": 113,
+     "no_tensor|pop_below_floor": 37,
+     "class:hprc": 53,
+     "no_tensor|hprc": 40,
+     "class:repeat": 79,
+     "no_tensor|repeat": 29,
+     "tensor_not_called": 1371,
+     "tensor_not_called|other": 1193,
+     "class:germline_same": 111,
+     "tensor_not_called|germline_same": 44,
+     "also_fp": 156,
+     "also_fp|germline_same": 66,
+     "tensor_not_called|pop_below_floor": 70,
+     "also_fp|other": 79,
+     "tensor_not_called|hprc": 13,
+     "tensor_not_called|repeat": 46,
+     "class:pop_other_repr": 9,
+     "tensor_not_called|pop_other_repr": 4,
+     "no_tensor|pop_other_repr": 4,
+     "also_fp|pop_below_floor": 6,
+     "also_fp|repeat": 4,
+     "other_allele_tensor": 12,
+     "other_allele_tensor|other": 12,
+     "no_tensor|germline_same": 1,
+     "class:germline_overlap": 3,
+     "no_tensor|germline_overlap": 2,
+     "tensor_not_called|germline_overlap": 1,
+     "also_fp|pop_other_repr": 1
+    },
+    "1": {
+     "tensor_not_called": 81,
+     "class:pop_other_repr": 2,
+     "n": 140,
+     "tensor_not_called|pop_other_repr": 2,
+     "class:germline_same": 10,
+     "tensor_not_called|germline_same": 6,
+     "also_fp": 13,
+     "class:other": 67,
+     "also_fp|other": 6,
+     "class:pop_below_floor": 18,
+     "tensor_not_called|pop_below_floor": 15,
+     "tensor_not_called|other": 44,
+     "class:hprc": 8,
+     "tensor_not_called|hprc": 1,
+     "no_tensor": 46,
+     "no_tensor|hprc": 7,
+     "no_tensor|other": 17,
+     "no_tensor|pop_below_floor": 3,
+     "class:near_germline": 25,
+     "no_tensor|near_germline": 13,
+     "tensor_not_called|near_germline": 10,
+     "also_fp|germline_same": 4,
+     "class:repeat": 7,
+     "also_fp|repeat": 1,
+     "also_fp|near_germline": 2,
+     "no_tensor|repeat": 5,
+     "class:germline_overlap": 3,
+     "tensor_not_called|germline_overlap": 2,
+     "no_tensor|germline_overlap": 1,
+     "tensor_not_called|repeat": 1
+    },
+    "2+": {
+     "no_tensor": 23,
+     "class:near_germline": 19,
+     "n": 49,
+     "no_tensor|near_germline": 10,
+     "class:other": 15,
+     "no_tensor|other": 5,
+     "also_fp": 3,
+     "also_fp|other": 2,
+     "tensor_not_called": 23,
+     "tensor_not_called|other": 8,
+     "tensor_not_called|near_germline": 9,
+     "class:hprc": 3,
+     "tensor_not_called|hprc": 1,
+     "class:germline_same": 5,
+     "also_fp|germline_same": 1,
+     "class:repeat": 2,
+     "no_tensor|repeat": 2,
+     "class:germline_overlap": 4,
+     "tensor_not_called|germline_overlap": 1,
+     "class:pop_below_floor": 1,
+     "tensor_not_called|pop_below_floor": 1,
+     "no_tensor|germline_overlap": 3,
+     "no_tensor|hprc": 2,
+     "tensor_not_called|germline_same": 3,
+     "no_tensor|germline_same": 1
+    }
+   }
+  }
+ }
+}
