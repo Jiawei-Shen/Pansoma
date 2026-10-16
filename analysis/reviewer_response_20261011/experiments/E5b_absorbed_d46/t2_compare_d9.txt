@@ -1,0 +1,5 @@
+(ref_ok sqlite, ref_ok vg-find, alt sqlite, alt vg-find): count over 300 loci
+('1', '1', '0', '0') 44
+('1', '1', '1', '0') 22
+('1', '1', '1', '1') 234
+agree on alt_spelled: 278 of 300

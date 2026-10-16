@@ -1,0 +1,221 @@
+# E8: ClairS-TO and DeepSomatic tumor-only under Pansoma's protocol (chr1)
+
+Status (2026-10-13): **CANCELLED by the user.** The user already has ClairS-TO / DeepSomatic results, so the comparators
+are not re-run. No comparator was run in E8.
+
+What is left:
+
+- the prepared scorer, dataset table and job scripts (section 3);
+- a check of the scorer on two existing DeepSomatic VCFs (section 4);
+- 5.7G of partial preparation data, which the user decides whether to delete (section 5).
+
+The user's existing comparator VCFs can be re-scored under the Pansoma protocol with `score_comparator.py` once the
+user gives their paths (section 6).
+
+## 1. Question and reviewer points
+
+The plan was to re-run both tumor-only callers on the same reads as Pansoma and score them with the same truth, BED,
+PoN rule and rtg options on chr1. That would show whether Pansoma's chr1 results hold against them, and where each
+caller loses recall.
+
+| point | what E8 was to provide |
+|---|---|
+| R3.m2 comparator setup | versions, models, command lines, BAMs, PoN, PASS criteria; each caller with its own filters and with our PoN |
+| R1.6 low sensitivity / R2.3 recall gap to DeepSomatic | comparators' recall before / after our PoN, curve ceilings, recall at matched precision, one protocol |
+| R3.5 signatures | SBS96 of truth, comparators and Pansoma PASS + PoN SNVs |
+| R3.9 statistics | comparator call sets for the paired bootstrap (E16) |
+| R3.10 INDEL claims | INDEL tables and strata (HP>=7, HP4-6, STR, none; INS / DEL) for every call set |
+| R1.m1 additional lines | HCC1395 and CASTLE HCC1954 / H1437 / H2009 x 3 platforms |
+
+These experiments were to take their comparator calls from E8: E1.6 (recall funnel), E5c (comparators at absorbed
+loci), E10 (strata), E16 (bootstrap) and E17a (INDEL strata). They can use the re-scored user VCFs instead (section 6).
+
+## 2. Decision and what happened to the jobs
+
+- 2026-10-13 from 10:23 CDT: E8 submitted (387336 / 387338 about 11:15, replacing the slow index jobs). There were
+  6 preparation jobs (`jobs/jobs.tsv`: bwa, merge, index, chr1 extraction) and 55 jobs 387194-387248
+  (`jobs/lanes.tsv`: the callers plus the CASTLE index job 387210) in 6 dependency lanes.
+- 2026-10-13 11:46:40-11:47:25: all E8 jobs cancelled (user decision).
+  - The comparator image pull 387136 was cancelled too, after 1:49:05. No ClairS-TO or DeepSomatic SIF exists in
+    `/scratch/jshen/bin/`.
+- Final states (`sacct`): all 61 E8 jobs are CANCELLED. 57 never started. Four had started:
+
+| job | what | ran | how far it got |
+|---|---|---|---|
+| 387161 | bwa mem COLO829T Illumina FASTQs -> chr1 BAM (`bwa_chr1.sh`) | 1:23:59 | 178,145,788 reads aligned (sum of `Processed` lines in `bams/COLO829T_Illumina.bwa.log`); nothing written (sort still in memory) |
+| 387162 | bwa mem HCC1395 WGS_FD_T_1 -> chr1 BAM | 1:23:59 | 128,666,924 reads aligned (`bams/HCC1395T_Illumina_FD_T_1.bwa.log`); nothing written |
+| 387164 | index HCC1395 PacBio / ONT raw BAMs via symlinks (`index_bams.sh`) | 0:52:03 | cancelled earlier (11:15) as too slow; replaced by 387336 |
+| 387336 | chr1 extraction of HCC1395 PacBio / ONT (`extract_chr1.sh`) | 0:27:07 | partial `bams/HCC1395T_PacBio.chr1.tmp.bam`, truncated (no BGZF EOF block) |
+
+Job logs: `/scratch/jshen/Github/Pansoma/tmp/reviewer_cpu_20261013/E8_comparators/logs/`. The four logs above are
+there; each ends with the slurmstepd CANCELLED line.
+
+## 3. What was prepared (kept here)
+
+| file | what it is |
+|---|---|
+| `datasets.tsv` | 27 datasets: HG008T x 3, COLO829T x 3, HCC1395T x 3, CASTLE HCC1954T / H1437T / H2009T x 3, COLO829T purity mixtures P75 / P50 / P25 x 3. Columns: dataset, priority, tensor `set` (truth / BED / FASTA source), BAM, ClairS-TO platform / model (`ss` instead of `ssrs` on the CASTLE lines), ClairS-TO extra options (`--disable_verdict` for the mixtures), DeepSomatic model type, reads and aligner |
+| `score_comparator.py` | scores one comparator VCF (or ClairS-TO's snv + indel pair) for one kind on chr1 with Pansoma's protocol (below). Tested (section 4) |
+| `collect.py` | builds `tables.md`, `summary.json`, `sbs96.tsv`, `indel_strata.tsv` from `score/<caller>/<dataset>/<KIND>/report.json`, next to Pansoma's 7fc7396 benchmark numbers (arms d9, d46, linear; purity joint models) |
+| `tables.md`, `summary.json` | generated 11:27 before the cancellation: Pansoma rows only. The comparator rows, matched precision, SBS96, INDEL strata and Commands tables are empty; `summary.json` lists 108 pending caller / dataset / kind reports |
+| `jobs/` | copies of the job scripts (`bwa_chr1.sh`, `hcc1395_illumina_merge.sh`, `index_bams.sh`, `extract_chr1.sh`, `run_clairs_to.sh`, `run_deepsomatic.sh`, `submit_lanes.sh`) and `jobs.tsv` / `lanes.tsv`. These are a record only; none completed |
+
+Scoring protocol of `score_comparator.py`:
+
+- It uses `machine_learning/pansoma_net_v2/vcfeval.py` as a library, unmodified.
+- Truth and BED: the tensor set's `tensors/<KIND>/labels.manifest.json`, the same files as Pansoma's chr1 test.
+  - CASTLE sets without a manifest fall back to `CASTLE/<line>/truth/`.
+  - `--truth` / `--bed` override both.
+- Call preparation:
+  - `bcftools norm -m -any -f <labels FASTA>`, chr1;
+  - only records of the kind, by the same SNV / INDEL rule that selects the truth;
+  - RefCall / NoCall records dropped;
+  - one record per (POS, REF, ALT);
+  - sites-only VCF that keeps the tool's QUAL and FILTER.
+- PoN: `scripts/filter_panel_of_normals.py` with the four PoN VCFs of `jobs/vcf.sh`, applied to the calls and to the
+  truth. The truth run gives the PoN bound on recall.
+- rtg 3.12.1: `--squash-ploidy --sample ALT,ALT -f QUAL`, chr1 as `--bed-regions`. Each call set is scored inside the
+  BED (`eval_bed`) and on the whole chromosome (`eval_nobed`), with `--all-records` for the curves.
+- Four call sets per run:
+
+| set | content | reviewer setting |
+|---|---|---|
+| `pass` | the tool's PASS records | (1) tool PASS |
+| `pass_pon` | `pass` minus the records our PoN tags | (2) tool PASS + our PoN |
+| `all` | every non-RefCall record, curve by QUAL | curve without our PoN |
+| `all_pon` | `all` minus PoN-tagged records, curve by QUAL | (3) all calls + our PoN, by the tool's quality |
+
+## 4. Scorer check on two existing DeepSomatic VCFs (COLO829T fiber-seq, SNV, chr1)
+
+These are not E8 runs. They only test the scorer on real DeepSomatic output. Outputs are in
+`/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/test/`.
+
+- `smaht_ds160_fiberseq_SNV`: SMaHT's
+  `/scratch/jshen/data/COLO829T/COLO829T_fiberseq/SMHTCOLO829T-X-X-M45-B004-uwsc-SMAVCQ2SLU5S-deepsomatic_1.6.0_GRCh38_snv.vcf.gz`.
+  It is genome-wide and SNV only. The header does not record the mode, which may be tumor-normal [unverified].
+  - Full report: `report.txt` / `report.json`.
+- `local_ds190_TO_fiberseq_SNV`: `/scratch/jshen/data/COLO829T/COLO829T_fiberseq/deeepsomatic_TO_results/COLO829T_Pacbio_deepsomatic.vcf.gz`.
+  This is DeepSomatic 1.9.0 tumor-only on chr1, with a PON filter.
+  - The four `eval_bed` rtg runs finished; the numbers below come from their `summary.txt`.
+  - `eval_nobed` finished only `pass`. The other three nobed runs were stopped to free the login node, so there is no
+    `report.json`.
+
+The truth has 2,443 chr1 SNV records in the BED. The PoN tags 84 of them, so recall after the PoN is at most 0.966. Cells
+are P / R / F1 (TP / FP / FN).
+
+| call set | tool PASS | tool PASS + our PoN | curve, all records, no PoN: best F1 (P, R) | curve, all records + our PoN: best F1 (P, R) at QUAL | curve ceiling + PoN |
+|---|---|---|---|---|---|
+| SMaHT DeepSomatic 1.6.0 (mode not recorded) | 0.972 / 0.745 / 0.844 (1821 / 53 / 622) | 0.974 / 0.723 / 0.830 (1765 / 47 / 678) | 0.066 (0.034, 0.746) | 0.779 (0.836, 0.728) at 3.1 | 0.728 |
+| local DeepSomatic 1.9.0 tumor-only, with PON | 0.592 / 0.564 / 0.578 (1378 / 951 / 1065) | 0.733 / 0.557 / 0.633 (1361 / 496 / 1082) | 0.236 (0.233, 0.240) | 0.792 (0.724, 0.873) at 15.2 | 0.894 |
+| Pansoma d9 `COLO829_fiberseq_SNV_h90` (`tables.md`, from the 7fc7396 benchmark) | 0.445 / 0.736 / 0.555 (raw PASS) | 0.857 / 0.717 / 0.781 | - | 0.784 (0.849, 0.728) | 0.792 |
+
+Prepared chr1 SNV records (non-RefCall, `calls.all.vcf.gz`), by FILTER:
+
+- SMaHT 1.6.0: 1,874 PASS, 51,995 GERMLINE;
+- local 1.9.0: 2,329 PASS, 3,124 PON, 209,047 GERMLINE.
+
+Interpretation:
+
+- The scorer runs end to end on DeepSomatic VCFs: multi-allelic splitting, RefCall removal, PoN on about 2e5 records,
+  and rtg with `--all-records`.
+  - The SMaHT VCF took about 7 min.
+  - The 1.9.0 VCF took 20 min for the PoN (10:43 -> 11:03) plus 4-5 min per rtg run on the busy login node.
+- The 1.9.0 tumor-only run loses most of its SNV recall to its own germline classification.
+  - Its PASS recall is 0.564.
+  - After our PoN, all its records ranked by QUAL reach recall 0.873 at precision 0.724 (best F1 0.792). The ceiling
+    is 0.894.
+  - A likely reason [unverified, not analysed]: COLO829T is near-pure, so clonal somatic SNVs (in LOH regions
+    especially) sit at germline-like VAF.
+- The SMaHT 1.6.0 VCF has far fewer GERMLINE records than the 1.9.0 tumor-only VCF, and PASS precision 0.972. That fits
+  a tumor-normal run [unverified]. It should not be used as a tumor-only comparator unless its mode is confirmed.
+- Before our PoN, ranking all DeepSomatic records by QUAL is useless (best F1 0.066 / 0.236), because GERMLINE records
+  carry high QUAL. Setting (3) is meaningful only after the PoN.
+
+## 5. Leftover data (user decides whether to delete)
+
+Directory: `/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/`. It is 5.7G by `du -sh`, almost all of it
+one unusable partial BAM.
+
+| path (under the directory) | size | content | useful? |
+|---|---|---|---|
+| `bams/HCC1395T_PacBio.chr1.tmp.bam` | 6,046,506,688 bytes | partial chr1 extraction of the HCC1395 PacBio BAM (job 387336), truncated | no |
+| `bams/HCC1395T_PacBio.bam` | symlink | -> `/scratch/jshen/data/CASTLE/HCC1395/PacBio/HCC1395.GRCh38.bam` (raw data) | no. Removing the link does not touch the raw BAM; never delete through it |
+| `bams/COLO829T_Illumina.bwa.log`, `bams/HCC1395T_Illumina_FD_T_1.bwa.log` | 279,331 / 207,045 bytes | bwa stderr of 387161 / 387162 | record only |
+| `bams/COLO829T_Illumina.sorttmp/`, `bams/HCC1395T_Illumina_FD_T_1.sorttmp/` | empty | samtools sort temp dirs | no |
+| `calls/`, `score/` | empty | planned outputs | `score/` is where re-scored reports go (section 6) |
+| `test/` | 9.7M | the scorer check of section 4 | yes: the source of the section 4 numbers |
+
+Nothing was written next to the raw data.
+
+## 6. How to re-score the user's existing comparator VCFs
+
+Once the user gives the VCF paths, run one scorer call per caller, dataset and kind. ClairS-TO's `snv.vcf.gz` and
+`indel.vcf.gz` can be passed together, because the scorer keeps only the records of `--kind`.
+
+- `--set`: the `set` column of `datasets.tsv`, for example `HCC1395T_PacBio_d46`. It decides truth, BED and FASTA.
+- `--output`: `score/<caller>/<dataset>/<KIND>`, where `<dataset>` is the first column of `datasets.tsv`. This is the
+  path `collect.py` reads.
+- Use `--caller clairs_to` or `--caller deepsomatic`; `collect.py` looks only at those two directory names.
+
+Example (ClairS-TO, HG008T PacBio, SNV):
+
+    cd /scratch/jshen/Github/Pansoma/analysis/reviewer_response_20261011/experiments/E8_comparators
+    /wanglab/jshen/anaconda3/bin/python score_comparator.py \
+        --vcf /path/given/by/user/snv.vcf.gz --vcf /path/given/by/user/indel.vcf.gz \
+        --set HG008T_PacBio --kind SNV --caller clairs_to --threads 4 \
+        --output /scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/clairs_to/HG008T_PacBio/SNV
+
+Repeat with `--kind INDEL`, then build the tables:
+
+    /wanglab/jshen/anaconda3/bin/python collect.py      # tables.md, summary.json, sbs96.tsv, indel_strata.tsv
+
+Practical notes:
+
+- Only chr1 records are scored (`--chrom chr1`, the default), so genome-wide VCFs can be passed as they are.
+- The VCFs must be on GRCh38 with `chr` names. The scorer normalizes against the GCA no-alt FASTA of the labels.
+  chr1 has the same name and length in GIAB's GRCh38-GIABv3; for other references this is [unverified]. `bcftools norm`
+  runs with `-c w`, so a REF mismatch is only warned about.
+- The scorer refuses to overwrite an existing `eval_bed/<set>` or `eval_nobed/<set>`. Give a new `--output`, or move the
+  old one aside.
+- Run time (section 4, busy login node):
+  - about 7 min for the SMaHT VCF;
+  - 42 min (10:40 -> 11:22) for the 1.9.0 tumor-only VCF, with about 2e5 GERMLINE records on chr1, up to the end of
+    the four `eval_bed` runs. The `eval_nobed` runs add roughly as much again [estimate].
+  - Memory was not measured.
+  - Large VCFs belong in a Slurm job once the user agrees a cluster cap.
+- `collect.py` labels the two callers "ClairS-TO 0.5.1" and "DeepSomatic 1.10.0" (`CALLERS`). If the user's runs used
+  other versions, edit that constant before collecting.
+- `collect.py` fills the Commands table (R3.m2) from `calls/<caller>/<dataset>/command.txt`. Put each user run's
+  command line (version, model, BAM) there, or the table stays empty.
+- The section 4 DeepSomatic 1.9.0 tumor-only VCF has no `report.json` (`test/` only). To include it, re-score it into
+  `score/deepsomatic/COLO829T_fiberseq/{SNV,INDEL}`.
+
+## 7. Caveats for the comparison with the user's results
+
+- Reads: E8 was meant to give the comparators the same reads as the Pansoma tensors. The user's runs may differ in reads,
+  aligner and depth (for example COLO829T Illumina, where E8 planned a new bwa alignment of the tensor FASTQs, and the
+  purity mixtures). Record the BAM of every scored VCF.
+- Mode: confirm that each VCF is tumor-only. The SMaHT DeepSomatic 1.6.0 VCF looks tumor-normal (section 4).
+- Training data:
+  - Pansoma models are trained on chr2-22 of the same tumor and tested on its chr1. The comparators are general
+    models. This asymmetry favours Pansoma and must be stated next to every table.
+  - E8b (`../E8b_literature_facts/README.md`) found that DeepSomatic holds out chr1 in every model, including the
+    tumor-only models trained on HCC1395 (rows D2, D10, D14). Its chr1 numbers on the CASTLE lines are therefore
+    held-out.
+  - For ClairS-TO the sources disagree: chr20 or chr1 excluded (E8b row C4). If chr20, the `ssrs` models have seen
+    chr1 of HCC1954 / H1437 / H2009, and the `ss` models should be used there.
+  - CASTLE truth is DeepSomatic's own benchmark, which the DeepSomatic paper calls biased toward DeepSomatic (E8b row D8).
+- QUAL ranking (setting 3) uses the tool's QUAL. For DeepSomatic, GERMLINE records carry high QUAL, so only the curve
+  after our PoN (`all_pon`) is meaningful (section 4).
+- HG008T ONT is dorado sup v5.0.0. ClairS-TO 0.5.1 has no sup v5 model; E8 would have used
+  `ont_r10_dorado_sup_5khz_ssrs` (sup v4.2.0). Check which model the user's run used.
+
+## 8. Status
+
+| item | status |
+|---|---|
+| scorer `score_comparator.py`, collector `collect.py`, `datasets.tsv` | DONE; scorer tested on two existing DeepSomatic VCFs (section 4) |
+| comparator calling (ClairS-TO 0.5.1, DeepSomatic 1.10.0) on 27 datasets | CANCELLED by the user (existing results are used instead); all 61 E8 jobs and image pull 387136 cancelled, nothing called |
+| re-scoring the user's ClairS-TO / DeepSomatic VCFs under the Pansoma protocol | PENDING: the user has to give the VCF paths (and the BAM / version / command of each run) |
+| leftover data, 5.7G | PENDING user decision: delete or keep (section 5); only `test/` is worth keeping |
+| `tables.md` comparator rows | PENDING on the re-scoring above; currently Pansoma rows only |

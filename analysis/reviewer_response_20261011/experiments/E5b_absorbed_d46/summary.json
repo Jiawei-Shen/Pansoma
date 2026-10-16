@@ -1,0 +1,1140 @@
+{
+ "HG008T/Illumina/SNV/tensor": {
+  "n": 8690,
+  "not_tagged": 7780,
+  "tensor": {
+   "linear": 8552,
+   "d9": 8273,
+   "d46": 8307
+  },
+  "tensor_not_tagged": {
+   "linear": 7714,
+   "d9": 7684,
+   "d46": 7686
+  }
+ },
+ "HG008T/Illumina/INDEL/tensor": {
+  "n": 8496,
+  "not_tagged": 3251,
+  "tensor": {
+   "linear": 6720,
+   "d9": 3555,
+   "d46": 3821
+  },
+  "tensor_not_tagged": {
+   "linear": 2683,
+   "d9": 2276,
+   "d46": 2306
+  }
+ },
+ "HG008T/PacBio/SNV/tensor": {
+  "n": 8690,
+  "not_tagged": 7780,
+  "tensor": {
+   "linear": 8545,
+   "d9": 8231,
+   "d46": 8249
+  },
+  "tensor_not_tagged": {
+   "linear": 7704,
+   "d9": 7681,
+   "d46": 7680
+  }
+ },
+ "HG008T/PacBio/INDEL/tensor": {
+  "n": 8496,
+  "not_tagged": 3251,
+  "tensor": {
+   "linear": 7077,
+   "d9": 4062,
+   "d46": 4226
+  },
+  "tensor_not_tagged": {
+   "linear": 2807,
+   "d9": 2294,
+   "d46": 2313
+  }
+ },
+ "HG008T/ONT/SNV/tensor": {
+  "n": 8690,
+  "not_tagged": 7780,
+  "tensor": {
+   "linear": 8567,
+   "d9": 8268,
+   "d46": 8290
+  },
+  "tensor_not_tagged": {
+   "linear": 7741,
+   "d9": 7718,
+   "d46": 7725
+  }
+ },
+ "HG008T/ONT/INDEL/tensor": {
+  "n": 8496,
+  "not_tagged": 3251,
+  "tensor": {
+   "linear": 4848,
+   "d9": 3628,
+   "d46": 3642
+  },
+  "tensor_not_tagged": {
+   "linear": 2241,
+   "d9": 2074,
+   "d46": 2075
+  }
+ },
+ "COLO829T/Illumina/SNV/tensor": {
+  "n": 42035,
+  "not_tagged": 40593,
+  "tensor": {
+   "linear": 38222,
+   "d9": 37864,
+   "d46": 37861
+  },
+  "tensor_not_tagged": {
+   "linear": 36871,
+   "d9": 36608,
+   "d46": 36598
+  }
+ },
+ "COLO829T/Illumina/INDEL/tensor": {
+  "n": 1912,
+  "not_tagged": 929,
+  "tensor": {
+   "linear": 1747,
+   "d9": 1092,
+   "d46": 1155
+  },
+  "tensor_not_tagged": {
+   "linear": 869,
+   "d9": 739,
+   "d46": 751
+  }
+ },
+ "COLO829T/fiberseq/SNV/tensor": {
+  "n": 42035,
+  "not_tagged": 40593,
+  "tensor": {
+   "linear": 37945,
+   "d9": 37756,
+   "d46": 37736
+  },
+  "tensor_not_tagged": {
+   "linear": 36635,
+   "d9": 36514,
+   "d46": 36491
+  }
+ },
+ "COLO829T/fiberseq/INDEL/tensor": {
+  "n": 1912,
+  "not_tagged": 929,
+  "tensor": {
+   "linear": 1842,
+   "d9": 1210,
+   "d46": 1260
+  },
+  "tensor_not_tagged": {
+   "linear": 910,
+   "d9": 753,
+   "d46": 755
+  }
+ },
+ "COLO829T/ONT/SNV/tensor": {
+  "n": 42035,
+  "not_tagged": 40593,
+  "tensor": {
+   "linear": 37665,
+   "d9": 37523,
+   "d46": 37514
+  },
+  "tensor_not_tagged": {
+   "linear": 36354,
+   "d9": 36276,
+   "d46": 36263
+  }
+ },
+ "COLO829T/ONT/INDEL/tensor": {
+  "n": 1912,
+  "not_tagged": 929,
+  "tensor": {
+   "linear": 1441,
+   "d9": 1108,
+   "d46": 1116
+  },
+  "tensor_not_tagged": {
+   "linear": 789,
+   "d9": 701,
+   "d46": 695
+  }
+ },
+ "HCC1395T/Illumina/SNV/tensor": {
+  "n": 39447,
+  "not_tagged": 38345,
+  "tensor": {
+   "linear": 0,
+   "d9": 0,
+   "d46": 35266
+  },
+  "tensor_not_tagged": {
+   "linear": 0,
+   "d9": 0,
+   "d46": 34455
+  }
+ },
+ "HCC1395T/Illumina/INDEL/tensor": {
+  "n": 1625,
+  "not_tagged": 1506,
+  "tensor": {
+   "linear": 0,
+   "d9": 0,
+   "d46": 1346
+  },
+  "tensor_not_tagged": {
+   "linear": 0,
+   "d9": 0,
+   "d46": 1280
+  }
+ },
+ "HCC1395T/PacBio/SNV/tensor": {
+  "n": 39447,
+  "not_tagged": 38345,
+  "tensor": {
+   "linear": 0,
+   "d9": 0,
+   "d46": 34374
+  },
+  "tensor_not_tagged": {
+   "linear": 0,
+   "d9": 0,
+   "d46": 33604
+  }
+ },
+ "HCC1395T/PacBio/INDEL/tensor": {
+  "n": 1625,
+  "not_tagged": 1506,
+  "tensor": {
+   "linear": 0,
+   "d9": 0,
+   "d46": 1375
+  },
+  "tensor_not_tagged": {
+   "linear": 0,
+   "d9": 0,
+   "d46": 1307
+  }
+ },
+ "HCC1395T/ONT/SNV/tensor": {
+  "n": 39447,
+  "not_tagged": 38345,
+  "tensor": {
+   "linear": 0,
+   "d9": 0,
+   "d46": 30869
+  },
+  "tensor_not_tagged": {
+   "linear": 0,
+   "d9": 0,
+   "d46": 30125
+  }
+ },
+ "HCC1395T/ONT/INDEL/tensor": {
+  "n": 1625,
+  "not_tagged": 1506,
+  "tensor": {
+   "linear": 0,
+   "d9": 0,
+   "d46": 1239
+  },
+  "tensor_not_tagged": {
+   "linear": 0,
+   "d9": 0,
+   "d46": 1171
+  }
+ },
+ "HG008T/Illumina/SNV/d9": {
+  "lost": 293,
+  "lost_after_pon": 36,
+  "absorbed": 140,
+  "nocand_other": 105,
+  "filtered": 47,
+  "other_allele": 1,
+  "absorbed_after_pon": 0,
+  "nocand_other_after_pon": 27,
+  "filtered_after_pon": 8,
+  "other_allele_after_pon": 1,
+  "gained": 14,
+  "gained_after_pon": 6
+ },
+ "HG008T/Illumina/SNV/d46": {
+  "lost": 261,
+  "lost_after_pon": 35,
+  "absorbed": 109,
+  "nocand_other": 97,
+  "filtered": 53,
+  "other_allele": 2,
+  "absorbed_after_pon": 0,
+  "nocand_other_after_pon": 26,
+  "filtered_after_pon": 9,
+  "other_allele_after_pon": 0,
+  "gained": 16,
+  "gained_after_pon": 7
+ },
+ "HG008T/PacBio/SNV/d9": {
+  "lost": 333,
+  "lost_after_pon": 32,
+  "absorbed": 165,
+  "nocand_other": 127,
+  "filtered": 41,
+  "other_allele": 0,
+  "absorbed_after_pon": 0,
+  "nocand_other_after_pon": 25,
+  "filtered_after_pon": 7,
+  "other_allele_after_pon": 0,
+  "gained": 19,
+  "gained_after_pon": 9
+ },
+ "HG008T/PacBio/SNV/d46": {
+  "lost": 314,
+  "lost_after_pon": 34,
+  "absorbed": 124,
+  "nocand_other": 151,
+  "filtered": 38,
+  "other_allele": 1,
+  "absorbed_after_pon": 0,
+  "nocand_other_after_pon": 26,
+  "filtered_after_pon": 8,
+  "other_allele_after_pon": 0,
+  "gained": 18,
+  "gained_after_pon": 10
+ },
+ "HG008T/ONT/SNV/d9": {
+  "lost": 317,
+  "lost_after_pon": 31,
+  "absorbed": 153,
+  "nocand_other": 102,
+  "filtered": 60,
+  "other_allele": 2,
+  "absorbed_after_pon": 0,
+  "nocand_other_after_pon": 17,
+  "filtered_after_pon": 13,
+  "other_allele_after_pon": 1,
+  "gained": 18,
+  "gained_after_pon": 8
+ },
+ "HG008T/ONT/SNV/d46": {
+  "lost": 290,
+  "lost_after_pon": 22,
+  "absorbed": 121,
+  "nocand_other": 119,
+  "filtered": 48,
+  "other_allele": 2,
+  "absorbed_after_pon": 0,
+  "nocand_other_after_pon": 15,
+  "filtered_after_pon": 6,
+  "other_allele_after_pon": 1,
+  "gained": 13,
+  "gained_after_pon": 6
+ },
+ "HG008T/Illumina/INDEL/d9": {
+  "lost": 3341,
+  "lost_after_pon": 481,
+  "absorbed": 1613,
+  "nocand_other": 987,
+  "filtered": 681,
+  "other_allele": 60,
+  "absorbed_after_pon": 35,
+  "nocand_other_after_pon": 274,
+  "filtered_after_pon": 153,
+  "other_allele_after_pon": 19,
+  "gained": 176,
+  "gained_after_pon": 74
+ },
+ "HG008T/Illumina/INDEL/d46": {
+  "lost": 3104,
+  "lost_after_pon": 464,
+  "absorbed": 1301,
+  "nocand_other": 1139,
+  "filtered": 577,
+  "other_allele": 87,
+  "absorbed_after_pon": 39,
+  "nocand_other_after_pon": 280,
+  "filtered_after_pon": 123,
+  "other_allele_after_pon": 22,
+  "gained": 205,
+  "gained_after_pon": 87
+ },
+ "HG008T/PacBio/INDEL/d9": {
+  "lost": 3229,
+  "lost_after_pon": 581,
+  "absorbed": 935,
+  "nocand_other": 1203,
+  "filtered": 835,
+  "other_allele": 256,
+  "absorbed_after_pon": 34,
+  "nocand_other_after_pon": 339,
+  "filtered_after_pon": 125,
+  "other_allele_after_pon": 83,
+  "gained": 214,
+  "gained_after_pon": 68
+ },
+ "HG008T/PacBio/INDEL/d46": {
+  "lost": 3078,
+  "lost_after_pon": 571,
+  "absorbed": 839,
+  "nocand_other": 1433,
+  "filtered": 546,
+  "other_allele": 260,
+  "absorbed_after_pon": 32,
+  "nocand_other_after_pon": 361,
+  "filtered_after_pon": 95,
+  "other_allele_after_pon": 83,
+  "gained": 227,
+  "gained_after_pon": 77
+ },
+ "HG008T/ONT/INDEL/d9": {
+  "lost": 1847,
+  "lost_after_pon": 299,
+  "absorbed": 441,
+  "nocand_other": 583,
+  "filtered": 591,
+  "other_allele": 232,
+  "absorbed_after_pon": 20,
+  "nocand_other_after_pon": 145,
+  "filtered_after_pon": 84,
+  "other_allele_after_pon": 50,
+  "gained": 627,
+  "gained_after_pon": 132
+ },
+ "HG008T/ONT/INDEL/d46": {
+  "lost": 1752,
+  "lost_after_pon": 290,
+  "absorbed": 472,
+  "nocand_other": 687,
+  "filtered": 364,
+  "other_allele": 229,
+  "absorbed_after_pon": 20,
+  "nocand_other_after_pon": 146,
+  "filtered_after_pon": 60,
+  "other_allele_after_pon": 64,
+  "gained": 546,
+  "gained_after_pon": 124
+ },
+ "COLO829T/Illumina/SNV/d9": {
+  "lost": 395,
+  "lost_after_pon": 297,
+  "absorbed": 55,
+  "nocand_other": 287,
+  "filtered": 53,
+  "other_allele": 0,
+  "absorbed_after_pon": 1,
+  "nocand_other_after_pon": 249,
+  "filtered_after_pon": 47,
+  "other_allele_after_pon": 0,
+  "gained": 37,
+  "gained_after_pon": 34
+ },
+ "COLO829T/Illumina/SNV/d46": {
+  "lost": 398,
+  "lost_after_pon": 305,
+  "absorbed": 45,
+  "nocand_other": 297,
+  "filtered": 56,
+  "other_allele": 0,
+  "absorbed_after_pon": 0,
+  "nocand_other_after_pon": 257,
+  "filtered_after_pon": 48,
+  "other_allele_after_pon": 0,
+  "gained": 37,
+  "gained_after_pon": 32
+ },
+ "COLO829T/fiberseq/SNV/d9": {
+  "lost": 244,
+  "lost_after_pon": 172,
+  "absorbed": 56,
+  "nocand_other": 154,
+  "filtered": 34,
+  "other_allele": 0,
+  "absorbed_after_pon": 0,
+  "nocand_other_after_pon": 142,
+  "filtered_after_pon": 30,
+  "other_allele_after_pon": 0,
+  "gained": 55,
+  "gained_after_pon": 51
+ },
+ "COLO829T/fiberseq/SNV/d46": {
+  "lost": 281,
+  "lost_after_pon": 209,
+  "absorbed": 49,
+  "nocand_other": 173,
+  "filtered": 59,
+  "other_allele": 0,
+  "absorbed_after_pon": 0,
+  "nocand_other_after_pon": 156,
+  "filtered_after_pon": 53,
+  "other_allele_after_pon": 0,
+  "gained": 72,
+  "gained_after_pon": 65
+ },
+ "COLO829T/ONT/SNV/d9": {
+  "lost": 204,
+  "lost_after_pon": 135,
+  "absorbed": 50,
+  "nocand_other": 84,
+  "filtered": 69,
+  "other_allele": 1,
+  "absorbed_after_pon": 0,
+  "nocand_other_after_pon": 73,
+  "filtered_after_pon": 61,
+  "other_allele_after_pon": 1,
+  "gained": 62,
+  "gained_after_pon": 57
+ },
+ "COLO829T/ONT/SNV/d46": {
+  "lost": 221,
+  "lost_after_pon": 153,
+  "absorbed": 45,
+  "nocand_other": 57,
+  "filtered": 118,
+  "other_allele": 1,
+  "absorbed_after_pon": 0,
+  "nocand_other_after_pon": 47,
+  "filtered_after_pon": 105,
+  "other_allele_after_pon": 1,
+  "gained": 70,
+  "gained_after_pon": 62
+ },
+ "COLO829T/Illumina/INDEL/d9": {
+  "lost": 666,
+  "lost_after_pon": 133,
+  "absorbed": 354,
+  "nocand_other": 199,
+  "filtered": 103,
+  "other_allele": 10,
+  "absorbed_after_pon": 4,
+  "nocand_other_after_pon": 92,
+  "filtered_after_pon": 33,
+  "other_allele_after_pon": 4,
+  "gained": 11,
+  "gained_after_pon": 3
+ },
+ "COLO829T/Illumina/INDEL/d46": {
+  "lost": 609,
+  "lost_after_pon": 124,
+  "absorbed": 315,
+  "nocand_other": 194,
+  "filtered": 88,
+  "other_allele": 12,
+  "absorbed_after_pon": 6,
+  "nocand_other_after_pon": 89,
+  "filtered_after_pon": 23,
+  "other_allele_after_pon": 6,
+  "gained": 17,
+  "gained_after_pon": 6
+ },
+ "COLO829T/fiberseq/INDEL/d9": {
+  "lost": 642,
+  "lost_after_pon": 159,
+  "absorbed": 183,
+  "nocand_other": 203,
+  "filtered": 219,
+  "other_allele": 37,
+  "absorbed_after_pon": 3,
+  "nocand_other_after_pon": 91,
+  "filtered_after_pon": 46,
+  "other_allele_after_pon": 19,
+  "gained": 10,
+  "gained_after_pon": 2
+ },
+ "COLO829T/fiberseq/INDEL/d46": {
+  "lost": 591,
+  "lost_after_pon": 157,
+  "absorbed": 198,
+  "nocand_other": 214,
+  "filtered": 142,
+  "other_allele": 37,
+  "absorbed_after_pon": 5,
+  "nocand_other_after_pon": 91,
+  "filtered_after_pon": 46,
+  "other_allele_after_pon": 15,
+  "gained": 9,
+  "gained_after_pon": 2
+ },
+ "COLO829T/ONT/INDEL/d9": {
+  "lost": 444,
+  "lost_after_pon": 114,
+  "absorbed": 115,
+  "nocand_other": 142,
+  "filtered": 144,
+  "other_allele": 43,
+  "absorbed_after_pon": 1,
+  "nocand_other_after_pon": 67,
+  "filtered_after_pon": 28,
+  "other_allele_after_pon": 18,
+  "gained": 111,
+  "gained_after_pon": 26
+ },
+ "COLO829T/ONT/INDEL/d46": {
+  "lost": 429,
+  "lost_after_pon": 116,
+  "absorbed": 128,
+  "nocand_other": 149,
+  "filtered": 104,
+  "other_allele": 48,
+  "absorbed_after_pon": 2,
+  "nocand_other_after_pon": 65,
+  "filtered_after_pon": 33,
+  "other_allele_after_pon": 16,
+  "gained": 104,
+  "gained_after_pon": 22
+ },
+ "HG008T/Illumina/SNV/d9_readlevel": {
+  "lost": 293,
+  "lost_readlevel": 163,
+  "lost_readlevel_after_pon": 1,
+  "lost_other": 130,
+  "lost_other_after_pon": 35
+ },
+ "HG008T/PacBio/SNV/d9_readlevel": {
+  "lost": 333,
+  "lost_readlevel": 179,
+  "lost_readlevel_after_pon": 1,
+  "lost_other": 154,
+  "lost_other_after_pon": 31
+ },
+ "HG008T/ONT/SNV/d9_readlevel": {
+  "lost": 317,
+  "lost_readlevel": 169,
+  "lost_readlevel_after_pon": 1,
+  "lost_other": 148,
+  "lost_other_after_pon": 30
+ },
+ "HG008T/Illumina/INDEL/d9_readlevel": {
+  "lost": 3341,
+  "lost_readlevel": 1749,
+  "lost_readlevel_after_pon": 49,
+  "lost_other": 1592,
+  "lost_other_after_pon": 432
+ },
+ "HG008T/PacBio/INDEL/d9_readlevel": {
+  "lost": 3229,
+  "lost_readlevel": 1539,
+  "lost_readlevel_after_pon": 74,
+  "lost_other": 1690,
+  "lost_other_after_pon": 507
+ },
+ "HG008T/ONT/INDEL/d9_readlevel": {
+  "lost": 1847,
+  "lost_readlevel": 889,
+  "lost_readlevel_after_pon": 40,
+  "lost_other": 958,
+  "lost_other_after_pon": 259
+ },
+ "COLO829T/Illumina/SNV/d9_readlevel": {
+  "lost": 395,
+  "lost_readlevel": 60,
+  "lost_readlevel_after_pon": 1,
+  "lost_other": 335,
+  "lost_other_after_pon": 296
+ },
+ "COLO829T/fiberseq/SNV/d9_readlevel": {
+  "lost": 244,
+  "lost_readlevel": 60,
+  "lost_readlevel_after_pon": 1,
+  "lost_other": 184,
+  "lost_other_after_pon": 171
+ },
+ "COLO829T/ONT/SNV/d9_readlevel": {
+  "lost": 204,
+  "lost_readlevel": 55,
+  "lost_readlevel_after_pon": 1,
+  "lost_other": 149,
+  "lost_other_after_pon": 134
+ },
+ "COLO829T/Illumina/INDEL/d9_readlevel": {
+  "lost": 666,
+  "lost_readlevel": 368,
+  "lost_readlevel_after_pon": 7,
+  "lost_other": 298,
+  "lost_other_after_pon": 126
+ },
+ "COLO829T/fiberseq/INDEL/d9_readlevel": {
+  "lost": 642,
+  "lost_readlevel": 343,
+  "lost_readlevel_after_pon": 13,
+  "lost_other": 299,
+  "lost_other_after_pon": 146
+ },
+ "COLO829T/ONT/INDEL/d9_readlevel": {
+  "lost": 444,
+  "lost_readlevel": 236,
+  "lost_readlevel_after_pon": 9,
+  "lost_other": 208,
+  "lost_other_after_pon": 105
+ },
+ "HG008T/union/SNV/d9": {
+  "n": 8690,
+  "n_tagged": 910,
+  "lost_any": 426,
+  "lost_any_after_pon": 67,
+  "absorbed_any": 184,
+  "absorbed_any_after_pon": 0,
+  "lost_all": 200,
+  "lost_all_after_pon": 7,
+  "absorbed_all": 113,
+  "absorbed_all_after_pon": 0
+ },
+ "HG008T/union/SNV/d46": {
+  "n": 8690,
+  "n_tagged": 910,
+  "lost_any": 396,
+  "lost_any_after_pon": 63,
+  "absorbed_any": 140,
+  "absorbed_any_after_pon": 0,
+  "lost_all": 180,
+  "lost_all_after_pon": 8,
+  "absorbed_all": 91,
+  "absorbed_all_after_pon": 0
+ },
+ "HG008T/union/INDEL/d9": {
+  "n": 8496,
+  "n_tagged": 5245,
+  "lost_any": 4275,
+  "lost_any_after_pon": 720,
+  "absorbed_any": 1818,
+  "absorbed_any_after_pon": 59,
+  "lost_all": 1188,
+  "lost_all_after_pon": 175,
+  "absorbed_all": 315,
+  "absorbed_all_after_pon": 6
+ },
+ "HG008T/union/INDEL/d46": {
+  "n": 8496,
+  "n_tagged": 5245,
+  "lost_any": 4039,
+  "lost_any_after_pon": 704,
+  "absorbed_any": 1467,
+  "absorbed_any_after_pon": 51,
+  "lost_all": 1126,
+  "lost_all_after_pon": 170,
+  "absorbed_all": 345,
+  "absorbed_all_after_pon": 12
+ },
+ "COLO829T/union/SNV/d9": {
+  "n": 42035,
+  "n_tagged": 1442,
+  "lost_any": 489,
+  "lost_any_after_pon": 376,
+  "absorbed_any": 64,
+  "absorbed_any_after_pon": 1,
+  "lost_all": 119,
+  "lost_all_after_pon": 68,
+  "absorbed_all": 41,
+  "absorbed_all_after_pon": 0
+ },
+ "COLO829T/union/SNV/d46": {
+  "n": 42035,
+  "n_tagged": 1442,
+  "lost_any": 552,
+  "lost_any_after_pon": 438,
+  "absorbed_any": 54,
+  "absorbed_any_after_pon": 0,
+  "lost_all": 101,
+  "lost_all_after_pon": 56,
+  "absorbed_all": 35,
+  "absorbed_all_after_pon": 0
+ },
+ "COLO829T/union/INDEL/d9": {
+  "n": 1912,
+  "n_tagged": 983,
+  "lost_any": 799,
+  "lost_any_after_pon": 184,
+  "absorbed_any": 382,
+  "absorbed_any_after_pon": 6,
+  "lost_all": 323,
+  "lost_all_after_pon": 72,
+  "absorbed_all": 89,
+  "absorbed_all_after_pon": 0
+ },
+ "COLO829T/union/INDEL/d46": {
+  "n": 1912,
+  "n_tagged": 983,
+  "lost_any": 757,
+  "lost_any_after_pon": 180,
+  "absorbed_any": 347,
+  "absorbed_any_after_pon": 7,
+  "lost_all": 298,
+  "lost_all_after_pon": 71,
+  "absorbed_all": 99,
+  "absorbed_all_after_pon": 2
+ },
+ "HG008T/Illumina/SNV/d46_vs_d9": {
+  "d46_only": 79,
+  "d46_only_after_pon": 10,
+  "d46_only_d9_absorbed": 32,
+  "d9_only": 45,
+  "d9_only_after_pon": 8,
+  "d9_only_d46_absorbed": 15,
+  "net_after_pon": 2
+ },
+ "HG008T/PacBio/SNV/d46_vs_d9": {
+  "d46_only": 71,
+  "d46_only_after_pon": 12,
+  "d46_only_d9_absorbed": 36,
+  "d9_only": 53,
+  "d9_only_after_pon": 13,
+  "d9_only_d46_absorbed": 14,
+  "net_after_pon": -1
+ },
+ "HG008T/ONT/SNV/d46_vs_d9": {
+  "d46_only": 71,
+  "d46_only_after_pon": 16,
+  "d46_only_d9_absorbed": 27,
+  "d9_only": 49,
+  "d9_only_after_pon": 9,
+  "d9_only_d46_absorbed": 15,
+  "net_after_pon": 7
+ },
+ "HG008T/Illumina/INDEL/d46_vs_d9": {
+  "d46_only": 466,
+  "d46_only_after_pon": 87,
+  "d46_only_d9_absorbed": 266,
+  "d9_only": 200,
+  "d9_only_after_pon": 57,
+  "d9_only_d46_absorbed": 64,
+  "net_after_pon": 30
+ },
+ "HG008T/PacBio/INDEL/d46_vs_d9": {
+  "d46_only": 396,
+  "d46_only_after_pon": 67,
+  "d46_only_d9_absorbed": 132,
+  "d9_only": 232,
+  "d9_only_after_pon": 48,
+  "d9_only_d46_absorbed": 76,
+  "net_after_pon": 19
+ },
+ "HG008T/ONT/INDEL/d46_vs_d9": {
+  "d46_only": 415,
+  "d46_only_after_pon": 66,
+  "d46_only_d9_absorbed": 92,
+  "d9_only": 401,
+  "d9_only_after_pon": 65,
+  "d9_only_d46_absorbed": 106,
+  "net_after_pon": 1
+ },
+ "COLO829T/Illumina/SNV/d46_vs_d9": {
+  "d46_only": 100,
+  "d46_only_after_pon": 80,
+  "d46_only_d9_absorbed": 10,
+  "d9_only": 103,
+  "d9_only_after_pon": 90,
+  "d9_only_d46_absorbed": 4,
+  "net_after_pon": -10
+ },
+ "COLO829T/fiberseq/SNV/d46_vs_d9": {
+  "d46_only": 95,
+  "d46_only_after_pon": 77,
+  "d46_only_d9_absorbed": 10,
+  "d9_only": 115,
+  "d9_only_after_pon": 100,
+  "d9_only_d46_absorbed": 4,
+  "net_after_pon": -23
+ },
+ "COLO829T/ONT/SNV/d46_vs_d9": {
+  "d46_only": 120,
+  "d46_only_after_pon": 102,
+  "d46_only_d9_absorbed": 11,
+  "d9_only": 129,
+  "d9_only_after_pon": 115,
+  "d9_only_d46_absorbed": 3,
+  "net_after_pon": -13
+ },
+ "COLO829T/Illumina/INDEL/d46_vs_d9": {
+  "d46_only": 96,
+  "d46_only_after_pon": 16,
+  "d46_only_d9_absorbed": 54,
+  "d9_only": 33,
+  "d9_only_after_pon": 4,
+  "d9_only_d46_absorbed": 18,
+  "net_after_pon": 12
+ },
+ "COLO829T/fiberseq/INDEL/d46_vs_d9": {
+  "d46_only": 88,
+  "d46_only_after_pon": 11,
+  "d46_only_d9_absorbed": 26,
+  "d9_only": 38,
+  "d9_only_after_pon": 9,
+  "d9_only_d46_absorbed": 12,
+  "net_after_pon": 2
+ },
+ "COLO829T/ONT/INDEL/d46_vs_d9": {
+  "d46_only": 84,
+  "d46_only_after_pon": 15,
+  "d46_only_d9_absorbed": 14,
+  "d9_only": 76,
+  "d9_only_after_pon": 21,
+  "d9_only_d46_absorbed": 11,
+  "net_after_pon": -6
+ },
+ "HG008T/spelled/SNV": {
+  "n": 8690,
+  "d9": 215,
+  "d46": 153,
+  "d9_only": 87,
+  "d46_only": 25,
+  "both": 128,
+  "d46_tagged": 153
+ },
+ "HG008T/spelled/INDEL": {
+  "n": 8496,
+  "d9": 2319,
+  "d46": 1809,
+  "d9_only": 716,
+  "d46_only": 206,
+  "both": 1603,
+  "d46_tagged": 1740
+ },
+ "COLO829T/spelled/SNV": {
+  "n": 42035,
+  "d9": 83,
+  "d46": 70,
+  "d9_only": 18,
+  "d46_only": 5,
+  "both": 65,
+  "d46_tagged": 69
+ },
+ "COLO829T/spelled/INDEL": {
+  "n": 1912,
+  "d9": 457,
+  "d46": 398,
+  "d9_only": 112,
+  "d46_only": 53,
+  "both": 345,
+  "d46_tagged": 389
+ },
+ "HCC1395T/spelled/SNV": {
+  "n": 39447,
+  "d9": 202,
+  "d46": 228,
+  "d9_only": 9,
+  "d46_only": 35,
+  "both": 193,
+  "d46_tagged": 228
+ },
+ "HCC1395T/spelled/INDEL": {
+  "n": 1625,
+  "d9": 52,
+  "d46": 47,
+  "d9_only": 8,
+  "d46_only": 3,
+  "both": 44,
+  "d46_tagged": 47
+ },
+ "HG008T/validation/SNV": {
+  "read_level": 201,
+  "spelled": 145,
+  "no_cand_now": 201,
+  "mine": 188,
+  "mine_in_read_level": 145
+ },
+ "HG008T/validation/INDEL": {
+  "read_level": 2277,
+  "spelled": 1839,
+  "no_cand_now": 2277,
+  "mine": 2039,
+  "mine_in_read_level": 1839
+ },
+ "COLO829T/validation/SNV": {
+  "read_level": 67,
+  "spelled": 64,
+  "no_cand_now": 67,
+  "mine": 66,
+  "mine_in_read_level": 64
+ },
+ "COLO829T/validation/INDEL": {
+  "read_level": 430,
+  "spelled": 382,
+  "no_cand_now": 430,
+  "mine": 402,
+  "mine_in_read_level": 382
+ },
+ "HCC1395T/Illumina/SNV/d46": {
+  "n": 39447,
+  "tensor": 35266,
+  "no_candidate": 436,
+  "absorbed": 225,
+  "absorbed_after_pon": 0,
+  "filtered": 3745
+ },
+ "HCC1395T/Illumina/INDEL/d46": {
+  "n": 1625,
+  "tensor": 1346,
+  "no_candidate": 77,
+  "absorbed": 46,
+  "absorbed_after_pon": 0,
+  "filtered": 198
+ },
+ "HCC1395T/PacBio/SNV/d46": {
+  "n": 39447,
+  "tensor": 34374,
+  "no_candidate": 824,
+  "absorbed": 225,
+  "absorbed_after_pon": 0,
+  "filtered": 4248
+ },
+ "HCC1395T/PacBio/INDEL/d46": {
+  "n": 1625,
+  "tensor": 1375,
+  "no_candidate": 75,
+  "absorbed": 33,
+  "absorbed_after_pon": 0,
+  "filtered": 166
+ },
+ "HCC1395T/ONT/SNV/d46": {
+  "n": 39447,
+  "tensor": 30869,
+  "no_candidate": 2481,
+  "absorbed": 226,
+  "absorbed_after_pon": 0,
+  "filtered": 6095
+ },
+ "HCC1395T/ONT/INDEL/d46": {
+  "n": 1625,
+  "tensor": 1239,
+  "no_candidate": 130,
+  "absorbed": 26,
+  "absorbed_after_pon": 0,
+  "filtered": 235
+ },
+ "HG008T/Illumina/INDEL/chr1bed/d9": {
+  "n": 588,
+  "not_tagged": 209,
+  "lost_after_pon": 27,
+  "absorbed_after_pon": 0,
+  "tensor_not_tagged": {
+   "linear": 170,
+   "d9": 151,
+   "d46": 153
+  }
+ },
+ "HG008T/Illumina/INDEL/chr1bed/d46": {
+  "n": 588,
+  "not_tagged": 209,
+  "lost_after_pon": 25,
+  "absorbed_after_pon": 2,
+  "tensor_not_tagged": {
+   "linear": 170,
+   "d9": 151,
+   "d46": 153
+  }
+ },
+ "HG008T/PacBio/INDEL/chr1bed/d9": {
+  "n": 588,
+  "not_tagged": 209,
+  "lost_after_pon": 30,
+  "absorbed_after_pon": 1,
+  "tensor_not_tagged": {
+   "linear": 181,
+   "d9": 153,
+   "d46": 153
+  }
+ },
+ "HG008T/PacBio/INDEL/chr1bed/d46": {
+  "n": 588,
+  "not_tagged": 209,
+  "lost_after_pon": 31,
+  "absorbed_after_pon": 2,
+  "tensor_not_tagged": {
+   "linear": 181,
+   "d9": 153,
+   "d46": 153
+  }
+ },
+ "HG008T/ONT/INDEL/chr1bed/d9": {
+  "n": 588,
+  "not_tagged": 209,
+  "lost_after_pon": 18,
+  "absorbed_after_pon": 1,
+  "tensor_not_tagged": {
+   "linear": 157,
+   "d9": 148,
+   "d46": 145
+  }
+ },
+ "HG008T/ONT/INDEL/chr1bed/d46": {
+  "n": 588,
+  "not_tagged": 209,
+  "lost_after_pon": 20,
+  "absorbed_after_pon": 2,
+  "tensor_not_tagged": {
+   "linear": 157,
+   "d9": 148,
+   "d46": 145
+  }
+ },
+ "COLO829T/Illumina/INDEL/chr1bed/d9": {
+  "n": 131,
+  "not_tagged": 50,
+  "lost_after_pon": 11,
+  "absorbed_after_pon": 1,
+  "tensor_not_tagged": {
+   "linear": 47,
+   "d9": 36,
+   "d46": 36
+  }
+ },
+ "COLO829T/Illumina/INDEL/chr1bed/d46": {
+  "n": 131,
+  "not_tagged": 50,
+  "lost_after_pon": 11,
+  "absorbed_after_pon": 1,
+  "tensor_not_tagged": {
+   "linear": 47,
+   "d9": 36,
+   "d46": 36
+  }
+ },
+ "COLO829T/fiberseq/INDEL/chr1bed/d9": {
+  "n": 131,
+  "not_tagged": 50,
+  "lost_after_pon": 13,
+  "absorbed_after_pon": 1,
+  "tensor_not_tagged": {
+   "linear": 50,
+   "d9": 37,
+   "d46": 37
+  }
+ },
+ "COLO829T/fiberseq/INDEL/chr1bed/d46": {
+  "n": 131,
+  "not_tagged": 50,
+  "lost_after_pon": 13,
+  "absorbed_after_pon": 1,
+  "tensor_not_tagged": {
+   "linear": 50,
+   "d9": 37,
+   "d46": 37
+  }
+ },
+ "COLO829T/ONT/INDEL/chr1bed/d9": {
+  "n": 131,
+  "not_tagged": 50,
+  "lost_after_pon": 10,
+  "absorbed_after_pon": 0,
+  "tensor_not_tagged": {
+   "linear": 44,
+   "d9": 34,
+   "d46": 34
+  }
+ },
+ "COLO829T/ONT/INDEL/chr1bed/d46": {
+  "n": 131,
+  "not_tagged": 50,
+  "lost_after_pon": 10,
+  "absorbed_after_pon": 1,
+  "tensor_not_tagged": {
+   "linear": 44,
+   "d9": 34,
+   "d46": 34
+  }
+ }
+}

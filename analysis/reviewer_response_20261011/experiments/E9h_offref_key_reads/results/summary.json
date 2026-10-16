@@ -1,0 +1,3642 @@
+{
+ "sets": {
+  "HG008T_Illumina": {
+   "n": 184,
+   "chr1_n": 10,
+   "graph": "d9",
+   "run": "",
+   "query_status": {
+    "30": {
+     "ok": 184
+    },
+    "50": {
+     "ok": 184
+    }
+   },
+   "n_a1_median": 30,
+   "event_kind": {
+    "INDEL": 130,
+    "SNV": 54
+   },
+   "repeat_context": {
+    "homopolymer>=7": 128,
+    "STR": 45,
+    "other": 11
+   },
+   "classes": {
+    "h30_earlier": {
+     "counts": {
+      "tumor_only": 32,
+      "normal": 135,
+      "neither": 10,
+      "ambiguous": 7
+     },
+     "chr1": {
+      "tumor_only": 4,
+      "normal": 6,
+      "neither": 0,
+      "ambiguous": 0
+     },
+     "why": {
+      "ambiguous:paralog": 7,
+      "neither:": 10,
+      "normal:at_locus": 116,
+      "normal:elsewhere": 19,
+      "tumor_only:at_locus": 28,
+      "tumor_only:elsewhere": 4
+     },
+     "by_event_kind": {
+      "SNV": {
+       "tumor_only": 23,
+       "normal": 22,
+       "neither": 4,
+       "ambiguous": 5
+      },
+      "INDEL": {
+       "tumor_only": 9,
+       "normal": 113,
+       "neither": 6,
+       "ambiguous": 2
+      }
+     },
+     "by_repeat": {
+      "homopolymer>=7": {
+       "tumor_only": 16,
+       "normal": 102,
+       "neither": 6,
+       "ambiguous": 4
+      },
+      "STR": {
+       "tumor_only": 8,
+       "normal": 30,
+       "neither": 4,
+       "ambiguous": 3
+      },
+      "other": {
+       "tumor_only": 8,
+       "normal": 3,
+       "neither": 0,
+       "ambiguous": 0
+      }
+     }
+    },
+    "h30_strict": {
+     "counts": {
+      "tumor_only": 69,
+      "normal": 96,
+      "neither": 12,
+      "ambiguous": 7
+     },
+     "chr1": {
+      "tumor_only": 6,
+      "normal": 4,
+      "neither": 0,
+      "ambiguous": 0
+     },
+     "why": {
+      "ambiguous:paralog": 7,
+      "neither:": 12,
+      "normal:at_locus": 78,
+      "normal:elsewhere": 18,
+      "tumor_only:at_locus": 65,
+      "tumor_only:elsewhere": 4
+     },
+     "by_event_kind": {
+      "SNV": {
+       "tumor_only": 26,
+       "normal": 18,
+       "neither": 5,
+       "ambiguous": 5
+      },
+      "INDEL": {
+       "tumor_only": 43,
+       "normal": 78,
+       "neither": 7,
+       "ambiguous": 2
+      }
+     },
+     "by_repeat": {
+      "homopolymer>=7": {
+       "tumor_only": 52,
+       "normal": 64,
+       "neither": 8,
+       "ambiguous": 4
+      },
+      "STR": {
+       "tumor_only": 9,
+       "normal": 29,
+       "neither": 4,
+       "ambiguous": 3
+      },
+      "other": {
+       "tumor_only": 8,
+       "normal": 3,
+       "neither": 0,
+       "ambiguous": 0
+      }
+     }
+    },
+    "h50_earlier": {
+     "counts": {
+      "tumor_only": 56,
+      "normal": 108,
+      "neither": 15,
+      "ambiguous": 5
+     },
+     "chr1": {
+      "tumor_only": 5,
+      "normal": 4,
+      "neither": 0,
+      "ambiguous": 1
+     },
+     "why": {
+      "ambiguous:paralog": 5,
+      "neither:": 15,
+      "normal:at_locus": 108,
+      "tumor_only:at_locus": 55,
+      "tumor_only:elsewhere": 1
+     },
+     "by_event_kind": {
+      "SNV": {
+       "tumor_only": 32,
+       "normal": 13,
+       "neither": 6,
+       "ambiguous": 3
+      },
+      "INDEL": {
+       "tumor_only": 24,
+       "normal": 95,
+       "neither": 9,
+       "ambiguous": 2
+      }
+     },
+     "by_repeat": {
+      "homopolymer>=7": {
+       "tumor_only": 23,
+       "normal": 92,
+       "neither": 13,
+       "ambiguous": 0
+      },
+      "STR": {
+       "tumor_only": 24,
+       "normal": 14,
+       "neither": 2,
+       "ambiguous": 5
+      },
+      "other": {
+       "tumor_only": 9,
+       "normal": 2,
+       "neither": 0,
+       "ambiguous": 0
+      }
+     }
+    },
+    "h50_strict": {
+     "counts": {
+      "tumor_only": 115,
+      "normal": 48,
+      "neither": 17,
+      "ambiguous": 4
+     },
+     "chr1": {
+      "tumor_only": 9,
+      "normal": 1,
+      "neither": 0,
+      "ambiguous": 0
+     },
+     "why": {
+      "ambiguous:paralog": 4,
+      "neither:": 17,
+      "normal:at_locus": 48,
+      "tumor_only:at_locus": 114,
+      "tumor_only:elsewhere": 1
+     },
+     "by_event_kind": {
+      "SNV": {
+       "tumor_only": 36,
+       "normal": 9,
+       "neither": 6,
+       "ambiguous": 3
+      },
+      "INDEL": {
+       "tumor_only": 79,
+       "normal": 39,
+       "neither": 11,
+       "ambiguous": 1
+      }
+     },
+     "by_repeat": {
+      "homopolymer>=7": {
+       "tumor_only": 80,
+       "normal": 33,
+       "neither": 15,
+       "ambiguous": 0
+      },
+      "STR": {
+       "tumor_only": 26,
+       "normal": 13,
+       "neither": 2,
+       "ambiguous": 4
+      },
+      "other": {
+       "tumor_only": 9,
+       "normal": 2,
+       "neither": 0,
+       "ambiguous": 0
+      }
+     }
+    }
+   },
+   "earlier_normal_indel_only": {
+    "30": 37,
+    "50": 57
+   },
+   "transition_h30_earlier_to_strict": {
+    "ambiguous->ambiguous": 7,
+    "neither->neither": 10,
+    "normal->neither": 1,
+    "normal->normal": 96,
+    "normal->tumor_only": 38,
+    "tumor_only->neither": 1,
+    "tumor_only->tumor_only": 31
+   },
+   "normal_at_locus_hap": {
+    "h30_earlier": {
+     "both": 56,
+     "own": 58,
+     "other": 2
+    },
+    "h30_strict": {
+     "both": 44,
+     "own": 34
+    },
+    "h50_earlier": {
+     "both": 51,
+     "own": 54,
+     "other": 3
+    },
+    "h50_strict": {
+     "both": 26,
+     "own": 22
+    }
+   },
+   "class_by_event_T_context": {
+    "h30_earlier": {
+     "ambiguous|ambiguous": 4,
+     "ambiguous|normal": 3,
+     "neither|ambiguous": 1,
+     "neither|neither": 1,
+     "neither|normal": 8,
+     "normal|ambiguous": 3,
+     "normal|neither": 5,
+     "normal|normal": 118,
+     "normal|tumor_only": 9,
+     "tumor_only|normal": 8,
+     "tumor_only|tumor_only": 24
+    },
+    "h30_strict": {
+     "ambiguous|ambiguous": 4,
+     "ambiguous|normal": 3,
+     "neither|ambiguous": 1,
+     "neither|neither": 2,
+     "neither|normal": 4,
+     "neither|tumor_only": 5,
+     "normal|ambiguous": 3,
+     "normal|neither": 3,
+     "normal|normal": 43,
+     "normal|tumor_only": 47,
+     "tumor_only|neither": 1,
+     "tumor_only|normal": 6,
+     "tumor_only|tumor_only": 62
+    },
+    "h50_earlier": {
+     "ambiguous|ambiguous": 4,
+     "ambiguous|tumor_only": 1,
+     "neither|normal": 5,
+     "neither|tumor_only": 10,
+     "normal|normal": 92,
+     "normal|tumor_only": 16,
+     "tumor_only|normal": 12,
+     "tumor_only|tumor_only": 44
+    },
+    "h50_strict": {
+     "ambiguous|ambiguous": 3,
+     "ambiguous|tumor_only": 1,
+     "neither|tumor_only": 17,
+     "normal|normal": 9,
+     "normal|tumor_only": 39,
+     "tumor_only|ambiguous": 1,
+     "tumor_only|normal": 11,
+     "tumor_only|tumor_only": 103
+    }
+   },
+   "tumor_only_at_locus": {
+    "h30_earlier": 28,
+    "h30_strict": 65,
+    "h50_earlier": 55,
+    "h50_strict": 114
+   },
+   "vs_e9d_h50_strict": {
+    "germline|ambiguous": 3,
+    "germline|neither": 5,
+    "germline|normal": 47,
+    "germline|tumor_only": 3,
+    "tumor_only|ambiguous": 1,
+    "tumor_only|neither": 5,
+    "tumor_only|tumor_only": 106,
+    "unsupported|neither": 3,
+    "unsupported|normal": 1,
+    "unsupported|tumor_only": 3,
+    "unverifiable|neither": 4,
+    "unverifiable|tumor_only": 3
+   },
+   "vs_e9d_h30_earlier": {
+    "germline|ambiguous": 1,
+    "germline|neither": 2,
+    "germline|normal": 52,
+    "germline|tumor_only": 3,
+    "tumor_only|ambiguous": 5,
+    "tumor_only|neither": 4,
+    "tumor_only|normal": 77,
+    "tumor_only|tumor_only": 26,
+    "unsupported|neither": 2,
+    "unsupported|normal": 3,
+    "unsupported|tumor_only": 2,
+    "unverifiable|ambiguous": 1,
+    "unverifiable|neither": 2,
+    "unverifiable|normal": 3,
+    "unverifiable|tumor_only": 1
+   },
+   "vs_old": {
+    "neither|ambiguous": 3,
+    "neither|neither": 9,
+    "neither|normal": 14,
+    "neither|tumor_only": 6,
+    "normal|ambiguous": 4,
+    "normal|neither": 1,
+    "normal|normal": 117,
+    "tumor|normal": 4,
+    "tumor|tumor_only": 26
+   },
+   "old_query_same": {
+    "True": 184
+   }
+  },
+  "HG008T_PacBio": {
+   "n": 112,
+   "chr1_n": 8,
+   "graph": "d9",
+   "run": "HG008_PacBio_SNV_7fc7396",
+   "query_status": {
+    "30": {
+     "ok": 112
+    },
+    "50": {
+     "ok": 112
+    }
+   },
+   "n_a1_median": 21,
+   "event_kind": {
+    "INDEL": 76,
+    "SNV": 36
+   },
+   "repeat_context": {
+    "homopolymer>=7": 82,
+    "STR": 22,
+    "other": 8
+   },
+   "classes": {
+    "h30_earlier": {
+     "counts": {
+      "tumor_only": 21,
+      "normal": 84,
+      "neither": 1,
+      "ambiguous": 6
+     },
+     "chr1": {
+      "tumor_only": 4,
+      "normal": 3,
+      "neither": 0,
+      "ambiguous": 1
+     },
+     "why": {
+      "ambiguous:paralog": 6,
+      "neither:": 1,
+      "normal:at_locus": 69,
+      "normal:elsewhere": 15,
+      "tumor_only:at_locus": 19,
+      "tumor_only:elsewhere": 2
+     },
+     "by_event_kind": {
+      "SNV": {
+       "tumor_only": 17,
+       "normal": 14,
+       "neither": 0,
+       "ambiguous": 5
+      },
+      "INDEL": {
+       "tumor_only": 4,
+       "normal": 70,
+       "neither": 1,
+       "ambiguous": 1
+      }
+     },
+     "by_repeat": {
+      "homopolymer>=7": {
+       "tumor_only": 10,
+       "normal": 69,
+       "neither": 1,
+       "ambiguous": 2
+      },
+      "STR": {
+       "tumor_only": 5,
+       "normal": 13,
+       "neither": 0,
+       "ambiguous": 4
+      },
+      "other": {
+       "tumor_only": 6,
+       "normal": 2,
+       "neither": 0,
+       "ambiguous": 0
+      }
+     },
+     "calls": {
+      "tumor_only": {
+       "n": 21,
+       "chr1_n": 4,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 7,
+       "rescue_t": 12,
+       "allH_t": 14,
+       "allH_argmax": 12,
+       "chr1_rescue_argmax": 1
+      },
+      "normal": {
+       "n": 84,
+       "chr1_n": 3,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 23,
+       "rescue_t": 31,
+       "allH_t": 42,
+       "allH_argmax": 29,
+       "chr1_rescue_argmax": 2
+      },
+      "neither": {
+       "n": 1,
+       "chr1_n": 0,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 0,
+       "rescue_t": 0,
+       "allH_t": 1,
+       "allH_argmax": 0,
+       "chr1_rescue_argmax": 0
+      },
+      "ambiguous": {
+       "n": 6,
+       "chr1_n": 1,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 2,
+       "rescue_t": 2,
+       "allH_t": 4,
+       "allH_argmax": 3,
+       "chr1_rescue_argmax": 0
+      },
+      "all": {
+       "n": 112,
+       "chr1_n": 8,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 32,
+       "rescue_t": 45,
+       "allH_t": 61,
+       "allH_argmax": 44,
+       "chr1_rescue_argmax": 3
+      }
+     }
+    },
+    "h30_strict": {
+     "counts": {
+      "tumor_only": 45,
+      "normal": 57,
+      "neither": 4,
+      "ambiguous": 6
+     },
+     "chr1": {
+      "tumor_only": 5,
+      "normal": 2,
+      "neither": 0,
+      "ambiguous": 1
+     },
+     "why": {
+      "ambiguous:paralog": 6,
+      "neither:": 4,
+      "normal:at_locus": 41,
+      "normal:elsewhere": 16,
+      "tumor_only:at_locus": 43,
+      "tumor_only:elsewhere": 2
+     },
+     "by_event_kind": {
+      "SNV": {
+       "tumor_only": 18,
+       "normal": 12,
+       "neither": 1,
+       "ambiguous": 5
+      },
+      "INDEL": {
+       "tumor_only": 27,
+       "normal": 45,
+       "neither": 3,
+       "ambiguous": 1
+      }
+     },
+     "by_repeat": {
+      "homopolymer>=7": {
+       "tumor_only": 34,
+       "normal": 42,
+       "neither": 4,
+       "ambiguous": 2
+      },
+      "STR": {
+       "tumor_only": 5,
+       "normal": 13,
+       "neither": 0,
+       "ambiguous": 4
+      },
+      "other": {
+       "tumor_only": 6,
+       "normal": 2,
+       "neither": 0,
+       "ambiguous": 0
+      }
+     },
+     "calls": {
+      "tumor_only": {
+       "n": 45,
+       "chr1_n": 5,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 18,
+       "rescue_t": 26,
+       "allH_t": 29,
+       "allH_argmax": 23,
+       "chr1_rescue_argmax": 2
+      },
+      "normal": {
+       "n": 57,
+       "chr1_n": 2,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 11,
+       "rescue_t": 16,
+       "allH_t": 26,
+       "allH_argmax": 17,
+       "chr1_rescue_argmax": 1
+      },
+      "neither": {
+       "n": 4,
+       "chr1_n": 0,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 1,
+       "rescue_t": 1,
+       "allH_t": 2,
+       "allH_argmax": 1,
+       "chr1_rescue_argmax": 0
+      },
+      "ambiguous": {
+       "n": 6,
+       "chr1_n": 1,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 2,
+       "rescue_t": 2,
+       "allH_t": 4,
+       "allH_argmax": 3,
+       "chr1_rescue_argmax": 0
+      },
+      "all": {
+       "n": 112,
+       "chr1_n": 8,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 32,
+       "rescue_t": 45,
+       "allH_t": 61,
+       "allH_argmax": 44,
+       "chr1_rescue_argmax": 3
+      }
+     }
+    },
+    "h50_earlier": {
+     "counts": {
+      "tumor_only": 40,
+      "normal": 66,
+      "neither": 3,
+      "ambiguous": 3
+     },
+     "chr1": {
+      "tumor_only": 4,
+      "normal": 3,
+      "neither": 0,
+      "ambiguous": 1
+     },
+     "why": {
+      "ambiguous:paralog": 3,
+      "neither:": 3,
+      "normal:at_locus": 65,
+      "normal:elsewhere": 1,
+      "tumor_only:at_locus": 40
+     },
+     "by_event_kind": {
+      "SNV": {
+       "tumor_only": 24,
+       "normal": 9,
+       "neither": 1,
+       "ambiguous": 2
+      },
+      "INDEL": {
+       "tumor_only": 16,
+       "normal": 57,
+       "neither": 2,
+       "ambiguous": 1
+      }
+     },
+     "by_repeat": {
+      "homopolymer>=7": {
+       "tumor_only": 21,
+       "normal": 57,
+       "neither": 3,
+       "ambiguous": 1
+      },
+      "STR": {
+       "tumor_only": 13,
+       "normal": 7,
+       "neither": 0,
+       "ambiguous": 2
+      },
+      "other": {
+       "tumor_only": 6,
+       "normal": 2,
+       "neither": 0,
+       "ambiguous": 0
+      }
+     },
+     "calls": {
+      "tumor_only": {
+       "n": 40,
+       "chr1_n": 4,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 9,
+       "rescue_t": 15,
+       "allH_t": 23,
+       "allH_argmax": 16,
+       "chr1_rescue_argmax": 1
+      },
+      "normal": {
+       "n": 66,
+       "chr1_n": 3,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 22,
+       "rescue_t": 29,
+       "allH_t": 36,
+       "allH_argmax": 27,
+       "chr1_rescue_argmax": 1
+      },
+      "neither": {
+       "n": 3,
+       "chr1_n": 0,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 0,
+       "rescue_t": 0,
+       "allH_t": 1,
+       "allH_argmax": 0,
+       "chr1_rescue_argmax": 0
+      },
+      "ambiguous": {
+       "n": 3,
+       "chr1_n": 1,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 1,
+       "rescue_t": 1,
+       "allH_t": 1,
+       "allH_argmax": 1,
+       "chr1_rescue_argmax": 1
+      },
+      "all": {
+       "n": 112,
+       "chr1_n": 8,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 32,
+       "rescue_t": 45,
+       "allH_t": 61,
+       "allH_argmax": 44,
+       "chr1_rescue_argmax": 3
+      }
+     }
+    },
+    "h50_strict": {
+     "counts": {
+      "tumor_only": 72,
+      "normal": 28,
+      "neither": 11,
+      "ambiguous": 1
+     },
+     "chr1": {
+      "tumor_only": 7,
+      "normal": 1,
+      "neither": 0,
+      "ambiguous": 0
+     },
+     "why": {
+      "ambiguous:paralog": 1,
+      "neither:": 11,
+      "normal:at_locus": 26,
+      "normal:elsewhere": 2,
+      "tumor_only:at_locus": 72
+     },
+     "by_event_kind": {
+      "SNV": {
+       "tumor_only": 25,
+       "normal": 6,
+       "neither": 4,
+       "ambiguous": 1
+      },
+      "INDEL": {
+       "tumor_only": 47,
+       "normal": 22,
+       "neither": 7,
+       "ambiguous": 0
+      }
+     },
+     "by_repeat": {
+      "homopolymer>=7": {
+       "tumor_only": 52,
+       "normal": 19,
+       "neither": 11,
+       "ambiguous": 0
+      },
+      "STR": {
+       "tumor_only": 14,
+       "normal": 7,
+       "neither": 0,
+       "ambiguous": 1
+      },
+      "other": {
+       "tumor_only": 6,
+       "normal": 2,
+       "neither": 0,
+       "ambiguous": 0
+      }
+     },
+     "calls": {
+      "tumor_only": {
+       "n": 72,
+       "chr1_n": 7,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 22,
+       "rescue_t": 33,
+       "allH_t": 43,
+       "allH_argmax": 31,
+       "chr1_rescue_argmax": 3
+      },
+      "normal": {
+       "n": 28,
+       "chr1_n": 1,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 9,
+       "rescue_t": 11,
+       "allH_t": 15,
+       "allH_argmax": 11,
+       "chr1_rescue_argmax": 0
+      },
+      "neither": {
+       "n": 11,
+       "chr1_n": 0,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 1,
+       "rescue_t": 1,
+       "allH_t": 3,
+       "allH_argmax": 2,
+       "chr1_rescue_argmax": 0
+      },
+      "ambiguous": {
+       "n": 1,
+       "chr1_n": 0,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 0,
+       "rescue_t": 0,
+       "allH_t": 0,
+       "allH_argmax": 0,
+       "chr1_rescue_argmax": 0
+      },
+      "all": {
+       "n": 112,
+       "chr1_n": 8,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 32,
+       "rescue_t": 45,
+       "allH_t": 61,
+       "allH_argmax": 44,
+       "chr1_rescue_argmax": 3
+      }
+     }
+    }
+   },
+   "earlier_normal_indel_only": {
+    "30": 26,
+    "50": 37
+   },
+   "transition_h30_earlier_to_strict": {
+    "ambiguous->ambiguous": 6,
+    "neither->neither": 1,
+    "normal->normal": 57,
+    "normal->tumor_only": 27,
+    "tumor_only->neither": 3,
+    "tumor_only->tumor_only": 18
+   },
+   "normal_at_locus_hap": {
+    "h30_earlier": {
+     "both": 30,
+     "own": 37,
+     "other": 2
+    },
+    "h30_strict": {
+     "both": 23,
+     "own": 18
+    },
+    "h50_earlier": {
+     "both": 27,
+     "own": 36,
+     "other": 2
+    },
+    "h50_strict": {
+     "own": 11,
+     "both": 15
+    }
+   },
+   "class_by_event_T_context": {
+    "h30_earlier": {
+     "ambiguous|ambiguous": 3,
+     "ambiguous|normal": 3,
+     "neither|normal": 1,
+     "normal|ambiguous": 1,
+     "normal|neither": 2,
+     "normal|normal": 76,
+     "normal|tumor_only": 5,
+     "tumor_only|normal": 4,
+     "tumor_only|tumor_only": 17
+    },
+    "h30_strict": {
+     "ambiguous|ambiguous": 3,
+     "ambiguous|normal": 3,
+     "neither|tumor_only": 4,
+     "normal|ambiguous": 1,
+     "normal|neither": 1,
+     "normal|normal": 28,
+     "normal|tumor_only": 27,
+     "tumor_only|neither": 1,
+     "tumor_only|normal": 2,
+     "tumor_only|tumor_only": 42
+    },
+    "h50_earlier": {
+     "ambiguous|ambiguous": 2,
+     "ambiguous|tumor_only": 1,
+     "neither|normal": 2,
+     "neither|tumor_only": 1,
+     "normal|normal": 56,
+     "normal|tumor_only": 10,
+     "tumor_only|normal": 11,
+     "tumor_only|tumor_only": 29
+    },
+    "h50_strict": {
+     "ambiguous|ambiguous": 1,
+     "neither|tumor_only": 11,
+     "normal|normal": 6,
+     "normal|tumor_only": 22,
+     "tumor_only|ambiguous": 1,
+     "tumor_only|normal": 7,
+     "tumor_only|tumor_only": 64
+    }
+   },
+   "tumor_only_at_locus": {
+    "h30_earlier": 19,
+    "h30_strict": 43,
+    "h50_earlier": 40,
+    "h50_strict": 72
+   },
+   "vs_e9d_h50_strict": {
+    "absent|normal": 2,
+    "absent|tumor_only": 3,
+    "germline|ambiguous": 1,
+    "germline|normal": 25,
+    "tumor_only|neither": 1,
+    "tumor_only|tumor_only": 69,
+    "unsupported|neither": 3,
+    "unverifiable|neither": 7,
+    "unverifiable|normal": 1
+   },
+   "vs_e9d_h30_earlier": {
+    "absent|normal": 5,
+    "germline|ambiguous": 1,
+    "germline|normal": 24,
+    "germline|tumor_only": 1,
+    "tumor_only|ambiguous": 5,
+    "tumor_only|neither": 1,
+    "tumor_only|normal": 48,
+    "tumor_only|tumor_only": 16,
+    "unsupported|normal": 1,
+    "unsupported|tumor_only": 2,
+    "unverifiable|normal": 6,
+    "unverifiable|tumor_only": 2
+   }
+  },
+  "HG008T_ONT": {
+   "n": 89,
+   "chr1_n": 8,
+   "graph": "d9",
+   "run": "HG008_ONT_SNV_7fc7396",
+   "query_status": {
+    "30": {
+     "ok": 89
+    },
+    "50": {
+     "ok": 89
+    }
+   },
+   "n_a1_median": 7,
+   "event_kind": {
+    "INDEL": 61,
+    "SNV": 28
+   },
+   "repeat_context": {
+    "homopolymer>=7": 63,
+    "STR": 19,
+    "other": 7
+   },
+   "classes": {
+    "h30_earlier": {
+     "counts": {
+      "tumor_only": 24,
+      "normal": 57,
+      "neither": 4,
+      "ambiguous": 4
+     },
+     "chr1": {
+      "tumor_only": 4,
+      "normal": 3,
+      "neither": 0,
+      "ambiguous": 1
+     },
+     "why": {
+      "ambiguous:paralog": 4,
+      "neither:": 4,
+      "normal:at_locus": 49,
+      "normal:elsewhere": 8,
+      "tumor_only:at_locus": 22,
+      "tumor_only:elsewhere": 2
+     },
+     "by_event_kind": {
+      "SNV": {
+       "tumor_only": 18,
+       "normal": 6,
+       "neither": 1,
+       "ambiguous": 3
+      },
+      "INDEL": {
+       "tumor_only": 6,
+       "normal": 51,
+       "neither": 3,
+       "ambiguous": 1
+      }
+     },
+     "by_repeat": {
+      "homopolymer>=7": {
+       "tumor_only": 12,
+       "normal": 47,
+       "neither": 3,
+       "ambiguous": 1
+      },
+      "STR": {
+       "tumor_only": 6,
+       "normal": 9,
+       "neither": 1,
+       "ambiguous": 3
+      },
+      "other": {
+       "tumor_only": 6,
+       "normal": 1,
+       "neither": 0,
+       "ambiguous": 0
+      }
+     },
+     "calls": {
+      "tumor_only": {
+       "n": 24,
+       "chr1_n": 4,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 13,
+       "rescue_t": 12,
+       "allH_t": 14,
+       "allH_argmax": 14,
+       "chr1_rescue_argmax": 2
+      },
+      "normal": {
+       "n": 57,
+       "chr1_n": 3,
+       "base_t": 1,
+       "base_argmax": 1,
+       "rescue_argmax": 31,
+       "rescue_t": 31,
+       "allH_t": 32,
+       "allH_argmax": 32,
+       "chr1_rescue_argmax": 2
+      },
+      "neither": {
+       "n": 4,
+       "chr1_n": 0,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 0,
+       "rescue_t": 0,
+       "allH_t": 0,
+       "allH_argmax": 0,
+       "chr1_rescue_argmax": 0
+      },
+      "ambiguous": {
+       "n": 4,
+       "chr1_n": 1,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 2,
+       "rescue_t": 2,
+       "allH_t": 3,
+       "allH_argmax": 3,
+       "chr1_rescue_argmax": 0
+      },
+      "all": {
+       "n": 89,
+       "chr1_n": 8,
+       "base_t": 1,
+       "base_argmax": 1,
+       "rescue_argmax": 46,
+       "rescue_t": 45,
+       "allH_t": 49,
+       "allH_argmax": 49,
+       "chr1_rescue_argmax": 4
+      }
+     }
+    },
+    "h30_strict": {
+     "counts": {
+      "tumor_only": 41,
+      "normal": 36,
+      "neither": 8,
+      "ambiguous": 4
+     },
+     "chr1": {
+      "tumor_only": 5,
+      "normal": 2,
+      "neither": 0,
+      "ambiguous": 1
+     },
+     "why": {
+      "ambiguous:paralog": 4,
+      "neither:": 8,
+      "normal:at_locus": 27,
+      "normal:elsewhere": 9,
+      "tumor_only:at_locus": 39,
+      "tumor_only:elsewhere": 2
+     },
+     "by_event_kind": {
+      "SNV": {
+       "tumor_only": 18,
+       "normal": 5,
+       "neither": 2,
+       "ambiguous": 3
+      },
+      "INDEL": {
+       "tumor_only": 23,
+       "normal": 31,
+       "neither": 6,
+       "ambiguous": 1
+      }
+     },
+     "by_repeat": {
+      "homopolymer>=7": {
+       "tumor_only": 29,
+       "normal": 26,
+       "neither": 7,
+       "ambiguous": 1
+      },
+      "STR": {
+       "tumor_only": 6,
+       "normal": 9,
+       "neither": 1,
+       "ambiguous": 3
+      },
+      "other": {
+       "tumor_only": 6,
+       "normal": 1,
+       "neither": 0,
+       "ambiguous": 0
+      }
+     },
+     "calls": {
+      "tumor_only": {
+       "n": 41,
+       "chr1_n": 5,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 26,
+       "rescue_t": 25,
+       "allH_t": 26,
+       "allH_argmax": 26,
+       "chr1_rescue_argmax": 3
+      },
+      "normal": {
+       "n": 36,
+       "chr1_n": 2,
+       "base_t": 1,
+       "base_argmax": 1,
+       "rescue_argmax": 18,
+       "rescue_t": 18,
+       "allH_t": 20,
+       "allH_argmax": 20,
+       "chr1_rescue_argmax": 1
+      },
+      "neither": {
+       "n": 8,
+       "chr1_n": 0,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 0,
+       "rescue_t": 0,
+       "allH_t": 0,
+       "allH_argmax": 0,
+       "chr1_rescue_argmax": 0
+      },
+      "ambiguous": {
+       "n": 4,
+       "chr1_n": 1,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 2,
+       "rescue_t": 2,
+       "allH_t": 3,
+       "allH_argmax": 3,
+       "chr1_rescue_argmax": 0
+      },
+      "all": {
+       "n": 89,
+       "chr1_n": 8,
+       "base_t": 1,
+       "base_argmax": 1,
+       "rescue_argmax": 46,
+       "rescue_t": 45,
+       "allH_t": 49,
+       "allH_argmax": 49,
+       "chr1_rescue_argmax": 4
+      }
+     }
+    },
+    "h50_earlier": {
+     "counts": {
+      "tumor_only": 34,
+      "normal": 46,
+      "neither": 8,
+      "ambiguous": 1
+     },
+     "chr1": {
+      "tumor_only": 4,
+      "normal": 3,
+      "neither": 0,
+      "ambiguous": 1
+     },
+     "why": {
+      "ambiguous:paralog": 1,
+      "neither:": 8,
+      "normal:at_locus": 45,
+      "normal:elsewhere": 1,
+      "tumor_only:at_locus": 34
+     },
+     "by_event_kind": {
+      "SNV": {
+       "tumor_only": 22,
+       "normal": 4,
+       "neither": 2,
+       "ambiguous": 0
+      },
+      "INDEL": {
+       "tumor_only": 12,
+       "normal": 42,
+       "neither": 6,
+       "ambiguous": 1
+      }
+     },
+     "by_repeat": {
+      "homopolymer>=7": {
+       "tumor_only": 16,
+       "normal": 40,
+       "neither": 7,
+       "ambiguous": 0
+      },
+      "STR": {
+       "tumor_only": 12,
+       "normal": 5,
+       "neither": 1,
+       "ambiguous": 1
+      },
+      "other": {
+       "tumor_only": 6,
+       "normal": 1,
+       "neither": 0,
+       "ambiguous": 0
+      }
+     },
+     "calls": {
+      "tumor_only": {
+       "n": 34,
+       "chr1_n": 4,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 17,
+       "rescue_t": 16,
+       "allH_t": 19,
+       "allH_argmax": 19,
+       "chr1_rescue_argmax": 2
+      },
+      "normal": {
+       "n": 46,
+       "chr1_n": 3,
+       "base_t": 1,
+       "base_argmax": 1,
+       "rescue_argmax": 27,
+       "rescue_t": 27,
+       "allH_t": 29,
+       "allH_argmax": 29,
+       "chr1_rescue_argmax": 1
+      },
+      "neither": {
+       "n": 8,
+       "chr1_n": 0,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 1,
+       "rescue_t": 1,
+       "allH_t": 0,
+       "allH_argmax": 0,
+       "chr1_rescue_argmax": 0
+      },
+      "ambiguous": {
+       "n": 1,
+       "chr1_n": 1,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 1,
+       "rescue_t": 1,
+       "allH_t": 1,
+       "allH_argmax": 1,
+       "chr1_rescue_argmax": 1
+      },
+      "all": {
+       "n": 89,
+       "chr1_n": 8,
+       "base_t": 1,
+       "base_argmax": 1,
+       "rescue_argmax": 46,
+       "rescue_t": 45,
+       "allH_t": 49,
+       "allH_argmax": 49,
+       "chr1_rescue_argmax": 4
+      }
+     }
+    },
+    "h50_strict": {
+     "counts": {
+      "tumor_only": 51,
+      "normal": 21,
+      "neither": 17,
+      "ambiguous": 0
+     },
+     "chr1": {
+      "tumor_only": 6,
+      "normal": 1,
+      "neither": 1,
+      "ambiguous": 0
+     },
+     "why": {
+      "neither:": 17,
+      "normal:at_locus": 20,
+      "normal:elsewhere": 1,
+      "tumor_only:at_locus": 51
+     },
+     "by_event_kind": {
+      "SNV": {
+       "tumor_only": 21,
+       "normal": 2,
+       "neither": 5,
+       "ambiguous": 0
+      },
+      "INDEL": {
+       "tumor_only": 30,
+       "normal": 19,
+       "neither": 12,
+       "ambiguous": 0
+      }
+     },
+     "by_repeat": {
+      "homopolymer>=7": {
+       "tumor_only": 33,
+       "normal": 15,
+       "neither": 15,
+       "ambiguous": 0
+      },
+      "STR": {
+       "tumor_only": 12,
+       "normal": 5,
+       "neither": 2,
+       "ambiguous": 0
+      },
+      "other": {
+       "tumor_only": 6,
+       "normal": 1,
+       "neither": 0,
+       "ambiguous": 0
+      }
+     },
+     "calls": {
+      "tumor_only": {
+       "n": 51,
+       "chr1_n": 6,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 29,
+       "rescue_t": 28,
+       "allH_t": 30,
+       "allH_argmax": 30,
+       "chr1_rescue_argmax": 4
+      },
+      "normal": {
+       "n": 21,
+       "chr1_n": 1,
+       "base_t": 1,
+       "base_argmax": 1,
+       "rescue_argmax": 14,
+       "rescue_t": 14,
+       "allH_t": 16,
+       "allH_argmax": 16,
+       "chr1_rescue_argmax": 0
+      },
+      "neither": {
+       "n": 17,
+       "chr1_n": 1,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 3,
+       "rescue_t": 3,
+       "allH_t": 3,
+       "allH_argmax": 3,
+       "chr1_rescue_argmax": 0
+      },
+      "ambiguous": {
+       "n": 0,
+       "chr1_n": 0,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 0,
+       "rescue_t": 0,
+       "allH_t": 0,
+       "allH_argmax": 0,
+       "chr1_rescue_argmax": 0
+      },
+      "all": {
+       "n": 89,
+       "chr1_n": 8,
+       "base_t": 1,
+       "base_argmax": 1,
+       "rescue_argmax": 46,
+       "rescue_t": 45,
+       "allH_t": 49,
+       "allH_argmax": 49,
+       "chr1_rescue_argmax": 4
+      }
+     }
+    }
+   },
+   "earlier_normal_indel_only": {
+    "30": 21,
+    "50": 24
+   },
+   "transition_h30_earlier_to_strict": {
+    "ambiguous->ambiguous": 4,
+    "neither->neither": 4,
+    "normal->normal": 36,
+    "normal->tumor_only": 21,
+    "tumor_only->neither": 4,
+    "tumor_only->tumor_only": 20
+   },
+   "normal_at_locus_hap": {
+    "h30_earlier": {
+     "both": 24,
+     "own": 22,
+     "other": 3
+    },
+    "h30_strict": {
+     "both": 18,
+     "own": 9
+    },
+    "h50_earlier": {
+     "both": 23,
+     "own": 19,
+     "other": 3
+    },
+    "h50_strict": {
+     "own": 6,
+     "both": 14
+    }
+   },
+   "class_by_event_T_context": {
+    "h30_earlier": {
+     "ambiguous|ambiguous": 2,
+     "ambiguous|normal": 2,
+     "neither|normal": 3,
+     "neither|tumor_only": 1,
+     "normal|ambiguous": 1,
+     "normal|neither": 2,
+     "normal|normal": 53,
+     "normal|tumor_only": 1,
+     "tumor_only|normal": 6,
+     "tumor_only|tumor_only": 18
+    },
+    "h30_strict": {
+     "ambiguous|ambiguous": 2,
+     "ambiguous|normal": 2,
+     "neither|normal": 3,
+     "neither|tumor_only": 5,
+     "normal|ambiguous": 1,
+     "normal|neither": 1,
+     "normal|normal": 17,
+     "normal|tumor_only": 17,
+     "tumor_only|neither": 1,
+     "tumor_only|normal": 2,
+     "tumor_only|tumor_only": 38
+    },
+    "h50_earlier": {
+     "ambiguous|ambiguous": 1,
+     "neither|normal": 5,
+     "neither|tumor_only": 3,
+     "normal|normal": 42,
+     "normal|tumor_only": 4,
+     "tumor_only|normal": 7,
+     "tumor_only|tumor_only": 27
+    },
+    "h50_strict": {
+     "neither|normal": 1,
+     "neither|tumor_only": 16,
+     "normal|normal": 6,
+     "normal|tumor_only": 15,
+     "tumor_only|ambiguous": 1,
+     "tumor_only|normal": 4,
+     "tumor_only|tumor_only": 46
+    }
+   },
+   "tumor_only_at_locus": {
+    "h30_earlier": 22,
+    "h30_strict": 39,
+    "h50_earlier": 34,
+    "h50_strict": 51
+   },
+   "vs_e9d_h50_strict": {
+    "absent|normal": 2,
+    "absent|tumor_only": 1,
+    "germline|normal": 19,
+    "tumor_only|neither": 1,
+    "tumor_only|tumor_only": 50,
+    "unsupported|neither": 7,
+    "unverifiable|neither": 9
+   },
+   "vs_e9d_h30_earlier": {
+    "absent|normal": 3,
+    "germline|normal": 18,
+    "germline|tumor_only": 1,
+    "tumor_only|ambiguous": 3,
+    "tumor_only|neither": 1,
+    "tumor_only|normal": 29,
+    "tumor_only|tumor_only": 18,
+    "unsupported|ambiguous": 1,
+    "unsupported|neither": 2,
+    "unsupported|normal": 2,
+    "unsupported|tumor_only": 2,
+    "unverifiable|neither": 1,
+    "unverifiable|normal": 5,
+    "unverifiable|tumor_only": 3
+   }
+  },
+  "HG008T_Illumina_d46": {
+   "n": 135,
+   "chr1_n": 12,
+   "graph": "d46",
+   "run": "HG008_Illumina_SNV_d46_7fc7396",
+   "query_status": {
+    "30": {
+     "ok": 135
+    },
+    "50": {
+     "ok": 135
+    }
+   },
+   "n_a1_median": 32,
+   "event_kind": {
+    "INDEL": 89,
+    "SNV": 46
+   },
+   "repeat_context": {
+    "STR": 36,
+    "homopolymer>=7": 86,
+    "other": 13
+   },
+   "classes": {
+    "h30_earlier": {
+     "counts": {
+      "tumor_only": 28,
+      "normal": 92,
+      "neither": 7,
+      "ambiguous": 8
+     },
+     "chr1": {
+      "tumor_only": 5,
+      "normal": 6,
+      "neither": 0,
+      "ambiguous": 1
+     },
+     "why": {
+      "ambiguous:paralog": 8,
+      "neither:": 7,
+      "normal:at_locus": 75,
+      "normal:elsewhere": 17,
+      "tumor_only:at_locus": 27,
+      "tumor_only:elsewhere": 1
+     },
+     "by_event_kind": {
+      "SNV": {
+       "tumor_only": 24,
+       "normal": 14,
+       "neither": 2,
+       "ambiguous": 6
+      },
+      "INDEL": {
+       "tumor_only": 4,
+       "normal": 78,
+       "neither": 5,
+       "ambiguous": 2
+      }
+     },
+     "by_repeat": {
+      "homopolymer>=7": {
+       "tumor_only": 9,
+       "normal": 66,
+       "neither": 6,
+       "ambiguous": 5
+      },
+      "STR": {
+       "tumor_only": 8,
+       "normal": 24,
+       "neither": 1,
+       "ambiguous": 3
+      },
+      "other": {
+       "tumor_only": 11,
+       "normal": 2,
+       "neither": 0,
+       "ambiguous": 0
+      }
+     },
+     "calls": {
+      "tumor_only": {
+       "n": 28,
+       "chr1_n": 5,
+       "base_t": 2,
+       "base_argmax": 0,
+       "rescue_argmax": 21,
+       "rescue_t": 22,
+       "allH_t": 23,
+       "allH_argmax": 21,
+       "chr1_rescue_argmax": 5
+      },
+      "normal": {
+       "n": 92,
+       "chr1_n": 6,
+       "base_t": 1,
+       "base_argmax": 0,
+       "rescue_argmax": 56,
+       "rescue_t": 61,
+       "allH_t": 69,
+       "allH_argmax": 55,
+       "chr1_rescue_argmax": 4
+      },
+      "neither": {
+       "n": 7,
+       "chr1_n": 0,
+       "base_t": 1,
+       "base_argmax": 1,
+       "rescue_argmax": 2,
+       "rescue_t": 2,
+       "allH_t": 2,
+       "allH_argmax": 2,
+       "chr1_rescue_argmax": 0
+      },
+      "ambiguous": {
+       "n": 8,
+       "chr1_n": 1,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 1,
+       "rescue_t": 1,
+       "allH_t": 3,
+       "allH_argmax": 3,
+       "chr1_rescue_argmax": 0
+      },
+      "all": {
+       "n": 135,
+       "chr1_n": 12,
+       "base_t": 4,
+       "base_argmax": 1,
+       "rescue_argmax": 80,
+       "rescue_t": 86,
+       "allH_t": 97,
+       "allH_argmax": 81,
+       "chr1_rescue_argmax": 9
+      }
+     }
+    },
+    "h30_strict": {
+     "counts": {
+      "tumor_only": 62,
+      "normal": 58,
+      "neither": 7,
+      "ambiguous": 8
+     },
+     "chr1": {
+      "tumor_only": 7,
+      "normal": 4,
+      "neither": 0,
+      "ambiguous": 1
+     },
+     "why": {
+      "ambiguous:paralog": 8,
+      "neither:": 7,
+      "normal:at_locus": 41,
+      "normal:elsewhere": 17,
+      "tumor_only:at_locus": 60,
+      "tumor_only:elsewhere": 2
+     },
+     "by_event_kind": {
+      "SNV": {
+       "tumor_only": 26,
+       "normal": 12,
+       "neither": 2,
+       "ambiguous": 6
+      },
+      "INDEL": {
+       "tumor_only": 36,
+       "normal": 46,
+       "neither": 5,
+       "ambiguous": 2
+      }
+     },
+     "by_repeat": {
+      "homopolymer>=7": {
+       "tumor_only": 42,
+       "normal": 33,
+       "neither": 6,
+       "ambiguous": 5
+      },
+      "STR": {
+       "tumor_only": 9,
+       "normal": 23,
+       "neither": 1,
+       "ambiguous": 3
+      },
+      "other": {
+       "tumor_only": 11,
+       "normal": 2,
+       "neither": 0,
+       "ambiguous": 0
+      }
+     },
+     "calls": {
+      "tumor_only": {
+       "n": 62,
+       "chr1_n": 7,
+       "base_t": 2,
+       "base_argmax": 0,
+       "rescue_argmax": 49,
+       "rescue_t": 51,
+       "allH_t": 55,
+       "allH_argmax": 51,
+       "chr1_rescue_argmax": 6
+      },
+      "normal": {
+       "n": 58,
+       "chr1_n": 4,
+       "base_t": 1,
+       "base_argmax": 0,
+       "rescue_argmax": 28,
+       "rescue_t": 32,
+       "allH_t": 37,
+       "allH_argmax": 25,
+       "chr1_rescue_argmax": 3
+      },
+      "neither": {
+       "n": 7,
+       "chr1_n": 0,
+       "base_t": 1,
+       "base_argmax": 1,
+       "rescue_argmax": 2,
+       "rescue_t": 2,
+       "allH_t": 2,
+       "allH_argmax": 2,
+       "chr1_rescue_argmax": 0
+      },
+      "ambiguous": {
+       "n": 8,
+       "chr1_n": 1,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 1,
+       "rescue_t": 1,
+       "allH_t": 3,
+       "allH_argmax": 3,
+       "chr1_rescue_argmax": 0
+      },
+      "all": {
+       "n": 135,
+       "chr1_n": 12,
+       "base_t": 4,
+       "base_argmax": 1,
+       "rescue_argmax": 80,
+       "rescue_t": 86,
+       "allH_t": 97,
+       "allH_argmax": 81,
+       "chr1_rescue_argmax": 9
+      }
+     }
+    },
+    "h50_earlier": {
+     "counts": {
+      "tumor_only": 50,
+      "normal": 64,
+      "neither": 17,
+      "ambiguous": 4
+     },
+     "chr1": {
+      "tumor_only": 7,
+      "normal": 3,
+      "neither": 1,
+      "ambiguous": 1
+     },
+     "why": {
+      "ambiguous:paralog": 4,
+      "neither:": 17,
+      "normal:at_locus": 63,
+      "normal:elsewhere": 1,
+      "tumor_only:at_locus": 50
+     },
+     "by_event_kind": {
+      "SNV": {
+       "tumor_only": 31,
+       "normal": 5,
+       "neither": 8,
+       "ambiguous": 2
+      },
+      "INDEL": {
+       "tumor_only": 19,
+       "normal": 59,
+       "neither": 9,
+       "ambiguous": 2
+      }
+     },
+     "by_repeat": {
+      "homopolymer>=7": {
+       "tumor_only": 15,
+       "normal": 55,
+       "neither": 15,
+       "ambiguous": 1
+      },
+      "STR": {
+       "tumor_only": 24,
+       "normal": 7,
+       "neither": 2,
+       "ambiguous": 3
+      },
+      "other": {
+       "tumor_only": 11,
+       "normal": 2,
+       "neither": 0,
+       "ambiguous": 0
+      }
+     },
+     "calls": {
+      "tumor_only": {
+       "n": 50,
+       "chr1_n": 7,
+       "base_t": 2,
+       "base_argmax": 0,
+       "rescue_argmax": 30,
+       "rescue_t": 33,
+       "allH_t": 35,
+       "allH_argmax": 29,
+       "chr1_rescue_argmax": 6
+      },
+      "normal": {
+       "n": 64,
+       "chr1_n": 3,
+       "base_t": 1,
+       "base_argmax": 1,
+       "rescue_argmax": 46,
+       "rescue_t": 48,
+       "allH_t": 54,
+       "allH_argmax": 47,
+       "chr1_rescue_argmax": 2
+      },
+      "neither": {
+       "n": 17,
+       "chr1_n": 1,
+       "base_t": 1,
+       "base_argmax": 0,
+       "rescue_argmax": 3,
+       "rescue_t": 4,
+       "allH_t": 7,
+       "allH_argmax": 4,
+       "chr1_rescue_argmax": 0
+      },
+      "ambiguous": {
+       "n": 4,
+       "chr1_n": 1,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 1,
+       "rescue_t": 1,
+       "allH_t": 1,
+       "allH_argmax": 1,
+       "chr1_rescue_argmax": 1
+      },
+      "all": {
+       "n": 135,
+       "chr1_n": 12,
+       "base_t": 4,
+       "base_argmax": 1,
+       "rescue_argmax": 80,
+       "rescue_t": 86,
+       "allH_t": 97,
+       "allH_argmax": 81,
+       "chr1_rescue_argmax": 9
+      }
+     }
+    },
+    "h50_strict": {
+     "counts": {
+      "tumor_only": 93,
+      "normal": 22,
+      "neither": 17,
+      "ambiguous": 3
+     },
+     "chr1": {
+      "tumor_only": 10,
+      "normal": 1,
+      "neither": 1,
+      "ambiguous": 0
+     },
+     "why": {
+      "ambiguous:paralog": 3,
+      "neither:": 17,
+      "normal:at_locus": 21,
+      "normal:elsewhere": 1,
+      "tumor_only:at_locus": 93
+     },
+     "by_event_kind": {
+      "SNV": {
+       "tumor_only": 33,
+       "normal": 3,
+       "neither": 8,
+       "ambiguous": 2
+      },
+      "INDEL": {
+       "tumor_only": 60,
+       "normal": 19,
+       "neither": 9,
+       "ambiguous": 1
+      }
+     },
+     "by_repeat": {
+      "homopolymer>=7": {
+       "tumor_only": 56,
+       "normal": 14,
+       "neither": 15,
+       "ambiguous": 1
+      },
+      "STR": {
+       "tumor_only": 26,
+       "normal": 6,
+       "neither": 2,
+       "ambiguous": 2
+      },
+      "other": {
+       "tumor_only": 11,
+       "normal": 2,
+       "neither": 0,
+       "ambiguous": 0
+      }
+     },
+     "calls": {
+      "tumor_only": {
+       "n": 93,
+       "chr1_n": 10,
+       "base_t": 3,
+       "base_argmax": 1,
+       "rescue_argmax": 66,
+       "rescue_t": 70,
+       "allH_t": 76,
+       "allH_argmax": 66,
+       "chr1_rescue_argmax": 8
+      },
+      "normal": {
+       "n": 22,
+       "chr1_n": 1,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 11,
+       "rescue_t": 12,
+       "allH_t": 14,
+       "allH_argmax": 11,
+       "chr1_rescue_argmax": 1
+      },
+      "neither": {
+       "n": 17,
+       "chr1_n": 1,
+       "base_t": 1,
+       "base_argmax": 0,
+       "rescue_argmax": 3,
+       "rescue_t": 4,
+       "allH_t": 7,
+       "allH_argmax": 4,
+       "chr1_rescue_argmax": 0
+      },
+      "ambiguous": {
+       "n": 3,
+       "chr1_n": 0,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 0,
+       "rescue_t": 0,
+       "allH_t": 0,
+       "allH_argmax": 0,
+       "chr1_rescue_argmax": 0
+      },
+      "all": {
+       "n": 135,
+       "chr1_n": 12,
+       "base_t": 4,
+       "base_argmax": 1,
+       "rescue_argmax": 80,
+       "rescue_t": 86,
+       "allH_t": 97,
+       "allH_argmax": 81,
+       "chr1_rescue_argmax": 9
+      }
+     }
+    }
+   },
+   "earlier_normal_indel_only": {
+    "30": 33,
+    "50": 41
+   },
+   "transition_h30_earlier_to_strict": {
+    "ambiguous->ambiguous": 8,
+    "neither->neither": 7,
+    "normal->normal": 58,
+    "normal->tumor_only": 34,
+    "tumor_only->tumor_only": 28
+   },
+   "normal_at_locus_hap": {
+    "h30_earlier": {
+     "own": 47,
+     "both": 27,
+     "other": 1
+    },
+    "h30_strict": {
+     "both": 19,
+     "own": 21,
+     "other": 1
+    },
+    "h50_earlier": {
+     "own": 39,
+     "both": 22,
+     "other": 2
+    },
+    "h50_strict": {
+     "both": 10,
+     "own": 10,
+     "other": 1
+    }
+   },
+   "class_by_event_T_context": {
+    "h30_earlier": {
+     "ambiguous|ambiguous": 5,
+     "ambiguous|normal": 3,
+     "neither|normal": 5,
+     "neither|tumor_only": 2,
+     "normal|neither": 5,
+     "normal|normal": 82,
+     "normal|tumor_only": 5,
+     "tumor_only|ambiguous": 1,
+     "tumor_only|neither": 2,
+     "tumor_only|normal": 1,
+     "tumor_only|tumor_only": 24
+    },
+    "h30_strict": {
+     "ambiguous|ambiguous": 5,
+     "ambiguous|normal": 3,
+     "neither|ambiguous": 1,
+     "neither|normal": 3,
+     "neither|tumor_only": 3,
+     "normal|neither": 4,
+     "normal|normal": 38,
+     "normal|tumor_only": 16,
+     "tumor_only|ambiguous": 1,
+     "tumor_only|neither": 4,
+     "tumor_only|normal": 3,
+     "tumor_only|tumor_only": 54
+    },
+    "h50_earlier": {
+     "ambiguous|ambiguous": 3,
+     "ambiguous|normal": 1,
+     "neither|normal": 9,
+     "neither|tumor_only": 8,
+     "normal|normal": 59,
+     "normal|tumor_only": 5,
+     "tumor_only|normal": 7,
+     "tumor_only|tumor_only": 43
+    },
+    "h50_strict": {
+     "ambiguous|ambiguous": 2,
+     "ambiguous|tumor_only": 1,
+     "neither|normal": 1,
+     "neither|tumor_only": 16,
+     "normal|normal": 9,
+     "normal|tumor_only": 13,
+     "tumor_only|ambiguous": 1,
+     "tumor_only|neither": 1,
+     "tumor_only|normal": 8,
+     "tumor_only|tumor_only": 83
+    }
+   },
+   "tumor_only_at_locus": {
+    "h30_earlier": 27,
+    "h30_strict": 60,
+    "h50_earlier": 50,
+    "h50_strict": 93
+   },
+   "vs_e9d_h50_strict": {
+    "germline|ambiguous": 2,
+    "germline|neither": 7,
+    "germline|normal": 22,
+    "tumor_only|ambiguous": 1,
+    "tumor_only|neither": 7,
+    "tumor_only|tumor_only": 91,
+    "unsupported|neither": 3,
+    "unsupported|tumor_only": 1,
+    "unverifiable|tumor_only": 1
+   },
+   "vs_e9d_h30_earlier": {
+    "germline|ambiguous": 1,
+    "germline|neither": 2,
+    "germline|normal": 27,
+    "germline|tumor_only": 1,
+    "tumor_only|ambiguous": 7,
+    "tumor_only|neither": 3,
+    "tumor_only|normal": 62,
+    "tumor_only|tumor_only": 27,
+    "unsupported|neither": 2,
+    "unsupported|normal": 2,
+    "unverifiable|normal": 1
+   }
+  },
+  "HG008T_PacBio_d46": {
+   "n": 82,
+   "chr1_n": 11,
+   "graph": "d46",
+   "run": "HG008_PacBio_SNV_d46_7fc7396",
+   "query_status": {
+    "30": {
+     "ok": 82
+    },
+    "50": {
+     "ok": 82
+    }
+   },
+   "n_a1_median": 28,
+   "event_kind": {
+    "SNV": 32,
+    "INDEL": 50
+   },
+   "repeat_context": {
+    "STR": 21,
+    "homopolymer>=7": 54,
+    "other": 7
+   },
+   "classes": {
+    "h30_earlier": {
+     "counts": {
+      "tumor_only": 23,
+      "normal": 53,
+      "neither": 3,
+      "ambiguous": 3
+     },
+     "chr1": {
+      "tumor_only": 4,
+      "normal": 7,
+      "neither": 0,
+      "ambiguous": 0
+     },
+     "why": {
+      "ambiguous:paralog": 3,
+      "neither:": 3,
+      "normal:at_locus": 43,
+      "normal:elsewhere": 10,
+      "tumor_only:at_locus": 23
+     },
+     "by_event_kind": {
+      "SNV": {
+       "tumor_only": 18,
+       "normal": 10,
+       "neither": 1,
+       "ambiguous": 3
+      },
+      "INDEL": {
+       "tumor_only": 5,
+       "normal": 43,
+       "neither": 2,
+       "ambiguous": 0
+      }
+     },
+     "by_repeat": {
+      "homopolymer>=7": {
+       "tumor_only": 9,
+       "normal": 40,
+       "neither": 2,
+       "ambiguous": 3
+      },
+      "STR": {
+       "tumor_only": 7,
+       "normal": 13,
+       "neither": 1,
+       "ambiguous": 0
+      },
+      "other": {
+       "tumor_only": 7,
+       "normal": 0,
+       "neither": 0,
+       "ambiguous": 0
+      }
+     },
+     "calls": {
+      "tumor_only": {
+       "n": 23,
+       "chr1_n": 4,
+       "base_t": 1,
+       "base_argmax": 0,
+       "rescue_argmax": 13,
+       "rescue_t": 15,
+       "allH_t": 18,
+       "allH_argmax": 18,
+       "chr1_rescue_argmax": 2
+      },
+      "normal": {
+       "n": 53,
+       "chr1_n": 7,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 24,
+       "rescue_t": 28,
+       "allH_t": 38,
+       "allH_argmax": 34,
+       "chr1_rescue_argmax": 1
+      },
+      "neither": {
+       "n": 3,
+       "chr1_n": 0,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 0,
+       "rescue_t": 1,
+       "allH_t": 1,
+       "allH_argmax": 1,
+       "chr1_rescue_argmax": 0
+      },
+      "ambiguous": {
+       "n": 3,
+       "chr1_n": 0,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 1,
+       "rescue_t": 1,
+       "allH_t": 2,
+       "allH_argmax": 2,
+       "chr1_rescue_argmax": 0
+      },
+      "all": {
+       "n": 82,
+       "chr1_n": 11,
+       "base_t": 1,
+       "base_argmax": 0,
+       "rescue_argmax": 38,
+       "rescue_t": 45,
+       "allH_t": 59,
+       "allH_argmax": 55,
+       "chr1_rescue_argmax": 3
+      }
+     }
+    },
+    "h30_strict": {
+     "counts": {
+      "tumor_only": 48,
+      "normal": 25,
+      "neither": 5,
+      "ambiguous": 4
+     },
+     "chr1": {
+      "tumor_only": 6,
+      "normal": 5,
+      "neither": 0,
+      "ambiguous": 0
+     },
+     "why": {
+      "ambiguous:paralog": 4,
+      "neither:": 5,
+      "normal:at_locus": 15,
+      "normal:elsewhere": 10,
+      "tumor_only:at_locus": 48
+     },
+     "by_event_kind": {
+      "SNV": {
+       "tumor_only": 20,
+       "normal": 8,
+       "neither": 1,
+       "ambiguous": 3
+      },
+      "INDEL": {
+       "tumor_only": 28,
+       "normal": 17,
+       "neither": 4,
+       "ambiguous": 1
+      }
+     },
+     "by_repeat": {
+      "homopolymer>=7": {
+       "tumor_only": 34,
+       "normal": 12,
+       "neither": 4,
+       "ambiguous": 4
+      },
+      "STR": {
+       "tumor_only": 7,
+       "normal": 13,
+       "neither": 1,
+       "ambiguous": 0
+      },
+      "other": {
+       "tumor_only": 7,
+       "normal": 0,
+       "neither": 0,
+       "ambiguous": 0
+      }
+     },
+     "calls": {
+      "tumor_only": {
+       "n": 48,
+       "chr1_n": 6,
+       "base_t": 1,
+       "base_argmax": 0,
+       "rescue_argmax": 29,
+       "rescue_t": 33,
+       "allH_t": 39,
+       "allH_argmax": 39,
+       "chr1_rescue_argmax": 2
+      },
+      "normal": {
+       "n": 25,
+       "chr1_n": 5,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 7,
+       "rescue_t": 9,
+       "allH_t": 16,
+       "allH_argmax": 12,
+       "chr1_rescue_argmax": 1
+      },
+      "neither": {
+       "n": 5,
+       "chr1_n": 0,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 1,
+       "rescue_t": 2,
+       "allH_t": 2,
+       "allH_argmax": 2,
+       "chr1_rescue_argmax": 0
+      },
+      "ambiguous": {
+       "n": 4,
+       "chr1_n": 0,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 1,
+       "rescue_t": 1,
+       "allH_t": 2,
+       "allH_argmax": 2,
+       "chr1_rescue_argmax": 0
+      },
+      "all": {
+       "n": 82,
+       "chr1_n": 11,
+       "base_t": 1,
+       "base_argmax": 0,
+       "rescue_argmax": 38,
+       "rescue_t": 45,
+       "allH_t": 59,
+       "allH_argmax": 55,
+       "chr1_rescue_argmax": 3
+      }
+     }
+    },
+    "h50_earlier": {
+     "counts": {
+      "tumor_only": 33,
+      "normal": 42,
+      "neither": 5,
+      "ambiguous": 2
+     },
+     "chr1": {
+      "tumor_only": 6,
+      "normal": 4,
+      "neither": 0,
+      "ambiguous": 1
+     },
+     "why": {
+      "ambiguous:paralog": 2,
+      "neither:": 5,
+      "normal:at_locus": 40,
+      "normal:elsewhere": 2,
+      "tumor_only:at_locus": 33
+     },
+     "by_event_kind": {
+      "SNV": {
+       "tumor_only": 23,
+       "normal": 4,
+       "neither": 4,
+       "ambiguous": 1
+      },
+      "INDEL": {
+       "tumor_only": 10,
+       "normal": 38,
+       "neither": 1,
+       "ambiguous": 1
+      }
+     },
+     "by_repeat": {
+      "homopolymer>=7": {
+       "tumor_only": 10,
+       "normal": 40,
+       "neither": 4,
+       "ambiguous": 0
+      },
+      "STR": {
+       "tumor_only": 16,
+       "normal": 2,
+       "neither": 1,
+       "ambiguous": 2
+      },
+      "other": {
+       "tumor_only": 7,
+       "normal": 0,
+       "neither": 0,
+       "ambiguous": 0
+      }
+     },
+     "calls": {
+      "tumor_only": {
+       "n": 33,
+       "chr1_n": 6,
+       "base_t": 1,
+       "base_argmax": 0,
+       "rescue_argmax": 16,
+       "rescue_t": 19,
+       "allH_t": 26,
+       "allH_argmax": 24,
+       "chr1_rescue_argmax": 2
+      },
+      "normal": {
+       "n": 42,
+       "chr1_n": 4,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 22,
+       "rescue_t": 26,
+       "allH_t": 31,
+       "allH_argmax": 30,
+       "chr1_rescue_argmax": 1
+      },
+      "neither": {
+       "n": 5,
+       "chr1_n": 0,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 0,
+       "rescue_t": 0,
+       "allH_t": 2,
+       "allH_argmax": 1,
+       "chr1_rescue_argmax": 0
+      },
+      "ambiguous": {
+       "n": 2,
+       "chr1_n": 1,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 0,
+       "rescue_t": 0,
+       "allH_t": 0,
+       "allH_argmax": 0,
+       "chr1_rescue_argmax": 0
+      },
+      "all": {
+       "n": 82,
+       "chr1_n": 11,
+       "base_t": 1,
+       "base_argmax": 0,
+       "rescue_argmax": 38,
+       "rescue_t": 45,
+       "allH_t": 59,
+       "allH_argmax": 55,
+       "chr1_rescue_argmax": 3
+      }
+     }
+    },
+    "h50_strict": {
+     "counts": {
+      "tumor_only": 65,
+      "normal": 8,
+      "neither": 8,
+      "ambiguous": 1
+     },
+     "chr1": {
+      "tumor_only": 9,
+      "normal": 2,
+      "neither": 0,
+      "ambiguous": 0
+     },
+     "why": {
+      "ambiguous:paralog": 1,
+      "neither:": 8,
+      "normal:at_locus": 7,
+      "normal:elsewhere": 1,
+      "tumor_only:at_locus": 65
+     },
+     "by_event_kind": {
+      "SNV": {
+       "tumor_only": 23,
+       "normal": 2,
+       "neither": 6,
+       "ambiguous": 1
+      },
+      "INDEL": {
+       "tumor_only": 42,
+       "normal": 6,
+       "neither": 2,
+       "ambiguous": 0
+      }
+     },
+     "by_repeat": {
+      "homopolymer>=7": {
+       "tumor_only": 42,
+       "normal": 6,
+       "neither": 6,
+       "ambiguous": 0
+      },
+      "STR": {
+       "tumor_only": 16,
+       "normal": 2,
+       "neither": 2,
+       "ambiguous": 1
+      },
+      "other": {
+       "tumor_only": 7,
+       "normal": 0,
+       "neither": 0,
+       "ambiguous": 0
+      }
+     },
+     "calls": {
+      "tumor_only": {
+       "n": 65,
+       "chr1_n": 9,
+       "base_t": 1,
+       "base_argmax": 0,
+       "rescue_argmax": 33,
+       "rescue_t": 40,
+       "allH_t": 50,
+       "allH_argmax": 48,
+       "chr1_rescue_argmax": 2
+      },
+      "normal": {
+       "n": 8,
+       "chr1_n": 2,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 5,
+       "rescue_t": 5,
+       "allH_t": 5,
+       "allH_argmax": 5,
+       "chr1_rescue_argmax": 1
+      },
+      "neither": {
+       "n": 8,
+       "chr1_n": 0,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 0,
+       "rescue_t": 0,
+       "allH_t": 4,
+       "allH_argmax": 2,
+       "chr1_rescue_argmax": 0
+      },
+      "ambiguous": {
+       "n": 1,
+       "chr1_n": 0,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 0,
+       "rescue_t": 0,
+       "allH_t": 0,
+       "allH_argmax": 0,
+       "chr1_rescue_argmax": 0
+      },
+      "all": {
+       "n": 82,
+       "chr1_n": 11,
+       "base_t": 1,
+       "base_argmax": 0,
+       "rescue_argmax": 38,
+       "rescue_t": 45,
+       "allH_t": 59,
+       "allH_argmax": 55,
+       "chr1_rescue_argmax": 3
+      }
+     }
+    }
+   },
+   "earlier_normal_indel_only": {
+    "30": 26,
+    "50": 33
+   },
+   "transition_h30_earlier_to_strict": {
+    "ambiguous->ambiguous": 3,
+    "neither->neither": 3,
+    "normal->ambiguous": 1,
+    "normal->neither": 1,
+    "normal->normal": 25,
+    "normal->tumor_only": 26,
+    "tumor_only->neither": 1,
+    "tumor_only->tumor_only": 22
+   },
+   "normal_at_locus_hap": {
+    "h30_earlier": {
+     "own": 27,
+     "both": 14,
+     "other": 2
+    },
+    "h30_strict": {
+     "own": 7,
+     "both": 7,
+     "other": 1
+    },
+    "h50_earlier": {
+     "own": 28,
+     "both": 10,
+     "other": 2
+    },
+    "h50_strict": {
+     "both": 2,
+     "own": 4,
+     "other": 1
+    }
+   },
+   "class_by_event_T_context": {
+    "h30_earlier": {
+     "ambiguous|ambiguous": 3,
+     "neither|normal": 2,
+     "neither|tumor_only": 1,
+     "normal|neither": 3,
+     "normal|normal": 48,
+     "normal|tumor_only": 2,
+     "tumor_only|ambiguous": 1,
+     "tumor_only|normal": 3,
+     "tumor_only|tumor_only": 19
+    },
+    "h30_strict": {
+     "ambiguous|ambiguous": 4,
+     "neither|neither": 1,
+     "neither|normal": 1,
+     "neither|tumor_only": 3,
+     "normal|neither": 1,
+     "normal|normal": 20,
+     "normal|tumor_only": 4,
+     "tumor_only|ambiguous": 1,
+     "tumor_only|neither": 2,
+     "tumor_only|normal": 3,
+     "tumor_only|tumor_only": 42
+    },
+    "h50_earlier": {
+     "ambiguous|ambiguous": 2,
+     "neither|normal": 1,
+     "neither|tumor_only": 4,
+     "normal|normal": 40,
+     "normal|tumor_only": 2,
+     "tumor_only|normal": 4,
+     "tumor_only|tumor_only": 29
+    },
+    "h50_strict": {
+     "ambiguous|ambiguous": 1,
+     "neither|tumor_only": 8,
+     "normal|normal": 5,
+     "normal|tumor_only": 3,
+     "tumor_only|ambiguous": 1,
+     "tumor_only|neither": 1,
+     "tumor_only|normal": 5,
+     "tumor_only|tumor_only": 58
+    }
+   },
+   "tumor_only_at_locus": {
+    "h30_earlier": 23,
+    "h30_strict": 48,
+    "h50_earlier": 33,
+    "h50_strict": 65
+   },
+   "vs_e9d_h50_strict": {
+    "germline|ambiguous": 1,
+    "germline|neither": 2,
+    "germline|normal": 8,
+    "tumor_only|neither": 1,
+    "tumor_only|tumor_only": 65,
+    "unsupported|neither": 3,
+    "unverifiable|neither": 2
+   },
+   "vs_e9d_h30_earlier": {
+    "germline|neither": 1,
+    "germline|normal": 9,
+    "germline|tumor_only": 1,
+    "tumor_only|ambiguous": 2,
+    "tumor_only|neither": 2,
+    "tumor_only|normal": 41,
+    "tumor_only|tumor_only": 21,
+    "unsupported|ambiguous": 1,
+    "unsupported|normal": 1,
+    "unsupported|tumor_only": 1,
+    "unverifiable|normal": 2
+   }
+  },
+  "HG008T_ONT_d46": {
+   "n": 67,
+   "chr1_n": 9,
+   "graph": "d46",
+   "run": "HG008_ONT_SNV_d46_7fc7396",
+   "query_status": {
+    "30": {
+     "ok": 67
+    },
+    "50": {
+     "ok": 67
+    }
+   },
+   "n_a1_median": 8,
+   "event_kind": {
+    "SNV": 26,
+    "INDEL": 41
+   },
+   "repeat_context": {
+    "STR": 16,
+    "homopolymer>=7": 44,
+    "other": 7
+   },
+   "classes": {
+    "h30_earlier": {
+     "counts": {
+      "tumor_only": 21,
+      "normal": 42,
+      "neither": 3,
+      "ambiguous": 1
+     },
+     "chr1": {
+      "tumor_only": 3,
+      "normal": 6,
+      "neither": 0,
+      "ambiguous": 0
+     },
+     "why": {
+      "ambiguous:paralog": 1,
+      "neither:": 3,
+      "normal:at_locus": 32,
+      "normal:elsewhere": 10,
+      "tumor_only:at_locus": 19,
+      "tumor_only:elsewhere": 2
+     },
+     "by_event_kind": {
+      "SNV": {
+       "tumor_only": 17,
+       "normal": 8,
+       "neither": 0,
+       "ambiguous": 1
+      },
+      "INDEL": {
+       "tumor_only": 4,
+       "normal": 34,
+       "neither": 3,
+       "ambiguous": 0
+      }
+     },
+     "by_repeat": {
+      "homopolymer>=7": {
+       "tumor_only": 7,
+       "normal": 33,
+       "neither": 3,
+       "ambiguous": 1
+      },
+      "STR": {
+       "tumor_only": 7,
+       "normal": 9,
+       "neither": 0,
+       "ambiguous": 0
+      },
+      "other": {
+       "tumor_only": 7,
+       "normal": 0,
+       "neither": 0,
+       "ambiguous": 0
+      }
+     },
+     "calls": {
+      "tumor_only": {
+       "n": 21,
+       "chr1_n": 3,
+       "base_t": 4,
+       "base_argmax": 2,
+       "rescue_argmax": 14,
+       "rescue_t": 15,
+       "allH_t": 19,
+       "allH_argmax": 16,
+       "chr1_rescue_argmax": 2
+      },
+      "normal": {
+       "n": 42,
+       "chr1_n": 6,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 23,
+       "rescue_t": 25,
+       "allH_t": 27,
+       "allH_argmax": 23,
+       "chr1_rescue_argmax": 3
+      },
+      "neither": {
+       "n": 3,
+       "chr1_n": 0,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 2,
+       "rescue_t": 2,
+       "allH_t": 2,
+       "allH_argmax": 2,
+       "chr1_rescue_argmax": 0
+      },
+      "ambiguous": {
+       "n": 1,
+       "chr1_n": 0,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 1,
+       "rescue_t": 1,
+       "allH_t": 1,
+       "allH_argmax": 1,
+       "chr1_rescue_argmax": 0
+      },
+      "all": {
+       "n": 67,
+       "chr1_n": 9,
+       "base_t": 4,
+       "base_argmax": 2,
+       "rescue_argmax": 40,
+       "rescue_t": 43,
+       "allH_t": 49,
+       "allH_argmax": 42,
+       "chr1_rescue_argmax": 5
+      }
+     }
+    },
+    "h30_strict": {
+     "counts": {
+      "tumor_only": 40,
+      "normal": 22,
+      "neither": 4,
+      "ambiguous": 1
+     },
+     "chr1": {
+      "tumor_only": 4,
+      "normal": 5,
+      "neither": 0,
+      "ambiguous": 0
+     },
+     "why": {
+      "ambiguous:paralog": 1,
+      "neither:": 4,
+      "normal:at_locus": 12,
+      "normal:elsewhere": 10,
+      "tumor_only:at_locus": 38,
+      "tumor_only:elsewhere": 2
+     },
+     "by_event_kind": {
+      "SNV": {
+       "tumor_only": 19,
+       "normal": 6,
+       "neither": 0,
+       "ambiguous": 1
+      },
+      "INDEL": {
+       "tumor_only": 21,
+       "normal": 16,
+       "neither": 4,
+       "ambiguous": 0
+      }
+     },
+     "by_repeat": {
+      "homopolymer>=7": {
+       "tumor_only": 26,
+       "normal": 13,
+       "neither": 4,
+       "ambiguous": 1
+      },
+      "STR": {
+       "tumor_only": 7,
+       "normal": 9,
+       "neither": 0,
+       "ambiguous": 0
+      },
+      "other": {
+       "tumor_only": 7,
+       "normal": 0,
+       "neither": 0,
+       "ambiguous": 0
+      }
+     },
+     "calls": {
+      "tumor_only": {
+       "n": 40,
+       "chr1_n": 4,
+       "base_t": 4,
+       "base_argmax": 2,
+       "rescue_argmax": 26,
+       "rescue_t": 28,
+       "allH_t": 32,
+       "allH_argmax": 28,
+       "chr1_rescue_argmax": 3
+      },
+      "normal": {
+       "n": 22,
+       "chr1_n": 5,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 10,
+       "rescue_t": 11,
+       "allH_t": 13,
+       "allH_argmax": 10,
+       "chr1_rescue_argmax": 2
+      },
+      "neither": {
+       "n": 4,
+       "chr1_n": 0,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 3,
+       "rescue_t": 3,
+       "allH_t": 3,
+       "allH_argmax": 3,
+       "chr1_rescue_argmax": 0
+      },
+      "ambiguous": {
+       "n": 1,
+       "chr1_n": 0,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 1,
+       "rescue_t": 1,
+       "allH_t": 1,
+       "allH_argmax": 1,
+       "chr1_rescue_argmax": 0
+      },
+      "all": {
+       "n": 67,
+       "chr1_n": 9,
+       "base_t": 4,
+       "base_argmax": 2,
+       "rescue_argmax": 40,
+       "rescue_t": 43,
+       "allH_t": 49,
+       "allH_argmax": 42,
+       "chr1_rescue_argmax": 5
+      }
+     }
+    },
+    "h50_earlier": {
+     "counts": {
+      "tumor_only": 29,
+      "normal": 29,
+      "neither": 8,
+      "ambiguous": 1
+     },
+     "chr1": {
+      "tumor_only": 5,
+      "normal": 2,
+      "neither": 1,
+      "ambiguous": 1
+     },
+     "why": {
+      "ambiguous:paralog": 1,
+      "neither:": 8,
+      "normal:at_locus": 28,
+      "normal:elsewhere": 1,
+      "tumor_only:at_locus": 29
+     },
+     "by_event_kind": {
+      "SNV": {
+       "tumor_only": 20,
+       "normal": 2,
+       "neither": 4,
+       "ambiguous": 0
+      },
+      "INDEL": {
+       "tumor_only": 9,
+       "normal": 27,
+       "neither": 4,
+       "ambiguous": 1
+      }
+     },
+     "by_repeat": {
+      "homopolymer>=7": {
+       "tumor_only": 9,
+       "normal": 28,
+       "neither": 7,
+       "ambiguous": 0
+      },
+      "STR": {
+       "tumor_only": 13,
+       "normal": 1,
+       "neither": 1,
+       "ambiguous": 1
+      },
+      "other": {
+       "tumor_only": 7,
+       "normal": 0,
+       "neither": 0,
+       "ambiguous": 0
+      }
+     },
+     "calls": {
+      "tumor_only": {
+       "n": 29,
+       "chr1_n": 5,
+       "base_t": 4,
+       "base_argmax": 2,
+       "rescue_argmax": 19,
+       "rescue_t": 20,
+       "allH_t": 26,
+       "allH_argmax": 22,
+       "chr1_rescue_argmax": 2
+      },
+      "normal": {
+       "n": 29,
+       "chr1_n": 2,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 19,
+       "rescue_t": 21,
+       "allH_t": 20,
+       "allH_argmax": 18,
+       "chr1_rescue_argmax": 2
+      },
+      "neither": {
+       "n": 8,
+       "chr1_n": 1,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 1,
+       "rescue_t": 1,
+       "allH_t": 2,
+       "allH_argmax": 1,
+       "chr1_rescue_argmax": 0
+      },
+      "ambiguous": {
+       "n": 1,
+       "chr1_n": 1,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 1,
+       "rescue_t": 1,
+       "allH_t": 1,
+       "allH_argmax": 1,
+       "chr1_rescue_argmax": 1
+      },
+      "all": {
+       "n": 67,
+       "chr1_n": 9,
+       "base_t": 4,
+       "base_argmax": 2,
+       "rescue_argmax": 40,
+       "rescue_t": 43,
+       "allH_t": 49,
+       "allH_argmax": 42,
+       "chr1_rescue_argmax": 5
+      }
+     }
+    },
+    "h50_strict": {
+     "counts": {
+      "tumor_only": 50,
+      "normal": 6,
+      "neither": 11,
+      "ambiguous": 0
+     },
+     "chr1": {
+      "tumor_only": 7,
+      "normal": 1,
+      "neither": 1,
+      "ambiguous": 0
+     },
+     "why": {
+      "neither:": 11,
+      "normal:at_locus": 6,
+      "tumor_only:at_locus": 50
+     },
+     "by_event_kind": {
+      "SNV": {
+       "tumor_only": 21,
+       "normal": 0,
+       "neither": 5,
+       "ambiguous": 0
+      },
+      "INDEL": {
+       "tumor_only": 29,
+       "normal": 6,
+       "neither": 6,
+       "ambiguous": 0
+      }
+     },
+     "by_repeat": {
+      "homopolymer>=7": {
+       "tumor_only": 29,
+       "normal": 5,
+       "neither": 10,
+       "ambiguous": 0
+      },
+      "STR": {
+       "tumor_only": 14,
+       "normal": 1,
+       "neither": 1,
+       "ambiguous": 0
+      },
+      "other": {
+       "tumor_only": 7,
+       "normal": 0,
+       "neither": 0,
+       "ambiguous": 0
+      }
+     },
+     "calls": {
+      "tumor_only": {
+       "n": 50,
+       "chr1_n": 7,
+       "base_t": 4,
+       "base_argmax": 2,
+       "rescue_argmax": 32,
+       "rescue_t": 35,
+       "allH_t": 40,
+       "allH_argmax": 34,
+       "chr1_rescue_argmax": 4
+      },
+      "normal": {
+       "n": 6,
+       "chr1_n": 1,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 6,
+       "rescue_t": 6,
+       "allH_t": 5,
+       "allH_argmax": 5,
+       "chr1_rescue_argmax": 1
+      },
+      "neither": {
+       "n": 11,
+       "chr1_n": 1,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 2,
+       "rescue_t": 2,
+       "allH_t": 4,
+       "allH_argmax": 3,
+       "chr1_rescue_argmax": 0
+      },
+      "ambiguous": {
+       "n": 0,
+       "chr1_n": 0,
+       "base_t": 0,
+       "base_argmax": 0,
+       "rescue_argmax": 0,
+       "rescue_t": 0,
+       "allH_t": 0,
+       "allH_argmax": 0,
+       "chr1_rescue_argmax": 0
+      },
+      "all": {
+       "n": 67,
+       "chr1_n": 9,
+       "base_t": 4,
+       "base_argmax": 2,
+       "rescue_argmax": 40,
+       "rescue_t": 43,
+       "allH_t": 49,
+       "allH_argmax": 42,
+       "chr1_rescue_argmax": 5
+      }
+     }
+    }
+   },
+   "earlier_normal_indel_only": {
+    "30": 19,
+    "50": 22
+   },
+   "transition_h30_earlier_to_strict": {
+    "ambiguous->ambiguous": 1,
+    "neither->neither": 3,
+    "normal->normal": 22,
+    "normal->tumor_only": 20,
+    "tumor_only->neither": 1,
+    "tumor_only->tumor_only": 20
+   },
+   "normal_at_locus_hap": {
+    "h30_earlier": {
+     "own": 18,
+     "both": 13,
+     "other": 1
+    },
+    "h30_strict": {
+     "own": 5,
+     "both": 6,
+     "other": 1
+    },
+    "h50_earlier": {
+     "own": 17,
+     "both": 9,
+     "other": 2
+    },
+    "h50_strict": {
+     "both": 2,
+     "own": 3,
+     "other": 1
+    }
+   },
+   "class_by_event_T_context": {
+    "h30_earlier": {
+     "ambiguous|ambiguous": 1,
+     "neither|neither": 1,
+     "neither|normal": 2,
+     "normal|ambiguous": 1,
+     "normal|neither": 2,
+     "normal|normal": 37,
+     "normal|tumor_only": 2,
+     "tumor_only|normal": 3,
+     "tumor_only|tumor_only": 18
+    },
+    "h30_strict": {
+     "ambiguous|ambiguous": 1,
+     "neither|neither": 1,
+     "neither|normal": 1,
+     "neither|tumor_only": 2,
+     "normal|ambiguous": 1,
+     "normal|neither": 1,
+     "normal|normal": 17,
+     "normal|tumor_only": 3,
+     "tumor_only|neither": 2,
+     "tumor_only|normal": 3,
+     "tumor_only|tumor_only": 35
+    },
+    "h50_earlier": {
+     "ambiguous|ambiguous": 1,
+     "neither|normal": 3,
+     "neither|tumor_only": 5,
+     "normal|normal": 28,
+     "normal|tumor_only": 1,
+     "tumor_only|normal": 4,
+     "tumor_only|tumor_only": 25
+    },
+    "h50_strict": {
+     "neither|normal": 1,
+     "neither|tumor_only": 10,
+     "normal|normal": 4,
+     "normal|tumor_only": 2,
+     "tumor_only|ambiguous": 1,
+     "tumor_only|neither": 1,
+     "tumor_only|normal": 5,
+     "tumor_only|tumor_only": 43
+    }
+   },
+   "tumor_only_at_locus": {
+    "h30_earlier": 19,
+    "h30_strict": 38,
+    "h50_earlier": 29,
+    "h50_strict": 50
+   },
+   "vs_e9d_h50_strict": {
+    "germline|neither": 3,
+    "germline|normal": 6,
+    "tumor_only|neither": 3,
+    "tumor_only|tumor_only": 50,
+    "unsupported|neither": 4,
+    "unverifiable|neither": 1
+   },
+   "vs_e9d_h30_earlier": {
+    "germline|normal": 9,
+    "tumor_only|ambiguous": 1,
+    "tumor_only|neither": 3,
+    "tumor_only|normal": 29,
+    "tumor_only|tumor_only": 20,
+    "unsupported|normal": 3,
+    "unsupported|tumor_only": 1,
+    "unverifiable|normal": 1
+   }
+  }
+ },
+ "checks": {
+  "HG008_PacBio_SNV_7fc7396": {
+   "n": 112,
+   "recount": {
+    "base": [
+     0,
+     0
+    ],
+    "all_H": [
+     61,
+     44
+    ],
+    "site10_high": [
+     45,
+     32
+    ]
+   },
+   "e11": {
+    "base": [
+     0,
+     0
+    ],
+    "all_H": [
+     61,
+     44
+    ],
+    "site10_high": [
+     45,
+     32
+    ]
+   },
+   "equal": true
+  },
+  "HG008_ONT_SNV_7fc7396": {
+   "n": 89,
+   "recount": {
+    "base": [
+     1,
+     1
+    ],
+    "all_H": [
+     49,
+     49
+    ],
+    "site10_high": [
+     45,
+     46
+    ]
+   },
+   "e11": {
+    "base": [
+     1,
+     1
+    ],
+    "all_H": [
+     49,
+     49
+    ],
+    "site10_high": [
+     45,
+     46
+    ]
+   },
+   "equal": true
+  },
+  "HG008_Illumina_SNV_d46_7fc7396": {
+   "n": 135,
+   "recount": {
+    "base": [
+     4,
+     1
+    ],
+    "all_H": [
+     97,
+     81
+    ],
+    "site10_high": [
+     86,
+     80
+    ]
+   },
+   "e11": {
+    "base": [
+     4,
+     1
+    ],
+    "all_H": [
+     97,
+     81
+    ],
+    "site10_high": [
+     86,
+     80
+    ]
+   },
+   "equal": true
+  },
+  "HG008_PacBio_SNV_d46_7fc7396": {
+   "n": 82,
+   "recount": {
+    "base": [
+     1,
+     0
+    ],
+    "all_H": [
+     59,
+     55
+    ],
+    "site10_high": [
+     45,
+     38
+    ]
+   },
+   "e11": {
+    "base": [
+     1,
+     0
+    ],
+    "all_H": [
+     59,
+     55
+    ],
+    "site10_high": [
+     45,
+     38
+    ]
+   },
+   "equal": true
+  },
+  "HG008_ONT_SNV_d46_7fc7396": {
+   "n": 67,
+   "recount": {
+    "base": [
+     4,
+     2
+    ],
+    "all_H": [
+     49,
+     42
+    ],
+    "site10_high": [
+     43,
+     40
+    ]
+   },
+   "e11": {
+    "base": [
+     4,
+     2
+    ],
+    "all_H": [
+     49,
+     42
+    ],
+    "site10_high": [
+     43,
+     40
+    ]
+   },
+   "equal": true
+  }
+ },
+ "windows": {
+  "events": 256,
+  "N_window_in_N_exact": 256,
+  "T_window_in_T_exact": 253,
+  "T_window_in_T_le1": 256,
+  "T_window_in_N_exact": 1,
+  "N_window_in_T_exact": 33,
+  "T_locus_found": 256
+ },
+ "controls": {
+  "events": 256,
+  "event_kind": {
+   "INDEL": 181,
+   "SNV": 75
+  },
+  "classes": {
+   "T_h30_earlier": {
+    "all": {
+     "tumor_only": 49,
+     "normal": 187,
+     "neither": 9,
+     "ambiguous": 11
+    },
+    "SNV": {
+     "tumor_only": 38,
+     "normal": 25,
+     "neither": 3,
+     "ambiguous": 9
+    },
+    "INDEL": {
+     "tumor_only": 11,
+     "normal": 162,
+     "neither": 6,
+     "ambiguous": 2
+    }
+   },
+   "T_h30_strict": {
+    "all": {
+     "tumor_only": 146,
+     "normal": 87,
+     "neither": 10,
+     "ambiguous": 13
+    },
+    "SNV": {
+     "tumor_only": 39,
+     "normal": 23,
+     "neither": 4,
+     "ambiguous": 9
+    },
+    "INDEL": {
+     "tumor_only": 107,
+     "normal": 64,
+     "neither": 6,
+     "ambiguous": 4
+    }
+   },
+   "T_h50_earlier": {
+    "all": {
+     "tumor_only": 98,
+     "normal": 152,
+     "neither": 0,
+     "ambiguous": 6
+    },
+    "SNV": {
+     "tumor_only": 66,
+     "normal": 4,
+     "neither": 0,
+     "ambiguous": 5
+    },
+    "INDEL": {
+     "tumor_only": 32,
+     "normal": 148,
+     "neither": 0,
+     "ambiguous": 1
+    }
+   },
+   "T_h50_strict": {
+    "all": {
+     "tumor_only": 218,
+     "normal": 31,
+     "neither": 1,
+     "ambiguous": 6
+    },
+    "SNV": {
+     "tumor_only": 67,
+     "normal": 2,
+     "neither": 1,
+     "ambiguous": 5
+    },
+    "INDEL": {
+     "tumor_only": 151,
+     "normal": 29,
+     "neither": 0,
+     "ambiguous": 1
+    }
+   },
+   "N_h30_earlier": {
+    "all": {
+     "tumor_only": 4,
+     "normal": 243,
+     "neither": 9,
+     "ambiguous": 0
+    },
+    "SNV": {
+     "tumor_only": 1,
+     "normal": 71,
+     "neither": 3,
+     "ambiguous": 0
+    },
+    "INDEL": {
+     "tumor_only": 3,
+     "normal": 172,
+     "neither": 6,
+     "ambiguous": 0
+    }
+   },
+   "N_h30_strict": {
+    "all": {
+     "tumor_only": 3,
+     "normal": 243,
+     "neither": 10,
+     "ambiguous": 0
+    },
+    "SNV": {
+     "tumor_only": 1,
+     "normal": 71,
+     "neither": 3,
+     "ambiguous": 0
+    },
+    "INDEL": {
+     "tumor_only": 2,
+     "normal": 172,
+     "neither": 7,
+     "ambiguous": 0
+    }
+   },
+   "N_h50_earlier": {
+    "all": {
+     "tumor_only": 1,
+     "normal": 253,
+     "neither": 2,
+     "ambiguous": 0
+    },
+    "SNV": {
+     "tumor_only": 1,
+     "normal": 72,
+     "neither": 2,
+     "ambiguous": 0
+    },
+    "INDEL": {
+     "tumor_only": 0,
+     "normal": 181,
+     "neither": 0,
+     "ambiguous": 0
+    }
+   },
+   "N_h50_strict": {
+    "all": {
+     "tumor_only": 1,
+     "normal": 253,
+     "neither": 2,
+     "ambiguous": 0
+    },
+    "SNV": {
+     "tumor_only": 1,
+     "normal": 72,
+     "neither": 2,
+     "ambiguous": 0
+    },
+    "INDEL": {
+     "tumor_only": 0,
+     "normal": 181,
+     "neither": 0,
+     "ambiguous": 0
+    }
+   }
+  }
+ }
+}

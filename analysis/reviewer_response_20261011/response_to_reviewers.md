@@ -22,11 +22,11 @@ How to read this draft:
 | R1.2 | 图的组成和大小 | 部分 | d46 模型；单倍型数梯度实验 |
 | R1.3 | 困难区域、ONT 歧义 | 部分 | GIAB stratification；三参考 alignment 指标 |
 | R1.4 | 图里已有的 somatic allele 被删 | 部分 | 分析已完成；branch candidate 功能 |
-| R1.5 | HapMap 不合适、有泄漏 | 部分 | 去掉 HapMap 或去 donor 的图；dilution 模型 |
+| R1.5 | HapMap 不合适、有泄漏 | 部分 | 去掉 HapMap 或去 donor 的图；dilution 模型；HCC1395 dilution（数据已有） |
 | R1.6 | recall 低 | 部分 | SNV 重训；比较器同协议；INDEL 现行 recipe |
 | R1.7 | 训练数据规模和多样性 | 部分 | 跨样本 / leave-one-line-out |
 | R1.8 | 标签过程不清楚 | 能 | 整理成 Methods 和计数表 |
-| R1.m1 | 更多数据集 | 部分 | HCC1395 等的模型和评估；CASTLE truth 是 DeepSomatic 的 |
+| R1.m1 | 更多数据集 | 部分 | HCC1395 等的模型和评估；CASTLE truth 是 DeepSomatic 的；HCC1937 没做 |
 | R1.m2 | 窗口截断在节点边界 | 能 | 图示 |
 | R2.1 | HapMap | 部分 | 同 R1.5 |
 | R2.2 | truth 怎么来的 | 能 | 写 Methods |
@@ -207,21 +207,25 @@ are in HPRC v1.1.
 v2.1. We removed the HapMap mixture from the main benchmark.
 
 Low-VAF performance is now evaluated with in-silico tumor/normal dilutions of COLO829T: purity 25, 50 and 75% on all
-three platforms. These contain true acquired mutations and were built with the same pipeline.
-[待补: SEQC2 HCC1395 titration series, if added]
+three platforms. These contain true acquired mutations and were built with the same pipeline. The same design on
+SEQC2 HCC1395 (Illumina, 5–50% purity, SEQC2 truth) tests low-VAF calling on a second tumor.
+[待补: HCC1395 dilution results]
 
 The Supplement keeps a HapMap analysis on a graph with the four donors removed, and states the limitation explicitly.
 [待补]
 
 **现有 pipeline 能否解决：部分。**
 
-- 已有：COLO829T P25 / P50 / P75 九套 tensor。fiberseq 联合模型已有结果：PoN 后 F1 在 P100 / P75 / P50 / P25 分别为
-  0.785 / 0.699 / 0.663 / 0.722，实测 purity 0.65 / 0.38 / 0.17。P75 和 P50 比 P25 差，这个异常还没查。
+- 已有：COLO829T P25 / P50 / P75 九套 tensor。fiberseq 联合模型 PoN 后 F1：P100 / P75 / P50 / P25 为
+  0.785 / 0.699 / 0.663 / 0.722（实测 purity 0.65 / 0.38 / 0.17），P75、P50 比 P25 差，异常没查。
 - 需要：
   - 先查异常，再训练 Illumina 和 ONT 的混合模型。
-  - leave-donor-out 图：从 GBZ 去掉 4 个 donor（`vg gbwt --remove-sample`），重新做频率过滤和 giraffe 索引，HapMap
-    重新比对、建 tensor。工作量大，也可以直接去掉 HapMap。用户决定。
-  - 可选：SEQC2 HCC1395/HCC1395BL titration，是真实的低 VAF somatic，要下载，用户决定。
+  - leave-donor-out 图：GBZ 去掉 4 个 donor，重做频率过滤、索引、比对和 tensor。工作量大，也可直接去掉 HapMap。
+    用户决定。
+  - HCC1395 dilution，数据都在 `/scratch/jshen/data/SEQC2/`，不用下载：tumor = WGS_FD_T_1 + _2（~108x），normal =
+    HCC1395BL `SRR7890827`（~58x）。按 ~60x 混 P5 / P10 / P20 / P50，normal 够用；只作稀释，不作 matched normal。
+    每档要 giraffe + sort + tensor，用户决定。
+  - SEQC2 湿实验 titration `Tumor_Purity_Titration/SPP_GT_1-1_1.sra`（~148x）也在盘上，只有一个 run，purity 待查。
 
 ### R1.6 Low sensitivity
 
@@ -237,7 +241,7 @@ and repeat absorption. On COLO829T they are low-VAF subclonal mutations and regi
 
 The INDEL limitation is real, and we state it. 43–68% of truth INDELs reach a tensor, and 81–92% of those without
 any candidate are graph-encoded (R1.4). Moreover, 72–84% of all truth INDELs are exact population alleles. Population filtering alone
-therefore caps INDEL recall at 0.30 on HG008T chr1, for any tumor-only caller that uses it. We now show full
+therefore caps INDEL recall at 0.35 on HG008T chr1, for any tumor-only caller that uses it. We now show full
 precision–recall curves for every caller so readers can choose their operating point.
 
 **现有 pipeline 能否解决：部分。**
@@ -327,7 +331,10 @@ HCC1395, whose SEQC2 truth is independent of DeepSomatic.
 - 需要：模型和评估。HCC1937 没包括；它的 truth 已在 `CASTLE/benchmarks/` 里，要覆盖 DeepSomatic 全部五株的话需要加
   reads 和 tensor。
 - 注意：HCC1954 / H1437 / H2009 的 truth 是 DeepSomatic 的训练 truth（`CASTLE/README.txt`），在这三株上和
-  DeepSomatic 比较对它有利。HCC1395 用的是 SEQC2 truth，和 DeepSomatic 无关。
+  DeepSomatic 比较对它有利。HCC1395 的 SEQC2 truth 是独立的，但 DeepSomatic 也用 HCC1395 训练过（`benchmarks/`
+  里有它的 HCC1395 训练 truth），所以 HCC1395 上的比较也只能在它的 held-out 染色体上做。
+- SEQC2 / CASTLE 的 INDEL truth 来自短读长 caller，少了大部分 homopolymer / STR INDEL（SEQC2 HP≥7 15.5 %，HG008T
+  74.9 %），所以用了 rule (a)。HCC1395 的 INDEL 数字和 HG008T 不能直接比，文中要说明。
 
 ### R1.m2 Tensor windows truncated at node boundaries
 
@@ -417,7 +424,8 @@ sensitivity by truth VAF. On COLO829T, this threshold removes 74–82% of truth 
 those with VAF ≥ 0.10 reach a tensor. [待补: recall per VAF bin after calling]
 
 For low purity, we trained on COLO829T dilutions (25, 50 and 75% purity) together with the undiluted tumor, and we
-report results per purity. [待补: per-purity F1 on three platforms]
+report results per purity. [待补: per-purity F1 on three platforms] The HCC1395 dilutions (R1.5) test the same models
+on an unseen tumor.
 
 The earlier HapMap-trained low-VAF model is withdrawn with the HapMap benchmark. A low-AF configuration, built at
 AF ≥ 0.03 and trained on the dilutions, replaces it. [待补] We give explicit usage guidance: the default model for
@@ -476,7 +484,8 @@ resources". INDELs now use a separate documented rule: an exact allele with AF �
 
 - 需要：
   - 核实 HG008 / COLO829 是否在 CoLoRSdb、gnomAD 的样本里。
-  - INDEL 规则是在 chr1（test）上选的，要在 validation 或独立样本（HCC1395）上重新确认。
+  - INDEL 规则是在 chr1（test）上选的，要在 validation 或独立样本（HCC1395）上重新确认。HCC1395 的 SEQC2 truth
+    里 HP≥7 的 INDEL 很少，只能确认 0.001 那一档，0.01 那一档要用 HG008T / COLO829T 的 validation 染色体。
 
 ### R2.7 Alignment statistics overstated
 
@@ -517,7 +526,7 @@ v1.1 and v2.1] We also toned down the statement (R3.6).
 **Comment.** Run the identical Pansoma pipeline on GRCh38 (or a single-path graph) and on the HPRC graph to isolate the
 pangenome's contribution.
 
-**Response.** We performed this ablation. Reads of all six datasets were aligned with the same vg giraffe version to
+**Response.** We performed this ablation. Reads of all six datasets were aligned with vg Giraffe (1.66 for the GRCh38-only graph, 1.77 for HPRC v2.1; [待核实: v1.1]) to
 three references:
 
 - a GRCh38-only graph built by vg autoindex from the same FASTA;
@@ -694,6 +703,8 @@ chromosome.
   - 多 seed 训练（GPU 时间）。
   - block bootstrap 脚本：rtg 输出的 TP / FP / FN 按位置分块重抽样。
   - 可考虑第二条测试染色体。
+  - 可选：SEQC2 的技术重复。`WGS_FD_T_3` 是同一株、另一个文库（盘上已有，~56x），可以看同一模型在重复测序上的
+    calls 一致性。
 
 ### R3.10 Low-VAF and INDEL claims
 
@@ -714,6 +725,8 @@ INDEL accuracy is therefore limited by this overlap more than by platform error.
 
 - 已有：`analysis/indel_repeat_context_predictions_20261006`、`tmp/indel_hp_strata_20261010`。
 - 需要：最终 INDEL 模型（10-11 recipe）在六套上的结果出来后，再出分层表。
+- HCC1395 / CASTLE 的 INDEL 分层要单独列：它们的 truth 少了 HP / STR INDEL（rule (a)），重复区的 recall 和
+  precision 在这些株上没有意义。
 
 ### R3.m1 Parameter discrepancies between Methods and Supplement
 
@@ -779,7 +792,8 @@ corrected, and the manuscript was language-edited.
 
 5. 跨样本和 leave-one-line-out，统一在 d46 上。（R1.7、R1.m1）
 6. 多 seed 和 block bootstrap。（R3.9）
-7. VAF 和 purity：查 mixture 异常、Illumina / ONT 混合模型、低 AF build。（R2.4、R3.10）
+7. VAF 和 purity：查 mixture 异常、Illumina / ONT 混合模型、低 AF build；HCC1395 Illumina in-silico dilution
+   （SEQC2 tumor + HCC1395BL reads，都在盘上）。（R1.5、R2.4、R3.10）
 8. 区域分层：GIAB stratification、三参考的 alignment 指标和 MAPQ。（R1.3、R3.6、R2.7）
 
 **P2：可选的新功能和实验。**
@@ -787,14 +801,16 @@ corrected, and the manuscript was language-edited.
 9. branch candidate 模式。（R1.4、R1.1）
 10. bubble plane。（R1.1、R1.m2）
 11. HPRC 单倍型子集图。（R1.2）
-12. 去掉 donor 的 HapMap 图，或 SEQC2 titration。（R1.5）
+12. 去掉 donor 的 HapMap 图；SEQC2 湿实验 titration（盘上只有 SPP_GT_1-1 一个 run，purity 待查）；HCC1937
+    （truth 已有，reads 要下载）。（R1.5、R1.m1）
 13. CHM13-only 图（HG008T PacBio）。（R3.6）
 14. SBS96、INDEL 分层表、图和文字修改。（R3.5、R3.10、R2.m、R3.m）
 
 **要用户决定的事：**
 
 - HapMap 是直接去掉，还是做去 donor 的图。
-- 是否下载 GIAB stratification 和 SEQC2 titration。
+- 是否下载 GIAB stratification。
+- 是否做 HCC1395 dilution（不用下载），以及 HCC1937 要不要下载 reads。
 - 是否做 branch candidate 和 bubble plane。
 - rule (a) 是否用到 HG008T / COLO829T。
 - INDEL 人群过滤规则要在非 chr1 的数据上重新确认。

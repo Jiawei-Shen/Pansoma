@@ -1,0 +1,5137 @@
+{
+ "common_af": 0.01,
+ "bin_bp": 1000000,
+ "min_bin_snvs": 100,
+ "sets": {
+  "H1437_CASTLE": {
+   "used_by_pansoma": "yes",
+   "truth_vcf": "/scratch/jshen/data/CASTLE/H1437/truth/H1437_somatic_CASTLE.vcf.gz",
+   "bed": "/scratch/jshen/data/CASTLE/H1437/truth/H1437_high-confidence-regions_DeepSomatic-HCC1395-model.bed",
+   "normal_line": "H1437",
+   "germline_baseline_chr20_in_bed": {
+    "n": 74719,
+    "gnomad_ge1pct": 67919,
+    "gnomad_any": 69395,
+    "het_n": 47636,
+    "het_gnomad_ge1pct": 42419
+   },
+   "SNV_all": {
+    "n": 82529,
+    "normal_exact": 0,
+    "normal_exact_q10": 0,
+    "label_germ": 0,
+    "normal_exact_hom": 0,
+    "normal_pos_other": 77,
+    "merged_germline": 66,
+    "full_filter_GERMLINE": 66,
+    "full_filter_PASS": 82463,
+    "full_absent": 0,
+    "gnomad_ge1pct": 22982,
+    "gnomad_any": 26350,
+    "colorsdb_ge1pct": 23491,
+    "gnomad_or_colorsdb_ge1pct": 23733,
+    "gnomad_ge1pct_and_normal": 0,
+    "gnomad_ge1pct_not_normal": 22982,
+    "normal_or_gnomad_ge1pct": 22982,
+    "tumor_vaf_common_n": 22982,
+    "tumor_vaf_common_median": 0.336,
+    "tumor_vaf_common_ge0.9": 23,
+    "tumor_vaf_rare_n": 59547,
+    "tumor_vaf_rare_median": 0.483,
+    "tumor_vaf_rare_ge0.9": 11772,
+    "bin_class": {
+     "het0.0-0.1": {
+      "rare_not_normal": 5156,
+      "all": 26982,
+      "common_not_normal": 21826
+     },
+     "het0.1-0.2": {
+      "rare_not_normal": 668,
+      "all": 1250,
+      "common_not_normal": 582
+     },
+     "het0.2-0.4": {
+      "rare_not_normal": 4000,
+      "all": 4078,
+      "common_not_normal": 78
+     },
+     "het0.4-1.0": {
+      "rare_not_normal": 49582,
+      "all": 50077,
+      "common_not_normal": 495
+     },
+     "sparse": {
+      "rare_not_normal": 141,
+      "all": 142,
+      "common_not_normal": 1
+     }
+    },
+    "bins_half_common_not_normal": 25,
+    "bins_any_common_not_normal": 272,
+    "top_bins_common_not_normal": [
+     {
+      "chrom": "chr9",
+      "start_mb": 92,
+      "n": 739
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 102,
+      "n": 605
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 109,
+      "n": 577
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 80,
+      "n": 570
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 117,
+      "n": 544
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 105,
+      "n": 534
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 96,
+      "n": 533
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 94,
+      "n": 498
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 126,
+      "n": 475
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 131,
+      "n": 473
+     }
+    ],
+    "bins_half_rare_not_normal": 726,
+    "bins_any_rare_not_normal": 2896,
+    "top_bins_rare_not_normal": [
+     {
+      "chrom": "chr9",
+      "start_mb": 133,
+      "n": 137
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 57,
+      "n": 106
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 56,
+      "n": 96
+     },
+     {
+      "chrom": "chr8",
+      "start_mb": 83,
+      "n": 86
+     },
+     {
+      "chrom": "chr14",
+      "start_mb": 105,
+      "n": 86
+     },
+     {
+      "chrom": "chr2",
+      "start_mb": 125,
+      "n": 85
+     },
+     {
+      "chrom": "chr16",
+      "start_mb": 35,
+      "n": 84
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 102,
+      "n": 81
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 62,
+      "n": 79
+     },
+     {
+      "chrom": "chr15",
+      "start_mb": 27,
+      "n": 79
+     }
+    ]
+   },
+   "SNV_bed": {
+    "n": 73623,
+    "normal_exact": 0,
+    "normal_exact_q10": 0,
+    "label_germ": 0,
+    "normal_exact_hom": 0,
+    "normal_pos_other": 65,
+    "merged_germline": 59,
+    "full_filter_GERMLINE": 59,
+    "full_filter_PASS": 73564,
+    "full_absent": 0,
+    "gnomad_ge1pct": 21180,
+    "gnomad_any": 24128,
+    "colorsdb_ge1pct": 21460,
+    "gnomad_or_colorsdb_ge1pct": 21662,
+    "gnomad_ge1pct_and_normal": 0,
+    "gnomad_ge1pct_not_normal": 21180,
+    "normal_or_gnomad_ge1pct": 21180,
+    "tumor_vaf_common_n": 21180,
+    "tumor_vaf_common_median": 0.336,
+    "tumor_vaf_common_ge0.9": 17,
+    "tumor_vaf_rare_n": 52443,
+    "tumor_vaf_rare_median": 0.479,
+    "tumor_vaf_rare_ge0.9": 9421,
+    "bin_class": {
+     "het0.0-0.1": {
+      "rare_not_normal": 2629,
+      "all": 23035,
+      "common_not_normal": 20406
+     },
+     "het0.1-0.2": {
+      "rare_not_normal": 592,
+      "all": 1125,
+      "common_not_normal": 533
+     },
+     "het0.2-0.4": {
+      "rare_not_normal": 3501,
+      "all": 3514,
+      "common_not_normal": 13
+     },
+     "het0.4-1.0": {
+      "rare_not_normal": 45703,
+      "all": 45931,
+      "common_not_normal": 228
+     },
+     "sparse": {
+      "rare_not_normal": 18,
+      "all": 18
+     }
+    },
+    "bins_half_common_not_normal": 24,
+    "bins_any_common_not_normal": 225,
+    "top_bins_common_not_normal": [
+     {
+      "chrom": "chr9",
+      "start_mb": 92,
+      "n": 632
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 102,
+      "n": 597
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 109,
+      "n": 572
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 80,
+      "n": 556
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 117,
+      "n": 543
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 105,
+      "n": 515
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 131,
+      "n": 472
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 126,
+      "n": 467
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 107,
+      "n": 430
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 89,
+      "n": 427
+     }
+    ],
+    "bins_half_rare_not_normal": 663,
+    "bins_any_rare_not_normal": 2706,
+    "top_bins_rare_not_normal": [
+     {
+      "chrom": "chr9",
+      "start_mb": 133,
+      "n": 121
+     },
+     {
+      "chrom": "chr8",
+      "start_mb": 83,
+      "n": 86
+     },
+     {
+      "chrom": "chr2",
+      "start_mb": 125,
+      "n": 83
+     },
+     {
+      "chrom": "chr16",
+      "start_mb": 35,
+      "n": 80
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 102,
+      "n": 79
+     },
+     {
+      "chrom": "chr15",
+      "start_mb": 27,
+      "n": 79
+     },
+     {
+      "chrom": "chr2",
+      "start_mb": 123,
+      "n": 76
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 145,
+      "n": 76
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 117,
+      "n": 75
+     },
+     {
+      "chrom": "chr5",
+      "start_mb": 45,
+      "n": 72
+     }
+    ]
+   },
+   "INDEL_all": {
+    "n": 4896,
+    "normal_exact": 2,
+    "normal_exact_q10": 2,
+    "label_germ": 2,
+    "normal_exact_hom": 0,
+    "normal_pos_other": 55,
+    "merged_germline": 49,
+    "full_filter_GERMLINE": 51,
+    "full_filter_PASS": 4844,
+    "full_absent": 1,
+    "gnomad_ge1pct": 1843,
+    "gnomad_any": 2183,
+    "colorsdb_ge1pct": 2375,
+    "gnomad_or_colorsdb_ge1pct": 2427,
+    "gnomad_ge1pct_and_normal": 1,
+    "gnomad_ge1pct_not_normal": 1842,
+    "normal_or_gnomad_ge1pct": 1844,
+    "tumor_vaf_common_n": 1843,
+    "tumor_vaf_common_median": 0.329,
+    "tumor_vaf_common_ge0.9": 5,
+    "tumor_vaf_rare_n": 3052,
+    "tumor_vaf_rare_median": 0.42,
+    "tumor_vaf_rare_ge0.9": 396,
+    "bin_class": {
+     "het0.0-0.1": {
+      "rare_not_normal": 708,
+      "all": 2434,
+      "common_not_normal": 1725,
+      "normal_exact": 1
+     },
+     "het0.1-0.2": {
+      "rare_not_normal": 45,
+      "all": 91,
+      "common_not_normal": 46
+     },
+     "het0.2-0.4": {
+      "rare_not_normal": 167,
+      "all": 177,
+      "common_not_normal": 10
+     },
+     "het0.4-1.0": {
+      "rare_not_normal": 2126,
+      "all": 2187,
+      "common_not_normal": 60,
+      "normal_exact": 1
+     },
+     "sparse": {
+      "rare_not_normal": 6,
+      "all": 7,
+      "common_not_normal": 1
+     }
+    },
+    "bins_half_common_not_normal": 24,
+    "bins_any_common_not_normal": 138,
+    "top_bins_common_not_normal": [
+     {
+      "chrom": "chr9",
+      "start_mb": 92,
+      "n": 57
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 96,
+      "n": 55
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 102,
+      "n": 55
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 94,
+      "n": 54
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 80,
+      "n": 46
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 110,
+      "n": 45
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 125,
+      "n": 45
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 131,
+      "n": 45
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 93,
+      "n": 41
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 109,
+      "n": 40
+     }
+    ],
+    "bins_half_rare_not_normal": 353,
+    "bins_any_rare_not_normal": 1545,
+    "top_bins_rare_not_normal": [
+     {
+      "chrom": "chr9",
+      "start_mb": 133,
+      "n": 21
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 94,
+      "n": 19
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 102,
+      "n": 18
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 96,
+      "n": 17
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 125,
+      "n": 16
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 92,
+      "n": 15
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 118,
+      "n": 15
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 136,
+      "n": 14
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 99,
+      "n": 13
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 110,
+      "n": 13
+     }
+    ]
+   },
+   "INDEL_bed": {
+    "n": 4452,
+    "normal_exact": 2,
+    "normal_exact_q10": 2,
+    "label_germ": 2,
+    "normal_exact_hom": 0,
+    "normal_pos_other": 53,
+    "merged_germline": 47,
+    "full_filter_GERMLINE": 49,
+    "full_filter_PASS": 4402,
+    "full_absent": 1,
+    "gnomad_ge1pct": 1717,
+    "gnomad_any": 2011,
+    "colorsdb_ge1pct": 2202,
+    "gnomad_or_colorsdb_ge1pct": 2251,
+    "gnomad_ge1pct_and_normal": 1,
+    "gnomad_ge1pct_not_normal": 1716,
+    "normal_or_gnomad_ge1pct": 1718,
+    "tumor_vaf_common_n": 1717,
+    "tumor_vaf_common_median": 0.329,
+    "tumor_vaf_common_ge0.9": 5,
+    "tumor_vaf_rare_n": 2734,
+    "tumor_vaf_rare_median": 0.41,
+    "tumor_vaf_rare_ge0.9": 319,
+    "bin_class": {
+     "het0.0-0.1": {
+      "rare_not_normal": 559,
+      "all": 2172,
+      "common_not_normal": 1612,
+      "normal_exact": 1
+     },
+     "het0.1-0.2": {
+      "rare_not_normal": 41,
+      "all": 82,
+      "common_not_normal": 41
+     },
+     "het0.2-0.4": {
+      "rare_not_normal": 146,
+      "all": 153,
+      "common_not_normal": 7
+     },
+     "het0.4-1.0": {
+      "rare_not_normal": 1986,
+      "all": 2043,
+      "common_not_normal": 56,
+      "normal_exact": 1
+     },
+     "sparse": {
+      "rare_not_normal": 2,
+      "all": 2
+     }
+    },
+    "bins_half_common_not_normal": 24,
+    "bins_any_common_not_normal": 128,
+    "top_bins_common_not_normal": [
+     {
+      "chrom": "chr9",
+      "start_mb": 102,
+      "n": 53
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 92,
+      "n": 51
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 80,
+      "n": 45
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 94,
+      "n": 45
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 131,
+      "n": 45
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 96,
+      "n": 44
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 125,
+      "n": 44
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 110,
+      "n": 43
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 109,
+      "n": 40
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 126,
+      "n": 36
+     }
+    ],
+    "bins_half_rare_not_normal": 318,
+    "bins_any_rare_not_normal": 1385,
+    "top_bins_rare_not_normal": [
+     {
+      "chrom": "chr9",
+      "start_mb": 133,
+      "n": 20
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 102,
+      "n": 18
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 125,
+      "n": 16
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 94,
+      "n": 15
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 118,
+      "n": 15
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 92,
+      "n": 14
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 99,
+      "n": 13
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 110,
+      "n": 13
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 136,
+      "n": 13
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 89,
+      "n": 12
+     }
+    ]
+   }
+  },
+  "HCC1954_CASTLE": {
+   "used_by_pansoma": "yes",
+   "truth_vcf": "/scratch/jshen/data/CASTLE/HCC1954/truth/HCC1954_somatic_CASTLE.vcf.gz",
+   "bed": "/scratch/jshen/data/CASTLE/HCC1954/truth/HCC1954_high-confidence-regions_DeepSomatic-HCC1395-model.bed",
+   "normal_line": "HCC1954",
+   "germline_baseline_chr20_in_bed": {
+    "n": 77571,
+    "gnomad_ge1pct": 69484,
+    "gnomad_any": 71586,
+    "het_n": 49784,
+    "het_gnomad_ge1pct": 43329
+   },
+   "SNV_all": {
+    "n": 24033,
+    "normal_exact": 1,
+    "normal_exact_q10": 1,
+    "label_germ": 1,
+    "normal_exact_hom": 0,
+    "normal_pos_other": 17,
+    "merged_germline": 11,
+    "full_filter_GERMLINE": 12,
+    "full_filter_PASS": 24021,
+    "full_absent": 0,
+    "gnomad_ge1pct": 574,
+    "gnomad_any": 2896,
+    "colorsdb_ge1pct": 693,
+    "gnomad_or_colorsdb_ge1pct": 751,
+    "gnomad_ge1pct_and_normal": 1,
+    "gnomad_ge1pct_not_normal": 573,
+    "normal_or_gnomad_ge1pct": 574,
+    "tumor_vaf_common_n": 574,
+    "tumor_vaf_common_median": 0.478,
+    "tumor_vaf_common_ge0.9": 7,
+    "tumor_vaf_rare_n": 23459,
+    "tumor_vaf_rare_median": 0.243,
+    "tumor_vaf_rare_ge0.9": 189,
+    "bin_class": {
+     "het0.0-0.1": {
+      "rare_not_normal": 132,
+      "all": 133,
+      "common_not_normal": 1
+     },
+     "het0.1-0.2": {
+      "rare_not_normal": 155,
+      "all": 156,
+      "common_not_normal": 1
+     },
+     "het0.2-0.4": {
+      "rare_not_normal": 1609,
+      "all": 1625,
+      "common_not_normal": 16
+     },
+     "het0.4-1.0": {
+      "rare_not_normal": 21553,
+      "all": 22109,
+      "common_not_normal": 555,
+      "normal_exact": 1
+     },
+     "sparse": {
+      "rare_not_normal": 10,
+      "all": 10
+     }
+    },
+    "bins_half_common_not_normal": 4,
+    "bins_any_common_not_normal": 267,
+    "top_bins_common_not_normal": [
+     {
+      "chrom": "chr7",
+      "start_mb": 90,
+      "n": 197
+     },
+     {
+      "chrom": "chr14",
+      "start_mb": 105,
+      "n": 47
+     },
+     {
+      "chrom": "chr14",
+      "start_mb": 22,
+      "n": 32
+     },
+     {
+      "chrom": "chr14",
+      "start_mb": 106,
+      "n": 16
+     },
+     {
+      "chrom": "chr2",
+      "start_mb": 88,
+      "n": 5
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 21,
+      "n": 3
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 142,
+      "n": 3
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 68,
+      "n": 2
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 71,
+      "n": 2
+     },
+     {
+      "chrom": "chr4",
+      "start_mb": 131,
+      "n": 2
+     }
+    ],
+    "bins_half_rare_not_normal": 705,
+    "bins_any_rare_not_normal": 2858,
+    "top_bins_rare_not_normal": [
+     {
+      "chrom": "chr14",
+      "start_mb": 106,
+      "n": 73
+     },
+     {
+      "chrom": "chr4",
+      "start_mb": 171,
+      "n": 47
+     },
+     {
+      "chrom": "chr5",
+      "start_mb": 116,
+      "n": 47
+     },
+     {
+      "chrom": "chr5",
+      "start_mb": 117,
+      "n": 41
+     },
+     {
+      "chrom": "chr8",
+      "start_mb": 84,
+      "n": 40
+     },
+     {
+      "chrom": "chr8",
+      "start_mb": 112,
+      "n": 39
+     },
+     {
+      "chrom": "chr20",
+      "start_mb": 60,
+      "n": 39
+     },
+     {
+      "chrom": "chr8",
+      "start_mb": 75,
+      "n": 35
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 11,
+      "n": 34
+     },
+     {
+      "chrom": "chr21",
+      "start_mb": 22,
+      "n": 33
+     }
+    ]
+   },
+   "SNV_bed": {
+    "n": 20846,
+    "normal_exact": 0,
+    "normal_exact_q10": 0,
+    "label_germ": 0,
+    "normal_exact_hom": 0,
+    "normal_pos_other": 15,
+    "merged_germline": 9,
+    "full_filter_GERMLINE": 9,
+    "full_filter_PASS": 20837,
+    "full_absent": 0,
+    "gnomad_ge1pct": 478,
+    "gnomad_any": 2515,
+    "colorsdb_ge1pct": 562,
+    "gnomad_or_colorsdb_ge1pct": 603,
+    "gnomad_ge1pct_and_normal": 0,
+    "gnomad_ge1pct_not_normal": 478,
+    "normal_or_gnomad_ge1pct": 478,
+    "tumor_vaf_common_n": 478,
+    "tumor_vaf_common_median": 0.486,
+    "tumor_vaf_common_ge0.9": 5,
+    "tumor_vaf_rare_n": 20368,
+    "tumor_vaf_rare_median": 0.242,
+    "tumor_vaf_rare_ge0.9": 141,
+    "bin_class": {
+     "het0.0-0.1": {
+      "rare_not_normal": 92,
+      "all": 93,
+      "common_not_normal": 1
+     },
+     "het0.1-0.2": {
+      "rare_not_normal": 128,
+      "all": 129,
+      "common_not_normal": 1
+     },
+     "het0.2-0.4": {
+      "rare_not_normal": 1395,
+      "all": 1409,
+      "common_not_normal": 14
+     },
+     "het0.4-1.0": {
+      "rare_not_normal": 18752,
+      "all": 19214,
+      "common_not_normal": 462
+     },
+     "sparse": {
+      "rare_not_normal": 1,
+      "all": 1
+     }
+    },
+    "bins_half_common_not_normal": 4,
+    "bins_any_common_not_normal": 229,
+    "top_bins_common_not_normal": [
+     {
+      "chrom": "chr7",
+      "start_mb": 90,
+      "n": 197
+     },
+     {
+      "chrom": "chr14",
+      "start_mb": 22,
+      "n": 29
+     },
+     {
+      "chrom": "chr14",
+      "start_mb": 105,
+      "n": 10
+     },
+     {
+      "chrom": "chr14",
+      "start_mb": 106,
+      "n": 8
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 68,
+      "n": 2
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 71,
+      "n": 2
+     },
+     {
+      "chrom": "chr2",
+      "start_mb": 88,
+      "n": 2
+     },
+     {
+      "chrom": "chr5",
+      "start_mb": 165,
+      "n": 2
+     },
+     {
+      "chrom": "chr6",
+      "start_mb": 78,
+      "n": 2
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 142,
+      "n": 2
+     }
+    ],
+    "bins_half_rare_not_normal": 635,
+    "bins_any_rare_not_normal": 2651,
+    "top_bins_rare_not_normal": [
+     {
+      "chrom": "chr5",
+      "start_mb": 116,
+      "n": 45
+     },
+     {
+      "chrom": "chr4",
+      "start_mb": 171,
+      "n": 42
+     },
+     {
+      "chrom": "chr5",
+      "start_mb": 117,
+      "n": 40
+     },
+     {
+      "chrom": "chr20",
+      "start_mb": 60,
+      "n": 39
+     },
+     {
+      "chrom": "chr8",
+      "start_mb": 84,
+      "n": 37
+     },
+     {
+      "chrom": "chr8",
+      "start_mb": 112,
+      "n": 37
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 11,
+      "n": 34
+     },
+     {
+      "chrom": "chr8",
+      "start_mb": 75,
+      "n": 33
+     },
+     {
+      "chrom": "chr14",
+      "start_mb": 106,
+      "n": 33
+     },
+     {
+      "chrom": "chr21",
+      "start_mb": 22,
+      "n": 32
+     }
+    ]
+   },
+   "INDEL_all": {
+    "n": 2556,
+    "normal_exact": 0,
+    "normal_exact_q10": 0,
+    "label_germ": 0,
+    "normal_exact_hom": 0,
+    "normal_pos_other": 35,
+    "merged_germline": 33,
+    "full_filter_GERMLINE": 33,
+    "full_filter_PASS": 2522,
+    "full_absent": 1,
+    "gnomad_ge1pct": 165,
+    "gnomad_any": 654,
+    "colorsdb_ge1pct": 386,
+    "gnomad_or_colorsdb_ge1pct": 453,
+    "gnomad_ge1pct_and_normal": 0,
+    "gnomad_ge1pct_not_normal": 165,
+    "normal_or_gnomad_ge1pct": 165,
+    "tumor_vaf_common_n": 165,
+    "tumor_vaf_common_median": 0.414,
+    "tumor_vaf_common_ge0.9": 1,
+    "tumor_vaf_rare_n": 2391,
+    "tumor_vaf_rare_median": 0.344,
+    "tumor_vaf_rare_ge0.9": 11,
+    "bin_class": {
+     "het0.0-0.1": {
+      "rare_not_normal": 15,
+      "all": 16,
+      "common_not_normal": 1
+     },
+     "het0.1-0.2": {
+      "common_not_normal": 3,
+      "all": 18,
+      "rare_not_normal": 15
+     },
+     "het0.2-0.4": {
+      "rare_not_normal": 149,
+      "all": 159,
+      "common_not_normal": 10
+     },
+     "het0.4-1.0": {
+      "rare_not_normal": 2212,
+      "all": 2363,
+      "common_not_normal": 151
+     }
+    },
+    "bins_half_common_not_normal": 67,
+    "bins_any_common_not_normal": 149,
+    "top_bins_common_not_normal": [
+     {
+      "chrom": "chr7",
+      "start_mb": 90,
+      "n": 10
+     },
+     {
+      "chrom": "chr11",
+      "start_mb": 41,
+      "n": 3
+     },
+     {
+      "chrom": "chr14",
+      "start_mb": 22,
+      "n": 3
+     },
+     {
+      "chrom": "chr5",
+      "start_mb": 23,
+      "n": 2
+     },
+     {
+      "chrom": "chr8",
+      "start_mb": 61,
+      "n": 2
+     },
+     {
+      "chrom": "chr13",
+      "start_mb": 87,
+      "n": 2
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 50,
+      "n": 1
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 68,
+      "n": 1
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 71,
+      "n": 1
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 103,
+      "n": 1
+     }
+    ],
+    "bins_half_rare_not_normal": 446,
+    "bins_any_rare_not_normal": 1498,
+    "top_bins_rare_not_normal": [
+     {
+      "chrom": "chr7",
+      "start_mb": 90,
+      "n": 7
+     },
+     {
+      "chrom": "chr14",
+      "start_mb": 26,
+      "n": 7
+     },
+     {
+      "chrom": "chr21",
+      "start_mb": 20,
+      "n": 7
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 240,
+      "n": 6
+     },
+     {
+      "chrom": "chr4",
+      "start_mb": 62,
+      "n": 6
+     },
+     {
+      "chrom": "chr13",
+      "start_mb": 65,
+      "n": 6
+     },
+     {
+      "chrom": "chr14",
+      "start_mb": 25,
+      "n": 6
+     },
+     {
+      "chrom": "chr16",
+      "start_mb": 17,
+      "n": 6
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 182,
+      "n": 5
+     },
+     {
+      "chrom": "chr2",
+      "start_mb": 162,
+      "n": 5
+     }
+    ]
+   },
+   "INDEL_bed": {
+    "n": 2274,
+    "normal_exact": 0,
+    "normal_exact_q10": 0,
+    "label_germ": 0,
+    "normal_exact_hom": 0,
+    "normal_pos_other": 31,
+    "merged_germline": 30,
+    "full_filter_GERMLINE": 30,
+    "full_filter_PASS": 2244,
+    "full_absent": 0,
+    "gnomad_ge1pct": 157,
+    "gnomad_any": 600,
+    "colorsdb_ge1pct": 341,
+    "gnomad_or_colorsdb_ge1pct": 405,
+    "gnomad_ge1pct_and_normal": 0,
+    "gnomad_ge1pct_not_normal": 157,
+    "normal_or_gnomad_ge1pct": 157,
+    "tumor_vaf_common_n": 157,
+    "tumor_vaf_common_median": 0.416,
+    "tumor_vaf_common_ge0.9": 1,
+    "tumor_vaf_rare_n": 2117,
+    "tumor_vaf_rare_median": 0.345,
+    "tumor_vaf_rare_ge0.9": 10,
+    "bin_class": {
+     "het0.0-0.1": {
+      "rare_not_normal": 7,
+      "all": 8,
+      "common_not_normal": 1
+     },
+     "het0.1-0.2": {
+      "common_not_normal": 3,
+      "all": 15,
+      "rare_not_normal": 12
+     },
+     "het0.2-0.4": {
+      "rare_not_normal": 136,
+      "all": 146,
+      "common_not_normal": 10
+     },
+     "het0.4-1.0": {
+      "rare_not_normal": 1962,
+      "all": 2105,
+      "common_not_normal": 143
+     }
+    },
+    "bins_half_common_not_normal": 63,
+    "bins_any_common_not_normal": 141,
+    "top_bins_common_not_normal": [
+     {
+      "chrom": "chr7",
+      "start_mb": 90,
+      "n": 10
+     },
+     {
+      "chrom": "chr11",
+      "start_mb": 41,
+      "n": 3
+     },
+     {
+      "chrom": "chr14",
+      "start_mb": 22,
+      "n": 3
+     },
+     {
+      "chrom": "chr5",
+      "start_mb": 23,
+      "n": 2
+     },
+     {
+      "chrom": "chr8",
+      "start_mb": 61,
+      "n": 2
+     },
+     {
+      "chrom": "chr13",
+      "start_mb": 87,
+      "n": 2
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 50,
+      "n": 1
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 68,
+      "n": 1
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 71,
+      "n": 1
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 103,
+      "n": 1
+     }
+    ],
+    "bins_half_rare_not_normal": 402,
+    "bins_any_rare_not_normal": 1343,
+    "top_bins_rare_not_normal": [
+     {
+      "chrom": "chr7",
+      "start_mb": 90,
+      "n": 7
+     },
+     {
+      "chrom": "chr14",
+      "start_mb": 26,
+      "n": 7
+     },
+     {
+      "chrom": "chr21",
+      "start_mb": 20,
+      "n": 7
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 240,
+      "n": 6
+     },
+     {
+      "chrom": "chr4",
+      "start_mb": 62,
+      "n": 6
+     },
+     {
+      "chrom": "chr13",
+      "start_mb": 65,
+      "n": 6
+     },
+     {
+      "chrom": "chr14",
+      "start_mb": 25,
+      "n": 6
+     },
+     {
+      "chrom": "chr16",
+      "start_mb": 17,
+      "n": 6
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 182,
+      "n": 5
+     },
+     {
+      "chrom": "chr2",
+      "start_mb": 162,
+      "n": 5
+     }
+    ]
+   }
+  },
+  "H2009_CASTLE": {
+   "used_by_pansoma": "yes",
+   "truth_vcf": "/scratch/jshen/data/CASTLE/H2009/truth/H2009_somatic_CASTLE.vcf.gz",
+   "bed": "/scratch/jshen/data/CASTLE/H2009/truth/H2009_high-confidence-regions_DeepSomatic-HCC1395-model.bed",
+   "normal_line": "H2009",
+   "germline_baseline_chr20_in_bed": {
+    "n": 75557,
+    "gnomad_ge1pct": 68677,
+    "gnomad_any": 70161,
+    "het_n": 48738,
+    "het_gnomad_ge1pct": 43468
+   },
+   "SNV_all": {
+    "n": 161917,
+    "normal_exact": 3,
+    "normal_exact_q10": 3,
+    "label_germ": 3,
+    "normal_exact_hom": 0,
+    "normal_pos_other": 185,
+    "merged_germline": 161,
+    "full_filter_GERMLINE": 164,
+    "full_filter_PASS": 161753,
+    "full_absent": 0,
+    "gnomad_ge1pct": 8141,
+    "gnomad_any": 15079,
+    "colorsdb_ge1pct": 8244,
+    "gnomad_or_colorsdb_ge1pct": 8692,
+    "gnomad_ge1pct_and_normal": 2,
+    "gnomad_ge1pct_not_normal": 8139,
+    "normal_or_gnomad_ge1pct": 8142,
+    "tumor_vaf_common_n": 8141,
+    "tumor_vaf_common_median": 0.674,
+    "tumor_vaf_common_ge0.9": 66,
+    "tumor_vaf_rare_n": 153775,
+    "tumor_vaf_rare_median": 0.501,
+    "tumor_vaf_rare_ge0.9": 31790,
+    "bin_class": {
+     "het0.0-0.1": {
+      "rare_not_normal": 2863,
+      "all": 9715,
+      "common_not_normal": 6852
+     },
+     "het0.1-0.2": {
+      "rare_not_normal": 2495,
+      "all": 2902,
+      "common_not_normal": 407
+     },
+     "het0.2-0.4": {
+      "rare_not_normal": 13087,
+      "all": 13146,
+      "common_not_normal": 59
+     },
+     "het0.4-1.0": {
+      "rare_not_normal": 135267,
+      "all": 136091,
+      "common_not_normal": 821,
+      "normal_exact": 3
+     },
+     "sparse": {
+      "rare_not_normal": 63,
+      "all": 63
+     }
+    },
+    "bins_half_common_not_normal": 9,
+    "bins_any_common_not_normal": 395,
+    "top_bins_common_not_normal": [
+     {
+      "chrom": "chr7",
+      "start_mb": 129,
+      "n": 573
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 124,
+      "n": 566
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 134,
+      "n": 498
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 131,
+      "n": 462
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 141,
+      "n": 438
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 122,
+      "n": 435
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 126,
+      "n": 393
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 138,
+      "n": 390
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 128,
+      "n": 378
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 139,
+      "n": 350
+     }
+    ],
+    "bins_half_rare_not_normal": 750,
+    "bins_any_rare_not_normal": 2900,
+    "top_bins_rare_not_normal": [
+     {
+      "chrom": "chr7",
+      "start_mb": 142,
+      "n": 486
+     },
+     {
+      "chrom": "chr8",
+      "start_mb": 83,
+      "n": 230
+     },
+     {
+      "chrom": "chr5",
+      "start_mb": 24,
+      "n": 225
+     },
+     {
+      "chrom": "chr2",
+      "start_mb": 129,
+      "n": 223
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 146,
+      "n": 223
+     },
+     {
+      "chrom": "chr5",
+      "start_mb": 29,
+      "n": 222
+     },
+     {
+      "chrom": "chr5",
+      "start_mb": 22,
+      "n": 221
+     },
+     {
+      "chrom": "chr8",
+      "start_mb": 50,
+      "n": 220
+     },
+     {
+      "chrom": "chr5",
+      "start_mb": 165,
+      "n": 219
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 62,
+      "n": 215
+     }
+    ]
+   },
+   "SNV_bed": {
+    "n": 144176,
+    "normal_exact": 2,
+    "normal_exact_q10": 2,
+    "label_germ": 2,
+    "normal_exact_hom": 0,
+    "normal_pos_other": 159,
+    "merged_germline": 139,
+    "full_filter_GERMLINE": 141,
+    "full_filter_PASS": 144035,
+    "full_absent": 0,
+    "gnomad_ge1pct": 7662,
+    "gnomad_any": 13863,
+    "colorsdb_ge1pct": 7633,
+    "gnomad_or_colorsdb_ge1pct": 8049,
+    "gnomad_ge1pct_and_normal": 1,
+    "gnomad_ge1pct_not_normal": 7661,
+    "normal_or_gnomad_ge1pct": 7663,
+    "tumor_vaf_common_n": 7662,
+    "tumor_vaf_common_median": 0.674,
+    "tumor_vaf_common_ge0.9": 53,
+    "tumor_vaf_rare_n": 136513,
+    "tumor_vaf_rare_median": 0.498,
+    "tumor_vaf_rare_ge0.9": 25423,
+    "bin_class": {
+     "het0.0-0.1": {
+      "rare_not_normal": 2271,
+      "all": 8806,
+      "common_not_normal": 6535
+     },
+     "het0.1-0.2": {
+      "rare_not_normal": 2029,
+      "all": 2334,
+      "common_not_normal": 305
+     },
+     "het0.2-0.4": {
+      "rare_not_normal": 11109,
+      "all": 11158,
+      "common_not_normal": 49
+     },
+     "het0.4-1.0": {
+      "rare_not_normal": 121074,
+      "all": 121848,
+      "common_not_normal": 772,
+      "normal_exact": 2
+     },
+     "sparse": {
+      "rare_not_normal": 30,
+      "all": 30
+     }
+    },
+    "bins_half_common_not_normal": 9,
+    "bins_any_common_not_normal": 343,
+    "top_bins_common_not_normal": [
+     {
+      "chrom": "chr7",
+      "start_mb": 129,
+      "n": 571
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 124,
+      "n": 550
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 131,
+      "n": 449
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 134,
+      "n": 447
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 141,
+      "n": 435
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 122,
+      "n": 431
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 138,
+      "n": 371
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 126,
+      "n": 367
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 127,
+      "n": 341
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 139,
+      "n": 334
+     }
+    ],
+    "bins_half_rare_not_normal": 678,
+    "bins_any_rare_not_normal": 2718,
+    "top_bins_rare_not_normal": [
+     {
+      "chrom": "chr7",
+      "start_mb": 142,
+      "n": 307
+     },
+     {
+      "chrom": "chr8",
+      "start_mb": 83,
+      "n": 229
+     },
+     {
+      "chrom": "chr5",
+      "start_mb": 24,
+      "n": 223
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 146,
+      "n": 222
+     },
+     {
+      "chrom": "chr8",
+      "start_mb": 50,
+      "n": 219
+     },
+     {
+      "chrom": "chr5",
+      "start_mb": 165,
+      "n": 217
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 145,
+      "n": 213
+     },
+     {
+      "chrom": "chr2",
+      "start_mb": 129,
+      "n": 206
+     },
+     {
+      "chrom": "chr5",
+      "start_mb": 29,
+      "n": 206
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 117,
+      "n": 205
+     }
+    ]
+   },
+   "INDEL_all": {
+    "n": 6520,
+    "normal_exact": 1,
+    "normal_exact_q10": 1,
+    "label_germ": 1,
+    "normal_exact_hom": 0,
+    "normal_pos_other": 56,
+    "merged_germline": 52,
+    "full_filter_GERMLINE": 53,
+    "full_filter_PASS": 6467,
+    "full_absent": 0,
+    "gnomad_ge1pct": 793,
+    "gnomad_any": 1217,
+    "colorsdb_ge1pct": 1247,
+    "gnomad_or_colorsdb_ge1pct": 1349,
+    "gnomad_ge1pct_and_normal": 0,
+    "gnomad_ge1pct_not_normal": 793,
+    "normal_or_gnomad_ge1pct": 794,
+    "tumor_vaf_common_n": 793,
+    "tumor_vaf_common_median": 0.642,
+    "tumor_vaf_common_ge0.9": 2,
+    "tumor_vaf_rare_n": 5726,
+    "tumor_vaf_rare_median": 0.493,
+    "tumor_vaf_rare_ge0.9": 856,
+    "bin_class": {
+     "het0.0-0.1": {
+      "rare_not_normal": 349,
+      "all": 937,
+      "common_not_normal": 588
+     },
+     "het0.1-0.2": {
+      "rare_not_normal": 102,
+      "all": 124,
+      "common_not_normal": 22
+     },
+     "het0.2-0.4": {
+      "rare_not_normal": 433,
+      "all": 451,
+      "common_not_normal": 18
+     },
+     "het0.4-1.0": {
+      "rare_not_normal": 4840,
+      "all": 5006,
+      "common_not_normal": 165,
+      "normal_exact": 1
+     },
+     "sparse": {
+      "rare_not_normal": 2,
+      "all": 2
+     }
+    },
+    "bins_half_common_not_normal": 10,
+    "bins_any_common_not_normal": 147,
+    "top_bins_common_not_normal": [
+     {
+      "chrom": "chr7",
+      "start_mb": 129,
+      "n": 62
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 134,
+      "n": 49
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 141,
+      "n": 44
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 128,
+      "n": 41
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 122,
+      "n": 37
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 124,
+      "n": 37
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 138,
+      "n": 37
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 121,
+      "n": 35
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 126,
+      "n": 34
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 131,
+      "n": 34
+     }
+    ],
+    "bins_half_rare_not_normal": 497,
+    "bins_any_rare_not_normal": 2146,
+    "top_bins_rare_not_normal": [
+     {
+      "chrom": "chr7",
+      "start_mb": 122,
+      "n": 29
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 129,
+      "n": 26
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 142,
+      "n": 25
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 131,
+      "n": 23
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 130,
+      "n": 22
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 121,
+      "n": 20
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 124,
+      "n": 20
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 136,
+      "n": 18
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 126,
+      "n": 17
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 139,
+      "n": 17
+     }
+    ]
+   },
+   "INDEL_bed": {
+    "n": 5854,
+    "normal_exact": 1,
+    "normal_exact_q10": 1,
+    "label_germ": 1,
+    "normal_exact_hom": 0,
+    "normal_pos_other": 51,
+    "merged_germline": 48,
+    "full_filter_GERMLINE": 49,
+    "full_filter_PASS": 5805,
+    "full_absent": 0,
+    "gnomad_ge1pct": 740,
+    "gnomad_any": 1117,
+    "colorsdb_ge1pct": 1159,
+    "gnomad_or_colorsdb_ge1pct": 1253,
+    "gnomad_ge1pct_and_normal": 0,
+    "gnomad_ge1pct_not_normal": 740,
+    "normal_or_gnomad_ge1pct": 741,
+    "tumor_vaf_common_n": 740,
+    "tumor_vaf_common_median": 0.642,
+    "tumor_vaf_common_ge0.9": 1,
+    "tumor_vaf_rare_n": 5113,
+    "tumor_vaf_rare_median": 0.49,
+    "tumor_vaf_rare_ge0.9": 673,
+    "bin_class": {
+     "het0.0-0.1": {
+      "rare_not_normal": 317,
+      "all": 869,
+      "common_not_normal": 552
+     },
+     "het0.1-0.2": {
+      "rare_not_normal": 81,
+      "all": 99,
+      "common_not_normal": 18
+     },
+     "het0.2-0.4": {
+      "rare_not_normal": 357,
+      "all": 373,
+      "common_not_normal": 16
+     },
+     "het0.4-1.0": {
+      "rare_not_normal": 4358,
+      "all": 4513,
+      "common_not_normal": 154,
+      "normal_exact": 1
+     }
+    },
+    "bins_half_common_not_normal": 10,
+    "bins_any_common_not_normal": 135,
+    "top_bins_common_not_normal": [
+     {
+      "chrom": "chr7",
+      "start_mb": 129,
+      "n": 62
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 134,
+      "n": 46
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 141,
+      "n": 42
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 122,
+      "n": 36
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 138,
+      "n": 36
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 124,
+      "n": 35
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 121,
+      "n": 34
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 131,
+      "n": 34
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 126,
+      "n": 27
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 128,
+      "n": 27
+     }
+    ],
+    "bins_half_rare_not_normal": 447,
+    "bins_any_rare_not_normal": 1950,
+    "top_bins_rare_not_normal": [
+     {
+      "chrom": "chr7",
+      "start_mb": 122,
+      "n": 29
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 129,
+      "n": 26
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 131,
+      "n": 23
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 130,
+      "n": 22
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 121,
+      "n": 20
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 124,
+      "n": 19
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 136,
+      "n": 18
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 127,
+      "n": 16
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 138,
+      "n": 16
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 139,
+      "n": 16
+     }
+    ]
+   }
+  },
+  "HCC1395_SEQC2": {
+   "used_by_pansoma": "yes",
+   "truth_vcf": "/scratch/jshen/data/CASTLE/HCC1395/truth/HCC1395_somatic_SEQC2_v1.2.1.vcf.gz",
+   "bed": "/scratch/jshen/data/CASTLE/HCC1395/truth/SEQC2_High-Confidence_Regions_v1.2.bed",
+   "normal_line": "HCC1395",
+   "germline_baseline_chr20_in_bed": {
+    "n": 83573,
+    "gnomad_ge1pct": 69580,
+    "gnomad_any": 71122,
+    "het_n": 56515,
+    "het_gnomad_ge1pct": 44098
+   },
+   "SNV_all": {
+    "n": 39447,
+    "normal_exact": 0,
+    "normal_exact_q10": 0,
+    "label_germ": 0,
+    "normal_exact_hom": 0,
+    "normal_pos_other": 22,
+    "merged_germline": 11,
+    "full_filter_GERMLINE": 11,
+    "full_filter_PASS": 36754,
+    "full_absent": 2682,
+    "gnomad_ge1pct": 212,
+    "gnomad_any": 2387,
+    "colorsdb_ge1pct": 330,
+    "gnomad_or_colorsdb_ge1pct": 353,
+    "gnomad_ge1pct_and_normal": 0,
+    "gnomad_ge1pct_not_normal": 212,
+    "normal_or_gnomad_ge1pct": 212,
+    "tumor_vaf_common_n": 201,
+    "tumor_vaf_common_median": 0.596,
+    "tumor_vaf_common_ge0.9": 11,
+    "tumor_vaf_rare_n": 36564,
+    "tumor_vaf_rare_median": 0.364,
+    "tumor_vaf_rare_ge0.9": 5537,
+    "bin_class": {
+     "het0.0-0.1": {
+      "rare_not_normal": 187,
+      "all": 235,
+      "common_not_normal": 48
+     },
+     "het0.1-0.2": {
+      "rare_not_normal": 436,
+      "all": 442,
+      "common_not_normal": 6
+     },
+     "het0.2-0.4": {
+      "rare_not_normal": 3161,
+      "all": 3169,
+      "common_not_normal": 8
+     },
+     "het0.4-1.0": {
+      "rare_not_normal": 35451,
+      "all": 35601,
+      "common_not_normal": 150
+     }
+    },
+    "bins_half_common_not_normal": 4,
+    "bins_any_common_not_normal": 96,
+    "top_bins_common_not_normal": [
+     {
+      "chrom": "chr16",
+      "start_mb": 35,
+      "n": 48
+     },
+     {
+      "chrom": "chr12",
+      "start_mb": 28,
+      "n": 39
+     },
+     {
+      "chrom": "chr14",
+      "start_mb": 106,
+      "n": 16
+     },
+     {
+      "chrom": "chr22",
+      "start_mb": 22,
+      "n": 8
+     },
+     {
+      "chrom": "chr16",
+      "start_mb": 36,
+      "n": 5
+     },
+     {
+      "chrom": "chr16",
+      "start_mb": 0,
+      "n": 3
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 102,
+      "n": 2
+     },
+     {
+      "chrom": "chr2",
+      "start_mb": 87,
+      "n": 2
+     },
+     {
+      "chrom": "chr8",
+      "start_mb": 139,
+      "n": 2
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 1,
+      "n": 1
+     }
+    ],
+    "bins_half_rare_not_normal": 865,
+    "bins_any_rare_not_normal": 2620,
+    "top_bins_rare_not_normal": [
+     {
+      "chrom": "chr17",
+      "start_mb": 79,
+      "n": 67
+     },
+     {
+      "chrom": "chr2",
+      "start_mb": 206,
+      "n": 57
+     },
+     {
+      "chrom": "chr8",
+      "start_mb": 132,
+      "n": 51
+     },
+     {
+      "chrom": "chr22",
+      "start_mb": 22,
+      "n": 51
+     },
+     {
+      "chrom": "chr2",
+      "start_mb": 45,
+      "n": 47
+     },
+     {
+      "chrom": "chr2",
+      "start_mb": 44,
+      "n": 45
+     },
+     {
+      "chrom": "chr16",
+      "start_mb": 34,
+      "n": 44
+     },
+     {
+      "chrom": "chr5",
+      "start_mb": 5,
+      "n": 43
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 81,
+      "n": 43
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 154,
+      "n": 43
+     }
+    ]
+   },
+   "SNV_bed": {
+    "n": 39447,
+    "normal_exact": 0,
+    "normal_exact_q10": 0,
+    "label_germ": 0,
+    "normal_exact_hom": 0,
+    "normal_pos_other": 22,
+    "merged_germline": 11,
+    "full_filter_GERMLINE": 11,
+    "full_filter_PASS": 36754,
+    "full_absent": 2682,
+    "gnomad_ge1pct": 212,
+    "gnomad_any": 2387,
+    "colorsdb_ge1pct": 330,
+    "gnomad_or_colorsdb_ge1pct": 353,
+    "gnomad_ge1pct_and_normal": 0,
+    "gnomad_ge1pct_not_normal": 212,
+    "normal_or_gnomad_ge1pct": 212,
+    "tumor_vaf_common_n": 201,
+    "tumor_vaf_common_median": 0.596,
+    "tumor_vaf_common_ge0.9": 11,
+    "tumor_vaf_rare_n": 36564,
+    "tumor_vaf_rare_median": 0.364,
+    "tumor_vaf_rare_ge0.9": 5537,
+    "bin_class": {
+     "het0.0-0.1": {
+      "rare_not_normal": 187,
+      "all": 235,
+      "common_not_normal": 48
+     },
+     "het0.1-0.2": {
+      "rare_not_normal": 436,
+      "all": 442,
+      "common_not_normal": 6
+     },
+     "het0.2-0.4": {
+      "rare_not_normal": 3161,
+      "all": 3169,
+      "common_not_normal": 8
+     },
+     "het0.4-1.0": {
+      "rare_not_normal": 35451,
+      "all": 35601,
+      "common_not_normal": 150
+     }
+    },
+    "bins_half_common_not_normal": 4,
+    "bins_any_common_not_normal": 96,
+    "top_bins_common_not_normal": [
+     {
+      "chrom": "chr16",
+      "start_mb": 35,
+      "n": 48
+     },
+     {
+      "chrom": "chr12",
+      "start_mb": 28,
+      "n": 39
+     },
+     {
+      "chrom": "chr14",
+      "start_mb": 106,
+      "n": 16
+     },
+     {
+      "chrom": "chr22",
+      "start_mb": 22,
+      "n": 8
+     },
+     {
+      "chrom": "chr16",
+      "start_mb": 36,
+      "n": 5
+     },
+     {
+      "chrom": "chr16",
+      "start_mb": 0,
+      "n": 3
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 102,
+      "n": 2
+     },
+     {
+      "chrom": "chr2",
+      "start_mb": 87,
+      "n": 2
+     },
+     {
+      "chrom": "chr8",
+      "start_mb": 139,
+      "n": 2
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 1,
+      "n": 1
+     }
+    ],
+    "bins_half_rare_not_normal": 865,
+    "bins_any_rare_not_normal": 2620,
+    "top_bins_rare_not_normal": [
+     {
+      "chrom": "chr17",
+      "start_mb": 79,
+      "n": 67
+     },
+     {
+      "chrom": "chr2",
+      "start_mb": 206,
+      "n": 57
+     },
+     {
+      "chrom": "chr8",
+      "start_mb": 132,
+      "n": 51
+     },
+     {
+      "chrom": "chr22",
+      "start_mb": 22,
+      "n": 51
+     },
+     {
+      "chrom": "chr2",
+      "start_mb": 45,
+      "n": 47
+     },
+     {
+      "chrom": "chr2",
+      "start_mb": 44,
+      "n": 45
+     },
+     {
+      "chrom": "chr16",
+      "start_mb": 34,
+      "n": 44
+     },
+     {
+      "chrom": "chr5",
+      "start_mb": 5,
+      "n": 43
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 81,
+      "n": 43
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 154,
+      "n": 43
+     }
+    ]
+   },
+   "INDEL_all": {
+    "n": 1625,
+    "normal_exact": 0,
+    "normal_exact_q10": 0,
+    "label_germ": 0,
+    "normal_exact_hom": 0,
+    "normal_pos_other": 6,
+    "merged_germline": 0,
+    "full_filter_GERMLINE": 0,
+    "full_filter_PASS": 1235,
+    "full_absent": 390,
+    "gnomad_ge1pct": 52,
+    "gnomad_any": 108,
+    "colorsdb_ge1pct": 91,
+    "gnomad_or_colorsdb_ge1pct": 111,
+    "gnomad_ge1pct_and_normal": 0,
+    "gnomad_ge1pct_not_normal": 52,
+    "normal_or_gnomad_ge1pct": 52,
+    "tumor_vaf_common_n": 35,
+    "tumor_vaf_common_median": 0.527,
+    "tumor_vaf_common_ge0.9": 1,
+    "tumor_vaf_rare_n": 1200,
+    "tumor_vaf_rare_median": 0.402,
+    "tumor_vaf_rare_ge0.9": 61,
+    "bin_class": {
+     "het0.0-0.1": {
+      "rare_not_normal": 9,
+      "all": 15,
+      "common_not_normal": 6
+     },
+     "het0.1-0.2": {
+      "rare_not_normal": 15,
+      "all": 16,
+      "common_not_normal": 1
+     },
+     "het0.2-0.4": {
+      "rare_not_normal": 113,
+      "all": 115,
+      "common_not_normal": 2
+     },
+     "het0.4-1.0": {
+      "rare_not_normal": 1436,
+      "all": 1479,
+      "common_not_normal": 43
+     }
+    },
+    "bins_half_common_not_normal": 13,
+    "bins_any_common_not_normal": 39,
+    "top_bins_common_not_normal": [
+     {
+      "chrom": "chr12",
+      "start_mb": 28,
+      "n": 7
+     },
+     {
+      "chrom": "chr16",
+      "start_mb": 35,
+      "n": 6
+     },
+     {
+      "chrom": "chr4",
+      "start_mb": 47,
+      "n": 2
+     },
+     {
+      "chrom": "chr4",
+      "start_mb": 170,
+      "n": 2
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 39,
+      "n": 1
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 155,
+      "n": 1
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 166,
+      "n": 1
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 229,
+      "n": 1
+     },
+     {
+      "chrom": "chr2",
+      "start_mb": 39,
+      "n": 1
+     },
+     {
+      "chrom": "chr2",
+      "start_mb": 107,
+      "n": 1
+     }
+    ],
+    "bins_half_rare_not_normal": 334,
+    "bins_any_rare_not_normal": 1107,
+    "top_bins_rare_not_normal": [
+     {
+      "chrom": "chr1",
+      "start_mb": 209,
+      "n": 5
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 34,
+      "n": 5
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 52,
+      "n": 5
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 108,
+      "n": 5
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 235,
+      "n": 4
+     },
+     {
+      "chrom": "chr2",
+      "start_mb": 45,
+      "n": 4
+     },
+     {
+      "chrom": "chr2",
+      "start_mb": 206,
+      "n": 4
+     },
+     {
+      "chrom": "chr4",
+      "start_mb": 69,
+      "n": 4
+     },
+     {
+      "chrom": "chr4",
+      "start_mb": 92,
+      "n": 4
+     },
+     {
+      "chrom": "chr5",
+      "start_mb": 19,
+      "n": 4
+     }
+    ]
+   },
+   "INDEL_bed": {
+    "n": 1602,
+    "normal_exact": 0,
+    "normal_exact_q10": 0,
+    "label_germ": 0,
+    "normal_exact_hom": 0,
+    "normal_pos_other": 6,
+    "merged_germline": 0,
+    "full_filter_GERMLINE": 0,
+    "full_filter_PASS": 1214,
+    "full_absent": 388,
+    "gnomad_ge1pct": 52,
+    "gnomad_any": 108,
+    "colorsdb_ge1pct": 91,
+    "gnomad_or_colorsdb_ge1pct": 111,
+    "gnomad_ge1pct_and_normal": 0,
+    "gnomad_ge1pct_not_normal": 52,
+    "normal_or_gnomad_ge1pct": 52,
+    "tumor_vaf_common_n": 35,
+    "tumor_vaf_common_median": 0.527,
+    "tumor_vaf_common_ge0.9": 1,
+    "tumor_vaf_rare_n": 1179,
+    "tumor_vaf_rare_median": 0.398,
+    "tumor_vaf_rare_ge0.9": 59,
+    "bin_class": {
+     "het0.0-0.1": {
+      "rare_not_normal": 9,
+      "all": 15,
+      "common_not_normal": 6
+     },
+     "het0.1-0.2": {
+      "rare_not_normal": 15,
+      "all": 16,
+      "common_not_normal": 1
+     },
+     "het0.2-0.4": {
+      "rare_not_normal": 112,
+      "all": 114,
+      "common_not_normal": 2
+     },
+     "het0.4-1.0": {
+      "rare_not_normal": 1414,
+      "all": 1457,
+      "common_not_normal": 43
+     }
+    },
+    "bins_half_common_not_normal": 13,
+    "bins_any_common_not_normal": 39,
+    "top_bins_common_not_normal": [
+     {
+      "chrom": "chr12",
+      "start_mb": 28,
+      "n": 7
+     },
+     {
+      "chrom": "chr16",
+      "start_mb": 35,
+      "n": 6
+     },
+     {
+      "chrom": "chr4",
+      "start_mb": 47,
+      "n": 2
+     },
+     {
+      "chrom": "chr4",
+      "start_mb": 170,
+      "n": 2
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 39,
+      "n": 1
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 155,
+      "n": 1
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 166,
+      "n": 1
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 229,
+      "n": 1
+     },
+     {
+      "chrom": "chr2",
+      "start_mb": 39,
+      "n": 1
+     },
+     {
+      "chrom": "chr2",
+      "start_mb": 107,
+      "n": 1
+     }
+    ],
+    "bins_half_rare_not_normal": 332,
+    "bins_any_rare_not_normal": 1095,
+    "top_bins_rare_not_normal": [
+     {
+      "chrom": "chr1",
+      "start_mb": 209,
+      "n": 5
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 34,
+      "n": 5
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 52,
+      "n": 5
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 108,
+      "n": 5
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 235,
+      "n": 4
+     },
+     {
+      "chrom": "chr2",
+      "start_mb": 45,
+      "n": 4
+     },
+     {
+      "chrom": "chr2",
+      "start_mb": 206,
+      "n": 4
+     },
+     {
+      "chrom": "chr4",
+      "start_mb": 69,
+      "n": 4
+     },
+     {
+      "chrom": "chr4",
+      "start_mb": 92,
+      "n": 4
+     },
+     {
+      "chrom": "chr5",
+      "start_mb": 19,
+      "n": 4
+     }
+    ]
+   }
+  },
+  "HCC1395_CASTLE": {
+   "used_by_pansoma": "no",
+   "truth_vcf": "/scratch/jshen/data/CASTLE/benchmarks/DeepSomatic_HCC1395-model_benchmark/vcfs/somatic_only/HCC1395_DeepSomatic_HCC1395-model_somatic-only.vcf.gz",
+   "bed": "/scratch/jshen/data/CASTLE/benchmarks/DeepSomatic_HCC1395-model_benchmark/beds/HCC1395_high-confidence-regions_DeepSomatic-HCC1395-model.bed",
+   "normal_line": "HCC1395",
+   "germline_baseline_chr20_in_bed": {
+    "n": 71401,
+    "gnomad_ge1pct": 66088,
+    "gnomad_any": 67493,
+    "het_n": 46330,
+    "het_gnomad_ge1pct": 41849
+   },
+   "SNV_all": {
+    "n": 120941,
+    "normal_exact": 2,
+    "normal_exact_q10": 2,
+    "label_germ": 0,
+    "normal_exact_hom": 0,
+    "normal_pos_other": 66,
+    "merged_germline": 57,
+    "full_filter_GERMLINE": 59,
+    "full_filter_PASS": 120882,
+    "full_absent": 0,
+    "gnomad_ge1pct": 72264,
+    "gnomad_any": 76935,
+    "colorsdb_ge1pct": 73784,
+    "gnomad_or_colorsdb_ge1pct": 74708,
+    "gnomad_ge1pct_and_normal": 2,
+    "gnomad_ge1pct_not_normal": 72262,
+    "normal_or_gnomad_ge1pct": 72264,
+    "tumor_vaf_common_n": 72264,
+    "tumor_vaf_common_median": 0.733,
+    "tumor_vaf_common_ge0.9": 28260,
+    "tumor_vaf_rare_n": 48677,
+    "tumor_vaf_rare_median": 0.38,
+    "tumor_vaf_rare_ge0.9": 8708,
+    "bin_class": {
+     "het0.0-0.1": {
+      "rare_not_normal": 7537,
+      "all": 75673,
+      "common_not_normal": 68135,
+      "normal_exact": 1
+     },
+     "het0.1-0.2": {
+      "rare_not_normal": 1151,
+      "all": 3208,
+      "common_not_normal": 2057
+     },
+     "het0.2-0.4": {
+      "rare_not_normal": 3453,
+      "all": 5071,
+      "common_not_normal": 1617,
+      "normal_exact": 1
+     },
+     "het0.4-1.0": {
+      "rare_not_normal": 36445,
+      "all": 36729,
+      "common_not_normal": 284
+     },
+     "sparse": {
+      "common_not_normal": 169,
+      "all": 260,
+      "rare_not_normal": 91
+     }
+    },
+    "bins_half_common_not_normal": 60,
+    "bins_any_common_not_normal": 364,
+    "top_bins_common_not_normal": [
+     {
+      "chrom": "chr6",
+      "start_mb": 29,
+      "n": 1314
+     },
+     {
+      "chrom": "chr6",
+      "start_mb": 33,
+      "n": 1228
+     },
+     {
+      "chrom": "chr6",
+      "start_mb": 32,
+      "n": 1180
+     },
+     {
+      "chrom": "chr6",
+      "start_mb": 31,
+      "n": 1139
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 89,
+      "n": 880
+     },
+     {
+      "chrom": "chr16",
+      "start_mb": 78,
+      "n": 871
+     },
+     {
+      "chrom": "chr16",
+      "start_mb": 74,
+      "n": 800
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 1,
+      "n": 770
+     },
+     {
+      "chrom": "chr16",
+      "start_mb": 84,
+      "n": 725
+     },
+     {
+      "chrom": "chr6",
+      "start_mb": 30,
+      "n": 716
+     }
+    ],
+    "bins_half_rare_not_normal": 876,
+    "bins_any_rare_not_normal": 2882,
+    "top_bins_rare_not_normal": [
+     {
+      "chrom": "chr6",
+      "start_mb": 32,
+      "n": 368
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 141,
+      "n": 210
+     },
+     {
+      "chrom": "chr6",
+      "start_mb": 0,
+      "n": 115
+     },
+     {
+      "chrom": "chr6",
+      "start_mb": 51,
+      "n": 97
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 1,
+      "n": 97
+     },
+     {
+      "chrom": "chr6",
+      "start_mb": 1,
+      "n": 96
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 0,
+      "n": 93
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 77,
+      "n": 90
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 116,
+      "n": 89
+     },
+     {
+      "chrom": "chr6",
+      "start_mb": 2,
+      "n": 81
+     }
+    ]
+   },
+   "SNV_bed": {
+    "n": 35040,
+    "normal_exact": 0,
+    "normal_exact_q10": 0,
+    "label_germ": 0,
+    "normal_exact_hom": 0,
+    "normal_pos_other": 13,
+    "merged_germline": 12,
+    "full_filter_GERMLINE": 12,
+    "full_filter_PASS": 35028,
+    "full_absent": 0,
+    "gnomad_ge1pct": 193,
+    "gnomad_any": 2142,
+    "colorsdb_ge1pct": 263,
+    "gnomad_or_colorsdb_ge1pct": 280,
+    "gnomad_ge1pct_and_normal": 0,
+    "gnomad_ge1pct_not_normal": 193,
+    "normal_or_gnomad_ge1pct": 193,
+    "tumor_vaf_common_n": 193,
+    "tumor_vaf_common_median": 0.598,
+    "tumor_vaf_common_ge0.9": 11,
+    "tumor_vaf_rare_n": 34847,
+    "tumor_vaf_rare_median": 0.363,
+    "tumor_vaf_rare_ge0.9": 5318,
+    "bin_class": {
+     "het0.0-0.1": {
+      "rare_not_normal": 153,
+      "all": 201,
+      "common_not_normal": 48
+     },
+     "het0.1-0.2": {
+      "rare_not_normal": 380,
+      "all": 385,
+      "common_not_normal": 5
+     },
+     "het0.2-0.4": {
+      "rare_not_normal": 2731,
+      "all": 2739,
+      "common_not_normal": 8
+     },
+     "het0.4-1.0": {
+      "rare_not_normal": 31583,
+      "all": 31715,
+      "common_not_normal": 132
+     }
+    },
+    "bins_half_common_not_normal": 3,
+    "bins_any_common_not_normal": 85,
+    "top_bins_common_not_normal": [
+     {
+      "chrom": "chr16",
+      "start_mb": 35,
+      "n": 48
+     },
+     {
+      "chrom": "chr12",
+      "start_mb": 28,
+      "n": 38
+     },
+     {
+      "chrom": "chr14",
+      "start_mb": 106,
+      "n": 13
+     },
+     {
+      "chrom": "chr22",
+      "start_mb": 22,
+      "n": 8
+     },
+     {
+      "chrom": "chr16",
+      "start_mb": 36,
+      "n": 4
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 102,
+      "n": 2
+     },
+     {
+      "chrom": "chr8",
+      "start_mb": 139,
+      "n": 2
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 5,
+      "n": 1
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 51,
+      "n": 1
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 71,
+      "n": 1
+     }
+    ],
+    "bins_half_rare_not_normal": 841,
+    "bins_any_rare_not_normal": 2577,
+    "top_bins_rare_not_normal": [
+     {
+      "chrom": "chr17",
+      "start_mb": 79,
+      "n": 63
+     },
+     {
+      "chrom": "chr2",
+      "start_mb": 206,
+      "n": 54
+     },
+     {
+      "chrom": "chr8",
+      "start_mb": 132,
+      "n": 47
+     },
+     {
+      "chrom": "chr2",
+      "start_mb": 44,
+      "n": 45
+     },
+     {
+      "chrom": "chr2",
+      "start_mb": 45,
+      "n": 45
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 81,
+      "n": 41
+     },
+     {
+      "chrom": "chr8",
+      "start_mb": 123,
+      "n": 40
+     },
+     {
+      "chrom": "chr5",
+      "start_mb": 5,
+      "n": 37
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 88,
+      "n": 37
+     },
+     {
+      "chrom": "chr10",
+      "start_mb": 44,
+      "n": 36
+     }
+    ]
+   },
+   "INDEL_all": {
+    "n": 8359,
+    "normal_exact": 0,
+    "normal_exact_q10": 0,
+    "label_germ": 0,
+    "normal_exact_hom": 0,
+    "normal_pos_other": 2,
+    "merged_germline": 1,
+    "full_filter_GERMLINE": 1,
+    "full_filter_PASS": 8358,
+    "full_absent": 0,
+    "gnomad_ge1pct": 4901,
+    "gnomad_any": 5097,
+    "colorsdb_ge1pct": 6341,
+    "gnomad_or_colorsdb_ge1pct": 6429,
+    "gnomad_ge1pct_and_normal": 0,
+    "gnomad_ge1pct_not_normal": 4901,
+    "normal_or_gnomad_ge1pct": 4901,
+    "tumor_vaf_common_n": 4901,
+    "tumor_vaf_common_median": 0.711,
+    "tumor_vaf_common_ge0.9": 1690,
+    "tumor_vaf_rare_n": 3458,
+    "tumor_vaf_rare_median": 0.601,
+    "tumor_vaf_rare_ge0.9": 803,
+    "bin_class": {
+     "het0.0-0.1": {
+      "rare_not_normal": 1676,
+      "all": 6285,
+      "common_not_normal": 4609
+     },
+     "het0.1-0.2": {
+      "rare_not_normal": 62,
+      "all": 205,
+      "common_not_normal": 143
+     },
+     "het0.2-0.4": {
+      "rare_not_normal": 163,
+      "all": 260,
+      "common_not_normal": 97
+     },
+     "het0.4-1.0": {
+      "rare_not_normal": 1550,
+      "all": 1592,
+      "common_not_normal": 42
+     },
+     "sparse": {
+      "common_not_normal": 10,
+      "all": 17,
+      "rare_not_normal": 7
+     }
+    },
+    "bins_half_common_not_normal": 58,
+    "bins_any_common_not_normal": 279,
+    "top_bins_common_not_normal": [
+     {
+      "chrom": "chr6",
+      "start_mb": 32,
+      "n": 84
+     },
+     {
+      "chrom": "chr6",
+      "start_mb": 33,
+      "n": 84
+     },
+     {
+      "chrom": "chr6",
+      "start_mb": 24,
+      "n": 76
+     },
+     {
+      "chrom": "chr6",
+      "start_mb": 31,
+      "n": 57
+     },
+     {
+      "chrom": "chr6",
+      "start_mb": 8,
+      "n": 56
+     },
+     {
+      "chrom": "chr6",
+      "start_mb": 29,
+      "n": 55
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 1,
+      "n": 55
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 89,
+      "n": 55
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 125,
+      "n": 55
+     },
+     {
+      "chrom": "chr6",
+      "start_mb": 4,
+      "n": 54
+     }
+    ],
+    "bins_half_rare_not_normal": 207,
+    "bins_any_rare_not_normal": 1455,
+    "top_bins_rare_not_normal": [
+     {
+      "chrom": "chrX",
+      "start_mb": 0,
+      "n": 27
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 1,
+      "n": 22
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 2,
+      "n": 22
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 82,
+      "n": 22
+     },
+     {
+      "chrom": "chr6",
+      "start_mb": 1,
+      "n": 21
+     },
+     {
+      "chrom": "chr6",
+      "start_mb": 6,
+      "n": 18
+     },
+     {
+      "chrom": "chr6",
+      "start_mb": 18,
+      "n": 17
+     },
+     {
+      "chrom": "chr16",
+      "start_mb": 57,
+      "n": 17
+     },
+     {
+      "chrom": "chr16",
+      "start_mb": 60,
+      "n": 17
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 12,
+      "n": 17
+     }
+    ]
+   },
+   "INDEL_bed": {
+    "n": 1126,
+    "normal_exact": 0,
+    "normal_exact_q10": 0,
+    "label_germ": 0,
+    "normal_exact_hom": 0,
+    "normal_pos_other": 0,
+    "merged_germline": 0,
+    "full_filter_GERMLINE": 0,
+    "full_filter_PASS": 1126,
+    "full_absent": 0,
+    "gnomad_ge1pct": 32,
+    "gnomad_any": 65,
+    "colorsdb_ge1pct": 62,
+    "gnomad_or_colorsdb_ge1pct": 70,
+    "gnomad_ge1pct_and_normal": 0,
+    "gnomad_ge1pct_not_normal": 32,
+    "normal_or_gnomad_ge1pct": 32,
+    "tumor_vaf_common_n": 32,
+    "tumor_vaf_common_median": 0.532,
+    "tumor_vaf_common_ge0.9": 1,
+    "tumor_vaf_rare_n": 1094,
+    "tumor_vaf_rare_median": 0.393,
+    "tumor_vaf_rare_ge0.9": 54,
+    "bin_class": {
+     "het0.0-0.1": {
+      "rare_not_normal": 5,
+      "all": 11,
+      "common_not_normal": 6
+     },
+     "het0.1-0.2": {
+      "rare_not_normal": 6,
+      "all": 7,
+      "common_not_normal": 1
+     },
+     "het0.2-0.4": {
+      "rare_not_normal": 86,
+      "all": 87,
+      "common_not_normal": 1
+     },
+     "het0.4-1.0": {
+      "rare_not_normal": 997,
+      "all": 1021,
+      "common_not_normal": 24
+     }
+    },
+    "bins_half_common_not_normal": 6,
+    "bins_any_common_not_normal": 22,
+    "top_bins_common_not_normal": [
+     {
+      "chrom": "chr12",
+      "start_mb": 28,
+      "n": 6
+     },
+     {
+      "chrom": "chr16",
+      "start_mb": 35,
+      "n": 6
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 155,
+      "n": 1
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 166,
+      "n": 1
+     },
+     {
+      "chrom": "chr4",
+      "start_mb": 33,
+      "n": 1
+     },
+     {
+      "chrom": "chr4",
+      "start_mb": 36,
+      "n": 1
+     },
+     {
+      "chrom": "chr4",
+      "start_mb": 47,
+      "n": 1
+     },
+     {
+      "chrom": "chr4",
+      "start_mb": 130,
+      "n": 1
+     },
+     {
+      "chrom": "chr4",
+      "start_mb": 170,
+      "n": 1
+     },
+     {
+      "chrom": "chr5",
+      "start_mb": 15,
+      "n": 1
+     }
+    ],
+    "bins_half_rare_not_normal": 293,
+    "bins_any_rare_not_normal": 840,
+    "top_bins_rare_not_normal": [
+     {
+      "chrom": "chr7",
+      "start_mb": 34,
+      "n": 5
+     },
+     {
+      "chrom": "chr2",
+      "start_mb": 45,
+      "n": 4
+     },
+     {
+      "chrom": "chr2",
+      "start_mb": 206,
+      "n": 4
+     },
+     {
+      "chrom": "chr5",
+      "start_mb": 19,
+      "n": 4
+     },
+     {
+      "chrom": "chr7",
+      "start_mb": 52,
+      "n": 4
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 200,
+      "n": 3
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 209,
+      "n": 3
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 221,
+      "n": 3
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 227,
+      "n": 3
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 231,
+      "n": 3
+     }
+    ]
+   }
+  },
+  "HCC1937_CASTLE": {
+   "used_by_pansoma": "no",
+   "truth_vcf": "/scratch/jshen/data/CASTLE/benchmarks/DeepSomatic_HCC1395-model_benchmark/vcfs/somatic_only/HCC1937_DeepSomatic_HCC1395-model_somatic-only.vcf.gz",
+   "bed": "/scratch/jshen/data/CASTLE/benchmarks/DeepSomatic_HCC1395-model_benchmark/beds/HCC1937_high-confidence-regions_DeepSomatic-HCC1395-model.bed",
+   "normal_line": "HCC1937",
+   "germline_baseline_chr20_in_bed": {
+    "n": 74073,
+    "gnomad_ge1pct": 67416,
+    "gnomad_any": 68756,
+    "het_n": 47171,
+    "het_gnomad_ge1pct": 42046
+   },
+   "SNV_all": {
+    "n": 52685,
+    "normal_exact": 0,
+    "normal_exact_q10": 0,
+    "label_germ": 0,
+    "normal_exact_hom": 0,
+    "normal_pos_other": 23,
+    "merged_germline": 17,
+    "full_filter_GERMLINE": 17,
+    "full_filter_PASS": 52668,
+    "full_absent": 0,
+    "gnomad_ge1pct": 31991,
+    "gnomad_any": 34369,
+    "colorsdb_ge1pct": 32933,
+    "gnomad_or_colorsdb_ge1pct": 33174,
+    "gnomad_ge1pct_and_normal": 0,
+    "gnomad_ge1pct_not_normal": 31991,
+    "normal_or_gnomad_ge1pct": 31991,
+    "tumor_vaf_common_n": 31991,
+    "tumor_vaf_common_median": 0.986,
+    "tumor_vaf_common_ge0.9": 18846,
+    "tumor_vaf_rare_n": 20694,
+    "tumor_vaf_rare_median": 0.333,
+    "tumor_vaf_rare_ge0.9": 3639,
+    "bin_class": {
+     "het0.0-0.1": {
+      "rare_not_normal": 3095,
+      "all": 32485,
+      "common_not_normal": 29390
+     },
+     "het0.1-0.2": {
+      "rare_not_normal": 214,
+      "all": 1204,
+      "common_not_normal": 990
+     },
+     "het0.2-0.4": {
+      "rare_not_normal": 1291,
+      "all": 1893,
+      "common_not_normal": 602
+     },
+     "het0.4-1.0": {
+      "rare_not_normal": 15950,
+      "all": 16005,
+      "common_not_normal": 55
+     },
+     "sparse": {
+      "rare_not_normal": 144,
+      "all": 1098,
+      "common_not_normal": 954
+     }
+    },
+    "bins_half_common_not_normal": 36,
+    "bins_any_common_not_normal": 214,
+    "top_bins_common_not_normal": [
+     {
+      "chrom": "chrX",
+      "start_mb": 79,
+      "n": 796
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 146,
+      "n": 734
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 143,
+      "n": 610
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 1,
+      "n": 588
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 22,
+      "n": 587
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 23,
+      "n": 567
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 0,
+      "n": 546
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 87,
+      "n": 506
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 26,
+      "n": 503
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 117,
+      "n": 490
+     }
+    ],
+    "bins_half_rare_not_normal": 785,
+    "bins_any_rare_not_normal": 2855,
+    "top_bins_rare_not_normal": [
+     {
+      "chrom": "chrX",
+      "start_mb": 115,
+      "n": 171
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 1,
+      "n": 90
+     },
+     {
+      "chrom": "chr22",
+      "start_mb": 22,
+      "n": 84
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 2,
+      "n": 82
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 143,
+      "n": 75
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 116,
+      "n": 68
+     },
+     {
+      "chrom": "chr14",
+      "start_mb": 105,
+      "n": 65
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 141,
+      "n": 63
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 75,
+      "n": 53
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 131,
+      "n": 52
+     }
+    ]
+   },
+   "SNV_bed": {
+    "n": 16631,
+    "normal_exact": 0,
+    "normal_exact_q10": 0,
+    "label_germ": 0,
+    "normal_exact_hom": 0,
+    "normal_pos_other": 3,
+    "merged_germline": 2,
+    "full_filter_GERMLINE": 2,
+    "full_filter_PASS": 16629,
+    "full_absent": 0,
+    "gnomad_ge1pct": 271,
+    "gnomad_any": 1162,
+    "colorsdb_ge1pct": 382,
+    "gnomad_or_colorsdb_ge1pct": 393,
+    "gnomad_ge1pct_and_normal": 0,
+    "gnomad_ge1pct_not_normal": 271,
+    "normal_or_gnomad_ge1pct": 271,
+    "tumor_vaf_common_n": 271,
+    "tumor_vaf_common_median": 0.528,
+    "tumor_vaf_common_ge0.9": 71,
+    "tumor_vaf_rare_n": 16360,
+    "tumor_vaf_rare_median": 0.265,
+    "tumor_vaf_rare_ge0.9": 1795,
+    "bin_class": {
+     "het0.0-0.1": {
+      "rare_not_normal": 44,
+      "all": 44
+     },
+     "het0.1-0.2": {
+      "rare_not_normal": 118,
+      "all": 118
+     },
+     "het0.2-0.4": {
+      "rare_not_normal": 1170,
+      "all": 1391,
+      "common_not_normal": 221
+     },
+     "het0.4-1.0": {
+      "rare_not_normal": 15026,
+      "all": 15076,
+      "common_not_normal": 50
+     },
+     "sparse": {
+      "rare_not_normal": 2,
+      "all": 2
+     }
+    },
+    "bins_half_common_not_normal": 1,
+    "bins_any_common_not_normal": 56,
+    "top_bins_common_not_normal": [
+     {
+      "chrom": "chr22",
+      "start_mb": 22,
+      "n": 162
+     },
+     {
+      "chrom": "chr14",
+      "start_mb": 105,
+      "n": 55
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 51,
+      "n": 1
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 57,
+      "n": 1
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 185,
+      "n": 1
+     },
+     {
+      "chrom": "chr2",
+      "start_mb": 89,
+      "n": 1
+     },
+     {
+      "chrom": "chr2",
+      "start_mb": 116,
+      "n": 1
+     },
+     {
+      "chrom": "chr2",
+      "start_mb": 124,
+      "n": 1
+     },
+     {
+      "chrom": "chr2",
+      "start_mb": 131,
+      "n": 1
+     },
+     {
+      "chrom": "chr2",
+      "start_mb": 174,
+      "n": 1
+     }
+    ],
+    "bins_half_rare_not_normal": 813,
+    "bins_any_rare_not_normal": 2648,
+    "top_bins_rare_not_normal": [
+     {
+      "chrom": "chr22",
+      "start_mb": 22,
+      "n": 73
+     },
+     {
+      "chrom": "chr14",
+      "start_mb": 105,
+      "n": 49
+     },
+     {
+      "chrom": "chr8",
+      "start_mb": 139,
+      "n": 23
+     },
+     {
+      "chrom": "chr5",
+      "start_mb": 8,
+      "n": 20
+     },
+     {
+      "chrom": "chr5",
+      "start_mb": 53,
+      "n": 20
+     },
+     {
+      "chrom": "chr8",
+      "start_mb": 142,
+      "n": 20
+     },
+     {
+      "chrom": "chr9",
+      "start_mb": 5,
+      "n": 20
+     },
+     {
+      "chrom": "chr16",
+      "start_mb": 59,
+      "n": 20
+     },
+     {
+      "chrom": "chr8",
+      "start_mb": 64,
+      "n": 19
+     },
+     {
+      "chrom": "chr8",
+      "start_mb": 52,
+      "n": 18
+     }
+    ]
+   },
+   "INDEL_all": {
+    "n": 4258,
+    "normal_exact": 0,
+    "normal_exact_q10": 0,
+    "label_germ": 0,
+    "normal_exact_hom": 0,
+    "normal_pos_other": 18,
+    "merged_germline": 17,
+    "full_filter_GERMLINE": 17,
+    "full_filter_PASS": 4241,
+    "full_absent": 0,
+    "gnomad_ge1pct": 2238,
+    "gnomad_any": 2392,
+    "colorsdb_ge1pct": 3053,
+    "gnomad_or_colorsdb_ge1pct": 3105,
+    "gnomad_ge1pct_and_normal": 0,
+    "gnomad_ge1pct_not_normal": 2238,
+    "normal_or_gnomad_ge1pct": 2238,
+    "tumor_vaf_common_n": 2238,
+    "tumor_vaf_common_median": 0.897,
+    "tumor_vaf_common_ge0.9": 1115,
+    "tumor_vaf_rare_n": 2020,
+    "tumor_vaf_rare_median": 0.572,
+    "tumor_vaf_rare_ge0.9": 436,
+    "bin_class": {
+     "het0.0-0.1": {
+      "rare_not_normal": 884,
+      "all": 2920,
+      "common_not_normal": 2036
+     },
+     "het0.1-0.2": {
+      "rare_not_normal": 45,
+      "all": 97,
+      "common_not_normal": 52
+     },
+     "het0.2-0.4": {
+      "rare_not_normal": 106,
+      "all": 145,
+      "common_not_normal": 39
+     },
+     "het0.4-1.0": {
+      "rare_not_normal": 955,
+      "all": 995,
+      "common_not_normal": 40
+     },
+     "sparse": {
+      "common_not_normal": 71,
+      "all": 101,
+      "rare_not_normal": 30
+     }
+    },
+    "bins_half_common_not_normal": 35,
+    "bins_any_common_not_normal": 185,
+    "top_bins_common_not_normal": [
+     {
+      "chrom": "chrX",
+      "start_mb": 79,
+      "n": 57
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 146,
+      "n": 57
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 27,
+      "n": 45
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 126,
+      "n": 42
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 23,
+      "n": 41
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 26,
+      "n": 40
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 22,
+      "n": 39
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 1,
+      "n": 38
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 11,
+      "n": 37
+     },
+     {
+      "chrom": "chr22",
+      "start_mb": 22,
+      "n": 35
+     }
+    ],
+    "bins_half_rare_not_normal": 142,
+    "bins_any_rare_not_normal": 952,
+    "top_bins_rare_not_normal": [
+     {
+      "chrom": "chrX",
+      "start_mb": 143,
+      "n": 20
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 2,
+      "n": 18
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 79,
+      "n": 18
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 7,
+      "n": 17
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 22,
+      "n": 17
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 26,
+      "n": 16
+     },
+     {
+      "chrom": "chr22",
+      "start_mb": 22,
+      "n": 15
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 0,
+      "n": 15
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 18,
+      "n": 15
+     },
+     {
+      "chrom": "chrX",
+      "start_mb": 44,
+      "n": 15
+     }
+    ]
+   },
+   "INDEL_bed": {
+    "n": 1036,
+    "normal_exact": 0,
+    "normal_exact_q10": 0,
+    "label_germ": 0,
+    "normal_exact_hom": 0,
+    "normal_pos_other": 14,
+    "merged_germline": 13,
+    "full_filter_GERMLINE": 13,
+    "full_filter_PASS": 1023,
+    "full_absent": 0,
+    "gnomad_ge1pct": 54,
+    "gnomad_any": 113,
+    "colorsdb_ge1pct": 117,
+    "gnomad_or_colorsdb_ge1pct": 141,
+    "gnomad_ge1pct_and_normal": 0,
+    "gnomad_ge1pct_not_normal": 54,
+    "normal_or_gnomad_ge1pct": 54,
+    "tumor_vaf_common_n": 54,
+    "tumor_vaf_common_median": 0.489,
+    "tumor_vaf_common_ge0.9": 6,
+    "tumor_vaf_rare_n": 982,
+    "tumor_vaf_rare_median": 0.45,
+    "tumor_vaf_rare_ge0.9": 148,
+    "bin_class": {
+     "het0.0-0.1": {
+      "rare_not_normal": 1,
+      "all": 1
+     },
+     "het0.1-0.2": {
+      "rare_not_normal": 14,
+      "all": 14
+     },
+     "het0.2-0.4": {
+      "rare_not_normal": 87,
+      "all": 101,
+      "common_not_normal": 14
+     },
+     "het0.4-1.0": {
+      "rare_not_normal": 880,
+      "all": 920,
+      "common_not_normal": 40
+     }
+    },
+    "bins_half_common_not_normal": 15,
+    "bins_any_common_not_normal": 42,
+    "top_bins_common_not_normal": [
+     {
+      "chrom": "chr22",
+      "start_mb": 22,
+      "n": 13
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 29,
+      "n": 1
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 35,
+      "n": 1
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 69,
+      "n": 1
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 111,
+      "n": 1
+     },
+     {
+      "chrom": "chr1",
+      "start_mb": 158,
+      "n": 1
+     },
+     {
+      "chrom": "chr2",
+      "start_mb": 68,
+      "n": 1
+     },
+     {
+      "chrom": "chr3",
+      "start_mb": 8,
+      "n": 1
+     },
+     {
+      "chrom": "chr3",
+      "start_mb": 10,
+      "n": 1
+     },
+     {
+      "chrom": "chr3",
+      "start_mb": 29,
+      "n": 1
+     }
+    ],
+    "bins_half_rare_not_normal": 256,
+    "bins_any_rare_not_normal": 747,
+    "top_bins_rare_not_normal": [
+     {
+      "chrom": "chr22",
+      "start_mb": 22,
+      "n": 8
+     },
+     {
+      "chrom": "chr5",
+      "start_mb": 25,
+      "n": 6
+     },
+     {
+      "chrom": "chr8",
+      "start_mb": 105,
+      "n": 6
+     },
+     {
+      "chrom": "chr10",
+      "start_mb": 44,
+      "n": 6
+     },
+     {
+      "chrom": "chr2",
+      "start_mb": 170,
+      "n": 5
+     },
+     {
+      "chrom": "chr3",
+      "start_mb": 85,
+      "n": 5
+     },
+     {
+      "chrom": "chr8",
+      "start_mb": 77,
+      "n": 5
+     },
+     {
+      "chrom": "chr16",
+      "start_mb": 59,
+      "n": 5
+     },
+     {
+      "chrom": "chr3",
+      "start_mb": 52,
+      "n": 4
+     },
+     {
+      "chrom": "chr3",
+      "start_mb": 184,
+      "n": 4
+     }
+    ]
+   }
+  }
+ },
+ "normals": {
+  "H1437": {
+   "genome_bin_classes": {
+    "het0.4-1.0": 2417,
+    "het0.0-0.1": 87,
+    "het0.1-0.2": 37,
+    "het0.2-0.4": 231,
+    "sparse": 5
+   },
+   "lowhet_segments_lt0.2": [
+    {
+     "chrom": "chr1",
+     "start_mb": 9,
+     "end_mb": 12,
+     "mb": 3
+    },
+    {
+     "chrom": "chr1",
+     "start_mb": 35,
+     "end_mb": 36,
+     "mb": 1
+    },
+    {
+     "chrom": "chr1",
+     "start_mb": 211,
+     "end_mb": 212,
+     "mb": 1
+    },
+    {
+     "chrom": "chr2",
+     "start_mb": 52,
+     "end_mb": 53,
+     "mb": 1
+    },
+    {
+     "chrom": "chr2",
+     "start_mb": 96,
+     "end_mb": 97,
+     "mb": 1
+    },
+    {
+     "chrom": "chr2",
+     "start_mb": 137,
+     "end_mb": 139,
+     "mb": 2
+    },
+    {
+     "chrom": "chr2",
+     "start_mb": 147,
+     "end_mb": 148,
+     "mb": 1
+    },
+    {
+     "chrom": "chr2",
+     "start_mb": 182,
+     "end_mb": 183,
+     "mb": 1
+    },
+    {
+     "chrom": "chr2",
+     "start_mb": 189,
+     "end_mb": 190,
+     "mb": 1
+    },
+    {
+     "chrom": "chr2",
+     "start_mb": 194,
+     "end_mb": 195,
+     "mb": 1
+    },
+    {
+     "chrom": "chr3",
+     "start_mb": 40,
+     "end_mb": 41,
+     "mb": 1
+    },
+    {
+     "chrom": "chr3",
+     "start_mb": 51,
+     "end_mb": 52,
+     "mb": 1
+    },
+    {
+     "chrom": "chr3",
+     "start_mb": 67,
+     "end_mb": 68,
+     "mb": 1
+    },
+    {
+     "chrom": "chr3",
+     "start_mb": 90,
+     "end_mb": 92,
+     "mb": 2
+    },
+    {
+     "chrom": "chr3",
+     "start_mb": 94,
+     "end_mb": 95,
+     "mb": 1
+    },
+    {
+     "chrom": "chr3",
+     "start_mb": 121,
+     "end_mb": 122,
+     "mb": 1
+    },
+    {
+     "chrom": "chr5",
+     "start_mb": 49,
+     "end_mb": 50,
+     "mb": 1
+    },
+    {
+     "chrom": "chr5",
+     "start_mb": 138,
+     "end_mb": 139,
+     "mb": 1
+    },
+    {
+     "chrom": "chr6",
+     "start_mb": 27,
+     "end_mb": 28,
+     "mb": 1
+    },
+    {
+     "chrom": "chr6",
+     "start_mb": 127,
+     "end_mb": 128,
+     "mb": 1
+    },
+    {
+     "chrom": "chr7",
+     "start_mb": 59,
+     "end_mb": 60,
+     "mb": 1
+    },
+    {
+     "chrom": "chr7",
+     "start_mb": 119,
+     "end_mb": 120,
+     "mb": 1
+    },
+    {
+     "chrom": "chr8",
+     "start_mb": 10,
+     "end_mb": 11,
+     "mb": 1
+    },
+    {
+     "chrom": "chr8",
+     "start_mb": 49,
+     "end_mb": 51,
+     "mb": 2
+    },
+    {
+     "chrom": "chr9",
+     "start_mb": 45,
+     "end_mb": 46,
+     "mb": 1
+    },
+    {
+     "chrom": "chr9",
+     "start_mb": 68,
+     "end_mb": 139,
+     "mb": 71
+    },
+    {
+     "chrom": "chr10",
+     "start_mb": 40,
+     "end_mb": 41,
+     "mb": 1
+    },
+    {
+     "chrom": "chr10",
+     "start_mb": 72,
+     "end_mb": 73,
+     "mb": 1
+    },
+    {
+     "chrom": "chr10",
+     "start_mb": 115,
+     "end_mb": 116,
+     "mb": 1
+    },
+    {
+     "chrom": "chr11",
+     "start_mb": 45,
+     "end_mb": 46,
+     "mb": 1
+    },
+    {
+     "chrom": "chr11",
+     "start_mb": 47,
+     "end_mb": 48,
+     "mb": 1
+    },
+    {
+     "chrom": "chr11",
+     "start_mb": 50,
+     "end_mb": 51,
+     "mb": 1
+    },
+    {
+     "chrom": "chr11",
+     "start_mb": 54,
+     "end_mb": 55,
+     "mb": 1
+    },
+    {
+     "chrom": "chr11",
+     "start_mb": 66,
+     "end_mb": 68,
+     "mb": 2
+    },
+    {
+     "chrom": "chr11",
+     "start_mb": 74,
+     "end_mb": 75,
+     "mb": 1
+    },
+    {
+     "chrom": "chr11",
+     "start_mb": 91,
+     "end_mb": 92,
+     "mb": 1
+    },
+    {
+     "chrom": "chr11",
+     "start_mb": 105,
+     "end_mb": 106,
+     "mb": 1
+    },
+    {
+     "chrom": "chr12",
+     "start_mb": 88,
+     "end_mb": 89,
+     "mb": 1
+    },
+    {
+     "chrom": "chr13",
+     "start_mb": 77,
+     "end_mb": 78,
+     "mb": 1
+    },
+    {
+     "chrom": "chr14",
+     "start_mb": 16,
+     "end_mb": 17,
+     "mb": 1
+    },
+    {
+     "chrom": "chr14",
+     "start_mb": 63,
+     "end_mb": 64,
+     "mb": 1
+    },
+    {
+     "chrom": "chr14",
+     "start_mb": 97,
+     "end_mb": 98,
+     "mb": 1
+    },
+    {
+     "chrom": "chr15",
+     "start_mb": 76,
+     "end_mb": 77,
+     "mb": 1
+    },
+    {
+     "chrom": "chr16",
+     "start_mb": 35,
+     "end_mb": 36,
+     "mb": 1
+    },
+    {
+     "chrom": "chr16",
+     "start_mb": 38,
+     "end_mb": 39,
+     "mb": 1
+    },
+    {
+     "chrom": "chr17",
+     "start_mb": 23,
+     "end_mb": 26,
+     "mb": 3
+    },
+    {
+     "chrom": "chr18",
+     "start_mb": 16,
+     "end_mb": 17,
+     "mb": 1
+    }
+   ]
+  },
+  "H2009": {
+   "genome_bin_classes": {
+    "het0.4-1.0": 2456,
+    "het0.2-0.4": 238,
+    "het0.1-0.2": 42,
+    "het0.0-0.1": 39,
+    "sparse": 2
+   },
+   "lowhet_segments_lt0.2": [
+    {
+     "chrom": "chr1",
+     "start_mb": 31,
+     "end_mb": 32,
+     "mb": 1
+    },
+    {
+     "chrom": "chr1",
+     "start_mb": 49,
+     "end_mb": 51,
+     "mb": 2
+    },
+    {
+     "chrom": "chr1",
+     "start_mb": 71,
+     "end_mb": 72,
+     "mb": 1
+    },
+    {
+     "chrom": "chr1",
+     "start_mb": 93,
+     "end_mb": 94,
+     "mb": 1
+    },
+    {
+     "chrom": "chr1",
+     "start_mb": 120,
+     "end_mb": 121,
+     "mb": 1
+    },
+    {
+     "chrom": "chr1",
+     "start_mb": 194,
+     "end_mb": 195,
+     "mb": 1
+    },
+    {
+     "chrom": "chr2",
+     "start_mb": 119,
+     "end_mb": 121,
+     "mb": 2
+    },
+    {
+     "chrom": "chr2",
+     "start_mb": 135,
+     "end_mb": 136,
+     "mb": 1
+    },
+    {
+     "chrom": "chr2",
+     "start_mb": 188,
+     "end_mb": 190,
+     "mb": 2
+    },
+    {
+     "chrom": "chr2",
+     "start_mb": 194,
+     "end_mb": 195,
+     "mb": 1
+    },
+    {
+     "chrom": "chr3",
+     "start_mb": 44,
+     "end_mb": 45,
+     "mb": 1
+    },
+    {
+     "chrom": "chr3",
+     "start_mb": 129,
+     "end_mb": 130,
+     "mb": 1
+    },
+    {
+     "chrom": "chr3",
+     "start_mb": 184,
+     "end_mb": 185,
+     "mb": 1
+    },
+    {
+     "chrom": "chr4",
+     "start_mb": 9,
+     "end_mb": 10,
+     "mb": 1
+    },
+    {
+     "chrom": "chr4",
+     "start_mb": 22,
+     "end_mb": 23,
+     "mb": 1
+    },
+    {
+     "chrom": "chr4",
+     "start_mb": 51,
+     "end_mb": 52,
+     "mb": 1
+    },
+    {
+     "chrom": "chr4",
+     "start_mb": 141,
+     "end_mb": 143,
+     "mb": 2
+    },
+    {
+     "chrom": "chr4",
+     "start_mb": 151,
+     "end_mb": 152,
+     "mb": 1
+    },
+    {
+     "chrom": "chr5",
+     "start_mb": 47,
+     "end_mb": 51,
+     "mb": 4
+    },
+    {
+     "chrom": "chr5",
+     "start_mb": 102,
+     "end_mb": 103,
+     "mb": 1
+    },
+    {
+     "chrom": "chr6",
+     "start_mb": 118,
+     "end_mb": 119,
+     "mb": 1
+    },
+    {
+     "chrom": "chr7",
+     "start_mb": 9,
+     "end_mb": 10,
+     "mb": 1
+    },
+    {
+     "chrom": "chr7",
+     "start_mb": 55,
+     "end_mb": 62,
+     "mb": 7
+    },
+    {
+     "chrom": "chr7",
+     "start_mb": 64,
+     "end_mb": 67,
+     "mb": 3
+    },
+    {
+     "chrom": "chr7",
+     "start_mb": 119,
+     "end_mb": 120,
+     "mb": 1
+    },
+    {
+     "chrom": "chr7",
+     "start_mb": 122,
+     "end_mb": 143,
+     "mb": 21
+    },
+    {
+     "chrom": "chr7",
+     "start_mb": 145,
+     "end_mb": 146,
+     "mb": 1
+    },
+    {
+     "chrom": "chr8",
+     "start_mb": 50,
+     "end_mb": 51,
+     "mb": 1
+    },
+    {
+     "chrom": "chr9",
+     "start_mb": 115,
+     "end_mb": 116,
+     "mb": 1
+    },
+    {
+     "chrom": "chr10",
+     "start_mb": 39,
+     "end_mb": 40,
+     "mb": 1
+    },
+    {
+     "chrom": "chr10",
+     "start_mb": 74,
+     "end_mb": 75,
+     "mb": 1
+    },
+    {
+     "chrom": "chr10",
+     "start_mb": 118,
+     "end_mb": 119,
+     "mb": 1
+    },
+    {
+     "chrom": "chr11",
+     "start_mb": 39,
+     "end_mb": 40,
+     "mb": 1
+    },
+    {
+     "chrom": "chr11",
+     "start_mb": 51,
+     "end_mb": 52,
+     "mb": 1
+    },
+    {
+     "chrom": "chr12",
+     "start_mb": 133,
+     "end_mb": 134,
+     "mb": 1
+    },
+    {
+     "chrom": "chr14",
+     "start_mb": 31,
+     "end_mb": 32,
+     "mb": 1
+    },
+    {
+     "chrom": "chr16",
+     "start_mb": 35,
+     "end_mb": 36,
+     "mb": 1
+    },
+    {
+     "chrom": "chr16",
+     "start_mb": 37,
+     "end_mb": 39,
+     "mb": 2
+    },
+    {
+     "chrom": "chr17",
+     "start_mb": 23,
+     "end_mb": 26,
+     "mb": 3
+    },
+    {
+     "chrom": "chr17",
+     "start_mb": 65,
+     "end_mb": 66,
+     "mb": 1
+    },
+    {
+     "chrom": "chr18",
+     "start_mb": 16,
+     "end_mb": 17,
+     "mb": 1
+    },
+    {
+     "chrom": "chr18",
+     "start_mb": 19,
+     "end_mb": 20,
+     "mb": 1
+    },
+    {
+     "chrom": "chr18",
+     "start_mb": 49,
+     "end_mb": 50,
+     "mb": 1
+    },
+    {
+     "chrom": "chr19",
+     "start_mb": 37,
+     "end_mb": 38,
+     "mb": 1
+    }
+   ]
+  },
+  "HCC1395": {
+   "genome_bin_classes": {
+    "het0.2-0.4": 232,
+    "het0.4-1.0": 2380,
+    "het0.1-0.2": 46,
+    "het0.0-0.1": 114,
+    "sparse": 5
+   },
+   "lowhet_segments_lt0.2": [
+    {
+     "chrom": "chr1",
+     "start_mb": 35,
+     "end_mb": 36,
+     "mb": 1
+    },
+    {
+     "chrom": "chr1",
+     "start_mb": 49,
+     "end_mb": 50,
+     "mb": 1
+    },
+    {
+     "chrom": "chr1",
+     "start_mb": 120,
+     "end_mb": 121,
+     "mb": 1
+    },
+    {
+     "chrom": "chr2",
+     "start_mb": 92,
+     "end_mb": 94,
+     "mb": 2
+    },
+    {
+     "chrom": "chr2",
+     "start_mb": 135,
+     "end_mb": 136,
+     "mb": 1
+    },
+    {
+     "chrom": "chr2",
+     "start_mb": 161,
+     "end_mb": 163,
+     "mb": 2
+    },
+    {
+     "chrom": "chr2",
+     "start_mb": 188,
+     "end_mb": 190,
+     "mb": 2
+    },
+    {
+     "chrom": "chr2",
+     "start_mb": 192,
+     "end_mb": 193,
+     "mb": 1
+    },
+    {
+     "chrom": "chr2",
+     "start_mb": 194,
+     "end_mb": 195,
+     "mb": 1
+    },
+    {
+     "chrom": "chr3",
+     "start_mb": 41,
+     "end_mb": 42,
+     "mb": 1
+    },
+    {
+     "chrom": "chr3",
+     "start_mb": 47,
+     "end_mb": 48,
+     "mb": 1
+    },
+    {
+     "chrom": "chr3",
+     "start_mb": 49,
+     "end_mb": 50,
+     "mb": 1
+    },
+    {
+     "chrom": "chr3",
+     "start_mb": 51,
+     "end_mb": 52,
+     "mb": 1
+    },
+    {
+     "chrom": "chr3",
+     "start_mb": 56,
+     "end_mb": 57,
+     "mb": 1
+    },
+    {
+     "chrom": "chr3",
+     "start_mb": 88,
+     "end_mb": 89,
+     "mb": 1
+    },
+    {
+     "chrom": "chr3",
+     "start_mb": 92,
+     "end_mb": 93,
+     "mb": 1
+    },
+    {
+     "chrom": "chr4",
+     "start_mb": 33,
+     "end_mb": 34,
+     "mb": 1
+    },
+    {
+     "chrom": "chr4",
+     "start_mb": 51,
+     "end_mb": 52,
+     "mb": 1
+    },
+    {
+     "chrom": "chr4",
+     "start_mb": 127,
+     "end_mb": 128,
+     "mb": 1
+    },
+    {
+     "chrom": "chr5",
+     "start_mb": 12,
+     "end_mb": 13,
+     "mb": 1
+    },
+    {
+     "chrom": "chr5",
+     "start_mb": 49,
+     "end_mb": 50,
+     "mb": 1
+    },
+    {
+     "chrom": "chr5",
+     "start_mb": 99,
+     "end_mb": 100,
+     "mb": 1
+    },
+    {
+     "chrom": "chr5",
+     "start_mb": 131,
+     "end_mb": 132,
+     "mb": 1
+    },
+    {
+     "chrom": "chr6",
+     "start_mb": 1,
+     "end_mb": 62,
+     "mb": 61
+    },
+    {
+     "chrom": "chr7",
+     "start_mb": 59,
+     "end_mb": 60,
+     "mb": 1
+    },
+    {
+     "chrom": "chr7",
+     "start_mb": 72,
+     "end_mb": 73,
+     "mb": 1
+    },
+    {
+     "chrom": "chr7",
+     "start_mb": 81,
+     "end_mb": 82,
+     "mb": 1
+    },
+    {
+     "chrom": "chr7",
+     "start_mb": 94,
+     "end_mb": 95,
+     "mb": 1
+    },
+    {
+     "chrom": "chr7",
+     "start_mb": 119,
+     "end_mb": 120,
+     "mb": 1
+    },
+    {
+     "chrom": "chr8",
+     "start_mb": 49,
+     "end_mb": 52,
+     "mb": 3
+    },
+    {
+     "chrom": "chr8",
+     "start_mb": 99,
+     "end_mb": 100,
+     "mb": 1
+    },
+    {
+     "chrom": "chr9",
+     "start_mb": 44,
+     "end_mb": 45,
+     "mb": 1
+    },
+    {
+     "chrom": "chr10",
+     "start_mb": 63,
+     "end_mb": 64,
+     "mb": 1
+    },
+    {
+     "chrom": "chr10",
+     "start_mb": 74,
+     "end_mb": 75,
+     "mb": 1
+    },
+    {
+     "chrom": "chr10",
+     "start_mb": 99,
+     "end_mb": 100,
+     "mb": 1
+    },
+    {
+     "chrom": "chr11",
+     "start_mb": 50,
+     "end_mb": 56,
+     "mb": 6
+    },
+    {
+     "chrom": "chr12",
+     "start_mb": 36,
+     "end_mb": 37,
+     "mb": 1
+    },
+    {
+     "chrom": "chr12",
+     "start_mb": 43,
+     "end_mb": 44,
+     "mb": 1
+    },
+    {
+     "chrom": "chr12",
+     "start_mb": 83,
+     "end_mb": 84,
+     "mb": 1
+    },
+    {
+     "chrom": "chr13",
+     "start_mb": 16,
+     "end_mb": 18,
+     "mb": 2
+    },
+    {
+     "chrom": "chr13",
+     "start_mb": 61,
+     "end_mb": 62,
+     "mb": 1
+    },
+    {
+     "chrom": "chr16",
+     "start_mb": 35,
+     "end_mb": 38,
+     "mb": 3
+    },
+    {
+     "chrom": "chr16",
+     "start_mb": 47,
+     "end_mb": 70,
+     "mb": 23
+    },
+    {
+     "chrom": "chr16",
+     "start_mb": 71,
+     "end_mb": 74,
+     "mb": 3
+    },
+    {
+     "chrom": "chr16",
+     "start_mb": 75,
+     "end_mb": 90,
+     "mb": 15
+    },
+    {
+     "chrom": "chr17",
+     "start_mb": 23,
+     "end_mb": 24,
+     "mb": 1
+    },
+    {
+     "chrom": "chr18",
+     "start_mb": 16,
+     "end_mb": 20,
+     "mb": 4
+    }
+   ]
+  },
+  "HCC1937": {
+   "genome_bin_classes": {
+    "het0.4-1.0": 2517,
+    "het0.2-0.4": 222,
+    "het0.1-0.2": 26,
+    "het0.0-0.1": 10,
+    "sparse": 2
+   },
+   "lowhet_segments_lt0.2": [
+    {
+     "chrom": "chr1",
+     "start_mb": 72,
+     "end_mb": 73,
+     "mb": 1
+    },
+    {
+     "chrom": "chr1",
+     "start_mb": 91,
+     "end_mb": 92,
+     "mb": 1
+    },
+    {
+     "chrom": "chr1",
+     "start_mb": 118,
+     "end_mb": 119,
+     "mb": 1
+    },
+    {
+     "chrom": "chr2",
+     "start_mb": 135,
+     "end_mb": 136,
+     "mb": 1
+    },
+    {
+     "chrom": "chr3",
+     "start_mb": 51,
+     "end_mb": 52,
+     "mb": 1
+    },
+    {
+     "chrom": "chr3",
+     "start_mb": 93,
+     "end_mb": 94,
+     "mb": 1
+    },
+    {
+     "chrom": "chr4",
+     "start_mb": 51,
+     "end_mb": 53,
+     "mb": 2
+    },
+    {
+     "chrom": "chr4",
+     "start_mb": 60,
+     "end_mb": 61,
+     "mb": 1
+    },
+    {
+     "chrom": "chr4",
+     "start_mb": 91,
+     "end_mb": 92,
+     "mb": 1
+    },
+    {
+     "chrom": "chr4",
+     "start_mb": 163,
+     "end_mb": 164,
+     "mb": 1
+    },
+    {
+     "chrom": "chr5",
+     "start_mb": 43,
+     "end_mb": 44,
+     "mb": 1
+    },
+    {
+     "chrom": "chr5",
+     "start_mb": 72,
+     "end_mb": 73,
+     "mb": 1
+    },
+    {
+     "chrom": "chr6",
+     "start_mb": 27,
+     "end_mb": 28,
+     "mb": 1
+    },
+    {
+     "chrom": "chr7",
+     "start_mb": 59,
+     "end_mb": 60,
+     "mb": 1
+    },
+    {
+     "chrom": "chr7",
+     "start_mb": 114,
+     "end_mb": 115,
+     "mb": 1
+    },
+    {
+     "chrom": "chr7",
+     "start_mb": 133,
+     "end_mb": 134,
+     "mb": 1
+    },
+    {
+     "chrom": "chr9",
+     "start_mb": 94,
+     "end_mb": 95,
+     "mb": 1
+    },
+    {
+     "chrom": "chr10",
+     "start_mb": 40,
+     "end_mb": 41,
+     "mb": 1
+    },
+    {
+     "chrom": "chr10",
+     "start_mb": 64,
+     "end_mb": 65,
+     "mb": 1
+    },
+    {
+     "chrom": "chr11",
+     "start_mb": 48,
+     "end_mb": 52,
+     "mb": 4
+    },
+    {
+     "chrom": "chr11",
+     "start_mb": 54,
+     "end_mb": 56,
+     "mb": 2
+    },
+    {
+     "chrom": "chr12",
+     "start_mb": 11,
+     "end_mb": 12,
+     "mb": 1
+    },
+    {
+     "chrom": "chr12",
+     "start_mb": 37,
+     "end_mb": 38,
+     "mb": 1
+    },
+    {
+     "chrom": "chr12",
+     "start_mb": 88,
+     "end_mb": 89,
+     "mb": 1
+    },
+    {
+     "chrom": "chr14",
+     "start_mb": 43,
+     "end_mb": 44,
+     "mb": 1
+    },
+    {
+     "chrom": "chr15",
+     "start_mb": 44,
+     "end_mb": 45,
+     "mb": 1
+    },
+    {
+     "chrom": "chr16",
+     "start_mb": 48,
+     "end_mb": 49,
+     "mb": 1
+    },
+    {
+     "chrom": "chr17",
+     "start_mb": 23,
+     "end_mb": 26,
+     "mb": 3
+    },
+    {
+     "chrom": "chr20",
+     "start_mb": 35,
+     "end_mb": 36,
+     "mb": 1
+    }
+   ]
+  },
+  "HCC1954": {
+   "genome_bin_classes": {
+    "het0.4-1.0": 2528,
+    "het0.2-0.4": 207,
+    "het0.1-0.2": 27,
+    "het0.0-0.1": 11,
+    "sparse": 4
+   },
+   "lowhet_segments_lt0.2": [
+    {
+     "chrom": "chr1",
+     "start_mb": 50,
+     "end_mb": 51,
+     "mb": 1
+    },
+    {
+     "chrom": "chr1",
+     "start_mb": 193,
+     "end_mb": 194,
+     "mb": 1
+    },
+    {
+     "chrom": "chr2",
+     "start_mb": 148,
+     "end_mb": 149,
+     "mb": 1
+    },
+    {
+     "chrom": "chr2",
+     "start_mb": 189,
+     "end_mb": 190,
+     "mb": 1
+    },
+    {
+     "chrom": "chr2",
+     "start_mb": 198,
+     "end_mb": 199,
+     "mb": 1
+    },
+    {
+     "chrom": "chr2",
+     "start_mb": 203,
+     "end_mb": 204,
+     "mb": 1
+    },
+    {
+     "chrom": "chr3",
+     "start_mb": 93,
+     "end_mb": 95,
+     "mb": 2
+    },
+    {
+     "chrom": "chr4",
+     "start_mb": 39,
+     "end_mb": 40,
+     "mb": 1
+    },
+    {
+     "chrom": "chr4",
+     "start_mb": 50,
+     "end_mb": 52,
+     "mb": 2
+    },
+    {
+     "chrom": "chr4",
+     "start_mb": 72,
+     "end_mb": 73,
+     "mb": 1
+    },
+    {
+     "chrom": "chr4",
+     "start_mb": 86,
+     "end_mb": 87,
+     "mb": 1
+    },
+    {
+     "chrom": "chr5",
+     "start_mb": 20,
+     "end_mb": 21,
+     "mb": 1
+    },
+    {
+     "chrom": "chr5",
+     "start_mb": 27,
+     "end_mb": 28,
+     "mb": 1
+    },
+    {
+     "chrom": "chr5",
+     "start_mb": 44,
+     "end_mb": 45,
+     "mb": 1
+    },
+    {
+     "chrom": "chr5",
+     "start_mb": 55,
+     "end_mb": 56,
+     "mb": 1
+    },
+    {
+     "chrom": "chr5",
+     "start_mb": 72,
+     "end_mb": 73,
+     "mb": 1
+    },
+    {
+     "chrom": "chr5",
+     "start_mb": 134,
+     "end_mb": 135,
+     "mb": 1
+    },
+    {
+     "chrom": "chr6",
+     "start_mb": 35,
+     "end_mb": 37,
+     "mb": 2
+    },
+    {
+     "chrom": "chr6",
+     "start_mb": 160,
+     "end_mb": 161,
+     "mb": 1
+    },
+    {
+     "chrom": "chr7",
+     "start_mb": 58,
+     "end_mb": 60,
+     "mb": 2
+    },
+    {
+     "chrom": "chr7",
+     "start_mb": 119,
+     "end_mb": 120,
+     "mb": 1
+    },
+    {
+     "chrom": "chr8",
+     "start_mb": 99,
+     "end_mb": 100,
+     "mb": 1
+    },
+    {
+     "chrom": "chr9",
+     "start_mb": 15,
+     "end_mb": 16,
+     "mb": 1
+    },
+    {
+     "chrom": "chr9",
+     "start_mb": 45,
+     "end_mb": 46,
+     "mb": 1
+    },
+    {
+     "chrom": "chr12",
+     "start_mb": 59,
+     "end_mb": 60,
+     "mb": 1
+    },
+    {
+     "chrom": "chr13",
+     "start_mb": 16,
+     "end_mb": 17,
+     "mb": 1
+    },
+    {
+     "chrom": "chr13",
+     "start_mb": 56,
+     "end_mb": 57,
+     "mb": 1
+    },
+    {
+     "chrom": "chr13",
+     "start_mb": 85,
+     "end_mb": 86,
+     "mb": 1
+    },
+    {
+     "chrom": "chr14",
+     "start_mb": 16,
+     "end_mb": 17,
+     "mb": 1
+    },
+    {
+     "chrom": "chr15",
+     "start_mb": 85,
+     "end_mb": 86,
+     "mb": 1
+    },
+    {
+     "chrom": "chr16",
+     "start_mb": 18,
+     "end_mb": 19,
+     "mb": 1
+    },
+    {
+     "chrom": "chr16",
+     "start_mb": 38,
+     "end_mb": 39,
+     "mb": 1
+    },
+    {
+     "chrom": "chr17",
+     "start_mb": 23,
+     "end_mb": 24,
+     "mb": 1
+    },
+    {
+     "chrom": "chr17",
+     "start_mb": 46,
+     "end_mb": 47,
+     "mb": 1
+    }
+   ]
+  }
+ }
+}

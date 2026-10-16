@@ -1,0 +1,766 @@
+{
+ "HG008": {
+  "k8_d1": {
+   "germline_SNV": 0.850796,
+   "germline_INDEL": 0.743128,
+   "somatic_SNV": 0.026864,
+   "somatic_INDEL": 0.305994,
+   "somatic_INDEL_HP>=7": 0.370265,
+   "somatic_INDEL_not_HP>=7": 0.12666
+  },
+  "k16_d1": {
+   "germline_SNV": 0.9072,
+   "germline_INDEL": 0.812986,
+   "somatic_SNV": 0.033045,
+   "somatic_INDEL": 0.40421,
+   "somatic_INDEL_HP>=7": 0.487534,
+   "somatic_INDEL_not_HP>=7": 0.171715
+  },
+  "k16_d9": {
+   "germline_SNV": 0.409624,
+   "germline_INDEL": 0.265207,
+   "somatic_SNV": 0.006842,
+   "somatic_INDEL": 0.01524,
+   "somatic_INDEL_HP>=7": 0.017517,
+   "somatic_INDEL_not_HP>=7": 0.008887
+  },
+  "k32_d1": {
+   "germline_SNV": 0.940044,
+   "germline_INDEL": 0.853548,
+   "somatic_SNV": 0.038183,
+   "somatic_INDEL": 0.489827,
+   "somatic_INDEL_HP>=7": 0.588724,
+   "somatic_INDEL_not_HP>=7": 0.21388
+  },
+  "k32_d9": {
+   "germline_SNV": 0.676934,
+   "germline_INDEL": 0.530207,
+   "somatic_SNV": 0.013256,
+   "somatic_INDEL": 0.082157,
+   "somatic_INDEL_HP>=7": 0.100231,
+   "somatic_INDEL_not_HP>=7": 0.031725
+  },
+  "k64_d1": {
+   "germline_SNV": 0.954605,
+   "germline_INDEL": 0.872829,
+   "somatic_SNV": 0.043603,
+   "somatic_INDEL": 0.562801,
+   "somatic_INDEL_HP>=7": 0.676318,
+   "somatic_INDEL_not_HP>=7": 0.246058
+  },
+  "k64_d9": {
+   "germline_SNV": 0.826648,
+   "germline_INDEL": 0.707422,
+   "somatic_SNV": 0.020824,
+   "somatic_INDEL": 0.195853,
+   "somatic_INDEL_HP>=7": 0.23917,
+   "somatic_INDEL_not_HP>=7": 0.074988
+  },
+  "k89_d1": {
+   "germline_SNV": 0.959909,
+   "germline_INDEL": 0.87899,
+   "somatic_SNV": 0.046003,
+   "somatic_INDEL": 0.590319,
+   "somatic_INDEL_HP>=7": 0.709247,
+   "somatic_INDEL_not_HP>=7": 0.258481
+  },
+  "k89_d9": {
+   "germline_SNV": 0.869412,
+   "germline_INDEL": 0.761161,
+   "somatic_SNV": 0.023996,
+   "somatic_INDEL": 0.255893,
+   "somatic_INDEL_HP>=7": 0.310959,
+   "somatic_INDEL_not_HP>=7": 0.102246
+  }
+ },
+ "COLO829": {
+  "k8_d1": {
+   "germline_SNV": 0.852826,
+   "germline_INDEL": 0.738452,
+   "somatic_SNV": 0.002757,
+   "somatic_INDEL": 0.264331,
+   "somatic_INDEL_HP>=7": 0.34027,
+   "somatic_INDEL_not_HP>=7": 0.159227
+  },
+  "k16_d1": {
+   "germline_SNV": 0.909032,
+   "germline_INDEL": 0.808648,
+   "somatic_SNV": 0.003773,
+   "somatic_INDEL": 0.343122,
+   "somatic_INDEL_HP>=7": 0.448919,
+   "somatic_INDEL_not_HP>=7": 0.196696
+  },
+  "k16_d9": {
+   "germline_SNV": 0.409519,
+   "germline_INDEL": 0.261851,
+   "somatic_SNV": 0.000228,
+   "somatic_INDEL": 0.02126,
+   "somatic_INDEL_HP>=7": 0.024369,
+   "somatic_INDEL_not_HP>=7": 0.016958
+  },
+  "k32_d1": {
+   "germline_SNV": 0.941215,
+   "germline_INDEL": 0.849769,
+   "somatic_SNV": 0.004951,
+   "somatic_INDEL": 0.411454,
+   "somatic_INDEL_HP>=7": 0.546306,
+   "somatic_INDEL_not_HP>=7": 0.224813
+  },
+  "k32_d9": {
+   "germline_SNV": 0.678045,
+   "germline_INDEL": 0.524603,
+   "somatic_SNV": 0.000661,
+   "somatic_INDEL": 0.077824,
+   "somatic_INDEL_HP>=7": 0.091622,
+   "somatic_INDEL_not_HP>=7": 0.058728
+  },
+  "k64_d1": {
+   "germline_SNV": 0.955232,
+   "germline_INDEL": 0.869601,
+   "somatic_SNV": 0.006448,
+   "somatic_INDEL": 0.467992,
+   "somatic_INDEL_HP>=7": 0.630811,
+   "somatic_INDEL_not_HP>=7": 0.242643
+  },
+  "k64_d9": {
+   "germline_SNV": 0.829942,
+   "germline_INDEL": 0.702205,
+   "somatic_SNV": 0.001444,
+   "somatic_INDEL": 0.174085,
+   "somatic_INDEL_HP>=7": 0.210811,
+   "somatic_INDEL_not_HP>=7": 0.123254
+  },
+  "k89_d1": {
+   "germline_SNV": 0.960407,
+   "germline_INDEL": 0.87611,
+   "somatic_SNV": 0.007208,
+   "somatic_INDEL": 0.491632,
+   "somatic_INDEL_HP>=7": 0.666667,
+   "somatic_INDEL_not_HP>=7": 0.249377
+  },
+  "k89_d9": {
+   "germline_SNV": 0.872387,
+   "germline_INDEL": 0.755999,
+   "somatic_SNV": 0.001903,
+   "somatic_INDEL": 0.222803,
+   "somatic_INDEL_HP>=7": 0.272072,
+   "somatic_INDEL_not_HP>=7": 0.154613
+  }
+ },
+ "HCC1395": {
+  "k8_d1": {
+   "germline_SNV": 0.861672,
+   "germline_INDEL": 0.777493,
+   "somatic_SNV": 0.005748,
+   "somatic_INDEL": 0.038999,
+   "somatic_INDEL_HP>=7": 0.186325,
+   "somatic_INDEL_not_HP>=7": 0.012981
+  },
+  "k16_d1": {
+   "germline_SNV": 0.917215,
+   "germline_INDEL": 0.843422,
+   "somatic_SNV": 0.006852,
+   "somatic_INDEL": 0.049391,
+   "somatic_INDEL_HP>=7": 0.236325,
+   "somatic_INDEL_not_HP>=7": 0.016377
+  },
+  "k16_d9": {
+   "germline_SNV": 0.41989,
+   "germline_INDEL": 0.29133,
+   "somatic_SNV": 0.000755,
+   "somatic_INDEL": 0.005997,
+   "somatic_INDEL_HP>=7": 0.033333,
+   "somatic_INDEL_not_HP>=7": 0.00117
+  },
+  "k32_d1": {
+   "germline_SNV": 0.949182,
+   "germline_INDEL": 0.879641,
+   "somatic_SNV": 0.008058,
+   "somatic_INDEL": 0.059525,
+   "somatic_INDEL_HP>=7": 0.292308,
+   "somatic_INDEL_not_HP>=7": 0.018415
+  },
+  "k32_d9": {
+   "germline_SNV": 0.689898,
+   "germline_INDEL": 0.571309,
+   "somatic_SNV": 0.002952,
+   "somatic_INDEL": 0.01703,
+   "somatic_INDEL_HP>=7": 0.08312,
+   "somatic_INDEL_not_HP>=7": 0.005358
+  },
+  "k64_d1": {
+   "germline_SNV": 0.962657,
+   "germline_INDEL": 0.89565,
+   "somatic_SNV": 0.009231,
+   "somatic_INDEL": 0.06889,
+   "somatic_INDEL_HP>=7": 0.347436,
+   "somatic_INDEL_not_HP>=7": 0.019698
+  },
+  "k64_d9": {
+   "germline_SNV": 0.83892,
+   "germline_INDEL": 0.747793,
+   "somatic_SNV": 0.004479,
+   "somatic_INDEL": 0.027101,
+   "somatic_INDEL_HP>=7": 0.120085,
+   "somatic_INDEL_not_HP>=7": 0.010679
+  },
+  "k89_d1": {
+   "germline_SNV": 0.96779,
+   "germline_INDEL": 0.900736,
+   "somatic_SNV": 0.009836,
+   "somatic_INDEL": 0.074407,
+   "somatic_INDEL_HP>=7": 0.380342,
+   "somatic_INDEL_not_HP>=7": 0.020377
+  },
+  "k89_d9": {
+   "germline_SNV": 0.88138,
+   "germline_INDEL": 0.79875,
+   "somatic_SNV": 0.005019,
+   "somatic_INDEL": 0.032713,
+   "somatic_INDEL_HP>=7": 0.145299,
+   "somatic_INDEL_not_HP>=7": 0.01283
+  }
+ },
+ "calibration": [
+  {
+   "sample": "HG008",
+   "platform": "PacBio",
+   "role": "germline",
+   "stratum": "SNV",
+   "n": "3737022",
+   "predicted_in_d9": "0.8694",
+   "loss_d9_vs_linear": "0.8996",
+   "loss_d46_vs_linear": "0.9086"
+  },
+  {
+   "sample": "HG008",
+   "platform": "ONT",
+   "role": "germline",
+   "stratum": "SNV",
+   "n": "3737022",
+   "predicted_in_d9": "0.8694",
+   "loss_d9_vs_linear": "0.8979",
+   "loss_d46_vs_linear": "0.9059"
+  },
+  {
+   "sample": "HG008",
+   "platform": "Illumina",
+   "role": "germline",
+   "stratum": "SNV",
+   "n": "3737022",
+   "predicted_in_d9": "0.8694",
+   "loss_d9_vs_linear": "0.9019",
+   "loss_d46_vs_linear": "0.9097"
+  },
+  {
+   "sample": "HG008",
+   "platform": "PacBio",
+   "role": "germline",
+   "stratum": "INDEL",
+   "n": "964490",
+   "predicted_in_d9": "0.7612",
+   "loss_d9_vs_linear": "0.8195",
+   "loss_d46_vs_linear": "0.8197"
+  },
+  {
+   "sample": "HG008",
+   "platform": "ONT",
+   "role": "germline",
+   "stratum": "INDEL",
+   "n": "964490",
+   "predicted_in_d9": "0.7612",
+   "loss_d9_vs_linear": "0.8194",
+   "loss_d46_vs_linear": "0.8314"
+  },
+  {
+   "sample": "HG008",
+   "platform": "Illumina",
+   "role": "germline",
+   "stratum": "INDEL",
+   "n": "964490",
+   "predicted_in_d9": "0.7612",
+   "loss_d9_vs_linear": "0.9281",
+   "loss_d46_vs_linear": "0.9303"
+  },
+  {
+   "sample": "HG008",
+   "platform": "PacBio",
+   "role": "germline",
+   "stratum": "INDEL_HP>=7",
+   "n": "442324",
+   "predicted_in_d9": "0.8433",
+   "loss_d9_vs_linear": "0.708",
+   "loss_d46_vs_linear": "0.7037"
+  },
+  {
+   "sample": "HG008",
+   "platform": "ONT",
+   "role": "germline",
+   "stratum": "INDEL_HP>=7",
+   "n": "442324",
+   "predicted_in_d9": "0.8433",
+   "loss_d9_vs_linear": "0.685",
+   "loss_d46_vs_linear": "0.7078"
+  },
+  {
+   "sample": "HG008",
+   "platform": "Illumina",
+   "role": "germline",
+   "stratum": "INDEL_HP>=7",
+   "n": "442324",
+   "predicted_in_d9": "0.8433",
+   "loss_d9_vs_linear": "0.9357",
+   "loss_d46_vs_linear": "0.9365"
+  },
+  {
+   "sample": "HG008",
+   "platform": "PacBio",
+   "role": "somatic",
+   "stratum": "SNV",
+   "n": "8543",
+   "predicted_in_d9": "0.024",
+   "loss_d9_vs_linear": "0.0372",
+   "loss_d46_vs_linear": "0.0351"
+  },
+  {
+   "sample": "HG008",
+   "platform": "ONT",
+   "role": "somatic",
+   "stratum": "SNV",
+   "n": "8543",
+   "predicted_in_d9": "0.024",
+   "loss_d9_vs_linear": "0.0352",
+   "loss_d46_vs_linear": "0.0323"
+  },
+  {
+   "sample": "HG008",
+   "platform": "Illumina",
+   "role": "somatic",
+   "stratum": "SNV",
+   "n": "8543",
+   "predicted_in_d9": "0.024",
+   "loss_d9_vs_linear": "0.0333",
+   "loss_d46_vs_linear": "0.0295"
+  },
+  {
+   "sample": "HG008",
+   "platform": "PacBio",
+   "role": "somatic",
+   "stratum": "INDEL",
+   "n": "7933",
+   "predicted_in_d9": "0.2559",
+   "loss_d9_vs_linear": "0.4519",
+   "loss_d46_vs_linear": "0.4318"
+  },
+  {
+   "sample": "HG008",
+   "platform": "ONT",
+   "role": "somatic",
+   "stratum": "INDEL",
+   "n": "7933",
+   "predicted_in_d9": "0.2559",
+   "loss_d9_vs_linear": "0.3754",
+   "loss_d46_vs_linear": "0.3562"
+  },
+  {
+   "sample": "HG008",
+   "platform": "Illumina",
+   "role": "somatic",
+   "stratum": "INDEL",
+   "n": "7933",
+   "predicted_in_d9": "0.2559",
+   "loss_d9_vs_linear": "0.4921",
+   "loss_d46_vs_linear": "0.4582"
+  },
+  {
+   "sample": "HG008",
+   "platform": "PacBio",
+   "role": "somatic",
+   "stratum": "INDEL_HP>=7",
+   "n": "5840",
+   "predicted_in_d9": "0.311",
+   "loss_d9_vs_linear": "0.4263",
+   "loss_d46_vs_linear": "0.4013"
+  },
+  {
+   "sample": "HG008",
+   "platform": "ONT",
+   "role": "somatic",
+   "stratum": "INDEL_HP>=7",
+   "n": "5840",
+   "predicted_in_d9": "0.311",
+   "loss_d9_vs_linear": "0.3353",
+   "loss_d46_vs_linear": "0.3125"
+  },
+  {
+   "sample": "HG008",
+   "platform": "Illumina",
+   "role": "somatic",
+   "stratum": "INDEL_HP>=7",
+   "n": "5840",
+   "predicted_in_d9": "0.311",
+   "loss_d9_vs_linear": "0.5006",
+   "loss_d46_vs_linear": "0.4584"
+  },
+  {
+   "sample": "COLO829",
+   "platform": "PacBio_fiberseq",
+   "role": "germline",
+   "stratum": "SNV",
+   "n": "3729123",
+   "predicted_in_d9": "0.8724",
+   "loss_d9_vs_linear": "0.8952",
+   "loss_d46_vs_linear": "0.9045"
+  },
+  {
+   "sample": "COLO829",
+   "platform": "ONT",
+   "role": "germline",
+   "stratum": "SNV",
+   "n": "3729123",
+   "predicted_in_d9": "0.8724",
+   "loss_d9_vs_linear": "0.8908",
+   "loss_d46_vs_linear": "0.8999"
+  },
+  {
+   "sample": "COLO829",
+   "platform": "Illumina",
+   "role": "germline",
+   "stratum": "SNV",
+   "n": "3729123",
+   "predicted_in_d9": "0.8724",
+   "loss_d9_vs_linear": "0.9",
+   "loss_d46_vs_linear": "0.9083"
+  },
+  {
+   "sample": "COLO829",
+   "platform": "PacBio_fiberseq",
+   "role": "germline",
+   "stratum": "INDEL",
+   "n": "977293",
+   "predicted_in_d9": "0.756",
+   "loss_d9_vs_linear": "0.8166",
+   "loss_d46_vs_linear": "0.8159"
+  },
+  {
+   "sample": "COLO829",
+   "platform": "ONT",
+   "role": "germline",
+   "stratum": "INDEL",
+   "n": "977293",
+   "predicted_in_d9": "0.756",
+   "loss_d9_vs_linear": "0.7951",
+   "loss_d46_vs_linear": "0.8048"
+  },
+  {
+   "sample": "COLO829",
+   "platform": "Illumina",
+   "role": "germline",
+   "stratum": "INDEL",
+   "n": "977293",
+   "predicted_in_d9": "0.756",
+   "loss_d9_vs_linear": "0.9263",
+   "loss_d46_vs_linear": "0.9286"
+  },
+  {
+   "sample": "COLO829",
+   "platform": "PacBio_fiberseq",
+   "role": "germline",
+   "stratum": "INDEL_HP>=7",
+   "n": "453572",
+   "predicted_in_d9": "0.8316",
+   "loss_d9_vs_linear": "0.7081",
+   "loss_d46_vs_linear": "0.7013"
+  },
+  {
+   "sample": "COLO829",
+   "platform": "ONT",
+   "role": "germline",
+   "stratum": "INDEL_HP>=7",
+   "n": "453572",
+   "predicted_in_d9": "0.8316",
+   "loss_d9_vs_linear": "0.6236",
+   "loss_d46_vs_linear": "0.6425"
+  },
+  {
+   "sample": "COLO829",
+   "platform": "Illumina",
+   "role": "germline",
+   "stratum": "INDEL_HP>=7",
+   "n": "453572",
+   "predicted_in_d9": "0.8316",
+   "loss_d9_vs_linear": "0.9334",
+   "loss_d46_vs_linear": "0.9338"
+  },
+  {
+   "sample": "COLO829",
+   "platform": "PacBio_fiberseq",
+   "role": "somatic",
+   "stratum": "SNV",
+   "n": "42035",
+   "predicted_in_d9": "0.0019",
+   "loss_d9_vs_linear": "0.0064",
+   "loss_d46_vs_linear": "0.0074"
+  },
+  {
+   "sample": "COLO829",
+   "platform": "ONT",
+   "role": "somatic",
+   "stratum": "SNV",
+   "n": "42035",
+   "predicted_in_d9": "0.0019",
+   "loss_d9_vs_linear": "0.0054",
+   "loss_d46_vs_linear": "0.0059"
+  },
+  {
+   "sample": "COLO829",
+   "platform": "Illumina",
+   "role": "somatic",
+   "stratum": "SNV",
+   "n": "42035",
+   "predicted_in_d9": "0.0019",
+   "loss_d9_vs_linear": "0.0103",
+   "loss_d46_vs_linear": "0.0104"
+  },
+  {
+   "sample": "COLO829",
+   "platform": "PacBio_fiberseq",
+   "role": "somatic",
+   "stratum": "INDEL",
+   "n": "1912",
+   "predicted_in_d9": "0.2228",
+   "loss_d9_vs_linear": "0.3485",
+   "loss_d46_vs_linear": "0.3208"
+  },
+  {
+   "sample": "COLO829",
+   "platform": "ONT",
+   "role": "somatic",
+   "stratum": "INDEL",
+   "n": "1912",
+   "predicted_in_d9": "0.2228",
+   "loss_d9_vs_linear": "0.3081",
+   "loss_d46_vs_linear": "0.2977"
+  },
+  {
+   "sample": "COLO829",
+   "platform": "Illumina",
+   "role": "somatic",
+   "stratum": "INDEL",
+   "n": "1912",
+   "predicted_in_d9": "0.2228",
+   "loss_d9_vs_linear": "0.3812",
+   "loss_d46_vs_linear": "0.3486"
+  },
+  {
+   "sample": "COLO829",
+   "platform": "PacBio_fiberseq",
+   "role": "somatic",
+   "stratum": "INDEL_HP>=7",
+   "n": "1110",
+   "predicted_in_d9": "0.2721",
+   "loss_d9_vs_linear": "0.2829",
+   "loss_d46_vs_linear": "0.2442"
+  },
+  {
+   "sample": "COLO829",
+   "platform": "ONT",
+   "role": "somatic",
+   "stratum": "INDEL_HP>=7",
+   "n": "1110",
+   "predicted_in_d9": "0.2721",
+   "loss_d9_vs_linear": "0.2089",
+   "loss_d46_vs_linear": "0.1978"
+  },
+  {
+   "sample": "COLO829",
+   "platform": "Illumina",
+   "role": "somatic",
+   "stratum": "INDEL_HP>=7",
+   "n": "1110",
+   "predicted_in_d9": "0.2721",
+   "loss_d9_vs_linear": "0.3648",
+   "loss_d46_vs_linear": "0.3185"
+  },
+  {
+   "sample": "HCC1395",
+   "platform": "PacBio",
+   "role": "germline",
+   "stratum": "SNV",
+   "n": "3135770",
+   "predicted_in_d9": "0.8814",
+   "loss_d9_vs_linear": "",
+   "loss_d46_vs_linear": ""
+  },
+  {
+   "sample": "HCC1395",
+   "platform": "ONT",
+   "role": "germline",
+   "stratum": "SNV",
+   "n": "3135770",
+   "predicted_in_d9": "0.8814",
+   "loss_d9_vs_linear": "",
+   "loss_d46_vs_linear": ""
+  },
+  {
+   "sample": "HCC1395",
+   "platform": "Illumina",
+   "role": "germline",
+   "stratum": "SNV",
+   "n": "3135770",
+   "predicted_in_d9": "0.8814",
+   "loss_d9_vs_linear": "",
+   "loss_d46_vs_linear": ""
+  },
+  {
+   "sample": "HCC1395",
+   "platform": "PacBio",
+   "role": "germline",
+   "stratum": "INDEL",
+   "n": "753706",
+   "predicted_in_d9": "0.7988",
+   "loss_d9_vs_linear": "",
+   "loss_d46_vs_linear": ""
+  },
+  {
+   "sample": "HCC1395",
+   "platform": "ONT",
+   "role": "germline",
+   "stratum": "INDEL",
+   "n": "753706",
+   "predicted_in_d9": "0.7988",
+   "loss_d9_vs_linear": "",
+   "loss_d46_vs_linear": ""
+  },
+  {
+   "sample": "HCC1395",
+   "platform": "Illumina",
+   "role": "germline",
+   "stratum": "INDEL",
+   "n": "753706",
+   "predicted_in_d9": "0.7988",
+   "loss_d9_vs_linear": "",
+   "loss_d46_vs_linear": ""
+  },
+  {
+   "sample": "HCC1395",
+   "platform": "PacBio",
+   "role": "germline",
+   "stratum": "INDEL_HP>=7",
+   "n": "360227",
+   "predicted_in_d9": "0.8717",
+   "loss_d9_vs_linear": "",
+   "loss_d46_vs_linear": ""
+  },
+  {
+   "sample": "HCC1395",
+   "platform": "ONT",
+   "role": "germline",
+   "stratum": "INDEL_HP>=7",
+   "n": "360227",
+   "predicted_in_d9": "0.8717",
+   "loss_d9_vs_linear": "",
+   "loss_d46_vs_linear": ""
+  },
+  {
+   "sample": "HCC1395",
+   "platform": "Illumina",
+   "role": "germline",
+   "stratum": "INDEL_HP>=7",
+   "n": "360227",
+   "predicted_in_d9": "0.8717",
+   "loss_d9_vs_linear": "",
+   "loss_d46_vs_linear": ""
+  },
+  {
+   "sample": "HCC1395",
+   "platform": "PacBio",
+   "role": "somatic",
+   "stratum": "SNV",
+   "n": "39447",
+   "predicted_in_d9": "0.005",
+   "loss_d9_vs_linear": "",
+   "loss_d46_vs_linear": ""
+  },
+  {
+   "sample": "HCC1395",
+   "platform": "ONT",
+   "role": "somatic",
+   "stratum": "SNV",
+   "n": "39447",
+   "predicted_in_d9": "0.005",
+   "loss_d9_vs_linear": "",
+   "loss_d46_vs_linear": ""
+  },
+  {
+   "sample": "HCC1395",
+   "platform": "Illumina",
+   "role": "somatic",
+   "stratum": "SNV",
+   "n": "39447",
+   "predicted_in_d9": "0.005",
+   "loss_d9_vs_linear": "",
+   "loss_d46_vs_linear": ""
+  },
+  {
+   "sample": "HCC1395",
+   "platform": "PacBio",
+   "role": "somatic",
+   "stratum": "INDEL",
+   "n": "1559",
+   "predicted_in_d9": "0.0327",
+   "loss_d9_vs_linear": "",
+   "loss_d46_vs_linear": ""
+  },
+  {
+   "sample": "HCC1395",
+   "platform": "ONT",
+   "role": "somatic",
+   "stratum": "INDEL",
+   "n": "1559",
+   "predicted_in_d9": "0.0327",
+   "loss_d9_vs_linear": "",
+   "loss_d46_vs_linear": ""
+  },
+  {
+   "sample": "HCC1395",
+   "platform": "Illumina",
+   "role": "somatic",
+   "stratum": "INDEL",
+   "n": "1559",
+   "predicted_in_d9": "0.0327",
+   "loss_d9_vs_linear": "",
+   "loss_d46_vs_linear": ""
+  },
+  {
+   "sample": "HCC1395",
+   "platform": "PacBio",
+   "role": "somatic",
+   "stratum": "INDEL_HP>=7",
+   "n": "234",
+   "predicted_in_d9": "0.1453",
+   "loss_d9_vs_linear": "",
+   "loss_d46_vs_linear": ""
+  },
+  {
+   "sample": "HCC1395",
+   "platform": "ONT",
+   "role": "somatic",
+   "stratum": "INDEL_HP>=7",
+   "n": "234",
+   "predicted_in_d9": "0.1453",
+   "loss_d9_vs_linear": "",
+   "loss_d46_vs_linear": ""
+  },
+  {
+   "sample": "HCC1395",
+   "platform": "Illumina",
+   "role": "somatic",
+   "stratum": "INDEL_HP>=7",
+   "n": "234",
+   "predicted_in_d9": "0.1453",
+   "loss_d9_vs_linear": "",
+   "loss_d46_vs_linear": ""
+  }
+ ]
+}

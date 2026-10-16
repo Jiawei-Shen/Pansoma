@@ -1,0 +1,9 @@
+# Comparator call sets for E16 / E17a / E18 (slot; empty until the user's ClairS-TO / DeepSomatic VCFs are re-scored).
+# One tab-separated row per call set and kind:
+#   label  set  kind  eval_bed  eval_nobed  truth_pon  note
+# label: e.g. "ClairS-TO 0.5.1 (tumor-only)"; set: the tensor set whose labels give truth / BED, e.g. HG008T_PacBio;
+# eval_bed / eval_nobed: rtg vcfeval directories of the PASS-after-our-PoN calls, i.e. score_comparator.py's
+#   <out>/eval_bed/pass_pon and <out>/eval_nobed/pass_pon (E8_comparators/score_comparator.py); '-' if absent;
+# truth_pon: <out>/truth.<KIND>.pon.vcf.gz of score_comparator.py (PoN-tagged truth), or '-'.
+# Example (not active; DeepSomatic 1.9.0 tumor-only scorer check of E8 section 4, eval_nobed incomplete):
+# DeepSomatic 1.9.0 TO (E8 check)	COLO829T_fiberseq	SNV	/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/test/local_ds190_TO_fiberseq_SNV/eval_bed/pass_pon	-	/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/test/local_ds190_TO_fiberseq_SNV/truth.SNV.pon.vcf.gz	scorer check only

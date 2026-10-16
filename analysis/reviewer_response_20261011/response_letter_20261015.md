@@ -1,0 +1,805 @@
+# Pansoma: response to the reviewers (draft 20261015)
+
+The English responses of `response_point_by_point_20261015.md`, without the internal evidence. `[待补: …]` marks numbers still pending.
+
+## Reviewer 1
+
+### R1.1 "Pangenome-native" is not supported
+
+**Comment（要点）。**
+
+- The pangenome is used mainly at vg Giraffe alignment; the downstream representation is a local pileup, so the method resembles DeepVariant, DeepSomatic or ClairS.
+- Neither the input nor the network models graph edges, bubbles / superbubbles, cross-node context or long-range haplotype structure.
+- Replacing linear coordinates with node IDs is not enough; haplotype and path information is discarded.
+- Request: substantial additional evidence, or a re-design, showing measurable benefit from pangenome-specific information beyond alignment.
+
+**Response.**
+
+We agree that "fully exploit the richness of pangenome data" overstated the design and that node IDs alone would not make a method pangenome-native; the phrase is removed and Pansoma is now described as pangenome-aware. Graph information enters at three stages after alignment, and the revision quantifies each.
+
+1. *Candidate definition.* Candidates are edits relative to the nodes each read traverses, so alleles on the graph's haplotypes produce no candidate. On identical reads, 76–82% of matched-normal germline alleles give a candidate on a GRCh38-only graph, against 7–13% on the HPRC v1.1 graph (d9 filter) and the HPRC v2.1 graph (d46 filter) (R1.2).
+2. *Path-following tensors.* Each tensor row follows its read's walk across node boundaries (R1.m2). Two channels come from the graph: the node's base (channel 5) and the number of haplotype paths through the node (channel 6).
+3. *The classifier uses channel 6.* We edited channel 6 at inference, without retraining, in the 12 SNV models on both HPRC graphs (chr1; COLO829T v1.1: joint-purity models; Supplementary Table). Setting it to an uninformative constant or to the all-haplotype count lowers somatic average precision from 0.199–0.352 to 0.044–0.087 (HG008T) and from 0.639–0.829 to 0.329–0.520 (COLO829T); with the all-haplotype count, 3.4–7.6 times as many germline tensors pass the threshold. On the GRCh38-only graph, where channel 6 is constant, nothing changes.
+
+Two qualifications. Population filtering removes most of these extra germline calls (per-tensor chr1 F1 after filtering changes by −0.063 to +0.007), so channel 6 and the filter overlap. Channel 6 also suppresses somatic SNVs off GRCh38: of the assembly-derived HG008T somatic SNVs on off-reference nodes, 57–79% per dataset are read-supported (their ALT reads match the tumor assembly, not the normal), yet the models call 0–4 of them; an off-reference rescue recovers 22–66, and 63–87% of its calls on these sites are read-supported. We report every SNV result with and without the rescue (R3.4).
+
+The reference-level ablation (R3.1; one training run each) puts both HPRC graphs ahead of GRCh38-only on all six datasets: +0.038 to +0.319 SNV F1 after population filtering (benchmark BED; paired block-bootstrap intervals exclude zero in all nine pairs tested; v2.1 still +0.020 to +0.209 without the chr1 centromere region, where many GRCh38-only false positives cluster), and higher INDEL F1 at the validation best-F1 threshold and by test-tuned best F1 (upper bound). Counting graph-coordinate calls as false positives (no benchmark regions) reverses four of twelve SNV comparisons, all with the off-reference rescue on; without the rescue all nine HPRC runs re-called locally stay ahead, except HG008T ONT on v2.1 inside the benchmark regions (0.004 below; R3.4). The contrast combines alignment, candidate definition and channel 6 [待补: retraining without channel 6 on both HPRC graphs], and reference completeness with haplotype diversity (both HPRC graphs carry CHM13 as an unfiltered reference path; R3.1, R3.6).
+
+Pansoma does not model bubbles, competing branches or long-range haplotypes explicitly; the revised text states this as a limitation.
+
+### R1.2 Composition and size of the pangenome
+
+**Comment（要点）。**
+
+- No systematic analysis of how the number and diversity of haplotypes, haplotype walks and alternative paths affect node pileups and germline identification.
+- The graph decides which alleles are represented, and so which variants are suppressed before the classifier.
+- With HPRC2 (many more haplotypes): better population representation, but possibly more mapping ambiguity and more absorbed somatic mutations that overlap population alleles.
+
+**Response.**
+
+We added the HPRC v2.1 graph (d46 filter) as a third reference. The reads of all six datasets were realigned to a GRCh38-only graph, the HPRC v1.1 graph (90 haplotypes; d9 filter: nodes kept when on at least 9 haplotypes or on the GRCh38 or CHM13 reference path) and the HPRC v2.1 graph (464 haplotypes, including 29 European individuals, absent from v1.1; d46 filter: at least 46 haplotypes or a reference path), and rebuilt with identical tensor code (R3.1, R3.m3).
+
+*Graph size.* Against v1.1, v2.1 changed the fraction of truth alleles that reach a candidate tensor (Supplementary Table X) by −0.001 to +0.004 for somatic SNVs, +0.005 to +0.043 for somatic insertions, −0.004 to +0.025 for somatic deletions and −0.012 to −0.005 for matched-normal germline alleles: slightly better germline suppression, no measurable extra somatic absorption. On v2.1 the haplotype-count channel alone separates germline from somatic tensors better (AUC 0.885–0.915 against 0.831–0.865 on v1.1; R1.m2). After population filtering, models trained on the two graphs are close on chr1 (benchmark BED; SNV F1 −0.021 to +0.031, with v1.1 ahead on HG008T by 0.015–0.021 and paired block-bootstrap intervals just excluding zero; INDEL test-tuned best F1 (upper bound) −0.033 to +0.015; same-tumor models, one training run each). [待补: matched v1.1 retraining (R3.1)]
+
+*Frequency filter versus haplotype count.* We measured both axes in silico with random subsets of the HPRC v1.1 haplotypes:
+
+- Without a frequency filter, coverage of HG008 germline SNVs saturates (0.851 with 8 haplotypes, 0.940 with 32, 0.960 with 89), while coverage of HG008T somatic indels keeps growing (0.306, 0.490, 0.590; 0.709 in homopolymers ≥ 7 bp).
+- At the 10% filter of both HPRC graphs, from 16 to 89 haplotypes, somatic indel coverage stays at 0.231–0.259 and germline SNV coverage at 0.845–0.869.
+- Composition matters more than count: 42 non-African haplotypes contain more of HG008's germline SNVs than 42 African ones (0.950 against 0.917) and fewer of its somatic indels (0.462 against 0.521).
+
+On the real v1.1 graph this predicts germline SNV loss (0.87 predicted in the graph; 0.89–0.90 lose their candidate relative to GRCh38-only). For somatic indels it is a lower bound (HG008T: 0.26 predicted, 0.38–0.49 lost): 0.29–0.36 of the indels absent from the graph also lose their candidate, probably repeat indels represented or aligned differently on the graph (R1.4). [待补: HPRC v2.1 haplotype subsets]
+
+*Mapping ambiguity* (all six datasets; R1.3). The added graph sequence (population haplotypes and the CHM13 reference path) adds some ambiguity in SMaHT extreme regions, already on v1.1: relative to GRCh38-only, 6.26–7.41% of long reads lose MAPQ ≥ 30 there and 3.05–4.93% gain it (v2.1, aligned with a newer Giraffe release: 13.97–17.30% lose it). For simulated Illumina reads of known origin, lower MAPQ did not mean more misplacement (v1.1 and v2.1 misplace 0.98% and 0.93%, against 1.24% on GRCh38-only), but v2.1 misplaces about twice as many simulated ONT reads (1.48% against 0.77%; v1.1: 0.61%), mostly in extreme regions (R3.6).
+
+### R1.3 Difficult regions and ONT ambiguity
+
+**Comment（要点）。**
+
+- 在重复、paralog、结构复杂和低 mappability 区域，pangenome 比对仍可能有歧义，ONT 这类高噪声 reads 尤其如此；haplotype 越多，竞争比对位置可能越多。
+- 汇总统计（更多 perfect reads、更少 mismatch / indel / soft clip）不能说明改善发生在 pangenome 应该起作用的地方。
+- ONT 的 graph-coordinate predictions 更多：是分辨率提高，还是额外的歧义？
+- 需要按区域的 benchmark 和错误分析。
+
+**Response.**
+
+We agree that aggregate statistics do not show where alignment improves, and added region- and call-level analyses.
+
+1. *Alignment by region* (same reads, six datasets, SMaHT region classes). In easy regions the graphs give cleaner alignments at the same locus: on the HPRC v1.1 graph (d9 filter), HG008T PacBio mismatched bases per kb fall from 1.02 to 0.16, and 99.93–99.99% of long reads keep their placement. In extreme regions they add ambiguity: on v1.1, 6.26–7.41% of long reads lose MAPQ ≥ 30 and 3.05–4.93% gain it; on the HPRC v2.1 graph (d46 filter), aligned with a newer aligner release, 13.97–17.30% lose it. For short reads, lower MAPQ is not more misplacement: of simulated HG008-N Illumina reads of known origin, v1.1 and v2.1 misplace 0.98% and 0.93% of placed reads against 1.24% on a GRCh38-only graph (R3.6). Simulated ONT reads differ: v1.1 misplaces slightly fewer (0.61% against 0.77%), but v2.1 about twice as many (1.48%), almost all in extreme regions, in line with the more frequent confident disagreements of real ONT reads on v2.1 (HG008T: 1,953 against 1,019 reads on v1.1).
+
+2. *Calls by region* (chr1 SNVs, PASS after population filtering, benchmark regions). On HG008T the arms are close in easy regions (F1 0.627–0.642 on GRCh38-only, 0.636–0.659 on the HPRC graphs). In extreme regions the GRCh38-only graph makes 351–2,210 PASS calls per dataset at precision 0.056–0.253, against 102–281 at 0.161–0.764 on the HPRC graphs; many of its false positives sit at the chr1 centromere and flanks (121–126 Mb: 1,888 of 2,221 for COLO829T Illumina; R3.2). Placed ONT SNVs lose no more recall in extreme regions (HG008T, v2.1: 0.451 against 0.341–0.374), but on COLO829T their precision there is lower (0.452 against 0.693–0.764). [待补: per-stratum intervals]
+
+3. *ONT graph-coordinate calls.* ONT makes the most graph-coordinate calls (chr1: HG008T 1,409 / 1,261 on v1.1 / v2.1, against 116–754 for Illumina and 211–244 for PacBio; COLO829T 1,675 / 4,566). Most are produced by the off-reference rescue; without it, 6–162 per run remain (R3.4). In the nine graph runs available (R3.3):
+   - 2.8–19.1% can be written as a GRCh38 variant; after filtering this adds six true positives across the nine runs (0–2 per run; three distinct truth SNVs; R3.4).
+   - In exclusive priority order, 49.8–91.4% match an HPRC allele and 4.2–45.4% are patient germline by assembly; 1–4 calls per HG008T run are tumor-only (4–24 by the assemblies alone). The HPRC-allele test is not specific: it tags 72 of 97 assembly-derived off-reference somatic SNVs (HG008T ONT, v2.1; R3.3).
+
+   With the rescue, HG008T ONT complete-output F1 (no benchmark regions) is 0.342 / 0.354, below GRCh38-only (0.365); without it, 0.579 / 0.524, and all nine HPRC runs re-called locally are above GRCh38-only; inside the benchmark regions HG008T ONT on v2.1 stays 0.004 below (0.533 against 0.537). We report every SNV result with and without the rescue. The extra ONT calls reflect added ambiguity, mostly population and germline alleles, not resolution.
+
+### R1.4 Candidate generation removes somatic variants already encoded in the graph
+
+**Comment（要点）。**
+
+- Candidates come only from mismatches / indels against the traversed node. A somatic allele that is already an alternative path, with tumor reads aligning perfectly to it, gives no candidate, tensor or call.
+- Called a "fatal methodological issue".
+- Supplementary Fig. 3 wrongly describes these false negatives as GRCh38 reference-bias artefacts.
+- An allele on an alternative path is not necessarily germline: the same allele can be germline in one person and somatic in another.
+
+**Response.**
+
+The reviewer is correct: an allele on a graph path is not necessarily germline, and reads that align to it without edit give no candidate. We withdrew the reference-bias reading of Supplementary Fig. 3, state the mechanism as a limitation, and quantified the loss.
+
+*Read level (HPRC v1.1 graph, d9 filter; patient assemblies; R3.7).* ALT reads of 2,478 HG008T truth alleles (201 SNVs, 2,277 INDELs; 26.8% of truth INDELs) and 497 COLO829T alleles (67 SNVs, 430 INDELs; 22.5%) align without edit to an existing path. Only 110 (4.4%) and 34 (6.8%) are the patient's germline allele; 2,085 (84.1%) and 430 (86.5%) are carried only by other HPRC individuals.
+
+*Population filtering.* Tumor-only pipelines remove such alleles at filtering; ours (R2.6) tags 98.5–99.0% of these SNVs and 94.7–97.0% of these INDELs, against 3.6–10.2% of all truth SNVs and 52.0–61.8% of all truth INDELs. Absorbed and untagged remain 2 SNVs and 121 INDELs for HG008T (1.3% of truth INDELs) and 1 SNV and 13 INDELs for COLO829T (0.6%); on the HPRC v2.1 graph (d46 filter), 0.2–0.7% of truth INDELs per platform.
+
+*Against a GRCh38-only graph* (same reads and code; chr1–22; tensor level). Net of gains, the HPRC graphs give a tensor to 0.2–0.6% fewer truth SNVs and 2.0–8.2% fewer truth INDELs that filtering would keep. Absorption is a small part: of the untagged INDELs lost on v1.1 (HG008T Illumina / PacBio / ONT: 481 / 581 / 299), 35 / 34 / 20 are absorbed by a strict spelling test; most others get no candidate without an exactly matching graph path or fall below the candidate allele-fraction cut. In the scored region (chr1, benchmark BED), 0–2 absorbed, untagged INDELs are lost per dataset and graph, and the GRCh38-only arm calls most of the untagged INDELs that the graphs lose (HG008T: 18–28 of 18–31; COLO829T: 4–12 of 10–13). Its final INDEL recall is similar: in a per-allele recall funnel, about two thirds of truth INDELs are population alleles, most of which it calls and filtering removes, and 24–27% of truth INDELs are called on every reference, slightly more on GRCh38-only (R1.6). But it also makes the patient's germline INDELs candidates and ranks somatic ones worse: its chr1 INDEL F1 after filtering is lower on all six datasets at the validation best-F1 threshold and by test-tuned best F1 (upper bound), though higher at the recall-0.9 validation threshold on the four long-read datasets, where every arm scores 0.125 or less (R3.1).
+
+Linear tumor-only callers drop such alleles too: an earlier DeepSomatic tumor-only run labels 72 of 131 COLO829T Fiber-seq chr1 truth INDELs germline. [待补: ClairS-TO and DeepSomatic at the absorbed loci]
+
+The classifier applies the population prior a second time through the haplotype-count channel: of the assembly-derived HG008T somatic SNVs on off-reference nodes, 57–79% per dataset have read support as somatic, yet the models call only 0–4 of these (R1.1, R3.3). The Discussion states both as limitations of population-based tumor-only calling.
+
+### R1.5 HapMap mixture as a somatic benchmark, and data leakage
+
+**Comment（要点）。**
+
+- HapMap 的 "somatic-like" positives 是少数个体（minor donors）的 germline allele；Pansoma 的前提是图会压掉 population germline allele，两者冲突，这个 benchmark 可能系统性地对 pangenome caller 不利，也不是获得性低 VAF 突变的合适检验。
+- 数据泄漏：HPRC v1.1 含 6 个 donor 中的 4 个（HG00438、HG02257、HG02486、HG02622）；companion paper（Fu, Xin, Miao et al., bioRxiv 2026.01.04.697580）提过这个问题，但没有排除这些 donor。
+
+**Response.**
+
+We agree with both points. The HAPMAP6 positives are germline alleles of the five minor donors (VAF 0.25–16.5%), not acquired mutations. Four of the six donors (HG00438, HG02257, HG02486, HG02622) are in the HPRC v1.1 graph (d9 filter), as our companion study noted, and all six, including HG002 and the 83.5% background HG005, are in the HPRC v2.1 graph (d46 filter). Apart from the GRCh38 and CHM13 reference paths, our graphs keep only nodes on about 10% or more of their haplotypes, so they absorb the positives that are common among those haplotypes whether or not the donors are in the graph; a donor's private alleles are filtered out either way. The donors' rare alleles are also found in CoLoRSdb, one of our population filtering resources, far more often than those of our cancer benchmarks' normals (chr20 SNVs: 14.5–25.9% against 4.0–7.9%). The benchmark therefore asks the caller to report alleles that its population prior, used by the trained model (R2.1), is designed to suppress.
+
+We removed the HapMap mixture from the main benchmark and withdrew the HapMap-trained low-VAF model; no claim of the revised manuscript rests on HapMap results. Low-VAF performance is now measured on in-silico dilutions of COLO829T with COLO829BL on three platforms (nominal purity 75, 50 and 25%; measured 0.66 / 0.40 / 0.20 for Illumina and Fiber-seq, 0.70 / 0.44 / 0.22 for ONT). One model per platform and variant type is trained on chr2–22 of all four purities and tested on chr1 of each; the tumor itself is not held out.
+
+- Fiber-seq SNV F1 after population filtering, at one recall-0.9 validation threshold pooled over all purities, is 0.779 / 0.687 / 0.665 / 0.720 at 100 / 75 / 50 / 25% purity (95% block-bootstrap interval at 50%: 0.648–0.682; 547–705 graph-coordinate calls per purity are not scored; R3.4). The share of truth SNVs that any model can reach falls from 0.821 to 0.711; on chr1, 16.1% of truth SNVs at full purity and 26.9% at 25% purity lie below the 0.08 candidate allele-fraction floor.
+- The dip at 75 and 50% comes from the tumor's loss of heterozygosity: where the tumor lost the ALT copy of a germline heterozygous SNV, the admixed normal reads put that allele at (1 − purity)/2, inside the somatic allele-fraction range of those mixtures. The false positives at these two purities have a germline-like spectrum (cosine to the germline spectrum 0.788 and 0.768, against 0.536 at full purity).
+- In the Illumina and ONT mixtures, tumor- and normal-derived reads differ in base quality, a cue that a real tumor lacks, so those scores are likely optimistic. [待补: Illumina and ONT after removing this cue]
+
+[待补: dilutions of a second tumor not used in training (HCC1395)]
+
+### R1.6 Low sensitivity
+
+**Comment（要点）。**
+
+- F1 的提升来自 precision；Supplementary Fig. 1 和 Tables 2–3 里 COLO829T、HG008T 的 SNV recall 低于 ClairS-TO 和 DeepSomatic-TO。
+- INDEL recall 只有约 4–22 %（COLO829T）和 13–19 %（HG008T）。
+- tumor-only 没有 matched normal 或第二阶段来补回漏掉的 variant，所以 sensitivity 很重要，F1 不能替代它。
+
+**Response.**
+
+We agree. Sensitivity is essential in tumor-only calling, and in the original submission Pansoma's SNV recall was below that of ClairS-TO and DeepSomatic-TO on both tumors, and its INDEL recall was low. The revision changes the operating point and reports recall separately from F1.
+
+*Operating point.* PASS is the recall-0.9 validation threshold, set on held-out validation blocks before population filtering. Records down to p = 0.01 are kept as LowQual and population matches are tagged, not deleted, so users can move along the precision–recall curve, now shown for every caller.
+
+*Where recall is lost* (chr1, benchmark regions, HPRC v1.1 graph with the d9 filter, models trained on chr2–22 of the same tumor; ranges over three platforms; HG008T INDEL candidates include partial allele matches; Supplementary Table [待补]):
+
+| Recall | SNV HG008T | SNV COLO829T | INDEL HG008T | INDEL COLO829T |
+|---|---|---|---|---|
+| truth allele reaches a candidate | 0.944–0.951 | 0.812–0.816 | 0.539–0.702 | 0.397–0.458 |
+| PASS | 0.855–0.862 | 0.705–0.736 | 0.359–0.431 | 0.321–0.420 |
+| PASS, after population filtering | 0.826–0.831 | 0.686–0.717 | 0.228–0.256 | 0.237–0.267 |
+| any threshold, after population filtering | 0.888–0.897 | 0.790–0.795 | 0.238–0.259 | 0.237–0.275 |
+| bound for any caller using the same filter (whole chr1 truth) | 0.913 | 0.966 | 0.350 | 0.382 |
+
+A per-allele funnel on all three references, GRCh38-only, v1.1 and the HPRC v2.1 graph (d46 filter), places each missed truth variant at its first loss. HG008T SNVs are called at 81.8%, 82.8% and 84.9%, the threshold being the largest loss on every reference; candidate-stage losses are mostly graph alleles and repeat absorption that filtering would tag anyway (R1.4). On COLO829T, 17–18% of truth SNVs get no candidate, mostly subclonal mutations below the 0.08 allele-fraction floor (15.1–16.1% of chr1 truth SNVs), whereas recall at allele fraction 0.05–0.2 is 0.850–0.966 once a candidate exists (R2.3, R2.4).
+
+*INDELs.* The Abstract and Discussion now state this limitation (R3.10). 413 of the 635 HG008T chr1 truth INDELs (81 of 131 on COLO829T) are exact population alleles at the filtering frequencies, so no caller filtered this way exceeds a recall of 0.350 (0.382), and our post-filter recall at the recall-0.9 validation threshold is close to the curve's maximum. The graph also absorbs repeat-length INDELs (R1.4): a GRCh38-only graph gives more HG008T truth INDELs a candidate (0.75–0.87 against 0.54–0.70), but these are almost all population alleles, so 24–27% of truth INDELs are called on every reference and both tumors (funnel). At the validation best-F1 threshold, long-read INDEL F1 rises (HG008T PacBio, v1.1: 0.089 to 0.226), but recall falls to 0.073–0.158 on HG008T (v1.1) and 0.015–0.061 on COLO829T (v2.1), so we report both operating points. Both limits depend on the truth set: on HCC1395 (SEQC2), only 7.3% of truth INDELs are population-tagged and 0.76–0.85 reach a candidate (v2.1; HG008T: 0.43–0.50).
+
+*Other tumors* (preliminary, HPRC v2.1 graph; R1.7). Without retraining, HG008T SNV models reach a post-filter recall of 0.640 / 0.701 / 0.589 on COLO829T (Illumina / Fiber-seq / ONT), against 0.715 / 0.707 / 0.692 for COLO829T's own models, and 0.773–0.930 on the lung lines H1437 and H2009; COLO829T models lose recall through threshold transfer (Illumina: 0.157 on HCC1395 and 0.296–0.305 on H1437 and H2009, at precision 0.908–0.973). [待补: retrained models]
+
+*Comparators.* ClairS-TO and DeepSomatic-TO are re-scored under the identical protocol (R3.m2): recall at their own PASS, after the same population filtering, and at Pansoma's precision along their QUAL curves. [待补: comparator recall at each stage]
+
+### R1.7 Training scale and tumor diversity
+
+**Comment（要点）。**
+
+- 约 200 M 参数的 ConvNeXt 主要用 COLO829（40–50 k truth variants）训练，数据量够不够？
+- 报告确切参数量，以及每个平台、每种 variant type 的正 / 负训练样本数，并说明数据量撑得住模型容量。
+- COLO829 是单一的 UV 主导的 melanoma，模型可能学到 tumor-specific 特征；DeepSomatic 用了多个细胞系并做了大量 augmentation。
+- 把训练扩展到不同 mutational process 的肿瘤，并直接证明模型不是 tumor-specific。
+
+**Response.**
+
+We agree that one melanoma line was too narrow a basis, and we report the requested numbers.
+
+*Model size.* The revised SNV network (ConvNeXt) has 50.4 M parameters, the INDEL network 8.7 M (Supplementary Methods). The original 199.6 M configuration overfitted (HG008T PacBio validation loss 0.51 to 2.16) and was not more accurate (F1 after population filtering 0.604, against 0.616).
+
+*Training examples.* Supplementary Table [待补: number] lists the examples per class for every model. On the pangenome graphs, SNV models see 7,098–7,274 (HG008T) or 33,472–34,110 (COLO829T) somatic, 256,583–381,159 germline and 67,735–1,620,829 non-variant examples; INDEL models see 3,121–3,761 (HG008T) and 971–1,141 (COLO829T) somatic examples. Every positive is an exact allele match, and each SNV positive is a different truth allele.
+
+*Capacity.* With about 7,000 parameters per HG008T somatic SNV example, the network can fit its training set (final training loss 0.002–0.139), so generalisation rests on early stopping on held-out node blocks (best epochs 4–12 of 20). [待补: a learning curve and a model-size series, testing whether accuracy is still data-limited]
+
+*Tumor diversity.* COLO829T positives are 71% C>T, 65% at dipyrimidines (UV); HG008T positives are 41% C>T, 19% C>A and 8.4% C>G at TCW. We added two breast (HCC1395, HCC1954) and two lung adenocarcinoma lines (H1437, H2009), three platforms each, processed identically (R1.m1). They add APOBEC-like (HCC1395: 24–25% C>G) and tobacco-like processes (H1437, H2009: 42% and 38% C>A).
+
+*Tumor specificity, a first direct test (preliminary).* We applied each HPRC v2.1 SNV model to chr1 of tumors it was not trained on, at the recall-0.9 validation threshold of its own training tumor (F1 after population filtering, benchmark BED, one training run; Supplementary Table [待补]):
+
+- Models trained on HG008T (pancreatic; about 7,200 somatic examples) reach 0.708, 0.754 and 0.630 on COLO829T (Illumina, PacBio HiFi / Fiber-seq, ONT), 0.024–0.106 below COLO829T's own models (paired block-bootstrap intervals exclude zero), 0.689–0.790 on HCC1395 and 0.787–0.937 on the lung lines H1437 and H2009. Their true positives keep each target's spectrum (R3.5).
+- Models trained on COLO829T reach 0.359, 0.557 and 0.487 on HG008T (HG008T's own models: 0.570, 0.605, 0.575). Part of the loss is the transferred threshold (HCC1395 Illumina: recall 0.157 at precision 0.934; test-tuned best F1 (upper bound) 0.810), and part appears to be a UV preference learned from COLO829T: on HG008T they recall 0.493–0.841 of UV-context C>T but only 0.016–0.129 of T>C substitutions (HG008T's own models: 0.905–0.925 and 0.613–0.645).
+- On HCC1954 every model has low precision (0.22–0.37): 93–99% of the false positives are germline alleles of its matched normal, while its truth set shows no germline content, so the models let germline variants of this line through (R1.m1).
+
+These models standardised base and mapping qualities by the training tumor's statistics; the final models do so per dataset. [待补: retrained models; leave-one-line-out; an HCC1395 in-sample reference]
+
+*Augmentation.* Joint COLO829T models add in-silico purity dilutions (75, 50, 25%; R1.5). [待补: Illumina and ONT after removing a read-source base-quality cue]
+
+### R1.8 Construction of the training set
+
+**Comment（要点）。**
+
+- 正样本：GRCh38 上的 truth 投影到 graph 坐标并按 exact allele 匹配；truth allele 本身就是 graph path、投影有歧义、graph 和 linear 表示不同（尤其 INDEL）时，正样本怎么定？
+- graph-only 位置通过相邻的 1-bp SNV node 间接得到 GRCh38 坐标。
+- 被吸收的位点永远成不了正样本（Supp. Fig. 3）。
+- 要明确写出标签和投影过程，包括 graph 一侧是否做 normalisation，并说明正样本集合没有被系统性扭曲。
+- 负样本：什么叫 "determinable"？germline 是否显式包含？artefact 怎么定义？VAF 和 purity 怎么取样？
+
+**Response.**
+
+We agree that the description was insufficient. Labelling is now described in full (Methods, Supplementary Note; each label manifest records the rule file's checksum).
+
+*Positives and projection.* Each truth ALT is split, trimmed and, in repeats, expanded to every equivalent placement (up to 5,000). Each placement is converted along the graph's GRCh38 path into a node key, so no separate normalisation is needed on either side. A tensor is somatic only when its representative allele equals a truth key. Where graph and linear representations differ, matches with allele or read-haplotype overlap above 0.45 are recorded as partial and excluded from training, so every training positive is an exact match (in an earlier model version this raised HG008T Illumina's test-tuned best F1 (upper bound) from 0.623 to 0.665).
+
+*Graph-only positions* are no longer placed through neighbouring nodes; without a truth match, branch-node tensors are excluded from training. The model thus never sees a positive off GRCh38 and scores a low haplotype path count as not somatic: of the assembly-derived HG008T somatic SNVs on off-reference nodes of the HPRC v1.1 graph (d9 filter), 0 of 112 (PacBio) and 1 of 89 (ONT) pass the threshold (HPRC v2.1 graph: 1–4 of 67–135), although 57–79% per dataset have read support as somatic. An optional off-reference rescue re-scores off-reference SNV tensors with the full haplotype count at the site and recovers 22–66 read-supported ones per dataset; it produces most graph-coordinate SNV PASS calls, and we report every SNV result with and without the rescue (R3.3, R3.4).
+
+*Is the positive set distorted?* Alleles that are already graph paths produce no candidate, but on v1.1 94.7–99.0% of these absorbed truth alleles are population-tagged anyway; the graph-specific loss is 1.3% of HG008T and 0.6% of COLO829T truth INDELs (R1.4). In the training region, 94.8–95.9% (HG008T) and 89.5–90.5% (COLO829T) of truth SNVs stand behind a training example on either HPRC graph, against 98.5–98.7% and 90.1–91.4% on the GRCh38-only graph; the COLO829T shortfall is mostly subclonal SNVs below the candidate floor (15.1–16.1% of its chr1 truth SNVs lie below the 0.08 floor; R2.4). INDELs are affected more (42.6–66.7%, against 57.4–96.7% on the GRCh38-only graph). Supplementary Table [待补] gives every truth allele's status.
+
+*Negatives.* Germline is an explicit class from the matched normal's truth (HG008-N and COLO829BL assembly calls; DeepVariant calls with QUAL ≥ 10 for the SEQC2 and CASTLE normals): 256,583–381,159 germline SNV examples per pangenome model. Non-variant examples (artefacts) are tensors on a GRCh38 node inside the confident region without a matching truth allele, including errors next to true variants. "Determinable" means exactly this: inside the confident region, at a unique GRCh38 position, and either an exact truth allele or none; all other tensors are ignored.
+
+*VAF and purity* are not resampled: each line keeps its natural distribution (median somatic SNV allele fraction 0.53–0.54 for HG008T, 0.46–0.51 for COLO829T), and joint COLO829T models add purity dilutions (R1.5).
+
+### R1.m1 Additional benchmarks
+
+**Comment（要点）。**
+
+- 在 SEQC2 的 HCC1395 tumor / normal 细胞系上做 benchmark。
+- 在 DeepSomatic 研究里另外五个细胞系（CASTLE）上做 benchmark。
+
+**Response.**
+
+We added HCC1395 (SEQC2 truth v1.2.1, 41,072 somatic alleles) and three CASTLE lines, HCC1954, H1437 and H2009 (25,014, 84,744 and 161,091 somatic alleles on chr1–22), each sequenced with Illumina, PacBio HiFi and ONT and processed with the identical pipeline on the HPRC v2.1 graph (d46 filter).
+
+*HCC1395 chr1 with models that never saw HCC1395* (preliminary: one training run, earlier quality normalization; 3,440 somatic SNVs in the benchmark region; F1 after population filtering at the recall-0.9 validation threshold of the training tumor; R1.7): models trained on HG008T reach 0.790 (Illumina), 0.698 (PacBio) and 0.689 (ONT); models trained on COLO829T (Fiber-seq for PacBio) reach 0.269, 0.741 and 0.621. Their test-tuned best F1 (upper bound) is 0.810, 0.819 and 0.691, so most of their shortfall comes from the transferred threshold, and part from a UV preference learned on COLO829T.
+
+*CASTLE lines, chr1* (preliminary; same models and protocol): models trained on HG008T reach 0.787–0.937 on H1437 and H2009, and models trained on COLO829T 0.454–0.809, again losing mostly at the transferred threshold (test-tuned best F1 0.828–0.950). On HCC1954 every model has low precision (0.22–0.37): 93–99% of these false positives are germline alleles of its matched normal, while its truth set shows no germline content (2.4% common population alleles, no loss of heterozygosity in the normal), so this is germline leakage by our models, not a truth artefact. The H1437 truth, in contrast, includes about 30% germline alleles that its B-lymphoblastoid normal lost through loss of heterozygosity (chr9q, chr1:9–12 Mb), which explains the line's candidate coverage of about 70%; on chr1, our test chromosome, they are negligible (R2.2). [待补: retrained and held-out-line models; an HCC1395 in-sample reference; ClairS-TO and DeepSomatic under the same protocol]
+
+How we use these lines follows from how the comparators were trained.
+
+- DeepSomatic's multi-cancer models were trained on HCC1395, HCC1937, HCC1954, H1437 and H2009 with chr1 held out, our test chromosome too, and the CASTLE truth sets of HCC1954, H1437 and H2009 were derived from DeepSomatic's calls (biased toward it, as its authors note). ClairS-TO's real-tumor model was fine-tuned on HCC1937, HCC1954, H1437 and H2009 (R3.m2). We therefore use these three lines mainly for training diversity and held-out-line tests of Pansoma, and report comparator results on them with this caveat.
+- HCC1395 has a truth set independent of both tools (SEQC2). ClairS-TO excluded it from training; DeepSomatic held out its chr1 only, whereas our models above never saw HCC1395. HCC1395 chr1 is therefore our main external comparison, together with HG008T, on which neither tool was trained.
+- The SEQC2 and CASTLE truth sets likely omit many INDELs in long homopolymers and STRs (15.5% of SEQC2 INDELs lie in homopolymers of ≥ 7 bp, against 74.9% for HG008T), so unmatched INDEL candidates in such repeats are not used as negatives on these lines (R2.2) and their INDEL results are reported separately.
+
+We have not added HCC1937 and Hs578T, the other two lines of the DeepSomatic study. [待补: the reason]
+
+### R1.m2 Tensor windows truncated at node boundaries
+
+**Comment（要点）。**
+
+- 窗口限制在当前节点内、在节点边界截断，相邻节点和跨路径的证据丢掉了。
+- 短节点、单碱基节点很难处理；很多 alternative 节点比窗口还短。
+- 可信的 graph-native 方法需要跨相邻节点的 path-aware tensor，并显式建模 edges、bubbles、alternative paths 和 competing path support。
+
+**Response.**
+
+The reviewer describes the first version correctly; the revised tensors are not truncated at node boundaries.
+
+- Each tensor (8 channels × 200 rows × 101 columns) is centred on the candidate site, and each row follows its read's alignment walk across node boundaries, on reference and alternative nodes alike. A short or single-base node thus keeps the context of its neighbours.
+- The graph base (channel 5) and the number of haplotype paths through the node (channel 6, relative to the graph's haplotype count) are filled per column from the node the read traverses there.
+- Rows are grouped by allele (A1, A2, …, REF, OTHER) and clustered within a group by their events, which include every node transition, so reads taking the same alternative path sit together.
+
+The classifier uses this path information.
+
+- Alone, the site column's path count separates somatic from germline chr1 SNV test tensors with an AUC of 0.831–0.865 on the HPRC v1.1 graph (d9 filter) and 0.885–0.915 on the HPRC v2.1 graph (d46 filter), and the number of distinct codes within ±10 columns, a proxy for node changes, with 0.803–0.842 (all 12 graph-based test sets; 0.500 on the GRCh38-only graph).
+- We edited channel 6 at inference, without retraining, in the same 12 SNV models (HG008T and COLO829T, three platforms, two graphs). With the plane set to its training mean, somatic average precision falls from 0.199–0.352 to 0.044–0.066 (HG008T) and from 0.639–0.829 to 0.329–0.520 (COLO829T). Setting every node to "all haplotypes" has a similar effect and raises the germline tensors called somatic 3.4- to 7.6-fold. On the GRCh38-only graph, where the plane is constant, nothing changes.
+- After population filtering (a per-tensor estimate), these two edits change F1 by only −0.066 to +0.007, except HG008T ONT on v1.1 with the training mean (0.596 to 0.145); replacing the plane with another tensor's lowers F1 to 0.212–0.551. Whether the plane improves the final calls is the retraining ablation of R1.1.
+- The plane also suppresses somatic SNVs off GRCh38: of the assembly-derived HG008T somatic SNVs whose allele lies on an off-reference node, the models call 0 of 112 (PacBio) and 1 of 89 (ONT) on v1.1, against 61 and 49 with every node set to all haplotypes (v2.1, three platforms: 1–4 of 67–135, against 49–97), although 57–79% per dataset have read support as somatic (R1.1). An optional off-reference rescue recovers 22–66 of the read-supported ones per dataset at tensor level (R3.m1); we report every SNV result with and without the rescue (R3.4).
+
+A schematic of a tensor crossing node boundaries is added as Supplementary Fig. [待补].
+
+We agree that the tensors do not model bubbles explicitly: competing path support is represented through the reads' walks and per-node haplotype counts, not as a bubble-level object, and we state this as a limitation (R1.1).
+
+## Reviewer 2
+
+### R2.1 Why include the HapMap benchmark
+
+**Comment（要点）。**
+
+- HapMap 的 positives 是 germline variant，它们的 donor 在 HPRC 图里，所以理论上 pangenome 比对会把它们去掉。
+- 请讨论为什么纳入这个 benchmark，以及它在模拟 somatic mutation 上的局限。
+
+**Response.**
+
+We included the SMaHT HAPMAP6 mixture because it offers a large truth set at very low allele fractions (0.25–16.5%). We agree that it has three limits for a pangenome-based tumor-only caller:
+
+1. Its positives are germline alleles of the five minor donors that the HG005 background lacks. They are not acquired mutations, so they carry no somatic mutational process, clonal structure or tumor copy-number context.
+2. Four of the donors are in the HPRC v1.1 graph (d9 filter), and all six are in the HPRC v2.1 graph (d46 filter). Apart from their GRCh38 and CHM13 reference paths, both graphs keep only nodes carried by about 10% or more of their haplotypes, so they absorb the positives that are common among those haplotypes; a donor's private alleles are filtered out even when the donor is in the graph. The trained classifier relies on this prior: on our tumor benchmarks, when the haplotype-count channel is set at inference so that every node appears to carry all haplotypes, 3.4–7.6 times as many germline tensors pass the calling threshold (12 HPRC-graph SNV models, chr1), although population filtering removes most of them again (R1.1).
+3. The donors are public reference samples. Their rare alleles are found in CoLoRSdb, one of our population filtering resources, far more often than those of our cancer benchmarks' normals (chr20 SNVs: 14.5–25.9% against 4.0–7.9%; R2.6), so filtering also works against these positives.
+
+The mixture therefore measures sensitivity to low-fraction germline alleles. It does not measure tumor-only somatic calling.
+
+We removed it from the main benchmark, and no claim of the revised manuscript rests on HapMap results. In its place we use tumor/normal dilutions that contain true somatic mutations: COLO829T at 75, 50 and 25% purity on three platforms, with one model per platform trained on chr2–22 of all purities and tested per purity on chr1; the tumor itself is not held out (R1.5, R2.4). [待补: Illumina and ONT after removing a read-source base-quality cue (R1.5); dilutions of a second tumor not used in training (HCC1395)]
+
+### R2.2 How the truth sets were generated
+
+**Comment（要点）。**
+
+- 简要说明每个 benchmark 的 truth 是怎么生成的。
+- 特别是要支撑文中 "truth set 可能含 germline variants 和测序 artefacts" 的说法。
+
+**Response.**
+
+We added a Supplementary Note on each truth set. Calls are scored with rtg vcfeval inside each benchmark's regions;
+training negatives come from regions confident in both the somatic and the germline truth. Germline truth is the
+dipcall of the matched-normal assembly (HG008-N, COLO829BL) or, for the other four lines, DeepSomatic's DeepVariant
+calls of the normal (QUAL ≥ 10).
+
+- *HG008T:* GIAB HG008-T somatic small-variant draft benchmark v0.2 (9,609 SNVs, 9,343 INDELs), a pre-release draft
+  provided by GIAB, derived from comparing the HG008-T tumor assembly with the HG008-N normal assembly (v6.2).
+- *COLO829T:* the SMaHT COLO829 reference set (Ha et al., 2025): candidates from four Illumina somatic callers
+  (Mutect2, Strelka2, RUFUS, VarNet; COLO829 200× vs COLO829BL 300×), kept when PacBio reads show the ALT in the tumor
+  and not in the normal (44,005 SNVs, 2,059 INDELs). It is scored genome-wide: the SMaHT easy, difficult and extreme
+  regions together tile the genome.
+- *HCC1395:* SEQC2 v1.2.1 high- and medium-confidence somatic SNVs and INDELs in the SEQC2 high-confidence regions v1.2,
+  built from 378 Illumina call sets (21 replicates × 3 aligners × 6 callers) scored by SomaticSeq and NeuSomatic; it
+  covers only regions analysable with Illumina data.
+- *HCC1954, H1437, H2009:* the CASTLE somatic truth and high-confidence regions released with DeepSomatic. Made with
+  DeepSomatic models, they favour DeepSomatic, as its authors note; we say so wherever these lines are compared with it.
+
+The short-read SEQC2 truth has few homopolymer INDELs (15.5% in homopolymers of ≥ 7 bp, against 74.9% for HG008T), so
+for HCC1395 and the CASTLE lines unmatched INDEL candidates in such homopolymers or in short tandem repeats are not used
+as negatives.
+
+We removed the claim about sequencing artefacts, for which we have no direct evidence, and state the germline claim
+only where it is measured:
+
+- 209 HG008T somatic truth alleles are identical to an HG008-N germline allele.
+- Of the 110 graph-absorbed HG008T truth alleles carried by the normal, 109 are the germline allele of the other normal
+  haplotype; flanking phased SNPs indicate local changes, not regional LOH. They are somatic by GIAB's definition but
+  germline-like to a tumor-only caller.
+- At 55 COLO829T truth INDELs a COLO829BL haplotype already carries the truth allele over the whole repeat.
+- In the CASTLE H1437 truth, about 30% of SNVs are probably germline: 27.8% are common population alleles, 97.5% of
+  them in two regions where the B-lymphoblastoid normal lost heterozygosity (chr9q, chr1:9–12 Mb), so the tumor–normal
+  comparison called them somatic. H2009 shows this at about 5%, HCC1954 not at all.
+
+For HG008T and COLO829T these are benchmark ambiguities at a small number of sites, not errors of the truth sets, and
+we no longer use them to explain the lower recall (R2.3, R3.7). On chr1, our test chromosome, the H1437 effect is
+negligible (19 common alleles among 4,266 truth SNVs), but it affects about 10% of the line's training positives.
+
+### R2.3 Explaining the lower recall; normal sample at missed sites
+
+**Comment（要点）。**
+
+- recall 比 DeepSomatic 低约 20 %（COLO829T）和 10 %（HG008T），用 truth 错误来解释需要展开。
+- 解释 Supp. Fig. 2 的 false-negative 类别 "variant node not ranked #1" 和 "first aligned node mismatch"。
+- 对落在已有 graph node 上的 false negative，检查 normal 样本的 reads 是否优先比对到 alternative path。
+
+**Response.**
+
+*Recall difference to DeepSomatic.* We withdrew the truth-error explanation: on HG008T the tumor assembly shows that most graph-absorbed truth alleles are genuine somatic events (below; R1.4, R3.7). The gap is now measured under one protocol and decomposed by stage (R1.6, R3.m2). [待补: DeepSomatic-TO and ClairS-TO recall at PASS and after the shared population filter, HG008T and COLO829T chr1] Pansoma's chr1 PASS SNV recall after population filtering, in the benchmark regions, is 0.826–0.831 on HG008T and 0.686–0.717 on COLO829T, with the HPRC v1.1 graph (d9 filter) and models trained on chr2–22 of the same tumor. A per-allele funnel (R1.6) shows where Pansoma loses the rest. On HG008T the largest loss on every reference is the threshold (6.8–10.9% of truth SNVs, against 2.1–5.2% without a candidate and 3.0–5.2% removed by filtering); 61 of the 702 truth SNVs are population alleles that any caller using the same filter loses. On COLO829T (GRCh38-only graph and HPRC v2.1 graph, d46 filter), 17–18% of truth SNVs get no candidate, mainly because 15.1–16.1% have a tumor VAF below the 0.08 candidate floor (R2.4).
+
+*The two categories.* "Variant node not ranked #1" and "first aligned node mismatch" belonged to the earlier pipeline, which we replaced. Every truth allele without a candidate now gets one read-level class, on six datasets (later losses: R1.6): no read with MAPQ > 10; fewer than three ALT reads or an allele fraction below the threshold; the ALT is an existing graph allele; repeat absorption or respelling; an indel longer than 50 bp. For example, of 2,976 HG008T PacBio truth INDELs without a candidate (chr1–22), 2,739 (92.0%) are fully or partly encoded in the graph.
+
+*The normal at missed sites on graph nodes.* Instead of realigning normal reads, we used the haplotype-resolved matched-normal assemblies (HG008-N v6.2; COLO829BL), which show the normal's sequence directly. Of the truth alleles whose tumor reads align without edit to an existing v1.1 graph path (HG008T 2,478; COLO829T 497), only 110 (4.4%) and 34 (6.8%) are carried by the matched normal; 2,085 (84.1%) and 430 (86.5%) are absent from both normal haplotypes and lie on nodes walked by other HPRC individuals. At the 1,935 HG008T INDEL loci absent from the normal, the HG008-T tumor assembly carries a sequence found in neither normal haplotype at 1,931 and exactly the truth allele at 1,652, and the tumor's Illumina reads show the expected allele at 96.2% of them (95.7% at random non-absorbed truth INDELs). On HG008T these are real somatic events hidden by the graph, and the manuscript now says so; most also coincide with population alleles that the filter removes on any reference (R1.4): in the chr1 benchmark regions, the GRCh38-only arm calls at most one of the 38–114 HG008T truth INDELs that v1.1 absorbs. COLO829T has no tumor assembly, and up to 15.8% of its absorbed INDELs may be germline-like.
+
+### R2.4 Low-VAF detection and the low-VAF model
+
+**Comment（要点）。**
+
+- 10 % 的 read-support 阈值会限制低 purity、高异质性真实样本里的低 VAF 检测：真正的低 VAF SNV 应该怎么测？
+- 专门的 low-VAF model 描述不清：它和主模型有什么不同？
+- 它能不能找回低 VAF 变异？主模型在多低的 VAF 开始变差？要求做 VAF 递减的 sensitivity 分析。
+- 两个模型各自在什么情况下用？
+
+**Response.**
+
+*Thresholds.* A candidate now needs an allele fraction of at least 0.08 and at least three ALT-supporting reads (base quality ≥ 10), for SNVs and INDELs alike. Below this floor a variant never reaches the classifier; on chr1 of undiluted COLO829T this concerns 15.1–16.1% of the truth SNVs.
+
+*Sensitivity by VAF.* COLO829T, chr1, benchmark regions (for COLO829T the whole genome), HPRC v2.1 graph (d46 filter), three platforms, PASS calls after population filtering. A truth SNV's VAF is its allele fraction in the tumor reads, or the SMaHT truth VAF when it has no candidate:
+
+| truth VAF | truth SNVs | recall | recall of those with a candidate |
+|---|---|---|---|
+| < 0.05 | 284–301 | 0 | – |
+| 0.05–0.10 | 139–176 | 0.230–0.348 | 0.853–0.941 |
+| 0.10–0.20 | 149–177 | 0.672–0.897 | 0.850–0.966 |
+| 0.20–0.30 | 59–88 | 0.763–0.853 | 0.804–0.889 |
+| 0.30–0.50 | 266–391 | 0.808–0.857 | 0.840–0.861 |
+| ≥ 0.50 | 1,356–1,507 | 0.836–0.857 | 0.841–0.867 |
+
+Recall falls below 50% in the 0.05–0.10 bin, where only 34–68 truth SNVs have a candidate; once a candidate exists, recall is 0.804–0.966 in every bin. HG008T has too few low-VAF truth SNVs on chr1 for this analysis.
+
+*Decreasing purity.* For each platform, one model was trained on chr2–22 of COLO829T and its in-silico dilutions with COLO829BL (nominal purity 75, 50, 25%) and tested on chr1 of each purity at one recall-0.9 validation threshold shared by all purities; training and test share the tumor (one seed). On Fiber-seq, after population filtering and in the benchmark regions (graph-coordinate calls not scored; R3.4), SNV recall is 0.698 / 0.639 / 0.621 / 0.663 from 100% to 25% purity, at precision 0.881 / 0.741 / 0.715 / 0.786, while the share of truth SNVs whose expected VAF is below the 0.08 floor rises from 16.1% to 26.9%. At 25% purity, recall is close to the highest the curve reaches after filtering (0.663 against 0.688), so candidate generation is the main limit; by VAF it is 0.899 at 0.10–0.20 (829 of 922 truth SNVs) and 0.420 at 0.05–0.10. At 75% and 50% the classifier loses more (curve maxima 0.767 / 0.740) and precision falls: 86.1% and 86.5% of the false calls carry a germline allele of the normal (68.4% undiluted), as expected when germline SNVs in the tumor's regions of loss of heterozygosity enter the somatic allele-fraction range (R1.5). [待补: Illumina and ONT after removing a read-source base-quality cue that makes their current scores optimistic (R1.5); dilutions of a second tumor not used in training (HCC1395)]
+
+*The low-VAF model.* The original low-VAF model was the same kind of network trained on the HapMap mixture, with candidates built at an allele fraction of 0.015 instead of 0.10. Its positives were germline alleles, so it is withdrawn with that benchmark (R1.5).
+
+*Usage.* We recommend the default model for expected somatic VAFs of about 0.10 and above, where call-level recall in the 0.10–0.20 bin is 0.672–0.897 in undiluted COLO829T and 0.899 at 25% purity. No truth SNV below VAF 0.05 was called; such variants need a lower candidate floor or a dedicated ultra-low-VAF method.
+
+### R2.5 What drives the higher precision
+
+**Comment（要点）。**
+
+- Is the precision gain mostly reduced germline contamination, or are there other factors?
+- Beyond modelling germline variation at the site, does graph-aware calling help when several germline variants are nearby?
+
+**Response.**
+
+Before population filtering the gain is almost entirely reduced germline contamination; after it, which is what our F1 measures, fewer artefactual calls in difficult regions also contribute, by dataset.
+
+*Fewer germline candidates* (chr1; R3.1 ablation: GRCh38-only graph, HPRC v1.1 graph with d9 filter, HPRC v2.1 graph with d46 filter).
+
+- 75.7–82.2% of matched-normal germline variants become candidates on the GRCh38-only graph, against 7.7–13.1% on v1.1 and 7.2–12.4% on v2.1 (R1.2). Before filtering, the HG008T models call 117,205–144,251 germline tensors somatic at PASS on GRCh38-only, against 2,528–5,147 on the HPRC graphs.
+- Channel 6 (HPRC haplotypes through each node) adds a second germline prior: set to "every haplotype", it lets 3.4–7.6 times as many germline tensors pass the threshold, most later tagged by filtering (R1.1). [待补: how much channel 6 gains, by retraining without it (R1.1)]
+- After filtering, in the benchmark regions, the HPRC graphs lead by +0.038 to +0.319 SNV F1, and paired block-bootstrap intervals exclude zero in all nine comparisons re-run (R3.1, R3.9). Graph-coordinate calls, mostly produced by the off-reference rescue, reverse four of twelve SNV comparisons when all count as false positives (no benchmark regions); without the rescue all nine HPRC runs re-called locally lead, except HG008T ONT on v2.1 inside the benchmark regions (0.533 against 0.537; R3.4). We report every SNV result with and without the rescue.
+
+*False calls left after filtering* (R3.2). On the HPRC graphs, 82.7–97.9% of the HG008T false calls (COLO829T: 42.7–71.3%) carry exactly a germline allele of the normal, and at most two of these germline calls per call set are also HPRC v1.1 alleles; neither the graph nor the filter carries such rare germline variants (R2.6). Of the additional false calls of GRCh38-only, 60.3–73.3% are at or within 10 bp of the patient's germline variants on HG008T PacBio and ONT. On HG008T Illumina and COLO829T most match no germline or population allele, have low allele fractions and concentrate in SMaHT extreme regions (R1.3); on COLO829T Illumina, 1,888 of GRCh38-only's 2,221 false calls lie at the chr1 centromere and flanks (121–126 Mb), and without that region v2.1 still leads on all six datasets, by +0.020 to +0.209 F1. This fits reads misplaced on a reference that lacks their sequence (inferred, not verified per call).
+
+*Clustered germline variation* (the normal's germline variants within ±50 bp: 0, 1, 2+). For HG008T SNVs the HPRC graphs' F1 gain is largest in the 2+ stratum on all three platforms (0.107–0.204, against 0.022–0.087 with none nearby), through precision (125–236 false calls on GRCh38-only, 18–73 on the HPRC graphs); recall stays 0.256–0.308 on every reference (McNemar p ≥ 0.5); at ±500 bp the gain is not monotonic. COLO829T Fiber-seq agrees (0.211); for COLO829T Illumina and ONT the test is uninformative (most GRCh38-only false calls lie outside the germline truth regions). For INDELs the graphs lose: in the 2+ stratum only 5.9–21.6% of truth INDELs get an exact candidate (GRCh38-only: 62.7–94.1%), costing HG008T PacBio recall (McNemar p 0.002 and 0.004).
+
+Limitations are those of R3.1 [待补: matched reruns and seeds (R3.9)].
+
+### R2.6 Panels of normals
+
+**Comment（要点）。**
+
+- Some PoNs were built from common benchmark datasets and include variants of the tested samples (HapMap in particular), which may inflate the reduction in germline contamination.
+- Fig. 2e shows that > 20% of germline variants are not in the AF-HPRC graph: were they removed by the PoNs?
+- Only COLO829 was evaluated without the PoN; add HG008T without the PoN.
+
+**Response.**
+
+*1. Overlap with the benchmark samples.* Our four resources are the files ClairS-TO uses by default: the GATK gnomAD v2 allele-frequency file (2017), dbSNP 138 (2013), the GATK 1000 Genomes panel (2017) and CoLoRSdb v1.1.0 (2024). HG008 data collection began in 2023, so HG008 cannot be in the first three, and CoLoRSdb's listed cohorts contain no GIAB cancer sample. Matching each individual's rare germline SNVs to the resources, the normals of HG008, COLO829, HCC1395 and the three CASTLE lines match least of the 12 individuals tested (gnomAD 0.6–2.5%, CoLoRSdb 4.0–7.9%), against 3.4–15.4% and 14.5–25.9% for the HapMap donors, which are likely represented (R1.5). No allele of the six somatic truth sets, nor any HapMap positive on chr20, is a dbSNP record flagged somatic. The truth alleles the filter does tag (HG008T 10.2% of SNVs, 61.8% of INDELs; COLO829T 3.6% / 52.0%; HCC1395 2.8% / 7.3%) coincide with population alleles; they cost recall and do not inflate precision. The CASTLE H1437 truth is the exception: 30.7% of its SNVs are tagged, mostly germline alleles its normal lost through loss of heterozygosity (R2.2).
+
+*2. Germline variants not in the graph.* In the benchmark regions, 13% of matched-normal germline SNVs and 25% of germline INDELs are not alleles of the HPRC v1.1 graph (d9 filter). They remain candidates, are labelled germline in training, and population filtering tags 95.5–96.6% of the germline SNV candidates on all six datasets. With the final HG008T chr1 SNV models (per-tensor estimates) it removes 87.5–88.5% (v1.1) and 74.3–76.1% (HPRC v2.1 graph, d46 filter) of the germline candidates called somatic at PASS. Of the remaining false calls in the benchmark regions, 82.7–97.9% carry exactly a germline allele of the normal, and at most two of these germline calls per call set are also HPRC v1.1 alleles. Rare germline variants that neither the graph nor the filter carries, not artefacts, therefore limit HG008T precision (R2.5).
+
+*3. HG008T without filtering*, now reported for every dataset and reference. HG008T SNV, v1.1, chr1, benchmark regions (graph-coordinate calls not scored; R3.4): F1 0.182–0.191 without filtering and 0.585–0.621 with it. INDEL F1 at the recall-0.9 validation threshold is 0.011–0.101 against 0.015–0.241, and test-tuned best F1 (upper bound) 0.090–0.150 against 0.140–0.264.
+
+*Rules* (listed in R3.m1; renamed in R3.m4). Both rules were chosen on chr1, our test chromosome, so we re-selected them without it. On chr2–22 (labelled candidates, objective fixed in advance) the SNV choice is the current rule; the INDEL choice there, a more lenient homopolymer floor, lowers chr1 PASS F1 in 29 of 44 call sets. Selected on one tumor's chr1 calls and scored on the other's, the INDEL choice is a close neighbour of the current rule (≥ 8 bp: 0.01, else 1e-4) that does at least as well on every held-out call set (mean PASS F1 +0.002 on COLO829T, +0.005 on HG008T). The current rule is therefore not flattered by chr1. Graph-coordinate calls cannot be filtered this way and are classified separately (R3.3, R3.4).
+
+### R2.7 Alignment statistics overstated
+
+**Comment（要点）。**
+
+- 第 292–294 行说 graph 上 perfect reads 更多、soft clipping 更少，对照 Supplementary Fig. 4 看有些夸大。
+- 要给出 read 数或比例。
+
+**Response.**
+
+We agree. Lines 292–294 are rewritten, and Supplementary Fig. 4 is replaced by a table of counts and proportions for the same reads on each reference, for both tumors and all three platforms: the GRCh38 BAM, the GRCh38-only graph, the HPRC v1.1 graph (d9 filter) and the HPRC v2.1 graph (d46 filter), overall and by SMaHT region class and segmental duplication. Examples:
+
+- *Illumina, the same reads* (10% of the reads in 48 GRCh38 windows, half at segmental duplications, placed in the same window on both graphs): full-length edit-free alignments rise on HG008T from 69.12% to 79.36% on v1.1 and from 69.07% to 79.41% on v2.1, and on COLO829T from 71.02% to 81.66% and from 71.01% to 81.73%. On their shared reads the GRCh38 BAM (BWA-MEM) and the GRCh38-only graph both give 69.18%, so the gain comes from the graph's content, not the aligner. Of the reads that became edit-free on v1.1, 86.02% had mismatches only and 99.74% kept their GRCh38 position.
+- *Illumina, whole files* (HG008T, 2,974,694,440 read records): 1.42% (v1.1) and 1.41% (v2.1) are unmapped, against 1.51% on the GRCh38-only graph, and the number of reads at MAPQ 60 is almost unchanged.
+- *Long reads* are rarely edit-free end to end (0.00–1.32% on the GRCh38-only graph, 0.01–2.54% on v1.1), so we report per-base rates. Mismatched bases per kb fall on v1.1 for every long-read dataset (HG008T PacBio 1.57 to 0.63, COLO829T Fiber-seq 1.80 to 0.84, HG008T ONT 5.22 to 4.26, COLO829T ONT 9.16 to 8.36); indel events per kb change less (HG008T PacBio 1.58 to 1.39).
+- *Soft clipping* changes little: 2.05% vs 1.83% of reads (HG008T Illumina, same reads), 2.65% vs 2.00% (HG008T PacBio; 3.75% on v2.1) and 30.37% vs 29.89% (HG008T ONT).
+- *Unmapped reads and MAPQ.* Of the same 14,014,144 HG008T PacBio reads, 0.01% (GRCh38 BAM), 2.78% (GRCh38-only graph), 2.64% (v1.1) and 0.01% (v2.1) are unmapped, and MAPQ is 60 for 94.84%, 95.88%, 95.88% and 83.32% of mapped reads; COLO829T Fiber-seq follows the same pattern on the graphs. The extra reads v2.1 aligns lie mostly in difficult regions, at low MAPQ (R3.6). On ONT, giraffe leaves more HG008T reads unmapped on every graph (7.77–8.04%) than minimap2 on the BAM (3.89%).
+- *Correctness* (reads simulated from the HG008-N assembly; R3.6): 98.698%, 98.642% and 98.659% of Illumina reads are placed correctly on the GRCh38-only graph, v1.1 and v2.1, but wrong placements at MAPQ ≥ 30 fall from 0.093% to 0.019% and 0.013%. ONT reads are the exception: v2.1 misplaces more of them (1.483%, against 0.773% on the GRCh38-only graph and 0.614% on v1.1).
+
+The table states each arm's aligner, because MAPQ scales are aligner-specific. We also toned down the statement: the graph mainly removes edits at alleles that the sample shares with HPRC haplotypes; more edit-free alignments do not by themselves mean more correct placements, and on simulated short and HiFi reads the graphs mainly reduce confident misplacements (R3.6).
+
+### R2.m Minor comments 1–8
+
+**Comment（要点）。**（原审稿文字不在 repo 里；下面按详版的逐条 Response 反推。）
+
+1. Figure 2d、2f 画的是 truth-set variants 还是 Pansoma 的输出，要说清楚。
+2. 图的引用顺序（2e 在 2f 之前引用）。
+3. Supplementary Fig. 2 的 COLO829T panel 没有标注。
+4. Supplementary Fig. 1 的点标签压在点上。
+5. 第 13 页的 "truth overlapping" 没有定义。
+6. Figure 4 里把 truth-set 的 spectrum 和各 caller 放在一起（同 R3.5）。
+7. Figure 4 的 panel 引用顺序和正文不一致。
+8. 定义 candidate 和 candidate site。
+
+**Response.**
+
+We thank the reviewer and made the following changes.
+
+1. Figures 2d and 2f show truth-set variants, not Pansoma output. The legends now say so, and both panels moved to the
+   Supplement.
+2. Figures are now cited in order (2e before 2f).
+3. The COLO829T panel of Supplementary Fig. 2 is labelled.
+4. Point labels in Supplementary Fig. 1 were moved off the points.
+5. "Truth overlapping" was replaced by defined categories, for example a call within 10 bp of a truth allele but with a
+   different allele.
+6. The SBS96 spectrum of each truth set is now shown beside each caller's in Figure 4 (R3.5). On chr1, in the
+   benchmark regions, Pansoma's calls after population filtering match their truth spectrum (cosine 0.996–0.997 on
+   COLO829T and 0.940–0.958 on HG008T, HPRC graphs). [待补: comparator panels]
+7. Figure 4 panels are cited in the order of the text (see item 2).
+8. A *candidate* is one allele at a graph position: node, start on the node's forward strand, REF, ALT and type (SNV,
+   insertion or deletion). A *candidate site* is all candidates that pass the filters at one node position and variant
+   class (SNV or INDEL); they are encoded together in one tensor, each read labelled with the allele it carries (or as
+   REF or OTHER).
+
+## Reviewer 3
+
+### R3.1 Reference-level ablation
+
+**Comment（要点）。**
+
+- End-to-end benchmarking does not isolate the pangenome: Pansoma differs from the comparators in reference, alignment, candidate generation, tensorisation, architecture and post-processing.
+- Run the Pansoma pipeline with a GRCh38 linear reference (or a single-path graph) and with the full HPRC graph. Keep candidate extraction, tensors, architecture, training and filtering thresholds identical, and show how much of the gain the pangenome drives.
+
+**Response.**
+
+We performed this ablation on HG008T and COLO829T, three platforms each. Their reads were aligned with vg Giraffe to a GRCh38-only graph built from the same FASTA, the HPRC v1.1 graph (d9 filter; 90 haplotypes) and the HPRC v2.1 graph (d46 filter; 464 haplotypes). Everything downstream is identical (candidates, tensors, labels, network, recipe, the recall-0.9 validation threshold, population filtering); per dataset and reference, one SNV and one INDEL model were trained on chr2–22 and tested on chr1 of the same tumor. Eight of the twelve v1.1 models differ in GPU count, code version or INDEL learning rate [待补: matched v1.1 retraining], and the Giraffe version differs for v2.1 and for COLO829T Illumina on v1.1 (R3.m1).
+
+*SNVs.* After population filtering (chr1, benchmark regions), both HPRC graphs beat GRCh38-only on all six datasets: F1 0.418–0.680, against 0.585–0.781 (v1.1) and 0.570–0.783 (v2.1), a gain of +0.038 to +0.319. Paired 1-Mb block-bootstrap intervals exclude zero in all nine pairs scored so far (lower bounds +0.010 to +0.208; R3.9) [待补: the COLO829T v1.1 pairs]. On GRCh38-only, 1.4–7.8 times as many false positives survive filtering as on v1.1 (R3.2). Many cluster around the chr1 centromere (121–126 Mb; 1,888 of 2,221 for COLO829T Illumina); without that region the v2.1 lead shrinks to +0.020 to +0.209 but remains. The HPRC graphs are close to each other (−0.021 to +0.031; on HG008T v2.1 is 0.015–0.021 lower, paired intervals just excluding zero; R1.2).
+
+*INDELs.* At the validation best-F1 threshold, GRCh38-only is lower in all nine comparisons available: on HG008T 0.036–0.080, against 0.116–0.226 (v1.1) and 0.151–0.204 (v2.1); on COLO829T this threshold leaves only 0–46 calls per run (F1 at most 0.090) [待补: COLO829T v1.1]. The test-tuned best F1 (upper bound) agrees (0.019–0.199 against 0.071–0.264 and 0.085–0.269). At the recall-0.9 validation threshold, which on long reads falls far short of the test-tuned best F1, GRCh38-only scores higher on the four long-read datasets, where all arms are poor.
+
+*Graph-coordinate calls* have no GRCh38 position, so rtg does not score them; most are produced by the off-reference rescue step (R3.4). Counting every one as a false positive (no benchmark regions, a worst case), the HPRC graphs fall below GRCh38-only in four of twelve SNV comparisons, all long-read. Without the rescue, all nine HPRC runs re-called locally are above GRCh38-only (complete-output F1 0.524–0.780 against 0.197–0.680) [待补: COLO829T Fiber-seq on v1.1]; inside the benchmark regions HG008T ONT on v2.1 stays 0.004 below (0.533 against 0.537). We report every SNV result with and without the rescue.
+
+*Limits.* The contrast combines alignment, candidate generation and the haplotype-count channel (constant on GRCh38-only); retraining an HPRC arm without that channel separates them [待补]. It also combines reference completeness with haplotype diversity, as both HPRC graphs contain CHM13 as an unfiltered reference path (R3.6). The GRCh38-only arm is our network, not a dedicated linear caller (R3.m2). Models are in-sample, one seed each [待补: seed repeats (R3.9)]; cross-tumor results are in R1.7.
+
+### R3.2 Composition of the removed candidates
+
+**Comment（要点）。**
+
+- Fewer candidates help only if germline variants and artefacts are removed preferentially while true somatic variants are kept.
+- Compare linear and graph candidate generation for (1) somatic truth, (2) matched-normal germline variants, (3) background / non-truth candidates.
+- Stratify the reduction of false positives by whether the germline allele is encoded in the HPRC graph, to connect the 79 % / 73 % overlap of normal-sample SNVs / INDELs with the graph to the precision gain.
+
+**Response.**
+
+We did this on identical reads and code for all six datasets (R3.1) with the GRCh38-only graph, the HPRC v1.1 graph (d9 filter) and the HPRC v2.1 graph (d46 filter). Fraction of truth alleles that produce a candidate (range over the six datasets; per-dataset values in R1.2):
+
+| | GRCh38-only | HPRC v1.1 | HPRC v2.1 |
+|---|---|---|---|
+| Somatic SNVs | 0.896–0.986 | 0.893–0.952 | 0.892–0.956 |
+| Somatic insertions | 0.529–0.962 | 0.356–0.535 | 0.361–0.578 |
+| Somatic deletions | 0.629–0.965 | 0.504–0.718 | 0.524–0.729 |
+| Matched-normal germline variants | 0.757–0.822 | 0.077–0.131 | 0.072–0.124 |
+
+*Background.* Non-truth SNV candidates in the benchmark regions fall by 11–61% on v1.1 and 5–59% on v2.1, and all candidates by 33–69% and 34–70%. Non-truth INDEL candidates fall by 75–84% on Illumina but change by −0.8% to +3.9% on long reads, where many are sequencing errors that a population graph does not contain.
+
+*Germline removed, somatic largely kept.* The HPRC graphs remove 84–91% of the GRCh38-only graph's germline candidates at a cost of 0.3–3.6 points of candidate-level somatic SNV sensitivity. Somatic INDELs lose more, but 73–86% of the lost INDELs are population alleles that filtering removes on any reference (R1.4). Counting only alleles that population filtering keeps, GRCh38-only has a candidate for 0.2–0.6% more of all somatic SNVs and 2.0–8.2% more of all somatic INDELs (chr1–22); in the chr1 benchmark regions it calls most of these INDELs after filtering (R1.4).
+
+*Link to the graph's content.* In the benchmark regions, 87% of matched-normal germline SNVs and 75% of germline INDELs are alleles of the HPRC v1.1 graph, against 0.2–2.5% of somatic SNVs and 21–25% of somatic INDELs [待补: reconciliation with the 79% / 73% of the original text, which used another definition]. The haplotype-count channel then suppresses part of the remaining germline candidates (R1.1, R2.5). After population filtering, 1.4–7.8 times more false positives remain on GRCh38-only than on v1.1, and the HPRC graphs gain +0.038 to +0.319 SNV F1 (R3.1).
+
+*Which false positives remain.* We matched every SNV false positive left after filtering (chr1, benchmark regions) to the normal's germline truth, HPRC v1.1 haplotypes and the population resources. On the HPRC graphs most are private germline variants: on HG008T 82.7–97.9% carry exactly the normal's germline allele, and at most 10 per call set are HPRC v1.1 alleles that the patient does not carry. The GRCh38-only graph's excess (116–2,118 false positives per pair) is mixed. On HG008T PacBio and ONT, 60.3–73.3% of it is at or within 10 bp of the normal's germline variants (45–60 per pair are HPRC v1.1 alleles); on HG008T Illumina 21.5–30.5%, on COLO829T none. Population alleles explain at most 8.5%. Most of the rest, on HG008T Illumina and COLO829T, are low-allele-fraction calls in SMaHT "extreme" regions, where GRCh38-only makes 351–2,210 PASS calls at precision 0.056–0.253, against 102–281 at 0.161–0.764 on the HPRC graphs (many at the chr1 centromere; R3.1). This suggests reads misplaced on a reference that lacks the alternative sequence (R3.6). The precision gain therefore combines absorbed germline variation and fewer misplaced reads, in proportions that differ between datasets.
+
+### R3.3 Validation of graph-coordinate variants
+
+**Comment（要点）。**
+
+- A subset of the final predictions exists only in graph coordinates. The evidence for them (signatures, read examples) is indirect.
+- Validate a representative sample orthogonally: matched-normal alignment evidence, phased haplotype assemblies, or cross-platform data.
+
+**Response.**
+
+We agree. We no longer present graph-coordinate calls as a strength, and every run also reports a complete output counting them as false positives (R3.4). We validated the graph-coordinate SNV PASS calls on chr1 of nine final runs: HG008T on the HPRC v1.1 graph (d9 filter) and the HPRC v2.1 graph (d46 filter), three platforms each, and COLO829T on v2.1 (115–4,569 calls per run; for COLO829T ONT a random 3,000) [待补: COLO829T on v1.1].
+
+1. *Origin.* Most are produced by an off-reference rescue step; without it, 6–162 per run remain (R3.4). The classifier treats the low haplotype counts of nodes off GRCh38 as evidence against a somatic call (R1.1). For 57–79% per dataset of the assembly-derived HG008T off-reference somatic SNVs (all autosomes), the consensus of their ALT reads is in the HG008-T tumor assembly and in neither HG008-N haplotype. Of these read-supported SNVs the models call 0–4 per dataset without the rescue and 22–66 with it (tensor level), and 63–87% of the rescue's calls on these sites are read-supported.
+2. *Placement.* Via the GRCh38 nodes flanking their bubble, 2.8–19.1% per run become a GRCh38 allele, adding six true positives after population filtering across the nine runs (0–2 per run; three distinct truth SNVs). Of 89–1,334 calls per run placed only to a GRCh38 interval, one matches a missed truth variant (R3.4).
+3. *Assemblies.* We aligned each call's ALT context to the HG008-T tumor assembly and both HG008-N haplotypes (COLO829T: the two COLO829BL haplotypes only, so somatic status cannot be confirmed). In controls (150 per group and run), 145–149 placed true positives are tumor-only on HG008T (COLO829T: 148–150 absent from the normal), and 135–146 (HG008T) and 110–131 (COLO829T) placed false positives after filtering are in the normal. In exclusive classes, the graph-coordinate calls are population alleles (ALT context spelled by GRCh38 or an HPRC haplotype or walk) in 49.8–91.4%, germline in 4.2–45.4%, and tumor-only in 0.2–0.9% on HG008T (COLO829T: 2.4–5.8% absent from the normal). By the assemblies alone, 1.1–5.2% per HG008T run are tumor-only, most of them also population alleles.
+4. *Graph-native population filter.* It tags 0–1 of 150 placed true positives per run, but also 74.2–88.3% of the assembly-derived off-reference somatic SNVs (all chromosomes, six HG008T sets), and 20 of the 26 PASS calls of such SNVs on chr1 (six runs). It describes calls and cannot certify them.
+5. *Cross-platform.* On v2.1, 81 calls (same node, offset and allele) are PASS on all three HG008T platforms, 68–69 of them population alleles.
+
+So on HG008T at most 1.1–5.2% of graph-coordinate calls per run have assembly support as somatic; the rest are mostly population or germline alleles that a GRCh38-based filter cannot reach, and counting them as false positives (R3.4) is close to their true status. Because the rescue also recovers read-supported off-reference somatic SNVs (point 1), we report every SNV result with and without the rescue; that training with assembly-derived off-reference labels would address the cause is stated as a limitation.
+
+### R3.4 Metrics exclude graph-coordinate calls; "about 2%"; CHM13
+
+**Comment（要点）。**
+
+- TP / FP / FN are computed only for calls that project to GRCh38, so precision, recall and F1 describe a subset, not the complete output.
+- The graph-coordinate fraction depends on the platform and is large: above 10 %, and sometimes above 20 % for ONT (Supplementary Table 6). This contradicts the Discussion's "about 2%".
+- Are graph-coordinate calls truly graph-dependent, or just not projectable to GRCh38? What fraction can be represented on T2T-CHM13, and what remains graph-specific?
+
+**Response.**
+
+We agree, and the revised evaluation covers the complete output.
+
+1. *"About 2%" was wrong and has been removed.* On chr1, after population filtering and without benchmark regions, graph-coordinate calls are 8.1–52.4% of the PASS SNV output on the HPRC v1.1 graph (d9 filter) and 11.4–68.0% on the HPRC v2.1 graph (d46 filter), highest for ONT throughout. Every benchmark table now reports this fraction, replacing Supplementary Table 6.
+2. *Complete-output metrics.* Every run reports F1 for the GRCh38-evaluable calls and for the complete output, counting every graph-coordinate PASS call as a false positive (a worst case). HG008T SNV, chr1, after population filtering, no benchmark regions, HPRC v1.1 / v2.1 / GRCh38-only graph:
+
+   | | Illumina | PacBio | ONT |
+   |---|---|---|---|
+   | evaluable calls | 0.577 / 0.561 / 0.197 | 0.614 / 0.600 / 0.359 | 0.586 / 0.563 / 0.365 |
+   | complete output | 0.546 / 0.414 / 0.197 | 0.553 / 0.533 / 0.359 | 0.342 / 0.354 / 0.365 |
+
+   Under this worst case the HPRC graphs fall below the GRCh38-only graph in four of the twelve SNV comparisons, all long-read: HG008T ONT on both graphs, COLO829T ONT on v2.1 (0.369 against 0.418) and COLO829T Fiber-seq on v1.1 (0.636 against 0.680).
+3. *Graph-specific or merely unprojected?* In the nine graph runs available, the GRCh38 nodes flanking each call's bubble give a GRCh38 allele for 2.8–19.1% of calls. After population filtering this adds six true positives across the nine runs (0–2 per run; three distinct truth SNVs), and of the 89–1,334 calls per run placed only to a GRCh38 interval, one matches a missed truth variant. The rest have no GRCh38 allele (inserted sequence, the GRCh38 base on a branch node, no consistent anchors); most are population or germline alleles, and on HG008T only 1.1–5.2% per run have tumor-only support in the assemblies (R3.3). Projection moves complete-output F1 by 0.001–0.009 [待补: the COLO829T v1.1 runs]. A Supplementary Table lists each call's node, offset, class, GRCh38 interval and assembly class.
+4. *Origin and trade-off.* Most graph-coordinate SNV PASS calls are produced by an off-reference rescue step that raises the haplotype count on nodes off GRCh38 (R3.3); without it, 6–162 per run remain. The rescue recovers off-reference somatic SNVs that rtg cannot credit: at the assembly-derived HG008T sites, it calls 22–66 read-supported somatic SNVs per dataset (0–4 without it; tensor level), and 63–87% of its calls there are read-supported (R3.3). On chr1, however, that is 2–8 such SNVs per HG008T run against 210–1,410 graph-coordinate PASS calls, and the rescue causes the long-read losses above. Without it, the placed calls are unchanged and all nine HPRC runs re-called locally are above the GRCh38-only graph without benchmark regions (complete-output F1 0.524–0.780 against 0.197–0.680) [待补: the COLO829T v1.1 runs]; inside the benchmark regions, HG008T ONT on v2.1 stays 0.004 below (0.533 against 0.537). We report every SNV result with and without the rescue.
+5. *CHM13.* We did not compute a CHM13 projection. CHM13 is an unfiltered reference path in both graphs, but our truth sets are on GRCh38, so CHM13 coordinates would not change any score; point 3 separates the calls that GRCh38 can represent from those it cannot.
+
+### R3.5 Mutational signatures with the truth set
+
+**Comment（要点）。**
+
+- Figure 4a 里把 truth 的 spectrum 和 Pansoma、DeepSomatic-TO、ClairS-TO 并排画出来，而不只是当作 cosine similarity 的参照；HG008T 最需要，因为它的 profile 不单一，各 caller 的 cosine 都不高。
+- 在 Supplement 里给出 SBS96 profiles，用来支持 "graph 坐标的 variants 是 biological" 的说法。
+
+**Response.**
+
+We agree, and Figure 4 is revised accordingly.
+
+*Truth spectrum beside each caller.* For each dataset, Figure 4a now shows the SBS96 spectrum of the truth set next to those of Pansoma, DeepSomatic-TO and ClairS-TO (chr1, PASS, after the same population filtering), and the Supplement gives the SBS96 profile of every call set, split into true and false positives, with the cosine similarity of each to the truth spectrum [待补: comparator spectra]. Pansoma's calls reproduce the truth spectrum: the cosine similarity of all PASS calls on the HPRC graphs is 0.996–0.997 on COLO829T and 0.940–0.958 on HG008T (true positives alone 0.982–0.995).
+
+*HG008T.* The HG008T truth spectrum is indeed heterogeneous. Its best single COSMIC v3.4 match is SBS40a (cosine 0.780; SBS5 0.625, SBS1 0.241), whereas COLO829T matches the UV signature SBS7a (0.917). With an SNV precision of 0.43–0.50 after filtering on HG008T chr1, the false positives shape the spectrum of a whole call set, which is why we show them separately: HG008T's false positives resemble the matched normal's germline spectrum (cosine 0.845–0.913; best COSMIC match SBS5 in five of six call sets), consistent with the private germline variants that dominate them (R3.2). On COLO829T, 57–63% of the false-positive spectrum resembles the tumor's UV spectrum, consistent with, but not proof of, real mutations missing from the truth set.
+
+*Training spectrum.* Our main models are trained on chr2–22 of the tumor they are tested on, so their calls could follow its spectrum. A preliminary cross-tumor test (HPRC v2.1 graph with the d46 filter, earlier normalisation, one seed; R1.7) shows that this depends on the training tumor. The true positives of the HG008T models on COLO829T, HCC1395 and two lung adenocarcinoma lines match each target's truth spectrum (cosine 0.986–0.999). The COLO829T models drift towards UV-type changes on other tumors (0.793–0.978); on HG008T, 44.2–55.6% of their true positives are UV-type C>T, against 28.8% in its truth. A model trained on one UV-dominated tumor thus ranks UV-context changes higher elsewhere, which supports training on several tumors (R1.7).
+
+*Graph-coordinate calls.* We no longer use the spectrum as evidence that these calls are biological, because a spectrum cannot distinguish somatic mutations from population alleles that GRCh38 lacks. We tested them directly instead: placement on GRCh38, a graph-native population filter and the tumor and normal assemblies show that on HG008T at most 1.1–5.2% per run have assembly support as somatic, and most are population or germline alleles (R3.3, R3.4). Their SBS96 profiles, with trinucleotide context taken from the graph, are shown separately in the Supplement by validation class [待补].
+
+### R3.6 More perfect alignment is not more correct alignment
+
+**Comment（要点）。**
+
+- 更多 perfect alignment、更少 mismatch / soft clip 不等于比对更正确：图里可匹配的序列本来就更多。
+- 比较 GRCh38、T2T-CHM13 和完整 HPRC graph 上的比对质量，把 "参考更完整" 和 "多 haplotype 建模" 两个因素分开。
+- 如果可行：MAPQ 分布、phased-haplotype 一致性、基于组装的 truth、segmental duplications 和其他困难区域。
+
+**Response.**
+
+We agree and removed the inference from "more perfect" to "more correct".
+
+1. *What the gain is.* For the same HG008T Illumina reads (48 GRCh38 windows; R2.7), 79.36% align without any edit on the HPRC v1.1 graph (d9 filter) against 69.12% on the GRCh38-only graph, and 99.74% of the reads that become edit-free keep their GRCh38 position. The graph removes edits at alleles that the sample shares with HPRC haplotypes; this alone is not evidence of more correct placement.
+
+2. *MAPQ, same reads.* Over whole files, the share of mapped reads with MAPQ 60 on the GRCh38-only, v1.1 and v2.1 (d46 filter) graphs is 95.88%, 95.88% and 83.32% for HG008T PacBio and 92.38%, 92.63% and 76.87% for COLO829T Fiber-seq. The v2.1 drop is smaller on ONT and absent in Illumina windows. v2.1 was aligned with a newer Giraffe version, so graph and aligner effects are not separated. By region, both HPRC graphs add some ambiguity in SMaHT extreme regions and segmental duplications (R1.3).
+
+3. *Correctness with known origin.* We simulated reads from the HG008-N v6.2 diploid assembly (in neither HPRC graph) on chr1 and chr20, where it aligns one-to-one to GRCh38. For 5 million Illumina reads, v1.1 and v2.1 give more edit-free alignments than the GRCh38-only graph (72.94% and 73.06% against 63.69%) and fewer misplaced reads (0.983% and 0.927% of placed reads against 1.235%). "Perfect but wrong" alignments do not increase (33,204 and 32,025 against 33,847, nearly all in SMaHT extreme regions), and the error rate among placements with MAPQ ≥ 30 falls from 0.093% to 0.019% and 0.013%; MAPQ is over-confident on all three. The gain concentrates in reads spanning a structural variant (misplaced 51.0% and 46.0% against 71.7%), although fewer of them are placed correctly (21.2% and 21.7% against 25.1%); far from any HG008-N variant the HPRC graphs misplace slightly more (0.807% against 0.697%). HiFi-like reads go the same way (misplaced 0.328% and 0.383% against 0.495%). Noisy ONT-like reads do not: v1.1 misplaces slightly fewer (0.614% against 0.773%), but v2.1 about twice as many (1.483%; at MAPQ ≥ 30, 0.764% against 0.433%), almost all in SMaHT extreme regions, as the confident disagreements of real ONT reads on v2.1 suggested (R1.3); its newer Giraffe release may contribute. The hardest regions are under-represented, and the v1.1 arm used Giraffe 1.65.
+
+4. *Phased haplotypes on real reads.* We compare the graph placement of real HG008-T reads in difficult regions with their placement on the phased HG008-N assembly [待补].
+
+5. *Completeness versus multi-haplotype modelling.* In the reference ablation (R3.1), the HPRC graphs raise chr1 SNV F1 after population filtering by +0.038 to +0.319 on all six datasets. Both HPRC graphs contain CHM13 as an unfiltered reference path, so this gain, like the simulation above, combines reference completeness and haplotype diversity. We did not add a T2T-CHM13 arm, because our truth sets are on GRCh38, and state this as a limitation.
+
+### R3.7 Caution on reclassifying benchmark false negatives
+
+**Comment（要点）。**
+
+- 单靠 graph alignment 不能推翻已建立的 truth 注释。
+- 把 Supp. Fig. 3 的 false negatives 重新归类，需要正交证据：matched-normal 的 alignments 或 haplotype-resolved assemblies。
+- 否则就要把说法收弱。
+
+**Response.**
+
+We agree, and we withdrew the interpretation that these false negatives are reference-bias artefacts or benchmark
+errors. We tested them with orthogonal evidence: haplotype-resolved assemblies of the matched normals (HG008-N v6.2;
+COLO829BL) and, for HG008T, of the tumor (HG008-T v3.2), together with the HPRC haplotype walks (R1.4).
+
+- *HG008T.* On the HPRC v1.1 graph (d9 filter), 2,478 truth alleles (201 SNVs, 2,277 INDELs) are lost because their reads align
+  without edits to an existing graph path. Only 110 (4.4%) are carried by the matched normal, and in 109 of them the
+  tumor allele is the germline allele of the other normal haplotype. For 2,085 (84.1%), neither normal haplotype carries
+  the allele, but other HPRC haplotypes walk the same nodes (1,854 with exactly this allele). At 1,652 of the 1,935 such
+  INDELs the tumor assembly carries exactly the truth allele over the repeat, and at 1,931 it carries a sequence found
+  in neither normal haplotype. Illumina tumor reads show the expected allele at 96.2% of these INDEL loci, as at 95.7%
+  of randomly chosen truth INDELs that were not absorbed.
+- *COLO829T.* Of 497 such alleles, 34 (6.8%) are the normal's germline allele, and 430 (86.5%) are absent from both
+  normal haplotypes but lie on nodes walked by other HPRC haplotypes (390 with exactly this allele). Without a tumor
+  assembly we cannot resolve 35 further INDELs at which a normal haplotype has the ALT length with different bases, so
+  the germline-like share of the absorbed INDELs lies between 7.7% and 15.8%.
+
+The evidence therefore points the other way from our original interpretation: most of these alleles are genuine
+somatic events hidden by population alleles in the graph, not truth-set errors. Supplementary Fig. 3 is reframed as
+"somatic alleles absorbed by the graph", and the cost of this absorption is quantified in R1.4. We did not
+realign matched-normal reads at these sites; the matched-normal evidence comes from the assemblies, whose errors in
+long homopolymers we can bound only indirectly (HG008-N: about 6–8% of loci, equally at absorbed and other truth
+alleles).
+
+### R3.8 Scope: tumor-only versus somatic mosaicism
+
+**Comment（要点）。**
+
+- 验证以肿瘤为中心（两个肿瘤加一个合成 admixture），没有正常组织 mosaicism 数据集（如 SMaHT tissues）。
+- 二选一：要么全文一致地把范围限定在 tumor-only calling，要么在独立表征过的 mosaicism 数据集上验证。
+
+**Response.**
+
+We keep the scope to tumor-only somatic calling in cancer samples. The title, abstract, Results and Discussion now state
+this consistently, and broader claims about "somatic variation" in general were removed.
+
+The method is not built for mosaicism in normal tissue, and the revised Methods say why:
+
+- A candidate needs at least three ALT reads and an allele fraction of at least 0.08 for SNVs and INDELs, so variants at
+  the much lower allele fractions typical of mosaicism in normal tissue are not evaluated.
+- The training positives are tumor variants, mostly clonal: the somatic SNV training tensors of the single-sample
+  models have a median allele fraction of 0.53–0.54 (HG008T) and 0.46–0.51 (COLO829T), and only 0.4–1.2% (HG008T) and
+  6.5–7.3% (COLO829T) lie below 0.20.
+- The classifier is trained to separate a tumor's somatic variants from the germline variants and sequencing errors of
+  the same sample.
+
+Validating on an independently characterised mosaicism dataset such as the SMaHT tissues would need a low-allele-fraction
+candidate configuration, new training labels and new models. We describe this in the Discussion as future work rather
+than claim it.
+
+Within the cancer scope we extend the validation beyond HG008T and COLO829T to further cancer cell lines (R1.7,
+R1.m1) [待补: the lines with final results], and the HapMap mixture, whose positives are germline alleles of other individuals, is no longer used as evidence of
+somatic performance (R1.5).
+
+### R3.9 Model stability and statistical uncertainty
+
+**Comment（要点）。**
+
+- 结果都是点估计；用多 seed 重训、基因组区间的 block bootstrap 置信区间或染色体间方差评估稳定性。
+- 特别是：多 seed 重训，报告 held-out 染色体和独立 HG008T benchmark 上 precision / recall / F1 的分布。
+- 用染色体或 block 级重抽样给 Pansoma 与比较器之间差值的置信区间。
+- 报告对固定 0.5 阈值的敏感性。
+
+**Response.**
+
+We agree that single point estimates are not enough, and we now report uncertainty for every headline number.
+
+1. *Repeated training.* Training is deterministic for a given seed and dataset (two models retrained with the same seed reproduced their chr1 calls exactly), and inference is stable across hardware: re-running 30 in-sample checkpoints on another cluster reproduced their chr1 F1 after population filtering within 0.002. The variance we report therefore comes from the seed, which also redraws the validation blocks. Each headline model is retrained with several seeds [待补: number of seeds], and we report the mean and range of precision, recall and F1 on chr1 and on held-out tumors [待补]. HG008T held out from training replaces the original COLO829T-to-HG008T benchmark; a first single-seed test on the HPRC v2.1 graph (d46 filter), with models that still standardised base and mapping qualities by the training tumor's statistics, loses 0.046–0.211 F1 against HG008T's own models (R1.7).
+
+2. *Block bootstrap.* 95% intervals come from 2,000 resamples of the 1-Mb blocks of chr1 over rtg's true-positive, false-positive and false-negative records; a paired difference uses the same resampled blocks for both members. The test sets are small (697 somatic SNVs on HG008T chr1, 131 somatic INDELs on COLO829T chr1): SNV F1 intervals are 0.033–0.074 wide on the HPRC graphs and up to 0.341 on the GRCh38-only graph, whose false positives cluster in a few blocks; 5-Mb blocks widen them by a median factor of 1.16. Paired intervals are much narrower. Every HPRC − GRCh38-only SNV difference scored so far excludes zero (nine pairs; R3.1), every cross-tumor SNV loss does, and the two HPRC graphs differ by only 0.015–0.021 on HG008T, with intervals that just exclude zero. Graph-coordinate calls lie outside rtg and these intervals (R3.4). Intervals for the differences to each comparator follow once they are re-scored [待补].
+
+3. *Operating point.* The fixed 0.5 threshold is no longer used. PASS is the recall-0.9 validation threshold (90% somatic recall on the validation blocks), never tuned on the test chromosome. For SNVs it lands within 0.002–0.043 F1 of the test-tuned best F1 (upper bound) in all twelve in-sample HPRC models; across tumors it transfers less well (the COLO829T Illumina model reaches recall 0.157 on HCC1395 at its own threshold, while its curve peaks at F1 0.810; R1.7). For INDELs on long reads it falls far short of the test-tuned best F1; the validation best-F1 threshold instead raises long-read HG008T INDEL F1 by 0.101–0.137 (paired intervals exclude zero) but lowers it on Illumina and leaves only 0–46 calls on COLO829T (R3.10). We therefore show full curves for every model, report test-tuned best F1 only as a labelled upper bound, and give metrics at validation recall 0.95 and at argmax [待补].
+
+### R3.10 Low-VAF and INDEL claims
+
+**Comment（要点）。**
+
+- HapMap 的低 VAF 结果要加限定：那是 germline 细胞系，不是 somatic lineage。
+- SNV 和 INDEL 分开报告。Pansoma 的优势在 SNV；INDEL 准确度一般，在部分 ONT 设置下还低于 ClairS-TO。整体结论要收窄。
+- 用真正的低 VAF somatic benchmark，或者对已验证 somatic 变异做 in-silico dilution（COLO829T 或 HG008T），来补充 HapMap。
+- INDEL 按 insertion / deletion、长度、序列 context（homopolymer、tandem repeat）和平台分层，好把低 VAF 生物学、平台错误模式和 INDEL 类别区分开。
+
+**Response.**
+
+*Low VAF.* We agree: the HapMap mixture, whose positives are germline alleles of other individuals, is no longer a main benchmark (R1.5). It is replaced by in-silico dilutions of COLO829T, whose somatic variants are validated, at 75, 50 and 25% purity on three platforms (R2.4). On Fiber-seq, one model gives SNV F1 0.665–0.779 across purities and SNV recall 0.779–0.899 at truth allele fractions of 0.1–0.2, 0.212–0.420 at 0.05–0.1 and zero below 0.05, where no candidate is built. The Illumina and ONT dilutions are reported only after removing a base-quality cue that separates their tumor and normal reads (R1.5) [待补].
+
+*SNVs and INDELs are reported separately* throughout, and any claimed advantage is limited to SNVs where the re-scored comparators support it. Below: chr1, HPRC v1.1 graph (d9 filter) unless stated, benchmark regions, after population filtering, same-tumor models (graph-coordinate calls: R3.4).
+
+- SNV F1 at the recall-0.9 validation threshold is 0.585 / 0.621 / 0.596 on HG008T (Illumina / PacBio / ONT) and 0.778 / 0.781 / 0.706 on COLO829T (Illumina / Fiber-seq / ONT).
+- INDEL F1 is far lower: 0.241 / 0.089 / 0.015 and 0.115 / 0.016 / 0.003 at that threshold, and 0.264 / 0.260 / 0.140 and 0.195 / 0.120 / 0.071 as test-tuned best F1 (upper bound). At the validation best-F1 threshold it is 0.216 / 0.226 / 0.116 on HG008T; on COLO829T (v2.1 models) that threshold passes only 5–46 calls [待补: COLO829T v1.1].
+- ClairS-TO and DeepSomatic-TO are re-scored under the same protocol (R3.m2) [待补: numbers]; we state every setting where ClairS-TO is better, including ONT INDELs.
+
+*INDEL stratification.* A Supplementary Table stratifies INDEL performance by insertion or deletion, length (1, 2–4, 5–10, > 10 bp), repeat context and platform, for every Pansoma model and both comparators [待补: comparators]:
+
+- *Classes.* On HG008T chr1, 74.1% of truth INDELs lie in homopolymers of ≥ 7 bp and 11.1% in STRs. Population filtering removes 413 of the 635, capping recall at 0.350 for any caller using it (COLO829T: 0.382; R1.6); of the truth INDELs it keeps, 64.0–71.6% are called on every reference. On the HPRC graphs recall is lower for insertions than deletions (0.20–0.23 against 0.26–0.30), lowest for 2–4-bp changes (0.05–0.08) and near zero in STRs (0.00–0.04), where filtering removes most truth (54 of 65 on HG008T).
+- *Platform error modes* (HG008T). On ONT, 15,862 of 17,253 false INDEL calls lie in homopolymers of ≥ 7 bp, where only 92 of 15,954 calls are true; at the validation best-F1 threshold, precision there rises to 0.25 (ONT) and 0.40 (PacBio). On Illumina, homopolymer precision (0.25) is close to that outside repeats (0.31).
+- *Allele fraction.* In the Fiber-seq dilutions, test-tuned best INDEL F1 is 0.047–0.073 at every purity (7–17 true calls), too few to resolve a trend.
+
+INDEL accuracy is thus limited by overlap with population alleles, long-read homopolymer errors and, on long reads, the threshold, rather than by allele fraction.
+
+### R3.m1 Parameter discrepancies between Methods and Supplement
+
+**Comment（要点）。**
+
+- 主 Methods（AF > 10 %、2 条 supporting reads、排除 MAPQ ≤ 5、80 epochs）和 Supplementary Methods（AF ≥ 0.08、≥ 3 个 ALT
+  observation、mean ALT BQ ≥ 10、MAPQ ≥ 10、INDEL ≤ 50 bp、80–120 epochs）不一致。
+- 上游（candidate）和下游（VCF、过滤、评估）步骤写得比网络部分简略得多。
+
+**Response.**
+
+We agree. One parameter table (Supplementary Table [待补]) now serves the main and Supplementary Methods, and every value is recorded in each run's manifest and checkpoint; re-running prediction and evaluation of 30 in-sample checkpoints on a second cluster reproduces the reported chr1 F1 within 0.002 (R3.9). Where the texts disagreed, the values below were used for every reported result; the others (including 80–120 epochs) are superseded. "MAPQ ≤ 5" and "MAPQ ≥ 10" were two different steps, now both stated:
+
+- *Alignment:* vg Giraffe 1.66 for the GRCh38-only graph and, on HG008T, the HPRC v1.1 graph (d9 filter); on COLO829T v1.1, 1.64–1.66 (Fiber-seq, ONT) and ≤ 1.62 (Illumina), dated from the alignment files; 1.77 for the HPRC v2.1 graph (d46 filter).
+- *Node selection:* alignments with MAPQ > 5; a node is a target when more than 5% of its alignments carry an edit.
+- *Candidates:* reads with MAPQ ≤ 10 are dropped; at least 3 ALT reads, each ALT observation with base quality ≥ 10 (per observation, not a mean); allele fraction ≥ 0.08 for SNVs and INDELs; INDELs up to 50 bp; at most 800 reads per node (deterministic subsampling).
+- *Tensors:* 8 channels × 200 rows × 101 columns (R1.m2).
+- *Training:* chromosomes 2–22, 5% of their ~1-Mb blocks held out for validation; chromosome 1 is the test chromosome. SNV: 50.4 M-parameter ConvNeXt, 20 epochs, class weights pow 0.75. INDEL: 8.7 M parameters, 12 epochs, square-root class weights. Both: learning rate 1e-4, batch 1,024 per GPU. The table lists the GPU count of every model and the deviations of eight HPRC v1.1 models [待补: matched reruns]. The checkpoint is the epoch with the best thresholded validation somatic F1.
+- *Normalisation:* base and mapping quality z-scored with the training statistics in the models reported so far, per dataset in newer models (now the default; R1.7); the haplotype-count channel always with the training statistics. [待补: the setting of each final model]
+- *Calls:* PASS at the recall-0.9 validation threshold; for INDELs we also report the validation best-F1 threshold (R3.10) [待补: which of the two is the INDEL default]. An optional off-reference rescue calls SNVs on off-reference nodes by argmax after their path counts in the 21 central columns are raised to the all-haplotype code; we report every SNV result with and without the rescue (R3.4).
+- *Population filtering resources (R2.6):* exact-allele matches. SNVs: gnomAD or CoLoRSdb at AF ≥ 1e-4, dbSNP records not flagged somatic, the 1000 Genomes panel. INDELs: gnomAD or CoLoRSdb at AF ≥ 0.01 in homopolymers of ≥ 7 bp, else ≥ 0.001.
+- *Evaluation:* rtg vcfeval against each truth set in its benchmark regions, and on the whole chromosome. Graph-coordinate calls go to a separate VCF that vcfeval does not score; a complete-output metric counts them as false positives (R3.4).
+
+The Methods now describe these upstream and downstream steps in the same detail as the network.
+
+### R3.m2 Comparator setup
+
+**Comment（要点）。**
+
+- 像描述 Pansoma 一样详细地记录比较器：软件版本、aligner 和版本、预训练 checkpoint、确切的 tumor-only 配置、PASS / filter 标准、参考资源、population / PoN 资源、命令行。
+- Pansoma 的主要优势是 precision，而 precision 对过滤配置很敏感。
+
+**Response.**
+
+We agree. A new Supplementary Table documents both comparators at the level of detail given for Pansoma: software version, model checkpoint, tumor-only configuration, input BAM with its aligner and version, reference, population and panel-of-normals resources, PASS criteria and exact command lines [待补: values for each call set reported].
+
+*Software and models.* DeepSomatic [待补: version] in tumor-only mode (`--model_type` WGS_TUMOR_ONLY, PACBIO_TUMOR_ONLY or ONT_TUMOR_ONLY) and ClairS-TO [待补: version] with its platform models (Illumina `ilmn`, PacBio `hifi_revio`, ONT `ont_r10_dorado_sup_5khz` [待补: `ss` or `ssrs`]). ClairS-TO has no model for the dorado SUP v5 basecalls of the HG008T ONT data [待补: the model used].
+
+*Population resources and PASS criteria.* DeepSomatic tumor-only uses a population allele-frequency input channel (DeepVariant 1000 Genomes calls for Illumina, CoLoRSdb for long reads, AF > 0.05); its panel-of-normals filter applies only with `--use_default_pon_filtering=true` [待补: whether set]. ClairS-TO tags non-somatic variants with four resources by default: gnomAD (AF ≥ 0.001), dbSNP 138 non-somatic sites, the GATK 1000 Genomes panel of normals and CoLoRSdb (AF ≥ 0.001), matching the allele for gnomAD and dbSNP and only the position for the other two. Our population filtering resources are the same four source files, with exact-allele matching throughout (R2.6). The two rules differ mainly for INDELs: on the whole truth sets (no benchmark regions), ClairS-TO's default rule tags 87.1% of the HG008T somatic INDEL alleles, 74.0% on COLO829T and 13.8% on HCC1395, against 61.8%, 52.0% and 7.3% for ours; for SNVs they agree within about one percentage point on six truth sets.
+
+*Scoring.* The existing ClairS-TO and DeepSomatic call sets are re-scored with exactly Pansoma's protocol: the same truth, benchmark regions, chromosome and evaluation (rtg vcfeval 3.12.1, `--squash-ploidy --sample ALT,ALT`), in three settings: (1) the tool's own PASS; (2) its PASS after our population filtering; (3) all its records after our population filtering, ranked by its QUAL, as a precision–recall curve. Because precision depends on filtering, all three are reported [待补: numbers].
+
+*Training data.* Neither tool was trained on HG008; COLO829 is a ClairS-TO benchmark sample, not a training sample, and is not named in the DeepSomatic paper. DeepSomatic holds out chr1 in every model; the tumor-only models of its paper were trained on HCC1395, and from release 1.9.0 its WGS_TUMOR_ONLY model is trained on all of the paper's datasets. ClairS-TO's README states that all models exclude chr20, whereas its paper states chr1; its `ssrs` models were fine-tuned on HCC1937, HCC1954, H1437 and H2009. Pansoma's models in the main comparison are trained on chr2–22 of the same tumor; this asymmetry favours Pansoma and is stated beside every table, together with the cross-tumor results of R1.7.
+
+### R3.m3 Composition of the pangenome reference
+
+**Comment（要点）。**
+
+- Document the HPRC release and version, the included haplotypes, the allele-frequency filtering, the treatment of structural variants and the graph construction.
+- State whether benchmark individuals or their close relatives contributed to the graph.
+
+**Response.**
+
+The Methods now specify each reference.
+
+- *HPRC v1.1 graph (d9 filter; release 1).* The Minigraph-Cactus graph with GRCh38 as the reference, in the frequency-filtered form distributed by the HPRC. Nodes and edges carried by fewer than 9 of the 90 haplotypes (about 10%) are removed; the two reference paths, GRCh38 and CHM13, are exempt.
+  - The 90 haplotypes are 44 individuals × 2, plus GRCh38 and CHM13. The HPRC held out HG002, HG005 and NA19240.
+  - The 44 individuals are African 23, American 16, East Asian 4, South Asian 1 and European 0.
+- *HPRC v2.1 graph (d46 filter; release 2).* The same construction, filtered at 46 of 464 haplotypes.
+  - The 464 haplotypes are 231 individuals × 2, plus GRCh38 and CHM13. The HPRC held out HG00272.
+  - The individuals are African 70, East Asian 50, American 44, South Asian 36, European 29, and two without a population label (HG002, HG005).
+  - We used the distributed graph and rebuilt its distance and minimizer indexes with vg 1.77.
+- *GRCh38-only graph.* Built by vg autoindex (vg 1.66) from the GRCh38 no-alt analysis set that all truth sets use. Every node carries the same 17 paths, so its haplotype-count channel is constant.
+
+*Structural variants.* The graphs keep the structural variants that pass the frequency filter, and reads align along them. Pansoma's candidates, however, are limited to indels of 1–50 bp; longer events are logged and not called.
+
+*Benchmark individuals.* None of the cancer cell lines used here, nor their matched normals, is in either graph: HG008, COLO829, HCC1395, HCC1954, H1437 and H2009 are absent from both sample lists. These lines are anonymised, so we also tested for close relatives genetically. Of the germline SNVs of the HG008, COLO829 and HCC1395 normals that are rare in HPRC v1.1 (on one or two of its 89 non-reference haplotypes), no v1.1 individual carries more than 8.2%, whereas a first-degree relative would carry about half. In addition, because both graphs keep only non-reference nodes on at least 9 of 90 or 46 of 464 haplotypes, alleles private to one individual or a small family cannot enter either graph. The genetic test covers the v1.1 individuals; for v2.1 we rely on the sample list and this frequency filter.
+
+The HapMap-mixture donors are in the graphs: four of the six in v1.1 and all six in v2.1. R1.5 explains how we handle this.
+
+The HG008 donor is of European ancestry, a group absent from v1.1 and present in v2.1. After population filtering, the results on the two graphs are close (R1.2).
+
+### R3.m4 Terminology and language
+
+**Comment（要点）。**
+
+- 术语不一致，有若干语法问题。
+- "panel of normals" 对 gnomAD、dbSNP、1000G、CoLoRSdb 来说范围太宽。
+- 指出的几个具体句子要改。
+- NPU 要给出全称。
+- Pansoma 和 Pansoma-TO 混用；"Supplement Figure" 和 "Supplementary Figure" 混用。
+- 最后做一次语言编辑。
+
+**Response.**
+
+We thank the reviewer and standardised the terminology throughout.
+
+- The method is called Pansoma everywhere (not Pansoma-TO), and figures are cited as "Supplementary Figure".
+- NPU is expanded at first use in the main text and in the Supplementary Methods ([待补: full name]).
+- "Panel of normals" is no longer used as the collective name of gnomAD, dbSNP, CoLoRSdb and the GATK 1000 Genomes
+  panel (only the last is a panel of normals in the usual sense). We now call the four "population filtering resources"
+  (abbreviated PoN in figures and tables) and the step "population filtering"; each resource and its exact matching
+  rule are listed in Methods (R2.6, R3.m1).
+- Terms that recur across the paper (candidate, candidate site, off-reference node, graph-coordinate call, graph-absorbed
+  allele, and the two operating thresholds, "the recall-0.9 validation threshold" and "the validation best-F1
+  threshold") are defined once in Methods and used consistently (R2.m, item 8).
+- The quoted sentences were corrected, for example "One key challenge in calling variants on graph alignments is that
+  they differ fundamentally …", "Pansoma converts the variants …", "with the technical details described in Methods",
+  and "read pileup" in Figure 5.
+- The manuscript was edited for grammar and language by [待补: who did the language edit].

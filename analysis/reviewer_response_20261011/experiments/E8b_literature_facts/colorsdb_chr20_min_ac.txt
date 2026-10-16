@@ -1,0 +1,1 @@
+chr20_records 1234398 AC_eq_1 0 min_AC 2

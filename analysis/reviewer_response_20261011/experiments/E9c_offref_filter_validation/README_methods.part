@@ -1,0 +1,64 @@
+## Data
+
+- **Runs (available now, "legacy")**: the local d9 runs of the current recipes, chr1 test, PASS at the checkpoint's
+  validation recall-0.9 threshold, GRCh38 PoN of the run's time:
+  - SNV `{HG008,COLO829T}_{Illumina,PacBio|fiberseq,ONT}_SNV_pow075_S_lr1e4_e20` (2026-09-30 / 10-01; the RIS 7fc7396
+    SNV runs reproduce the PacBio / ONT ones exactly according to `analysis/benchmark_7fc7396_20261012/README.md`);
+  - INDEL `{HG008,COLO829T}_*_INDEL_small_nofilt` (2026-10-10: small model, sqrt, no filter, lr 4e-4; the 7fc7396 RIS
+    recipe uses lr 1e-4, which the benchmark README reports as equal under the same PoN).
+- **Runs (arriving)**: the RIS 7fc7396 models' CPU re-predictions, `pansoma_net_v2_runs/reviewer_cpu_20261013/<run>/vcf_chr1*`
+  (main session). `discover.py` lists every finished one on d9 / d46; `run_all.sh` processes them (see Status).
+- **Graphs**: HPRC v1.1 d9 and v2.1 d46: node sequences and path counts (`graph_index.sqlite`), GRCh38 reference path
+  (`grch38_path`), and an edge table built here from the GFA L lines (`build_edges.py`: d9 70,105,101 L lines,
+  d46 103,555,446; CSR over oriented node handles in `DATA/edges_{d9,d46}`).
+- **Population haplotypes**: `hprc-v1.1-mc-grch38.raw.vcf.gz` (vg deconstruct of the full, not frequency-filtered
+  HPRC v1.1 graph: top-level sites, 44 diploid samples + CHM13 = 89 haplotypes, every allele kept). Indexed here through
+  a symlink (`DATA/ref/`, tabix). The HPRC v2.1 full-graph VCF is not local (see "Needs").
+- **Assemblies**: HG008-T v3.2 (`HG008T_v3.2.fasta.gz`, both haplotypes), HG008-N v6.2
+  (`HG008N_curatedv6_250714_bothhaps_polished6.2.fasta.gz`); COLO829BL verkko 2.1 hapX / hapY (ragtag GRCh38 scaffolds,
+  primary + unlocalized; `/scratch/qfu/COLO829BL_DSA/ragtag_hg38`, read only). No COLO829T tumor assembly is local.
+- **Gold set**: the 450 HG008-T somatic events that the HG008-N v6.2 assembly frame puts on a non-reference d9 node,
+  233 with an exact HG008T_Illumina tensor key (`pansoma_net_v2_runs/assembly_offref_20260929/offref_somatic.tsv`);
+  for d46 the same events re-aligned to d46 (`gold_graph.py`, job `gold_d46.sh`).
+
+## Method
+
+Per run (`e9c_run.py VCFDIR NAME`), rows = the unplaced PASS calls (a random sample of 3,000 when there are more),
+150 random placed controls of each kind (rtg TP after the PoN = somatic truth; rtg FP after the PoN; PASS calls the
+GRCh38 PoN tags = population alleles), and the gold keys on chr1.
+
+1. **Contexts from the tensor** (node-forward, up to 50 bases each side): `alt_read` = majority read bases of the A1
+   rows (the sample's ALT haplotype); `alt_graph` = graph bases of the A1 rows' path (channel 5) with the site allele
+   (channel 2); `ref_graph` = the graph path with REF; `ref_read` = majority read bases of the REF rows. The A1 / REF
+   row blocks and the site columns are read from the tensor itself (channel 2 is non-zero exactly over the site
+   columns); this equals the `variant_summary` layout on 783 of 783 checked tensors (383 SNV, 400 INDEL).
+2. **Bubble locus**: from the call's node, a bp-weighted search along the graph edges in each direction, not through
+   GRCh38 nodes, to the nearest node with one GRCh38 visit; the GRCh38 interval between the left and right anchors is
+   the locus (`bubble`; one side only `one_side`; span > 100 kb `wide`, not used).
+3. **Graph PoN (E9c)**. The ALT query = the event plus `f` bases each side, from `alt_graph` and from `alt_read`;
+   `f` = 5, 10, 15 (11 / 21 / 31-mers for an SNV) or adaptive (10, widened by 5 up to 40 while the query occurs in the
+   REF contexts, i.e. inside a repeat). The call is a **population allele** when
+   - *in-graph*: a walk of the run's own graph within the call's neighbourhood (all nodes within the anchor distance
+     plus the query length) spells the query (every d9 / d46 node and edge is carried by >= 10 % of the HPRC
+     haplotypes), or
+   - *HPRC haplotype*: GRCh38 or at least `min AC` of the 89 HPRC v1.1 haplotypes spell it inside the bubble interval
+     +- 100 bp (haplotype sequences = GRCh38 with each haplotype's top-level alleles applied; phased GTs).
+
+   **Main rule, fixed before looking at chr1: adaptive flank, min AC 1, graph or read context.** The grid of flanks and
+   AC thresholds is reported for calibration (gold set on chr2-22) and on every group.
+4. **Assembly check (E9d, `e9d_asm.py`)**: every context (>= 25 bp) mapped with `minimap2 -cx sr --cs --secondary=yes -N 50`
+   to each assembly. A hit covers >= 90 % of the context, has no indel, at most one mismatch, and no mismatch within one
+   base of the event. Primary query = `alt_read` (>= 40 bp, else `alt_graph`). Classes: **germline** (ALT in the normal
+   assembly), **tumor-only** (ALT in HG008-T, not in HG008-N), **unsupported** (ALT in neither, REF context found),
+   **unverifiable** (neither ALT nor REF context found); multi-copy flag when a context hits > 2 loci in one assembly.
+   COLO829T: germline / not in normal / unverifiable (no tumor assembly).
+5. **Categories and corrected precision (E9e part)**: exclusive order population > germline > tumor-only >
+   unverifiable > unsupported. Precision on chr1 after the GRCh38 PoN at the PASS threshold, with TP / FP from the
+   run's own rtg report (`eval_nobed`, `eval_bed`) and U unplaced PASS calls:
+   `placed` TP/(TP+FP); `all FP` TP/(TP+FP+U); `graph PoN` TP/(TP+FP+U_untagged); `+tumor-only TP`
+   (TP+S)/(TP+FP+U_untagged) with S the tumor-only unplaced calls (an upper bound: they are not truth-matched).
+   Recall stays rtg's. In the BED, an unplaced call counts when its bubble interval lies inside the BED (no interval:
+   counted, conservative).
+6. **Cross-platform**: the same `node:offset:allele` key PASS among the unplaced calls of another platform's run of the
+   same graph, sample and kind.
+7. **Repeat context (R1.3)**: homopolymer >= 7 at the site, else a 2-6 bp unit tandem repeat of >= 3 copies, else other.

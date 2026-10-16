@@ -1,0 +1,43 @@
+kind	name	scan (groups, alignments, tags)	PARAMS_JSON md5
+GAM	COLO829T_Illumina_d9	scanned 3000 groups, 2374254 alignments; tags {'GAM': 3000}	none
+GAM	COLO829T_fiberseq_d9	scanned 100 groups, 49049 alignments; tags {'GAM': 99, 'PARAMS_JSON': 1}	fd3a08426553
+GAM	COLO829T_ONT_d9	scanned 100 groups, 49049 alignments; tags {'GAM': 99, 'PARAMS_JSON': 1}	cf46e333ee44
+GAM	COLO829BL_Illumina_d9_2025-06	scanned 2000 groups, 1550900 alignments; tags {'GAM': 2000}	none
+GAM	SEQC2_SRR7890824_d9_2025-06	scanned 2000 groups, 1600800 alignments; tags {'GAM': 2000}	none
+GAM	HG008T_Illumina_d9_vg1.66.0	scanned 100 groups, 79038 alignments; tags {'GAM': 99, 'PARAMS_JSON': 1}	d261df879418
+GAM	HG008T_PacBio_d9_vg1.66.0	scanned 100 groups, 49049 alignments; tags {'GAM': 99, 'PARAMS_JSON': 1}	fd3a08426553
+GAM	HG008T_ONT_d9_vg1.66.0	scanned 100 groups, 49049 alignments; tags {'GAM': 99, 'PARAMS_JSON': 1}	cf46e333ee44
+GAM	COLO829_mix_ONT_p25_vg1.66.0	scanned 100 groups, 49049 alignments; tags {'GAM': 99, 'PARAMS_JSON': 1}	cf46e333ee44
+test	v1.50.0 short	scanned 5 groups, 4000 alignments; tags {'GAM': 5}	none
+test	v1.53.0 short	scanned 5 groups, 4000 alignments; tags {'GAM': 5}	none
+test	v1.55.0 short	scanned 5 groups, 4000 alignments; tags {'GAM': 5}	none
+test	v1.56.0 short	scanned 5 groups, 4000 alignments; tags {'GAM': 5}	none
+test	v1.57.0 short	scanned 5 groups, 4000 alignments; tags {'GAM': 5}	none
+test	v1.58.0 short	scanned 5 groups, 4000 alignments; tags {'GAM': 5}	none
+test	v1.59.0 short	scanned 5 groups, 4000 alignments; tags {'GAM': 5}	none
+test	v1.60.0 short	scanned 5 groups, 4000 alignments; tags {'GAM': 5}	none
+test	v1.61.0 short	scanned 5 groups, 4000 alignments; tags {'GAM': 5}	none
+test	v1.62.0 short	scanned 5 groups, 4000 alignments; tags {'GAM': 5}	none
+test	v1.63.0 short	scanned 7 groups, 4000 alignments; tags {'GAM': 6, 'PARAMS_JSON': 1}	5ab31e4811c2
+test	v1.63.0 short_oldmin	scanned 7 groups, 4000 alignments; tags {'GAM': 6, 'PARAMS_JSON': 1}	5ab31e4811c2
+test	v1.63.0 hifi	scanned 4 groups, 30 alignments; tags {'GAM': 3, 'PARAMS_JSON': 1}	6d53a38b81ff
+test	v1.63.0 r10	scanned 4 groups, 30 alignments; tags {'GAM': 3, 'PARAMS_JSON': 1}	0bf943141743
+test	v1.63.1 short	scanned 7 groups, 4000 alignments; tags {'GAM': 6, 'PARAMS_JSON': 1}	5ab31e4811c2
+test	v1.63.1 short_oldmin	scanned 7 groups, 4000 alignments; tags {'GAM': 6, 'PARAMS_JSON': 1}	5ab31e4811c2
+test	v1.63.1 hifi	scanned 4 groups, 30 alignments; tags {'GAM': 3, 'PARAMS_JSON': 1}	6d53a38b81ff
+test	v1.63.1 r10	scanned 4 groups, 30 alignments; tags {'GAM': 3, 'PARAMS_JSON': 1}	0bf943141743
+test	v1.64.0 short	scanned 7 groups, 4000 alignments; tags {'GAM': 6, 'PARAMS_JSON': 1}	8c9d0b579965
+test	v1.64.0 hifi	scanned 4 groups, 30 alignments; tags {'GAM': 3, 'PARAMS_JSON': 1}	fd3a08426553
+test	v1.64.0 r10	scanned 4 groups, 30 alignments; tags {'GAM': 3, 'PARAMS_JSON': 1}	cf46e333ee44
+test	v1.64.1 short	scanned 7 groups, 4000 alignments; tags {'GAM': 6, 'PARAMS_JSON': 1}	8c9d0b579965
+test	v1.64.1 hifi	scanned 4 groups, 30 alignments; tags {'GAM': 3, 'PARAMS_JSON': 1}	fd3a08426553
+test	v1.64.1 r10	scanned 4 groups, 30 alignments; tags {'GAM': 3, 'PARAMS_JSON': 1}	cf46e333ee44
+test	v1.65.0 short	scanned 7 groups, 4000 alignments; tags {'GAM': 6, 'PARAMS_JSON': 1}	8c9d0b579965
+test	v1.65.0 hifi	scanned 4 groups, 30 alignments; tags {'GAM': 3, 'PARAMS_JSON': 1}	fd3a08426553
+test	v1.65.0 r10	scanned 4 groups, 30 alignments; tags {'GAM': 3, 'PARAMS_JSON': 1}	cf46e333ee44
+test	v1.66.0 short	scanned 7 groups, 4000 alignments; tags {'GAM': 6, 'PARAMS_JSON': 1}	d261df879418
+test	v1.66.0 hifi	scanned 4 groups, 30 alignments; tags {'GAM': 3, 'PARAMS_JSON': 1}	fd3a08426553
+test	v1.66.0 r10	scanned 4 groups, 30 alignments; tags {'GAM': 3, 'PARAMS_JSON': 1}	cf46e333ee44
+test	v1.77.0 short	scanned 7 groups, 4000 alignments; tags {'GAM': 6, 'PARAMS_JSON': 1}	9f4544711802
+test	v1.77.0 hifi	scanned 4 groups, 30 alignments; tags {'GAM': 3, 'PARAMS_JSON': 1}	4d566ad1183c
+test	v1.77.0 r10	scanned 4 groups, 30 alignments; tags {'GAM': 3, 'PARAMS_JSON': 1}	e09e7901606e

@@ -1,0 +1,6201 @@
+{
+ "created": "2026-10-15 19:51",
+ "per_truth": "/scratch/jshen/data/reviewer_experiments_20261013/E1.6_recall_funnel/per_truth.tsv.gz",
+ "runs": {
+  "COLO829_Illumina_SNV_linear_7fc7396__vcf_chr1": {
+   "meta": {
+    "run": "COLO829_Illumina_SNV_linear_7fc7396",
+    "vcf_dir": "vcf_chr1",
+    "group": "insample",
+    "set": "COLO829T_Illumina_linear",
+    "sample": "COLO829T",
+    "platform": "Illumina",
+    "arm": "linear",
+    "kind": "SNV",
+    "threshold": 0.08059561997652054,
+    "predictions": {
+     "predictions": 371760,
+     "excluded": 0,
+     "path": "/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/COLO829_Illumina_SNV_linear_7fc7396/test_chr1/COLO829T_Illumina_linear.tensors.SNV.predictions.ndjson.gz"
+    },
+    "check": {
+     "pon_tp": 1423,
+     "pon_fn": 1020,
+     "raw_tp": 1464,
+     "raw_fn": 979,
+     "stage4": 1423,
+     "stage123": 1020,
+     "stage3": 41,
+     "stage12": 979,
+     "exact": true
+    },
+    "truth_pon_tags": {
+     "records": 2443,
+     "tagged": 84,
+     "tagged_pass": 84,
+     "PoN1_gnomAD": 62,
+     "PoN2_dbSNP": 40,
+     "PoN3_1000G": 2,
+     "PoN4_CoLoRSdb": 27
+    },
+    "unplaced_pass": 0
+   },
+   "funnel": {
+    "n": 2443,
+    "no_tensor": 407,
+    "below_threshold": 572,
+    "pon": 41,
+    "called": 1423
+   },
+   "reasons_stage1": {
+    "af_floor": 276,
+    "no_candidate": 86,
+    "min_variants": 45
+   },
+   "reasons_stage2": {
+    "below_threshold": 572
+   },
+   "stage1_partial_tensor": 0,
+   "stage1_partial_pass": 0,
+   "truth_pon_tagged": {
+    "no_tensor": 11,
+    "below_threshold": 32,
+    "pon": 41,
+    "called": 0
+   },
+   "stage3_call_pon_tagged": 41,
+   "stage4_without_exact_tensor": 0,
+   "stage3_without_exact_tensor": 0,
+   "vaf_sources": {
+    "tensor": 2036,
+    "build_min_af": 276,
+    "truth_vcf": 131
+   },
+   "by_kind": {
+    "SNV": {
+     "n": 2443,
+     "no_tensor": 407,
+     "below_threshold": 572,
+     "pon": 41,
+     "called": 1423
+    }
+   },
+   "by_vaf": {
+    "0-0.08": {
+     "n": 402,
+     "no_tensor": 402,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    },
+    "0.08-0.2": {
+     "n": 196,
+     "no_tensor": 3,
+     "below_threshold": 7,
+     "pon": 6,
+     "called": 180
+    },
+    "0.2-0.4": {
+     "n": 103,
+     "no_tensor": 0,
+     "below_threshold": 18,
+     "pon": 1,
+     "called": 84
+    },
+    ">0.4": {
+     "n": 1742,
+     "no_tensor": 2,
+     "below_threshold": 547,
+     "pon": 34,
+     "called": 1159
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 31,
+     "no_tensor": 5,
+     "below_threshold": 14,
+     "pon": 3,
+     "called": 9
+    },
+    "STR": {
+     "n": 127,
+     "no_tensor": 24,
+     "below_threshold": 33,
+     "pon": 2,
+     "called": 68
+    },
+    "other": {
+     "n": 2285,
+     "no_tensor": 378,
+     "below_threshold": 525,
+     "pon": 36,
+     "called": 1346
+    }
+   },
+   "by_vcf_vaf": {
+    "0-0.08": {
+     "n": 405,
+     "no_tensor": 369,
+     "below_threshold": 8,
+     "pon": 1,
+     "called": 27
+    },
+    "0.08-0.2": {
+     "n": 186,
+     "no_tensor": 34,
+     "below_threshold": 3,
+     "pon": 3,
+     "called": 146
+    },
+    "0.2-0.4": {
+     "n": 107,
+     "no_tensor": 2,
+     "below_threshold": 11,
+     "pon": 4,
+     "called": 90
+    },
+    ">0.4": {
+     "n": 1745,
+     "no_tensor": 2,
+     "below_threshold": 550,
+     "pon": 33,
+     "called": 1160
+    }
+   },
+   "untagged_funnel": {
+    "n": 2359,
+    "no_tensor": 396,
+    "below_threshold": 540,
+    "pon": 0,
+    "called": 1423
+   }
+  },
+  "COLO829_Illumina_SNV_d46_7fc7396__vcf_chr1": {
+   "meta": {
+    "run": "COLO829_Illumina_SNV_d46_7fc7396",
+    "vcf_dir": "vcf_chr1",
+    "group": "insample",
+    "set": "COLO829T_Illumina_d46",
+    "sample": "COLO829T",
+    "platform": "Illumina",
+    "arm": "d46",
+    "kind": "SNV",
+    "threshold": 0.639503002166748,
+    "predictions": {
+     "predictions": 154348,
+     "excluded": 0,
+     "path": "/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/COLO829_Illumina_SNV_d46_7fc7396/test_chr1/COLO829T_Illumina_d46.tensors.SNV.predictions.ndjson.gz"
+    },
+    "check": {
+     "pon_tp": 1745,
+     "pon_fn": 698,
+     "raw_tp": 1784,
+     "raw_fn": 659,
+     "stage4": 1745,
+     "stage123": 698,
+     "stage3": 39,
+     "stage12": 659,
+     "exact": true
+    },
+    "truth_pon_tags": {
+     "records": 2443,
+     "tagged": 84,
+     "tagged_pass": 84,
+     "PoN1_gnomAD": 62,
+     "PoN2_dbSNP": 40,
+     "PoN3_1000G": 2,
+     "PoN4_CoLoRSdb": 27
+    },
+    "unplaced_pass": 516
+   },
+   "funnel": {
+    "n": 2443,
+    "no_tensor": 440,
+    "below_threshold": 219,
+    "pon": 39,
+    "called": 1745
+   },
+   "reasons_stage1": {
+    "no_candidate": 66,
+    "af_floor": 291,
+    "min_variants": 80,
+    "absorbed": 3
+   },
+   "reasons_stage2": {
+    "below_threshold": 219
+   },
+   "stage1_partial_tensor": 3,
+   "stage1_partial_pass": 1,
+   "truth_pon_tagged": {
+    "no_tensor": 23,
+    "below_threshold": 22,
+    "pon": 39,
+    "called": 0
+   },
+   "stage3_call_pon_tagged": 39,
+   "stage4_without_exact_tensor": 0,
+   "stage3_without_exact_tensor": 0,
+   "vaf_sources": {
+    "tensor": 2003,
+    "other_arm": 31,
+    "truth_vcf": 118,
+    "build_min_af": 291
+   },
+   "by_kind": {
+    "SNV": {
+     "n": 2443,
+     "no_tensor": 440,
+     "below_threshold": 219,
+     "pon": 39,
+     "called": 1745
+    }
+   },
+   "by_vaf": {
+    "0-0.08": {
+     "n": 401,
+     "no_tensor": 401,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    },
+    "0.08-0.2": {
+     "n": 194,
+     "no_tensor": 9,
+     "below_threshold": 7,
+     "pon": 4,
+     "called": 174
+    },
+    "0.2-0.4": {
+     "n": 101,
+     "no_tensor": 7,
+     "below_threshold": 16,
+     "pon": 1,
+     "called": 77
+    },
+    ">0.4": {
+     "n": 1747,
+     "no_tensor": 23,
+     "below_threshold": 196,
+     "pon": 34,
+     "called": 1494
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 31,
+     "no_tensor": 7,
+     "below_threshold": 9,
+     "pon": 2,
+     "called": 13
+    },
+    "STR": {
+     "n": 127,
+     "no_tensor": 29,
+     "below_threshold": 23,
+     "pon": 1,
+     "called": 74
+    },
+    "other": {
+     "n": 2285,
+     "no_tensor": 404,
+     "below_threshold": 187,
+     "pon": 36,
+     "called": 1658
+    }
+   },
+   "by_vcf_vaf": {
+    "0-0.08": {
+     "n": 405,
+     "no_tensor": 377,
+     "below_threshold": 1,
+     "pon": 1,
+     "called": 26
+    },
+    "0.08-0.2": {
+     "n": 186,
+     "no_tensor": 38,
+     "below_threshold": 5,
+     "pon": 2,
+     "called": 141
+    },
+    "0.2-0.4": {
+     "n": 107,
+     "no_tensor": 3,
+     "below_threshold": 15,
+     "pon": 3,
+     "called": 86
+    },
+    ">0.4": {
+     "n": 1745,
+     "no_tensor": 22,
+     "below_threshold": 198,
+     "pon": 33,
+     "called": 1492
+    }
+   },
+   "untagged_funnel": {
+    "n": 2359,
+    "no_tensor": 417,
+    "below_threshold": 197,
+    "pon": 0,
+    "called": 1745
+   }
+  },
+  "COLO829_fiberseq_SNV_linear_7fc7396__vcf_chr1": {
+   "meta": {
+    "run": "COLO829_fiberseq_SNV_linear_7fc7396",
+    "vcf_dir": "vcf_chr1",
+    "group": "insample",
+    "set": "COLO829T_fiberseq_linear",
+    "sample": "COLO829T",
+    "platform": "fiberseq",
+    "arm": "linear",
+    "kind": "SNV",
+    "threshold": 0.0851980671286583,
+    "predictions": {
+     "predictions": 276492,
+     "excluded": 0,
+     "path": "/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/COLO829_fiberseq_SNV_linear_7fc7396/test_chr1/COLO829T_fiberseq_linear.tensors.SNV.predictions.ndjson.gz"
+    },
+    "check": {
+     "pon_tp": 1525,
+     "pon_fn": 918,
+     "raw_tp": 1568,
+     "raw_fn": 875,
+     "stage4": 1525,
+     "stage123": 918,
+     "stage3": 43,
+     "stage12": 875,
+     "exact": true
+    },
+    "truth_pon_tags": {
+     "records": 2443,
+     "tagged": 84,
+     "tagged_pass": 84,
+     "PoN1_gnomAD": 62,
+     "PoN2_dbSNP": 40,
+     "PoN3_1000G": 2,
+     "PoN4_CoLoRSdb": 27
+    },
+    "unplaced_pass": 0
+   },
+   "funnel": {
+    "n": 2443,
+    "no_tensor": 427,
+    "below_threshold": 448,
+    "pon": 43,
+    "called": 1525
+   },
+   "reasons_stage1": {
+    "no_candidate": 77,
+    "af_floor": 302,
+    "min_variants": 48
+   },
+   "reasons_stage2": {
+    "below_threshold": 448
+   },
+   "stage1_partial_tensor": 0,
+   "stage1_partial_pass": 0,
+   "truth_pon_tagged": {
+    "no_tensor": 21,
+    "below_threshold": 20,
+    "pon": 43,
+    "called": 0
+   },
+   "stage3_call_pon_tagged": 43,
+   "stage4_without_exact_tensor": 0,
+   "stage3_without_exact_tensor": 0,
+   "vaf_sources": {
+    "tensor": 2016,
+    "truth_vcf": 123,
+    "build_min_af": 302,
+    "other_arm": 2
+   },
+   "by_kind": {
+    "SNV": {
+     "n": 2443,
+     "no_tensor": 427,
+     "below_threshold": 448,
+     "pon": 43,
+     "called": 1525
+    }
+   },
+   "by_vaf": {
+    "0-0.08": {
+     "n": 413,
+     "no_tensor": 413,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    },
+    "0.08-0.2": {
+     "n": 188,
+     "no_tensor": 4,
+     "below_threshold": 3,
+     "pon": 4,
+     "called": 177
+    },
+    "0.2-0.4": {
+     "n": 102,
+     "no_tensor": 4,
+     "below_threshold": 11,
+     "pon": 3,
+     "called": 84
+    },
+    ">0.4": {
+     "n": 1740,
+     "no_tensor": 6,
+     "below_threshold": 434,
+     "pon": 36,
+     "called": 1264
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 31,
+     "no_tensor": 7,
+     "below_threshold": 15,
+     "pon": 0,
+     "called": 9
+    },
+    "STR": {
+     "n": 127,
+     "no_tensor": 29,
+     "below_threshold": 28,
+     "pon": 2,
+     "called": 68
+    },
+    "other": {
+     "n": 2285,
+     "no_tensor": 391,
+     "below_threshold": 405,
+     "pon": 41,
+     "called": 1448
+    }
+   },
+   "by_vcf_vaf": {
+    "0-0.08": {
+     "n": 411,
+     "no_tensor": 396,
+     "below_threshold": 0,
+     "pon": 1,
+     "called": 14
+    },
+    "0.08-0.2": {
+     "n": 188,
+     "no_tensor": 19,
+     "below_threshold": 2,
+     "pon": 4,
+     "called": 163
+    },
+    "0.2-0.4": {
+     "n": 102,
+     "no_tensor": 5,
+     "below_threshold": 11,
+     "pon": 2,
+     "called": 84
+    },
+    ">0.4": {
+     "n": 1742,
+     "no_tensor": 7,
+     "below_threshold": 435,
+     "pon": 36,
+     "called": 1264
+    }
+   },
+   "untagged_funnel": {
+    "n": 2359,
+    "no_tensor": 406,
+    "below_threshold": 428,
+    "pon": 0,
+    "called": 1525
+   }
+  },
+  "COLO829_fiberseq_SNV_d46_7fc7396__vcf_chr1": {
+   "meta": {
+    "run": "COLO829_fiberseq_SNV_d46_7fc7396",
+    "vcf_dir": "vcf_chr1",
+    "group": "insample",
+    "set": "COLO829T_fiberseq_d46",
+    "sample": "COLO829T",
+    "platform": "fiberseq",
+    "arm": "d46",
+    "kind": "SNV",
+    "threshold": 0.4811917543411255,
+    "predictions": {
+     "predictions": 241213,
+     "excluded": 0,
+     "path": "/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/COLO829_fiberseq_SNV_d46_7fc7396/test_chr1/COLO829T_fiberseq_d46.tensors.SNV.predictions.ndjson.gz"
+    },
+    "check": {
+     "pon_tp": 1728,
+     "pon_fn": 715,
+     "raw_tp": 1768,
+     "raw_fn": 675,
+     "stage4": 1728,
+     "stage123": 715,
+     "stage3": 40,
+     "stage12": 675,
+     "exact": true
+    },
+    "truth_pon_tags": {
+     "records": 2443,
+     "tagged": 84,
+     "tagged_pass": 84,
+     "PoN1_gnomAD": 62,
+     "PoN2_dbSNP": 40,
+     "PoN3_1000G": 2,
+     "PoN4_CoLoRSdb": 27
+    },
+    "unplaced_pass": 257
+   },
+   "funnel": {
+    "n": 2443,
+    "no_tensor": 436,
+    "below_threshold": 239,
+    "pon": 40,
+    "called": 1728
+   },
+   "reasons_stage1": {
+    "no_candidate": 50,
+    "af_floor": 321,
+    "min_variants": 62,
+    "absorbed": 3
+   },
+   "reasons_stage2": {
+    "below_threshold": 239
+   },
+   "stage1_partial_tensor": 1,
+   "stage1_partial_pass": 1,
+   "truth_pon_tagged": {
+    "no_tensor": 24,
+    "below_threshold": 20,
+    "pon": 40,
+    "called": 0
+   },
+   "stage3_call_pon_tagged": 40,
+   "stage4_without_exact_tensor": 0,
+   "stage3_without_exact_tensor": 0,
+   "vaf_sources": {
+    "tensor": 2007,
+    "truth_vcf": 103,
+    "build_min_af": 321,
+    "other_arm": 12
+   },
+   "by_kind": {
+    "SNV": {
+     "n": 2443,
+     "no_tensor": 436,
+     "below_threshold": 239,
+     "pon": 40,
+     "called": 1728
+    }
+   },
+   "by_vaf": {
+    "0-0.08": {
+     "n": 409,
+     "no_tensor": 409,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    },
+    "0.08-0.2": {
+     "n": 188,
+     "no_tensor": 9,
+     "below_threshold": 4,
+     "pon": 3,
+     "called": 172
+    },
+    "0.2-0.4": {
+     "n": 102,
+     "no_tensor": 4,
+     "below_threshold": 14,
+     "pon": 2,
+     "called": 82
+    },
+    ">0.4": {
+     "n": 1744,
+     "no_tensor": 14,
+     "below_threshold": 221,
+     "pon": 35,
+     "called": 1474
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 31,
+     "no_tensor": 8,
+     "below_threshold": 10,
+     "pon": 2,
+     "called": 11
+    },
+    "STR": {
+     "n": 127,
+     "no_tensor": 28,
+     "below_threshold": 21,
+     "pon": 1,
+     "called": 77
+    },
+    "other": {
+     "n": 2285,
+     "no_tensor": 400,
+     "below_threshold": 208,
+     "pon": 37,
+     "called": 1640
+    }
+   },
+   "by_vcf_vaf": {
+    "0-0.08": {
+     "n": 411,
+     "no_tensor": 394,
+     "below_threshold": 2,
+     "pon": 1,
+     "called": 14
+    },
+    "0.08-0.2": {
+     "n": 188,
+     "no_tensor": 22,
+     "below_threshold": 6,
+     "pon": 2,
+     "called": 158
+    },
+    "0.2-0.4": {
+     "n": 102,
+     "no_tensor": 4,
+     "below_threshold": 11,
+     "pon": 3,
+     "called": 84
+    },
+    ">0.4": {
+     "n": 1742,
+     "no_tensor": 16,
+     "below_threshold": 220,
+     "pon": 34,
+     "called": 1472
+    }
+   },
+   "untagged_funnel": {
+    "n": 2359,
+    "no_tensor": 412,
+    "below_threshold": 219,
+    "pon": 0,
+    "called": 1728
+   }
+  },
+  "COLO829_ONT_SNV_linear_7fc7396__vcf_chr1": {
+   "meta": {
+    "run": "COLO829_ONT_SNV_linear_7fc7396",
+    "vcf_dir": "vcf_chr1",
+    "group": "insample",
+    "set": "COLO829T_ONT_linear",
+    "sample": "COLO829T",
+    "platform": "ONT",
+    "arm": "linear",
+    "kind": "SNV",
+    "threshold": 0.09195131808519363,
+    "predictions": {
+     "predictions": 541098,
+     "excluded": 0,
+     "path": "/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/COLO829_ONT_SNV_linear_7fc7396/test_chr1/COLO829T_ONT_linear.tensors.SNV.predictions.ndjson.gz"
+    },
+    "check": {
+     "pon_tp": 1325,
+     "pon_fn": 1118,
+     "raw_tp": 1360,
+     "raw_fn": 1083,
+     "stage4": 1325,
+     "stage123": 1118,
+     "stage3": 35,
+     "stage12": 1083,
+     "exact": true
+    },
+    "truth_pon_tags": {
+     "records": 2443,
+     "tagged": 84,
+     "tagged_pass": 84,
+     "PoN1_gnomAD": 62,
+     "PoN2_dbSNP": 40,
+     "PoN3_1000G": 2,
+     "PoN4_CoLoRSdb": 27
+    },
+    "unplaced_pass": 0
+   },
+   "funnel": {
+    "n": 2443,
+    "no_tensor": 434,
+    "below_threshold": 649,
+    "pon": 35,
+    "called": 1325
+   },
+   "reasons_stage1": {
+    "af_floor": 229,
+    "min_variants": 160,
+    "no_candidate": 45
+   },
+   "reasons_stage2": {
+    "below_threshold": 649
+   },
+   "stage1_partial_tensor": 0,
+   "stage1_partial_pass": 0,
+   "truth_pon_tagged": {
+    "no_tensor": 22,
+    "below_threshold": 27,
+    "pon": 35,
+    "called": 0
+   },
+   "stage3_call_pon_tagged": 35,
+   "stage4_without_exact_tensor": 0,
+   "stage3_without_exact_tensor": 0,
+   "vaf_sources": {
+    "tensor": 2009,
+    "build_min_af": 229,
+    "truth_vcf": 204,
+    "other_arm": 1
+   },
+   "by_kind": {
+    "SNV": {
+     "n": 2443,
+     "no_tensor": 434,
+     "below_threshold": 649,
+     "pon": 35,
+     "called": 1325
+    }
+   },
+   "by_vaf": {
+    "0-0.08": {
+     "n": 422,
+     "no_tensor": 422,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    },
+    "0.08-0.2": {
+     "n": 217,
+     "no_tensor": 7,
+     "below_threshold": 13,
+     "pon": 5,
+     "called": 192
+    },
+    "0.2-0.4": {
+     "n": 149,
+     "no_tensor": 1,
+     "below_threshold": 16,
+     "pon": 4,
+     "called": 128
+    },
+    ">0.4": {
+     "n": 1655,
+     "no_tensor": 4,
+     "below_threshold": 620,
+     "pon": 26,
+     "called": 1005
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 31,
+     "no_tensor": 6,
+     "below_threshold": 15,
+     "pon": 3,
+     "called": 7
+    },
+    "STR": {
+     "n": 127,
+     "no_tensor": 25,
+     "below_threshold": 26,
+     "pon": 2,
+     "called": 74
+    },
+    "other": {
+     "n": 2285,
+     "no_tensor": 403,
+     "below_threshold": 608,
+     "pon": 30,
+     "called": 1244
+    }
+   },
+   "by_vcf_vaf": {
+    "0-0.08": {
+     "n": 411,
+     "no_tensor": 373,
+     "below_threshold": 4,
+     "pon": 0,
+     "called": 34
+    },
+    "0.08-0.2": {
+     "n": 188,
+     "no_tensor": 53,
+     "below_threshold": 3,
+     "pon": 2,
+     "called": 130
+    },
+    "0.2-0.4": {
+     "n": 102,
+     "no_tensor": 3,
+     "below_threshold": 10,
+     "pon": 2,
+     "called": 87
+    },
+    ">0.4": {
+     "n": 1742,
+     "no_tensor": 5,
+     "below_threshold": 632,
+     "pon": 31,
+     "called": 1074
+    }
+   },
+   "untagged_funnel": {
+    "n": 2359,
+    "no_tensor": 412,
+    "below_threshold": 622,
+    "pon": 0,
+    "called": 1325
+   }
+  },
+  "COLO829_ONT_SNV_d46_7fc7396__vcf_chr1": {
+   "meta": {
+    "run": "COLO829_ONT_SNV_d46_7fc7396",
+    "vcf_dir": "vcf_chr1",
+    "group": "insample",
+    "set": "COLO829T_ONT_d46",
+    "sample": "COLO829T",
+    "platform": "ONT",
+    "arm": "d46",
+    "kind": "SNV",
+    "threshold": 0.5676898956298828,
+    "predictions": {
+     "predictions": 307193,
+     "excluded": 0,
+     "path": "/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/COLO829_ONT_SNV_d46_7fc7396/test_chr1/COLO829T_ONT_d46.tensors.SNV.predictions.ndjson.gz"
+    },
+    "check": {
+     "pon_tp": 1690,
+     "pon_fn": 753,
+     "raw_tp": 1730,
+     "raw_fn": 713,
+     "stage4": 1690,
+     "stage123": 753,
+     "stage3": 40,
+     "stage12": 713,
+     "exact": true
+    },
+    "truth_pon_tags": {
+     "records": 2443,
+     "tagged": 84,
+     "tagged_pass": 84,
+     "PoN1_gnomAD": 62,
+     "PoN2_dbSNP": 40,
+     "PoN3_1000G": 2,
+     "PoN4_CoLoRSdb": 27
+    },
+    "unplaced_pass": 4569
+   },
+   "funnel": {
+    "n": 2443,
+    "no_tensor": 442,
+    "below_threshold": 271,
+    "pon": 40,
+    "called": 1690
+   },
+   "reasons_stage1": {
+    "min_variants": 166,
+    "no_candidate": 47,
+    "af_floor": 226,
+    "absorbed": 3
+   },
+   "reasons_stage2": {
+    "below_threshold": 271
+   },
+   "stage1_partial_tensor": 1,
+   "stage1_partial_pass": 1,
+   "truth_pon_tagged": {
+    "no_tensor": 25,
+    "below_threshold": 19,
+    "pon": 40,
+    "called": 0
+   },
+   "stage3_call_pon_tagged": 40,
+   "stage4_without_exact_tensor": 0,
+   "stage3_without_exact_tensor": 0,
+   "vaf_sources": {
+    "tensor": 2001,
+    "truth_vcf": 210,
+    "other_arm": 6,
+    "build_min_af": 226
+   },
+   "by_kind": {
+    "SNV": {
+     "n": 2443,
+     "no_tensor": 442,
+     "below_threshold": 271,
+     "pon": 40,
+     "called": 1690
+    }
+   },
+   "by_vaf": {
+    "0-0.08": {
+     "n": 421,
+     "no_tensor": 421,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    },
+    "0.08-0.2": {
+     "n": 219,
+     "no_tensor": 11,
+     "below_threshold": 27,
+     "pon": 4,
+     "called": 177
+    },
+    "0.2-0.4": {
+     "n": 155,
+     "no_tensor": 1,
+     "below_threshold": 26,
+     "pon": 3,
+     "called": 125
+    },
+    ">0.4": {
+     "n": 1648,
+     "no_tensor": 9,
+     "below_threshold": 218,
+     "pon": 33,
+     "called": 1388
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 31,
+     "no_tensor": 7,
+     "below_threshold": 9,
+     "pon": 3,
+     "called": 12
+    },
+    "STR": {
+     "n": 127,
+     "no_tensor": 26,
+     "below_threshold": 22,
+     "pon": 1,
+     "called": 78
+    },
+    "other": {
+     "n": 2285,
+     "no_tensor": 409,
+     "below_threshold": 240,
+     "pon": 36,
+     "called": 1600
+    }
+   },
+   "by_vcf_vaf": {
+    "0-0.08": {
+     "n": 411,
+     "no_tensor": 374,
+     "below_threshold": 8,
+     "pon": 0,
+     "called": 29
+    },
+    "0.08-0.2": {
+     "n": 188,
+     "no_tensor": 55,
+     "below_threshold": 15,
+     "pon": 2,
+     "called": 116
+    },
+    "0.2-0.4": {
+     "n": 102,
+     "no_tensor": 3,
+     "below_threshold": 15,
+     "pon": 3,
+     "called": 81
+    },
+    ">0.4": {
+     "n": 1742,
+     "no_tensor": 10,
+     "below_threshold": 233,
+     "pon": 35,
+     "called": 1464
+    }
+   },
+   "untagged_funnel": {
+    "n": 2359,
+    "no_tensor": 417,
+    "below_threshold": 252,
+    "pon": 0,
+    "called": 1690
+   }
+  },
+  "HG008_Illumina_SNV_linear_7fc7396__vcf_chr1": {
+   "meta": {
+    "run": "HG008_Illumina_SNV_linear_7fc7396",
+    "vcf_dir": "vcf_chr1",
+    "group": "insample",
+    "set": "HG008T_Illumina_linear",
+    "sample": "HG008T",
+    "platform": "Illumina",
+    "arm": "linear",
+    "kind": "SNV",
+    "threshold": 0.06399419158697128,
+    "predictions": {
+     "predictions": 513557,
+     "excluded": 0,
+     "path": "/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/HG008_Illumina_SNV_linear_7fc7396/test_chr1/HG008T_Illumina_linear.tensors.SNV.predictions.ndjson.gz"
+    },
+    "check": {
+     "pon_tp": 548,
+     "pon_fn": 149,
+     "raw_tp": 583,
+     "raw_fn": 114,
+     "stage4": 548,
+     "stage123": 149,
+     "stage3": 35,
+     "stage12": 114,
+     "exact": true
+    },
+    "truth_pon_tags": {
+     "records": 702,
+     "tagged": 61,
+     "tagged_pass": 61,
+     "PoN1_gnomAD": 39,
+     "PoN2_dbSNP": 31,
+     "PoN3_1000G": 1,
+     "PoN4_CoLoRSdb": 42
+    },
+    "unplaced_pass": 0
+   },
+   "funnel": {
+    "n": 697,
+    "no_tensor": 13,
+    "below_threshold": 101,
+    "pon": 35,
+    "called": 548
+   },
+   "reasons_stage1": {
+    "no_candidate": 11,
+    "af_floor": 2
+   },
+   "reasons_stage2": {
+    "below_threshold": 101
+   },
+   "stage1_partial_tensor": 0,
+   "stage1_partial_pass": 0,
+   "truth_pon_tagged": {
+    "no_tensor": 4,
+    "below_threshold": 21,
+    "pon": 35,
+    "called": 0
+   },
+   "stage3_call_pon_tagged": 35,
+   "stage4_without_exact_tensor": 0,
+   "stage3_without_exact_tensor": 0,
+   "vaf_sources": {
+    "tensor": 684,
+    "other_platform": 9,
+    "build_min_af": 2,
+    "unknown": 1,
+    "other_arm": 1
+   },
+   "by_kind": {
+    "SNV": {
+     "n": 697,
+     "no_tensor": 13,
+     "below_threshold": 101,
+     "pon": 35,
+     "called": 548
+    }
+   },
+   "by_vaf": {
+    "0-0.08": {
+     "n": 2,
+     "no_tensor": 2,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    },
+    "0.08-0.2": {
+     "n": 7,
+     "no_tensor": 3,
+     "below_threshold": 3,
+     "pon": 1,
+     "called": 0
+    },
+    "0.2-0.4": {
+     "n": 69,
+     "no_tensor": 5,
+     "below_threshold": 6,
+     "pon": 6,
+     "called": 52
+    },
+    ">0.4": {
+     "n": 618,
+     "no_tensor": 2,
+     "below_threshold": 92,
+     "pon": 28,
+     "called": 496
+    },
+    "unknown": {
+     "n": 1,
+     "no_tensor": 1,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 34,
+     "no_tensor": 2,
+     "below_threshold": 7,
+     "pon": 17,
+     "called": 8
+    },
+    "STR": {
+     "n": 49,
+     "no_tensor": 3,
+     "below_threshold": 15,
+     "pon": 5,
+     "called": 26
+    },
+    "other": {
+     "n": 614,
+     "no_tensor": 8,
+     "below_threshold": 79,
+     "pon": 13,
+     "called": 514
+    }
+   },
+   "untagged_funnel": {
+    "n": 637,
+    "no_tensor": 9,
+    "below_threshold": 80,
+    "pon": 0,
+    "called": 548
+   }
+  },
+  "HG008_Illumina_SNV_7fc7396_ddp4_b1024__vcf_chr1": {
+   "meta": {
+    "run": "HG008_Illumina_SNV_7fc7396_ddp4_b1024",
+    "vcf_dir": "vcf_chr1",
+    "group": "insample",
+    "set": "HG008T_Illumina",
+    "sample": "HG008T",
+    "platform": "Illumina",
+    "arm": "d9",
+    "kind": "SNV",
+    "threshold": 0.25126704573631287,
+    "predictions": {
+     "predictions": 279945,
+     "excluded": 0,
+     "path": "/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/HG008_Illumina_SNV_7fc7396_ddp4_b1024/test_chr1/HG008T_Illumina.tensors.SNV.predictions.ndjson.gz"
+    },
+    "check": {
+     "pon_tp": 579,
+     "pon_fn": 118,
+     "raw_tp": 601,
+     "raw_fn": 96,
+     "stage4": 579,
+     "stage123": 118,
+     "stage3": 22,
+     "stage12": 96,
+     "exact": true
+    },
+    "truth_pon_tags": {
+     "records": 702,
+     "tagged": 61,
+     "tagged_pass": 61,
+     "PoN1_gnomAD": 39,
+     "PoN2_dbSNP": 31,
+     "PoN3_1000G": 1,
+     "PoN4_CoLoRSdb": 42
+    },
+    "unplaced_pass": 115
+   },
+   "funnel": {
+    "n": 697,
+    "no_tensor": 37,
+    "below_threshold": 59,
+    "pon": 22,
+    "called": 579
+   },
+   "reasons_stage1": {
+    "min_variants": 4,
+    "absorbed": 11,
+    "no_candidate": 21,
+    "af_floor": 1
+   },
+   "reasons_stage2": {
+    "below_threshold": 59
+   },
+   "stage1_partial_tensor": 3,
+   "stage1_partial_pass": 3,
+   "truth_pon_tagged": {
+    "no_tensor": 23,
+    "below_threshold": 15,
+    "pon": 22,
+    "called": 0
+   },
+   "stage3_call_pon_tagged": 22,
+   "stage4_without_exact_tensor": 0,
+   "stage3_without_exact_tensor": 0,
+   "vaf_sources": {
+    "tensor": 660,
+    "other_arm": 25,
+    "other_platform": 10,
+    "unknown": 1,
+    "build_min_af": 1
+   },
+   "by_kind": {
+    "SNV": {
+     "n": 697,
+     "no_tensor": 37,
+     "below_threshold": 59,
+     "pon": 22,
+     "called": 579
+    }
+   },
+   "by_vaf": {
+    "0-0.08": {
+     "n": 1,
+     "no_tensor": 1,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    },
+    "0.08-0.2": {
+     "n": 7,
+     "no_tensor": 6,
+     "below_threshold": 1,
+     "pon": 0,
+     "called": 0
+    },
+    "0.2-0.4": {
+     "n": 64,
+     "no_tensor": 10,
+     "below_threshold": 7,
+     "pon": 2,
+     "called": 45
+    },
+    ">0.4": {
+     "n": 624,
+     "no_tensor": 19,
+     "below_threshold": 51,
+     "pon": 20,
+     "called": 534
+    },
+    "unknown": {
+     "n": 1,
+     "no_tensor": 1,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 34,
+     "no_tensor": 15,
+     "below_threshold": 10,
+     "pon": 2,
+     "called": 7
+    },
+    "STR": {
+     "n": 49,
+     "no_tensor": 13,
+     "below_threshold": 5,
+     "pon": 5,
+     "called": 26
+    },
+    "other": {
+     "n": 614,
+     "no_tensor": 9,
+     "below_threshold": 44,
+     "pon": 15,
+     "called": 546
+    }
+   },
+   "untagged_funnel": {
+    "n": 637,
+    "no_tensor": 14,
+    "below_threshold": 44,
+    "pon": 0,
+    "called": 579
+   }
+  },
+  "HG008_Illumina_SNV_d46_7fc7396__vcf_chr1": {
+   "meta": {
+    "run": "HG008_Illumina_SNV_d46_7fc7396",
+    "vcf_dir": "vcf_chr1",
+    "group": "insample",
+    "set": "HG008T_Illumina_d46",
+    "sample": "HG008T",
+    "platform": "Illumina",
+    "arm": "d46",
+    "kind": "SNV",
+    "threshold": 0.32374927401542664,
+    "predictions": {
+     "predictions": 273992,
+     "excluded": 0,
+     "path": "/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/HG008_Illumina_SNV_d46_7fc7396/test_chr1/HG008T_Illumina_d46.tensors.SNV.predictions.ndjson.gz"
+    },
+    "check": {
+     "pon_tp": 594,
+     "pon_fn": 103,
+     "raw_tp": 618,
+     "raw_fn": 79,
+     "stage4": 594,
+     "stage123": 103,
+     "stage3": 24,
+     "stage12": 79,
+     "exact": true
+    },
+    "truth_pon_tags": {
+     "records": 702,
+     "tagged": 61,
+     "tagged_pass": 61,
+     "PoN1_gnomAD": 39,
+     "PoN2_dbSNP": 31,
+     "PoN3_1000G": 1,
+     "PoN4_CoLoRSdb": 42
+    },
+    "unplaced_pass": 754
+   },
+   "funnel": {
+    "n": 697,
+    "no_tensor": 31,
+    "below_threshold": 48,
+    "pon": 24,
+    "called": 594
+   },
+   "reasons_stage1": {
+    "no_candidate": 17,
+    "absorbed": 10,
+    "af_floor": 2,
+    "min_variants": 2
+   },
+   "reasons_stage2": {
+    "below_threshold": 48
+   },
+   "stage1_partial_tensor": 2,
+   "stage1_partial_pass": 1,
+   "truth_pon_tagged": {
+    "no_tensor": 20,
+    "below_threshold": 16,
+    "pon": 24,
+    "called": 0
+   },
+   "stage3_call_pon_tagged": 24,
+   "stage4_without_exact_tensor": 0,
+   "stage3_without_exact_tensor": 0,
+   "vaf_sources": {
+    "tensor": 666,
+    "other_arm": 19,
+    "other_platform": 9,
+    "build_min_af": 2,
+    "unknown": 1
+   },
+   "by_kind": {
+    "SNV": {
+     "n": 697,
+     "no_tensor": 31,
+     "below_threshold": 48,
+     "pon": 24,
+     "called": 594
+    }
+   },
+   "by_vaf": {
+    "0-0.08": {
+     "n": 2,
+     "no_tensor": 2,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    },
+    "0.08-0.2": {
+     "n": 4,
+     "no_tensor": 3,
+     "below_threshold": 1,
+     "pon": 0,
+     "called": 0
+    },
+    "0.2-0.4": {
+     "n": 66,
+     "no_tensor": 9,
+     "below_threshold": 8,
+     "pon": 3,
+     "called": 46
+    },
+    ">0.4": {
+     "n": 624,
+     "no_tensor": 16,
+     "below_threshold": 39,
+     "pon": 21,
+     "called": 548
+    },
+    "unknown": {
+     "n": 1,
+     "no_tensor": 1,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 34,
+     "no_tensor": 11,
+     "below_threshold": 13,
+     "pon": 3,
+     "called": 7
+    },
+    "STR": {
+     "n": 49,
+     "no_tensor": 11,
+     "below_threshold": 4,
+     "pon": 5,
+     "called": 29
+    },
+    "other": {
+     "n": 614,
+     "no_tensor": 9,
+     "below_threshold": 31,
+     "pon": 16,
+     "called": 558
+    }
+   },
+   "untagged_funnel": {
+    "n": 637,
+    "no_tensor": 11,
+    "below_threshold": 32,
+    "pon": 0,
+    "called": 594
+   }
+  },
+  "HG008_PacBio_SNV_linear_7fc7396__vcf_chr1": {
+   "meta": {
+    "run": "HG008_PacBio_SNV_linear_7fc7396",
+    "vcf_dir": "vcf_chr1",
+    "group": "insample",
+    "set": "HG008T_PacBio_linear",
+    "sample": "HG008T",
+    "platform": "PacBio",
+    "arm": "linear",
+    "kind": "SNV",
+    "threshold": 0.039716336876153946,
+    "predictions": {
+     "predictions": 302200,
+     "excluded": 0,
+     "path": "/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/HG008_PacBio_SNV_linear_7fc7396/test_chr1/HG008T_PacBio_linear.tensors.SNV.predictions.ndjson.gz"
+    },
+    "check": {
+     "pon_tp": 576,
+     "pon_fn": 121,
+     "raw_tp": 615,
+     "raw_fn": 82,
+     "stage4": 576,
+     "stage123": 121,
+     "stage3": 39,
+     "stage12": 82,
+     "exact": true
+    },
+    "truth_pon_tags": {
+     "records": 702,
+     "tagged": 61,
+     "tagged_pass": 61,
+     "PoN1_gnomAD": 39,
+     "PoN2_dbSNP": 31,
+     "PoN3_1000G": 1,
+     "PoN4_CoLoRSdb": 42
+    },
+    "unplaced_pass": 0
+   },
+   "funnel": {
+    "n": 697,
+    "no_tensor": 14,
+    "below_threshold": 68,
+    "pon": 39,
+    "called": 576
+   },
+   "reasons_stage1": {
+    "no_candidate": 8,
+    "min_variants": 4,
+    "af_floor": 2
+   },
+   "reasons_stage2": {
+    "below_threshold": 68
+   },
+   "stage1_partial_tensor": 0,
+   "stage1_partial_pass": 0,
+   "truth_pon_tagged": {
+    "no_tensor": 8,
+    "below_threshold": 13,
+    "pon": 39,
+    "called": 0
+   },
+   "stage3_call_pon_tagged": 39,
+   "stage4_without_exact_tensor": 0,
+   "stage3_without_exact_tensor": 0,
+   "vaf_sources": {
+    "tensor": 683,
+    "other_platform": 8,
+    "other_arm": 3,
+    "unknown": 1,
+    "build_min_af": 2
+   },
+   "by_kind": {
+    "SNV": {
+     "n": 697,
+     "no_tensor": 14,
+     "below_threshold": 68,
+     "pon": 39,
+     "called": 576
+    }
+   },
+   "by_vaf": {
+    "0-0.08": {
+     "n": 2,
+     "no_tensor": 2,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    },
+    "0.08-0.2": {
+     "n": 12,
+     "no_tensor": 2,
+     "below_threshold": 6,
+     "pon": 2,
+     "called": 2
+    },
+    "0.2-0.4": {
+     "n": 76,
+     "no_tensor": 6,
+     "below_threshold": 4,
+     "pon": 9,
+     "called": 57
+    },
+    ">0.4": {
+     "n": 606,
+     "no_tensor": 3,
+     "below_threshold": 58,
+     "pon": 28,
+     "called": 517
+    },
+    "unknown": {
+     "n": 1,
+     "no_tensor": 1,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 34,
+     "no_tensor": 5,
+     "below_threshold": 6,
+     "pon": 14,
+     "called": 9
+    },
+    "STR": {
+     "n": 49,
+     "no_tensor": 4,
+     "below_threshold": 5,
+     "pon": 9,
+     "called": 31
+    },
+    "other": {
+     "n": 614,
+     "no_tensor": 5,
+     "below_threshold": 57,
+     "pon": 16,
+     "called": 536
+    }
+   },
+   "untagged_funnel": {
+    "n": 637,
+    "no_tensor": 6,
+    "below_threshold": 55,
+    "pon": 0,
+    "called": 576
+   }
+  },
+  "HG008_PacBio_SNV_7fc7396__vcf_chr1": {
+   "meta": {
+    "run": "HG008_PacBio_SNV_7fc7396",
+    "vcf_dir": "vcf_chr1",
+    "group": "insample",
+    "set": "HG008T_PacBio",
+    "sample": "HG008T",
+    "platform": "PacBio",
+    "arm": "d9",
+    "kind": "SNV",
+    "threshold": 0.3141991198062897,
+    "predictions": {
+     "predictions": 85133,
+     "excluded": 0,
+     "path": "/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/HG008_PacBio_SNV_7fc7396/test_chr1/HG008T_PacBio.tensors.SNV.predictions.ndjson.gz"
+    },
+    "check": {
+     "pon_tp": 577,
+     "pon_fn": 120,
+     "raw_tp": 597,
+     "raw_fn": 100,
+     "stage4": 577,
+     "stage123": 120,
+     "stage3": 20,
+     "stage12": 100,
+     "exact": true
+    },
+    "truth_pon_tags": {
+     "records": 702,
+     "tagged": 61,
+     "tagged_pass": 61,
+     "PoN1_gnomAD": 39,
+     "PoN2_dbSNP": 31,
+     "PoN3_1000G": 1,
+     "PoN4_CoLoRSdb": 42
+    },
+    "unplaced_pass": 210
+   },
+   "funnel": {
+    "n": 697,
+    "no_tensor": 38,
+    "below_threshold": 62,
+    "pon": 20,
+    "called": 577
+   },
+   "reasons_stage1": {
+    "no_candidate": 21,
+    "absorbed": 12,
+    "min_variants": 4,
+    "af_floor": 1
+   },
+   "reasons_stage2": {
+    "below_threshold": 62
+   },
+   "stage1_partial_tensor": 3,
+   "stage1_partial_pass": 0,
+   "truth_pon_tagged": {
+    "no_tensor": 24,
+    "below_threshold": 16,
+    "pon": 20,
+    "called": 0
+   },
+   "stage3_call_pon_tagged": 20,
+   "stage4_without_exact_tensor": 0,
+   "stage3_without_exact_tensor": 0,
+   "vaf_sources": {
+    "tensor": 659,
+    "other_platform": 9,
+    "other_arm": 27,
+    "unknown": 1,
+    "build_min_af": 1
+   },
+   "by_kind": {
+    "SNV": {
+     "n": 697,
+     "no_tensor": 38,
+     "below_threshold": 62,
+     "pon": 20,
+     "called": 577
+    }
+   },
+   "by_vaf": {
+    "0-0.08": {
+     "n": 1,
+     "no_tensor": 1,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    },
+    "0.08-0.2": {
+     "n": 14,
+     "no_tensor": 10,
+     "below_threshold": 4,
+     "pon": 0,
+     "called": 0
+    },
+    "0.2-0.4": {
+     "n": 77,
+     "no_tensor": 12,
+     "below_threshold": 9,
+     "pon": 3,
+     "called": 53
+    },
+    ">0.4": {
+     "n": 604,
+     "no_tensor": 14,
+     "below_threshold": 49,
+     "pon": 17,
+     "called": 524
+    },
+    "unknown": {
+     "n": 1,
+     "no_tensor": 1,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 34,
+     "no_tensor": 16,
+     "below_threshold": 10,
+     "pon": 1,
+     "called": 7
+    },
+    "STR": {
+     "n": 49,
+     "no_tensor": 13,
+     "below_threshold": 8,
+     "pon": 3,
+     "called": 25
+    },
+    "other": {
+     "n": 614,
+     "no_tensor": 9,
+     "below_threshold": 44,
+     "pon": 16,
+     "called": 545
+    }
+   },
+   "untagged_funnel": {
+    "n": 637,
+    "no_tensor": 14,
+    "below_threshold": 46,
+    "pon": 0,
+    "called": 577
+   }
+  },
+  "HG008_PacBio_SNV_d46_7fc7396__vcf_chr1": {
+   "meta": {
+    "run": "HG008_PacBio_SNV_d46_7fc7396",
+    "vcf_dir": "vcf_chr1",
+    "group": "insample",
+    "set": "HG008T_PacBio_d46",
+    "sample": "HG008T",
+    "platform": "PacBio",
+    "arm": "d46",
+    "kind": "SNV",
+    "threshold": 0.29122111201286316,
+    "predictions": {
+     "predictions": 140610,
+     "excluded": 0,
+     "path": "/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/HG008_PacBio_SNV_d46_7fc7396/test_chr1/HG008T_PacBio_d46.tensors.SNV.predictions.ndjson.gz"
+    },
+    "check": {
+     "pon_tp": 582,
+     "pon_fn": 115,
+     "raw_tp": 607,
+     "raw_fn": 90,
+     "stage4": 582,
+     "stage123": 115,
+     "stage3": 25,
+     "stage12": 90,
+     "exact": true
+    },
+    "truth_pon_tags": {
+     "records": 702,
+     "tagged": 61,
+     "tagged_pass": 61,
+     "PoN1_gnomAD": 39,
+     "PoN2_dbSNP": 31,
+     "PoN3_1000G": 1,
+     "PoN4_CoLoRSdb": 42
+    },
+    "unplaced_pass": 240
+   },
+   "funnel": {
+    "n": 697,
+    "no_tensor": 35,
+    "below_threshold": 55,
+    "pon": 25,
+    "called": 582
+   },
+   "reasons_stage1": {
+    "af_floor": 1,
+    "no_candidate": 22,
+    "absorbed": 10,
+    "min_variants": 2
+   },
+   "reasons_stage2": {
+    "below_threshold": 55
+   },
+   "stage1_partial_tensor": 2,
+   "stage1_partial_pass": 1,
+   "truth_pon_tagged": {
+    "no_tensor": 21,
+    "below_threshold": 14,
+    "pon": 25,
+    "called": 0
+   },
+   "stage3_call_pon_tagged": 25,
+   "stage4_without_exact_tensor": 0,
+   "stage3_without_exact_tensor": 0,
+   "vaf_sources": {
+    "tensor": 662,
+    "build_min_af": 1,
+    "other_platform": 8,
+    "other_arm": 25,
+    "unknown": 1
+   },
+   "by_kind": {
+    "SNV": {
+     "n": 697,
+     "no_tensor": 35,
+     "below_threshold": 55,
+     "pon": 25,
+     "called": 582
+    }
+   },
+   "by_vaf": {
+    "0-0.08": {
+     "n": 1,
+     "no_tensor": 1,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    },
+    "0.08-0.2": {
+     "n": 10,
+     "no_tensor": 8,
+     "below_threshold": 2,
+     "pon": 0,
+     "called": 0
+    },
+    "0.2-0.4": {
+     "n": 74,
+     "no_tensor": 12,
+     "below_threshold": 9,
+     "pon": 2,
+     "called": 51
+    },
+    ">0.4": {
+     "n": 611,
+     "no_tensor": 13,
+     "below_threshold": 44,
+     "pon": 23,
+     "called": 531
+    },
+    "unknown": {
+     "n": 1,
+     "no_tensor": 1,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 34,
+     "no_tensor": 13,
+     "below_threshold": 9,
+     "pon": 4,
+     "called": 8
+    },
+    "STR": {
+     "n": 49,
+     "no_tensor": 11,
+     "below_threshold": 7,
+     "pon": 3,
+     "called": 28
+    },
+    "other": {
+     "n": 614,
+     "no_tensor": 11,
+     "below_threshold": 39,
+     "pon": 18,
+     "called": 546
+    }
+   },
+   "untagged_funnel": {
+    "n": 637,
+    "no_tensor": 14,
+    "below_threshold": 41,
+    "pon": 0,
+    "called": 582
+   }
+  },
+  "HG008_ONT_SNV_linear_7fc7396__vcf_chr1": {
+   "meta": {
+    "run": "HG008_ONT_SNV_linear_7fc7396",
+    "vcf_dir": "vcf_chr1",
+    "group": "insample",
+    "set": "HG008T_ONT_linear",
+    "sample": "HG008T",
+    "platform": "ONT",
+    "arm": "linear",
+    "kind": "SNV",
+    "threshold": 0.04177317023277283,
+    "predictions": {
+     "predictions": 607844,
+     "excluded": 0,
+     "path": "/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/HG008_ONT_SNV_linear_7fc7396/test_chr1/HG008T_ONT_linear.tensors.SNV.predictions.ndjson.gz"
+    },
+    "check": {
+     "pon_tp": 587,
+     "pon_fn": 110,
+     "raw_tp": 622,
+     "raw_fn": 75,
+     "stage4": 587,
+     "stage123": 110,
+     "stage3": 35,
+     "stage12": 75,
+     "exact": true
+    },
+    "truth_pon_tags": {
+     "records": 702,
+     "tagged": 61,
+     "tagged_pass": 61,
+     "PoN1_gnomAD": 39,
+     "PoN2_dbSNP": 31,
+     "PoN3_1000G": 1,
+     "PoN4_CoLoRSdb": 42
+    },
+    "unplaced_pass": 0
+   },
+   "funnel": {
+    "n": 697,
+    "no_tensor": 16,
+    "below_threshold": 59,
+    "pon": 35,
+    "called": 587
+   },
+   "reasons_stage1": {
+    "min_variants": 12,
+    "no_candidate": 4
+   },
+   "reasons_stage2": {
+    "below_threshold": 59
+   },
+   "stage1_partial_tensor": 0,
+   "stage1_partial_pass": 0,
+   "truth_pon_tagged": {
+    "no_tensor": 12,
+    "below_threshold": 13,
+    "pon": 35,
+    "called": 0
+   },
+   "stage3_call_pon_tagged": 35,
+   "stage4_without_exact_tensor": 0,
+   "stage3_without_exact_tensor": 0,
+   "vaf_sources": {
+    "tensor": 681,
+    "other_platform": 10,
+    "other_arm": 5,
+    "unknown": 1
+   },
+   "by_kind": {
+    "SNV": {
+     "n": 697,
+     "no_tensor": 16,
+     "below_threshold": 59,
+     "pon": 35,
+     "called": 587
+    }
+   },
+   "by_vaf": {
+    "0.08-0.2": {
+     "n": 19,
+     "no_tensor": 4,
+     "below_threshold": 9,
+     "pon": 3,
+     "called": 3
+    },
+    "0.2-0.4": {
+     "n": 100,
+     "no_tensor": 7,
+     "below_threshold": 5,
+     "pon": 8,
+     "called": 80
+    },
+    ">0.4": {
+     "n": 577,
+     "no_tensor": 4,
+     "below_threshold": 45,
+     "pon": 24,
+     "called": 504
+    },
+    "unknown": {
+     "n": 1,
+     "no_tensor": 1,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 34,
+     "no_tensor": 7,
+     "below_threshold": 6,
+     "pon": 13,
+     "called": 8
+    },
+    "STR": {
+     "n": 49,
+     "no_tensor": 6,
+     "below_threshold": 7,
+     "pon": 7,
+     "called": 29
+    },
+    "other": {
+     "n": 614,
+     "no_tensor": 3,
+     "below_threshold": 46,
+     "pon": 15,
+     "called": 550
+    }
+   },
+   "untagged_funnel": {
+    "n": 637,
+    "no_tensor": 4,
+    "below_threshold": 46,
+    "pon": 0,
+    "called": 587
+   }
+  },
+  "HG008_ONT_SNV_7fc7396__vcf_chr1": {
+   "meta": {
+    "run": "HG008_ONT_SNV_7fc7396",
+    "vcf_dir": "vcf_chr1",
+    "group": "insample",
+    "set": "HG008T_ONT",
+    "sample": "HG008T",
+    "platform": "ONT",
+    "arm": "d9",
+    "kind": "SNV",
+    "threshold": 0.4492301940917969,
+    "predictions": {
+     "predictions": 376698,
+     "excluded": 0,
+     "path": "/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/HG008_ONT_SNV_7fc7396/test_chr1/HG008T_ONT.tensors.SNV.predictions.ndjson.gz"
+    },
+    "check": {
+     "pon_tp": 576,
+     "pon_fn": 121,
+     "raw_tp": 596,
+     "raw_fn": 101,
+     "stage4": 576,
+     "stage123": 121,
+     "stage3": 20,
+     "stage12": 101,
+     "exact": true
+    },
+    "truth_pon_tags": {
+     "records": 702,
+     "tagged": 61,
+     "tagged_pass": 61,
+     "PoN1_gnomAD": 39,
+     "PoN2_dbSNP": 31,
+     "PoN3_1000G": 1,
+     "PoN4_CoLoRSdb": 42
+    },
+    "unplaced_pass": 1410
+   },
+   "funnel": {
+    "n": 697,
+    "no_tensor": 33,
+    "below_threshold": 68,
+    "pon": 20,
+    "called": 576
+   },
+   "reasons_stage1": {
+    "min_variants": 5,
+    "no_candidate": 16,
+    "absorbed": 12
+   },
+   "reasons_stage2": {
+    "below_threshold": 68
+   },
+   "stage1_partial_tensor": 4,
+   "stage1_partial_pass": 1,
+   "truth_pon_tagged": {
+    "no_tensor": 23,
+    "below_threshold": 17,
+    "pon": 20,
+    "called": 0
+   },
+   "stage3_call_pon_tagged": 20,
+   "stage4_without_exact_tensor": 0,
+   "stage3_without_exact_tensor": 0,
+   "vaf_sources": {
+    "tensor": 664,
+    "other_platform": 10,
+    "other_arm": 22,
+    "unknown": 1
+   },
+   "by_kind": {
+    "SNV": {
+     "n": 697,
+     "no_tensor": 33,
+     "below_threshold": 68,
+     "pon": 20,
+     "called": 576
+    }
+   },
+   "by_vaf": {
+    "0.08-0.2": {
+     "n": 18,
+     "no_tensor": 10,
+     "below_threshold": 7,
+     "pon": 0,
+     "called": 1
+    },
+    "0.2-0.4": {
+     "n": 99,
+     "no_tensor": 10,
+     "below_threshold": 10,
+     "pon": 3,
+     "called": 76
+    },
+    ">0.4": {
+     "n": 579,
+     "no_tensor": 12,
+     "below_threshold": 51,
+     "pon": 17,
+     "called": 499
+    },
+    "unknown": {
+     "n": 1,
+     "no_tensor": 1,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 34,
+     "no_tensor": 16,
+     "below_threshold": 9,
+     "pon": 2,
+     "called": 7
+    },
+    "STR": {
+     "n": 49,
+     "no_tensor": 12,
+     "below_threshold": 7,
+     "pon": 3,
+     "called": 27
+    },
+    "other": {
+     "n": 614,
+     "no_tensor": 5,
+     "below_threshold": 52,
+     "pon": 15,
+     "called": 542
+    }
+   },
+   "untagged_funnel": {
+    "n": 637,
+    "no_tensor": 10,
+    "below_threshold": 51,
+    "pon": 0,
+    "called": 576
+   }
+  },
+  "HG008_ONT_SNV_d46_7fc7396__vcf_chr1": {
+   "meta": {
+    "run": "HG008_ONT_SNV_d46_7fc7396",
+    "vcf_dir": "vcf_chr1",
+    "group": "insample",
+    "set": "HG008T_ONT_d46",
+    "sample": "HG008T",
+    "platform": "ONT",
+    "arm": "d46",
+    "kind": "SNV",
+    "threshold": 0.23086291551589966,
+    "predictions": {
+     "predictions": 255143,
+     "excluded": 0,
+     "path": "/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/HG008_ONT_SNV_d46_7fc7396/test_chr1/HG008T_ONT_d46.tensors.SNV.predictions.ndjson.gz"
+    },
+    "check": {
+     "pon_tp": 599,
+     "pon_fn": 98,
+     "raw_tp": 627,
+     "raw_fn": 70,
+     "stage4": 599,
+     "stage123": 98,
+     "stage3": 28,
+     "stage12": 70,
+     "exact": true
+    },
+    "truth_pon_tags": {
+     "records": 702,
+     "tagged": 61,
+     "tagged_pass": 61,
+     "PoN1_gnomAD": 39,
+     "PoN2_dbSNP": 31,
+     "PoN3_1000G": 1,
+     "PoN4_CoLoRSdb": 42
+    },
+    "unplaced_pass": 1258
+   },
+   "funnel": {
+    "n": 697,
+    "no_tensor": 31,
+    "below_threshold": 39,
+    "pon": 28,
+    "called": 599
+   },
+   "reasons_stage1": {
+    "no_candidate": 14,
+    "absorbed": 10,
+    "min_variants": 6,
+    "af_floor": 1
+   },
+   "reasons_stage2": {
+    "below_threshold": 39
+   },
+   "stage1_partial_tensor": 1,
+   "stage1_partial_pass": 1,
+   "truth_pon_tagged": {
+    "no_tensor": 24,
+    "below_threshold": 8,
+    "pon": 28,
+    "called": 0
+   },
+   "stage3_call_pon_tagged": 28,
+   "stage4_without_exact_tensor": 0,
+   "stage3_without_exact_tensor": 0,
+   "vaf_sources": {
+    "tensor": 666,
+    "other_platform": 10,
+    "other_arm": 19,
+    "unknown": 1,
+    "build_min_af": 1
+   },
+   "by_kind": {
+    "SNV": {
+     "n": 697,
+     "no_tensor": 31,
+     "below_threshold": 39,
+     "pon": 28,
+     "called": 599
+    }
+   },
+   "by_vaf": {
+    "0-0.08": {
+     "n": 1,
+     "no_tensor": 1,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    },
+    "0.08-0.2": {
+     "n": 13,
+     "no_tensor": 7,
+     "below_threshold": 4,
+     "pon": 0,
+     "called": 2
+    },
+    "0.2-0.4": {
+     "n": 105,
+     "no_tensor": 10,
+     "below_threshold": 5,
+     "pon": 5,
+     "called": 85
+    },
+    ">0.4": {
+     "n": 577,
+     "no_tensor": 12,
+     "below_threshold": 30,
+     "pon": 23,
+     "called": 512
+    },
+    "unknown": {
+     "n": 1,
+     "no_tensor": 1,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 34,
+     "no_tensor": 15,
+     "below_threshold": 7,
+     "pon": 4,
+     "called": 8
+    },
+    "STR": {
+     "n": 49,
+     "no_tensor": 12,
+     "below_threshold": 4,
+     "pon": 4,
+     "called": 29
+    },
+    "other": {
+     "n": 614,
+     "no_tensor": 4,
+     "below_threshold": 28,
+     "pon": 20,
+     "called": 562
+    }
+   },
+   "untagged_funnel": {
+    "n": 637,
+    "no_tensor": 7,
+    "below_threshold": 31,
+    "pon": 0,
+    "called": 599
+   }
+  },
+  "COLO829_Illumina_INDEL_linear_7fc7396__vcf_chr1": {
+   "meta": {
+    "run": "COLO829_Illumina_INDEL_linear_7fc7396",
+    "vcf_dir": "vcf_chr1",
+    "group": "insample",
+    "set": "COLO829T_Illumina_linear",
+    "sample": "COLO829T",
+    "platform": "Illumina",
+    "arm": "linear",
+    "kind": "INDEL",
+    "threshold": 0.010956976562738419,
+    "predictions": {
+     "predictions": 63971,
+     "excluded": 0,
+     "path": "/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/COLO829_Illumina_INDEL_linear_7fc7396/test_chr1/COLO829T_Illumina_linear.tensors.INDEL.predictions.ndjson.gz"
+    },
+    "check": {
+     "pon_tp": 29,
+     "pon_fn": 102,
+     "raw_tp": 81,
+     "raw_fn": 50,
+     "stage4": 29,
+     "stage123": 102,
+     "stage3": 52,
+     "stage12": 50,
+     "exact": true
+    },
+    "truth_pon_tags": {
+     "records": 131,
+     "tagged": 81,
+     "tagged_pass": 81,
+     "PoN1_gnomAD": 15,
+     "PoN2_dbSNP": 0,
+     "PoN3_1000G": 0,
+     "PoN4_CoLoRSdb": 77
+    },
+    "unplaced_pass": 0
+   },
+   "funnel": {
+    "n": 131,
+    "no_tensor": 19,
+    "below_threshold": 31,
+    "pon": 52,
+    "called": 29
+   },
+   "reasons_stage1": {
+    "min_variants": 8,
+    "no_candidate": 8,
+    "other_allele": 1,
+    "af_floor": 2
+   },
+   "reasons_stage2": {
+    "below_threshold": 31
+   },
+   "stage1_partial_tensor": 1,
+   "stage1_partial_pass": 0,
+   "truth_pon_tagged": {
+    "no_tensor": 16,
+    "below_threshold": 13,
+    "pon": 52,
+    "called": 0
+   },
+   "stage3_call_pon_tagged": 52,
+   "stage4_without_exact_tensor": 0,
+   "stage3_without_exact_tensor": 0,
+   "vaf_sources": {
+    "tensor": 113,
+    "truth_vcf": 16,
+    "build_min_af": 2
+   },
+   "by_kind": {
+    "INS": {
+     "n": 77,
+     "no_tensor": 11,
+     "below_threshold": 20,
+     "pon": 33,
+     "called": 13
+    },
+    "DEL": {
+     "n": 54,
+     "no_tensor": 8,
+     "below_threshold": 11,
+     "pon": 19,
+     "called": 16
+    }
+   },
+   "by_vaf": {
+    "0-0.08": {
+     "n": 2,
+     "no_tensor": 2,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    },
+    "0.08-0.2": {
+     "n": 8,
+     "no_tensor": 0,
+     "below_threshold": 4,
+     "pon": 2,
+     "called": 2
+    },
+    "0.2-0.4": {
+     "n": 47,
+     "no_tensor": 8,
+     "below_threshold": 2,
+     "pon": 22,
+     "called": 15
+    },
+    ">0.4": {
+     "n": 74,
+     "no_tensor": 9,
+     "below_threshold": 25,
+     "pon": 28,
+     "called": 12
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 70,
+     "no_tensor": 4,
+     "below_threshold": 19,
+     "pon": 32,
+     "called": 15
+    },
+    "STR": {
+     "n": 27,
+     "no_tensor": 5,
+     "below_threshold": 5,
+     "pon": 15,
+     "called": 2
+    },
+    "other": {
+     "n": 34,
+     "no_tensor": 10,
+     "below_threshold": 7,
+     "pon": 5,
+     "called": 12
+    }
+   },
+   "by_vcf_vaf": {
+    "0.2-0.4": {
+     "n": 41,
+     "no_tensor": 9,
+     "below_threshold": 4,
+     "pon": 18,
+     "called": 10
+    },
+    ">0.4": {
+     "n": 90,
+     "no_tensor": 10,
+     "below_threshold": 27,
+     "pon": 34,
+     "called": 19
+    }
+   },
+   "untagged_funnel": {
+    "n": 50,
+    "no_tensor": 3,
+    "below_threshold": 18,
+    "pon": 0,
+    "called": 29
+   }
+  },
+  "COLO829_Illumina_INDEL_d46_7fc7396__vcf_chr1": {
+   "meta": {
+    "run": "COLO829_Illumina_INDEL_d46_7fc7396",
+    "vcf_dir": "vcf_chr1",
+    "group": "insample",
+    "set": "COLO829T_Illumina_d46",
+    "sample": "COLO829T",
+    "platform": "Illumina",
+    "arm": "d46",
+    "kind": "INDEL",
+    "threshold": 0.02222439832985401,
+    "predictions": {
+     "predictions": 8596,
+     "excluded": 0,
+     "path": "/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/COLO829_Illumina_INDEL_d46_7fc7396/test_chr1/COLO829T_Illumina_d46.tensors.INDEL.predictions.ndjson.gz"
+    },
+    "check": {
+     "pon_tp": 32,
+     "pon_fn": 99,
+     "raw_tp": 51,
+     "raw_fn": 80,
+     "stage4": 32,
+     "stage123": 99,
+     "stage3": 19,
+     "stage12": 80,
+     "exact": true
+    },
+    "truth_pon_tags": {
+     "records": 131,
+     "tagged": 81,
+     "tagged_pass": 81,
+     "PoN1_gnomAD": 15,
+     "PoN2_dbSNP": 0,
+     "PoN3_1000G": 0,
+     "PoN4_CoLoRSdb": 77
+    },
+    "unplaced_pass": 368
+   },
+   "funnel": {
+    "n": 131,
+    "no_tensor": 70,
+    "below_threshold": 10,
+    "pon": 19,
+    "called": 32
+   },
+   "reasons_stage1": {
+    "no_candidate": 32,
+    "absorbed": 34,
+    "af_floor": 1,
+    "min_variants": 3
+   },
+   "reasons_stage2": {
+    "below_threshold": 10
+   },
+   "stage1_partial_tensor": 14,
+   "stage1_partial_pass": 6,
+   "truth_pon_tagged": {
+    "no_tensor": 56,
+    "below_threshold": 6,
+    "pon": 19,
+    "called": 0
+   },
+   "stage3_call_pon_tagged": 19,
+   "stage4_without_exact_tensor": 0,
+   "stage3_without_exact_tensor": 0,
+   "vaf_sources": {
+    "tensor": 61,
+    "truth_vcf": 18,
+    "other_arm": 51,
+    "build_min_af": 1
+   },
+   "by_kind": {
+    "INS": {
+     "n": 77,
+     "no_tensor": 45,
+     "below_threshold": 5,
+     "pon": 9,
+     "called": 18
+    },
+    "DEL": {
+     "n": 54,
+     "no_tensor": 25,
+     "below_threshold": 5,
+     "pon": 10,
+     "called": 14
+    }
+   },
+   "by_vaf": {
+    "0-0.08": {
+     "n": 1,
+     "no_tensor": 1,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    },
+    "0.08-0.2": {
+     "n": 9,
+     "no_tensor": 4,
+     "below_threshold": 3,
+     "pon": 0,
+     "called": 2
+    },
+    "0.2-0.4": {
+     "n": 44,
+     "no_tensor": 24,
+     "below_threshold": 3,
+     "pon": 8,
+     "called": 9
+    },
+    ">0.4": {
+     "n": 77,
+     "no_tensor": 41,
+     "below_threshold": 4,
+     "pon": 11,
+     "called": 21
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 70,
+     "no_tensor": 31,
+     "below_threshold": 5,
+     "pon": 16,
+     "called": 18
+    },
+    "STR": {
+     "n": 27,
+     "no_tensor": 21,
+     "below_threshold": 3,
+     "pon": 2,
+     "called": 1
+    },
+    "other": {
+     "n": 34,
+     "no_tensor": 18,
+     "below_threshold": 2,
+     "pon": 1,
+     "called": 13
+    }
+   },
+   "by_vcf_vaf": {
+    "0.2-0.4": {
+     "n": 41,
+     "no_tensor": 24,
+     "below_threshold": 5,
+     "pon": 6,
+     "called": 6
+    },
+    ">0.4": {
+     "n": 90,
+     "no_tensor": 46,
+     "below_threshold": 5,
+     "pon": 13,
+     "called": 26
+    }
+   },
+   "untagged_funnel": {
+    "n": 50,
+    "no_tensor": 14,
+    "below_threshold": 4,
+    "pon": 0,
+    "called": 32
+   }
+  },
+  "COLO829_fiberseq_INDEL_linear_7fc7396__vcf_chr1": {
+   "meta": {
+    "run": "COLO829_fiberseq_INDEL_linear_7fc7396",
+    "vcf_dir": "vcf_chr1",
+    "group": "insample",
+    "set": "COLO829T_fiberseq_linear",
+    "sample": "COLO829T",
+    "platform": "fiberseq",
+    "arm": "linear",
+    "kind": "INDEL",
+    "threshold": 0.008109658025205135,
+    "predictions": {
+     "predictions": 181164,
+     "excluded": 0,
+     "path": "/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/COLO829_fiberseq_INDEL_linear_7fc7396/test_chr1/COLO829T_fiberseq_linear.tensors.INDEL.predictions.ndjson.gz"
+    },
+    "check": {
+     "pon_tp": 39,
+     "pon_fn": 92,
+     "raw_tp": 99,
+     "raw_fn": 32,
+     "stage4": 39,
+     "stage123": 92,
+     "stage3": 60,
+     "stage12": 32,
+     "exact": true
+    },
+    "truth_pon_tags": {
+     "records": 131,
+     "tagged": 81,
+     "tagged_pass": 81,
+     "PoN1_gnomAD": 15,
+     "PoN2_dbSNP": 0,
+     "PoN3_1000G": 0,
+     "PoN4_CoLoRSdb": 77
+    },
+    "unplaced_pass": 0
+   },
+   "funnel": {
+    "n": 131,
+    "no_tensor": 8,
+    "below_threshold": 24,
+    "pon": 60,
+    "called": 39
+   },
+   "reasons_stage1": {
+    "no_candidate": 4,
+    "other_allele": 2,
+    "af_floor": 1,
+    "min_variants": 1
+   },
+   "reasons_stage2": {
+    "below_threshold": 24
+   },
+   "stage1_partial_tensor": 2,
+   "stage1_partial_pass": 2,
+   "truth_pon_tagged": {
+    "no_tensor": 8,
+    "below_threshold": 13,
+    "pon": 60,
+    "called": 0
+   },
+   "stage3_call_pon_tagged": 60,
+   "stage4_without_exact_tensor": 0,
+   "stage3_without_exact_tensor": 0,
+   "vaf_sources": {
+    "tensor": 125,
+    "truth_vcf": 5,
+    "build_min_af": 1
+   },
+   "by_kind": {
+    "INS": {
+     "n": 77,
+     "no_tensor": 3,
+     "below_threshold": 15,
+     "pon": 38,
+     "called": 21
+    },
+    "DEL": {
+     "n": 54,
+     "no_tensor": 5,
+     "below_threshold": 9,
+     "pon": 22,
+     "called": 18
+    }
+   },
+   "by_vaf": {
+    "0-0.08": {
+     "n": 1,
+     "no_tensor": 1,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    },
+    "0.08-0.2": {
+     "n": 4,
+     "no_tensor": 0,
+     "below_threshold": 0,
+     "pon": 3,
+     "called": 1
+    },
+    "0.2-0.4": {
+     "n": 22,
+     "no_tensor": 1,
+     "below_threshold": 4,
+     "pon": 9,
+     "called": 8
+    },
+    ">0.4": {
+     "n": 104,
+     "no_tensor": 6,
+     "below_threshold": 20,
+     "pon": 48,
+     "called": 30
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 70,
+     "no_tensor": 4,
+     "below_threshold": 16,
+     "pon": 31,
+     "called": 19
+    },
+    "STR": {
+     "n": 27,
+     "no_tensor": 2,
+     "below_threshold": 4,
+     "pon": 19,
+     "called": 2
+    },
+    "other": {
+     "n": 34,
+     "no_tensor": 2,
+     "below_threshold": 4,
+     "pon": 10,
+     "called": 18
+    }
+   },
+   "by_vcf_vaf": {
+    "0.2-0.4": {
+     "n": 18,
+     "no_tensor": 1,
+     "below_threshold": 3,
+     "pon": 6,
+     "called": 8
+    },
+    ">0.4": {
+     "n": 113,
+     "no_tensor": 7,
+     "below_threshold": 21,
+     "pon": 54,
+     "called": 31
+    }
+   },
+   "untagged_funnel": {
+    "n": 50,
+    "no_tensor": 0,
+    "below_threshold": 11,
+    "pon": 0,
+    "called": 39
+   }
+  },
+  "COLO829_fiberseq_INDEL_d46_7fc7396__vcf_chr1": {
+   "meta": {
+    "run": "COLO829_fiberseq_INDEL_d46_7fc7396",
+    "vcf_dir": "vcf_chr1",
+    "group": "insample",
+    "set": "COLO829T_fiberseq_d46",
+    "sample": "COLO829T",
+    "platform": "fiberseq",
+    "arm": "d46",
+    "kind": "INDEL",
+    "threshold": 0.011724080890417099,
+    "predictions": {
+     "predictions": 164198,
+     "excluded": 0,
+     "path": "/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/COLO829_fiberseq_INDEL_d46_7fc7396/test_chr1/COLO829T_fiberseq_d46.tensors.INDEL.predictions.ndjson.gz"
+    },
+    "check": {
+     "pon_tp": 34,
+     "pon_fn": 97,
+     "raw_tp": 58,
+     "raw_fn": 73,
+     "stage4": 34,
+     "stage123": 97,
+     "stage3": 24,
+     "stage12": 73,
+     "exact": true
+    },
+    "truth_pon_tags": {
+     "records": 131,
+     "tagged": 81,
+     "tagged_pass": 81,
+     "PoN1_gnomAD": 15,
+     "PoN2_dbSNP": 0,
+     "PoN3_1000G": 0,
+     "PoN4_CoLoRSdb": 77
+    },
+    "unplaced_pass": 2080
+   },
+   "funnel": {
+    "n": 131,
+    "no_tensor": 63,
+    "below_threshold": 10,
+    "pon": 24,
+    "called": 34
+   },
+   "reasons_stage1": {
+    "no_candidate": 27,
+    "absorbed": 26,
+    "other_allele": 4,
+    "af_floor": 6
+   },
+   "reasons_stage2": {
+    "below_threshold": 10
+   },
+   "stage1_partial_tensor": 25,
+   "stage1_partial_pass": 17,
+   "truth_pon_tagged": {
+    "no_tensor": 50,
+    "below_threshold": 7,
+    "pon": 24,
+    "called": 0
+   },
+   "stage3_call_pon_tagged": 24,
+   "stage4_without_exact_tensor": 0,
+   "stage3_without_exact_tensor": 0,
+   "vaf_sources": {
+    "tensor": 72,
+    "truth_vcf": 6,
+    "other_arm": 47,
+    "build_min_af": 6
+   },
+   "by_kind": {
+    "INS": {
+     "n": 77,
+     "no_tensor": 43,
+     "below_threshold": 3,
+     "pon": 13,
+     "called": 18
+    },
+    "DEL": {
+     "n": 54,
+     "no_tensor": 20,
+     "below_threshold": 7,
+     "pon": 11,
+     "called": 16
+    }
+   },
+   "by_vaf": {
+    "0-0.08": {
+     "n": 6,
+     "no_tensor": 6,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    },
+    "0.08-0.2": {
+     "n": 13,
+     "no_tensor": 5,
+     "below_threshold": 6,
+     "pon": 2,
+     "called": 0
+    },
+    "0.2-0.4": {
+     "n": 23,
+     "no_tensor": 13,
+     "below_threshold": 1,
+     "pon": 3,
+     "called": 6
+    },
+    ">0.4": {
+     "n": 89,
+     "no_tensor": 39,
+     "below_threshold": 3,
+     "pon": 19,
+     "called": 28
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 70,
+     "no_tensor": 25,
+     "below_threshold": 7,
+     "pon": 18,
+     "called": 20
+    },
+    "STR": {
+     "n": 27,
+     "no_tensor": 21,
+     "below_threshold": 0,
+     "pon": 5,
+     "called": 1
+    },
+    "other": {
+     "n": 34,
+     "no_tensor": 17,
+     "below_threshold": 3,
+     "pon": 1,
+     "called": 13
+    }
+   },
+   "by_vcf_vaf": {
+    "0.2-0.4": {
+     "n": 18,
+     "no_tensor": 10,
+     "below_threshold": 1,
+     "pon": 2,
+     "called": 5
+    },
+    ">0.4": {
+     "n": 113,
+     "no_tensor": 53,
+     "below_threshold": 9,
+     "pon": 22,
+     "called": 29
+    }
+   },
+   "untagged_funnel": {
+    "n": 50,
+    "no_tensor": 13,
+    "below_threshold": 3,
+    "pon": 0,
+    "called": 34
+   }
+  },
+  "COLO829_ONT_INDEL_linear_7fc7396__vcf_chr1": {
+   "meta": {
+    "run": "COLO829_ONT_INDEL_linear_7fc7396",
+    "vcf_dir": "vcf_chr1",
+    "group": "insample",
+    "set": "COLO829T_ONT_linear",
+    "sample": "COLO829T",
+    "platform": "ONT",
+    "arm": "linear",
+    "kind": "INDEL",
+    "threshold": 0.004976289812475443,
+    "predictions": {
+     "predictions": 402240,
+     "excluded": 0,
+     "path": "/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/COLO829_ONT_INDEL_linear_7fc7396/test_chr1/COLO829T_ONT_linear.tensors.INDEL.predictions.ndjson.gz"
+    },
+    "check": {
+     "pon_tp": 37,
+     "pon_fn": 94,
+     "raw_tp": 81,
+     "raw_fn": 50,
+     "stage4": 37,
+     "stage123": 94,
+     "stage3": 44,
+     "stage12": 50,
+     "exact": true
+    },
+    "truth_pon_tags": {
+     "records": 131,
+     "tagged": 81,
+     "tagged_pass": 81,
+     "PoN1_gnomAD": 15,
+     "PoN2_dbSNP": 0,
+     "PoN3_1000G": 0,
+     "PoN4_CoLoRSdb": 77
+    },
+    "unplaced_pass": 0
+   },
+   "funnel": {
+    "n": 131,
+    "no_tensor": 25,
+    "below_threshold": 25,
+    "pon": 44,
+    "called": 37
+   },
+   "reasons_stage1": {
+    "other_allele": 19,
+    "af_floor": 5,
+    "min_variants": 1
+   },
+   "reasons_stage2": {
+    "below_threshold": 25
+   },
+   "stage1_partial_tensor": 12,
+   "stage1_partial_pass": 8,
+   "truth_pon_tagged": {
+    "no_tensor": 19,
+    "below_threshold": 18,
+    "pon": 44,
+    "called": 0
+   },
+   "stage3_call_pon_tagged": 44,
+   "stage4_without_exact_tensor": 0,
+   "stage3_without_exact_tensor": 0,
+   "vaf_sources": {
+    "tensor": 125,
+    "build_min_af": 5,
+    "truth_vcf": 1
+   },
+   "by_kind": {
+    "INS": {
+     "n": 77,
+     "no_tensor": 12,
+     "below_threshold": 18,
+     "pon": 29,
+     "called": 18
+    },
+    "DEL": {
+     "n": 54,
+     "no_tensor": 13,
+     "below_threshold": 7,
+     "pon": 15,
+     "called": 19
+    }
+   },
+   "by_vaf": {
+    "0-0.08": {
+     "n": 5,
+     "no_tensor": 5,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    },
+    "0.08-0.2": {
+     "n": 32,
+     "no_tensor": 16,
+     "below_threshold": 8,
+     "pon": 3,
+     "called": 5
+    },
+    "0.2-0.4": {
+     "n": 50,
+     "no_tensor": 3,
+     "below_threshold": 7,
+     "pon": 27,
+     "called": 13
+    },
+    ">0.4": {
+     "n": 44,
+     "no_tensor": 1,
+     "below_threshold": 10,
+     "pon": 14,
+     "called": 19
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 70,
+     "no_tensor": 22,
+     "below_threshold": 11,
+     "pon": 19,
+     "called": 18
+    },
+    "STR": {
+     "n": 27,
+     "no_tensor": 1,
+     "below_threshold": 6,
+     "pon": 18,
+     "called": 2
+    },
+    "other": {
+     "n": 34,
+     "no_tensor": 2,
+     "below_threshold": 8,
+     "pon": 7,
+     "called": 17
+    }
+   },
+   "by_vcf_vaf": {
+    "0.2-0.4": {
+     "n": 18,
+     "no_tensor": 5,
+     "below_threshold": 2,
+     "pon": 4,
+     "called": 7
+    },
+    ">0.4": {
+     "n": 113,
+     "no_tensor": 20,
+     "below_threshold": 23,
+     "pon": 40,
+     "called": 30
+    }
+   },
+   "untagged_funnel": {
+    "n": 50,
+    "no_tensor": 6,
+    "below_threshold": 7,
+    "pon": 0,
+    "called": 37
+   }
+  },
+  "COLO829_ONT_INDEL_d46_7fc7396__vcf_chr1": {
+   "meta": {
+    "run": "COLO829_ONT_INDEL_d46_7fc7396",
+    "vcf_dir": "vcf_chr1",
+    "group": "insample",
+    "set": "COLO829T_ONT_d46",
+    "sample": "COLO829T",
+    "platform": "ONT",
+    "arm": "d46",
+    "kind": "INDEL",
+    "threshold": 0.012749798595905304,
+    "predictions": {
+     "predictions": 393219,
+     "excluded": 0,
+     "path": "/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/COLO829_ONT_INDEL_d46_7fc7396/test_chr1/COLO829T_ONT_d46.tensors.INDEL.predictions.ndjson.gz"
+    },
+    "check": {
+     "pon_tp": 30,
+     "pon_fn": 101,
+     "raw_tp": 50,
+     "raw_fn": 81,
+     "stage4": 30,
+     "stage123": 101,
+     "stage3": 20,
+     "stage12": 81,
+     "exact": true
+    },
+    "truth_pon_tags": {
+     "records": 131,
+     "tagged": 81,
+     "tagged_pass": 81,
+     "PoN1_gnomAD": 15,
+     "PoN2_dbSNP": 0,
+     "PoN3_1000G": 0,
+     "PoN4_CoLoRSdb": 77
+    },
+    "unplaced_pass": 9258
+   },
+   "funnel": {
+    "n": 131,
+    "no_tensor": 75,
+    "below_threshold": 6,
+    "pon": 20,
+    "called": 30
+   },
+   "reasons_stage1": {
+    "no_candidate": 24,
+    "af_floor": 10,
+    "other_allele": 15,
+    "min_variants": 5,
+    "absorbed": 21
+   },
+   "reasons_stage2": {
+    "below_threshold": 6
+   },
+   "stage1_partial_tensor": 32,
+   "stage1_partial_pass": 26,
+   "truth_pon_tagged": {
+    "no_tensor": 59,
+    "below_threshold": 2,
+    "pon": 20,
+    "called": 0
+   },
+   "stage3_call_pon_tagged": 20,
+   "stage4_without_exact_tensor": 0,
+   "stage3_without_exact_tensor": 0,
+   "vaf_sources": {
+    "tensor": 71,
+    "other_arm": 48,
+    "build_min_af": 10,
+    "truth_vcf": 2
+   },
+   "by_kind": {
+    "INS": {
+     "n": 77,
+     "no_tensor": 48,
+     "below_threshold": 1,
+     "pon": 12,
+     "called": 16
+    },
+    "DEL": {
+     "n": 54,
+     "no_tensor": 27,
+     "below_threshold": 5,
+     "pon": 8,
+     "called": 14
+    }
+   },
+   "by_vaf": {
+    "0-0.08": {
+     "n": 10,
+     "no_tensor": 10,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    },
+    "0.08-0.2": {
+     "n": 37,
+     "no_tensor": 23,
+     "below_threshold": 5,
+     "pon": 6,
+     "called": 3
+    },
+    "0.2-0.4": {
+     "n": 42,
+     "no_tensor": 21,
+     "below_threshold": 0,
+     "pon": 11,
+     "called": 10
+    },
+    ">0.4": {
+     "n": 42,
+     "no_tensor": 21,
+     "below_threshold": 1,
+     "pon": 3,
+     "called": 17
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 70,
+     "no_tensor": 37,
+     "below_threshold": 3,
+     "pon": 13,
+     "called": 17
+    },
+    "STR": {
+     "n": 27,
+     "no_tensor": 21,
+     "below_threshold": 0,
+     "pon": 5,
+     "called": 1
+    },
+    "other": {
+     "n": 34,
+     "no_tensor": 17,
+     "below_threshold": 3,
+     "pon": 2,
+     "called": 12
+    }
+   },
+   "by_vcf_vaf": {
+    "0.2-0.4": {
+     "n": 18,
+     "no_tensor": 11,
+     "below_threshold": 2,
+     "pon": 1,
+     "called": 4
+    },
+    ">0.4": {
+     "n": 113,
+     "no_tensor": 64,
+     "below_threshold": 4,
+     "pon": 19,
+     "called": 26
+    }
+   },
+   "untagged_funnel": {
+    "n": 50,
+    "no_tensor": 16,
+    "below_threshold": 4,
+    "pon": 0,
+    "called": 30
+   }
+  },
+  "HG008_Illumina_INDEL_linear_7fc7396__vcf_chr1": {
+   "meta": {
+    "run": "HG008_Illumina_INDEL_linear_7fc7396",
+    "vcf_dir": "vcf_chr1",
+    "group": "insample",
+    "set": "HG008T_Illumina_linear",
+    "sample": "HG008T",
+    "platform": "Illumina",
+    "arm": "linear",
+    "kind": "INDEL",
+    "threshold": 0.04801846295595169,
+    "predictions": {
+     "predictions": 75767,
+     "excluded": 0,
+     "path": "/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/HG008_Illumina_INDEL_linear_7fc7396/test_chr1/HG008T_Illumina_linear.tensors.INDEL.predictions.ndjson.gz"
+    },
+    "check": {
+     "pon_tp": 154,
+     "pon_fn": 433,
+     "raw_tp": 433,
+     "raw_fn": 154,
+     "stage4": 154,
+     "stage123": 433,
+     "stage3": 279,
+     "stage12": 154,
+     "exact": true
+    },
+    "truth_pon_tags": {
+     "records": 635,
+     "tagged": 413,
+     "tagged_pass": 413,
+     "PoN1_gnomAD": 50,
+     "PoN2_dbSNP": 0,
+     "PoN3_1000G": 0,
+     "PoN4_CoLoRSdb": 405
+    },
+    "unplaced_pass": 0
+   },
+   "funnel": {
+    "n": 587,
+    "no_tensor": 114,
+    "below_threshold": 40,
+    "pon": 279,
+    "called": 154
+   },
+   "reasons_stage1": {
+    "min_variants": 14,
+    "af_floor": 33,
+    "no_candidate": 34,
+    "other_allele": 33
+   },
+   "reasons_stage2": {
+    "below_threshold": 40
+   },
+   "stage1_partial_tensor": 14,
+   "stage1_partial_pass": 3,
+   "truth_pon_tagged": {
+    "no_tensor": 76,
+    "below_threshold": 24,
+    "pon": 279,
+    "called": 0
+   },
+   "stage3_call_pon_tagged": 279,
+   "stage4_without_exact_tensor": 0,
+   "stage3_without_exact_tensor": 0,
+   "vaf_sources": {
+    "tensor": 506,
+    "unknown": 14,
+    "build_min_af": 33,
+    "other_platform": 33,
+    "other_arm": 1
+   },
+   "by_kind": {
+    "INS": {
+     "n": 368,
+     "no_tensor": 78,
+     "below_threshold": 26,
+     "pon": 173,
+     "called": 91
+    },
+    "DEL": {
+     "n": 219,
+     "no_tensor": 36,
+     "below_threshold": 14,
+     "pon": 106,
+     "called": 63
+    }
+   },
+   "by_vaf": {
+    "0-0.08": {
+     "n": 33,
+     "no_tensor": 33,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    },
+    "0.08-0.2": {
+     "n": 82,
+     "no_tensor": 22,
+     "below_threshold": 8,
+     "pon": 42,
+     "called": 10
+    },
+    "0.2-0.4": {
+     "n": 224,
+     "no_tensor": 39,
+     "below_threshold": 7,
+     "pon": 126,
+     "called": 52
+    },
+    ">0.4": {
+     "n": 234,
+     "no_tensor": 6,
+     "below_threshold": 25,
+     "pon": 111,
+     "called": 92
+    },
+    "unknown": {
+     "n": 14,
+     "no_tensor": 14,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 435,
+     "no_tensor": 62,
+     "below_threshold": 21,
+     "pon": 236,
+     "called": 116
+    },
+    "STR": {
+     "n": 65,
+     "no_tensor": 26,
+     "below_threshold": 5,
+     "pon": 31,
+     "called": 3
+    },
+    "other": {
+     "n": 87,
+     "no_tensor": 26,
+     "below_threshold": 14,
+     "pon": 12,
+     "called": 35
+    }
+   },
+   "untagged_funnel": {
+    "n": 208,
+    "no_tensor": 38,
+    "below_threshold": 16,
+    "pon": 0,
+    "called": 154
+   }
+  },
+  "HG008_Illumina_INDEL_7fc7396__vcf_chr1": {
+   "meta": {
+    "run": "HG008_Illumina_INDEL_7fc7396",
+    "vcf_dir": "vcf_chr1",
+    "group": "insample",
+    "set": "HG008T_Illumina",
+    "sample": "HG008T",
+    "platform": "Illumina",
+    "arm": "d9",
+    "kind": "INDEL",
+    "threshold": 0.11949265748262405,
+    "predictions": {
+     "predictions": 12674,
+     "excluded": 0,
+     "path": "/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/HG008_Illumina_INDEL_7fc7396/test_chr1/HG008T_Illumina.tensors.INDEL.predictions.ndjson.gz"
+    },
+    "check": {
+     "pon_tp": 140,
+     "pon_fn": 447,
+     "raw_tp": 211,
+     "raw_fn": 376,
+     "stage4": 140,
+     "stage123": 447,
+     "stage3": 71,
+     "stage12": 376,
+     "exact": true
+    },
+    "truth_pon_tags": {
+     "records": 635,
+     "tagged": 413,
+     "tagged_pass": 413,
+     "PoN1_gnomAD": 50,
+     "PoN2_dbSNP": 0,
+     "PoN3_1000G": 0,
+     "PoN4_CoLoRSdb": 405
+    },
+    "unplaced_pass": 564
+   },
+   "funnel": {
+    "n": 587,
+    "no_tensor": 351,
+    "below_threshold": 25,
+    "pon": 71,
+    "called": 140
+   },
+   "reasons_stage1": {
+    "min_variants": 46,
+    "no_candidate": 145,
+    "absorbed": 137,
+    "af_floor": 20,
+    "other_allele": 3
+   },
+   "reasons_stage2": {
+    "below_threshold": 25
+   },
+   "stage1_partial_tensor": 82,
+   "stage1_partial_pass": 48,
+   "truth_pon_tagged": {
+    "no_tensor": 294,
+    "below_threshold": 14,
+    "pon": 71,
+    "called": 0
+   },
+   "stage3_call_pon_tagged": 71,
+   "stage4_without_exact_tensor": 0,
+   "stage3_without_exact_tensor": 0,
+   "vaf_sources": {
+    "tensor": 239,
+    "other_arm": 256,
+    "unknown": 15,
+    "other_platform": 57,
+    "build_min_af": 20
+   },
+   "by_kind": {
+    "INS": {
+     "n": 368,
+     "no_tensor": 240,
+     "below_threshold": 12,
+     "pon": 38,
+     "called": 78
+    },
+    "DEL": {
+     "n": 219,
+     "no_tensor": 111,
+     "below_threshold": 13,
+     "pon": 33,
+     "called": 62
+    }
+   },
+   "by_vaf": {
+    "0-0.08": {
+     "n": 20,
+     "no_tensor": 20,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    },
+    "0.08-0.2": {
+     "n": 98,
+     "no_tensor": 84,
+     "below_threshold": 11,
+     "pon": 3,
+     "called": 0
+    },
+    "0.2-0.4": {
+     "n": 218,
+     "no_tensor": 130,
+     "below_threshold": 5,
+     "pon": 35,
+     "called": 48
+    },
+    ">0.4": {
+     "n": 236,
+     "no_tensor": 102,
+     "below_threshold": 9,
+     "pon": 33,
+     "called": 92
+    },
+    "unknown": {
+     "n": 15,
+     "no_tensor": 15,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 435,
+     "no_tensor": 250,
+     "below_threshold": 16,
+     "pon": 66,
+     "called": 103
+    },
+    "STR": {
+     "n": 65,
+     "no_tensor": 58,
+     "below_threshold": 3,
+     "pon": 3,
+     "called": 1
+    },
+    "other": {
+     "n": 87,
+     "no_tensor": 43,
+     "below_threshold": 6,
+     "pon": 2,
+     "called": 36
+    }
+   },
+   "untagged_funnel": {
+    "n": 208,
+    "no_tensor": 57,
+    "below_threshold": 11,
+    "pon": 0,
+    "called": 140
+   }
+  },
+  "HG008_Illumina_INDEL_d46_7fc7396__vcf_chr1": {
+   "meta": {
+    "run": "HG008_Illumina_INDEL_d46_7fc7396",
+    "vcf_dir": "vcf_chr1",
+    "group": "insample",
+    "set": "HG008T_Illumina_d46",
+    "sample": "HG008T",
+    "platform": "Illumina",
+    "arm": "d46",
+    "kind": "INDEL",
+    "threshold": 0.10646037012338638,
+    "predictions": {
+     "predictions": 11643,
+     "excluded": 0,
+     "path": "/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/HG008_Illumina_INDEL_d46_7fc7396/test_chr1/HG008T_Illumina_d46.tensors.INDEL.predictions.ndjson.gz"
+    },
+    "check": {
+     "pon_tp": 141,
+     "pon_fn": 446,
+     "raw_tp": 219,
+     "raw_fn": 368,
+     "stage4": 141,
+     "stage123": 446,
+     "stage3": 78,
+     "stage12": 368,
+     "exact": true
+    },
+    "truth_pon_tags": {
+     "records": 635,
+     "tagged": 413,
+     "tagged_pass": 413,
+     "PoN1_gnomAD": 50,
+     "PoN2_dbSNP": 0,
+     "PoN3_1000G": 0,
+     "PoN4_CoLoRSdb": 405
+    },
+    "unplaced_pass": 583
+   },
+   "funnel": {
+    "n": 587,
+    "no_tensor": 333,
+    "below_threshold": 35,
+    "pon": 78,
+    "called": 141
+   },
+   "reasons_stage1": {
+    "af_floor": 15,
+    "no_candidate": 157,
+    "absorbed": 108,
+    "other_allele": 7,
+    "min_variants": 46
+   },
+   "reasons_stage2": {
+    "below_threshold": 35
+   },
+   "stage1_partial_tensor": 106,
+   "stage1_partial_pass": 64,
+   "truth_pon_tagged": {
+    "no_tensor": 278,
+    "below_threshold": 23,
+    "pon": 78,
+    "called": 0
+   },
+   "stage3_call_pon_tagged": 78,
+   "stage4_without_exact_tensor": 0,
+   "stage3_without_exact_tensor": 0,
+   "vaf_sources": {
+    "tensor": 261,
+    "build_min_af": 15,
+    "other_arm": 238,
+    "unknown": 15,
+    "other_platform": 58
+   },
+   "by_kind": {
+    "INS": {
+     "n": 368,
+     "no_tensor": 222,
+     "below_threshold": 23,
+     "pon": 44,
+     "called": 79
+    },
+    "DEL": {
+     "n": 219,
+     "no_tensor": 111,
+     "below_threshold": 12,
+     "pon": 34,
+     "called": 62
+    }
+   },
+   "by_vaf": {
+    "0-0.08": {
+     "n": 15,
+     "no_tensor": 15,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    },
+    "0.08-0.2": {
+     "n": 103,
+     "no_tensor": 84,
+     "below_threshold": 12,
+     "pon": 5,
+     "called": 2
+    },
+    "0.2-0.4": {
+     "n": 223,
+     "no_tensor": 129,
+     "below_threshold": 12,
+     "pon": 37,
+     "called": 45
+    },
+    ">0.4": {
+     "n": 231,
+     "no_tensor": 90,
+     "below_threshold": 11,
+     "pon": 36,
+     "called": 94
+    },
+    "unknown": {
+     "n": 15,
+     "no_tensor": 15,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 435,
+     "no_tensor": 234,
+     "below_threshold": 25,
+     "pon": 75,
+     "called": 101
+    },
+    "STR": {
+     "n": 65,
+     "no_tensor": 57,
+     "below_threshold": 7,
+     "pon": 1,
+     "called": 0
+    },
+    "other": {
+     "n": 87,
+     "no_tensor": 42,
+     "below_threshold": 3,
+     "pon": 2,
+     "called": 40
+    }
+   },
+   "untagged_funnel": {
+    "n": 208,
+    "no_tensor": 55,
+    "below_threshold": 12,
+    "pon": 0,
+    "called": 141
+   }
+  },
+  "HG008_PacBio_INDEL_linear_7fc7396__vcf_chr1": {
+   "meta": {
+    "run": "HG008_PacBio_INDEL_linear_7fc7396",
+    "vcf_dir": "vcf_chr1",
+    "group": "insample",
+    "set": "HG008T_PacBio_linear",
+    "sample": "HG008T",
+    "platform": "PacBio",
+    "arm": "linear",
+    "kind": "INDEL",
+    "threshold": 0.036697905510663986,
+    "predictions": {
+     "predictions": 203810,
+     "excluded": 0,
+     "path": "/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/HG008_PacBio_INDEL_linear_7fc7396/test_chr1/HG008T_PacBio_linear.tensors.INDEL.predictions.ndjson.gz"
+    },
+    "check": {
+     "pon_tp": 153,
+     "pon_fn": 434,
+     "raw_tp": 443,
+     "raw_fn": 144,
+     "stage4": 153,
+     "stage123": 434,
+     "stage3": 290,
+     "stage12": 144,
+     "exact": true
+    },
+    "truth_pon_tags": {
+     "records": 635,
+     "tagged": 413,
+     "tagged_pass": 413,
+     "PoN1_gnomAD": 50,
+     "PoN2_dbSNP": 0,
+     "PoN3_1000G": 0,
+     "PoN4_CoLoRSdb": 405
+    },
+    "unplaced_pass": 0
+   },
+   "funnel": {
+    "n": 587,
+    "no_tensor": 92,
+    "below_threshold": 52,
+    "pon": 290,
+    "called": 153
+   },
+   "reasons_stage1": {
+    "other_allele": 71,
+    "af_floor": 7,
+    "no_candidate": 11,
+    "min_variants": 3
+   },
+   "reasons_stage2": {
+    "below_threshold": 52
+   },
+   "stage1_partial_tensor": 19,
+   "stage1_partial_pass": 15,
+   "truth_pon_tagged": {
+    "no_tensor": 64,
+    "below_threshold": 25,
+    "pon": 290,
+    "called": 0
+   },
+   "stage3_call_pon_tagged": 290,
+   "stage4_without_exact_tensor": 0,
+   "stage3_without_exact_tensor": 0,
+   "vaf_sources": {
+    "tensor": 566,
+    "build_min_af": 7,
+    "unknown": 11,
+    "other_platform": 3
+   },
+   "by_kind": {
+    "INS": {
+     "n": 368,
+     "no_tensor": 67,
+     "below_threshold": 27,
+     "pon": 178,
+     "called": 96
+    },
+    "DEL": {
+     "n": 219,
+     "no_tensor": 25,
+     "below_threshold": 25,
+     "pon": 112,
+     "called": 57
+    }
+   },
+   "by_vaf": {
+    "0-0.08": {
+     "n": 7,
+     "no_tensor": 7,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    },
+    "0.08-0.2": {
+     "n": 38,
+     "no_tensor": 22,
+     "below_threshold": 0,
+     "pon": 13,
+     "called": 3
+    },
+    "0.2-0.4": {
+     "n": 218,
+     "no_tensor": 47,
+     "below_threshold": 5,
+     "pon": 113,
+     "called": 53
+    },
+    ">0.4": {
+     "n": 313,
+     "no_tensor": 5,
+     "below_threshold": 47,
+     "pon": 164,
+     "called": 97
+    },
+    "unknown": {
+     "n": 11,
+     "no_tensor": 11,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 435,
+     "no_tensor": 60,
+     "below_threshold": 18,
+     "pon": 238,
+     "called": 119
+    },
+    "STR": {
+     "n": 65,
+     "no_tensor": 18,
+     "below_threshold": 8,
+     "pon": 33,
+     "called": 6
+    },
+    "other": {
+     "n": 87,
+     "no_tensor": 14,
+     "below_threshold": 26,
+     "pon": 19,
+     "called": 28
+    }
+   },
+   "untagged_funnel": {
+    "n": 208,
+    "no_tensor": 28,
+    "below_threshold": 27,
+    "pon": 0,
+    "called": 153
+   }
+  },
+  "HG008_PacBio_INDEL_7fc7396__vcf_chr1": {
+   "meta": {
+    "run": "HG008_PacBio_INDEL_7fc7396",
+    "vcf_dir": "vcf_chr1",
+    "group": "insample",
+    "set": "HG008T_PacBio",
+    "sample": "HG008T",
+    "platform": "PacBio",
+    "arm": "d9",
+    "kind": "INDEL",
+    "threshold": 0.03972123563289642,
+    "predictions": {
+     "predictions": 161836,
+     "excluded": 0,
+     "path": "/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/HG008_PacBio_INDEL_7fc7396/test_chr1/HG008T_PacBio.tensors.INDEL.predictions.ndjson.gz"
+    },
+    "check": {
+     "pon_tp": 150,
+     "pon_fn": 437,
+     "raw_tp": 253,
+     "raw_fn": 334,
+     "stage4": 150,
+     "stage123": 437,
+     "stage3": 103,
+     "stage12": 334,
+     "exact": true
+    },
+    "truth_pon_tags": {
+     "records": 635,
+     "tagged": 413,
+     "tagged_pass": 413,
+     "PoN1_gnomAD": 50,
+     "PoN2_dbSNP": 0,
+     "PoN3_1000G": 0,
+     "PoN4_CoLoRSdb": 405
+    },
+    "unplaced_pass": 2076
+   },
+   "funnel": {
+    "n": 587,
+    "no_tensor": 310,
+    "below_threshold": 24,
+    "pon": 103,
+    "called": 150
+   },
+   "reasons_stage1": {
+    "no_candidate": 144,
+    "absorbed": 81,
+    "min_variants": 29,
+    "other_allele": 16,
+    "af_floor": 40
+   },
+   "reasons_stage2": {
+    "below_threshold": 24
+   },
+   "stage1_partial_tensor": 137,
+   "stage1_partial_pass": 81,
+   "truth_pon_tagged": {
+    "no_tensor": 255,
+    "below_threshold": 21,
+    "pon": 103,
+    "called": 0
+   },
+   "stage3_call_pon_tagged": 103,
+   "stage4_without_exact_tensor": 0,
+   "stage3_without_exact_tensor": 0,
+   "vaf_sources": {
+    "tensor": 293,
+    "other_arm": 235,
+    "unknown": 14,
+    "build_min_af": 40,
+    "other_platform": 5
+   },
+   "by_kind": {
+    "INS": {
+     "n": 368,
+     "no_tensor": 220,
+     "below_threshold": 9,
+     "pon": 53,
+     "called": 86
+    },
+    "DEL": {
+     "n": 219,
+     "no_tensor": 90,
+     "below_threshold": 15,
+     "pon": 50,
+     "called": 64
+    }
+   },
+   "by_vaf": {
+    "0-0.08": {
+     "n": 40,
+     "no_tensor": 40,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    },
+    "0.08-0.2": {
+     "n": 79,
+     "no_tensor": 45,
+     "below_threshold": 15,
+     "pon": 18,
+     "called": 1
+    },
+    "0.2-0.4": {
+     "n": 188,
+     "no_tensor": 104,
+     "below_threshold": 6,
+     "pon": 40,
+     "called": 38
+    },
+    ">0.4": {
+     "n": 266,
+     "no_tensor": 107,
+     "below_threshold": 3,
+     "pon": 45,
+     "called": 111
+    },
+    "unknown": {
+     "n": 14,
+     "no_tensor": 14,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 435,
+     "no_tensor": 212,
+     "below_threshold": 19,
+     "pon": 96,
+     "called": 108
+    },
+    "STR": {
+     "n": 65,
+     "no_tensor": 55,
+     "below_threshold": 3,
+     "pon": 6,
+     "called": 1
+    },
+    "other": {
+     "n": 87,
+     "no_tensor": 43,
+     "below_threshold": 2,
+     "pon": 1,
+     "called": 41
+    }
+   },
+   "untagged_funnel": {
+    "n": 208,
+    "no_tensor": 55,
+    "below_threshold": 3,
+    "pon": 0,
+    "called": 150
+   }
+  },
+  "HG008_PacBio_INDEL_d46_7fc7396__vcf_chr1": {
+   "meta": {
+    "run": "HG008_PacBio_INDEL_d46_7fc7396",
+    "vcf_dir": "vcf_chr1",
+    "group": "insample",
+    "set": "HG008T_PacBio_d46",
+    "sample": "HG008T",
+    "platform": "PacBio",
+    "arm": "d46",
+    "kind": "INDEL",
+    "threshold": 0.026991212740540504,
+    "predictions": {
+     "predictions": 167382,
+     "excluded": 0,
+     "path": "/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/HG008_PacBio_INDEL_d46_7fc7396/test_chr1/HG008T_PacBio_d46.tensors.INDEL.predictions.ndjson.gz"
+    },
+    "check": {
+     "pon_tp": 151,
+     "pon_fn": 436,
+     "raw_tp": 253,
+     "raw_fn": 334,
+     "stage4": 151,
+     "stage123": 436,
+     "stage3": 102,
+     "stage12": 334,
+     "exact": true
+    },
+    "truth_pon_tags": {
+     "records": 635,
+     "tagged": 413,
+     "tagged_pass": 413,
+     "PoN1_gnomAD": 50,
+     "PoN2_dbSNP": 0,
+     "PoN3_1000G": 0,
+     "PoN4_CoLoRSdb": 405
+    },
+    "unplaced_pass": 3350
+   },
+   "funnel": {
+    "n": 587,
+    "no_tensor": 305,
+    "below_threshold": 29,
+    "pon": 102,
+    "called": 151
+   },
+   "reasons_stage1": {
+    "no_candidate": 164,
+    "absorbed": 77,
+    "min_variants": 19,
+    "other_allele": 19,
+    "af_floor": 26
+   },
+   "reasons_stage2": {
+    "below_threshold": 29
+   },
+   "stage1_partial_tensor": 164,
+   "stage1_partial_pass": 124,
+   "truth_pon_tagged": {
+    "no_tensor": 250,
+    "below_threshold": 27,
+    "pon": 102,
+    "called": 0
+   },
+   "stage3_call_pon_tagged": 102,
+   "stage4_without_exact_tensor": 0,
+   "stage3_without_exact_tensor": 0,
+   "vaf_sources": {
+    "tensor": 301,
+    "other_arm": 241,
+    "unknown": 14,
+    "build_min_af": 26,
+    "other_platform": 5
+   },
+   "by_kind": {
+    "INS": {
+     "n": 368,
+     "no_tensor": 215,
+     "below_threshold": 8,
+     "pon": 59,
+     "called": 86
+    },
+    "DEL": {
+     "n": 219,
+     "no_tensor": 90,
+     "below_threshold": 21,
+     "pon": 43,
+     "called": 65
+    }
+   },
+   "by_vaf": {
+    "0-0.08": {
+     "n": 26,
+     "no_tensor": 26,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    },
+    "0.08-0.2": {
+     "n": 69,
+     "no_tensor": 46,
+     "below_threshold": 16,
+     "pon": 7,
+     "called": 0
+    },
+    "0.2-0.4": {
+     "n": 202,
+     "no_tensor": 111,
+     "below_threshold": 11,
+     "pon": 42,
+     "called": 38
+    },
+    ">0.4": {
+     "n": 276,
+     "no_tensor": 108,
+     "below_threshold": 2,
+     "pon": 53,
+     "called": 113
+    },
+    "unknown": {
+     "n": 14,
+     "no_tensor": 14,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 435,
+     "no_tensor": 208,
+     "below_threshold": 26,
+     "pon": 93,
+     "called": 108
+    },
+    "STR": {
+     "n": 65,
+     "no_tensor": 57,
+     "below_threshold": 0,
+     "pon": 7,
+     "called": 1
+    },
+    "other": {
+     "n": 87,
+     "no_tensor": 40,
+     "below_threshold": 3,
+     "pon": 2,
+     "called": 42
+    }
+   },
+   "untagged_funnel": {
+    "n": 208,
+    "no_tensor": 55,
+    "below_threshold": 2,
+    "pon": 0,
+    "called": 151
+   }
+  },
+  "HG008_ONT_INDEL_linear_7fc7396__vcf_chr1": {
+   "meta": {
+    "run": "HG008_ONT_INDEL_linear_7fc7396",
+    "vcf_dir": "vcf_chr1",
+    "group": "insample",
+    "set": "HG008T_ONT_linear",
+    "sample": "HG008T",
+    "platform": "ONT",
+    "arm": "linear",
+    "kind": "INDEL",
+    "threshold": 0.008446893654763699,
+    "predictions": {
+     "predictions": 255697,
+     "excluded": 0,
+     "path": "/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/HG008_ONT_INDEL_linear_7fc7396/test_chr1/HG008T_ONT_linear.tensors.INDEL.predictions.ndjson.gz"
+    },
+    "check": {
+     "pon_tp": 140,
+     "pon_fn": 447,
+     "raw_tp": 316,
+     "raw_fn": 271,
+     "stage4": 140,
+     "stage123": 447,
+     "stage3": 176,
+     "stage12": 271,
+     "exact": true
+    },
+    "truth_pon_tags": {
+     "records": 635,
+     "tagged": 413,
+     "tagged_pass": 413,
+     "PoN1_gnomAD": 50,
+     "PoN2_dbSNP": 0,
+     "PoN3_1000G": 0,
+     "PoN4_CoLoRSdb": 405
+    },
+    "unplaced_pass": 0
+   },
+   "funnel": {
+    "n": 587,
+    "no_tensor": 242,
+    "below_threshold": 29,
+    "pon": 176,
+    "called": 140
+   },
+   "reasons_stage1": {
+    "other_allele": 155,
+    "min_variants": 49,
+    "af_floor": 22,
+    "no_candidate": 16
+   },
+   "reasons_stage2": {
+    "below_threshold": 29
+   },
+   "stage1_partial_tensor": 96,
+   "stage1_partial_pass": 86,
+   "truth_pon_tagged": {
+    "no_tensor": 191,
+    "below_threshold": 12,
+    "pon": 176,
+    "called": 0
+   },
+   "stage3_call_pon_tagged": 176,
+   "stage4_without_exact_tensor": 0,
+   "stage3_without_exact_tensor": 0,
+   "vaf_sources": {
+    "tensor": 500,
+    "unknown": 14,
+    "build_min_af": 22,
+    "other_platform": 46,
+    "other_arm": 5
+   },
+   "by_kind": {
+    "INS": {
+     "n": 368,
+     "no_tensor": 165,
+     "below_threshold": 20,
+     "pon": 101,
+     "called": 82
+    },
+    "DEL": {
+     "n": 219,
+     "no_tensor": 77,
+     "below_threshold": 9,
+     "pon": 75,
+     "called": 58
+    }
+   },
+   "by_vaf": {
+    "0-0.08": {
+     "n": 22,
+     "no_tensor": 22,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    },
+    "0.08-0.2": {
+     "n": 220,
+     "no_tensor": 146,
+     "below_threshold": 7,
+     "pon": 51,
+     "called": 16
+    },
+    "0.2-0.4": {
+     "n": 199,
+     "no_tensor": 55,
+     "below_threshold": 13,
+     "pon": 81,
+     "called": 50
+    },
+    ">0.4": {
+     "n": 132,
+     "no_tensor": 5,
+     "below_threshold": 9,
+     "pon": 44,
+     "called": 74
+    },
+    "unknown": {
+     "n": 14,
+     "no_tensor": 14,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 435,
+     "no_tensor": 204,
+     "below_threshold": 22,
+     "pon": 119,
+     "called": 90
+    },
+    "STR": {
+     "n": 65,
+     "no_tensor": 16,
+     "below_threshold": 2,
+     "pon": 39,
+     "called": 8
+    },
+    "other": {
+     "n": 87,
+     "no_tensor": 22,
+     "below_threshold": 5,
+     "pon": 18,
+     "called": 42
+    }
+   },
+   "untagged_funnel": {
+    "n": 208,
+    "no_tensor": 51,
+    "below_threshold": 17,
+    "pon": 0,
+    "called": 140
+   }
+  },
+  "HG008_ONT_INDEL_7fc7396__vcf_chr1": {
+   "meta": {
+    "run": "HG008_ONT_INDEL_7fc7396",
+    "vcf_dir": "vcf_chr1",
+    "group": "insample",
+    "set": "HG008T_ONT",
+    "sample": "HG008T",
+    "platform": "ONT",
+    "arm": "d9",
+    "kind": "INDEL",
+    "threshold": 0.01780148223042488,
+    "predictions": {
+     "predictions": 225724,
+     "excluded": 0,
+     "path": "/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/HG008_ONT_INDEL_7fc7396/test_chr1/HG008T_ONT.tensors.INDEL.predictions.ndjson.gz"
+    },
+    "check": {
+     "pon_tp": 134,
+     "pon_fn": 453,
+     "raw_tp": 235,
+     "raw_fn": 352,
+     "stage4": 134,
+     "stage123": 453,
+     "stage3": 101,
+     "stage12": 352,
+     "exact": true
+    },
+    "truth_pon_tags": {
+     "records": 635,
+     "tagged": 413,
+     "tagged_pass": 413,
+     "PoN1_gnomAD": 50,
+     "PoN2_dbSNP": 0,
+     "PoN3_1000G": 0,
+     "PoN4_CoLoRSdb": 405
+    },
+    "unplaced_pass": 7285
+   },
+   "funnel": {
+    "n": 587,
+    "no_tensor": 326,
+    "below_threshold": 26,
+    "pon": 101,
+    "called": 134
+   },
+   "reasons_stage1": {
+    "no_candidate": 128,
+    "absorbed": 57,
+    "min_variants": 83,
+    "other_allele": 45,
+    "af_floor": 13
+   },
+   "reasons_stage2": {
+    "below_threshold": 26
+   },
+   "stage1_partial_tensor": 148,
+   "stage1_partial_pass": 125,
+   "truth_pon_tagged": {
+    "no_tensor": 266,
+    "below_threshold": 12,
+    "pon": 101,
+    "called": 0
+   },
+   "stage3_call_pon_tagged": 99,
+   "stage4_without_exact_tensor": 0,
+   "stage3_without_exact_tensor": 2,
+   "vaf_sources": {
+    "tensor": 304,
+    "other_arm": 199,
+    "unknown": 15,
+    "other_platform": 55,
+    "build_min_af": 14
+   },
+   "by_kind": {
+    "INS": {
+     "n": 368,
+     "no_tensor": 228,
+     "below_threshold": 8,
+     "pon": 56,
+     "called": 76
+    },
+    "DEL": {
+     "n": 219,
+     "no_tensor": 98,
+     "below_threshold": 18,
+     "pon": 45,
+     "called": 58
+    }
+   },
+   "by_vaf": {
+    "0-0.08": {
+     "n": 14,
+     "no_tensor": 13,
+     "below_threshold": 0,
+     "pon": 1,
+     "called": 0
+    },
+    "0.08-0.2": {
+     "n": 226,
+     "no_tensor": 157,
+     "below_threshold": 16,
+     "pon": 39,
+     "called": 14
+    },
+    "0.2-0.4": {
+     "n": 201,
+     "no_tensor": 104,
+     "below_threshold": 9,
+     "pon": 45,
+     "called": 43
+    },
+    ">0.4": {
+     "n": 131,
+     "no_tensor": 37,
+     "below_threshold": 1,
+     "pon": 16,
+     "called": 77
+    },
+    "unknown": {
+     "n": 15,
+     "no_tensor": 15,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 435,
+     "no_tensor": 228,
+     "below_threshold": 23,
+     "pon": 92,
+     "called": 92
+    },
+    "STR": {
+     "n": 65,
+     "no_tensor": 54,
+     "below_threshold": 1,
+     "pon": 8,
+     "called": 2
+    },
+    "other": {
+     "n": 87,
+     "no_tensor": 44,
+     "below_threshold": 2,
+     "pon": 1,
+     "called": 40
+    }
+   },
+   "untagged_funnel": {
+    "n": 208,
+    "no_tensor": 60,
+    "below_threshold": 14,
+    "pon": 0,
+    "called": 134
+   }
+  },
+  "HG008_ONT_INDEL_d46_7fc7396__vcf_chr1": {
+   "meta": {
+    "run": "HG008_ONT_INDEL_d46_7fc7396",
+    "vcf_dir": "vcf_chr1",
+    "group": "insample",
+    "set": "HG008T_ONT_d46",
+    "sample": "HG008T",
+    "platform": "ONT",
+    "arm": "d46",
+    "kind": "INDEL",
+    "threshold": 0.013545623049139977,
+    "predictions": {
+     "predictions": 228662,
+     "excluded": 0,
+     "path": "/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/HG008_ONT_INDEL_d46_7fc7396/test_chr1/HG008T_ONT_d46.tensors.INDEL.predictions.ndjson.gz"
+    },
+    "check": {
+     "pon_tp": 139,
+     "pon_fn": 448,
+     "raw_tp": 226,
+     "raw_fn": 361,
+     "stage4": 139,
+     "stage123": 448,
+     "stage3": 87,
+     "stage12": 361,
+     "exact": true
+    },
+    "truth_pon_tags": {
+     "records": 635,
+     "tagged": 413,
+     "tagged_pass": 413,
+     "PoN1_gnomAD": 50,
+     "PoN2_dbSNP": 0,
+     "PoN3_1000G": 0,
+     "PoN4_CoLoRSdb": 405
+    },
+    "unplaced_pass": 9899
+   },
+   "funnel": {
+    "n": 587,
+    "no_tensor": 341,
+    "below_threshold": 20,
+    "pon": 87,
+    "called": 139
+   },
+   "reasons_stage1": {
+    "absorbed": 64,
+    "no_candidate": 144,
+    "min_variants": 59,
+    "af_floor": 14,
+    "other_allele": 60
+   },
+   "reasons_stage2": {
+    "below_threshold": 20
+   },
+   "stage1_partial_tensor": 181,
+   "stage1_partial_pass": 149,
+   "truth_pon_tagged": {
+    "no_tensor": 278,
+    "below_threshold": 14,
+    "pon": 87,
+    "called": 0
+   },
+   "stage3_call_pon_tagged": 86,
+   "stage4_without_exact_tensor": 0,
+   "stage3_without_exact_tensor": 1,
+   "vaf_sources": {
+    "tensor": 306,
+    "other_arm": 199,
+    "unknown": 15,
+    "build_min_af": 14,
+    "other_platform": 53
+   },
+   "by_kind": {
+    "INS": {
+     "n": 368,
+     "no_tensor": 233,
+     "below_threshold": 12,
+     "pon": 48,
+     "called": 75
+    },
+    "DEL": {
+     "n": 219,
+     "no_tensor": 108,
+     "below_threshold": 8,
+     "pon": 39,
+     "called": 64
+    }
+   },
+   "by_vaf": {
+    "0-0.08": {
+     "n": 14,
+     "no_tensor": 14,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    },
+    "0.08-0.2": {
+     "n": 225,
+     "no_tensor": 175,
+     "below_threshold": 12,
+     "pon": 27,
+     "called": 11
+    },
+    "0.2-0.4": {
+     "n": 211,
+     "no_tensor": 102,
+     "below_threshold": 8,
+     "pon": 46,
+     "called": 55
+    },
+    ">0.4": {
+     "n": 122,
+     "no_tensor": 35,
+     "below_threshold": 0,
+     "pon": 14,
+     "called": 73
+    },
+    "unknown": {
+     "n": 15,
+     "no_tensor": 15,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 435,
+     "no_tensor": 246,
+     "below_threshold": 19,
+     "pon": 74,
+     "called": 96
+    },
+    "STR": {
+     "n": 65,
+     "no_tensor": 54,
+     "below_threshold": 0,
+     "pon": 10,
+     "called": 1
+    },
+    "other": {
+     "n": 87,
+     "no_tensor": 41,
+     "below_threshold": 1,
+     "pon": 3,
+     "called": 42
+    }
+   },
+   "untagged_funnel": {
+    "n": 208,
+    "no_tensor": 63,
+    "below_threshold": 6,
+    "pon": 0,
+    "called": 139
+   }
+  },
+  "COLO829_fiberseq_SNV_joint_7fc7396_gpu4__vcf_chr1_COLO829T_fiberseq": {
+   "meta": {
+    "run": "COLO829_fiberseq_SNV_joint_7fc7396_gpu4",
+    "vcf_dir": "vcf_chr1_COLO829T_fiberseq",
+    "group": "joint",
+    "set": "COLO829T_fiberseq",
+    "sample": "COLO829T",
+    "platform": "fiberseq",
+    "arm": "d9",
+    "kind": "SNV",
+    "threshold": 0.5492464303970337,
+    "predictions": {
+     "predictions": 97740,
+     "excluded": 0,
+     "path": "/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/COLO829_fiberseq_SNV_joint_7fc7396_gpu4/test_chr1/COLO829T_fiberseq.tensors.SNV.predictions.ndjson.gz"
+    },
+    "check": {
+     "pon_tp": 1707,
+     "pon_fn": 736,
+     "raw_tp": 1755,
+     "raw_fn": 688,
+     "stage4": 1707,
+     "stage123": 736,
+     "stage3": 48,
+     "stage12": 688,
+     "exact": true
+    },
+    "truth_pon_tags": {
+     "records": 2443,
+     "tagged": 84,
+     "tagged_pass": 84,
+     "PoN1_gnomAD": 62,
+     "PoN2_dbSNP": 40,
+     "PoN3_1000G": 2,
+     "PoN4_CoLoRSdb": 27
+    },
+    "unplaced_pass": 705
+   },
+   "funnel": {
+    "n": 2443,
+    "no_tensor": 437,
+    "below_threshold": 251,
+    "pon": 48,
+    "called": 1707
+   },
+   "reasons_stage1": {
+    "no_candidate": 36,
+    "min_variants": 69,
+    "af_floor": 328,
+    "absorbed": 4
+   },
+   "reasons_stage2": {
+    "below_threshold": 251
+   },
+   "stage1_partial_tensor": 0,
+   "stage1_partial_pass": 0,
+   "truth_pon_tagged": {
+    "no_tensor": 24,
+    "below_threshold": 12,
+    "pon": 48,
+    "called": 0
+   },
+   "stage3_call_pon_tagged": 48,
+   "stage4_without_exact_tensor": 0,
+   "stage3_without_exact_tensor": 0,
+   "vaf_sources": {
+    "tensor": 2006,
+    "truth_vcf": 97,
+    "build_min_af": 328,
+    "other_arm": 12
+   },
+   "by_kind": {
+    "SNV": {
+     "n": 2443,
+     "no_tensor": 437,
+     "below_threshold": 251,
+     "pon": 48,
+     "called": 1707
+    }
+   },
+   "by_vaf": {
+    "0-0.08": {
+     "n": 410,
+     "no_tensor": 410,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    },
+    "0.08-0.2": {
+     "n": 186,
+     "no_tensor": 8,
+     "below_threshold": 7,
+     "pon": 3,
+     "called": 168
+    },
+    "0.2-0.4": {
+     "n": 102,
+     "no_tensor": 5,
+     "below_threshold": 16,
+     "pon": 4,
+     "called": 77
+    },
+    ">0.4": {
+     "n": 1745,
+     "no_tensor": 14,
+     "below_threshold": 228,
+     "pon": 41,
+     "called": 1462
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 31,
+     "no_tensor": 8,
+     "below_threshold": 7,
+     "pon": 4,
+     "called": 12
+    },
+    "STR": {
+     "n": 127,
+     "no_tensor": 30,
+     "below_threshold": 19,
+     "pon": 1,
+     "called": 77
+    },
+    "other": {
+     "n": 2285,
+     "no_tensor": 399,
+     "below_threshold": 225,
+     "pon": 43,
+     "called": 1618
+    }
+   },
+   "by_vcf_vaf": {
+    "0-0.08": {
+     "n": 411,
+     "no_tensor": 396,
+     "below_threshold": 1,
+     "pon": 1,
+     "called": 13
+    },
+    "0.08-0.2": {
+     "n": 188,
+     "no_tensor": 22,
+     "below_threshold": 9,
+     "pon": 3,
+     "called": 154
+    },
+    "0.2-0.4": {
+     "n": 102,
+     "no_tensor": 4,
+     "below_threshold": 16,
+     "pon": 3,
+     "called": 79
+    },
+    ">0.4": {
+     "n": 1742,
+     "no_tensor": 15,
+     "below_threshold": 225,
+     "pon": 41,
+     "called": 1461
+    }
+   },
+   "untagged_funnel": {
+    "n": 2359,
+    "no_tensor": 413,
+    "below_threshold": 239,
+    "pon": 0,
+    "called": 1707
+   }
+  },
+  "COLO829_fiberseq_INDEL_joint_7fc7396__vcf_chr1_COLO829T_fiberseq": {
+   "meta": {
+    "run": "COLO829_fiberseq_INDEL_joint_7fc7396",
+    "vcf_dir": "vcf_chr1_COLO829T_fiberseq",
+    "group": "joint",
+    "set": "COLO829T_fiberseq",
+    "sample": "COLO829T",
+    "platform": "fiberseq",
+    "arm": "d9",
+    "kind": "INDEL",
+    "threshold": 0.0072951773181557655,
+    "predictions": {
+     "predictions": 151678,
+     "excluded": 0,
+     "path": "/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/COLO829_fiberseq_INDEL_joint_7fc7396/test_chr1/COLO829T_fiberseq.tensors.INDEL.predictions.ndjson.gz"
+    },
+    "check": {
+     "pon_tp": 36,
+     "pon_fn": 95,
+     "raw_tp": 57,
+     "raw_fn": 74,
+     "stage4": 36,
+     "stage123": 95,
+     "stage3": 21,
+     "stage12": 74,
+     "exact": true
+    },
+    "truth_pon_tags": {
+     "records": 131,
+     "tagged": 81,
+     "tagged_pass": 81,
+     "PoN1_gnomAD": 15,
+     "PoN2_dbSNP": 0,
+     "PoN3_1000G": 0,
+     "PoN4_CoLoRSdb": 77
+    },
+    "unplaced_pass": 4195
+   },
+   "funnel": {
+    "n": 131,
+    "no_tensor": 68,
+    "below_threshold": 6,
+    "pon": 21,
+    "called": 36
+   },
+   "reasons_stage1": {
+    "no_candidate": 27,
+    "absorbed": 26,
+    "other_allele": 4,
+    "af_floor": 10,
+    "min_variants": 1
+   },
+   "reasons_stage2": {
+    "below_threshold": 6
+   },
+   "stage1_partial_tensor": 20,
+   "stage1_partial_pass": 12,
+   "truth_pon_tagged": {
+    "no_tensor": 55,
+    "below_threshold": 5,
+    "pon": 21,
+    "called": 0
+   },
+   "stage3_call_pon_tagged": 21,
+   "stage4_without_exact_tensor": 0,
+   "stage3_without_exact_tensor": 0,
+   "vaf_sources": {
+    "tensor": 67,
+    "truth_vcf": 6,
+    "other_arm": 48,
+    "build_min_af": 10
+   },
+   "by_kind": {
+    "INS": {
+     "n": 77,
+     "no_tensor": 47,
+     "below_threshold": 2,
+     "pon": 11,
+     "called": 17
+    },
+    "DEL": {
+     "n": 54,
+     "no_tensor": 21,
+     "below_threshold": 4,
+     "pon": 10,
+     "called": 19
+    }
+   },
+   "by_vaf": {
+    "0-0.08": {
+     "n": 10,
+     "no_tensor": 10,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    },
+    "0.08-0.2": {
+     "n": 8,
+     "no_tensor": 4,
+     "below_threshold": 2,
+     "pon": 1,
+     "called": 1
+    },
+    "0.2-0.4": {
+     "n": 26,
+     "no_tensor": 13,
+     "below_threshold": 2,
+     "pon": 4,
+     "called": 7
+    },
+    ">0.4": {
+     "n": 87,
+     "no_tensor": 41,
+     "below_threshold": 2,
+     "pon": 16,
+     "called": 28
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 70,
+     "no_tensor": 29,
+     "below_threshold": 4,
+     "pon": 16,
+     "called": 21
+    },
+    "STR": {
+     "n": 27,
+     "no_tensor": 23,
+     "below_threshold": 1,
+     "pon": 2,
+     "called": 1
+    },
+    "other": {
+     "n": 34,
+     "no_tensor": 16,
+     "below_threshold": 1,
+     "pon": 3,
+     "called": 14
+    }
+   },
+   "by_vcf_vaf": {
+    "0.2-0.4": {
+     "n": 18,
+     "no_tensor": 10,
+     "below_threshold": 0,
+     "pon": 2,
+     "called": 6
+    },
+    ">0.4": {
+     "n": 113,
+     "no_tensor": 58,
+     "below_threshold": 6,
+     "pon": 19,
+     "called": 30
+    }
+   },
+   "untagged_funnel": {
+    "n": 50,
+    "no_tensor": 13,
+    "below_threshold": 1,
+    "pon": 0,
+    "called": 36
+   }
+  }
+ },
+ "pooled_platforms": {
+  "COLO829T|SNV|linear": {
+   "funnel": {
+    "n": 7329,
+    "no_tensor": 1268,
+    "below_threshold": 1669,
+    "pon": 119,
+    "called": 4273
+   },
+   "by_kind": {
+    "SNV": {
+     "n": 7329,
+     "no_tensor": 1268,
+     "below_threshold": 1669,
+     "pon": 119,
+     "called": 4273
+    }
+   },
+   "by_vaf": {
+    "0-0.08": {
+     "n": 1237,
+     "no_tensor": 1237,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    },
+    "0.08-0.2": {
+     "n": 601,
+     "no_tensor": 14,
+     "below_threshold": 23,
+     "pon": 15,
+     "called": 549
+    },
+    "0.2-0.4": {
+     "n": 354,
+     "no_tensor": 5,
+     "below_threshold": 45,
+     "pon": 8,
+     "called": 296
+    },
+    ">0.4": {
+     "n": 5137,
+     "no_tensor": 12,
+     "below_threshold": 1601,
+     "pon": 96,
+     "called": 3428
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 93,
+     "no_tensor": 18,
+     "below_threshold": 44,
+     "pon": 6,
+     "called": 25
+    },
+    "STR": {
+     "n": 381,
+     "no_tensor": 78,
+     "below_threshold": 87,
+     "pon": 6,
+     "called": 210
+    },
+    "other": {
+     "n": 6855,
+     "no_tensor": 1172,
+     "below_threshold": 1538,
+     "pon": 107,
+     "called": 4038
+    }
+   },
+   "by_vcf_vaf": {
+    "0-0.08": {
+     "n": 1227,
+     "no_tensor": 1138,
+     "below_threshold": 12,
+     "pon": 2,
+     "called": 75
+    },
+    "0.08-0.2": {
+     "n": 562,
+     "no_tensor": 106,
+     "below_threshold": 8,
+     "pon": 9,
+     "called": 439
+    },
+    "0.2-0.4": {
+     "n": 311,
+     "no_tensor": 10,
+     "below_threshold": 32,
+     "pon": 8,
+     "called": 261
+    },
+    ">0.4": {
+     "n": 5229,
+     "no_tensor": 14,
+     "below_threshold": 1617,
+     "pon": 100,
+     "called": 3498
+    }
+   },
+   "reasons_stage1": {
+    "af_floor": 807,
+    "no_candidate": 208,
+    "min_variants": 253
+   },
+   "stage1_partial_pass": 0,
+   "stage1_truth_pon_tagged": 54,
+   "truth_pon_tagged": 252,
+   "untagged_funnel": {
+    "n": 7077,
+    "no_tensor": 1214,
+    "below_threshold": 1590,
+    "pon": 0,
+    "called": 4273
+   },
+   "vaf_sources": {
+    "tensor": 6061,
+    "build_min_af": 807,
+    "truth_vcf": 458,
+    "other_arm": 3
+   }
+  },
+  "COLO829T|SNV|d46": {
+   "funnel": {
+    "n": 7329,
+    "no_tensor": 1318,
+    "below_threshold": 729,
+    "pon": 119,
+    "called": 5163
+   },
+   "by_kind": {
+    "SNV": {
+     "n": 7329,
+     "no_tensor": 1318,
+     "below_threshold": 729,
+     "pon": 119,
+     "called": 5163
+    }
+   },
+   "by_vaf": {
+    "0-0.08": {
+     "n": 1231,
+     "no_tensor": 1231,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    },
+    "0.08-0.2": {
+     "n": 601,
+     "no_tensor": 29,
+     "below_threshold": 38,
+     "pon": 11,
+     "called": 523
+    },
+    "0.2-0.4": {
+     "n": 358,
+     "no_tensor": 12,
+     "below_threshold": 56,
+     "pon": 6,
+     "called": 284
+    },
+    ">0.4": {
+     "n": 5139,
+     "no_tensor": 46,
+     "below_threshold": 635,
+     "pon": 102,
+     "called": 4356
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 93,
+     "no_tensor": 22,
+     "below_threshold": 28,
+     "pon": 7,
+     "called": 36
+    },
+    "STR": {
+     "n": 381,
+     "no_tensor": 83,
+     "below_threshold": 66,
+     "pon": 3,
+     "called": 229
+    },
+    "other": {
+     "n": 6855,
+     "no_tensor": 1213,
+     "below_threshold": 635,
+     "pon": 109,
+     "called": 4898
+    }
+   },
+   "by_vcf_vaf": {
+    "0-0.08": {
+     "n": 1227,
+     "no_tensor": 1145,
+     "below_threshold": 11,
+     "pon": 2,
+     "called": 69
+    },
+    "0.08-0.2": {
+     "n": 562,
+     "no_tensor": 115,
+     "below_threshold": 26,
+     "pon": 6,
+     "called": 415
+    },
+    "0.2-0.4": {
+     "n": 311,
+     "no_tensor": 10,
+     "below_threshold": 41,
+     "pon": 9,
+     "called": 251
+    },
+    ">0.4": {
+     "n": 5229,
+     "no_tensor": 48,
+     "below_threshold": 651,
+     "pon": 102,
+     "called": 4428
+    }
+   },
+   "reasons_stage1": {
+    "no_candidate": 163,
+    "af_floor": 838,
+    "min_variants": 308,
+    "absorbed": 9
+   },
+   "stage1_partial_pass": 3,
+   "stage1_truth_pon_tagged": 72,
+   "truth_pon_tagged": 252,
+   "untagged_funnel": {
+    "n": 7077,
+    "no_tensor": 1246,
+    "below_threshold": 668,
+    "pon": 0,
+    "called": 5163
+   },
+   "vaf_sources": {
+    "tensor": 6011,
+    "other_arm": 49,
+    "truth_vcf": 431,
+    "build_min_af": 838
+   }
+  },
+  "HG008T|SNV|linear": {
+   "funnel": {
+    "n": 2091,
+    "no_tensor": 43,
+    "below_threshold": 228,
+    "pon": 109,
+    "called": 1711
+   },
+   "by_kind": {
+    "SNV": {
+     "n": 2091,
+     "no_tensor": 43,
+     "below_threshold": 228,
+     "pon": 109,
+     "called": 1711
+    }
+   },
+   "by_vaf": {
+    "0-0.08": {
+     "n": 4,
+     "no_tensor": 4,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    },
+    "0.08-0.2": {
+     "n": 38,
+     "no_tensor": 9,
+     "below_threshold": 18,
+     "pon": 6,
+     "called": 5
+    },
+    "0.2-0.4": {
+     "n": 245,
+     "no_tensor": 18,
+     "below_threshold": 15,
+     "pon": 23,
+     "called": 189
+    },
+    ">0.4": {
+     "n": 1801,
+     "no_tensor": 9,
+     "below_threshold": 195,
+     "pon": 80,
+     "called": 1517
+    },
+    "unknown": {
+     "n": 3,
+     "no_tensor": 3,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 102,
+     "no_tensor": 14,
+     "below_threshold": 19,
+     "pon": 44,
+     "called": 25
+    },
+    "STR": {
+     "n": 147,
+     "no_tensor": 13,
+     "below_threshold": 27,
+     "pon": 21,
+     "called": 86
+    },
+    "other": {
+     "n": 1842,
+     "no_tensor": 16,
+     "below_threshold": 182,
+     "pon": 44,
+     "called": 1600
+    }
+   },
+   "reasons_stage1": {
+    "no_candidate": 23,
+    "af_floor": 4,
+    "min_variants": 16
+   },
+   "stage1_partial_pass": 0,
+   "stage1_truth_pon_tagged": 24,
+   "truth_pon_tagged": 180,
+   "untagged_funnel": {
+    "n": 1911,
+    "no_tensor": 19,
+    "below_threshold": 181,
+    "pon": 0,
+    "called": 1711
+   },
+   "vaf_sources": {
+    "tensor": 2048,
+    "other_platform": 27,
+    "build_min_af": 4,
+    "unknown": 3,
+    "other_arm": 9
+   }
+  },
+  "HG008T|SNV|d9": {
+   "funnel": {
+    "n": 2091,
+    "no_tensor": 108,
+    "below_threshold": 189,
+    "pon": 62,
+    "called": 1732
+   },
+   "by_kind": {
+    "SNV": {
+     "n": 2091,
+     "no_tensor": 108,
+     "below_threshold": 189,
+     "pon": 62,
+     "called": 1732
+    }
+   },
+   "by_vaf": {
+    "0-0.08": {
+     "n": 2,
+     "no_tensor": 2,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    },
+    "0.08-0.2": {
+     "n": 39,
+     "no_tensor": 26,
+     "below_threshold": 12,
+     "pon": 0,
+     "called": 1
+    },
+    "0.2-0.4": {
+     "n": 240,
+     "no_tensor": 32,
+     "below_threshold": 26,
+     "pon": 8,
+     "called": 174
+    },
+    ">0.4": {
+     "n": 1807,
+     "no_tensor": 45,
+     "below_threshold": 151,
+     "pon": 54,
+     "called": 1557
+    },
+    "unknown": {
+     "n": 3,
+     "no_tensor": 3,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 102,
+     "no_tensor": 47,
+     "below_threshold": 29,
+     "pon": 5,
+     "called": 21
+    },
+    "STR": {
+     "n": 147,
+     "no_tensor": 38,
+     "below_threshold": 20,
+     "pon": 11,
+     "called": 78
+    },
+    "other": {
+     "n": 1842,
+     "no_tensor": 23,
+     "below_threshold": 140,
+     "pon": 46,
+     "called": 1633
+    }
+   },
+   "reasons_stage1": {
+    "min_variants": 13,
+    "absorbed": 35,
+    "no_candidate": 58,
+    "af_floor": 2
+   },
+   "stage1_partial_pass": 4,
+   "stage1_truth_pon_tagged": 70,
+   "truth_pon_tagged": 180,
+   "untagged_funnel": {
+    "n": 1911,
+    "no_tensor": 38,
+    "below_threshold": 141,
+    "pon": 0,
+    "called": 1732
+   },
+   "vaf_sources": {
+    "tensor": 1983,
+    "other_arm": 74,
+    "other_platform": 29,
+    "unknown": 3,
+    "build_min_af": 2
+   }
+  },
+  "HG008T|SNV|d46": {
+   "funnel": {
+    "n": 2091,
+    "no_tensor": 97,
+    "below_threshold": 142,
+    "pon": 77,
+    "called": 1775
+   },
+   "by_kind": {
+    "SNV": {
+     "n": 2091,
+     "no_tensor": 97,
+     "below_threshold": 142,
+     "pon": 77,
+     "called": 1775
+    }
+   },
+   "by_vaf": {
+    "0-0.08": {
+     "n": 4,
+     "no_tensor": 4,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    },
+    "0.08-0.2": {
+     "n": 27,
+     "no_tensor": 18,
+     "below_threshold": 7,
+     "pon": 0,
+     "called": 2
+    },
+    "0.2-0.4": {
+     "n": 245,
+     "no_tensor": 31,
+     "below_threshold": 22,
+     "pon": 10,
+     "called": 182
+    },
+    ">0.4": {
+     "n": 1812,
+     "no_tensor": 41,
+     "below_threshold": 113,
+     "pon": 67,
+     "called": 1591
+    },
+    "unknown": {
+     "n": 3,
+     "no_tensor": 3,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 102,
+     "no_tensor": 39,
+     "below_threshold": 29,
+     "pon": 11,
+     "called": 23
+    },
+    "STR": {
+     "n": 147,
+     "no_tensor": 34,
+     "below_threshold": 15,
+     "pon": 12,
+     "called": 86
+    },
+    "other": {
+     "n": 1842,
+     "no_tensor": 24,
+     "below_threshold": 98,
+     "pon": 54,
+     "called": 1666
+    }
+   },
+   "reasons_stage1": {
+    "no_candidate": 53,
+    "absorbed": 30,
+    "af_floor": 4,
+    "min_variants": 10
+   },
+   "stage1_partial_pass": 3,
+   "stage1_truth_pon_tagged": 65,
+   "truth_pon_tagged": 180,
+   "untagged_funnel": {
+    "n": 1911,
+    "no_tensor": 32,
+    "below_threshold": 104,
+    "pon": 0,
+    "called": 1775
+   },
+   "vaf_sources": {
+    "tensor": 1994,
+    "other_arm": 63,
+    "other_platform": 27,
+    "build_min_af": 4,
+    "unknown": 3
+   }
+  },
+  "COLO829T|INDEL|linear": {
+   "funnel": {
+    "n": 393,
+    "no_tensor": 52,
+    "below_threshold": 80,
+    "pon": 156,
+    "called": 105
+   },
+   "by_kind": {
+    "INS": {
+     "n": 231,
+     "no_tensor": 26,
+     "below_threshold": 53,
+     "pon": 100,
+     "called": 52
+    },
+    "DEL": {
+     "n": 162,
+     "no_tensor": 26,
+     "below_threshold": 27,
+     "pon": 56,
+     "called": 53
+    }
+   },
+   "by_vaf": {
+    "0-0.08": {
+     "n": 8,
+     "no_tensor": 8,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    },
+    "0.08-0.2": {
+     "n": 44,
+     "no_tensor": 16,
+     "below_threshold": 12,
+     "pon": 8,
+     "called": 8
+    },
+    "0.2-0.4": {
+     "n": 119,
+     "no_tensor": 12,
+     "below_threshold": 13,
+     "pon": 58,
+     "called": 36
+    },
+    ">0.4": {
+     "n": 222,
+     "no_tensor": 16,
+     "below_threshold": 55,
+     "pon": 90,
+     "called": 61
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 210,
+     "no_tensor": 30,
+     "below_threshold": 46,
+     "pon": 82,
+     "called": 52
+    },
+    "STR": {
+     "n": 81,
+     "no_tensor": 8,
+     "below_threshold": 15,
+     "pon": 52,
+     "called": 6
+    },
+    "other": {
+     "n": 102,
+     "no_tensor": 14,
+     "below_threshold": 19,
+     "pon": 22,
+     "called": 47
+    }
+   },
+   "by_vcf_vaf": {
+    "0.2-0.4": {
+     "n": 77,
+     "no_tensor": 15,
+     "below_threshold": 9,
+     "pon": 28,
+     "called": 25
+    },
+    ">0.4": {
+     "n": 316,
+     "no_tensor": 37,
+     "below_threshold": 71,
+     "pon": 128,
+     "called": 80
+    }
+   },
+   "reasons_stage1": {
+    "min_variants": 10,
+    "no_candidate": 12,
+    "other_allele": 22,
+    "af_floor": 8
+   },
+   "stage1_partial_pass": 10,
+   "stage1_truth_pon_tagged": 43,
+   "truth_pon_tagged": 243,
+   "untagged_funnel": {
+    "n": 150,
+    "no_tensor": 9,
+    "below_threshold": 36,
+    "pon": 0,
+    "called": 105
+   },
+   "vaf_sources": {
+    "tensor": 363,
+    "truth_vcf": 22,
+    "build_min_af": 8
+   }
+  },
+  "COLO829T|INDEL|d46": {
+   "funnel": {
+    "n": 393,
+    "no_tensor": 208,
+    "below_threshold": 26,
+    "pon": 63,
+    "called": 96
+   },
+   "by_kind": {
+    "INS": {
+     "n": 231,
+     "no_tensor": 136,
+     "below_threshold": 9,
+     "pon": 34,
+     "called": 52
+    },
+    "DEL": {
+     "n": 162,
+     "no_tensor": 72,
+     "below_threshold": 17,
+     "pon": 29,
+     "called": 44
+    }
+   },
+   "by_vaf": {
+    "0-0.08": {
+     "n": 17,
+     "no_tensor": 17,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    },
+    "0.08-0.2": {
+     "n": 59,
+     "no_tensor": 32,
+     "below_threshold": 14,
+     "pon": 8,
+     "called": 5
+    },
+    "0.2-0.4": {
+     "n": 109,
+     "no_tensor": 58,
+     "below_threshold": 4,
+     "pon": 22,
+     "called": 25
+    },
+    ">0.4": {
+     "n": 208,
+     "no_tensor": 101,
+     "below_threshold": 8,
+     "pon": 33,
+     "called": 66
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 210,
+     "no_tensor": 93,
+     "below_threshold": 15,
+     "pon": 47,
+     "called": 55
+    },
+    "STR": {
+     "n": 81,
+     "no_tensor": 63,
+     "below_threshold": 3,
+     "pon": 12,
+     "called": 3
+    },
+    "other": {
+     "n": 102,
+     "no_tensor": 52,
+     "below_threshold": 8,
+     "pon": 4,
+     "called": 38
+    }
+   },
+   "by_vcf_vaf": {
+    "0.2-0.4": {
+     "n": 77,
+     "no_tensor": 45,
+     "below_threshold": 8,
+     "pon": 9,
+     "called": 15
+    },
+    ">0.4": {
+     "n": 316,
+     "no_tensor": 163,
+     "below_threshold": 18,
+     "pon": 54,
+     "called": 81
+    }
+   },
+   "reasons_stage1": {
+    "no_candidate": 83,
+    "absorbed": 81,
+    "af_floor": 17,
+    "min_variants": 8,
+    "other_allele": 19
+   },
+   "stage1_partial_pass": 49,
+   "stage1_truth_pon_tagged": 165,
+   "truth_pon_tagged": 243,
+   "untagged_funnel": {
+    "n": 150,
+    "no_tensor": 43,
+    "below_threshold": 11,
+    "pon": 0,
+    "called": 96
+   },
+   "vaf_sources": {
+    "tensor": 204,
+    "truth_vcf": 26,
+    "other_arm": 146,
+    "build_min_af": 17
+   }
+  },
+  "HG008T|INDEL|linear": {
+   "funnel": {
+    "n": 1761,
+    "no_tensor": 448,
+    "below_threshold": 121,
+    "pon": 745,
+    "called": 447
+   },
+   "by_kind": {
+    "INS": {
+     "n": 1104,
+     "no_tensor": 310,
+     "below_threshold": 73,
+     "pon": 452,
+     "called": 269
+    },
+    "DEL": {
+     "n": 657,
+     "no_tensor": 138,
+     "below_threshold": 48,
+     "pon": 293,
+     "called": 178
+    }
+   },
+   "by_vaf": {
+    "0-0.08": {
+     "n": 62,
+     "no_tensor": 62,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    },
+    "0.08-0.2": {
+     "n": 340,
+     "no_tensor": 190,
+     "below_threshold": 15,
+     "pon": 106,
+     "called": 29
+    },
+    "0.2-0.4": {
+     "n": 641,
+     "no_tensor": 141,
+     "below_threshold": 25,
+     "pon": 320,
+     "called": 155
+    },
+    ">0.4": {
+     "n": 679,
+     "no_tensor": 16,
+     "below_threshold": 81,
+     "pon": 319,
+     "called": 263
+    },
+    "unknown": {
+     "n": 39,
+     "no_tensor": 39,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 1305,
+     "no_tensor": 326,
+     "below_threshold": 61,
+     "pon": 593,
+     "called": 325
+    },
+    "STR": {
+     "n": 195,
+     "no_tensor": 60,
+     "below_threshold": 15,
+     "pon": 103,
+     "called": 17
+    },
+    "other": {
+     "n": 261,
+     "no_tensor": 62,
+     "below_threshold": 45,
+     "pon": 49,
+     "called": 105
+    }
+   },
+   "reasons_stage1": {
+    "min_variants": 66,
+    "af_floor": 62,
+    "no_candidate": 61,
+    "other_allele": 259
+   },
+   "stage1_partial_pass": 104,
+   "stage1_truth_pon_tagged": 331,
+   "truth_pon_tagged": 1137,
+   "untagged_funnel": {
+    "n": 624,
+    "no_tensor": 117,
+    "below_threshold": 60,
+    "pon": 0,
+    "called": 447
+   },
+   "vaf_sources": {
+    "tensor": 1572,
+    "unknown": 39,
+    "build_min_af": 62,
+    "other_platform": 82,
+    "other_arm": 6
+   }
+  },
+  "HG008T|INDEL|d9": {
+   "funnel": {
+    "n": 1761,
+    "no_tensor": 987,
+    "below_threshold": 75,
+    "pon": 275,
+    "called": 424
+   },
+   "by_kind": {
+    "INS": {
+     "n": 1104,
+     "no_tensor": 688,
+     "below_threshold": 29,
+     "pon": 147,
+     "called": 240
+    },
+    "DEL": {
+     "n": 657,
+     "no_tensor": 299,
+     "below_threshold": 46,
+     "pon": 128,
+     "called": 184
+    }
+   },
+   "by_vaf": {
+    "0-0.08": {
+     "n": 74,
+     "no_tensor": 73,
+     "below_threshold": 0,
+     "pon": 1,
+     "called": 0
+    },
+    "0.08-0.2": {
+     "n": 403,
+     "no_tensor": 286,
+     "below_threshold": 42,
+     "pon": 60,
+     "called": 15
+    },
+    "0.2-0.4": {
+     "n": 607,
+     "no_tensor": 338,
+     "below_threshold": 20,
+     "pon": 120,
+     "called": 129
+    },
+    ">0.4": {
+     "n": 633,
+     "no_tensor": 246,
+     "below_threshold": 13,
+     "pon": 94,
+     "called": 280
+    },
+    "unknown": {
+     "n": 44,
+     "no_tensor": 44,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 1305,
+     "no_tensor": 690,
+     "below_threshold": 58,
+     "pon": 254,
+     "called": 303
+    },
+    "STR": {
+     "n": 195,
+     "no_tensor": 167,
+     "below_threshold": 7,
+     "pon": 17,
+     "called": 4
+    },
+    "other": {
+     "n": 261,
+     "no_tensor": 130,
+     "below_threshold": 10,
+     "pon": 4,
+     "called": 117
+    }
+   },
+   "reasons_stage1": {
+    "min_variants": 158,
+    "no_candidate": 417,
+    "absorbed": 275,
+    "af_floor": 73,
+    "other_allele": 64
+   },
+   "stage1_partial_pass": 254,
+   "stage1_truth_pon_tagged": 815,
+   "truth_pon_tagged": 1137,
+   "untagged_funnel": {
+    "n": 624,
+    "no_tensor": 172,
+    "below_threshold": 28,
+    "pon": 0,
+    "called": 424
+   },
+   "vaf_sources": {
+    "tensor": 836,
+    "other_arm": 690,
+    "unknown": 44,
+    "other_platform": 117,
+    "build_min_af": 74
+   }
+  },
+  "HG008T|INDEL|d46": {
+   "funnel": {
+    "n": 1761,
+    "no_tensor": 979,
+    "below_threshold": 84,
+    "pon": 267,
+    "called": 431
+   },
+   "by_kind": {
+    "INS": {
+     "n": 1104,
+     "no_tensor": 670,
+     "below_threshold": 43,
+     "pon": 151,
+     "called": 240
+    },
+    "DEL": {
+     "n": 657,
+     "no_tensor": 309,
+     "below_threshold": 41,
+     "pon": 116,
+     "called": 191
+    }
+   },
+   "by_vaf": {
+    "0-0.08": {
+     "n": 55,
+     "no_tensor": 55,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    },
+    "0.08-0.2": {
+     "n": 397,
+     "no_tensor": 305,
+     "below_threshold": 40,
+     "pon": 39,
+     "called": 13
+    },
+    "0.2-0.4": {
+     "n": 636,
+     "no_tensor": 342,
+     "below_threshold": 31,
+     "pon": 125,
+     "called": 138
+    },
+    ">0.4": {
+     "n": 629,
+     "no_tensor": 233,
+     "below_threshold": 13,
+     "pon": 103,
+     "called": 280
+    },
+    "unknown": {
+     "n": 44,
+     "no_tensor": 44,
+     "below_threshold": 0,
+     "pon": 0,
+     "called": 0
+    }
+   },
+   "by_repeat": {
+    "HP>=7": {
+     "n": 1305,
+     "no_tensor": 688,
+     "below_threshold": 70,
+     "pon": 242,
+     "called": 305
+    },
+    "STR": {
+     "n": 195,
+     "no_tensor": 168,
+     "below_threshold": 7,
+     "pon": 18,
+     "called": 2
+    },
+    "other": {
+     "n": 261,
+     "no_tensor": 123,
+     "below_threshold": 7,
+     "pon": 7,
+     "called": 124
+    }
+   },
+   "reasons_stage1": {
+    "af_floor": 55,
+    "no_candidate": 465,
+    "absorbed": 249,
+    "other_allele": 86,
+    "min_variants": 124
+   },
+   "stage1_partial_pass": 337,
+   "stage1_truth_pon_tagged": 806,
+   "truth_pon_tagged": 1137,
+   "untagged_funnel": {
+    "n": 624,
+    "no_tensor": 173,
+    "below_threshold": 20,
+    "pon": 0,
+    "called": 431
+   },
+   "vaf_sources": {
+    "tensor": 868,
+    "build_min_af": 55,
+    "other_arm": 678,
+    "unknown": 44,
+    "other_platform": 116
+   }
+  }
+ },
+ "all_checks_exact": true,
+ "invariants": {
+  "stage3_truth_all_tagged": 32,
+  "stage4_truth_none_tagged": 32,
+  "stage2_only_below_threshold": 32,
+  "stage1_inconsistent": 0,
+  "stage34_without_exact_tensor": {
+   "HG008_ONT_INDEL_7fc7396__vcf_chr1": [
+    2,
+    0
+   ],
+   "HG008_ONT_INDEL_d46_7fc7396__vcf_chr1": [
+    1,
+    0
+   ]
+  },
+  "stage3_exact_call_untagged": {
+   "HG008_ONT_INDEL_7fc7396__vcf_chr1": 2,
+   "HG008_ONT_INDEL_d46_7fc7396__vcf_chr1": 1
+  }
+ }
+}

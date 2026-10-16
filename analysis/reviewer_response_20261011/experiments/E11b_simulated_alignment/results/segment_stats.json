@@ -1,0 +1,46 @@
+{
+ "chr1": {
+  "non_N_bases": 230481014,
+  "smaht_non_N": {
+   "easy": 179223254,
+   "difficult": 25309436,
+   "extreme": 25948324
+  },
+  "hap1_covered_bases": 225210896,
+  "hap1_covered_frac_of_non_N": 0.9771,
+  "hap1_smaht_covered_frac": {
+   "easy": 0.9987,
+   "difficult": 0.9964,
+   "extreme": 0.8095
+  },
+  "hap2_covered_bases": 224633415,
+  "hap2_covered_frac_of_non_N": 0.9746,
+  "hap2_smaht_covered_frac": {
+   "easy": 0.9985,
+   "difficult": 0.9963,
+   "extreme": 0.7886
+  }
+ },
+ "chr20": {
+  "non_N_bases": 63944257,
+  "smaht_non_N": {
+   "easy": 49278286,
+   "difficult": 7258874,
+   "extreme": 7407097
+  },
+  "hap1_covered_bases": 60581388,
+  "hap1_covered_frac_of_non_N": 0.9474,
+  "hap1_smaht_covered_frac": {
+   "easy": 0.9985,
+   "difficult": 0.9875,
+   "extreme": 0.5685
+  },
+  "hap2_covered_bases": 60353439,
+  "hap2_covered_frac_of_non_N": 0.9438,
+  "hap2_smaht_covered_frac": {
+   "easy": 0.9969,
+   "difficult": 0.9854,
+   "extreme": 0.5501
+  }
+ }
+}

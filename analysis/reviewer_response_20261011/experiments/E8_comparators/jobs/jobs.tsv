@@ -1,0 +1,7 @@
+job	name	depends
+387161	e8_bwa_COLO829T_Illumina	-
+387162	e8_bwa_HCC1395T_FD_T_1	-
+387163	e8_merge_HCC1395T_Illumina	afterok:387162
+387164	e8_index_HCC1395T	-
+387336	e8_extract_HCC1395T	-	replaces 387164 (index, cancelled: 9 MB/s on guinness)
+387338	e8_extract_CASTLE	afterany:387209	replaces 387210 (index, cancelled before start); dependents repointed with scontrol

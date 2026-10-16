@@ -1,0 +1,10 @@
+fraction	replicate	kept_blocks	blocks	excluded	non	somatic	germline	somatic_truth_alleles	file
+1.0	0	5662	5662	0	71573	7227	270175	7227	
+0.1	1	556	5662	313645	8410	703	26642	703	/scratch/jshen/data/reviewer_experiments_20261013/E21_training_composition/e13/HG008T_PacBio_d46.SNV.keep10.rep1.exclude.txt
+0.25	1	1431	5662	248628	32289	1773	66634	1773	/scratch/jshen/data/reviewer_experiments_20261013/E21_training_composition/e13/HG008T_PacBio_d46.SNV.keep25.rep1.exclude.txt
+0.5	1	2810	5662	167551	42021	3512	136122	3512	/scratch/jshen/data/reviewer_experiments_20261013/E21_training_composition/e13/HG008T_PacBio_d46.SNV.keep50.rep1.exclude.txt
+0.75	1	4257	5662	84196	57025	5289	202590	5289	/scratch/jshen/data/reviewer_experiments_20261013/E21_training_composition/e13/HG008T_PacBio_d46.SNV.keep75.rep1.exclude.txt
+0.1	2	567	5662	319615	5352	779	23645	779	/scratch/jshen/data/reviewer_experiments_20261013/E21_training_composition/e13/HG008T_PacBio_d46.SNV.keep10.rep2.exclude.txt
+0.25	2	1455	5662	268953	13584	1867	64920	1867	/scratch/jshen/data/reviewer_experiments_20261013/E21_training_composition/e13/HG008T_PacBio_d46.SNV.keep25.rep2.exclude.txt
+0.5	2	2859	5662	185533	26972	3655	133033	3655	/scratch/jshen/data/reviewer_experiments_20261013/E21_training_composition/e13/HG008T_PacBio_d46.SNV.keep50.rep2.exclude.txt
+0.75	2	4245	5662	94404	53933	5364	195385	5364	/scratch/jshen/data/reviewer_experiments_20261013/E21_training_composition/e13/HG008T_PacBio_d46.SNV.keep75.rep2.exclude.txt

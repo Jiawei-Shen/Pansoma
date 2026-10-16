@@ -1,0 +1,129 @@
+sample	kind	group	distinct_truth_alleles_behind_train_tensors
+COLO829T	INDEL	Illumina d46	1042
+COLO829T	INDEL	Illumina d9	967
+COLO829T	INDEL	Illumina d9 P25	614
+COLO829T	INDEL	Illumina d9 P50	894
+COLO829T	INDEL	Illumina d9 P75	953
+COLO829T	INDEL	Illumina joint P100+P75+P50+P25	973
+COLO829T	INDEL	Illumina linear	1544
+COLO829T	INDEL	Illumina, all three arms	1615
+COLO829T	INDEL	ONT d46	1007
+COLO829T	INDEL	ONT d9	986
+COLO829T	INDEL	ONT d9 P25	831
+COLO829T	INDEL	ONT d9 P50	927
+COLO829T	INDEL	ONT d9 P75	967
+COLO829T	INDEL	ONT joint P100+P75+P50+P25	1085
+COLO829T	INDEL	ONT linear	1269
+COLO829T	INDEL	ONT, all three arms	1441
+COLO829T	INDEL	all platforms, all three arms	1730
+COLO829T	INDEL	all platforms, d46	1236
+COLO829T	INDEL	all platforms, d9	1179
+COLO829T	INDEL	all platforms, linear	1653
+COLO829T	INDEL	fiberseq d46	1134
+COLO829T	INDEL	fiberseq d9	1072
+COLO829T	INDEL	fiberseq d9 P25	847
+COLO829T	INDEL	fiberseq d9 P50	991
+COLO829T	INDEL	fiberseq d9 P75	1039
+COLO829T	INDEL	fiberseq joint P100+P75+P50+P25	1079
+COLO829T	INDEL	fiberseq linear	1627
+COLO829T	INDEL	fiberseq, all three arms	1696
+COLO829T	SNV	Illumina d46	34110
+COLO829T	SNV	Illumina d9	33782
+COLO829T	SNV	Illumina d9 P25	26963
+COLO829T	SNV	Illumina d9 P50	32073
+COLO829T	SNV	Illumina d9 P75	33098
+COLO829T	SNV	Illumina joint P100+P75+P50+P25	33797
+COLO829T	SNV	Illumina linear	34341
+COLO829T	SNV	Illumina, all three arms	36209
+COLO829T	SNV	ONT d46	33779
+COLO829T	SNV	ONT d9	33472
+COLO829T	SNV	ONT d9 P25	26218
+COLO829T	SNV	ONT d9 P50	31669
+COLO829T	SNV	ONT d9 P75	32711
+COLO829T	SNV	ONT joint P100+P75+P50+P25	33475
+COLO829T	SNV	ONT linear	33852
+COLO829T	SNV	ONT, all three arms	35741
+COLO829T	SNV	all platforms, all three arms	36880
+COLO829T	SNV	all platforms, d46	34853
+COLO829T	SNV	all platforms, d9	34508
+COLO829T	SNV	all platforms, linear	34971
+COLO829T	SNV	fiberseq d46	33998
+COLO829T	SNV	fiberseq d9	33669
+COLO829T	SNV	fiberseq d9 P25	27092
+COLO829T	SNV	fiberseq d9 P50	31982
+COLO829T	SNV	fiberseq d9 P75	32991
+COLO829T	SNV	fiberseq joint P100+P75+P50+P25	33720
+COLO829T	SNV	fiberseq linear	34100
+COLO829T	SNV	fiberseq, all three arms	35998
+H1437T	INDEL	PacBio d46	2388
+H1437T	INDEL	PacBio, all three arms	2388
+H1437T	INDEL	all platforms, all three arms	2388
+H1437T	INDEL	all platforms, d46	2388
+H1437T	SNV	PacBio d46	50019
+H1437T	SNV	PacBio, all three arms	50019
+H1437T	SNV	all platforms, all three arms	50019
+H1437T	SNV	all platforms, d46	50019
+H2009T	INDEL	PacBio d46	4405
+H2009T	INDEL	PacBio, all three arms	4405
+H2009T	INDEL	all platforms, all three arms	4405
+H2009T	INDEL	all platforms, d46	4405
+H2009T	SNV	PacBio d46	125774
+H2009T	SNV	PacBio, all three arms	125774
+H2009T	SNV	all platforms, all three arms	125774
+H2009T	SNV	all platforms, d46	125774
+HCC1395T	INDEL	Illumina d46	1179
+HCC1395T	INDEL	Illumina, all three arms	1179
+HCC1395T	INDEL	ONT d46	1088
+HCC1395T	INDEL	ONT, all three arms	1088
+HCC1395T	INDEL	PacBio d46	1206
+HCC1395T	INDEL	PacBio, all three arms	1206
+HCC1395T	INDEL	all platforms, all three arms	1291
+HCC1395T	INDEL	all platforms, d46	1291
+HCC1395T	SNV	Illumina d46	30546
+HCC1395T	SNV	Illumina, all three arms	30546
+HCC1395T	SNV	ONT d46	26824
+HCC1395T	SNV	ONT, all three arms	26824
+HCC1395T	SNV	PacBio d46	29805
+HCC1395T	SNV	PacBio, all three arms	29805
+HCC1395T	SNV	all platforms, all three arms	32006
+HCC1395T	SNV	all platforms, d46	32006
+HCC1954T	INDEL	PacBio d46	1864
+HCC1954T	INDEL	PacBio, all three arms	1864
+HCC1954T	INDEL	all platforms, all three arms	1864
+HCC1954T	INDEL	all platforms, d46	1864
+HCC1954T	SNV	PacBio d46	18227
+HCC1954T	SNV	PacBio, all three arms	18227
+HCC1954T	SNV	all platforms, all three arms	18227
+HCC1954T	SNV	all platforms, d46	18227
+HG008T	INDEL	Illumina d46	3377
+HG008T	INDEL	Illumina d9	3115
+HG008T	INDEL	Illumina linear	5880
+HG008T	INDEL	Illumina, all three arms	6292
+HG008T	INDEL	ONT d46	3214
+HG008T	INDEL	ONT d9	3163
+HG008T	INDEL	ONT linear	4220
+HG008T	INDEL	ONT, all three arms	5097
+HG008T	INDEL	PacBio d46	3728
+HG008T	INDEL	PacBio d9	3557
+HG008T	INDEL	PacBio linear	6185
+HG008T	INDEL	PacBio, all three arms	6643
+HG008T	INDEL	all platforms, all three arms	7107
+HG008T	INDEL	all platforms, d46	4154
+HG008T	INDEL	all platforms, d9	4037
+HG008T	INDEL	all platforms, linear	6706
+HG008T	SNV	Illumina d46	7274
+HG008T	SNV	Illumina d9	7134
+HG008T	SNV	Illumina linear	7371
+HG008T	SNV	Illumina, all three arms	7865
+HG008T	SNV	ONT d46	7259
+HG008T	SNV	ONT d9	7124
+HG008T	SNV	ONT linear	7391
+HG008T	SNV	ONT, all three arms	7881
+HG008T	SNV	PacBio d46	7227
+HG008T	SNV	PacBio d9	7098
+HG008T	SNV	PacBio linear	7370
+HG008T	SNV	PacBio, all three arms	7864
+HG008T	SNV	all platforms, all three arms	7935
+HG008T	SNV	all platforms, d46	7337
+HG008T	SNV	all platforms, d9	7203
+HG008T	SNV	all platforms, linear	7448

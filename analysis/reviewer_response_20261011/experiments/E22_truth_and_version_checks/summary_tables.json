@@ -1,0 +1,301 @@
+{
+ "H1437_CASTLE": {
+  "snv": 82529,
+  "snv_in_bed": 73623,
+  "common": 22982,
+  "common_in_bed": 21180,
+  "common_autosomal": 22975,
+  "common_in_lowhet_bins": 21821,
+  "rare_in_lowhet_bins": 2831,
+  "common_in_segments": 22397,
+  "all_in_segments": 24914,
+  "segments": [
+   {
+    "chrom": "chr1",
+    "start_mb": 9,
+    "end_mb": 12,
+    "mb": 3
+   },
+   {
+    "chrom": "chr9",
+    "start_mb": 68,
+    "end_mb": 139,
+    "mb": 71
+   }
+  ],
+  "chr1_snv": 4266,
+  "chr1_common": 19,
+  "germline_baseline_common": 0.9089923580347703,
+  "implied_germline_like_share": 0.30222670706384996,
+  "top_common_bins": [
+   "chr9:92-93 Mb n=739",
+   "chr9:102-103 Mb n=605",
+   "chr9:109-110 Mb n=577",
+   "chr9:80-81 Mb n=570",
+   "chr9:117-118 Mb n=544",
+   "chr9:105-106 Mb n=534",
+   "chr9:96-97 Mb n=533",
+   "chr9:94-95 Mb n=498"
+  ]
+ },
+ "HCC1954_CASTLE": {
+  "snv": 24033,
+  "snv_in_bed": 20846,
+  "common": 574,
+  "common_in_bed": 478,
+  "common_autosomal": 552,
+  "common_in_lowhet_bins": 1,
+  "rare_in_lowhet_bins": 94,
+  "common_in_segments": 0,
+  "all_in_segments": 0,
+  "segments": [],
+  "chr1_snv": 1596,
+  "chr1_common": 27,
+  "germline_baseline_common": 0.8957471219914659,
+  "implied_germline_like_share": 0.020788512686543702,
+  "top_common_bins": [
+   "chr7:90-91 Mb n=197",
+   "chr14:105-106 Mb n=48",
+   "chr14:22-23 Mb n=32",
+   "chr14:106-107 Mb n=16",
+   "chr2:88-89 Mb n=5",
+   "chr1:21-22 Mb n=3",
+   "chr1:68-69 Mb n=2",
+   "chr1:71-72 Mb n=2"
+  ]
+ },
+ "H2009_CASTLE": {
+  "snv": 161917,
+  "snv_in_bed": 144176,
+  "common": 8141,
+  "common_in_bed": 7662,
+  "common_autosomal": 8122,
+  "common_in_lowhet_bins": 6852,
+  "rare_in_lowhet_bins": 2697,
+  "common_in_segments": 7085,
+  "all_in_segments": 9824,
+  "segments": [
+   {
+    "chrom": "chr5",
+    "start_mb": 47,
+    "end_mb": 51,
+    "mb": 4
+   },
+   {
+    "chrom": "chr7",
+    "start_mb": 55,
+    "end_mb": 62,
+    "mb": 7
+   },
+   {
+    "chrom": "chr7",
+    "start_mb": 64,
+    "end_mb": 67,
+    "mb": 3
+   },
+   {
+    "chrom": "chr7",
+    "start_mb": 122,
+    "end_mb": 143,
+    "mb": 21
+   }
+  ],
+  "chr1_snv": 11792,
+  "chr1_common": 33,
+  "germline_baseline_common": 0.9089429172677581,
+  "implied_germline_like_share": 0.04969688632703874,
+  "top_common_bins": [
+   "chr7:129-130 Mb n=573",
+   "chr7:124-125 Mb n=566",
+   "chr7:134-135 Mb n=498",
+   "chr7:131-132 Mb n=462",
+   "chr7:141-142 Mb n=438",
+   "chr7:122-123 Mb n=435",
+   "chr7:126-127 Mb n=393",
+   "chr7:138-139 Mb n=390"
+  ]
+ },
+ "HCC1395_SEQC2": {
+  "snv": 39447,
+  "snv_in_bed": 39447,
+  "common": 212,
+  "common_in_bed": 212,
+  "common_autosomal": 212,
+  "common_in_lowhet_bins": 48,
+  "rare_in_lowhet_bins": 187,
+  "common_in_segments": 54,
+  "all_in_segments": 207,
+  "segments": [
+   {
+    "chrom": "chr6",
+    "start_mb": 1,
+    "end_mb": 62,
+    "mb": 61
+   },
+   {
+    "chrom": "chr8",
+    "start_mb": 49,
+    "end_mb": 52,
+    "mb": 3
+   },
+   {
+    "chrom": "chr11",
+    "start_mb": 50,
+    "end_mb": 56,
+    "mb": 6
+   },
+   {
+    "chrom": "chr16",
+    "start_mb": 35,
+    "end_mb": 38,
+    "mb": 3
+   },
+   {
+    "chrom": "chr16",
+    "start_mb": 47,
+    "end_mb": 70,
+    "mb": 23
+   },
+   {
+    "chrom": "chr16",
+    "start_mb": 71,
+    "end_mb": 74,
+    "mb": 3
+   },
+   {
+    "chrom": "chr16",
+    "start_mb": 75,
+    "end_mb": 90,
+    "mb": 15
+   },
+   {
+    "chrom": "chr18",
+    "start_mb": 16,
+    "end_mb": 20,
+    "mb": 4
+   }
+  ],
+  "chr1_snv": 3440,
+  "chr1_common": 9,
+  "germline_baseline_common": 0.8325655415026384,
+  "implied_germline_like_share": 0.0,
+  "top_common_bins": [
+   "chr16:35-36 Mb n=48",
+   "chr12:28-29 Mb n=39",
+   "chr14:106-107 Mb n=16",
+   "chr22:22-23 Mb n=8",
+   "chr16:36-37 Mb n=5",
+   "chr16:0-1 Mb n=3",
+   "chr1:102-103 Mb n=2",
+   "chr2:87-88 Mb n=2"
+  ]
+ },
+ "HCC1395_CASTLE": {
+  "snv": 120941,
+  "snv_in_bed": 35040,
+  "common": 72264,
+  "common_in_bed": 193,
+  "common_autosomal": 42493,
+  "common_in_lowhet_bins": 39411,
+  "rare_in_lowhet_bins": 3891,
+  "common_in_segments": 40611,
+  "all_in_segments": 44866,
+  "segments": [
+   {
+    "chrom": "chr6",
+    "start_mb": 1,
+    "end_mb": 62,
+    "mb": 61
+   },
+   {
+    "chrom": "chr8",
+    "start_mb": 49,
+    "end_mb": 52,
+    "mb": 3
+   },
+   {
+    "chrom": "chr11",
+    "start_mb": 50,
+    "end_mb": 56,
+    "mb": 6
+   },
+   {
+    "chrom": "chr16",
+    "start_mb": 35,
+    "end_mb": 38,
+    "mb": 3
+   },
+   {
+    "chrom": "chr16",
+    "start_mb": 47,
+    "end_mb": 70,
+    "mb": 23
+   },
+   {
+    "chrom": "chr16",
+    "start_mb": 71,
+    "end_mb": 74,
+    "mb": 3
+   },
+   {
+    "chrom": "chr16",
+    "start_mb": 75,
+    "end_mb": 90,
+    "mb": 15
+   },
+   {
+    "chrom": "chr18",
+    "start_mb": 16,
+    "end_mb": 20,
+    "mb": 4
+   }
+  ],
+  "chr1_snv": 3559,
+  "chr1_common": 9,
+  "germline_baseline_common": 0.9255892774611,
+  "implied_germline_like_share": 0.643480279227577,
+  "top_common_bins": [
+   "chr6:29-30 Mb n=1314",
+   "chr6:33-34 Mb n=1228",
+   "chr6:32-33 Mb n=1180",
+   "chr6:31-32 Mb n=1139",
+   "chr16:78-79 Mb n=871",
+   "chr16:74-75 Mb n=800",
+   "chr16:84-85 Mb n=725",
+   "chr6:30-31 Mb n=716"
+  ]
+ },
+ "HCC1937_CASTLE": {
+  "snv": 52685,
+  "snv_in_bed": 16631,
+  "common": 31991,
+  "common_in_bed": 271,
+  "common_autosomal": 610,
+  "common_in_lowhet_bins": 0,
+  "rare_in_lowhet_bins": 62,
+  "common_in_segments": 0,
+  "all_in_segments": 25,
+  "segments": [
+   {
+    "chrom": "chr11",
+    "start_mb": 48,
+    "end_mb": 52,
+    "mb": 4
+   }
+  ],
+  "chr1_snv": 1350,
+  "chr1_common": 3,
+  "germline_baseline_common": 0.9101291968733547,
+  "implied_germline_like_share": 0.6651949398817396,
+  "top_common_bins": [
+   "chr22:22-23 Mb n=427",
+   "chr14:105-106 Mb n=124",
+   "chr15:22-23 Mb n=2",
+   "chr1:51-52 Mb n=1",
+   "chr1:57-58 Mb n=1",
+   "chr1:185-186 Mb n=1",
+   "chr2:89-90 Mb n=1",
+   "chr2:116-117 Mb n=1"
+  ]
+ }
+}
