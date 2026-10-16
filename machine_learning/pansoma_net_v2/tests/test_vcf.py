@@ -365,7 +365,7 @@ class VcfevalPartsTest(unittest.TestCase):
 
 class PonFilterTest(unittest.TestCase):
     """scripts/filter_panel_of_normals.py: the SNV rule (gnomAD / CoLoRSdb AF >= 1e-4, dbSNP non-somatic, 1000G) and
-    the INDEL rule (gnomAD / CoLoRSdb only: AF >= 0.01 in homopolymers of >= 7 bases, else AF >= 0.001), chosen per
+    the INDEL rule (gnomAD / CoLoRSdb only: AF >= 0.01 in homopolymers of >= 8 bases, else AF >= 0.0001), chosen per
     record by its kind; the homopolymer from the FASTA of ##reference or --fasta."""
 
     @staticmethod
@@ -393,19 +393,19 @@ class PonFilterTest(unittest.TestCase):
                 ("chr1", "20", "snv_dbsnp", "A", "C", "30", "PASS", "."),       # dbSNP SAO=0: SNV tagged
                 ("chr1", "30", "snv_1000g", "A", "C", "30", "LowQual", "."),    # 1000G: SNV tagged
                 ("chr1", "40", "ins_hp_rare", "A", "AT", "30", "PASS", "."),    # HP 8, gnomAD AF 0.005 < 0.01: not tagged
-                ("chr1", "50", "ins_nonhp", "A", "AT", "30", "PASS", "."),      # no HP, CoLoRSdb AF 0.002 >= 0.001: tagged
-                ("chr1", "55", "del_nonhp_low", "AT", "A", "30", "PASS", "."),  # HP 1, gnomAD AF 0.0005 < 0.001: not tagged
+                ("chr1", "50", "ins_nonhp", "A", "AT", "30", "PASS", "."),      # no HP, CoLoRSdb AF 0.002 >= 0.0001: tagged
+                ("chr1", "55", "del_nonhp_low", "AT", "A", "30", "PASS", "."),  # HP 1, gnomAD AF 0.00005 < 0.0001: not tagged
                 ("chr1", "60", "del_dbsnp", "AT", "A", "30", "PASS", "."),      # dbSNP + 1000G only: not tagged
                 ("chr1", "70", "del_gnomad", "AT", "A", "30", "PASS", "."),     # AF 0.02 on the other ALT only: not tagged
                 ("chr1", "80", "mixed", "A", "AT,C", "30", "PASS", "."),        # INDEL record, HP 8, AF 0.009; SNV ALT in dbSNP ignored
-                ("chr1", "90", "ins_hp_common", "A", "AT", "30", "PASS", ".")]  # HP 7, CoLoRSdb AF 0.01: tagged
+                ("chr1", "90", "ins_hp7", "A", "AT", "30", "PASS", ".")]        # HP 7 < 8: floor 0.0001, CoLoRSdb AF 0.005: tagged
             calls = write_vcf_gz(Path(tmp) / "calls.vcf.gz", contig + [lowqual, f"##reference=file://{fasta}"], records)
             bare = write_vcf_gz(Path(tmp) / "bare.vcf.gz", contig + [lowqual], records)   # no ##reference
             pons = [write_vcf_gz(Path(tmp) / f"{name}.vcf.gz", contig + [info], recs) for name, info, recs in (
                 ("gnomad", af, [("chr1", "10", ".", "A", "C", ".", ".", "AF=0.0005"),
                                 ("chr1", "40", ".", "A", "AT", ".", ".", "AF=0.005"),
-                                ("chr1", "55", ".", "AT", "A", ".", ".", "AF=0.0005"),
-                                ("chr1", "70", ".", "AT", "A,ATT", ".", ".", "AF=0.0005,0.02"),
+                                ("chr1", "55", ".", "AT", "A", ".", ".", "AF=0.00005"),
+                                ("chr1", "70", ".", "AT", "A,ATT", ".", ".", "AF=0.00005,0.02"),
                                 ("chr1", "80", ".", "A", "AT", ".", ".", "AF=0.009")]),
                 ("dbsnp", sao, [("chr1", "20", ".", "A", "C", ".", ".", "SAO=0"),
                                 ("chr1", "60", ".", "AT", "A", ".", ".", "SAO=0"),
@@ -413,13 +413,13 @@ class PonFilterTest(unittest.TestCase):
                 ("1000g", af, [("chr1", "30", ".", "A", "C", ".", ".", "."),
                                ("chr1", "60", ".", "AT", "A", ".", ".", ".")]),
                 ("colors", af, [("chr1", "50", ".", "A", "AT", ".", ".", "AF=0.002"),
-                                ("chr1", "90", ".", "A", "AT", ".", ".", "AF=0.01")]))]
+                                ("chr1", "90", ".", "A", "AT", ".", ".", "AF=0.005")]))]
             script = [sys.executable, str(vcfeval.PON_SCRIPT)]
             expected = {"snv_af": ("PanelOfNormals", "PoN1_gnomAD"), "snv_dbsnp": ("PanelOfNormals", "PoN2_dbSNP"),
                         "snv_1000g": ("LowQual;PanelOfNormals", "PoN3_1000G"), "ins_hp_rare": ("PASS", None),
                         "ins_nonhp": ("PanelOfNormals", "PoN4_CoLoRSdb"), "del_nonhp_low": ("PASS", None),
                         "del_dbsnp": ("PASS", None), "del_gnomad": ("PASS", None), "mixed": ("PASS", None),
-                        "ins_hp_common": ("PanelOfNormals", "PoN4_CoLoRSdb")}
+                        "ins_hp7": ("PanelOfNormals", "PoN4_CoLoRSdb")}
             for name, source, extra in (("header", calls, []), ("option", bare, ["--fasta", str(fasta)])):
                 out = Path(tmp) / f"tagged_{name}.vcf.gz"
                 result = subprocess.run(script + [str(source), str(out), "--pon", *map(str, pons), *extra],
@@ -449,8 +449,9 @@ class PonFilterTest(unittest.TestCase):
             self.assertEqual(run(fasta, "chr1", 90, "A", "AT"), 7)
             self.assertEqual(run(fasta, "chr1", 50, "A", "AT"), 0)        # no T after it
             self.assertEqual(run(fasta, "chr1", 40, "A", "ATG"), 0)       # two different bases
-            self.assertEqual(module.indel_min_af(fasta, "chr1", 90, "A", "AT"), 0.01)
-            self.assertEqual(module.indel_min_af(fasta, "chr1", 50, "A", "AT"), 0.001)
+            self.assertEqual(module.indel_min_af(fasta, "chr1", 40, "A", "AT"), 0.01)     # HP 8
+            self.assertEqual(module.indel_min_af(fasta, "chr1", 90, "A", "AT"), 0.0001)   # HP 7
+            self.assertEqual(module.indel_min_af(fasta, "chr1", 50, "A", "AT"), 0.0001)
 
 
 @unittest.skipUnless(RTG, "rtg not found (set $RTG)")

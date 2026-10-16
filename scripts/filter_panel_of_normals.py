@@ -6,10 +6,12 @@ the record's kind:
 - SNV (every ALT of REF's length): gnomAD and CoLoRSdb with that ALT's AF >= 0.0001; dbSNP when the
   record is not somatic (SAO != 2); 1000G any such record.
 - INDEL (an ALT of another length): only gnomAD and CoLoRSdb, with that ALT's AF >= 0.01 when the ALT
-  changes the length of a homopolymer of >= 7 bases on the reference, and >= 0.001 otherwise. dbSNP and
+  changes the length of a homopolymer of >= 8 bases on the reference, and >= 0.0001 otherwise. dbSNP and
   1000G are not used. Somatic homopolymer INDELs are often population alleles at AF 0.001-0.05, so they
   need the higher floor; other somatic INDELs rarely are, and the lower floor removes more germline
-  (analysis/tensor_recall_20260930/pon/indel_rules, tmp/indel_pon_recheck_20261010).
+  (analysis/tensor_recall_20260930/pon/indel_rules). The thresholds were chosen on chr1 calls with one tumor
+  left out (HG008T <-> COLO829T, both directions pick this rule; no held-out call set gets worse:
+  analysis/reviewer_response_20261011/experiments/E17c_pon_rule_offchr1/heldout.md).
   The homopolymer of an ALT: its inserted or deleted bases (after the shared first base) are one repeated
   base b, and the run of b on the reference at POS + 1, extended both ways, counting the deleted bases.
   This needs the reference FASTA: --fasta, or the input VCF's ##reference=file://... line."""
@@ -28,8 +30,8 @@ import pysam
 PON_NAMES = ("PoN1_gnomAD", "PoN2_dbSNP", "PoN3_1000G", "PoN4_CoLoRSdb")
 SNV_MIN_AF = 0.0001
 INDEL_MIN_AF_HOMOPOLYMER = 0.01   # the ALT changes a homopolymer of >= INDEL_HOMOPOLYMER bases
-INDEL_MIN_AF = 0.001              # any other INDEL ALT
-INDEL_HOMOPOLYMER = 7
+INDEL_MIN_AF = 0.0001             # any other INDEL ALT
+INDEL_HOMOPOLYMER = 8
 PON_RULES = {  # per kind, per PoN in PON_NAMES order; None = the PoN is not used for the kind; "indel_af" = per ALT
     "SNV": (dict(min_af=SNV_MIN_AF), dict(non_somatic=True), dict(), dict(min_af=SNV_MIN_AF)),
     "INDEL": ("indel_af", None, None, "indel_af"),

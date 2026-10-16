@@ -244,8 +244,8 @@ epoch ~7 (validation loss 0.51 -> 2.16) and the 50.4 M model does not; with the 
 64 128 256 512`, `--class-weights sqrt --batch-size 1024 --lr 1e-4 --epochs 12 --non-fraction 1.0 --block v2
 --ignore-reasons residual_partial_somatic_truth allele_partial_somatic_truth`, every plane and every candidate kept
 (no `--exclude-candidates`); calls at the validation recall-0.9 threshold (graph_vcf's default; no off-reference
-rescue for INDELs), then the INDEL PoN rule (gnomAD / CoLoRSdb exact allele: AF ≥ 0.01 in homopolymers of ≥ 7 bases,
-else AF ≥ 0.001; below). The chr1 curve's best point is recorded next to the PASS result (vcfeval's report,
+rescue for INDELs), then the INDEL PoN rule (gnomAD / CoLoRSdb exact allele: AF ≥ 0.01 in homopolymers of ≥ 8 bases,
+else AF ≥ 0.0001; below). The chr1 curve's best point is recorded next to the PASS result (vcfeval's report,
 `summary`); it is chosen on the test chromosome and never used as the threshold. On a MIG 2g.24gb slice the batch
 needs `--micro-batches 4` (about 23 GB as one batch). `machine_learning/pansoma_net_v2/jobs/submit_indel.sh SET ...`
 submits the recipe per set from that directory (chunk cache, training + chr1 test, calls + vcfeval); logs and
@@ -350,7 +350,7 @@ merge stored as the summaries' `grch38`.
 
 - **PoN** (optional: `--pon` or `--pon-vcf`). `scripts/filter_panel_of_normals.py` with the four PoNs. It matches
   by allele, with the rule of each record's kind: SNV gnomAD / CoLoRSdb at AF ≥ 0.0001, dbSNP only records not
-  flagged somatic, 1000G; INDEL gnomAD / CoLoRSdb only, at AF ≥ 0.01 in homopolymers of ≥ 7 bases and AF ≥ 0.001
+  flagged somatic, 1000G; INDEL gnomAD / CoLoRSdb only, at AF ≥ 0.01 in homopolymers of ≥ 8 bases and AF ≥ 0.0001
   otherwise (the repository README, section 5). vcfeval passes the calls' `##reference` FASTA (or `--fasta`).
   It also runs over the truth records, which shows how much recall the PoN leaves to any caller.
 - **Truth.** The PASS truth records of the kind on the predicted chromosomes.

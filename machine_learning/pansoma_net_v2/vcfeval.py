@@ -7,8 +7,8 @@
 1. PoN (with --pon or --pon-vcf; without either only the raw calls are evaluated): the repository's
    scripts/filter_panel_of_normals.py, with the four PoNs in its order (gnomAD, dbSNP, 1000G, CoLoRSdb). It
    matches by allele, with the rule of each record's kind: SNV gnomAD / CoLoRSdb at AF >= 0.0001, dbSNP
-   non-somatic, 1000G; INDEL gnomAD / CoLoRSdb only, at AF >= 0.01 when the ALT changes a homopolymer of >= 7
-   bases and at AF >= 0.001 otherwise. The homopolymer comes from the reference FASTA: --fasta, default the
+   non-somatic, 1000G; INDEL gnomAD / CoLoRSdb only, at AF >= 0.01 when the ALT changes a homopolymer of >= 8
+   bases and at AF >= 0.0001 otherwise. The homopolymer comes from the reference FASTA: --fasta, default the
    calls' ##reference (linear_vcf writes it); the truth records are tagged with the same FASTA.
    Matched records get FILTER PanelOfNormals: <dir>/<name>.pon.vcf.gz. --pon-vcf reuses the tagged calls of an earlier run
    (e.g. to evaluate the same calls with and without a BED).
