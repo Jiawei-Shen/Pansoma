@@ -1,4 +1,4 @@
-"""E7 step 1: per-haplotype carriers of every HPRC v1.1 primitive allele on one chromosome.
+"""E7 step 1: per-haplotype carriers of every HPRC v1.1 (E7_GRAPH=v2.1: v2.1) primitive allele on one chromosome.
 
 Inputs
   wave: hprc-v1.1-mc-grch38.vcfbub.a100k.wave.vcf.gz (vg deconstruct -> vcfbub -l 0 -a 100000 -> vcfwave; 45 columns:
@@ -15,16 +15,21 @@ allele that contains it. Records vcfwave did not touch keep their wave GT.
 Then every allele goes through `bcftools norm -f GRCh38 -c w` (left-align) and common.primitives (MNP -> SNVs), and
 identical keys are merged (union of carriers).
 Haplotype bit order: bit 0 = CHM13, bit 2i-1 / 2i = hap 1 / hap 2 of the i-th sample column (i = 1..44).
-Output: WORK/hprc_alleles/<tag>.tsv.gz: key, kind, rep_class, unit, tract, ilen, n_carriers, mask (hex);
+v2.1 (E7_GRAPH=v2.1): hprc-v2.1-mc-grch38.wave.vcf.gz, 232 columns (CHM13 + 231 diploid samples = 463 haplotypes), same
+bit order. Its genotypes are used as they are (no raw VCF, no repair): s0_check_wave_gt.py finds 0.07 % of the raw
+non-ref haplotype calls missing from the v2.1 wave VCF, against 0.77 % for v1.1 on the same region. Its records may be
+multiallelic (`bcftools norm -m +any` after vcfwave); every ALT gets its own carrier mask.
+Output: GWORK/hprc_alleles/<tag>.tsv.gz (GWORK = WORK for v1.1, WORK/v2.1 for v2.1): key, kind, rep_class, unit, tract, ilen, n_carriers, mask (hex);
         WORK/hprc_alleles/<tag>.json: counts, including the check of the repaired carriers against wave INFO AC.
 Usage: s1_hprc_alleles.py CHROM [REGION] [TAG]
 """
 import collections, gzip, json, os, subprocess, sys
 import pysam
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from common import BCFTOOLS, FASTA, HPRC_VCF, WORK, key, primitives, repeat_context
+from common import BCFTOOLS, FASTA, G, GWORK, HPRC_VCF, NHAP, key, primitives, repeat_context
 
-RAW = '/scratch/jshen/data/pansoma_net_v2_runs/graph_absorbed_somatic_20261001/full_vcf_index/hprc-v1.1-mc-grch38.raw.vcf.gz'
+RAW = G['raw']  # None for v2.1: wave genotypes used as they are
+WORK = GWORK
 chrom = sys.argv[1]
 region = sys.argv[2] if len(sys.argv) > 2 else chrom
 tag = sys.argv[3] if len(sys.argv) > 3 else chrom
@@ -41,7 +46,7 @@ def query(vcf, fmt, region):
 
 
 def gt_masks(gts, n_alleles):
-    """allele index -> haplotype mask, from the 45 GT strings."""
+    """allele index -> haplotype mask, from the (NHAP + 1) / 2 GT strings."""
     m = [0] * (n_alleles + 1)
     for i, g in enumerate(gts):
         a = g.replace('/', '|').split('|')
@@ -85,10 +90,14 @@ def decompose(ref, alt, prims):
 plain, groups = [], collections.defaultdict(list)
 for f in query(HPRC_VCF, '%ID\t%POS\t%REF\t%ALT\t%INFO/AC\t%INFO/ORIGIN[\t%GT]\n', region):
     vid, pos, ref, alts, acs, origin, gts = f[0], int(f[1]), f[2], f[3].split(','), f[4].split(','), f[5], f[6:]
-    assert len(gts) == 45
+    assert len(gts) == (NHAP + 1) // 2
     m = gt_masks(gts, len(alts)) if '1' in ''.join(gts) or len(alts) > 1 else [0] * (len(alts) + 1)
     stat['wave_records'] += 1
-    if origin == '.':
+    if RAW is None:
+        stat['wave_records_decomposed'] += origin != '.'
+        for j, a in enumerate(alts, start=1):
+            plain.append((pos, ref, a, m[j]))
+    elif origin == '.':
         for j, a in enumerate(alts, start=1):
             plain.append((pos, ref, a, m[j]))
     else:
@@ -98,7 +107,7 @@ for f in query(HPRC_VCF, '%ID\t%POS\t%REF\t%ALT\t%INFO/AC\t%INFO/ORIGIN[\t%GT]\n
 
 # 2. raw records of the decomposed bubbles
 raw = {}
-for f in query(RAW, '%ID\t%POS\t%REF\t%ALT[\t%GT]\n', region):
+for f in (query(RAW, '%ID\t%POS\t%REF\t%ALT[\t%GT]\n', region) if RAW else []):
     if f[0] in groups and f[0] not in raw:
         alts = f[3].split(',')
         raw[f[0]] = (int(f[1]), f[2], alts, gt_masks(f[4:], len(alts)))
@@ -146,10 +155,10 @@ stat.update({f'decomposed_primitive_{k}': v for k, v in check.items()})
 # 4. left-align with bcftools norm (the mask rides in the ID column), split MNPs, merge identical keys
 fai = {l.split('\t')[0]: int(l.split('\t')[1]) for l in open(FASTA + '.fai')}
 records.sort(key=lambda r: r[0])
+os.makedirs(f'{WORK}/hprc_alleles', exist_ok=True)
 norm = subprocess.Popen(f'{BCFTOOLS} norm -f {FASTA} -c w -Ov - 2> {WORK}/hprc_alleles/{tag}.norm.log | '
                         f'{BCFTOOLS} query -f "%POS\\t%ID\\t%REF\\t%ALT\\n"', shell=True, stdin=subprocess.PIPE,
                         stdout=subprocess.PIPE, text=True, bufsize=1 << 20)
-os.makedirs(f'{WORK}/hprc_alleles', exist_ok=True)
 alleles = {}
 
 

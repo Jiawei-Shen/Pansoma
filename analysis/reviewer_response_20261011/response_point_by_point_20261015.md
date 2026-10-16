@@ -27,7 +27,7 @@
 | Point | 问题 | 状态 | 关键证据（chr1，PoN 后） | 还缺什么 |
 |---|---|---|---|---|
 | R1.1 | "pangenome-native" 证据不足 | 部分解决 | Response 按三点重写（10-16）：path-following tensors（E1.7：57–76% 的 somatic SNV、92–97% 的 somatic INDEL 窗口跨出自身 node）、ch6 + 推理时 ablation、三参考 ablation（10-16 压短，只留设计和总数，细节移到 R1.2）；E1.1：去掉 ch6 信息后 germline 误判增加 3.4–7.6 倍，ch6 单独的 AUC 0.83–0.92；E3 / E16：HPRC 比 GRCh38-only 高 +0.038 到 +0.319，9 个配对区间都不含 0；E9h：rescue 找回的 off-ref key 中 63–87% 有 reads 支持 | GPU：去掉 ch6 重训、多 seed；同步：COLO829T d9 |
-| R1.2 | 泛基因组组成、单倍型数、v2.1 | 部分解决 | 三参考 ablation 的主体（10-16 从 R1.1 移来）：GRCh38-only 上 76–82% 的 germline 成为 candidate，HPRC 上 7–13%；HPRC 比 GRCh38-only 高 +0.038 到 +0.319，9 个配对区间都不含 0；d46 和 d9 很接近（HG008T 上 d46 低 0.015–0.021）；E7：吸收多少由频率阈值决定；E11a / E11b：ONT 在 v2.1 上更差。Response 10-16 重写成约 350 词：mapping ambiguity 引文献（Giraffe、HPRC、Minigraph-Cactus），吸收用 E5b（v2.1 上 17–18% 的 somatic INDEL 被吸收，62–80% 在 HP ≥ 7，96.5–98% 本来就被 PoN 去掉，图特有的损失 0.2–0.7%），并指出其他 tumor-only caller 也用 PoN | GPU：matched d9；E7 v2.1 轴在跑；决定：主图、centromere 窗口怎么处理 |
+| R1.2 | 泛基因组组成、单倍型数、v2.1 | 部分解决 | 三参考 ablation 的主体（10-16 从 R1.1 移来）：GRCh38-only 上 76–82% 的 germline 成为 candidate，HPRC 上 7–13%；HPRC 比 GRCh38-only 高 +0.038 到 +0.319，9 个配对区间都不含 0；d46 和 d9 很接近（HG008T 上 d46 低 0.015–0.021）；E7：吸收多少由频率阈值决定（10-16 v2.1 轴：10% 过滤下 16 到 463 条 haplotype，HG008 somatic INDEL 0.18–0.21）；E11a / E11b：ONT 在 v2.1 上更差。Response 10-16 重写成约 350 词：mapping ambiguity 引文献（Giraffe、HPRC、Minigraph-Cactus），吸收用 E5b（v2.1 上 17–18% 的 somatic INDEL 被吸收，62–80% 在 HP ≥ 7，96.5–98% 本来就被 PoN 去掉，图特有的损失 0.2–0.7%），并指出其他 tumor-only caller 也用 PoN | GPU：matched d9；决定：主图、centromere 窗口怎么处理 |
 | R1.3 | 困难区域；ONT 的歧义 | 部分解决 | E10：GRCh38-only 在 extreme 区域的 FP 更多；E9a / E9c：ONT 的 graph-coordinate calls 主要是人群 allele 和 germline；E11b：ONT 在 v2.1 上放错更多 | 决定：GIAB 分层是否下载、rescue 默认值 |
 | R1.4 | 图吸收已有的 somatic | 部分解决 | E5b：被吸收的 truth 中 95.5–100% 本来就会被 PoN 标掉；E1.6：三个参考臂 INDEL 都叫出 24–27%；E9h | 同步：比较器（E5c）；决定：E6 / E25 |
 | R1.5 | HapMap mixture 和数据泄漏 | 部分解决 | COLO829T dilution（fiberseq 干净），LOH 解释了 P75 / P50 的低谷；donor 在图里的情况已核实 | 决定：HapMap 去留（重跑 OOM 失败）；GPU：BQ 伪影修好后重训 |
@@ -56,7 +56,7 @@
 | R3.10 | 低 VAF 和 INDEL 的结论 | 部分解决 | E17a：INDEL 分层；E3b：validation best-F1 阈值；E2.4 | 决定：INDEL 的 operating point；GPU：BQ 伪影修好后重训；同步：比较器 |
 | R3.m1 | 参数不一致 | 部分解决 | 参数只剩一套，从 checkpoint 能复现；vg 版本已核实 | 等最终模型和 INDEL 阈值定了再出参数表 |
 | R3.m2 | 比较器设置 | 部分解决 | E8b 核实了版本和训练数据；打分脚本已就绪 | 同步：你已有结果的路径和元数据 |
-| R3.m3 | 泛基因组参考的组成 | **已解决** | E8b；E7 的近亲检查（共享罕见 SNV ≤ 8.2%）；CHM13 是 reference path | 只剩改稿 |
+| R3.m3 | 泛基因组参考的组成 | **已解决** | E8b；E7 的近亲检查（共享罕见 SNV v1.1 ≤ 8.2%、v2.1 ≤ 2.9%，10-16 补了 v2.1）；CHM13 是 reference path | 只剩改稿 |
 | R3.m4 | 术语和语言 | **已解决** | — | 只剩改稿 |
 
 ## 2. 这次查漏补缺的主要结果
@@ -134,7 +134,7 @@
 3. **INDEL 的 operating point**：用 recall-0.9 validation 阈值还是 validation best-F1 阈值，结果好坏参半；test-tuned best F1 只作上界。
 4. **主图和主评估**：主图用 d9 还是 d46（两者很接近，d9 略高）；主结果是否用跨样本，in-sample 只作上界。
 5. **HapMap**：直接去掉，还是把内存提到约 40G 重跑 donor-free 图后放进 Supplement。
-6. **下载**：GIAB stratification（R1.3）、HPRC v2.1 全图 VCF（R1.2、R3.m3）、COLO829T tumor 组装（R3.3）、SEQC2 titration（R2.4）。
+6. **下载**：GIAB stratification（R1.3）、COLO829T tumor 组装（R3.3）、SEQC2 titration（R2.4）。（HPRC v2.1 wave VCF 10-16 用户同意并已下载，E7 v2.1 轴已完成。）
 7. **对照实验做不做**：用 vg 1.77 的版本对照；CHM13+GRCh38-only 图（已暂停，现在写成 limitation）。
 8. **新功能做不做**：E24、E25 / E6、E9f。
 9. **truth**：
@@ -156,7 +156,7 @@
 | E2.4_vaf_bins | 按 VAF 分档的 recall；purity 系列 | R2.4、R3.10 |
 | E4b_fp_decomposition | PoN 后 FP 的组成 | R3.2、R2.5、R2.6 |
 | E5b_absorbed_d46 | 被图吸收的 truth；linear 能否叫回 | R1.4、R3.2 |
-| E7_graph_composition | in-silico 图组成；近亲检查 | R1.2、R3.m3 |
+| E7_graph_composition | in-silico 图组成（v1.1 89 条、v2.1 463 条 haplotype）；近亲检查（两版） | R1.2、R3.m3 |
 | E8b_literature_facts | 文献和资源事实 | 多条 |
 | E8_comparators | 已取消；打分脚本保留 | R3.m2 |
 | E9a_unplaced_projection | graph-coordinate calls 投影到 GRCh38 | R3.4、R1.3 |
@@ -289,7 +289,7 @@ Pansoma does not model bubbles, competing branches or long-range haplotypes expl
 
 ### R1.2 Composition and size of the pangenome
 
-**状态：部分解决**: d9 / d46 的对比已经齐了（candidate 层面六套，训练后 chr1 十二套，in-sample、一个 seed），2026-10-15 起 HG008T 的 d46 − d9 有了 E16 的配对 block-bootstrap 区间（SNV 三对 −0.015 到 −0.021，区间刚好不含 0；INDEL 三对区间含 0）；E1.1 给出了 haplotype 数对 ch6 和 germline 识别的影响（ch6-only AUC 18 个 run 都有：v1.1 0.831–0.865、v2.1 0.885–0.915），E7（v1.1 轴）给出了 in-silico 曲线和对 d9 / d46 实测损失的校准，E5b 给出了图里没有的 INDEL 为什么也丢 candidate 的分类，E11a 现在两个肿瘤 × 三平台都有（mapping ambiguity 在六套上同一个方向），E11b 给了已知来源的模拟 reads（Illumina 和 HiFi 图上 misplaced 更少；2026-10-15 晚的 ONT 结果对 v2.1 不利：v2.1 上 ONT 错放约两倍，几乎全在 SMaHT extreme 区，正是审稿人担心的 "HPRC2 更多 mapping ambiguity"，Response 已照实写）。还缺：matched d9 重训（d46 ≈ d9 的结论目前只有 HG008T Illumina SNV 和 HG008T 三套 INDEL 是只差图）；E7 的 v2.1 单倍型轴（用户 2026-10-16 同意下载 VCF，job 417207 在跑）。2026-10-16 Response 按用户要求重写成约 350 词（三参考 → GRCh38-only 对比 → v1.1 / v2.1 → mapping ambiguity 引文献 → 吸收 vs PoN）。
+**状态：部分解决**: d9 / d46 的对比已经齐了（candidate 层面六套，训练后 chr1 十二套，in-sample、一个 seed），2026-10-15 起 HG008T 的 d46 − d9 有了 E16 的配对 block-bootstrap 区间（SNV 三对 −0.015 到 −0.021，区间刚好不含 0；INDEL 三对区间含 0）；E1.1 给出了 haplotype 数对 ch6 和 germline 识别的影响（ch6-only AUC 18 个 run 都有：v1.1 0.831–0.865、v2.1 0.885–0.915），E7（v1.1 轴）给出了 in-silico 曲线和对 d9 / d46 实测损失的校准，E5b 给出了图里没有的 INDEL 为什么也丢 candidate 的分类，E11a 现在两个肿瘤 × 三平台都有（mapping ambiguity 在六套上同一个方向），E11b 给了已知来源的模拟 reads（Illumina 和 HiFi 图上 misplaced 更少；2026-10-15 晚的 ONT 结果对 v2.1 不利：v2.1 上 ONT 错放约两倍，几乎全在 SMaHT extreme 区，正是审稿人担心的 "HPRC2 更多 mapping ambiguity"，Response 已照实写）。还缺：matched d9 重训（d46 ≈ d9 的结论目前只有 HG008T Illumina SNV 和 HG008T 三套 INDEL 是只差图）。E7 的 v2.1 单倍型轴 2026-10-16 已完成（10 % 过滤下 16 到 463 条 haplotype，HG008 somatic INDEL 吸收 0.18–0.21，不随条数变多）。2026-10-16 Response 按用户要求重写成约 350 词（三参考 → GRCh38-only 对比 → v1.1 / v2.1 → mapping ambiguity 引文献 → 吸收 vs PoN）。
 
 **Comment（要点）。**
 
@@ -303,7 +303,7 @@ We compared three graph references built from the same reads, tensor code and la
 
 *Pangenome versus GRCh38-only.* On the GRCh38-only graph 76–82% of matched-normal germline alleles become candidates, against 7–13% on the HPRC graphs. After population filtering both HPRC graphs lead on all six datasets: +0.038 to +0.319 SNV F1 (benchmark BED; paired block-bootstrap intervals exclude zero in all nine pairs tested), and indel F1 is also higher.
 
-*v1.1 versus v2.1.* The larger graph removed slightly more germline candidates (−0.012 to −0.005) without absorbing more somatic alleles (SNVs −0.001 to +0.004, indels −0.004 to +0.043), and models trained on the two graphs are close (SNV F1 −0.021 to +0.031). In silico, absorption is set by the frequency filter, not the haplotype count: at a 10% filter, 16 to 89 v1.1 haplotypes contain 0.23–0.26 of HG008T somatic indels. [待补: the same on 89 to 463 HPRC v2.1 haplotypes (E7 v2.1 axis, job 417207)]
+*v1.1 versus v2.1.* The larger graph removed slightly more germline candidates (−0.012 to −0.005) without absorbing more somatic alleles (SNVs −0.001 to +0.004, indels −0.004 to +0.043), and models trained on the two graphs are close (SNV F1 −0.021 to +0.031). In silico, the frequency filter, not the haplotype count, sets what is absorbed: with a 10% filter, graphs of 16 to all 463 v2.1 haplotypes contain 0.18–0.21 of HG008T somatic indels, whereas without a filter this rises from 0.37 to 0.72.
 
 *Mapping ambiguity.* Graph alignment with Giraffe is as accurate as linear mapping and reduces reference bias (Sirén et al., 2021), and the frequency-filtered HPRC graph reduced small-variant errors by 34% relative to GRCh38 (Liao et al., 2023; Hickey et al., 2024). In our simulations with reads of known origin, both HPRC graphs misplaced fewer Illumina and HiFi reads than GRCh38-only; ONT reads on v2.1 are the exception (1.48% against 0.77%), mostly in SMaHT extreme regions (R1.3).
 
@@ -315,7 +315,7 @@ We compared three graph references built from the same reads, tensor code and la
   - 三个参考的定义、29 个 EUR：同下面旧证据（E8b H2 / H5，R3.m3）。
   - 76–82 % / 7–13 %、+0.038 到 +0.319、九对 bootstrap：同下面 "2026-10-16 按用户要求，三个参考的 ablation 的重点从 R1.1 移到这里" 一条。"indel F1 is also higher"：E3b `tables.md` §2 valbest 六套图高，test-tuned best F1 linear 六套都低（benchmark README）。
   - v1.1 vs v2.1：candidate 比例变化 germline −0.012 到 −0.005、somatic SNV −0.001 到 +0.004、somatic INS +0.005 到 +0.043、DEL −0.004 到 +0.025（合写成 indels −0.004 到 +0.043），出处见下面 "四个变化范围" 一条（详版 R1.2 表）。SNV F1 −0.021 到 +0.031：E3 `tables.md` §1。为了字数去掉了 "v1.1 ahead on HG008T by 0.015–0.021 (E16 区间刚好不含 0)" 和 INDEL best F1 −0.033 到 +0.015，R3.1 的 Response 里有。
-  - in silico：E7 `curves.tsv`，HG008 somatic INDEL，rel 0.1，k16 0.259、k32 0.231、k64 0.245、k89 0.256 → 0.23–0.26。v2.1 轴（k 到 463）job 417207 在跑，出来后补 [待补]。
+  - in silico（2026-10-16 v2.1 轴出来后替换了 v1.1 的那句）：E7 `v2.1/curves.tsv` / `v2.1/tables.md` B、C，scope bed，pool all，HG008。f = 10 %：somatic INDEL k16 21.3、k32 17.9、k64 18.9、k89 20.0、k128 19.5、k256 19.0、k463 18.8 % → 0.18–0.21；germline SNV 85.1 / 84.9 / 86.5 / 87.0 / 87.1 / 87.1 / 87.1 % → 0.85–0.87；d = 1：somatic INDEL k16 36.5 → k463 71.8 % → "0.37 to 0.72"。v1.1 原来的数（k16–89 时 0.23–0.26）在 E7 README 和 `curves.tsv`。实测校准（没进 Response，字数）：d46 的 germline SNV 损失在 v2.1 携带数 35–45 时 17.0 %、46–57 时 98.4 %（HG008T PacBio，`v2.1/tables.md` G），predicted 的 germline SNV 损失占 97.8–98.0 %（F）。
   - 文献（2026-10-16 网上核实）：
     - Sirén J. et al. Pangenomics enables genotyping of known structural variants in 5202 diverse genomes. Science 374, abg8871 (2021)：Giraffe 在已知来源的模拟 reads 上 "as accurate as the most accurate previously published mappers"，图里 allele 越多 reference allele bias 越小（PMC9365333）。
     - Liao W.-W. et al. A draft human pangenome reference. Nature 617, 312–324 (2023)：摘要 "reduced small variant discovery errors by 34%" 相对 GRCh38-based workflows（short reads）。
@@ -402,7 +402,7 @@ We compared three graph references built from the same reads, tensor code and la
 
 - （已完成）E7 的 `s7_tables.py` 和 README（2026-10-13 23:03），Response 的校准数字已核对。剩下的只有图（`curves.tsv` 可直接画）。
 - （已完成）E5b graph spelling（387428 / 387429 / 387430 COMPLETED 2026-10-13 22:47–22:52）。"图里没有的 somatic INDEL 也有 0.29–0.36 丢了 candidate" 现在按 E5b 的分类写（not spelled / filtered），但 "representation / alignment" 这个原因本身没有测。要的话，可以在 E5b 的 `lost_alleles.tsv.gz` 上抽几十个 "not spelled" 的位点看 read 在 d9 上怎么走（CPU，可选）。
-- （进行中）E7 的 v2.1 轴：用户 2026-10-16 同意下载，`hprc-v2.1-mc-grch38.wave.vcf.gz` 已下载，s1 完成，s3 / s4 / s6（job 417207）在跑。出来后替换 Response 里的 [待补]（in-silico 一句写成 v1.1 + v2.1 合在一起，控制字数）。
+- （已完成，2026-10-16）E7 的 v2.1 轴（job 417207），Response 的 in-silico 一句已换成 v2.1 的数（E7 README "HPRC v2.1 axis"）。
 - [文字] 文献引用核实：Liao 2023 的 34 % 用的是否是频率过滤图、Hickey 2024 正文、ClairS-TO 正文的 PoN、Mutect2 的引用（见证据 2026-10-16）。
 - [用户决定] centromere（chr1:121–126 Mb）：Response 已去掉，等用户决定怎么处理。
 - （已完成，2026-10-15）E11a 六套（`compare.py` 18:36）和 E11b（Illumina / HiFi）已进 Response 的 "Mapping ambiguity"。[文字] E11a README（14:07）还写着 ONT / COLO829T held，要按 tables.md 更新（不在本次可改的文件里）。
@@ -3214,7 +3214,7 @@ We agree. A new Supplementary Table documents both comparators at the level of d
 
 ### R3.m3 Composition of the pangenome reference
 
-**状态：已解决**: E8b 已经按 HPRC 原始文档和本地 GBZ 的样本表核实了这些事实：两张图的 release / 版本、个体和人群组成、频率过滤方式、benchmark donor 在不在图里；SV 的处理也和 pipeline README 对过。近亲的遗传学检查（E7 s6，v1.1）也已出：没有任何 v1.1 个体带了 benchmark normal 超过 8.2 % 的罕见 germline SNV（一级亲属约一半）。剩下的只是改 Methods 文字；v2.1 的近亲检查是可选的（要下载 VCF，用户决定），因为两张图都按 9 / 90、46 / 464 过滤，单个个体或小家庭特有的 allele 本来就进不了图（Response 已加这一句）。
+**状态：已解决**: E8b 已经按 HPRC 原始文档和本地 GBZ 的样本表核实了这些事实：两张图的 release / 版本、个体和人群组成、频率过滤方式、benchmark donor 在不在图里；SV 的处理也和 pipeline README 对过。近亲的遗传学检查（E7 s6）v1.1 和 v2.1 都已出：没有任何 v1.1 个体带了 benchmark normal 超过 8.2 % 的罕见 germline SNV，v2.1 个体不超过 2.9 %（一级亲属约一半；v2.1 部分 2026-10-16 下载 VCF 后完成）。剩下的只是改 Methods 文字。
 
 **Comment（要点）。**
 
@@ -3236,7 +3236,7 @@ The Methods now specify each reference.
 
 *Structural variants.* The graphs keep the structural variants that pass the frequency filter, and reads align along them. Pansoma's candidates, however, are limited to indels of 1–50 bp; longer events are logged and not called.
 
-*Benchmark individuals.* None of the cancer cell lines used here, nor their matched normals, is in either graph: HG008, COLO829, HCC1395, HCC1954, H1437 and H2009 are absent from both sample lists. These lines are anonymised, so we also tested for close relatives genetically. Of the germline SNVs of the HG008, COLO829 and HCC1395 normals that are rare in HPRC v1.1 (on one or two of its 89 non-reference haplotypes), no v1.1 individual carries more than 8.2%, whereas a first-degree relative would carry about half. In addition, because both graphs keep only non-reference nodes on at least 9 of 90 or 46 of 464 haplotypes, alleles private to one individual or a small family cannot enter either graph. The genetic test covers the v1.1 individuals; for v2.1 we rely on the sample list and this frequency filter.
+*Benchmark individuals.* None of the cancer cell lines used here, nor their matched normals, is in either graph: HG008, COLO829, HCC1395, HCC1954, H1437 and H2009 are absent from both sample lists. These lines are anonymised, so we also tested for close relatives genetically. Of the germline SNVs of the HG008, COLO829 and HCC1395 normals that are rare in each release (on one or two of its non-reference haplotypes), no individual carries more than 8.2% in v1.1 or 2.9% in v2.1, whereas a first-degree relative would carry about half. In addition, because both graphs keep only non-reference nodes on at least 9 of 90 or 46 of 464 haplotypes, alleles private to one individual or a small family cannot enter either graph.
 
 The HapMap-mixture donors are in the graphs: four of the six in v1.1 and all six in v2.1. R1.5 explains how we handle this.
 
@@ -3244,6 +3244,7 @@ The HG008 donor is of European ancestry, a group absent from v1.1 and present in
 
 **证据（内部）。**
 
+- 2026-10-16 v2.1 近亲检查完成（用户同意下载 HPRC v2.1 wave VCF；E7 s6 的 v2.1 版本，job 417207；`experiments/E7_graph_composition/v2.1/relatedness.tsv`、`tables.md` J、README "HPRC v2.1 axis" §6）。测试集是各 normal 的 PASS、BED 内、在 463 条 v2.1 haplotype 里只有 1–2 条携带的 germline SNV：HG008 39,112、COLO829 38,407、HCC1395 29,886。携带最多的个体：HG008 HG00140（GBR）2.18 %，COLO829 HG00235（GBR）2.79 %，HCC1395 HG00235 2.90 %（EUR 中位数的 1.24–1.52 倍）→ Response "2.9% in v2.1"。比值更高的只出现在份额很小的混合 / 低共享人群个体（COLO829 / NA19682 MXL 2.34 倍、2.23 %；HCC1395 / HG01960 ACB 6.85 倍、1.19 %；COLO829 / NA18959 JPT 6.27 倍、0.85 %；这些超人群的中位数只有 0.06–0.98 %）。HG002 1.51–1.87 %、HG005 0.06–0.22 %。"rare in each release" 的定义两版一样（1–2 条携带），但 v2.1 的 haplotype 多五倍，同样 1–2 条更稀有，所以 2.9 % 和 8.2 % 不能直接比大小，只说明两版都远低于一半。Response 去掉了 "The genetic test covers the v1.1 individuals; for v2.1 we rely on the sample list and this frequency filter."
 - 2026-10-15 终稿一致性：最后一句 "After population filtering, the results on the two graphs are equivalent (R1.2)" 改成 "are close (R1.2)"。E16 的配对区间显示 HG008T 上 d46 − d9 是 −0.015 到 −0.021、区间刚好不含 0（E16 README §2），R1.2 / R3.1 的 Response 都已写 "close"，"equivalent" 和它们矛盾。
 - 2026-10-15 结果并入（Response 不改，状态仍是已解决）：今天的新结果都不涉及图的组成。和本条有关的只有 HapMap：donor-free 图（`mgi_non_HG005.d9`）的重跑失败，discovery job 387101 在 2026-10-15 09:11:27 超出 32 GB 内存上限被杀（`tmp/hapmap_nonHG005_20261012/tensors/discovery-387101.out`："exceeded memory limit (34660331520 > 34359738368)"），run 和 finalize 都没跑（`run-387104.out`、`finalize-387105.out`）。所以没有 donor-free 的 HapMap 结果，Response 里 "The HapMap-mixture donors are in the graphs ... R1.5 explains how we handle this" 这句只能指向 "不再当主结果"。E11b 的 Caveats（CHM13 在两张 HPRC 图里是 REFERENCE path）和本条 "the two reference paths, GRCh38 and CHM13, are exempt" 一致。
 - 2026-10-15 改稿（适用性检查）：
@@ -3284,7 +3285,7 @@ The HG008 donor is of European ancestry, a group absent from v1.1 and present in
 **还缺什么。**
 
 - [文字] Methods 的参考图一节按 Response 改写。简版和详版里 "four HapMap donors are in both" 要改成 v1.1 4/6、v2.1 6/6。
-- [用户决定]（可选）v2.1 的近亲检查要 v2.1 全图 VCF（下载；d46 GBZ 本身不行，罕见 allele 已被 46 / 464 过滤掉）。Response 现在按 "不做" 写（遗传检查只查了 v1.1，v2.1 靠样本表 + 频率过滤）；如果做了，把那句换成 v2.1 的结果。
+- （已完成，2026-10-16）v2.1 的近亲检查（E7 v2.1 s6），Response 已换成两版的结果。
 - [用户决定] HapMap 的处理（R1.5：直接去掉，还是用已有的 donor-free 图 `mgi_non_HG005.d9`），这一点决定 Response 里 HapMap 那句话怎么写。donor-free 重跑 2026-10-15 因内存不足失败（见证据），要用这条路就得加内存（387101 是 32 GB）重新提交 discovery。
 
 ### R3.m4 Terminology and language

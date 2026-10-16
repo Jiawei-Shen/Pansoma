@@ -14,9 +14,17 @@ The results also feed R1.4 / R3.2 (which somatic alleles the graph absorbs). The
 
 ## Summary
 
-Status: **DONE for HPRC v1.1** (steps s1-s7 finished on 2026-10-13). **PENDING**: the HPRC v2.1 haplotype axis
-(k up to 462), which needs the v2.1 full-graph VCF; downloading it is a user decision. Also pending: the optional E7b
-measured point and a figure. No E7 job is queued or held.
+Status: **DONE for HPRC v1.1** (steps s1-s7, 2026-10-13) **and for the HPRC v2.1 axis** (463 haplotypes; download
+approved by the user and run on 2026-10-16; section "HPRC v2.1 axis"). Still pending: the optional E7b measured point
+and a figure. No E7 job is queued or held.
+
+- **v2.1 confirms the v1.1 result up to 463 haplotypes.** At a 10 % filter, from k = 16 to 463:
+  - HG008 somatic INDEL absorption stays at 17.9-21.3 %;
+  - germline SNV coverage stays at 84.9-87.1 %.
+
+  Without a filter, absorption rises from 36.5 to 71.8 %. The real d46 graph behaves as ">= 46 of the 463 v2.1
+  haplotypes": germline SNV loss jumps from 17.0 % to 98.4 % at that carrier count.
+- **Relatedness on v2.1:** no v2.1 individual carries more than 2.9 % of a normal's rare germline SNVs.
 
 - **The frequency threshold decides what the graph contains. The haplotype count does not.** At a relative threshold of
   10 %, going from k = 16 to all 89 HPRC v1.1 haplotypes changes:
@@ -487,6 +495,182 @@ Suggested text for the open "curves" placeholder of the R1.2 response (draft, nu
 > alleles carried by at least 9 haplotypes, and at most 7.2 % of those carried by fewer, are in the v1.1 graph. Predicted
 > alleles account for 98 % of the germline SNV candidates the graph removes on identical reads.
 
+## HPRC v2.1 axis (added 2026-10-16)
+
+The same model on the 463 non-GRCh38 haplotypes of HPRC release 2 (v2.1), the release of the d46 graph. The user
+approved the download on 2026-10-16. Run with `E7_GRAPH=v2.1`; the v1.1 code path is unchanged (regression check below).
+
+### Data
+
+- `/scratch/jshen/data/hprc_v2.1_vcf/hprc-v2.1-mc-grch38.wave.vcf.gz` (+ `.tbi`, `README.v2.1.txt`), downloaded
+  2026-10-16 from `s3://human-pangenomics/pangenomes/freeze/release2/minigraph-cactus/v2.1/hprc-v2.1-mc-grch38/`.
+  - The size matches the S3 listing: 2,291,014,302 bytes.
+  - It has 232 sample columns: CHM13 (haploid) plus 231 diploid samples, giving 463 haplotypes. HG00272 is held out.
+  - chr1-22 hold 40,614,201 records (tabix index), against 27,409,686 in v1.1.
+  - Per the HPRC README it was made with vcfbub -l 0 -a 100000, vcfwave -I 1000 and vcffixup. Records can be
+    multiallelic (`bcftools norm -m +any`).
+  - The README says "missing genotypes bug resolved in vcfwave output".
+- Superpopulations: `/scratch/jshen/data/hprc_v2.1_meta/hprc_release2_sample_metadata.csv`
+  (human-pangenomics/hprc_intermediate_assembly, `data_tables/sample`). 1000G population codes map to
+  superpopulations in `common.SUPERPOP`:
+  - ASL and MKK count as AFR;
+  - HG002 counts as EUR and HG005 as EAS.
+  - Haplotype pools: AFR 140, EAS 102, AMR 88, SAS 72, EUR 60. These are the individuals of E8b H5
+    (70 / 50 + HG005 / 44 / 36 / 29 + HG002).
+- Sample alleles: the same s2 tables as v1.1 (`WORK/sample_alleles`).
+- Measured candidate status: the same `tensors/*.recall.tsv` as v1.1.
+- There is no d46 counterpart of the d9 deconstruct VCF. HPRC publishes only the d46 GBZ / indexes, so for v2.1 the
+  graph-content check (s5, sections 6a / 6b) is not possible, and the calibration is the measured loss on identical
+  reads only.
+
+### Method changes
+
+- **Genotypes used as they are; no raw-VCF repair** (`s0_check_wave_gt.py`). For every top-level raw bubble in a test
+  region, the check asks whether each haplotype with a non-0 raw allele carries a non-0 allele in a wave record from
+  that bubble.
+  - v2.1 against the raw VCF (read remotely by tabix from the same S3 folder): 0.072 % of the non-ref haplotype calls
+    are missing on chr21:20-22 Mb, and 0.204 % on chr1:10-30 Mb (22,119 of 10,819,386).
+  - Positive control, the same check on v1.1: 0.773 % and 1.374 %. This is the bug the v1.1 repair fixes.
+  - Spurious calls (raw ref, non-ref in a single-ID wave record): 16 and 553 for v2.1, 0 for v1.1.
+  - Log: `tmp/reviewer_cpu_20261013/E7_graph_composition/v2.1/s0_check_wave_gt.log`.
+  - The residual 0.2 % slightly under-counts carriers. It was not repaired: that would need the 24 GB raw VCF, and
+    the merged multiallelic records make bubble-level repair ambiguous.
+- **Masks of NW = 8 uint64 words.** `common.mask_words`; joined.npz key `masks`.
+- **Draws (s3).**
+  - All-haplotype pool: k in {2, 4, 8, 16, 32, 64, 89, 128, 256} plus all 463, with 20 draws each. k = 89 is the size
+    of v1.1.
+  - Absolute d in {1, 2, 5, 9, 18, 46, 92}; relative f as for v1.1 (f = 10 % gives d = 47 at k = 463).
+  - Each superpopulation: k in {2-32} plus k = 60 (the whole EUR pool, so all five are compared at equal k) plus its
+    whole pool.
+  - Graph size is computed for the all-haplotype pool only.
+- **Calibration (s4).** "Predicted in d46" means >= 46 of the 463 haplotypes carry the allele (the d46 graph keeps
+  nodes on >= 46 of its 464 haplotypes, GRCh38 included). Carrier bins: 0, 1, 2-9, 10-22, 23-34, 35-45, 46-57,
+  58-92, 93-231, 232-463.
+- **Relatedness (s6).** Rare means 1-2 of the 463 v2.1 haplotypes; the test is run against all 231 individuals.
+- **Tables:** `s8_tables_v21.py` writes `v2.1/tables.md` and `v2.1/summary.json`.
+
+### Jobs
+
+Job scripts and logs are in `tmp/reviewer_cpu_20261013/E7_graph_composition/v2.1/`; large outputs are in `WORK/v2.1/`.
+
+| Step | Job script | Slurm job | Output |
+|---|---|---|---|
+| s0 | login node, 2026-10-16 | - | `s0_check_wave_gt.log` |
+| s1 | `s1_hprc_alleles.sh` (general, -c 3, 8 G, 22 tasks, 6 at a time) | 417189 | WORK/v2.1/hprc_alleles/chr*.tsv.gz |
+| s3 + s4 + s6 + s8 | `s3_s4_s6.sh` (general, -c 2, 40 G; afterok s1) | 417207 | `v2.1/*.tsv`, `v2.1/tables.md`, `v2.1/summary.json`, WORK/v2.1/joined.npz, hist_draws.npy |
+| v1.1 regression | `s3_s4_s6_v11_regression.sh` (general, -c 2, 24 G) | 417204 | rewrites the v1.1 TSVs in this folder; `git diff` must be empty |
+
+`WORK/v2.1/hprc_alleles/chr21test.*` is the 1 Mb test of s1 (chr21:20-21 Mb, 2026-10-16 14:29).
+
+All three jobs COMPLETED on 2026-10-16:
+
+- s1 (417189): 22 tasks, 1.6-6.6 min each, at most 3.0 GB. It read 40,614,201 wave records, of which 6,493,762 have
+  INFO ORIGIN. They give 48,836,404 allele keys, 48,396,165 of them with at least one carrier (v1.1: 28.1 M keys).
+- s3 + s4 + s6 + s8 (417207): 33 min, 14.1 GB MaxRSS, 766 draws. 13,891,983 of the 15,054,305 sample alleles have all
+  their keys in the v2.1 table.
+- v1.1 regression (417204): 19 min, 9.6 GB. It rewrote `curves.tsv`, `graph_size.tsv`, `calibration*.tsv`, `d9_*.tsv`
+  and `relatedness.tsv` (14:40-14:50), and `git diff` on them is empty, so the generalized code reproduces v1.1 exactly.
+
+### Results (`v2.1/tables.md`; PASS, in BED, chr1-22 unless stated)
+
+**1. The haplotype-count axis up to 463 (tables.md B, C).** % in the graph, all-haplotype pool, mean of 20 draws.
+
+| Sample | threshold | k = 16 | k = 89 | k = 463 |
+|---|---|---|---|---|
+| HG008 germline SNV | f = 10 % | 85.1 | 87.0 | 87.1 |
+| HG008 somatic INDEL | f = 10 % | 21.3 | 20.0 | 18.8 |
+| COLO829 somatic INDEL | f = 10 % | 18.9 | 18.2 | 17.6 |
+| HCC1395 somatic INDEL | f = 10 % | 3.2 | 3.1 | 3.0 |
+| HG008 germline SNV | d = 1 | 91.0 | 95.7 | 97.3 |
+| HG008 somatic INDEL | d = 1 | 36.5 | 58.8 | 71.8 |
+| COLO829 somatic INDEL | d = 1 | 31.1 | 48.2 | 59.4 |
+| HCC1395 somatic INDEL | d = 1 | 4.8 | 7.5 | 10.0 |
+
+- At a relative 10 % filter, the v2.1 axis confirms the v1.1 result up to 463 haplotypes. Between k = 16 and 463, HG008
+  somatic INDEL absorption stays within 17.9-21.3 % and germline SNV coverage within 84.9-87.1 %.
+- Without a filter (d = 1), germline coverage saturates while somatic INDEL absorption keeps rising. At k = 463, 84.1 %
+  of HG008 and 79.8 % of COLO829 HP >= 7 somatic INDELs are on some v2.1 haplotype.
+- An absolute threshold on a larger graph absorbs more (tables.md K). At d = 9 (the v1.1 count), all 463 v2.1
+  haplotypes contain 47.6 % of HG008 somatic INDELs, against 20.0 % for 89 v2.1 haplotypes. A 10 % filter (d46 for
+  463 haplotypes) is what keeps it at 18.8 %.
+
+**2. v1.1 against v2.1 at equal size (tables.md K).** % in the graph; v1.1 = all 89 haplotypes, v2.1 = 20 subsets of
+89.
+
+| Sample | f = 10 %: germline SNV v1.1 / v2.1 | f = 10 %: somatic INDEL v1.1 / v2.1 | d = 1: somatic INDEL v1.1 / v2.1 |
+|---|---|---|---|
+| HG008 | 86.9 / 87.0 | 25.6 / 20.0 | 59.0 / 58.8 |
+| COLO829 | 87.2 / 87.3 | 22.3 / 18.2 | 49.2 / 48.2 |
+| HCC1395 | 88.1 / 88.3 | 3.3 / 3.1 | 7.4 / 7.5 |
+
+- At the same size and filter, v2.1 haplotypes absorb fewer somatic INDELs than v1.1's (20.0 against 25.6 % for HG008),
+  with the same germline coverage.
+- This fits the ancestry result below (v1.1 is 52 % AFR haplotypes, v2.1 30 %). It also fits E5b's real-graph count:
+  d46 spells 21.3 % of HG008T truth INDELs, against 27.3 % for d9.
+
+**3. Ancestry at equal k = 60 (tables.md D).** % in the graph, f = 10 % (d = 6), mean of 20 draws.
+
+| Sample | Stratum | AFR | AMR | EAS | EUR | SAS |
+|---|---|---|---|---|---|---|
+| HG008 | germline SNV | 80.7 | 86.6 | 80.6 | 88.3 | 86.4 |
+| HG008 | somatic INDEL | 25.3 | 18.1 | 17.0 | 17.7 | 18.3 |
+| COLO829 | germline SNV | 80.9 | 86.9 | 81.1 | 88.2 | 86.7 |
+| COLO829 | somatic INDEL | 23.9 | 15.4 | 14.7 | 15.7 | 15.4 |
+| HCC1395 | germline SNV | 81.8 | 88.1 | 81.8 | 89.7 | 87.8 |
+| HCC1395 | somatic INDEL | 3.5 | 2.8 | 2.6 | 2.6 | 3.0 |
+
+- European haplotypes, absent from v1.1, contain the most of every donor's germline SNVs. For HG008, whose donor is of
+  European ancestry (E8b G6), this is 88.3 %, against 80.6-80.7 % for EAS / AFR.
+- AFR haplotypes absorb the most somatic INDELs (23.9-25.3 % against 14.7-18.3 %), as on v1.1. More diverse
+  haplotypes carry more length variants of the same repeats.
+
+**4. Graph size (tables.md E).** HPRC v2.1 alleles kept, chr1-22, millions.
+
+- All 463 haplotypes at d = 46: 6.30 M SNV and 1.80 M INDEL <= 50 bp.
+- Without a filter: 37.31 M SNV and 9.56 M INDEL.
+- v1.1 at d = 9 keeps 6.87 M SNV and 2.12 M INDEL, so the two real graphs are of similar allele size.
+
+**5. Calibration against the real d46 graph (tables.md F, G, H).** "Predicted in d46" = >= 46 of the 463 v2.1
+haplotypes carry the allele.
+
+- **The d46 filter is sharp on its own axis** (section G, germline SNV loss on d46 by v2.1 carrier count): 17.0 % at
+  35-45 carriers, then 98.4 % at 46-57 (HG008T PacBio); COLO829T fiber-seq 14.6 %, then 98.1 %. On the same bins d9
+  loses 46.3 %, then 67.8 %. This is the v1.1 picture in reverse: section 6d showed d46 blurred on the v1.1 axis, and
+  here d9 is blurred on the v2.1 axis.
+- **Germline SNV.**
+  - Predicted in d46: 87.3 % (HG008) and 87.7 % (COLO829).
+  - Measured loss on d46: 90.6-91.0 % and 90.0-90.8 %.
+  - Alleles predicted in lose 99.1-99.7 % of their candidates, alleles predicted out 16.4-18.4 %.
+  - 97.8-98.0 % of the germline SNV loss falls on predicted alleles.
+- **Somatic alleles: only part of the loss is composition.**
+  - Predicted share of the d46 loss: somatic INDEL 33.2-43.5 % (HG008T) and 40.6-49.9 % (COLO829T); somatic SNV
+    38.6-44.5 % and 11.1-19.0 %.
+  - Somatic INDELs with no v2.1 carrier still lose 29.3 % (HG008T PacBio) and 26.2 % (COLO829T fiber-seq) of their
+    candidates on d46 (section G, bin 0), as on v1.1 (34.0 % / 26.5 % with no v1.1 carrier).
+- **Sample alleles in v2.1** (section H):
+  - Any v2.1 carrier: 97.3-98.1 % of germline SNVs; 71.8 % (HG008), 59.4 % (COLO829) and 10.0 % (HCC1395) of somatic
+    INDELs.
+  - Predicted in d46: 19.2 %, 17.8 % and 3.0 % of somatic INDELs; 0.1-1.7 % of somatic SNVs.
+  - Of the somatic INDELs predicted in d46, 87.4 % (HG008), 67.9 % (COLO829) and 61.7 % (HCC1395) are HP >= 7. With
+    STR included this rises to 97.6 %, 87.6 % and 68.1 % (computed from `curves.tsv`, k = 463, d = 46).
+
+**6. Relatedness against the 231 v2.1 individuals (R3.m3; tables.md J).** The test set is each normal's germline SNVs
+carried by 1-2 of the 463 v2.1 haplotypes: 39,112 (HG008), 38,407 (COLO829) and 29,886 (HCC1395).
+
+- The most similar individual carries 2.18 % (HG00140, GBR), 2.79 % (HG00235, GBR) and 2.90 % (HG00235, GBR) of them,
+  at 1.24-1.52x the EUR median. A first-degree relative would carry about half (the script's premise).
+- Higher ratios occur only at small shares, in individuals of admixed or low-sharing populations:
+  - COLO829 / NA19682 (MXL): 2.34x at 2.23 %;
+  - HCC1395 / HG01960 (ACB): 6.85x at 1.19 %;
+  - COLO829 / NA18959 (JPT): 6.27x at 0.85 %.
+
+  Their superpopulation medians are 0.06-0.98 %.
+- So no v2.1 individual is a close relative of the HG008, COLO829 or HCC1395 donor. Together with the v1.1 test (at most
+  8.2 %), this covers both graphs.
+- HG002 and HG005 are in v2.1 and are not close to any donor (`relatedness.tsv`):
+  - HG002 carries 1.51-1.87 % of the rare SNVs (0.79-0.99x the EUR median);
+  - HG005 carries 0.06-0.22 %.
+
 ## Caveats
 
 - **"In the graph" is not "absorbed".**
@@ -510,15 +694,18 @@ Suggested text for the open "curves" placeholder of the R1.2 response (draft, nu
   (13,240 carriers) could not be decomposed and are missing.
 - **d9 VCF presence is a lower bound.** The d9 deconstruct VCF is not vcfwave-decomposed, which is why only 96-98.5 % of
   SNV alleles with >= 9 carriers are found (6a, 6b).
-- **The model covers HPRC v1.1 only** (89 haplotypes; GRCh38 is always the backbone). It cannot extrapolate beyond
-  k = 89. d46 is compared only through measured loss, not modelled.
+- **v1.1 and v2.1 are modelled separately.** v1.1 has 89 haplotypes and v2.1 463 (section "HPRC v2.1 axis"); GRCh38
+  is always the backbone.
+  - The two releases are separate pools; their haplotypes are never merged in one draw.
+  - For v2.1 there is no graph-content check (no d46 deconstruct VCF), and its genotypes are used without repair:
+    0.2 % of non-ref haplotype calls are missing on the test region.
 - **Population pools are small.** AFR has 46 haplotypes. Non-AFR has 42 (AMR 32, EAS 8, SAS 2), so "non-AFR" mostly
   means AMR. There is no European pool in v1.1.
 - **HCC1395 has no linear or d9 tensor sets**, so it has no measured loss (empty columns in tables.md F).
 - **Scope differs from the R1.2 response table** (here chr1-22, PASS within the BED). For example, HG008T PacBio somatic
   SNV tensor rates are 98.4 / 95.0 / 95.2 % here vs 0.983 / 0.947 / 0.949 there.
-- **Relatedness** was checked against HPRC v1.1 only, for three donors. A first-degree relative sharing "about half" is
-  the script's premise, not a measured control.
+- **Relatedness** was checked against HPRC v1.1 and v2.1, for three donors. A first-degree relative sharing "about
+  half" is the script's premise, not a measured control.
 
 ## Status
 
@@ -532,17 +719,16 @@ calibration against d9 / d46 on HG008T and COLO829T x 3 platforms, and the R3.m3
 
 **PENDING**
 
-1. **HPRC v2.1 axis** (k = 128, 256, 462; calibration of k = 462, f = 10 % against d46). This needs the HPRC v2.1
-   full-graph vcfbub / wave VCF. The download is on the user-decision list (`response_to_reviewers_detailed.md` §7, item
-   4). Nothing has been downloaded or submitted.
+1. (DONE 2026-10-16) **HPRC v2.1 axis**: k up to 463, calibration against d46 and relatedness (section "HPRC v2.1
+   axis").
 2. **E7b** (optional, P2): one measured point on a v2.1 d23 graph. It needs the v2.1 full GBZ, new indexes and
    alignment, and is not started (user decision).
 3. **Figure.** `curves.tsv` is figure-ready (`WORK/hist_draws.npy` keeps the full per-draw histograms), but no plot has
    been made yet.
 4. **The non-composition half of the graph-arm INDEL loss** (6c / 6d). This is outside E7's design. It is a candidate
    follow-up for R1.4 / E5b; no job is planned.
-5. **Relatedness** against v2.1 and for the other CASTLE lines (HCC1954, H1437, H2009): not done. The s2 inputs cover
-   only HG008, COLO829 and HCC1395.
+5. **Relatedness** for the other CASTLE lines (HCC1954, H1437, H2009): not done; the s2 inputs cover only HG008,
+   COLO829 and HCC1395. The v2.1 relatedness is done (2026-10-16).
 
 No E7 job is running, queued or held, so nothing here waits on the lab-cluster cap. The comparator re-runs and the CHM13
 work dropped today do not affect E7.
@@ -551,15 +737,22 @@ work dropped today do not affect E7.
 
 This folder:
 
-- Scripts: `common.py`, `s1`-`s7` `*.py`, `collect.sh`.
-- Results: `curves.tsv`, `graph_size.tsv`, `calibration.tsv`, `calibration_bins.tsv`, `d9_retention.tsv`,
+- Scripts: `common.py`, `s0`-`s8` `*.py` (`s0_check_wave_gt.py` and `s8_tables_v21.py` are v2.1 only), `collect.sh`.
+- Results (v1.1): `curves.tsv`, `graph_size.tsv`, `calibration.tsv`, `calibration_bins.tsv`, `d9_retention.tsv`,
   `d9_content.tsv`, `relatedness.tsv`, `tables.md`, `summary.json`.
+- Results (v2.1): `v2.1/curves.tsv`, `graph_size.tsv`, `calibration.tsv`, `calibration_bins.tsv`, `d46_content.tsv`,
+  `relatedness.tsv`, `tables.md`, `summary.json`.
 
-Job scripts and logs: `/scratch/jshen/Github/Pansoma/tmp/reviewer_cpu_20261013/E7_graph_composition/`.
+Job scripts and logs: `/scratch/jshen/Github/Pansoma/tmp/reviewer_cpu_20261013/E7_graph_composition/` (v2.1: its
+`v2.1/` subfolder).
 
 Data directory `/scratch/jshen/data/reviewer_experiments_20261013/E7_graph_composition/`:
 
 - `hprc_alleles/` (s1; `chr21test.*` is the 10:17 test run);
 - `sample_alleles/` (s2);
 - `d9_alleles/` (s5);
-- `joined.npz` and `hist_draws.npy` (s3).
+- `joined.npz` and `hist_draws.npy` (s3; the v1.1 regression of 2026-10-16 rewrote them with the `masks` key);
+- `v2.1/hprc_alleles/`, `v2.1/joined.npz`, `v2.1/hist_draws.npy` (v2.1 s1 / s3).
+
+HPRC v2.1 inputs: `/scratch/jshen/data/hprc_v2.1_vcf/` (wave VCF, index, HPRC README) and
+`/scratch/jshen/data/hprc_v2.1_meta/hprc_release2_sample_metadata.csv`.

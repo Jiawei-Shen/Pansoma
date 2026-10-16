@@ -9,14 +9,19 @@ For every truth allele (scope: FILTER PASS, inside its BED, chr1-22; and chr1 on
     analysis/graph_ablation_tensors_20261005/tables.md section B): 'tensor' = status tensor_representative.
 Measured graph loss = alleles with a tensor on the GRCh38-only (linear) arm but none on d9 (or d46), over alleles with a
 linear tensor. Outputs: calibration.tsv, calibration_bins.tsv, d9_retention.tsv, d9_content.tsv (this folder).
+v2.1 (E7_GRAPH=v2.1, added 2026-10-16): carrier count c among the 463 v2.1 haplotypes; 'predicted in d46' = c >= 46
+(the d46 graph keeps nodes of >= 46 of its 464 haplotypes; GRCh38 never carries an ALT). HPRC publishes no deconstruct
+VCF of the d46 graph, so there is no graph-content check (steps 2-3); the calibration is the measured candidate loss.
+Outputs in ./v2.1: calibration.tsv, calibration_bins.tsv (v2.1 carrier bins), d46_content.tsv.
 """
 import collections, csv, gzip, hashlib, os, sys
 import numpy as np
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from common import AUTOSOMES, FI, FINE, GROUPS, ROLES, SAMPLES, WORK, fine_code
+from common import AUTOSOMES, FI, FINE, G, GOUT, GRAPH, GROUPS, GWORK, ROLES, SAMPLES, WORK, fine_code
 
-OUT = os.path.dirname(os.path.abspath(__file__))
-JOINED = f'{WORK}/joined.npz'
+OUT = GOUT
+JOINED = f'{GWORK}/joined.npz'
+R, DR = G['real'], G['d_real']  # the real graph of this HPRC release and its carrier threshold (d9: 9, d46: 46)
 CHROMS = AUTOSOMES
 if os.environ.get('E7_TEST'):  # quick test with s3's test output (chr21 only)
     OUT = os.environ['E7_TEST']
@@ -29,11 +34,13 @@ PLATFORMS = {'HG008': [('PacBio', 'HG008T_PacBio'), ('ONT', 'HG008T_ONT'), ('Ill
 ARMS = {'linear': '_linear', 'd9': '', 'd46': '_d46'}
 if os.environ.get('E7_TEST'):
     PLATFORMS = {k: v[:1] for k, v in PLATFORMS.items()}
-CBINS = [(0, 0), (1, 1), (2, 4), (5, 8), (9, 17), (18, 44), (45, 89)]
+CBINS = [(0, 0), (1, 1), (2, 4), (5, 8), (9, 17), (18, 44), (45, 89)] if GRAPH == 'v1.1' else \
+    [(0, 0), (1, 1), (2, 9), (10, 22), (23, 34), (35, 45), (46, 57), (58, 92), (93, 231), (232, 463)]
 
 J = np.load(JOINED)
-n = len(J['lo'])
-cnt = (np.bitwise_count(J['lo']) + np.bitwise_count(J['hi'])).astype(np.int64)
+W = J['masks'] if 'masks' in J.files else np.stack([J['lo'], J['hi']], axis=1)
+n = len(W)
+cnt = sum(np.bitwise_count(W[:, w]).astype(np.int64) for w in range(W.shape[1]))
 cnt[~J['found']] = 0
 sample, role, tid, chrom, fine = J['sample'], J['role'], J['truth_id'], J['chrom'], J['fine']
 inbed = J['passed'] & J['in_bed']
@@ -76,11 +83,11 @@ for k, v in ids.items():
     if len(v) != 1:
         print('WARNING: truth tables differ between sets for', k, flush=True)
 
-# 2. d9 deconstruct presence (simple keys)
+# 2. d9 deconstruct presence (simple keys); v1.1 only
 print('d9 keys', flush=True)
 in_d9vcf = np.zeros(n, bool)
 keys_by_chrom = collections.defaultdict(list)
-for si, s in enumerate(SAMPLES):
+for si, s in (enumerate(SAMPLES) if GRAPH == 'v1.1' else []):
     for ri, r in enumerate(ROLES):
         sel, pos = index[(si, ri)]
         fn = f'{WORK}/sample_alleles/{s}.{r}.tsv.gz'
@@ -95,7 +102,7 @@ for si, s in enumerate(SAMPLES):
                     continue
                 keys_by_chrom[f[1]].append((sel[j], f[5].split(';') if f[5] else []))
 ret = collections.Counter()  # (fine, c) -> [n, in d9]
-for c in CHROMS:
+for c in (CHROMS if GRAPH == 'v1.1' else []):
     d9 = set()
     with gzip.open(f'{WORK}/d9_alleles/{c}.tsv.gz', 'rt') as fh:
         fh.readline()
@@ -121,8 +128,9 @@ for g in ['SNV', 'INDEL', 'INDEL_HP>=7', 'INDEL_not_HP>=7', 'SV>50']:
         if nn:
             rows.append(dict(stratum=g, hprc_carriers=c, hprc_alleles=nn, in_d9_vcf=sum(ret[(f, c, 'd9')] for f in fis),
                              fraction=round(sum(ret[(f, c, 'd9')] for f in fis) / nn, 4)))
-with open(f'{OUT}/d9_retention.tsv', 'w') as fo:
-    w = csv.DictWriter(fo, fieldnames=list(rows[0]), delimiter='\t'); w.writeheader(); w.writerows(rows)
+if rows:
+    with open(f'{OUT}/d9_retention.tsv', 'w') as fo:
+        w = csv.DictWriter(fo, fieldnames=list(rows[0]), delimiter='\t'); w.writeheader(); w.writerows(rows)
 
 # 4. calibration per (sample, platform, role, stratum, scope)
 rows, brows, crows = [], [], []
@@ -135,17 +143,19 @@ for si, s in enumerate(SAMPLES):
                 N = int(gm.sum())
                 if not N:
                     continue
-                pred9 = cnt[gm] >= 9
-                crows.append(dict(sample=s, role=r, scope=scope, stratum=g, n=N,
-                                  in_hprc_any=round(float((cnt[gm] >= 1).mean()), 4),
-                                  predicted_d9=round(float(pred9.mean()), 4),
-                                  in_d9_vcf=round(float(in_d9vcf[gm].mean()), 4),
-                                  in_d9_vcf_given_pred=round(float(in_d9vcf[gm][pred9].mean()), 4) if pred9.any() else '',
-                                  in_d9_vcf_given_not_pred=round(float(in_d9vcf[gm][~pred9].mean()), 4) if (~pred9).any() else ''))
+                pred9 = cnt[gm] >= DR
+                crow = dict(sample=s, role=r, scope=scope, stratum=g, n=N,
+                            in_hprc_any=round(float((cnt[gm] >= 1).mean()), 4),
+                            **{f'predicted_{R}': round(float(pred9.mean()), 4)})
+                if GRAPH == 'v1.1':
+                    crow.update(in_d9_vcf=round(float(in_d9vcf[gm].mean()), 4),
+                                in_d9_vcf_given_pred=round(float(in_d9vcf[gm][pred9].mean()), 4) if pred9.any() else '',
+                                in_d9_vcf_given_not_pred=round(float(in_d9vcf[gm][~pred9].mean()), 4) if (~pred9).any() else '')
+                crows.append(crow)
                 for plat, _ in PLATFORMS[s]:
                     st = {a: status.get((s, plat, a)) for a in ARMS}
                     rec = dict(sample=s, platform=plat, role=r, scope=scope, stratum=g, n=N,
-                               predicted_in_d9=round(float(pred9.mean()), 4))
+                               **{f'predicted_in_{R}': round(float(pred9.mean()), 4)})
                     for a, v in st.items():
                         rec[f'tensor_{a}'] = round(float((v[gm] == 1).mean()), 4) if v is not None else ''
                     lin = st['linear']
@@ -157,13 +167,13 @@ for si, s in enumerate(SAMPLES):
                         has = gm & (lin == 1)
                         lost = has & (v != 1)
                         rec[f'loss_{a}_vs_linear'] = round(float(lost.sum() / max(1, has.sum())), 4)
-                        if a == 'd9':
-                            p = has & (cnt >= 9)
-                            q = has & (cnt < 9)
-                            rec['loss_d9_if_pred_in'] = round(float((lost & p).sum() / max(1, p.sum())), 4)
-                            rec['loss_d9_if_pred_out'] = round(float((lost & q).sum() / max(1, q.sum())), 4)
+                        if a == R:
+                            p = has & (cnt >= DR)
+                            q = has & (cnt < DR)
+                            rec[f'loss_{R}_if_pred_in'] = round(float((lost & p).sum() / max(1, p.sum())), 4)
+                            rec[f'loss_{R}_if_pred_out'] = round(float((lost & q).sum() / max(1, q.sum())), 4)
                             rec['n_linear_tensor'] = int(has.sum())
-                            rec['share_of_d9_loss_pred_in'] = round(float((lost & p).sum() / max(1, lost.sum())), 4)
+                            rec[f'share_of_{R}_loss_pred_in'] = round(float((lost & p).sum() / max(1, lost.sum())), 4)
                     rows.append(rec)
                     if scope == 'bed' and lin is not None:
                         for lo_, hi_ in CBINS:
@@ -175,7 +185,7 @@ for si, s in enumerate(SAMPLES):
                                 v = st[a]
                                 br[f'loss_{a}'] = round(float((b & (v != 1)).sum() / nb), 4) if (v is not None and nb) else ''
                             brows.append(br)
-for name, rr in (('calibration.tsv', rows), ('calibration_bins.tsv', brows), ('d9_content.tsv', crows)):
+for name, rr in (('calibration.tsv', rows), ('calibration_bins.tsv', brows), (f'{R}_content.tsv', crows)):
     keys = []
     for x in rr:
         for k in x:

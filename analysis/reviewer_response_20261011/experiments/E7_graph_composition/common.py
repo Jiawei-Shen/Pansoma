@@ -10,17 +10,73 @@ allele becomes one or more primitive alleles:
 Long sequences are replaced by their md5 so that structural alleles do not blow up memory; the same function is used
 for HPRC and for the sample alleles, so keys stay comparable.
 """
-import hashlib, os
+import csv, hashlib, os
 
 # GRCh38 no-alt analysis set, the fasta of every labels manifest. Slurm jobs copy it to node-local /tmp and set E7_FASTA,
 # because random access over BeeGFS stalled on busy nodes (2026-10-13).
 FASTA_SRC = '/scratch/jshen/data/HapMap/GCA_000001405.15_GRCh38_no_alt_analysis_set.fasta'
 FASTA = os.environ.get('E7_FASTA', FASTA_SRC)
-HPRC_VCF = '/scratch/jshen/data/hprc-v1.1-mc-grch38.vcfbub.a100k.wave.vcf.gz'
 BCFTOOLS = '/wanglab/jshen/anaconda3/envs/sambcfenv/bin/bcftools'
 WORK = '/scratch/jshen/data/reviewer_experiments_20261013/E7_graph_composition'
 AUTOSOMES = [f'chr{i}' for i in range(1, 23)]
 LONG = 200
+
+# Which HPRC release the haplotype axis comes from: E7_GRAPH=v1.1 (default; the 2026-10-13 results in this folder) or
+# v2.1 (added 2026-10-16; results in ./v2.1, large outputs in WORK/v2.1). The sample alleles (s2) are shared.
+GRAPH = os.environ.get('E7_GRAPH', 'v1.1')
+GRAPHS = {
+    'v1.1': dict(vcf='/scratch/jshen/data/hprc-v1.1-mc-grch38.vcfbub.a100k.wave.vcf.gz',
+                 raw='/scratch/jshen/data/pansoma_net_v2_runs/graph_absorbed_somatic_20261001/full_vcf_index/'
+                     'hprc-v1.1-mc-grch38.raw.vcf.gz',
+                 nhap=89, real='d9', d_real=9, sub=''),
+    # HPRC release 2 v2.1 Minigraph-Cactus GRCh38 graph, decomposed VCF (vcfbub -l 0 -a 100000, vcfwave -I 1000,
+    # vcffixup; s3://human-pangenomics/pangenomes/freeze/release2/minigraph-cactus/v2.1/hprc-v2.1-mc-grch38/,
+    # downloaded 2026-10-16). Its README says the missing-genotype bug of the v1.1 wave VCF is resolved, so s1 uses its
+    # genotypes as they are (raw None; checked against the raw VCF on a test region, see README v2.1 section).
+    'v2.1': dict(vcf='/scratch/jshen/data/hprc_v2.1_vcf/hprc-v2.1-mc-grch38.wave.vcf.gz', raw=None,
+                 nhap=463, real='d46', d_real=46, sub='v2.1'),
+}
+G = GRAPHS[GRAPH]
+HPRC_VCF = G['vcf']
+NHAP = G['nhap']  # non-GRCh38 haplotypes: CHM13 (haploid column 0) + 2 per diploid sample column
+NW = (NHAP + 63) // 64  # uint64 words per carrier mask
+GWORK = f"{WORK}/{G['sub']}" if G['sub'] else WORK  # graph-specific large outputs (hprc_alleles, joined, hist_draws)
+GOUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), G['sub'])  # graph-specific result tables
+
+# 1000 Genomes population -> superpopulation, for the HPRC release 2 metadata (population_abbreviation). ASL (African
+# Americans in St. Louis) and MKK (HapMap Maasai) are not 1000G codes; both are African-ancestry populations.
+SUPERPOP = {**{p: 'AFR' for p in ('YRI', 'LWK', 'GWD', 'MSL', 'ESN', 'ASW', 'ACB', 'MKK', 'ASL')},
+            **{p: 'AMR' for p in ('MXL', 'PUR', 'CLM', 'PEL')},
+            **{p: 'EAS' for p in ('CHB', 'JPT', 'CHS', 'CDX', 'KHV')},
+            **{p: 'EUR' for p in ('CEU', 'TSI', 'FIN', 'GBR', 'IBS')},
+            **{p: 'SAS' for p in ('GIH', 'PJL', 'BEB', 'STU', 'ITU')}}
+# GIAB samples without a 1000G population code: HG002 (Ashkenazi Jewish) and HG005 (Han Chinese).
+SUPERPOP_EXTRA = {'HG002': 'EUR', 'HG005': 'EAS'}
+V2_META = '/scratch/jshen/data/hprc_v2.1_meta/hprc_release2_sample_metadata.csv'
+
+
+def haplotypes():
+    """One dict per carrier-mask bit (sample, hap, superpopulation), in the bit order of s1 (VCF column order)."""
+    cols = [l.strip() for l in os.popen(f'{BCFTOOLS} query -l {HPRC_VCF}')]
+    assert cols[0] == 'CHM13' and 1 + 2 * (len(cols) - 1) == NHAP, (cols[:2], len(cols))
+    if GRAPH == 'v1.1':
+        haps = list(csv.DictReader(open('/scratch/jshen/Github/Pansoma/analysis/graph_absorbed_somatic_20261001/'
+                                        'hprc_individuals.tsv'), delimiter='\t'))
+    else:
+        pop = {r['sample_id']: r['population_abbreviation'] for r in csv.DictReader(open(V2_META))}
+        haps = [dict(sample='CHM13', hap='0', superpopulation='reference')]
+        for s in cols[1:]:
+            sp = SUPERPOP_EXTRA.get(s) or SUPERPOP[pop[s]]
+            haps += [dict(sample=s, hap='1', superpopulation=sp), dict(sample=s, hap='2', superpopulation=sp)]
+    assert len(haps) == NHAP and haps[0]['sample'] == 'CHM13'
+    assert [h['sample'] for h in haps] == [cols[0]] + [s for s in cols[1:] for _ in (1, 2)]
+    assert [h['hap'] for h in haps[1:]] == ['1', '2'] * (len(cols) - 1)
+    return haps
+
+
+def mask_words(m):
+    """Python int carrier mask -> NW uint64 words (word 0 = bits 0-63)."""
+    return [(m >> (64 * i)) & 0xFFFFFFFFFFFFFFFF for i in range(NW)]
 
 
 def seqkey(s):

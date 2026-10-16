@@ -6,31 +6,33 @@ the BED, chr1-22) take its germline SNVs that are rare in HPRC v1.1 (carried by 
 and count for every HPRC individual how many of them it carries (either haplotype). Output: relatedness.tsv (this folder):
 per sample and HPRC individual, the shared count and its ratio to the median over individuals of the same superpopulation.
 Input: WORK/joined.npz (s3).
+v2.1 (E7_GRAPH=v2.1, added 2026-10-16): the same test against the 231 HPRC v2.1 individuals (rare = 1-2 of the 463
+haplotypes); input WORK/v2.1/joined.npz, output ./v2.1/relatedness.tsv.
 """
 import csv, os, sys
 import numpy as np
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from common import AUTOSOMES, FI, SAMPLES, WORK
+from common import AUTOSOMES, FI, GOUT, GWORK, NHAP, SAMPLES, WORK, haplotypes
 
-OUT = os.path.dirname(os.path.abspath(__file__))
-JOINED = f'{WORK}/joined.npz'
+OUT = GOUT
+JOINED = f'{GWORK}/joined.npz'
 CHROMS = AUTOSOMES
 if os.environ.get('E7_TEST'):  # quick test with s3's test output (chr21 only)
     OUT = os.environ['E7_TEST']
     JOINED = f'{OUT}/joined.npz'
     CHROMS = ['chr21']
-haps = list(csv.DictReader(open('/scratch/jshen/Github/Pansoma/analysis/graph_absorbed_somatic_20261001/'
-                                'hprc_individuals.tsv'), delimiter='\t'))
+haps = haplotypes()
 J = np.load(JOINED)
-cnt = (np.bitwise_count(J['lo']) + np.bitwise_count(J['hi'])).astype(np.int64)
+W = J['masks'] if 'masks' in J.files else np.stack([J['lo'], J['hi']], axis=1)
+cnt = sum(np.bitwise_count(W[:, w]).astype(np.int64) for w in range(W.shape[1]))
 rows = []
 for si, s in enumerate(SAMPLES):
     sel = ((J['sample'] == si) & (J['role'] == 0) & J['passed'] & J['in_bed'] & (J['fine'] == FI['SNV']) &
            J['found'] & (cnt >= 1) & (cnt <= 2))
-    lo, hi = J['lo'][sel], J['hi'][sel]
+    ws = W[sel]
     per_hap = []
-    for b in range(89):
-        w, bit = (lo, b) if b < 64 else (hi, b - 64)
+    for b in range(NHAP):
+        w, bit = ws[:, b // 64], b % 64
         per_hap.append(int(((w >> np.uint64(bit)) & np.uint64(1)).sum()))
     ind = {}
     for h, v in zip(haps, per_hap):
