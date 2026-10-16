@@ -47,7 +47,11 @@ def parse_args(argv=None):
     p.add_argument("--output", required=True)
     p.add_argument("--cache-dir", help="index cache (default: <output>/index_cache)")
     p.add_argument("--train-chroms", nargs="+", help="default: every autosome not in --val-chroms/--test-chroms")
-    p.add_argument("--test-chroms", nargs="+", default=["chr1"], help="left out of training and validation")
+    p.add_argument("--test-chroms", nargs="*", default=["chr1"],
+                   help="left out of training and validation, in every set (--test-chroms alone: none)")
+    p.add_argument("--set-test-chroms", nargs="+", action="append", default=[], metavar=("SET", "CHROM"),
+                   help="SET (one of --tensors) CHROM [CHROM ...]: also left out of training and validation, in that set "
+                        "only (e.g. a test sample's chr1 while the other sets train on theirs); repeatable")
     p.add_argument("--val-chroms", nargs="+", default=[], help="validation chromosomes (default: node blocks)")
     p.add_argument("--val-fraction", type=float, default=0.05, help="node blocks of the training chromosomes")
     p.add_argument("--val-block-nodes", type=int, default=20000)
@@ -163,6 +167,22 @@ def split_chroms(args, available):
         raise SystemExit(f"chromosome sets overlap: train {sorted(train & (val | test))}, val/test {sorted(val & test)}")
     missing = (train | val | test) - set(available)
     return sorted(train), sorted(val), sorted(test), sorted(missing)
+
+
+def set_test_chroms(args):
+    """{resolved --tensors path: sorted chromosomes} of --set-test-chroms."""
+    sets = {Path(s).resolve() for s in args.tensors}
+    held = {}
+    for entry in args.set_test_chroms:
+        if len(entry) < 2:
+            raise SystemExit(f"--set-test-chroms {' '.join(entry)}: give SET CHROM [CHROM ...]")
+        path, chroms = Path(entry[0]).resolve(), entry[1:]
+        if path not in sets:
+            raise SystemExit(f"--set-test-chroms: {entry[0]} is not one of --tensors")
+        if set(chroms) - set(AUTOSOMES):
+            raise SystemExit(f"--set-test-chroms: {sorted(set(chroms) - set(AUTOSOMES))} are not autosomes")
+        held[path] = sorted(set(held.get(path, [])) | set(chroms))
+    return held
 
 
 def class_weights(spec, counts):
@@ -340,16 +360,24 @@ def main(argv=None):
     train_chroms, val_chroms, test_chroms, missing = split_chroms(args, available)
     run.log(f"train {train_chroms}\nval {val_chroms}\ntest (left out) {test_chroms}"
             + (f"\nnot in the data: {missing}" if missing else ""))
+    held = set_test_chroms(args)
+    for path, chroms in held.items():
+        run.log(f"test (left out) of {path} only: {chroms}")
+
+    def chroms_of(index, chroms):
+        """The chromosomes of `chroms` that index's set trains / validates on (without its --set-test-chroms)."""
+        return [c for c in chroms if c not in held.get(index.dir.parent, ())]
+
     # training: labels >= 0; validation (like the test): evaluation labels (off-reference tensors without a
     # truth match count as non), since the threshold chosen on it is applied to the test chromosome
     if val_chroms:
-        train_parts = [(i, i.select(train_chroms)) for i, _ in everything]
-        val_parts = [(i, i.select(val_chroms, evaluation=True)) for i, _ in everything]
+        train_parts = [(i, i.select(chroms_of(i, train_chroms))) for i, _ in everything]
+        val_parts = [(i, i.select(chroms_of(i, val_chroms), evaluation=True)) for i, _ in everything]
     else:
         train_parts, val_parts = [], []
         for i, _ in everything:
-            tr, va = block_split(i, i.select(train_chroms, labelled=False), args.val_fraction, args.val_block_nodes,
-                                 args.seed)
+            tr, va = block_split(i, i.select(chroms_of(i, train_chroms), labelled=False), args.val_fraction,
+                                 args.val_block_nodes, args.seed)
             train_parts.append((i, tr[i.arrays["label"][tr] >= 0]))
             val_parts.append((i, va[i.arrays["eval_label"][va] >= 0]))
         run.log(f"validation: {args.val_fraction:.0%} of the {args.val_block_nodes}-node blocks of the training chromosomes")
@@ -385,15 +413,17 @@ def main(argv=None):
     # (other_keys: the truth alleles of the other kind, true calls when a validation tensor matches one)
     val_truth, truth_keys, other_keys = None, set(), set()
     for p, ((index, _), (_, va)) in enumerate(zip(train_parts, val_parts)):
-        t_all = somatic_truth(index, chroms=val_chroms or train_chroms)
+        t_all = somatic_truth(index, chroms=chroms_of(index, val_chroms or train_chroms))
         if t_all is None:
             run.log(f"{index.dir}: no somatic.recall.tsv, no truth-level validation")
             truth_keys = None
             break
         vt = set(t_all) if val_chroms else validation_truth(
-            index, index.select(train_chroms, labelled=False), t_all, args.val_fraction, args.val_block_nodes, args.seed)
+            index, index.select(chroms_of(index, train_chroms), labelled=False), t_all, args.val_fraction,
+            args.val_block_nodes, args.seed)
         truth_keys |= {(p, t) for t in vt}
-        other_keys |= {(p, t) for t in somatic_truth(index, val_chroms or train_chroms, other_kind=True)}
+        other_keys |= {(p, t) for t in somatic_truth(index, chroms_of(index, val_chroms or train_chroms),
+                                                     other_kind=True)}
     if truth_keys is not None:
         ids = val_keep.tolist() if val_keep is not None else range(len(val_set))
         matches = [{(int(val_set.part[i]), int(t)) for t in val_parts[val_set.part[i]][0].truth_of(val_set.position[i])}
@@ -444,7 +474,8 @@ def main(argv=None):
                     run.log(f"dataset statistics of {i.dir} kept from --resume")
                     continue
                 t0 = time.time()
-                st = dataset_stats(i, i.select(train_chroms, labelled=False), args.stats_samples, args.seed + 12345,
+                st = dataset_stats(i, i.select(chroms_of(i, train_chroms), labelled=False), args.stats_samples,
+                                   args.seed + 12345,
                                    args.num_workers, run.log, f"dataset statistics of {i.dir}")
                 box[0].append(st)
                 run.log(f"dataset statistics of {i.dir} from {st['tensors']:,} tensors of the training chromosomes "
@@ -536,7 +567,8 @@ def main(argv=None):
                            path_count_haplotypes=haplotypes,
                            data=[dict(directory=str(i.dir), labels=i.meta["labels"], train=int(len(p)))
                                  for i, p in train_parts],
-                           chroms=dict(train=train_chroms, val=val_chroms, test=test_chroms))
+                           chroms=dict(train=train_chroms, val=val_chroms, test=test_chroms,
+                                       **({"set_test": {str(k): v for k, v in held.items()}} if held else {})))
             tmp = run.out / (path + ".tmp")
             torch.save(payload, tmp)
             tmp.replace(run.out / path)

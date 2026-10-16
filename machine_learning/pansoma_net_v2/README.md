@@ -93,7 +93,9 @@ Useful `train` options (the recipes, "SNV recipe" and "INDEL recipe" below, set 
 `--batch-size`, `--lr`, `--class-weights`, `--non-fraction 1.0`, `--block v2` and `--ignore-reasons`):
 
 - **Split.**
-  - `--test-chroms` (default chr1).
+  - `--test-chroms` (default chr1; `--test-chroms` alone: none) leaves chromosomes out of every set;
+    `--set-test-chroms SET CHROM ...` (repeatable) out of one set only, e.g. a test sample's chr1 while the other
+    sets train on theirs (the checkpoint's `chroms.set_test`).
   - `--val-fraction 0.05` of the `--val-block-nodes 20000`-node blocks of the training chromosomes; whole
     blocks, so validation tensors share no reads with training tensors. `--val-chroms` instead validates on
     whole chromosomes; `--train-chroms` limits training to some chromosomes (a quick test).

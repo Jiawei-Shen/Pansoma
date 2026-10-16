@@ -221,6 +221,35 @@ class ExcludeTest(unittest.TestCase):
             self.assertEqual((rep0["excluded"], rep0["tensors"]), (0, rep["tensors"] + len(test_drop)))
 
 
+class SetTestChromsTest(unittest.TestCase):
+    """--set-test-chroms: a chromosome left out of one set only; the other sets train and validate on theirs."""
+
+    def test_one_set_leaves_out_its_chr1(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            sets = {name: tmp / name / "tensors" for name in ("held", "other")}
+            for seed, root in enumerate(sets.values()):
+                make_tensor_set(root, SPEC, shard_size=8, seed=seed)
+            expected = {}
+            for name, chroms in (("held", ["chr2", "chr3"]), ("other", ["chr1", "chr2", "chr3"])):
+                index = KindIndex(sets[name] / "SNV", tmp / "check_cache")
+                tr, va = block_split(index, index.select(chroms, labelled=False), 0.5, 21, 0)
+                expected[str(index.dir)] = (int((index.arrays["label"][tr] >= 0).sum()),
+                                            int((index.arrays["eval_label"][va] >= 0).sum()))
+            out = tmp / "run"
+            train.main(["--tensors", *map(str, sets.values()), "--output", str(out), "--epochs", "1", "--kinds", "SNV",
+                        "--test-chroms", "--set-test-chroms", str(sets["held"]), "chr1"] + SMALL_ARGS)
+            ckpt = torch.load(out / "best.pth", weights_only=False)
+            self.assertEqual({d["directory"]: d["train"] for d in ckpt["data"]},
+                             {k: v[0] for k, v in expected.items()})
+            self.assertEqual(ckpt["val"]["tensors"], sum(v[1] for v in expected.values()))
+            self.assertEqual(ckpt["chroms"]["test"], [])
+            self.assertEqual(ckpt["chroms"]["set_test"], {str(sets["held"].resolve()): ["chr1"]})
+            with self.assertRaisesRegex(SystemExit, "not one of --tensors"):
+                train.main(["--tensors", str(sets["other"]), "--output", str(tmp / "bad"), "--epochs", "1",
+                            "--kinds", "SNV", "--set-test-chroms", str(sets["held"]), "chr1"] + SMALL_ARGS)
+
+
 class PartialTestTest(unittest.TestCase):
     """predict's default: the reasons trained without stay out of the SNV test; INDEL keeps the partial somatic matches."""
 
