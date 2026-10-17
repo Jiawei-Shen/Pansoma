@@ -1,0 +1,306 @@
+dataset	call_set	axis	class	tp_baseline	fn	tp_call	fp
+HG008T_Illumina	ClairS-TO 0.4.1 / 0.4.2	context	HP4-6	7	0	7	7
+HG008T_Illumina	ClairS-TO 0.4.1 / 0.4.2	context	HP>=7	10	426	10	10
+HG008T_Illumina	ClairS-TO 0.4.1 / 0.4.2	context	STR	1	64	1	5
+HG008T_Illumina	ClairS-TO 0.4.1 / 0.4.2	context	VNTR	0	0	0	1
+HG008T_Illumina	ClairS-TO 0.4.1 / 0.4.2	context	none	29	51	29	54
+HG008T_Illumina	ClairS-TO 0.4.1 / 0.4.2	length	1	27	293	27	31
+HG008T_Illumina	ClairS-TO 0.4.1 / 0.4.2	length	16-50	4	33	4	6
+HG008T_Illumina	ClairS-TO 0.4.1 / 0.4.2	length	2-4	8	128	8	27
+HG008T_Illumina	ClairS-TO 0.4.1 / 0.4.2	length	5-15	8	81	8	13
+HG008T_Illumina	ClairS-TO 0.4.1 / 0.4.2	length	>50	0	6	0	0
+HG008T_Illumina	ClairS-TO 0.4.1 / 0.4.2	type	DEL	28	192	28	47
+HG008T_Illumina	ClairS-TO 0.4.1 / 0.4.2	type	INS	19	349	19	30
+HG008T_Illumina	DeepSomatic 1.9.0	context	HP4-6	7	0	7	17
+HG008T_Illumina	DeepSomatic 1.9.0	context	HP>=7	42	394	42	52
+HG008T_Illumina	DeepSomatic 1.9.0	context	STR	1	64	1	9
+HG008T_Illumina	DeepSomatic 1.9.0	context	VNTR	0	0	0	1
+HG008T_Illumina	DeepSomatic 1.9.0	context	none	33	47	33	49
+HG008T_Illumina	DeepSomatic 1.9.0	length	1	60	260	60	83
+HG008T_Illumina	DeepSomatic 1.9.0	length	16-50	4	33	4	2
+HG008T_Illumina	DeepSomatic 1.9.0	length	2-4	9	127	9	35
+HG008T_Illumina	DeepSomatic 1.9.0	length	5-15	10	79	10	8
+HG008T_Illumina	DeepSomatic 1.9.0	length	>50	0	6	0	0
+HG008T_Illumina	DeepSomatic 1.9.0	type	DEL	42	178	42	70
+HG008T_Illumina	DeepSomatic 1.9.0	type	INS	41	327	41	58
+HG008T_Illumina	Pansoma HPRC v1.1 d9 `HG008_Illumina_INDEL_7fc7396`	context	HP4-6	7	0	7	22
+HG008T_Illumina	Pansoma HPRC v1.1 d9 `HG008_Illumina_INDEL_7fc7396`	context	HP>=7	103	333	103	291
+HG008T_Illumina	Pansoma HPRC v1.1 d9 `HG008_Illumina_INDEL_7fc7396`	context	STR	1	64	1	23
+HG008T_Illumina	Pansoma HPRC v1.1 d9 `HG008_Illumina_INDEL_7fc7396`	context	none	29	51	29	54
+HG008T_Illumina	Pansoma HPRC v1.1 d9 `HG008_Illumina_INDEL_7fc7396`	length	1	118	202	118	247
+HG008T_Illumina	Pansoma HPRC v1.1 d9 `HG008_Illumina_INDEL_7fc7396`	length	16-50	3	34	3	2
+HG008T_Illumina	Pansoma HPRC v1.1 d9 `HG008_Illumina_INDEL_7fc7396`	length	2-4	9	127	9	86
+HG008T_Illumina	Pansoma HPRC v1.1 d9 `HG008_Illumina_INDEL_7fc7396`	length	5-15	10	79	10	55
+HG008T_Illumina	Pansoma HPRC v1.1 d9 `HG008_Illumina_INDEL_7fc7396`	length	>50	0	6	0	0
+HG008T_Illumina	Pansoma HPRC v1.1 d9 `HG008_Illumina_INDEL_7fc7396`	type	DEL	62	158	62	251
+HG008T_Illumina	Pansoma HPRC v1.1 d9 `HG008_Illumina_INDEL_7fc7396`	type	INS	78	290	78	139
+HG008T_Illumina	Pansoma HPRC v2.1 d46 `HG008_Illumina_INDEL_d46_7fc7396`	context	HP4-6	7	0	7	22
+HG008T_Illumina	Pansoma HPRC v2.1 d46 `HG008_Illumina_INDEL_d46_7fc7396`	context	HP>=7	101	335	101	272
+HG008T_Illumina	Pansoma HPRC v2.1 d46 `HG008_Illumina_INDEL_d46_7fc7396`	context	STR	0	65	0	19
+HG008T_Illumina	Pansoma HPRC v2.1 d46 `HG008_Illumina_INDEL_d46_7fc7396`	context	none	33	47	33	72
+HG008T_Illumina	Pansoma HPRC v2.1 d46 `HG008_Illumina_INDEL_d46_7fc7396`	length	1	118	202	118	270
+HG008T_Illumina	Pansoma HPRC v2.1 d46 `HG008_Illumina_INDEL_d46_7fc7396`	length	16-50	3	34	3	4
+HG008T_Illumina	Pansoma HPRC v2.1 d46 `HG008_Illumina_INDEL_d46_7fc7396`	length	2-4	10	126	10	78
+HG008T_Illumina	Pansoma HPRC v2.1 d46 `HG008_Illumina_INDEL_d46_7fc7396`	length	5-15	10	79	10	33
+HG008T_Illumina	Pansoma HPRC v2.1 d46 `HG008_Illumina_INDEL_d46_7fc7396`	length	>50	0	6	0	0
+HG008T_Illumina	Pansoma HPRC v2.1 d46 `HG008_Illumina_INDEL_d46_7fc7396`	type	DEL	62	158	62	229
+HG008T_Illumina	Pansoma HPRC v2.1 d46 `HG008_Illumina_INDEL_d46_7fc7396`	type	INS	79	289	79	156
+HG008T_Illumina	Pansoma GRCh38-only graph `HG008_Illumina_INDEL_linear_7fc7396`	context	HP4-6	5	2	5	50
+HG008T_Illumina	Pansoma GRCh38-only graph `HG008_Illumina_INDEL_linear_7fc7396`	context	HP>=7	116	320	116	571
+HG008T_Illumina	Pansoma GRCh38-only graph `HG008_Illumina_INDEL_linear_7fc7396`	context	STR	3	62	3	399
+HG008T_Illumina	Pansoma GRCh38-only graph `HG008_Illumina_INDEL_linear_7fc7396`	context	VNTR	0	0	0	12
+HG008T_Illumina	Pansoma GRCh38-only graph `HG008_Illumina_INDEL_linear_7fc7396`	context	none	28	52	28	316
+HG008T_Illumina	Pansoma GRCh38-only graph `HG008_Illumina_INDEL_linear_7fc7396`	length	1	117	203	117	331
+HG008T_Illumina	Pansoma GRCh38-only graph `HG008_Illumina_INDEL_linear_7fc7396`	length	16-50	5	32	5	91
+HG008T_Illumina	Pansoma GRCh38-only graph `HG008_Illumina_INDEL_linear_7fc7396`	length	2-4	18	118	18	572
+HG008T_Illumina	Pansoma GRCh38-only graph `HG008_Illumina_INDEL_linear_7fc7396`	length	5-15	12	77	12	354
+HG008T_Illumina	Pansoma GRCh38-only graph `HG008_Illumina_INDEL_linear_7fc7396`	length	>50	0	6	0	0
+HG008T_Illumina	Pansoma GRCh38-only graph `HG008_Illumina_INDEL_linear_7fc7396`	type	DEL	63	157	63	920
+HG008T_Illumina	Pansoma GRCh38-only graph `HG008_Illumina_INDEL_linear_7fc7396`	type	INS	89	279	89	428
+HG008T_PacBio	ClairS-TO 0.4.1 / 0.4.2	context	HP4-6	7	0	7	7
+HG008T_PacBio	ClairS-TO 0.4.1 / 0.4.2	context	HP>=7	10	426	10	10
+HG008T_PacBio	ClairS-TO 0.4.1 / 0.4.2	context	STR	1	64	1	2
+HG008T_PacBio	ClairS-TO 0.4.1 / 0.4.2	context	none	26	54	26	35
+HG008T_PacBio	ClairS-TO 0.4.1 / 0.4.2	length	1	27	293	27	29
+HG008T_PacBio	ClairS-TO 0.4.1 / 0.4.2	length	16-50	2	35	2	0
+HG008T_PacBio	ClairS-TO 0.4.1 / 0.4.2	length	2-4	6	130	6	21
+HG008T_PacBio	ClairS-TO 0.4.1 / 0.4.2	length	5-15	9	80	9	4
+HG008T_PacBio	ClairS-TO 0.4.1 / 0.4.2	length	>50	0	6	0	0
+HG008T_PacBio	ClairS-TO 0.4.1 / 0.4.2	type	DEL	24	196	24	36
+HG008T_PacBio	ClairS-TO 0.4.1 / 0.4.2	type	INS	20	348	20	18
+HG008T_PacBio	DeepSomatic 1.9.0	context	HP4-6	1	6	1	10
+HG008T_PacBio	DeepSomatic 1.9.0	context	HP>=7	7	429	7	46
+HG008T_PacBio	DeepSomatic 1.9.0	context	STR	0	65	0	0
+HG008T_PacBio	DeepSomatic 1.9.0	context	none	10	70	10	17
+HG008T_PacBio	DeepSomatic 1.9.0	length	1	11	309	11	63
+HG008T_PacBio	DeepSomatic 1.9.0	length	16-50	2	35	2	2
+HG008T_PacBio	DeepSomatic 1.9.0	length	2-4	2	134	2	4
+HG008T_PacBio	DeepSomatic 1.9.0	length	5-15	3	86	3	3
+HG008T_PacBio	DeepSomatic 1.9.0	length	>50	0	6	0	1
+HG008T_PacBio	DeepSomatic 1.9.0	type	DEL	16	204	16	68
+HG008T_PacBio	DeepSomatic 1.9.0	type	INS	2	366	2	5
+HG008T_PacBio	Pansoma HPRC v1.1 d9 `HG008_PacBio_INDEL_7fc7396`	context	HP4-6	7	0	7	80
+HG008T_PacBio	Pansoma HPRC v1.1 d9 `HG008_PacBio_INDEL_7fc7396`	context	HP>=7	108	328	108	1860
+HG008T_PacBio	Pansoma HPRC v1.1 d9 `HG008_PacBio_INDEL_7fc7396`	context	STR	1	64	1	173
+HG008T_PacBio	Pansoma HPRC v1.1 d9 `HG008_PacBio_INDEL_7fc7396`	context	VNTR	0	0	0	12
+HG008T_PacBio	Pansoma HPRC v1.1 d9 `HG008_PacBio_INDEL_7fc7396`	context	none	34	46	34	409
+HG008T_PacBio	Pansoma HPRC v1.1 d9 `HG008_PacBio_INDEL_7fc7396`	length	1	126	194	126	1807
+HG008T_PacBio	Pansoma HPRC v1.1 d9 `HG008_PacBio_INDEL_7fc7396`	length	16-50	5	32	5	68
+HG008T_PacBio	Pansoma HPRC v1.1 d9 `HG008_PacBio_INDEL_7fc7396`	length	2-4	10	126	10	390
+HG008T_PacBio	Pansoma HPRC v1.1 d9 `HG008_PacBio_INDEL_7fc7396`	length	5-15	9	80	9	269
+HG008T_PacBio	Pansoma HPRC v1.1 d9 `HG008_PacBio_INDEL_7fc7396`	length	>50	0	6	0	0
+HG008T_PacBio	Pansoma HPRC v1.1 d9 `HG008_PacBio_INDEL_7fc7396`	type	DEL	64	156	64	1671
+HG008T_PacBio	Pansoma HPRC v1.1 d9 `HG008_PacBio_INDEL_7fc7396`	type	INS	86	282	86	863
+HG008T_PacBio	Pansoma HPRC v2.1 d46 `HG008_PacBio_INDEL_d46_7fc7396`	context	HP4-6	7	0	7	86
+HG008T_PacBio	Pansoma HPRC v2.1 d46 `HG008_PacBio_INDEL_d46_7fc7396`	context	HP>=7	108	328	108	1605
+HG008T_PacBio	Pansoma HPRC v2.1 d46 `HG008_PacBio_INDEL_d46_7fc7396`	context	STR	1	64	1	242
+HG008T_PacBio	Pansoma HPRC v2.1 d46 `HG008_PacBio_INDEL_d46_7fc7396`	context	VNTR	0	0	0	10
+HG008T_PacBio	Pansoma HPRC v2.1 d46 `HG008_PacBio_INDEL_d46_7fc7396`	context	none	34	46	34	381
+HG008T_PacBio	Pansoma HPRC v2.1 d46 `HG008_PacBio_INDEL_d46_7fc7396`	length	1	125	195	125	1596
+HG008T_PacBio	Pansoma HPRC v2.1 d46 `HG008_PacBio_INDEL_d46_7fc7396`	length	16-50	5	32	5	59
+HG008T_PacBio	Pansoma HPRC v2.1 d46 `HG008_PacBio_INDEL_d46_7fc7396`	length	2-4	11	125	11	415
+HG008T_PacBio	Pansoma HPRC v2.1 d46 `HG008_PacBio_INDEL_d46_7fc7396`	length	5-15	9	80	9	254
+HG008T_PacBio	Pansoma HPRC v2.1 d46 `HG008_PacBio_INDEL_d46_7fc7396`	length	>50	0	6	0	0
+HG008T_PacBio	Pansoma HPRC v2.1 d46 `HG008_PacBio_INDEL_d46_7fc7396`	type	DEL	65	155	65	1487
+HG008T_PacBio	Pansoma HPRC v2.1 d46 `HG008_PacBio_INDEL_d46_7fc7396`	type	INS	85	283	85	837
+HG008T_PacBio	Pansoma GRCh38-only graph `HG008_PacBio_INDEL_linear_7fc7396`	context	HP4-6	5	2	5	23
+HG008T_PacBio	Pansoma GRCh38-only graph `HG008_PacBio_INDEL_linear_7fc7396`	context	HP>=7	119	317	119	701
+HG008T_PacBio	Pansoma GRCh38-only graph `HG008_PacBio_INDEL_linear_7fc7396`	context	STR	4	61	4	276
+HG008T_PacBio	Pansoma GRCh38-only graph `HG008_PacBio_INDEL_linear_7fc7396`	context	VNTR	0	0	0	14
+HG008T_PacBio	Pansoma GRCh38-only graph `HG008_PacBio_INDEL_linear_7fc7396`	context	none	22	58	22	509
+HG008T_PacBio	Pansoma GRCh38-only graph `HG008_PacBio_INDEL_linear_7fc7396`	length	1	114	206	114	414
+HG008T_PacBio	Pansoma GRCh38-only graph `HG008_PacBio_INDEL_linear_7fc7396`	length	16-50	7	30	7	188
+HG008T_PacBio	Pansoma GRCh38-only graph `HG008_PacBio_INDEL_linear_7fc7396`	length	2-4	17	119	17	431
+HG008T_PacBio	Pansoma GRCh38-only graph `HG008_PacBio_INDEL_linear_7fc7396`	length	5-15	12	77	12	490
+HG008T_PacBio	Pansoma GRCh38-only graph `HG008_PacBio_INDEL_linear_7fc7396`	length	>50	0	6	0	0
+HG008T_PacBio	Pansoma GRCh38-only graph `HG008_PacBio_INDEL_linear_7fc7396`	type	DEL	57	163	57	814
+HG008T_PacBio	Pansoma GRCh38-only graph `HG008_PacBio_INDEL_linear_7fc7396`	type	INS	93	275	93	709
+HG008T_ONT	ClairS-TO 0.4.1 / 0.4.2	context	HP4-6	7	0	7	14
+HG008T_ONT	ClairS-TO 0.4.1 / 0.4.2	context	HP>=7	7	429	7	5
+HG008T_ONT	ClairS-TO 0.4.1 / 0.4.2	context	STR	1	64	1	3
+HG008T_ONT	ClairS-TO 0.4.1 / 0.4.2	context	none	29	51	29	41
+HG008T_ONT	ClairS-TO 0.4.1 / 0.4.2	length	1	25	295	25	35
+HG008T_ONT	ClairS-TO 0.4.1 / 0.4.2	length	16-50	4	33	4	1
+HG008T_ONT	ClairS-TO 0.4.1 / 0.4.2	length	2-4	6	130	6	21
+HG008T_ONT	ClairS-TO 0.4.1 / 0.4.2	length	5-15	9	80	9	6
+HG008T_ONT	ClairS-TO 0.4.1 / 0.4.2	length	>50	0	6	0	0
+HG008T_ONT	ClairS-TO 0.4.1 / 0.4.2	type	DEL	26	194	26	49
+HG008T_ONT	ClairS-TO 0.4.1 / 0.4.2	type	INS	18	350	18	14
+HG008T_ONT	DeepSomatic 1.9.0	context	HP4-6	1	6	1	12
+HG008T_ONT	DeepSomatic 1.9.0	context	HP>=7	0	436	0	4
+HG008T_ONT	DeepSomatic 1.9.0	context	STR	1	64	1	4
+HG008T_ONT	DeepSomatic 1.9.0	context	none	9	71	9	33
+HG008T_ONT	DeepSomatic 1.9.0	length	1	3	317	3	24
+HG008T_ONT	DeepSomatic 1.9.0	length	16-50	4	33	4	6
+HG008T_ONT	DeepSomatic 1.9.0	length	2-4	0	136	0	4
+HG008T_ONT	DeepSomatic 1.9.0	length	5-15	4	85	4	8
+HG008T_ONT	DeepSomatic 1.9.0	length	>50	0	6	0	11
+HG008T_ONT	DeepSomatic 1.9.0	type	DEL	9	211	9	31
+HG008T_ONT	DeepSomatic 1.9.0	type	INS	2	366	2	22
+HG008T_ONT	Pansoma HPRC v1.1 d9 `HG008_ONT_INDEL_7fc7396`	context	HP4-6	7	0	7	199
+HG008T_ONT	Pansoma HPRC v1.1 d9 `HG008_ONT_INDEL_7fc7396`	context	HP>=7	92	344	92	15797
+HG008T_ONT	Pansoma HPRC v1.1 d9 `HG008_ONT_INDEL_7fc7396`	context	STR	2	63	2	462
+HG008T_ONT	Pansoma HPRC v1.1 d9 `HG008_ONT_INDEL_7fc7396`	context	VNTR	0	0	0	9
+HG008T_ONT	Pansoma HPRC v1.1 d9 `HG008_ONT_INDEL_7fc7396`	context	none	33	47	33	556
+HG008T_ONT	Pansoma HPRC v1.1 d9 `HG008_ONT_INDEL_7fc7396`	length	1	109	211	109	12579
+HG008T_ONT	Pansoma HPRC v1.1 d9 `HG008_ONT_INDEL_7fc7396`	length	16-50	4	33	4	58
+HG008T_ONT	Pansoma HPRC v1.1 d9 `HG008_ONT_INDEL_7fc7396`	length	2-4	11	125	11	4073
+HG008T_ONT	Pansoma HPRC v1.1 d9 `HG008_ONT_INDEL_7fc7396`	length	5-15	10	79	10	313
+HG008T_ONT	Pansoma HPRC v1.1 d9 `HG008_ONT_INDEL_7fc7396`	length	>50	0	6	0	0
+HG008T_ONT	Pansoma HPRC v1.1 d9 `HG008_ONT_INDEL_7fc7396`	type	DEL	58	162	58	8497
+HG008T_ONT	Pansoma HPRC v1.1 d9 `HG008_ONT_INDEL_7fc7396`	type	INS	76	292	76	8526
+HG008T_ONT	Pansoma HPRC v2.1 d46 `HG008_ONT_INDEL_d46_7fc7396`	context	HP4-6	7	0	7	271
+HG008T_ONT	Pansoma HPRC v2.1 d46 `HG008_ONT_INDEL_d46_7fc7396`	context	HP>=7	96	340	96	16843
+HG008T_ONT	Pansoma HPRC v2.1 d46 `HG008_ONT_INDEL_d46_7fc7396`	context	STR	1	64	1	513
+HG008T_ONT	Pansoma HPRC v2.1 d46 `HG008_ONT_INDEL_d46_7fc7396`	context	VNTR	0	0	0	11
+HG008T_ONT	Pansoma HPRC v2.1 d46 `HG008_ONT_INDEL_d46_7fc7396`	context	none	35	45	35	540
+HG008T_ONT	Pansoma HPRC v2.1 d46 `HG008_ONT_INDEL_d46_7fc7396`	length	1	116	204	116	13706
+HG008T_ONT	Pansoma HPRC v2.1 d46 `HG008_ONT_INDEL_d46_7fc7396`	length	16-50	4	33	4	76
+HG008T_ONT	Pansoma HPRC v2.1 d46 `HG008_ONT_INDEL_d46_7fc7396`	length	2-4	10	126	10	4018
+HG008T_ONT	Pansoma HPRC v2.1 d46 `HG008_ONT_INDEL_d46_7fc7396`	length	5-15	9	80	9	378
+HG008T_ONT	Pansoma HPRC v2.1 d46 `HG008_ONT_INDEL_d46_7fc7396`	length	>50	0	6	0	0
+HG008T_ONT	Pansoma HPRC v2.1 d46 `HG008_ONT_INDEL_d46_7fc7396`	type	DEL	64	156	64	7879
+HG008T_ONT	Pansoma HPRC v2.1 d46 `HG008_ONT_INDEL_d46_7fc7396`	type	INS	75	293	75	10299
+HG008T_ONT	Pansoma GRCh38-only graph `HG008_ONT_INDEL_linear_7fc7396`	context	HP4-6	5	2	5	162
+HG008T_ONT	Pansoma GRCh38-only graph `HG008_ONT_INDEL_linear_7fc7396`	context	HP>=7	90	346	90	9183
+HG008T_ONT	Pansoma GRCh38-only graph `HG008_ONT_INDEL_linear_7fc7396`	context	STR	6	59	6	698
+HG008T_ONT	Pansoma GRCh38-only graph `HG008_ONT_INDEL_linear_7fc7396`	context	VNTR	0	0	0	23
+HG008T_ONT	Pansoma GRCh38-only graph `HG008_ONT_INDEL_linear_7fc7396`	context	none	37	43	37	1307
+HG008T_ONT	Pansoma GRCh38-only graph `HG008_ONT_INDEL_linear_7fc7396`	length	1	101	219	101	5618
+HG008T_ONT	Pansoma GRCh38-only graph `HG008_ONT_INDEL_linear_7fc7396`	length	16-50	7	30	7	452
+HG008T_ONT	Pansoma GRCh38-only graph `HG008_ONT_INDEL_linear_7fc7396`	length	2-4	18	118	18	3938
+HG008T_ONT	Pansoma GRCh38-only graph `HG008_ONT_INDEL_linear_7fc7396`	length	5-15	12	77	12	1365
+HG008T_ONT	Pansoma GRCh38-only graph `HG008_ONT_INDEL_linear_7fc7396`	length	>50	0	6	0	0
+HG008T_ONT	Pansoma GRCh38-only graph `HG008_ONT_INDEL_linear_7fc7396`	type	DEL	58	162	58	5732
+HG008T_ONT	Pansoma GRCh38-only graph `HG008_ONT_INDEL_linear_7fc7396`	type	INS	80	288	80	5641
+COLO829T_fiberseq	ClairS-TO 0.4.1 / 0.4.2	context	HP4-6	2	4	2	5
+COLO829T_fiberseq	ClairS-TO 0.4.1 / 0.4.2	context	HP>=7	4	66	4	2
+COLO829T_fiberseq	ClairS-TO 0.4.1 / 0.4.2	context	STR	0	27	0	1
+COLO829T_fiberseq	ClairS-TO 0.4.1 / 0.4.2	context	none	8	20	8	24
+COLO829T_fiberseq	ClairS-TO 0.4.1 / 0.4.2	length	1	10	59	10	17
+COLO829T_fiberseq	ClairS-TO 0.4.1 / 0.4.2	length	16-50	1	5	1	1
+COLO829T_fiberseq	ClairS-TO 0.4.1 / 0.4.2	length	2-4	1	36	1	10
+COLO829T_fiberseq	ClairS-TO 0.4.1 / 0.4.2	length	5-15	2	17	2	4
+COLO829T_fiberseq	ClairS-TO 0.4.1 / 0.4.2	type	DEL	7	47	7	23
+COLO829T_fiberseq	ClairS-TO 0.4.1 / 0.4.2	type	INS	7	70	7	9
+COLO829T_fiberseq	DeepSomatic 1.9.0	context	HP4-6	3	3	3	4
+COLO829T_fiberseq	DeepSomatic 1.9.0	context	HP>=7	5	65	5	13
+COLO829T_fiberseq	DeepSomatic 1.9.0	context	STR	0	27	0	0
+COLO829T_fiberseq	DeepSomatic 1.9.0	context	none	3	25	3	7
+COLO829T_fiberseq	DeepSomatic 1.9.0	length	1	9	60	9	22
+COLO829T_fiberseq	DeepSomatic 1.9.0	length	16-50	1	5	1	0
+COLO829T_fiberseq	DeepSomatic 1.9.0	length	2-4	1	36	1	0
+COLO829T_fiberseq	DeepSomatic 1.9.0	length	5-15	0	19	0	2
+COLO829T_fiberseq	DeepSomatic 1.9.0	type	DEL	8	46	8	24
+COLO829T_fiberseq	DeepSomatic 1.9.0	type	INS	3	74	3	0
+COLO829T_fiberseq	Pansoma HPRC v2.1 d46 `COLO829_fiberseq_INDEL_d46_7fc7396`	context	HP4-6	2	4	2	59
+COLO829T_fiberseq	Pansoma HPRC v2.1 d46 `COLO829_fiberseq_INDEL_d46_7fc7396`	context	HP>=7	20	50	20	2539
+COLO829T_fiberseq	Pansoma HPRC v2.1 d46 `COLO829_fiberseq_INDEL_d46_7fc7396`	context	STR	1	26	1	181
+COLO829T_fiberseq	Pansoma HPRC v2.1 d46 `COLO829_fiberseq_INDEL_d46_7fc7396`	context	VNTR	0	0	0	9
+COLO829T_fiberseq	Pansoma HPRC v2.1 d46 `COLO829_fiberseq_INDEL_d46_7fc7396`	context	none	11	17	11	281
+COLO829T_fiberseq	Pansoma HPRC v2.1 d46 `COLO829_fiberseq_INDEL_d46_7fc7396`	length	1	26	43	26	2506
+COLO829T_fiberseq	Pansoma HPRC v2.1 d46 `COLO829_fiberseq_INDEL_d46_7fc7396`	length	16-50	3	3	3	79
+COLO829T_fiberseq	Pansoma HPRC v2.1 d46 `COLO829_fiberseq_INDEL_d46_7fc7396`	length	2-4	3	34	3	304
+COLO829T_fiberseq	Pansoma HPRC v2.1 d46 `COLO829_fiberseq_INDEL_d46_7fc7396`	length	5-15	2	17	2	180
+COLO829T_fiberseq	Pansoma HPRC v2.1 d46 `COLO829_fiberseq_INDEL_d46_7fc7396`	type	DEL	16	38	16	2300
+COLO829T_fiberseq	Pansoma HPRC v2.1 d46 `COLO829_fiberseq_INDEL_d46_7fc7396`	type	INS	18	59	18	769
+COLO829T_fiberseq	Pansoma GRCh38-only graph `COLO829_fiberseq_INDEL_linear_7fc7396`	context	HP4-6	2	4	2	38
+COLO829T_fiberseq	Pansoma GRCh38-only graph `COLO829_fiberseq_INDEL_linear_7fc7396`	context	HP>=7	19	51	19	467
+COLO829T_fiberseq	Pansoma GRCh38-only graph `COLO829_fiberseq_INDEL_linear_7fc7396`	context	STR	2	25	2	332
+COLO829T_fiberseq	Pansoma GRCh38-only graph `COLO829_fiberseq_INDEL_linear_7fc7396`	context	VNTR	0	0	0	17
+COLO829T_fiberseq	Pansoma GRCh38-only graph `COLO829_fiberseq_INDEL_linear_7fc7396`	context	none	16	12	16	747
+COLO829T_fiberseq	Pansoma GRCh38-only graph `COLO829_fiberseq_INDEL_linear_7fc7396`	length	1	23	46	23	415
+COLO829T_fiberseq	Pansoma GRCh38-only graph `COLO829_fiberseq_INDEL_linear_7fc7396`	length	16-50	3	3	3	231
+COLO829T_fiberseq	Pansoma GRCh38-only graph `COLO829_fiberseq_INDEL_linear_7fc7396`	length	2-4	7	30	7	492
+COLO829T_fiberseq	Pansoma GRCh38-only graph `COLO829_fiberseq_INDEL_linear_7fc7396`	length	5-15	6	13	6	463
+COLO829T_fiberseq	Pansoma GRCh38-only graph `COLO829_fiberseq_INDEL_linear_7fc7396`	type	DEL	18	36	18	832
+COLO829T_fiberseq	Pansoma GRCh38-only graph `COLO829_fiberseq_INDEL_linear_7fc7396`	type	INS	21	56	21	769
+COLO829T_ONT	ClairS-TO 0.4.1 / 0.4.2	context	HP4-6	2	4	2	44
+COLO829T_ONT	ClairS-TO 0.4.1 / 0.4.2	context	HP>=7	2	68	2	4
+COLO829T_ONT	ClairS-TO 0.4.1 / 0.4.2	context	STR	0	27	0	4
+COLO829T_ONT	ClairS-TO 0.4.1 / 0.4.2	context	none	8	20	8	37
+COLO829T_ONT	ClairS-TO 0.4.1 / 0.4.2	length	1	8	61	8	71
+COLO829T_ONT	ClairS-TO 0.4.1 / 0.4.2	length	16-50	1	5	1	2
+COLO829T_ONT	ClairS-TO 0.4.1 / 0.4.2	length	2-4	1	36	1	15
+COLO829T_ONT	ClairS-TO 0.4.1 / 0.4.2	length	5-15	2	17	2	1
+COLO829T_ONT	ClairS-TO 0.4.1 / 0.4.2	type	DEL	7	47	7	69
+COLO829T_ONT	ClairS-TO 0.4.1 / 0.4.2	type	INS	5	72	5	20
+COLO829T_ONT	DeepSomatic 1.9.0	context	HP4-6	0	6	0	24
+COLO829T_ONT	DeepSomatic 1.9.0	context	HP>=7	0	70	0	10
+COLO829T_ONT	DeepSomatic 1.9.0	context	STR	0	27	0	4
+COLO829T_ONT	DeepSomatic 1.9.0	context	none	2	26	2	23
+COLO829T_ONT	DeepSomatic 1.9.0	length	1	1	68	1	45
+COLO829T_ONT	DeepSomatic 1.9.0	length	16-50	1	5	1	5
+COLO829T_ONT	DeepSomatic 1.9.0	length	2-4	0	37	0	7
+COLO829T_ONT	DeepSomatic 1.9.0	length	5-15	0	19	0	3
+COLO829T_ONT	DeepSomatic 1.9.0	length	>50	0	0	0	1
+COLO829T_ONT	DeepSomatic 1.9.0	type	DEL	1	53	1	48
+COLO829T_ONT	DeepSomatic 1.9.0	type	INS	1	76	1	13
+COLO829T_ONT	Pansoma HPRC v2.1 d46 `COLO829_ONT_INDEL_d46_7fc7396`	context	HP4-6	2	4	2	910
+COLO829T_ONT	Pansoma HPRC v2.1 d46 `COLO829_ONT_INDEL_d46_7fc7396`	context	HP>=7	17	53	17	20832
+COLO829T_ONT	Pansoma HPRC v2.1 d46 `COLO829_ONT_INDEL_d46_7fc7396`	context	STR	1	26	1	939
+COLO829T_ONT	Pansoma HPRC v2.1 d46 `COLO829_ONT_INDEL_d46_7fc7396`	context	VNTR	0	0	0	19
+COLO829T_ONT	Pansoma HPRC v2.1 d46 `COLO829_ONT_INDEL_d46_7fc7396`	context	none	10	18	10	5157
+COLO829T_ONT	Pansoma HPRC v2.1 d46 `COLO829_ONT_INDEL_d46_7fc7396`	length	1	23	46	23	20312
+COLO829T_ONT	Pansoma HPRC v2.1 d46 `COLO829_ONT_INDEL_d46_7fc7396`	length	16-50	3	3	3	290
+COLO829T_ONT	Pansoma HPRC v2.1 d46 `COLO829_ONT_INDEL_d46_7fc7396`	length	2-4	2	35	2	6560
+COLO829T_ONT	Pansoma HPRC v2.1 d46 `COLO829_ONT_INDEL_d46_7fc7396`	length	5-15	2	17	2	695
+COLO829T_ONT	Pansoma HPRC v2.1 d46 `COLO829_ONT_INDEL_d46_7fc7396`	type	DEL	14	40	14	15802
+COLO829T_ONT	Pansoma HPRC v2.1 d46 `COLO829_ONT_INDEL_d46_7fc7396`	type	INS	16	61	16	12055
+COLO829T_ONT	Pansoma GRCh38-only graph `COLO829_ONT_INDEL_linear_7fc7396`	context	HP4-6	2	4	2	647
+COLO829T_ONT	Pansoma GRCh38-only graph `COLO829_ONT_INDEL_linear_7fc7396`	context	HP>=7	18	52	18	13228
+COLO829T_ONT	Pansoma GRCh38-only graph `COLO829_ONT_INDEL_linear_7fc7396`	context	STR	2	25	2	1132
+COLO829T_ONT	Pansoma GRCh38-only graph `COLO829_ONT_INDEL_linear_7fc7396`	context	VNTR	0	0	0	30
+COLO829T_ONT	Pansoma GRCh38-only graph `COLO829_ONT_INDEL_linear_7fc7396`	context	none	15	13	15	3343
+COLO829T_ONT	Pansoma GRCh38-only graph `COLO829_ONT_INDEL_linear_7fc7396`	length	1	24	45	24	11653
+COLO829T_ONT	Pansoma GRCh38-only graph `COLO829_ONT_INDEL_linear_7fc7396`	length	16-50	3	3	3	441
+COLO829T_ONT	Pansoma GRCh38-only graph `COLO829_ONT_INDEL_linear_7fc7396`	length	2-4	6	31	6	5064
+COLO829T_ONT	Pansoma GRCh38-only graph `COLO829_ONT_INDEL_linear_7fc7396`	length	5-15	4	15	4	1222
+COLO829T_ONT	Pansoma GRCh38-only graph `COLO829_ONT_INDEL_linear_7fc7396`	type	DEL	19	35	19	11786
+COLO829T_ONT	Pansoma GRCh38-only graph `COLO829_ONT_INDEL_linear_7fc7396`	type	INS	18	59	18	6594
+COLO829T_Illumina	ClairS-TO 0.4.1 / 0.4.2	context	HP4-6	3	3	3	31
+COLO829T_Illumina	ClairS-TO 0.4.1 / 0.4.2	context	HP>=7	5	65	5	10
+COLO829T_Illumina	ClairS-TO 0.4.1 / 0.4.2	context	STR	0	27	0	3
+COLO829T_Illumina	ClairS-TO 0.4.1 / 0.4.2	context	VNTR	0	0	0	2
+COLO829T_Illumina	ClairS-TO 0.4.1 / 0.4.2	context	complex	0	0	0	1
+COLO829T_Illumina	ClairS-TO 0.4.1 / 0.4.2	context	none	11	17	11	114
+COLO829T_Illumina	ClairS-TO 0.4.1 / 0.4.2	length	1	14	55	14	83
+COLO829T_Illumina	ClairS-TO 0.4.1 / 0.4.2	length	16-50	2	4	2	11
+COLO829T_Illumina	ClairS-TO 0.4.1 / 0.4.2	length	2-4	1	36	1	46
+COLO829T_Illumina	ClairS-TO 0.4.1 / 0.4.2	length	5-15	2	17	2	21
+COLO829T_Illumina	ClairS-TO 0.4.1 / 0.4.2	type	DEL	10	44	10	109
+COLO829T_Illumina	ClairS-TO 0.4.1 / 0.4.2	type	INS	9	68	9	51
+COLO829T_Illumina	ClairS-TO 0.4.1 / 0.4.2	type	complex	0	0	0	1
+COLO829T_Illumina	DeepSomatic 1.9.0	context	HP4-6	3	3	3	16
+COLO829T_Illumina	DeepSomatic 1.9.0	context	HP>=7	9	61	9	21
+COLO829T_Illumina	DeepSomatic 1.9.0	context	STR	2	25	2	3
+COLO829T_Illumina	DeepSomatic 1.9.0	context	VNTR	0	0	0	1
+COLO829T_Illumina	DeepSomatic 1.9.0	context	none	10	18	10	56
+COLO829T_Illumina	DeepSomatic 1.9.0	length	1	16	53	16	70
+COLO829T_Illumina	DeepSomatic 1.9.0	length	16-50	2	4	2	2
+COLO829T_Illumina	DeepSomatic 1.9.0	length	2-4	3	34	3	16
+COLO829T_Illumina	DeepSomatic 1.9.0	length	5-15	3	16	3	9
+COLO829T_Illumina	DeepSomatic 1.9.0	type	DEL	14	40	14	72
+COLO829T_Illumina	DeepSomatic 1.9.0	type	INS	10	67	10	25
+COLO829T_Illumina	Pansoma HPRC v2.1 d46 `COLO829_Illumina_INDEL_d46_7fc7396`	context	HP4-6	2	4	2	21
+COLO829T_Illumina	Pansoma HPRC v2.1 d46 `COLO829_Illumina_INDEL_d46_7fc7396`	context	HP>=7	18	52	18	225
+COLO829T_Illumina	Pansoma HPRC v2.1 d46 `COLO829_Illumina_INDEL_d46_7fc7396`	context	STR	1	26	1	40
+COLO829T_Illumina	Pansoma HPRC v2.1 d46 `COLO829_Illumina_INDEL_d46_7fc7396`	context	VNTR	0	0	0	3
+COLO829T_Illumina	Pansoma HPRC v2.1 d46 `COLO829_Illumina_INDEL_d46_7fc7396`	context	none	11	17	11	95
+COLO829T_Illumina	Pansoma HPRC v2.1 d46 `COLO829_Illumina_INDEL_d46_7fc7396`	length	1	24	45	24	231
+COLO829T_Illumina	Pansoma HPRC v2.1 d46 `COLO829_Illumina_INDEL_d46_7fc7396`	length	16-50	3	3	3	16
+COLO829T_Illumina	Pansoma HPRC v2.1 d46 `COLO829_Illumina_INDEL_d46_7fc7396`	length	2-4	3	34	3	80
+COLO829T_Illumina	Pansoma HPRC v2.1 d46 `COLO829_Illumina_INDEL_d46_7fc7396`	length	5-15	2	17	2	57
+COLO829T_Illumina	Pansoma HPRC v2.1 d46 `COLO829_Illumina_INDEL_d46_7fc7396`	type	DEL	14	40	14	231
+COLO829T_Illumina	Pansoma HPRC v2.1 d46 `COLO829_Illumina_INDEL_d46_7fc7396`	type	INS	18	59	18	153
+COLO829T_Illumina	Pansoma GRCh38-only graph `COLO829_Illumina_INDEL_linear_7fc7396`	context	HP4-6	2	4	2	119
+COLO829T_Illumina	Pansoma GRCh38-only graph `COLO829_Illumina_INDEL_linear_7fc7396`	context	HP>=7	15	55	15	327
+COLO829T_Illumina	Pansoma GRCh38-only graph `COLO829_Illumina_INDEL_linear_7fc7396`	context	STR	2	25	2	261
+COLO829T_Illumina	Pansoma GRCh38-only graph `COLO829_Illumina_INDEL_linear_7fc7396`	context	VNTR	0	0	0	13
+COLO829T_Illumina	Pansoma GRCh38-only graph `COLO829_Illumina_INDEL_linear_7fc7396`	context	none	10	18	10	807
+COLO829T_Illumina	Pansoma GRCh38-only graph `COLO829_Illumina_INDEL_linear_7fc7396`	length	1	21	48	21	595
+COLO829T_Illumina	Pansoma GRCh38-only graph `COLO829_Illumina_INDEL_linear_7fc7396`	length	16-50	3	3	3	140
+COLO829T_Illumina	Pansoma GRCh38-only graph `COLO829_Illumina_INDEL_linear_7fc7396`	length	2-4	3	34	3	417
+COLO829T_Illumina	Pansoma GRCh38-only graph `COLO829_Illumina_INDEL_linear_7fc7396`	length	5-15	2	17	2	375
+COLO829T_Illumina	Pansoma GRCh38-only graph `COLO829_Illumina_INDEL_linear_7fc7396`	type	DEL	16	38	16	1087
+COLO829T_Illumina	Pansoma GRCh38-only graph `COLO829_Illumina_INDEL_linear_7fc7396`	type	INS	13	64	13	440

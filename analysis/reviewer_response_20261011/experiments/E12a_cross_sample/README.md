@@ -1,5 +1,8 @@
 # E12a: cross-sample application of the d46 models (preliminary)
 
+> **2026-10-16, INDEL PoN rule changed** (user decision: gnomAD / CoLoRSdb exact allele, AF >= 0.01 in homopolymers >= 8 bp, else AF >= 1e-4; was >= 7 bp and 1e-3). The 44 local chr1 INDEL call sets were re-scored in place (`tmp/reviewer_cpu_20261013/pon_hp8_20261016/rescore.sh`, array 418042; the old evaluations are kept as `eval_bed.pon_hp7_1e-3` / `eval_nobed.pon_hp7_1e-3`) and this experiment's collector was rerun (job 418071), so `tables.md` / `summary.json` / TSVs now use the new rule. INDEL numbers quoted in the prose below may still be those of the earlier rule (changes are small: e.g. HG008T Illumina v1.1 PASS F1 0.241 -> 0.251, best 0.265 -> 0.270; HG008T chr1 truth INDELs tagged 413 -> 418 of 635). SNV results are unchanged.
+
+
 Reviewer points: **R1.7** (training scale and tumor diversity: does a model trained on one tumor generalize?),
 **R1.m1** (additional benchmarks: HCC1395), **R3.9** (stability), and the in-sample caveat behind every Pansoma number:
 the RIS models are trained on chr2-22 of the same tumor they are tested on (chr1).

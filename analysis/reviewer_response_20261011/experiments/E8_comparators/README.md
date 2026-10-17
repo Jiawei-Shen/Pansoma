@@ -1,6 +1,6 @@
 # E8: ClairS-TO and DeepSomatic tumor-only under Pansoma's protocol (chr1)
 
-Status (2026-10-13): **CANCELLED by the user.** The user already has ClairS-TO / DeepSomatic results, so the comparators
+Status (2026-10-13): **CANCELLED by the user.** 2026-10-16: the user's existing VCFs are being re-scored (section 9). The user already has ClairS-TO / DeepSomatic results, so the comparators
 are not re-run. No comparator was run in E8.
 
 What is left:
@@ -219,3 +219,50 @@ Practical notes:
 | re-scoring the user's ClairS-TO / DeepSomatic VCFs under the Pansoma protocol | PENDING: the user has to give the VCF paths (and the BAM / version / command of each run) |
 | leftover data, 5.7G | PENDING user decision: delete or keep (section 5); only `test/` is worth keeping |
 | `tables.md` comparator rows | PENDING on the re-scoring above; currently Pansoma rows only |
+
+## 9. Re-scoring the user's existing VCFs (2026-10-16)
+
+The user pointed to `/scratch/jshen/Pansoma_testing_results_V2/` (the comparison data of the original manuscript). The
+P100 COLO829T VCFs are in the older `/scratch/jshen/Pansoma_testing_results/VCF_results/`; the old rtg results in V2
+name them in their `vcfeval.log` (`-c`). All runs are tumor-only and chr1 only; provenance is from the VCF headers
+(`##cmdline`, `##clairs_to_version`, `##DeepVariant_version`) and the DeepSomatic logs (model `example_info.json`,
+`--reads_tumor`, PON files). One line per run is in `calls/<caller>/<dataset>/command.txt` (Commands table).
+
+| dataset | ClairS-TO (default PoNs on) | DeepSomatic tumor-only (PON filtering on) | BAM (same sequencing as the tensors) |
+|---|---|---|---|
+| HG008T_Illumina | 0.4.2 `ilmn_ssrs`, `V2/HG008_GIAB/AF_HPRC/clairs-to_HG008T_WGS_Chr1/` | 1.9.0 WGS_TUMOR_ONLY, `.../deepsomatic_HG008T_WGS_Chr1/HG008T_WGS.vcf.gz` | GIAB `HG008-T_Illumina_195x_GRCh38-GIABv3.bam` (BCM 2024-03-13, the FASTQs of the GAM) |
+| HG008T_PacBio | 0.4.2 `hifi_revio_ssrs`, `.../clairs-to_HG008_PacBio_Chr1/` | 1.9.0 PACBIO_TUMOR_ONLY, `.../deepsomatic_HG008T_PacBio_Chr1/HG008T_PacBio.vcf.gz` | GIAB Revio 116x |
+| HG008T_ONT | 0.4.2 `ont_r10_dorado_sup_5khz_ssrs`, `.../clairs-to_HG008_ONT_Chr1/` | 1.9.0 **PACBIO_TUMOR_ONLY on the ONT BAM** (logs load `pacbio_tumor_only/example_info.json`), `.../deepsomatic_HG008T_ONT_Chr1/HG008T_ONTvcf.gz` | GIAB ONT-UL R10.4.1 dorado 0.8.1 sup, 54x |
+| COLO829T_Illumina | 0.4.1 `ilmn`, `VCF_results/clairs-to_COLO829T_WGS/` | 1.9.0 WGS_TUMOR_ONLY, `VCF_results/deepsomatic_COLO829T_WGS/COLO829T_WGS.chr1.vcf.gz` | SMaHT `SMHTCOLO829T-X-X-M45-A001-uwsc-...-sentieon_bwamem` |
+| COLO829T_fiberseq | 0.4.1 `hifi_revio_ssrs`, `VCF_results/clairs-to_COLO829T_Pacbio/` | 1.9.0 PACBIO_TUMOR_ONLY, `VCF_results/deepsomatic_COLO829T_Pacbio/COLO829T_Pacbio.chr1.vcf.gz` | SMaHT `...-M45-B004-uwsc-MERGED-pbmm2` (the fiber-seq reads of the tensors) |
+| COLO829T_ONT | 0.4.1 `ont_r10_dorado_sup_5khz_ssrs`, `VCF_results/clairs-to_COLO829T_ONT/` | 1.9.0 ONT_TUMOR_ONLY, `VCF_results/deepsomatic_COLO829T_ONT/COLO829T_ONT.chr1.vcf.gz` | `COLO829T_ONT_merged.bam` (the reads of the tensors) |
+
+- The DeepSomatic files scored are the full VCFs (PASS, PON, GERMLINE and RefCall records), not the PASS / per-kind
+  subsets the old rtg runs used, so all four call sets of section 6 (`pass`, `pass_pon`, `all`, `all_pon`) exist.
+- **HG008T ONT DeepSomatic used the PacBio model.** Its numbers are not a valid ONT comparator. User (2026-10-16): re-run
+  it with `ONT_TUMOR_ONLY` and restrict the evaluation to the BED. Re-run on a tequila GPU (user: not on CPU;
+  the first CPU chain, pull 417710 + run 417711, was cancelled): DeepSomatic `1.9.0-gpu` image pulled inside the job
+  (`/scratch/jshen/bin/deepsomatic_1.9.0-gpu.sif`), the same BAM, `GRCh38.primary.fasta`, `--regions=chr1`,
+  `--use_default_pon_filtering=true` as the user's other 1.9.0 runs (job 417841, `-p gpu -w tequila --gres=gpu:12gb:1`,
+  16 CPUs, 80G; `tmp/reviewer_cpu_20261016/E8_rescore/run_deepsomatic_hg008t_ont_gpu.sh`; make_examples 50 min, 15 of 16
+  shards in minutes; call_variants on the GPU finished, postprocess_variants was killed at 98 GB, one worker per node core
+  each loading the PON VCF; postprocess re-run alone with `--cpus=4`, 64G, job 418308, `postprocess_hg008t_ont_gpu.sh`), calls in `calls/deepsomatic/HG008T_ONT/`, then
+  scored like the others; the reported numbers are `eval_bed` (inside the HG008T benchmark BED), `eval_nobed` is whole
+  chr1. Array tasks 10 / 12 (the wrong-model VCF) were cancelled so they do not take the same `score/` path.
+- The old numbers of the original manuscript differ from this protocol: no BED (`--region chr1` only), the tools' own
+  filters only (no common PoN), and for DeepSomatic HG008T PacBio SNV a baseline of SNVs + INDELs (FN 765 > 702 chr1 SNVs).
+- Jobs: `tmp/reviewer_cpu_20261016/E8_rescore/` (`tasks.tsv`, `score.sh`; array 417688, 24 tasks, 4 at a time, 4 CPUs,
+  32G each; the first submission 417661 failed in 1 s on anaconda's `bcftools` (missing `libcrypto.so.1.0.0`), the
+  script now loads `bcftools/1.18`). Outputs: `score/<caller>/<dataset>/<KIND>/`. Then `collect.py` (labels set to
+  ClairS-TO 0.4.1 / 0.4.2 and DeepSomatic 1.9.0).
+- Not scored yet: the COLO829T P25 / P50 / P75 comparator VCFs (`V2/COLO829T_*/{clairs-to,deepsomatic-to}_INDEL_COLO829_*_chr1_P*/`;
+  which mixture BAMs they used is not checked) and the HapMap runs (`V2/HapMap/`, `V2/clairs-to_HapMap_WGS/`).
+- **INDEL PoN rule.** The INDEL PoN rule changed during the re-scoring (user decision 2026-10-16: HP >= 8 bp AF >= 0.01,
+  else >= 1e-4; `scripts/filter_panel_of_normals.py` rewritten 17:33, commit 71cb51a). The two HG008T Illumina INDEL
+  reports (tasks 3 / 4) had run with the old rule (truth tagged 413 of 635; new rule 418): moved to
+  `score/{clairs_to,deepsomatic}/HG008T_Illumina/INDEL.oldPoN_HP7_1e-3` and re-scored (array 418385). Every other INDEL
+  report uses the new rule. Pansoma's INDEL rows: `collect.py` (`indel_new_pon_rule`) takes them from the CPU
+  re-predictions re-scored with the new rule (`pansoma_net_v2_runs/reviewer_cpu_20261013/<run>/vcf_chr1*/eval_bed`,
+  old reports kept as `eval_bed.pon_hp7_1e-3`; tmp/reviewer_cpu_20261013/pon_hp8_20261016) instead of the 7fc7396
+  summaries; rows without a local re-scored call set (COLO829T d9 single-set runs) are marked "old INDEL PoN rule".
+  SNV is unaffected.

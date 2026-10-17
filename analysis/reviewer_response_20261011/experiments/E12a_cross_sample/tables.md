@@ -4,11 +4,11 @@ PASS = the model's own validation recall-0.9 threshold (chosen on its training t
 
 | kind | model (trained on) | target chr1 | PASS thr | PoN TP / FP / FN | PoN P / R / F1 | best F1 | ceiling | unplaced PASS | in-sample PoN F1 (best) |
 |---|---|---|---:|---|---|---:|---:|---:|---|
-| INDEL | `COLO829_Illumina_INDEL_d46_7fc7396` | H1437T_Illumina_d46 | 0.022 | 67 / 517 / 91 | 0.115 / 0.424 / **0.181** | 0.210 | 0.633 | 611 | - |
-| INDEL | `COLO829_Illumina_INDEL_d46_7fc7396` | H2009T_Illumina_d46 | 0.022 | 155 / 601 / 221 | 0.205 / 0.412 / **0.274** | 0.288 | 0.705 | 613 | - |
-| INDEL | `COLO829_Illumina_INDEL_d46_7fc7396` | HCC1395T_Illumina_d46 | 0.022 | 35 / 60 / 98 | 0.368 / 0.263 / **0.307** | 0.331 | 0.429 | 95 | - |
-| INDEL | `COLO829_Illumina_INDEL_d46_7fc7396` | HCC1954T_Illumina_d46 | 0.022 | 53 / 687 / 114 | 0.072 / 0.317 / **0.117** | 0.135 | 0.515 | 510 | - |
-| INDEL | `COLO829_Illumina_INDEL_d46_7fc7396` | HG008T_Illumina_d46 | 0.022 | 122 / 252 / 465 | 0.326 / 0.208 / **0.254** | 0.262 | 0.247 | 305 | 0.244 (0.249) |
+| INDEL | `COLO829_Illumina_INDEL_d46_7fc7396` | H1437T_Illumina_d46 | 0.022 | 66 / 482 / 92 | 0.120 / 0.418 / **0.187** | 0.215 | 0.627 | 611 | - |
+| INDEL | `COLO829_Illumina_INDEL_d46_7fc7396` | H2009T_Illumina_d46 | 0.022 | 152 / 577 / 224 | 0.208 / 0.404 / **0.275** | 0.289 | 0.697 | 613 | - |
+| INDEL | `COLO829_Illumina_INDEL_d46_7fc7396` | HCC1395T_Illumina_d46 | 0.022 | 35 / 55 / 98 | 0.389 / 0.263 / **0.314** | 0.337 | 0.421 | 95 | - |
+| INDEL | `COLO829_Illumina_INDEL_d46_7fc7396` | HCC1954T_Illumina_d46 | 0.022 | 51 / 651 / 116 | 0.073 / 0.305 / **0.117** | 0.137 | 0.497 | 510 | - |
+| INDEL | `COLO829_Illumina_INDEL_d46_7fc7396` | HG008T_Illumina_d46 | 0.022 | 122 / 224 / 465 | 0.353 / 0.208 / **0.262** | 0.270 | 0.247 | 305 | 0.244 (0.249) |
 | SNV | `COLO829_Illumina_SNV_d46_7fc7396` | H1437T_Illumina_d46 | 0.640 | 1201 / 121 / 2740 | 0.908 / 0.305 / **0.456** | 0.828 | 0.917 | 641 | - |
 | SNV | `COLO829_Illumina_SNV_d46_7fc7396` | H2009T_Illumina_d46 | 0.640 | 3292 / 91 / 7814 | 0.973 / 0.296 / **0.454** | 0.932 | 0.961 | 596 | - |
 | SNV | `COLO829_Illumina_SNV_d46_7fc7396` | HCC1395T_Illumina_d46 | 0.640 | 540 / 38 / 2900 | 0.934 / 0.157 / **0.269** | 0.810 | 0.895 | 444 | - |
@@ -24,11 +24,11 @@ PASS = the model's own validation recall-0.9 threshold (chosen on its training t
 | SNV | `COLO829_fiberseq_SNV_d46_7fc7396` | HCC1395T_PacBio_d46 | 0.481 | 2222 / 338 / 1218 | 0.868 / 0.646 / **0.741** | 0.819 | 0.861 | 114 | - |
 | SNV | `COLO829_fiberseq_SNV_d46_7fc7396` | HCC1954T_PacBio_d46 | 0.481 | 1124 / 2225 / 326 | 0.336 / 0.775 / **0.468** | 0.474 | 0.903 | 128 | - |
 | SNV | `COLO829_fiberseq_SNV_d46_7fc7396` | HG008T_PacBio_d46 | 0.481 | 382 / 292 / 315 | 0.567 / 0.548 / **0.557** | 0.597 | 0.888 | 227 | 0.605 (0.622) |
-| INDEL | `HG008_Illumina_INDEL_d46_7fc7396` | COLO829T_Illumina_d46 | 0.106 | 34 / 730 / 97 | 0.044 / 0.260 / **0.076** | 0.135 | 0.267 | 728 | 0.109 (0.163) |
-| INDEL | `HG008_Illumina_INDEL_d46_7fc7396` | H1437T_Illumina_d46 | 0.106 | 119 / 4017 / 39 | 0.029 / 0.753 / **0.055** | 0.145 | 0.873 | 2,609 | - |
-| INDEL | `HG008_Illumina_INDEL_d46_7fc7396` | H2009T_Illumina_d46 | 0.106 | 304 / 4472 / 72 | 0.064 / 0.808 / **0.118** | 0.247 | 0.880 | 2,840 | - |
-| INDEL | `HG008_Illumina_INDEL_d46_7fc7396` | HCC1395T_Illumina_d46 | 0.106 | 33 / 214 / 100 | 0.134 / 0.248 / **0.174** | 0.247 | 0.789 | 309 | - |
-| INDEL | `HG008_Illumina_INDEL_d46_7fc7396` | HCC1954T_Illumina_d46 | 0.106 | 94 / 4321 / 73 | 0.021 / 0.563 / **0.041** | 0.127 | 0.778 | 2,643 | - |
+| INDEL | `HG008_Illumina_INDEL_d46_7fc7396` | COLO829T_Illumina_d46 | 0.106 | 34 / 670 / 97 | 0.048 / 0.260 / **0.081** | 0.141 | 0.267 | 728 | 0.109 (0.163) |
+| INDEL | `HG008_Illumina_INDEL_d46_7fc7396` | H1437T_Illumina_d46 | 0.106 | 118 / 3971 / 40 | 0.029 / 0.747 / **0.056** | 0.147 | 0.867 | 2,609 | - |
+| INDEL | `HG008_Illumina_INDEL_d46_7fc7396` | H2009T_Illumina_d46 | 0.106 | 300 / 4433 / 76 | 0.064 / 0.798 / **0.118** | 0.245 | 0.870 | 2,840 | - |
+| INDEL | `HG008_Illumina_INDEL_d46_7fc7396` | HCC1395T_Illumina_d46 | 0.106 | 32 / 198 / 101 | 0.139 / 0.241 / **0.176** | 0.257 | 0.774 | 309 | - |
+| INDEL | `HG008_Illumina_INDEL_d46_7fc7396` | HCC1954T_Illumina_d46 | 0.106 | 91 / 4243 / 76 | 0.021 / 0.545 / **0.040** | 0.124 | 0.754 | 2,643 | - |
 | SNV | `HG008_Illumina_SNV_d46_7fc7396` | COLO829T_Illumina_d46 | 0.324 | 1563 / 411 / 880 | 0.792 / 0.640 / **0.708** | 0.717 | 0.736 | 225 | 0.783 (0.786) |
 | SNV | `HG008_Illumina_SNV_d46_7fc7396` | H1437T_Illumina_d46 | 0.324 | 3414 / 687 / 527 | 0.833 / 0.866 / **0.849** | 0.852 | 0.915 | 604 | - |
 | SNV | `HG008_Illumina_SNV_d46_7fc7396` | H2009T_Illumina_d46 | 0.324 | 10334 / 627 / 772 | 0.943 / 0.930 / **0.937** | 0.940 | 0.963 | 610 | - |

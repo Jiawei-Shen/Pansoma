@@ -1,5 +1,8 @@
 # E17c: the PoN rule re-selected on chr2-22 (R2.6, panels of normals)
 
+> **Decision 2026-10-16 (user):** the leave-one-tumor-out rule, HP >= 8: AF >= 0.01, else AF >= 1e-4, is adopted as the INDEL PoN rule (`scripts/filter_panel_of_normals.py`, commit 71cb51a) and used from now on. In the tables below "current" still means the earlier rule (HP >= 7: 0.01, else 1e-3); the purity re-scoring of the new rule was not pursued (user: no more purity tests).
+
+
 ## Question
 
 The population filters were chosen by looking at chr1, the test chromosome:

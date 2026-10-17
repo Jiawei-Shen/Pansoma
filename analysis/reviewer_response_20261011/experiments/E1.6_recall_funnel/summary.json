@@ -1,5 +1,5 @@
 {
- "created": "2026-10-15 19:51",
+ "created": "2026-10-16 18:49",
  "per_truth": "/scratch/jshen/data/reviewer_experiments_20261013/E1.6_recall_funnel/per_truth.tsv.gz",
  "runs": {
   "COLO829_Illumina_SNV_linear_7fc7396__vcf_chr1": {
@@ -2374,10 +2374,10 @@
      "records": 131,
      "tagged": 81,
      "tagged_pass": 81,
-     "PoN1_gnomAD": 15,
+     "PoN1_gnomAD": 16,
      "PoN2_dbSNP": 0,
      "PoN3_1000G": 0,
-     "PoN4_CoLoRSdb": 77
+     "PoN4_CoLoRSdb": 78
     },
     "unplaced_pass": 0
    },
@@ -2537,10 +2537,10 @@
      "records": 131,
      "tagged": 81,
      "tagged_pass": 81,
-     "PoN1_gnomAD": 15,
+     "PoN1_gnomAD": 16,
      "PoN2_dbSNP": 0,
      "PoN3_1000G": 0,
-     "PoN4_CoLoRSdb": 77
+     "PoN4_CoLoRSdb": 78
     },
     "unplaced_pass": 368
    },
@@ -2701,10 +2701,10 @@
      "records": 131,
      "tagged": 81,
      "tagged_pass": 81,
-     "PoN1_gnomAD": 15,
+     "PoN1_gnomAD": 16,
      "PoN2_dbSNP": 0,
      "PoN3_1000G": 0,
-     "PoN4_CoLoRSdb": 77
+     "PoN4_CoLoRSdb": 78
     },
     "unplaced_pass": 0
    },
@@ -2864,10 +2864,10 @@
      "records": 131,
      "tagged": 81,
      "tagged_pass": 81,
-     "PoN1_gnomAD": 15,
+     "PoN1_gnomAD": 16,
      "PoN2_dbSNP": 0,
      "PoN3_1000G": 0,
-     "PoN4_CoLoRSdb": 77
+     "PoN4_CoLoRSdb": 78
     },
     "unplaced_pass": 2080
    },
@@ -3028,10 +3028,10 @@
      "records": 131,
      "tagged": 81,
      "tagged_pass": 81,
-     "PoN1_gnomAD": 15,
+     "PoN1_gnomAD": 16,
      "PoN2_dbSNP": 0,
      "PoN3_1000G": 0,
-     "PoN4_CoLoRSdb": 77
+     "PoN4_CoLoRSdb": 78
     },
     "unplaced_pass": 0
    },
@@ -3190,10 +3190,10 @@
      "records": 131,
      "tagged": 81,
      "tagged_pass": 81,
-     "PoN1_gnomAD": 15,
+     "PoN1_gnomAD": 16,
      "PoN2_dbSNP": 0,
      "PoN3_1000G": 0,
-     "PoN4_CoLoRSdb": 77
+     "PoN4_CoLoRSdb": 78
     },
     "unplaced_pass": 9258
    },
@@ -3341,24 +3341,24 @@
      "path": "/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/HG008_Illumina_INDEL_linear_7fc7396/test_chr1/HG008T_Illumina_linear.tensors.INDEL.predictions.ndjson.gz"
     },
     "check": {
-     "pon_tp": 154,
-     "pon_fn": 433,
+     "pon_tp": 152,
+     "pon_fn": 435,
      "raw_tp": 433,
      "raw_fn": 154,
-     "stage4": 154,
-     "stage123": 433,
-     "stage3": 279,
+     "stage4": 152,
+     "stage123": 435,
+     "stage3": 281,
      "stage12": 154,
      "exact": true
     },
     "truth_pon_tags": {
      "records": 635,
-     "tagged": 413,
-     "tagged_pass": 413,
-     "PoN1_gnomAD": 50,
+     "tagged": 418,
+     "tagged_pass": 418,
+     "PoN1_gnomAD": 54,
      "PoN2_dbSNP": 0,
      "PoN3_1000G": 0,
-     "PoN4_CoLoRSdb": 405
+     "PoN4_CoLoRSdb": 410
     },
     "unplaced_pass": 0
    },
@@ -3366,8 +3366,8 @@
     "n": 587,
     "no_tensor": 114,
     "below_threshold": 40,
-    "pon": 279,
-    "called": 154
+    "pon": 281,
+    "called": 152
    },
    "reasons_stage1": {
     "min_variants": 14,
@@ -3381,12 +3381,12 @@
    "stage1_partial_tensor": 14,
    "stage1_partial_pass": 3,
    "truth_pon_tagged": {
-    "no_tensor": 76,
+    "no_tensor": 79,
     "below_threshold": 24,
-    "pon": 279,
+    "pon": 281,
     "called": 0
    },
-   "stage3_call_pon_tagged": 279,
+   "stage3_call_pon_tagged": 281,
    "stage4_without_exact_tensor": 0,
    "stage3_without_exact_tensor": 0,
    "vaf_sources": {
@@ -3401,8 +3401,8 @@
      "n": 368,
      "no_tensor": 78,
      "below_threshold": 26,
-     "pon": 173,
-     "called": 91
+     "pon": 175,
+     "called": 89
     },
     "DEL": {
      "n": 219,
@@ -3424,15 +3424,15 @@
      "n": 82,
      "no_tensor": 22,
      "below_threshold": 8,
-     "pon": 42,
-     "called": 10
+     "pon": 43,
+     "called": 9
     },
     "0.2-0.4": {
      "n": 224,
      "no_tensor": 39,
      "below_threshold": 7,
-     "pon": 126,
-     "called": 52
+     "pon": 127,
+     "called": 51
     },
     ">0.4": {
      "n": 234,
@@ -3468,16 +3468,16 @@
      "n": 87,
      "no_tensor": 26,
      "below_threshold": 14,
-     "pon": 12,
-     "called": 35
+     "pon": 14,
+     "called": 33
     }
    },
    "untagged_funnel": {
-    "n": 208,
-    "no_tensor": 38,
+    "n": 203,
+    "no_tensor": 35,
     "below_threshold": 16,
     "pon": 0,
-    "called": 154
+    "called": 152
    }
   },
   "HG008_Illumina_INDEL_7fc7396__vcf_chr1": {
@@ -3509,12 +3509,12 @@
     },
     "truth_pon_tags": {
      "records": 635,
-     "tagged": 413,
-     "tagged_pass": 413,
-     "PoN1_gnomAD": 50,
+     "tagged": 418,
+     "tagged_pass": 418,
+     "PoN1_gnomAD": 54,
      "PoN2_dbSNP": 0,
      "PoN3_1000G": 0,
-     "PoN4_CoLoRSdb": 405
+     "PoN4_CoLoRSdb": 410
     },
     "unplaced_pass": 564
    },
@@ -3538,7 +3538,7 @@
    "stage1_partial_tensor": 82,
    "stage1_partial_pass": 48,
    "truth_pon_tagged": {
-    "no_tensor": 294,
+    "no_tensor": 299,
     "below_threshold": 14,
     "pon": 71,
     "called": 0
@@ -3630,8 +3630,8 @@
     }
    },
    "untagged_funnel": {
-    "n": 208,
-    "no_tensor": 57,
+    "n": 203,
+    "no_tensor": 52,
     "below_threshold": 11,
     "pon": 0,
     "called": 140
@@ -3666,12 +3666,12 @@
     },
     "truth_pon_tags": {
      "records": 635,
-     "tagged": 413,
-     "tagged_pass": 413,
-     "PoN1_gnomAD": 50,
+     "tagged": 418,
+     "tagged_pass": 418,
+     "PoN1_gnomAD": 54,
      "PoN2_dbSNP": 0,
      "PoN3_1000G": 0,
-     "PoN4_CoLoRSdb": 405
+     "PoN4_CoLoRSdb": 410
     },
     "unplaced_pass": 583
    },
@@ -3695,8 +3695,8 @@
    "stage1_partial_tensor": 106,
    "stage1_partial_pass": 64,
    "truth_pon_tagged": {
-    "no_tensor": 278,
-    "below_threshold": 23,
+    "no_tensor": 282,
+    "below_threshold": 24,
     "pon": 78,
     "called": 0
    },
@@ -3787,9 +3787,9 @@
     }
    },
    "untagged_funnel": {
-    "n": 208,
-    "no_tensor": 55,
-    "below_threshold": 12,
+    "n": 203,
+    "no_tensor": 51,
+    "below_threshold": 11,
     "pon": 0,
     "called": 141
    }
@@ -3811,24 +3811,24 @@
      "path": "/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/HG008_PacBio_INDEL_linear_7fc7396/test_chr1/HG008T_PacBio_linear.tensors.INDEL.predictions.ndjson.gz"
     },
     "check": {
-     "pon_tp": 153,
-     "pon_fn": 434,
+     "pon_tp": 150,
+     "pon_fn": 437,
      "raw_tp": 443,
      "raw_fn": 144,
-     "stage4": 153,
-     "stage123": 434,
-     "stage3": 290,
+     "stage4": 150,
+     "stage123": 437,
+     "stage3": 293,
      "stage12": 144,
      "exact": true
     },
     "truth_pon_tags": {
      "records": 635,
-     "tagged": 413,
-     "tagged_pass": 413,
-     "PoN1_gnomAD": 50,
+     "tagged": 418,
+     "tagged_pass": 418,
+     "PoN1_gnomAD": 54,
      "PoN2_dbSNP": 0,
      "PoN3_1000G": 0,
-     "PoN4_CoLoRSdb": 405
+     "PoN4_CoLoRSdb": 410
     },
     "unplaced_pass": 0
    },
@@ -3836,8 +3836,8 @@
     "n": 587,
     "no_tensor": 92,
     "below_threshold": 52,
-    "pon": 290,
-    "called": 153
+    "pon": 293,
+    "called": 150
    },
    "reasons_stage1": {
     "other_allele": 71,
@@ -3851,12 +3851,12 @@
    "stage1_partial_tensor": 19,
    "stage1_partial_pass": 15,
    "truth_pon_tagged": {
-    "no_tensor": 64,
+    "no_tensor": 66,
     "below_threshold": 25,
-    "pon": 290,
+    "pon": 293,
     "called": 0
    },
-   "stage3_call_pon_tagged": 290,
+   "stage3_call_pon_tagged": 293,
    "stage4_without_exact_tensor": 0,
    "stage3_without_exact_tensor": 0,
    "vaf_sources": {
@@ -3870,8 +3870,8 @@
      "n": 368,
      "no_tensor": 67,
      "below_threshold": 27,
-     "pon": 178,
-     "called": 96
+     "pon": 181,
+     "called": 93
     },
     "DEL": {
      "n": 219,
@@ -3900,8 +3900,8 @@
      "n": 218,
      "no_tensor": 47,
      "below_threshold": 5,
-     "pon": 113,
-     "called": 53
+     "pon": 116,
+     "called": 50
     },
     ">0.4": {
      "n": 313,
@@ -3930,23 +3930,23 @@
      "n": 65,
      "no_tensor": 18,
      "below_threshold": 8,
-     "pon": 33,
-     "called": 6
+     "pon": 35,
+     "called": 4
     },
     "other": {
      "n": 87,
      "no_tensor": 14,
      "below_threshold": 26,
-     "pon": 19,
-     "called": 28
+     "pon": 20,
+     "called": 27
     }
    },
    "untagged_funnel": {
-    "n": 208,
-    "no_tensor": 28,
+    "n": 203,
+    "no_tensor": 26,
     "below_threshold": 27,
     "pon": 0,
-    "called": 153
+    "called": 150
    }
   },
   "HG008_PacBio_INDEL_7fc7396__vcf_chr1": {
@@ -3978,12 +3978,12 @@
     },
     "truth_pon_tags": {
      "records": 635,
-     "tagged": 413,
-     "tagged_pass": 413,
-     "PoN1_gnomAD": 50,
+     "tagged": 418,
+     "tagged_pass": 418,
+     "PoN1_gnomAD": 54,
      "PoN2_dbSNP": 0,
      "PoN3_1000G": 0,
-     "PoN4_CoLoRSdb": 405
+     "PoN4_CoLoRSdb": 410
     },
     "unplaced_pass": 2076
    },
@@ -4007,8 +4007,8 @@
    "stage1_partial_tensor": 137,
    "stage1_partial_pass": 81,
    "truth_pon_tagged": {
-    "no_tensor": 255,
-    "below_threshold": 21,
+    "no_tensor": 259,
+    "below_threshold": 22,
     "pon": 103,
     "called": 0
    },
@@ -4099,9 +4099,9 @@
     }
    },
    "untagged_funnel": {
-    "n": 208,
-    "no_tensor": 55,
-    "below_threshold": 3,
+    "n": 203,
+    "no_tensor": 51,
+    "below_threshold": 2,
     "pon": 0,
     "called": 150
    }
@@ -4123,24 +4123,24 @@
      "path": "/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/HG008_PacBio_INDEL_d46_7fc7396/test_chr1/HG008T_PacBio_d46.tensors.INDEL.predictions.ndjson.gz"
     },
     "check": {
-     "pon_tp": 151,
-     "pon_fn": 436,
+     "pon_tp": 150,
+     "pon_fn": 437,
      "raw_tp": 253,
      "raw_fn": 334,
-     "stage4": 151,
-     "stage123": 436,
-     "stage3": 102,
+     "stage4": 150,
+     "stage123": 437,
+     "stage3": 103,
      "stage12": 334,
      "exact": true
     },
     "truth_pon_tags": {
      "records": 635,
-     "tagged": 413,
-     "tagged_pass": 413,
-     "PoN1_gnomAD": 50,
+     "tagged": 418,
+     "tagged_pass": 418,
+     "PoN1_gnomAD": 54,
      "PoN2_dbSNP": 0,
      "PoN3_1000G": 0,
-     "PoN4_CoLoRSdb": 405
+     "PoN4_CoLoRSdb": 410
     },
     "unplaced_pass": 3350
    },
@@ -4148,8 +4148,8 @@
     "n": 587,
     "no_tensor": 305,
     "below_threshold": 29,
-    "pon": 102,
-    "called": 151
+    "pon": 103,
+    "called": 150
    },
    "reasons_stage1": {
     "no_candidate": 164,
@@ -4164,12 +4164,12 @@
    "stage1_partial_tensor": 164,
    "stage1_partial_pass": 124,
    "truth_pon_tagged": {
-    "no_tensor": 250,
+    "no_tensor": 254,
     "below_threshold": 27,
-    "pon": 102,
+    "pon": 103,
     "called": 0
    },
-   "stage3_call_pon_tagged": 102,
+   "stage3_call_pon_tagged": 103,
    "stage4_without_exact_tensor": 0,
    "stage3_without_exact_tensor": 0,
    "vaf_sources": {
@@ -4184,8 +4184,8 @@
      "n": 368,
      "no_tensor": 215,
      "below_threshold": 8,
-     "pon": 59,
-     "called": 86
+     "pon": 60,
+     "called": 85
     },
     "DEL": {
      "n": 219,
@@ -4214,8 +4214,8 @@
      "n": 202,
      "no_tensor": 111,
      "below_threshold": 11,
-     "pon": 42,
-     "called": 38
+     "pon": 43,
+     "called": 37
     },
     ">0.4": {
      "n": 276,
@@ -4251,16 +4251,16 @@
      "n": 87,
      "no_tensor": 40,
      "below_threshold": 3,
-     "pon": 2,
-     "called": 42
+     "pon": 3,
+     "called": 41
     }
    },
    "untagged_funnel": {
-    "n": 208,
-    "no_tensor": 55,
+    "n": 203,
+    "no_tensor": 51,
     "below_threshold": 2,
     "pon": 0,
-    "called": 151
+    "called": 150
    }
   },
   "HG008_ONT_INDEL_linear_7fc7396__vcf_chr1": {
@@ -4280,24 +4280,24 @@
      "path": "/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/HG008_ONT_INDEL_linear_7fc7396/test_chr1/HG008T_ONT_linear.tensors.INDEL.predictions.ndjson.gz"
     },
     "check": {
-     "pon_tp": 140,
-     "pon_fn": 447,
+     "pon_tp": 138,
+     "pon_fn": 449,
      "raw_tp": 316,
      "raw_fn": 271,
-     "stage4": 140,
-     "stage123": 447,
-     "stage3": 176,
+     "stage4": 138,
+     "stage123": 449,
+     "stage3": 178,
      "stage12": 271,
      "exact": true
     },
     "truth_pon_tags": {
      "records": 635,
-     "tagged": 413,
-     "tagged_pass": 413,
-     "PoN1_gnomAD": 50,
+     "tagged": 418,
+     "tagged_pass": 418,
+     "PoN1_gnomAD": 54,
      "PoN2_dbSNP": 0,
      "PoN3_1000G": 0,
-     "PoN4_CoLoRSdb": 405
+     "PoN4_CoLoRSdb": 410
     },
     "unplaced_pass": 0
    },
@@ -4305,8 +4305,8 @@
     "n": 587,
     "no_tensor": 242,
     "below_threshold": 29,
-    "pon": 176,
-    "called": 140
+    "pon": 178,
+    "called": 138
    },
    "reasons_stage1": {
     "other_allele": 155,
@@ -4320,12 +4320,12 @@
    "stage1_partial_tensor": 96,
    "stage1_partial_pass": 86,
    "truth_pon_tagged": {
-    "no_tensor": 191,
+    "no_tensor": 194,
     "below_threshold": 12,
-    "pon": 176,
+    "pon": 178,
     "called": 0
    },
-   "stage3_call_pon_tagged": 176,
+   "stage3_call_pon_tagged": 178,
    "stage4_without_exact_tensor": 0,
    "stage3_without_exact_tensor": 0,
    "vaf_sources": {
@@ -4340,8 +4340,8 @@
      "n": 368,
      "no_tensor": 165,
      "below_threshold": 20,
-     "pon": 101,
-     "called": 82
+     "pon": 103,
+     "called": 80
     },
     "DEL": {
      "n": 219,
@@ -4363,8 +4363,8 @@
      "n": 220,
      "no_tensor": 146,
      "below_threshold": 7,
-     "pon": 51,
-     "called": 16
+     "pon": 52,
+     "called": 15
     },
     "0.2-0.4": {
      "n": 199,
@@ -4377,8 +4377,8 @@
      "n": 132,
      "no_tensor": 5,
      "below_threshold": 9,
-     "pon": 44,
-     "called": 74
+     "pon": 45,
+     "called": 73
     },
     "unknown": {
      "n": 14,
@@ -4400,8 +4400,8 @@
      "n": 65,
      "no_tensor": 16,
      "below_threshold": 2,
-     "pon": 39,
-     "called": 8
+     "pon": 41,
+     "called": 6
     },
     "other": {
      "n": 87,
@@ -4412,11 +4412,11 @@
     }
    },
    "untagged_funnel": {
-    "n": 208,
-    "no_tensor": 51,
+    "n": 203,
+    "no_tensor": 48,
     "below_threshold": 17,
     "pon": 0,
-    "called": 140
+    "called": 138
    }
   },
   "HG008_ONT_INDEL_7fc7396__vcf_chr1": {
@@ -4448,12 +4448,12 @@
     },
     "truth_pon_tags": {
      "records": 635,
-     "tagged": 413,
-     "tagged_pass": 413,
-     "PoN1_gnomAD": 50,
+     "tagged": 418,
+     "tagged_pass": 418,
+     "PoN1_gnomAD": 54,
      "PoN2_dbSNP": 0,
      "PoN3_1000G": 0,
-     "PoN4_CoLoRSdb": 405
+     "PoN4_CoLoRSdb": 410
     },
     "unplaced_pass": 7285
    },
@@ -4477,7 +4477,7 @@
    "stage1_partial_tensor": 148,
    "stage1_partial_pass": 125,
    "truth_pon_tagged": {
-    "no_tensor": 266,
+    "no_tensor": 271,
     "below_threshold": 12,
     "pon": 101,
     "called": 0
@@ -4569,8 +4569,8 @@
     }
    },
    "untagged_funnel": {
-    "n": 208,
-    "no_tensor": 60,
+    "n": 203,
+    "no_tensor": 55,
     "below_threshold": 14,
     "pon": 0,
     "called": 134
@@ -4605,12 +4605,12 @@
     },
     "truth_pon_tags": {
      "records": 635,
-     "tagged": 413,
-     "tagged_pass": 413,
-     "PoN1_gnomAD": 50,
+     "tagged": 418,
+     "tagged_pass": 418,
+     "PoN1_gnomAD": 54,
      "PoN2_dbSNP": 0,
      "PoN3_1000G": 0,
-     "PoN4_CoLoRSdb": 405
+     "PoN4_CoLoRSdb": 410
     },
     "unplaced_pass": 9899
    },
@@ -4634,7 +4634,7 @@
    "stage1_partial_tensor": 181,
    "stage1_partial_pass": 149,
    "truth_pon_tagged": {
-    "no_tensor": 278,
+    "no_tensor": 283,
     "below_threshold": 14,
     "pon": 87,
     "called": 0
@@ -4726,8 +4726,8 @@
     }
    },
    "untagged_funnel": {
-    "n": 208,
-    "no_tensor": 63,
+    "n": 203,
+    "no_tensor": 58,
     "below_threshold": 6,
     "pon": 0,
     "called": 139
@@ -4935,10 +4935,10 @@
      "records": 131,
      "tagged": 81,
      "tagged_pass": 81,
-     "PoN1_gnomAD": 15,
+     "PoN1_gnomAD": 16,
      "PoN2_dbSNP": 0,
      "PoN3_1000G": 0,
-     "PoN4_CoLoRSdb": 77
+     "PoN4_CoLoRSdb": 78
     },
     "unplaced_pass": 4195
    },
@@ -5855,16 +5855,16 @@
     "n": 1761,
     "no_tensor": 448,
     "below_threshold": 121,
-    "pon": 745,
-    "called": 447
+    "pon": 752,
+    "called": 440
    },
    "by_kind": {
     "INS": {
      "n": 1104,
      "no_tensor": 310,
      "below_threshold": 73,
-     "pon": 452,
-     "called": 269
+     "pon": 459,
+     "called": 262
     },
     "DEL": {
      "n": 657,
@@ -5886,22 +5886,22 @@
      "n": 340,
      "no_tensor": 190,
      "below_threshold": 15,
-     "pon": 106,
-     "called": 29
+     "pon": 108,
+     "called": 27
     },
     "0.2-0.4": {
      "n": 641,
      "no_tensor": 141,
      "below_threshold": 25,
-     "pon": 320,
-     "called": 155
+     "pon": 324,
+     "called": 151
     },
     ">0.4": {
      "n": 679,
      "no_tensor": 16,
      "below_threshold": 81,
-     "pon": 319,
-     "called": 263
+     "pon": 320,
+     "called": 262
     },
     "unknown": {
      "n": 39,
@@ -5923,15 +5923,15 @@
      "n": 195,
      "no_tensor": 60,
      "below_threshold": 15,
-     "pon": 103,
-     "called": 17
+     "pon": 107,
+     "called": 13
     },
     "other": {
      "n": 261,
      "no_tensor": 62,
      "below_threshold": 45,
-     "pon": 49,
-     "called": 105
+     "pon": 52,
+     "called": 102
     }
    },
    "reasons_stage1": {
@@ -5941,14 +5941,14 @@
     "other_allele": 259
    },
    "stage1_partial_pass": 104,
-   "stage1_truth_pon_tagged": 331,
-   "truth_pon_tagged": 1137,
+   "stage1_truth_pon_tagged": 339,
+   "truth_pon_tagged": 1152,
    "untagged_funnel": {
-    "n": 624,
-    "no_tensor": 117,
+    "n": 609,
+    "no_tensor": 109,
     "below_threshold": 60,
     "pon": 0,
-    "called": 447
+    "called": 440
    },
    "vaf_sources": {
     "tensor": 1572,
@@ -6050,12 +6050,12 @@
     "other_allele": 64
    },
    "stage1_partial_pass": 254,
-   "stage1_truth_pon_tagged": 815,
-   "truth_pon_tagged": 1137,
+   "stage1_truth_pon_tagged": 829,
+   "truth_pon_tagged": 1152,
    "untagged_funnel": {
-    "n": 624,
-    "no_tensor": 172,
-    "below_threshold": 28,
+    "n": 609,
+    "no_tensor": 158,
+    "below_threshold": 27,
     "pon": 0,
     "called": 424
    },
@@ -6072,16 +6072,16 @@
     "n": 1761,
     "no_tensor": 979,
     "below_threshold": 84,
-    "pon": 267,
-    "called": 431
+    "pon": 268,
+    "called": 430
    },
    "by_kind": {
     "INS": {
      "n": 1104,
      "no_tensor": 670,
      "below_threshold": 43,
-     "pon": 151,
-     "called": 240
+     "pon": 152,
+     "called": 239
     },
     "DEL": {
      "n": 657,
@@ -6110,8 +6110,8 @@
      "n": 636,
      "no_tensor": 342,
      "below_threshold": 31,
-     "pon": 125,
-     "called": 138
+     "pon": 126,
+     "called": 137
     },
     ">0.4": {
      "n": 629,
@@ -6147,8 +6147,8 @@
      "n": 261,
      "no_tensor": 123,
      "below_threshold": 7,
-     "pon": 7,
-     "called": 124
+     "pon": 8,
+     "called": 123
     }
    },
    "reasons_stage1": {
@@ -6159,14 +6159,14 @@
     "min_variants": 124
    },
    "stage1_partial_pass": 337,
-   "stage1_truth_pon_tagged": 806,
-   "truth_pon_tagged": 1137,
+   "stage1_truth_pon_tagged": 819,
+   "truth_pon_tagged": 1152,
    "untagged_funnel": {
-    "n": 624,
-    "no_tensor": 173,
-    "below_threshold": 20,
+    "n": 609,
+    "no_tensor": 160,
+    "below_threshold": 19,
     "pon": 0,
-    "called": 431
+    "called": 430
    },
    "vaf_sources": {
     "tensor": 868,

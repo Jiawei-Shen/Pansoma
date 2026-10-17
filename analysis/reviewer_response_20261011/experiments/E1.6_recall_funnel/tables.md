@@ -1,4 +1,4 @@
-# E1.6 recall funnel: tables (written 2026-10-15 19:51 by e16_recall_funnel.py)
+# E1.6 recall funnel: tables (written 2026-10-16 18:49 by e16_recall_funnel.py)
 
 chr1, truth records in the benchmark BED (rtg baseline), PASS at each run's validation recall-0.9 threshold; stage = the first stage at which a truth record is lost. Arms: GRCh38-only = linear, HPRC v1.1 d9, HPRC v2.1 d46. `(joint model)` = COLO829T fiberseq P100 called by the joint P100+P75+P50+P25 d9 model (supplementary, not arm-matched). Per-record rows: `/scratch/jshen/data/reviewer_experiments_20261013/E1.6_recall_funnel/per_truth.tsv.gz`.
 
@@ -11,9 +11,9 @@ Cell: `no tensor / tensor, not PASS / PASS, PoN-tagged / called` in % of the tru
 | HG008T Illumina SNV | 1.9 / 14.5 / 5.0 / 78.6 | 5.3 / 8.5 / 3.2 / 83.1 | 4.4 / 6.9 / 3.4 / 85.2 |
 | HG008T PacBio SNV | 2.0 / 9.8 / 5.6 / 82.6 | 5.5 / 8.9 / 2.9 / 82.8 | 5.0 / 7.9 / 3.6 / 83.5 |
 | HG008T ONT SNV | 2.3 / 8.5 / 5.0 / 84.2 | 4.7 / 9.8 / 2.9 / 82.6 | 4.4 / 5.6 / 4.0 / 85.9 |
-| HG008T Illumina INDEL | 19.4 / 6.8 / 47.5 / 26.2 | 59.8 / 4.3 / 12.1 / 23.9 | 56.7 / 6.0 / 13.3 / 24.0 |
-| HG008T PacBio INDEL | 15.7 / 8.9 / 49.4 / 26.1 | 52.8 / 4.1 / 17.5 / 25.6 | 52.0 / 4.9 / 17.4 / 25.7 |
-| HG008T ONT INDEL | 41.2 / 4.9 / 30.0 / 23.9 | 55.5 / 4.4 / 17.2 / 22.8 | 58.1 / 3.4 / 14.8 / 23.7 |
+| HG008T Illumina INDEL | 19.4 / 6.8 / 47.9 / 25.9 | 59.8 / 4.3 / 12.1 / 23.9 | 56.7 / 6.0 / 13.3 / 24.0 |
+| HG008T PacBio INDEL | 15.7 / 8.9 / 49.9 / 25.6 | 52.8 / 4.1 / 17.5 / 25.6 | 52.0 / 4.9 / 17.5 / 25.6 |
+| HG008T ONT INDEL | 41.2 / 4.9 / 30.3 / 23.5 | 55.5 / 4.4 / 17.2 / 22.8 | 58.1 / 3.4 / 14.8 / 23.7 |
 | COLO829T Illumina SNV | 16.7 / 23.4 / 1.7 / 58.2 | n.l. | 18.0 / 9.0 / 1.6 / 71.4 |
 | COLO829T fiberseq SNV | 17.5 / 18.3 / 1.8 / 62.4 | n.l. | 17.8 / 9.8 / 1.6 / 70.7 |
 | COLO829T ONT SNV | 17.8 / 26.6 / 1.4 / 54.2 | n.l. | 18.1 / 11.1 / 1.6 / 69.2 |
@@ -46,13 +46,13 @@ Cell: `no tensor / tensor, not PASS / PASS, PoN-tagged / called` in % of the tru
 | COLO829T fiberseq INDEL | HPRC v2.1 d46 | 131 | 63 (48.1 %) | 10 (7.6 %) | 24 (18.3 %) | 34 (26.0 %) | 0.0117 | 34 / 97 | yes |
 | COLO829T ONT INDEL | GRCh38-only | 131 | 25 (19.1 %) | 25 (19.1 %) | 44 (33.6 %) | 37 (28.2 %) | 0.0050 | 37 / 94 | yes |
 | COLO829T ONT INDEL | HPRC v2.1 d46 | 131 | 75 (57.3 %) | 6 (4.6 %) | 20 (15.3 %) | 30 (22.9 %) | 0.0127 | 30 / 101 | yes |
-| HG008T Illumina INDEL | GRCh38-only | 587 | 114 (19.4 %) | 40 (6.8 %) | 279 (47.5 %) | 154 (26.2 %) | 0.0480 | 154 / 433 | yes |
+| HG008T Illumina INDEL | GRCh38-only | 587 | 114 (19.4 %) | 40 (6.8 %) | 281 (47.9 %) | 152 (25.9 %) | 0.0480 | 152 / 435 | yes |
 | HG008T Illumina INDEL | HPRC v1.1 d9 | 587 | 351 (59.8 %) | 25 (4.3 %) | 71 (12.1 %) | 140 (23.9 %) | 0.1195 | 140 / 447 | yes |
 | HG008T Illumina INDEL | HPRC v2.1 d46 | 587 | 333 (56.7 %) | 35 (6.0 %) | 78 (13.3 %) | 141 (24.0 %) | 0.1065 | 141 / 446 | yes |
-| HG008T PacBio INDEL | GRCh38-only | 587 | 92 (15.7 %) | 52 (8.9 %) | 290 (49.4 %) | 153 (26.1 %) | 0.0367 | 153 / 434 | yes |
+| HG008T PacBio INDEL | GRCh38-only | 587 | 92 (15.7 %) | 52 (8.9 %) | 293 (49.9 %) | 150 (25.6 %) | 0.0367 | 150 / 437 | yes |
 | HG008T PacBio INDEL | HPRC v1.1 d9 | 587 | 310 (52.8 %) | 24 (4.1 %) | 103 (17.5 %) | 150 (25.6 %) | 0.0397 | 150 / 437 | yes |
-| HG008T PacBio INDEL | HPRC v2.1 d46 | 587 | 305 (52.0 %) | 29 (4.9 %) | 102 (17.4 %) | 151 (25.7 %) | 0.0270 | 151 / 436 | yes |
-| HG008T ONT INDEL | GRCh38-only | 587 | 242 (41.2 %) | 29 (4.9 %) | 176 (30.0 %) | 140 (23.9 %) | 0.0084 | 140 / 447 | yes |
+| HG008T PacBio INDEL | HPRC v2.1 d46 | 587 | 305 (52.0 %) | 29 (4.9 %) | 103 (17.5 %) | 150 (25.6 %) | 0.0270 | 150 / 437 | yes |
+| HG008T ONT INDEL | GRCh38-only | 587 | 242 (41.2 %) | 29 (4.9 %) | 178 (30.3 %) | 138 (23.5 %) | 0.0084 | 138 / 449 | yes |
 | HG008T ONT INDEL | HPRC v1.1 d9 | 587 | 326 (55.5 %) | 26 (4.4 %) | 101 (17.2 %) | 134 (22.8 %) | 0.0178 | 134 / 453 | yes |
 | HG008T ONT INDEL | HPRC v2.1 d46 | 587 | 341 (58.1 %) | 20 (3.4 %) | 87 (14.8 %) | 139 (23.7 %) | 0.0135 | 139 / 448 | yes |
 | COLO829T fiberseq SNV | HPRC v1.1 d9 (joint model) | 2443 | 437 (17.9 %) | 251 (10.3 %) | 48 (2.0 %) | 1707 (69.9 %) | 0.5492 | 1707 / 736 | yes |
@@ -161,15 +161,15 @@ Reasons from `<set>/tensors/somatic.recall.tsv`; absorbed = no_candidate and the
 | COLO829T fiberseq INDEL | HPRC v2.1 d46 | 81 / 131 (61.8 %) | 50 / 63 | 7 / 10 | 24 / 24 | 0 / 34 | 24 / 24 | 50 | 26.0 | 6.0 | 0.0 | 68.0 |
 | COLO829T ONT INDEL | GRCh38-only | 81 / 131 (61.8 %) | 19 / 25 | 18 / 25 | 44 / 44 | 0 / 37 | 44 / 44 | 50 | 12.0 | 14.0 | 0.0 | 74.0 |
 | COLO829T ONT INDEL | HPRC v2.1 d46 | 81 / 131 (61.8 %) | 59 / 75 | 2 / 6 | 20 / 20 | 0 / 30 | 20 / 20 | 50 | 32.0 | 8.0 | 0.0 | 60.0 |
-| HG008T Illumina INDEL | GRCh38-only | 379 / 587 (64.6 %) | 76 / 114 | 24 / 40 | 279 / 279 | 0 / 154 | 279 / 279 | 208 | 18.3 | 7.7 | 0.0 | 74.0 |
-| HG008T Illumina INDEL | HPRC v1.1 d9 | 379 / 587 (64.6 %) | 294 / 351 | 14 / 25 | 71 / 71 | 0 / 140 | 71 / 71 | 208 | 27.4 | 5.3 | 0.0 | 67.3 |
-| HG008T Illumina INDEL | HPRC v2.1 d46 | 379 / 587 (64.6 %) | 278 / 333 | 23 / 35 | 78 / 78 | 0 / 141 | 78 / 78 | 208 | 26.4 | 5.8 | 0.0 | 67.8 |
-| HG008T PacBio INDEL | GRCh38-only | 379 / 587 (64.6 %) | 64 / 92 | 25 / 52 | 290 / 290 | 0 / 153 | 290 / 290 | 208 | 13.5 | 13.0 | 0.0 | 73.6 |
-| HG008T PacBio INDEL | HPRC v1.1 d9 | 379 / 587 (64.6 %) | 255 / 310 | 21 / 24 | 103 / 103 | 0 / 150 | 103 / 103 | 208 | 26.4 | 1.4 | 0.0 | 72.1 |
-| HG008T PacBio INDEL | HPRC v2.1 d46 | 379 / 587 (64.6 %) | 250 / 305 | 27 / 29 | 102 / 102 | 0 / 151 | 102 / 102 | 208 | 26.4 | 1.0 | 0.0 | 72.6 |
-| HG008T ONT INDEL | GRCh38-only | 379 / 587 (64.6 %) | 191 / 242 | 12 / 29 | 176 / 176 | 0 / 140 | 176 / 176 | 208 | 24.5 | 8.2 | 0.0 | 67.3 |
-| HG008T ONT INDEL | HPRC v1.1 d9 | 379 / 587 (64.6 %) | 266 / 326 | 12 / 26 | 101 / 101 | 0 / 134 | 99 / 101 | 208 | 28.8 | 6.7 | 0.0 | 64.4 |
-| HG008T ONT INDEL | HPRC v2.1 d46 | 379 / 587 (64.6 %) | 278 / 341 | 14 / 20 | 87 / 87 | 0 / 139 | 86 / 87 | 208 | 30.3 | 2.9 | 0.0 | 66.8 |
+| HG008T Illumina INDEL | GRCh38-only | 384 / 587 (65.4 %) | 79 / 114 | 24 / 40 | 281 / 281 | 0 / 152 | 281 / 281 | 203 | 17.2 | 7.9 | 0.0 | 74.9 |
+| HG008T Illumina INDEL | HPRC v1.1 d9 | 384 / 587 (65.4 %) | 299 / 351 | 14 / 25 | 71 / 71 | 0 / 140 | 71 / 71 | 203 | 25.6 | 5.4 | 0.0 | 69.0 |
+| HG008T Illumina INDEL | HPRC v2.1 d46 | 384 / 587 (65.4 %) | 282 / 333 | 24 / 35 | 78 / 78 | 0 / 141 | 78 / 78 | 203 | 25.1 | 5.4 | 0.0 | 69.5 |
+| HG008T PacBio INDEL | GRCh38-only | 384 / 587 (65.4 %) | 66 / 92 | 25 / 52 | 293 / 293 | 0 / 150 | 293 / 293 | 203 | 12.8 | 13.3 | 0.0 | 73.9 |
+| HG008T PacBio INDEL | HPRC v1.1 d9 | 384 / 587 (65.4 %) | 259 / 310 | 22 / 24 | 103 / 103 | 0 / 150 | 103 / 103 | 203 | 25.1 | 1.0 | 0.0 | 73.9 |
+| HG008T PacBio INDEL | HPRC v2.1 d46 | 384 / 587 (65.4 %) | 254 / 305 | 27 / 29 | 103 / 103 | 0 / 150 | 103 / 103 | 203 | 25.1 | 1.0 | 0.0 | 73.9 |
+| HG008T ONT INDEL | GRCh38-only | 384 / 587 (65.4 %) | 194 / 242 | 12 / 29 | 178 / 178 | 0 / 138 | 178 / 178 | 203 | 23.6 | 8.4 | 0.0 | 68.0 |
+| HG008T ONT INDEL | HPRC v1.1 d9 | 384 / 587 (65.4 %) | 271 / 326 | 12 / 26 | 101 / 101 | 0 / 134 | 99 / 101 | 203 | 27.1 | 6.9 | 0.0 | 66.0 |
+| HG008T ONT INDEL | HPRC v2.1 d46 | 384 / 587 (65.4 %) | 283 / 341 | 14 / 20 | 87 / 87 | 0 / 139 | 86 / 87 | 203 | 28.6 | 3.0 | 0.0 | 68.5 |
 | COLO829T fiberseq SNV | HPRC v1.1 d9 (joint model) | 84 / 2443 (3.4 %) | 24 / 437 | 12 / 251 | 48 / 48 | 0 / 1707 | 48 / 48 | 2359 | 17.5 | 10.1 | 0.0 | 72.4 |
 | COLO829T fiberseq INDEL | HPRC v1.1 d9 (joint model) | 81 / 131 (61.8 %) | 55 / 68 | 5 / 6 | 21 / 21 | 0 / 36 | 21 / 21 | 50 | 26.0 | 2.0 | 0.0 | 72.0 |
 
@@ -206,19 +206,19 @@ Truth tag: the PoN run by vcfeval over the truth records (`eval_bed/truth.<KIND>
 | COLO829T ONT INDEL | GRCh38-only | DEL | 54 | 24.1 | 13.0 | 27.8 | 35.2 |
 | COLO829T ONT INDEL | HPRC v2.1 d46 | INS | 77 | 62.3 | 1.3 | 15.6 | 20.8 |
 | COLO829T ONT INDEL | HPRC v2.1 d46 | DEL | 54 | 50.0 | 9.3 | 14.8 | 25.9 |
-| HG008T Illumina INDEL | GRCh38-only | INS | 368 | 21.2 | 7.1 | 47.0 | 24.7 |
+| HG008T Illumina INDEL | GRCh38-only | INS | 368 | 21.2 | 7.1 | 47.6 | 24.2 |
 | HG008T Illumina INDEL | GRCh38-only | DEL | 219 | 16.4 | 6.4 | 48.4 | 28.8 |
 | HG008T Illumina INDEL | HPRC v1.1 d9 | INS | 368 | 65.2 | 3.3 | 10.3 | 21.2 |
 | HG008T Illumina INDEL | HPRC v1.1 d9 | DEL | 219 | 50.7 | 5.9 | 15.1 | 28.3 |
 | HG008T Illumina INDEL | HPRC v2.1 d46 | INS | 368 | 60.3 | 6.2 | 12.0 | 21.5 |
 | HG008T Illumina INDEL | HPRC v2.1 d46 | DEL | 219 | 50.7 | 5.5 | 15.5 | 28.3 |
-| HG008T PacBio INDEL | GRCh38-only | INS | 368 | 18.2 | 7.3 | 48.4 | 26.1 |
+| HG008T PacBio INDEL | GRCh38-only | INS | 368 | 18.2 | 7.3 | 49.2 | 25.3 |
 | HG008T PacBio INDEL | GRCh38-only | DEL | 219 | 11.4 | 11.4 | 51.1 | 26.0 |
 | HG008T PacBio INDEL | HPRC v1.1 d9 | INS | 368 | 59.8 | 2.4 | 14.4 | 23.4 |
 | HG008T PacBio INDEL | HPRC v1.1 d9 | DEL | 219 | 41.1 | 6.8 | 22.8 | 29.2 |
-| HG008T PacBio INDEL | HPRC v2.1 d46 | INS | 368 | 58.4 | 2.2 | 16.0 | 23.4 |
+| HG008T PacBio INDEL | HPRC v2.1 d46 | INS | 368 | 58.4 | 2.2 | 16.3 | 23.1 |
 | HG008T PacBio INDEL | HPRC v2.1 d46 | DEL | 219 | 41.1 | 9.6 | 19.6 | 29.7 |
-| HG008T ONT INDEL | GRCh38-only | INS | 368 | 44.8 | 5.4 | 27.4 | 22.3 |
+| HG008T ONT INDEL | GRCh38-only | INS | 368 | 44.8 | 5.4 | 28.0 | 21.7 |
 | HG008T ONT INDEL | GRCh38-only | DEL | 219 | 35.2 | 4.1 | 34.2 | 26.5 |
 | HG008T ONT INDEL | HPRC v1.1 d9 | INS | 368 | 62.0 | 2.2 | 15.2 | 20.7 |
 | HG008T ONT INDEL | HPRC v1.1 d9 | DEL | 219 | 44.7 | 8.2 | 20.5 | 26.5 |
@@ -326,8 +326,8 @@ VAF source order: own tensor AF, own build filter min_af (< 0.08), other-arm ten
 | COLO829T ONT INDEL | HPRC v2.1 d46 | 0.2-0.4 | 42 | 50.0 | 0.0 | 26.2 | 23.8 |
 | COLO829T ONT INDEL | HPRC v2.1 d46 | >0.4 | 42 | 50.0 | 2.4 | 7.1 | 40.5 |
 | HG008T Illumina INDEL | GRCh38-only | 0-0.08 | 33 | 100.0 | 0.0 | 0.0 | 0.0 |
-| HG008T Illumina INDEL | GRCh38-only | 0.08-0.2 | 82 | 26.8 | 9.8 | 51.2 | 12.2 |
-| HG008T Illumina INDEL | GRCh38-only | 0.2-0.4 | 224 | 17.4 | 3.1 | 56.2 | 23.2 |
+| HG008T Illumina INDEL | GRCh38-only | 0.08-0.2 | 82 | 26.8 | 9.8 | 52.4 | 11.0 |
+| HG008T Illumina INDEL | GRCh38-only | 0.2-0.4 | 224 | 17.4 | 3.1 | 56.7 | 22.8 |
 | HG008T Illumina INDEL | GRCh38-only | >0.4 | 234 | 2.6 | 10.7 | 47.4 | 39.3 |
 | HG008T Illumina INDEL | GRCh38-only | unknown | 14 | 100.0 | 0.0 | 0.0 | 0.0 |
 | HG008T Illumina INDEL | HPRC v1.1 d9 | 0-0.08 | 20 | 100.0 | 0.0 | 0.0 | 0.0 |
@@ -342,7 +342,7 @@ VAF source order: own tensor AF, own build filter min_af (< 0.08), other-arm ten
 | HG008T Illumina INDEL | HPRC v2.1 d46 | unknown | 15 | 100.0 | 0.0 | 0.0 | 0.0 |
 | HG008T PacBio INDEL | GRCh38-only | 0-0.08 | 7 | 100.0 | 0.0 | 0.0 | 0.0 |
 | HG008T PacBio INDEL | GRCh38-only | 0.08-0.2 | 38 | 57.9 | 0.0 | 34.2 | 7.9 |
-| HG008T PacBio INDEL | GRCh38-only | 0.2-0.4 | 218 | 21.6 | 2.3 | 51.8 | 24.3 |
+| HG008T PacBio INDEL | GRCh38-only | 0.2-0.4 | 218 | 21.6 | 2.3 | 53.2 | 22.9 |
 | HG008T PacBio INDEL | GRCh38-only | >0.4 | 313 | 1.6 | 15.0 | 52.4 | 31.0 |
 | HG008T PacBio INDEL | GRCh38-only | unknown | 11 | 100.0 | 0.0 | 0.0 | 0.0 |
 | HG008T PacBio INDEL | HPRC v1.1 d9 | 0-0.08 | 40 | 100.0 | 0.0 | 0.0 | 0.0 |
@@ -352,13 +352,13 @@ VAF source order: own tensor AF, own build filter min_af (< 0.08), other-arm ten
 | HG008T PacBio INDEL | HPRC v1.1 d9 | unknown | 14 | 100.0 | 0.0 | 0.0 | 0.0 |
 | HG008T PacBio INDEL | HPRC v2.1 d46 | 0-0.08 | 26 | 100.0 | 0.0 | 0.0 | 0.0 |
 | HG008T PacBio INDEL | HPRC v2.1 d46 | 0.08-0.2 | 69 | 66.7 | 23.2 | 10.1 | 0.0 |
-| HG008T PacBio INDEL | HPRC v2.1 d46 | 0.2-0.4 | 202 | 55.0 | 5.4 | 20.8 | 18.8 |
+| HG008T PacBio INDEL | HPRC v2.1 d46 | 0.2-0.4 | 202 | 55.0 | 5.4 | 21.3 | 18.3 |
 | HG008T PacBio INDEL | HPRC v2.1 d46 | >0.4 | 276 | 39.1 | 0.7 | 19.2 | 40.9 |
 | HG008T PacBio INDEL | HPRC v2.1 d46 | unknown | 14 | 100.0 | 0.0 | 0.0 | 0.0 |
 | HG008T ONT INDEL | GRCh38-only | 0-0.08 | 22 | 100.0 | 0.0 | 0.0 | 0.0 |
-| HG008T ONT INDEL | GRCh38-only | 0.08-0.2 | 220 | 66.4 | 3.2 | 23.2 | 7.3 |
+| HG008T ONT INDEL | GRCh38-only | 0.08-0.2 | 220 | 66.4 | 3.2 | 23.6 | 6.8 |
 | HG008T ONT INDEL | GRCh38-only | 0.2-0.4 | 199 | 27.6 | 6.5 | 40.7 | 25.1 |
-| HG008T ONT INDEL | GRCh38-only | >0.4 | 132 | 3.8 | 6.8 | 33.3 | 56.1 |
+| HG008T ONT INDEL | GRCh38-only | >0.4 | 132 | 3.8 | 6.8 | 34.1 | 55.3 |
 | HG008T ONT INDEL | GRCh38-only | unknown | 14 | 100.0 | 0.0 | 0.0 | 0.0 |
 | HG008T ONT INDEL | HPRC v1.1 d9 | 0-0.08 | 14 | 92.9 | 0.0 | 7.1 | 0.0 |
 | HG008T ONT INDEL | HPRC v1.1 d9 | 0.08-0.2 | 226 | 69.5 | 7.1 | 17.3 | 6.2 |
@@ -534,7 +534,7 @@ HP>=7: homopolymer tract >= 7 bp; STR: unit 2-6, >= 3 units; other: the rest (ca
 | COLO829T ONT INDEL | HPRC v2.1 d46 | other | 34 | 50.0 | 8.8 | 5.9 | 35.3 |
 | HG008T Illumina INDEL | GRCh38-only | HP>=7 | 435 | 14.3 | 4.8 | 54.3 | 26.7 |
 | HG008T Illumina INDEL | GRCh38-only | STR | 65 | 40.0 | 7.7 | 47.7 | 4.6 |
-| HG008T Illumina INDEL | GRCh38-only | other | 87 | 29.9 | 16.1 | 13.8 | 40.2 |
+| HG008T Illumina INDEL | GRCh38-only | other | 87 | 29.9 | 16.1 | 16.1 | 37.9 |
 | HG008T Illumina INDEL | HPRC v1.1 d9 | HP>=7 | 435 | 57.5 | 3.7 | 15.2 | 23.7 |
 | HG008T Illumina INDEL | HPRC v1.1 d9 | STR | 65 | 89.2 | 4.6 | 4.6 | 1.5 |
 | HG008T Illumina INDEL | HPRC v1.1 d9 | other | 87 | 49.4 | 6.9 | 2.3 | 41.4 |
@@ -542,16 +542,16 @@ HP>=7: homopolymer tract >= 7 bp; STR: unit 2-6, >= 3 units; other: the rest (ca
 | HG008T Illumina INDEL | HPRC v2.1 d46 | STR | 65 | 87.7 | 10.8 | 1.5 | 0.0 |
 | HG008T Illumina INDEL | HPRC v2.1 d46 | other | 87 | 48.3 | 3.4 | 2.3 | 46.0 |
 | HG008T PacBio INDEL | GRCh38-only | HP>=7 | 435 | 13.8 | 4.1 | 54.7 | 27.4 |
-| HG008T PacBio INDEL | GRCh38-only | STR | 65 | 27.7 | 12.3 | 50.8 | 9.2 |
-| HG008T PacBio INDEL | GRCh38-only | other | 87 | 16.1 | 29.9 | 21.8 | 32.2 |
+| HG008T PacBio INDEL | GRCh38-only | STR | 65 | 27.7 | 12.3 | 53.8 | 6.2 |
+| HG008T PacBio INDEL | GRCh38-only | other | 87 | 16.1 | 29.9 | 23.0 | 31.0 |
 | HG008T PacBio INDEL | HPRC v1.1 d9 | HP>=7 | 435 | 48.7 | 4.4 | 22.1 | 24.8 |
 | HG008T PacBio INDEL | HPRC v1.1 d9 | STR | 65 | 84.6 | 4.6 | 9.2 | 1.5 |
 | HG008T PacBio INDEL | HPRC v1.1 d9 | other | 87 | 49.4 | 2.3 | 1.1 | 47.1 |
 | HG008T PacBio INDEL | HPRC v2.1 d46 | HP>=7 | 435 | 47.8 | 6.0 | 21.4 | 24.8 |
 | HG008T PacBio INDEL | HPRC v2.1 d46 | STR | 65 | 87.7 | 0.0 | 10.8 | 1.5 |
-| HG008T PacBio INDEL | HPRC v2.1 d46 | other | 87 | 46.0 | 3.4 | 2.3 | 48.3 |
+| HG008T PacBio INDEL | HPRC v2.1 d46 | other | 87 | 46.0 | 3.4 | 3.4 | 47.1 |
 | HG008T ONT INDEL | GRCh38-only | HP>=7 | 435 | 46.9 | 5.1 | 27.4 | 20.7 |
-| HG008T ONT INDEL | GRCh38-only | STR | 65 | 24.6 | 3.1 | 60.0 | 12.3 |
+| HG008T ONT INDEL | GRCh38-only | STR | 65 | 24.6 | 3.1 | 63.1 | 9.2 |
 | HG008T ONT INDEL | GRCh38-only | other | 87 | 25.3 | 5.7 | 20.7 | 48.3 |
 | HG008T ONT INDEL | HPRC v1.1 d9 | HP>=7 | 435 | 52.4 | 5.3 | 21.1 | 21.1 |
 | HG008T ONT INDEL | HPRC v1.1 d9 | STR | 65 | 83.1 | 1.5 | 12.3 | 3.1 |
@@ -577,9 +577,9 @@ HP>=7: homopolymer tract >= 7 bp; STR: unit 2-6, >= 3 units; other: the rest (ca
 | HG008T SNV | GRCh38-only | all | 2091 (100.0 %) | 2.1 | 10.9 | 5.2 | 81.8 |
 | HG008T SNV | HPRC v1.1 d9 | all | 2091 (100.0 %) | 5.2 | 9.0 | 3.0 | 82.8 |
 | HG008T SNV | HPRC v2.1 d46 | all | 2091 (100.0 %) | 4.6 | 6.8 | 3.7 | 84.9 |
-| HG008T INDEL | GRCh38-only | all | 1761 (100.0 %) | 25.4 | 6.9 | 42.3 | 25.4 |
+| HG008T INDEL | GRCh38-only | all | 1761 (100.0 %) | 25.4 | 6.9 | 42.7 | 25.0 |
 | HG008T INDEL | HPRC v1.1 d9 | all | 1761 (100.0 %) | 56.0 | 4.3 | 15.6 | 24.1 |
-| HG008T INDEL | HPRC v2.1 d46 | all | 1761 (100.0 %) | 55.6 | 4.8 | 15.2 | 24.5 |
+| HG008T INDEL | HPRC v2.1 d46 | all | 1761 (100.0 %) | 55.6 | 4.8 | 15.2 | 24.4 |
 
 ### 10a. by variant kind
 
@@ -594,11 +594,11 @@ HP>=7: homopolymer tract >= 7 bp; STR: unit 2-6, >= 3 units; other: the rest (ca
 | HG008T SNV | GRCh38-only | SNV | 2091 (100.0 %) | 2.1 | 10.9 | 5.2 | 81.8 |
 | HG008T SNV | HPRC v1.1 d9 | SNV | 2091 (100.0 %) | 5.2 | 9.0 | 3.0 | 82.8 |
 | HG008T SNV | HPRC v2.1 d46 | SNV | 2091 (100.0 %) | 4.6 | 6.8 | 3.7 | 84.9 |
-| HG008T INDEL | GRCh38-only | INS | 1104 (62.7 %) | 28.1 | 6.6 | 40.9 | 24.4 |
+| HG008T INDEL | GRCh38-only | INS | 1104 (62.7 %) | 28.1 | 6.6 | 41.6 | 23.7 |
 | HG008T INDEL | GRCh38-only | DEL | 657 (37.3 %) | 21.0 | 7.3 | 44.6 | 27.1 |
 | HG008T INDEL | HPRC v1.1 d9 | INS | 1104 (62.7 %) | 62.3 | 2.6 | 13.3 | 21.7 |
 | HG008T INDEL | HPRC v1.1 d9 | DEL | 657 (37.3 %) | 45.5 | 7.0 | 19.5 | 28.0 |
-| HG008T INDEL | HPRC v2.1 d46 | INS | 1104 (62.7 %) | 60.7 | 3.9 | 13.7 | 21.7 |
+| HG008T INDEL | HPRC v2.1 d46 | INS | 1104 (62.7 %) | 60.7 | 3.9 | 13.8 | 21.6 |
 | HG008T INDEL | HPRC v2.1 d46 | DEL | 657 (37.3 %) | 47.0 | 6.2 | 17.7 | 29.1 |
 
 ### 10b. by truth VAF bin (sources as in section 6)
@@ -637,9 +637,9 @@ HP>=7: homopolymer tract >= 7 bp; STR: unit 2-6, >= 3 units; other: the rest (ca
 | HG008T SNV | HPRC v2.1 d46 | >0.4 | 1812 (86.7 %) | 2.3 | 6.2 | 3.7 | 87.8 |
 | HG008T SNV | HPRC v2.1 d46 | unknown | 3 (0.1 %) | 100.0 | 0.0 | 0.0 | 0.0 |
 | HG008T INDEL | GRCh38-only | 0-0.08 | 62 (3.5 %) | 100.0 | 0.0 | 0.0 | 0.0 |
-| HG008T INDEL | GRCh38-only | 0.08-0.2 | 340 (19.3 %) | 55.9 | 4.4 | 31.2 | 8.5 |
-| HG008T INDEL | GRCh38-only | 0.2-0.4 | 641 (36.4 %) | 22.0 | 3.9 | 49.9 | 24.2 |
-| HG008T INDEL | GRCh38-only | >0.4 | 679 (38.6 %) | 2.4 | 11.9 | 47.0 | 38.7 |
+| HG008T INDEL | GRCh38-only | 0.08-0.2 | 340 (19.3 %) | 55.9 | 4.4 | 31.8 | 7.9 |
+| HG008T INDEL | GRCh38-only | 0.2-0.4 | 641 (36.4 %) | 22.0 | 3.9 | 50.5 | 23.6 |
+| HG008T INDEL | GRCh38-only | >0.4 | 679 (38.6 %) | 2.4 | 11.9 | 47.1 | 38.6 |
 | HG008T INDEL | GRCh38-only | unknown | 39 (2.2 %) | 100.0 | 0.0 | 0.0 | 0.0 |
 | HG008T INDEL | HPRC v1.1 d9 | 0-0.08 | 74 (4.2 %) | 98.6 | 0.0 | 1.4 | 0.0 |
 | HG008T INDEL | HPRC v1.1 d9 | 0.08-0.2 | 403 (22.9 %) | 71.0 | 10.4 | 14.9 | 3.7 |
@@ -648,7 +648,7 @@ HP>=7: homopolymer tract >= 7 bp; STR: unit 2-6, >= 3 units; other: the rest (ca
 | HG008T INDEL | HPRC v1.1 d9 | unknown | 44 (2.5 %) | 100.0 | 0.0 | 0.0 | 0.0 |
 | HG008T INDEL | HPRC v2.1 d46 | 0-0.08 | 55 (3.1 %) | 100.0 | 0.0 | 0.0 | 0.0 |
 | HG008T INDEL | HPRC v2.1 d46 | 0.08-0.2 | 397 (22.5 %) | 76.8 | 10.1 | 9.8 | 3.3 |
-| HG008T INDEL | HPRC v2.1 d46 | 0.2-0.4 | 636 (36.1 %) | 53.8 | 4.9 | 19.7 | 21.7 |
+| HG008T INDEL | HPRC v2.1 d46 | 0.2-0.4 | 636 (36.1 %) | 53.8 | 4.9 | 19.8 | 21.5 |
 | HG008T INDEL | HPRC v2.1 d46 | >0.4 | 629 (35.7 %) | 37.0 | 2.1 | 16.4 | 44.5 |
 | HG008T INDEL | HPRC v2.1 d46 | unknown | 44 (2.5 %) | 100.0 | 0.0 | 0.0 | 0.0 |
 
@@ -695,14 +695,14 @@ HP>=7: homopolymer tract >= 7 bp; STR: unit 2-6, >= 3 units; other: the rest (ca
 | HG008T SNV | HPRC v2.1 d46 | STR | 147 (7.0 %) | 23.1 | 10.2 | 8.2 | 58.5 |
 | HG008T SNV | HPRC v2.1 d46 | other | 1842 (88.1 %) | 1.3 | 5.3 | 2.9 | 90.4 |
 | HG008T INDEL | GRCh38-only | HP>=7 | 1305 (74.1 %) | 25.0 | 4.7 | 45.4 | 24.9 |
-| HG008T INDEL | GRCh38-only | STR | 195 (11.1 %) | 30.8 | 7.7 | 52.8 | 8.7 |
-| HG008T INDEL | GRCh38-only | other | 261 (14.8 %) | 23.8 | 17.2 | 18.8 | 40.2 |
+| HG008T INDEL | GRCh38-only | STR | 195 (11.1 %) | 30.8 | 7.7 | 54.9 | 6.7 |
+| HG008T INDEL | GRCh38-only | other | 261 (14.8 %) | 23.8 | 17.2 | 19.9 | 39.1 |
 | HG008T INDEL | HPRC v1.1 d9 | HP>=7 | 1305 (74.1 %) | 52.9 | 4.4 | 19.5 | 23.2 |
 | HG008T INDEL | HPRC v1.1 d9 | STR | 195 (11.1 %) | 85.6 | 3.6 | 8.7 | 2.1 |
 | HG008T INDEL | HPRC v1.1 d9 | other | 261 (14.8 %) | 49.8 | 3.8 | 1.5 | 44.8 |
 | HG008T INDEL | HPRC v2.1 d46 | HP>=7 | 1305 (74.1 %) | 52.7 | 5.4 | 18.5 | 23.4 |
 | HG008T INDEL | HPRC v2.1 d46 | STR | 195 (11.1 %) | 86.2 | 3.6 | 9.2 | 1.0 |
-| HG008T INDEL | HPRC v2.1 d46 | other | 261 (14.8 %) | 47.1 | 2.7 | 2.7 | 47.5 |
+| HG008T INDEL | HPRC v2.1 d46 | other | 261 (14.8 %) | 47.1 | 2.7 | 3.1 | 47.1 |
 
 ### 10e. stage 1 reasons (n (% of all truth n)), PoN tags and the funnel of the untagged truth
 
@@ -715,9 +715,9 @@ HP>=7: homopolymer tract >= 7 bp; STR: unit 2-6, >= 3 units; other: the rest (ca
 | HG008T SNV | GRCh38-only | 43 (2.1 %) | 4 (0.2 %) | 16 (0.8 %) | 0 (0.0 %) | 23 (1.1 %) | 0 (0.0 %) | 0 (0.0 %) | 0 | 24 / 43 | 180 / 2091 (8.6 %) | 1911 | 1.0 | 9.5 | 0.0 | 89.5 |
 | HG008T SNV | HPRC v1.1 d9 | 108 (5.2 %) | 2 (0.1 %) | 13 (0.6 %) | 35 (1.7 %) | 58 (2.8 %) | 0 (0.0 %) | 0 (0.0 %) | 4 | 70 / 108 | 180 / 2091 (8.6 %) | 1911 | 2.0 | 7.4 | 0.0 | 90.6 |
 | HG008T SNV | HPRC v2.1 d46 | 97 (4.6 %) | 4 (0.2 %) | 10 (0.5 %) | 30 (1.4 %) | 53 (2.5 %) | 0 (0.0 %) | 0 (0.0 %) | 3 | 65 / 97 | 180 / 2091 (8.6 %) | 1911 | 1.7 | 5.4 | 0.0 | 92.9 |
-| HG008T INDEL | GRCh38-only | 448 (25.4 %) | 62 (3.5 %) | 66 (3.7 %) | 0 (0.0 %) | 61 (3.5 %) | 259 (14.7 %) | 0 (0.0 %) | 104 | 331 / 448 | 1137 / 1761 (64.6 %) | 624 | 18.8 | 9.6 | 0.0 | 71.6 |
-| HG008T INDEL | HPRC v1.1 d9 | 987 (56.0 %) | 73 (4.1 %) | 158 (9.0 %) | 275 (15.6 %) | 417 (23.7 %) | 64 (3.6 %) | 0 (0.0 %) | 254 | 815 / 987 | 1137 / 1761 (64.6 %) | 624 | 27.6 | 4.5 | 0.0 | 67.9 |
-| HG008T INDEL | HPRC v2.1 d46 | 979 (55.6 %) | 55 (3.1 %) | 124 (7.0 %) | 249 (14.1 %) | 465 (26.4 %) | 86 (4.9 %) | 0 (0.0 %) | 337 | 806 / 979 | 1137 / 1761 (64.6 %) | 624 | 27.7 | 3.2 | 0.0 | 69.1 |
+| HG008T INDEL | GRCh38-only | 448 (25.4 %) | 62 (3.5 %) | 66 (3.7 %) | 0 (0.0 %) | 61 (3.5 %) | 259 (14.7 %) | 0 (0.0 %) | 104 | 339 / 448 | 1152 / 1761 (65.4 %) | 609 | 17.9 | 9.9 | 0.0 | 72.2 |
+| HG008T INDEL | HPRC v1.1 d9 | 987 (56.0 %) | 73 (4.1 %) | 158 (9.0 %) | 275 (15.6 %) | 417 (23.7 %) | 64 (3.6 %) | 0 (0.0 %) | 254 | 829 / 987 | 1152 / 1761 (65.4 %) | 609 | 25.9 | 4.4 | 0.0 | 69.6 |
+| HG008T INDEL | HPRC v2.1 d46 | 979 (55.6 %) | 55 (3.1 %) | 124 (7.0 %) | 249 (14.1 %) | 465 (26.4 %) | 86 (4.9 %) | 0 (0.0 %) | 337 | 819 / 979 | 1152 / 1761 (65.4 %) | 609 | 26.3 | 3.1 | 0.0 | 70.6 |
 
 ## 11. Invariants (all call sets)
 
@@ -728,4 +728,4 @@ HP>=7: homopolymer tract >= 7 bp; STR: unit 2-6, >= 3 units; other: the rest (ca
 - Stage 3 / 4 records without an exact tensor (rtg matched another tensor's call), per call set: {'HG008_ONT_INDEL_7fc7396__vcf_chr1': (2, 0), 'HG008_ONT_INDEL_d46_7fc7396__vcf_chr1': (1, 0)}.
 - Stage-3 records whose exact tensor's call is not PoN-tagged (the match came from another call): {'HG008_ONT_INDEL_7fc7396__vcf_chr1': 2, 'HG008_ONT_INDEL_d46_7fc7396__vcf_chr1': 1}.
 
-All 32 call sets reproduce rtg exactly: True. Runtime 30 s.
+All 32 call sets reproduce rtg exactly: True. Runtime 196 s.

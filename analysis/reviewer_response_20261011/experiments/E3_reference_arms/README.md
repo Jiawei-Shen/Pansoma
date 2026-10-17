@@ -1,5 +1,8 @@
 # E3: reference-level ablation (GRCh38-only vs HPRC v1.1 d9 vs HPRC v2.1 d46)
 
+> **2026-10-16:** the INDEL rows here come from the RIS benchmark summary and use the earlier INDEL PoN rule (HP >= 7: 0.01, else 1e-3). The local re-scoring with the adopted rule (HP >= 8: 0.01, else 1e-4) is in E3b `tables.md`, E16 and E17a; the COLO829T v1.1 single-set INDEL runs exist only on RIS and are not re-scored.
+
+
 Reviewer points: **R3.1** (reference ablation), **R1.1** (is the method pangenome-native), **R1.2** (graph size and
 composition), **R2.5** (what drives the precision), **R3.2** (what the graph removes).
 

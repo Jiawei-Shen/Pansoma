@@ -4,20 +4,20 @@ curve = any score (the ceiling), PASS = at the run's recall-0.9 threshold. "pend
 
 | sample | platform | set | n | not PoN-tagged | linear TP curve / PASS | d9 TP curve / PASS | d46 TP curve / PASS |
 |---|---|---|---:|---:|---|---|---|
-| HG008T | Illumina | all truth INDEL | 588 | 209 | 167 / 154 | 151 / 140 | 151 / 141 |
-| HG008T | Illumina | lost on d9 | 250 | 27 | 26 / 23 | 0 / 0 | 3 / 2 |
+| HG008T | Illumina | all truth INDEL | 588 | 204 | 165 / 152 | 151 / 140 | 150 / 141 |
+| HG008T | Illumina | lost on d9 | 250 | 25 | 24 / 21 | 0 / 0 | 2 / 2 |
 | HG008T | Illumina | absorbed on d9 | 114 | 0 | 0 / 0 | 0 / 0 | 0 / 0 |
-| HG008T | Illumina | lost on d46 | 235 | 25 | 24 / 20 | 2 / 1 | 0 / 0 |
+| HG008T | Illumina | lost on d46 | 235 | 24 | 23 / 19 | 2 / 1 | 0 / 0 |
 | HG008T | Illumina | absorbed on d46 | 93 | 2 | 2 / 2 | 0 / 0 | 0 / 0 |
-| HG008T | PacBio | all truth INDEL | 588 | 209 | 177 / 153 | 152 / 150 | 152 / 151 |
-| HG008T | PacBio | lost on d9 | 228 | 30 | 29 / 27 | 0 / 0 | 2 / 2 |
+| HG008T | PacBio | all truth INDEL | 588 | 204 | 174 / 150 | 151 / 150 | 151 / 150 |
+| HG008T | PacBio | lost on d9 | 228 | 28 | 27 / 25 | 0 / 0 | 2 / 2 |
 | HG008T | PacBio | absorbed on d9 | 64 | 1 | 1 / 1 | 0 / 0 | 0 / 0 |
-| HG008T | PacBio | lost on d46 | 222 | 31 | 30 / 28 | 3 / 2 | 0 / 0 |
+| HG008T | PacBio | lost on d46 | 222 | 29 | 28 / 26 | 3 / 2 | 0 / 0 |
 | HG008T | PacBio | absorbed on d46 | 66 | 2 | 2 / 2 | 0 / 0 | 0 / 0 |
-| HG008T | ONT | all truth INDEL | 588 | 209 | 140 / 140 | 140 / 134 | 139 / 139 |
-| HG008T | ONT | lost on d9 | 141 | 18 | 18 / 18 | 0 / 0 | 1 / 1 |
+| HG008T | ONT | all truth INDEL | 588 | 204 | 138 / 138 | 140 / 134 | 139 / 139 |
+| HG008T | ONT | lost on d9 | 141 | 16 | 16 / 16 | 0 / 0 | 1 / 1 |
 | HG008T | ONT | absorbed on d9 | 38 | 1 | 1 / 1 | 0 / 0 | 0 / 0 |
-| HG008T | ONT | lost on d46 | 136 | 20 | 20 / 20 | 3 / 3 | 0 / 0 |
+| HG008T | ONT | lost on d46 | 136 | 18 | 18 / 18 | 3 / 3 | 0 / 0 |
 | HG008T | ONT | absorbed on d46 | 39 | 2 | 2 / 2 | 0 / 0 | 0 / 0 |
 | COLO829T | Illumina | all truth INDEL | 131 | 50 | 32 / 29 | pending | 35 / 32 |
 | COLO829T | Illumina | lost on d9 | 55 | 11 | 6 / 4 | pending | 0 / 0 |
