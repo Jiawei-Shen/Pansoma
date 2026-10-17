@@ -6,13 +6,15 @@
 #       COLO829T_Illumina,COLO829T_Illumina_P75,COLO829T_Illumina_P50,COLO829T_Illumina_P25
 # GPUS (default 1; DDP with the recipe's --batch-size per GPU), SLOTS / MEM (default 7 / 192), QUEUE / SELECT, WAIT (an
 # LSF dependency of the GPU job), VAL_WORKERS (default 6, per rank): as in snv_pipeline.sh. The recipes: recipes.sh.
+# READNORM=1: joint_run.sh --readnorm (BQ normalized per read, tools/readnorm.py).
 set -euo pipefail
 NAME=$1 SETS=$2; shift 2
 HERE=$(cd "$(dirname "$0")" && pwd)
 KIND=${KIND:-SNV}; source "$HERE/recipes.sh"
 "$HERE/submit.sh" ${WAIT:+-w "$WAIT"} -q "${QUEUE:-epigenome}" -s "${SELECT:-gmodel=NVIDIAH10080GBHBM3}" -g "${GPUS:-1}" \
     -n "${SLOTS:-7}" -m "${MEM:-192}" \
-    "pnv2_$NAME" joint_run.sh "$NAME" "$KIND" "$SETS" "${RECIPE[@]}" --read-threads 8 --val-workers "${VAL_WORKERS:-6}" "$@"
+    "pnv2_$NAME" joint_run.sh ${READNORM:+--readnorm} "$NAME" "$KIND" "$SETS" "${RECIPE[@]}" --read-threads 8 \
+    --val-workers "${VAL_WORKERS:-6}" "$@"
 for s in ${SETS//,/ }; do
   "$HERE/submit.sh" -g 0 -n 4 -m 32 -w "done(pnv2_$NAME)" "pnv2_vcf_${NAME}_$s" vcf.sh --set "$s" "$NAME" "$KIND"
 done
