@@ -1,0 +1,1393 @@
+{
+ "matched_d9": [
+  {
+   "set": "HG008T Illumina",
+   "kind": "SNV",
+   "earlier": "HG008_Illumina_SNV_7fc7396_ddp4_b1024",
+   "d9_earlier": null,
+   "d9_matched": {
+    "pass": 0.5851,
+    "best": 0.6073,
+    "p": 0.4516,
+    "r": 0.8307,
+    "fp": 703,
+    "best_tp": 529
+   },
+   "d46": {
+    "pass": 0.5703,
+    "best": 0.6133,
+    "p": 0.4286,
+    "r": 0.8522,
+    "fp": 792,
+    "best_tp": 532
+   }
+  },
+  {
+   "set": "HG008T Illumina",
+   "kind": "INDEL",
+   "earlier": null,
+   "d9_earlier": null,
+   "d9_matched": {
+    "pass": 0.2507,
+    "best": 0.2694,
+    "p": 0.2642,
+    "r": 0.2385,
+    "fp": 390,
+    "best_tp": 125
+   },
+   "d46": {
+    "pass": 0.2534,
+    "best": 0.2564,
+    "p": 0.2681,
+    "r": 0.2402,
+    "fp": 385,
+    "best_tp": 136
+   }
+  },
+  {
+   "set": "HG008T PacBio",
+   "kind": "SNV",
+   "earlier": "HG008_PacBio_SNV_7fc7396",
+   "d9_earlier": {
+    "pass": 0.6211,
+    "best": 0.6409,
+    "p": 0.497,
+    "r": 0.8278,
+    "fp": 584,
+    "best_tp": 556
+   },
+   "d9_matched": {
+    "pass": 0.6075,
+    "best": 0.6306,
+    "p": 0.4793,
+    "r": 0.8293,
+    "fp": 628,
+    "best_tp": 495
+   },
+   "d46": {
+    "pass": 0.605,
+    "best": 0.6224,
+    "p": 0.4729,
+    "r": 0.8393,
+    "fp": 652,
+    "best_tp": 549
+   }
+  },
+  {
+   "set": "HG008T PacBio",
+   "kind": "INDEL",
+   "earlier": null,
+   "d9_earlier": null,
+   "d9_matched": {
+    "pass": 0.0919,
+    "best": 0.2629,
+    "p": 0.056,
+    "r": 0.2555,
+    "fp": 2528,
+    "best_tp": 120
+   },
+   "d46": {
+    "pass": 0.0979,
+    "best": 0.2749,
+    "p": 0.0606,
+    "r": 0.2555,
+    "fp": 2326,
+    "best_tp": 127
+   }
+  },
+  {
+   "set": "HG008T ONT",
+   "kind": "SNV",
+   "earlier": "HG008_ONT_SNV_7fc7396",
+   "d9_earlier": {
+    "pass": 0.5957,
+    "best": 0.6196,
+    "p": 0.4656,
+    "r": 0.8264,
+    "fp": 661,
+    "best_tp": 509
+   },
+   "d9_matched": {
+    "pass": 0.6002,
+    "best": 0.6161,
+    "p": 0.4731,
+    "r": 0.8207,
+    "fp": 637,
+    "best_tp": 504
+   },
+   "d46": {
+    "pass": 0.5749,
+    "best": 0.6038,
+    "p": 0.4319,
+    "r": 0.8594,
+    "fp": 788,
+    "best_tp": 522
+   }
+  },
+  {
+   "set": "HG008T ONT",
+   "kind": "INDEL",
+   "earlier": null,
+   "d9_earlier": null,
+   "d9_matched": {
+    "pass": 0.0151,
+    "best": 0.1435,
+    "p": 0.0078,
+    "r": 0.2283,
+    "fp": 17038,
+    "best_tp": 62
+   },
+   "d46": {
+    "pass": 0.0147,
+    "best": 0.1589,
+    "p": 0.0076,
+    "r": 0.2368,
+    "fp": 18182,
+    "best_tp": 75
+   }
+  },
+  {
+   "set": "COLO829T Illumina",
+   "kind": "SNV",
+   "earlier": "COLO829_Illumina_SNV_h90",
+   "d9_earlier": {
+    "pass": 0.7785,
+    "best": 0.7803,
+    "p": 0.8595,
+    "r": 0.7114,
+    "fp": 284,
+    "best_tp": 1749
+   },
+   "d9_matched": {
+    "pass": 0.5719,
+    "best": 0.6591,
+    "p": 0.4844,
+    "r": 0.6979,
+    "fp": 1815,
+    "best_tp": 1392
+   },
+   "d46": {
+    "pass": 0.7835,
+    "best": 0.7863,
+    "p": 0.8669,
+    "r": 0.7147,
+    "fp": 268,
+    "best_tp": 1794
+   }
+  },
+  {
+   "set": "COLO829T Illumina",
+   "kind": "INDEL",
+   "earlier": "COLO829_Illumina_INDEL_small",
+   "d9_earlier": {
+    "pass": 0.1248,
+    "best": 0.2024,
+    "p": 0.0814,
+    "r": 0.2672,
+    "fp": 395,
+    "best_tp": 25
+   },
+   "d9_matched": {
+    "pass": 0.1045,
+    "best": 0.1605,
+    "p": 0.0645,
+    "r": 0.2748,
+    "fp": 522,
+    "best_tp": 26
+   },
+   "d46": {
+    "pass": 0.117,
+    "best": 0.1681,
+    "p": 0.0769,
+    "r": 0.2443,
+    "fp": 384,
+    "best_tp": 20
+   }
+  },
+  {
+   "set": "COLO829T fiberseq",
+   "kind": "SNV",
+   "earlier": "COLO829_fiberseq_SNV_h90",
+   "d9_earlier": {
+    "pass": 0.7807,
+    "best": 0.7838,
+    "p": 0.8567,
+    "r": 0.7172,
+    "fp": 293,
+    "best_tp": 1778
+   },
+   "d9_matched": {
+    "pass": 0.7523,
+    "best": 0.773,
+    "p": 0.7848,
+    "r": 0.7225,
+    "fp": 484,
+    "best_tp": 1679
+   },
+   "d46": {
+    "pass": 0.7786,
+    "best": 0.783,
+    "p": 0.8657,
+    "r": 0.7073,
+    "fp": 268,
+    "best_tp": 1820
+   }
+  },
+  {
+   "set": "COLO829T fiberseq",
+   "kind": "INDEL",
+   "earlier": "COLO829_fiberseq_INDEL_small",
+   "d9_earlier": {
+    "pass": 0.0165,
+    "best": 0.1244,
+    "p": 0.0085,
+    "r": 0.2443,
+    "fp": 3718,
+    "best_tp": 13
+   },
+   "d9_matched": {
+    "pass": 0.0241,
+    "best": 0.142,
+    "p": 0.0126,
+    "r": 0.2672,
+    "fp": 2737,
+    "best_tp": 24
+   },
+   "d46": {
+    "pass": 0.0211,
+    "best": 0.1372,
+    "p": 0.011,
+    "r": 0.2595,
+    "fp": 3061,
+    "best_tp": 26
+   }
+  },
+  {
+   "set": "COLO829T ONT",
+   "kind": "SNV",
+   "earlier": "COLO829_ONT_SNV_h90",
+   "d9_earlier": {
+    "pass": 0.7058,
+    "best": 0.7165,
+    "p": 0.7268,
+    "r": 0.686,
+    "fp": 630,
+    "best_tp": 1554
+   },
+   "d9_matched": {
+    "pass": 0.7442,
+    "best": 0.745,
+    "p": 0.7933,
+    "r": 0.7008,
+    "fp": 446,
+    "best_tp": 1690
+   },
+   "d46": {
+    "pass": 0.7369,
+    "best": 0.7387,
+    "p": 0.7882,
+    "r": 0.6918,
+    "fp": 454,
+    "best_tp": 1669
+   }
+  },
+  {
+   "set": "COLO829T ONT",
+   "kind": "INDEL",
+   "earlier": "COLO829_ONT_INDEL_small",
+   "d9_earlier": {
+    "pass": 0.0031,
+    "best": 0.0736,
+    "p": 0.0016,
+    "r": 0.2366,
+    "fp": 19788,
+    "best_tp": 6
+   },
+   "d9_matched": {
+    "pass": 0.0031,
+    "best": 0.0949,
+    "p": 0.0016,
+    "r": 0.2443,
+    "fp": 21074,
+    "best_tp": 14
+   },
+   "d46": {
+    "pass": 0.0021,
+    "best": 0.0887,
+    "p": 0.0011,
+    "r": 0.229,
+    "fp": 27862,
+    "best_tp": 11
+   }
+  }
+ ],
+ "no_ch6": [
+  {
+   "set": "HG008T Illumina",
+   "kind": "SNV",
+   "d9_with": {
+    "pass": 0.5851,
+    "best": 0.6073,
+    "p": 0.4516,
+    "r": 0.8307,
+    "fp": 703,
+    "best_tp": 529
+   },
+   "d9_without": {
+    "pass": 0.542,
+    "best": 0.5558,
+    "p": 0.4075,
+    "r": 0.8092,
+    "fp": 820,
+    "best_tp": 548
+   },
+   "d46_with": {
+    "pass": 0.5703,
+    "best": 0.6133,
+    "p": 0.4286,
+    "r": 0.8522,
+    "fp": 792,
+    "best_tp": 532
+   },
+   "d46_without": {
+    "pass": 0.5278,
+    "best": 0.5413,
+    "p": 0.398,
+    "r": 0.7834,
+    "fp": 826,
+    "best_tp": 469
+   }
+  },
+  {
+   "set": "HG008T PacBio",
+   "kind": "SNV",
+   "d9_with": {
+    "pass": 0.6211,
+    "best": 0.6409,
+    "p": 0.497,
+    "r": 0.8278,
+    "fp": 584,
+    "best_tp": 556
+   },
+   "d9_without": {
+    "pass": 0.5804,
+    "best": 0.5885,
+    "p": 0.4561,
+    "r": 0.7977,
+    "fp": 663,
+    "best_tp": 532
+   },
+   "d46_with": {
+    "pass": 0.605,
+    "best": 0.6224,
+    "p": 0.4729,
+    "r": 0.8393,
+    "fp": 652,
+    "best_tp": 549
+   },
+   "d46_without": {
+    "pass": 0.5939,
+    "best": 0.6001,
+    "p": 0.4657,
+    "r": 0.8192,
+    "fp": 655,
+    "best_tp": 517
+   }
+  },
+  {
+   "set": "HG008T ONT",
+   "kind": "SNV",
+   "d9_with": {
+    "pass": 0.5957,
+    "best": 0.6196,
+    "p": 0.4656,
+    "r": 0.8264,
+    "fp": 661,
+    "best_tp": 509
+   },
+   "d9_without": {
+    "pass": 0.5622,
+    "best": 0.6014,
+    "p": 0.4241,
+    "r": 0.8336,
+    "fp": 789,
+    "best_tp": 513
+   },
+   "d46_with": {
+    "pass": 0.5749,
+    "best": 0.6038,
+    "p": 0.4319,
+    "r": 0.8594,
+    "fp": 788,
+    "best_tp": 522
+   },
+   "d46_without": {
+    "pass": 0.5837,
+    "best": 0.6012,
+    "p": 0.447,
+    "r": 0.8407,
+    "fp": 725,
+    "best_tp": 511
+   }
+  },
+  {
+   "set": "COLO829T Illumina",
+   "kind": "SNV",
+   "d9_with": {
+    "pass": 0.7785,
+    "best": 0.7803,
+    "p": 0.8595,
+    "r": 0.7114,
+    "fp": 284,
+    "best_tp": 1749
+   },
+   "d9_without": {
+    "pass": 0.7599,
+    "best": 0.7638,
+    "p": 0.8497,
+    "r": 0.6873,
+    "fp": 297,
+    "best_tp": 1722
+   },
+   "d46_with": {
+    "pass": 0.7835,
+    "best": 0.7863,
+    "p": 0.8669,
+    "r": 0.7147,
+    "fp": 268,
+    "best_tp": 1794
+   },
+   "d46_without": {
+    "pass": 0.472,
+    "best": 0.5885,
+    "p": 0.3619,
+    "r": 0.6783,
+    "fp": 2921,
+    "best_tp": 1289
+   }
+  },
+  {
+   "set": "COLO829T fiberseq",
+   "kind": "SNV",
+   "d9_with": {
+    "pass": 0.7807,
+    "best": 0.7838,
+    "p": 0.8567,
+    "r": 0.7172,
+    "fp": 293,
+    "best_tp": 1778
+   },
+   "d9_without": {
+    "pass": 0.7748,
+    "best": 0.7749,
+    "p": 0.8459,
+    "r": 0.7147,
+    "fp": 318,
+    "best_tp": 1742
+   },
+   "d46_with": {
+    "pass": 0.7786,
+    "best": 0.783,
+    "p": 0.8657,
+    "r": 0.7073,
+    "fp": 268,
+    "best_tp": 1820
+   },
+   "d46_without": {
+    "pass": 0.7715,
+    "best": 0.7795,
+    "p": 0.8833,
+    "r": 0.6848,
+    "fp": 221,
+    "best_tp": 1785
+   }
+  },
+  {
+   "set": "COLO829T ONT",
+   "kind": "SNV",
+   "d9_with": {
+    "pass": 0.7058,
+    "best": 0.7165,
+    "p": 0.7268,
+    "r": 0.686,
+    "fp": 630,
+    "best_tp": 1554
+   },
+   "d9_without": {
+    "pass": 0.6933,
+    "best": 0.6959,
+    "p": 0.7131,
+    "r": 0.6746,
+    "fp": 663,
+    "best_tp": 1667
+   },
+   "d46_with": {
+    "pass": 0.7369,
+    "best": 0.7387,
+    "p": 0.7882,
+    "r": 0.6918,
+    "fp": 454,
+    "best_tp": 1669
+   },
+   "d46_without": {
+    "pass": 0.6752,
+    "best": 0.6771,
+    "p": 0.7033,
+    "r": 0.6492,
+    "fp": 669,
+    "best_tp": 1541
+   }
+  },
+  {
+   "set": "HG008T Illumina",
+   "kind": "INDEL",
+   "d9_with": {
+    "pass": 0.2507,
+    "best": 0.2694,
+    "p": 0.2642,
+    "r": 0.2385,
+    "fp": 390,
+    "best_tp": 125
+   },
+   "d9_without": {
+    "pass": 0.2249,
+    "best": 0.2592,
+    "p": 0.2114,
+    "r": 0.2402,
+    "fp": 526,
+    "best_tp": 116
+   },
+   "d46_with": {
+    "pass": 0.2534,
+    "best": 0.2564,
+    "p": 0.2681,
+    "r": 0.2402,
+    "fp": 385,
+    "best_tp": 136
+   },
+   "d46_without": {
+    "pass": 0.2231,
+    "best": 0.252,
+    "p": 0.207,
+    "r": 0.2419,
+    "fp": 544,
+    "best_tp": 123
+   }
+  },
+  {
+   "set": "HG008T PacBio",
+   "kind": "INDEL",
+   "d9_with": {
+    "pass": 0.0919,
+    "best": 0.2629,
+    "p": 0.056,
+    "r": 0.2555,
+    "fp": 2528,
+    "best_tp": 120
+   },
+   "d9_without": {
+    "pass": 0.1082,
+    "best": 0.2292,
+    "p": 0.0688,
+    "r": 0.2538,
+    "fp": 2018,
+    "best_tp": 110
+   },
+   "d46_with": {
+    "pass": 0.0979,
+    "best": 0.2749,
+    "p": 0.0606,
+    "r": 0.2555,
+    "fp": 2326,
+    "best_tp": 127
+   },
+   "d46_without": {
+    "pass": 0.1051,
+    "best": 0.2451,
+    "p": 0.0665,
+    "r": 0.2504,
+    "fp": 2063,
+    "best_tp": 124
+   }
+  },
+  {
+   "set": "HG008T ONT",
+   "kind": "INDEL",
+   "d9_with": {
+    "pass": 0.0151,
+    "best": 0.1435,
+    "p": 0.0078,
+    "r": 0.2283,
+    "fp": 17038,
+    "best_tp": 62
+   },
+   "d9_without": {
+    "pass": 0.0133,
+    "best": 0.1326,
+    "p": 0.0069,
+    "r": 0.2436,
+    "fp": 20720,
+    "best_tp": 57
+   },
+   "d46_with": {
+    "pass": 0.0147,
+    "best": 0.1589,
+    "p": 0.0076,
+    "r": 0.2368,
+    "fp": 18182,
+    "best_tp": 75
+   },
+   "d46_without": {
+    "pass": 0.0143,
+    "best": 0.1581,
+    "p": 0.0074,
+    "r": 0.2351,
+    "fp": 18564,
+    "best_tp": 83
+   }
+  },
+  {
+   "set": "COLO829T Illumina",
+   "kind": "INDEL",
+   "d9_with": {
+    "pass": 0.1045,
+    "best": 0.1605,
+    "p": 0.0645,
+    "r": 0.2748,
+    "fp": 522,
+    "best_tp": 26
+   },
+   "d9_without": {
+    "pass": 0.0959,
+    "best": 0.1722,
+    "p": 0.0592,
+    "r": 0.2519,
+    "fp": 524,
+    "best_tp": 18
+   },
+   "d46_with": {
+    "pass": 0.117,
+    "best": 0.1681,
+    "p": 0.0769,
+    "r": 0.2443,
+    "fp": 384,
+    "best_tp": 20
+   },
+   "d46_without": {
+    "pass": 0.1119,
+    "best": 0.1784,
+    "p": 0.0726,
+    "r": 0.2443,
+    "fp": 409,
+    "best_tp": 19
+   }
+  },
+  {
+   "set": "COLO829T fiberseq",
+   "kind": "INDEL",
+   "d9_with": {
+    "pass": 0.0241,
+    "best": 0.142,
+    "p": 0.0126,
+    "r": 0.2672,
+    "fp": 2737,
+    "best_tp": 24
+   },
+   "d9_without": {
+    "pass": 0.0156,
+    "best": 0.113,
+    "p": 0.0081,
+    "r": 0.229,
+    "fp": 3685,
+    "best_tp": 13
+   },
+   "d46_with": {
+    "pass": 0.0211,
+    "best": 0.1372,
+    "p": 0.011,
+    "r": 0.2595,
+    "fp": 3061,
+    "best_tp": 26
+   },
+   "d46_without": {
+    "pass": 0.0172,
+    "best": 0.086,
+    "p": 0.0089,
+    "r": 0.2595,
+    "fp": 3786,
+    "best_tp": 15
+   }
+  },
+  {
+   "set": "COLO829T ONT",
+   "kind": "INDEL",
+   "d9_with": {
+    "pass": 0.0031,
+    "best": 0.0949,
+    "p": 0.0016,
+    "r": 0.2443,
+    "fp": 21074,
+    "best_tp": 14
+   },
+   "d9_without": {
+    "pass": 0.0019,
+    "best": 0.0815,
+    "p": 0.001,
+    "r": 0.2366,
+    "fp": 31926,
+    "best_tp": 11
+   },
+   "d46_with": {
+    "pass": 0.0021,
+    "best": 0.0887,
+    "p": 0.0011,
+    "r": 0.229,
+    "fp": 27862,
+    "best_tp": 11
+   },
+   "d46_without": {
+    "pass": 0.0022,
+    "best": 0.1018,
+    "p": 0.0011,
+    "r": 0.2366,
+    "fp": 27477,
+    "best_tp": 14
+   }
+  }
+ ],
+ "norm_dataset": [
+  {
+   "set": "HG008T Illumina",
+   "kind": "SNV",
+   "train": {
+    "pass": 0.5703,
+    "best": 0.6133,
+    "p": 0.4286,
+    "r": 0.8522,
+    "fp": 792,
+    "best_tp": 532
+   },
+   "dataset": {
+    "pass": 0.5641,
+    "best": 0.6121,
+    "p": 0.4209,
+    "r": 0.8551,
+    "fp": 820,
+    "best_tp": 527
+   }
+  },
+  {
+   "set": "HG008T PacBio",
+   "kind": "SNV",
+   "train": {
+    "pass": 0.605,
+    "best": 0.6224,
+    "p": 0.4729,
+    "r": 0.8393,
+    "fp": 652,
+    "best_tp": 549
+   },
+   "dataset": {
+    "pass": 0.6044,
+    "best": 0.6091,
+    "p": 0.4736,
+    "r": 0.835,
+    "fp": 647,
+    "best_tp": 561
+   }
+  },
+  {
+   "set": "HG008T ONT",
+   "kind": "SNV",
+   "train": {
+    "pass": 0.5749,
+    "best": 0.6038,
+    "p": 0.4319,
+    "r": 0.8594,
+    "fp": 788,
+    "best_tp": 522
+   },
+   "dataset": {
+    "pass": 0.5482,
+    "best": 0.5612,
+    "p": 0.4041,
+    "r": 0.8522,
+    "fp": 876,
+    "best_tp": 541
+   }
+  },
+  {
+   "set": "COLO829T Illumina",
+   "kind": "SNV",
+   "train": {
+    "pass": 0.7835,
+    "best": 0.7863,
+    "p": 0.8669,
+    "r": 0.7147,
+    "fp": 268,
+    "best_tp": 1794
+   },
+   "dataset": {
+    "pass": 0.7825,
+    "best": 0.7853,
+    "p": 0.864,
+    "r": 0.7151,
+    "fp": 275,
+    "best_tp": 1790
+   }
+  },
+  {
+   "set": "COLO829T fiberseq",
+   "kind": "SNV",
+   "train": {
+    "pass": 0.7786,
+    "best": 0.783,
+    "p": 0.8657,
+    "r": 0.7073,
+    "fp": 268,
+    "best_tp": 1820
+   },
+   "dataset": {
+    "pass": 0.7788,
+    "best": 0.7824,
+    "p": 0.8555,
+    "r": 0.7147,
+    "fp": 295,
+    "best_tp": 1807
+   }
+  },
+  {
+   "set": "COLO829T ONT",
+   "kind": "SNV",
+   "train": {
+    "pass": 0.7369,
+    "best": 0.7387,
+    "p": 0.7882,
+    "r": 0.6918,
+    "fp": 454,
+    "best_tp": 1669
+   },
+   "dataset": {
+    "pass": 0.5199,
+    "best": 0.5522,
+    "p": 0.4024,
+    "r": 0.7343,
+    "fp": 2664,
+    "best_tp": 1482
+   }
+  },
+  {
+   "set": "HG008T Illumina",
+   "kind": "INDEL",
+   "train": {
+    "pass": 0.2534,
+    "best": 0.2564,
+    "p": 0.2681,
+    "r": 0.2402,
+    "fp": 385,
+    "best_tp": 136
+   },
+   "dataset": {
+    "pass": 0.2532,
+    "best": 0.2564,
+    "p": 0.272,
+    "r": 0.2368,
+    "fp": 372,
+    "best_tp": 136
+   }
+  },
+  {
+   "set": "COLO829T Illumina",
+   "kind": "INDEL",
+   "train": {
+    "pass": 0.117,
+    "best": 0.1681,
+    "p": 0.0769,
+    "r": 0.2443,
+    "fp": 384,
+    "best_tp": 20
+   },
+   "dataset": {
+    "pass": 0.1162,
+    "best": 0.1717,
+    "p": 0.0762,
+    "r": 0.2443,
+    "fp": 388,
+    "best_tp": 20
+   }
+  }
+ ],
+ "seeds": [
+  {
+   "set": "HG008T Illumina",
+   "arm": "linear",
+   "scores": [
+    {
+     "pass": 0.4692,
+     "best": 0.5442,
+     "p": 0.3344,
+     "r": 0.7862,
+     "fp": 1091,
+     "best_tp": 437
+    },
+    {
+     "pass": 0.524,
+     "best": 0.5472,
+     "p": 0.3937,
+     "r": 0.7834,
+     "fp": 841,
+     "best_tp": 426
+    },
+    null
+   ]
+  },
+  {
+   "set": "HG008T Illumina",
+   "arm": "d9",
+   "scores": [
+    {
+     "pass": 0.5851,
+     "best": 0.6073,
+     "p": 0.4516,
+     "r": 0.8307,
+     "fp": 703,
+     "best_tp": 529
+    },
+    {
+     "pass": 0.5874,
+     "best": 0.6125,
+     "p": 0.4579,
+     "r": 0.8192,
+     "fp": 676,
+     "best_tp": 516
+    },
+    null
+   ]
+  },
+  {
+   "set": "HG008T Illumina",
+   "arm": "d46",
+   "scores": [
+    {
+     "pass": 0.5703,
+     "best": 0.6133,
+     "p": 0.4286,
+     "r": 0.8522,
+     "fp": 792,
+     "best_tp": 532
+    },
+    {
+     "pass": 0.5891,
+     "best": 0.6115,
+     "p": 0.4572,
+     "r": 0.8278,
+     "fp": 685,
+     "best_tp": 521
+    },
+    null
+   ]
+  },
+  {
+   "set": "HG008T PacBio",
+   "arm": "linear",
+   "scores": [
+    {
+     "pass": 0.5129,
+     "best": 0.5955,
+     "p": 0.3719,
+     "r": 0.8264,
+     "fp": 973,
+     "best_tp": 502
+    },
+    {
+     "pass": 0.5916,
+     "best": 0.6038,
+     "p": 0.4722,
+     "r": 0.792,
+     "fp": 617,
+     "best_tp": 515
+    },
+    null
+   ]
+  },
+  {
+   "set": "HG008T PacBio",
+   "arm": "d9",
+   "scores": [
+    {
+     "pass": 0.6075,
+     "best": 0.6306,
+     "p": 0.4793,
+     "r": 0.8293,
+     "fp": 628,
+     "best_tp": 495
+    },
+    {
+     "pass": 0.5724,
+     "best": 0.6117,
+     "p": 0.4433,
+     "r": 0.8077,
+     "fp": 707,
+     "best_tp": 501
+    },
+    null
+   ]
+  },
+  {
+   "set": "HG008T PacBio",
+   "arm": "d46",
+   "scores": [
+    {
+     "pass": 0.605,
+     "best": 0.6224,
+     "p": 0.4729,
+     "r": 0.8393,
+     "fp": 652,
+     "best_tp": 549
+    },
+    {
+     "pass": 0.6035,
+     "best": 0.607,
+     "p": 0.4767,
+     "r": 0.8221,
+     "fp": 629,
+     "best_tp": 543
+    },
+    null
+   ]
+  },
+  {
+   "set": "HG008T ONT",
+   "arm": "linear",
+   "scores": [
+    {
+     "pass": 0.5366,
+     "best": 0.5698,
+     "p": 0.3937,
+     "r": 0.8422,
+     "fp": 904,
+     "best_tp": 506
+    },
+    {
+     "pass": 0.5091,
+     "best": 0.5678,
+     "p": 0.3678,
+     "r": 0.8264,
+     "fp": 990,
+     "best_tp": 492
+    },
+    null
+   ]
+  },
+  {
+   "set": "HG008T ONT",
+   "arm": "d9",
+   "scores": [
+    {
+     "pass": 0.6002,
+     "best": 0.6161,
+     "p": 0.4731,
+     "r": 0.8207,
+     "fp": 637,
+     "best_tp": 504
+    },
+    {
+     "pass": 0.5812,
+     "best": 0.6058,
+     "p": 0.4512,
+     "r": 0.8164,
+     "fp": 692,
+     "best_tp": 524
+    },
+    null
+   ]
+  },
+  {
+   "set": "HG008T ONT",
+   "arm": "d46",
+   "scores": [
+    {
+     "pass": 0.5749,
+     "best": 0.6038,
+     "p": 0.4319,
+     "r": 0.8594,
+     "fp": 788,
+     "best_tp": 522
+    },
+    {
+     "pass": 0.5957,
+     "best": 0.6164,
+     "p": 0.4667,
+     "r": 0.8235,
+     "fp": 656,
+     "best_tp": 511
+    },
+    null
+   ]
+  },
+  {
+   "set": "COLO829T Illumina",
+   "arm": "linear",
+   "scores": [
+    {
+     "pass": 0.4679,
+     "best": 0.5542,
+     "p": 0.391,
+     "r": 0.5825,
+     "fp": 2216,
+     "best_tp": 1171
+    },
+    {
+     "pass": 0.386,
+     "best": 0.5235,
+     "p": 0.2886,
+     "r": 0.5825,
+     "fp": 3507,
+     "best_tp": 1082
+    },
+    null
+   ]
+  },
+  {
+   "set": "COLO829T Illumina",
+   "arm": "d9",
+   "scores": [
+    {
+     "pass": 0.5719,
+     "best": 0.6591,
+     "p": 0.4844,
+     "r": 0.6979,
+     "fp": 1815,
+     "best_tp": 1392
+    },
+    {
+     "pass": 0.6259,
+     "best": 0.7087,
+     "p": 0.5625,
+     "r": 0.7053,
+     "fp": 1340,
+     "best_tp": 1496
+    },
+    null
+   ]
+  },
+  {
+   "set": "COLO829T Illumina",
+   "arm": "d46",
+   "scores": [
+    {
+     "pass": 0.7835,
+     "best": 0.7863,
+     "p": 0.8669,
+     "r": 0.7147,
+     "fp": 268,
+     "best_tp": 1794
+    },
+    {
+     "pass": 0.704,
+     "best": 0.7295,
+     "p": 0.7036,
+     "r": 0.7045,
+     "fp": 725,
+     "best_tp": 1579
+    },
+    null
+   ]
+  },
+  {
+   "set": "COLO829T fiberseq",
+   "arm": "linear",
+   "scores": [
+    {
+     "pass": 0.6796,
+     "best": 0.6816,
+     "p": 0.7451,
+     "r": 0.6246,
+     "fp": 522,
+     "best_tp": 1510
+    },
+    {
+     "pass": 0.7004,
+     "best": 0.7061,
+     "p": 0.8411,
+     "r": 0.6001,
+     "fp": 277,
+     "best_tp": 1517
+    },
+    null
+   ]
+  },
+  {
+   "set": "COLO829T fiberseq",
+   "arm": "d9",
+   "scores": [
+    {
+     "pass": 0.7523,
+     "best": 0.773,
+     "p": 0.7848,
+     "r": 0.7225,
+     "fp": 484,
+     "best_tp": 1679
+    },
+    {
+     "pass": 0.7823,
+     "best": 0.7882,
+     "p": 0.8758,
+     "r": 0.7069,
+     "fp": 245,
+     "best_tp": 1803
+    },
+    null
+   ]
+  },
+  {
+   "set": "COLO829T fiberseq",
+   "arm": "d46",
+   "scores": [
+    {
+     "pass": 0.7786,
+     "best": 0.783,
+     "p": 0.8657,
+     "r": 0.7073,
+     "fp": 268,
+     "best_tp": 1820
+    },
+    {
+     "pass": 0.7736,
+     "best": 0.7816,
+     "p": 0.846,
+     "r": 0.7126,
+     "fp": 317,
+     "best_tp": 1840
+    },
+    null
+   ]
+  },
+  {
+   "set": "COLO829T ONT",
+   "arm": "linear",
+   "scores": [
+    {
+     "pass": 0.4183,
+     "best": 0.5107,
+     "p": 0.3401,
+     "r": 0.5432,
+     "fp": 2575,
+     "best_tp": 1114
+    },
+    null,
+    null
+   ]
+  },
+  {
+   "set": "COLO829T ONT",
+   "arm": "d9",
+   "scores": [
+    {
+     "pass": 0.7442,
+     "best": 0.745,
+     "p": 0.7933,
+     "r": 0.7008,
+     "fp": 446,
+     "best_tp": 1690
+    },
+    {
+     "pass": 0.7494,
+     "best": 0.7555,
+     "p": 0.8159,
+     "r": 0.693,
+     "fp": 382,
+     "best_tp": 1760
+    },
+    null
+   ]
+  },
+  {
+   "set": "COLO829T ONT",
+   "arm": "d46",
+   "scores": [
+    {
+     "pass": 0.7369,
+     "best": 0.7387,
+     "p": 0.7882,
+     "r": 0.6918,
+     "fp": 454,
+     "best_tp": 1669
+    },
+    {
+     "pass": 0.7182,
+     "best": 0.7323,
+     "p": 0.7339,
+     "r": 0.7032,
+     "fp": 623,
+     "best_tp": 1596
+    },
+    null
+   ]
+  }
+ ],
+ "e13": [
+  {
+   "run": "HG008_PacBio_SNV_d46_7fc7396",
+   "what": "100 %, 50.4 M",
+   "score": {
+    "pass": 0.605,
+    "best": 0.6224,
+    "p": 0.4729,
+    "r": 0.8393,
+    "fp": 652,
+    "best_tp": 549
+   }
+  },
+  {
+   "run": "HG008_PacBio_SNV_d46_e13_keep10_rep1",
+   "what": "10 %, rep 1",
+   "score": null
+  },
+  {
+   "run": "HG008_PacBio_SNV_d46_e13_keep10_rep2",
+   "what": "10 %, rep 2",
+   "score": null
+  },
+  {
+   "run": "HG008_PacBio_SNV_d46_e13_keep25_rep1",
+   "what": "25 %, rep 1",
+   "score": null
+  },
+  {
+   "run": "HG008_PacBio_SNV_d46_e13_keep25_rep2",
+   "what": "25 %, rep 2",
+   "score": null
+  },
+  {
+   "run": "HG008_PacBio_SNV_d46_e13_keep50_rep1",
+   "what": "50 %, rep 1",
+   "score": null
+  },
+  {
+   "run": "HG008_PacBio_SNV_d46_e13_keep50_rep2",
+   "what": "50 %, rep 2",
+   "score": null
+  },
+  {
+   "run": "HG008_PacBio_SNV_d46_e13_keep75_rep1",
+   "what": "75 %, rep 1",
+   "score": null
+  },
+  {
+   "run": "HG008_PacBio_SNV_d46_e13_keep75_rep2",
+   "what": "75 %, rep 2",
+   "score": null
+  },
+  {
+   "run": "HG008_PacBio_SNV_d46_e13_8p7M",
+   "what": "100 %, 8.7 M",
+   "score": null
+  },
+  {
+   "run": "HG008_PacBio_SNV_d46_e13_199p6M",
+   "what": "100 %, 199.6 M",
+   "score": null
+  }
+ ]
+}

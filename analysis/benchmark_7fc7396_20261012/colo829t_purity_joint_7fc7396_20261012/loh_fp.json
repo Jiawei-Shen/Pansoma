@@ -1,0 +1,1706 @@
+{
+ "Illumina SNV P100": {
+  "run": "COLO829_Illumina_SNV_joint_readnorm_gpu8",
+  "set": "COLO829T_Illumina",
+  "threshold": 0.5497832298278809,
+  "pass_f1": 0.7388,
+  "pass_p": 0.8227,
+  "pass_r": 0.6705,
+  "best_f1": 0.744,
+  "best_p": 0.7899,
+  "best_r": 0.7032,
+  "pon_ceiling": 0.7912,
+  "somatic_af": {
+   "n": 1993,
+   "q1": 0.4965028124235754,
+   "median": 0.9733333333333334,
+   "q3": 1.0
+  },
+  "expected": {
+   "lost": null,
+   "kept": 1.0
+  },
+  "germline_called": {
+   "all": 1556,
+   "after_pon": 160,
+   "unplaced": 0
+  },
+  "by_class": {
+   "lost": {
+    "before_pon": 0,
+    "after_pon": 0
+   },
+   "kept": {
+    "before_pon": 1510,
+    "after_pon": 155
+   },
+   "other": {
+    "before_pon": 46,
+    "after_pon": 5
+   }
+  },
+  "by_af_bin": {
+   "0.0-0.1": {
+    "before_pon": 2,
+    "after_pon": 1
+   },
+   "0.1-0.2": {
+    "before_pon": 2,
+    "after_pon": 0
+   },
+   "0.2-0.3": {
+    "before_pon": 0,
+    "after_pon": 0
+   },
+   "0.3-0.4": {
+    "before_pon": 0,
+    "after_pon": 0
+   },
+   "0.4-0.6": {
+    "before_pon": 2,
+    "after_pon": 0
+   },
+   "0.6-0.8": {
+    "before_pon": 0,
+    "after_pon": 0
+   },
+   "0.8-1.0": {
+    "before_pon": 1550,
+    "after_pon": 159
+   }
+  }
+ },
+ "Illumina SNV P75": {
+  "run": "COLO829_Illumina_SNV_joint_readnorm_gpu8",
+  "set": "COLO829T_Illumina_P75",
+  "threshold": 0.5497832298278809,
+  "pass_f1": 0.7089,
+  "pass_p": 0.7371,
+  "pass_r": 0.6828,
+  "best_f1": 0.7092,
+  "best_p": 0.7377,
+  "best_r": 0.6828,
+  "pon_ceiling": 0.7642,
+  "somatic_af": {
+   "n": 1922,
+   "q1": 0.4073254670599803,
+   "median": 0.6410256410256411,
+   "q3": 0.7468735702302882
+  },
+  "expected": {
+   "lost": 0.125,
+   "kept": 0.875
+  },
+  "germline_called": {
+   "all": 3297,
+   "after_pon": 372,
+   "unplaced": 0
+  },
+  "by_class": {
+   "lost": {
+    "before_pon": 2137,
+    "after_pon": 251
+   },
+   "kept": {
+    "before_pon": 494,
+    "after_pon": 50
+   },
+   "other": {
+    "before_pon": 666,
+    "after_pon": 71
+   }
+  },
+  "by_af_bin": {
+   "0.0-0.1": {
+    "before_pon": 598,
+    "after_pon": 77
+   },
+   "0.1-0.2": {
+    "before_pon": 1644,
+    "after_pon": 188
+   },
+   "0.2-0.3": {
+    "before_pon": 279,
+    "after_pon": 33
+   },
+   "0.3-0.4": {
+    "before_pon": 6,
+    "after_pon": 0
+   },
+   "0.4-0.6": {
+    "before_pon": 2,
+    "after_pon": 0
+   },
+   "0.6-0.8": {
+    "before_pon": 160,
+    "after_pon": 18
+   },
+   "0.8-1.0": {
+    "before_pon": 608,
+    "after_pon": 56
+   }
+  }
+ },
+ "Illumina SNV P50": {
+  "run": "COLO829_Illumina_SNV_joint_readnorm_gpu8",
+  "set": "COLO829T_Illumina_P50",
+  "threshold": 0.5497832298278809,
+  "pass_f1": 0.6778,
+  "pass_p": 0.6823,
+  "pass_r": 0.6734,
+  "best_f1": 0.6836,
+  "best_p": 0.7495,
+  "best_r": 0.6283,
+  "pon_ceiling": 0.7364,
+  "somatic_af": {
+   "n": 1850,
+   "q1": 0.2988795819014891,
+   "median": 0.3879074017666768,
+   "q3": 0.5069906444906445
+  },
+  "expected": {
+   "lost": 0.25,
+   "kept": 0.75
+  },
+  "germline_called": {
+   "all": 4061,
+   "after_pon": 510,
+   "unplaced": 0
+  },
+  "by_class": {
+   "lost": {
+    "before_pon": 1693,
+    "after_pon": 205
+   },
+   "kept": {
+    "before_pon": 912,
+    "after_pon": 87
+   },
+   "other": {
+    "before_pon": 1456,
+    "after_pon": 218
+   }
+  },
+  "by_af_bin": {
+   "0.0-0.1": {
+    "before_pon": 10,
+    "after_pon": 6
+   },
+   "0.1-0.2": {
+    "before_pon": 738,
+    "after_pon": 149
+   },
+   "0.2-0.3": {
+    "before_pon": 1443,
+    "after_pon": 175
+   },
+   "0.3-0.4": {
+    "before_pon": 390,
+    "after_pon": 37
+   },
+   "0.4-0.6": {
+    "before_pon": 54,
+    "after_pon": 4
+   },
+   "0.6-0.8": {
+    "before_pon": 1213,
+    "after_pon": 122
+   },
+   "0.8-1.0": {
+    "before_pon": 213,
+    "after_pon": 17
+   }
+  }
+ },
+ "Illumina SNV P25": {
+  "run": "COLO829_Illumina_SNV_joint_readnorm_gpu8",
+  "set": "COLO829T_Illumina_P25",
+  "threshold": 0.5497832298278809,
+  "pass_f1": 0.6946,
+  "pass_p": 0.7229,
+  "pass_r": 0.6684,
+  "best_f1": 0.7332,
+  "best_p": 0.8541,
+  "best_r": 0.6422,
+  "pon_ceiling": 0.691,
+  "somatic_af": {
+   "n": 1736,
+   "q1": 0.1504424778761062,
+   "median": 0.19083969465648856,
+   "q3": 0.2627118644067797
+  },
+  "expected": {
+   "lost": 0.375,
+   "kept": 0.625
+  },
+  "germline_called": {
+   "all": 2576,
+   "after_pon": 355,
+   "unplaced": 0
+  },
+  "by_class": {
+   "lost": {
+    "before_pon": 883,
+    "after_pon": 112
+   },
+   "kept": {
+    "before_pon": 724,
+    "after_pon": 64
+   },
+   "other": {
+    "before_pon": 969,
+    "after_pon": 179
+   }
+  },
+  "by_af_bin": {
+   "0.0-0.1": {
+    "before_pon": 1,
+    "after_pon": 0
+   },
+   "0.1-0.2": {
+    "before_pon": 50,
+    "after_pon": 35
+   },
+   "0.2-0.3": {
+    "before_pon": 294,
+    "after_pon": 78
+   },
+   "0.3-0.4": {
+    "before_pon": 832,
+    "after_pon": 104
+   },
+   "0.4-0.6": {
+    "before_pon": 627,
+    "after_pon": 68
+   },
+   "0.6-0.8": {
+    "before_pon": 739,
+    "after_pon": 69
+   },
+   "0.8-1.0": {
+    "before_pon": 33,
+    "after_pon": 1
+   }
+  }
+ },
+ "fiberseq SNV P100": {
+  "run": "COLO829_fiberseq_SNV_joint_7fc7396_gpu4",
+  "set": "COLO829T_fiberseq",
+  "threshold": 0.5492464303970337,
+  "pass_f1": 0.7789,
+  "pass_p": 0.8811,
+  "pass_r": 0.6979,
+  "best_f1": 0.7896,
+  "best_p": 0.8447,
+  "best_r": 0.7413,
+  "pon_ceiling": 0.7949,
+  "somatic_af": {
+   "n": 1993,
+   "q1": 0.4931424182576256,
+   "median": 0.9612403100775194,
+   "q3": 0.9879275165176836
+  },
+  "expected": {
+   "lost": null,
+   "kept": 1.0
+  },
+  "germline_called": {
+   "all": 1802,
+   "after_pon": 158,
+   "unplaced": 0
+  },
+  "by_class": {
+   "lost": {
+    "before_pon": 0,
+    "after_pon": 0
+   },
+   "kept": {
+    "before_pon": 1732,
+    "after_pon": 151
+   },
+   "other": {
+    "before_pon": 70,
+    "after_pon": 7
+   }
+  },
+  "by_af_bin": {
+   "0.0-0.1": {
+    "before_pon": 0,
+    "after_pon": 0
+   },
+   "0.1-0.2": {
+    "before_pon": 0,
+    "after_pon": 0
+   },
+   "0.2-0.3": {
+    "before_pon": 0,
+    "after_pon": 0
+   },
+   "0.3-0.4": {
+    "before_pon": 0,
+    "after_pon": 0
+   },
+   "0.4-0.6": {
+    "before_pon": 1,
+    "after_pon": 0
+   },
+   "0.6-0.8": {
+    "before_pon": 7,
+    "after_pon": 0
+   },
+   "0.8-1.0": {
+    "before_pon": 1794,
+    "after_pon": 158
+   }
+  }
+ },
+ "fiberseq SNV P75": {
+  "run": "COLO829_fiberseq_SNV_joint_7fc7396_gpu4",
+  "set": "COLO829T_fiberseq_P75",
+  "threshold": 0.5492464303970337,
+  "pass_f1": 0.6866,
+  "pass_p": 0.7413,
+  "pass_r": 0.6394,
+  "best_f1": 0.7033,
+  "best_p": 0.695,
+  "best_r": 0.7118,
+  "pon_ceiling": 0.7671,
+  "somatic_af": {
+   "n": 1928,
+   "q1": 0.402195742401928,
+   "median": 0.6318272095332671,
+   "q3": 0.742124495967742
+  },
+  "expected": {
+   "lost": 0.125,
+   "kept": 0.875
+  },
+  "germline_called": {
+   "all": 4538,
+   "after_pon": 469,
+   "unplaced": 0
+  },
+  "by_class": {
+   "lost": {
+    "before_pon": 2773,
+    "after_pon": 316
+   },
+   "kept": {
+    "before_pon": 1075,
+    "after_pon": 83
+   },
+   "other": {
+    "before_pon": 690,
+    "after_pon": 70
+   }
+  },
+  "by_af_bin": {
+   "0.0-0.1": {
+    "before_pon": 817,
+    "after_pon": 89
+   },
+   "0.1-0.2": {
+    "before_pon": 2107,
+    "after_pon": 241
+   },
+   "0.2-0.3": {
+    "before_pon": 308,
+    "after_pon": 36
+   },
+   "0.3-0.4": {
+    "before_pon": 10,
+    "after_pon": 2
+   },
+   "0.4-0.6": {
+    "before_pon": 1,
+    "after_pon": 0
+   },
+   "0.6-0.8": {
+    "before_pon": 109,
+    "after_pon": 12
+   },
+   "0.8-1.0": {
+    "before_pon": 1186,
+    "after_pon": 89
+   }
+  }
+ },
+ "fiberseq SNV P50": {
+  "run": "COLO829_fiberseq_SNV_joint_7fc7396_gpu4",
+  "set": "COLO829T_fiberseq_P50",
+  "threshold": 0.5492464303970337,
+  "pass_f1": 0.6649,
+  "pass_p": 0.715,
+  "pass_r": 0.6214,
+  "best_f1": 0.6714,
+  "best_p": 0.692,
+  "best_r": 0.6521,
+  "pon_ceiling": 0.7397,
+  "somatic_af": {
+   "n": 1858,
+   "q1": 0.29131947098845656,
+   "median": 0.38461538461538464,
+   "q3": 0.5109299516908212
+  },
+  "expected": {
+   "lost": 0.25,
+   "kept": 0.75
+  },
+  "germline_called": {
+   "all": 4470,
+   "after_pon": 523,
+   "unplaced": 0
+  },
+  "by_class": {
+   "lost": {
+    "before_pon": 2114,
+    "after_pon": 214
+   },
+   "kept": {
+    "before_pon": 811,
+    "after_pon": 64
+   },
+   "other": {
+    "before_pon": 1545,
+    "after_pon": 245
+   }
+  },
+  "by_af_bin": {
+   "0.0-0.1": {
+    "before_pon": 10,
+    "after_pon": 8
+   },
+   "0.1-0.2": {
+    "before_pon": 997,
+    "after_pon": 173
+   },
+   "0.2-0.3": {
+    "before_pon": 1776,
+    "after_pon": 179
+   },
+   "0.3-0.4": {
+    "before_pon": 466,
+    "after_pon": 64
+   },
+   "0.4-0.6": {
+    "before_pon": 31,
+    "after_pon": 3
+   },
+   "0.6-0.8": {
+    "before_pon": 878,
+    "after_pon": 74
+   },
+   "0.8-1.0": {
+    "before_pon": 312,
+    "after_pon": 22
+   }
+  }
+ },
+ "fiberseq SNV P25": {
+  "run": "COLO829_fiberseq_SNV_joint_7fc7396_gpu4",
+  "set": "COLO829T_fiberseq_P25",
+  "threshold": 0.5492464303970337,
+  "pass_f1": 0.7195,
+  "pass_p": 0.7864,
+  "pass_r": 0.6631,
+  "best_f1": 0.7292,
+  "best_p": 0.8447,
+  "best_r": 0.6414,
+  "pon_ceiling": 0.6881,
+  "somatic_af": {
+   "n": 1726,
+   "q1": 0.15053763440860216,
+   "median": 0.18811881188118812,
+   "q3": 0.26967391304347826
+  },
+  "expected": {
+   "lost": 0.375,
+   "kept": 0.625
+  },
+  "germline_called": {
+   "all": 2480,
+   "after_pon": 350,
+   "unplaced": 0
+  },
+  "by_class": {
+   "lost": {
+    "before_pon": 1110,
+    "after_pon": 108
+   },
+   "kept": {
+    "before_pon": 399,
+    "after_pon": 34
+   },
+   "other": {
+    "before_pon": 971,
+    "after_pon": 208
+   }
+  },
+  "by_af_bin": {
+   "0.0-0.1": {
+    "before_pon": 1,
+    "after_pon": 0
+   },
+   "0.1-0.2": {
+    "before_pon": 39,
+    "after_pon": 36
+   },
+   "0.2-0.3": {
+    "before_pon": 403,
+    "after_pon": 115
+   },
+   "0.3-0.4": {
+    "before_pon": 1107,
+    "after_pon": 118
+   },
+   "0.4-0.6": {
+    "before_pon": 519,
+    "after_pon": 49
+   },
+   "0.6-0.8": {
+    "before_pon": 388,
+    "after_pon": 32
+   },
+   "0.8-1.0": {
+    "before_pon": 23,
+    "after_pon": 0
+   }
+  }
+ },
+ "ONT SNV P100": {
+  "run": "COLO829_ONT_SNV_joint_7fc7396_gpu4",
+  "set": "COLO829T_ONT",
+  "threshold": 0.4997875988483429,
+  "pass_f1": 0.6774,
+  "pass_p": 0.7234,
+  "pass_r": 0.6369,
+  "best_f1": 0.6813,
+  "best_p": 0.7716,
+  "best_r": 0.6099,
+  "pon_ceiling": 0.7822,
+  "somatic_af": {
+   "n": 1984,
+   "q1": 0.45098039215686275,
+   "median": 0.8235294117647058,
+   "q3": 0.9023194643711143
+  },
+  "expected": {
+   "lost": null,
+   "kept": 1.0
+  },
+  "germline_called": {
+   "all": 1396,
+   "after_pon": 140,
+   "unplaced": 0
+  },
+  "by_class": {
+   "lost": {
+    "before_pon": 0,
+    "after_pon": 0
+   },
+   "kept": {
+    "before_pon": 217,
+    "after_pon": 19
+   },
+   "other": {
+    "before_pon": 1179,
+    "after_pon": 121
+   }
+  },
+  "by_af_bin": {
+   "0.0-0.1": {
+    "before_pon": 58,
+    "after_pon": 7
+   },
+   "0.1-0.2": {
+    "before_pon": 55,
+    "after_pon": 5
+   },
+   "0.2-0.3": {
+    "before_pon": 0,
+    "after_pon": 0
+   },
+   "0.3-0.4": {
+    "before_pon": 0,
+    "after_pon": 0
+   },
+   "0.4-0.6": {
+    "before_pon": 12,
+    "after_pon": 1
+   },
+   "0.6-0.8": {
+    "before_pon": 141,
+    "after_pon": 11
+   },
+   "0.8-1.0": {
+    "before_pon": 1130,
+    "after_pon": 116
+   }
+  }
+ },
+ "ONT SNV P75": {
+  "run": "COLO829_ONT_SNV_joint_7fc7396_gpu4",
+  "set": "COLO829T_ONT_P75",
+  "threshold": 0.4997875988483429,
+  "pass_f1": 0.6536,
+  "pass_p": 0.6593,
+  "pass_r": 0.648,
+  "best_f1": 0.6648,
+  "best_p": 0.7152,
+  "best_r": 0.621,
+  "pon_ceiling": 0.7589,
+  "somatic_af": {
+   "n": 1908,
+   "q1": 0.37608797929898846,
+   "median": 0.5771939328277356,
+   "q3": 0.6812788660614747
+  },
+  "expected": {
+   "lost": 0.125,
+   "kept": 0.875
+  },
+  "germline_called": {
+   "all": 3239,
+   "after_pon": 351,
+   "unplaced": 0
+  },
+  "by_class": {
+   "lost": {
+    "before_pon": 1904,
+    "after_pon": 221
+   },
+   "kept": {
+    "before_pon": 303,
+    "after_pon": 22
+   },
+   "other": {
+    "before_pon": 1032,
+    "after_pon": 108
+   }
+  },
+  "by_af_bin": {
+   "0.0-0.1": {
+    "before_pon": 593,
+    "after_pon": 60
+   },
+   "0.1-0.2": {
+    "before_pon": 1401,
+    "after_pon": 172
+   },
+   "0.2-0.3": {
+    "before_pon": 223,
+    "after_pon": 14
+   },
+   "0.3-0.4": {
+    "before_pon": 6,
+    "after_pon": 1
+   },
+   "0.4-0.6": {
+    "before_pon": 33,
+    "after_pon": 4
+   },
+   "0.6-0.8": {
+    "before_pon": 596,
+    "after_pon": 66
+   },
+   "0.8-1.0": {
+    "before_pon": 387,
+    "after_pon": 34
+   }
+  }
+ },
+ "ONT SNV P50": {
+  "run": "COLO829_ONT_SNV_joint_7fc7396_gpu4",
+  "set": "COLO829T_ONT_P50",
+  "threshold": 0.4997875988483429,
+  "pass_f1": 0.639,
+  "pass_p": 0.635,
+  "pass_r": 0.6431,
+  "best_f1": 0.6536,
+  "best_p": 0.7278,
+  "best_r": 0.5931,
+  "pon_ceiling": 0.7262,
+  "somatic_af": {
+   "n": 1825,
+   "q1": 0.2775750202757502,
+   "median": 0.36,
+   "q3": 0.46755151150548957
+  },
+  "expected": {
+   "lost": 0.25,
+   "kept": 0.75
+  },
+  "germline_called": {
+   "all": 4011,
+   "after_pon": 463,
+   "unplaced": 0
+  },
+  "by_class": {
+   "lost": {
+    "before_pon": 1526,
+    "after_pon": 161
+   },
+   "kept": {
+    "before_pon": 439,
+    "after_pon": 33
+   },
+   "other": {
+    "before_pon": 2046,
+    "after_pon": 269
+   }
+  },
+  "by_af_bin": {
+   "0.0-0.1": {
+    "before_pon": 41,
+    "after_pon": 21
+   },
+   "0.1-0.2": {
+    "before_pon": 1311,
+    "after_pon": 170
+   },
+   "0.2-0.3": {
+    "before_pon": 1271,
+    "after_pon": 139
+   },
+   "0.3-0.4": {
+    "before_pon": 211,
+    "after_pon": 22
+   },
+   "0.4-0.6": {
+    "before_pon": 222,
+    "after_pon": 29
+   },
+   "0.6-0.8": {
+    "before_pon": 898,
+    "after_pon": 79
+   },
+   "0.8-1.0": {
+    "before_pon": 57,
+    "after_pon": 3
+   }
+  }
+ },
+ "ONT SNV P25": {
+  "run": "COLO829_ONT_SNV_joint_7fc7396_gpu4",
+  "set": "COLO829T_ONT_P25",
+  "threshold": 0.4997875988483429,
+  "pass_f1": 0.6656,
+  "pass_p": 0.6697,
+  "pass_r": 0.6615,
+  "best_f1": 0.7113,
+  "best_p": 0.8266,
+  "best_r": 0.6242,
+  "pon_ceiling": 0.6893,
+  "somatic_af": {
+   "n": 1724,
+   "q1": 0.14285714285714285,
+   "median": 0.18055555555555555,
+   "q3": 0.24719101123595505
+  },
+  "expected": {
+   "lost": 0.375,
+   "kept": 0.625
+  },
+  "germline_called": {
+   "all": 2594,
+   "after_pon": 337,
+   "unplaced": 0
+  },
+  "by_class": {
+   "lost": {
+    "before_pon": 719,
+    "after_pon": 76
+   },
+   "kept": {
+    "before_pon": 445,
+    "after_pon": 37
+   },
+   "other": {
+    "before_pon": 1430,
+    "after_pon": 224
+   }
+  },
+  "by_af_bin": {
+   "0.0-0.1": {
+    "before_pon": 4,
+    "after_pon": 0
+   },
+   "0.1-0.2": {
+    "before_pon": 112,
+    "after_pon": 60
+   },
+   "0.2-0.3": {
+    "before_pon": 656,
+    "after_pon": 99
+   },
+   "0.3-0.4": {
+    "before_pon": 755,
+    "after_pon": 80
+   },
+   "0.4-0.6": {
+    "before_pon": 737,
+    "after_pon": 79
+   },
+   "0.6-0.8": {
+    "before_pon": 309,
+    "after_pon": 19
+   },
+   "0.8-1.0": {
+    "before_pon": 21,
+    "after_pon": 0
+   }
+  }
+ },
+ "Illumina INDEL P100": {
+  "run": "COLO829_Illumina_INDEL_joint_readnorm",
+  "set": "COLO829T_Illumina",
+  "threshold": 0.07381,
+  "pass_f1": 0.0738,
+  "pass_p": 0.0433,
+  "pass_r": 0.2519,
+  "best_f1": 0.1743,
+  "best_p": 0.1909,
+  "best_r": 0.1603,
+  "pon_ceiling": 0.2519,
+  "somatic_af": {
+   "n": 80,
+   "q1": 0.293245291188569,
+   "median": 0.42106014125704505,
+   "q3": 0.7230910267471958
+  },
+  "expected": {
+   "lost": null,
+   "kept": 1.0
+  },
+  "germline_called": {
+   "all": 573,
+   "after_pon": 56,
+   "unplaced": 0
+  },
+  "by_class": {
+   "lost": {
+    "before_pon": 0,
+    "after_pon": 0
+   },
+   "kept": {
+    "before_pon": 19,
+    "after_pon": 2
+   },
+   "other": {
+    "before_pon": 554,
+    "after_pon": 54
+   }
+  },
+  "by_af_bin": {
+   "0.0-0.1": {
+    "before_pon": 1,
+    "after_pon": 0
+   },
+   "0.1-0.2": {
+    "before_pon": 11,
+    "after_pon": 0
+   },
+   "0.2-0.3": {
+    "before_pon": 12,
+    "after_pon": 1
+   },
+   "0.3-0.4": {
+    "before_pon": 12,
+    "after_pon": 1
+   },
+   "0.4-0.6": {
+    "before_pon": 66,
+    "after_pon": 5
+   },
+   "0.6-0.8": {
+    "before_pon": 222,
+    "after_pon": 25
+   },
+   "0.8-1.0": {
+    "before_pon": 249,
+    "after_pon": 24
+   }
+  }
+ },
+ "Illumina INDEL P75": {
+  "run": "COLO829_Illumina_INDEL_joint_readnorm",
+  "set": "COLO829T_Illumina_P75",
+  "threshold": 0.09843,
+  "pass_f1": 0.0655,
+  "pass_p": 0.0375,
+  "pass_r": 0.2595,
+  "best_f1": 0.1362,
+  "best_p": 0.1284,
+  "best_r": 0.145,
+  "pon_ceiling": 0.2595,
+  "somatic_af": {
+   "n": 79,
+   "q1": 0.23529411764705882,
+   "median": 0.31654676258992803,
+   "q3": 0.5051546391752577
+  },
+  "expected": {
+   "lost": 0.125,
+   "kept": 0.875
+  },
+  "germline_called": {
+   "all": 927,
+   "after_pon": 107,
+   "unplaced": 0
+  },
+  "by_class": {
+   "lost": {
+    "before_pon": 569,
+    "after_pon": 70
+   },
+   "kept": {
+    "before_pon": 31,
+    "after_pon": 1
+   },
+   "other": {
+    "before_pon": 327,
+    "after_pon": 36
+   }
+  },
+  "by_af_bin": {
+   "0.0-0.1": {
+    "before_pon": 182,
+    "after_pon": 27
+   },
+   "0.1-0.2": {
+    "before_pon": 403,
+    "after_pon": 46
+   },
+   "0.2-0.3": {
+    "before_pon": 52,
+    "after_pon": 4
+   },
+   "0.3-0.4": {
+    "before_pon": 15,
+    "after_pon": 1
+   },
+   "0.4-0.6": {
+    "before_pon": 71,
+    "after_pon": 7
+   },
+   "0.6-0.8": {
+    "before_pon": 164,
+    "after_pon": 20
+   },
+   "0.8-1.0": {
+    "before_pon": 40,
+    "after_pon": 2
+   }
+  }
+ },
+ "Illumina INDEL P50": {
+  "run": "COLO829_Illumina_INDEL_joint_readnorm",
+  "set": "COLO829T_Illumina_P50",
+  "threshold": 0.14513,
+  "pass_f1": 0.0537,
+  "pass_p": 0.0303,
+  "pass_r": 0.2366,
+  "best_f1": 0.1246,
+  "best_p": 0.1139,
+  "best_r": 0.1374,
+  "pon_ceiling": 0.2366,
+  "somatic_af": {
+   "n": 70,
+   "q1": 0.1715891768292683,
+   "median": 0.24184873949579833,
+   "q3": 0.3456863541424925
+  },
+  "expected": {
+   "lost": 0.25,
+   "kept": 0.75
+  },
+  "germline_called": {
+   "all": 780,
+   "after_pon": 112,
+   "unplaced": 0
+  },
+  "by_class": {
+   "lost": {
+    "before_pon": 293,
+    "after_pon": 31
+   },
+   "kept": {
+    "before_pon": 12,
+    "after_pon": 1
+   },
+   "other": {
+    "before_pon": 475,
+    "after_pon": 80
+   }
+  },
+  "by_af_bin": {
+   "0.0-0.1": {
+    "before_pon": 29,
+    "after_pon": 5
+   },
+   "0.1-0.2": {
+    "before_pon": 393,
+    "after_pon": 60
+   },
+   "0.2-0.3": {
+    "before_pon": 245,
+    "after_pon": 27
+   },
+   "0.3-0.4": {
+    "before_pon": 32,
+    "after_pon": 4
+   },
+   "0.4-0.6": {
+    "before_pon": 40,
+    "after_pon": 7
+   },
+   "0.6-0.8": {
+    "before_pon": 37,
+    "after_pon": 9
+   },
+   "0.8-1.0": {
+    "before_pon": 4,
+    "after_pon": 0
+   }
+  }
+ },
+ "Illumina INDEL P25": {
+  "run": "COLO829_Illumina_INDEL_joint_readnorm",
+  "set": "COLO829T_Illumina_P25",
+  "threshold": 0.58809,
+  "pass_f1": 0.0347,
+  "pass_p": 0.0196,
+  "pass_r": 0.1527,
+  "best_f1": 0.1316,
+  "best_p": 0.4762,
+  "best_r": 0.0763,
+  "pon_ceiling": 0.1527,
+  "somatic_af": {
+   "n": 50,
+   "q1": 0.12113074613074615,
+   "median": 0.15751937984496123,
+   "q3": 0.20239229889439572
+  },
+  "expected": {
+   "lost": 0.375,
+   "kept": 0.625
+  },
+  "germline_called": {
+   "all": 34,
+   "after_pon": 10,
+   "unplaced": 0
+  },
+  "by_class": {
+   "lost": {
+    "before_pon": 0,
+    "after_pon": 0
+   },
+   "kept": {
+    "before_pon": 0,
+    "after_pon": 0
+   },
+   "other": {
+    "before_pon": 34,
+    "after_pon": 10
+   }
+  },
+  "by_af_bin": {
+   "0.0-0.1": {
+    "before_pon": 3,
+    "after_pon": 0
+   },
+   "0.1-0.2": {
+    "before_pon": 15,
+    "after_pon": 5
+   },
+   "0.2-0.3": {
+    "before_pon": 16,
+    "after_pon": 5
+   },
+   "0.3-0.4": {
+    "before_pon": 0,
+    "after_pon": 0
+   },
+   "0.4-0.6": {
+    "before_pon": 0,
+    "after_pon": 0
+   },
+   "0.6-0.8": {
+    "before_pon": 0,
+    "after_pon": 0
+   },
+   "0.8-1.0": {
+    "before_pon": 0,
+    "after_pon": 0
+   }
+  }
+ },
+ "fiberseq INDEL P100": {
+  "run": "COLO829_fiberseq_INDEL_joint_7fc7396",
+  "set": "COLO829T_fiberseq",
+  "threshold": 0.31876,
+  "pass_f1": 0.0072,
+  "pass_p": 0.0036,
+  "pass_r": 0.2748,
+  "best_f1": 0.0681,
+  "best_p": 0.0769,
+  "best_r": 0.0611,
+  "pon_ceiling": 0.2748,
+  "somatic_af": {
+   "n": 94,
+   "q1": 0.25,
+   "median": 0.44883871610845294,
+   "q3": 0.6263736263736264
+  },
+  "expected": {
+   "lost": null,
+   "kept": 1.0
+  },
+  "germline_called": {
+   "all": 22,
+   "after_pon": 2,
+   "unplaced": 0
+  },
+  "by_class": {
+   "lost": {
+    "before_pon": 0,
+    "after_pon": 0
+   },
+   "kept": {
+    "before_pon": 0,
+    "after_pon": 0
+   },
+   "other": {
+    "before_pon": 22,
+    "after_pon": 2
+   }
+  },
+  "by_af_bin": {
+   "0.0-0.1": {
+    "before_pon": 0,
+    "after_pon": 0
+   },
+   "0.1-0.2": {
+    "before_pon": 2,
+    "after_pon": 0
+   },
+   "0.2-0.3": {
+    "before_pon": 2,
+    "after_pon": 0
+   },
+   "0.3-0.4": {
+    "before_pon": 0,
+    "after_pon": 0
+   },
+   "0.4-0.6": {
+    "before_pon": 4,
+    "after_pon": 1
+   },
+   "0.6-0.8": {
+    "before_pon": 14,
+    "after_pon": 1
+   },
+   "0.8-1.0": {
+    "before_pon": 0,
+    "after_pon": 0
+   }
+  }
+ },
+ "fiberseq INDEL P75": {
+  "run": "COLO829_fiberseq_INDEL_joint_7fc7396",
+  "set": "COLO829T_fiberseq_P75",
+  "threshold": 0.12763,
+  "pass_f1": 0.0045,
+  "pass_p": 0.0023,
+  "pass_r": 0.2519,
+  "best_f1": 0.0472,
+  "best_p": 0.0288,
+  "best_r": 0.1298,
+  "pon_ceiling": 0.2519,
+  "somatic_af": {
+   "n": 89,
+   "q1": 0.21023809523809525,
+   "median": 0.371900826446281,
+   "q3": 0.5088669177652229
+  },
+  "expected": {
+   "lost": 0.125,
+   "kept": 0.875
+  },
+  "germline_called": {
+   "all": 937,
+   "after_pon": 109,
+   "unplaced": 0
+  },
+  "by_class": {
+   "lost": {
+    "before_pon": 381,
+    "after_pon": 46
+   },
+   "kept": {
+    "before_pon": 30,
+    "after_pon": 4
+   },
+   "other": {
+    "before_pon": 526,
+    "after_pon": 59
+   }
+  },
+  "by_af_bin": {
+   "0.0-0.1": {
+    "before_pon": 76,
+    "after_pon": 6
+   },
+   "0.1-0.2": {
+    "before_pon": 352,
+    "after_pon": 48
+   },
+   "0.2-0.3": {
+    "before_pon": 171,
+    "after_pon": 14
+   },
+   "0.3-0.4": {
+    "before_pon": 34,
+    "after_pon": 7
+   },
+   "0.4-0.6": {
+    "before_pon": 93,
+    "after_pon": 14
+   },
+   "0.6-0.8": {
+    "before_pon": 177,
+    "after_pon": 16
+   },
+   "0.8-1.0": {
+    "before_pon": 34,
+    "after_pon": 4
+   }
+  }
+ },
+ "fiberseq INDEL P50": {
+  "run": "COLO829_fiberseq_INDEL_joint_7fc7396",
+  "set": "COLO829T_fiberseq_P50",
+  "threshold": 0.34852,
+  "pass_f1": 0.0037,
+  "pass_p": 0.0019,
+  "pass_r": 0.2366,
+  "best_f1": 0.053,
+  "best_p": 0.0468,
+  "best_r": 0.0611,
+  "pon_ceiling": 0.2366,
+  "somatic_af": {
+   "n": 83,
+   "q1": 0.18309859154929578,
+   "median": 0.2912621359223301,
+   "q3": 0.39855072463768115
+  },
+  "expected": {
+   "lost": 0.25,
+   "kept": 0.75
+  },
+  "germline_called": {
+   "all": 424,
+   "after_pon": 60,
+   "unplaced": 0
+  },
+  "by_class": {
+   "lost": {
+    "before_pon": 293,
+    "after_pon": 42
+   },
+   "kept": {
+    "before_pon": 0,
+    "after_pon": 0
+   },
+   "other": {
+    "before_pon": 131,
+    "after_pon": 18
+   }
+  },
+  "by_af_bin": {
+   "0.0-0.1": {
+    "before_pon": 0,
+    "after_pon": 0
+   },
+   "0.1-0.2": {
+    "before_pon": 106,
+    "after_pon": 16
+   },
+   "0.2-0.3": {
+    "before_pon": 245,
+    "after_pon": 35
+   },
+   "0.3-0.4": {
+    "before_pon": 65,
+    "after_pon": 8
+   },
+   "0.4-0.6": {
+    "before_pon": 8,
+    "after_pon": 1
+   },
+   "0.6-0.8": {
+    "before_pon": 0,
+    "after_pon": 0
+   },
+   "0.8-1.0": {
+    "before_pon": 0,
+    "after_pon": 0
+   }
+  }
+ },
+ "fiberseq INDEL P25": {
+  "run": "COLO829_fiberseq_INDEL_joint_7fc7396",
+  "set": "COLO829T_fiberseq_P25",
+  "threshold": 0.52071,
+  "pass_f1": 0.003,
+  "pass_p": 0.0015,
+  "pass_r": 0.229,
+  "best_f1": 0.0729,
+  "best_p": 0.1148,
+  "best_r": 0.0534,
+  "pon_ceiling": 0.229,
+  "somatic_af": {
+   "n": 76,
+   "q1": 0.11691176470588235,
+   "median": 0.191238847447711,
+   "q3": 0.2913306451612903
+  },
+  "expected": {
+   "lost": 0.375,
+   "kept": 0.625
+  },
+  "germline_called": {
+   "all": 71,
+   "after_pon": 25,
+   "unplaced": 0
+  },
+  "by_class": {
+   "lost": {
+    "before_pon": 24,
+    "after_pon": 7
+   },
+   "kept": {
+    "before_pon": 0,
+    "after_pon": 0
+   },
+   "other": {
+    "before_pon": 47,
+    "after_pon": 18
+   }
+  },
+  "by_af_bin": {
+   "0.0-0.1": {
+    "before_pon": 1,
+    "after_pon": 0
+   },
+   "0.1-0.2": {
+    "before_pon": 5,
+    "after_pon": 5
+   },
+   "0.2-0.3": {
+    "before_pon": 32,
+    "after_pon": 12
+   },
+   "0.3-0.4": {
+    "before_pon": 30,
+    "after_pon": 7
+   },
+   "0.4-0.6": {
+    "before_pon": 3,
+    "after_pon": 1
+   },
+   "0.6-0.8": {
+    "before_pon": 0,
+    "after_pon": 0
+   },
+   "0.8-1.0": {
+    "before_pon": 0,
+    "after_pon": 0
+   }
+  }
+ },
+ "ONT INDEL P100": {
+  "run": "COLO829_ONT_INDEL_joint_7fc7396",
+  "set": "COLO829T_ONT",
+  "threshold": 0.50501,
+  "pass_f1": 0.0011,
+  "pass_p": 0.0005,
+  "pass_r": 0.2595,
+  "best_f1": 0.0541,
+  "best_p": 0.0926,
+  "best_r": 0.0382,
+  "pon_ceiling": 0.2595,
+  "somatic_af": {
+   "n": 107,
+   "q1": 0.15151515151515152,
+   "median": 0.2236842105263158,
+   "q3": 0.3893805309734513
+  },
+  "expected": {
+   "lost": null,
+   "kept": 1.0
+  },
+  "germline_called": {
+   "all": 49,
+   "after_pon": 7,
+   "unplaced": 0
+  },
+  "by_class": {
+   "lost": {
+    "before_pon": 0,
+    "after_pon": 0
+   },
+   "kept": {
+    "before_pon": 0,
+    "after_pon": 0
+   },
+   "other": {
+    "before_pon": 49,
+    "after_pon": 7
+   }
+  },
+  "by_af_bin": {
+   "0.0-0.1": {
+    "before_pon": 1,
+    "after_pon": 0
+   },
+   "0.1-0.2": {
+    "before_pon": 5,
+    "after_pon": 0
+   },
+   "0.2-0.3": {
+    "before_pon": 7,
+    "after_pon": 2
+   },
+   "0.3-0.4": {
+    "before_pon": 7,
+    "after_pon": 0
+   },
+   "0.4-0.6": {
+    "before_pon": 8,
+    "after_pon": 1
+   },
+   "0.6-0.8": {
+    "before_pon": 11,
+    "after_pon": 3
+   },
+   "0.8-1.0": {
+    "before_pon": 10,
+    "after_pon": 1
+   }
+  }
+ },
+ "ONT INDEL P75": {
+  "run": "COLO829_ONT_INDEL_joint_7fc7396",
+  "set": "COLO829T_ONT_P75",
+  "threshold": 0.80443,
+  "pass_f1": 0.0011,
+  "pass_p": 0.0006,
+  "pass_r": 0.2519,
+  "best_f1": 0.0506,
+  "best_p": 0.1481,
+  "best_r": 0.0305,
+  "pon_ceiling": 0.2519,
+  "somatic_af": {
+   "n": 101,
+   "q1": 0.13793103448275862,
+   "median": 0.216,
+   "q3": 0.3181946006749157
+  },
+  "expected": {
+   "lost": 0.125,
+   "kept": 0.875
+  },
+  "germline_called": {
+   "all": 48,
+   "after_pon": 6,
+   "unplaced": 0
+  },
+  "by_class": {
+   "lost": {
+    "before_pon": 35,
+    "after_pon": 4
+   },
+   "kept": {
+    "before_pon": 0,
+    "after_pon": 0
+   },
+   "other": {
+    "before_pon": 13,
+    "after_pon": 2
+   }
+  },
+  "by_af_bin": {
+   "0.0-0.1": {
+    "before_pon": 10,
+    "after_pon": 3
+   },
+   "0.1-0.2": {
+    "before_pon": 27,
+    "after_pon": 1
+   },
+   "0.2-0.3": {
+    "before_pon": 4,
+    "after_pon": 0
+   },
+   "0.3-0.4": {
+    "before_pon": 3,
+    "after_pon": 2
+   },
+   "0.4-0.6": {
+    "before_pon": 2,
+    "after_pon": 0
+   },
+   "0.6-0.8": {
+    "before_pon": 2,
+    "after_pon": 0
+   },
+   "0.8-1.0": {
+    "before_pon": 0,
+    "after_pon": 0
+   }
+  }
+ },
+ "ONT INDEL P50": {
+  "run": "COLO829_ONT_INDEL_joint_7fc7396",
+  "set": "COLO829T_ONT_P50",
+  "threshold": 0.75706,
+  "pass_f1": 0.0011,
+  "pass_p": 0.0005,
+  "pass_r": 0.2366,
+  "best_f1": 0.0682,
+  "best_p": 0.1333,
+  "best_r": 0.0458,
+  "pon_ceiling": 0.2366,
+  "somatic_af": {
+   "n": 87,
+   "q1": 0.14,
+   "median": 0.2111111111111111,
+   "q3": 0.29896907216494845
+  },
+  "expected": {
+   "lost": 0.25,
+   "kept": 0.75
+  },
+  "germline_called": {
+   "all": 85,
+   "after_pon": 15,
+   "unplaced": 0
+  },
+  "by_class": {
+   "lost": {
+    "before_pon": 36,
+    "after_pon": 4
+   },
+   "kept": {
+    "before_pon": 0,
+    "after_pon": 0
+   },
+   "other": {
+    "before_pon": 49,
+    "after_pon": 11
+   }
+  },
+  "by_af_bin": {
+   "0.0-0.1": {
+    "before_pon": 0,
+    "after_pon": 0
+   },
+   "0.1-0.2": {
+    "before_pon": 45,
+    "after_pon": 9
+   },
+   "0.2-0.3": {
+    "before_pon": 30,
+    "after_pon": 4
+   },
+   "0.3-0.4": {
+    "before_pon": 2,
+    "after_pon": 0
+   },
+   "0.4-0.6": {
+    "before_pon": 5,
+    "after_pon": 1
+   },
+   "0.6-0.8": {
+    "before_pon": 3,
+    "after_pon": 1
+   },
+   "0.8-1.0": {
+    "before_pon": 0,
+    "after_pon": 0
+   }
+  }
+ },
+ "ONT INDEL P25": {
+  "run": "COLO829_ONT_INDEL_joint_7fc7396",
+  "set": "COLO829T_ONT_P25",
+  "threshold": 0.63592,
+  "pass_f1": 0.0008,
+  "pass_p": 0.0004,
+  "pass_r": 0.1756,
+  "best_f1": 0.0602,
+  "best_p": 0.1429,
+  "best_r": 0.0382,
+  "pon_ceiling": 0.1756,
+  "somatic_af": {
+   "n": 74,
+   "q1": 0.12276867030965391,
+   "median": 0.17350848385331144,
+   "q3": 0.23390151515151517
+  },
+  "expected": {
+   "lost": 0.375,
+   "kept": 0.625
+  },
+  "germline_called": {
+   "all": 68,
+   "after_pon": 14,
+   "unplaced": 0
+  },
+  "by_class": {
+   "lost": {
+    "before_pon": 20,
+    "after_pon": 3
+   },
+   "kept": {
+    "before_pon": 4,
+    "after_pon": 0
+   },
+   "other": {
+    "before_pon": 44,
+    "after_pon": 11
+   }
+  },
+  "by_af_bin": {
+   "0.0-0.1": {
+    "before_pon": 0,
+    "after_pon": 0
+   },
+   "0.1-0.2": {
+    "before_pon": 8,
+    "after_pon": 2
+   },
+   "0.2-0.3": {
+    "before_pon": 25,
+    "after_pon": 7
+   },
+   "0.3-0.4": {
+    "before_pon": 22,
+    "after_pon": 4
+   },
+   "0.4-0.6": {
+    "before_pon": 9,
+    "after_pon": 1
+   },
+   "0.6-0.8": {
+    "before_pon": 4,
+    "after_pon": 0
+   },
+   "0.8-1.0": {
+    "before_pon": 0,
+    "after_pon": 0
+   }
+  }
+ }
+}

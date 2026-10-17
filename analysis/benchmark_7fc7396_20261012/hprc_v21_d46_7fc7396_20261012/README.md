@@ -1,5 +1,9 @@
 # HPRC v2.1 d46 graph: HG008T and COLO829T, three platforms, SNV and INDEL, chr1 test
 
+> 2026-10-16: the INDEL numbers here use the 7fc7396 INDEL PoN rule (homopolymer >= 7 bp: AF >= 0.01, else 1e-3). With
+> the 71cb51a rule (>= 8 bp, else 1e-4) every INDEL call set was re-scored: `../indel_pon_71cb51a_20261016/tables.md`
+> (+0.000 to +0.013 F1, no comparison changes direction).
+
 2026-10-12, on RIS compute1, pipeline of 7fc7396 (the v2 README's SNV recipe and INDEL recipe). The same samples,
 platforms, recipes and test as the HPRC v1.1 d9 runs, on the tensor sets built against the HPRC v2.1 Minigraph-Cactus
 GRCh38 graph filtered at d46 (`<SET>_d46`, `analysis/graph_ablation_tensors_20261005`): one model per set, trained on

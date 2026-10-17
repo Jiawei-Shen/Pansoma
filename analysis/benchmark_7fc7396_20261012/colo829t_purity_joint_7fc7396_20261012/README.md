@@ -1,5 +1,9 @@
 # COLO829T purity dilutions: one joint model per platform and kind, tested on chr1 of each purity
 
+> 2026-10-16: the INDEL numbers here use the 7fc7396 INDEL PoN rule (homopolymer >= 7 bp: AF >= 0.01, else 1e-3). With
+> the 71cb51a rule (>= 8 bp, else 1e-4) every INDEL call set was re-scored: `../indel_pon_71cb51a_20261016/tables.md`
+> (+0.000 to +0.013 F1, no comparison changes direction).
+
 2026-10-12, on RIS compute1, pipeline of 7fc7396 (the v2 README's SNV recipe and INDEL recipe). For each platform and
 kind (SNV, INDEL), one model is trained on the undiluted COLO829T set and its three in-silico tumor / normal (COLO829BL)
 dilutions together: P100 + P75 + P50 + P25, chr2-22 of every set. chr1 of each purity is then predicted, called and
@@ -14,6 +18,11 @@ Files in this folder:
 - `purity.py` → `purity.md`, `purity.json`: per purity on chr1 before any calling, the truth alleles with a tensor
   (the recall ceiling) and the read AF of the somatic / germline tensors (measured purity).
 - `tables.md`: per-purity F1 matrix, training, per-purity rtg details, P100 joint vs the earlier single-set model.
+- Read-source artefact checks: `bq_hist.py`, `bq_alt_ref.py` (`bq_alt_ref.json`), `read_source.py` (`read_source.json`:
+  the Illumina mixture BAMs' read groups), `bq_relative_check.py` (`bq_relative_check.json`: raw / per-read
+  centered / per-read rank BQ), `read_quality_dist.py` (`read_quality_dist.json`: wholly low-quality reads).
+- `purity_loh_fp.py` → `loh_fp.md`, `loh_fp.json`: the germline false calls per purity against the AFs of tumor-LOH
+  germline variants in a dilution (section 6).
 
 ## Data
 
@@ -201,6 +210,69 @@ F1": F1, P / R, TP / FP and the p_somatic of the point; 131 truth INDELs, recall
   0.071); the best points hold 4-17 true calls, so the purity trend is within noise. At PASS (the validation recall-0.9
   threshold, 0.007 fiberseq, 8.4e-6 ONT) 20,000-37,500 / 96,000-107,000 calls pass per purity's chr1 and F1 is
   0.001-0.007.
+
+**5. Illumina with BQ normalized per read** (2026-10-13; `ris/tools/readnorm.py`, `ris/joint_run.sh --readnorm`: each
+read's BQ minus its own median over its valid cells in the window, over the dataset's BQ std; MAPQ and path count as
+before; with `--norm dataset`). Runs `COLO829_Illumina_SNV_joint_readnorm_gpu8` (8 H100, global batch 8,192, jobs
+56580-56584) and `COLO829_Illumina_INDEL_joint_readnorm` (1 H100, 56585-56589). In the BED after the PoN:
+
+| | P100 | P75 | P50 | P25 |
+|---|---|---|---|---|
+| SNV PASS F1 (P / R), joint as before | 0.675 (0.931 / 0.530) | 0.840 (0.968 / 0.742) | 0.833 (0.966 / 0.733) | 0.804 (0.967 / 0.689) |
+| SNV PASS F1 (P / R), BQ per read | **0.739** (0.823 / 0.670) | **0.709** (0.737 / 0.683) | **0.678** (0.682 / 0.673) | **0.695** (0.723 / 0.668) |
+| SNV best F1: before -> per read | 0.784 -> 0.744 | 0.841 -> 0.709 | 0.834 -> 0.684 | 0.805 -> 0.733 |
+| SNV chr1 somatic AP: before -> per read | 0.697 -> 0.706 | 0.979 -> 0.472 | 0.986 -> 0.529 | 0.985 -> 0.872 |
+| INDEL best F1: before -> per read | 0.163 -> 0.174 | 0.308 -> 0.136 | 0.330 -> 0.125 | 0.233 -> 0.132 |
+
+Validation somatic AP 0.961 -> 0.813 (SNV), 0.576 -> 0.178 (INDEL). Without the read-source cue the Illumina dilutions
+lose their precision of 0.97 (now 0.68-0.74) and their INDEL advantage, and show the long reads' P75 / P50 < P25 pattern
+(section 6); P100's PASS F1 rises (the pooled recall-0.9 threshold falls from 0.804 to 0.550 once the dilutions no
+longer score near 1), its best point falls (0.784 -> 0.744). Not a clean comparison: the per-dataset z-score and, for
+SNV, 8 GPUs (global batch 8,192 against 4,096) changed too; a control (`--norm dataset` without the per-read BQ, 8 GPUs)
+would separate them. Training ran at 8,262 tensors/s on 8 GPUs against 13,491 on 4 for the earlier run (186 against
+113 min): the per-read median (a sort over 200 x 101 cells per tensor) is slow. Per-read centering also hides wholly
+low-quality reads (section 2), so it is a diagnostic here, not yet a method.
+
+**6. Why P25 scores above P75 and P50 on every platform** (`purity_loh_fp.py` -> `loh_fp.md`; Illumina with BQ per read,
+fiberseq and ONT the joint models as they are). A heterozygous germline SNV of the patient in a tumor LOH region shows
+in a dilution at AF (1 - p) / 2 where the tumor lost its ALT copy ("lost") and (1 + p) / 2 where it kept it ("kept"),
+p the tumor read fraction: lost 0.125 / 0.25 / 0.375 and kept 0.875 / 0.75 / 0.625 at P75 / P50 / P25. Germline chr1
+tensors called somatic at the PASS threshold (SNV), before the PoN (after it):
+
+| platform | purity | PASS F1 | somatic AF q1 / median / q3 | germline called | of them lost | kept | other |
+|---|---|---:|---|---:|---:|---:|---:|
+| Illumina | P100 | 0.739 | 0.50 / 0.97 / 1.00 | 1,556 (160) | - | 1,510 (155) | 46 (5) |
+| Illumina | P75 | 0.709 | 0.41 / 0.64 / 0.75 | 3,297 (372) | 2,137 (251) | 494 (50) | 666 (71) |
+| Illumina | P50 | 0.678 | 0.30 / 0.39 / 0.51 | 4,061 (510) | 1,693 (205) | 912 (87) | 1,456 (218) |
+| Illumina | P25 | 0.695 | 0.15 / 0.19 / 0.26 | 2,576 (355) | 883 (112) | 724 (64) | 969 (179) |
+| fiberseq | P100 | 0.779 | 0.49 / 0.96 / 0.99 | 1,802 (158) | - | 1,732 (151) | 70 (7) |
+| fiberseq | P75 | 0.687 | 0.40 / 0.63 / 0.74 | 4,538 (469) | 2,773 (316) | 1,075 (83) | 690 (70) |
+| fiberseq | P50 | 0.665 | 0.29 / 0.39 / 0.51 | 4,470 (523) | 2,114 (214) | 811 (64) | 1,545 (245) |
+| fiberseq | P25 | 0.720 | 0.15 / 0.19 / 0.27 | 2,480 (350) | 1,110 (108) | 399 (34) | 971 (208) |
+| ONT | P100 | 0.677 | 0.45 / 0.82 / 0.90 | 1,396 (140) | - | 217 (19) | 1,179 (121) |
+| ONT | P75 | 0.654 | 0.38 / 0.58 / 0.68 | 3,239 (351) | 1,904 (221) | 303 (22) | 1,032 (108) |
+| ONT | P50 | 0.639 | 0.28 / 0.36 / 0.47 | 4,011 (463) | 1,526 (161) | 439 (33) | 2,046 (269) |
+| ONT | P25 | 0.666 | 0.14 / 0.18 / 0.25 | 2,594 (337) | 719 (76) | 445 (37) | 1,430 (224) |
+
+("lost" / "kept": within 0.06 of the expected AF; ONT's noisier AF puts more into "other", its P100 kept group at AF ~1
+too.) The same on all three platforms, so a property of the sample and the dilution, not of the sequencing:
+- P100: the germline false calls are the kept group at AF ~1 (homozygous-looking germline of the LOH regions).
+- P50 has the most germline false calls after the PoN (463-523): the lost group's 0.25 lies inside P50's own somatic AF
+  (q1 0.28-0.30, median 0.36-0.39).
+- P75: the lost group's 0.125 lies below P75's somatic AF but inside the somatic AF of P25 (0.14-0.27) in the same
+  training data: the joint model does not know a tensor's purity, and low AF is somatic-like across the four sets.
+- P25: the lost group's 0.375 and the kept group's 0.625 straddle ordinary heterozygous germline (0.5) and lie above
+  P25's somatic AF (median 0.18-0.19), so fewer pass (76-112 lost after the PoN, against 161-316 at P75 / P50). P25's
+  recall ceiling is the lowest (0.69 after the PoN) but its precision the highest of the dilutions on fiberseq and ONT
+  (0.786 / 0.670 against 0.741 / 0.659 at P75), hence its F1. Illumina (BQ per read) is the exception at PASS: P75 0.709
+  (precision 0.737) against P25 0.695 (0.723); at the curves' best points P25 is ahead there too (0.733 vs 0.709).
+- This is not an artefact of in-silico mixing: a real tumor with LOH at intermediate purity has the same lost / kept
+  germline. The PoN cannot remove them (rare germline variants, not in the population panels). What separates them
+  is outside a single site: a whole LOH segment's heterozygous germline sits at one AF ((1 - p) / 2), somatic variants
+  do not; a sample-level purity estimate; or a matched normal.
+- INDEL (at each curve's best point; 4-34 true calls): the lost group is again the main germline false call at P75 /
+  P50 (Illumina 569 / 293 before the PoN), but the counts are small and the best points' thresholds differ by purity,
+  so INDEL does not resolve the purity ordering.
 
 **Training** (`tables.md`): Illumina SNV 4.53 M training tensors (125,916 somatic), 113 min on 4 H100s, best epoch 7,
 validation somatic AP 0.961; fiberseq SNV 2.07 M (125,734), 133 min on 4, best epoch 5, AP 0.789; Illumina INDEL 0.43

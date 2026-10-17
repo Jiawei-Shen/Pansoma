@@ -12,6 +12,8 @@ of each kind; PASS at the checkpoint's validation recall-0.9 threshold). Multi-G
 | `colo829t_purity_joint_7fc7396_20261012/` | COLO829T purity dilutions: one model per platform and kind on P100 + P75 + P50 + P25, tested per purity | done |
 | `hprc_v21_d46_7fc7396_20261012/` | the same 12 sample x platform x kind runs on the HPRC v2.1 d46 graph, against d9 | done |
 | `linear_grch38_7fc7396_20261012/` | the same 12 on a GRCh38-only graph, against d9 and d46 | done |
+| `indel_pon_71cb51a_20261016/` | every INDEL call set re-scored with the 71cb51a INDEL PoN rule (HP >= 8: AF 0.01, else 1e-4) | done |
+| `reviewer_gpu_7fc7396_20261016/` | the RIS GPU jobs of the 2026-10-15 reviewer response: matched d9, no ch6, `--norm dataset`, seeds, E13 | running |
 
 Each folder has a `README.md` (what was run, LSF jobs, results and their reading), a `collect.py` (standard library;
 reads `$PANSOMA_RUNS/<run>` and writes `tables.md`, `summary.json` and `runs/<run>/` copies of the training logs and rtg
@@ -21,52 +23,60 @@ reports) and `tables.md`.
 
 SNV: PASS F1 at the validation recall-0.9 threshold. INDEL: the best F1 of the chr1 rtg curve, because the recall-0.9
 threshold lands far below the best point for INDELs (PASS F1 in brackets). The best point is chosen on the test
-chromosome: an upper bound for a threshold rule, not a held-out result.
+chromosome: an upper bound for a threshold rule, not a held-out result. INDEL numbers here use the 71cb51a INDEL PoN
+rule (homopolymer >= 8 bp: AF >= 0.01, else 1e-4; `indel_pon_71cb51a_20261016/`, +0.000 to +0.013 against the 7fc7396
+rule, no comparison changes direction); the sub-folders' tables keep the 7fc7396 rule they were written with.
 
 **HG008T, v1.1 d9** (`hg008t_snv_indel_7fc7396_20261012`):
 
 | platform | SNV (PASS) | INDEL (best; PASS) |
 |---|---:|---:|
-| Illumina | 0.585 (4 GPUs) | 0.264 (0.241) |
-| PacBio | 0.621 | 0.260 (0.089) |
-| ONT | 0.596 | 0.140 (0.015) |
+| Illumina | 0.585 (4 GPUs) | 0.269 (0.251) |
+| PacBio | 0.621 | 0.263 (0.092) |
+| ONT | 0.596 | 0.143 (0.015) |
 
 SNV reproduces the 2026-10-03 runs exactly (PacBio, ONT); INDEL lr 1e-4 gives the same as lr 4e-4 under the same PoN,
-and the new homopolymer PoN rule raises Illumina INDEL 0.218 -> 0.246 (PASS). On the long reads the recall-0.9
-threshold passes 2,780 / 17,402 INDEL calls after the PoN, far from the best points.
+and the 7fc7396 homopolymer PoN rule raised Illumina INDEL 0.218 -> 0.246 (PASS). On the long reads the recall-0.9
+threshold passes 2,780 / 17,402 INDEL calls after the PoN (7fc7396 rule), far from the best points.
 
 **COLO829T purity, joint models** (`colo829t_purity_joint_7fc7396_20261012`), P100 / P75 / P50 / P25:
 
 | platform | SNV (PASS) | INDEL (best) |
 |---|---|---|
-| Illumina | 0.675 / 0.840 / 0.833 / 0.804 | 0.163 / 0.308 / 0.330 / 0.233 |
-| fiberseq | 0.779 / 0.687 / 0.665 / 0.720 | 0.068 / 0.047 / 0.053 / 0.073 |
-| ONT | 0.677 / 0.654 / 0.639 / 0.666 | 0.054 / 0.051 / 0.068 / 0.060 |
+| Illumina | 0.675 / 0.840 / 0.833 / 0.804 | 0.167 / 0.312 / 0.330 / 0.233 |
+| fiberseq | 0.779 / 0.687 / 0.665 / 0.720 | 0.069 / 0.049 / 0.055 / 0.074 |
+| ONT | 0.677 / 0.654 / 0.639 / 0.666 | 0.055 / 0.051 / 0.070 / 0.062 |
 
 - Illumina P100 is low because one validation threshold is pooled over the four purities (P100 best point 0.784).
 - The Illumina and ONT dilutions carry a read-source artefact: the COLO829BL normal reads have higher base quality
   than the tumor reads (Illumina read groups: mean BQ 30.77 vs 29.43, nothing else differs), so the ALT reads' BQ
   marks somatic variants (AUC of that difference alone up to 0.71 Illumina, 0.69 ONT at P25); their scores are likely
   optimistic. fiberseq has no such cue. A per-read BQ centering removes it in the tensors; the fix is open.
-- On the long reads P75 and P50 score below P25 (the anomaly of `analysis/reviewer_response_20261011`, reproduced):
-  germline SNVs whose ALT the tumor lost in its LOH regions appear at AF (1 - purity) / 2 = 0.125 / 0.25, inside the
-  somatic AF range of those mixtures.
-- INDEL: Illumina dilutions above P100 (0.308 / 0.330 / 0.233 vs 0.163, likely helped by the same BQ cue); long reads
-  0.05-0.07 at every purity (4-17 true calls at the best points), below the single-set P100 models (0.120 / 0.071).
+- With BQ normalized per read (`ris/tools/readnorm.py`), Illumina SNV becomes 0.739 / 0.709 / 0.678 / 0.695 (precision
+  0.68-0.82 instead of 0.97; INDEL best 0.182 / 0.146 / 0.133 / 0.133): the dilution scores were the read-source cue.
+- On every platform P75 and P50 score below P25 (the anomaly of `analysis/reviewer_response_20261011`, reproduced;
+  Illumina once the BQ cue is removed): germline SNVs of the tumor's LOH regions appear at AF (1 - p) / 2 = 0.125 /
+  0.25 / 0.375 where the tumor lost the ALT copy; at P50 that lies inside the somatic AF (the most germline false
+  calls after the PoN, 463-523), at P75 inside the P25 somatic AF the joint model also trains on, at P25 above the
+  somatic AF (`loh_fp.md`). A real LOH tumor at intermediate purity has the same germline; a single site cannot
+  separate them.
+- INDEL: Illumina dilutions above P100 (0.312 / 0.330 / 0.233 vs 0.167, likely helped by the same BQ cue); long reads
+  0.05-0.07 at every purity (4-17 true calls at the best points), below the single-set P100 models (0.124 / 0.074).
 
 **HPRC v2.1 d46 against v1.1 d9** (`hprc_v21_d46_7fc7396_20261012`): after the PoN the same (PASS F1 -0.021 to +0.006
 on 11 of 12 sets, COLO829T ONT SNV +0.031); before the PoN d46 is much better for SNV (raw PASS F1 +0.10-0.13 on all six
 SNV sets), because fewer germline variants become candidates on the larger pangenome, which is what the PoN removes
 anyway. INDEL: d46 gives more truth INDELs a tensor, but they are population alleles the PoN tags (the PoN-limited
-ceilings are unchanged); by best F1, d46 - d9 is -0.015 / +0.009 / +0.015 on HG008T Illumina / PacBio / ONT and
--0.033 / +0.009 / +0.013 on COLO829T: equal within noise.
+ceilings are unchanged); by best F1, d46 - d9 is -0.013 / +0.012 / +0.016 on HG008T Illumina / PacBio / ONT and
+-0.034 / +0.013 / +0.015 on COLO829T (against the 2026-10-06 lr 4e-4 d9 runs; +0.007 / -0.005 / -0.006 against the
+matched lr 1e-4 d9 runs of `reviewer_gpu_7fc7396_20261016`): equal within noise.
 
 **Linear GRCh38 graph** (`linear_grch38_7fc7396_20261012`), after the PoN, linear / d9 / d46:
 
 | sample | SNV (PASS) Illumina / PacBio-fiberseq / ONT | INDEL (best) Illumina / PacBio-fiberseq / ONT |
 |---|---|---|
-| HG008T | 0.469 / 0.513 / 0.537 vs 0.585 / 0.621 / 0.596 (d9) | 0.199 / 0.173 / 0.082 vs 0.264 / 0.260 / 0.140 (d9) |
-| COLO829T | 0.468 / 0.680 / 0.418 vs 0.778 / 0.781 / 0.706 (d9) | 0.069 / 0.092 / 0.019 vs 0.195 / 0.120 / 0.071 (d9) |
+| HG008T | 0.469 / 0.513 / 0.537 vs 0.585 / 0.621 / 0.596 (d9) | 0.201 / 0.176 / 0.084 vs 0.269 / 0.263 / 0.143 (d9) |
+| COLO829T | 0.468 / 0.680 / 0.418 vs 0.778 / 0.781 / 0.706 (d9) | 0.070 / 0.095 / 0.020 vs 0.202 / 0.124 / 0.074 (d9) |
 
 The pangenome is worth 0.06-0.31 SNV F1 even after the PoN (linear: every germline variant of the sample is a
 candidate, raw F1 0.01-0.07; more false calls survive the PoN, and many more outside the BED). For INDEL the linear

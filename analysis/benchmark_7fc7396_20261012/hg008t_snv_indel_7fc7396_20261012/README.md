@@ -1,5 +1,9 @@
 # HG008T SNV and INDEL, three platforms: training and chr1 test with the pipeline of 7fc7396
 
+> 2026-10-16: the INDEL numbers here use the 7fc7396 INDEL PoN rule (homopolymer >= 7 bp: AF >= 0.01, else 1e-3). With
+> the 71cb51a rule (>= 8 bp, else 1e-4) every INDEL call set was re-scored: `../indel_pon_71cb51a_20261016/tables.md`
+> (+0.000 to +0.013 F1, no comparison changes direction).
+
 2026-10-12, on RIS compute1. The SNV recipe and the INDEL recipe of `machine_learning/pansoma_net_v2/README.md` at
 7fc7396 (INDEL PoN homopolymer rule, INDEL recipe lr 1e-4, INDEL tests keep the partial somatic matches), one model
 per platform and kind on HG008T Illumina, PacBio and ONT, trained on chr2-22 and tested on chr1.
