@@ -48,7 +48,7 @@
 | R3.2 | 被去掉的 candidate 由什么组成 | 部分解决 | 三类 candidate × 三个参考臂；E4b：FP 的组成；E5b；去 ch6 重训已完成（10-19）；10-19 Response 按外部建议改写成 "selective reduction"，加了按图分层的 FP：HG008T 图里的 germline FP 129 → 4（少 97 %），不在图里的 2,036 → 1,794–1,944（少 5–12 %）；79 % / 73 % 改用新定义 | CPU：E4b 换成 matched d9 run（可选） |
 | R3.3 | graph 坐标 variant 的验证 | 部分解决 | E9c / E9d（9 个 run）；E9h：57–79% 的 off-ref key 有 reads 支持 | 决定：rescue 默认值、graph PoN 怎么用；同步：COLO829T 的 tumor 组装 |
 | R3.4 | 指标不含 graph 坐标 call；"about 2%"；CHM13 | 部分解决 | "about 2%" 实际是 8–68%；E9a 投影；E3b 关掉 rescue 后的完整输出；CHM13 不做 | 决定：rescue 默认值 |
-| R3.5 | mutational signature | 部分解决 | E18：COLO829T 余弦 0.996–0.997（SBS7a），HG008T 0.94–0.96 | 同步：比较器的 SBS96 |
+| R3.5 | mutational signature | 部分解决 | E18：COLO829T 余弦 0.996–0.997（SBS7a），HG008T 0.94–0.96；比较器（E8，10-19 填入）COLO829T 0.913–0.995、HG008T 0.878–0.943；graph-coordinate calls 按验证类别的 SBS96（10-19，Supplement）：population / germline 类（95 %）像 normal germline（余弦 0.79–0.91），不像 truth（0.61–0.70） | 决定：COLO829T v1.1 跑不跑 E9c / E9d（R3.3） |
 | R3.6 | perfect 不等于 correct | 部分解决 | E11b：Illumina 上 MAPQ ≥ 30 放错从 0.093% 降到 0.019% / 0.013%；ONT 在 v2.1 上更差（如实写出）；E11a | 决定：E11c 做不做、vg 版本对照 |
 | R3.7 | 重新归类 FN 要谨慎 | **已解决** | 单倍型组装证据 | 只剩改稿 |
 | R3.8 | tumor-only 和 mosaicism | **已解决** | 统一写成 tumor-only | 只剩改稿 |
@@ -2977,16 +2977,59 @@ We agree, and the revised evaluation covers the complete output.
 
 We agree, and Figure 4 is revised accordingly.
 
-*Truth spectrum beside each caller.* For each dataset, Figure 4a now shows the SBS96 spectrum of the truth set next to those of Pansoma, DeepSomatic-TO and ClairS-TO (chr1, PASS, after the same population filtering), and the Supplement gives the SBS96 profile of every call set, split into true and false positives, with the cosine similarity of each to the truth spectrum [待补: comparator spectra]. Pansoma's calls reproduce the truth spectrum: the cosine similarity of all PASS calls on the HPRC graphs is 0.996–0.997 on COLO829T and 0.940–0.958 on HG008T (true positives alone 0.982–0.995).
+*Truth spectrum beside each caller.* For each dataset, Figure 4a now shows the SBS96 spectrum of the truth set next to those of Pansoma, DeepSomatic-TO and ClairS-TO (chr1, PASS, after the same population filtering), and the Supplement gives the SBS96 profile of every call set, split into true and false positives, with the cosine similarity of each to the truth spectrum. Pansoma's calls reproduce the truth spectrum at least as closely as the comparators': the cosine similarity of all PASS calls on the HPRC graphs is 0.996–0.997 on COLO829T and 0.940–0.958 on HG008T (true positives alone 0.982–0.995), against 0.913–0.995 and 0.878–0.943 for DeepSomatic-TO and ClairS-TO.
 
 *HG008T.* The HG008T truth spectrum is indeed heterogeneous. Its best single COSMIC v3.4 match is SBS40a (cosine 0.780; SBS5 0.625, SBS1 0.241), whereas COLO829T matches the UV signature SBS7a (0.917). With an SNV precision of 0.43–0.50 after filtering on HG008T chr1, the false positives shape the spectrum of a whole call set, which is why we show them separately: HG008T's false positives resemble the matched normal's germline spectrum (cosine 0.845–0.913; best COSMIC match SBS5 in five of six call sets), consistent with the private germline variants that dominate them (R3.2). On COLO829T, 57–63% of the false-positive spectrum resembles the tumor's UV spectrum, consistent with, but not proof of, real mutations missing from the truth set.
 
 *Training spectrum.* Our main models are trained on chr2–22 of the tumor they are tested on, so their calls could follow its spectrum. A preliminary cross-tumor test (HPRC v2.1 graph with the d46 filter, earlier normalisation, one seed; R1.7) shows that this depends on the training tumor. The true positives of the HG008T models on COLO829T, HCC1395 and two lung adenocarcinoma lines match each target's truth spectrum (cosine 0.986–0.999). The COLO829T models drift towards UV-type changes on other tumors (0.793–0.978); on HG008T, 44.2–55.6% of their true positives are UV-type C>T, against 28.8% in its truth. A model trained on one UV-dominated tumor thus ranks UV-context changes higher elsewhere, which supports training on several tumors (R1.7).
 
-*Graph-coordinate calls.* We no longer use the spectrum as evidence that these calls are biological, because a spectrum cannot distinguish somatic mutations from population alleles that GRCh38 lacks. We tested them directly instead: placement on GRCh38, a graph-native population filter and the tumor and normal assemblies show that on HG008T at most 1.1–5.2% per run have assembly support as somatic, and most are population or germline alleles (R3.3, R3.4). Their SBS96 profiles, with trinucleotide context taken from the graph, are shown separately in the Supplement by validation class [待补].
+*Graph-coordinate calls.* We no longer use the spectrum as evidence that these calls are biological, because a spectrum cannot distinguish somatic mutations from population alleles that GRCh38 lacks. We tested them directly instead: placement on GRCh38, a graph-native population filter and the tumor and normal assemblies show that on HG008T at most 1.1–5.2% per run have assembly support as somatic, and most are population or germline alleles (R3.3, R3.4). Their SBS96 profiles, with trinucleotide context taken from the graph, are shown in the Supplement by validation class: the population and germline classes (95% of these calls) resemble the matched normal's germline spectrum (cosine 0.79–0.91) more than the tumor truth (0.61–0.70); only the small classes absent from the normal lean towards the tumor (COLO829T, 103 calls not in COLO829BL: 0.64 against 0.51; HG008T, 13 tumor-only calls: 0.55 against 0.21).
+
+**Supplementary (R3.5).**
+
+![SBS96 spectra of the graph-coordinate SNV calls by validation class](supplementary/R3.5/fig_R3.5_sbs96_by_class.png)
+
+SBS96 spectra (percent of SNVs per channel) of the graph-coordinate SNV PASS calls on chr1, by validation class (R3.3),
+with the chr1 somatic truth and the matched-normal germline spectra of each tumor for reference. Calls of nine runs:
+HG008T on the HPRC v1.1 (d9) and v2.1 (d46) graphs and COLO829T on v2.1, three platforms each (COLO829T ONT: a random
+3,000 of its 4,569 calls). The trinucleotide context is read from the graph path: the bases flanking the site in the
+REF graph-path context spelled from each call's reads (0.1% of calls without a usable context are left out). Classes
+are exclusive, in this order: population allele (the ALT context is spelled by GRCh38 or an HPRC haplotype), germline
+(ALT context in the matched normal's assembly), tumor-only (HG008T: in the HG008-T tumor assembly and not in HG008-N) or
+not in the normal (COLO829T, which has no tumor assembly: absent from both COLO829BL haplotypes), and unverifiable or
+unsupported. Classes with fewer than 10 calls are not drawn.
+
+Supplementary Table (cosine similarities to the reference spectra; UV-type C>T: C>T at a 5' pyrimidine):
+
+| sample | spectrum | SNVs | cosine to truth | cosine to normal germline | UV-type C>T share | best COSMIC v3.4 matches |
+|---|---|---:|---:|---:|---:|---|
+| HG008T | population allele | 3,205 | 0.623 | 0.787 | 0.179 | SBS58 0.801, SBS40a 0.767, SBS5 0.766 |
+| HG008T | germline (normal assembly) | 603 | 0.653 | 0.831 | 0.148 | SBS3 0.783, SBS5 0.772, SBS40a 0.750 |
+| HG008T | tumor-only (in HG008-T, not in HG008-N) | 13 | 0.554 | 0.213 | 0.692 | SBS2 0.562, SBS31 0.477, SBS30 0.456 |
+| HG008T | unverifiable / unsupported | 158 | 0.348 | 0.370 | 0.184 | SBS47 0.812, SBS51 0.756, SBS58 0.745 |
+| COLO829T | population allele | 1,968 | 0.703 | 0.835 | 0.258 | SBS40a 0.841, SBS40c 0.809, SBS5 0.800 |
+| COLO829T | germline (normal assembly) | 1,611 | 0.608 | 0.908 | 0.215 | SBS5 0.855, SBS40c 0.821, SBS40a 0.811 |
+| COLO829T | not in the normal (COLO829BL) | 103 | 0.643 | 0.507 | 0.340 | SBS58 0.705, SBS40a 0.673, SBS40c 0.643 |
+| COLO829T | unverifiable / unsupported | 88 | 0.426 | 0.298 | 0.364 | SBS58 0.798, SBS47 0.721, SBS85 0.528 |
+| HG008T | chr1 somatic truth (reference) | 697 | 1.000 | 0.585 | 0.288 | - |
+| HG008T | matched-normal germline (reference) | 296,786 | 0.585 | 1.000 | 0.158 | - |
+| COLO829T | chr1 somatic truth (reference) | 2,443 | 1.000 | 0.428 | 0.585 | - |
+| COLO829T | matched-normal germline (reference) | 298,057 | 0.428 | 1.000 | 0.158 | - |
+
+Data and code: `supplementary/R3.5/sbs96_by_class.tsv` (96 counts per run and class, and per tumor and class),
+`cosine_by_class.tsv`, `make_sbs96_by_class.py` (classes and contexts from E9c / E9d, reference spectra and COSMIC from E18).
 
 **证据（内部）。**
 
+- 2026-10-19 Response 最后一段的 [待补]（graph-coordinate calls 按验证类别的 SBS96）做了，用户 10-19 决定放 Supplement（上面的 Supplementary 块，不算 Response 字数）。脚本 `supplementary/R3.5/make_sbs96_by_class.py`，`sambcfenv` 的 python，login node 上几秒钟。没有新跑 E9c / E9d：类别是 E9c `per_call.tsv.gz` 的 `category`（unplaced_pass、SNP、`rcpu__` 的 9 个 run），三核苷酸上下文用 E9c 每个 run 的 `calls.tsv` 里的 `ref_graph`（从 tensor 拼出的图路径 REF 上下文，两边各 50 bp，`ref_graph_site` 是位点位置；缺的话用 `alt_graph`），要求位点碱基等于 REF；7,760 个 call 里 11 个没有可用上下文。对照谱是 E18 `sbs96.tsv` 的 "truth <sample>" 和 "germline <sample>"，COSMIC 用 E18 的 loader（v3.4）。
+  - Response 里的数（`cosine_by_class.tsv`）：population HG008T 3,205 个、COLO829T 1,968 个，germline 603 / 1,611 个，合计 7,387 / 7,749 = 95 %。和 normal germline 的余弦 0.787 / 0.835（population）、0.831 / 0.908（germline）→ "0.79–0.91"；和 truth 的余弦 0.623 / 0.703、0.653 / 0.608 → "0.61–0.70"。COLO829T not in normal 103 个：truth 0.643、germline 0.507；HG008T tumor-only 13 个：truth 0.554、germline 0.213。unverifiable / unsupported 158 / 88 个，两边都不像（0.30–0.43）。
+  - UV-type C>T 占比：COLO829T truth 0.585、normal germline 0.158；COLO829T population 0.258、germline 0.215、not in normal 0.340。原稿 Fig. 4c 的 "UV 成分" 大部分来自 population / germline 类，只比 germline 背景略高。
+  - 只有 9 个 run：COLO829T v1.1 的三个 run 没跑 E9c / E9d（R3.3 的 [待补]，用户还没定）。
+- 2026-10-19 [待补: comparator spectra] 填上了（`experiments/E8_comparators/tables.md` "SBS96 cosine similarity to the chr1 truth spectrum"，`sbs96.tsv`；407e1c3：pansoma-3c 用用户已有的 tumor-only call set 按 Pansoma 的 chr1 口径重新打分，chr1、BED 内、PoN 后、全部 PASS SNV）：
+  - HG008T Illumina / PacBio / ONT：ClairS-TO 0.912 / 0.918 / 0.899，DeepSomatic 0.921 / 0.943 / 0.878 → "0.878–0.943"；Pansoma HPRC d9 0.949 / 0.958 / 0.951、d46 0.940 / 0.941 / 0.941。
+  - COLO829T Illumina / Fiber-seq / ONT：ClairS-TO 0.913 / 0.995 / 0.993，DeepSomatic 0.913 / 0.982 / 0.984 → "0.913–0.995"；Pansoma d46 0.996 / 0.997 / 0.996。
+  - 每套数据 Pansoma 都 ≥ 两个比较器（最接近的是 COLO829T Fiber-seq：ClairS-TO 0.995 vs 0.997），所以写 "at least as closely as"。COLO829T Illumina 的比较器各有 2,468 / 2,740 个 FP，余弦 0.913。只算 FP 的余弦：比较器 0.483–0.886，Pansoma 0.716–0.922（E8 同一张表）。
+  - E8 的 Pansoma HG008T PacBio / ONT d9 行是 1 GPU 的 seed 0 run。
 - 2026-10-15 E22 更正：HCC1954 的 CASTLE truth 没有 germline 问题（没有 truth SNV 是 normal 的 allele；common gnomAD allele 只占 2.39 %），跨样本在 HCC1954T 上的 FP 是模型把病人 germline 叫成了 somatic；H1437 的 truth 约 30 % 很可能是 normal 发生 LOH（chr9q、chr1:9–12 Mb）后丢掉的 germline allele，chr1 上影响很小。上文把 HCC1954 / H1437 当作 "truth 是否混入 germline" 的待查问题的说法，以此为准（`experiments/E22_truth_and_version_checks/README.md`）。
 
 - 2026-10-15 结果并入（E18，`experiments/E18_sbs96/tables.md` 18:06 版 + README；README 的数是 13:41 快照，这里按 18:06 的 `tables.md`）。chr1、BED 内、PASS、PoN 后；三核苷酸 context 取自 labels 的 GRCh38 FASTA；COSMIC v3.4 SBS GRCh38 来自本地 SigProfilerAssignment，没有下载，也没有做 signature refit（只算 cosine）。graph 坐标 calls 不在 rtg 里，也不在这些谱里。
@@ -3003,7 +3046,7 @@ We agree, and Figure 4 is revised accordingly.
 - 2026-10-15 改稿（适用性检查）：删掉 Response 里的 "[用户决定: confirm this withdrawal]"（内部标记，挪到还缺什么）；"Training spectrum" 一段压短，两个方向都保留（反方向只写 "lose more, mostly through threshold calibration"，数字在 R1.7），并写明 earlier normalisation、one seed；graph 坐标 calls 一段改用最终模型的 E9c / E9d 结果（3.8 / 1.7 %），不再写成 "will be tested"。数字没有改。
 - truth 谱（只有 SBS6 的 context 计数，没有 signature fit）：`analysis/reviewer_response_20261011/experiments/E21_training_composition/tables.md` T7 和 `somatic_spectrum.tsv`：HG008T 训练正样本 SNV 7,098–7,274 个，C>T 40.6–40.8 %，UV-type C>T 29.2–29.4 %，C>A 18.6–18.8 %，C>G 12.8–13.1 %，TCW C>G 8.3–8.5 %，CpG C>T 9.3–9.6 %；COLO829T 33,472–33,782 个，C>T 71.0–71.5 %，UV-type 64.6–65.1 %，TCW C>G 0.8 %。注意这是训练集（chr2-22 的 positive tensors 背后的 truth allele），不是 chr1 全部 truth。
 - HG008T chr1 SNV PoN 后 precision 0.452 / 0.497 / 0.466：`analysis/benchmark_7fc7396_20261012/hg008t_snv_indel_7fc7396_20261012/tables.md`。
-- 比较器的 SBS96：`experiments/E8_comparators/tables.md` 的 "SBS96 cosine similarity" 节是空表（E8 已按 user 10-13 的决定取消；README 还写着 PENDING，已过时）。
+- 比较器的 SBS96：2026-10-19 已有，见证据同日一条（E8 `tables.md` "SBS96 cosine similarity" 节，407e1c3）。原来这里写的 "空表" 已过时。
 - call sets 的位置：RIS run 的本地副本 `/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/<run>/test_chr1/` 只有 metrics，没有 VCF。tequila GPU 重新 predict 的三个 d46 SNV run 有完整的 chr1 call set：`/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/{HG008_PacBio,HG008_ONT,COLO829_ONT}_SNV_d46_7fc7396/vcf_chr1/`（`*.linear.vcf.gz`、`*.linear.unplaced.vcf.gz`、`eval_bed/vcfeval/pon_calls/{tp,fp,fn}.vcf.gz`）。
   - `eval_bed/report.txt`（PoN 后 PASS）：TP / FP 582 / 650、599 / 788、1690 / 457；P / R / F1 0.472 / 0.835 / 0.603、0.432 / 0.859 / 0.575、0.787 / 0.692 / 0.736（RIS 0.605 / 0.575 / 0.737，`benchmark_7fc7396_20261012/hprc_v21_d46_7fc7396_20261012/tables.md`）。
   - 没有 GRCh38 位置、不进 rtg 的 PASS calls（graph 坐标 calls）：240、1,258、4,569。
@@ -3016,9 +3059,9 @@ We agree, and Figure 4 is revised accordingly.
 
 **还缺什么。**
 
-- [数据同步] user 已有的 ClairS-TO / DeepSomatic VCF 路径（同时用于 R3.m2 的 re-score）。re-score 后把 `eval_bed/pass_pon` 写进 `E16_bootstrap/comparators.tsv`，重跑 E18 `collect.sh`，比较器就进 §2–4（Response 的 [待补: comparator spectra]、Figure 4a）。
+- （已完成 2026-10-19）比较器的 SBS96 余弦已写进 Response（E8，407e1c3，用户已有的 DeepSomatic 1.9.0 / ClairS-TO 0.4.1 / 0.4.2 call set，按 Pansoma 的 chr1 口径重新打分）。E18 的 `comparators.tsv` 还是空的；如果 Figure 4a 要用 E18 的统一作图，再把 E8 的 rtg 目录写进去重跑 E18。
 - [数据同步] COLO829T d9 单样本 run（`*_SNV_h90`）不在本地，E18 没有 COLO829T 的 d9 行（Response 只用 HPRC 图的范围，不受影响）。（其余 in-sample run 已在 2026-10-15 re-predict 完，E18 已用上。）
-- [CPU 本地] graph 坐标 calls 按验证类别的 SBS96（Response 最后一段的 [待补]）：E18 现在不含 unplaced calls；context 要从 graph index 的 node 序列取（E18 README Method 只做了 GRCh38 calls），类别用 `E9c_offref_filter_validation/per_call.tsv.gz`（九个 run 已有）。
+- （已完成 2026-10-19）graph 坐标 calls 按验证类别的 SBS96，放在 Supplementary 块（`supplementary/R3.5/`）；COLO829T v1.1 跑了 E9c / E9d 以后要重跑 `make_sbs96_by_class.py`。
 - [用户决定] 是否撤回 "SBS96 说明 graph 坐标 variants 是 biological" 的说法。Response 现在按撤回写（九个 run 的 E9c / E9d：HG008T 上只看组装 tumor-only 每个 run 1.1–5.2 %，R3.3）；如果不撤回，要改最后一段。
 - [用户决定]（可选）要不要做 signature refit（SigProfilerAssignment 已装），现在只报单个 signature 的 cosine。
 - [文字] Figure 4 改版（truth 并排、TP / FP 分开）；Supplementary SBS96 图（`E18_sbs96/sbs96.tsv` 有每个谱的 96 维计数）。

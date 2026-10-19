@@ -661,13 +661,47 @@ We agree, and the revised evaluation covers the complete output.
 
 We agree, and Figure 4 is revised accordingly.
 
-*Truth spectrum beside each caller.* For each dataset, Figure 4a now shows the SBS96 spectrum of the truth set next to those of Pansoma, DeepSomatic-TO and ClairS-TO (chr1, PASS, after the same population filtering), and the Supplement gives the SBS96 profile of every call set, split into true and false positives, with the cosine similarity of each to the truth spectrum [待补: comparator spectra]. Pansoma's calls reproduce the truth spectrum: the cosine similarity of all PASS calls on the HPRC graphs is 0.996–0.997 on COLO829T and 0.940–0.958 on HG008T (true positives alone 0.982–0.995).
+*Truth spectrum beside each caller.* For each dataset, Figure 4a now shows the SBS96 spectrum of the truth set next to those of Pansoma, DeepSomatic-TO and ClairS-TO (chr1, PASS, after the same population filtering), and the Supplement gives the SBS96 profile of every call set, split into true and false positives, with the cosine similarity of each to the truth spectrum. Pansoma's calls reproduce the truth spectrum at least as closely as the comparators': the cosine similarity of all PASS calls on the HPRC graphs is 0.996–0.997 on COLO829T and 0.940–0.958 on HG008T (true positives alone 0.982–0.995), against 0.913–0.995 and 0.878–0.943 for DeepSomatic-TO and ClairS-TO.
 
 *HG008T.* The HG008T truth spectrum is indeed heterogeneous. Its best single COSMIC v3.4 match is SBS40a (cosine 0.780; SBS5 0.625, SBS1 0.241), whereas COLO829T matches the UV signature SBS7a (0.917). With an SNV precision of 0.43–0.50 after filtering on HG008T chr1, the false positives shape the spectrum of a whole call set, which is why we show them separately: HG008T's false positives resemble the matched normal's germline spectrum (cosine 0.845–0.913; best COSMIC match SBS5 in five of six call sets), consistent with the private germline variants that dominate them (R3.2). On COLO829T, 57–63% of the false-positive spectrum resembles the tumor's UV spectrum, consistent with, but not proof of, real mutations missing from the truth set.
 
 *Training spectrum.* Our main models are trained on chr2–22 of the tumor they are tested on, so their calls could follow its spectrum. A preliminary cross-tumor test (HPRC v2.1 graph with the d46 filter, earlier normalisation, one seed; R1.7) shows that this depends on the training tumor. The true positives of the HG008T models on COLO829T, HCC1395 and two lung adenocarcinoma lines match each target's truth spectrum (cosine 0.986–0.999). The COLO829T models drift towards UV-type changes on other tumors (0.793–0.978); on HG008T, 44.2–55.6% of their true positives are UV-type C>T, against 28.8% in its truth. A model trained on one UV-dominated tumor thus ranks UV-context changes higher elsewhere, which supports training on several tumors (R1.7).
 
-*Graph-coordinate calls.* We no longer use the spectrum as evidence that these calls are biological, because a spectrum cannot distinguish somatic mutations from population alleles that GRCh38 lacks. We tested them directly instead: placement on GRCh38, a graph-native population filter and the tumor and normal assemblies show that on HG008T at most 1.1–5.2% per run have assembly support as somatic, and most are population or germline alleles (R3.3, R3.4). Their SBS96 profiles, with trinucleotide context taken from the graph, are shown separately in the Supplement by validation class [待补].
+*Graph-coordinate calls.* We no longer use the spectrum as evidence that these calls are biological, because a spectrum cannot distinguish somatic mutations from population alleles that GRCh38 lacks. We tested them directly instead: placement on GRCh38, a graph-native population filter and the tumor and normal assemblies show that on HG008T at most 1.1–5.2% per run have assembly support as somatic, and most are population or germline alleles (R3.3, R3.4). Their SBS96 profiles, with trinucleotide context taken from the graph, are shown in the Supplement by validation class: the population and germline classes (95% of these calls) resemble the matched normal's germline spectrum (cosine 0.79–0.91) more than the tumor truth (0.61–0.70); only the small classes absent from the normal lean towards the tumor (COLO829T, 103 calls not in COLO829BL: 0.64 against 0.51; HG008T, 13 tumor-only calls: 0.55 against 0.21).
+
+**Supplementary (R3.5).**
+
+![SBS96 spectra of the graph-coordinate SNV calls by validation class](supplementary/R3.5/fig_R3.5_sbs96_by_class.png)
+
+SBS96 spectra (percent of SNVs per channel) of the graph-coordinate SNV PASS calls on chr1, by validation class (R3.3),
+with the chr1 somatic truth and the matched-normal germline spectra of each tumor for reference. Calls of nine runs:
+HG008T on the HPRC v1.1 (d9) and v2.1 (d46) graphs and COLO829T on v2.1, three platforms each (COLO829T ONT: a random
+3,000 of its 4,569 calls). The trinucleotide context is read from the graph path: the bases flanking the site in the
+REF graph-path context spelled from each call's reads (0.1% of calls without a usable context are left out). Classes
+are exclusive, in this order: population allele (the ALT context is spelled by GRCh38 or an HPRC haplotype), germline
+(ALT context in the matched normal's assembly), tumor-only (HG008T: in the HG008-T tumor assembly and not in HG008-N) or
+not in the normal (COLO829T, which has no tumor assembly: absent from both COLO829BL haplotypes), and unverifiable or
+unsupported. Classes with fewer than 10 calls are not drawn.
+
+Supplementary Table (cosine similarities to the reference spectra; UV-type C>T: C>T at a 5' pyrimidine):
+
+| sample | spectrum | SNVs | cosine to truth | cosine to normal germline | UV-type C>T share | best COSMIC v3.4 matches |
+|---|---|---:|---:|---:|---:|---|
+| HG008T | population allele | 3,205 | 0.623 | 0.787 | 0.179 | SBS58 0.801, SBS40a 0.767, SBS5 0.766 |
+| HG008T | germline (normal assembly) | 603 | 0.653 | 0.831 | 0.148 | SBS3 0.783, SBS5 0.772, SBS40a 0.750 |
+| HG008T | tumor-only (in HG008-T, not in HG008-N) | 13 | 0.554 | 0.213 | 0.692 | SBS2 0.562, SBS31 0.477, SBS30 0.456 |
+| HG008T | unverifiable / unsupported | 158 | 0.348 | 0.370 | 0.184 | SBS47 0.812, SBS51 0.756, SBS58 0.745 |
+| COLO829T | population allele | 1,968 | 0.703 | 0.835 | 0.258 | SBS40a 0.841, SBS40c 0.809, SBS5 0.800 |
+| COLO829T | germline (normal assembly) | 1,611 | 0.608 | 0.908 | 0.215 | SBS5 0.855, SBS40c 0.821, SBS40a 0.811 |
+| COLO829T | not in the normal (COLO829BL) | 103 | 0.643 | 0.507 | 0.340 | SBS58 0.705, SBS40a 0.673, SBS40c 0.643 |
+| COLO829T | unverifiable / unsupported | 88 | 0.426 | 0.298 | 0.364 | SBS58 0.798, SBS47 0.721, SBS85 0.528 |
+| HG008T | chr1 somatic truth (reference) | 697 | 1.000 | 0.585 | 0.288 | - |
+| HG008T | matched-normal germline (reference) | 296,786 | 0.585 | 1.000 | 0.158 | - |
+| COLO829T | chr1 somatic truth (reference) | 2,443 | 1.000 | 0.428 | 0.585 | - |
+| COLO829T | matched-normal germline (reference) | 298,057 | 0.428 | 1.000 | 0.158 | - |
+
+Data and code: `supplementary/R3.5/sbs96_by_class.tsv` (96 counts per run and class, and per tumor and class),
+`cosine_by_class.tsv`, `make_sbs96_by_class.py` (classes and contexts from E9c / E9d, reference spectra and COSMIC from E18).
 
 ### R3.6 More perfect alignment is not more correct alignment
 
