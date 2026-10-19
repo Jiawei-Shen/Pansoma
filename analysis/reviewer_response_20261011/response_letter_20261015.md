@@ -444,8 +444,8 @@ and proportions for the same reads on four references (the GRCh38 BAM, a GRCh38-
 graphs), for both tumors and all three platforms (Supplementary Table and Figure below). In summary:
 
 - *Illumina:* full-length edit-free alignments of the same reads rise by about 10 percentage points on the HPRC graphs
-  (HG008T 69% to 79%, COLO829T 71% to 81–82%). The GRCh38 BAM and the GRCh38-only graph give the same rate (68.5% and
-  68.9%), so the gain comes from the graph's content, not from the aligner.
+  (HG008T 69% to 79%, COLO829T 71% to 81–82%). The GRCh38 BAM and the GRCh38-only graph give the same rate (HG008T
+  68.5% and 68.8%, COLO829T 70.6% and 70.7%), so the gain comes from the graph's content, not from the aligner.
 - *Long reads* are rarely edit-free end to end. On HPRC v1.1 their mismatched bases per kb fall (HiFi 1.57 to 0.63, ONT
   5.22 to 4.26), while indel rates, soft clipping and unmapped reads change little. HPRC v2.1 aligns nearly every HiFi
   read, but places the additional ones in difficult regions at lower mapping quality.
@@ -468,7 +468,7 @@ The revised text says that the graph mainly removes edits at alleles that the sa
 ![Illumina, the same reads on four references](supplementary/R2.7/fig_R2.7a.png)
 
 *a,* Illumina reads in 48 GRCh38 windows (24 random, 24 at segmental duplications): the share aligned end to end with no
-mismatch, indel or soft clip. COLO829T has no GRCh38 BAM in this sample.
+mismatch, indel or soft clip.
 
 ![Long reads, mismatched bases and indel events per kb](supplementary/R2.7/fig_R2.7b.png)
 
@@ -490,6 +490,7 @@ the graphs):
 | HG008T Illumina | GRCh38-only graph | 0.00 | 86.9 | 2.2 | 68.85 | 4.63 | 0.21 |
 | HG008T Illumina | HPRC v1.1 graph (d9) | 0.00 | 86.2 | 1.9 | 79.15 | 3.69 | 0.05 |
 | HG008T Illumina | HPRC v2.1 graph (d46) | 0.00 | 86.3 | 1.9 | 79.24 | 3.67 | 0.05 |
+| COLO829T Illumina | GRCh38 BAM (BWA-MEM) | 0.00 | 86.5 | 3.3 | 70.57 | 3.93 | 0.20 |
 | COLO829T Illumina | GRCh38-only graph | 0.00 | 85.6 | 2.6 | 70.72 | 3.95 | 0.21 |
 | COLO829T Illumina | HPRC v1.1 graph (d9) | 0.00 | 85.1 | 2.6 | 81.25 | 2.97 | 0.04 |
 | COLO829T Illumina | HPRC v2.1 graph (d46) | 0.00 | 85.5 | 2.4 | 81.61 | 2.94 | 0.04 |
@@ -512,8 +513,8 @@ Data: `supplementary/R2.7/alignment_stats.tsv`, `supplementary/R2.7/simulated_pl
 
 *Methods.*
 1. *Alignments.* Each dataset's tumor reads were aligned with vg Giraffe to the GRCh38-only graph and to the HPRC v1.1
-   (d9) and v2.1 (d46) graphs (versions as in R3.m1); the GRCh38 BAM is the data provider's BWA-MEM alignment (HG008T
-   Illumina).
+   (d9) and v2.1 (d46) graphs (versions as in R3.m1); the GRCh38 BAMs are the data providers' BWA-MEM 0.7.17 alignments
+   (HG008T: GIAB; COLO829T: SMaHT, Sentieon 202308.01 with duplicate marking, indel realignment and base recalibration).
 2. *Same reads.* Reads are selected by a hash of the read name, so every reference sees the same reads. Illumina: 10% of
    the reads in the 48 windows (± 1 kb) that any reference places there; long reads: 10% of all read names, whole files
    scanned.

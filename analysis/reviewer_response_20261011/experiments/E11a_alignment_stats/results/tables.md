@@ -1016,20 +1016,22 @@ By window kind and region:
 
 ## COLO829T_Illumina
 
-### W. Window sample (48 GRCh38 windows, flank 1,000 bp; reads placed in a window by at least one arm: 1,267,256; random 972,840, segdup 294,416)
+### W. Window sample (48 GRCh38 windows, flank 1,000 bp; reads placed in a window by at least one arm: 1,292,211; random 983,405, segdup 308,806)
 
 | arm | scope | in the window % | placed elsewhere % | unmapped % |
 |---|---|---:|---:|---:|
-| GRCh38-only graph | window | 92.35 | 7.38 | 0.27 |
-| HPRC v1.1 d9 | window | 92.23 | 7.76 | 0.01 |
-| HPRC v2.1 d46 | window | 92.06 | 7.67 | 0.27 |
+| GRCh38 BAM | window | 90.85 | 9.09 | 0.06 |
+| GRCh38-only graph | window | 90.56 | 8.97 | 0.46 |
+| HPRC v1.1 d9 | window | 90.45 | 9.42 | 0.13 |
+| HPRC v2.1 d46 | window | 90.28 | 9.27 | 0.45 |
 
-Unmapped records of the whole file (GAM head / BAM unplaced): GRCh38-only graph 24,512,000 (0.99 % of all reads); HPRC v1.1 d9 15,568,000 (0.63 % of all reads); HPRC v2.1 d46 23,242,000 (0.94 % of all reads)
+Unmapped records of the whole file (GAM head / BAM unplaced): GRCh38 BAM 7,299,140; GRCh38-only graph 24,512,000 (0.99 % of all reads); HPRC v1.1 d9 15,568,000 (0.63 % of all reads); HPRC v2.1 d46 23,242,000 (0.94 % of all reads)
 
 Reads placed in the window by the arm:
 
 | arm | reads | perfect % | mismatch % | indel % | soft clip % | MAPQ 0 % | MAPQ 1-9 % | MAPQ 10-29 % | MAPQ 30-59 % | MAPQ 60 % | median identity | mismatch bp / kb | indel events / kb | soft-clipped bp % | reads on off-ref nodes % | off-ref share of node visits % | off-ref visits edit-free % | multi-contig % |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| GRCh38 BAM | 1,173,977 | 70.57 | 26.57 | 2.91 | 3.28 | 6.18 | 0.39 | 2.23 | 4.56 | 86.51 | 1.0000 | 3.93 | 0.20 | 0.76 | - | - | - | 0.00 |
 | GRCh38-only graph | 1,170,285 | 70.72 | 26.87 | 2.84 | 2.63 | 3.98 | 3.69 | 2.96 | 3.75 | 85.61 | 1.0000 | 3.95 | 0.21 | 0.68 | - | - | - | 0.00 |
 | HPRC v1.1 d9 | 1,168,846 | 81.25 | 17.08 | 0.58 | 2.64 | 4.83 | 3.88 | 2.79 | 3.38 | 85.11 | 1.0000 | 2.97 | 0.04 | 0.88 | 14.54 | 4.89 | 98.98 | 0.00 |
 | HPRC v2.1 d46 | 1,166,614 | 81.61 | 17.00 | 0.56 | 2.36 | 4.74 | 3.60 | 2.75 | 3.45 | 85.45 | 1.0000 | 2.94 | 0.04 | 0.61 | 14.42 | 3.54 | 98.96 | 0.00 |
@@ -1041,60 +1043,94 @@ Same reads, both arms place them in the window (B relative to A); last columns: 
 | HPRC v1.1 d9 vs GRCh38-only graph | 1,102,189 | 1,102,189 | 1.57 | 3.15 | 0.39 | 1.07 | 71.02 | 81.66 | 10.64 | 0.00 | 2.49 | 2.29 | 99.58 | 100.00 | 16 | 68,027 | 69 | 63,261 | 3,396 |
 | HPRC v2.1 d46 vs GRCh38-only graph | 1,107,463 | 1,107,463 | 1.57 | 3.20 | 0.38 | 0.91 | 71.01 | 81.73 | 10.72 | 0.00 | 2.49 | 2.30 | 99.46 | 100.00 | 22 | 62,585 | 237 | 58,890 | 261 |
 | HPRC v2.1 d46 vs HPRC v1.1 d9 | 1,114,035 | 1,114,035 | 0.98 | 0.79 | 0.42 | 0.24 | 81.66 | 81.78 | 0.20 | 0.07 | 2.29 | 2.30 | 99.69 | 100.00 | 9 | 51,473 | 3,338 | 52,552 | 27 |
+| GRCh38-only graph vs GRCh38 BAM | 1,130,147 | 1,130,147 | 3.90 | 7.76 | 0.07 | 2.01 | 70.94 | 70.94 | 0.00 | 0.00 | 2.90 | 2.44 | 99.34 | 100.00 | 30 | 39,999 | 3,831 | 39,956 | 182 |
+| HPRC v1.1 d9 vs GRCh38 BAM | 1,100,983 | 1,100,983 | 3.38 | 7.06 | 0.24 | 2.72 | 71.06 | 81.70 | 10.64 | 0.00 | 2.94 | 2.29 | 99.58 | 100.00 | 31 | 71,413 | 1,581 | 67,133 | 730 |
+| HPRC v2.1 d46 vs GRCh38 BAM | 1,105,045 | 1,105,045 | 3.45 | 6.96 | 0.24 | 2.54 | 71.11 | 81.85 | 10.74 | 0.00 | 2.86 | 2.22 | 99.42 | 100.00 | 38 | 65,360 | 3,572 | 61,394 | 175 |
 
 | B vs A | reads perfect in B, not in A | of these on off-ref nodes in B % | median off-ref visits | A had mismatches only % | A had an indel % | A had a soft clip % | A unmapped % | median A mismatched bp | placement concordant % | MAPQ up % | MAPQ down % | reads perfect in A, not in B | of these on off-ref in B % |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | HPRC v1.1 d9 vs GRCh38-only graph | 117,286 | 94.11 | 1.0 | 85.76 | 13.63 | 0.70 | 0.00 | 1.0 | 99.60 | 5.17 | 1.93 | 7 | 57.14 |
 | HPRC v2.1 d46 vs GRCh38-only graph | 118,738 | 94.02 | 1.0 | 85.76 | 13.63 | 0.72 | 0.00 | 1.0 | 99.54 | 5.25 | 1.55 | 2 | 0.00 |
 | HPRC v2.1 d46 vs HPRC v1.1 d9 | 2,206 | 92.20 | 1.0 | 83.50 | 15.28 | 1.36 | 0.00 | 1.0 | 99.14 | 10.47 | 0.73 | 783 | 21.97 |
+| GRCh38-only graph vs GRCh38 BAM | 22 | 0.00 | 0.0 | 90.91 | 4.55 | 4.55 | 0.00 | 1.0 | 0.00 | 31.82 | 31.82 | 39 | 0.00 |
+| HPRC v1.1 d9 vs GRCh38 BAM | 117,123 | 94.10 | 1.0 | 83.98 | 14.73 | 1.42 | 0.00 | 1.0 | 99.62 | 6.39 | 3.43 | 12 | 41.67 |
+| HPRC v2.1 d46 vs GRCh38 BAM | 118,669 | 94.01 | 1.0 | 83.98 | 14.72 | 1.44 | 0.00 | 1.0 | 99.54 | 6.57 | 3.14 | 4 | 0.00 |
 
 By window kind and region:
 
 | stratum | reads | arm | in window % | elsewhere % | unmapped % | perfect % | mismatch % | indel % | soft clip % | MAPQ 0 % | MAPQ 60 % | median identity |
 |---|---:|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| windows: random | 972,840 | GRCh38-only graph | 96.96 | 2.76 | 0.28 | 71.73 | 25.82 | 2.73 | 2.54 | 1.77 | 93.53 | 1.0000 |
-| windows: random | 972,840 | HPRC v1.1 d9 | 96.97 | 3.02 | 0.01 | 82.34 | 16.01 | 0.38 | 2.57 | 2.03 | 93.55 | 1.0000 |
-| windows: random | 972,840 | HPRC v2.1 d46 | 96.35 | 3.37 | 0.28 | 82.78 | 15.86 | 0.35 | 2.29 | 1.91 | 94.03 | 1.0000 |
-| windows: segdup | 294,416 | GRCh38-only graph | 77.11 | 22.66 | 0.23 | 66.52 | 31.26 | 3.31 | 3.00 | 13.17 | 52.72 | 1.0000 |
-| windows: segdup | 294,416 | HPRC v1.1 d9 | 76.58 | 23.41 | 0.01 | 76.70 | 21.53 | 1.40 | 2.94 | 16.56 | 49.84 | 1.0000 |
-| windows: segdup | 294,416 | HPRC v2.1 d46 | 77.89 | 21.88 | 0.24 | 76.83 | 21.67 | 1.46 | 2.62 | 16.34 | 50.40 | 1.0000 |
-| SMaHT easy | 795,796 | GRCh38-only graph | 99.67 | 0.07 | 0.26 | 73.67 | 24.31 | 2.06 | 1.82 | 0.06 | 98.10 | 1.0000 |
-| SMaHT easy | 795,796 | HPRC v1.1 d9 | 99.87 | 0.13 | 0.00 | 83.82 | 14.81 | 0.26 | 1.94 | 0.09 | 97.88 | 1.0000 |
-| SMaHT easy | 795,796 | HPRC v2.1 d46 | 99.66 | 0.08 | 0.26 | 84.17 | 14.73 | 0.23 | 1.69 | 0.09 | 98.01 | 1.0000 |
-| SMaHT difficult | 126,883 | GRCh38-only graph | 99.24 | 0.33 | 0.43 | 63.11 | 32.50 | 5.62 | 5.60 | 0.65 | 93.83 | 1.0000 |
-| SMaHT difficult | 126,883 | HPRC v1.1 d9 | 99.31 | 0.68 | 0.00 | 75.26 | 21.85 | 0.90 | 5.39 | 0.60 | 94.05 | 1.0000 |
-| SMaHT difficult | 126,883 | HPRC v2.1 d46 | 98.98 | 0.59 | 0.42 | 75.84 | 21.69 | 0.83 | 4.94 | 0.51 | 94.32 | 1.0000 |
-| SMaHT extreme | 344,577 | GRCh38-only graph | 72.90 | 26.87 | 0.23 | 65.22 | 32.16 | 3.92 | 3.68 | 18.06 | 42.08 | 1.0000 |
-| SMaHT extreme | 344,577 | HPRC v1.1 d9 | 72.00 | 27.97 | 0.02 | 76.06 | 21.91 | 1.45 | 3.49 | 22.16 | 39.70 | 1.0000 |
-| SMaHT extreme | 344,577 | HPRC v2.1 d46 | 71.96 | 27.80 | 0.24 | 76.34 | 21.89 | 1.49 | 3.18 | 21.78 | 40.79 | 1.0000 |
-| segdup | 340,128 | GRCh38-only graph | 73.12 | 26.67 | 0.21 | 67.57 | 30.17 | 3.24 | 2.99 | 16.94 | 45.84 | 1.0000 |
-| segdup | 340,128 | HPRC v1.1 d9 | 72.48 | 27.52 | 0.00 | 77.07 | 21.13 | 1.32 | 2.98 | 21.28 | 43.15 | 1.0000 |
-| segdup | 340,128 | HPRC v2.1 d46 | 72.51 | 27.27 | 0.22 | 77.32 | 21.14 | 1.38 | 2.68 | 20.88 | 44.45 | 1.0000 |
-| not segdup | 927,128 | GRCh38-only graph | 99.40 | 0.30 | 0.29 | 71.58 | 25.99 | 2.74 | 2.53 | 0.49 | 96.35 | 1.0000 |
-| not segdup | 927,128 | HPRC v1.1 d9 | 99.48 | 0.51 | 0.01 | 82.37 | 16.00 | 0.38 | 2.55 | 0.44 | 96.33 | 1.0000 |
-| not segdup | 927,128 | HPRC v2.1 d46 | 99.23 | 0.48 | 0.29 | 82.76 | 15.89 | 0.35 | 2.27 | 0.42 | 96.44 | 1.0000 |
+| windows: random | 983,405 | GRCh38 BAM | 96.21 | 3.72 | 0.06 | 71.56 | 25.51 | 2.83 | 3.18 | 2.56 | 95.02 | 1.0000 |
+| windows: random | 983,405 | GRCh38-only graph | 95.92 | 3.60 | 0.48 | 71.73 | 25.82 | 2.73 | 2.54 | 1.77 | 93.53 | 1.0000 |
+| windows: random | 983,405 | HPRC v1.1 d9 | 95.93 | 3.94 | 0.13 | 82.34 | 16.01 | 0.38 | 2.57 | 2.03 | 93.55 | 1.0000 |
+| windows: random | 983,405 | HPRC v2.1 d46 | 95.31 | 4.22 | 0.46 | 82.78 | 15.86 | 0.35 | 2.29 | 1.91 | 94.03 | 1.0000 |
+| windows: segdup | 308,806 | GRCh38 BAM | 73.77 | 26.20 | 0.04 | 66.45 | 30.96 | 3.23 | 3.70 | 21.22 | 51.13 | 1.0000 |
+| windows: segdup | 308,806 | GRCh38-only graph | 73.51 | 26.08 | 0.40 | 66.52 | 31.26 | 3.31 | 3.00 | 13.17 | 52.72 | 1.0000 |
+| windows: segdup | 308,806 | HPRC v1.1 d9 | 73.02 | 26.87 | 0.12 | 76.70 | 21.54 | 1.40 | 2.94 | 16.55 | 49.84 | 1.0000 |
+| windows: segdup | 308,806 | HPRC v2.1 d46 | 74.26 | 25.34 | 0.40 | 76.83 | 21.67 | 1.46 | 2.62 | 16.34 | 50.40 | 1.0000 |
+| SMaHT easy | 794,335 | GRCh38 BAM | 99.75 | 0.19 | 0.07 | 73.55 | 24.07 | 2.12 | 2.32 | 0.01 | 99.77 | 1.0000 |
+| SMaHT easy | 794,335 | GRCh38-only graph | 99.53 | 0.09 | 0.38 | 73.70 | 24.30 | 2.03 | 1.81 | 0.05 | 98.10 | 1.0000 |
+| SMaHT easy | 794,335 | HPRC v1.1 d9 | 99.72 | 0.19 | 0.09 | 83.86 | 14.79 | 0.25 | 1.91 | 0.09 | 97.88 | 1.0000 |
+| SMaHT easy | 794,335 | HPRC v2.1 d46 | 99.52 | 0.11 | 0.38 | 84.20 | 14.71 | 0.23 | 1.67 | 0.09 | 98.01 | 1.0000 |
+| SMaHT difficult | 130,363 | GRCh38 BAM | 98.86 | 1.06 | 0.08 | 63.29 | 31.85 | 5.74 | 6.24 | 0.32 | 97.67 | 1.0000 |
+| SMaHT difficult | 130,363 | GRCh38-only graph | 98.51 | 0.75 | 0.74 | 63.50 | 32.36 | 5.58 | 5.30 | 0.64 | 93.95 | 1.0000 |
+| SMaHT difficult | 130,363 | HPRC v1.1 d9 | 98.59 | 1.34 | 0.08 | 75.56 | 21.75 | 0.90 | 5.11 | 0.60 | 94.14 | 1.0000 |
+| SMaHT difficult | 130,363 | HPRC v2.1 d46 | 98.26 | 1.11 | 0.63 | 76.16 | 21.58 | 0.82 | 4.66 | 0.50 | 94.40 | 1.0000 |
+| SMaHT extreme | 367,513 | GRCh38 BAM | 68.78 | 31.18 | 0.03 | 64.94 | 31.72 | 3.93 | 4.78 | 28.53 | 39.23 | 1.0000 |
+| SMaHT extreme | 367,513 | GRCh38-only graph | 68.36 | 31.09 | 0.54 | 65.06 | 32.18 | 4.00 | 3.85 | 18.05 | 42.07 | 1.0000 |
+| SMaHT extreme | 367,513 | HPRC v1.1 d9 | 67.55 | 32.23 | 0.22 | 75.87 | 21.96 | 1.47 | 3.69 | 22.15 | 39.71 | 1.0000 |
+| SMaHT extreme | 367,513 | HPRC v2.1 d46 | 67.48 | 31.98 | 0.54 | 76.17 | 21.94 | 1.51 | 3.36 | 21.78 | 40.79 | 1.0000 |
+| segdup | 360,817 | GRCh38 BAM | 69.17 | 30.80 | 0.03 | 67.47 | 29.87 | 3.14 | 3.70 | 27.90 | 44.23 | 1.0000 |
+| segdup | 360,817 | GRCh38-only graph | 68.93 | 30.71 | 0.36 | 67.56 | 30.17 | 3.24 | 2.99 | 16.94 | 45.84 | 1.0000 |
+| segdup | 360,817 | HPRC v1.1 d9 | 68.32 | 31.59 | 0.09 | 77.07 | 21.13 | 1.32 | 2.98 | 21.28 | 43.15 | 1.0000 |
+| segdup | 360,817 | HPRC v2.1 d46 | 68.35 | 31.29 | 0.36 | 77.32 | 21.14 | 1.38 | 2.68 | 20.88 | 44.45 | 1.0000 |
+| not segdup | 931,394 | GRCh38 BAM | 99.25 | 0.68 | 0.07 | 71.41 | 25.68 | 2.85 | 3.17 | 0.32 | 97.92 | 1.0000 |
+| not segdup | 931,394 | GRCh38-only graph | 98.95 | 0.55 | 0.50 | 71.58 | 25.98 | 2.74 | 2.53 | 0.49 | 96.35 | 1.0000 |
+| not segdup | 931,394 | HPRC v1.1 d9 | 99.03 | 0.83 | 0.14 | 82.37 | 16.00 | 0.38 | 2.55 | 0.44 | 96.33 | 1.0000 |
+| not segdup | 931,394 | HPRC v2.1 d46 | 98.77 | 0.74 | 0.48 | 82.76 | 15.89 | 0.35 | 2.27 | 0.42 | 96.44 | 1.0000 |
 
 | stratum | B vs A | both in window | MAPQ>=30 gained % | MAPQ>=30 lost % | perfect gained % | perfect lost % | concordant (1 kb) % | A in, B elsewhere % | A in, B unmapped % |
 |---|---|---:|---:|---:|---:|---:|---:|---:|---:|
-| windows: random | HPRC v1.1 d9 vs GRCh38-only graph | 923,112 | 0.19 | 0.29 | 10.87 | 0.00 | 99.86 | 2.13 | 0.01 |
-| windows: random | HPRC v2.1 d46 vs GRCh38-only graph | 921,328 | 0.16 | 0.31 | 11.02 | 0.00 | 99.87 | 2.31 | 0.02 |
-| windows: random | HPRC v2.1 d46 vs HPRC v1.1 d9 | 923,075 | 0.13 | 0.15 | 0.22 | 0.05 | 99.89 | 1.87 | 0.28 |
-| windows: segdup | HPRC v1.1 d9 vs GRCh38-only graph | 179,077 | 1.45 | 5.08 | 9.47 | 0.00 | 98.17 | 21.11 | 0.01 |
-| windows: segdup | HPRC v2.1 d46 vs GRCh38-only graph | 186,135 | 1.49 | 3.88 | 9.26 | 0.00 | 97.39 | 17.99 | 0.02 |
-| windows: segdup | HPRC v2.1 d46 vs HPRC v1.1 d9 | 190,960 | 1.83 | 0.66 | 0.11 | 0.16 | 98.73 | 15.01 | 0.30 |
-| SMaHT easy | HPRC v1.1 d9 vs GRCh38-only graph | 792,129 | 0.06 | 0.18 | 10.38 | 0.00 | 100.00 | 0.13 | 0.00 |
-| SMaHT easy | HPRC v2.1 d46 vs GRCh38-only graph | 792,726 | 0.05 | 0.13 | 10.50 | 0.00 | 100.00 | 0.04 | 0.01 |
-| SMaHT easy | HPRC v2.1 d46 vs HPRC v1.1 d9 | 792,275 | 0.13 | 0.09 | 0.17 | 0.05 | 100.00 | 0.05 | 0.26 |
-| SMaHT difficult | HPRC v1.1 d9 vs GRCh38-only graph | 125,124 | 0.20 | 0.28 | 12.31 | 0.00 | 99.98 | 0.63 | 0.00 |
-| SMaHT difficult | HPRC v2.1 d46 vs GRCh38-only graph | 125,325 | 0.19 | 0.28 | 12.56 | 0.00 | 100.00 | 0.44 | 0.03 |
-| SMaHT difficult | HPRC v2.1 d46 vs HPRC v1.1 d9 | 125,270 | 0.17 | 0.15 | 0.34 | 0.09 | 99.98 | 0.17 | 0.42 |
-| SMaHT extreme | HPRC v1.1 d9 vs GRCh38-only graph | 184,936 | 1.98 | 5.43 | 10.63 | 0.00 | 97.54 | 26.35 | 0.03 |
-| SMaHT extreme | HPRC v2.1 d46 vs GRCh38-only graph | 189,412 | 1.92 | 4.58 | 10.43 | 0.00 | 96.83 | 24.55 | 0.04 |
-| SMaHT extreme | HPRC v2.1 d46 vs HPRC v1.1 d9 | 196,490 | 1.76 | 0.91 | 0.22 | 0.16 | 98.28 | 20.50 | 0.30 |
-| segdup | HPRC v1.1 d9 vs GRCh38-only graph | 184,746 | 1.59 | 5.16 | 9.09 | 0.00 | 97.59 | 25.71 | 0.01 |
-| segdup | HPRC v2.1 d46 vs GRCh38-only graph | 189,475 | 1.52 | 4.08 | 8.87 | 0.00 | 96.89 | 23.79 | 0.02 |
-| segdup | HPRC v2.1 d46 vs HPRC v1.1 d9 | 195,843 | 1.87 | 0.78 | 0.16 | 0.16 | 98.32 | 20.27 | 0.29 |
-| not segdup | HPRC v1.1 d9 vs GRCh38-only graph | 917,443 | 0.15 | 0.25 | 10.95 | 0.00 | 99.98 | 0.44 | 0.01 |
-| not segdup | HPRC v2.1 d46 vs GRCh38-only graph | 917,988 | 0.15 | 0.26 | 11.10 | 0.00 | 99.99 | 0.37 | 0.02 |
-| not segdup | HPRC v2.1 d46 vs HPRC v1.1 d9 | 918,192 | 0.11 | 0.12 | 0.21 | 0.05 | 99.99 | 0.16 | 0.29 |
+| windows: random | HPRC v1.1 d9 vs GRCh38-only graph | 923,102 | 0.19 | 0.29 | 10.87 | 0.00 | 99.86 | 2.13 | 0.01 |
+| windows: random | HPRC v2.1 d46 vs GRCh38-only graph | 921,320 | 0.16 | 0.31 | 11.02 | 0.00 | 99.87 | 2.31 | 0.02 |
+| windows: random | HPRC v2.1 d46 vs HPRC v1.1 d9 | 923,065 | 0.13 | 0.15 | 0.22 | 0.05 | 99.89 | 1.87 | 0.28 |
+| windows: random | GRCh38-only graph vs GRCh38 BAM | 927,812 | 0.04 | 1.37 | 0.00 | 0.00 | 99.89 | 1.61 | 0.33 |
+| windows: random | HPRC v1.1 d9 vs GRCh38 BAM | 923,084 | 0.10 | 1.51 | 10.86 | 0.00 | 99.85 | 2.31 | 0.13 |
+| windows: random | HPRC v2.1 d46 vs GRCh38 BAM | 921,415 | 0.08 | 1.49 | 11.01 | 0.00 | 99.86 | 2.31 | 0.30 |
+| windows: segdup | HPRC v1.1 d9 vs GRCh38-only graph | 179,087 | 1.45 | 5.08 | 9.47 | 0.00 | 98.18 | 21.10 | 0.01 |
+| windows: segdup | HPRC v2.1 d46 vs GRCh38-only graph | 186,143 | 1.49 | 3.88 | 9.26 | 0.00 | 97.40 | 17.98 | 0.02 |
+| windows: segdup | HPRC v2.1 d46 vs HPRC v1.1 d9 | 190,970 | 1.83 | 0.66 | 0.11 | 0.16 | 98.72 | 15.01 | 0.29 |
+| windows: segdup | GRCh38-only graph vs GRCh38 BAM | 202,335 | 0.20 | 4.97 | 0.01 | 0.01 | 96.83 | 10.86 | 0.32 |
+| windows: segdup | HPRC v1.1 d9 vs GRCh38 BAM | 177,899 | 1.00 | 8.99 | 9.47 | 0.01 | 98.16 | 21.76 | 0.15 |
+| windows: segdup | HPRC v2.1 d46 vs GRCh38 BAM | 183,630 | 1.05 | 7.79 | 9.37 | 0.00 | 97.18 | 19.08 | 0.31 |
+| SMaHT easy | HPRC v1.1 d9 vs GRCh38-only graph | 789,599 | 0.06 | 0.18 | 10.39 | 0.00 | 100.00 | 0.13 | 0.00 |
+| SMaHT easy | HPRC v2.1 d46 vs GRCh38-only graph | 790,185 | 0.05 | 0.13 | 10.50 | 0.00 | 100.00 | 0.04 | 0.01 |
+| SMaHT easy | HPRC v2.1 d46 vs HPRC v1.1 d9 | 789,731 | 0.13 | 0.09 | 0.17 | 0.05 | 100.00 | 0.05 | 0.25 |
+| SMaHT easy | GRCh38-only graph vs GRCh38 BAM | 790,292 | 0.00 | 0.84 | 0.00 | 0.00 | 100.00 | 0.03 | 0.23 |
+| SMaHT easy | HPRC v1.1 d9 vs GRCh38 BAM | 790,140 | 0.01 | 1.01 | 10.38 | 0.00 | 99.99 | 0.18 | 0.09 |
+| SMaHT easy | HPRC v2.1 d46 vs GRCh38 BAM | 790,071 | 0.00 | 0.93 | 10.51 | 0.00 | 100.00 | 0.06 | 0.22 |
+| SMaHT difficult | HPRC v1.1 d9 vs GRCh38-only graph | 127,602 | 0.19 | 0.27 | 12.24 | 0.00 | 99.98 | 0.63 | 0.00 |
+| SMaHT difficult | HPRC v2.1 d46 vs GRCh38-only graph | 127,820 | 0.18 | 0.28 | 12.50 | 0.00 | 100.00 | 0.44 | 0.03 |
+| SMaHT difficult | HPRC v2.1 d46 vs HPRC v1.1 d9 | 127,756 | 0.16 | 0.15 | 0.35 | 0.08 | 99.98 | 0.17 | 0.42 |
+| SMaHT difficult | GRCh38-only graph vs GRCh38 BAM | 127,647 | 0.10 | 1.98 | 0.00 | 0.00 | 99.98 | 0.47 | 0.48 |
+| SMaHT difficult | HPRC v1.1 d9 vs GRCh38 BAM | 127,492 | 0.10 | 2.09 | 12.25 | 0.00 | 99.98 | 1.00 | 0.08 |
+| SMaHT difficult | HPRC v2.1 d46 vs GRCh38 BAM | 127,524 | 0.10 | 2.09 | 12.52 | 0.00 | 99.99 | 0.68 | 0.36 |
+| SMaHT extreme | HPRC v1.1 d9 vs GRCh38-only graph | 184,988 | 1.98 | 5.43 | 10.63 | 0.00 | 97.54 | 26.35 | 0.03 |
+| SMaHT extreme | HPRC v2.1 d46 vs GRCh38-only graph | 189,458 | 1.92 | 4.58 | 10.43 | 0.00 | 96.83 | 24.55 | 0.05 |
+| SMaHT extreme | HPRC v2.1 d46 vs HPRC v1.1 d9 | 196,548 | 1.76 | 0.91 | 0.21 | 0.16 | 98.28 | 20.49 | 0.33 |
+| SMaHT extreme | GRCh38-only graph vs GRCh38 BAM | 212,208 | 0.31 | 6.39 | 0.01 | 0.02 | 96.50 | 15.50 | 0.55 |
+| SMaHT extreme | HPRC v1.1 d9 vs GRCh38 BAM | 183,351 | 1.37 | 10.53 | 10.61 | 0.01 | 97.52 | 27.18 | 0.29 |
+| SMaHT extreme | HPRC v2.1 d46 vs GRCh38 BAM | 187,450 | 1.32 | 9.60 | 10.49 | 0.00 | 96.57 | 25.31 | 0.53 |
+| segdup | HPRC v1.1 d9 vs GRCh38-only graph | 184,738 | 1.59 | 5.16 | 9.09 | 0.00 | 97.59 | 25.71 | 0.01 |
+| segdup | HPRC v2.1 d46 vs GRCh38-only graph | 189,467 | 1.52 | 4.08 | 8.87 | 0.00 | 96.89 | 23.80 | 0.02 |
+| segdup | HPRC v2.1 d46 vs HPRC v1.1 d9 | 195,836 | 1.87 | 0.78 | 0.16 | 0.16 | 98.32 | 20.27 | 0.28 |
+| segdup | GRCh38-only graph vs GRCh38 BAM | 211,492 | 0.20 | 5.25 | 0.01 | 0.01 | 96.58 | 14.95 | 0.31 |
+| segdup | HPRC v1.1 d9 vs GRCh38 BAM | 183,338 | 1.14 | 9.27 | 9.07 | 0.01 | 97.57 | 26.41 | 0.13 |
+| segdup | HPRC v2.1 d46 vs GRCh38 BAM | 187,760 | 1.09 | 8.14 | 8.92 | 0.00 | 96.65 | 24.47 | 0.29 |
+| not segdup | HPRC v1.1 d9 vs GRCh38-only graph | 917,451 | 0.15 | 0.25 | 10.95 | 0.00 | 99.98 | 0.44 | 0.01 |
+| not segdup | HPRC v2.1 d46 vs GRCh38-only graph | 917,996 | 0.15 | 0.26 | 11.10 | 0.00 | 99.99 | 0.37 | 0.02 |
+| not segdup | HPRC v2.1 d46 vs HPRC v1.1 d9 | 918,199 | 0.11 | 0.12 | 0.21 | 0.05 | 99.99 | 0.16 | 0.29 |
+| not segdup | GRCh38-only graph vs GRCh38 BAM | 918,655 | 0.04 | 1.27 | 0.00 | 0.00 | 99.97 | 0.29 | 0.33 |
+| not segdup | HPRC v1.1 d9 vs GRCh38 BAM | 917,645 | 0.06 | 1.41 | 10.95 | 0.00 | 99.98 | 0.59 | 0.14 |
+| not segdup | HPRC v2.1 d46 vs GRCh38 BAM | 917,285 | 0.06 | 1.39 | 11.11 | 0.00 | 99.98 | 0.46 | 0.31 |
 

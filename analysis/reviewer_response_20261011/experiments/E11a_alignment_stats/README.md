@@ -1,11 +1,11 @@
 # E11a: per-read alignment statistics of the same reads on four references
 
-Status: complete (2026-10-15); see "Status" at the end. Tables: `results/tables.md` (written by `compare.py`, last run
-2026-10-15, 18:36).
+Status: complete (2026-10-15; COLO829T Illumina GRCh38 BAM arm added 2026-10-19); see "Status" at the end. Tables:
+`results/tables.md` (written by `compare.py`, last run 2026-10-19 on COLO829T Illumina; the other five JSONs are from
+2026-10-15).
 
-In short: both tumors on all three platforms. HG008T PacBio / ONT / Illumina and COLO829T fiber-seq / ONT are on all
-four arms (GRCh38 BAM, GRCh38-only graph, HPRC v1.1 d9, HPRC v2.1 d46). COLO829T Illumina has the three graph arms only,
-because no GRCh38 BAM is listed for it.
+In short: both tumors on all three platforms, every set on all four arms (GRCh38 BAM, GRCh38-only graph, HPRC v1.1 d9,
+HPRC v2.1 d46). The COLO829T Illumina BAM arm was added on 2026-10-19 (the SMaHT BAM, section 7).
 
 ## Question
 
@@ -58,9 +58,12 @@ it gives the same count (section 0).
 | COLO829T_ONT | linear / d9 / d46 | `tasks.tsv` rows 16-18 | G scans | done |
 | COLO829T_ONT | grch38_bam | `COLO829T_ONT_merged.bam` | W scan (wtask 10) | done |
 | COLO829T_Illumina | linear / d9 / d46 | `wtasks.tsv` rows 6-8 (linear = the paired `vg_linear_hg38_pe` GAM) | W scans (wtasks 6-8) | done |
+| COLO829T_Illumina | grch38_bam | `/scratch/qfu/COLO829T_WGS/SMHTCOLO829T-X-X-M45-A001-uwsc-SMAFIZO17Q9I-sentieon_bwamem_202308.01_GRCh38.aligned.sorted.bam` | W scan (wtask 11) | done (2026-10-19) |
 
-`...` = `/scratch/jshen/data/HG008_GIAB/raw_sequencing_data`. Full paths are in `tasks.tsv` / `wtasks.tsv`. No GRCh38 BAM
-is listed for COLO829T Illumina, so that set has the three graph arms only.
+`...` = `/scratch/jshen/data/HG008_GIAB/raw_sequencing_data`. Full paths are in `tasks.tsv` / `wtasks.tsv`. The COLO829T
+Illumina GAMs and this BAM hold the same reads: the FASTQ converted from the BAM (`/scratch/qfu/COLO829T_WGS/bam2fastq.sh`)
+has 2,479,603,422 reads, the GAMs' total, and 1,006 of 1,007 mapped d9 read names of window w00 were found in the BAM's
+fetch of that window (2026-10-19).
 
 Other inputs:
 
@@ -157,6 +160,8 @@ Job scripts: `tmp/reviewer_cpu_20261013/E11a_alignment_stats/scan_array.sh` (G; 
 | 387287 | 6-10 | W scans COLO829T Illumina linear / d9 / d46, COLO829T fiber-seq BAM, COLO829T ONT BAM | COMPLETED 2026-10-15 18:01-18:20 (3-5 min each) |
 | 387288 | 12-14, 16-18 | G scans COLO829T fiber-seq and ONT, linear / d9 / d46 | COMPLETED 2026-10-15 13:44-18:01 (35-53 min each, one at a time) |
 | 406873 | - | `compare.py` on the COLO829T sets (`sbatch --wrap`, general, 2 CPUs, 32 GB) | COMPLETED 2026-10-15 18:31-18:35 |
+| 446070 | 11 | W scan COLO829T Illumina GRCh38 BAM | COMPLETED 2026-10-19 14:06-14:07 (50 s; peak RSS 0.96 GB) |
+| 446071 | - | `compare.py COLO829T_Illumina` (`sbatch --wrap`, general, 2 CPUs, 32 GB) | COMPLETED 2026-10-19 (1 min 21 s) |
 
 The jobs held on 2026-10-13 (lab-cluster cap) were released on 2026-10-15 at about 13:05. The `tasks.tsv` rows 7, 8-11,
 15, 19 and 20-22 (full BAM scans and full Illumina GAM scans) were never submitted. Short reads and the BAM arms use the
@@ -927,21 +932,29 @@ Pairs by region (B relative to A):
 | SMaHT extreme | HPRC v1.1 d9 vs GRCh38 BAM | 2,435 | 5.34 | 9.94 | 0.00 | 0.00 | 94.00 | 14.21 | 9.55 |
 | SMaHT extreme | HPRC v2.1 d46 vs GRCh38 BAM | 2,097 | 4.43 | 11.73 | 0.00 | 0.00 | 91.99 | 23.17 | 11.18 |
 
-### 7. COLO829T Illumina, W sample (48 windows, flank 1 kb; 1,267,256 reads: random 972,840, segdup 294,416), graph arms only
+### 7. COLO829T Illumina, W sample (48 windows, flank 1 kb; 1,292,211 reads: random 983,405, segdup 308,806), all four arms
 
 | arm | scope | in the window % | placed elsewhere % | unmapped % |
 |---|---|---:|---:|---:|
-| GRCh38-only graph | window | 92.35 | 7.38 | 0.27 |
-| HPRC v1.1 d9 | window | 92.23 | 7.76 | 0.01 |
-| HPRC v2.1 d46 | window | 92.06 | 7.67 | 0.27 |
+| GRCh38 BAM | window | 90.85 | 9.09 | 0.06 |
+| GRCh38-only graph | window | 90.56 | 8.97 | 0.46 |
+| HPRC v1.1 d9 | window | 90.45 | 9.42 | 0.13 |
+| HPRC v2.1 d46 | window | 90.28 | 9.27 | 0.45 |
 
-Unmapped records of the whole file (GAM heads; 2,479,603,422 reads, `compare.py` `TOTAL_READS`): GRCh38-only graph
-24,512,000 (0.99 %), HPRC v1.1 d9 15,568,000 (0.63 %), HPRC v2.1 d46 23,242,000 (0.94 %).
+Unmapped records of the whole file (GAM heads; 2,479,603,422 reads, `compare.py` `TOTAL_READS`): GRCh38 BAM
+7,299,140 (unplaced, `fetch('*')`; 0.29 %); GRCh38-only graph 24,512,000 (0.99 %), HPRC v1.1 d9 15,568,000 (0.63 %),
+HPRC v2.1 d46 23,242,000 (0.94 %).
+
+The BAM arm was added on 2026-10-19 (window scan 446070_11 of the SMaHT BAM, `wtasks.tsv` row 11). The read
+universe grew from 1,267,256 reads (2026-10-15, three graph arms) to 1,292,211; the in-window rows of the graph arms
+are unchanged, the status and stratum percentages are over the larger universe (strata are anchored on the BAM
+placement when it is in the window).
 
 Reads the arm places in the window:
 
 | arm | reads in window | perfect % | mismatch % | indel % | soft clip % | MAPQ 0 % | MAPQ 1-9 % | MAPQ 10-29 % | MAPQ 30-59 % | MAPQ 60 % | median identity | mismatch bp / kb | indel events / kb | soft-clipped bp % | reads on off-ref nodes % | off-ref share of node visits % | off-ref visits edit-free % |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| GRCh38 BAM | 1,173,977 | 70.57 | 26.57 | 2.91 | 3.28 | 6.18 | 0.39 | 2.23 | 4.56 | 86.51 | 1.0000 | 3.93 | 0.20 | 0.76 | - | - | - |
 | GRCh38-only graph | 1,170,285 | 70.72 | 26.87 | 2.84 | 2.63 | 3.98 | 3.69 | 2.96 | 3.75 | 85.61 | 1.0000 | 3.95 | 0.21 | 0.68 | - | - | - |
 | HPRC v1.1 d9 | 1,168,846 | 81.25 | 17.08 | 0.58 | 2.64 | 4.83 | 3.88 | 2.79 | 3.38 | 85.11 | 1.0000 | 2.97 | 0.04 | 0.88 | 14.54 | 4.89 | 98.98 |
 | HPRC v2.1 d46 | 1,166,614 | 81.61 | 17.00 | 0.56 | 2.36 | 4.74 | 3.60 | 2.75 | 3.45 | 85.45 | 1.0000 | 2.94 | 0.04 | 0.61 | 14.42 | 3.54 | 98.96 |
@@ -953,6 +966,9 @@ Same reads, both arms place them in the window (B relative to A). The last four 
 | HPRC v1.1 d9 vs GRCh38-only graph | 1,102,189 | 1.57 | 3.15 | 0.39 | 1.07 | 71.02 | 81.66 | 10.64 | 0.00 | 2.49 | 2.29 | 99.58 | 100.00 | 16 | 68,027 | 69 | 63,261 | 3,396 |
 | HPRC v2.1 d46 vs GRCh38-only graph | 1,107,463 | 1.57 | 3.20 | 0.38 | 0.91 | 71.01 | 81.73 | 10.72 | 0.00 | 2.49 | 2.30 | 99.46 | 100.00 | 22 | 62,585 | 237 | 58,890 | 261 |
 | HPRC v2.1 d46 vs HPRC v1.1 d9 | 1,114,035 | 0.98 | 0.79 | 0.42 | 0.24 | 81.66 | 81.78 | 0.20 | 0.07 | 2.29 | 2.30 | 99.69 | 100.00 | 9 | 51,473 | 3,338 | 52,552 | 27 |
+| GRCh38-only graph vs GRCh38 BAM | 1,130,147 | 3.90 | 7.76 | 0.07 | 2.01 | 70.94 | 70.94 | 0.00 | 0.00 | 2.90 | 2.44 | 99.34 | 100.00 | 30 | 39,999 | 3,831 | 39,956 | 182 |
+| HPRC v1.1 d9 vs GRCh38 BAM | 1,100,983 | 3.38 | 7.06 | 0.24 | 2.72 | 71.06 | 81.70 | 10.64 | 0.00 | 2.94 | 2.29 | 99.58 | 100.00 | 31 | 71,413 | 1,581 | 67,133 | 730 |
+| HPRC v2.1 d46 vs GRCh38 BAM | 1,105,045 | 3.45 | 6.96 | 0.24 | 2.54 | 71.11 | 81.85 | 10.74 | 0.00 | 2.86 | 2.22 | 99.42 | 100.00 | 38 | 65,360 | 3,572 | 61,394 | 175 |
 
 Reads that became perfect / stopped being perfect:
 
@@ -961,54 +977,71 @@ Reads that became perfect / stopped being perfect:
 | HPRC v1.1 d9 vs GRCh38-only graph | 117,286 | 94.11 | 1.0 | 85.76 | 13.63 | 0.70 | 0.00 | 1.0 | 99.60 | 5.17 | 1.93 | 7 | 57.14 |
 | HPRC v2.1 d46 vs GRCh38-only graph | 118,738 | 94.02 | 1.0 | 85.76 | 13.63 | 0.72 | 0.00 | 1.0 | 99.54 | 5.25 | 1.55 | 2 | 0.00 |
 | HPRC v2.1 d46 vs HPRC v1.1 d9 | 2,206 | 92.20 | 1.0 | 83.50 | 15.28 | 1.36 | 0.00 | 1.0 | 99.14 | 10.47 | 0.73 | 783 | 21.97 |
+| GRCh38-only graph vs GRCh38 BAM | 22 | 0.00 | 0.0 | 90.91 | 4.55 | 4.55 | 0.00 | 1.0 | 0.00 | 31.82 | 31.82 | 39 | 0.00 |
+| HPRC v1.1 d9 vs GRCh38 BAM | 117,123 | 94.10 | 1.0 | 83.98 | 14.73 | 1.42 | 0.00 | 1.0 | 99.62 | 6.39 | 3.43 | 12 | 41.67 |
+| HPRC v2.1 d46 vs GRCh38 BAM | 118,669 | 94.01 | 1.0 | 83.98 | 14.72 | 1.44 | 0.00 | 1.0 | 99.54 | 6.57 | 3.14 | 4 | 0.00 |
 
-Reads with MAPQ >= 30 in both arms (JSON `W.pairs`): 1,026,464 (d9 vs linear), 1,030,949 (d46 vs linear), 1,029,601
-(d46 vs d9).
+Reads with MAPQ >= 30 in both arms (JSON `W.pairs`): 1,026,464 (d9 vs linear), 1,030,949 (d46 vs linear), 1,029,601 (d46 vs d9), 1,044,317 (linear vs BAM), 1,028,107 (d9 vs BAM), 1,032,115 (d46 vs BAM).
 
-By window kind and region (selected):
+By window kind and region (selected; all strata in `tables.md`):
 
 | stratum | reads | arm | in window % | elsewhere % | unmapped % | perfect % | mismatch % | indel % | soft clip % | MAPQ 0 % | MAPQ 60 % | median identity |
 |---|---:|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| windows: random | 972,840 | GRCh38-only graph | 96.96 | 2.76 | 0.28 | 71.73 | 25.82 | 2.73 | 2.54 | 1.77 | 93.53 | 1.0000 |
-| windows: random | 972,840 | HPRC v1.1 d9 | 96.97 | 3.02 | 0.01 | 82.34 | 16.01 | 0.38 | 2.57 | 2.03 | 93.55 | 1.0000 |
-| windows: random | 972,840 | HPRC v2.1 d46 | 96.35 | 3.37 | 0.28 | 82.78 | 15.86 | 0.35 | 2.29 | 1.91 | 94.03 | 1.0000 |
-| windows: segdup | 294,416 | GRCh38-only graph | 77.11 | 22.66 | 0.23 | 66.52 | 31.26 | 3.31 | 3.00 | 13.17 | 52.72 | 1.0000 |
-| windows: segdup | 294,416 | HPRC v1.1 d9 | 76.58 | 23.41 | 0.01 | 76.70 | 21.53 | 1.40 | 2.94 | 16.56 | 49.84 | 1.0000 |
-| windows: segdup | 294,416 | HPRC v2.1 d46 | 77.89 | 21.88 | 0.24 | 76.83 | 21.67 | 1.46 | 2.62 | 16.34 | 50.40 | 1.0000 |
-| SMaHT easy | 795,796 | GRCh38-only graph | 99.67 | 0.07 | 0.26 | 73.67 | 24.31 | 2.06 | 1.82 | 0.06 | 98.10 | 1.0000 |
-| SMaHT easy | 795,796 | HPRC v1.1 d9 | 99.87 | 0.13 | 0.00 | 83.82 | 14.81 | 0.26 | 1.94 | 0.09 | 97.88 | 1.0000 |
-| SMaHT easy | 795,796 | HPRC v2.1 d46 | 99.66 | 0.08 | 0.26 | 84.17 | 14.73 | 0.23 | 1.69 | 0.09 | 98.01 | 1.0000 |
-| SMaHT difficult | 126,883 | GRCh38-only graph | 99.24 | 0.33 | 0.43 | 63.11 | 32.50 | 5.62 | 5.60 | 0.65 | 93.83 | 1.0000 |
-| SMaHT difficult | 126,883 | HPRC v1.1 d9 | 99.31 | 0.68 | 0.00 | 75.26 | 21.85 | 0.90 | 5.39 | 0.60 | 94.05 | 1.0000 |
-| SMaHT difficult | 126,883 | HPRC v2.1 d46 | 98.98 | 0.59 | 0.42 | 75.84 | 21.69 | 0.83 | 4.94 | 0.51 | 94.32 | 1.0000 |
-| SMaHT extreme | 344,577 | GRCh38-only graph | 72.90 | 26.87 | 0.23 | 65.22 | 32.16 | 3.92 | 3.68 | 18.06 | 42.08 | 1.0000 |
-| SMaHT extreme | 344,577 | HPRC v1.1 d9 | 72.00 | 27.97 | 0.02 | 76.06 | 21.91 | 1.45 | 3.49 | 22.16 | 39.70 | 1.0000 |
-| SMaHT extreme | 344,577 | HPRC v2.1 d46 | 71.96 | 27.80 | 0.24 | 76.34 | 21.89 | 1.49 | 3.18 | 21.78 | 40.79 | 1.0000 |
+| windows: random | 983,405 | GRCh38 BAM | 96.21 | 3.72 | 0.06 | 71.56 | 25.51 | 2.83 | 3.18 | 2.56 | 95.02 | 1.0000 |
+| windows: random | 983,405 | GRCh38-only graph | 95.92 | 3.60 | 0.48 | 71.73 | 25.82 | 2.73 | 2.54 | 1.77 | 93.53 | 1.0000 |
+| windows: random | 983,405 | HPRC v1.1 d9 | 95.93 | 3.94 | 0.13 | 82.34 | 16.01 | 0.38 | 2.57 | 2.03 | 93.55 | 1.0000 |
+| windows: random | 983,405 | HPRC v2.1 d46 | 95.31 | 4.22 | 0.46 | 82.78 | 15.86 | 0.35 | 2.29 | 1.91 | 94.03 | 1.0000 |
+| windows: segdup | 308,806 | GRCh38 BAM | 73.77 | 26.20 | 0.04 | 66.45 | 30.96 | 3.23 | 3.70 | 21.22 | 51.13 | 1.0000 |
+| windows: segdup | 308,806 | GRCh38-only graph | 73.51 | 26.08 | 0.40 | 66.52 | 31.26 | 3.31 | 3.00 | 13.17 | 52.72 | 1.0000 |
+| windows: segdup | 308,806 | HPRC v1.1 d9 | 73.02 | 26.87 | 0.12 | 76.70 | 21.54 | 1.40 | 2.94 | 16.55 | 49.84 | 1.0000 |
+| windows: segdup | 308,806 | HPRC v2.1 d46 | 74.26 | 25.34 | 0.40 | 76.83 | 21.67 | 1.46 | 2.62 | 16.34 | 50.40 | 1.0000 |
+| SMaHT easy | 794,335 | GRCh38 BAM | 99.75 | 0.19 | 0.07 | 73.55 | 24.07 | 2.12 | 2.32 | 0.01 | 99.77 | 1.0000 |
+| SMaHT easy | 794,335 | GRCh38-only graph | 99.53 | 0.09 | 0.38 | 73.70 | 24.30 | 2.03 | 1.81 | 0.05 | 98.10 | 1.0000 |
+| SMaHT easy | 794,335 | HPRC v1.1 d9 | 99.72 | 0.19 | 0.09 | 83.86 | 14.79 | 0.25 | 1.91 | 0.09 | 97.88 | 1.0000 |
+| SMaHT easy | 794,335 | HPRC v2.1 d46 | 99.52 | 0.11 | 0.38 | 84.20 | 14.71 | 0.23 | 1.67 | 0.09 | 98.01 | 1.0000 |
+| SMaHT difficult | 130,363 | GRCh38 BAM | 98.86 | 1.06 | 0.08 | 63.29 | 31.85 | 5.74 | 6.24 | 0.32 | 97.67 | 1.0000 |
+| SMaHT difficult | 130,363 | GRCh38-only graph | 98.51 | 0.75 | 0.74 | 63.50 | 32.36 | 5.58 | 5.30 | 0.64 | 93.95 | 1.0000 |
+| SMaHT difficult | 130,363 | HPRC v1.1 d9 | 98.59 | 1.34 | 0.08 | 75.56 | 21.75 | 0.90 | 5.11 | 0.60 | 94.14 | 1.0000 |
+| SMaHT difficult | 130,363 | HPRC v2.1 d46 | 98.26 | 1.11 | 0.63 | 76.16 | 21.58 | 0.82 | 4.66 | 0.50 | 94.40 | 1.0000 |
+| SMaHT extreme | 367,513 | GRCh38 BAM | 68.78 | 31.18 | 0.03 | 64.94 | 31.72 | 3.93 | 4.78 | 28.53 | 39.23 | 1.0000 |
+| SMaHT extreme | 367,513 | GRCh38-only graph | 68.36 | 31.09 | 0.54 | 65.06 | 32.18 | 4.00 | 3.85 | 18.05 | 42.07 | 1.0000 |
+| SMaHT extreme | 367,513 | HPRC v1.1 d9 | 67.55 | 32.23 | 0.22 | 75.87 | 21.96 | 1.47 | 3.69 | 22.15 | 39.71 | 1.0000 |
+| SMaHT extreme | 367,513 | HPRC v2.1 d46 | 67.48 | 31.98 | 0.54 | 76.17 | 21.94 | 1.51 | 3.36 | 21.78 | 40.79 | 1.0000 |
 
 Pairs by region (B relative to A):
 
 | stratum | B vs A | both in window | MAPQ>=30 gained % | MAPQ>=30 lost % | perfect gained % | perfect lost % | concordant (1 kb) % | A in, B elsewhere % | A in, B unmapped % |
 |---|---|---:|---:|---:|---:|---:|---:|---:|---:|
-| windows: segdup | HPRC v1.1 d9 vs GRCh38-only graph | 179,077 | 1.45 | 5.08 | 9.47 | 0.00 | 98.17 | 21.11 | 0.01 |
-| windows: segdup | HPRC v2.1 d46 vs GRCh38-only graph | 186,135 | 1.49 | 3.88 | 9.26 | 0.00 | 97.39 | 17.99 | 0.02 |
-| windows: segdup | HPRC v2.1 d46 vs HPRC v1.1 d9 | 190,960 | 1.83 | 0.66 | 0.11 | 0.16 | 98.73 | 15.01 | 0.30 |
-| SMaHT easy | HPRC v1.1 d9 vs GRCh38-only graph | 792,129 | 0.06 | 0.18 | 10.38 | 0.00 | 100.00 | 0.13 | 0.00 |
-| SMaHT easy | HPRC v2.1 d46 vs GRCh38-only graph | 792,726 | 0.05 | 0.13 | 10.50 | 0.00 | 100.00 | 0.04 | 0.01 |
-| SMaHT easy | HPRC v2.1 d46 vs HPRC v1.1 d9 | 792,275 | 0.13 | 0.09 | 0.17 | 0.05 | 100.00 | 0.05 | 0.26 |
-| SMaHT extreme | HPRC v1.1 d9 vs GRCh38-only graph | 184,936 | 1.98 | 5.43 | 10.63 | 0.00 | 97.54 | 26.35 | 0.03 |
-| SMaHT extreme | HPRC v2.1 d46 vs GRCh38-only graph | 189,412 | 1.92 | 4.58 | 10.43 | 0.00 | 96.83 | 24.55 | 0.04 |
-| SMaHT extreme | HPRC v2.1 d46 vs HPRC v1.1 d9 | 196,490 | 1.76 | 0.91 | 0.22 | 0.16 | 98.28 | 20.50 | 0.30 |
+| windows: segdup | HPRC v1.1 d9 vs GRCh38-only graph | 179,087 | 1.45 | 5.08 | 9.47 | 0.00 | 98.18 | 21.10 | 0.01 |
+| windows: segdup | HPRC v2.1 d46 vs GRCh38-only graph | 186,143 | 1.49 | 3.88 | 9.26 | 0.00 | 97.40 | 17.98 | 0.02 |
+| windows: segdup | HPRC v2.1 d46 vs HPRC v1.1 d9 | 190,970 | 1.83 | 0.66 | 0.11 | 0.16 | 98.72 | 15.01 | 0.29 |
+| windows: segdup | GRCh38-only graph vs GRCh38 BAM | 202,335 | 0.20 | 4.97 | 0.01 | 0.01 | 96.83 | 10.86 | 0.32 |
+| windows: segdup | HPRC v1.1 d9 vs GRCh38 BAM | 177,899 | 1.00 | 8.99 | 9.47 | 0.01 | 98.16 | 21.76 | 0.15 |
+| windows: segdup | HPRC v2.1 d46 vs GRCh38 BAM | 183,630 | 1.05 | 7.79 | 9.37 | 0.00 | 97.18 | 19.08 | 0.31 |
+| SMaHT easy | HPRC v1.1 d9 vs GRCh38-only graph | 789,599 | 0.06 | 0.18 | 10.39 | 0.00 | 100.00 | 0.13 | 0.00 |
+| SMaHT easy | HPRC v2.1 d46 vs GRCh38-only graph | 790,185 | 0.05 | 0.13 | 10.50 | 0.00 | 100.00 | 0.04 | 0.01 |
+| SMaHT easy | HPRC v2.1 d46 vs HPRC v1.1 d9 | 789,731 | 0.13 | 0.09 | 0.17 | 0.05 | 100.00 | 0.05 | 0.25 |
+| SMaHT easy | GRCh38-only graph vs GRCh38 BAM | 790,292 | 0.00 | 0.84 | 0.00 | 0.00 | 100.00 | 0.03 | 0.23 |
+| SMaHT easy | HPRC v1.1 d9 vs GRCh38 BAM | 790,140 | 0.01 | 1.01 | 10.38 | 0.00 | 99.99 | 0.18 | 0.09 |
+| SMaHT easy | HPRC v2.1 d46 vs GRCh38 BAM | 790,071 | 0.00 | 0.93 | 10.51 | 0.00 | 100.00 | 0.06 | 0.22 |
+| SMaHT extreme | HPRC v1.1 d9 vs GRCh38-only graph | 184,988 | 1.98 | 5.43 | 10.63 | 0.00 | 97.54 | 26.35 | 0.03 |
+| SMaHT extreme | HPRC v2.1 d46 vs GRCh38-only graph | 189,458 | 1.92 | 4.58 | 10.43 | 0.00 | 96.83 | 24.55 | 0.05 |
+| SMaHT extreme | HPRC v2.1 d46 vs HPRC v1.1 d9 | 196,548 | 1.76 | 0.91 | 0.21 | 0.16 | 98.28 | 20.49 | 0.33 |
+| SMaHT extreme | GRCh38-only graph vs GRCh38 BAM | 212,208 | 0.31 | 6.39 | 0.01 | 0.02 | 96.50 | 15.50 | 0.55 |
+| SMaHT extreme | HPRC v1.1 d9 vs GRCh38 BAM | 183,351 | 1.37 | 10.53 | 10.61 | 0.01 | 97.52 | 27.18 | 0.29 |
+| SMaHT extreme | HPRC v2.1 d46 vs GRCh38 BAM | 187,450 | 1.32 | 9.60 | 10.49 | 0.00 | 96.57 | 25.31 | 0.53 |
 
 ## Interpretation
 
 1. **The short-read perfect-read gain is real, and it comes from graph content, not from the aligner.**
    - HG008T Illumina, the same reads in the same windows: 69.18 % perfect on the GRCh38 BAM and 69.18 % on the
      GRCh38-only graph (0.00 % gained or lost), against 79.61 % on d9 and 79.65 % on d46 (+10.34 / +10.41 points vs the
-     BAM; +10.24 / +10.34 vs the GRCh38-only graph). COLO829T Illumina (no BAM): 71.02 % on the GRCh38-only graph,
-     81.66 % on d9 and 81.73 % on d46 (+10.64 / +10.72 points).
+     BAM; +10.24 / +10.34 vs the GRCh38-only graph). COLO829T Illumina: 70.94 % on the GRCh38 BAM and 70.94 % on the
+     GRCh38-only graph, against 81.70 % on d9 and 81.85 % on d46 (+10.64 / +10.74 points vs the BAM); vs the GRCh38-only
+     graph 71.02 % to 81.66 % on d9 and 81.73 % on d46 (+10.64 / +10.72).
    - d46 adds little over d9 for short reads: perfect gained / lost 0.29 / 0.17 % (HG008T), 0.20 / 0.07 % (COLO829T).
-   - The reads that became perfect were mostly one-mismatch reads: in the six HPRC-vs-GRCh38 comparisons 84.74-86.09 %
-     had mismatches only (median 1 mismatched base), 94.02-94.16 % now pass over off-reference nodes, and 99.54-99.74 %
+   - The reads that became perfect were mostly one-mismatch reads: in the eight HPRC-vs-GRCh38 comparisons 83.98-86.09 %
+     had mismatches only (median 1 mismatched base), 94.01-94.16 % now pass over off-reference nodes, and 99.54-99.74 %
      keep their GRCh38 placement.
    - For long reads, "perfect" is the wrong scale: almost every HiFi / fiber-seq read carries an indel (97.12-99.43 % of
      mapped reads, G), and ONT reads more so. Mismatched bases per kb show the effect instead (GRCh38-only graph -> d9,
@@ -1097,7 +1130,11 @@ Pairs by region (B relative to A):
   - The GRCh38 BAMs are the GIAB / SMaHT alignments. Their `@PG` header lines (`samtools view -H`, samtools 1.18,
     checked 2026-10-15) give the aligners of the HG008T BAMs: Illumina BWA-MEM 0.7.17-r1188 (`bwa mem`, then
     samtools sort / merge), PacBio pbmm2 1.10.0 (`--preset HIFI`; also ccs 8.0.0, jasmine 2.2.0 and hiphase upstream),
-    ONT minimap2 2.26-r1175 (`-x map-ont`), all against the GIAB v3 GRCh38 no-alt analysis set. The COLO829T fiber-seq
+    ONT minimap2 2.26-r1175 (`-x map-ont`), all against the GIAB v3 GRCh38 no-alt analysis set. The COLO829T Illumina BAM (SMaHT,
+    checked 2026-10-19) is Sentieon 202308.01: `bwa mem` 0.7.17-r1188 per lane, then duplicate marking (records kept;
+    the scan does not filter 0x400, as for HG008T), indel realignment against known sites, base recalibration and
+    samtools merge 1.17, against a 195-contig GRCh38 no-alt analysis set; the indel realignment can change its indel and
+    soft-clip calls relative to plain BWA-MEM. The COLO829T fiber-seq
     BAM is pbmm2 1.13.0 (name and header); the COLO829T ONT BAM header lists minimap2 2.26-r1175 for its alignment steps
     and also a minimap2 2.24-r1122 line of unclear origin (see `../../points/R2.7.md`).
   - The GRCh38-only graph GAMs were made with vg 1.66; the d46 GAMs with vg 1.77 on indexes rebuilt with vg 1.77 (project
@@ -1126,8 +1163,8 @@ Pairs by region (B relative to A):
 - **COLO829T fiber-seq G sample.** The whole-GAM scans count 2,784,787 sampled records but 2,687,506 distinct reads, and
   report 44,480 duplicate (name, mate) keys (JSON `G.whole_file.*.duplicate_keys`). The sampled distinct reads are
   unmapped at 3.37 / 3.23 / 0.01 % against 5.62 / 5.43 / 0.03 % of all records. Not investigated.
-- **COLO829T Illumina d9** leaves only 0.01 % of the W universe unmapped, against 0.27 % on the other two graph arms
-  (whole-file unmapped 0.63 % against 0.99 / 0.94 %). Not investigated.
+- **COLO829T Illumina d9** leaves fewer reads of the W universe unmapped (0.13 %) than the other two graph arms (0.46 /
+  0.45 %; BAM 0.06 %), and fewer of the whole file (0.63 % against 0.99 / 0.94 %; BAM 0.29 %). Not investigated.
 - **No correctness against a known origin here** (E11b, Illumina and HiFi only), and no MAPQ calibration.
 - MAPQ distributions are reported as bins in the tables; no figure has been made.
 - **`results/tables.md` formatting bug.** In the W "Same reads, both arms place them in the window" tables, the header
@@ -1139,7 +1176,7 @@ Pairs by region (B relative to A):
 
 ## Status
 
-**DONE (2026-10-15).** Every scan job finished and `compare.py` has run on all six sets.
+**DONE (2026-10-15; COLO829T Illumina BAM arm 2026-10-19).** Every scan job finished and `compare.py` has run on all six sets.
 
 - Scripts and design: `scan_gam.py`, `scan_bam.py`, `window_scan.py`, `choose_windows.py` (windows fixed), `compare.py`,
   `vg_stats_crosscheck.py` (`results/vg_stats_crosscheck.md`).
@@ -1147,7 +1184,8 @@ Pairs by region (B relative to A):
 - HG008T ONT, four arms: G full scans (387166_4, _5, _6); BAM window scan (387287_5).
 - HG008T Illumina, four arms: window scans of the GRCh38-only graph, d9, d46 and the BAM (387287_0, _1, _2, _3).
 - COLO829T fiber-seq and ONT, four arms each: G full scans (387288_12-14, _16-18); BAM window scans (387287_9, _10).
-- COLO829T Illumina, three graph arms: window scans (387287_6-8).
+- COLO829T Illumina, four arms: window scans of the graph arms (387287_6-8) and of the SMaHT BAM (446070_11, 2026-10-19).
+- `compare.py COLO829T_Illumina` rerun on 2026-10-19 (446071) for the BAM arm.
 - `compare.py`: `results/{HG008T,COLO829T}_*.json` (six) and `results/tables.md`, 2026-10-15.
 
 Next steps outside this folder:
@@ -1161,7 +1199,6 @@ Not planned:
 
 - Full BAM scans (387166_3 cancelled; the BAM arm uses the window design).
 - Full Illumina GAM scans (tasks 8-10 and 20-22 never submitted).
-- A GRCh38 BAM arm for COLO829T Illumina (none listed).
 - CHM13: dropped by the user on 2026-10-13. It was never part of E11a; it belonged to E11b.
 - GIAB v3.5 strata (E10).
 - The comparators are not re-run; the user has the ClairS-TO / DeepSomatic results.
