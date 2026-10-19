@@ -1,0 +1,784 @@
+[
+ {
+  "kind": "SNV",
+  "target": "HCC1395T",
+  "platform": "Illumina",
+  "chrom": "chr1",
+  "test_set": "HCC1395T_Illumina_d46",
+  "multicancer4": {
+   "p": 0.8864,
+   "r": 0.7919,
+   "f1": 0.8365,
+   "best": 0.8533,
+   "truth": 3440,
+   "tagged": 66
+  },
+  "multicancer6": {
+   "p": 0.8878,
+   "r": 0.7933,
+   "f1": 0.8379,
+   "best": 0.8556,
+   "truth": 3440,
+   "tagged": 66
+  },
+  "in_sample": null,
+  "cross_tumor": {
+   "hg008": {
+    "p": 0.8013,
+    "r": 0.7782,
+    "f1": 0.7896,
+    "best": 0.809
+   },
+   "colo": {
+    "p": 0.9343,
+    "r": 0.157,
+    "f1": 0.2688,
+    "best": 0.8098
+   }
+  }
+ },
+ {
+  "kind": "SNV",
+  "target": "HCC1395T",
+  "platform": "Illumina",
+  "chrom": "chr20",
+  "test_set": "HCC1395T_Illumina_d46",
+  "multicancer4": {
+   "p": 0.8435,
+   "r": 0.7505,
+   "f1": 0.7943,
+   "best": 0.8084,
+   "truth": 1106,
+   "tagged": 27
+  },
+  "multicancer6": {
+   "p": 0.8524,
+   "r": 0.7468,
+   "f1": 0.7961,
+   "best": 0.8149,
+   "truth": 1106,
+   "tagged": 27
+  },
+  "in_sample": null,
+  "cross_tumor": null
+ },
+ {
+  "kind": "SNV",
+  "target": "HCC1395T",
+  "platform": "PacBio",
+  "chrom": "chr1",
+  "test_set": "HCC1395T_PacBio_d46",
+  "multicancer4": {
+   "p": 0.864,
+   "r": 0.7517,
+   "f1": 0.804,
+   "best": 0.8296,
+   "truth": 3440,
+   "tagged": 66
+  },
+  "multicancer6": {
+   "p": 0.8791,
+   "r": 0.7189,
+   "f1": 0.791,
+   "best": 0.8286,
+   "truth": 3440,
+   "tagged": 66
+  },
+  "in_sample": null,
+  "cross_tumor": {
+   "hg008": {
+    "p": 0.7922,
+    "r": 0.6238,
+    "f1": 0.698,
+    "best": 0.7755
+   },
+   "colo": {
+    "p": 0.868,
+    "r": 0.6459,
+    "f1": 0.7407,
+    "best": 0.8189
+   }
+  }
+ },
+ {
+  "kind": "SNV",
+  "target": "HCC1395T",
+  "platform": "PacBio",
+  "chrom": "chr20",
+  "test_set": "HCC1395T_PacBio_d46",
+  "multicancer4": {
+   "p": 0.809,
+   "r": 0.7278,
+   "f1": 0.7663,
+   "best": 0.7921,
+   "truth": 1106,
+   "tagged": 27
+  },
+  "multicancer6": {
+   "p": 0.838,
+   "r": 0.7107,
+   "f1": 0.7691,
+   "best": 0.7945,
+   "truth": 1106,
+   "tagged": 27
+  },
+  "in_sample": null,
+  "cross_tumor": null
+ },
+ {
+  "kind": "SNV",
+  "target": "HCC1395T",
+  "platform": "ONT",
+  "chrom": "chr1",
+  "test_set": "HCC1395T_ONT_d46",
+  "multicancer4": {
+   "p": 0.3261,
+   "r": 0.1613,
+   "f1": 0.2159,
+   "best": 0.5394,
+   "truth": 3440,
+   "tagged": 66
+  },
+  "multicancer6": {
+   "p": 0.1377,
+   "r": 0.0276,
+   "f1": 0.046,
+   "best": 0.354,
+   "truth": 3440,
+   "tagged": 66
+  },
+  "in_sample": null,
+  "cross_tumor": {
+   "hg008": {
+    "p": 0.7627,
+    "r": 0.6279,
+    "f1": 0.6888,
+    "best": 0.6986
+   },
+   "colo": {
+    "p": 0.7833,
+    "r": 0.5148,
+    "f1": 0.6213,
+    "best": 0.6912
+   }
+  }
+ },
+ {
+  "kind": "SNV",
+  "target": "HCC1395T",
+  "platform": "ONT",
+  "chrom": "chr20",
+  "test_set": "HCC1395T_ONT_d46",
+  "multicancer4": {
+   "p": 0.7353,
+   "r": 0.623,
+   "f1": 0.6745,
+   "best": 0.7034,
+   "truth": 1106,
+   "tagged": 27
+  },
+  "multicancer6": {
+   "p": 0.765,
+   "r": 0.6447,
+   "f1": 0.6997,
+   "best": 0.7237,
+   "truth": 1106,
+   "tagged": 27
+  },
+  "in_sample": null,
+  "cross_tumor": null
+ },
+ {
+  "kind": "SNV",
+  "target": "HG008T",
+  "platform": "Illumina",
+  "chrom": "chr1",
+  "test_set": "HG008T_Illumina_d46",
+  "multicancer4": {
+   "p": 0.5597,
+   "r": 0.6657,
+   "f1": 0.6081,
+   "best": 0.6134,
+   "truth": 702,
+   "tagged": 61
+  },
+  "multicancer6": {
+   "p": 0.6028,
+   "r": 0.6227,
+   "f1": 0.6126,
+   "best": 0.6251,
+   "truth": 702,
+   "tagged": 61
+  },
+  "in_sample": {
+   "p": 0.4286,
+   "r": 0.8522,
+   "f1": 0.5703,
+   "best": 0.6129,
+   "truth": 702,
+   "tagged": 61
+  },
+  "cross_tumor": {
+   "p": 0.6034,
+   "r": 0.2554,
+   "f1": 0.3589,
+   "best": 0.5544
+  }
+ },
+ {
+  "kind": "SNV",
+  "target": "HG008T",
+  "platform": "PacBio",
+  "chrom": "chr1",
+  "test_set": "HG008T_PacBio_d46",
+  "multicancer4": {
+   "p": 0.5463,
+   "r": 0.703,
+   "f1": 0.6148,
+   "best": 0.6229,
+   "truth": 702,
+   "tagged": 61
+  },
+  "multicancer6": {
+   "p": 0.5824,
+   "r": 0.6083,
+   "f1": 0.5951,
+   "best": 0.6224,
+   "truth": 702,
+   "tagged": 61
+  },
+  "in_sample": {
+   "p": 0.4724,
+   "r": 0.835,
+   "f1": 0.6034,
+   "best": 0.622,
+   "truth": 702,
+   "tagged": 61
+  },
+  "cross_tumor": {
+   "p": 0.5668,
+   "r": 0.5481,
+   "f1": 0.5573,
+   "best": 0.5971
+  }
+ },
+ {
+  "kind": "SNV",
+  "target": "HG008T",
+  "platform": "ONT",
+  "chrom": "chr1",
+  "test_set": "HG008T_ONT_d46",
+  "multicancer4": {
+   "p": 0.4861,
+   "r": 0.3271,
+   "f1": 0.3911,
+   "best": 0.5579,
+   "truth": 702,
+   "tagged": 61
+  },
+  "multicancer6": {
+   "p": 0.5424,
+   "r": 0.0918,
+   "f1": 0.1571,
+   "best": 0.542,
+   "truth": 702,
+   "tagged": 61
+  },
+  "in_sample": {
+   "p": 0.4319,
+   "r": 0.8594,
+   "f1": 0.5749,
+   "best": 0.6032,
+   "truth": 702,
+   "tagged": 61
+  },
+  "cross_tumor": {
+   "p": 0.5791,
+   "r": 0.4204,
+   "f1": 0.4871,
+   "best": 0.5792
+  }
+ },
+ {
+  "kind": "SNV",
+  "target": "COLO829T",
+  "platform": "Illumina",
+  "chrom": "chr1",
+  "test_set": "COLO829T_Illumina_d46",
+  "multicancer4": {
+   "p": 0.825,
+   "r": 0.5268,
+   "f1": 0.643,
+   "best": 0.7452,
+   "truth": 2443,
+   "tagged": 84
+  },
+  "multicancer6": {
+   "p": 0.8859,
+   "r": 0.639,
+   "f1": 0.7424,
+   "best": 0.7826,
+   "truth": 2443,
+   "tagged": 84
+  },
+  "in_sample": {
+   "p": 0.8669,
+   "r": 0.7143,
+   "f1": 0.7832,
+   "best": 0.7864,
+   "truth": 2443,
+   "tagged": 84
+  },
+  "cross_tumor": {
+   "p": 0.7918,
+   "r": 0.6398,
+   "f1": 0.7077,
+   "best": 0.7167
+  }
+ },
+ {
+  "kind": "SNV",
+  "target": "COLO829T",
+  "platform": "PacBio",
+  "chrom": "chr1",
+  "test_set": "COLO829T_fiberseq_d46",
+  "multicancer4": {
+   "p": 0.8863,
+   "r": 0.4466,
+   "f1": 0.5939,
+   "best": 0.7589,
+   "truth": 2443,
+   "tagged": 84
+  },
+  "multicancer6": {
+   "p": 0.8647,
+   "r": 0.7012,
+   "f1": 0.7744,
+   "best": 0.7881,
+   "truth": 2443,
+   "tagged": 84
+  },
+  "in_sample": {
+   "p": 0.8657,
+   "r": 0.7073,
+   "f1": 0.7786,
+   "best": 0.7829,
+   "truth": 2443,
+   "tagged": 84
+  },
+  "cross_tumor": {
+   "p": 0.8165,
+   "r": 0.7012,
+   "f1": 0.7545,
+   "best": 0.7644
+  }
+ },
+ {
+  "kind": "SNV",
+  "target": "COLO829T",
+  "platform": "ONT",
+  "chrom": "chr1",
+  "test_set": "COLO829T_ONT_d46",
+  "multicancer4": {
+   "p": 0.2562,
+   "r": 0.0933,
+   "f1": 0.1368,
+   "best": 0.5794,
+   "truth": 2443,
+   "tagged": 84
+  },
+  "multicancer6": {
+   "p": 0.6935,
+   "r": 0.3815,
+   "f1": 0.4922,
+   "best": 0.6111,
+   "truth": 2443,
+   "tagged": 84
+  },
+  "in_sample": {
+   "p": 0.7871,
+   "r": 0.6918,
+   "f1": 0.7364,
+   "best": 0.7386,
+   "truth": 2443,
+   "tagged": 84
+  },
+  "cross_tumor": {
+   "p": 0.6776,
+   "r": 0.5894,
+   "f1": 0.6305,
+   "best": 0.6387
+  }
+ },
+ {
+  "kind": "INDEL",
+  "target": "HCC1395T",
+  "platform": "Illumina",
+  "chrom": "chr1",
+  "test_set": "HCC1395T_Illumina_d46",
+  "multicancer4": {
+   "p": 0.4558,
+   "r": 0.7368,
+   "f1": 0.5632,
+   "best": 0.6619,
+   "truth": 133,
+   "tagged": 16
+  },
+  "multicancer6": {
+   "p": 0.2959,
+   "r": 0.7519,
+   "f1": 0.4246,
+   "best": 0.6639,
+   "truth": 133,
+   "tagged": 16
+  },
+  "in_sample": null,
+  "cross_tumor": {
+   "hg008": {
+    "p": 0.1391,
+    "r": 0.2406,
+    "f1": 0.1763,
+    "best": 0.2571
+   },
+   "colo": {
+    "p": 0.3889,
+    "r": 0.2632,
+    "f1": 0.3139,
+    "best": 0.3374
+   }
+  }
+ },
+ {
+  "kind": "INDEL",
+  "target": "HCC1395T",
+  "platform": "Illumina",
+  "chrom": "chr20",
+  "test_set": "HCC1395T_Illumina_d46",
+  "multicancer4": {
+   "p": 0.3465,
+   "r": 0.8333,
+   "f1": 0.4895,
+   "best": 0.6882,
+   "truth": 42,
+   "tagged": 1
+  },
+  "multicancer6": {
+   "p": 0.3333,
+   "r": 0.7857,
+   "f1": 0.4681,
+   "best": 0.5926,
+   "truth": 42,
+   "tagged": 1
+  },
+  "in_sample": null,
+  "cross_tumor": null
+ },
+ {
+  "kind": "INDEL",
+  "target": "HCC1395T",
+  "platform": "PacBio",
+  "chrom": "chr1",
+  "test_set": "HCC1395T_PacBio_d46",
+  "multicancer4": {
+   "p": 0.2017,
+   "r": 0.6992,
+   "f1": 0.3131,
+   "best": 0.5476,
+   "truth": 133,
+   "tagged": 16
+  },
+  "multicancer6": {
+   "p": 0.1103,
+   "r": 0.6992,
+   "f1": 0.1906,
+   "best": 0.4678,
+   "truth": 133,
+   "tagged": 16
+  },
+  "in_sample": null,
+  "cross_tumor": {
+   "hg008": null,
+   "colo": null
+  }
+ },
+ {
+  "kind": "INDEL",
+  "target": "HCC1395T",
+  "platform": "PacBio",
+  "chrom": "chr20",
+  "test_set": "HCC1395T_PacBio_d46",
+  "multicancer4": {
+   "p": 0.1832,
+   "r": 0.8333,
+   "f1": 0.3004,
+   "best": 0.6353,
+   "truth": 42,
+   "tagged": 1
+  },
+  "multicancer6": {
+   "p": 0.1029,
+   "r": 0.8333,
+   "f1": 0.1832,
+   "best": 0.5169,
+   "truth": 42,
+   "tagged": 1
+  },
+  "in_sample": null,
+  "cross_tumor": null
+ },
+ {
+  "kind": "INDEL",
+  "target": "HCC1395T",
+  "platform": "ONT",
+  "chrom": "chr1",
+  "test_set": "HCC1395T_ONT_d46",
+  "multicancer4": {
+   "p": 0.0063,
+   "r": 0.6617,
+   "f1": 0.0126,
+   "best": 0.25,
+   "truth": 133,
+   "tagged": 16
+  },
+  "multicancer6": {
+   "p": 0.0034,
+   "r": 0.6692,
+   "f1": 0.0069,
+   "best": 0.1728,
+   "truth": 133,
+   "tagged": 16
+  },
+  "in_sample": null,
+  "cross_tumor": {
+   "hg008": null,
+   "colo": null
+  }
+ },
+ {
+  "kind": "INDEL",
+  "target": "HCC1395T",
+  "platform": "ONT",
+  "chrom": "chr20",
+  "test_set": "HCC1395T_ONT_d46",
+  "multicancer4": {
+   "p": 0.0084,
+   "r": 0.7857,
+   "f1": 0.0167,
+   "best": 0.3378,
+   "truth": 42,
+   "tagged": 1
+  },
+  "multicancer6": {
+   "p": 0.0048,
+   "r": 0.8095,
+   "f1": 0.0096,
+   "best": 0.2667,
+   "truth": 42,
+   "tagged": 1
+  },
+  "in_sample": null,
+  "cross_tumor": null
+ },
+ {
+  "kind": "INDEL",
+  "target": "HG008T",
+  "platform": "Illumina",
+  "chrom": "chr1",
+  "test_set": "HG008T_Illumina_d46",
+  "multicancer4": {
+   "p": 0.3524,
+   "r": 0.1261,
+   "f1": 0.1857,
+   "best": 0.2227,
+   "truth": 635,
+   "tagged": 418
+  },
+  "multicancer6": {
+   "p": 0.2968,
+   "r": 0.2351,
+   "f1": 0.2624,
+   "best": 0.2692,
+   "truth": 635,
+   "tagged": 418
+  },
+  "in_sample": {
+   "p": 0.2681,
+   "r": 0.2402,
+   "f1": 0.2534,
+   "best": 0.2564,
+   "truth": 635,
+   "tagged": 418
+  },
+  "cross_tumor": {
+   "p": 0.3526,
+   "r": 0.2078,
+   "f1": 0.2615,
+   "best": 0.2703
+  }
+ },
+ {
+  "kind": "INDEL",
+  "target": "HG008T",
+  "platform": "PacBio",
+  "chrom": "chr1",
+  "test_set": "HG008T_PacBio_d46",
+  "multicancer4": {
+   "p": 0.0595,
+   "r": 0.1227,
+   "f1": 0.0801,
+   "best": 0.092,
+   "truth": 635,
+   "tagged": 418
+  },
+  "multicancer6": {
+   "p": 0.1165,
+   "r": 0.2283,
+   "f1": 0.1543,
+   "best": 0.2413,
+   "truth": 635,
+   "tagged": 418
+  },
+  "in_sample": {
+   "p": 0.0606,
+   "r": 0.2555,
+   "f1": 0.098,
+   "best": 0.2749,
+   "truth": 635,
+   "tagged": 418
+  },
+  "cross_tumor": null
+ },
+ {
+  "kind": "INDEL",
+  "target": "HG008T",
+  "platform": "ONT",
+  "chrom": "chr1",
+  "test_set": "HG008T_ONT_d46",
+  "multicancer4": {
+   "p": 0.03,
+   "r": 0.1244,
+   "f1": 0.0483,
+   "best": 0.103,
+   "truth": 635,
+   "tagged": 418
+  },
+  "multicancer6": {
+   "p": 0.0072,
+   "r": 0.2215,
+   "f1": 0.0139,
+   "best": 0.1297,
+   "truth": 635,
+   "tagged": 418
+  },
+  "in_sample": {
+   "p": 0.0076,
+   "r": 0.2368,
+   "f1": 0.0147,
+   "best": 0.1589,
+   "truth": 635,
+   "tagged": 418
+  },
+  "cross_tumor": null
+ },
+ {
+  "kind": "INDEL",
+  "target": "COLO829T",
+  "platform": "Illumina",
+  "chrom": "chr1",
+  "test_set": "COLO829T_Illumina_d46",
+  "multicancer4": {
+   "p": 0.1571,
+   "r": 0.1679,
+   "f1": 0.1624,
+   "best": 0.1709,
+   "truth": 131,
+   "tagged": 81
+  },
+  "multicancer6": {
+   "p": 0.1208,
+   "r": 0.2443,
+   "f1": 0.1616,
+   "best": 0.1782,
+   "truth": 131,
+   "tagged": 81
+  },
+  "in_sample": {
+   "p": 0.0769,
+   "r": 0.2443,
+   "f1": 0.117,
+   "best": 0.1681,
+   "truth": 131,
+   "tagged": 81
+  },
+  "cross_tumor": {
+   "p": 0.0483,
+   "r": 0.2595,
+   "f1": 0.0814,
+   "best": 0.1412
+  }
+ },
+ {
+  "kind": "INDEL",
+  "target": "COLO829T",
+  "platform": "PacBio",
+  "chrom": "chr1",
+  "test_set": "COLO829T_fiberseq_d46",
+  "multicancer4": {
+   "p": 0.0258,
+   "r": 0.1527,
+   "f1": 0.0441,
+   "best": 0.0647,
+   "truth": 131,
+   "tagged": 81
+  },
+  "multicancer6": {
+   "p": 0.0687,
+   "r": 0.2061,
+   "f1": 0.1031,
+   "best": 0.1553,
+   "truth": 131,
+   "tagged": 81
+  },
+  "in_sample": {
+   "p": 0.011,
+   "r": 0.2595,
+   "f1": 0.021,
+   "best": 0.1372,
+   "truth": 131,
+   "tagged": 81
+  },
+  "cross_tumor": null
+ },
+ {
+  "kind": "INDEL",
+  "target": "COLO829T",
+  "platform": "ONT",
+  "chrom": "chr1",
+  "test_set": "COLO829T_ONT_d46",
+  "multicancer4": {
+   "p": 0.0011,
+   "r": 0.1679,
+   "f1": 0.0021,
+   "best": 0.0089,
+   "truth": 131,
+   "tagged": 81
+  },
+  "multicancer6": {
+   "p": 0.0026,
+   "r": 0.2137,
+   "f1": 0.0051,
+   "best": 0.0608,
+   "truth": 131,
+   "tagged": 81
+  },
+  "in_sample": {
+   "p": 0.0011,
+   "r": 0.229,
+   "f1": 0.0021,
+   "best": 0.0887,
+   "truth": 131,
+   "tagged": 81
+  },
+  "cross_tumor": null
+ }
+]
