@@ -1,0 +1,29 @@
+use	tumor	platform	spectrum	n	cosine_to_truth	cosine_to_normal_germline	uv_type_ct_share
+Figure 4a	HG008T	Illumina	Pansoma	1386	0.940	0.786	0.240
+Figure 4a	HG008T	Illumina	DeepSomatic-TO	1649	0.921	0.815	0.216
+Figure 4a	HG008T	Illumina	ClairS-TO	1435	0.912	0.821	0.248
+Figure 4a	HG008T	PacBio HiFi	Pansoma	1232	0.941	0.776	0.260
+Figure 4a	HG008T	PacBio HiFi	DeepSomatic-TO	1321	0.943	0.763	0.245
+Figure 4a	HG008T	PacBio HiFi	ClairS-TO	1292	0.918	0.827	0.236
+Figure 4a	HG008T	ONT	Pansoma	1387	0.941	0.786	0.254
+Figure 4a	HG008T	ONT	DeepSomatic-TO	1954	0.878	0.858	0.236
+Figure 4a	HG008T	ONT	ClairS-TO	1399	0.899	0.847	0.238
+Figure 4a	COLO829T	Illumina	Pansoma	2013	0.996	0.394	0.643
+Figure 4a	COLO829T	Illumina	DeepSomatic-TO	4779	0.913	0.596	0.336
+Figure 4a	COLO829T	Illumina	ClairS-TO	4335	0.913	0.620	0.414
+Figure 4a	COLO829T	Fiber-seq	Pansoma	1996	0.997	0.387	0.652
+Figure 4a	COLO829T	Fiber-seq	DeepSomatic-TO	1853	0.982	0.457	0.477
+Figure 4a	COLO829T	Fiber-seq	ClairS-TO	2334	0.995	0.490	0.539
+Figure 4a	COLO829T	ONT	Pansoma	2147	0.996	0.405	0.631
+Figure 4a	COLO829T	ONT	DeepSomatic-TO	2915	0.984	0.549	0.463
+Figure 4a	COLO829T	ONT	ClairS-TO	2233	0.993	0.494	0.546
+Supplement graph-coordinate	HG008T	Illumina	Pansoma graph-coordinate	754	0.604	0.793	0.142
+Supplement graph-coordinate	HG008T	PacBio HiFi	Pansoma graph-coordinate	240	0.496	0.635	0.171
+Supplement graph-coordinate	HG008T	ONT	Pansoma graph-coordinate	1254	0.618	0.753	0.181
+Supplement graph-coordinate	COLO829T	Illumina	Pansoma graph-coordinate	516	0.711	0.736	0.260
+Supplement graph-coordinate	COLO829T	Fiber-seq	Pansoma graph-coordinate	257	0.674	0.468	0.416
+Supplement graph-coordinate	COLO829T	ONT	Pansoma graph-coordinate	2997	0.646	0.906	0.227
+reference	HG008T	-	matched-normal germline	296786	0.585	1.000	0.158
+reference	HG008T	-	chr1 somatic truth	697	1.000	0.585	0.288
+reference	COLO829T	-	matched-normal germline	298057	0.428	1.000	0.158
+reference	COLO829T	-	chr1 somatic truth	2443	1.000	0.428	0.585
