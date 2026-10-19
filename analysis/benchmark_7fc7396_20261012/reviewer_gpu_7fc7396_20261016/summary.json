@@ -776,7 +776,14 @@
     "best_tp": 527
    },
    "dataset_repredicted": null,
-   "normbq": null
+   "normbq": {
+    "pass": 0.5681,
+    "best": 0.6127,
+    "p": 0.4261,
+    "r": 0.8522,
+    "fp": 800,
+    "best_tp": 530
+   }
   },
   {
    "set": "HG008T PacBio",
@@ -863,7 +870,14 @@
     "best_tp": 1790
    },
    "dataset_repredicted": null,
-   "normbq": null
+   "normbq": {
+    "pass": 0.782,
+    "best": 0.7868,
+    "p": 0.867,
+    "r": 0.7122,
+    "fp": 267,
+    "best_tp": 1795
+   }
   },
   {
    "set": "COLO829T fiberseq",
@@ -885,7 +899,14 @@
     "best_tp": 1807
    },
    "dataset_repredicted": null,
-   "normbq": null
+   "normbq": {
+    "pass": 0.7772,
+    "best": 0.7826,
+    "p": 0.8631,
+    "r": 0.7069,
+    "fp": 274,
+    "best_tp": 1812
+   }
   },
   {
    "set": "COLO829T ONT",
@@ -914,7 +935,14 @@
     "fp": 415,
     "best_tp": 1714
    },
-   "normbq": null
+   "normbq": {
+    "pass": 0.7529,
+    "best": 0.754,
+    "p": 0.814,
+    "r": 0.7004,
+    "fp": 391,
+    "best_tp": 1755
+   }
   },
   {
    "set": "HG008T Illumina",

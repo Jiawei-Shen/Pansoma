@@ -74,8 +74,14 @@ threshold, best F1 of the chr1 curve beside it; INDEL: best F1, with the 71cb51a
 - **Matched d9** (SNV on 4 GPUs as d46): 1 -> 4 GPUs on the same recipe changes d9 SNV by -0.014 / +0.004 (HG008T PacBio
   / ONT) and -0.206 / -0.029 / +0.038 (COLO829T); the three-seed comparison of the arms is the one above. COLO829T d9
   INDEL at lr 1e-4: best 0.161 / 0.142 / 0.095 (Illumina / fiberseq / ONT), d46 - d9 +0.008 / -0.005 / -0.006.
-- **`--norm dataset`**: in-sample within -0.006 to +0.004 of `--norm train` on six models; the two ONT SNV models
-  lower because predict fitted the statistics on chr1 only (next section). Cross-sample predictions wait for that fix.
+- **`--norm dataset`**: the 2026-10-16 models (normds: BQ and MAPQ per dataset) were within -0.006 to +0.004 of `--norm
+  train` in-sample on six models and lower on the two ONT SNV ones because predict fitted the statistics on chr1 only
+  (next section). Fixed in f344bca (2026-10-19, the user's decision: BQ only per dataset, statistics of all
+  chromosomes, a training dataset's statistics from the checkpoint): the two ONT normds models re-predicted recover
+  from 0.548 / 0.520 to 0.594 / 0.746 (chr1 somatic AP 0.266 -> 0.360, 0.433 -> 0.743), and the 8 models retrained
+  with it (normbq, `submit_normbq.sh`) are within -0.002 to +0.001 of `--norm train` on seven and +0.016 on COLO829T
+  ONT SNV (0.753 against 0.718-0.737 over three seeds). The normbq checkpoints are the ones for the cross-sample
+  tests.
 - **E13** (HG008T PacBio d46, SNV; PASS F1 (best F1), two replicates per fraction; 100 % = the three seeds):
   - Training blocks 10 % 0.574 (0.579), 25 % 0.582 (0.588), 50 % 0.597 (0.600), 75 % 0.600 (0.616), 100 % 0.607
     (0.616): rising with the data, by +0.03 (PASS) from 10 % to 100 % and +0.010 from 50 % to 100 %; the replicates
@@ -119,6 +125,12 @@ The checkpoints are not affected (training fitted the statistics on chr2-22); th
 be any cross-sample prediction of one chromosome of another tumor. A fix is a pipeline change (pending the user):
 fit the statistics of a dataset on the whole set (all its chromosomes, labels not used) in predict, and likewise in
 train, so in-sample training and test use the same statistics; then re-predict the 8 models.
+
+Done 2026-10-19 (f344bca), with MAPQ taken off the per-dataset channels (the user: MAPQ comes from the pipeline's own
+vg alignment; HG008T and COLO829T MAPQ agree within 0.12 SD per platform, while BQ differs by up to 1.1 SD, HG008T vs
+COLO829T ONT). Checks: the two ONT normds checkpoints re-predicted with the checkpoint's statistics
+(`test_chr1_<SET>`, `vcf_chr1_<SET>`) score 0.594 / 0.746, and the normbq retraining matches `--norm train`
+in-sample (Results above).
 
 ## Not run here
 
