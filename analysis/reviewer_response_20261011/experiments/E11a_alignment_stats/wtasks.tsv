@@ -10,3 +10,4 @@ task	set	arm	kind	path	refpath	mod	keep	reads	windows
 8	COLO829T_Illumina	d46	gam	/scratch/jshen/data/COLO829T/illumina/vg_hprc_v2.1_d46/COLO829T_Illumina_WGS_hprc-v2.1-d46_vg.sorted.gam	/scratch/jshen/data/pansoma_v2_tensors/graph_index_hprc-v2.1-d46/hprc-v2.1-mc-grch38.d46.grch38_path	10	1	short	core
 9	COLO829T_fiberseq	grch38_bam	bam	/scratch/jshen/data/COLO829T/COLO829T_fiberseq/SMHTCOLO829T-X-X-M45-B004-uwsc-MERGED-pbmm2_1.13.0_GRCh38.aligned.sorted.bam	-	100	10	long	core+extra
 10	COLO829T_ONT	grch38_bam	bam	/scratch/jshen/data/COLO829T/COLO829T_ONT/COLO829T_ONT_merged.bam	-	100	10	long	core+extra
+11	COLO829T_Illumina	grch38_bam	bam	/scratch/qfu/COLO829T_WGS/SMHTCOLO829T-X-X-M45-A001-uwsc-SMAFIZO17Q9I-sentieon_bwamem_202308.01_GRCh38.aligned.sorted.bam	-	10	1	short	core
