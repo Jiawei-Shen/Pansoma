@@ -1,6 +1,7 @@
 """Build, from overview_<DATE>.md and points/<R-ID>.md in reviewer order:
   response_point_by_point_<DATE>.md  overview + every point file in full (状态 / Comment / Response / 证据 / 还缺什么)
   response_letter_<DATE>.md          the letter draft: per point the heading, the reviewer's asks and the English Response
+                                     (then the point's "**Supplementary" block, if any: figures, data, methods)
 usage: python assemble_point_by_point.py [DATE]   (default 20261015). Standard library only; rerun after editing points."""
 import re
 import sys
@@ -35,13 +36,15 @@ def main():
         full.append(f"\n---\n\n## 6.{n} {reviewer}\n")
         letter.append(f"\n## {reviewer}\n")
         for p in points:
-            text = (HERE / "points" / f"{p}.md").read_text().strip()
+            # the outputs sit one level above points/: links to ../supplementary/ become supplementary/
+            text = (HERE / "points" / f"{p}.md").read_text().strip().replace("](../supplementary/", "](supplementary/")
             full.append("\n" + text + "\n")
             head = text.splitlines()[0]
             comment = section(text, "**Comment", ["**Response", "**证据"])
-            resp = section(text, "**Response.**", ["**证据", "**还缺什么"])
+            resp = section(text, "**Response.**", ["**Supplementary", "**证据", "**还缺什么"])
+            supp = section(text, "**Supplementary", ["**证据", "**还缺什么"])  # figures, data, methods; not in the word count
             body = resp.replace("**Response.**", "**Response.**", 1)
-            letter.append(f"\n{head}\n\n{comment}\n\n{body}\n")
+            letter.append(f"\n{head}\n\n{comment}\n\n{body}\n" + (f"\n{supp}\n" if supp else ""))
             prose = re.sub(r"^\|.*$", "", resp, flags=re.M)  # word count without tables
             words.append((p, len(prose.replace("**Response.**", "").split())))
     (HERE / f"response_point_by_point_{date}.md").write_text("".join(full))

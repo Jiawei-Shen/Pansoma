@@ -439,16 +439,99 @@ precision over v1.1 after filtering (R1.2).
 
 **Response.**
 
-We agree. Lines 292–294 are rewritten, and Supplementary Fig. 4 is replaced by a table of counts and proportions for the same reads on each reference, for both tumors and all three platforms: the GRCh38 BAM, the GRCh38-only graph, the HPRC v1.1 graph (d9 filter) and the HPRC v2.1 graph (d46 filter), overall and by SMaHT region class and segmental duplication. Examples:
+We agree that lines 292–294 overstated the effect, and have rewritten them. Supplementary Fig. 4 is replaced by counts
+and proportions for the same reads on four references (the GRCh38 BAM, a GRCh38-only graph, and the HPRC v1.1 and v2.1
+graphs), for both tumors and all three platforms (Supplementary Table and Figure below). In summary:
 
-- *Illumina, the same reads* (10% of the reads in 48 GRCh38 windows, half at segmental duplications, placed in the same window on both graphs): full-length edit-free alignments rise on HG008T from 69.12% to 79.36% on v1.1 and from 69.07% to 79.41% on v2.1, and on COLO829T from 71.02% to 81.66% and from 71.01% to 81.73%. On their shared reads the GRCh38 BAM (BWA-MEM) and the GRCh38-only graph both give 69.18%, so the gain comes from the graph's content, not the aligner. Of the reads that became edit-free on v1.1, 86.02% had mismatches only and 99.74% kept their GRCh38 position.
-- *Illumina, whole files* (HG008T, 2,974,694,440 read records): 1.42% (v1.1) and 1.41% (v2.1) are unmapped, against 1.51% on the GRCh38-only graph, and the number of reads at MAPQ 60 is almost unchanged.
-- *Long reads* are rarely edit-free end to end (0.00–1.32% on the GRCh38-only graph, 0.01–2.54% on v1.1), so we report per-base rates. Mismatched bases per kb fall on v1.1 for every long-read dataset (HG008T PacBio 1.57 to 0.63, COLO829T Fiber-seq 1.80 to 0.84, HG008T ONT 5.22 to 4.26, COLO829T ONT 9.16 to 8.36); indel events per kb change less (HG008T PacBio 1.58 to 1.39).
-- *Soft clipping* changes little: 2.05% vs 1.83% of reads (HG008T Illumina, same reads), 2.65% vs 2.00% (HG008T PacBio; 3.75% on v2.1) and 30.37% vs 29.89% (HG008T ONT).
-- *Unmapped reads and MAPQ.* Of the same 14,014,144 HG008T PacBio reads, 0.01% (GRCh38 BAM), 2.78% (GRCh38-only graph), 2.64% (v1.1) and 0.01% (v2.1) are unmapped, and MAPQ is 60 for 94.84%, 95.88%, 95.88% and 83.32% of mapped reads; COLO829T Fiber-seq follows the same pattern on the graphs. The extra reads v2.1 aligns lie mostly in difficult regions, at low MAPQ (R3.6). On ONT, giraffe leaves more HG008T reads unmapped on every graph (7.77–8.04%) than minimap2 on the BAM (3.89%).
-- *Correctness* (reads simulated from the HG008-N assembly; R3.6): 98.698%, 98.642% and 98.659% of Illumina reads are placed correctly on the GRCh38-only graph, v1.1 and v2.1, but wrong placements at MAPQ ≥ 30 fall from 0.093% to 0.019% and 0.013%. ONT reads are the exception: v2.1 misplaces more of them (1.483%, against 0.773% on the GRCh38-only graph and 0.614% on v1.1).
+- *Illumina:* full-length edit-free alignments of the same reads rise by about 10 percentage points on the HPRC graphs
+  (HG008T 69% to 79%, COLO829T 71% to 81–82%). The GRCh38 BAM and the GRCh38-only graph give the same rate (68.5% and
+  68.9%), so the gain comes from the graph's content, not from the aligner.
+- *Long reads* are rarely edit-free end to end. On HPRC v1.1 their mismatched bases per kb fall (HiFi 1.57 to 0.63, ONT
+  5.22 to 4.26), while indel rates, soft clipping and unmapped reads change little. HPRC v2.1 aligns nearly every HiFi
+  read, but places the additional ones in difficult regions at lower mapping quality.
+- *More edit-free alignments are not more correct alignments.* On reads simulated from the HG008-N assembly, the share
+  placed correctly is the same on every reference (Illumina 98.6–98.7%), while confident misplacements fall for short
+  reads and HiFi; ONT reads are the exception on v2.1 (R3.6).
 
-The table states each arm's aligner, because MAPQ scales are aligner-specific. We also toned down the statement: the graph mainly removes edits at alleles that the sample shares with HPRC haplotypes; more edit-free alignments do not by themselves mean more correct placements, and on simulated short and HiFi reads the graphs mainly reduce confident misplacements (R3.6).
+*Published benchmarks agree.* On the 10%-filtered HPRC release 1 graph (the filter of our v1.1 graph), 78.1–78.9% of
+Illumina reads aligned perfectly, against 68.7% with BWA-MEM on GRCh38, at a slight cost in mapping confidence (Hickey et
+al., 2024), and Giraffe-based calling made 34% fewer small-variant errors than GRCh38-based workflows (Liao et al.,
+2023). Giraffe is as accurate as linear mappers on simulated short reads (Sirén et al., 2021) and, on the HPRC release
+2 graph with the same d46 filter as our v2.1 graph, mapped simulated HiFi reads with the highest true-positive rate and
+the fewest confident errors, with similar or slightly better variant calls than linear mappers (Chang et al., 2025,
+preprint).
+
+The revised text says that the graph mainly removes edits at alleles that the sample shares with HPRC haplotypes.
+
+**Supplementary (R2.7).**
+
+![Illumina, the same reads on four references](supplementary/R2.7/fig_R2.7a.png)
+
+*a,* Illumina reads in 48 GRCh38 windows (24 random, 24 at segmental duplications): the share aligned end to end with no
+mismatch, indel or soft clip. COLO829T has no GRCh38 BAM in this sample.
+
+![Long reads, mismatched bases and indel events per kb](supplementary/R2.7/fig_R2.7b.png)
+
+*b,* Long reads (a 10% genome-wide sample of read names, the same reads on every graph): mismatched bases and indel
+events per aligned kb. The higher HiFi and Fiber-seq rates on v2.1 come from the reads it newly aligns (unmapped 2.6–3.4%
+on v1.1, 0.01% on v2.1), mostly in difficult regions.
+
+![Simulated reads, correct placements and confident misplacements](supplementary/R2.7/fig_R2.7c.png)
+
+*c,* Reads simulated from the HG008-N assembly (Illumina 5,000,000; HiFi-like and ONT-like 40,000 each): the share placed
+within 50 bp of the true origin, and the misplaced reads with MAPQ ≥ 30 per 1,000 reads.
+
+Supplementary Table (same samples as *a* and *b*; MAPQ as reported by each aligner, so not comparable between the BAM and
+the graphs):
+
+| dataset | reference | unmapped % | MAPQ 60 % | soft-clipped reads % | edit-free reads % | mismatched bases / kb | indel events / kb |
+|---|---|---:|---:|---:|---:|---:|---:|
+| HG008T Illumina | GRCh38 BAM (BWA-MEM) | 0.00 | 88.2 | 2.8 | 68.50 | 4.73 | 0.21 |
+| HG008T Illumina | GRCh38-only graph | 0.00 | 86.9 | 2.2 | 68.85 | 4.63 | 0.21 |
+| HG008T Illumina | HPRC v1.1 graph (d9) | 0.00 | 86.2 | 1.9 | 79.15 | 3.69 | 0.05 |
+| HG008T Illumina | HPRC v2.1 graph (d46) | 0.00 | 86.3 | 1.9 | 79.24 | 3.67 | 0.05 |
+| COLO829T Illumina | GRCh38-only graph | 0.00 | 85.6 | 2.6 | 70.72 | 3.95 | 0.21 |
+| COLO829T Illumina | HPRC v1.1 graph (d9) | 0.00 | 85.1 | 2.6 | 81.25 | 2.97 | 0.04 |
+| COLO829T Illumina | HPRC v2.1 graph (d46) | 0.00 | 85.5 | 2.4 | 81.61 | 2.94 | 0.04 |
+| HG008T PacBio HiFi | GRCh38-only graph | 2.79 | 95.9 | 2.6 | 0.15 | 1.57 | 1.58 |
+| HG008T PacBio HiFi | HPRC v1.1 graph (d9) | 2.64 | 95.9 | 2.0 | 1.39 | 0.63 | 1.39 |
+| HG008T PacBio HiFi | HPRC v2.1 graph (d46) | 0.01 | 83.3 | 3.8 | 1.42 | 1.72 | 1.56 |
+| COLO829T Fiber-seq | GRCh38-only graph | 3.37 | 93.1 | 3.3 | 0.18 | 1.80 | 1.82 |
+| COLO829T Fiber-seq | HPRC v1.1 graph (d9) | 3.23 | 93.3 | 2.6 | 1.50 | 0.84 | 1.62 |
+| COLO829T Fiber-seq | HPRC v2.1 graph (d46) | 0.01 | 79.3 | 5.0 | 1.54 | 2.19 | 1.87 |
+| HG008T ONT | GRCh38-only graph | 7.86 | 95.2 | 30.4 | 1.32 | 5.22 | 4.27 |
+| HG008T ONT | HPRC v1.1 graph (d9) | 7.75 | 95.0 | 29.9 | 2.54 | 4.26 | 4.12 |
+| HG008T ONT | HPRC v2.1 graph (d46) | 8.01 | 94.2 | 29.6 | 2.50 | 4.35 | 4.33 |
+| COLO829T ONT | GRCh38-only graph | 13.53 | 93.9 | 99.0 | 0.00 | 9.16 | 8.59 |
+| COLO829T ONT | HPRC v1.1 graph (d9) | 13.23 | 93.5 | 99.0 | 0.01 | 8.36 | 8.55 |
+| COLO829T ONT | HPRC v2.1 graph (d46) | 13.61 | 89.5 | 99.0 | 0.01 | 8.93 | 9.12 |
+
+Data: `supplementary/R2.7/alignment_stats.tsv`, `supplementary/R2.7/simulated_placement.tsv` (made by
+`supplementary/R2.7/make_figures.py` from `experiments/E11a_alignment_stats/results/*.json` and
+`experiments/E11b_simulated_alignment/results/summary.tsv`).
+
+*Methods.*
+1. *Alignments.* Each dataset's tumor reads were aligned with vg Giraffe to the GRCh38-only graph and to the HPRC v1.1
+   (d9) and v2.1 (d46) graphs (versions as in R3.m1); the GRCh38 BAM is the data provider's BWA-MEM alignment (HG008T
+   Illumina).
+2. *Same reads.* Reads are selected by a hash of the read name, so every reference sees the same reads. Illumina: 10% of
+   the reads in the 48 windows (± 1 kb) that any reference places there; long reads: 10% of all read names, whole files
+   scanned.
+3. *Measures.* Edit-free: mapped with no mismatch, indel or soft clip. Mismatched bases and indel events per kb of
+   aligned bases, from each alignment's edits; unmapped, soft-clipped and MAPQ shares per read.
+4. *Simulation.* Reads drawn from one-to-one segments of the HG008-N assembly on chr1 and chr20, with known GRCh38
+   origin (Illumina 2 × 150 bp, 0.2% substitutions; HiFi-like ~15 kb, 0.1% errors; ONT-like with the pbsim3 R10.4
+   model), aligned to each graph and projected to GRCh38. Correct: the right chromosome and a read end within 50 bp of
+   the truth.
+
+*References.*
+- Sirén J. et al. Pangenomics enables genotyping of known structural variants in 5202 diverse genomes. *Science* 374,
+  abg8871 (2021).
+- Liao W.-W. et al. A draft human pangenome reference. *Nature* 617, 312–324 (2023).
+- Hickey G. et al. Pangenome graph construction from genome alignments with Minigraph-Cactus. *Nat. Biotechnol.* 42,
+  663–673 (2024).
+- Chang X. et al. Rapid, accurate long- and short-read mapping to large pangenome graphs with vg Giraffe. Research
+  Square preprint, doi:10.21203/rs.3.rs-7747403/v1 (2025; not peer reviewed).
 
 ### R2.m Minor comments 1–8
 
