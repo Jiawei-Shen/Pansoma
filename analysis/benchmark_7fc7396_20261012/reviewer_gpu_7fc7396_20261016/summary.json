@@ -798,7 +798,14 @@
     "best_tp": 561
    },
    "dataset_repredicted": null,
-   "normbq": null
+   "normbq": {
+    "pass": 0.6027,
+    "best": 0.6234,
+    "p": 0.4706,
+    "r": 0.8379,
+    "fp": 657,
+    "best_tp": 552
+   }
   },
   {
    "set": "HG008T ONT",
@@ -819,8 +826,22 @@
     "fp": 876,
     "best_tp": 541
    },
-   "dataset_repredicted": null,
-   "normbq": null
+   "dataset_repredicted": {
+    "pass": 0.5938,
+    "best": 0.6087,
+    "p": 0.4509,
+    "r": 0.8694,
+    "fp": 738,
+    "best_tp": 497
+   },
+   "normbq": {
+    "pass": 0.576,
+    "best": 0.6011,
+    "p": 0.4331,
+    "r": 0.8594,
+    "fp": 784,
+    "best_tp": 535
+   }
   },
   {
    "set": "COLO829T Illumina",
@@ -885,7 +906,14 @@
     "fp": 2664,
     "best_tp": 1482
    },
-   "dataset_repredicted": null,
+   "dataset_repredicted": {
+    "pass": 0.7459,
+    "best": 0.7477,
+    "p": 0.8038,
+    "r": 0.6959,
+    "fp": 415,
+    "best_tp": 1714
+   },
    "normbq": null
   },
   {
@@ -908,7 +936,14 @@
     "best_tp": 136
    },
    "dataset_repredicted": null,
-   "normbq": null
+   "normbq": {
+    "pass": 0.2527,
+    "best": 0.2564,
+    "p": 0.2665,
+    "r": 0.2402,
+    "fp": 388,
+    "best_tp": 121
+   }
   },
   {
    "set": "COLO829T Illumina",
@@ -930,7 +965,14 @@
     "best_tp": 20
    },
    "dataset_repredicted": null,
-   "normbq": null
+   "normbq": {
+    "pass": 0.117,
+    "best": 0.1688,
+    "p": 0.0769,
+    "r": 0.2443,
+    "fp": 384,
+    "best_tp": 20
+   }
   }
  ],
  "seeds": [

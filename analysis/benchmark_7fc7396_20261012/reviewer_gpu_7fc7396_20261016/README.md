@@ -51,7 +51,13 @@ threshold, best F1 of the chr1 curve beside it; INDEL: best F1, with the 71cb51a
     +0.163 (+0.091): the 4-GPU d9 runs are low on all three seeds (PASS 0.566-0.626; 1,340-1,900 false calls after
     the PoN, 1,085-1,659 of them in chr1:121-126 and 143-144 Mb, tensors outside the labels' confident region), while
     the 1-GPU d9 run scored 0.778 with 284 (33 there), as d46 (0.751 mean): a systematic effect of the 4-GPU recipe on
-    d9 for this set, not a one-seed accident.
+    d9 for this set, not a one-seed accident. `d9_fp_check.py` -> `d9_fp_check.md`: 1,080-1,612 of the 4-GPU d9 false
+    calls are tensors outside the labels' confident region (label -1, never trained on), against 35 of the 1-GPU run's
+    and 18 / 485 / 99 of the three d46 seeds'; the three d9 seeds miss on different sites (3,060 distinct alleles in
+    the two windows, 235 in all three), and 80 % of them have a d46 tensor of the same GRCh38 allele, which the d46
+    seeds call 18 / 312 / 62 times. So both graphs make these candidates; how often a model calls the unlabelled ones
+    varies between runs, on every seed with the 4-GPU d9 recipe. The 1-GPU recipe's seeds 1 and 2
+    (`submit_h90_seeds.sh`, `COLO829_Illumina_SNV_h90_s1` / `_s2`) test whether its 0.778 was one lucky seed.
   - Graph - linear, three-seed means: PASS +0.028 to +0.292 (HG008T +0.028 to +0.082, COLO829T +0.077 to +0.292),
     best +0.015 to +0.211 (HG008T +0.015 to +0.065, COLO829T +0.076 to +0.211); positive on every set for both graphs.
     The benchmark README's one-seed "0.06-0.31 after the PoN" becomes +0.03 to +0.29 (PASS) / +0.02 to +0.21 (best);

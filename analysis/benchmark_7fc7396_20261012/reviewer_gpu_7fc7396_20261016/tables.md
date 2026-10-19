@@ -46,13 +46,13 @@ normds: BQ and MAPQ per dataset, predict fitted on chr1 only (2026-10-16); normd
 | set | kind | --norm train (seed range) | normds | normds re-predicted | normbq | normbq - train |
 |---|---|---|---|---|---|---|
 | HG008T Illumina | SNV | 0.570 (0.565-0.589) | 0.564 | - | - | - |
-| HG008T PacBio | SNV | 0.605 (0.604-0.611) | 0.604 | - | - | - |
-| HG008T ONT | SNV | 0.575 (0.575-0.598) | 0.548 | - | - | - |
+| HG008T PacBio | SNV | 0.605 (0.604-0.611) | 0.604 | - | 0.603 | -0.002 |
+| HG008T ONT | SNV | 0.575 (0.575-0.598) | 0.548 | 0.594 | 0.576 | +0.001 |
 | COLO829T Illumina | SNV | 0.783 (0.704-0.783) | 0.782 | - | - | - |
 | COLO829T fiberseq | SNV | 0.779 (0.774-0.789) | 0.779 | - | - | - |
-| COLO829T ONT | SNV | 0.737 (0.718-0.737) | 0.520 | - | - | - |
-| HG008T Illumina | INDEL | 0.256 | 0.256 | - | - | - |
-| COLO829T Illumina | INDEL | 0.168 | 0.172 | - | - | - |
+| COLO829T ONT | SNV | 0.737 (0.718-0.737) | 0.520 | 0.746 | - | - |
+| HG008T Illumina | INDEL | 0.256 | 0.256 | - | 0.256 | +0.000 |
+| COLO829T Illumina | INDEL | 0.168 | 0.172 | - | 0.169 | +0.001 |
 
 ## Seeds (SNV PASS F1 (best F1); seed 0 = the existing run, seeds 1 and 2 new)
 
