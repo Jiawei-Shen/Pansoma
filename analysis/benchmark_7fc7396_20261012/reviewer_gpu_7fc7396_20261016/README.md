@@ -36,37 +36,46 @@ SNV on 4 GPUs (DDP, `--batch-size 1024` per GPU), INDEL on 1, unless stated. Inf
   `<S>_Illumina_INDEL_d46_normds`; group 4 `<d9 / d46 / linear run>_s1`, `_s2`; group 5 `HG008_PacBio_SNV_d46_e13_*`.
   LSF job ids: `$PANSOMA_RUNS/logs/submit_reviewer_gpu_20261016.txt`.
 
-## Results (2026-10-17 12:00; `tables.md` from `collect.py`)
+## Results (all 87 runs, 2026-10-19; `tables.md` from `collect.py`)
 
 chr1 after the PoN, in the benchmark BED (COLO829T: the full SMaHT union). SNV: PASS F1 at the validation recall-0.9
-threshold, best F1 of the chr1 curve beside it; INDEL: best F1, with the 71cb51a INDEL PoN rule. Done: groups 0-3 and
-17 of the 18 seed-1 runs; seed 2 and E13 running / queued.
+threshold, best F1 of the chr1 curve beside it; INDEL: best F1, with the 71cb51a INDEL PoN rule.
 
 - **Repro**: bit-identical (above).
-- **Matched d9** (SNV on 4 GPUs as d46): d46 - d9 on one seed is -0.015 / -0.003 / -0.025 on HG008T Illumina / PacBio /
-  ONT SNV and +0.212 / +0.026 / -0.007 on COLO829T (the matched COLO829T Illumina d9 run has 1,815 false calls after
-  the PoN against 284 for the earlier 1-GPU run, most of them in chr1:121-126 and 143 Mb, tensors outside the labels'
-  confident region); INDEL +0.008 / -0.005 / -0.006 on COLO829T. 1 -> 4 GPUs on the same recipe changes d9 SNV by
-  -0.014 / +0.004 (HG008T PacBio / ONT) and -0.206 / -0.029 / +0.038 (COLO829T), as large as the seed spread below.
-- **No ch6** (24 pairs, one seed each): SNV d9 -0.006 to -0.043 on all six sets; d46 -0.007 to -0.311 on five, +0.009
-  on HG008T ONT; INDEL HG008T -0.001 to -0.034 on all six, COLO829T -0.051 to +0.013 (11-26 true calls at the best
-  points). 20 of 24 pairs lower without ch6. The seed spread below (PASS F1 up to 0.035 between two seeds on the
-  HG008T graph arms, 0.08 on HG008T linear and on COLO829T Illumina d46) is of the same size as most single pairs,
-  so the per-pair numbers need no-ch6 seeds before they are quoted as effects; the direction (lower on 20 of 24) is
-  the robust part.
+- **Seeds** (SNV, three seeds per arm and set; mean and range in `tables.md`):
+  - Seed spread, PASS F1: 0.002-0.036 on the HG008T graph arms, 0.005-0.079 on the COLO829T graph arms, 0.020-0.144 on
+    linear; best F1: at most 0.019 on the HG008T graph arms, 0.065 on COLO829T, 0.061 on linear. The PASS F1 of one
+    run is a noisy readout; linear's threshold is chosen on a validation somatic AP of about 0.01.
+  - d46 - d9, three-seed means, PASS (best): HG008T Illumina -0.011 (+0.004), PacBio +0.015 (-0.005), ONT +0.002
+    (+0.004); COLO829T fiberseq +0.012 (+0.007), ONT -0.017 (-0.014): equal within the seed spread. COLO829T Illumina
+    +0.163 (+0.091): the 4-GPU d9 runs are low on all three seeds (PASS 0.566-0.626; 1,340-1,900 false calls after
+    the PoN, 1,085-1,659 of them in chr1:121-126 and 143-144 Mb, tensors outside the labels' confident region), while
+    the 1-GPU d9 run scored 0.778 with 284 (33 there), as d46 (0.751 mean): a systematic effect of the 4-GPU recipe on
+    d9 for this set, not a one-seed accident.
+  - Graph - linear, three-seed means: PASS +0.028 to +0.292 (HG008T +0.028 to +0.082, COLO829T +0.077 to +0.292),
+    best +0.015 to +0.211 (HG008T +0.015 to +0.065, COLO829T +0.076 to +0.211); positive on every set for both graphs.
+    The benchmark README's one-seed "0.06-0.31 after the PoN" becomes +0.03 to +0.29 (PASS) / +0.02 to +0.21 (best);
+    the smallest gain is HG008T PacBio (+0.03 / +0.04 PASS, +0.02 / +0.02 best), where linear's seed 0 (0.513) was low.
+- **No ch6** (24 pairs, one seed each; on d46 the with-ch6 side has the three seeds, same 4-GPU recipe):
+  - On d46 every no-ch6 SNV model is below the with-ch6 three-seed range by best F1 (HG008T Illumina -0.071, PacBio
+    -0.015, ONT -0.009; COLO829T Illumina -0.173, fiberseq -0.006, ONT -0.059 against the mean) and on five of six by
+    PASS F1 (HG008T ONT inside: 0.584 against 0.575-0.598). HG008T Illumina d9 (4 GPUs) is below its range too (PASS
+    0.542 against 0.585-0.587).
+  - The other pairs (one seed per side; d9 SNV on 1 GPU): d9 SNV -0.006 to -0.041; INDEL HG008T d9 -0.010 / -0.034 /
+    -0.011, d46 -0.004 / -0.030 / -0.001; COLO829T INDEL -0.051 to +0.013 on 11-26 true calls at the best points.
+  - 20 of 24 pairs are lower without ch6. The no-ch6 models have one seed each, so the size per set is uncertain by
+    about the seed spread; the direction is consistent.
+- **Matched d9** (SNV on 4 GPUs as d46): 1 -> 4 GPUs on the same recipe changes d9 SNV by -0.014 / +0.004 (HG008T PacBio
+  / ONT) and -0.206 / -0.029 / +0.038 (COLO829T); the three-seed comparison of the arms is the one above. COLO829T d9
+  INDEL at lr 1e-4: best 0.161 / 0.142 / 0.095 (Illumina / fiberseq / ONT), d46 - d9 +0.008 / -0.005 / -0.006.
 - **`--norm dataset`**: in-sample within -0.006 to +0.004 of `--norm train` on six models; the two ONT SNV models
   lower because predict fitted the statistics on chr1 only (next section). Cross-sample predictions wait for that fix.
-- **Seeds** (two of three seeds so far, SNV; `tables.md`):
-  - d46 - d9 changes sign between the two seeds on HG008T Illumina (-0.015 / +0.002), PacBio (-0.003 / +0.032), ONT
-    (-0.025 / +0.015) and COLO829T fiberseq (+0.027 / -0.008); it keeps its sign on COLO829T Illumina (+0.211 / +0.078;
-    both 4-GPU d9 runs low, 0.572 / 0.626 against 0.778 for the 1-GPU run) and ONT (-0.007 / -0.031).
-  - PASS F1 moves more than the best F1 between seeds, most on the linear arm (HG008T PacBio 0.513 / 0.592, best
-    0.596 / 0.604), whose threshold is chosen on a validation somatic AP of 0.012 / 0.011 (validation F1 0.04).
-  - By best F1 the graphs stay above linear on every set and seed so far: HG008T Illumina +0.06-0.07, ONT +0.03-0.05,
-    PacBio +0.00-0.04; COLO829T Illumina +0.10-0.23, fiberseq +0.08-0.10, ONT +0.23 (seed 0).
-  - The README's "pangenome worth 0.06-0.31 SNV F1 after the PoN" is a one-seed PASS F1 statement; with the seeds the
-    HG008T PacBio PASS gap goes from +0.09 (seed 0) to -0.02 / +0.01 (seed 1). Final numbers: three-seed means.
-- **E13**: queued.
+- **E13** (HG008T PacBio d46, SNV; PASS F1 (best F1), two replicates per fraction; 100 % = the three seeds):
+  - Training blocks 10 % 0.574 (0.579), 25 % 0.582 (0.588), 50 % 0.597 (0.600), 75 % 0.600 (0.616), 100 % 0.607
+    (0.616): rising with the data, by +0.03 (PASS) from 10 % to 100 % and +0.010 from 50 % to 100 %; the replicates
+    agree within 0.001-0.009.
+  - Model size on all blocks: 8.7 M 0.616 (0.632), 50.4 M 0.607 (0.616; seeds 0.604-0.611), 199.6 M 0.603 (0.608): no
+    gain from capacity; the 8.7 M model is at or above the 50.4 M seed range (one run).
 
 ## Code updates while the jobs ran
 
@@ -77,7 +86,7 @@ The RIS checkout was pulled to 689fc2f / 2c39bad on 2026-10-16 18:00-18:02, so j
   `vcf.sh` of an INDEL run here has the old or the new rule depending on when it ran, so every INDEL call set (these and
   the benchmark's) was re-scored with the new rule into `<run>/vcf_chr1_pon71cb51a` (`../indel_pon_71cb51a_20261016/`);
   compare INDEL runs on those.
-- To do once no job uses it: the comment in `ris/vcf.sh` (line 45) still states the 7fc7396 INDEL rule.
+- The comment in `ris/vcf.sh` stating the INDEL rule was updated once no job used the script (2026-10-19).
 
 ## `--norm dataset`: predict fits the statistics on the predicted chromosomes only
 

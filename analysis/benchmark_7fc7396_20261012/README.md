@@ -13,7 +13,7 @@ of each kind; PASS at the checkpoint's validation recall-0.9 threshold). Multi-G
 | `hprc_v21_d46_7fc7396_20261012/` | the same 12 sample x platform x kind runs on the HPRC v2.1 d46 graph, against d9 | done |
 | `linear_grch38_7fc7396_20261012/` | the same 12 on a GRCh38-only graph, against d9 and d46 | done |
 | `indel_pon_71cb51a_20261016/` | every INDEL call set re-scored with the 71cb51a INDEL PoN rule (HP >= 8: AF 0.01, else 1e-4) | done |
-| `reviewer_gpu_7fc7396_20261016/` | the RIS GPU jobs of the 2026-10-15 reviewer response: matched d9, no ch6, `--norm dataset`, seeds, E13 | running |
+| `reviewer_gpu_7fc7396_20261016/` | the RIS GPU jobs of the 2026-10-15 reviewer response: matched d9, no ch6, `--norm dataset`, seeds, E13 | done |
 
 Each folder has a `README.md` (what was run, LSF jobs, results and their reading), a `collect.py` (standard library;
 reads `$PANSOMA_RUNS/<run>` and writes `tables.md`, `summary.json` and `runs/<run>/` copies of the training logs and rtg
@@ -69,7 +69,9 @@ SNV sets), because fewer germline variants become candidates on the larger pange
 anyway. INDEL: d46 gives more truth INDELs a tensor, but they are population alleles the PoN tags (the PoN-limited
 ceilings are unchanged); by best F1, d46 - d9 is -0.013 / +0.012 / +0.016 on HG008T Illumina / PacBio / ONT and
 -0.034 / +0.013 / +0.015 on COLO829T (against the 2026-10-06 lr 4e-4 d9 runs; +0.007 / -0.005 / -0.006 against the
-matched lr 1e-4 d9 runs of `reviewer_gpu_7fc7396_20261016`): equal within noise.
+matched lr 1e-4 d9 runs of `reviewer_gpu_7fc7396_20261016`): equal within noise. With three seeds per arm and the d9 SNV
+models on 4 GPUs as d46 (`reviewer_gpu_7fc7396_20261016`), d46 - d9 SNV is -0.017 to +0.015 (PASS F1, three-seed means)
+on five of six sets, inside the seed spread; COLO829T Illumina +0.163, where the 4-GPU d9 runs are low on every seed.
 
 **Linear GRCh38 graph** (`linear_grch38_7fc7396_20261012`), after the PoN, linear / d9 / d46:
 
@@ -78,7 +80,8 @@ matched lr 1e-4 d9 runs of `reviewer_gpu_7fc7396_20261016`): equal within noise.
 | HG008T | 0.469 / 0.513 / 0.537 vs 0.585 / 0.621 / 0.596 (d9) | 0.201 / 0.176 / 0.084 vs 0.269 / 0.263 / 0.143 (d9) |
 | COLO829T | 0.468 / 0.680 / 0.418 vs 0.778 / 0.781 / 0.706 (d9) | 0.070 / 0.095 / 0.020 vs 0.202 / 0.124 / 0.074 (d9) |
 
-The pangenome is worth 0.06-0.31 SNV F1 even after the PoN (linear: every germline variant of the sample is a
+The pangenome is worth 0.06-0.31 SNV F1 even after the PoN on one seed, +0.03 to +0.29 (PASS F1) and +0.02 to +0.21
+(best F1) as three-seed means of every arm (`reviewer_gpu_7fc7396_20261016`; smallest on HG008T PacBio) (linear: every germline variant of the sample is a
 candidate, raw F1 0.01-0.07; more false calls survive the PoN, and many more outside the BED). For INDEL the linear
 graph keeps the somatic INDELs a pangenome absorbs (truth with a tensor 0.75-0.87 vs 0.54-0.70 on HG008T) but ranks
 worse: best F1 below d9 / d46 on every INDEL set (its higher long-read PASS F1 comes from where its recall-0.9
