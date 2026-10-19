@@ -3,7 +3,8 @@ import unittest
 import numpy as np
 import torch
 
-from ..encode import CATEGORICAL, CONTINUOUS, DATASET_NORM, N_PLANES, PLANES, WIDTH, TensorEncoder, compute_stats
+from ..encode import (CATEGORICAL, CONTINUOUS, DATASET_NORM, DATASET_NORM_BEFORE_20261019, N_PLANES, PLANES, WIDTH,
+                      TensorEncoder, compute_stats)
 from .fixtures import make_tensor
 
 STATS = {"base_quality": {"mean": 30.0, "std": 10.0}, "mapping_quality": {"mean": 40.0, "std": 20.0},
@@ -120,8 +121,9 @@ class EncoderTest(unittest.TestCase):
         self.assertTrue(torch.equal(enc(self.x, self.blocks), self.out))
 
     def test_dataset_statistics_remove_a_dataset_offset(self):
-        """norm dataset: a dataset whose BQ and MAPQ are shifted and scaled encodes like the original when each is
-        z-scored with its own statistics; path count keeps the encoder's statistics; without a table part is ignored."""
+        """norm dataset: a dataset whose DATASET_NORM channels (BQ) are shifted and scaled encodes like the original when
+        each is z-scored with its own statistics; path count keeps the encoder's statistics; without a table part is
+        ignored."""
         x2 = self.x.clone().to(torch.int16)
         for name, c, low in CONTINUOUS:
             if name in DATASET_NORM:  # a "run" with every valid value doubled and shifted by 3
@@ -146,6 +148,33 @@ class EncoderTest(unittest.TestCase):
         self.assertTrue(torch.equal(enc(self.x, self.blocks, part=ones), self.out))  # no table: the buffers
         with self.assertRaises(RuntimeError):
             TensorEncoder().set_part_stats(own)  # the encoder's own statistics come first
+
+    def test_dataset_norm_channels(self):
+        """dataset_norm picks the channels z-scored per dataset: BQ for new models (MAPQ keeps the encoder's statistics,
+        like path count), BQ and MAPQ for the norm dataset checkpoints of 2026-10-13 to 10-19; unknown names fail."""
+        self.assertEqual(DATASET_NORM, ("base_quality",))
+        x2 = self.x.clone().to(torch.int16)
+        for name, c, low in CONTINUOUS:
+            if name in DATASET_NORM_BEFORE_20261019:  # BQ and MAPQ of a "run" doubled and shifted by 3
+                valid = (x2[:, 4] > 0) & (x2[:, c] >= low)
+                x2[:, c] = torch.where(valid, x2[:, c] * 2 + 3, x2[:, c])
+        zeros = torch.zeros(len(self.x), dtype=torch.long)
+        own, own2 = [compute_stats([(self.x, self.blocks, None)], 100)], [compute_stats([(x2, self.blocks, None)], 100)]
+        ref = TensorEncoder(STATS, dataset_norm=DATASET_NORM_BEFORE_20261019)
+        ref.set_part_stats(own)
+        b = ref(self.x, self.blocks, part=zeros)
+        old = TensorEncoder(STATS, dataset_norm=DATASET_NORM_BEFORE_20261019)
+        old.set_part_stats(own2)
+        new = TensorEncoder(STATS)
+        new.set_part_stats(own2)
+        a_old, a_new = old(x2, self.blocks, part=zeros), new(x2, self.blocks, part=zeros)
+        for name in DATASET_NORM_BEFORE_20261019:
+            self.assertTrue(torch.allclose(plane(a_old, name), plane(b, name), atol=1e-4), name)
+        self.assertTrue(torch.allclose(plane(a_new, "base_quality"), plane(b, "base_quality"), atol=1e-4))
+        self.assertTrue(torch.equal(plane(a_new, "mapping_quality"), plane(self.enc(x2, self.blocks), "mapping_quality")))
+        self.assertEqual(new.dataset_norm, ("base_quality",))
+        with self.assertRaises(ValueError):
+            TensorEncoder(STATS, dataset_norm=("depth",))
 
     def test_bfloat16_output(self):
         out = self.enc(self.x, self.blocks, dtype=torch.bfloat16)

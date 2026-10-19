@@ -317,11 +317,16 @@ class TrainPredictTest(unittest.TestCase):
             self.assertEqual((resumed["path_count_storage"], resumed["path_count_haplotypes"]),
                              ("int8-count-linear100-log2", []))
             self.assertEqual(resumed["stats"], ckpt["stats"])  # statistics are not refitted
-            # norm dataset (the default): one BQ / MAPQ statistics row per training dataset, kept on --resume
-            self.assertEqual(ckpt["config"]["norm"], "dataset")
+            # norm dataset (the default): one BQ statistics row per training dataset, fitted on tensors of all its
+            # chromosomes (chr1 too, labels not used), kept on --resume
+            self.assertEqual((ckpt["config"]["norm"], ckpt["config"]["dataset_norm"]), ("dataset", ["base_quality"]))
             self.assertEqual([d["directory"] for d in ckpt["dataset_stats"]], [str(root / "SNV"), str(root / "INDEL")])
             self.assertTrue(all(d["stats"]["tensors"] > 0 for d in ckpt["dataset_stats"]))
             self.assertEqual(resumed["dataset_stats"], ckpt["dataset_stats"])
+            snv_index = KindIndex(root / "SNV", tmp / "check_cache")
+            snv_row = ckpt["dataset_stats"][0]["stats"]
+            self.assertEqual(snv_row, train.dataset_stats(snv_index, snv_index.select(None, labelled=False), 10, 12345, 0,
+                                                          lambda m: None, "check"))
 
             pred = tmp / "pred"
             predict.main(["--checkpoint", str(out / "best.pth"), "--tensors", str(root), "--output", str(pred),
@@ -337,10 +342,20 @@ class TrainPredictTest(unittest.TestCase):
             self.assertTrue(all(r["test_label"] == 0 for r in records if r["reason"] == "off_reference_no_truth_match"))
             report = json.loads((pred / "sample.tensors.SNV.metrics.json").read_text())
             self.assertEqual(report["tensors"], sum(t["eval_label"] >= 0 for t in chr1))
-            # predict fitted the statistics on the predicted dataset itself: every chr1 SNV tensor (fewer than 20,000)
+            # a training dataset: predict takes the statistics the model was trained with from the checkpoint
             norm = report["normalization"]
-            self.assertEqual((norm["norm"], norm["dataset_stats"]["tensors"]), ("dataset", len(chr1)))
+            self.assertEqual((norm["norm"], norm["channels"], norm["source"]), ("dataset", ["base_quality"], "checkpoint"))
+            self.assertEqual(norm["dataset_stats"], snv_row)
+            self.assertEqual(norm["shift"], {"base_quality": 0.0, "mapping_quality": 0.0, "path_count": 0.0})
             self.assertEqual(norm["checkpoint_stats"], torch.load(out / "best.pth", weights_only=False)["stats"])
+            # any other dataset (the same tensors at another path): fitted on all its chromosomes, not on --chroms
+            copy = tmp / "copy" / "tensors"
+            make_tensor_set(copy, SPEC, shard_size=8, seed=6)
+            predict.main(["--checkpoint", str(out / "best.pth"), "--tensors", str(copy), "--output", str(tmp / "pc"),
+                          "--chroms", "chr1", "--kinds", "SNV", "--num-workers", "0", "--amp", "off", "--batch-size", "5"])
+            norm2 = json.loads((tmp / "pc" / "copy.tensors.SNV.metrics.json").read_text())["normalization"]
+            self.assertEqual((norm2["source"], norm2["dataset_stats"]["tensors"]), ("fitted", len(truth["SNV"])))
+            self.assertEqual(set(norm2["shift"]), {"base_quality", "mapping_quality", "path_count"})
             self.assertEqual(report["left_out"], sum(t["eval_label"] < 0 for t in chr1))
             self.assertEqual(report["off_reference_in_test"], sum(t["off_reference"] and t["eval_label"] >= 0 for t in chr1))
             self.assertEqual(report["threshold"], torch.load(out / "best.pth", weights_only=False)["somatic_threshold"])
@@ -422,6 +437,10 @@ class TrainPredictTest(unittest.TestCase):
             old = dict(ckpt, config={k: v for k, v in ckpt["config"].items() if k != "norm"})  # before 2026-10-13
             torch.save(old, tmp / "old.pth")
             self.assertEqual(PansomaNetV2.from_checkpoint(old).config["norm"], "train")
+            self.assertEqual(PansomaNetV2.from_checkpoint(ckpt).config["dataset_norm"], [])
+            # a norm dataset checkpoint of 2026-10-13 to 10-19 (no dataset_norm): BQ and MAPQ per dataset
+            old_ds = dict(ckpt, config={**{k: v for k, v in ckpt["config"].items() if k != "dataset_norm"}, "norm": "dataset"})
+            self.assertEqual(PansomaNetV2.from_checkpoint(old_ds).encoder.dataset_norm, ("base_quality", "mapping_quality"))
             for name, checkpoint, extra, want in (("p_train", out / "best.pth", [], None),
                                                   ("p_old", tmp / "old.pth", [], None),
                                                   ("p_dataset", tmp / "old.pth", ["--norm", "dataset"], "dataset")):
@@ -430,6 +449,8 @@ class TrainPredictTest(unittest.TestCase):
                 norm = json.loads((tmp / name / "sample.tensors.SNV.metrics.json").read_text())["normalization"]
                 self.assertEqual(norm["norm"], want or "train")
                 self.assertEqual(norm["dataset_stats"] is not None, want == "dataset")
+                if want:  # a norm train checkpoint has no dataset statistics: fitted, BQ (encode.DATASET_NORM)
+                    self.assertEqual((norm["channels"], norm["source"], norm["shift"]), (["base_quality"], "fitted", None))
             same = lambda a, b: [json.loads(l)["p_somatic"] for l in gzip.open(tmp / a / "sample.tensors.SNV.predictions.ndjson.gz", "rt")] == \
                 [json.loads(l)["p_somatic"] for l in gzip.open(tmp / b / "sample.tensors.SNV.predictions.ndjson.gz", "rt")]  # noqa: E731
             self.assertTrue(same("p_train", "p_old"))  # an old checkpoint predicts as before

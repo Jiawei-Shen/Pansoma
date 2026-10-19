@@ -8,9 +8,10 @@ A <set> is a directory holding merged SNV/ and INDEL/ (e.g. .../COLO829T_Illumin
 the labels 0 non, 1 somatic, 2 germline; tensors labelled -1 are not used. The test chromosomes (default chr1)
 are left out; the others train, except the validation: whole ~1 Mb node blocks (--val-fraction of them), or
 --val-chroms. The encoder's z-score statistics (and with --scalars the scalars') are fitted once on the
-training tensors (or taken from --resume) and saved in every checkpoint; with --norm dataset (the default) BQ and
-MAPQ are z-scored per dataset instead, each training dataset (set x kind) with statistics fitted on its own tensors,
-and predict fits them on each predicted dataset (encode.py). Each epoch the somatic threshold of
+training tensors (or taken from --resume) and saved in every checkpoint; with --norm dataset (the default) BQ is
+z-scored per dataset instead, each training dataset (set x kind) with statistics fitted on tensors of all its
+chromosomes (labels not used), saved in the checkpoint; predict reuses them for a training dataset and fits them the
+same way on any other (encode.py). MAPQ and path count keep the training statistics. Each epoch the somatic threshold of
 the best validation F1 is found (metrics.py); the best checkpoint has the highest thresholded somatic F1 and
 stores its threshold.
 """
@@ -33,7 +34,7 @@ from .env import triton_libcuda
 from .chunks import ChunkLoader, build_cache
 from .data import (CHECKPOINT_PATH_COUNT, CLASSES, KINDS, SCALARS, EpochSampler, TensorDataset, block_split,
                    common_path_count, load_parts, read_candidate_ids, somatic_truth, validation_truth)
-from .encode import DATASET_NORM, PLANES, compute_stats
+from .encode import PLANES, compute_stats
 from .model import PansomaNetV2, full_config, no_decay
 
 AF = SCALARS.index("af")
@@ -94,10 +95,11 @@ def parse_args(argv=None):
     p.add_argument("--stats-samples", type=int, default=20000,
                    help="tensors used to fit the z-score: of the training data, and with --norm dataset of each dataset")
     p.add_argument("--norm", choices=["dataset", "train"], default="dataset",
-                   help="dataset: BQ and MAPQ z-scored with the statistics of each sample's own dataset (a set's SNV/ or "
-                        "INDEL/), fitted on its tensors here and by predict on each predicted dataset; train: with the "
-                        "training statistics for every dataset (every checkpoint before 2026-10-13). Path count always "
-                        "uses the training statistics")
+                   help="dataset: BQ z-scored with the statistics of each sample's own dataset (a set's SNV/ or "
+                        "INDEL/), fitted on tensors of all its chromosomes here (labels not used) and by predict on "
+                        "each other predicted dataset; train: with the training statistics for every dataset (every "
+                        "checkpoint before 2026-10-13). MAPQ and path count always use the training statistics "
+                        "(norm dataset checkpoints of 2026-10-13 to 10-19 z-scored MAPQ per dataset too)")
     p.add_argument("--amp", choices=["bf16", "off"], default="bf16")
     p.add_argument("--no-compile", dest="compile", action="store_false",
                    help="skip torch.compile (default on CUDA: 3x faster on an H100, ~2 min to compile)")
@@ -474,12 +476,14 @@ def main(argv=None):
                     run.log(f"dataset statistics of {i.dir} kept from --resume")
                     continue
                 t0 = time.time()
-                st = dataset_stats(i, i.select(chroms_of(i, train_chroms), labelled=False), args.stats_samples,
-                                   args.seed + 12345,
+                # every chromosome of the set, the test one too (labels not used): one chromosome is not a typical
+                # sample of a set (chr1 holds most pericentromeric tensors), and predict fits other sets the same way
+                st = dataset_stats(i, i.select(None, labelled=False), args.stats_samples, args.seed + 12345,
                                    args.num_workers, run.log, f"dataset statistics of {i.dir}")
                 box[0].append(st)
-                run.log(f"dataset statistics of {i.dir} from {st['tensors']:,} tensors of the training chromosomes "
-                        f"({time.time() - t0:.0f} s): " + json.dumps({k: st[k] for k in DATASET_NORM}))
+                run.log(f"dataset statistics of {i.dir} from {st['tensors']:,} tensors of all its chromosomes "
+                        f"({time.time() - t0:.0f} s; z-scored per dataset: {', '.join(model.encoder.dataset_norm)}): "
+                        + json.dumps({k: st[k] for k in model.encoder.dataset_norm}))
             (run.out / "dataset_stats.json").write_text(json.dumps(
                 [dict(directory=str(i.dir), stats=st) for (i, _), st in zip(train_parts, box[0])], indent=2) + "\n")
         if run.ddp:

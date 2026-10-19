@@ -21,13 +21,18 @@ stem covers the last column.
 
 Z-score statistics (`compute_stats`: mean and std over the valid covered cells of a sample of tensors):
   - the encoder's buffers `mean` / `std`, fitted on the training tensors and saved in the checkpoint, are used for
-    path count always (a property of the graph, stored relative to its haplotypes) and, without a dataset table, for
-    BQ and MAPQ too (checkpoints with config norm "train", the only kind before 2026-10-13);
-  - with norm "dataset" (`set_part_stats`), BQ and MAPQ (`DATASET_NORM`) are z-scored with the statistics of the
-    sample's own dataset (a set's SNV/ or INDEL/ directory): `forward(..., part)` picks each sample's row of the table.
-    Training fits one row per training dataset; predict fits one on each predicted dataset. BQ and MAPQ scales
-    depend on the instrument, run and aligner (binned or full-range BQ, MAPQ spread), so a model then sees each
-    dataset's values relative to that dataset, not to its training data.
+    path count and MAPQ always and, without a dataset table, for BQ too (checkpoints with config norm "train", the
+    only kind before 2026-10-13). Path count is a property of the graph (stored relative to its haplotypes); MAPQ
+    comes from the pipeline's own vg alignment, whose scale is the same for every dataset, while its mean depends on
+    which regions the tensors come from (chr1 alone: 0.5 SD below chr2-22 on ONT, mostly the pericentromeric tensors);
+  - with norm "dataset" (`set_part_stats`), the encoder's `dataset_norm` channels (new models: `DATASET_NORM`, BQ) are
+    z-scored with the statistics of the sample's own dataset (a set's SNV/ or INDEL/ directory, fitted on tensors of
+    all its chromosomes): `forward(..., part)` picks each sample's row of the table. Training fits one row per
+    training dataset; predict takes the checkpoint's row for a training dataset and fits one on any other. BQ scales
+    depend on the instrument, chemistry and basecaller (binned or full-range, e.g. HG008T vs COLO829T ONT 41.2 vs
+    29.8), so a model then sees each dataset's BQ relative to that dataset, not to its training data. Norm "dataset"
+    checkpoints of 2026-10-13 to 2026-10-19 record no `dataset_norm` and z-scored BQ and MAPQ per dataset
+    (`DATASET_NORM_BEFORE_20261019`, model.full_config).
 """
 import torch
 import torch.nn as nn
@@ -36,7 +41,8 @@ import torch.nn.functional as F
 CATEGORICAL = (("read_base", 0, 6), ("site_allele", 2, 6), ("graph_base", 5, 6), ("operation", 4, 6),
                ("strand", 7, 2))
 CONTINUOUS = (("base_quality", 1, 0), ("mapping_quality", 3, 0), ("path_count", 6, 1))  # (name, channel, min valid)
-DATASET_NORM = ("base_quality", "mapping_quality")  # z-scored per dataset under norm "dataset"; path count never
+DATASET_NORM = ("base_quality",)  # z-scored per dataset under norm "dataset" (models from 2026-10-19)
+DATASET_NORM_BEFORE_20261019 = ("base_quality", "mapping_quality")  # norm "dataset" checkpoints without dataset_norm
 BLOCKS = ("A1", "ALT", "REF", "OTHER")
 PLANES = tuple([f"{name}={code}" for name, _, k in CATEGORICAL for code in range(1, k + 1)]
                + [name for name, _, _ in CONTINUOUS]
@@ -52,11 +58,15 @@ def valid_masks(x):
 
 
 class TensorEncoder(nn.Module):
-    def __init__(self, stats=None, drop=()):
+    def __init__(self, stats=None, drop=(), dataset_norm=DATASET_NORM):
         super().__init__()
         unknown = set(drop) - set(PLANES)
         if unknown:
             raise ValueError(f"unknown planes {sorted(unknown)}; planes: {', '.join(PLANES)}")
+        names = [name for name, _, _ in CONTINUOUS]
+        if set(dataset_norm) - set(names):
+            raise ValueError(f"dataset_norm {sorted(set(dataset_norm) - set(names))}: not one of {names}")
+        self.dataset_norm = tuple(name for name in names if name in set(dataset_norm))  # channel order
         self.drop = tuple(p for p in PLANES if p in set(drop))
         self.keep = [k for k, p in enumerate(PLANES) if p not in set(drop)]
         self.n_planes = len(self.keep)
@@ -82,15 +92,15 @@ class TensorEncoder(nn.Module):
                 for j, (name, _, _) in enumerate(CONTINUOUS)}
 
     def set_part_stats(self, part_stats):
-        """part_stats: [compute_stats result] per dataset (row p for samples of part p). The DATASET_NORM channels take
-        the dataset's mean and std, the others the encoder's (fitted) buffers. An empty list removes the table."""
+        """part_stats: [compute_stats result] per dataset (row p for samples of part p). The `dataset_norm` channels
+        take the dataset's mean and std, the others the encoder's (fitted) buffers. An empty list removes the table."""
         if part_stats and not bool(self.fitted):
             raise RuntimeError("set the encoder's statistics (set_stats) before the per-dataset ones")
         mean = torch.zeros(len(part_stats), len(CONTINUOUS))
         std = torch.ones(len(part_stats), len(CONTINUOUS))
         for p, st in enumerate(part_stats):
             for j, (name, _, _) in enumerate(CONTINUOUS):
-                if name in DATASET_NORM:
+                if name in self.dataset_norm:
                     mean[p, j], std[p, j] = float(st[name]["mean"]), max(float(st[name]["std"]), 1e-6)
                 else:
                     mean[p, j], std[p, j] = self.mean[j], self.std[j]

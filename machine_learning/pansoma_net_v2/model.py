@@ -18,7 +18,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from timm.layers import DropPath, trunc_normal_
 
-from .encode import TensorEncoder
+from .encode import DATASET_NORM, DATASET_NORM_BEFORE_20261019, TensorEncoder
 
 
 class LayerNorm(nn.Module):
@@ -186,8 +186,12 @@ class ConvNeXtCBAM(nn.Module):
 
 def full_config(config):
     """A checkpoint's config with the defaults of keys added later (checkpoints before "block" are v1, before "norm"
-    z-score BQ and MAPQ with the training statistics: "train")."""
-    return {"scalars": 0, "block": "v1", "drop_planes": [], "norm": "train", **config}
+    z-score BQ and MAPQ with the training statistics: "train"; norm "dataset" ones before "dataset_norm" z-scored BQ
+    and MAPQ per dataset)."""
+    full = {"scalars": 0, "block": "v1", "drop_planes": [], "norm": "train", **config}
+    if "dataset_norm" not in full:
+        full["dataset_norm"] = list(DATASET_NORM_BEFORE_20261019) if full["norm"] == "dataset" else []
+    return full
 
 
 def no_decay(name, param):
@@ -200,18 +204,21 @@ class PansomaNetV2(nn.Module):
     (buffers, like the encoder's), go through a Linear(scalars, 64) + GELU and join the pooled features before the
     head.
 
-    norm: "dataset" z-scores BQ and MAPQ with the statistics of each sample's own dataset (the encoder's per-dataset
-    table, set by train / predict); "train" with the training statistics (encode.py)."""
+    norm: "dataset" z-scores the dataset_norm channels (default encode.DATASET_NORM, BQ) with the statistics of each
+    sample's own dataset (the encoder's per-dataset table, set by train / predict); "train" every channel with the
+    training statistics (encode.py)."""
 
     def __init__(self, num_classes=3, depths=(3, 3, 27, 3), dims=(192, 384, 768, 1536), front=(64, 64),
-                 drop_path_rate=0.1, stats=None, scalars=0, block="v2", drop_planes=(), norm="train"):
+                 drop_path_rate=0.1, stats=None, scalars=0, block="v2", drop_planes=(), norm="train", dataset_norm=None):
         super().__init__()
         if norm not in ("train", "dataset"):
             raise ValueError(f"norm must be train or dataset, not {norm!r}")
+        if dataset_norm is None:
+            dataset_norm = DATASET_NORM if norm == "dataset" else ()
+        self.encoder = TensorEncoder(stats, drop_planes, dataset_norm)
         self.config = dict(num_classes=num_classes, depths=list(depths), dims=list(dims), front=list(front),
                            drop_path_rate=drop_path_rate, scalars=scalars, block=block, drop_planes=list(drop_planes),
-                           norm=norm)
-        self.encoder = TensorEncoder(stats, drop_planes)
+                           norm=norm, dataset_norm=list(self.encoder.dataset_norm))
         layers, c = [], self.encoder.n_planes
         for width in front:
             layers += [nn.Conv2d(c, width, kernel_size=1), nn.GELU()]

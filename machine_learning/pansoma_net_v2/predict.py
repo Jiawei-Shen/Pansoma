@@ -38,10 +38,15 @@ sets (data.PATH_COUNT_ALL). It is called somatic when somatic is the most probab
 the off-reference tensors and the checkpoint's validation recall-0.9 threshold on the others; `offref_rescue`
 counts the tensors and calls and gives the floor.
 
-Z-score statistics: with a checkpoint of norm "dataset" (train --norm dataset, the default from 2026-10-13), BQ and MAPQ
-are z-scored with statistics fitted on each predicted dataset's own tensors (--stats-samples of the predicted
-chromosomes, labels not used; recorded in .metrics.json "normalization"); path count, and every channel of a norm
-"train" checkpoint, use the checkpoint's training statistics. --norm overrides the checkpoint's choice. If any set codes channel 6
+Z-score statistics: with a checkpoint of norm "dataset" (train --norm dataset, the default from 2026-10-13), its
+dataset_norm channels (BQ; BQ and MAPQ for the checkpoints of 2026-10-13 to 10-19) are z-scored with the statistics of
+each predicted dataset: the checkpoint's own for one of its training datasets (the same directory), otherwise fitted
+as train does, on --stats-samples tensors of all the dataset's chromosomes whatever --chroms is (labels not used;
+recorded in .metrics.json "normalization"). MAPQ, path count, and every channel of a norm "train" checkpoint use the
+checkpoint's training statistics; a dataset whose mean of such a channel lies more than 0.5 SD (of the nearest
+training dataset) from every training dataset's gets a warning (.metrics.json "normalization" "shift": the shift to
+the nearest training dataset in its SDs). --norm overrides the checkpoint's choice (--norm dataset on a norm "train"
+checkpoint: encode.DATASET_NORM). If any set codes channel 6
 otherwise than the checkpoint's training sets (checkpoint path_count_storage; int8-count-linear100-log2 when it
 records none), predict exits before predicting anything (a model trained with --drop-planes path_count never reads
 channel 6 and takes sets of any storage); a set built with another --haplotypes is predicted with a
@@ -61,6 +66,18 @@ from .data import (CHECKPOINT_PATH_COUNT, CLASSES, KINDS, PATH_COUNT_ALL, TENSOR
 from .encode import CONTINUOUS, DATASET_NORM
 from .model import PansomaNetV2
 from .train import dataset_stats, describe, make_loader, predict_probs, retry_workers
+
+
+def stat_shift(stats, references):
+    """{channel: (mean - reference mean) / reference std} of every CONTINUOUS channel against the nearest of the
+    reference statistics (the checkpoint's training datasets); None without references."""
+    if not references:
+        return None
+    out = {}
+    for name, _, _ in CONTINUOUS:
+        d = [(stats[name]["mean"] - r[name]["mean"]) / max(r[name]["std"], 1e-6) for r in references]
+        out[name] = round(min(d, key=abs), 4)
+    return out
 
 
 def parse_args(argv=None):
@@ -84,10 +101,11 @@ def parse_args(argv=None):
                         "the test like -1, records get excluded: true and graph_vcf leaves them out of the calls "
                         "(default: the checkpoint's train --exclude-candidates; the option without a file: none)")
     p.add_argument("--norm", choices=["dataset", "train"],
-                   help="BQ / MAPQ z-score: dataset (fitted on each predicted dataset) or train (the checkpoint's "
-                        "training statistics); default: the checkpoint's config norm")
+                   help="BQ z-score: dataset (each predicted dataset's statistics) or train (the checkpoint's training "
+                        "statistics); default: the checkpoint's config norm")
     p.add_argument("--stats-samples", type=int, default=20000,
-                   help="tensors of each predicted dataset used to fit its statistics (norm dataset)")
+                   help="tensors of each predicted dataset (all its chromosomes) used to fit its statistics (norm "
+                        "dataset, for a dataset the checkpoint was not trained on)")
     p.add_argument("--ignore-reasons", nargs="*",
                    help="label reasons left out of the test, as if -1 (default: the checkpoint's train --ignore-reasons, "
                         "minus the partial somatic reasons for INDEL sets); their records keep label, reason and "
@@ -123,8 +141,12 @@ def main(argv=None):
     out = Path(args.output)
     out.mkdir(parents=True, exist_ok=True)
     norm = args.norm or model.config["norm"]
+    if norm == "dataset" and not model.encoder.dataset_norm:  # a norm train checkpoint with --norm dataset
+        model.encoder.dataset_norm = DATASET_NORM
+    channels = list(model.encoder.dataset_norm) if norm == "dataset" else []
+    trained_stats = {d["directory"]: d["stats"] for d in checkpoint.get("dataset_stats", [])}
     print(f"checkpoint {args.checkpoint} (epoch {checkpoint['epoch']}), statistics {json.dumps(model.encoder.stats())}"
-          f"; BQ / MAPQ z-score: {norm}", flush=True)
+          f"; z-score: {norm}" + (f" (per dataset: {', '.join(channels)})" if channels else ""), flush=True)
 
     def probs_of(dataset, what):
         """(labels, probabilities) of every sample of dataset, in order."""
@@ -151,12 +173,22 @@ def main(argv=None):
             print(f"note: {index.dir} was built with --haplotypes {index.haplotypes}, the checkpoint's training sets "
                   f"with {trained_haplotypes or 'none recorded'}", flush=True)
         dataset = TensorDataset([(index, positions)], labels="eval_label")
-        part_stats = None
+        part_stats, source, shift = None, None, None
         if norm == "dataset":  # this dataset's statistics: row 0 of the table, the part of every sample here
-            part_stats = dataset_stats(index, positions, args.stats_samples, 12345, args.num_workers,
-                                       lambda m: print(m, flush=True), f"statistics of {index.dir}")
-            print(f"{index.dir}: statistics from {part_stats['tensors']:,} tensors: "
-                  + json.dumps({k: part_stats[k] for k in DATASET_NORM}), flush=True)
+            if str(index.dir) in trained_stats:  # a training dataset: the statistics the model was trained with
+                part_stats, source = trained_stats[str(index.dir)], "checkpoint"
+            else:  # fitted as train does: tensors of all the dataset's chromosomes, not only --chroms
+                part_stats = dataset_stats(index, index.select(None, labelled=False), args.stats_samples, 12345,
+                                           args.num_workers, lambda m: print(m, flush=True), f"statistics of {index.dir}")
+                source = "fitted"
+            shift = stat_shift(part_stats, list(trained_stats.values()))
+            print(f"{index.dir}: statistics ({source}, {part_stats['tensors']:,} tensors) "
+                  + json.dumps({k: part_stats[k] for k in channels})
+                  + (f"; shift to the nearest training dataset (SD): {json.dumps(shift)}" if shift else ""), flush=True)
+            for name, d in (shift or {}).items():
+                if name not in channels and abs(d) > 0.5:
+                    print(f"warning: {index.dir}: {name} mean {d:+.2f} SD from every training dataset's, and {name} "
+                          f"uses the training statistics", flush=True)
         model.encoder.set_part_stats([part_stats] if part_stats else [])
         if args.ignore_reasons is not None:
             ignore = args.ignore_reasons
@@ -230,7 +262,8 @@ def main(argv=None):
                       path_count=dict(storage=index.path_count, haplotypes=index.haplotypes,
                                       checkpoint_haplotypes=trained_haplotypes),
                       checkpoint=str(Path(args.checkpoint).resolve()), chroms=args.chroms,
-                      normalization=dict(norm=norm, dataset_stats=part_stats, checkpoint_stats=model.encoder.stats()))
+                      normalization=dict(norm=norm, channels=channels, source=source, dataset_stats=part_stats,
+                                         shift=shift, checkpoint_stats=model.encoder.stats()))
         (out / f"{name}.metrics.json").write_text(json.dumps(report, indent=2) + "\n")
         print(f"{name}: {len(labels):,} tensors, {report['tensors']:,} in the test "
               f"({report['off_reference_in_test']:,} off-reference) | {describe(report)}", flush=True)
