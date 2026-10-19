@@ -42,7 +42,7 @@ python -u -m pansoma_net_v2.linear_vcf --graph-vcf "$O/$name.$KIND.graph.vcf.gz"
     --reference-path "$G/$RP" --fasta "$FASTA" --output "$O/$name.$KIND.linear.vcf.gz"
 rm -rf "$O/eval_bed" "$O/eval_nobed"
 # the PoN for both kinds: filter_panel_of_normals.py applies its INDEL rule to INDELs (gnomAD / CoLoRSdb exact allele,
-# AF >= 0.01 in homopolymers >= 7 bp, else >= 0.001)
+# AF >= 0.01 in homopolymers >= 8 bp, else >= 0.0001; 71cb51a)
 pon=(--pon "$PON/af-only-gnomad.hg38.vcf.gz" "$PON/Homo_sapiens_assembly38.dbsnp138.vcf.gz" "$PON/1000g_pon.hg38.vcf.gz"
      "$PON/CoLoRSdb.GRCh38.v1.1.0.deepvariant.glnexus.vcf.gz")
 pon_vcf=(--pon-vcf "$O/eval_bed/$name.$KIND.linear.pon.vcf.gz")
