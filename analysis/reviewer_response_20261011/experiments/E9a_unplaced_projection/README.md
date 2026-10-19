@@ -1,5 +1,7 @@
 # E9a / E9b / E9e: placing the graph-coordinate ("unplaced") calls and scoring the complete output
 
+> **2026-10-19, COLO829T v1.1 added** (12 graph runs now): the COLO829T HPRC v1.1 (d9) runs of the matched recipe, seed 0 (RIS, synced 2026-10-19: SNV `COLO829_*_SNV_7fc7396_ddp4_b1024`, 4 GPUs; INDEL `COLO829_*_INDEL_7fc7396`, lr 1e-4), placed under `reviewer_cpu_20261013/<run>/` (best.pth -> the RIS copy, test_chr1 copied, the predictions' metrics.json pointed at the local checkpoint, the RIS path kept as `checkpoint_ris`). The local `jobs/vcf.sh` reproduces RIS's PASS / best F1, TP, FP and unplaced counts of all six exactly. Jobs: `tmp/reviewer_cpu_20261019/E3b_colo_d9` (446053) and `tmp/reviewer_cpu_20261019/E9a_colo_d9` (446057). Which v1.1 run COLO829T Illumina should use is still open (RIS is training the 1-GPU recipe with seeds 1 and 2). Class i (GRCh38 allele) 4.3 / 3.2 / 2.2 % (Illumina / Fiber-seq / ONT), no class i or class ii true positive; projection moves complete-output F1 (no BED, after the PoN) by 0.0006-0.0037. `collect.py` also re-read the GRCh38-only INDEL reports, which were re-scored with the 2026-10-16 INDEL PoN rule after the 10-15 tables were written.
+
 Reviewer points: **R3.4** (metrics exclude graph-coordinate calls; the "about 2 %"; CHM13), **R3.3** (validation of
 graph-coordinate variants: here the placement step only), **R1.3** (are the many ONT graph-coordinate calls improved
 resolution or extra ambiguity?). The design is in `../../response_to_reviewers_detailed.md`, sections R3.3, R3.4 and

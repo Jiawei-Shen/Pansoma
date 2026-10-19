@@ -1,6 +1,46 @@
 {
  "snv": [
   {
+   "run": "COLO829_Illumina_SNV_7fc7396_ddp4_b1024",
+   "arm": "d9",
+   "eval": "eval_bed",
+   "placed_f1": 0.5719,
+   "on": {
+    "tp": 1705,
+    "fp": 1815,
+    "fn": 738,
+    "unplaced": 186,
+    "complete_f1": 0.554561717352415
+   },
+   "off": {
+    "tp": 1705,
+    "fp": 1815,
+    "fn": 738,
+    "unplaced": 53,
+    "complete_f1": 0.5668218085106383
+   }
+  },
+  {
+   "run": "COLO829_Illumina_SNV_7fc7396_ddp4_b1024",
+   "arm": "d9",
+   "eval": "eval_nobed",
+   "placed_f1": 0.5719,
+   "on": {
+    "tp": 1705,
+    "fp": 1815,
+    "fn": 738,
+    "unplaced": 186,
+    "complete_f1": 0.554561717352415
+   },
+   "off": {
+    "tp": 1705,
+    "fp": 1815,
+    "fn": 738,
+    "unplaced": 53,
+    "complete_f1": 0.5668218085106383
+   }
+  },
+  {
    "run": "COLO829_Illumina_SNV_d46_7fc7396",
    "arm": "d46",
    "eval": "eval_bed",
@@ -41,6 +81,46 @@
    }
   },
   {
+   "run": "COLO829_ONT_SNV_7fc7396_ddp4_b1024",
+   "arm": "d9",
+   "eval": "eval_bed",
+   "placed_f1": 0.7442,
+   "on": {
+    "tp": 1712,
+    "fp": 446,
+    "fn": 731,
+    "unplaced": 3421,
+    "complete_f1": 0.4268262278733483
+   },
+   "off": {
+    "tp": 1712,
+    "fp": 446,
+    "fn": 731,
+    "unplaced": 152,
+    "complete_f1": 0.7203871239217337
+   }
+  },
+  {
+   "run": "COLO829_ONT_SNV_7fc7396_ddp4_b1024",
+   "arm": "d9",
+   "eval": "eval_nobed",
+   "placed_f1": 0.7442,
+   "on": {
+    "tp": 1712,
+    "fp": 446,
+    "fn": 731,
+    "unplaced": 3421,
+    "complete_f1": 0.4268262278733483
+   },
+   "off": {
+    "tp": 1712,
+    "fp": 446,
+    "fn": 731,
+    "unplaced": 152,
+    "complete_f1": 0.7203871239217337
+   }
+  },
+  {
    "run": "COLO829_ONT_SNV_d46_7fc7396",
    "arm": "d46",
    "eval": "eval_bed",
@@ -78,6 +158,46 @@
     "fn": 753,
     "unplaced": 98,
     "complete_f1": 0.7209897610921502
+   }
+  },
+  {
+   "run": "COLO829_fiberseq_SNV_7fc7396_ddp4_b1024",
+   "arm": "d9",
+   "eval": "eval_bed",
+   "placed_f1": 0.7523,
+   "on": {
+    "tp": 1765,
+    "fp": 484,
+    "fn": 678,
+    "unplaced": 1483,
+    "complete_f1": 0.5716599190283401
+   },
+   "off": {
+    "tp": 1765,
+    "fp": 484,
+    "fn": 678,
+    "unplaced": 35,
+    "complete_f1": 0.7467738523376348
+   }
+  },
+  {
+   "run": "COLO829_fiberseq_SNV_7fc7396_ddp4_b1024",
+   "arm": "d9",
+   "eval": "eval_nobed",
+   "placed_f1": 0.7523,
+   "on": {
+    "tp": 1765,
+    "fp": 484,
+    "fn": 678,
+    "unplaced": 1483,
+    "complete_f1": 0.5716599190283401
+   },
+   "off": {
+    "tp": 1765,
+    "fp": 484,
+    "fn": 678,
+    "unplaced": 35,
+    "complete_f1": 0.7467738523376348
    }
   },
   {
@@ -363,6 +483,50 @@
  ],
  "indel": [
   {
+   "run": "COLO829_Illumina_INDEL_7fc7396",
+   "arm": "d9",
+   "eval": "eval_bed",
+   "thr_r09": 0.0110855707898736,
+   "thr_valbest": 0.21449334919452667,
+   "r09": {
+    "tp": 36,
+    "fp": 522,
+    "p": 0.0645,
+    "r": 0.2748,
+    "f1": 0.1045
+   },
+   "valbest": {
+    "tp": 6,
+    "fp": 14,
+    "p": 0.3,
+    "r": 0.0458,
+    "f1": 0.0795
+   },
+   "best_f1": 0.1605
+  },
+  {
+   "run": "COLO829_Illumina_INDEL_7fc7396",
+   "arm": "d9",
+   "eval": "eval_nobed",
+   "thr_r09": 0.0110855707898736,
+   "thr_valbest": 0.21449334919452667,
+   "r09": {
+    "tp": 36,
+    "fp": 522,
+    "p": 0.0645,
+    "r": 0.2748,
+    "f1": 0.1045
+   },
+   "valbest": {
+    "tp": 6,
+    "fp": 14,
+    "p": 0.3,
+    "r": 0.0458,
+    "f1": 0.0795
+   },
+   "best_f1": 0.1605
+  },
+  {
    "run": "COLO829_Illumina_INDEL_d46_7fc7396",
    "arm": "d46",
    "eval": "eval_bed",
@@ -451,6 +615,50 @@
    "best_f1": 0.0704
   },
   {
+   "run": "COLO829_ONT_INDEL_7fc7396",
+   "arm": "d9",
+   "eval": "eval_bed",
+   "thr_r09": 0.00949890073388815,
+   "thr_valbest": 0.3081602454185486,
+   "r09": {
+    "tp": 32,
+    "fp": 21074,
+    "p": 0.0016,
+    "r": 0.2443,
+    "f1": 0.0031
+   },
+   "valbest": {
+    "tp": 5,
+    "fp": 27,
+    "p": 0.1563,
+    "r": 0.0382,
+    "f1": 0.0613
+   },
+   "best_f1": 0.0949
+  },
+  {
+   "run": "COLO829_ONT_INDEL_7fc7396",
+   "arm": "d9",
+   "eval": "eval_nobed",
+   "thr_r09": 0.00949890073388815,
+   "thr_valbest": 0.3081602454185486,
+   "r09": {
+    "tp": 32,
+    "fp": 21074,
+    "p": 0.0016,
+    "r": 0.2443,
+    "f1": 0.0031
+   },
+   "valbest": {
+    "tp": 5,
+    "fp": 27,
+    "p": 0.1563,
+    "r": 0.0382,
+    "f1": 0.0613
+   },
+   "best_f1": 0.0949
+  },
+  {
    "run": "COLO829_ONT_INDEL_d46_7fc7396",
    "arm": "d46",
    "eval": "eval_bed",
@@ -537,6 +745,50 @@
     "f1": 0.0
    },
    "best_f1": 0.0196
+  },
+  {
+   "run": "COLO829_fiberseq_INDEL_7fc7396",
+   "arm": "d9",
+   "eval": "eval_bed",
+   "thr_r09": 0.0045838262885808945,
+   "thr_valbest": 0.4659474194049835,
+   "r09": {
+    "tp": 35,
+    "fp": 2737,
+    "p": 0.0126,
+    "r": 0.2672,
+    "f1": 0.0241
+   },
+   "valbest": {
+    "tp": 3,
+    "fp": 11,
+    "p": 0.2143,
+    "r": 0.0229,
+    "f1": 0.0414
+   },
+   "best_f1": 0.142
+  },
+  {
+   "run": "COLO829_fiberseq_INDEL_7fc7396",
+   "arm": "d9",
+   "eval": "eval_nobed",
+   "thr_r09": 0.0045838262885808945,
+   "thr_valbest": 0.4659474194049835,
+   "r09": {
+    "tp": 35,
+    "fp": 2737,
+    "p": 0.0126,
+    "r": 0.2672,
+    "f1": 0.0241
+   },
+   "valbest": {
+    "tp": 3,
+    "fp": 11,
+    "p": 0.2143,
+    "r": 0.0229,
+    "f1": 0.0414
+   },
+   "best_f1": 0.142
   },
   {
    "run": "COLO829_fiberseq_INDEL_d46_7fc7396",
