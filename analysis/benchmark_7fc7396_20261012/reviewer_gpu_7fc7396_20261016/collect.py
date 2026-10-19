@@ -18,10 +18,17 @@ SETS = [("HG008", "Illumina"), ("HG008", "PacBio"), ("HG008", "ONT"),
         ("COLO829", "Illumina"), ("COLO829", "fiberseq"), ("COLO829", "ONT")]
 
 
-def score(run, kind):
-    """{pass, best, p, r, fp} of a run, or None when it is not evaluated yet."""
+PULL = 1792191762  # 2026-10-16 18:02:42 -0500: the 71cb51a INDEL PoN rule in the RIS checkout
+
+
+def score(run, kind, vcf="vcf_chr1"):
+    """{pass, best, p, r, fp} of a run, or None when it is not evaluated yet. INDEL: the 71cb51a PoN rule, i.e.
+    <vcf>_pon71cb51a (../indel_pon_71cb51a_20261016), or <vcf> itself when its vcf.sh ran after that rule came in."""
     d = RUNS / run
-    f = d / ("vcf_chr1_pon71cb51a" if kind == "INDEL" else "vcf_chr1") / "eval_bed" / "report.json"
+    f = d / vcf / "eval_bed" / "report.json"
+    if kind == "INDEL":
+        f2 = d / f"{vcf}_pon71cb51a" / "eval_bed" / "report.json"
+        f = f2 if f2.exists() else (f if f.exists() and f.stat().st_mtime > PULL else f2)
     if not f.exists():
         return None
     p = json.load(open(f))["pon"]
@@ -99,13 +106,22 @@ def main():
 
     # norm dataset
     L += ["\n## `--norm dataset` against `--norm train` (d46, in-sample)\n",
-          "| set | kind | --norm train | --norm dataset | change |", "|---|---|---|---|---|"]
+          "normds: BQ and MAPQ per dataset, predict fitted on chr1 only (2026-10-16); normds re-predicted: the same "
+          "checkpoints with the checkpoint's statistics (predict of 2026-10-19); normbq: BQ only per dataset, "
+          "statistics of all chromosomes (2026-10-19). Seed range: the three `--norm train` seeds.\n",
+          "| set | kind | --norm train (seed range) | normds | normds re-predicted | normbq | normbq - train |",
+          "|---|---|---|---|---|---|---|"]
     rows = []
     for s, p, k in [(s, p, "SNV") for s, p in SETS] + [("HG008", "Illumina", "INDEL"), ("COLO829", "Illumina", "INDEL")]:
-        a, b = score(f"{s}_{p}_{k}_d46_7fc7396", k), score(f"{s}_{p}_{k}_d46_normds", k)
-        rows.append(dict(set=f"{s}T {p}", kind=k, train=a, dataset=b))
+        base = f"{s}_{p}_{k}_d46_7fc7396"
+        a, b = score(base, k), score(f"{s}_{p}_{k}_d46_normds", k)
+        c = score(f"{s}_{p}_{k}_d46_normds", k, vcf=f"vcf_chr1_{s}T_{p}_d46")
+        q = score(f"{s}_{p}_{k}_d46_normbq", k)
         v = lambda x: main_value(x, k)  # noqa: E731
-        L.append(f"| {s}T {p} | {k} | {f3(v(a))} | {f3(v(b))} | {d3(v(a), v(b))} |")
+        seeds = [v(score(base + x, k)) for x in ("", "_s1", "_s2")] if k == "SNV" else []
+        rng = f" ({min(seeds):.3f}-{max(seeds):.3f})" if seeds and None not in seeds else ""
+        rows.append(dict(set=f"{s}T {p}", kind=k, train=a, dataset=b, dataset_repredicted=c, normbq=q))
+        L.append(f"| {s}T {p} | {k} | {f3(v(a))}{rng} | {f3(v(b))} | {f3(v(c))} | {f3(v(q))} | {d3(v(a), v(q))} |")
     out["norm_dataset"] = rows
 
     # seeds
