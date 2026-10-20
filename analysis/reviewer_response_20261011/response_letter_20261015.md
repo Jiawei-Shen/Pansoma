@@ -783,26 +783,13 @@ alleles).
 
 **Response.**
 
-We keep the scope to tumor-only somatic calling in cancer samples. The title, abstract, Results and Discussion now state
-this consistently, and broader claims about "somatic variation" in general were removed.
+We agree and have narrowed the scope of the manuscript to tumor-only somatic variant calling in cancer samples. The title, Abstract, Results and Discussion have been revised accordingly, and broader claims about somatic variation in general or normal-tissue mosaicism have been removed.
 
-The method is not built for mosaicism in normal tissue, and the revised Methods say why:
+Pansoma has not been trained or validated for somatic mosaicism in normal tissues. The models are trained on tumor-derived somatic variants, predominantly moderate- to high-allele-fraction events (Methods), and the standard candidate configuration requires at least three ALT-supporting reads and an allele fraction of at least 0.08, so the much lower allele fractions typical of mosaicism in normal tissue are not evaluated. A low allele fraction is not the same as normal-tissue mosaicism: within the cancer scope, low tumor fractions are tested with in-silico purity dilutions of COLO829T (75, 50 and 25%; R2.4), and these results are not extrapolated to normal tissue. The HapMap admixture, whose positives are germline alleles of other individuals, and the low-allele-fraction configuration evaluated on it are now described only as a controlled mixture benchmark, not as validation of somatic mosaicism (R1.5) [待定: drop this sentence if HapMap is removed altogether].
 
-- A candidate needs at least three ALT reads and an allele fraction of at least 0.08 for SNVs and INDELs, so variants at
-  the much lower allele fractions typical of mosaicism in normal tissue are not evaluated.
-- The training positives are tumor variants, mostly clonal: the somatic SNV training tensors of the single-sample
-  models have a median allele fraction of 0.53–0.54 (HG008T) and 0.46–0.51 (COLO829T), and only 0.4–1.2% (HG008T) and
-  6.5–7.3% (COLO829T) lie below 0.20.
-- The classifier is trained to separate a tumor's somatic variants from the germline variants and sequencing errors of
-  the same sample.
+Validation on independently characterised normal-tissue datasets such as the SMaHT tissues would require dedicated low-allele-fraction candidate settings, training labels and models; the Discussion identifies this as future work.
 
-Validating on an independently characterised mosaicism dataset such as the SMaHT tissues would need a low-allele-fraction
-candidate configuration, new training labels and new models. We describe this in the Discussion as future work rather
-than claim it.
-
-Within the cancer scope we extend the validation beyond HG008T and COLO829T to further cancer cell lines (R1.7,
-R1.m1) [待补: the lines with final results], and the HapMap mixture, whose positives are germline alleles of other individuals, is no longer used as evidence of
-somatic performance (R1.5).
+Within the cancer scope, we have instead expanded validation beyond HG008T and COLO829T to four further cancer cell lines, two breast (HCC1395, HCC1954) and two lung adenocarcinoma lines (H1437, H2009), three platforms each, tested with models trained on other tumors and with multi-tumor models (R1.7, R1.m1).
 
 ### R3.9 Model stability and statistical uncertainty
 
