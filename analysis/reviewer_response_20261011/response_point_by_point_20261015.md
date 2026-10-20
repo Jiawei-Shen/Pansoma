@@ -28,7 +28,7 @@
 |---|---|---|---|---|
 | R1.1 | "pangenome-native" 证据不足 | 部分解决 | Response 按三点重写（10-16）：path-following tensors（E1.7：57–76% 的 somatic SNV、92–97% 的 somatic INDEL 窗口跨出自身 node）、ch6 + 推理时 ablation、三参考 ablation（10-16 压短，只留设计和总数，细节移到 R1.2）；E1.1：去掉 ch6 信息后 germline 误判增加 3.4–7.6 倍，ch6 单独的 AUC 0.83–0.92；E3 / E16：HPRC 比 GRCh38-only 高 +0.028 到 +0.292（10-19 起用三 seed 均值），12 个配对区间都不含 0（10-19 加上 COLO829T v1.1）；去 ch6 重训（10-19 RIS）：SNV PoN 后 12 个里 11 个变低，中位 0.03，d46 上六个都低于 with-ch6 三个 seed 的 best F1 范围；E9h：rescue 找回的 off-ref key 中 63–87% 有 reads 支持 | — |
 | R1.2 | 泛基因组组成、单倍型数、v2.1 | 部分解决 | 三参考 ablation 的主体（10-16 从 R1.1 移来）：GRCh38-only 上 76–82% 的 germline 成为 candidate，HPRC 上 7–13%；HPRC 比 GRCh38-only 高 +0.028 到 +0.292（三 seed 均值，10-19），12 个配对区间都不含 0；d46 和 d9 在五套上的差都在 seed 范围内（三 seed 均值 −0.018 到 +0.015），COLO829T Illumina 的 matched d9（4 GPU）三个 seed 都偏低，FP 集中在 chr1 两段（−0.163）；E7：吸收多少由频率阈值决定（10-16 v2.1 轴：10% 过滤下 16 到 463 条 haplotype，HG008 somatic INDEL 0.18–0.21）；E11a / E11b：ONT 在 v2.1 上更差。Response 10-16 重写成约 350 词：mapping ambiguity 引文献（Giraffe、HPRC、Minigraph-Cactus），并指出其他 tumor-only caller 也用 PoN；10-19 吸收段改用 E5c（六套 d46 全部跑完）：任一 tensor allele 算有 tensor，v2.1 上 24–42% 的 truth INDEL 丢掉 candidate，85–96% 的丢失位点 ALT reads 走图 alt 节点（整段 43–59%，部分 + 残余 edit 30–52%），76–86% 本来就被 PoN 标，PoN 后净损失 3.5–7.0%，主要是部分走 alt 节点的 | 决定：主图、centromere 窗口（含 COLO829T Illumina d9 的 FP 段）怎么处理 |
-| R1.3 | 困难区域；ONT 的歧义 | 部分解决 | E10：GRCh38-only 在 extreme 区域的 FP 更多；E9a / E9c：ONT 的 graph-coordinate calls 主要是人群 allele 和 germline；E11b：ONT 在 v2.1 上放错更多；10-20 分 SMaHT 区的配对 bootstrap（E16 `e16_strata.py`）：HG008T easy 区 6 对都含 0，COLO829T easy 区 +0.053 到 +0.154，extreme 区 precision 增益 12 对里 10 对不含 0 | 决定：GIAB 分层是否下载、rescue 默认值 |
+| R1.3 | 困难区域；ONT 的歧义 | 部分解决 | E10：GRCh38-only 在 extreme 区域的 FP 更多；E9a / E9c：ONT 的 graph-coordinate calls 主要是人群 allele 和 germline；E11b：ONT 在 v2.1 上放错更多；10-20 分 SMaHT 区的配对 bootstrap（E16 `e16_strata.py`）：HG008T easy 区 6 对都含 0，COLO829T easy 区 +0.053 到 +0.154，extreme 区 precision 增益 12 对里 10 对不含 0；E10b（10-20，GIAB v3.5 分层）：SNV 在 GIAB 所有困难区域 12 / 12 对提升（11 对显著，COLO829T Illumina v1.1 用 epoch 6），各困难分层没有显著变差；INDEL 在 homopolymer 区 Illumina 提升、长读长 precision 下降 | 决定：GIAB 分层是否下载、rescue 默认值 |
 | R1.4 | 图吸收已有的 somatic | 部分解决 | 10-20 改成技术性反驳（不是 fatal：tumor-only 用 population 信息换 precision 的固有 trade-off，Pansoma 只是把一部分压制提前到 candidate 生成；ClairS-TO 默认 PoN 标掉更多 truth INDEL；没有在 pangenome 比对上做 somatic calling 的现成 caller）；E5b：被吸收的 truth 中 95.5–100% 本来就会被 PoN 标掉；E1.6：三个参考臂 INDEL 都叫出 24–27%；E9h；E8c（10-20）：DeepSomatic-TO / ClairS-TO 在吸收位点上 PASS 882 对里只有 7 对，PoN 后 0 | E6 / E25 不做（10-20），写成 future work |
 | R1.5 | HapMap mixture 和数据泄漏 | 部分解决 | 没有泄漏：原稿 HapMap 跑在去掉 6 个 donor 的 `mgi_non_HG005.d9` 上（用户 10-20 确认），Response 改成直接反驳；COLO829T dilution（fiberseq 干净），LOH 解释了 P75 / P50 的低谷 | 决定：HapMap 去留（重跑 OOM 失败）；GPU：BQ 伪影修好后重训 |
 | R1.6 | sensitivity 低 | 部分解决 | E1.6 漏斗：HG008T SNV 叫出 82–85%；COLO829T 有 17–18% 低于 0.08 的 AF 下限；PoN 的 INDEL 上限 0.35；10-20 第一段改成同一协议下的对比（HG008T 差距小，COLO829T DeepSomatic-TO Illumina 领先，INDEL Pansoma 最高） | - |
@@ -44,7 +44,7 @@
 | R2.6 | PoN | 部分解决 | E8b：资源组成；E17c：SNV 规则就是 chr2–22 选出的；INDEL 换成留出肿瘤选出的规则（HP ≥ 8: AF ≥ 0.01，其余 ≥ 1e-4；用户 10-16 决定，pipeline 已改） | 已重算（10-16，44 个本地 INDEL call set 按新规则重新打分，R1.2 / R1.4 / R1.6 / R1.8 / R2.6 / R3.1 / R3.2 / R3.9 / R3.10 / R3.m2 已换数）；COLO829T v1.1 单样本 INDEL：10-19 用 RIS 的 matched lr 1e-4 run 在本地出了 valbest（R3.1 / R3.10 已填） |
 | R2.7 | 比对统计夸大 | **已解决** | E11a 全量数据（10-19）：两个肿瘤 × 三个平台 × 四个参考，chr1–22 全部 reads 的 perfectly aligned / substitution / indel / soft clipping 读数和比例；原文那句逐条改写（soft clipping 的说法删掉）；不再用模拟 reads | 只剩改稿 |
 | R2.m | Minor 1–8 | 部分解决 | 大部分只是改图改字；E18 补了 SBS96 | 决定：第 5 条 "truth overlapping" 的原意；同步：比较器的 SBS96 |
-| R3.1 | 参考层面的 ablation | 部分解决 | Response 10-19 改成设计 + 三点结果（HPRC 全面优于 GRCh38-only；v2.1 对 v1.1 PoN 前 +0.079 到 +0.222、PoN 后在 seed 范围内；增益来自比对和 candidate 生成），300 词以内；E3 / E16 / E3b：关掉 rescue 后 12/12 个 run 都高于 GRCh38-only（10-19 用 matched d9 补上 COLO829T v1.1）；着丝粒是一项 caveat；CHM13 是一项 limitation；vg 版本已核实（E22）；10-19 RIS 三 seed：HPRC − GRCh38-only 均值 +0.028 到 +0.292，36 个同 seed 比较 35 个为正；去 ch6 后仍高于 GRCh38-only 均值（+0.011 到 +0.299） | 决定：vg 1.77 对照、COLO829T Illumina d9 用哪个 run（RIS 在跑 h90 seed 1 / 2；如果改用 h90，E3b / E16 / E9a 的 COLO829T Illumina 行要重算） |
+| R3.1 | 参考层面的 ablation | 部分解决 | Response 10-19 改成设计 + 三点结果（HPRC 全面优于 GRCh38-only；v2.1 对 v1.1 PoN 前 +0.079 到 +0.222、PoN 后在 seed 范围内；增益来自比对和 candidate 生成），300 词以内；E3 / E16 / E3b：关掉 rescue 后 12/12 个 run 都高于 GRCh38-only（10-19 用 matched d9 补上 COLO829T v1.1）；着丝粒是一项 caveat；CHM13 是一项 limitation；vg 版本已核实（E22）；10-19 RIS 三 seed：HPRC − GRCh38-only 均值 +0.028 到 +0.292，36 个同 seed 比较 35 个为正；去 ch6 后仍高于 GRCh38-only 均值（+0.011 到 +0.299）；10-20 RIS b662f00：COLO829T Illumina v1.1 用 epoch 6 / 5 / 6（用户决定，在 chr1 上选），d46 − d9 六套都在 seed 范围内（−0.015 到 +0.021），validation 选的 epoch 8 低 0.164 | 决定：vg 1.77 对照；E3b / E16 / E9a 的 COLO829T Illumina v1.1 行还是 epoch 8 的 seed 0（`--norm train`；epoch 6 的 run 已在本地，`--norm dataset` d46 seed 0 没同步） |
 | R3.2 | 被去掉的 candidate 由什么组成 | 部分解决 | 三类 candidate × 三个参考臂；E4b：FP 的组成；E5b；去 ch6 重训已完成（10-19）；10-19 Response 按外部建议改写成 "selective reduction"，加了按图分层的 FP：HG008T 图里的 germline FP 129 → 4（少 97 %），不在图里的 2,036 → 1,794–1,944（少 5–12 %）；79 % / 73 % 改用新定义 | CPU：E4b 换成 matched d9 run（可选） |
 | R3.3 | graph 坐标 variant 的验证 | 部分解决 | E9c / E9d（9 个 run）；E9h：57–79% 的 off-ref key 有 reads 支持 | 决定：rescue 默认值、graph PoN 怎么用；同步：COLO829T 的 tumor 组装 |
 | R3.4 | 指标不含 graph 坐标 call；"about 2%"；CHM13 | 部分解决 | "about 2%" 实际是 8–68%；E9a 投影；E3b 关掉 rescue 后的完整输出；E9b CHM13（10-20）：36.7–63.1 % 有 CHM13 allele，32.9–61.9 % 两张参考都没有 | 决定：rescue 默认值 |
@@ -52,7 +52,7 @@
 | R3.6 | perfect 不等于 correct | 部分解决 | E11b：Illumina 上 MAPQ ≥ 30 放错从 0.093% 降到 0.019% / 0.013%；ONT 在 v2.1 上更差（如实写出）；E11a；CHM13-only 对照（10-20）：CHM13 单独变化很小（Illumina perfect 63.7 → 64.8 %，HPRC 73 %），增益主要来自人群 haplotype | 决定：E11c 做不做、vg 版本对照 |
 | R3.7 | 重新归类 FN 要谨慎 | **已解决** | 单倍型组装证据 | 只剩改稿 |
 | R3.8 | tumor-only 和 mosaicism | **已解决** | 统一写成 tumor-only；10-19 改成 "has not been trained or validated for"，加 low VAF ≠ mosaicism、purity dilution（R2.4）、四株新细胞系名单 | 改稿（标题由用户定） |
-| R3.9 | 稳定性、统计不确定性 | 部分解决 | E16：所有 run 的区间和配对差；10-20 按用户三点重写：d9 / d46 三 seed（`--norm dataset`）每个 seed 的 P / R / F1 和 mean ± SD（F1 SD 0.001–0.040）；ΔP / ΔR / ΔF1 配对区间，HPRC − GRCh38-only ΔF1 12 / 12 不含 0，Pansoma v2.1 − DeepSomatic-TO SNV 6 / 6、− ClairS-TO 6 / 6 为正（2 对不含 0）；三类 label 取代固定 0.5 | GPU：INDEL 和跨样本模型的多 seed；CPU：val R0.95 / argmax 的 rtg 表 |
+| R3.9 | 稳定性、统计不确定性 | 部分解决 | E16：所有 run 的区间和配对差；10-20 按用户三点重写：d9 / d46 三 seed（`--norm dataset`）每个 seed 的 P / R / F1 和 mean ± SD（F1 SD 0.001–0.040）；ΔP / ΔR / ΔF1 配对区间，HPRC − GRCh38-only ΔF1 12 / 12 不含 0，Pansoma v2.1 − DeepSomatic-TO SNV 6 / 6、− ClairS-TO 6 / 6 为正（2 对不含 0）；三类 label 取代固定 0.5；COLO829T Illumina v1.1 在 seed 表里用 epoch 6 / 5 / 6，epoch 8 并列 | GPU：INDEL 和跨样本模型的多 seed；CPU：val R0.95 / argmax 的 rtg 表 |
 | R3.10 | 低 VAF 和 INDEL 的结论 | 部分解决 | E17a：INDEL 分层；E3b：validation best-F1 阈值；E2.4 | 决定：INDEL 的 operating point；GPU：BQ 伪影修好后重训；同步：比较器 |
 | R3.m1 | 参数不一致 | 部分解决 | 参数只剩一套，从 checkpoint 能复现；vg 版本已核实；Normalisation 按 f344bca 重写（报的模型都是 `--norm train`；BQ 按数据集是可选） | 等 normbq、最终模型和 INDEL 阈值定了再出参数表 |
 | R3.m2 | 比较器设置 | 部分解决 | E8b 核实了版本和训练数据；打分脚本已就绪 | 同步：你已有结果的路径和元数据 |
@@ -163,6 +163,7 @@
 | E9c_offref_filter_validation | graph PoN 和组装验证 | R3.3、R3.4 |
 | E9h_offref_key_reads | 用 reads 核实 off-ref key | R1.1、R3.3、R3.4 |
 | E10_region_strata | SMaHT 区域和重复区分层 | R1.3 |
+| E10b_giab_strata | GIAB v3.5 分层（10-20 下载），HPRC 图对 linear graph 的配对 bootstrap | R1.3 |
 | E11a_alignment_stats | 四个参考上的比对统计：全量 chr1–22 计数（`full/`，R2.7）；同一批 reads 的窗口 / 抽样对比 | R2.7、R3.6 |
 | E11b_simulated_alignment | 模拟 reads 的比对正确性（Illumina / HiFi / ONT） | R3.6、R1.3 |
 | E12a_cross_sample | 40 个跨样本 run，包括 CASTLE | R1.7、R1.m1、R3.9 |
@@ -317,7 +318,7 @@ We compared three graph references with the same reads, tensor code and labels: 
 
 *Pangenome versus GRCh38-only.* The HPRC graphs produce 84–91% fewer germline candidates (germline variants of the matched normal that become candidate tensors), because reads carrying a germline allele already in the graph follow its path without a mismatch. After population filtering both lead on all six datasets: SNV F1 +0.028 to +0.292 (benchmark BED, means over three training seeds; single-run paired block-bootstrap intervals exclude zero in all twelve pairs), and indel F1 is also higher.
 
-*v1.1 versus v2.1.* The larger v2.1 graph produces a further 6–11% fewer germline candidates and keeps candidates for as many somatic alleles. Its gain is mainly before population filtering (SNV F1 +0.079 to +0.222, through precision); afterwards the two graphs are equal within the training-seed range on five datasets (three-seed means differ by −0.018 to +0.015), and indel F1 differs by at most 0.006. On COLO829T Illumina, v1.1 is 0.163 lower, through false calls in two segments of chr1 on every seed.
+*v1.1 versus v2.1.* The larger v2.1 graph produces a further 6–11% fewer germline candidates and keeps candidates for as many somatic alleles. Its gain is mainly before population filtering (SNV F1 +0.079 to +0.154, through precision); afterwards the two graphs are equal on all six datasets (three-seed means of PASS F1 differ by −0.015 to +0.021 and of test-tuned best F1 by at most 0.012; COLO829T Illumina v1.1 at epochs 5–6, R3.1), and indel F1 differs by at most 0.006.
 
 *Mapping ambiguity.* Graph alignment with Giraffe is as accurate as linear mapping and reduces reference bias (Sirén et al., 2021). On the same 10%-filtered HPRC v1.1 graph, Giraffe-based calling made 34% fewer small-variant errors than GRCh38, with the largest gains in difficult regions (challenging medically relevant genes, regions where GRCh38 is erroneous, L1HS repeats), and mapping to GRCh38 left 6.6–8.5 times more reads unmapped in VNTRs (Liao et al., 2023).
 
@@ -325,6 +326,14 @@ We compared three graph references with the same reads, tensor code and labels: 
 
 **证据（内部）。**
 
+- 2026-10-20 用户决定 COLO829T Illumina v1.1 用 epoch 6 / 5 / 6（RIS b662f00，`reviewer_gpu_7fc7396_20261016/README.md` "d9 against d46 ... three seeds"
+  表；pansoma-9f 的 R3.1 第 2 点解释了 epoch 选择）→ "v1.1 versus v2.1" 改成六套都相等：PoN 后三 seed 均值 d46 − d9 PASS −0.015 / +0.021 / +0.011 /
+  +0.012 / +0.009 / −0.011（HG008T Illumina / PacBio / ONT，COLO829T Illumina / fiberseq / ONT；`--norm dataset` 的 normbq 模型），best F1 +0.004 /
+  −0.001 / −0.001 / +0.012 / +0.007 / −0.008 → "at most 0.012"。删掉 "On COLO829T Illumina, v1.1 is 0.163 lower ..."。PoN 前的 "+0.079 to +0.222"
+  里的 +0.222 是 COLO829T Illumina 用 epoch 8 的 d9；按 epoch 6 / 5 / 6 重算（本地 `ris_7fc7396_20261012`：d9 `COLO829_Illumina_SNV_d9_normbq_sweep_e06`、
+  `_s1_sweep_e05`、`_s2_sweep_e06` 的 raw F1 0.5315 / 0.5181 / 0.5463，均值 0.532，raw P 均值 0.419；d46 `COLO829_Illumina_SNV_d46_normds/vcf_chr1`
+  （PASS 0.7825 = RIS 表 seed 0 的 0.782）、`_d46_normbq_s1`、`_s2` 的 raw F1 0.6831 / 0.6021 / 0.6467，均值 0.644，raw P 均值 0.578）→ +0.112（P
+  +0.159）。其余五套的 PoN 前差值不变（+0.130 / +0.154 / +0.145 / +0.124 / +0.079，R3.1 证据），所以 "+0.079 to +0.154"。
 - 2026-10-20 措辞：用户 10-19 要求 Response 不再用 "edit" 这类说法（读者不一定知道 edit 是什么，pansoma-1c 转达），改成 "perfectly aligned"（两端对齐、没有错配、indel 和 soft clip）或 "mismatch / indel"。本条改了："entirely (43–59%) or with a residual edit (30–52%)" → "entirely (43–59%) or with one remaining mismatch or indel (30–52%)"。数字没变。
 - 2026-10-19 PoN 前 v2.1 − v1.1 的 SNV F1 换成三 seed 均值（+0.079 到 +0.222；推导见 R3.1 证据同日 "三点" 一条）；原来的 "+0.105 to +0.132" 是 seed 0、COLO829T 用旧 d9 run。
 - 2026-10-19 "all nine pairs tested" → "all twelve pairs"（加上 COLO829T v1.1 三对，E16；见 R3.1 证据同日一条）。
@@ -498,16 +507,25 @@ We compared three graph references with the same reads, tensor code and labels: 
 
 **Response.**
 
-The region- and call-level analyses the reviewer asked for show that the HPRC graphs improve calling where the linear reference is hardest. Against the GRCh38-only (linear) graph with the same reads and pipeline, SNV F1 after population filtering rises in extreme regions (the interval excludes zero in 10 of 12 pairs, mostly through precision), is at or above it in difficult regions in 10 of 12 pairs and never below, and rises in easy regions on COLO829T. The graphs do add alignment ambiguity for ONT reads in extreme regions, which we quantify below.
+The region- and call-level analyses the reviewer asked for show that the HPRC graphs improve calling where the linear reference is hardest. Against the GRCh38-only (linear) graph with the same reads and pipeline, SNV F1 after population filtering rises in all 12 dataset–graph pairs in the GIAB union of difficult regions and in SMaHT's extreme regions (significantly in 11 of 12 in both, mostly through precision), and is never significantly lower in any difficult stratum. The graphs do add alignment ambiguity for ONT reads in extreme regions, and long-read INDEL calls in homopolymers lose precision, which we quantify below.
 
 1. *Alignment by region* (same reads, six datasets, SMaHT region classes). In easy regions the graphs give cleaner alignments at the same locus: on the HPRC v1.1 graph (d9 filter), HG008T PacBio mismatched bases per kb fall from 1.02 to 0.16, and 99.93–99.99% of long reads keep their placement. In extreme regions they add ambiguity: on v1.1, 6.26–7.41% of long reads lose MAPQ ≥ 30 and 3.05–4.93% gain it; on the HPRC v2.1 graph (d46 filter), aligned with a newer aligner release, 13.97–17.30% lose it. For short reads, lower MAPQ is not more misplacement: of simulated HG008-N Illumina reads of known origin, v1.1 and v2.1 misplace 0.98% and 0.93% of placed reads against 1.24% on a GRCh38-only graph (R3.6). Simulated ONT reads differ: v1.1 misplaces slightly fewer (0.61% against 0.77%), but v2.1 about twice as many (1.48%), almost all in extreme regions, in line with the more frequent confident disagreements of real ONT reads on v2.1 (HG008T: 1,953 against 1,019 reads on v1.1).
 
-2. *Calls by region* (chr1 SNVs, PASS after population filtering, benchmark regions; each HPRC graph against the GRCh38-only (linear) graph with the same reads and pipeline; paired 1-Mb block-bootstrap intervals in the Supplementary Table). On HG008T the arms are close in easy regions (F1 0.627–0.642 on GRCh38-only, 0.636–0.659 on the HPRC graphs; all six paired intervals include zero), whereas on COLO829T the HPRC graphs gain +0.053 to +0.154 there, through recall (all six exclude zero). In difficult regions (25 Mb of chr1) F1 changes by −0.005 to +0.259, significantly for COLO829T ONT on both graphs and HG008T PacBio on v1.1. In extreme regions the GRCh38-only graph makes 351–2,210 PASS calls per dataset at precision 0.056–0.253, against 102–382 at 0.161–0.764 on the HPRC graphs; the precision gain excludes zero in 10 of 12 pairs. The exceptions are COLO829T on v1.1 with Fiber-seq (wide interval) and Illumina, whose matched-recipe model makes 1,725 such calls at precision 0.076 (R1.2). Placed ONT SNVs lose no more recall in extreme regions (HG008T, v2.1: 0.451 against 0.341–0.374), but on COLO829T their precision there is lower (v2.1: 0.452 against 0.693–0.764).
+2. *Calls by region* (chr1 SNVs, PASS after population filtering, benchmark regions; each HPRC graph against the GRCh38-only (linear) graph with the same reads and pipeline; paired 1-Mb block-bootstrap intervals in the Supplementary Table). On HG008T the arms are close in easy regions (F1 0.627–0.642 on GRCh38-only, 0.636–0.659 on the HPRC graphs; all six paired intervals include zero), whereas on COLO829T the HPRC graphs gain +0.053 to +0.154 there, through recall (all six exclude zero). In difficult regions (25 Mb of chr1) F1 changes by −0.005 to +0.259, significantly for COLO829T ONT on both graphs and HG008T PacBio on v1.1. With the GIAB v3.5 stratifications, SNV F1 rises in all 12 pairs in the union of difficult regions (46.8 Mb of chr1; +0.091 to +0.483) and significantly in 10–12 of 12 pairs in low-mappability, segmental-duplication and tandem-repeat regions, never significantly below. INDELs gain outside difficult regions (9 of 12) and with Illumina in homopolymers and tandem repeats, but lose precision there with long reads (HG008T PacBio F1 −0.065 / −0.056); every reference scores at most 0.24 INDEL F1 in these regions. In extreme regions the GRCh38-only graph makes 351–2,210 PASS calls per dataset at precision 0.056–0.253, against 102–382 at 0.161–0.764 on the HPRC graphs; the F1 gain excludes zero in 11 of 12 pairs, the exception being COLO829T Fiber-seq on v1.1 (wide interval; COLO829T Illumina v1.1 at epoch 6, R3.1). Placed ONT SNVs lose no more recall in extreme regions (HG008T, v2.1: 0.451 against 0.341–0.374), but on COLO829T their precision there is lower (v2.1: 0.452 against 0.693–0.764).
 
 3. *ONT graph-coordinate calls.* Some calls lie on graph nodes that are not part of GRCh38, so they have only graph coordinates and cannot be scored against the GRCh38 truth sets. ONT produces the most of these (chr1, HG008T: 1,409 / 1,261 on v1.1 / v2.1, against 116–754 for Illumina and 211–244 for PacBio). Checked against the HPRC alleles and the patients' assemblies, most are population or germline alleles (49.8–91.4% match an HPRC allele, 4.2–45.4% are germline alleles of the patient), and only 1–4 per HG008T run are supported as somatic by the tumor assembly. The extra ONT calls therefore reflect alignment ambiguity, not higher resolution.
 
 **证据（内部）。**
 
+- 2026-10-20 COLO829T Illumina v1.1 换成 epoch 6（用户决定，RIS b662f00；pansoma-9f 提醒 "1,725 such calls at precision 0.076" 过时）：
+  `experiments/E10b_giab_strata/colo_ill_d9_ep6.py`（job 449749）用 seed 0 epoch 6 的 run（`ris_7fc7396_20261012/COLO829_Illumina_SNV_d9_normbq_sweep_e06`，
+  PASS F1 0.773）重算 SMaHT 和 GIAB 各分层，旧 epoch 8 的 run 复现了 E16 的数（easy +0.084、difficult −0.001、extreme +0.033，校验通过）。epoch 6：
+  extreme 243 个 call，P 0.593，dF1 +0.503 [+0.213, +0.588]；difficult +0.029 [−0.011, +0.068]；GIAB all difficult +0.473 [+0.154, +0.559]，segdups +0.258。
+  `summary_ep6.py` → `summary_ep6.md`：SMaHT extreme 12 / 12 > 0、11 个区间在 0 以上（例外 COLO829T fiberseq d9 +0.098 [−0.134, +0.350]）；SMaHT
+  difficult 11 > 0、3 个显著；GIAB all difficult 12 > 0、11 个显著，dF1 +0.091 到 +0.483；low mappability 11、segdups 10、tandem repeats and homopolymers
+  12（"10–12 of 12"）；所有 SNV 分层 CI below 0 = 0。HPRC extreme 的 "102–382 at 0.161–0.764" 不变（243 / 0.593 在范围内）。注意：epoch 6 是 `--norm
+  dataset` 的 run，linear / d46 仍是 E16 用的 `--norm train` run（RIS：in-sample 两种 norm 相差 <= 0.007）。
+- 2026-10-20 用户同意下载 GIAB v3.5 stratifications 并分析 → 新实验 `experiments/E10b_giab_strata/`（README、`strata.md` §1 汇总；`giab_strata.py`，job 449747；数据 `/scratch/jshen/data/GIAB_stratifications_v3.5/`，md5 已核）。开头改成以 GIAB union 为主；第 2 条加 GIAB 一句。数字：SNV all difficult regions 12 / 12 > 0，10 个区间在 0 以上，dF1 +0.054 到 +0.483；low mappability 10、segdups 9、tandem repeats and homopolymers 11（"9–11 of 12"），所有 SNV 分层 CI below 0 = 0；SMaHT extreme 10 / 12（E16 strata）。INDEL：not in any difficult region 9 / 12 在 0 以上；homopolymers >= 7 bp Illumina HG008T +0.080 / +0.083、COLO829T +0.041 / +0.056，HG008T PacBio -0.065 / -0.056，COLO829T fiber-seq -0.029 / -0.032，ONT -0.001 到 -0.007；INDEL F1 最高 0.238（HG008T Illumina d46，homopolymers）。
 - 2026-10-20 用户看不懂第 3 条 → 换成更直白的版本（用户确认）：先解释 graph-coordinate call 是什么（落在非 GRCh38 节点、只有图坐标、不能和 GRCh38 truth 比），再给数量和成分。删掉的细节："COLO829T 1,675 / 4,566"、"2.8–19.1% can be written as a GRCh38 variant; ... six true positives ..."、"In exclusive priority order"、"(4–24 by the assemblies alone)"、"The HPRC-allele test is not specific: it tags 72 of 97 ..."（都在 R3.3 / R3.4 和下面的证据里）。保留的数（1,409 / 1,261、116–754、211–244、49.8–91.4 %、4.2–45.4 %、1–4）和原来的第 3 条相同，出处见下面 E9a 各条。
 - 2026-10-20 用户："关于 ONT 的部分不用提 off-reference rescue（"The off-reference rescue is responsible for most of these calls and lowers complete-output ONT F1 in HG008T; without this rescue, the graph-based runs perform substantially better"）" → 第 3 条删掉 "Most are produced by the off-reference rescue; without it, 6–162 per run remain (R3.4)" 和 "With the rescue, HG008T ONT complete-output F1 ... 0.342 / 0.354 ... without it, 0.579 / 0.524 ... inside the benchmark regions ... 0.533 against 0.537 ... We report every SNV result with and without the rescue"，只留最后一句结论。这些数仍在 R3.3 / R3.4 和下面的证据里。
 - 2026-10-20 用户："这个不是有提升么，为啥你说 We agree that aggregate ... "（指第一句 "We agree that aggregate statistics do not show where alignment improves"）→ 开头改成先给结论（按 reviewer-rebuttal-style：有数据支持就不先让步）。出处 `experiments/E16_bootstrap/strata.md` "HPRC - GRCh38-only, paired"：extreme dF1 区间不含 0 的 10 组（例外 COLO829T Illumina d9 +0.033 [-0.074, +0.091]、fiberseq d9 +0.098 [-0.134, +0.350]），dP 同样 10 组；difficult 见上一条；easy：COLO829T 六组 dF1 全部不含 0（+0.053 到 +0.154），HG008T 六组都含 0（-0.003 到 +0.020）。ONT extreme 的歧义：第 1 条（MAPQ、v2.1 上模拟 ONT reads 错放约两倍）和第 3 条。
@@ -888,11 +906,36 @@ We removed the HapMap mixture from the main benchmark and withdrew the HapMap-tr
 
 **Response.**
 
-We agree that sensitivity is essential in tumor-only calling and that F1 cannot stand in for it; the revision reports recall separately and changes the operating point. In the original submission Pansoma's SNV recall was below that of ClairS-TO and DeepSomatic-TO. Under an identical protocol, however, the difference is small on HG008T: after the same population filtering, SNV recall is 0.826–0.831 for Pansoma against 0.806–0.889 (DeepSomatic-TO) and 0.831–0.845 (ClairS-TO). On COLO829T the comparators reach 0.555–0.835 and Pansoma 0.686–0.717, and DeepSomatic-TO on Illumina keeps a clear lead (0.835). At equal precision Pansoma's recall is lower only than DeepSomatic-TO's on Illumina, and its F1 is the highest on five of the six datasets (R2.3). Low INDEL recall is not specific to Pansoma: population filtering alone limits any caller to 0.342 (HG008T) and 0.382 (COLO829T), and after the same filtering the comparators reach 0.015–0.183 against Pansoma's 0.228–0.267 (details below).
+We agree that sensitivity is essential in tumor-only calling and that F1 cannot stand in for it. The revision reports
+recall separately, with full precision–recall curves for every caller, and addresses it in three ways (details in the
+Supplementary block below).
 
-*Operating point.* PASS is the recall-0.9 validation threshold, set on held-out validation blocks before population filtering. Records down to p = 0.01 are kept as LowQual and population matches are tagged, not deleted, so users can move along the precision–recall curve, now shown for every caller.
+1. *A new pipeline with higher recall.* Tensors now follow each read's path across graph nodes and carry the number of
+   haplotypes through every node, and the training sets label each candidate as somatic, germline (from the matched
+   normal's truth) or other, with exact allele matches only. On chr1 after population filtering, recall rose from
+   0.575–0.596 to 0.686–0.717 for COLO829T SNVs and from 0.759–0.828 to 0.826–0.831 for HG008T SNVs (three platforms
+   each), and for INDELs from the 13–19% (HG008T) and 4–22% (COLO829T) of the original submission to 23–26% and 24–27%.
+2. *Recall at equal precision.* Under the identical protocol (R3.m2), at each comparator's post-filter precision,
+   Pansoma's SNV recall on HG008T is 0.858–0.891, against 0.806–0.889 for DeepSomatic-TO and ClairS-TO. It is lower
+   only than DeepSomatic-TO's on Illumina (HG008T 0.871 against 0.889; COLO829T, v2.1: 0.791 against 0.835).
+3. *Where recall is lost.* A per-allele funnel places each missed truth variant at its first loss. For HG008T SNVs the
+   largest loss is the threshold; on COLO829T, 15–16% of truth SNVs are subclonal mutations below the 0.08 candidate
+   allele-fraction floor. Most truth INDELs are population alleles: under the same population-filtering policy, the
+   maximum attainable recall is 0.342 (HG008T) and 0.382 (COLO829T), and after that filtering the comparators reach
+   0.015–0.183.
 
-*Where recall is lost* (chr1, benchmark regions, HPRC v1.1 graph with the d9 filter, models trained on chr2–22 of the same tumor; ranges over three platforms; HG008T INDEL candidates include partial allele matches; Supplementary Table [待补]):
+**Supplementary (R1.6).**
+
+*Recall before and after the revision* (chr1, after population filtering, HPRC v1.1 graph with the d9 filter; original
+submission: the chr1 results of the submitted models; revision: PASS at the recall-0.9 validation threshold):
+
+| | HG008T SNV | COLO829T SNV | HG008T INDEL | COLO829T INDEL |
+|---|---|---|---|---|
+| original submission | 0.759–0.828 | 0.575–0.596 | 0.13–0.19 | 0.04–0.22 |
+| revision | 0.826–0.831 | 0.686–0.717 | 0.228–0.256 | 0.237–0.267 |
+
+*Where recall is lost* (chr1, benchmark regions, HPRC v1.1 graph, models trained on chr2–22 of the same tumor; ranges
+over three platforms; HG008T INDEL candidates include partial allele matches):
 
 | Recall | SNV HG008T | SNV COLO829T | INDEL HG008T | INDEL COLO829T |
 |---|---|---|---|---|
@@ -900,18 +943,48 @@ We agree that sensitivity is essential in tumor-only calling and that F1 cannot 
 | PASS | 0.855–0.862 | 0.705–0.736 | 0.359–0.431 | 0.321–0.420 |
 | PASS, after population filtering | 0.826–0.831 | 0.686–0.717 | 0.228–0.256 | 0.237–0.267 |
 | any threshold, after population filtering | 0.888–0.897 | 0.790–0.795 | 0.238–0.257 | 0.237–0.275 |
-| bound for any caller using the same filter (whole chr1 truth) | 0.913 | 0.966 | 0.342 | 0.382 |
+| maximum attainable under the same population-filtering policy (whole chr1 truth) | 0.913 | 0.966 | 0.342 | 0.382 |
 
-A per-allele funnel on all three references, GRCh38-only, v1.1 and the HPRC v2.1 graph (d46 filter), places each missed truth variant at its first loss. HG008T SNVs are called at 81.8%, 82.8% and 84.9%, the threshold being the largest loss on every reference; candidate-stage losses are mostly graph alleles and repeat absorption that filtering would tag anyway (R1.4). On COLO829T, 17–18% of truth SNVs get no candidate, mostly subclonal mutations below the 0.08 allele-fraction floor (15.1–16.1% of chr1 truth SNVs), whereas recall at allele fraction 0.05–0.2 is 0.850–0.966 once a candidate exists (R2.3, R2.4).
-
-*INDELs.* The Abstract and Discussion now state this limitation (R3.10). 418 of the 635 HG008T chr1 truth INDELs (81 of 131 on COLO829T) are exact population alleles at the filtering frequencies, so no caller filtered this way exceeds a recall of 0.342 (0.382), and our post-filter recall at the recall-0.9 validation threshold is close to the curve's maximum. The graph also absorbs repeat-length INDELs (R1.4): a GRCh38-only graph gives more HG008T truth INDELs a candidate (0.75–0.87 against 0.54–0.70), but these are almost all population alleles, so 24–27% of truth INDELs are called on every reference and both tumors (funnel). At the validation best-F1 threshold, long-read INDEL F1 rises (HG008T PacBio, v1.1: 0.092 to 0.227), but recall falls to 0.073–0.158 on HG008T (v1.1) and 0.015–0.061 on COLO829T (v2.1), so we report both operating points. Both limits depend on the truth set: on HCC1395 (SEQC2), only 7.9% of truth INDELs are population-tagged and 0.76–0.85 reach a candidate (v2.1; HG008T: 0.43–0.50).
-
-*Other tumors* (HPRC v2.1 graph; R1.7, R1.m1). A model trained on four other lines keeps post-filter SNV recall at 0.684–0.726 on the unseen HG008T, at higher precision than HG008T's own models; models trained on a single tumor lose recall on another mainly through the transferred threshold (COLO829T models on HCC1395 Illumina: recall 0.157 at precision 0.934).
-
-*Comparators*, re-scored under the identical protocol (R3.m2). At their own PASS, DeepSomatic tumor-only and ClairS-TO reach HG008T SNV recall 0.816–0.911 and 0.845–0.859 (precision 0.167–0.359), and after the same population filtering 0.806–0.889 and 0.831–0.845, against Pansoma's 0.826–0.831. At equal precision (Pansoma's curve at each comparator's post-filter precision) Pansoma's recall is 0.858–0.891 on HG008T, against the comparators' 0.806–0.889, and it is lower only than DeepSomatic on Illumina (HG008T 0.871 against 0.889; COLO829T, v2.1: 0.791 against 0.835). For indels the comparators' post-filter recall is 0.019–0.141 on HG008T and 0.015–0.183 on COLO829T (R2.3).
+- *Operating point.* PASS is the recall-0.9 validation threshold, set on held-out validation blocks before population
+  filtering. Records down to p = 0.01 are kept as LowQual and population matches are tagged, not deleted, so users can
+  move along the precision–recall curve.
+- *Funnel.* On all three references (GRCh38-only, HPRC v1.1, HPRC v2.1 with the d46 filter), HG008T SNVs are called at
+  81.8%, 82.8% and 84.9%, the threshold being the largest loss on every reference; candidate-stage losses are mostly
+  graph alleles and repeat absorption that filtering would tag anyway (R1.4). On COLO829T, 17–18% of truth SNVs get no
+  candidate, mostly subclonal mutations below the 0.08 allele-fraction floor (15.1–16.1% of chr1 truth SNVs), whereas
+  recall at allele fraction 0.05–0.2 is 0.850–0.966 once a candidate exists (R2.3, R2.4).
+- *INDELs.* 418 of the 635 HG008T chr1 truth INDELs (81 of 131 on COLO829T) are exact population alleles at the
+  filtering frequencies, which sets the maximum attainable recall above; our post-filter recall at the recall-0.9
+  validation threshold is close to the curve's maximum. A GRCh38-only graph gives more HG008T truth INDELs a candidate
+  (0.75–0.87 against 0.54–0.70), but these are almost all population alleles, so 24–27% of truth INDELs are called on
+  every reference and both tumors. At the validation best-F1 threshold, long-read INDEL F1 rises (HG008T PacBio, v1.1:
+  0.092 to 0.227) while recall falls to 0.073–0.158 on HG008T (v1.1) and 0.015–0.061 on COLO829T (v2.1); we report both
+  operating points. On HCC1395 (SEQC2), only 7.9% of truth INDELs are population-tagged and 0.76–0.85 reach a candidate
+  (v2.1; HG008T: 0.43–0.50). The Abstract and Discussion state the INDEL limitation (R3.10).
+- *Comparators* (R3.m2). At their own PASS, DeepSomatic-TO and ClairS-TO reach HG008T SNV recall 0.816–0.911 and
+  0.845–0.859 (precision 0.167–0.359), and after the same population filtering 0.806–0.889 and 0.831–0.845, against
+  Pansoma's 0.826–0.831; on COLO829T they reach 0.555–0.835 and Pansoma 0.686–0.717, DeepSomatic-TO on Illumina being the
+  highest (R2.3). For INDELs their post-filter recall is 0.019–0.141 on HG008T and 0.015–0.183 on COLO829T.
+- *Other tumors* (HPRC v2.1; R1.7, R1.m1). A model trained on four other lines keeps post-filter SNV recall at
+  0.684–0.726 on the unseen HG008T, at higher precision than HG008T's own models; models trained on a single tumor lose
+  recall on another mainly through the transferred threshold (COLO829T models on HCC1395 Illumina: recall 0.157 at
+  precision 0.934).
 
 **证据（内部）。**
 
+- 2026-10-20 用户要求重写成三点（"一. 我们换了新的 pipeline (tensor format and training datasets added germline labels)，现在对于 recall 有了大幅
+  提升；同时检测了为何 recall 比较低，简单展示数据，具体放到补充，response 简短"），并按用户贴的两条措辞意见改：不写 "population filtering alone
+  limits any caller to 0.342"，改成 "under the same population-filtering policy, the maximum attainable recall is"；不拿 "F1 is highest on five of
+  six datasets" 当主要反驳（已删），主要反驳是等 precision 的 recall 和完整 PR 曲线。旧版备份 `R1.6_before_restructure_20261020.md`（session
+  scratchpad）。Response 只留三点，原来的表、漏斗、INDEL、比较器、其他肿瘤移到 "**Supplementary (R1.6).**"。
+  - 原稿 recall（`/wanglab/jshen/scratch_jshen/Pansoma_testing_results_V2/` 里原稿模型的 chr1 rtg `summary.txt`，None 阈值行；truth 数和现在
+    一样：HG008T SNV 702、INDEL 635，COLO829T SNV 2,443、INDEL 131）：HG008T SNV Illumina `HG008_GIAB/AF_HPRC/pansoma_HG008T_WGS_Chr1.somatic`
+    R 0.8048，PacBio `..._PacBio_Chr1_SNV.somatic` 0.7593，ONT `..._ONT_SNV_chr1.somatic` 0.8276 → "0.759–0.828"；COLO829T SNV P100 过原稿 PoN
+    （`filtered4PON.chr1.somatic`）Illumina 0.5956，PacBio 0.5767，ONT 0.5751 → "0.575–0.596"。INDEL 用审稿人从原稿 Supplementary Tables 2–3 引的
+    "13–19 %"（HG008T）和 "4–22 %"（COLO829T）；旧文件里的 INDEL（HG008T PacBio 0.129、ONT 0.176；COLO829T Illumina 过 PoN 0.115）都在这个范围里。
+    原稿的过滤是当时 v1 自己的 PoN（和现在的规则不同），所以 "rose" 是两套完整 pipeline 输出的对比，不是只换模型。另见 `analysis/v1_vs_v2_20260929`
+    （同一 PoN 下 v1 发表模型 HG008T Illumina：max F1 P 0.541 R 0.793）。
+  - 新的 recall 数和等 precision 的数都来自原来的 Response（E1.6、E8 重打分、R2.3），没有改。
 - 2026-10-20 为了字数（681 词）把 "Other tumors" 一段压成两句，细节在 R1.7 / R1.m1：删掉的数（HG008T 模型在 COLO829T 上 recall 0.640 / 0.701 / 0.589 对 COLO829T 自己的 0.715 / 0.707 / 0.692，lung 0.773–0.930，COLO829T 模型在 H1437 / H2009 上 0.296–0.305、precision 0.908–0.973；多癌种模型在 COLO829T 上 0.564 / 0.446 / 0.308）出处见上面 E12a / E12b 两条。留下的 "0.684–0.726" 是 E12b multicancer4 在 HG008T 上三个平台的 recall，"0.157 at precision 0.934" 是 E12a COLO829T Illumina 模型在 HCC1395T Illumina chr1（E12b tables.md 的 cross-tumor 列）。
 - 2026-10-20（中立性检查，用户要求 "中立的思考一下"）：第一段只引了 HG008T 的比较器数，补上 COLO829T（R2.3：比较器 0.555–0.835，Pansoma
   0.686–0.717，DeepSomatic-TO Illumina 0.835 明显领先；Pansoma F1 六套里五套最高）。"Other tumors" 一段的多癌种模型 recall 换成修正后的数并补上
@@ -2559,16 +2632,17 @@ We thank the reviewer and made the following changes.
 
 **Response.**
 
-We ran this ablation on HG008T and COLO829T, three platforms each. The same reads were aligned with vg Giraffe to a GRCh38-only graph built from the same FASTA, the HPRC v1.1 graph (90 haplotypes; d9 filter) and the HPRC v2.1 graph (464 haplotypes; d46 filter); everything downstream is identical (candidates, tensors, labels, network, training on chr2–22, threshold, population filtering), and models are tested on chr1 of the same tumor. SNV results are three-seed means after population filtering, in the benchmark regions.
+For HG008T and COLO829T, three platforms each, the same reads were aligned with vg Giraffe to a GRCh38-only graph built from the same FASTA, the HPRC v1.1 graph (90 haplotypes; d9 filter) and the HPRC v2.1 graph (464 haplotypes; d46 filter); everything downstream is identical, with training on chr2–22 and testing on chr1 of the same tumor. SNV results are three-seed means after population filtering, in the benchmark regions.
 
-1. *Both HPRC graphs outperform GRCh38-only.* SNV F1 is 0.586–0.768 (v1.1) and 0.575–0.780 (v2.1), against 0.454–0.691, with higher precision and recall on all six datasets (F1 +0.028 to +0.292; all paired block-bootstrap intervals exclude zero, R3.9). INDEL F1 at the validation best-F1 threshold is higher in all twelve comparisons; at the recall-0.9 threshold, GRCh38-only is higher on the four long-read datasets, where all arms are poor (R3.10).
+1. *Both HPRC graphs outperform GRCh38-only.* SNV F1 is 0.586–0.768 (v1.1) and 0.575–0.780 (v2.1), against 0.454–0.691, with higher precision and recall on all six datasets (F1 +0.028 to +0.292; all paired block-bootstrap intervals exclude zero, R3.9). INDEL F1 at the validation best-F1 threshold is higher in all twelve comparisons; at the recall-0.9 threshold, where all arms are poor on long reads, GRCh38-only is higher on four datasets (R3.10).
 
-2. *v2.1 against v1.1: a gain before population filtering, little after it.* Before filtering, v2.1 is higher on all six datasets (SNV F1 +0.079 to +0.222), mostly through precision (+0.089 to +0.280; recall within 0.016). After filtering, which removes most of the same germline variants, the two graphs are equal within the seed range on five datasets (−0.018 to +0.015); on COLO829T Illumina, v1.1 stays 0.163 lower through false calls in two segments of chr1 (R1.2).
+2. *v2.1 against v1.1: a gain before population filtering, little after it.* Before filtering, v2.1 is higher on all six datasets (SNV F1 +0.079 to +0.222), mostly through precision (+0.089 to +0.280). After filtering, which removes the same germline variants, the two graphs are equal within the seed range on all six datasets (means differ by −0.015 to +0.021). COLO829T Illumina needs v1.1 at epochs 5–6, chosen on chr1; at the validation-selected epoch it calls unlabelled tensors in two chr1 segments and is 0.164 lower (R3.9).
 
 3. *The gain comes from alignment and candidate generation.* Reads carrying a germline allele already in the graph follow its path without a mismatch (HG008T PacBio on v1.1: 0.16 instead of 1.02 mismatched bases per kb; R1.3). Only 7–13% of the matched normal's germline variants then become candidates, against 76–82% on GRCh38-only, while somatic SNVs keep theirs (89–96%, against 90–99%; R3.2). Retrained without the haplotype-count channel, both HPRC graphs still beat GRCh38-only (+0.011 to +0.299; R1.1).
 
 **证据（内部）。**
 
+- 2026-10-20（晚）第 2 点 PoN 后的 v2.1 − v1.1 按 RIS b662f00 更新（`reviewer_gpu_7fc7396_20261016/tables.md` "`--norm dataset` ... over three seeds"，d9 / d46 各三 seed）：用户决定 COLO829T Illumina d9 用 epoch 6 / 5 / 6，于是六套 d46 − d9 三 seed 均值 PASS −0.015 / +0.021 / +0.011 / +0.012 / +0.009 / −0.011（HG008T Illumina / PacBio / ONT，COLO829T Illumina / Fiber-seq / ONT）→ "−0.015 to +0.021"，best F1 差都在 0.012 以内；validation 选的 epoch 8 时 COLO829T Illumina 是 +0.164。这一组是 `--norm dataset`；第 1 点（对 GRCh38-only）和第 2 点 PoN 前的 "+0.079 to +0.222" 仍是 `--norm train` 三 seed（GRCh38-only 只有那一批有三个 seed）；PoN 前 COLO829T Illumina 的 +0.222 是 epoch 8 的 run。epoch 6 / 5 / 6 的 d9 run 已同步到本地（`ris_7fc7396_20261012/COLO829_Illumina_SNV_d9_normbq{,_s1,_s2}_sweep_e0{6,5,6}`），但 `--norm dataset` d46 的 seed 0（`<S>_<P>_SNV_d46_normbq`）没同步，所以 PoN 前的 v2.1 − v1.1 还没法全部换成 `--norm dataset`。RIS 结论：两个 arm 的差别只在那两段没有 label 的 tensor（窗口外 FP 217–341 对 231–288，TP 1,703–1,765 对 1,723–1,752）。用户计划以后两种都改成 10 个 epoch。
 - 2026-10-19 按用户要求把 Response 的结果改成三点（旧版 298 词，备份在 session scratchpad `R3.1.before_3points_20261019.md`）：1. 两张 HPRC 图都比 GRCh38-only 好；2. v2.1 对 v1.1：PoN 前明显好，PoN 后不明显；3. 增益来自比对和 candidate 生成。新算的数（三 seed 均值，各 run 的 `vcf_chr1/eval_bed/report.json` 的 `raw` / `pon` `at_threshold`，本地同步副本 `ris_7fc7396_20261012`，HG008T d46 seed 0 在 `reviewer_cpu_20261013`；18 个臂 × 3 个 seed 全齐）：
   - 第 1 点：PoN 后 F1 GRCh38-only 0.504 / 0.564 / 0.523 / 0.461 / 0.691 / 0.454，v1.1 0.586 / 0.592 / 0.587 / 0.588 / 0.768 / 0.746，v2.1 0.575 / 0.606 / 0.589 / 0.751 / 0.780 / 0.728（HG008T Illumina / PacBio / ONT，COLO829T Illumina / Fiber-seq / ONT）。precision 比 GRCh38-only 高 v1.1 +0.017 到 +0.425、v2.1 +0.035 到 +0.404，recall 高 v1.1 +0.003 到 +0.139、v2.1 +0.014 到 +0.154，六套都更高 → "with higher precision and recall on all six datasets"。INDEL：E3b §2（12 个比较）。
   - 第 2 点：PoN 前（`raw`）F1 v2.1 − v1.1 +0.130 / +0.154 / +0.145 / +0.222 / +0.124 / +0.079，precision +0.089 / +0.107 / +0.099 / +0.280 / +0.179 / +0.102，recall +0.016 / −0.000 / +0.011 / +0.007 / +0.004 / +0.013。PoN 后 −0.011 / +0.014 / +0.002 / +0.163 / +0.012 / −0.018。COLO829T Illumina 的 +0.222 / +0.163 里有 v1.1 4-GPU 异常的部分（R1.2、RIS `d9_fp_check.md`）。原来 R1.2 写的 PoN 前 "+0.105 to +0.132" 是 seed 0 且 COLO829T 用旧 d9 run 的数，R1.2 同步改成三 seed。
@@ -2685,7 +2759,7 @@ We ran this ablation on HG008T and COLO829T, three platforms each. The same read
 - [用户决定] vg 版本对照要不要真的做（E3 step 6：vg 1.77 重建 linear 索引，重新比对 HG008T PacBio + Illumina，再 build tensor 和训练）。HG008T 的 linear 和 d9 已经核实是同一版本（1.66.0），所以也可以只在文字里说明，不再重比对。
 - （已完成 2026-10-19，538012c）去 ch6 臂，27 runs；Limits 段已用。
 - （已完成 2026-10-19）matched d9 重训。
-- [用户决定] COLO829T Illumina d9 在 4 GPU recipe 下三个 seed 都偏低，假阳性集中在 chr1:121–126 和 143–144 Mb：和 centromere 窗口一起定怎么处理。Response 只写 "two segments of chr1"，不写坐标。
+- （已决定 2026-10-20）COLO829T Illumina d9 用 epoch 6 / 5 / 6（RIS b662f00；原因是 epoch 7 起在 chr1 两段没有 label 的 tensor 上报 call，不是 4 GPU recipe 本身）。centromere 窗口怎么处理仍由用户定。
 - （已完成 2026-10-19）SNV 每臂 3 个 seed。
 - （已完成）COLO829T v1.1 的 d9 − linear 配对区间、rescue off、valbest （2026-10-19 用 matched d9 seed 0 补上了：E3b / E16 / E9a，见证据同日一条；COLO829T Illumina 如果改用 `h90`（RIS 在跑单 GPU seed 1 / 2），要同步它的 test_chr1 后重跑）。
 - [GPU RIS] 跨肿瘤检查的正式版（E3 step 4 / E12）：
@@ -3517,7 +3591,7 @@ Within the cancer scope, we have instead expanded validation beyond HG008T and C
 
 We agree that single point estimates are not enough. The revision reports the variation across training seeds, paired block-bootstrap intervals for every difference, and how the decision threshold is set.
 
-1. *Variation across training seeds.* The SNV models are trained on chr2–22 and tested on chr1 of the same tumor. On both HPRC graphs (v1.1 with the d9 filter, v2.1 with the d46 filter) and all six datasets (HG008T and COLO829T, three platforms each), every model was trained with three independent seeds, which also redraw the validation blocks; Supplementary Table R3.9a gives the chr1 precision, recall and F1 after population filtering of each seed, with mean ± SD. Recall varies little across seeds (SD 0.004–0.019), precision more (SD 0.003–0.083), because the validation threshold moves with the redrawn blocks, and F1 has an SD of 0.001–0.040 (median 0.012). Differences below about 0.05 between single runs are therefore within training variance. Training is otherwise reproducible: three models retrained with the same seed reproduced their chr1 calls exactly, and 30 checkpoints re-run on a second cluster reproduced their chr1 F1 within 0.002. With three seeds per model, both HPRC graphs score above the GRCh38-only graph in 35 of 36 seed-matched comparisons (R3.1). [待补: seeds for the cross-tumor tests, including HG008T held out from training (R1.7)]
+1. *Variation across training seeds.* The SNV models are trained on chr2–22 and tested on chr1 of the same tumor. On both HPRC graphs (v1.1 with the d9 filter, v2.1 with the d46 filter) and all six datasets (HG008T and COLO829T, three platforms each), every model was trained with three independent seeds, which also redraw the validation blocks; Supplementary Table R3.9a gives the chr1 precision, recall and F1 after population filtering of each seed, with mean ± SD. Recall varies little across seeds (SD 0.006–0.019), precision more (SD 0.003–0.083), because the validation threshold moves with the redrawn blocks, and F1 has an SD of 0.001–0.040 (median 0.012). One instability needs naming: on COLO829T Illumina, the v1.1 models begin after epoch 5–6 to call unlabelled tensors in two segments of chr1, with no change in validation F1, so the table lists them at epochs 6 / 5 / 6 and at the validation-selected epoch 8. Differences below about 0.05 between single runs are therefore within training variance. Training is otherwise reproducible: three models retrained with the same seed reproduced their chr1 calls exactly, and 30 checkpoints re-run on a second cluster reproduced their chr1 F1 within 0.002. With three seeds per model, both HPRC graphs score above the GRCh38-only graph in 35 of 36 seed-matched comparisons (R3.1). [待补: seeds for the cross-tumor tests, including HG008T held out from training (R1.7)]
 
 2. *Paired block bootstrap.* Both call sets of a difference are scored on the same 2,000 resamples of the 1-Mb blocks of chr1, giving 95% intervals for Δprecision, Δrecall and ΔF1 (Supplementary Table R3.9b).
    - HPRC minus GRCh38-only (SNVs, twelve pairs): ΔF1 is +0.038 to +0.326 and excludes zero in all twelve; Δprecision excludes zero in ten and Δrecall in eight (on HG008T long reads the gain is in precision only).
@@ -3528,7 +3602,7 @@ We agree that single point estimates are not enough. The revision reports the va
 
 **Supplementary (R3.9).**
 
-*Supplementary Table R3.9a.* chr1 SNV precision, recall and F1 after population filtering (benchmark regions, PASS at the recall-0.9 validation threshold) of the in-sample models, three training seeds each; mean ± SD (sample SD) in brackets.
+*Supplementary Table R3.9a.* chr1 SNV precision, recall and F1 after population filtering (benchmark regions, PASS at the recall-0.9 validation threshold) of the in-sample models, three training seeds each; mean ± SD (sample SD) in brackets. COLO829T Illumina on v1.1 is shown at epochs 6 / 5 / 6 of seeds 0 / 1 / 2 (from epoch 7, or 6 for seed 1, these models call unlabelled tensors in chr1:121–126 and 143–144 Mb; the validation F1 does not change) and at the validation-selected epoch 8.
 
 | tumor | platform | graph | precision: seeds 0 / 1 / 2 (mean ± SD) | recall | F1 |
 |---|---|---|---|---|---|
@@ -3538,8 +3612,9 @@ We agree that single point estimates are not enough. The revision reports the va
 | HG008T | PacBio | HPRC v2.1 (d46) | 0.471 / 0.487 / 0.485 (0.481 ± 0.009) | 0.838 / 0.814 / 0.814 (0.822 ± 0.014) | 0.603 / 0.609 / 0.607 (0.606 ± 0.003) |
 | HG008T | ONT | HPRC v1.1 (d9) | 0.472 / 0.443 / 0.447 (0.454 ± 0.016) | 0.814 / 0.819 / 0.831 (0.821 ± 0.009) | 0.598 / 0.575 / 0.581 (0.585 ± 0.012) |
 | HG008T | ONT | HPRC v2.1 (d46) | 0.433 / 0.470 / 0.481 (0.461 ± 0.025) | 0.859 / 0.848 / 0.824 (0.844 ± 0.018) | 0.576 / 0.605 / 0.607 (0.596 ± 0.017) |
-| COLO829T | Illumina | HPRC v1.1 (d9) | 0.476 / 0.565 / 0.477 (0.506 ± 0.051) | 0.698 / 0.706 / 0.703 (0.702 ± 0.004) | 0.566 / 0.628 / 0.568 (0.587 ± 0.035) |
+| COLO829T | Illumina | HPRC v1.1 (d9) at epochs 6 / 5 / 6 | 0.832 / 0.705 / 0.782 (0.773 ± 0.064) | 0.723 / 0.705 / 0.698 (0.708 ± 0.013) | 0.773 / 0.705 / 0.738 (0.739 ± 0.034) |
 | COLO829T | Illumina | HPRC v2.1 (d46) | 0.867 / 0.706 / 0.821 (0.798 ± 0.083) | 0.712 / 0.705 / 0.717 (0.712 ± 0.006) | 0.782 / 0.705 / 0.765 (0.751 ± 0.040) |
+| COLO829T | Illumina | HPRC v1.1 (d9), validation-selected epoch 8 | 0.476 / 0.565 / 0.477 (0.506 ± 0.051) | 0.698 / 0.706 / 0.703 (0.702 ± 0.004) | 0.566 / 0.628 / 0.568 (0.587 ± 0.035) |
 | COLO829T | fiberseq | HPRC v1.1 (d9) | 0.798 / 0.876 / 0.843 (0.839 ± 0.039) | 0.722 / 0.708 / 0.710 (0.713 ± 0.008) | 0.758 / 0.783 / 0.771 (0.771 ± 0.012) |
 | COLO829T | fiberseq | HPRC v2.1 (d46) | 0.863 / 0.848 / 0.852 (0.854 ± 0.008) | 0.707 / 0.710 / 0.734 (0.717 ± 0.015) | 0.777 / 0.773 / 0.788 (0.779 ± 0.008) |
 | COLO829T | ONT | HPRC v1.1 (d9) | 0.793 / 0.822 / 0.830 (0.815 ± 0.020) | 0.700 / 0.693 / 0.675 (0.689 ± 0.013) | 0.744 / 0.752 / 0.745 (0.747 ± 0.004) |
@@ -3590,6 +3665,7 @@ Data and code: `supplementary/R3.9/seed_table.tsv`, `make_seed_table.py` (from t
 
 **证据（内部）。**
 
+- 2026-10-20（晚）RIS b662f00：用户决定 COLO829T Illumina d9 用 epoch 6 / 5 / 6（seed 0 / 1 / 2），validation 选的 epoch 8 并列保留。`make_seed_table.py` 重跑：表里 COLO829T Illumina d9 换成 epoch 6 / 5 / 6（F1 0.773 / 0.705 / 0.738，P 0.832 / 0.705 / 0.782），并多一行 epoch 8（0.566 / 0.628 / 0.568）。不算 epoch 8 那行，12 个 model 的 SD：precision 0.003–0.083，recall 0.006–0.019（中位 0.013），F1 0.001–0.040（中位 0.012）→ Response 的 recall SD 从 0.004 改成 0.006。RIS README：epoch 6 和 8 的 validation F1 0.677 / 0.681、0.660 / 0.665、0.690 / 0.690；false calls 在两段窗口里 15 / 502 / 198（epoch 6 / 5 / 6）对 1,635 / 1,075 / 1,639（epoch 8）；窗口外两个 arm 一样（217–341 对 d46 231–288）。epoch 是在 chr1 上选的（RIS README 写明），Response 用 "lists them at epochs 6 / 5 / 6 and at the validation-selected epoch 8" 如实写出。
 - 2026-10-20 按用户的三点重写 Response（旧版备份在 session scratchpad `R3.9.before_20261020.md`）：1. 多 seed（用户：只用 d9 和 d46）；2. 配对 block bootstrap，给 ΔP / ΔR / ΔF1；3. 新的三类 label，不再是单一 label 加固定 0.5 阈值。加了 Supplementary 块（R3.9a seed 表、R3.9b 配对表）。
   - 第 1 点：RIS 0a07f91 的 `normbq_seeds`（`--norm dataset`，BQ 按数据集、全部染色体统计，f344bca；d9 和 d46 各三 seed，linear 还在跑），`supplementary/R3.9/make_seed_table.py`。SD（三个 seed 的样本 SD）：precision 0.003–0.083（中位 0.022），recall 0.004–0.019（0.012），F1 0.001–0.040（0.012）。"35 of 36" 仍然是 R3.1 里 `--norm train` 三 seed 的同 seed 比较（linear 只有那一批有三个 seed）；`--norm dataset` 在 d46 上和 `--norm train` 差在 0.007 以内（RIS README）。d46 − d9 三 seed 均值（HG008T，`--norm dataset`）−0.015 / +0.021 / +0.011 → "−0.015 to +0.021"。删掉了旧版的 "chr1 somatic average precision varies by at most 0.046"（那是 `--norm train` 的 AP，新一批没有同步 predictions）和 HG008T 跨肿瘤一句（改成 [待补]，跨样本还没有多 seed）。
   - 第 2 点：E16 `paired.tsv`（BED 内、1 Mb）。HPRC − GRCh38-only 12 对：ΔF1 +0.038 到 +0.326，12 对都不含 0；ΔP 10 对不含 0（例外 COLO829T v1.1 Illumina +0.094 [−0.068, +0.158]、Fiber-seq +0.039 [−0.109, +0.179]）；ΔR 8 对（HG008T PacBio / ONT 的 d9、d46 四对含 0）。比较器：2026-10-20 把 E8 重新打分的 24 个比较器 call set 写进 `E16_bootstrap/comparators.tsv`，重跑 E16（138 个 call set，report check 228 / 228）。Pansoma d46 − DeepSomatic-TO SNV：ΔF1 +0.042 到 +0.219，6 / 6 不含 0，ΔP 6 / 6；− ClairS-TO：+0.012 到 +0.232，6 对点估计都为正，2 对不含 0（COLO829T Illumina +0.232、Fiber-seq +0.017 [+0.000, +0.032]），ΔP 3 / 6。INDEL（r0.9）：ΔR +0.061 到 +0.225（DeepSomatic）、+0.099 到 +0.181（ClairS-TO），ΔP 全部为负；ΔF1 −0.137 到 +0.121，为正的只有 HG008T Illumina（两个都是）和 HG008T PacBio 对 DeepSomatic-TO。v1.1 的比较器对在 `paired_table.tsv` 之外的 E16 `paired.tsv` 里。
