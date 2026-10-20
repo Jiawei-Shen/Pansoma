@@ -179,6 +179,27 @@ class GraphPrepTest(unittest.TestCase):
             graph_prep.main([str(a) for a in argv])
         return json.loads(out.getvalue())
 
+    def test_excluded_contigs_are_left_off_the_path(self):
+        """ref-path-scan --exclude-contigs chr2: nodes 8 and 9 (only on chr2) get no coordinate, chr1 and chr3 keep
+        theirs, and the chr2 W line is still logged. (HPRC v1.1 graphs: CHM13 chrY, which is GRCh38's chrY.)"""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            gfa, _ = graph_files(tmp)
+            scan(gfa, tmp / "all")
+            meta = self.run_cli("ref-path-scan", "--gfa", gfa, "--output", tmp / "rp", "--exclude-contigs", "chr2")
+            a, b = ReferencePath(tmp / "all"), ReferencePath(tmp / "rp")
+            self.assertEqual((b.contigs, meta["excluded_contigs"], meta["ambiguous_reference_nodes"]),
+                             (["chr1", "chr3"], ["chr2"], 0))
+            self.assertNotIn("excluded_contigs", a.meta)
+            for node in range(1, 12):
+                if a.chrom[node] >= 0 and a.contigs[a.chrom[node]] != "chr2":
+                    self.assertEqual((b.contigs[b.chrom[node]], b.start0[node], b.reverse[node], b.visits[node]),
+                                     (a.contigs[a.chrom[node]], a.start0[node], a.reverse[node], a.visits[node]))
+                else:
+                    self.assertEqual((b.chrom[node], b.visits[node]), (-1, 0))
+            self.assertIsNone(b.linear(9, 1, CHR2[8], "C", "SNP"))
+            self.assertIn(("GRCh38", "chr2"), [(w["sample"], w["contig"]) for w in b.walks()])
+
     def test_cli_scan_check_and_chr_index(self):
         with tempfile.TemporaryDirectory() as tmp:
             tmp = Path(tmp)

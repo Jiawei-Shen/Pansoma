@@ -8,12 +8,16 @@
 #   OUTDIR/<name>.components/                    graph_prep components (vg chunk -C per autosome)
 #   OUTDIR/<name>.chr_node_ranges.{tsv,json}     graph_prep chr-index
 #   OUTDIR/graph_audit.json                      graph_prep audit (graph index vs GFA)
+#   OUTDIR/<name>.chm13_path/                    with CHM13_FASTA only: ref-path-scan --reference-sample CHM13, then
+#                                                ref-path-check against CHM13_FASTA (pansoma_net_v2 linear_vcf: CHM13 VCF)
 # The GFA and the graph index are built side by side (both read only the GBZ).
 # Usage: sbatch -J graph_prep -o LOG graph_prep.sh GBZ OUTDIR [FASTA]
 # Environment: PANSOMA_VG (vg for gfa and components; default vg on PATH; scripts/use_vg.sh sets it), GFA (default
 # next to the GBZ), GBZ_DEPS (gbwtgraph prefix for the builder; default /scratch/jshen/Github/gbz-tool/dependency),
 # REFERENCE_SAMPLE (ref-path-scan --reference-sample; default GRCh38; _gbwt_ref for a GBZ whose reference is generic
-# paths, e.g. a GRCh38-only vg autoindex graph).
+# paths, e.g. a GRCh38-only vg autoindex graph), CHM13_FASTA (optional: the T2T-CHM13 FASTA of the graph's CHM13
+# reference path, e.g. chm13v2.0.fa; adds the CHM13 reference path), CHM13_EXCLUDE_CONTIGS (CHM13 contigs left off
+# that path, space-separated; chrY for the HPRC v1.1 graphs, whose CHM13 chrY is GRCh38's chrY).
 # Runs the package it lives in (<package>/tools/jobs/): the checkout or pipeline_code/.
 #SBATCH -p general
 #SBATCH -c 16
@@ -26,17 +30,19 @@ S=${BASH_SOURCE[0]}  # sbatch runs a copy of this file; the submitted path is in
 PKG=$(cd "$(dirname "$S")/../.." && pwd)
 [ -f "$S" ] && [ -f "$PKG/__init__.py" ] || { echo "Error: $S is not in <package>/tools/jobs/"; exit 1; }
 echo "package: $PKG"
-[ $# -ge 2 ] && [ $# -le 3 ] || { sed -n 12p "$S"; exit 2; }
+[ $# -ge 2 ] && [ $# -le 3 ] || { sed -n 14p "$S"; exit 2; }
 abs() { case $1 in /*) echo "$1" ;; *) echo "$PWD/$1" ;; esac; }  # the job runs from the package's parent
 GBZ=$(abs "$1"); OUT=$(abs "$2")
 FASTA=$(abs "${3:-/scratch/jshen/data/HapMap/GCA_000001405.15_GRCh38_no_alt_analysis_set.fasta}")
 NAME=$(basename "$GBZ" .gbz)
+CHM13_FASTA=${CHM13_FASTA:+$(abs "$CHM13_FASTA")}
 GFA=$(abs "${GFA:-$(dirname "$GBZ")/$NAME.gfa}")
 DEPS=${GBZ_DEPS:-/scratch/jshen/Github/gbz-tool/dependency}
 T=${SLURM_CPUS_PER_TASK:-4}
 PY=/wanglab/jshen/anaconda3/bin/python
 DB=$OUT/$NAME.graph_index.sqlite; RP=$OUT/$NAME.grch38_path; CO=$OUT/$NAME.components; CI=$OUT/$NAME.chr_node_ranges
-for f in "$RP.tmp" "$CO.tmp"; do [ ! -e "$f" ] || { echo "Error: $f is left from a failed step; remove it first"; exit 1; }; done
+CP=$OUT/$NAME.chm13_path
+for f in "$RP.tmp" "$CO.tmp" "$CP.tmp"; do [ ! -e "$f" ] || { echo "Error: $f is left from a failed step; remove it first"; exit 1; }; done
 echo "GBZ $GBZ; OUTDIR $OUT; GFA $GFA; FASTA $FASTA; vg $(command -v "${PANSOMA_VG:-vg}"): $("${PANSOMA_VG:-vg}" version | head -1)"
 mkdir -p "$OUT"
 cd "$(dirname "$PKG")"
@@ -70,5 +76,13 @@ fi
 if done_or audit "$OUT/graph_audit.json"; then
   $TIME $PY -m $M.graph_prep audit --graph-index "$DB" --gfa "$GFA" --chr-index "$CI.tsv" --output "$OUT/graph_audit.json" \
     --processes "$T"
+fi
+if [ -n "$CHM13_FASTA" ]; then
+  if done_or chm13-path-scan "$CP"; then
+    $TIME $PY -m $M.graph_prep ref-path-scan --gfa "$GFA" --output "$CP" --reference-sample CHM13 \
+      ${CHM13_EXCLUDE_CONTIGS:+--exclude-contigs $CHM13_EXCLUDE_CONTIGS}
+  fi
+  echo "== chm13-path-check"
+  $TIME $PY -m $M.graph_prep ref-path-check --path "$CP" --graph-index "$DB" --fasta "$CHM13_FASTA"
 fi
 echo GRAPH_PREP_DONE

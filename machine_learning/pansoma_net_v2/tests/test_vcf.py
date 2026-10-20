@@ -320,6 +320,38 @@ class LinearVcfTest(unittest.TestCase):
         with self.assertRaisesRegex(SystemExit, "disagree"):
             f.linear("SNV")
 
+    def test_chm13_reference_path(self):
+        """A second reference path of the same graph: CHM13 walks 1 3 4 from chr1 5 and 7 from chr1 40 (a clipped
+        path, two walks on one contig). Node 3 (off GRCh38) is placed; node 2 (GRCh38's allele), 5 and 6 are not."""
+        root = self.f.root
+        gfa = root / "chm13.gfa"
+        gfa.write_text("\n".join(["H\tVN:Z:1.1", *(f"S\t{n}\t{s}" for n, s in NODES.items()),
+                                  f"W\tGRCh38\t0\tchr1\t0\t{len(CHR1)}\t" + "".join(f">{n}" for n in WALK),
+                                  "W\tCHM13\t0\tchr1\t5\t26\t>1>3>4", "W\tCHM13\t0\tchr1\t40\t58\t>7"]) + "\n")
+        scan(gfa, root / "chm13_path", reference_sample="CHM13")
+        chm13 = "GGGGG" + NODES[1] + NODES[3] + NODES[4] + "A" * 14 + NODES[7]
+        (root / "chm13.fa").write_text(f">chr1\n{chm13}\n")
+        pysam.faidx(str(root / "chm13.fa"))
+        got = {}
+        for kind in ("SNV", "INDEL"):
+            _, graph = self.f.graph(kind)
+            out = root / f"{kind}.chm13.vcf.gz"
+            stats = linear_vcf.convert(linear_vcf.parse_args(
+                ["--graph-vcf", str(graph), "--reference-path", str(root / "chm13_path"), "--fasta",
+                 str(root / "chm13.fa"), "--output", str(out)]))
+            self.assertEqual(stats["reference"], "CHM13")
+            self.assertIn("##pansoma_coordinates=CHM13", read_vcf(out)[0])
+            for r in columns(out):
+                self.assertEqual(chm13[int(r[1]) - 1:int(r[1]) - 1 + len(r[3])], r[3])
+            got[kind] = ([(r[1], r[2], r[3], r[4], r[6]) for r in columns(out)],
+                         [r[2] for r in columns(root / f"{kind}.chm13.unplaced.vcf.gz")])
+        self.assertEqual(got["SNV"], ([("10", "1:4:SNP:A>G", "A", "G", "LowAF"), ("16", "3:0:SNP:T>G", "T", "G", "PASS"),
+                                       ("23", "4:6:SNP:A>C", "A", "C", "PASS"), ("41", "7:0:SNP:C>A", "C", "A", "LowQual")],
+                                      []))
+        self.assertEqual(got["INDEL"], ([("16", "4:0:INS:>A", "T", "TA", "PASS"), ("16", "4:0:DEL:GG>", "TGG", "T", "PASS"),
+                                         ("44", "7:5:INS:>G", "T", "TG", "PASS"), ("50", "7:13:DEL:A>", "CA", "C", "PASS")],
+                                        ["2:1:INS:>A", "5:0:DEL:TA>@6", "5:0:DEL:TC>@7"]))
+
 
 RTG = os.environ.get("RTG") or shutil.which("rtg")
 

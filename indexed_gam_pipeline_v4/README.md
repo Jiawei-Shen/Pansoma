@@ -482,6 +482,7 @@ $PY -m $P.tools.graph_index_build build --gbz /scratch/jshen/data/AF-Filtered_VG
 # GFA, reference path, chromosome blocks, index audit (once per graph; tensor_postprocessing/README.md)
 $PY -m $P.tools.graph_prep gfa --gbz G.gbz --output G.gfa [--threads 16] [--vg VG]
 $PY -m $P.tools.graph_prep ref-path-scan --gfa G.gfa --output DIR [--reference-sample GRCh38]   # _gbwt_ref: generic paths
+    [--exclude-contigs chrY ...]
 $PY -m $P.tools.graph_prep ref-path-check --path DIR --graph-index DB --fasta FA [--samples 100000]
 $PY -m $P.tools.graph_prep components --gbz G.gbz --reference-path DIR --output DIR [--threads 4] [--vg VG]
 $PY -m $P.tools.graph_prep chr-index --components-dir D --reference-path DIR --output PREFIX [--graph-index DB]
@@ -545,7 +546,11 @@ $PY -m $P.tools.compare_runs A B [--mask DOTTED.KEY ...] [--report FILE]
   reference walks are the GFA's W lines of `--reference-sample` (default `GRCh38`); a GBZ built from a
   FASTA alone (the GRCh38-only vg autoindex graph) keeps its reference as generic paths, the GFA's P
   lines (`P chr1 1+,2+,…`), read with `--reference-sample _gbwt_ref` (GBWT's sample name of generic
-  paths; `graph_prep.sh` takes it as `REFERENCE_SAMPLE`), and `components` then cuts `vg chunk -p chr1`;
+  paths; `graph_prep.sh` takes it as `REFERENCE_SAMPLE`), and `components` then cuts `vg chunk -p chr1`.
+  `--reference-sample CHM13` scans the HPRC graphs' second reference path. That path is clipped, so one contig
+  is several W lines with their own start; `contigs` then lists the contig once per walk. `--exclude-contigs`
+  leaves contigs off the path (`meta.json` `excluded_contigs`): their nodes get no coordinate, and their W lines
+  are logged like any other walk.
   `chr-index` writes `<prefix>.tsv` plus `<prefix>.json` (`format` `chr-node-ranges`, `tsv_sha256`,
   which `ChrIndex` checks).
 * **Job scripts** (`tools/jobs/`, plain shell with `#SBATCH` defaults for `-p general`;
@@ -562,7 +567,11 @@ $PY -m $P.tools.compare_runs A B [--mask DOTTED.KEY ...] [--report FILE]
     `OUTDIR/<name>.grch38_path/` (scan, check), `OUTDIR/<name>.components/`,
     `OUTDIR/<name>.chr_node_ranges.{tsv,json}` and `OUTDIR/graph_audit.json`. A step whose output
     exists is skipped (ref-path-check always runs), so a resubmission resumes; the `.tmp` of a failed
-    scan or components step stops it. 16 CPUs, `--mem=96G`, 2 days.
+    scan or components step stops it. With `CHM13_FASTA=<T2T-CHM13 FASTA>` (optional) it also writes
+    `OUTDIR/<name>.chm13_path/` (scan with `--reference-sample CHM13`, check against that FASTA): the graph's CHM13
+    reference path, which pansoma_net_v2's `linear_vcf` uses for a CHM13 VCF. `CHM13_EXCLUDE_CONTIGS` leaves contigs
+    off it (`--exclude-contigs`): `chrY` for HPRC v1.1, whose CHM13 chrY is GRCh38's chrY (FASTA chm13v2.0.fa);
+    HPRC v2.1 needs chm13v2.0_maskedY_rCRS.fa and no exclusion. 16 CPUs, `--mem=96G`, 2 days.
   * `gam_sort.sh GAM [OUTPUT]` (OUTPUT default `<GAM without .gam>.sorted.gam`): `gam_prep sort` with
     `$SLURM_CPUS_PER_TASK − 2` gamsort threads and `$GAMSORT_TMP` (default `/tmp`), with `VERIFY=1`
     also `gam_prep check --input`. 10 CPUs, `--mem=64G`, 6 days. Slurm does not track the nodes' local
