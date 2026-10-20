@@ -223,19 +223,17 @@ tested a multi-tumor model on a tumor excluded from its training (details in the
 *Model size and training data.* Network size now follows the size of the training sets. On the pangenome graphs,
 single-tumor SNV models see 7,098–34,110 somatic examples and INDEL models 971–3,761; multi-tumor models see
 237,577–281,853 and 10,390–15,486. SNV models therefore use a 50.4 M-parameter network and INDEL models an 8.7 M one,
-against 199.6 M in the original configuration; the sizes were not chosen by an exhaustive search. Supplementary Table
+against 199.6 M in the original configuration. Supplementary Table
 [待补: number] lists the exact training and validation examples per class (somatic, germline, other) of every model, by
 tumor, platform and variant type.
 
-*Overfitting and training-set size* (HG008T PacBio SNVs, HPRC v2.1 graph, one recipe). The original 199.6 M network
-memorizes its training set (training loss 0.038 at epoch 20; validation loss lowest at epoch 3, then 5.8-fold higher);
-the 50.4 M network overfits later (lowest at epochs 9–10, then 2.6–3.4-fold higher) and the 8.7 M network not within
-20 epochs. With early stopping on held-out validation blocks, the three reach similar F1 after population filtering
-(0.603, 0.604–0.611 over three seeds, 0.616). For HG008T Illumina INDELs, the 8.7 M network scores higher than the
-original configuration (PASS F1 0.243 against 0.187), which memorizes its training set (training loss 0.0004). F1 rises
-with training data, with diminishing gains: 0.574 with 10% of the training blocks, 0.597 with half, 0.607 with all.
-HG008T is our smallest SNV training set; these experiments show that the original capacity was not needed, not that
-50.4 M is optimal for every dataset, platform or variant type.
+*Model selection and overfitting.* We chose the smaller networks by testing on held-out data (Supplementary). Each
+model is the checkpoint with the best validation somatic F1 on held-out blocks of chr2–22 (early stopping), and these
+checkpoints are not overfitted: for the twelve HPRC v2.1 models of HG008T and COLO829T, the training and validation
+losses at the selected epoch are 0.141–0.304 and 0.178–0.445 for SNVs and 0.250–0.715 and 0.260–0.864 for INDELs, and
+the validation loss is 1.00–1.27 times its minimum over training (Supplementary Table [待补: number]). F1 rises with
+training data, with diminishing gains (HG008T PacBio SNVs): 0.574 with 10% of the training blocks, 0.597 with half and
+0.607 with all.
 
 *Tumor diversity and cross-tumor generalization.* We added two breast (HCC1395, HCC1954) and two lung adenocarcinoma
 lines (H1437, H2009), three platforms each (R1.m1), whose substitution spectra differ from COLO829T's UV-dominated one
@@ -267,10 +265,15 @@ on six tumors keeps the performance on a training tumor's held-out chromosome, n
   resampling or on-the-fly augmentation; class imbalance is handled by loss weights. In single-tumor SNV models each
   somatic example is a different truth allele; the joint COLO829T models contain the same alleles at four purities
   (below).
-- *Training and model size.* Early stopping selects the epoch with the best validation somatic F1: single-tumor models
-  epochs 4–12 of 20 (SNV) and 2–7 of 12 (INDEL); multi-tumor models, with more training data, 10–19 and 6–9. Learning curve: two replicates per fraction of the training blocks; the 8.7 M and 199.6 M SNV
-  networks are single runs with the 50.4 M recipe. The INDEL comparison is one pair on HG008T Illumina (HPRC v1.1 graph,
-  same recipe for both, scored with the same earlier INDEL population filter).
+- *Training and model size.* Size tests: on HG008T PacBio SNVs (HPRC v2.1, one recipe), networks of 8.7 M, 50.4 M
+  (three seeds) and 199.6 M parameters reach PASS F1 0.616, 0.604–0.611 and 0.603, and the larger the network, the
+  earlier its validation loss rises after its minimum; on HG008T Illumina INDELs (HPRC v1.1, one pair, same recipe and
+  population filter), the 8.7 M network scores 0.243 against 0.187 for the 199.6 M configuration. Early stopping
+  selects the epoch with the best validation somatic F1: single-tumor models epochs 4–12 of 20 (SNV) and 2–7 of 12
+  (INDEL); multi-tumor models, with more training data, 10–19 and 6–9. The validation loss also scores the
+  off-reference candidates without a truth match as other, which training does not use, so it overstates the gap to the
+  training loss. Learning curve: two replicates per fraction of the training blocks; the 8.7 M and 199.6 M SNV networks
+  are single runs with the 50.4 M recipe.
 - *Single-tumor models across tumors* (HPRC v2.1, chr1, F1 after population filtering at the recall-0.9 validation
   threshold of the training tumor, benchmark BED; Supplementary Table [待补]). Models trained on HG008T (about 7,200
   somatic examples) reach 0.708, 0.754 and 0.630 on COLO829T (Illumina, PacBio HiFi / Fiber-seq, ONT), 0.024–0.106 below

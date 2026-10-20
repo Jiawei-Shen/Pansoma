@@ -32,7 +32,7 @@
 | R1.4 | 图吸收已有的 somatic | 部分解决 | 10-20 改成技术性反驳（不是 fatal：tumor-only 用 population 信息换 precision 的固有 trade-off，Pansoma 只是把一部分压制提前到 candidate 生成；ClairS-TO 默认 PoN 标掉更多 truth INDEL；没有在 pangenome 比对上做 somatic calling 的现成 caller）；E5b：被吸收的 truth 中 95.5–100% 本来就会被 PoN 标掉；E1.6：三个参考臂 INDEL 都叫出 24–27%；E9h；E8c（10-20）：DeepSomatic-TO / ClairS-TO 在吸收位点上 PASS 882 对里只有 7 对，PoN 后 0 | E6 / E25 不做（10-20），写成 future work |
 | R1.5 | HapMap mixture 和数据泄漏 | 部分解决 | 没有泄漏：原稿 HapMap 跑在去掉 6 个 donor 的 `mgi_non_HG005.d9` 上（用户 10-20 确认），Response 改成直接反驳；COLO829T dilution（fiberseq 干净），LOH 解释了 P75 / P50 的低谷 | 决定：HapMap 去留（重跑 OOM 失败）；GPU：BQ 伪影修好后重训 |
 | R1.6 | sensitivity 低 | 部分解决 | E1.6 漏斗：HG008T SNV 叫出 82–85%；COLO829T 有 17–18% 低于 0.08 的 AF 下限；PoN 的 INDEL 上限 0.35；10-20 第一段改成同一协议下的对比（HG008T 差距小，COLO829T DeepSomatic-TO Illumina 领先，INDEL Pansoma 最高） | - |
-| R1.7 | 训练规模、肿瘤多样性 | 部分解决 | E21；E12a：HG008T 模型在 COLO829T / HCC1395 / H1437 / H2009 上 0.63–0.94；COLO829T 模型带 UV 偏好；E13（10-19 RIS）：训练数据 10% → 100% 时 F1 从 0.574 升到 0.607，后一半只多 0.010；8.7 M / 50.4 M / 199.6 M 分别是 0.616 / 0.604–0.611 / 0.603；10-20 第三轮：网络大小按训练集大小说，overfitting 用 E13 loss 曲线（199.6 M val loss epoch 3 最低、epoch 20 5.8 倍；50.4 M 2.6–3.4 倍；8.7 M 不升），多肿瘤训练计数（E21 `capacity_multitumor.md`），跨肿瘤 / 同肿瘤两种测试分开 | E12b 修正后重新预测完成（10-20，ONT 已补：HCC1395T 0.658，HG008T 0.587）；GPU：normbq checkpoint 的跨样本预测（tequila 449822 在跑）；Supplementary Table 编号 |
+| R1.7 | 训练规模、肿瘤多样性 | 部分解决 | E21；E12a：HG008T 模型在 COLO829T / HCC1395 / H1437 / H2009 上 0.63–0.94；COLO829T 模型带 UV 偏好；E13（10-19 RIS）：训练数据 10% → 100% 时 F1 从 0.574 升到 0.607，后一半只多 0.010；8.7 M / 50.4 M / 199.6 M 分别是 0.616 / 0.604–0.611 / 0.603；10-20 第三轮：网络大小按训练集大小说，overfitting 用选中 checkpoint 的 train / val loss（12 个 v2.1 模型，val 是最低点的 1.00–1.27 倍；199.6 M 的对比只在 Supplementary），多肿瘤训练计数（E21 `capacity_multitumor.md`），跨肿瘤 / 同肿瘤两种测试分开 | E12b 修正后重新预测完成（10-20，ONT 已补：HCC1395T 0.658，HG008T 0.587）；GPU：normbq checkpoint 的跨样本预测（tequila 449822 在跑）；Supplementary Table 编号 |
 | R1.8 | 训练集怎么构建 | **已解决** | 标签规则和代码出处；E21 覆盖所有 set；E9h | 只剩改稿 |
 | R1.m1 | 补充 benchmark（HCC1395、CASTLE） | 部分解决 | E12a：在 HCC1395 和 CASTLE 三株上的跨样本结果；E22：H1437 truth 约 30% 是 LOH 带进来的 germline，HCC1954 的 truth 没问题；E12b + HCC1395T 比较器（10-20）：SNV 和 DeepSomatic-TO 打平（Illumina）或低 0.014–0.030（长读长），INDEL DeepSomatic-TO 领先 | GPU：LOLO；用户：为什么没加 HCC1937 / Hs578T |
 | R1.m2 | tensor 窗口在 node 边界截断 | **已解决** | 跨 node 的 tensor 已实现；E1.1；10-20 Supplementary Fig. R1.m2（一个 somatic SNV 的 tensor：ALT reads 走 10–12 条 haplotype 的分支节点，REF reads 走 89 条的） | 只剩改稿 |
@@ -1088,19 +1088,17 @@ tested a multi-tumor model on a tumor excluded from its training (details in the
 *Model size and training data.* Network size now follows the size of the training sets. On the pangenome graphs,
 single-tumor SNV models see 7,098–34,110 somatic examples and INDEL models 971–3,761; multi-tumor models see
 237,577–281,853 and 10,390–15,486. SNV models therefore use a 50.4 M-parameter network and INDEL models an 8.7 M one,
-against 199.6 M in the original configuration; the sizes were not chosen by an exhaustive search. Supplementary Table
+against 199.6 M in the original configuration. Supplementary Table
 [待补: number] lists the exact training and validation examples per class (somatic, germline, other) of every model, by
 tumor, platform and variant type.
 
-*Overfitting and training-set size* (HG008T PacBio SNVs, HPRC v2.1 graph, one recipe). The original 199.6 M network
-memorizes its training set (training loss 0.038 at epoch 20; validation loss lowest at epoch 3, then 5.8-fold higher);
-the 50.4 M network overfits later (lowest at epochs 9–10, then 2.6–3.4-fold higher) and the 8.7 M network not within
-20 epochs. With early stopping on held-out validation blocks, the three reach similar F1 after population filtering
-(0.603, 0.604–0.611 over three seeds, 0.616). For HG008T Illumina INDELs, the 8.7 M network scores higher than the
-original configuration (PASS F1 0.243 against 0.187), which memorizes its training set (training loss 0.0004). F1 rises
-with training data, with diminishing gains: 0.574 with 10% of the training blocks, 0.597 with half, 0.607 with all.
-HG008T is our smallest SNV training set; these experiments show that the original capacity was not needed, not that
-50.4 M is optimal for every dataset, platform or variant type.
+*Model selection and overfitting.* We chose the smaller networks by testing on held-out data (Supplementary). Each
+model is the checkpoint with the best validation somatic F1 on held-out blocks of chr2–22 (early stopping), and these
+checkpoints are not overfitted: for the twelve HPRC v2.1 models of HG008T and COLO829T, the training and validation
+losses at the selected epoch are 0.141–0.304 and 0.178–0.445 for SNVs and 0.250–0.715 and 0.260–0.864 for INDELs, and
+the validation loss is 1.00–1.27 times its minimum over training (Supplementary Table [待补: number]). F1 rises with
+training data, with diminishing gains (HG008T PacBio SNVs): 0.574 with 10% of the training blocks, 0.597 with half and
+0.607 with all.
 
 *Tumor diversity and cross-tumor generalization.* We added two breast (HCC1395, HCC1954) and two lung adenocarcinoma
 lines (H1437, H2009), three platforms each (R1.m1), whose substitution spectra differ from COLO829T's UV-dominated one
@@ -1132,10 +1130,15 @@ on six tumors keeps the performance on a training tumor's held-out chromosome, n
   resampling or on-the-fly augmentation; class imbalance is handled by loss weights. In single-tumor SNV models each
   somatic example is a different truth allele; the joint COLO829T models contain the same alleles at four purities
   (below).
-- *Training and model size.* Early stopping selects the epoch with the best validation somatic F1: single-tumor models
-  epochs 4–12 of 20 (SNV) and 2–7 of 12 (INDEL); multi-tumor models, with more training data, 10–19 and 6–9. Learning curve: two replicates per fraction of the training blocks; the 8.7 M and 199.6 M SNV
-  networks are single runs with the 50.4 M recipe. The INDEL comparison is one pair on HG008T Illumina (HPRC v1.1 graph,
-  same recipe for both, scored with the same earlier INDEL population filter).
+- *Training and model size.* Size tests: on HG008T PacBio SNVs (HPRC v2.1, one recipe), networks of 8.7 M, 50.4 M
+  (three seeds) and 199.6 M parameters reach PASS F1 0.616, 0.604–0.611 and 0.603, and the larger the network, the
+  earlier its validation loss rises after its minimum; on HG008T Illumina INDELs (HPRC v1.1, one pair, same recipe and
+  population filter), the 8.7 M network scores 0.243 against 0.187 for the 199.6 M configuration. Early stopping
+  selects the epoch with the best validation somatic F1: single-tumor models epochs 4–12 of 20 (SNV) and 2–7 of 12
+  (INDEL); multi-tumor models, with more training data, 10–19 and 6–9. The validation loss also scores the
+  off-reference candidates without a truth match as other, which training does not use, so it overstates the gap to the
+  training loss. Learning curve: two replicates per fraction of the training blocks; the 8.7 M and 199.6 M SNV networks
+  are single runs with the 50.4 M recipe.
 - *Single-tumor models across tumors* (HPRC v2.1, chr1, F1 after population filtering at the recall-0.9 validation
   threshold of the training tumor, benchmark BED; Supplementary Table [待补]). Models trained on HG008T (about 7,200
   somatic examples) reach 0.708, 0.754 and 0.630 on COLO829T (Illumina, PacBio HiFi / Fiber-seq, ONT), 0.024–0.106 below
@@ -1155,6 +1158,22 @@ on six tumors keeps the performance on a training tumor's held-out chromosome, n
   read-source base-quality cue (R1.5; done for Illumina)]
 
 **证据（内部）。**
+
+- 2026-10-20 用户："你没必要提之前的 2 亿参数模型了，就说我们根据测试选取了小参数模型，然后把 val loss、train loss 加上，表明我们没有
+  overfitting"。"Overfitting and training-set size" 段改成 "Model selection and overfitting"：
+  - 199.6 M 的 loss 曲线和三种大小的 F1 对比从 Response 移到 Supplementary "Training and model size"（"chose the smaller networks by testing"
+    的依据）；Model size 段删掉 "the sizes were not chosen by an exhaustive search"（和 "by testing" 矛盾）；"against 199.6 M in the original
+    configuration" 留着（审稿人问的就是约 200 M 的模型）。
+  - train / val loss 是 12 个 HPRC v2.1（d46）单肿瘤模型（HG008T / COLO829T × 三平台 × SNV / INDEL，`*_d46_7fc7396`）在选中 epoch 的值，出自
+    E21 `runs_training.tsv` 的 `train_loss_best_epoch`、`val_loss_best_epoch`、`val_loss_min`：SNV train 0.141–0.304、val 0.178–0.445，
+    val / min 1.04–1.27（最大是 HG008T PacBio，epoch 7 train 0.304、val 0.445、min 0.350）；INDEL train 0.250–0.715、val 0.260–0.864，
+    val / min 1.00–1.04 → "1.00–1.27 times its minimum"。说的是 "these checkpoints are not overfitted"，不是 "网络不会 overfit"（训满 20 epoch
+    的 50.4 M val loss 会升到最低点的 2.6–3.4 倍，E13，Supplementary 写了 "the larger the network, the earlier its validation loss rises"）。
+  - 多肿瘤 INDEL 模型没放进这句：Illumina INDEL 的 val loss 从 epoch 1 就是 1.5–1.9（multicancer4 val 1.92 / train 0.64），因为验证集把约 7,800 个
+    没对上 truth 的 off-reference tensor 当 non（训练集不用这些，四个新细胞系的 Illumina INDEL 训练 non 又很少，multicancer4 只有 19,628），
+    不是 overfitting；选中 epoch 的 val / train 在多肿瘤 INDEL 是 1.96–8.69，单肿瘤 d46 INDEL 是 1.02–1.33。Supplementary 加了一句 off-reference
+    让 val loss 偏高。
+  - Response 字数 524 → 468。
 
 - 2026-10-20 用户贴了第三轮意见（50.4 M 的选择依据；容量实验只覆盖 HG008T PacBio SNV；两种测试分开；"trained and tested across six
   tumors" 会被理解成全面留一；Supplementary 要给准确的分类计数、定义 "other"、训练 / 验证分开；"INDEL 正例少所以模型小" 是动机，单个数据集的
