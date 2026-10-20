@@ -1678,5 +1678,768 @@
     "best_tp": 577
    }
   }
+ ],
+ "normbq_seeds": [
+  {
+   "set": "HG008T Illumina",
+   "arm": "linear",
+   "scores": [
+    null,
+    null,
+    null
+   ]
+  },
+  {
+   "set": "HG008T Illumina",
+   "arm": "d9",
+   "scores": [
+    {
+     "pass": 0.5884,
+     "best": 0.608,
+     "p": 0.4555,
+     "r": 0.8307,
+     "fp": 692,
+     "best_tp": 529
+    },
+    {
+     "pass": 0.5884,
+     "best": 0.6107,
+     "p": 0.459,
+     "r": 0.8192,
+     "fp": 673,
+     "best_tp": 516
+    },
+    {
+     "pass": 0.5861,
+     "best": 0.6045,
+     "p": 0.4613,
+     "r": 0.8034,
+     "fp": 654,
+     "best_tp": 496
+    }
+   ]
+  },
+  {
+   "set": "HG008T Illumina",
+   "arm": "d46",
+   "scores": [
+    {
+     "pass": 0.5681,
+     "best": 0.6127,
+     "p": 0.4261,
+     "r": 0.8522,
+     "fp": 800,
+     "best_tp": 530
+    },
+    {
+     "pass": 0.5846,
+     "best": 0.6117,
+     "p": 0.4509,
+     "r": 0.8307,
+     "fp": 705,
+     "best_tp": 516
+    },
+    {
+     "pass": 0.5656,
+     "best": 0.6108,
+     "p": 0.4335,
+     "r": 0.8135,
+     "fp": 741,
+     "best_tp": 488
+    }
+   ]
+  },
+  {
+   "set": "HG008T PacBio",
+   "arm": "linear",
+   "scores": [
+    null,
+    null,
+    null
+   ]
+  },
+  {
+   "set": "HG008T PacBio",
+   "arm": "d9",
+   "scores": [
+    {
+     "pass": 0.6106,
+     "best": 0.6296,
+     "p": 0.4837,
+     "r": 0.8278,
+     "fp": 616,
+     "best_tp": 543
+    },
+    {
+     "pass": 0.5553,
+     "best": 0.6086,
+     "p": 0.4223,
+     "r": 0.8106,
+     "fp": 773,
+     "best_tp": 510
+    },
+    {
+     "pass": 0.5916,
+     "best": 0.6235,
+     "p": 0.4598,
+     "r": 0.8293,
+     "fp": 679,
+     "best_tp": 529
+    }
+   ]
+  },
+  {
+   "set": "HG008T PacBio",
+   "arm": "d46",
+   "scores": [
+    {
+     "pass": 0.6027,
+     "best": 0.6234,
+     "p": 0.4706,
+     "r": 0.8379,
+     "fp": 657,
+     "best_tp": 552
+    },
+    {
+     "pass": 0.609,
+     "best": 0.6173,
+     "p": 0.4867,
+     "r": 0.8135,
+     "fp": 598,
+     "best_tp": 500
+    },
+    {
+     "pass": 0.6074,
+     "best": 0.6177,
+     "p": 0.4846,
+     "r": 0.8135,
+     "fp": 603,
+     "best_tp": 484
+    }
+   ]
+  },
+  {
+   "set": "HG008T ONT",
+   "arm": "linear",
+   "scores": [
+    null,
+    null,
+    null
+   ]
+  },
+  {
+   "set": "HG008T ONT",
+   "arm": "d9",
+   "scores": [
+    {
+     "pass": 0.5978,
+     "best": 0.6176,
+     "p": 0.4725,
+     "r": 0.8135,
+     "fp": 633,
+     "best_tp": 499
+    },
+    {
+     "pass": 0.5753,
+     "best": 0.6035,
+     "p": 0.4433,
+     "r": 0.8192,
+     "fp": 717,
+     "best_tp": 513
+    },
+    {
+     "pass": 0.581,
+     "best": 0.6057,
+     "p": 0.4468,
+     "r": 0.8307,
+     "fp": 717,
+     "best_tp": 497
+    }
+   ]
+  },
+  {
+   "set": "HG008T ONT",
+   "arm": "d46",
+   "scores": [
+    {
+     "pass": 0.576,
+     "best": 0.6011,
+     "p": 0.4331,
+     "r": 0.8594,
+     "fp": 784,
+     "best_tp": 535
+    },
+    {
+     "pass": 0.6052,
+     "best": 0.6126,
+     "p": 0.4705,
+     "r": 0.8479,
+     "fp": 665,
+     "best_tp": 555
+    },
+    {
+     "pass": 0.6071,
+     "best": 0.611,
+     "p": 0.4807,
+     "r": 0.8235,
+     "fp": 620,
+     "best_tp": 552
+    }
+   ]
+  },
+  {
+   "set": "COLO829T Illumina",
+   "arm": "linear",
+   "scores": [
+    null,
+    null,
+    null
+   ]
+  },
+  {
+   "set": "COLO829T Illumina",
+   "arm": "d9",
+   "scores": [
+    {
+     "pass": 0.5658,
+     "best": 0.6554,
+     "p": 0.4757,
+     "r": 0.6979,
+     "fp": 1879,
+     "best_tp": 1400
+    },
+    {
+     "pass": 0.6277,
+     "best": 0.7083,
+     "p": 0.565,
+     "r": 0.7061,
+     "fp": 1328,
+     "best_tp": 1496
+    },
+    {
+     "pass": 0.5684,
+     "best": 0.6461,
+     "p": 0.4771,
+     "r": 0.7028,
+     "fp": 1882,
+     "best_tp": 1381
+    }
+   ]
+  },
+  {
+   "set": "COLO829T Illumina",
+   "arm": "d46",
+   "scores": [
+    {
+     "pass": 0.782,
+     "best": 0.7868,
+     "p": 0.867,
+     "r": 0.7122,
+     "fp": 267,
+     "best_tp": 1795
+    },
+    {
+     "pass": 0.7054,
+     "best": 0.7302,
+     "p": 0.7056,
+     "r": 0.7053,
+     "fp": 719,
+     "best_tp": 1567
+    },
+    {
+     "pass": 0.7654,
+     "best": 0.7688,
+     "p": 0.8206,
+     "r": 0.7172,
+     "fp": 383,
+     "best_tp": 1729
+    }
+   ]
+  },
+  {
+   "set": "COLO829T fiberseq",
+   "arm": "linear",
+   "scores": [
+    null,
+    null,
+    null
+   ]
+  },
+  {
+   "set": "COLO829T fiberseq",
+   "arm": "d9",
+   "scores": [
+    {
+     "pass": 0.7581,
+     "best": 0.7737,
+     "p": 0.7985,
+     "r": 0.7217,
+     "fp": 445,
+     "best_tp": 1679
+    },
+    {
+     "pass": 0.7829,
+     "best": 0.7897,
+     "p": 0.8759,
+     "r": 0.7077,
+     "fp": 245,
+     "best_tp": 1799
+    },
+    {
+     "pass": 0.7708,
+     "best": 0.7731,
+     "p": 0.8434,
+     "r": 0.7098,
+     "fp": 322,
+     "best_tp": 1753
+    }
+   ]
+  },
+  {
+   "set": "COLO829T fiberseq",
+   "arm": "d46",
+   "scores": [
+    {
+     "pass": 0.7772,
+     "best": 0.7826,
+     "p": 0.8631,
+     "r": 0.7069,
+     "fp": 274,
+     "best_tp": 1812
+    },
+    {
+     "pass": 0.7726,
+     "best": 0.7831,
+     "p": 0.8475,
+     "r": 0.7098,
+     "fp": 312,
+     "best_tp": 1850
+    },
+    {
+     "pass": 0.7885,
+     "best": 0.7919,
+     "p": 0.8518,
+     "r": 0.7339,
+     "fp": 312,
+     "best_tp": 1840
+    }
+   ]
+  },
+  {
+   "set": "COLO829T ONT",
+   "arm": "linear",
+   "scores": [
+    null,
+    null,
+    null
+   ]
+  },
+  {
+   "set": "COLO829T ONT",
+   "arm": "d9",
+   "scores": [
+    {
+     "pass": 0.7438,
+     "best": 0.7441,
+     "p": 0.7929,
+     "r": 0.7004,
+     "fp": 447,
+     "best_tp": 1711
+    },
+    {
+     "pass": 0.7517,
+     "best": 0.756,
+     "p": 0.8218,
+     "r": 0.6926,
+     "fp": 367,
+     "best_tp": 1726
+    },
+    {
+     "pass": 0.7449,
+     "best": 0.7479,
+     "p": 0.8304,
+     "r": 0.6754,
+     "fp": 337,
+     "best_tp": 1698
+    }
+   ]
+  },
+  {
+   "set": "COLO829T ONT",
+   "arm": "d46",
+   "scores": [
+    {
+     "pass": 0.7529,
+     "best": 0.754,
+     "p": 0.814,
+     "r": 0.7004,
+     "fp": 391,
+     "best_tp": 1755
+    },
+    {
+     "pass": 0.7262,
+     "best": 0.7345,
+     "p": 0.7535,
+     "r": 0.7008,
+     "fp": 560,
+     "best_tp": 1653
+    },
+    {
+     "pass": 0.7289,
+     "best": 0.7369,
+     "p": 0.7401,
+     "r": 0.718,
+     "fp": 616,
+     "best_tp": 1697
+    }
+   ]
+  }
+ ],
+ "normbq_indel": [
+  {
+   "set": "HG008T Illumina",
+   "scores": {
+    "linear": null,
+    "d9": null,
+    "d46": {
+     "pass": 0.2527,
+     "best": 0.2564,
+     "p": 0.2665,
+     "r": 0.2402,
+     "fp": 388,
+     "best_tp": 121
+    }
+   }
+  },
+  {
+   "set": "HG008T PacBio",
+   "scores": {
+    "linear": null,
+    "d9": null,
+    "d46": null
+   }
+  },
+  {
+   "set": "HG008T ONT",
+   "scores": {
+    "linear": null,
+    "d9": null,
+    "d46": null
+   }
+  },
+  {
+   "set": "COLO829T Illumina",
+   "scores": {
+    "linear": null,
+    "d9": null,
+    "d46": {
+     "pass": 0.117,
+     "best": 0.1688,
+     "p": 0.0769,
+     "r": 0.2443,
+     "fp": 384,
+     "best_tp": 20
+    }
+   }
+  },
+  {
+   "set": "COLO829T fiberseq",
+   "scores": {
+    "linear": null,
+    "d9": null,
+    "d46": null
+   }
+  },
+  {
+   "set": "COLO829T ONT",
+   "scores": {
+    "linear": null,
+    "d9": null,
+    "d46": null
+   }
+  }
+ ],
+ "normbq_no_ch6": [
+  {
+   "set": "HG008T Illumina",
+   "kind": "SNV",
+   "with_ch6": [
+    {
+     "pass": 0.5681,
+     "best": 0.6127,
+     "p": 0.4261,
+     "r": 0.8522,
+     "fp": 800,
+     "best_tp": 530
+    },
+    {
+     "pass": 0.5846,
+     "best": 0.6117,
+     "p": 0.4509,
+     "r": 0.8307,
+     "fp": 705,
+     "best_tp": 516
+    },
+    {
+     "pass": 0.5656,
+     "best": 0.6108,
+     "p": 0.4335,
+     "r": 0.8135,
+     "fp": 741,
+     "best_tp": 488
+    }
+   ],
+   "no_ch6": [
+    {
+     "pass": 0.5287,
+     "best": 0.5419,
+     "p": 0.3983,
+     "r": 0.7862,
+     "fp": 828,
+     "best_tp": 469
+    },
+    null,
+    null
+   ]
+  },
+  {
+   "set": "HG008T PacBio",
+   "kind": "SNV",
+   "with_ch6": [
+    {
+     "pass": 0.6027,
+     "best": 0.6234,
+     "p": 0.4706,
+     "r": 0.8379,
+     "fp": 657,
+     "best_tp": 552
+    },
+    {
+     "pass": 0.609,
+     "best": 0.6173,
+     "p": 0.4867,
+     "r": 0.8135,
+     "fp": 598,
+     "best_tp": 500
+    },
+    {
+     "pass": 0.6074,
+     "best": 0.6177,
+     "p": 0.4846,
+     "r": 0.8135,
+     "fp": 603,
+     "best_tp": 484
+    }
+   ],
+   "no_ch6": [
+    {
+     "pass": 0.5955,
+     "best": 0.601,
+     "p": 0.466,
+     "r": 0.825,
+     "fp": 659,
+     "best_tp": 519
+    },
+    null,
+    null
+   ]
+  },
+  {
+   "set": "HG008T ONT",
+   "kind": "SNV",
+   "with_ch6": [
+    {
+     "pass": 0.576,
+     "best": 0.6011,
+     "p": 0.4331,
+     "r": 0.8594,
+     "fp": 784,
+     "best_tp": 535
+    },
+    {
+     "pass": 0.6052,
+     "best": 0.6126,
+     "p": 0.4705,
+     "r": 0.8479,
+     "fp": 665,
+     "best_tp": 555
+    },
+    {
+     "pass": 0.6071,
+     "best": 0.611,
+     "p": 0.4807,
+     "r": 0.8235,
+     "fp": 620,
+     "best_tp": 552
+    }
+   ],
+   "no_ch6": [
+    {
+     "pass": 0.5838,
+     "best": 0.6006,
+     "p": 0.4467,
+     "r": 0.8422,
+     "fp": 727,
+     "best_tp": 509
+    },
+    null,
+    null
+   ]
+  },
+  {
+   "set": "COLO829T Illumina",
+   "kind": "SNV",
+   "with_ch6": [
+    {
+     "pass": 0.782,
+     "best": 0.7868,
+     "p": 0.867,
+     "r": 0.7122,
+     "fp": 267,
+     "best_tp": 1795
+    },
+    {
+     "pass": 0.7054,
+     "best": 0.7302,
+     "p": 0.7056,
+     "r": 0.7053,
+     "fp": 719,
+     "best_tp": 1567
+    },
+    {
+     "pass": 0.7654,
+     "best": 0.7688,
+     "p": 0.8206,
+     "r": 0.7172,
+     "fp": 383,
+     "best_tp": 1729
+    }
+   ],
+   "no_ch6": [
+    null,
+    null,
+    null
+   ]
+  },
+  {
+   "set": "COLO829T fiberseq",
+   "kind": "SNV",
+   "with_ch6": [
+    {
+     "pass": 0.7772,
+     "best": 0.7826,
+     "p": 0.8631,
+     "r": 0.7069,
+     "fp": 274,
+     "best_tp": 1812
+    },
+    {
+     "pass": 0.7726,
+     "best": 0.7831,
+     "p": 0.8475,
+     "r": 0.7098,
+     "fp": 312,
+     "best_tp": 1850
+    },
+    {
+     "pass": 0.7885,
+     "best": 0.7919,
+     "p": 0.8518,
+     "r": 0.7339,
+     "fp": 312,
+     "best_tp": 1840
+    }
+   ],
+   "no_ch6": [
+    null,
+    null,
+    null
+   ]
+  },
+  {
+   "set": "COLO829T ONT",
+   "kind": "SNV",
+   "with_ch6": [
+    {
+     "pass": 0.7529,
+     "best": 0.754,
+     "p": 0.814,
+     "r": 0.7004,
+     "fp": 391,
+     "best_tp": 1755
+    },
+    {
+     "pass": 0.7262,
+     "best": 0.7345,
+     "p": 0.7535,
+     "r": 0.7008,
+     "fp": 560,
+     "best_tp": 1653
+    },
+    {
+     "pass": 0.7289,
+     "best": 0.7369,
+     "p": 0.7401,
+     "r": 0.718,
+     "fp": 616,
+     "best_tp": 1697
+    }
+   ],
+   "no_ch6": [
+    null,
+    null,
+    null
+   ]
+  },
+  {
+   "set": "HG008T Illumina",
+   "kind": "INDEL",
+   "with_ch6": {
+    "pass": 0.2527,
+    "best": 0.2564,
+    "p": 0.2665,
+    "r": 0.2402,
+    "fp": 388,
+    "best_tp": 121
+   },
+   "no_ch6": null
+  },
+  {
+   "set": "HG008T PacBio",
+   "kind": "INDEL",
+   "with_ch6": null,
+   "no_ch6": null
+  },
+  {
+   "set": "HG008T ONT",
+   "kind": "INDEL",
+   "with_ch6": null,
+   "no_ch6": null
+  },
+  {
+   "set": "COLO829T Illumina",
+   "kind": "INDEL",
+   "with_ch6": {
+    "pass": 0.117,
+    "best": 0.1688,
+    "p": 0.0769,
+    "r": 0.2443,
+    "fp": 384,
+    "best_tp": 20
+   },
+   "no_ch6": null
+  },
+  {
+   "set": "COLO829T fiberseq",
+   "kind": "INDEL",
+   "with_ch6": null,
+   "no_ch6": null
+  },
+  {
+   "set": "COLO829T ONT",
+   "kind": "INDEL",
+   "with_ch6": null,
+   "no_ch6": null
+  }
  ]
 }

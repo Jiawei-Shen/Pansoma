@@ -154,6 +154,69 @@ def main():
         L.append(f"| {run} | {what} | {f3(x and x['pass'])} | {f3(x and x['best'])} |")
     out["e13"] = rows
 
+    # --norm dataset (f344bca, BQ only per dataset): the reported models, three seeds for SNV
+    def three(base, kind):
+        sc = [score(base + x, kind) for x in ("", "_s1", "_s2")]
+        got = [x for x in sc if x is not None]
+        summ = {k: ((statistics.mean([x[k] for x in got]), min(x[k] for x in got), max(x[k] for x in got))
+                    if len(got) == 3 else None) for k in ("pass", "best")}
+        return sc, summ
+
+    def ms(t):
+        return "-" if t is None else f"{t[0]:.3f} ({t[1]:.3f}-{t[2]:.3f})"
+
+    L += ["\n## `--norm dataset` (BQ only per dataset, f344bca): SNV over three seeds\n",
+          "PASS F1 (best F1) per seed; mean (range). d46 seed 0 = `<S>_<P>_SNV_d46_normbq` (submit_normbq.sh), the rest "
+          "submit_normbq_all.sh.\n",
+          "| set | arm | seed 0 | seed 1 | seed 2 | PASS mean (range) | best mean (range) |", "|---|---|---|---|---|---|---|"]
+    rows, means = [], {}
+    for s, p in SETS:
+        for arm in ("linear", "d9", "d46"):
+            sc, summ = three(f"{s}_{p}_SNV_{arm}_normbq", "SNV")
+            means[(s, p, arm)] = summ
+            rows.append(dict(set=f"{s}T {p}", arm=arm, scores=sc))
+            cells = ["-" if x is None else f"{x['pass']:.3f} ({x['best']:.3f})" for x in sc]
+            L.append(f"| {s}T {p} | {arm} | " + " | ".join(cells) + f" | {ms(summ['pass'])} | {ms(summ['best'])} |")
+    out["normbq_seeds"] = rows
+    L += ["\nArm differences of the three-seed means (PASS F1 / best F1):\n",
+          "| set | d46 - d9 | d9 - linear | d46 - linear |", "|---|---|---|---|"]
+    for s, p in SETS:
+        def dd(a, b):
+            x, y = means[(s, p, a)], means[(s, p, b)]
+            return "-" if not (x["pass"] and y["pass"]) else \
+                f"{x['pass'][0] - y['pass'][0]:+.3f} / {x['best'][0] - y['best'][0]:+.3f}"
+        L.append(f"| {s}T {p} | {dd('d46', 'd9')} | {dd('d9', 'linear')} | {dd('d46', 'linear')} |")
+
+    L += ["\n## `--norm dataset`: INDEL per arm (best F1 (PASS F1), one seed)\n",
+          "| set | linear | d9 | d46 |", "|---|---|---|---|"]
+    rows = []
+    for s, p in SETS:
+        sc = {arm: score(f"{s}_{p}_INDEL_{arm}_normbq", "INDEL") for arm in ("linear", "d9", "d46")}
+        rows.append(dict(set=f"{s}T {p}", scores=sc))
+        L.append(f"| {s}T {p} | " + " | ".join("-" if x is None else f"{x['best']:.3f} ({x['pass']:.3f})"
+                                              for x in sc.values()) + " |")
+    out["normbq_indel"] = rows
+
+    L += ["\n## `--norm dataset`: no ch6 on d46 (SNV three seeds each side; INDEL one seed)\n",
+          "| set | kind | with ch6: mean (range) | no ch6: mean (range) | change of the means | no ch6 below every with-ch6 seed |",
+          "|---|---|---|---|---|---|"]
+    rows = []
+    for k in ("SNV", "INDEL"):
+        for s, p in SETS:
+            if k == "SNV":
+                (wsc, w), (nsc, n) = three(f"{s}_{p}_SNV_d46_normbq", "SNV"), three(f"{s}_{p}_SNV_nopc_d46_normbq", "SNV")
+                key = "pass"
+                below = "-" if not (w[key] and n[key]) else ("yes" if n[key][2] < w[key][1] else "no")
+                L.append(f"| {s}T {p} | SNV (PASS) | {ms(w[key])} | {ms(n[key])} | "
+                         f"{'-' if not (w[key] and n[key]) else f'{n[key][0] - w[key][0]:+.3f}'} | {below} |")
+                rows.append(dict(set=f"{s}T {p}", kind=k, with_ch6=wsc, no_ch6=nsc))
+            else:
+                w, n = score(f"{s}_{p}_INDEL_d46_normbq", k), score(f"{s}_{p}_INDEL_nopc_d46_normbq", k)
+                L.append(f"| {s}T {p} | INDEL (best) | {f3(w and w['best'])} | {f3(n and n['best'])} | "
+                         f"{d3(w and w['best'], n and n['best'])} | - |")
+                rows.append(dict(set=f"{s}T {p}", kind=k, with_ch6=w, no_ch6=n))
+    out["normbq_no_ch6"] = rows
+
     (HERE / "summary.json").write_text(json.dumps(out, indent=1) + "\n")
     (HERE / "tables.md").write_text("\n".join(L) + "\n")
     print("\n".join(L))

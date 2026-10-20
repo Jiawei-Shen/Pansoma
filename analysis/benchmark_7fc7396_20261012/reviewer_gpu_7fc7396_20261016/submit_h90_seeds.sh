@@ -10,3 +10,6 @@ cd "$(git rev-parse --show-toplevel)"
 for seed in 1 2; do
   GPUS=1 MEM=192 KIND=SNV ris/snv_pipeline.sh COLO829_Illumina_SNV_h90_s$seed COLO829T_Illumina --norm train --seed $seed
 done
+# 2026-10-19 16:20: seed 0 again (the user: reproduce the 0.778 first). HG008_{PacBio,ONT}_SNV_7fc7396 (1 GPU,
+# 7fc7396) reproduced HG008_*_SNV_h90 (9d6bd8d) exactly (best epoch, threshold, TP / FP), so this should give 0.778.
+GPUS=1 MEM=192 KIND=SNV ris/snv_pipeline.sh COLO829_Illumina_SNV_h90_repro COLO829T_Illumina --norm train --seed 0

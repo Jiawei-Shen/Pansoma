@@ -11,8 +11,8 @@
 | COLO829_Illumina_SNV_7fc7396_ddp4_b1024_s1 | d9, 4 GPUs | 1,340 | 1,085 | 1,080 | 1,062 | representative_allele_is_germline_truth 169, confident_no_truth_allele 72, near_truth_allele_mismatch 15, residual_partial_somatic_truth 4 |
 | COLO829_Illumina_SNV_7fc7396_ddp4_b1024_s2 | d9, 4 GPUs | 1,900 | 1,659 | 1,612 | 1,603 | representative_allele_is_germline_truth 160, confident_no_truth_allele 108, near_truth_allele_mismatch 16, residual_partial_somatic_truth 4 |
 | COLO829_Illumina_SNV_h90 | d9, 1 GPU | 284 | 33 | 35 | 28 | representative_allele_is_germline_truth 169, confident_no_truth_allele 57, near_truth_allele_mismatch 19, residual_partial_somatic_truth 4 |
-| COLO829_Illumina_SNV_h90_s1 | d9, 1 GPU | not evaluated | | | | |
-| COLO829_Illumina_SNV_h90_s2 | d9, 1 GPU | not evaluated | | | | |
+| COLO829_Illumina_SNV_h90_s1 | d9, 1 GPU | 928 | 675 | 646 | 634 | representative_allele_is_germline_truth 176, confident_no_truth_allele 94, near_truth_allele_mismatch 8, residual_partial_somatic_truth 4 |
+| COLO829_Illumina_SNV_h90_s2 | d9, 1 GPU | 790 | 552 | 561 | 544 | representative_allele_is_germline_truth 148, confident_no_truth_allele 60, near_truth_allele_mismatch 18, residual_partial_somatic_truth 3 |
 | COLO829_Illumina_SNV_d46_7fc7396 | d46, 4 GPUs | 268 | 19 | 18 | 15 | representative_allele_is_germline_truth 191, confident_no_truth_allele 45, near_truth_allele_mismatch 11, residual_partial_somatic_truth 3 |
 | COLO829_Illumina_SNV_d46_7fc7396_s1 | d46, 4 GPUs | 725 | 494 | 485 | 483 | representative_allele_is_germline_truth 183, confident_no_truth_allele 47, near_truth_allele_mismatch 7, residual_partial_somatic_truth 3 |
 | COLO829_Illumina_SNV_d46_7fc7396_s2 | d46, 4 GPUs | 386 | 97 | 99 | 93 | representative_allele_is_germline_truth 229, confident_no_truth_allele 46, near_truth_allele_mismatch 8, residual_partial_somatic_truth 4 |

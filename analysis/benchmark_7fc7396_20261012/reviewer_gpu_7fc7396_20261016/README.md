@@ -57,7 +57,37 @@ threshold, best F1 of the chr1 curve beside it; INDEL: best F1, with the 71cb51a
     the two windows, 235 in all three), and 80 % of them have a d46 tensor of the same GRCh38 allele, which the d46
     seeds call 18 / 312 / 62 times. So both graphs make these candidates; how often a model calls the unlabelled ones
     varies between runs, on every seed with the 4-GPU d9 recipe. The 1-GPU recipe's seeds 1 and 2
-    (`submit_h90_seeds.sh`, `COLO829_Illumina_SNV_h90_s1` / `_s2`) test whether its 0.778 was one lucky seed.
+    (`submit_h90_seeds.sh`, `COLO829_Illumina_SNV_h90_s1` / `_s2`, current code) score 0.675 / 0.687 (best 0.712 /
+    0.724; chr1 somatic AP 0.729 / 0.729 against 0.725 for seed 0) with 646 / 561 unlabelled false calls (634 / 544 in
+    the windows): h90's 0.778 (35 unlabelled) was a lucky seed. Both recipes call the unlabelled tensors, the 4-GPU one
+    more (1,080-1,612 against 35-646; PASS mean 0.588 against 0.713), so the d9 arm keeps the matched 4-GPU recipe for
+    the comparison with d46 and GRCh38-only (both 4 GPUs), with this set flagged as recipe- and seed-sensitive. The
+    current code re-predicting h90 gives the same 159,277 p_somatic and the same 0.778 (`test_chr1_COLO829T_Illumina`,
+    `vcf_chr1_COLO829T_Illumina`): prediction and evaluation are not the difference.
+  - Seed 0 retrained exactly as h90 (`COLO829_Illumina_SNV_h90_repro`: 1 GPU, seed 0, current code, `--norm train`):
+    PASS 0.624 (best 0.671), 1,401 false calls (1,120 in the windows), chr1 somatic AP 0.740. Its trajectory matches
+    h90's (train loss equal to 4-5 digits every epoch, validation somatic F1 within 0.003; not bit for bit as
+    HG008_{PacBio,ONT}_SNV_7fc7396 reproduced their h90 runs: the epoch-1 loss already differs in the 8th digit), but
+    the checkpoint chosen differs: h90 took epoch 6 (validation F1 0.6871 against 0.6870 for epoch 8), the rerun
+    epoch 8 (0.6874 against 0.6858). The two epochs of one trajectory behave very differently on the unlabelled
+    window tensors (33 against 1,120 false calls), which validation never sees. So h90's 0.778 hangs on a 0.0001
+    validation margin between near-tied epochs; the 4-GPU d9 seeds all chose epoch 8.
+  - Resolved 2026-10-19 (user: "reproduce the high result first"):
+    - The 10-03 code (git worktree of 9d6bd8d, `ris/tools/train_at.sh`) retrained on today's data and caches
+      reproduces h90 bit for bit (`COLO829_Illumina_SNV_h90_at9d6bd8d`: every epoch, best epoch 6, all 159,277 chr1
+      p_somatic, PASS 0.7785 with 1,738 TP / 284 FP). Data, caches, image and evaluation are unchanged.
+    - One-epoch bisection (`ris/tools/train_epoch1.sh`): 9d6bd8d, 7fc7396, a01969d, a73114f give h90's epoch-1 loss;
+      f2a0e4e a third value; 689fc2f and later today's. With `--no-compile` (and `--micro-batches 2` to fit in eager
+      mode) 9d6bd8d and today's code are bit-identical: the logic is unchanged, and the difference is the kernels
+      torch.compile generates for the encoder's z-score once f2a0e4e wrote it with broadcast statistics (last-bit
+      differences that depend on the data; HG008T happened not to show them).
+    - Epoch sweep (`submit_epoch_sweep.sh`, `epoch_sweep.py` -> `epoch_sweep.md`; today's code, every epoch's
+      checkpoint scored): epochs 1-6 PASS 0.772-0.784 (268-340 false calls, 0-50 in the windows), epoch 6 0.779 /
+      286; from epoch 7 the model calls the unlabelled window tensors (1,161-1,401 false calls at epochs 7-9, 0.624-0.650)
+      while the validation F1 stays at 0.66-0.69; the pipeline keeps epoch 8 (validation F1 0.6874 against 0.6858).
+      Neither validation F1 nor AP (0.726 at epoch 8, the highest) can see the drift, because no validation tensor
+      lies outside the labels' confident region. Options (user decision): train / validate on such tensors, a
+      selection rule that does not rest on validation alone, or reporting this set over seeds.
   - Graph - linear, three-seed means: PASS +0.028 to +0.292 (HG008T +0.028 to +0.082, COLO829T +0.077 to +0.292),
     best +0.015 to +0.211 (HG008T +0.015 to +0.065, COLO829T +0.076 to +0.211); positive on every set for both graphs.
     The benchmark README's one-seed "0.06-0.31 after the PoN" becomes +0.03 to +0.29 (PASS) / +0.02 to +0.21 (best);
@@ -88,6 +118,29 @@ threshold, best F1 of the chr1 curve beside it; INDEL: best F1, with the 71cb51a
     agree within 0.001-0.009.
   - Model size on all blocks: 8.7 M 0.616 (0.632), 50.4 M 0.607 (0.616; seeds 0.604-0.611), 199.6 M 0.603 (0.608): no
     gain from capacity; the 8.7 M model is at or above the 50.4 M seed range (one run).
+
+## The reported models with `--norm dataset` (f344bca), `submit_normbq_all.sh` (running, 2026-10-20)
+
+The user: the seeds with the new `--norm` too, and whatever else needs it. 88 runs (job 197329-197505): d46 SNV seeds 1
+and 2 (seed 0 = `*_SNV_d46_normbq`), d9 SNV seeds 0-2 (4 GPUs), no ch6 on d46 (SNV seeds 0-2, INDEL), INDEL on the three
+arms, GRCh38-only SNV seeds 0-2. `tables.md` sections "`--norm dataset` ...". Done 2026-10-20 13:30: d46 and d9 seeds.
+
+d9 against d46, SNV, three seeds each (chr1, BED, after the PoN; PASS F1 mean (range), and the mean differences
+PASS / best F1; the `--norm train` differences of the Results above beside them):
+
+| set | d9 | d46 | d46 - d9 | with `--norm train` |
+|---|---|---|---|---|
+| HG008T Illumina | 0.588 (0.586-0.588) | 0.573 (0.566-0.585) | -0.015 / +0.004 | -0.011 / +0.004 |
+| HG008T PacBio | 0.586 (0.555-0.611) | 0.606 (0.603-0.609) | +0.021 / -0.001 | +0.015 / -0.005 |
+| HG008T ONT | 0.585 (0.575-0.598) | 0.596 (0.576-0.607) | +0.011 / -0.001 | +0.002 / +0.004 |
+| COLO829T Illumina | 0.587 (0.566-0.628) | 0.751 (0.705-0.782) | +0.164 / +0.092 | +0.163 / +0.091 |
+| COLO829T fiberseq | 0.771 (0.758-0.783) | 0.779 (0.773-0.788) | +0.009 / +0.007 | +0.012 / +0.007 |
+| COLO829T ONT | 0.747 (0.744-0.752) | 0.736 (0.726-0.753) | -0.011 / -0.008 | -0.017 / -0.014 |
+
+- In-sample the new normalization changes nothing: the d46 three-seed means are within 0.007 of `--norm train`'s,
+  seed by seed close too (its point is the cross-sample tests).
+- d9 and d46 are equal on five of six sets (best F1 within 0.008, PASS within the seed range); COLO829T Illumina is
+  again the 4-GPU d9 drift on the unlabelled tensors (0.566-0.628), which the normalization does not touch.
 
 ## Code updates while the jobs ran
 
