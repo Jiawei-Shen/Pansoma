@@ -126,7 +126,7 @@ We removed the HapMap mixture from the main benchmark and withdrew the HapMap-tr
 
 - Fiber-seq SNV F1 after population filtering, at one recall-0.9 validation threshold pooled over all purities, is 0.779 / 0.687 / 0.665 / 0.720 at 100 / 75 / 50 / 25% purity (95% block-bootstrap interval at 50%: 0.648–0.682; 547–705 graph-coordinate calls per purity are not scored; R3.4). The share of truth SNVs that any model can reach falls from 0.821 to 0.711; on chr1, 16.1% of truth SNVs at full purity and 26.9% at 25% purity lie below the 0.08 candidate allele-fraction floor.
 - The dip at 75 and 50% comes from the tumor's loss of heterozygosity: where the tumor lost the ALT copy of a germline heterozygous SNV, the admixed normal reads put that allele at (1 − purity)/2, inside the somatic allele-fraction range of those mixtures. The false positives at these two purities have a germline-like spectrum (cosine to the germline spectrum 0.788 and 0.768, against 0.536 at full purity).
-- In the Illumina and ONT mixtures, tumor- and normal-derived reads differ in base quality, a cue that a real tumor lacks, so those scores are likely optimistic. For Illumina INDELs, removing the cue (per-read base-quality centring) lowers the dilutions' test-tuned best F1 (upper bound) to 0.133–0.146, below the 100% sample (0.182), as expected if the cue had inflated them [待补: Illumina SNVs and ONT after removing this cue].
+- In the Illumina and ONT mixtures, tumor- and normal-derived reads differ in base quality, a cue that a real tumor lacks, so those scores are likely optimistic. For Illumina INDELs, removing the cue (per-read base-quality centring) lowers the dilutions' test-tuned best F1 (upper bound) to 0.133–0.146, below the 100% sample (0.182), as expected if the cue had inflated them. For Illumina SNVs, the dilutions' PASS F1 falls from 0.804–0.840 to 0.678–0.709 (precision from 0.97 to 0.68–0.74) [待补: ONT after removing this cue].
 
 [待补: dilutions of a second tumor not used in training (HCC1395)]
 
@@ -215,27 +215,56 @@ over three platforms; HG008T INDEL candidates include partial allele matches):
 
 **Response.**
 
-We agree that one melanoma line was too narrow a basis, and we report the requested numbers.
+We agree that the original model was unnecessarily large and that training on a single tumor was too narrow a basis
+for a general tumor-only caller. We reduced the model, report the training sets in full, measured the effect of
+training-set size and model capacity, and trained and tested across six tumors (details in the Supplementary block).
 
-*Model size.* The revised SNV network (ConvNeXt) has 50.4 M parameters, the INDEL network 8.7 M (Supplementary Methods); the original 199.6 M configuration overfitted (HG008T PacBio validation loss 0.51 to 2.16).
+*Model size and training data.* The revised SNV network has 50.4 M parameters and the INDEL network 8.7 M, against
+199.6 M in the original SNV configuration, which overfitted (HG008T PacBio validation loss rose from 0.51 to 2.16).
+Supplementary Table [待补: number] gives the examples per class for every model: SNV models see 7,098–7,274 (HG008T) or
+33,472–34,110 (COLO829T) somatic examples together with 256,583–381,159 germline and 67,735–1,620,829 other examples;
+INDEL models see 3,121–3,761 and 971–1,141 somatic examples. Every positive is an exact allele match.
 
-*Training examples.* Supplementary Table [待补: number] lists the examples per class for every model. On the pangenome graphs, SNV models see 7,098–7,274 (HG008T) or 33,472–34,110 (COLO829T) somatic, 256,583–381,159 germline and 67,735–1,620,829 non-variant examples; INDEL models see 3,121–3,761 (HG008T) and 971–1,141 (COLO829T) somatic examples. Every positive is an exact allele match, and each SNV positive is a different truth allele.
+*Data and capacity scaling* (HG008T PacBio, HPRC v2.1 graph). F1 after population filtering rises with diminishing
+gains, from 0.574 with 10% of the training blocks to 0.597 with half and 0.607 with all. Capacity matters little at this
+scale: networks of 8.7 M, 50.4 M and 199.6 M parameters reach 0.616, 0.604–0.611 (three seeds) and 0.603. The original
+configuration was therefore unnecessarily large, and the revised performance does not come from added capacity.
 
-*Capacity.* With about 7,000 parameters per HG008T somatic SNV example, the network can fit its training set (final training loss 0.002–0.139), so generalisation rests on early stopping on held-out node blocks (best epochs 4–12 of 20). On HG008T PacBio (HPRC v2.1), F1 after population filtering rises from 0.574 with 10% of the training blocks to 0.597 with half and 0.607 with all (two replicates per fraction), and 8.7 M and 199.6 M networks reach 0.616 and 0.603, against 0.604–0.611 for 50.4 M over three seeds: accuracy gains little from more data and nothing from capacity.
+*Tumor diversity and cross-tumor generalization.* We added two breast (HCC1395, HCC1954) and two lung adenocarcinoma
+lines (H1437, H2009), three platforms each (R1.m1), whose substitution spectra differ from COLO829T's UV-dominated one
+(C>G-enriched HCC1395, C>A-enriched H1437 and H2009). Cross-tumor tests confirm the reviewer's concern for single-tumor
+models: COLO829T-trained models transfer poorly to HG008T (SNV F1 0.359 / 0.557 / 0.487 against 0.570 / 0.605 / 0.575
+for HG008T's own models, Illumina / PacBio / ONT) and preferentially recover UV-context substitutions (on HG008T,
+recall 0.493–0.841 for UV-context C>T against 0.016–0.129 for T>C). We no longer claim that a model trained on one tumor
+transfers in general.
 
-*Tumor diversity.* COLO829T positives are 71% C>T, 65% at dipyrimidines (UV); HG008T positives are 41% C>T, 19% C>A and 8.4% C>G at TCW. We added two breast (HCC1395, HCC1954) and two lung adenocarcinoma lines (H1437, H2009), three platforms each, processed identically (R1.m1). They add APOBEC-like (HCC1395: 24–25% C>G) and tobacco-like processes (H1437, H2009: 42% and 38% C>A).
+*Multi-tumor training.* A model trained on HCC1395 and the three CASTLE lines reaches SNV F1 0.605 / 0.614 / 0.587 on
+HG008T, which it never saw, above HG008T's own models; adding HG008T and COLO829T (without chr1) to training brings the
+UV-driven COLO829T to 0.755 / 0.774 / 0.737, close to its own models (0.783 / 0.779 / 0.736). [待定: the multi-tumor
+model as Pansoma's default model, single-tumor models as an ablation]
 
-*Tumor specificity, a first direct test (preliminary).* We applied each HPRC v2.1 SNV model to chr1 of tumors it was not trained on, at the recall-0.9 validation threshold of its own training tumor (F1 after population filtering, benchmark BED, one training run; Supplementary Table [待补]):
+**Supplementary (R1.7).**
 
-- Models trained on HG008T (pancreatic; about 7,200 somatic examples) reach 0.708, 0.754 and 0.630 on COLO829T (Illumina, PacBio HiFi / Fiber-seq, ONT), 0.024–0.106 below COLO829T's own models (paired block-bootstrap intervals exclude zero), 0.689–0.790 on HCC1395 and 0.787–0.937 on the lung lines H1437 and H2009. Their true positives keep each target's spectrum (R3.5).
-- Models trained on COLO829T reach 0.359, 0.557 and 0.487 on HG008T (its own models: 0.570, 0.605, 0.575). They lose partly through the transferred threshold (HCC1395 Illumina: recall 0.157 at precision 0.934; test-tuned best F1 0.810) and partly, it appears, through a UV preference: on HG008T they recall 0.493–0.841 of UV-context C>T but 0.016–0.129 of T>C (HG008T's own models: 0.905–0.925 and 0.613–0.645).
-- On HCC1954 every model has low precision (0.22–0.37): 93–99% of the false positives are germline alleles of its matched normal, while its truth set shows no germline content, so the models let germline variants of this line through (R1.m1).
-
-These models standardise base and mapping qualities by the training tumor's statistics. [待补: the same tests with base quality standardised per dataset (R3.m1)]
-
-*Multi-tumor models* (one run each, HPRC v2.1, three platforms; Supplementary Table [待补]). Trained on HCC1395 (without chr1 and chr20) and the three CASTLE lines, a model reaches SNV F1 0.845 / 0.820 / 0.658 on HCC1395 chr1 (Illumina / PacBio / ONT), against at most 0.790 / 0.741 / 0.689 for a single-tumor model of another line, and 0.605 / 0.614 / 0.587 on the unseen HG008T, above HG008T's own models (0.570 / 0.603 / 0.575; higher precision, lower recall). On the unseen, UV-driven COLO829T it reaches 0.671 / 0.595 / 0.380 through lower recall; adding HG008T and COLO829T (without chr1) to training restores 0.755 / 0.774 / 0.737 (its own models: 0.783 / 0.779 / 0.736). [待补: leave-one-line-out of the CASTLE lines]
-
-*Augmentation.* Joint COLO829T models add in-silico purity dilutions (75, 50, 25%; R1.5). [待补: Illumina SNVs and ONT after removing a read-source base-quality cue (R1.5; done for Illumina INDELs)]
+- *Spectra of the training tumors.* COLO829T positives are 71% C>T, 65% at dipyrimidines; HG008T positives are 41% C>T,
+  19% C>A and 8.4% C>G at TCW; HCC1395 24–25% C>G; H1437 and H2009 42% and 38% C>A.
+- *Training.* Early stopping on held-out chr2–22 node blocks (best epochs 4–12 of 20). Learning curve: two replicates per
+  fraction of the training blocks; the 8.7 M and 199.6 M networks are single runs.
+- *Single-tumor models across tumors* (HPRC v2.1, chr1, F1 after population filtering at the recall-0.9 validation
+  threshold of the training tumor, benchmark BED; Supplementary Table [待补]). Models trained on HG008T (about 7,200
+  somatic examples) reach 0.708, 0.754 and 0.630 on COLO829T (Illumina, PacBio HiFi / Fiber-seq, ONT), 0.024–0.106 below
+  COLO829T's own models (paired block-bootstrap intervals exclude zero), 0.689–0.790 on HCC1395 and 0.787–0.937 on H1437
+  and H2009; their true positives keep each target's spectrum (R3.5). COLO829T-trained models lose partly through the
+  transferred threshold (HCC1395 Illumina: recall 0.157 at precision 0.934; test-tuned best F1 0.810) and partly through
+  the UV preference above (HG008T's own models: 0.905–0.925 for UV-context C>T, 0.613–0.645 for T>C). On HCC1954 every
+  model has low precision (0.22–0.37): 93–99% of the false positives are germline alleles of its matched normal, while its
+  truth set shows no germline content (R1.m1). These models standardise base and mapping qualities by the training
+  tumor's statistics. [待补: the same tests with base quality standardised per dataset (R3.m1)]
+- *Multi-tumor models* (one run each; Supplementary Table [待补]). Trained on HCC1395 (without chr1 and chr20), HCC1954,
+  H1437 and H2009, the model reaches 0.845 / 0.820 / 0.658 on HCC1395 chr1 (Illumina / PacBio / ONT), against at most
+  0.790 / 0.741 / 0.689 for a single-tumor model of another line; on HG008T it has higher precision and lower recall than
+  HG008T's own models; on COLO829T, unseen, it reaches 0.671 / 0.595 / 0.380, through lower recall.
+- *Augmentation.* Joint COLO829T models add in-silico purity dilutions (75, 50, 25%; R1.5). [待补: ONT after removing a
+  read-source base-quality cue (R1.5; done for Illumina)]
 
 ### R1.8 Construction of the training set
 
@@ -274,7 +303,7 @@ We added HCC1395 (SEQC2 truth v1.2.1, 41,072 somatic alleles) and three CASTLE l
 
 *HCC1395 chr1 with models that never saw HCC1395* (preliminary: one training run, earlier quality normalization; 3,440 somatic SNVs in the benchmark region; F1 after population filtering at the recall-0.9 validation threshold of the training tumor; R1.7): models trained on HG008T reach 0.790 (Illumina), 0.698 (PacBio) and 0.689 (ONT); models trained on COLO829T (Fiber-seq for PacBio) reach 0.269, 0.741 and 0.621. Their test-tuned best F1 (upper bound) is 0.810, 0.819 and 0.691, so most of their shortfall comes from the transferred threshold, and part from a UV preference learned on COLO829T.
 
-*CASTLE lines, chr1* (preliminary; same models and protocol): models trained on HG008T reach 0.787–0.937 on H1437 and H2009, and models trained on COLO829T 0.454–0.809, again losing mostly at the transferred threshold (test-tuned best F1 0.828–0.950). On HCC1954 every model has low precision (0.22–0.37): 93–99% of these false positives are germline alleles of its matched normal, while its truth set shows no germline content (2.4% common population alleles, no loss of heterozygosity in the normal), so this is germline leakage by our models, not a truth artefact. The H1437 truth, in contrast, includes about 30% germline alleles that its B-lymphoblastoid normal lost through loss of heterozygosity (chr9q, chr1:9–12 Mb), which explains the line's candidate coverage of about 70%; on chr1, our test chromosome, they are negligible (R2.2). A multi-tumor model trained on HCC1395 (without chr1 and chr20) and the three CASTLE lines reaches SNV F1 0.845 / 0.820 / 0.658 on HCC1395 chr1 (Illumina / PacBio / ONT; 0.850 / 0.825 / 0.730 with HG008T and COLO829T also in training), above every single-tumor model of another line, and generalises to HG008T, which it never saw (0.605 / 0.614 / 0.587; R1.7). Under the same protocol on HCC1395 chr1, DeepSomatic-TO, whose models were trained on HCC1395 with chr1 held out, reaches 0.848 / 0.839 / 0.760, and ClairS-TO, which never saw HCC1395, 0.832 / 0.814 / 0.760: Pansoma is level with DeepSomatic-TO on Illumina and 0.014 / 0.030 below it on PacBio / ONT, and above ClairS-TO except on ONT. On HG008T, which none of the three was trained on, the multi-tumor model is above both (DeepSomatic-TO 0.457–0.557, ClairS-TO 0.552–0.591). For INDELs DeepSomatic-TO leads on HCC1395 (best F1 0.519–0.672 against 0.255–0.662). [待补: leave-one-line-out of the CASTLE lines]
+*CASTLE lines, chr1* (preliminary; same models and protocol): models trained on HG008T reach 0.787–0.937 on H1437 and H2009, and models trained on COLO829T 0.454–0.809, again losing mostly at the transferred threshold (test-tuned best F1 0.828–0.950). On HCC1954 every model has low precision (0.22–0.37): 93–99% of these false positives are germline alleles of its matched normal, while its truth set shows no germline content (2.4% common population alleles, no loss of heterozygosity in the normal), so this is germline leakage by our models, not a truth artefact. The H1437 truth, in contrast, includes about 30% germline alleles that its B-lymphoblastoid normal lost through loss of heterozygosity (chr9q, chr1:9–12 Mb), which explains the line's candidate coverage of about 70%; on chr1, our test chromosome, they are negligible (R2.2). A multi-tumor model trained on HCC1395 (without chr1 and chr20) and the three CASTLE lines reaches SNV F1 0.845 / 0.820 / 0.658 on HCC1395 chr1 (Illumina / PacBio / ONT; 0.850 / 0.825 / 0.730 with HG008T and COLO829T also in training), above every single-tumor model of another line, and generalises to HG008T, which it never saw (0.605 / 0.614 / 0.587; R1.7). Under the same protocol on HCC1395 chr1, DeepSomatic-TO, whose models were trained on HCC1395 with chr1 held out, reaches 0.848 / 0.839 / 0.760, and ClairS-TO, which never saw HCC1395, 0.832 / 0.814 / 0.760: Pansoma is level with DeepSomatic-TO on Illumina and 0.014 / 0.030 below it on PacBio / ONT, and above ClairS-TO except on ONT. On HG008T, which none of the three was trained on, the multi-tumor model is above both (DeepSomatic-TO 0.457–0.557, ClairS-TO 0.552–0.591). For INDELs DeepSomatic-TO leads on HCC1395 (best F1 0.519–0.672 against 0.255–0.662).
 
 How we use these lines follows from how the comparators were trained.
 
@@ -282,7 +311,7 @@ How we use these lines follows from how the comparators were trained.
 - HCC1395 has a truth set independent of both tools (SEQC2). ClairS-TO excluded it from training; DeepSomatic held out its chr1 only, whereas our models above never saw HCC1395. HCC1395 chr1 is therefore our main external comparison, together with HG008T, on which neither tool was trained.
 - The SEQC2 and CASTLE truth sets likely omit many INDELs in long homopolymers and STRs (15.5% of SEQC2 INDELs lie in homopolymers of ≥ 7 bp, against 74.9% for HG008T), so unmatched INDEL candidates in such repeats are not used as negatives on these lines (R2.2) and their INDEL results are reported separately.
 
-We have not added HCC1937 and Hs578T, the other two lines of the DeepSomatic study. [待补: the reason]
+We have not added HCC1937 and Hs578T, the other two lines of the DeepSomatic study: both are breast cancer lines, a type already represented by HCC1395 and HCC1954, and each further line adds three platforms of data to every training run.
 
 ### R1.m2 Tensor windows truncated at node boundaries
 
