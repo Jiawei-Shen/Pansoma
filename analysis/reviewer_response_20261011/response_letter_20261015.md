@@ -225,23 +225,25 @@ Supplementary Table [待补: number] gives the examples per class for every mode
 33,472–34,110 (COLO829T) somatic examples together with 256,583–381,159 germline and 67,735–1,620,829 other examples;
 INDEL models see 3,121–3,761 and 971–1,141 somatic examples. Every positive is an exact allele match.
 
-*Data and capacity scaling* (HG008T PacBio, HPRC v2.1 graph). F1 after population filtering rises with diminishing
-gains, from 0.574 with 10% of the training blocks to 0.597 with half and 0.607 with all. Capacity matters little at this
-scale: networks of 8.7 M, 50.4 M and 199.6 M parameters reach 0.616, 0.604–0.611 (three seeds) and 0.603. The original
-configuration was therefore unnecessarily large, and the revised performance does not come from added capacity.
+*Data and capacity scaling* (HG008T PacBio SNVs, HPRC v2.1 graph). F1 after population filtering rises with
+diminishing gains, from 0.574 with 10% of the training blocks to 0.597 with half and 0.607 with all. Increasing capacity
+gives no measurable benefit: networks of 8.7 M, 50.4 M and 199.6 M parameters reach 0.616, 0.604–0.611 (three seeds) and
+0.603. Network sizes follow the amount of training data: INDEL models, with 2–35 times fewer somatic examples, use the
+8.7 M network, which on HG008T Illumina outperformed the original large configuration trained with the same recipe (PASS
+F1 0.243 against 0.187, through precision); for SNVs, the choice between 8.7 M and 50.4 M does not drive the results.
+Together with the overfitting of the original model, these results motivated the reduction in capacity.
 
 *Tumor diversity and cross-tumor generalization.* We added two breast (HCC1395, HCC1954) and two lung adenocarcinoma
 lines (H1437, H2009), three platforms each (R1.m1), whose substitution spectra differ from COLO829T's UV-dominated one
 (C>G-enriched HCC1395, C>A-enriched H1437 and H2009). Cross-tumor tests confirm the reviewer's concern for single-tumor
 models: COLO829T-trained models transfer poorly to HG008T (SNV F1 0.359 / 0.557 / 0.487 against 0.570 / 0.605 / 0.575
-for HG008T's own models, Illumina / PacBio / ONT) and preferentially recover UV-context substitutions (on HG008T,
-recall 0.493–0.841 for UV-context C>T against 0.016–0.129 for T>C). We no longer claim that a model trained on one tumor
+for HG008T's own models, Illumina / PacBio / ONT) and show strongly context-dependent recall (on HG008T,
+0.493–0.841 for UV-context C>T against 0.016–0.129 for T>C), consistent with a tumor-specific bias. We no longer claim that a model trained on one tumor
 transfers in general.
 
-*Multi-tumor training.* A model trained on HCC1395 and the three CASTLE lines reaches SNV F1 0.605 / 0.614 / 0.587 on
+*Multi-tumor training improves generalization.* A model trained on HCC1395 and the three CASTLE lines reaches SNV F1 0.605 / 0.614 / 0.587 on
 HG008T, which it never saw, above HG008T's own models; adding HG008T and COLO829T (without chr1) to training brings the
-UV-driven COLO829T to 0.755 / 0.774 / 0.737, close to its own models (0.783 / 0.779 / 0.736). [待定: the multi-tumor
-model as Pansoma's default model, single-tumor models as an ablation]
+UV-driven COLO829T to 0.755 / 0.774 / 0.737, close to its own models (0.783 / 0.779 / 0.736).
 
 **Supplementary (R1.7).**
 
