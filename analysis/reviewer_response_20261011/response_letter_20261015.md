@@ -304,51 +304,61 @@ on six tumors keeps the performance on a training tumor's held-out chromosome, n
 
 **Response.**
 
-We thank the reviewer and agree that the original description of the training set was insufficient. The revised
-Methods and a Supplementary Note describe it in full; in brief:
+We thank the reviewer and agree that the original description of the training set was insufficient. The revised Methods
+and a Supplementary Note describe it in full. Because no somatic small-variant caller works on pangenome alignments yet
+(R1.4), there is no established convention for labelling candidates on a graph. We therefore made every choice explicit
+and conservative, and anchored every label to the GRCh38 path, on which current somatic benchmarks are defined: somatic
+positives require exact allele identity, representations that differ between graph and linear reference are excluded
+rather than forced into a label, and germline variants and other candidates are explicit classes.
 
-*Positions are defined on the GRCh38 path of the graph.* The HPRC graphs embed GRCh38 as a path, and every base of a
-node on this path has exactly one GRCh38 coordinate, so positions on the path and on the linear GRCh38 reference
-correspond one to one. For an SNV, the truth position gives the node on the GRCh38 path and the offset within it; a
-candidate exists there when the reads aligned to that node carry the ALT base as a mismatch, and its tensor is built
-from these aligned reads. An INDEL is located in the same way, by its node and start offset on the GRCh38 path, and
-extended along the reads' alignment, now also across several nodes (a deletion over several nodes is one candidate).
-Candidate INDELs are left-aligned in graph coordinates and truth INDELs in repeats are matched at every equivalent
-placement (up to 5,000), so a match does not depend on where in a repeat either side writes the INDEL. Reads that pass
-through nodes off the GRCh38 path at a site do not change this: each read row of the tensor records the graph base and
-the haplotype path count of the node that read is aligned to. A tensor is somatic only when its representative allele
-equals a truth allele; partial matches (allele or read-haplotype overlap above 0.45) are not used for training.
+*Positions are defined on the GRCh38 path of the graph.* The HPRC graphs embed GRCh38 as a path. Every node that this
+path traverses once, in either orientation, gives each of its bases one GRCh38 coordinate (a node it traverses more than
+once is treated as off the path), so positions on the path and on the linear GRCh38 reference correspond one to one. For
+an SNV, the truth position gives the node on the GRCh38 path and the offset within it; a candidate exists there when the
+reads aligned to that node carry the ALT base as a mismatch, and its tensor is built from these aligned reads. An INDEL
+is located in the same way, by its node and start offset on the GRCh38 path, and extended along the reads' alignment,
+now also across several nodes (a deletion over several nodes is one candidate). Candidate INDELs are left-aligned along
+each read's alignment in forward node coordinates (the VCF convention), and truth INDELs in repeats are converted to
+node keys at every equivalent placement (up to 5,000), so a match does not depend on where in a repeat the candidate's
+left-alignment stops. Reads that pass through nodes off the GRCh38 path at a site do not change this: each read row of
+the tensor records the graph base and the haplotype path count of the node that read is aligned to. A tensor is somatic
+only when its representative allele equals a truth allele.
 
-*Coverage of the positive set.* A truth allele that is itself a graph path gives no mismatch and therefore no candidate;
-this is the absorption discussed in R1.4, where population filtering tags 96.7–98.3% of these INDELs on the HPRC v2.1
-graph. Apart from this, the projection itself neither moves nor reshapes any allele. In the training region, 94.8–95.9%
-(HG008T) and 89.5–90.5% (COLO829T) of truth SNVs stand behind a training example on the HPRC graphs (GRCh38-only graph:
-98.5–98.7% and 90.1–91.4%); most of the COLO829T remainder, on every graph, is low-allele-fraction SNVs below the
-candidate floor (allele fraction 0.08, three ALT reads). Among truth INDELs that population filtering keeps, the HPRC
-graphs give a tensor to 1.7–7.7% fewer than the GRCh38-only graph (R1.4). Supplementary Table [待补] gives the status of
-every truth allele.
+*Coverage of the positive set.* Positives are lost mostly before labelling, at candidate generation: a truth allele that
+is itself a graph path gives no mismatch and therefore no candidate (the absorption discussed in R1.4; on the HPRC v2.1
+graph, population filtering tags 96.7–98.3% of these INDELs). The projection does not force an ambiguous representation
+into a positive label: non-exact matches (allele or read-haplotype overlap above 0.45) are recorded as partial and
+excluded from training. In the training region, 94.8–95.9% (HG008T) and 89.5–90.5% (COLO829T) of truth SNVs stand behind
+a training example on the HPRC graphs (GRCh38-only graph: 98.5–98.7% and 90.1–91.4%); most of the COLO829T remainder, on
+every graph, is low-allele-fraction SNVs below the candidate floor (allele fraction 0.08, three ALT reads). Among truth
+INDELs that population filtering keeps, the HPRC graphs give a tensor to 1.7–7.7% fewer than the GRCh38-only graph
+(R1.4). Supplementary Table [待补] gives the status of every truth allele.
 
 *Graph-only positions.* The original manuscript gave such positions GRCh38 coordinates indirectly, through neighbouring
-1-bp nodes. The new tensors no longer need this: a candidate is identified by its node and offset in the graph, and its
-tensor is built from the reads aligned there. A candidate on a node off the GRCh38 path has no GRCh38 truth allele to be
-compared with and is not used as a training example; its calls are reported in graph coordinates (R3.3, R3.4).
+1-bp nodes. The new pipeline assigns them no GRCh38 coordinate: a candidate is identified by its node and offset in the
+graph, and its tensor is built from the reads aligned there. A candidate on a node off the GRCh38 path has no GRCh38
+truth allele to be compared with and is not used as a training example; its calls are reported in graph coordinates
+(R3.3, R3.4).
 
 *Three labels.* The model learns germline variants and sequencing or alignment errors as two explicit classes:
 
 1. *Somatic*: an exact match to a somatic truth allele.
 2. *Germline*: a match to the matched normal's truth set (HG008-N and COLO829BL assembly calls; DeepVariant calls with
    QUAL ≥ 10 for the SEQC2 and CASTLE normals), for INDELs also an allele overlap above 0.45, such as a one-base length
-   difference in a homopolymer; 256,583–381,159 germline SNV examples per pangenome model.
-3. *Other*: no matching truth allele inside the confident region (sequencing and alignment errors, including errors
-   next to true variants).
+   difference in a homopolymer; 256,583–381,159 germline SNV examples per pangenome model. Such an INDEL is typically
+   the germline variant with a different repeat length, so it is labelled germline rather than other, a negative either
+   way, whereas a somatic positive requires exact allele identity (excluding partial somatic matches raised HG008T
+   Illumina's best F1 from 0.623 to 0.665 in an earlier model version).
+3. *Other*: no matching truth allele inside the confident region (mostly sequencing and alignment errors, including
+   errors next to true variants).
 
 Not used for training are tensors without a truth match outside the confident region, tensors off the GRCh38 path and
 partial somatic matches; these criteria replace the term "determinable".
 
 *VAF and purity.* Each tumor keeps its observed allele-fraction distribution (median somatic SNV allele fraction
-0.53–0.54 for HG008T, 0.46–0.51 for COLO829T). To cover lower purities, we built in-silico COLO829T mixtures of 75%,
-50% and 25% tumor (three platforms; median somatic SNV allele fraction 0.40, 0.28 and 0.15 on Illumina) and trained
-joint models on all four purities, evaluated per purity in R1.5.
+0.53–0.54 for HG008T, 0.46–0.51 for COLO829T). To cover lower purities, we built in-silico COLO829T mixtures of 75%, 50%
+and 25% tumor (three platforms; median somatic SNV allele fraction 0.40, 0.28 and 0.15 on Illumina) and trained joint
+models on all four purities, evaluated per purity in R1.5.
 
 ### R1.m1 Additional benchmarks
 
