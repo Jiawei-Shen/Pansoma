@@ -31,10 +31,10 @@
 | R1.3 | 困难区域；ONT 的歧义 | 部分解决 | E10：GRCh38-only 在 extreme 区域的 FP 更多；E9a / E9c：ONT 的 graph-coordinate calls 主要是人群 allele 和 germline；E11b：ONT 在 v2.1 上放错更多；10-20 分 SMaHT 区的配对 bootstrap（E16 `e16_strata.py`）：HG008T easy 区 6 对都含 0，COLO829T easy 区 +0.053 到 +0.154，extreme 区 precision 增益 12 对里 10 对不含 0 | 决定：GIAB 分层是否下载、rescue 默认值 |
 | R1.4 | 图吸收已有的 somatic | 部分解决 | 10-20 改成技术性反驳（不是 fatal：tumor-only 用 population 信息换 precision 的固有 trade-off，Pansoma 只是把一部分压制提前到 candidate 生成；ClairS-TO 默认 PoN 标掉更多 truth INDEL；没有在 pangenome 比对上做 somatic calling 的现成 caller）；E5b：被吸收的 truth 中 95.5–100% 本来就会被 PoN 标掉；E1.6：三个参考臂 INDEL 都叫出 24–27%；E9h；E8c（10-20）：DeepSomatic-TO / ClairS-TO 在吸收位点上 PASS 882 对里只有 7 对，PoN 后 0 | E6 / E25 不做（10-20），写成 future work |
 | R1.5 | HapMap mixture 和数据泄漏 | 部分解决 | 没有泄漏：原稿 HapMap 跑在去掉 6 个 donor 的 `mgi_non_HG005.d9` 上（用户 10-20 确认），Response 改成直接反驳；COLO829T dilution（fiberseq 干净），LOH 解释了 P75 / P50 的低谷 | 决定：HapMap 去留（重跑 OOM 失败）；GPU：BQ 伪影修好后重训 |
-| R1.6 | sensitivity 低 | 部分解决 | E1.6 漏斗：HG008T SNV 叫出 82–85%；COLO829T 有 17–18% 低于 0.08 的 AF 下限；PoN 的 INDEL 上限 0.35 | 同步：比较器重新打分 |
-| R1.7 | 训练规模、肿瘤多样性 | 部分解决 | E21；E12a：HG008T 模型在 COLO829T / HCC1395 / H1437 / H2009 上 0.63–0.94；COLO829T 模型带 UV 偏好；E13（10-19 RIS）：训练数据 10% → 100% 时 F1 从 0.574 升到 0.607，后一半只多 0.010；8.7 M / 50.4 M / 199.6 M 分别是 0.616 / 0.604–0.611 / 0.603 | GPU：normbq（f344bca，RIS 在跑）之后的跨样本、LOLO；multicancer ONT 重新预测（pansoma-3c） |
+| R1.6 | sensitivity 低 | 部分解决 | E1.6 漏斗：HG008T SNV 叫出 82–85%；COLO829T 有 17–18% 低于 0.08 的 AF 下限；PoN 的 INDEL 上限 0.35；10-20 第一段改成同一协议下的对比（HG008T 差距小，COLO829T DeepSomatic-TO Illumina 领先，INDEL Pansoma 最高） | - |
+| R1.7 | 训练规模、肿瘤多样性 | 部分解决 | E21；E12a：HG008T 模型在 COLO829T / HCC1395 / H1437 / H2009 上 0.63–0.94；COLO829T 模型带 UV 偏好；E13（10-19 RIS）：训练数据 10% → 100% 时 F1 从 0.574 升到 0.607，后一半只多 0.010；8.7 M / 50.4 M / 199.6 M 分别是 0.616 / 0.604–0.611 / 0.603 | E12b 修正后重新预测完成（10-20，ONT 已补：HCC1395T 0.658，HG008T 0.587）；GPU：normbq checkpoint 的跨样本预测、LOLO |
 | R1.8 | 训练集怎么构建 | **已解决** | 标签规则和代码出处；E21 覆盖所有 set；E9h | 只剩改稿 |
-| R1.m1 | 补充 benchmark（HCC1395、CASTLE） | 部分解决 | E12a：在 HCC1395 和 CASTLE 三株上的跨样本结果；E22：H1437 truth 约 30% 是 LOH 带进来的 germline，HCC1954 的 truth 没问题 | GPU：HCC1395 / CASTLE 的 in-sample 模型；同步：比较器 |
+| R1.m1 | 补充 benchmark（HCC1395、CASTLE） | 部分解决 | E12a：在 HCC1395 和 CASTLE 三株上的跨样本结果；E22：H1437 truth 约 30% 是 LOH 带进来的 germline，HCC1954 的 truth 没问题；E12b + HCC1395T 比较器（10-20）：SNV 和 DeepSomatic-TO 打平（Illumina）或低 0.014–0.030（长读长），INDEL DeepSomatic-TO 领先 | GPU：LOLO；用户：为什么没加 HCC1937 / Hs578T |
 | R1.m2 | tensor 窗口在 node 边界截断 | **已解决** | 跨 node 的 tensor 已实现；E1.1；10-20 Supplementary Fig. R1.m2（一个 somatic SNV 的 tensor：ALT reads 走 10–12 条 haplotype 的分支节点，REF reads 走 89 条的） | 只剩改稿 |
 | R2.1 | 为什么纳入 HapMap | 部分解决 | E8b 核实的事实；dilution 作替代 | 决定：HapMap 去留 |
 | R2.2 | truth set 怎么来的 | 部分解决 | E8b 按原始文献核实；E22：H1437 的 LOH germline，HCC1954 的 truth 没问题 | 决定：HG008 v0.2 还是 v0.3、rule (a)、H1437 怎么处理 |
@@ -158,7 +158,7 @@
 | E5b_absorbed_d46 | 被图吸收的 truth；linear 能否叫回 | R1.4、R3.2 |
 | E7_graph_composition | in-silico 图组成（v1.1 89 条、v2.1 463 条 haplotype）；近亲检查（两版） | R1.2、R3.m3 |
 | E8b_literature_facts | 文献和资源事实 | 多条 |
-| E8_comparators | 已取消；打分脚本保留 | R3.m2 |
+| E8_comparators | 比较器在 Pansoma 协议下重新打分（HG008T、COLO829T 用户已有 run；HCC1395T 10-19/20 在 tequila 新跑） | R3.m2、R1.6、R1.m1 |
 | E9a_unplaced_projection | graph-coordinate calls 投影到 GRCh38 | R3.4、R1.3 |
 | E9c_offref_filter_validation | graph PoN 和组装验证 | R3.3、R3.4 |
 | E9h_offref_key_reads | 用 reads 核实 off-ref key | R1.1、R3.3、R3.4 |
@@ -614,23 +614,23 @@ the loss. We respectfully disagree, however, that it is a fatal methodological i
 every tumor-only caller pays when it uses population information to remove germline variants. What differs in Pansoma
 is where part of this suppression happens: at candidate generation, rather than at population filtering.
 
-*The absorbed alleles are population alleles* (HPRC v1.1 graph, d9 filter; patient assemblies; R3.7). The ALT reads of
-2,478 HG008T truth alleles (26.8% of truth INDELs) and 497 COLO829T alleles (22.5%) align perfectly to an existing path.
-Only 4.4% and 6.8% of them are the patient's germline allele; 84–87% are carried only by other HPRC individuals.
-Population filtering of the kind used by tumor-only callers tags 98.5–99.0% of these SNVs and 95.0–97.7% of these
-INDELs (R2.6). The part specific to the graph, absorbed but not tagged, is 1.2% of HG008T and 0.5% of COLO829T truth
-INDELs (0.2–0.7% on the HPRC v2.1 graph, d46 filter), and 0–2 INDELs per dataset in the scored region.
+*The absorbed alleles are population alleles.* On the HPRC v2.1 graph (d46 filter), 1,467 HG008T and 347 COLO829T truth
+INDELs (and 140 and 54 truth SNVs) get no candidate on at least one platform although a graph path spells their ALT (a
+strict test, so a lower bound). Population filtering of the kind used by tumor-only callers tags 96.7–98.3% of these
+INDELs and all of these SNVs (R2.6). The part specific to the graph, absorbed but not tagged, is 0.6% of HG008T and 0.3%
+of COLO829T truth INDELs, and 1–2 INDELs per dataset in the scored region. The HPRC v1.1 graph (d9 filter) of the
+original submission is similar (1.2% and 0.5% by a read-level test).
 
 *Linear tumor-only callers lose the same alleles at filtering.* Our filter uses the four resources ClairS-TO uses by
 default; ClairS-TO's own default rule tags even more truth INDELs (HG008T: 87.1% against our 62.7%). At the alleles the
-HPRC v1.1 graph absorbs on chr1 (4–14 SNVs and 19–136 INDELs per dataset), DeepSomatic-TO and ClairS-TO emit a record
-for many of the INDELs (4–85%), but their own filters pass 7 of 882 allele–caller pairs, and after population filtering
-none. DeepSomatic's tumor-only models also give the network population allele frequencies as an input channel, the
-role our haplotype-count channel plays.
+HPRC v2.1 graph absorbs on chr1 (2–108 INDELs and 3–10 SNVs per dataset, HCC1395 included), DeepSomatic-TO and ClairS-TO
+emit a record for many of the INDELs (3–100%), but their own filters pass 9 of 780 allele–caller pairs, and after
+population filtering one (on v1.1: 7 of 882, and none). DeepSomatic's tumor-only models also give the network
+population allele frequencies as an input channel, the role our haplotype-count channel plays.
 
 *End to end, the trade-off favours the graph.* Against a GRCh38-only graph with the same reads and code (chr1–22), the
 HPRC graphs give a tensor to 0.2–0.6% fewer truth SNVs and 1.7–7.7% fewer truth INDELs that filtering would keep, and
-absorption explains only a small part of this (HG008T v1.1: 35 / 30 / 16 of 461 / 550 / 276 INDELs). In exchange they
+absorption explains only a small part of this (HG008T, v2.1: 38 / 31 / 19 of the 446 / 542 / 268 untagged INDELs lost). In exchange they
 produce 84–91% fewer germline candidates (R1.2). After filtering, 24–27% of truth INDELs are called on every reference,
 SNV F1 is higher on both HPRC graphs for all six datasets, and INDEL F1 on all six at the validation best-F1 threshold
 (at the recall-0.9 threshold the GRCh38-only graph is higher on the four long-read datasets, where every reference
@@ -646,6 +646,21 @@ population-based tumor-only calling, and describe candidate generation on altern
 
 **证据（内部）。**
 
+- 2026-10-20 用户："Only 4.4% and 6.8% ... carried only by other HPRC individuals 这个可以不用加" → 删掉病人组装那半句（2,478 / 497、4.4 % / 6.8 %、84–87 %），只留 v1.1 "is similar (1.2% and 0.5% by a read-level test)"。数据仍在 R3.7 和下面的证据里。
+- 2026-10-20 用户问 "为什么不直接以 v2.1 为主?" → "absorbed alleles" 和 "linear callers" 两段改成 v2.1 在前、v1.1（原稿的图）在后。原因：原来
+  R1.4 围绕原稿的 v1.1 写，读层面吸收分析（病人组装、"perfect bypass"）和 E8c 都只在 d9 上做过；v2.1 的对应数据是 E5b 的严格 spelling 测试。
+  - v2.1 吸收（`experiments/E5b_absorbed_d46/tables.md` §3，三平台 union，新 INDEL PoN 规则）：HG008T INDEL absorbed on >= 1 platform 1,467
+    （1,418 tagged，96.7 %；49 after PoN），SNV 140（100 %，0）；COLO829T INDEL 347（341，98.3 %；6），SNV 54（100 %，0）。49 / 8,496 = 0.58 %、
+    6 / 1,912 = 0.31 % → "0.6% ... 0.3%"（分母是 §3 的 truth INDEL n，不拆 ALT）。chr1 BED（§8，d46 列括号）：HG008T 2 / 2 / 2，COLO829T
+    1 / 1 / 1 → "1–2"。v1.1 的 "1.2% and 0.5%" 是读层面交叉表（113 / 9,362、10 / 2,059，拆 ALT），口径不同，所以写 "similar"。
+  - "End to end" 一段的拆分换成 v2.1（E5b §2，HG008T INDEL d46，after PoN）：lost 446 / 542 / 268（Illumina / PacBio / ONT），其中 absorbed
+    38 / 31 / 19（v1.1 是 35 / 30 / 16 of 461 / 550 / 276）。
+  - 比较器（`experiments/E8c_comparators_absorbed/tables_d46.md`、`summary_d46.json`，`absorbed_comparators.py --graph d46`，2026-10-20）：
+    吸收集合 = E5b `lost_alleles.tsv.gz` 里 chr1、`<platform>_d46` == N 且 `d46_spelled` == 1；加了 HCC1395T（10-19/20 tequila 新跑的比较器）。
+    每套 INDEL 108 / 78 / 64（HG008T）、34 / 26 / 21（COLO829T）、4 / 3 / 2（HCC1395T）→ "2–108"；SNV 10 / 10 / 10、3 / 3 / 3、4 / 3 / 4 →
+    "3–10"。INDEL any record：DeepSomatic-TO 81 / 42 / 36 / 68 / 62 / 57 / 100 / 100 / 100 %，ClairS-TO 45 / 3 / 6 / 65 / 27 / 29 / 75 / 33 / 50 % →
+    "3–100%"。配对数 (50 SNV + 340 INDEL) × 2 = 780；PASS 9（全是 DeepSomatic-TO INDEL：HG008T Illumina 5、ONT 1，COLO829T Illumina 1，
+    HCC1395T Illumina 2）；PASS + PoN 1（DeepSomatic-TO HG008T ONT INDEL）。v1.1 的 7 / 882、0 不变（`tables.md`）。
 - 2026-10-20 按用户要求改成技术性反驳（用户："不能全盘接受 ... PoN 是 tumor-only 十分常见的做法，PoN 中也会出现这些问题 ...
   我们是 variant calling tool，不是 alignment tool paper"；附的要点：failure mode 存在，但不是 Pansoma 独有、也不是 fatal flaw，是
   tumor-only calling 用 population information 换 precision 的固有 sensitivity trade-off；Pansoma 的不同在于一部分 suppression 发生在
@@ -873,7 +888,7 @@ We removed the HapMap mixture from the main benchmark and withdrew the HapMap-tr
 
 **Response.**
 
-We agree that sensitivity is essential in tumor-only calling and that F1 cannot stand in for it; the revision reports recall separately and changes the operating point. In the original submission Pansoma's SNV recall was below that of ClairS-TO and DeepSomatic-TO. Under an identical protocol, however, the difference is small: after the same population filtering, HG008T SNV recall is 0.826–0.831 for Pansoma against 0.806–0.889 and 0.831–0.845 for the two comparators, and at equal precision Pansoma's recall is higher except against DeepSomatic on Illumina. Low INDEL recall is not specific to Pansoma: population filtering alone limits any caller to 0.342 (HG008T) and 0.382 (COLO829T), and after the same filtering the comparators reach 0.015–0.183 against Pansoma's 0.228–0.267 (details below).
+We agree that sensitivity is essential in tumor-only calling and that F1 cannot stand in for it; the revision reports recall separately and changes the operating point. In the original submission Pansoma's SNV recall was below that of ClairS-TO and DeepSomatic-TO. Under an identical protocol, however, the difference is small on HG008T: after the same population filtering, SNV recall is 0.826–0.831 for Pansoma against 0.806–0.889 (DeepSomatic-TO) and 0.831–0.845 (ClairS-TO). On COLO829T the comparators reach 0.555–0.835 and Pansoma 0.686–0.717, and DeepSomatic-TO on Illumina keeps a clear lead (0.835). At equal precision Pansoma's recall is lower only than DeepSomatic-TO's on Illumina, and its F1 is the highest on five of the six datasets (R2.3). Low INDEL recall is not specific to Pansoma: population filtering alone limits any caller to 0.342 (HG008T) and 0.382 (COLO829T), and after the same filtering the comparators reach 0.015–0.183 against Pansoma's 0.228–0.267 (details below).
 
 *Operating point.* PASS is the recall-0.9 validation threshold, set on held-out validation blocks before population filtering. Records down to p = 0.01 are kept as LowQual and population matches are tagged, not deleted, so users can move along the precision–recall curve, now shown for every caller.
 
@@ -891,12 +906,16 @@ A per-allele funnel on all three references, GRCh38-only, v1.1 and the HPRC v2.1
 
 *INDELs.* The Abstract and Discussion now state this limitation (R3.10). 418 of the 635 HG008T chr1 truth INDELs (81 of 131 on COLO829T) are exact population alleles at the filtering frequencies, so no caller filtered this way exceeds a recall of 0.342 (0.382), and our post-filter recall at the recall-0.9 validation threshold is close to the curve's maximum. The graph also absorbs repeat-length INDELs (R1.4): a GRCh38-only graph gives more HG008T truth INDELs a candidate (0.75–0.87 against 0.54–0.70), but these are almost all population alleles, so 24–27% of truth INDELs are called on every reference and both tumors (funnel). At the validation best-F1 threshold, long-read INDEL F1 rises (HG008T PacBio, v1.1: 0.092 to 0.227), but recall falls to 0.073–0.158 on HG008T (v1.1) and 0.015–0.061 on COLO829T (v2.1), so we report both operating points. Both limits depend on the truth set: on HCC1395 (SEQC2), only 7.9% of truth INDELs are population-tagged and 0.76–0.85 reach a candidate (v2.1; HG008T: 0.43–0.50).
 
-*Other tumors* (preliminary, HPRC v2.1 graph; R1.7). Without retraining, HG008T SNV models reach a post-filter recall of 0.640 / 0.701 / 0.589 on COLO829T (Illumina / Fiber-seq / ONT), against 0.715 / 0.707 / 0.692 for COLO829T's own models, and 0.773–0.930 on the lung lines H1437 and H2009; COLO829T models lose recall through threshold transfer (Illumina: 0.157 on HCC1395 and 0.296–0.305 on H1437 and H2009, at precision 0.908–0.973). A model retrained on four other lines (R1.7) reaches post-filter recall 0.666 / 0.703 on HG008T (Illumina / PacBio) and 0.527 / 0.447 on COLO829T, neither seen in training, at higher precision than the single-tumor models on HG008T [待补: ONT].
+*Other tumors* (HPRC v2.1 graph; R1.7, R1.m1). A model trained on four other lines keeps post-filter SNV recall at 0.684–0.726 on the unseen HG008T, at higher precision than HG008T's own models; models trained on a single tumor lose recall on another mainly through the transferred threshold (COLO829T models on HCC1395 Illumina: recall 0.157 at precision 0.934).
 
 *Comparators*, re-scored under the identical protocol (R3.m2). At their own PASS, DeepSomatic tumor-only and ClairS-TO reach HG008T SNV recall 0.816–0.911 and 0.845–0.859 (precision 0.167–0.359), and after the same population filtering 0.806–0.889 and 0.831–0.845, against Pansoma's 0.826–0.831. At equal precision (Pansoma's curve at each comparator's post-filter precision) Pansoma's recall is 0.858–0.891 on HG008T, against the comparators' 0.806–0.889, and it is lower only than DeepSomatic on Illumina (HG008T 0.871 against 0.889; COLO829T, v2.1: 0.791 against 0.835). For indels the comparators' post-filter recall is 0.019–0.141 on HG008T and 0.015–0.183 on COLO829T (R2.3).
 
 **证据（内部）。**
 
+- 2026-10-20 为了字数（681 词）把 "Other tumors" 一段压成两句，细节在 R1.7 / R1.m1：删掉的数（HG008T 模型在 COLO829T 上 recall 0.640 / 0.701 / 0.589 对 COLO829T 自己的 0.715 / 0.707 / 0.692，lung 0.773–0.930，COLO829T 模型在 H1437 / H2009 上 0.296–0.305、precision 0.908–0.973；多癌种模型在 COLO829T 上 0.564 / 0.446 / 0.308）出处见上面 E12a / E12b 两条。留下的 "0.684–0.726" 是 E12b multicancer4 在 HG008T 上三个平台的 recall，"0.157 at precision 0.934" 是 E12a COLO829T Illumina 模型在 HCC1395T Illumina chr1（E12b tables.md 的 cross-tumor 列）。
+- 2026-10-20（中立性检查，用户要求 "中立的思考一下"）：第一段只引了 HG008T 的比较器数，补上 COLO829T（R2.3：比较器 0.555–0.835，Pansoma
+  0.686–0.717，DeepSomatic-TO Illumina 0.835 明显领先；Pansoma F1 六套里五套最高）。"Other tumors" 一段的多癌种模型 recall 换成修正后的数并补上
+  ONT（`experiments/E12b_multicancer_models/tables.md` / `summary.json`（`collect.py` 2026-10-20 重跑：多癌种模型全部换成 --norm dataset 修正后的 re-prediction `vcf_*_normfix`，48 个 report 都在；比较器列来自 E8 `score_comparator.py`，HCC1395T 是 10-19/20 在 tequila 上新跑的 DeepSomatic 1.9.0 / ClairS-TO 0.4.2（`tmp/reviewer_cpu_20261019/E8_hcc1395/`，score 目录 `.../E8_comparators/score/<caller>/HCC1395T_<platform>[_chr20]/`），HG008T / COLO829T 是 E8 重新打分的用户已有 run））：HG008T 0.684 / 0.720 / 0.726，COLO829T 0.564 / 0.446 / 0.308。
 - 2026-10-20 按用户要求加反驳：第一段从 "We agree. ..." 改成同意 sensitivity 重要、F1 不能代替，但同一协议下差距小（HG008T SNV PoN 后 recall
   Pansoma 0.826–0.831，DeepSomatic-TO 0.806–0.889，ClairS-TO 0.831–0.845；等 precision 下只比 DeepSomatic Illumina 低），INDEL recall 低不是
   Pansoma 独有（population filtering 的上限 0.342 / 0.382；比较器 PoN 后 0.015–0.183，Pansoma 0.228–0.267）。数字全部来自本条下文已有的表和
@@ -1002,12 +1021,16 @@ We agree that one melanoma line was too narrow a basis, and we report the reques
 
 These models standardise base and mapping qualities by the training tumor's statistics. [待补: the same tests with base quality standardised per dataset (R3.m1)]
 
-*Multi-tumor models* (preliminary: one run each, HPRC v2.1, Illumina and PacBio; Supplementary Table [待补]). Trained on HCC1395 (without chr1 and chr20) and the three CASTLE lines, a model reaches SNV F1 0.837 / 0.804 on HCC1395 chr1 (Illumina / PacBio), against at most 0.790 / 0.741 for a single-tumor model of another line, and 0.608 / 0.615 on the unseen HG008T (its own model: 0.570 / 0.603; higher precision, lower recall). On the unseen, UV-driven COLO829T it reaches 0.643 / 0.594 through lower recall; adding HG008T and COLO829T (without chr1) to training restores 0.742 / 0.774 (its own model: 0.783 / 0.779). [待补: ONT after a normalisation fix at prediction; leave-one-line-out of the CASTLE lines]
+*Multi-tumor models* (one run each, HPRC v2.1, three platforms; Supplementary Table [待补]). Trained on HCC1395 (without chr1 and chr20) and the three CASTLE lines, a model reaches SNV F1 0.845 / 0.820 / 0.658 on HCC1395 chr1 (Illumina / PacBio / ONT), against at most 0.790 / 0.741 / 0.689 for a single-tumor model of another line, and 0.605 / 0.614 / 0.587 on the unseen HG008T, above HG008T's own models (0.570 / 0.603 / 0.575; higher precision, lower recall). On the unseen, UV-driven COLO829T it reaches 0.671 / 0.595 / 0.380 through lower recall; adding HG008T and COLO829T (without chr1) to training restores 0.755 / 0.774 / 0.737 (its own models: 0.783 / 0.779 / 0.736). [待补: leave-one-line-out of the CASTLE lines]
 
 *Augmentation.* Joint COLO829T models add in-silico purity dilutions (75, 50, 25%; R1.5). [待补: Illumina SNVs and ONT after removing a read-source base-quality cue (R1.5; done for Illumina INDELs)]
 
 **证据（内部）。**
 
+- 2026-10-20 多癌种模型一段换成修正后的数并补上 ONT（`experiments/E12b_multicancer_models/tables.md` / `summary.json`（`collect.py` 2026-10-20 重跑：多癌种模型全部换成 --norm dataset 修正后的 re-prediction `vcf_*_normfix`，48 个 report 都在；比较器列来自 E8 `score_comparator.py`，HCC1395T 是 10-19/20 在 tequila 上新跑的 DeepSomatic 1.9.0 / ClairS-TO 0.4.2（`tmp/reviewer_cpu_20261019/E8_hcc1395/`，score 目录 `.../E8_comparators/score/<caller>/HCC1395T_<platform>[_chr20]/`），HG008T / COLO829T 是 E8 重新打分的用户已有 run））：HCC1395T chr1 multicancer4 0.845 / 0.820 / 0.658（Illumina / PacBio / ONT；
+  修正前 0.837 / 0.804 / ONT 无效），另一株单肿瘤模型最高 0.790 / 0.741 / 0.689；HG008T（没见过）0.605 / 0.614 / 0.587，HG008T 自己的模型
+  0.570 / 0.603 / 0.575；COLO829T（没见过）0.671 / 0.595 / 0.380，加入 HG008T、COLO829T 后（multicancer6）0.755 / 0.774 / 0.737，自己的模型
+  0.783 / 0.779 / 0.736。去掉了 "preliminary" 和 "[待补: ONT after a normalisation fix at prediction]"；leave-one-line-out 仍是 [待补]。
 - 2026-10-19 按用户要求压字数（旧版在 session scratchpad `R1.7.before_trim_20261019.md`）：Model size 两句合一；Capacity 的 E13 句压短（删 "within 0.009 of each other"、"by only 0.010 over the second half"，数字见下面 E13 一条）；COLO829T 那条和 Multi-tumor 段只改措辞，数字没变。
 - 2026-10-19 E13 完成（RIS 总结 `analysis/benchmark_7fc7396_20261012/reviewer_gpu_7fc7396_20261016/`（538012c；`tables.md`、`summary.json`；chr1、BED 内、PoN 后、PASS = recall-0.9 validation 阈值，INDEL 用 71cb51a 规则），"E13" 表；HG008T PacBio d46 SNV，PASS F1，括号是 best）：
   - 训练 block 10 % 0.572 / 0.575（0.579 / 0.579），25 % 0.580 / 0.583，50 % 0.596 / 0.597，75 % 0.595 / 0.604，100 % 三个 seed 0.605 / 0.604 / 0.611（均值 0.607）。均值 0.574 → 0.597 → 0.607，50 % → 100 % +0.010；replicate 之间的差 0.003 / 0.003 / 0.001 / 0.009 → "within 0.009"。
@@ -1174,11 +1197,11 @@ We added HCC1395 (SEQC2 truth v1.2.1, 41,072 somatic alleles) and three CASTLE l
 
 *HCC1395 chr1 with models that never saw HCC1395* (preliminary: one training run, earlier quality normalization; 3,440 somatic SNVs in the benchmark region; F1 after population filtering at the recall-0.9 validation threshold of the training tumor; R1.7): models trained on HG008T reach 0.790 (Illumina), 0.698 (PacBio) and 0.689 (ONT); models trained on COLO829T (Fiber-seq for PacBio) reach 0.269, 0.741 and 0.621. Their test-tuned best F1 (upper bound) is 0.810, 0.819 and 0.691, so most of their shortfall comes from the transferred threshold, and part from a UV preference learned on COLO829T.
 
-*CASTLE lines, chr1* (preliminary; same models and protocol): models trained on HG008T reach 0.787–0.937 on H1437 and H2009, and models trained on COLO829T 0.454–0.809, again losing mostly at the transferred threshold (test-tuned best F1 0.828–0.950). On HCC1954 every model has low precision (0.22–0.37): 93–99% of these false positives are germline alleles of its matched normal, while its truth set shows no germline content (2.4% common population alleles, no loss of heterozygosity in the normal), so this is germline leakage by our models, not a truth artefact. The H1437 truth, in contrast, includes about 30% germline alleles that its B-lymphoblastoid normal lost through loss of heterozygosity (chr9q, chr1:9–12 Mb), which explains the line's candidate coverage of about 70%; on chr1, our test chromosome, they are negligible (R2.2). A multi-tumor model trained on HCC1395 (without chr1 and chr20) and the three CASTLE lines reaches SNV F1 0.837 / 0.804 on HCC1395 chr1 (Illumina / PacBio), above every single-tumor model of another line, and generalises to HG008T, which it never saw (0.608 / 0.615; R1.7). [待补: ONT after a normalisation fix at prediction; leave-one-line-out of the CASTLE lines; ClairS-TO and DeepSomatic on these lines under the same protocol]
+*CASTLE lines, chr1* (preliminary; same models and protocol): models trained on HG008T reach 0.787–0.937 on H1437 and H2009, and models trained on COLO829T 0.454–0.809, again losing mostly at the transferred threshold (test-tuned best F1 0.828–0.950). On HCC1954 every model has low precision (0.22–0.37): 93–99% of these false positives are germline alleles of its matched normal, while its truth set shows no germline content (2.4% common population alleles, no loss of heterozygosity in the normal), so this is germline leakage by our models, not a truth artefact. The H1437 truth, in contrast, includes about 30% germline alleles that its B-lymphoblastoid normal lost through loss of heterozygosity (chr9q, chr1:9–12 Mb), which explains the line's candidate coverage of about 70%; on chr1, our test chromosome, they are negligible (R2.2). A multi-tumor model trained on HCC1395 (without chr1 and chr20) and the three CASTLE lines reaches SNV F1 0.845 / 0.820 / 0.658 on HCC1395 chr1 (Illumina / PacBio / ONT; 0.850 / 0.825 / 0.730 with HG008T and COLO829T also in training), above every single-tumor model of another line, and generalises to HG008T, which it never saw (0.605 / 0.614 / 0.587; R1.7). Under the same protocol on HCC1395 chr1, DeepSomatic-TO, whose models were trained on HCC1395 with chr1 held out, reaches 0.848 / 0.839 / 0.760, and ClairS-TO, which never saw HCC1395, 0.832 / 0.814 / 0.760: Pansoma is level with DeepSomatic-TO on Illumina and 0.014 / 0.030 below it on PacBio / ONT, and above ClairS-TO except on ONT. On HG008T, which none of the three was trained on, the multi-tumor model is above both (DeepSomatic-TO 0.457–0.557, ClairS-TO 0.552–0.591). For INDELs DeepSomatic-TO leads on HCC1395 (best F1 0.519–0.672 against 0.255–0.662). [待补: leave-one-line-out of the CASTLE lines]
 
 How we use these lines follows from how the comparators were trained.
 
-- DeepSomatic's multi-cancer models were trained on HCC1395, HCC1937, HCC1954, H1437 and H2009 with chr1 held out, our test chromosome too, and the CASTLE truth sets of HCC1954, H1437 and H2009 were derived from DeepSomatic's calls (biased toward it, as its authors note). ClairS-TO's real-tumor model was fine-tuned on HCC1937, HCC1954, H1437 and H2009 (R3.m2). We therefore use these three lines mainly for training diversity and held-out-line tests of Pansoma, and report comparator results on them with this caveat.
+- DeepSomatic's multi-cancer models were trained on HCC1395, HCC1937, HCC1954, H1437 and H2009 with chr1 held out, our test chromosome too, and the CASTLE truth sets of HCC1954, H1437 and H2009 were derived from DeepSomatic's calls (biased toward it, as its authors note). ClairS-TO's real-tumor model was fine-tuned on HCC1937, HCC1954, H1437 and H2009 (R3.m2). We therefore use these three lines for training diversity and held-out-line tests of Pansoma only, and do not compare the tools on them.
 - HCC1395 has a truth set independent of both tools (SEQC2). ClairS-TO excluded it from training; DeepSomatic held out its chr1 only, whereas our models above never saw HCC1395. HCC1395 chr1 is therefore our main external comparison, together with HG008T, on which neither tool was trained.
 - The SEQC2 and CASTLE truth sets likely omit many INDELs in long homopolymers and STRs (15.5% of SEQC2 INDELs lie in homopolymers of ≥ 7 bp, against 74.9% for HG008T), so unmatched INDEL candidates in such repeats are not used as negatives on these lines (R2.2) and their INDEL results are reported separately.
 
@@ -1186,6 +1209,14 @@ We have not added HCC1937 and Hs578T, the other two lines of the DeepSomatic stu
 
 **证据（内部）。**
 
+- 2026-10-20 多癌种模型一句换成修正后的数，并填上 "[待补: ClairS-TO and DeepSomatic on these lines under the same protocol]" 的 HCC1395 部分
+  （`experiments/E12b_multicancer_models/tables.md` / `summary.json`（`collect.py` 2026-10-20 重跑：多癌种模型全部换成 --norm dataset 修正后的 re-prediction `vcf_*_normfix`，48 个 report 都在；比较器列来自 E8 `score_comparator.py`，HCC1395T 是 10-19/20 在 tequila 上新跑的 DeepSomatic 1.9.0 / ClairS-TO 0.4.2（`tmp/reviewer_cpu_20261019/E8_hcc1395/`，score 目录 `.../E8_comparators/score/<caller>/HCC1395T_<platform>[_chr20]/`），HG008T / COLO829T 是 E8 重新打分的用户已有 run））：HCC1395T chr1 SNV PASS + PoN F1 DeepSomatic-TO 0.848 / 0.839 / 0.760，ClairS-TO 0.832 / 0.814 / 0.760；multicancer4 0.845 / 0.820 /
+  0.658，multicancer6 0.850 / 0.825 / 0.730（"level with DeepSomatic-TO on Illumina and 0.014 / 0.030 below it on PacBio / ONT, and above ClairS-TO
+  except on ONT" 用 multicancer6）；HG008T 比较器 DeepSomatic-TO 0.529 / 0.557 / 0.457、ClairS-TO 0.552 / 0.591 / 0.552 → "0.457–0.557"、
+  "0.552–0.591"。INDEL（all-records 曲线 PoN 后 best F1）DeepSomatic-TO 0.672 / 0.628 / 0.519，multicancer4 0.662 / 0.537 / 0.255。chr20（ClairS-TO
+  README 说的留出染色体）DeepSomatic-TO 0.845 / 0.835 / 0.752、ClairS-TO 0.730 / 0.795 / 0.747、multicancer6 0.809 / 0.788 / 0.721（没写进 Response）。
+  CASTLE 三株上没有跑比较器（DeepSomatic 和 ClairS-TO 都在这三株上训练过，truth 来自 DeepSomatic），所以 "report comparator results on them with
+  this caveat" 改成 "do not compare the tools on them"。
 - 2026-10-19（`experiments/E12b_multicancer_models/README.md`、`tables.md`（multicancer4 / multicancer6，tequila 2026-10-16..19，jobs 417715-417777；chr1、BED 内、PoN 后；INDEL 新规则））：多癌种模型填了 "retrained ... an HCC1395 in-sample reference" 的部分，数同 R1.7 证据同日一条。剩下的 [待补]：ONT（predict 归一化问题）、CASTLE 各线的 leave-one-line-out、比较器在这几条线上按同一协议（E8 只做了 HG008T / COLO829T）。
 
 - 2026-10-15 E1.6/E9h/E22/E11b-ONT（本条用到 E22 check 1；Response 472 → 487 词）：

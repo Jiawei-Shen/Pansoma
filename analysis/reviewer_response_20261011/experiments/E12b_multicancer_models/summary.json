@@ -6,6 +6,22 @@
   "chrom": "chr1",
   "test_set": "HCC1395T_Illumina_d46",
   "multicancer4": {
+   "p": 0.8769,
+   "r": 0.8157,
+   "f1": 0.8452,
+   "best": 0.8538,
+   "truth": 3440,
+   "tagged": 66
+  },
+  "multicancer6": {
+   "p": 0.8793,
+   "r": 0.8218,
+   "f1": 0.8496,
+   "best": 0.8556,
+   "truth": 3440,
+   "tagged": 66
+  },
+  "multicancer4_prefix": {
    "p": 0.8864,
    "r": 0.7919,
    "f1": 0.8365,
@@ -13,7 +29,7 @@
    "truth": 3440,
    "tagged": 66
   },
-  "multicancer6": {
+  "multicancer6_prefix": {
    "p": 0.8878,
    "r": 0.7933,
    "f1": 0.8379,
@@ -35,6 +51,18 @@
     "f1": 0.2688,
     "best": 0.8098
    }
+  },
+  "deepsomatic": {
+   "p": 0.7813,
+   "r": 0.9273,
+   "f1": 0.8481,
+   "best": 0.8748
+  },
+  "clairs_to": {
+   "p": 0.8061,
+   "r": 0.8593,
+   "f1": 0.8319,
+   "best": 0.8378
   }
  },
  {
@@ -44,6 +72,22 @@
   "chrom": "chr20",
   "test_set": "HCC1395T_Illumina_d46",
   "multicancer4": {
+   "p": 0.8342,
+   "r": 0.764,
+   "f1": 0.7975,
+   "best": 0.8133,
+   "truth": 1106,
+   "tagged": 27
+  },
+  "multicancer6": {
+   "p": 0.8388,
+   "r": 0.7812,
+   "f1": 0.809,
+   "best": 0.8177,
+   "truth": 1106,
+   "tagged": 27
+  },
+  "multicancer4_prefix": {
    "p": 0.8435,
    "r": 0.7505,
    "f1": 0.7943,
@@ -51,7 +95,7 @@
    "truth": 1106,
    "tagged": 27
   },
-  "multicancer6": {
+  "multicancer6_prefix": {
    "p": 0.8524,
    "r": 0.7468,
    "f1": 0.7961,
@@ -60,7 +104,19 @@
    "tagged": 27
   },
   "in_sample": null,
-  "cross_tumor": null
+  "cross_tumor": null,
+  "deepsomatic": {
+   "p": 0.7691,
+   "r": 0.9367,
+   "f1": 0.8447,
+   "best": 0.8933
+  },
+  "clairs_to": {
+   "p": 0.6491,
+   "r": 0.8345,
+   "f1": 0.7302,
+   "best": 0.7707
+  }
  },
  {
   "kind": "SNV",
@@ -69,6 +125,22 @@
   "chrom": "chr1",
   "test_set": "HCC1395T_PacBio_d46",
   "multicancer4": {
+   "p": 0.8564,
+   "r": 0.7872,
+   "f1": 0.8204,
+   "best": 0.8322,
+   "truth": 3440,
+   "tagged": 66
+  },
+  "multicancer6": {
+   "p": 0.8428,
+   "r": 0.8087,
+   "f1": 0.8254,
+   "best": 0.8309,
+   "truth": 3440,
+   "tagged": 66
+  },
+  "multicancer4_prefix": {
    "p": 0.864,
    "r": 0.7517,
    "f1": 0.804,
@@ -76,7 +148,7 @@
    "truth": 3440,
    "tagged": 66
   },
-  "multicancer6": {
+  "multicancer6_prefix": {
    "p": 0.8791,
    "r": 0.7189,
    "f1": 0.791,
@@ -98,6 +170,18 @@
     "f1": 0.7407,
     "best": 0.8189
    }
+  },
+  "deepsomatic": {
+   "p": 0.7659,
+   "r": 0.9273,
+   "f1": 0.8389,
+   "best": 0.8544
+  },
+  "clairs_to": {
+   "p": 0.8055,
+   "r": 0.8224,
+   "f1": 0.8139,
+   "best": 0.8328
   }
  },
  {
@@ -107,6 +191,22 @@
   "chrom": "chr20",
   "test_set": "HCC1395T_PacBio_d46",
   "multicancer4": {
+   "p": 0.8033,
+   "r": 0.7495,
+   "f1": 0.7755,
+   "best": 0.7943,
+   "truth": 1106,
+   "tagged": 27
+  },
+  "multicancer6": {
+   "p": 0.8036,
+   "r": 0.7731,
+   "f1": 0.788,
+   "best": 0.7986,
+   "truth": 1106,
+   "tagged": 27
+  },
+  "multicancer4_prefix": {
    "p": 0.809,
    "r": 0.7278,
    "f1": 0.7663,
@@ -114,7 +214,7 @@
    "truth": 1106,
    "tagged": 27
   },
-  "multicancer6": {
+  "multicancer6_prefix": {
    "p": 0.838,
    "r": 0.7107,
    "f1": 0.7691,
@@ -123,7 +223,19 @@
    "tagged": 27
   },
   "in_sample": null,
-  "cross_tumor": null
+  "cross_tumor": null,
+  "deepsomatic": {
+   "p": 0.7404,
+   "r": 0.9566,
+   "f1": 0.8347,
+   "best": 0.851
+  },
+  "clairs_to": {
+   "p": 0.7782,
+   "r": 0.8119,
+   "f1": 0.7947,
+   "best": 0.8038
+  }
  },
  {
   "kind": "SNV",
@@ -132,6 +244,22 @@
   "chrom": "chr1",
   "test_set": "HCC1395T_ONT_d46",
   "multicancer4": {
+   "p": 0.6496,
+   "r": 0.6677,
+   "f1": 0.6585,
+   "best": 0.6626,
+   "truth": 3440,
+   "tagged": 66
+  },
+  "multicancer6": {
+   "p": 0.7673,
+   "r": 0.6968,
+   "f1": 0.7303,
+   "best": 0.732,
+   "truth": 3440,
+   "tagged": 66
+  },
+  "multicancer4_prefix": {
    "p": 0.3261,
    "r": 0.1613,
    "f1": 0.2159,
@@ -139,7 +267,7 @@
    "truth": 3440,
    "tagged": 66
   },
-  "multicancer6": {
+  "multicancer6_prefix": {
    "p": 0.1377,
    "r": 0.0276,
    "f1": 0.046,
@@ -161,6 +289,18 @@
     "f1": 0.6213,
     "best": 0.6912
    }
+  },
+  "deepsomatic": {
+   "p": 0.7552,
+   "r": 0.7657,
+   "f1": 0.7604,
+   "best": 0.7696
+  },
+  "clairs_to": {
+   "p": 0.7914,
+   "r": 0.7302,
+   "f1": 0.7596,
+   "best": 0.7657
   }
  },
  {
@@ -170,6 +310,22 @@
   "chrom": "chr20",
   "test_set": "HCC1395T_ONT_d46",
   "multicancer4": {
+   "p": 0.7209,
+   "r": 0.6609,
+   "f1": 0.6896,
+   "best": 0.7075,
+   "truth": 1106,
+   "tagged": 27
+  },
+  "multicancer6": {
+   "p": 0.7549,
+   "r": 0.6908,
+   "f1": 0.7214,
+   "best": 0.723,
+   "truth": 1106,
+   "tagged": 27
+  },
+  "multicancer4_prefix": {
    "p": 0.7353,
    "r": 0.623,
    "f1": 0.6745,
@@ -177,7 +333,7 @@
    "truth": 1106,
    "tagged": 27
   },
-  "multicancer6": {
+  "multicancer6_prefix": {
    "p": 0.765,
    "r": 0.6447,
    "f1": 0.6997,
@@ -186,7 +342,19 @@
    "tagged": 27
   },
   "in_sample": null,
-  "cross_tumor": null
+  "cross_tumor": null,
+  "deepsomatic": {
+   "p": 0.7172,
+   "r": 0.7911,
+   "f1": 0.7524,
+   "best": 0.7696
+  },
+  "clairs_to": {
+   "p": 0.7586,
+   "r": 0.736,
+   "f1": 0.7471,
+   "best": 0.7492
+  }
  },
  {
   "kind": "SNV",
@@ -195,6 +363,22 @@
   "chrom": "chr1",
   "test_set": "HG008T_Illumina_d46",
   "multicancer4": {
+   "p": 0.5427,
+   "r": 0.6844,
+   "f1": 0.6053,
+   "best": 0.6175,
+   "truth": 702,
+   "tagged": 61
+  },
+  "multicancer6": {
+   "p": 0.5917,
+   "r": 0.6112,
+   "f1": 0.6013,
+   "best": 0.622,
+   "truth": 702,
+   "tagged": 61
+  },
+  "multicancer4_prefix": {
    "p": 0.5597,
    "r": 0.6657,
    "f1": 0.6081,
@@ -202,7 +386,7 @@
    "truth": 702,
    "tagged": 61
   },
-  "multicancer6": {
+  "multicancer6_prefix": {
    "p": 0.6028,
    "r": 0.6227,
    "f1": 0.6126,
@@ -223,6 +407,18 @@
    "r": 0.2554,
    "f1": 0.3589,
    "best": 0.5544
+  },
+  "deepsomatic": {
+   "p": 0.376,
+   "r": 0.8895,
+   "f1": 0.5286,
+   "best": 0.6273
+  },
+  "clairs_to": {
+   "p": 0.4105,
+   "r": 0.8451,
+   "f1": 0.5525,
+   "best": 0.5869
   }
  },
  {
@@ -232,6 +428,22 @@
   "chrom": "chr1",
   "test_set": "HG008T_PacBio_d46",
   "multicancer4": {
+   "p": 0.5352,
+   "r": 0.7202,
+   "f1": 0.6141,
+   "best": 0.6251,
+   "truth": 702,
+   "tagged": 61
+  },
+  "multicancer6": {
+   "p": 0.5859,
+   "r": 0.67,
+   "f1": 0.6252,
+   "best": 0.6385,
+   "truth": 702,
+   "tagged": 61
+  },
+  "multicancer4_prefix": {
    "p": 0.5463,
    "r": 0.703,
    "f1": 0.6148,
@@ -239,7 +451,7 @@
    "truth": 702,
    "tagged": 61
   },
-  "multicancer6": {
+  "multicancer6_prefix": {
    "p": 0.5824,
    "r": 0.6083,
    "f1": 0.5951,
@@ -260,6 +472,18 @@
    "r": 0.5481,
    "f1": 0.5573,
    "best": 0.5971
+  },
+  "deepsomatic": {
+   "p": 0.4254,
+   "r": 0.8063,
+   "f1": 0.557,
+   "best": 0.5889
+  },
+  "clairs_to": {
+   "p": 0.4551,
+   "r": 0.8436,
+   "f1": 0.5913,
+   "best": 0.5919
   }
  },
  {
@@ -269,6 +493,22 @@
   "chrom": "chr1",
   "test_set": "HG008T_ONT_d46",
   "multicancer4": {
+   "p": 0.4922,
+   "r": 0.726,
+   "f1": 0.5867,
+   "best": 0.5927,
+   "truth": 702,
+   "tagged": 61
+  },
+  "multicancer6": {
+   "p": 0.6347,
+   "r": 0.5509,
+   "f1": 0.5899,
+   "best": 0.6336,
+   "truth": 702,
+   "tagged": 61
+  },
+  "multicancer4_prefix": {
    "p": 0.4861,
    "r": 0.3271,
    "f1": 0.3911,
@@ -276,7 +516,7 @@
    "truth": 702,
    "tagged": 61
   },
-  "multicancer6": {
+  "multicancer6_prefix": {
    "p": 0.5424,
    "r": 0.0918,
    "f1": 0.1571,
@@ -297,6 +537,18 @@
    "r": 0.4204,
    "f1": 0.4871,
    "best": 0.5792
+  },
+  "deepsomatic": {
+   "p": 0.3101,
+   "r": 0.8694,
+   "f1": 0.4572,
+   "best": 0.5724
+  },
+  "clairs_to": {
+   "p": 0.4139,
+   "r": 0.8307,
+   "f1": 0.5525,
+   "best": 0.5637
   }
  },
  {
@@ -306,6 +558,22 @@
   "chrom": "chr1",
   "test_set": "COLO829T_Illumina_d46",
   "multicancer4": {
+   "p": 0.8271,
+   "r": 0.5641,
+   "f1": 0.6707,
+   "best": 0.7497,
+   "truth": 2443,
+   "tagged": 84
+  },
+  "multicancer6": {
+   "p": 0.8797,
+   "r": 0.6615,
+   "f1": 0.7551,
+   "best": 0.7833,
+   "truth": 2443,
+   "tagged": 84
+  },
+  "multicancer4_prefix": {
    "p": 0.825,
    "r": 0.5268,
    "f1": 0.643,
@@ -313,7 +581,7 @@
    "truth": 2443,
    "tagged": 84
   },
-  "multicancer6": {
+  "multicancer6_prefix": {
    "p": 0.8859,
    "r": 0.639,
    "f1": 0.7424,
@@ -334,6 +602,18 @@
    "r": 0.6398,
    "f1": 0.7077,
    "best": 0.7167
+  },
+  "deepsomatic": {
+   "p": 0.4267,
+   "r": 0.8346,
+   "f1": 0.5647,
+   "best": 0.771
+  },
+  "clairs_to": {
+   "p": 0.4307,
+   "r": 0.7642,
+   "f1": 0.5509,
+   "best": 0.7186
   }
  },
  {
@@ -343,6 +623,22 @@
   "chrom": "chr1",
   "test_set": "COLO829T_fiberseq_d46",
   "multicancer4": {
+   "p": 0.892,
+   "r": 0.4462,
+   "f1": 0.5948,
+   "best": 0.7578,
+   "truth": 2443,
+   "tagged": 84
+  },
+  "multicancer6": {
+   "p": 0.8805,
+   "r": 0.6905,
+   "f1": 0.774,
+   "best": 0.7906,
+   "truth": 2443,
+   "tagged": 84
+  },
+  "multicancer4_prefix": {
    "p": 0.8863,
    "r": 0.4466,
    "f1": 0.5939,
@@ -350,7 +646,7 @@
    "truth": 2443,
    "tagged": 84
   },
-  "multicancer6": {
+  "multicancer6_prefix": {
    "p": 0.8647,
    "r": 0.7012,
    "f1": 0.7744,
@@ -371,6 +667,18 @@
    "r": 0.7012,
    "f1": 0.7545,
    "best": 0.7644
+  },
+  "deepsomatic": {
+   "p": 0.7323,
+   "r": 0.5555,
+   "f1": 0.6318,
+   "best": 0.7918
+  },
+  "clairs_to": {
+   "p": 0.7793,
+   "r": 0.7446,
+   "f1": 0.7616,
+   "best": 0.76
   }
  },
  {
@@ -380,6 +688,22 @@
   "chrom": "chr1",
   "test_set": "COLO829T_ONT_d46",
   "multicancer4": {
+   "p": 0.497,
+   "r": 0.3078,
+   "f1": 0.3802,
+   "best": 0.6224,
+   "truth": 2443,
+   "tagged": 84
+  },
+  "multicancer6": {
+   "p": 0.817,
+   "r": 0.6705,
+   "f1": 0.7365,
+   "best": 0.7464,
+   "truth": 2443,
+   "tagged": 84
+  },
+  "multicancer4_prefix": {
    "p": 0.2562,
    "r": 0.0933,
    "f1": 0.1368,
@@ -387,7 +711,7 @@
    "truth": 2443,
    "tagged": 84
   },
-  "multicancer6": {
+  "multicancer6_prefix": {
    "p": 0.6935,
    "r": 0.3815,
    "f1": 0.4922,
@@ -408,6 +732,18 @@
    "r": 0.5894,
    "f1": 0.6305,
    "best": 0.6387
+  },
+  "deepsomatic": {
+   "p": 0.5822,
+   "r": 0.6946,
+   "f1": 0.6334,
+   "best": 0.6967
+  },
+  "clairs_to": {
+   "p": 0.7488,
+   "r": 0.6844,
+   "f1": 0.7151,
+   "best": 0.7165
   }
  },
  {
@@ -417,6 +753,22 @@
   "chrom": "chr1",
   "test_set": "HCC1395T_Illumina_d46",
   "multicancer4": {
+   "p": 0.4579,
+   "r": 0.7368,
+   "f1": 0.5648,
+   "best": 0.6619,
+   "truth": 133,
+   "tagged": 16
+  },
+  "multicancer6": {
+   "p": 0.3556,
+   "r": 0.7594,
+   "f1": 0.4844,
+   "best": 0.6897,
+   "truth": 133,
+   "tagged": 16
+  },
+  "multicancer4_prefix": {
    "p": 0.4558,
    "r": 0.7368,
    "f1": 0.5632,
@@ -424,7 +776,7 @@
    "truth": 133,
    "tagged": 16
   },
-  "multicancer6": {
+  "multicancer6_prefix": {
    "p": 0.2959,
    "r": 0.7519,
    "f1": 0.4246,
@@ -446,6 +798,18 @@
     "f1": 0.3139,
     "best": 0.3374
    }
+  },
+  "deepsomatic": {
+   "p": 0.5,
+   "r": 0.7669,
+   "f1": 0.6053,
+   "best": 0.6716
+  },
+  "clairs_to": {
+   "p": 0.5974,
+   "r": 0.6917,
+   "f1": 0.6411,
+   "best": 0.4151
   }
  },
  {
@@ -455,6 +819,22 @@
   "chrom": "chr20",
   "test_set": "HCC1395T_Illumina_d46",
   "multicancer4": {
+   "p": 0.3789,
+   "r": 0.8571,
+   "f1": 0.5255,
+   "best": 0.6988,
+   "truth": 42,
+   "tagged": 1
+  },
+  "multicancer6": {
+   "p": 0.3077,
+   "r": 0.8571,
+   "f1": 0.4528,
+   "best": 0.7407,
+   "truth": 42,
+   "tagged": 1
+  },
+  "multicancer4_prefix": {
    "p": 0.3465,
    "r": 0.8333,
    "f1": 0.4895,
@@ -462,7 +842,7 @@
    "truth": 42,
    "tagged": 1
   },
-  "multicancer6": {
+  "multicancer6_prefix": {
    "p": 0.3333,
    "r": 0.7857,
    "f1": 0.4681,
@@ -471,7 +851,19 @@
    "tagged": 1
   },
   "in_sample": null,
-  "cross_tumor": null
+  "cross_tumor": null,
+  "deepsomatic": {
+   "p": 0.4699,
+   "r": 0.9286,
+   "f1": 0.624,
+   "best": 0.8276
+  },
+  "clairs_to": {
+   "p": 0.4268,
+   "r": 0.8333,
+   "f1": 0.5645,
+   "best": 0.4079
+  }
  },
  {
   "kind": "INDEL",
@@ -480,6 +872,22 @@
   "chrom": "chr1",
   "test_set": "HCC1395T_PacBio_d46",
   "multicancer4": {
+   "p": 0.2,
+   "r": 0.6992,
+   "f1": 0.311,
+   "best": 0.5368,
+   "truth": 133,
+   "tagged": 16
+  },
+  "multicancer6": {
+   "p": 0.1076,
+   "r": 0.6992,
+   "f1": 0.1866,
+   "best": 0.471,
+   "truth": 133,
+   "tagged": 16
+  },
+  "multicancer4_prefix": {
    "p": 0.2017,
    "r": 0.6992,
    "f1": 0.3131,
@@ -487,7 +895,7 @@
    "truth": 133,
    "tagged": 16
   },
-  "multicancer6": {
+  "multicancer6_prefix": {
    "p": 0.1103,
    "r": 0.6992,
    "f1": 0.1906,
@@ -499,6 +907,18 @@
   "cross_tumor": {
    "hg008": null,
    "colo": null
+  },
+  "deepsomatic": {
+   "p": 0.6074,
+   "r": 0.6165,
+   "f1": 0.6119,
+   "best": 0.6276
+  },
+  "clairs_to": {
+   "p": 0.6216,
+   "r": 0.5188,
+   "f1": 0.5656,
+   "best": 0.4984
   }
  },
  {
@@ -508,6 +928,22 @@
   "chrom": "chr20",
   "test_set": "HCC1395T_PacBio_d46",
   "multicancer4": {
+   "p": 0.1944,
+   "r": 0.8333,
+   "f1": 0.3153,
+   "best": 0.6353,
+   "truth": 42,
+   "tagged": 1
+  },
+  "multicancer6": {
+   "p": 0.102,
+   "r": 0.8333,
+   "f1": 0.1818,
+   "best": 0.5376,
+   "truth": 42,
+   "tagged": 1
+  },
+  "multicancer4_prefix": {
    "p": 0.1832,
    "r": 0.8333,
    "f1": 0.3004,
@@ -515,7 +951,7 @@
    "truth": 42,
    "tagged": 1
   },
-  "multicancer6": {
+  "multicancer6_prefix": {
    "p": 0.1029,
    "r": 0.8333,
    "f1": 0.1832,
@@ -524,7 +960,19 @@
    "tagged": 1
   },
   "in_sample": null,
-  "cross_tumor": null
+  "cross_tumor": null,
+  "deepsomatic": {
+   "p": 0.6271,
+   "r": 0.881,
+   "f1": 0.7327,
+   "best": 0.7957
+  },
+  "clairs_to": {
+   "p": 0.5476,
+   "r": 0.5476,
+   "f1": 0.5476,
+   "best": 0.4571
+  }
  },
  {
   "kind": "INDEL",
@@ -533,6 +981,22 @@
   "chrom": "chr1",
   "test_set": "HCC1395T_ONT_d46",
   "multicancer4": {
+   "p": 0.0064,
+   "r": 0.6617,
+   "f1": 0.0126,
+   "best": 0.2553,
+   "truth": 133,
+   "tagged": 16
+  },
+  "multicancer6": {
+   "p": 0.0035,
+   "r": 0.6692,
+   "f1": 0.0069,
+   "best": 0.1734,
+   "truth": 133,
+   "tagged": 16
+  },
+  "multicancer4_prefix": {
    "p": 0.0063,
    "r": 0.6617,
    "f1": 0.0126,
@@ -540,7 +1004,7 @@
    "truth": 133,
    "tagged": 16
   },
-  "multicancer6": {
+  "multicancer6_prefix": {
    "p": 0.0034,
    "r": 0.6692,
    "f1": 0.0069,
@@ -552,6 +1016,18 @@
   "cross_tumor": {
    "hg008": null,
    "colo": null
+  },
+  "deepsomatic": {
+   "p": 0.4604,
+   "r": 0.4812,
+   "f1": 0.4706,
+   "best": 0.5192
+  },
+  "clairs_to": {
+   "p": 0.5827,
+   "r": 0.5564,
+   "f1": 0.5692,
+   "best": 0.5343
   }
  },
  {
@@ -561,6 +1037,22 @@
   "chrom": "chr20",
   "test_set": "HCC1395T_ONT_d46",
   "multicancer4": {
+   "p": 0.0083,
+   "r": 0.7857,
+   "f1": 0.0164,
+   "best": 0.3421,
+   "truth": 42,
+   "tagged": 1
+  },
+  "multicancer6": {
+   "p": 0.0048,
+   "r": 0.8095,
+   "f1": 0.0095,
+   "best": 0.2667,
+   "truth": 42,
+   "tagged": 1
+  },
+  "multicancer4_prefix": {
    "p": 0.0084,
    "r": 0.7857,
    "f1": 0.0167,
@@ -568,7 +1060,7 @@
    "truth": 42,
    "tagged": 1
   },
-  "multicancer6": {
+  "multicancer6_prefix": {
    "p": 0.0048,
    "r": 0.8095,
    "f1": 0.0096,
@@ -577,7 +1069,19 @@
    "tagged": 1
   },
   "in_sample": null,
-  "cross_tumor": null
+  "cross_tumor": null,
+  "deepsomatic": {
+   "p": 0.614,
+   "r": 0.8333,
+   "f1": 0.7071,
+   "best": 0.8049
+  },
+  "clairs_to": {
+   "p": 0.5455,
+   "r": 0.5714,
+   "f1": 0.5581,
+   "best": 0.5217
+  }
  },
  {
   "kind": "INDEL",
@@ -586,6 +1090,22 @@
   "chrom": "chr1",
   "test_set": "HG008T_Illumina_d46",
   "multicancer4": {
+   "p": 0.3561,
+   "r": 0.1244,
+   "f1": 0.1843,
+   "best": 0.2222,
+   "truth": 635,
+   "tagged": 418
+  },
+  "multicancer6": {
+   "p": 0.292,
+   "r": 0.2368,
+   "f1": 0.2615,
+   "best": 0.2722,
+   "truth": 635,
+   "tagged": 418
+  },
+  "multicancer4_prefix": {
    "p": 0.3524,
    "r": 0.1261,
    "f1": 0.1857,
@@ -593,7 +1113,7 @@
    "truth": 635,
    "tagged": 418
   },
-  "multicancer6": {
+  "multicancer6_prefix": {
    "p": 0.2968,
    "r": 0.2351,
    "f1": 0.2624,
@@ -614,6 +1134,18 @@
    "r": 0.2078,
    "f1": 0.2615,
    "best": 0.2703
+  },
+  "deepsomatic": {
+   "p": 0.3934,
+   "r": 0.1414,
+   "f1": 0.208,
+   "best": 0.2941
+  },
+  "clairs_to": {
+   "p": 0.379,
+   "r": 0.0801,
+   "f1": 0.1322,
+   "best": 0.2363
   }
  },
  {
@@ -623,6 +1155,22 @@
   "chrom": "chr1",
   "test_set": "HG008T_PacBio_d46",
   "multicancer4": {
+   "p": 0.0587,
+   "r": 0.121,
+   "f1": 0.0791,
+   "best": 0.0898,
+   "truth": 635,
+   "tagged": 418
+  },
+  "multicancer6": {
+   "p": 0.0789,
+   "r": 0.2453,
+   "f1": 0.1194,
+   "best": 0.247,
+   "truth": 635,
+   "tagged": 418
+  },
+  "multicancer4_prefix": {
    "p": 0.0595,
    "r": 0.1227,
    "f1": 0.0801,
@@ -630,7 +1178,7 @@
    "truth": 635,
    "tagged": 418
   },
-  "multicancer6": {
+  "multicancer6_prefix": {
    "p": 0.1165,
    "r": 0.2283,
    "f1": 0.1543,
@@ -646,7 +1194,19 @@
    "truth": 635,
    "tagged": 418
   },
-  "cross_tumor": null
+  "cross_tumor": null,
+  "deepsomatic": {
+   "p": 0.1978,
+   "r": 0.0307,
+   "f1": 0.0531,
+   "best": 0.2477
+  },
+  "clairs_to": {
+   "p": 0.449,
+   "r": 0.075,
+   "f1": 0.1285,
+   "best": 0.1957
+  }
  },
  {
   "kind": "INDEL",
@@ -655,6 +1215,22 @@
   "chrom": "chr1",
   "test_set": "HG008T_ONT_d46",
   "multicancer4": {
+   "p": 0.0288,
+   "r": 0.1244,
+   "f1": 0.0468,
+   "best": 0.1014,
+   "truth": 635,
+   "tagged": 418
+  },
+  "multicancer6": {
+   "p": 0.0071,
+   "r": 0.2215,
+   "f1": 0.0137,
+   "best": 0.1257,
+   "truth": 635,
+   "tagged": 418
+  },
+  "multicancer4_prefix": {
    "p": 0.03,
    "r": 0.1244,
    "f1": 0.0483,
@@ -662,7 +1238,7 @@
    "truth": 635,
    "tagged": 418
   },
-  "multicancer6": {
+  "multicancer6_prefix": {
    "p": 0.0072,
    "r": 0.2215,
    "f1": 0.0139,
@@ -678,7 +1254,19 @@
    "truth": 635,
    "tagged": 418
   },
-  "cross_tumor": null
+  "cross_tumor": null,
+  "deepsomatic": {
+   "p": 0.1719,
+   "r": 0.0187,
+   "f1": 0.0338,
+   "best": 0.1538
+  },
+  "clairs_to": {
+   "p": 0.4112,
+   "r": 0.075,
+   "f1": 0.1268,
+   "best": 0.1552
+  }
  },
  {
   "kind": "INDEL",
@@ -687,6 +1275,22 @@
   "chrom": "chr1",
   "test_set": "COLO829T_Illumina_d46",
   "multicancer4": {
+   "p": 0.156,
+   "r": 0.1679,
+   "f1": 0.1618,
+   "best": 0.1698,
+   "truth": 131,
+   "tagged": 81
+  },
+  "multicancer6": {
+   "p": 0.1213,
+   "r": 0.2519,
+   "f1": 0.1638,
+   "best": 0.1812,
+   "truth": 131,
+   "tagged": 81
+  },
+  "multicancer4_prefix": {
    "p": 0.1571,
    "r": 0.1679,
    "f1": 0.1624,
@@ -694,7 +1298,7 @@
    "truth": 131,
    "tagged": 81
   },
-  "multicancer6": {
+  "multicancer6_prefix": {
    "p": 0.1208,
    "r": 0.2443,
    "f1": 0.1616,
@@ -715,6 +1319,18 @@
    "r": 0.2595,
    "f1": 0.0814,
    "best": 0.1412
+  },
+  "deepsomatic": {
+   "p": 0.1983,
+   "r": 0.1832,
+   "f1": 0.1905,
+   "best": 0.1995
+  },
+  "clairs_to": {
+   "p": 0.1056,
+   "r": 0.145,
+   "f1": 0.1222,
+   "best": 0.1478
   }
  },
  {
@@ -724,6 +1340,22 @@
   "chrom": "chr1",
   "test_set": "COLO829T_fiberseq_d46",
   "multicancer4": {
+   "p": 0.0247,
+   "r": 0.145,
+   "f1": 0.0422,
+   "best": 0.0636,
+   "truth": 131,
+   "tagged": 81
+  },
+  "multicancer6": {
+   "p": 0.0644,
+   "r": 0.2061,
+   "f1": 0.0982,
+   "best": 0.1584,
+   "truth": 131,
+   "tagged": 81
+  },
+  "multicancer4_prefix": {
    "p": 0.0258,
    "r": 0.1527,
    "f1": 0.0441,
@@ -731,7 +1363,7 @@
    "truth": 131,
    "tagged": 81
   },
-  "multicancer6": {
+  "multicancer6_prefix": {
    "p": 0.0687,
    "r": 0.2061,
    "f1": 0.1031,
@@ -747,7 +1379,19 @@
    "truth": 131,
    "tagged": 81
   },
-  "cross_tumor": null
+  "cross_tumor": null,
+  "deepsomatic": {
+   "p": 0.3143,
+   "r": 0.084,
+   "f1": 0.1325,
+   "best": 0.1742
+  },
+  "clairs_to": {
+   "p": 0.3043,
+   "r": 0.1069,
+   "f1": 0.1582,
+   "best": 0.1687
+  }
  },
  {
   "kind": "INDEL",
@@ -756,6 +1400,22 @@
   "chrom": "chr1",
   "test_set": "COLO829T_ONT_d46",
   "multicancer4": {
+   "p": 0.001,
+   "r": 0.1679,
+   "f1": 0.0021,
+   "best": 0.0086,
+   "truth": 131,
+   "tagged": 81
+  },
+  "multicancer6": {
+   "p": 0.0028,
+   "r": 0.2137,
+   "f1": 0.0055,
+   "best": 0.0563,
+   "truth": 131,
+   "tagged": 81
+  },
+  "multicancer4_prefix": {
    "p": 0.0011,
    "r": 0.1679,
    "f1": 0.0021,
@@ -763,7 +1423,7 @@
    "truth": 131,
    "tagged": 81
   },
-  "multicancer6": {
+  "multicancer6_prefix": {
    "p": 0.0026,
    "r": 0.2137,
    "f1": 0.0051,
@@ -779,6 +1439,18 @@
    "truth": 131,
    "tagged": 81
   },
-  "cross_tumor": null
+  "cross_tumor": null,
+  "deepsomatic": {
+   "p": 0.0317,
+   "r": 0.0153,
+   "f1": 0.0206,
+   "best": 0.0912
+  },
+  "clairs_to": {
+   "p": 0.1188,
+   "r": 0.0916,
+   "f1": 0.1034,
+   "best": 0.1168
+  }
  }
 ]

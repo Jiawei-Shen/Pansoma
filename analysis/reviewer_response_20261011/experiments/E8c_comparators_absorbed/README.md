@@ -20,3 +20,12 @@ as in the BED when it is in tp-baseline or fn of the `all` stage. Writes `tables
   INDELs at PASS.
 - After the same population filtering, none of the absorbed alleles is called by either caller.
 - So the linear callers lose these alleles too, at their germline filtering instead of at alignment.
+
+## HPRC v2.1 (d46), 2026-10-20
+
+`python3 absorbed_comparators.py --graph d46` -> `tables_d46.md`, `summary_d46.json`. Absorbed = no candidate on d46 on
+that platform and the ALT spelled by a d46 path (E5b `lost_alleles.tsv.gz`: `<platform>_d46` == N and `d46_spelled` ==
+1, chr1; a strict test, so a lower bound; not the read-level "perfect bypass" set used for d9). HCC1395T added (comparators
+run on tequila 2026-10-19/20). Per dataset 2-108 INDELs and 3-10 SNVs in the BED; 780 allele-caller pairs; the callers'
+own filters pass 9 (all DeepSomatic-TO INDELs), and 1 survives our PoN (DeepSomatic-TO, HG008T ONT). Same conclusion as
+d9 (7 of 882, none).
