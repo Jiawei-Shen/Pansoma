@@ -7,6 +7,7 @@ validation recall-0.9 threshold (best F1 of the chr1 curve beside it); INDEL: th
 beside it), with the 71cb51a INDEL PoN rule (<run>/vcf_chr1_pon71cb51a, ../indel_pon_71cb51a_20261016). Writes
 tables.md and summary.json next to this script.
 """
+import gzip
 import json
 import os
 import statistics
@@ -19,6 +20,12 @@ SETS = [("HG008", "Illumina"), ("HG008", "PacBio"), ("HG008", "ONT"),
 
 
 PULL = 1792191762  # 2026-10-16 18:02:42 -0500: the 71cb51a INDEL PoN rule in the RIS checkout
+# COLO829T Illumina d9 with --norm dataset: the checkpoints the user chose on 2026-10-20 (seeds 0 and 2 epoch 6, seed 1
+# epoch 5; submit_ep6.sh) for the validation-selected epoch 8 of every seed, which is shown beside them
+CHOSEN = {"COLO829_Illumina_SNV_d9_normbq": "COLO829_Illumina_SNV_d9_normbq_sweep_e06",
+          "COLO829_Illumina_SNV_d9_normbq_s1": "COLO829_Illumina_SNV_d9_normbq_s1_sweep_e05",
+          "COLO829_Illumina_SNV_d9_normbq_s2": "COLO829_Illumina_SNV_d9_normbq_s2_sweep_e06"}
+WINDOWS = [(121_000_000, 126_000_000), (143_000_000, 144_000_000)]  # chr1, where the d9 false calls gather
 
 
 def score(run, kind, vcf="vcf_chr1"):
@@ -34,7 +41,7 @@ def score(run, kind, vcf="vcf_chr1"):
     p = json.load(open(f))["pon"]
     t, b = p["at_threshold"], p["best"]
     return {"pass": t["f1"], "best": b["f1"], "p": t["precision"], "r": t["recall"], "fp": t["fp"],
-            "best_tp": b["tp_baseline"]}
+            "tp": t["tp_call"], "best_tp": b["tp_baseline"]}
 
 
 def main_value(s, kind):
@@ -155,8 +162,8 @@ def main():
     out["e13"] = rows
 
     # --norm dataset (f344bca, BQ only per dataset): the reported models, three seeds for SNV
-    def three(base, kind):
-        sc = [score(base + x, kind) for x in ("", "_s1", "_s2")]
+    def three(base, kind, chosen=True):
+        sc = [score(CHOSEN.get(base + x, base + x) if chosen else base + x, kind) for x in ("", "_s1", "_s2")]
         got = [x for x in sc if x is not None]
         summ = {k: ((statistics.mean([x[k] for x in got]), min(x[k] for x in got), max(x[k] for x in got))
                     if len(got) == 3 else None) for k in ("pass", "best")}
@@ -167,7 +174,8 @@ def main():
 
     L += ["\n## `--norm dataset` (BQ only per dataset, f344bca): SNV over three seeds\n",
           "PASS F1 (best F1) per seed; mean (range). d46 seed 0 = `<S>_<P>_SNV_d46_normbq` (submit_normbq.sh), the rest "
-          "submit_normbq_all.sh.\n",
+          "submit_normbq_all.sh. COLO829T Illumina d9: seeds 0 / 1 / 2 at epoch 6 / 5 / 6 (the user, 2026-10-20; "
+          "submit_ep6.sh), the validation-selected epoch 8 in the row below it.\n",
           "| set | arm | seed 0 | seed 1 | seed 2 | PASS mean (range) | best mean (range) |", "|---|---|---|---|---|---|---|"]
     rows, means = [], {}
     for s, p in SETS:
@@ -176,7 +184,14 @@ def main():
             means[(s, p, arm)] = summ
             rows.append(dict(set=f"{s}T {p}", arm=arm, scores=sc))
             cells = ["-" if x is None else f"{x['pass']:.3f} ({x['best']:.3f})" for x in sc]
-            L.append(f"| {s}T {p} | {arm} | " + " | ".join(cells) + f" | {ms(summ['pass'])} | {ms(summ['best'])} |")
+            label = "d9, epoch 6 / 5 / 6" if (s, p, arm) == ("COLO829", "Illumina", "d9") else arm
+            L.append(f"| {s}T {p} | {label} | " + " | ".join(cells) + f" | {ms(summ['pass'])} | {ms(summ['best'])} |")
+            if label != arm:
+                sc8, summ8 = three(f"{s}_{p}_SNV_{arm}_normbq", "SNV", chosen=False)
+                rows.append(dict(set=f"{s}T {p}", arm="d9 validation-selected (epoch 8)", scores=sc8))
+                cells = ["-" if x is None else f"{x['pass']:.3f} ({x['best']:.3f})" for x in sc8]
+                L.append(f"| {s}T {p} | d9, epoch 8 (validation) | " + " | ".join(cells) +
+                         f" | {ms(summ8['pass'])} | {ms(summ8['best'])} |")
     out["normbq_seeds"] = rows
     L += ["\nArm differences of the three-seed means (PASS F1 / best F1):\n",
           "| set | d46 - d9 | d9 - linear | d46 - linear |", "|---|---|---|---|"]
@@ -186,6 +201,32 @@ def main():
             return "-" if not (x["pass"] and y["pass"]) else \
                 f"{x['pass'][0] - y['pass'][0]:+.3f} / {x['best'][0] - y['best'][0]:+.3f}"
         L.append(f"| {s}T {p} | {dd('d46', 'd9')} | {dd('d9', 'linear')} | {dd('d46', 'linear')} |")
+
+    L += ["\n## `--norm dataset`: COLO829T Illumina d9, the epochs tested (submit_ep6.sh)\n",
+          "Each seed retrained as it was with every epoch's checkpoint kept, ended after epoch 6 (epochs 1-6 bit for bit "
+          "those of the run); * = the checkpoint in the tables above. False calls: PASS, in the BED, after the PoN, with "
+          "those in chr1:121-126 / 143-144 Mb.\n",
+          "| seed | epoch | validation somatic F1 | PASS F1 (P / R) | TP | false calls (in the windows) | best F1 | run |",
+          "|---|---:|---:|---|---:|---:|---:|---|"]
+    rows = []
+    for sfx in ("", "_s1", "_s2"):
+        base = f"COLO829_Illumina_SNV_d9_normbq{sfx}"
+        val = {r["epoch"]: r["val"]["thresholded"]["somatic"]["f1"] for r in map(json.loads, open(RUNS / base / "metrics.jsonl"))}
+        runs = [(e, f"{base}_sweep_e{e:02d}") for e in (5, 6) if (RUNS / f"{base}_sweep_e{e:02d}").exists()]
+        best = max(val, key=val.get)
+        for e, run in runs + [(best, base)]:
+            x = score(run, "SNV")
+            fp = RUNS / run / "vcf_chr1" / "eval_bed" / "vcfeval" / "pon_calls" / "fp.vcf.gz"
+            win = None if not fp.exists() else sum(
+                any(a <= int(line.split("\t", 2)[1]) < b for a, b in WINDOWS)
+                for line in gzip.open(fp, "rt") if line[0] != "#")
+            rows.append(dict(seed=sfx or "_s0", epoch=e, run=run, val_f1=val[e], score=x, fp_windows=win))
+            mark = "*" if CHOSEN.get(base) == run else ""
+            L.append(f"| {(sfx or '_s0')[1:]} | {e}{mark} | {val[e]:.4f} | " +
+                     ("- | - | - | -" if x is None else
+                      f"{x['pass']:.3f} ({x['p']:.3f} / {x['r']:.3f}) | {x.get('tp', '-')} | {x['fp']:,} ({win:,}) | {x['best']:.3f}")
+                     + f" | `{run}` |")
+    out["normbq_d9_colo829_illumina_epochs"] = rows
 
     L += ["\n## `--norm dataset`: INDEL per arm (best F1 (PASS F1), one seed)\n",
           "| set | linear | d9 | d46 |", "|---|---|---|---|"]
@@ -197,19 +238,21 @@ def main():
                                               for x in sc.values()) + " |")
     out["normbq_indel"] = rows
 
-    L += ["\n## `--norm dataset`: no ch6 on d46 (SNV three seeds each side; INDEL one seed)\n",
-          "| set | kind | with ch6: mean (range) | no ch6: mean (range) | change of the means | no ch6 below every with-ch6 seed |",
+    L += ["\n## `--norm dataset`: no ch6 on d46 (SNV: with ch6 seeds 0 ; 1 ; 2, no ch6 seed 0; INDEL one seed each)\n",
+          "| set | kind | with ch6 | no ch6 | change | no ch6 below every with-ch6 seed (PASS/best) |",
           "|---|---|---|---|---|---|"]
     rows = []
     for k in ("SNV", "INDEL"):
         for s, p in SETS:
-            if k == "SNV":
-                (wsc, w), (nsc, n) = three(f"{s}_{p}_SNV_d46_normbq", "SNV"), three(f"{s}_{p}_SNV_nopc_d46_normbq", "SNV")
-                key = "pass"
-                below = "-" if not (w[key] and n[key]) else ("yes" if n[key][2] < w[key][1] else "no")
-                L.append(f"| {s}T {p} | SNV (PASS) | {ms(w[key])} | {ms(n[key])} | "
-                         f"{'-' if not (w[key] and n[key]) else f'{n[key][0] - w[key][0]:+.3f}'} | {below} |")
-                rows.append(dict(set=f"{s}T {p}", kind=k, with_ch6=wsc, no_ch6=nsc))
+            if k == "SNV":  # no ch6: seed 0 only (the user, 2026-10-20); with ch6: the three seeds, each shown
+                wsc, _ = three(f"{s}_{p}_SNV_d46_normbq", "SNV")
+                n = score(f"{s}_{p}_SNV_nopc_d46_normbq", "SNV")
+                cell = lambda x: "-" if x is None else f"{x['pass']:.3f} ({x['best']:.3f})"  # noqa: E731
+                got = [x for x in wsc if x is not None]
+                below = "-" if n is None or len(got) < 3 else \
+                    "/".join("yes" if n[q] < min(x[q] for x in got) else "no" for q in ("pass", "best"))
+                L.append(f"| {s}T {p} | SNV PASS (best) | {' ; '.join(cell(x) for x in wsc)} | {cell(n)} | - | {below} |")
+                rows.append(dict(set=f"{s}T {p}", kind=k, with_ch6=wsc, no_ch6=n))
             else:
                 w, n = score(f"{s}_{p}_INDEL_d46_normbq", k), score(f"{s}_{p}_INDEL_nopc_d46_normbq", k)
                 L.append(f"| {s}T {p} | INDEL (best) | {f3(w and w['best'])} | {f3(n and n['best'])} | "

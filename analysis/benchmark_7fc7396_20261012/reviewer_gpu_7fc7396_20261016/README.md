@@ -123,24 +123,50 @@ threshold, best F1 of the chr1 curve beside it; INDEL: best F1, with the 71cb51a
 
 The user: the seeds with the new `--norm` too, and whatever else needs it. 88 runs (job 197329-197505): d46 SNV seeds 1
 and 2 (seed 0 = `*_SNV_d46_normbq`), d9 SNV seeds 0-2 (4 GPUs), no ch6 on d46 (SNV seeds 0-2, INDEL), INDEL on the three
-arms, GRCh38-only SNV seeds 0-2. `tables.md` sections "`--norm dataset` ...". Done 2026-10-20 13:30: d46 and d9 seeds.
+arms, GRCh38-only SNV seeds 0-2. `tables.md` sections "`--norm dataset` ...".
+- 2026-10-20 13:45, the user: no seeds for no ch6. The 12 no-ch6 SNV seed-1 / seed-2 runs and their vcf jobs were
+  cancelled while pending: 76 runs.
+- Done 2026-10-20 15:30: d46 and d9 seeds, no-ch6 SNV on five sets, the first INDEL runs.
+- For the COLO829T Illumina d9 epoch test below (the user: first in the queue, cancel unrelated jobs for GPUs) three
+  jobs were requeued and restart from scratch: `COLO829_ONT_SNV_nopc_d46_normbq` (after 3 min),
+  `HG008_Illumina_SNV_linear_normbq` (after 2 epochs), `HG008_PacBio_SNV_linear_normbq` (after 6 epochs); their partial
+  outputs are in `<run>_requeued_20261020`. The rest of the queue was held 14:51-15:16.
 
-d9 against d46, SNV, three seeds each (chr1, BED, after the PoN; PASS F1 mean (range), and the mean differences
-PASS / best F1; the `--norm train` differences of the Results above beside them):
+d9 against d46, SNV, three seeds each (chr1, BED, after the PoN; PASS F1 of seeds 0 / 1 / 2, and the differences of
+the three-seed means PASS / best F1; the `--norm train` differences of the Results above beside them):
 
 | set | d9 | d46 | d46 - d9 | with `--norm train` |
 |---|---|---|---|---|
-| HG008T Illumina | 0.588 (0.586-0.588) | 0.573 (0.566-0.585) | -0.015 / +0.004 | -0.011 / +0.004 |
-| HG008T PacBio | 0.586 (0.555-0.611) | 0.606 (0.603-0.609) | +0.021 / -0.001 | +0.015 / -0.005 |
-| HG008T ONT | 0.585 (0.575-0.598) | 0.596 (0.576-0.607) | +0.011 / -0.001 | +0.002 / +0.004 |
-| COLO829T Illumina | 0.587 (0.566-0.628) | 0.751 (0.705-0.782) | +0.164 / +0.092 | +0.163 / +0.091 |
-| COLO829T fiberseq | 0.771 (0.758-0.783) | 0.779 (0.773-0.788) | +0.009 / +0.007 | +0.012 / +0.007 |
-| COLO829T ONT | 0.747 (0.744-0.752) | 0.736 (0.726-0.753) | -0.011 / -0.008 | -0.017 / -0.014 |
+| HG008T Illumina | 0.588 / 0.588 / 0.586 | 0.568 / 0.585 / 0.566 | -0.015 / +0.004 | -0.011 / +0.004 |
+| HG008T PacBio | 0.611 / 0.555 / 0.592 | 0.603 / 0.609 / 0.607 | +0.021 / -0.001 | +0.015 / -0.005 |
+| HG008T ONT | 0.598 / 0.575 / 0.581 | 0.576 / 0.605 / 0.607 | +0.011 / -0.001 | +0.002 / +0.004 |
+| COLO829T Illumina, d9 at epochs 6 / 5 / 6 | 0.773 / 0.705 / 0.738 | 0.782 / 0.705 / 0.765 | +0.012 / +0.012 | - |
+| COLO829T Illumina, d9 at epoch 8 (validation) | 0.566 / 0.628 / 0.568 | 0.782 / 0.705 / 0.765 | +0.164 / +0.092 | +0.163 / +0.091 |
+| COLO829T fiberseq | 0.758 / 0.783 / 0.771 | 0.777 / 0.773 / 0.788 | +0.009 / +0.007 | +0.012 / +0.007 |
+| COLO829T ONT | 0.744 / 0.752 / 0.745 | 0.753 / 0.726 / 0.729 | -0.011 / -0.008 | -0.017 / -0.014 |
 
 - In-sample the new normalization changes nothing: the d46 three-seed means are within 0.007 of `--norm train`'s,
   seed by seed close too (its point is the cross-sample tests).
-- d9 and d46 are equal on five of six sets (best F1 within 0.008, PASS within the seed range); COLO829T Illumina is
-  again the 4-GPU d9 drift on the unlabelled tensors (0.566-0.628), which the normalization does not touch.
+- COLO829T Illumina d9, the epochs (`submit_ep6.sh`; the user, 2026-10-20: "test epoch 6", then "seed 1 at epoch 5"):
+  every seed retrained as it was with every epoch's checkpoint kept and ended once epoch 6 was saved
+  (`ris/epoch_sweep.sh` under torchrun, `ris/tools/save_epochs.py --stop-after-epoch 6`, `--epochs 20` and so the
+  learning-rate schedule unchanged); epochs 1-6 of `metrics.jsonl` are bit for bit those of the runs, i.e. these are
+  the runs' own checkpoints. PASS F1 (false calls, of them in chr1:121-126 / 143-144 Mb):
+  - seed 0: epoch 6 0.773 (356, 15), epoch 8 0.566 (1,879, 1,635)
+  - seed 1: epoch 5 0.705 (719, 502), epoch 6 0.594 (1,593, 1,333), epoch 8 0.628 (1,328, 1,075)
+  - seed 2: epoch 6 0.738 (474, 198), epoch 8 0.568 (1,882, 1,639)
+  - Outside the windows the false calls are 217-341 at every epoch tested, as d46's 231-288, and TP 1,703-1,765
+    against d46's 1,723-1,752: the arms differ by the unlabelled window tensors only, and the epoch at which d9
+    starts to call them differs by seed (seed 0 after 6, seed 1 at 5 or before). The validation F1 does not see
+    it (epoch 6 against 8: 0.677 / 0.681, 0.660 / 0.665, 0.690 / 0.690).
+  - The user's decision (2026-10-20): this comparison takes COLO829T Illumina d9 at epochs 6 / 5 / 6. They are
+    chosen on chr1, not by validation; the validation-selected epoch 8 is kept beside them. With them d9 and d46 are
+    equal on all six sets (PASS within the seed ranges, best F1 within 0.012). The user plans 10 epochs for both
+    kinds later; the recipes are unchanged for now (SNV 20, INDEL 12).
+- HG008T Illumina has no such gap: its chr1 has more unlabelled tensors in the windows (71,551 on d9, 70,622 on d46,
+  against COLO829T's 52,279 / 51,551), but its models call few of them (1-55 false calls there at the selected epochs).
+- No ch6 so far (seed 0; `tables.md`): COLO829T Illumina 0.477 (best 0.591) against 0.705-0.782 with ch6 has the same
+  pattern, 2,634 of its 2,861 false calls in the windows; COLO829T fiberseq 0.732 (254 of 532).
 
 ## Code updates while the jobs ran
 

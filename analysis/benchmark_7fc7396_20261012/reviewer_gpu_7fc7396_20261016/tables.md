@@ -95,7 +95,7 @@ normds: BQ and MAPQ per dataset, predict fitted on chr1 only (2026-10-16); normd
 
 ## `--norm dataset` (BQ only per dataset, f344bca): SNV over three seeds
 
-PASS F1 (best F1) per seed; mean (range). d46 seed 0 = `<S>_<P>_SNV_d46_normbq` (submit_normbq.sh), the rest submit_normbq_all.sh.
+PASS F1 (best F1) per seed; mean (range). d46 seed 0 = `<S>_<P>_SNV_d46_normbq` (submit_normbq.sh), the rest submit_normbq_all.sh. COLO829T Illumina d9: seeds 0 / 1 / 2 at epoch 6 / 5 / 6 (the user, 2026-10-20; submit_ep6.sh), the validation-selected epoch 8 in the row below it.
 
 | set | arm | seed 0 | seed 1 | seed 2 | PASS mean (range) | best mean (range) |
 |---|---|---|---|---|---|---|
@@ -109,7 +109,8 @@ PASS F1 (best F1) per seed; mean (range). d46 seed 0 = `<S>_<P>_SNV_d46_normbq` 
 | HG008T ONT | d9 | 0.598 (0.618) | 0.575 (0.604) | 0.581 (0.606) | 0.585 (0.575-0.598) | 0.609 (0.604-0.618) |
 | HG008T ONT | d46 | 0.576 (0.601) | 0.605 (0.613) | 0.607 (0.611) | 0.596 (0.576-0.607) | 0.608 (0.601-0.613) |
 | COLO829T Illumina | linear | - | - | - | - | - |
-| COLO829T Illumina | d9 | 0.566 (0.655) | 0.628 (0.708) | 0.568 (0.646) | 0.587 (0.566-0.628) | 0.670 (0.646-0.708) |
+| COLO829T Illumina | d9, epoch 6 / 5 / 6 | 0.773 (0.776) | 0.705 (0.730) | 0.738 (0.744) | 0.739 (0.705-0.773) | 0.750 (0.730-0.776) |
+| COLO829T Illumina | d9, epoch 8 (validation) | 0.566 (0.655) | 0.628 (0.708) | 0.568 (0.646) | 0.587 (0.566-0.628) | 0.670 (0.646-0.708) |
 | COLO829T Illumina | d46 | 0.782 (0.787) | 0.705 (0.730) | 0.765 (0.769) | 0.751 (0.705-0.782) | 0.762 (0.730-0.787) |
 | COLO829T fiberseq | linear | - | - | - | - | - |
 | COLO829T fiberseq | d9 | 0.758 (0.774) | 0.783 (0.790) | 0.771 (0.773) | 0.771 (0.758-0.783) | 0.779 (0.773-0.790) |
@@ -125,34 +126,48 @@ Arm differences of the three-seed means (PASS F1 / best F1):
 | HG008T Illumina | -0.015 / +0.004 | - | - |
 | HG008T PacBio | +0.021 / -0.001 | - | - |
 | HG008T ONT | +0.011 / -0.001 | - | - |
-| COLO829T Illumina | +0.164 / +0.092 | - | - |
+| COLO829T Illumina | +0.012 / +0.012 | - | - |
 | COLO829T fiberseq | +0.009 / +0.007 | - | - |
 | COLO829T ONT | -0.011 / -0.008 | - | - |
+
+## `--norm dataset`: COLO829T Illumina d9, the epochs tested (submit_ep6.sh)
+
+Each seed retrained as it was with every epoch's checkpoint kept, ended after epoch 6 (epochs 1-6 bit for bit those of the run); * = the checkpoint in the tables above. False calls: PASS, in the BED, after the PoN, with those in chr1:121-126 / 143-144 Mb.
+
+| seed | epoch | validation somatic F1 | PASS F1 (P / R) | TP | false calls (in the windows) | best F1 | run |
+|---|---:|---:|---|---:|---:|---:|---|
+| s0 | 6* | 0.6769 | 0.773 (0.832 / 0.723) | 1765 | 356 (15) | 0.776 | `COLO829_Illumina_SNV_d9_normbq_sweep_e06` |
+| s0 | 8 | 0.6806 | 0.566 (0.476 / 0.698) | 1705 | 1,879 (1,635) | 0.655 | `COLO829_Illumina_SNV_d9_normbq` |
+| s1 | 5* | 0.6636 | 0.705 (0.705 / 0.705) | 1722 | 719 (502) | 0.730 | `COLO829_Illumina_SNV_d9_normbq_s1_sweep_e05` |
+| s1 | 6 | 0.6599 | 0.594 (0.517 / 0.697) | 1703 | 1,593 (1,333) | 0.722 | `COLO829_Illumina_SNV_d9_normbq_s1_sweep_e06` |
+| s1 | 8 | 0.6651 | 0.628 (0.565 / 0.706) | 1725 | 1,328 (1,075) | 0.708 | `COLO829_Illumina_SNV_d9_normbq_s1` |
+| s2 | 6* | 0.6895 | 0.738 (0.782 / 0.698) | 1705 | 474 (198) | 0.744 | `COLO829_Illumina_SNV_d9_normbq_s2_sweep_e06` |
+| s2 | 8 | 0.6904 | 0.568 (0.477 / 0.703) | 1717 | 1,882 (1,639) | 0.646 | `COLO829_Illumina_SNV_d9_normbq_s2` |
 
 ## `--norm dataset`: INDEL per arm (best F1 (PASS F1), one seed)
 
 | set | linear | d9 | d46 |
 |---|---|---|---|
-| HG008T Illumina | - | - | 0.256 (0.253) |
+| HG008T Illumina | - | 0.270 (0.250) | 0.256 (0.253) |
 | HG008T PacBio | - | - | - |
 | HG008T ONT | - | - | - |
 | COLO829T Illumina | - | - | 0.169 (0.117) |
 | COLO829T fiberseq | - | - | - |
 | COLO829T ONT | - | - | - |
 
-## `--norm dataset`: no ch6 on d46 (SNV three seeds each side; INDEL one seed)
+## `--norm dataset`: no ch6 on d46 (SNV: with ch6 seeds 0 ; 1 ; 2, no ch6 seed 0; INDEL one seed each)
 
-| set | kind | with ch6: mean (range) | no ch6: mean (range) | change of the means | no ch6 below every with-ch6 seed |
+| set | kind | with ch6 | no ch6 | change | no ch6 below every with-ch6 seed (PASS/best) |
 |---|---|---|---|---|---|
-| HG008T Illumina | SNV (PASS) | 0.573 (0.566-0.585) | - | - | - |
-| HG008T PacBio | SNV (PASS) | 0.606 (0.603-0.609) | - | - | - |
-| HG008T ONT | SNV (PASS) | 0.596 (0.576-0.607) | - | - | - |
-| COLO829T Illumina | SNV (PASS) | 0.751 (0.705-0.782) | - | - | - |
-| COLO829T fiberseq | SNV (PASS) | 0.779 (0.773-0.788) | - | - | - |
-| COLO829T ONT | SNV (PASS) | 0.736 (0.726-0.753) | - | - | - |
-| HG008T Illumina | INDEL (best) | 0.256 | - | - | - |
+| HG008T Illumina | SNV PASS (best) | 0.568 (0.613) ; 0.585 (0.612) ; 0.566 (0.611) | 0.529 (0.542) | - | yes/yes |
+| HG008T PacBio | SNV PASS (best) | 0.603 (0.623) ; 0.609 (0.617) ; 0.607 (0.618) | 0.596 (0.601) | - | yes/yes |
+| HG008T ONT | SNV PASS (best) | 0.576 (0.601) ; 0.605 (0.613) ; 0.607 (0.611) | 0.584 (0.601) | - | no/yes |
+| COLO829T Illumina | SNV PASS (best) | 0.782 (0.787) ; 0.705 (0.730) ; 0.765 (0.769) | 0.477 (0.591) | - | yes/yes |
+| COLO829T fiberseq | SNV PASS (best) | 0.777 (0.783) ; 0.773 (0.783) ; 0.788 (0.792) | 0.732 (0.742) | - | yes/yes |
+| COLO829T ONT | SNV PASS (best) | 0.753 (0.754) ; 0.726 (0.735) ; 0.729 (0.737) | - | - | - |
+| HG008T Illumina | INDEL (best) | 0.256 | 0.252 | -0.005 | - |
 | HG008T PacBio | INDEL (best) | - | - | - | - |
 | HG008T ONT | INDEL (best) | - | - | - | - |
-| COLO829T Illumina | INDEL (best) | 0.169 | - | - | - |
+| COLO829T Illumina | INDEL (best) | 0.169 | 0.178 | +0.010 | - |
 | COLO829T fiberseq | INDEL (best) | - | - | - | - |
 | COLO829T ONT | INDEL (best) | - | - | - | - |

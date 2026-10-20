@@ -6,6 +6,8 @@
 #   A1. d46 SNV seeds 1, 2 (seed 0 = <S>_<P>_SNV_d46_normbq of submit_normbq.sh)                     12 runs
 #   A2. d9 SNV seeds 0, 1, 2 (4 GPUs, the matched recipe)                                             18
 #   C.  no ch6 on d46 (--drop-planes path_count): SNV seeds 0, 1, 2; INDEL                            24
+#       (2026-10-20 13:45, the user: no seeds for no ch6; the 12 SNV seed-1 / seed-2 runs and their vcf jobs were
+#       cancelled while pending, so C is SNV seed 0 + INDEL, 12 runs, and the batch 76 runs)
 #   B.  INDEL d9, d46 (but the two Illumina of submit_normbq.sh), linear                              16
 #   A3. GRCh38-only (linear) SNV seeds 0, 1, 2 (the slowest)                                          18
 # Names: <S>_<P>_<KIND>_<arm>_normbq[_s1|_s2], arm d9 / d46 / linear; no ch6 <S>_<P>_<KIND>_nopc_d46_normbq[_sK].
