@@ -7,6 +7,12 @@ all on HPRC v2.1 d46, tested on chr1 of HCC1395T, HG008T, COLO829T and on HCC139
 Baselines (chr1, in the benchmark BED, after the PoN, the current INDEL PoN rule):
   in-sample single-tumor d46 model  = reviewer_cpu_20261013/<S>_<P>_<KIND>_d46_7fc7396/vcf_chr1/eval_bed/report.json
   cross-tumor single-tumor d46 model = E12a summary.json (model of the other tumor, HCC1395T from both)
+Multi-cancer cells come from the re-predictions with the --norm dataset fix (f344bca; `vcf_<chrom>_<set>_normfix`);
+the first predictions (`vcf_<chrom>_<set>`, ONT invalid) are kept in summary.json as `*_prefix`.
+Comparators: DeepSomatic 1.9.0 and ClairS-TO tumor-only, scored with E8 score_comparator.py on the same truth, BED and
+PoN rule (/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/<caller>/<dataset>[_chr20]/<KIND>/;
+HCC1395T runs 2026-10-19/20 on tequila, HG008T / COLO829T = the user's existing runs re-scored); PASS after the PoN, and
+for INDEL also the best F1 of the all-records-after-PoN curve.
 SNV: PASS F1 at the training sets' recall-0.9 validation threshold; INDEL: best F1 of the chr1 curve (upper bound) and
 PASS. usage: /wanglab/jshen/anaconda3/bin/python collect.py
 """
@@ -18,6 +24,8 @@ RUNS = Path("/scratch/jshen/data/pansoma_net_v2_runs")
 CPU = RUNS / "reviewer_cpu_20261013"
 E12A = HERE.parent / "E12a_cross_sample" / "summary.json"
 PLAT = {"Illumina": ("Illumina", "Illumina"), "PacBio": ("PacBio", "fiberseq"), "ONT": ("ONT", "ONT")}  # HG008T, COLO829T
+E8 = Path("/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score")
+COMPARATORS = (("deepsomatic", "DeepSomatic-TO"), ("clairs_to", "ClairS-TO"))
 
 
 def load(p):
@@ -31,6 +39,14 @@ def from_report(rep):
     at, best = rep["pon"]["at_threshold"], rep["pon"]["best"]
     return dict(p=at["precision"], r=at["recall"], f1=at["f1"], best=best["f1"],
                 truth=rep["truth_records"], tagged=rep["truth_pon_tags"]["tagged"])
+
+
+def from_comparator(rep):
+    if rep is None:
+        return None
+    e = rep["eval_bed"]
+    at = e["pass_pon"]["at_threshold"]
+    return dict(p=at["precision"], r=at["recall"], f1=at["f1"], best=e["all_pon"]["best"]["f1"])
 
 
 def from_e12a(row):
@@ -56,17 +72,25 @@ def main():
                   "chr1 (and HCC1395T chr20), in the benchmark BED, after the PoN. SNV cells: P / R / **F1** at the PASS "
                   "threshold (each model's own validation recall-0.9 threshold). INDEL cells: **best F1** of the chr1 "
                   "curve (upper bound) (PASS F1). In-sample = the single-tumor HPRC v2.1 model of that tumor; cross-tumor "
-                  "= the single-tumor model of the other tumor (E12a; HCC1395T: HG008T model / COLO829T model).", ""]
+                  "= the single-tumor model of the other tumor (E12a; HCC1395T: HG008T model / COLO829T model). Multi-cancer "
+                  "models: re-predictions with the --norm dataset fix (f344bca). Comparators: PASS after the same PoN (INDEL: "
+                  "best F1 of the all-records curve after the PoN (PASS F1)); DeepSomatic's models were trained on HCC1395 "
+                  "with chr1 held out, ClairS-TO's never saw HCC1395.", ""]
     for kind in ("SNV", "INDEL"):
         L += [f"## {kind}", "",
               "| test set | platform | multicancer4 (target tumor not in training, except HCC1395T) | multicancer6 | "
-              "in-sample single-tumor | cross-tumor single-tumor |", "|---|---|---|---|---|---|"]
+              "in-sample single-tumor | cross-tumor single-tumor | DeepSomatic-TO | ClairS-TO |", "|---|---|---|---|---|---|---|---|"]
         for target in ("HCC1395T", "HG008T", "COLO829T"):
             for p, (hp, cp) in PLAT.items():
                 tset = {"HCC1395T": f"HCC1395T_{p}_d46", "HG008T": f"HG008T_{hp}_d46", "COLO829T": f"COLO829T_{cp}_d46"}[target]
                 for chrom in (("chr1", "chr20") if target == "HCC1395T" else ("chr1",)):
-                    mc = {g: from_report(load(RUNS / f"multicancer{g}_{p}_{kind}" / f"vcf_{chrom}_{tset}" / "eval_bed" / "report.json"))
+                    mc = {g: from_report(load(RUNS / f"multicancer{g}_{p}_{kind}" / f"vcf_{chrom}_{tset}_normfix" / "eval_bed" / "report.json"))
                           for g in (4, 6)}
+                    pre = {g: from_report(load(RUNS / f"multicancer{g}_{p}_{kind}" / f"vcf_{chrom}_{tset}" / "eval_bed" / "report.json"))
+                           for g in (4, 6)}
+                    cds = {"HCC1395T": f"HCC1395T_{p}", "HG008T": f"HG008T_{hp}", "COLO829T": f"COLO829T_{cp}"}[target]
+                    cds += "" if chrom == "chr1" else f"_{chrom}"
+                    comp = {c: from_comparator(load(E8 / c / cds / kind / "report.json")) for c, _ in COMPARATORS}
                     ins = xsd = None
                     if chrom == "chr1" and target == "HG008T":
                         ins = from_report(load(CPU / f"HG008_{hp}_{kind}_d46_7fc7396" / "vcf_chr1" / "eval_bed" / "report.json"))
@@ -81,13 +105,15 @@ def main():
                         rc = xs.get((f"COLO829_{cp}_{kind}_d46_7fc7396", tset, kind))
                         xsd = dict(hg008=from_e12a(rh) if rh else None, colo=from_e12a(rc) if rc else None)
                     row = dict(kind=kind, target=target, platform=p, chrom=chrom, test_set=tset,
-                               multicancer4=mc[4], multicancer6=mc[6], in_sample=ins, cross_tumor=xsd)
+                               multicancer4=mc[4], multicancer6=mc[6], multicancer4_prefix=pre[4],
+                               multicancer6_prefix=pre[6], in_sample=ins, cross_tumor=xsd, **comp)
                     out.append(row)
                     if isinstance(xsd, dict) and "hg008" in xsd:
                         xc = f"{cell(xsd['hg008'], kind)} / {cell(xsd['colo'], kind)}"
                     else:
                         xc = cell(xsd, kind)
-                    L.append(f"| {target} {chrom} | {p} | {cell(mc[4], kind)} | {cell(mc[6], kind)} | {cell(ins, kind)} | {xc} |")
+                    L.append(f"| {target} {chrom} | {p} | {cell(mc[4], kind)} | {cell(mc[6], kind)} | {cell(ins, kind)} | {xc} | "
+                             + " | ".join(cell(comp[c], kind) for c, _ in COMPARATORS) + " |")
         L.append("")
     (HERE / "summary.json").write_text(json.dumps(out, indent=1) + "\n")
     (HERE / "tables.md").write_text("\n".join(L) + "\n")
