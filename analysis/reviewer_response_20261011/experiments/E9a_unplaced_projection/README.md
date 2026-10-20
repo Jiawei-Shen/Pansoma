@@ -17,8 +17,28 @@ validation) are the separate experiment `../E9c_offref_filter_validation/`. It r
     2026-10-15 17:52, after the last call-set output (17:50).
 - **GRCh38-only (linear) arm.** That graph has no off-reference nodes, so it has no unplaced calls and nothing to
   project. `collect.py` reads the six SNV and six INDEL linear runs' own reports (Results §7).
-- **DROPPED: E9b (CHM13), by the user's decision on 2026-10-13.** The CHM13 step of `prep_graph.py` failed in both
-  graph-prep jobs, and nobody repaired it. Every call has `chm13_class = not_built`.
+- **E9b (CHM13): dropped by the user on 2026-10-13, restarted by the user on 2026-10-19.** The CHM13 step of
+  `prep_graph.py` had failed in both graph-prep jobs (every call of the 2026-10-15 outputs has `chm13_class =
+  not_built`). The CHM13 coordinates are now the pipeline's own: `graph_prep ref-path-scan --reference-sample CHM13`
+  + `ref-path-check` against chm13v2.0.fa (the scan reads a small GFA from `chm13_mini_gfa.py`: the GRCh38 path's segment lengths + the CHM13 W lines of the leftover `graph/<g>/chm13.gaf`; d9 446492, d46 446491. BeeGFS read the full GFAs at ~10 MB/s on 2026-10-19, and the full d9 GFA scan 446268 stalled and was cancelled. The 109 d9 walks equal the d9 GFA's CHM13 W lines (contig, start, end, node count, min / max node; the GRCh38 scan's walks.ndjson). The first check against chm13v2.0.fa failed on both graphs; comparing every CHM13 base with the FASTAs (`tmp/reviewer_cpu_20261019/E9b_chm13/compare_chm13_paths.py`, jobs 446746, 446758, 446760) showed: d9's two chrY walks are GRCh38's chrY (0 differences over 23.9 Mb) and its other 107 walks equal chm13v2.0.fa; d46 equals chm13v2.0_maskedY_rCRS.fa (rCRS chrM) over all 93 walks. So d9 is rebuilt with `--exclude-contigs chrY` and checked against chm13v2.0.fa (447886), and d46 is checked against chm13v2.0_maskedY_rCRS.fa (447959); CHM13 VCFs 447960 and projection array 447961 follow; `tmp/reviewer_cpu_20261019/E9b_chm13/`), written
+  to `<graph_index>/<graph>.chm13_path`. `<scratch>/graph/{d9,d46}/chm13_path` (empty directories) were replaced by
+  symlinks to them. The twelve SNV runs are projected again into `<scratch>/runs_e9b` (array 447961), so `runs/` stays
+  as it is until the GRCh38 columns are checked equal. pansoma_net_v2's CHM13 VCFs of the 24 SNV / INDEL runs (447960)
+  go to `/scratch/jshen/data/reviewer_experiments_20261013/E9b_chm13_vcf/`.
+- **E9b result (2026-10-19, `<scratch>/runs_e9b`, twelve SNV runs; `runs/` unchanged).** The GRCh38 columns of every
+  `projected.tsv` and all GRCh38 metrics equal those of `runs/` row for row; only the `chm13_*` fields changed (they
+  were `not_built`). Unplaced PASS SNV calls (no GRCh38 position), summed over the twelve runs: 14,419. Of these,
+  6,860 (47.6 %; 36.7-63.1 % per run) have a direct CHM13 position (the event's node is on the CHM13 path), 5,070
+  (35.2 %) lie in a CHM13 anchor interval, and 2,489 (17.3 %) have neither; 2,054 of the last are COLO829T ONT d46.
+  By GRCh38 class: i 246 / 252 / 15, ii 3,519 / 4,446 / 71, iii 3,095 / 372 / 2,403 (direct / anchor interval /
+  none).
+- **CHM13 VCFs (pipeline step, 24 SNV / INDEL runs, `collect_chm13_vcf.py` -> `results/chm13_vcf_by_run.tsv`).** For
+  each of the twelve SNV runs, the PASS calls placed on CHM13 but not on GRCh38 equal the E9b direct count exactly
+  (111, 312, 1,981, 1,677, 663, 115, 57, 476, 612, 660, 85, 111). PASS calls placed on GRCh38 but not on CHM13 are
+  0-101 per SNV run except COLO829T Illumina d9 (2,581). Of those 2,581, 2,554 are at GRCh38 chr1 120-145 Mb (1,820 at
+  120-125 Mb, around the modelled centromere), where the graphs' CHM13 path is clipped. Most CHM13-unplaced records of
+  a run are non-PASS candidates there (HG008T ONT d9: 47,096 of 51,625 at 120-145 Mb; none of its 809 CHM13-unplaced
+  PASS calls is).
 - **NOT PROCESSED: INDEL runs, the `__norescue` re-calls, the COLO829T fiber-seq joint model and the cross-sample runs.**
   They are finished and `run_all.sh` would queue them, but that needs a new Slurm array (see "Still missing").
 - **PENDING: the final complete-output number, which needs E9c / E9d.** The numbers here count every call that is not
