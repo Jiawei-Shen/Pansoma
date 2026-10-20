@@ -660,6 +660,23 @@ KIND=SNV GPUS=4 SLOTS=16 MEM=192 VAL_WORKERS=3 ris/snv_pipeline.sh HG008_PacBio_
   somatic AP (`test_chr1/*.metrics.json`), validation somatic AP, best epoch; the same `collect.py` pattern as
   `analysis/benchmark_7fc7396_20261012/hprc_v21_d46_7fc7396_20261012`.
 
+## 7. Model size (loss curves) and the multi-tumor training sets (R1.7; 2026-10-20, `capacity_multitumor.md`)
+
+`capacity_multitumor.py` (login node, reads only `train.log` / `metrics.jsonl` / `report.json`) writes
+`capacity_multitumor.md`, `capacity_loss.tsv` (train and validation loss per epoch) and `multitumor_training.tsv`.
+
+- **A. Model size** (E13, HG008T PacBio d46 SNV, lr 1e-4, 20 epochs; validation loss = class-weighted cross-entropy):
+  199.6 M: minimum 0.399 at epoch 3, 5.76x at epoch 20, training loss 0.038, selected epoch 6, PASS F1 0.603; 50.4 M
+  (three seeds): minimum at epochs 9-10, 2.56-3.43x at epoch 20, training loss 0.112-0.130, selected 7 / 9 / 9, PASS F1
+  0.604-0.611; 8.7 M: minimum at epoch 13, 1.04x at epoch 20, training loss 0.252, selected 16, PASS F1 0.616. The
+  INDEL pair of 2026-10-06 (HG008T Illumina d9, lr 4e-4, 12 epochs, sqrt weights; PoN rule of that day for both):
+  199.6 M training loss 0.0004, validation loss 5.33x its minimum at epoch 12, PASS F1 0.1865; 8.7 M 0.225, 1.91x,
+  0.2426. Larger networks overfit earlier and further; with early stopping the SNV F1 is the same within 0.013.
+- **B. Multi-tumor models** (12 runs; the per-set training counts add up to each run's total, checked by the script):
+  SNV somatic training tensors 237,577-240,469 (multicancer4) and 278,615-281,853 (multicancer6), INDEL 10,390-10,584
+  and 14,809-15,486; selected epochs SNV 10-19, INDEL 6-9 (single-set models: 4-12, 2-7). Validation counts are per run
+  (`train.log` does not split them by set).
+
 ## Interpretation for the response
 
 - **R1.7, example counts** (fills "Supplementary Table [待补]"): use `tables.md` T1 (per model) and T3 (per set). The
@@ -754,6 +771,7 @@ PENDING, with the reason:
 | `summarize.py` | replayed split, counts, truth alleles, VAF, spectrum -> `set_split_counts.tsv`, `runs_replay_check.tsv`, `somatic_truth_alleles.tsv`, `somatic_truth_unions.tsv`, `vaf_quantiles.tsv`, `vaf_hist.tsv`, `somatic_spectrum.tsv` |
 | `make_e13_subsets.py` | E13 exclude files -> `e13_subsets_<SET>_SNV.tsv` here, the files in `/scratch/jshen/data/reviewer_experiments_20261013/E21_training_composition/e13/` |
 | `make_tables.py` | `tables.md` (T1-T7) |
+| `capacity_multitumor.py` | section 7: `capacity_multitumor.md`, `capacity_loss.tsv`, `multitumor_training.tsv` |
 | `collect.sh` | all of the above after the index builds |
 | `/scratch/jshen/Github/Pansoma/tmp/reviewer_cpu_20261013/E21_training_composition/` | `build_index.sbatch`, `sets.txt`, `collect.sbatch`, logs |
 | `/scratch/jshen/data/reviewer_experiments_20261013/E21_training_composition/index_cache/` | index caches (large, not in git) |
