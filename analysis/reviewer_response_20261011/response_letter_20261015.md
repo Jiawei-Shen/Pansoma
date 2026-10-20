@@ -60,7 +60,7 @@ We agree that aggregate statistics do not show where alignment improves, and add
 
 1. *Alignment by region* (same reads, six datasets, SMaHT region classes). In easy regions the graphs give cleaner alignments at the same locus: on the HPRC v1.1 graph (d9 filter), HG008T PacBio mismatched bases per kb fall from 1.02 to 0.16, and 99.93–99.99% of long reads keep their placement. In extreme regions they add ambiguity: on v1.1, 6.26–7.41% of long reads lose MAPQ ≥ 30 and 3.05–4.93% gain it; on the HPRC v2.1 graph (d46 filter), aligned with a newer aligner release, 13.97–17.30% lose it. For short reads, lower MAPQ is not more misplacement: of simulated HG008-N Illumina reads of known origin, v1.1 and v2.1 misplace 0.98% and 0.93% of placed reads against 1.24% on a GRCh38-only graph (R3.6). Simulated ONT reads differ: v1.1 misplaces slightly fewer (0.61% against 0.77%), but v2.1 about twice as many (1.48%), almost all in extreme regions, in line with the more frequent confident disagreements of real ONT reads on v2.1 (HG008T: 1,953 against 1,019 reads on v1.1).
 
-2. *Calls by region* (chr1 SNVs, PASS after population filtering, benchmark regions). On HG008T the arms are close in easy regions (F1 0.627–0.642 on GRCh38-only, 0.636–0.659 on the HPRC graphs). In extreme regions the GRCh38-only graph makes 351–2,210 PASS calls per dataset at precision 0.056–0.253, against 102–281 at 0.161–0.764 on the HPRC graphs. Placed ONT SNVs lose no more recall in extreme regions (HG008T, v2.1: 0.451 against 0.341–0.374), but on COLO829T their precision there is lower (0.452 against 0.693–0.764). [待补: per-stratum intervals]
+2. *Calls by region* (chr1 SNVs, PASS after population filtering, benchmark regions; paired 1-Mb block-bootstrap intervals in the Supplementary Table). On HG008T the arms are close in easy regions (F1 0.627–0.642 on GRCh38-only, 0.636–0.659 on the HPRC graphs; all six paired intervals include zero), whereas on COLO829T the HPRC graphs gain +0.053 to +0.154 there, through recall (all six exclude zero). In extreme regions the GRCh38-only graph makes 351–2,210 PASS calls per dataset at precision 0.056–0.253, against 102–382 at 0.161–0.764 on the HPRC graphs; the precision gain excludes zero in 10 of 12 pairs. The exceptions are COLO829T on v1.1 with Fiber-seq (wide interval) and Illumina, whose matched-recipe model makes 1,725 such calls at precision 0.076 (R1.2). Placed ONT SNVs lose no more recall in extreme regions (HG008T, v2.1: 0.451 against 0.341–0.374), but on COLO829T their precision there is lower (v2.1: 0.452 against 0.693–0.764).
 
 3. *ONT graph-coordinate calls.* ONT makes the most graph-coordinate calls (chr1: HG008T 1,409 / 1,261 on v1.1 / v2.1, against 116–754 for Illumina and 211–244 for PacBio; COLO829T 1,675 / 4,566). Most are produced by the off-reference rescue; without it, 6–162 per run remain (R3.4). In the nine graph runs available (R3.3):
    - 2.8–19.1% can be written as a GRCh38 variant; after filtering this adds six true positives across the nine runs (0–2 per run; three distinct truth SNVs; R3.4).
@@ -87,7 +87,7 @@ The reviewer is correct: an allele on a graph path is not necessarily germline, 
 
 *Against a GRCh38-only graph* (same reads and code; chr1–22; tensor level). Net of gains, the HPRC graphs give a tensor to 0.2–0.6% fewer truth SNVs and 1.7–7.7% fewer truth INDELs that filtering would keep. Absorption is a small part: of the untagged INDELs lost on v1.1 (HG008T Illumina / PacBio / ONT: 461 / 550 / 276), 35 / 30 / 16 are absorbed by a strict spelling test; most others get no candidate without an exactly matching graph path or fall below the candidate allele-fraction cut. In the scored region (chr1, benchmark BED), 0–2 absorbed, untagged INDELs are lost per dataset and graph, and the GRCh38-only arm calls most of the untagged INDELs that the graphs lose (HG008T: 16–26 of 16–29; COLO829T: 4–12 of 10–13). Its final INDEL recall is similar: in a per-allele recall funnel, about two thirds of truth INDELs are population alleles, most of which it calls and filtering removes, and 24–27% of truth INDELs are called on every reference, slightly more on GRCh38-only (R1.6). But it also makes the patient's germline INDELs candidates and ranks somatic ones worse: its chr1 INDEL F1 after filtering is lower on all six datasets at the validation best-F1 threshold and by test-tuned best F1 (upper bound), though higher at the recall-0.9 validation threshold on the four long-read datasets, where every arm scores 0.133 or less (R3.1).
 
-Linear tumor-only callers drop such alleles too: an earlier DeepSomatic tumor-only run labels 72 of 131 COLO829T Fiber-seq chr1 truth INDELs germline. [待补: ClairS-TO and DeepSomatic at the absorbed loci]
+Linear tumor-only callers lose such alleles too, at filtering instead of alignment. At the alleles that the HPRC v1.1 graph absorbs on chr1 (benchmark regions; 4–14 SNVs and 19–136 indels per dataset), DeepSomatic-TO and ClairS-TO emit a record for many of the indels (4–85%), but their own filters pass 7 of 882 absorbed allele–caller pairs, all indels, against 56–91% of all truth SNVs and 2–21% of all truth indels; after the same population filtering they call none.
 
 The classifier applies the population prior a second time through the haplotype-count channel: of the assembly-derived HG008T somatic SNVs on off-reference nodes, 57–79% per dataset have read support as somatic, yet the models call only 0–4 of these (R1.1, R3.3). The Discussion states both as limitations of population-based tumor-only calling.
 
@@ -245,9 +245,22 @@ The classifier uses this path information.
 - After population filtering (a per-tensor estimate), these two edits change F1 by only −0.066 to +0.007, except HG008T ONT on v1.1 with the training mean (0.596 to 0.145); replacing the plane with another tensor's lowers F1 to 0.212–0.551. Whether the plane improves the final calls is the retraining ablation of R1.1.
 - The plane also suppresses somatic SNVs off GRCh38: of the assembly-derived HG008T somatic SNVs whose allele lies on an off-reference node, the models call 0 of 112 (PacBio) and 1 of 89 (ONT) on v1.1, against 61 and 49 with every node set to all haplotypes (v2.1, three platforms: 1–4 of 67–135, against 49–97), although 57–79% per dataset have read support as somatic (R1.1). An optional off-reference rescue recovers 22–66 of the read-supported ones per dataset at tensor level (R3.m1); we report every SNV result with and without the rescue (R3.4).
 
-A schematic of a tensor crossing node boundaries is added as Supplementary Fig. [待补].
+Supplementary Fig. R1.m2 shows one such tensor: at a somatic SNV, its rows cross several nodes, and the ALT reads follow a node carried by 10–12 of the 90 haplotypes about 15 bp upstream, while the REF reads follow one carried by 89.
 
 We agree that the tensors do not model bubbles explicitly: competing path support is represented through the reads' walks and per-node haplotype counts, not as a bubble-level object, and we state this as a limitation (R1.1).
+
+**Supplementary (R1.m2).**
+
+![A chr1 SNV tensor whose rows follow their reads across node boundaries](supplementary/R1.m2/fig_R1.m2_tensor_across_nodes.png)
+
+*R1.m2,* the eight channels of one chr1 SNV tensor (HG008T PacBio HiFi, HPRC v1.1 graph with the d9 filter; somatic truth
+SNV chr1:242,680,268 G>A, allele fraction 0.50; 49 ALT, 47 REF and 2 other reads). Rows are reads, grouped by the
+allele they carry at the site (A1 = ALT, REF, OTHER); columns are the 101 positions centred on the site (column 50).
+Each row follows its read's alignment walk, so the window spans several graph nodes. Panel 6 gives the graph base of the
+node the read traverses at each column, panel 7 the number of haplotype paths through that node (coded relative to the
+graph's 90 haplotypes: 99 = 89 haplotypes, 10 = 10). In columns 30–37 the ALT reads traverse a node carried by 10–12
+haplotypes and the REF reads one carried by 89, so the tensor records that the somatic allele lies on the haplotype with
+the less common upstream allele. Rendered with `scripts/visualize_tensor.py` (`supplementary/R1.m2/make_figure.sh`).
 
 ## Reviewer 2
 
@@ -439,100 +452,98 @@ precision over v1.1 after filtering (R1.2).
 
 **Response.**
 
-We agree that lines 292–294 overstated the effect, and have rewritten them. Supplementary Fig. 4 is replaced by counts
-and proportions for the same reads on four references (the GRCh38 BAM, a GRCh38-only graph, and the HPRC v1.1 and v2.1
-graphs), for both tumors and all three platforms (Supplementary Table and Figure below). In summary:
+We agree that lines 292–294 overstated the effect. They read: "Across both datasets, graph alignment increased perfect
+alignments by up to 11% in WGS data and by more than four-fold in long-read datasets, while substantially reducing
+soft-clipped bases, substitutions and indel events (Supplementary Fig. 4)." Supplementary Fig. 4 is replaced by read
+counts and proportions for all reads of both tumors on the three platforms, aligned to four references: GRCh38 (linear,
+the data providers' alignments), a GRCh38-only graph, and the HPRC v1.1 and v2.1 graphs, counting the reads aligned to
+chr1–22 (Supplementary Table and Figure below). In summary:
 
-- *Illumina:* full-length edit-free alignments of the same reads rise by about 10 percentage points on the HPRC graphs
-  (HG008T 69% to 79%, COLO829T 71% to 81–82%). The GRCh38 BAM and the GRCh38-only graph give the same rate (HG008T
-  68.5% and 68.8%, COLO829T 70.6% and 70.7%), so the gain comes from the graph's content, not from the aligner.
-- *Long reads* are rarely edit-free end to end. On HPRC v1.1 their mismatched bases per kb fall (HiFi 1.57 to 0.63, ONT
-  5.22 to 4.26), while indel rates, soft clipping and unmapped reads change little. HPRC v2.1 aligns nearly every HiFi
-  read, but places the additional ones in difficult regions at lower mapping quality.
-- *More edit-free alignments are not more correct alignments.* On reads simulated from the HG008-N assembly, the share
-  placed correctly is the same on every reference (Illumina 98.6–98.7%), while confident misplacements fall for short
-  reads and HiFi; ONT reads are the exception on v2.1 (R3.6).
+- *Illumina.* Perfectly aligned reads rise by about 10 percentage points on the HPRC graphs: HG008T from 1.87 billion of
+  2.74 billion reads (68.3%) on linear GRCh38 to 2.12 billion of 2.70 billion (78.5–78.7%), COLO829T from 69.9% to
+  79.8–80.5%. Reads with a substitution fall from 27–30% to 18–21%, and reads with an indel from 2.9–3.2% to 0.7–1.0%.
+  The GRCh38-only graph gives nearly the same rates as linear GRCh38 (68.7% against 68.3%, 70.0% against 69.9%
+  perfectly aligned), so the gain comes from the graph's content, not from the aligner.
+- *PacBio.* Perfectly aligned reads remain rare: 0.15–0.18% on GRCh38 and 1.4–1.5% on the HPRC graphs, so the
+  "four-fold" increase was on a very small base. Reads with a substitution fall from 95–96% to 66–75%, while nearly
+  every read still carries an indel (99% on GRCh38, 97% on the graphs).
+- *ONT.* Perfectly aligned reads are 1.4% on GRCh38 and 2.7–2.8% on the HPRC graphs for HG008T, and 0.01% on every
+  reference for COLO829T. Reads with a substitution fall from 93–94% on linear GRCh38 to 87–90%; indels change
+  little.
+- *Soft clipping* is not substantially reduced: 2.4–4.1% of Illumina reads on every reference, and for long reads it
+  depends more on the aligner than on the reference.
+
+The revised text reads: "Alignment to the HPRC graphs increased the proportion of perfectly aligned Illumina reads by
+about 10 percentage points in both tumors (HG008T, 68.3% on linear GRCh38 to 78.5–78.7%; COLO829T, 69.9% to
+79.8–80.5%), mainly by removing substitutions and indels at alleles shared with the HPRC haplotypes. Perfectly aligned
+long reads remained rare (at most 2.8%), while the proportion of long reads with a substitution decreased (PacBio 95–96%
+to 66–75%, ONT 93–94% to 87–90%); indels and soft clipping changed little (Supplementary Table X)."
 
 *Published benchmarks agree.* On the 10%-filtered HPRC release 1 graph (the filter of our v1.1 graph), 78.1–78.9% of
 Illumina reads aligned perfectly, against 68.7% with BWA-MEM on GRCh38, at a slight cost in mapping confidence (Hickey et
-al., 2024), and Giraffe-based calling made 34% fewer small-variant errors than GRCh38-based workflows (Liao et al.,
-2023). Giraffe is as accurate as linear mappers on simulated short reads (Sirén et al., 2021) and, on the HPRC release
-2 graph with the same d46 filter as our v2.1 graph, mapped simulated HiFi reads with the highest true-positive rate and
-the fewest confident errors, with similar or slightly better variant calls than linear mappers (Chang et al., 2025,
-preprint).
-
-The revised text says that the graph mainly removes edits at alleles that the sample shares with HPRC haplotypes.
+al., 2024), close to our 68.3% and 78.5% for HG008T; Giraffe-based calling on that graph made 34% fewer small-variant
+errors than GRCh38-based workflows (Liao et al., 2023).
 
 **Supplementary (R2.7).**
 
-![Illumina, the same reads on four references](supplementary/R2.7/fig_R2.7a.png)
+![Reads on chr1–22 on four references, by platform](supplementary/R2.7/fig_R2.7.png)
 
-*a,* Illumina reads in 48 GRCh38 windows (24 random, 24 at segmental duplications): the share aligned end to end with no
-mismatch, indel or soft clip.
+Reads aligned to chr1–22 for each dataset and reference: the share perfectly aligned (no substitution, indel or soft
+clipping) and the shares with at least one substitution, indel or soft-clipped end. Rows: Illumina; PacBio (HG008T HiFi,
+COLO829T Fiber-seq); ONT. Note the different y-axis ranges.
 
-![Long reads, mismatched bases and indel events per kb](supplementary/R2.7/fig_R2.7b.png)
+Supplementary Table (reads aligned to chr1–22; N (% of these reads)):
 
-*b,* Long reads (a 10% genome-wide sample of read names, the same reads on every graph): mismatched bases and indel
-events per aligned kb. The higher HiFi and Fiber-seq rates on v2.1 come from the reads it newly aligns (unmapped 2.6–3.4%
-on v1.1, 0.01% on v2.1), mostly in difficult regions.
+| dataset | reference | reads on chr1–22 | perfectly aligned | with substitution | with indel | with soft clipping |
+|---|---|---:|---:|---:|---:|---:|
+| HG008T Illumina | GRCh38 (linear) | 2,739,599,264 | 1,869,903,341 (68.25%) | 810,918,802 (29.60%) | 78,905,626 (2.88%) | 96,334,574 (3.52%) |
+| HG008T Illumina | GRCh38 graph | 2,710,092,615 | 1,861,828,942 (68.70%) | 800,943,101 (29.55%) | 79,136,287 (2.92%) | 74,218,393 (2.74%) |
+| HG008T Illumina | HPRC v1.1 graph | 2,704,033,209 | 2,121,622,695 (78.46%) | 560,922,772 (20.74%) | 21,774,798 (0.81%) | 66,387,175 (2.46%) |
+| HG008T Illumina | HPRC v2.1 graph | 2,695,745,607 | 2,121,713,347 (78.71%) | 552,985,555 (20.51%) | 19,851,148 (0.74%) | 63,829,495 (2.37%) |
+| COLO829T Illumina | GRCh38 (linear) | 2,296,226,777 | 1,604,645,813 (69.88%) | 627,386,769 (27.32%) | 72,684,106 (3.17%) | 95,094,133 (4.14%) |
+| COLO829T Illumina | GRCh38 graph | 2,283,443,818 | 1,599,146,760 (70.03%) | 629,366,832 (27.56%) | 71,551,146 (3.13%) | 78,056,743 (3.42%) |
+| COLO829T Illumina | HPRC v1.1 graph | 2,285,859,727 | 1,823,482,724 (79.77%) | 423,169,962 (18.51%) | 23,805,599 (1.04%) | 78,789,217 (3.45%) |
+| COLO829T Illumina | HPRC v2.1 graph | 2,265,562,422 | 1,822,701,086 (80.45%) | 410,679,337 (18.13%) | 20,250,428 (0.89%) | 66,561,782 (2.94%) |
+| HG008T PacBio HiFi | GRCh38 (linear) | 12,931,641 | 18,818 (0.15%) | 12,264,874 (94.84%) | 12,862,468 (99.47%) | 961,155 (7.43%) |
+| HG008T PacBio HiFi | GRCh38 graph | 12,675,374 | 18,819 (0.15%) | 12,020,862 (94.84%) | 12,606,854 (99.46%) | 314,848 (2.48%) |
+| HG008T PacBio HiFi | HPRC v1.1 graph | 12,689,479 | 179,824 (1.42%) | 8,558,774 (67.45%) | 12,377,219 (97.54%) | 228,857 (1.80%) |
+| HG008T PacBio HiFi | HPRC v2.1 graph | 12,977,109 | 184,297 (1.42%) | 8,605,339 (66.31%) | 12,666,519 (97.61%) | 422,918 (3.26%) |
+| COLO829T PacBio Fiber-seq | GRCh38 (linear) | 25,308,248 | 44,846 (0.18%) | 24,325,270 (96.12%) | 25,138,324 (99.33%) | 2,529,764 (10.00%) |
+| COLO829T PacBio Fiber-seq | GRCh38 graph | 25,026,903 | 44,873 (0.18%) | 24,011,605 (95.94%) | 24,858,107 (99.33%) | 936,884 (3.74%) |
+| COLO829T PacBio Fiber-seq | HPRC v1.1 graph | 25,070,732 | 386,300 (1.54%) | 18,732,761 (74.72%) | 24,353,478 (97.14%) | 717,920 (2.86%) |
+| COLO829T PacBio Fiber-seq | HPRC v2.1 graph | 26,066,512 | 397,244 (1.52%) | 19,343,766 (74.21%) | 25,350,225 (97.25%) | 1,538,959 (5.90%) |
+| HG008T ONT | GRCh38 (linear) | 3,208,600 | 43,815 (1.37%) | 3,009,593 (93.80%) | 3,084,419 (96.13%) | 1,215,595 (37.89%) |
+| HG008T ONT | GRCh38 graph | 3,100,754 | 43,748 (1.41%) | 2,869,956 (92.56%) | 2,950,998 (95.17%) | 930,380 (30.00%) |
+| HG008T ONT | HPRC v1.1 graph | 3,099,600 | 85,847 (2.77%) | 2,691,454 (86.83%) | 2,929,825 (94.52%) | 913,057 (29.46%) |
+| HG008T ONT | HPRC v2.1 graph | 3,087,083 | 84,623 (2.74%) | 2,704,935 (87.62%) | 2,944,975 (95.40%) | 899,235 (29.13%) |
+| COLO829T ONT | GRCh38 (linear) | 12,636,129 | 723 (0.01%) | 11,794,165 (93.34%) | 11,928,948 (94.40%) | 12,590,223 (99.64%) |
+| COLO829T ONT | GRCh38 graph | 11,839,534 | 778 (0.01%) | 10,956,152 (92.54%) | 11,047,335 (93.31%) | 11,723,760 (99.02%) |
+| COLO829T ONT | HPRC v1.1 graph | 11,877,368 | 1,121 (0.01%) | 10,662,112 (89.77%) | 11,030,919 (92.87%) | 11,760,246 (99.01%) |
+| COLO829T ONT | HPRC v2.1 graph | 11,789,372 | 1,098 (0.01%) | 10,645,364 (90.30%) | 11,021,767 (93.49%) | 11,674,637 (99.03%) |
 
-![Simulated reads, correct placements and confident misplacements](supplementary/R2.7/fig_R2.7c.png)
-
-*c,* Reads simulated from the HG008-N assembly (Illumina 5,000,000; HiFi-like and ONT-like 40,000 each): the share placed
-within 50 bp of the true origin, and the misplaced reads with MAPQ ≥ 30 per 1,000 reads.
-
-Supplementary Table (same samples as *a* and *b*; MAPQ as reported by each aligner, so not comparable between the BAM and
-the graphs):
-
-| dataset | reference | unmapped % | MAPQ 60 % | soft-clipped reads % | edit-free reads % | mismatched bases / kb | indel events / kb |
-|---|---|---:|---:|---:|---:|---:|---:|
-| HG008T Illumina | GRCh38 BAM (BWA-MEM) | 0.00 | 88.2 | 2.8 | 68.50 | 4.73 | 0.21 |
-| HG008T Illumina | GRCh38-only graph | 0.00 | 86.9 | 2.2 | 68.85 | 4.63 | 0.21 |
-| HG008T Illumina | HPRC v1.1 graph (d9) | 0.00 | 86.2 | 1.9 | 79.15 | 3.69 | 0.05 |
-| HG008T Illumina | HPRC v2.1 graph (d46) | 0.00 | 86.3 | 1.9 | 79.24 | 3.67 | 0.05 |
-| COLO829T Illumina | GRCh38 BAM (BWA-MEM) | 0.00 | 86.5 | 3.3 | 70.57 | 3.93 | 0.20 |
-| COLO829T Illumina | GRCh38-only graph | 0.00 | 85.6 | 2.6 | 70.72 | 3.95 | 0.21 |
-| COLO829T Illumina | HPRC v1.1 graph (d9) | 0.00 | 85.1 | 2.6 | 81.25 | 2.97 | 0.04 |
-| COLO829T Illumina | HPRC v2.1 graph (d46) | 0.00 | 85.5 | 2.4 | 81.61 | 2.94 | 0.04 |
-| HG008T PacBio HiFi | GRCh38-only graph | 2.79 | 95.9 | 2.6 | 0.15 | 1.57 | 1.58 |
-| HG008T PacBio HiFi | HPRC v1.1 graph (d9) | 2.64 | 95.9 | 2.0 | 1.39 | 0.63 | 1.39 |
-| HG008T PacBio HiFi | HPRC v2.1 graph (d46) | 0.01 | 83.3 | 3.8 | 1.42 | 1.72 | 1.56 |
-| COLO829T Fiber-seq | GRCh38-only graph | 3.37 | 93.1 | 3.3 | 0.18 | 1.80 | 1.82 |
-| COLO829T Fiber-seq | HPRC v1.1 graph (d9) | 3.23 | 93.3 | 2.6 | 1.50 | 0.84 | 1.62 |
-| COLO829T Fiber-seq | HPRC v2.1 graph (d46) | 0.01 | 79.3 | 5.0 | 1.54 | 2.19 | 1.87 |
-| HG008T ONT | GRCh38-only graph | 7.86 | 95.2 | 30.4 | 1.32 | 5.22 | 4.27 |
-| HG008T ONT | HPRC v1.1 graph (d9) | 7.75 | 95.0 | 29.9 | 2.54 | 4.26 | 4.12 |
-| HG008T ONT | HPRC v2.1 graph (d46) | 8.01 | 94.2 | 29.6 | 2.50 | 4.35 | 4.33 |
-| COLO829T ONT | GRCh38-only graph | 13.53 | 93.9 | 99.0 | 0.00 | 9.16 | 8.59 |
-| COLO829T ONT | HPRC v1.1 graph (d9) | 13.23 | 93.5 | 99.0 | 0.01 | 8.36 | 8.55 |
-| COLO829T ONT | HPRC v2.1 graph (d46) | 13.61 | 89.5 | 99.0 | 0.01 | 8.93 | 9.12 |
-
-Data: `supplementary/R2.7/alignment_stats.tsv`, `supplementary/R2.7/simulated_placement.tsv` (made by
-`supplementary/R2.7/make_figures.py` from `experiments/E11a_alignment_stats/results/*.json` and
-`experiments/E11b_simulated_alignment/results/summary.tsv`).
+Data: `supplementary/R2.7/alignment_counts.tsv` (made by `supplementary/R2.7/make_figures.py` from
+`experiments/E11a_alignment_stats/full/summary.json`).
 
 *Methods.*
 1. *Alignments.* Each dataset's tumor reads were aligned with vg Giraffe to the GRCh38-only graph and to the HPRC v1.1
-   (d9) and v2.1 (d46) graphs (versions as in R3.m1); the GRCh38 BAMs are the data providers' BWA-MEM 0.7.17 alignments
-   (HG008T: GIAB; COLO829T: SMaHT, Sentieon 202308.01 with duplicate marking, indel realignment and base recalibration).
-2. *Same reads.* Reads are selected by a hash of the read name, so every reference sees the same reads. Illumina: 10% of
-   the reads in the 48 windows (± 1 kb) that any reference places there; long reads: 10% of all read names, whole files
-   scanned.
-3. *Measures.* Edit-free: mapped with no mismatch, indel or soft clip. Mismatched bases and indel events per kb of
-   aligned bases, from each alignment's edits; unmapped, soft-clipped and MAPQ shares per read.
-4. *Simulation.* Reads drawn from one-to-one segments of the HG008-N assembly on chr1 and chr20, with known GRCh38
-   origin (Illumina 2 × 150 bp, 0.2% substitutions; HiFi-like ~15 kb, 0.1% errors; ONT-like with the pbsim3 R10.4
-   model), aligned to each graph and projected to GRCh38. Correct: the right chromosome and a read end within 50 bp of
-   the truth.
+   (d9) and v2.1 (d46) graphs (versions as in R3.m1). Linear GRCh38 is the data providers' alignment: for HG008T (GIAB)
+   BWA-MEM 0.7.17, pbmm2 1.10.0 and minimap2 2.26; for COLO829T (SMaHT) BWA-MEM 0.7.17 in Sentieon 202308.01 (with
+   duplicate marking, indel realignment and base recalibration), pbmm2 1.13.0 and minimap2 2.26.
+2. *Reads counted.* Every read of the dataset, each mate of a pair separately, whose alignment is on chr1–22: on linear
+   GRCh38 the primary alignment (secondary and supplementary alignments are not counted); on a graph, the GRCh38
+   chromosome holding most of the read's reference-path bases. Unmapped reads, reads on other contigs and reads aligned
+   only to non-reference nodes are not counted.
+3. *Measures.* Perfectly aligned: aligned end to end with no substitution, indel or soft clipping. Substitution: at least
+   one mismatched base (linear: NM minus inserted and deleted bases; graph: substitution edits against the read's graph
+   path, so a match to a non-reference allele is not a substitution). Indel: at least one inserted or deleted base. Soft
+   clipping: unaligned bases at a read end (linear: S or H CIGAR operations; graph: an insertion at the alignment end).
+4. On linear GRCh38 a long read split by the aligner keeps its remainder as a supplementary alignment, so its primary
+   alignment is soft-clipped; Giraffe writes one alignment per read.
 
 *References.*
-- Sirén J. et al. Pangenomics enables genotyping of known structural variants in 5202 diverse genomes. *Science* 374,
-  abg8871 (2021).
 - Liao W.-W. et al. A draft human pangenome reference. *Nature* 617, 312–324 (2023).
 - Hickey G. et al. Pangenome graph construction from genome alignments with Minigraph-Cactus. *Nat. Biotechnol.* 42,
   663–673 (2024).
-- Chang X. et al. Rapid, accurate long- and short-read mapping to large pangenome graphs with vg Giraffe. Research
-  Square preprint, doi:10.21203/rs.3.rs-7747403/v1 (2025; not peer reviewed).
 
 ### R2.m Minor comments 1–8
 
@@ -648,7 +659,7 @@ We agree, and the revised evaluation covers the complete output.
    Under this worst case the HPRC graphs fall below the GRCh38-only graph in four of the twelve SNV comparisons, all long-read: HG008T ONT on both graphs, COLO829T ONT on v2.1 (0.369 against 0.418) and COLO829T Fiber-seq on v1.1 (0.572 against 0.680).
 3. *Graph-specific or merely unprojected?* In the twelve graph runs, the GRCh38 nodes flanking each call's bubble give a GRCh38 allele for 2.2–19.1% of calls. After population filtering this adds six true positives across the twelve runs (0–2 per run; three distinct truth SNVs), and of the 89–1,718 calls per run placed only to a GRCh38 interval, one matches a missed truth variant. The rest have no GRCh38 allele (inserted sequence, the GRCh38 base on a branch node, no consistent anchors); most are population or germline alleles, and on HG008T only 1.1–5.2% per run have tumor-only support in the assemblies (R3.3). Projection moves complete-output F1 by at most 0.009. A Supplementary Table lists each call's node, offset, class, GRCh38 interval and assembly class.
 4. *Origin and trade-off.* Most graph-coordinate SNV PASS calls are produced by an off-reference rescue step that raises the haplotype count on nodes off GRCh38 (R3.3); without it, 6–162 per run remain. The rescue recovers off-reference somatic SNVs that rtg cannot credit: at the assembly-derived HG008T sites, it calls 22–66 read-supported somatic SNVs per dataset (0–4 without it; tensor level), and 63–87% of its calls there are read-supported (R3.3). On chr1, however, that is 2–8 such SNVs per HG008T run against 210–1,410 graph-coordinate PASS calls, and the rescue causes the long-read losses above. Without it, the placed calls are unchanged and all twelve HPRC runs are above the GRCh38-only graph without benchmark regions (complete-output F1 0.524–0.780 against 0.197–0.680); inside the benchmark regions, HG008T ONT on v2.1 stays 0.004 below (0.533 against 0.537). We report every SNV result with and without the rescue.
-5. *CHM13.* We did not compute a CHM13 projection. CHM13 is an unfiltered reference path in both graphs, but our truth sets are on GRCh38, so CHM13 coordinates would not change any score; point 3 separates the calls that GRCh38 can represent from those it cannot.
+5. *CHM13.* Both graphs carry T2T-CHM13 as an unfiltered reference path, and Pansoma now also writes its calls in CHM13 coordinates (an optional CHM13 VCF). Of the graph-coordinate PASS SNV calls in the twelve runs, 36.7–63.1% per run lie on CHM13 nodes and have a CHM13 allele; with the GRCh38 alleles of point 3, 38.1–67.1% can be written on one of the two linear references. The other 32.9–61.9% have an allele on neither and are specific to the graph. Our truth sets are on GRCh38, so CHM13 positions do not change any score.
 
 ### R3.5 Mutational signatures with the truth set
 
