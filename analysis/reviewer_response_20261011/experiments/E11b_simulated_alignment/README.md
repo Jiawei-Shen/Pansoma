@@ -15,14 +15,14 @@ Results are split by HG008-N germline variants in the read, repeat content, SMaH
 use.
 
 Scope as run: Illumina, HiFi and ONT on all three arms. The ONT-like reads were first left out by a submission error
-(see Status) and were aligned and scored on 2026-10-15 (jobs 407745-407748). The CHM13-only control arm was planned and
-then dropped by the user on 2026-10-13.
+(see Status) and were aligned and scored on 2026-10-15 (jobs 407745-407748). The CHM13-only control arm was dropped by
+the user on 2026-10-13 and restarted by the user on 2026-10-19 (item 6 of the Method; jobs 446259 -> 446263 -> 446264).
 
 ## Reviewer points answered
 
 - **R3.6.** More perfect alignment is not more correct alignment. Compare GRCh38, T2T-CHM13 and HPRC, use
   assembly-based truth and MAPQ. This experiment covers point 3 of the R3.6 response ("Correctness with known
-  origin") for GRCh38 and HPRC. The T2T-CHM13 comparison is no longer part of it, because the CHM13 work was dropped.
+  origin") for GRCh38 and HPRC. The T2T-CHM13 comparison (CHM13-only arm) is running again since 2026-10-19.
 - **R1.3.** Pangenome ambiguity in difficult regions and with noisy ONT reads. This experiment covers the simulated-read
   part of point 1 of the R1.3 response (misplacement and MAPQ calibration per stratum on each reference) for Illumina,
   HiFi and ONT. For ONT the answer is unfavourable to HPRC v2.1 (Interpretation 7).
@@ -121,11 +121,12 @@ HG008 is in neither HPRC graph. HPRC v1.1 has no HG008, and the v2.1 sample list
      block of this README.
    - The scoring chain (`align_arm.sh` steps -> `evaluate.py` -> `summarize.py`) was run end to end on a 400-read test
      against a tiny autoindexed graph (`.../tinytest/base/`). That test only checks the code; its numbers mean nothing.
-6. **CHM13-only control: dropped (user decision 2026-10-13).** The plan was to align the same reads to a CHM13-only
-   linear graph and score them against the template lifted to CHM13. The hap -> CHM13 alignments (387282, 387283) and
-   the CHM13 segments / truth had already been made. The graph index (387281) and the CHM13 alignment job (387348) were
-   cancelled. `align_arm.sh`, `chm13_truth.py`, `collect.sh` and `summarize.py` still contain the `chm13` arm; with no
-   `aln/chm13/` output it is skipped.
+6. **CHM13-only control: dropped by the user on 2026-10-13, restarted by the user on 2026-10-19.** The same reads are
+   aligned to a CHM13-only linear graph (vg 1.66 autoindex of chm13v2.0_maskedY_rCRS.fa, built like the GRCh38-only arm)
+   and scored against the template lifted to CHM13. The hap -> CHM13 alignments (387282, 387283) and the CHM13 segments /
+   truth were made on 2026-10-13. The 2026-10-13 graph index (387281) and alignment job (387348) were cancelled; the
+   partial `chm13_linear/tmp-autoindex` was moved to `tmp-autoindex.cancelled_387281`. Resubmitted 2026-10-19: index
+   446259, align (Illumina, HiFi, ONT) 446263, collect 446264.
 
 ## Exact commands
 
@@ -213,6 +214,7 @@ correct = surjected primary alignment on the true chromosome with start or end w
 | GRCh38-only graph (H 17) | 5,000,000 | 3,404 (0.068%) | 0 | 98.698% | 61,705 | 1.235% | 63.69% | 33,847 (1.063% of perfect) | 4,538 (0.093%) | 2,408 (0.050%) | 0.84% | 0 (0.00%) |
 | HPRC v1.1 d9 | 5,000,000 | 1,500 (0.030%) | 17,436 | 98.642% | 48,959 | 0.983% | 72.94% | 33,204 (0.910% of perfect) | 904 (0.019%) | 344 (0.007%) | 1.07% | 619,803 (12.40%) |
 | HPRC v2.1 d46 | 5,000,000 | 1,553 (0.031%) | 19,340 | 98.659% | 46,144 | 0.927% | 73.06% | 32,025 (0.877% of perfect) | 631 (0.013%) | 294 (0.006%) | 1.07% | 622,386 (12.45%) |
+| CHM13-only graph (control; CHM13 truth) | 4,988,641 | 2,504 (0.050%) | 0 | 98.831% | 55,799 | 1.119% | 64.81% | 31,494 (0.974% of perfect) | 4,574 (0.094%) | 2,781 (0.058%) | 0.82% | 0 (0.00%) |
 
 Error-free reads only (no simulated sequencing error; any graph mismatch is then a real difference between the read and the graph path it took):
 
@@ -221,19 +223,29 @@ Error-free reads only (no simulated sequencing error; any graph mismatch is then
 | GRCh38-only graph (H 17) | 3,702,448 | 86.00% | 33,682 (1.058%) | 1.224% | 3,348 |
 | HPRC v1.1 d9 | 3,702,448 | 98.48% | 32,983 (0.905%) | 0.967% | 659 |
 | HPRC v2.1 d46 | 3,702,448 | 98.64% | 31,800 (0.871%) | 0.917% | 464 |
+| CHM13-only graph (control; CHM13 truth) | 3,694,042 | 87.51% | 31,334 (0.969%) | 1.110% | 3,388 |
 
 ### illumina: MAPQ calibration (reads placed on GRCh38; error rate = wrong / placed in the bin; expected = mean 10^(-MAPQ/10))
 
-| MAPQ | GRCh38-only graph (H 17): placed / wrong / rate / expected | HPRC v1.1 d9: placed / wrong / rate / expected | HPRC v2.1 d46: placed / wrong / rate / expected |
-|---|---|---|---|
-| 0 | 41,978 / 29,500 / 7.03e-01 / 1.00e+00 | 45,494 / 27,828 / 6.12e-01 / 1.00e+00 | 44,253 / 26,433 / 5.97e-01 / 1.00e+00 |
-| 1-9 | 43,093 / 21,024 / 4.88e-01 / 7.71e-01 | 49,532 / 18,353 / 3.71e-01 / 7.78e-01 | 46,648 / 17,938 / 3.85e-01 / 7.78e-01 |
-| 10-19 | 28,286 / 5,335 / 1.89e-01 / 3.96e-02 | 27,169 / 1,511 / 5.56e-02 / 3.99e-02 | 27,301 / 908 / 3.33e-02 / 4.01e-02 |
-| 20-29 | 10,165 / 1,308 / 1.29e-01 / 3.09e-03 | 10,156 / 363 / 3.57e-02 / 2.65e-03 | 10,220 / 234 / 2.29e-02 / 2.63e-03 |
-| 30-39 | 17,540 / 1,030 / 5.87e-02 / 8.21e-04 | 16,416 / 254 / 1.55e-02 / 8.38e-04 | 16,238 / 149 / 9.18e-03 / 8.38e-04 |
-| 40-49 | 16,423 / 794 / 4.83e-02 / 3.80e-05 | 16,206 / 222 / 1.37e-02 / 3.90e-05 | 16,175 / 144 / 8.90e-03 / 3.90e-05 |
-| 50-59 | 7,390 / 306 / 4.14e-02 / 4.00e-06 | 7,109 / 84 / 1.18e-02 / 4.00e-06 | 7,312 / 44 / 6.02e-03 / 4.00e-06 |
-| 60 | 4,831,721 / 2,408 / 4.98e-04 / 1.00e-06 | 4,808,982 / 344 / 7.20e-05 / 1.00e-06 | 4,810,960 / 294 / 6.10e-05 / 1.00e-06 |
+| MAPQ | GRCh38-only graph (H 17): placed / wrong / rate / expected | HPRC v1.1 d9: placed / wrong / rate / expected | HPRC v2.1 d46: placed / wrong / rate / expected | CHM13-only graph (control; CHM13 truth): placed / wrong / rate / expected |
+|---|---|---|---|---|
+| 0 | 41,978 / 29,500 / 7.03e-01 / 1.00e+00 | 45,494 / 27,828 / 6.12e-01 / 1.00e+00 | 44,253 / 26,433 / 5.97e-01 / 1.00e+00 | 41,091 / 28,537 / 6.94e-01 / 1.00e+00 |
+| 1-9 | 43,093 / 21,024 / 4.88e-01 / 7.71e-01 | 49,532 / 18,353 / 3.71e-01 / 7.78e-01 | 46,648 / 17,938 / 3.85e-01 / 7.78e-01 | 37,091 / 17,429 / 4.70e-01 / 7.71e-01 |
+| 10-19 | 28,286 / 5,335 / 1.89e-01 / 3.96e-02 | 27,169 / 1,511 / 5.56e-02 / 3.99e-02 | 27,301 / 908 / 3.33e-02 / 4.01e-02 | 27,747 / 4,310 / 1.55e-01 / 3.93e-02 |
+| 20-29 | 10,165 / 1,308 / 1.29e-01 / 3.09e-03 | 10,156 / 363 / 3.57e-02 / 2.65e-03 | 10,220 / 234 / 2.29e-02 / 2.63e-03 | 9,830 / 949 / 9.65e-02 / 3.05e-03 |
+| 30-39 | 17,540 / 1,030 / 5.87e-02 / 8.21e-04 | 16,416 / 254 / 1.55e-02 / 8.38e-04 | 16,238 / 149 / 9.18e-03 / 8.38e-04 | 17,028 / 879 / 5.16e-02 / 8.25e-04 |
+| 40-49 | 16,423 / 794 / 4.83e-02 / 3.80e-05 | 16,206 / 222 / 1.37e-02 / 3.90e-05 | 16,175 / 144 / 8.90e-03 / 3.90e-05 | 15,929 / 626 / 3.93e-02 / 3.80e-05 |
+| 50-59 | 7,390 / 306 / 4.14e-02 / 4.00e-06 | 7,109 / 84 / 1.18e-02 / 4.00e-06 | 7,312 / 44 / 6.02e-03 / 4.00e-06 | 7,498 / 288 / 3.84e-02 / 4.00e-06 |
+| 60 | 4,831,721 / 2,408 / 4.98e-04 / 1.00e-06 | 4,808,982 / 344 / 7.20e-05 / 1.00e-06 | 4,810,960 / 294 / 6.10e-05 / 1.00e-06 | 4,829,923 / 2,781 / 5.76e-04 / 1.00e-06 |
+
+### illumina: all arms on the reads that have a one-to-one truth on both GRCh38 and CHM13 (4,988,641 of 5,000,000 reads; GRCh38 arms scored on GRCh38, CHM13 arm on CHM13)
+
+| arm | unmapped | correct (50 bp) | wrong / placed | perfect | perfect but wrong | wrong at MAPQ>=30 | MAPQ 0 |
+|---|---|---|---|---|---|---|---|
+| GRCh38-only graph (H 17) | 0.064% | 98.749% | 1.188% | 63.71% | 32,724 | 4,240 | 0.82% |
+| HPRC v1.1 d9 | 0.030% | 98.713% | 0.950% | 72.95% | 32,180 | 823 | 1.03% |
+| HPRC v2.1 d46 | 0.029% | 98.732% | 0.896% | 73.07% | 31,012 | 567 | 1.02% |
+| CHM13-only graph (control; CHM13 truth) | 0.050% | 98.831% | 1.119% | 64.81% | 31,494 | 4,574 | 0.82% |
 
 ### illumina: same reads, two arms (correct = within 50 bp; confident wrong = placed wrong with MAPQ>=30)
 
@@ -250,19 +262,29 @@ Error-free reads only (no simulated sequencing error; any graph mismatch is then
 | GRCh38-only graph (H 17) | 40,000 | 20 (0.050%) | 0 | 99.455% | 198 | 0.495% | 0.00% | 0 (n/a of perfect) | 13 (0.033%) | 1 (0.003%) | 0.01% | 0 (0.00%) |
 | HPRC v1.1 d9 | 40,000 | 8 (0.020%) | 40 | 99.552% | 131 | 0.328% | 0.00% | 0 (n/a of perfect) | 6 (0.015%) | 2 (0.005%) | 0.04% | 36,664 (91.66%) |
 | HPRC v2.1 d46 | 40,000 | 0 (0.000%) | 51 | 99.490% | 153 | 0.383% | 0.00% | 0 (n/a of perfect) | 3 (0.008%) | 0 (0.000%) | 0.00% | 36,672 (91.68%) |
+| CHM13-only graph (control; CHM13 truth) | 39,743 | 3 (0.007%) | 0 | 99.580% | 164 | 0.413% | 0.00% | 0 (n/a of perfect) | 13 (0.033%) | 6 (0.016%) | 0.03% | 0 (0.00%) |
 
 ### hifi: MAPQ calibration (reads placed on GRCh38; error rate = wrong / placed in the bin; expected = mean 10^(-MAPQ/10))
 
-| MAPQ | GRCh38-only graph (H 17): placed / wrong / rate / expected | HPRC v1.1 d9: placed / wrong / rate / expected | HPRC v2.1 d46: placed / wrong / rate / expected |
-|---|---|---|---|
-| 0 | 3 / 3 / 1.00e+00 / 1.00e+00 | 7 / 3 / 4.29e-01 / 1.00e+00 | 0 / 0 / n/a / n/a |
-| 1-9 | 612 / 167 / 2.73e-01 / 4.47e-01 | 707 / 110 / 1.56e-01 / 4.46e-01 | 775 / 146 / 1.88e-01 / 4.10e-01 |
-| 10-19 | 35 / 9 / 2.57e-01 / 5.32e-02 | 46 / 10 / 2.17e-01 / 5.22e-02 | 172 / 4 / 2.33e-02 / 5.24e-02 |
-| 20-29 | 50 / 6 / 1.20e-01 / 3.74e-03 | 45 / 2 / 4.44e-02 / 4.07e-03 | 243 / 0 / 0.00e+00 / 3.54e-03 |
-| 30-39 | 145 / 5 / 3.45e-02 / 3.55e-04 | 125 / 2 / 1.60e-02 / 3.40e-04 | 719 / 0 / 0.00e+00 / 3.49e-04 |
-| 40-49 | 474 / 7 / 1.48e-02 / 3.40e-05 | 409 / 1 / 2.45e-03 / 3.30e-05 | 1,971 / 1 / 5.07e-04 / 3.70e-05 |
-| 50-59 | 1,515 / 0 / 0.00e+00 / 4.00e-06 | 1,387 / 1 / 7.21e-04 / 4.00e-06 | 4,766 / 2 / 4.20e-04 / 4.00e-06 |
-| 60 | 37,146 / 1 / 2.70e-05 / 1.00e-06 | 37,226 / 2 / 5.40e-05 / 1.00e-06 | 31,303 / 0 / 0.00e+00 / 1.00e-06 |
+| MAPQ | GRCh38-only graph (H 17): placed / wrong / rate / expected | HPRC v1.1 d9: placed / wrong / rate / expected | HPRC v2.1 d46: placed / wrong / rate / expected | CHM13-only graph (control; CHM13 truth): placed / wrong / rate / expected |
+|---|---|---|---|---|
+| 0 | 3 / 3 / 1.00e+00 / 1.00e+00 | 7 / 3 / 4.29e-01 / 1.00e+00 | 0 / 0 / n/a / n/a | 11 / 10 / 9.09e-01 / 1.00e+00 |
+| 1-9 | 612 / 167 / 2.73e-01 / 4.47e-01 | 707 / 110 / 1.56e-01 / 4.46e-01 | 775 / 146 / 1.88e-01 / 4.10e-01 | 604 / 130 / 2.15e-01 / 4.49e-01 |
+| 10-19 | 35 / 9 / 2.57e-01 / 5.32e-02 | 46 / 10 / 2.17e-01 / 5.22e-02 | 172 / 4 / 2.33e-02 / 5.24e-02 | 36 / 7 / 1.94e-01 / 4.60e-02 |
+| 20-29 | 50 / 6 / 1.20e-01 / 3.74e-03 | 45 / 2 / 4.44e-02 / 4.07e-03 | 243 / 0 / 0.00e+00 / 3.54e-03 | 35 / 4 / 1.14e-01 / 3.08e-03 |
+| 30-39 | 145 / 5 / 3.45e-02 / 3.55e-04 | 125 / 2 / 1.60e-02 / 3.40e-04 | 719 / 0 / 0.00e+00 / 3.49e-04 | 133 / 4 / 3.01e-02 / 3.64e-04 |
+| 40-49 | 474 / 7 / 1.48e-02 / 3.40e-05 | 409 / 1 / 2.45e-03 / 3.30e-05 | 1,971 / 1 / 5.07e-04 / 3.70e-05 | 450 / 3 / 6.67e-03 / 3.40e-05 |
+| 50-59 | 1,515 / 0 / 0.00e+00 / 4.00e-06 | 1,387 / 1 / 7.21e-04 / 4.00e-06 | 4,766 / 2 / 4.20e-04 / 4.00e-06 | 1,479 / 0 / 0.00e+00 / 4.00e-06 |
+| 60 | 37,146 / 1 / 2.70e-05 / 1.00e-06 | 37,226 / 2 / 5.40e-05 / 1.00e-06 | 31,303 / 0 / 0.00e+00 / 1.00e-06 | 36,992 / 6 / 1.62e-04 / 1.00e-06 |
+
+### hifi: all arms on the reads that have a one-to-one truth on both GRCh38 and CHM13 (39,743 of 40,000 reads; GRCh38 arms scored on GRCh38, CHM13 arm on CHM13)
+
+| arm | unmapped | correct (50 bp) | wrong / placed | perfect | perfect but wrong | wrong at MAPQ>=30 | MAPQ 0 |
+|---|---|---|---|---|---|---|---|
+| GRCh38-only graph (H 17) | 0.040% | 99.487% | 0.473% | 0.00% | 0 | 11 | 0.01% |
+| HPRC v1.1 d9 | 0.018% | 99.580% | 0.310% | 0.00% | 0 | 3 | 0.04% |
+| HPRC v2.1 d46 | 0.000% | 99.532% | 0.355% | 0.00% | 0 | 1 | 0.00% |
+| CHM13-only graph (control; CHM13 truth) | 0.008% | 99.580% | 0.413% | 0.00% | 0 | 13 | 0.03% |
 
 ### hifi: same reads, two arms (correct = within 50 bp; confident wrong = placed wrong with MAPQ>=30)
 
@@ -279,19 +301,29 @@ Error-free reads only (no simulated sequencing error; any graph mismatch is then
 | GRCh38-only graph (H 17) | 40,000 | 282 (0.705%) | 0 | 98.528% | 307 | 0.773% | 0.85% | 1 (0.295% of perfect) | 170 (0.433%) | 158 (0.405%) | 0.00% | 0 (0.00%) |
 | HPRC v1.1 d9 | 40,000 | 234 (0.585%) | 46 | 98.690% | 244 | 0.614% | 7.94% | 1 (0.032% of perfect) | 131 (0.335%) | 125 (0.321%) | 0.07% | 37,387 (93.47%) |
 | HPRC v2.1 d46 | 40,000 | 218 (0.545%) | 66 | 97.817% | 589 | 1.483% | 8.62% | 2 (0.058% of perfect) | 299 (0.764%) | 181 (0.466%) | 0.00% | 37,349 (93.37%) |
+| CHM13-only graph (control; CHM13 truth) | 39,744 | 265 (0.667%) | 0 | 98.656% | 269 | 0.681% | 1.41% | 0 (0.000% of perfect) | 146 (0.374%) | 137 (0.353%) | 0.01% | 0 (0.00%) |
 
 ### ont: MAPQ calibration (reads placed on GRCh38; error rate = wrong / placed in the bin; expected = mean 10^(-MAPQ/10))
 
-| MAPQ | GRCh38-only graph (H 17): placed / wrong / rate / expected | HPRC v1.1 d9: placed / wrong / rate / expected | HPRC v2.1 d46: placed / wrong / rate / expected |
-|---|---|---|---|
-| 0 | 1 / 1 / 1.00e+00 / 1.00e+00 | 9 / 7 / 7.78e-01 / 1.00e+00 | 0 / 0 / n/a / n/a |
-| 1-9 | 259 / 112 / 4.32e-01 / 4.12e-01 | 336 / 96 / 2.86e-01 / 4.22e-01 | 329 / 173 / 5.26e-01 / 4.07e-01 |
-| 10-19 | 110 / 17 / 1.55e-01 / 4.08e-02 | 86 / 7 / 8.14e-02 / 4.08e-02 | 133 / 63 / 4.74e-01 / 4.21e-02 |
-| 20-29 | 127 / 7 / 5.51e-02 / 4.15e-03 | 173 / 3 / 1.73e-02 / 4.00e-03 | 128 / 54 / 4.22e-01 / 4.54e-03 |
-| 30-39 | 112 / 2 / 1.79e-02 / 4.85e-04 | 90 / 1 / 1.11e-02 / 4.70e-04 | 88 / 46 / 5.23e-01 / 4.65e-04 |
-| 40-49 | 64 / 4 / 6.25e-02 / 5.00e-05 | 53 / 2 / 3.77e-02 / 4.30e-05 | 88 / 40 / 4.55e-01 / 4.20e-05 |
-| 50-59 | 46 / 6 / 1.30e-01 / 4.00e-06 | 43 / 3 / 6.98e-02 / 4.00e-06 | 67 / 32 / 4.78e-01 / 5.00e-06 |
-| 60 | 38,999 / 158 / 4.05e-03 / 1.00e-06 | 38,930 / 125 / 3.21e-03 / 1.00e-06 | 38,883 / 181 / 4.66e-03 / 1.00e-06 |
+| MAPQ | GRCh38-only graph (H 17): placed / wrong / rate / expected | HPRC v1.1 d9: placed / wrong / rate / expected | HPRC v2.1 d46: placed / wrong / rate / expected | CHM13-only graph (control; CHM13 truth): placed / wrong / rate / expected |
+|---|---|---|---|---|
+| 0 | 1 / 1 / 1.00e+00 / 1.00e+00 | 9 / 7 / 7.78e-01 / 1.00e+00 | 0 / 0 / n/a / n/a | 4 / 4 / 1.00e+00 / 1.00e+00 |
+| 1-9 | 259 / 112 / 4.32e-01 / 4.12e-01 | 336 / 96 / 2.86e-01 / 4.22e-01 | 329 / 173 / 5.26e-01 / 4.07e-01 | 239 / 100 / 4.18e-01 / 3.78e-01 |
+| 10-19 | 110 / 17 / 1.55e-01 / 4.08e-02 | 86 / 7 / 8.14e-02 / 4.08e-02 | 133 / 63 / 4.74e-01 / 4.21e-02 | 115 / 14 / 1.22e-01 / 4.85e-02 |
+| 20-29 | 127 / 7 / 5.51e-02 / 4.15e-03 | 173 / 3 / 1.73e-02 / 4.00e-03 | 128 / 54 / 4.22e-01 / 4.54e-03 | 137 / 5 / 3.65e-02 / 4.21e-03 |
+| 30-39 | 112 / 2 / 1.79e-02 / 4.85e-04 | 90 / 1 / 1.11e-02 / 4.70e-04 | 88 / 46 / 5.23e-01 / 4.65e-04 | 118 / 2 / 1.69e-02 / 5.09e-04 |
+| 40-49 | 64 / 4 / 6.25e-02 / 5.00e-05 | 53 / 2 / 3.77e-02 / 4.30e-05 | 88 / 40 / 4.55e-01 / 4.20e-05 | 58 / 3 / 5.17e-02 / 5.00e-05 |
+| 50-59 | 46 / 6 / 1.30e-01 / 4.00e-06 | 43 / 3 / 6.98e-02 / 4.00e-06 | 67 / 32 / 4.78e-01 / 5.00e-06 | 38 / 4 / 1.05e-01 / 4.00e-06 |
+| 60 | 38,999 / 158 / 4.05e-03 / 1.00e-06 | 38,930 / 125 / 3.21e-03 / 1.00e-06 | 38,883 / 181 / 4.66e-03 / 1.00e-06 | 38,770 / 137 / 3.53e-03 / 1.00e-06 |
+
+### ont: all arms on the reads that have a one-to-one truth on both GRCh38 and CHM13 (39,744 of 40,000 reads; GRCh38 arms scored on GRCh38, CHM13 arm on CHM13)
+
+| arm | unmapped | correct (50 bp) | wrong / placed | perfect | perfect but wrong | wrong at MAPQ>=30 | MAPQ 0 |
+|---|---|---|---|---|---|---|---|
+| GRCh38-only graph (H 17) | 0.687% | 98.568% | 0.750% | 0.85% | 1 | 164 | 0.00% |
+| HPRC v1.1 d9 | 0.574% | 98.727% | 0.595% | 7.96% | 1 | 127 | 0.07% |
+| HPRC v2.1 d46 | 0.541% | 97.856% | 1.452% | 8.65% | 2 | 294 | 0.00% |
+| CHM13-only graph (control; CHM13 truth) | 0.667% | 98.656% | 0.681% | 1.41% | 0 | 146 | 0.01% |
 
 ### ont: same reads, two arms (correct = within 50 bp; confident wrong = placed wrong with MAPQ>=30)
 
@@ -512,6 +544,19 @@ of the d46 ones in SMaHT extreme).
    - for ONT, d46 (aligned with vg 1.77) misplaces about twice as many reads as the GRCh38-only graph (1.483 % against
      0.773 %; at MAPQ >= 30 0.764 % against 0.433 %), almost all in SMaHT extreme regions, while d9 is slightly better
      (0.614 %; 0.335 %). This should be stated plainly in R3.6 and R1.3.
+9. **CHM13-only control (2026-10-20): reference completeness alone changes little (R3.6 point 5).** On the reads that
+   have a one-to-one truth on both GRCh38 and CHM13 ("all arms" tables: Illumina 4,988,641, HiFi 39,743, ONT 39,744),
+   the CHM13-only graph (vg 1.66 autoindex of chm13v2.0_maskedY_rCRS, built and aligned like the GRCh38-only arm,
+   scored against the template lifted to CHM13) against the GRCh38-only graph, with HPRC v1.1 / v2.1 in brackets:
+   - Illumina: perfect 63.71 -> 64.81 % (72.95 / 73.07 %); wrong / placed 1.188 -> 1.119 % (0.950 / 0.896 %); wrong at
+     MAPQ >= 30 4,240 -> 4,574 reads (823 / 567); correct (50 bp) 98.749 -> 98.831 % (98.713 / 98.732 %).
+   - HiFi: wrong / placed 0.473 -> 0.413 % (0.310 / 0.355 %); wrong at MAPQ >= 30 11 -> 13 (3 / 1).
+   - ONT: wrong / placed 0.750 -> 0.681 % (0.595 / 1.452 %); wrong at MAPQ >= 30 164 -> 146 (127 / 294).
+   - So, within the sampled regions, most of the HPRC gain over the GRCh38-only graph (perfect +9.2 / +9.4 points,
+     confident misplacement -81 / -87 %) comes from the population haplotypes, not from CHM13's more complete sequence
+     (+1.1 points, +8 %). The GRCh38-only and CHM13-only arms share the giraffe release (1.66.0), so this comparison has
+     no version confound. Sequence that only T2T resolves is under-sampled, because segments need a one-to-one alignment
+     to GRCh38 (Caveats).
 
 ## Caveats
 
@@ -531,9 +576,10 @@ of the d46 ones in SMaHT extreme).
   (`vg paths -M -S CHM13`, vg 1.77: 109 subpaths in d9, 93 in d46, all with SENSE = REFERENCE; E8b H3 / H6). The
   frequency filter does not apply to reference paths, so CHM13 sequence, including sequence that GRCh38 lacks, is
   unfiltered in both HPRC graphs and reads can align to it. The HPRC arms therefore differ from the GRCh38-only arm in
-  reference completeness as well as in population haplotypes. The CHM13-only arm that would separate the two was dropped
-  by the user (2026-10-13), so this experiment cannot attribute the gains to one or the other, and the response to R3.6
-  point 3 / R1.3 point 1 must be narrowed to GRCh38-only graph vs HPRC v1.1 / v2.1.
+  reference completeness as well as in population haplotypes. The CHM13-only arm (2026-10-20, Interpretation 9) separates
+  the two on the sampled reads. Its truth is a second lift (hap -> CHM13 dipcall alignments, 387282 / 387283), and 99.77 %
+  of the Illumina reads (99.36 % of HiFi and ONT) have a one-to-one CHM13 image; the "all arms" tables use only reads
+  with both truths.
 - **HG008-N is in no graph.** HPRC v1.1 has no HG008, and HG008 is not in the v2.1 sample list (checked 2026-10-01).
   The simulated reads are therefore out of sample for every arm, as real patient reads are; HG008-N alleles that are
   common in HPRC are still in the graphs.
@@ -556,6 +602,8 @@ of the d46 ones in SMaHT extreme).
 
 ## Status
 
+**CHM13-only arm DONE (2026-10-20 10:16):** index 446259 (7 h 44 min, BeeGFS slow), align 446263 (Illumina, HiFi, ONT; 49 min), collect 448821. The first collect (446264) failed: `chm13_truth/illumina.chm13_truth.npz` of 2026-10-13 was truncated (not a zip); it was moved to `illumina.chm13_truth.npz.truncated_20261013` and collect rebuilt it (4,988,641 of 5,000,000 reads with a CHM13 truth). `results/` and the generated block above hold 12 (arm, platform) sets.
+
 **DONE for Illumina, HiFi and ONT (2026-10-15 19:39).**
 
 DONE:
@@ -569,8 +617,8 @@ DONE:
   (19:39) for the ONT sets; `results/tables.md`, `results/summary.{tsv,json}` and the generated block above hold 9
   (arm, platform) sets.
 
-DROPPED (user decision 2026-10-13): the CHM13-only control. 387281 and 387348 were cancelled. The CHM13 truth files in
-`chm13_truth/` (including `ont.chm13_truth.npz`, written by collect 387349) are unused.
+CHM13-only control: dropped on 2026-10-13 (387281 and 387348 cancelled), restarted on 2026-10-19 (446259 -> 446263 ->
+446264; Method item 6). It uses the CHM13 truth files in `chm13_truth/` (`ont.chm13_truth.npz` written by collect 387349).
 
 Test leftovers in the data directory, not used by any result:
 - `test_illumina/` (20,000-pair login-node test);

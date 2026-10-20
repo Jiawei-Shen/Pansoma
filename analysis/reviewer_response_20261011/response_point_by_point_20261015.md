@@ -28,30 +28,30 @@
 |---|---|---|---|---|
 | R1.1 | "pangenome-native" 证据不足 | 部分解决 | Response 按三点重写（10-16）：path-following tensors（E1.7：57–76% 的 somatic SNV、92–97% 的 somatic INDEL 窗口跨出自身 node）、ch6 + 推理时 ablation、三参考 ablation（10-16 压短，只留设计和总数，细节移到 R1.2）；E1.1：去掉 ch6 信息后 germline 误判增加 3.4–7.6 倍，ch6 单独的 AUC 0.83–0.92；E3 / E16：HPRC 比 GRCh38-only 高 +0.028 到 +0.292（10-19 起用三 seed 均值），12 个配对区间都不含 0（10-19 加上 COLO829T v1.1）；去 ch6 重训（10-19 RIS）：SNV PoN 后 12 个里 11 个变低，中位 0.03，d46 上六个都低于 with-ch6 三个 seed 的 best F1 范围；E9h：rescue 找回的 off-ref key 中 63–87% 有 reads 支持 | — |
 | R1.2 | 泛基因组组成、单倍型数、v2.1 | 部分解决 | 三参考 ablation 的主体（10-16 从 R1.1 移来）：GRCh38-only 上 76–82% 的 germline 成为 candidate，HPRC 上 7–13%；HPRC 比 GRCh38-only 高 +0.028 到 +0.292（三 seed 均值，10-19），12 个配对区间都不含 0；d46 和 d9 在五套上的差都在 seed 范围内（三 seed 均值 −0.018 到 +0.015），COLO829T Illumina 的 matched d9（4 GPU）三个 seed 都偏低，FP 集中在 chr1 两段（−0.163）；E7：吸收多少由频率阈值决定（10-16 v2.1 轴：10% 过滤下 16 到 463 条 haplotype，HG008 somatic INDEL 0.18–0.21）；E11a / E11b：ONT 在 v2.1 上更差。Response 10-16 重写成约 350 词：mapping ambiguity 引文献（Giraffe、HPRC、Minigraph-Cactus），并指出其他 tumor-only caller 也用 PoN；10-19 吸收段改用 E5c（六套 d46 全部跑完）：任一 tensor allele 算有 tensor，v2.1 上 24–42% 的 truth INDEL 丢掉 candidate，85–96% 的丢失位点 ALT reads 走图 alt 节点（整段 43–59%，部分 + 残余 edit 30–52%），76–86% 本来就被 PoN 标，PoN 后净损失 3.5–7.0%，主要是部分走 alt 节点的 | 决定：主图、centromere 窗口（含 COLO829T Illumina d9 的 FP 段）怎么处理 |
-| R1.3 | 困难区域；ONT 的歧义 | 部分解决 | E10：GRCh38-only 在 extreme 区域的 FP 更多；E9a / E9c：ONT 的 graph-coordinate calls 主要是人群 allele 和 germline；E11b：ONT 在 v2.1 上放错更多 | 决定：GIAB 分层是否下载、rescue 默认值 |
-| R1.4 | 图吸收已有的 somatic | 部分解决 | E5b：被吸收的 truth 中 95.5–100% 本来就会被 PoN 标掉；E1.6：三个参考臂 INDEL 都叫出 24–27%；E9h | 同步：比较器（E5c）；决定：E6 / E25 |
+| R1.3 | 困难区域；ONT 的歧义 | 部分解决 | E10：GRCh38-only 在 extreme 区域的 FP 更多；E9a / E9c：ONT 的 graph-coordinate calls 主要是人群 allele 和 germline；E11b：ONT 在 v2.1 上放错更多；10-20 分 SMaHT 区的配对 bootstrap（E16 `e16_strata.py`）：HG008T easy 区 6 对都含 0，COLO829T easy 区 +0.053 到 +0.154，extreme 区 precision 增益 12 对里 10 对不含 0 | 决定：GIAB 分层是否下载、rescue 默认值 |
+| R1.4 | 图吸收已有的 somatic | 部分解决 | E5b：被吸收的 truth 中 95.5–100% 本来就会被 PoN 标掉；E1.6：三个参考臂 INDEL 都叫出 24–27%；E9h；E8c（10-20）：DeepSomatic-TO / ClairS-TO 在吸收位点上 PASS 882 对里只有 7 对，PoN 后 0 | 决定：E6 / E25 |
 | R1.5 | HapMap mixture 和数据泄漏 | 部分解决 | COLO829T dilution（fiberseq 干净），LOH 解释了 P75 / P50 的低谷；donor 在图里的情况已核实 | 决定：HapMap 去留（重跑 OOM 失败）；GPU：BQ 伪影修好后重训 |
 | R1.6 | sensitivity 低 | 部分解决 | E1.6 漏斗：HG008T SNV 叫出 82–85%；COLO829T 有 17–18% 低于 0.08 的 AF 下限；PoN 的 INDEL 上限 0.35 | 同步：比较器重新打分 |
 | R1.7 | 训练规模、肿瘤多样性 | 部分解决 | E21；E12a：HG008T 模型在 COLO829T / HCC1395 / H1437 / H2009 上 0.63–0.94；COLO829T 模型带 UV 偏好；E13（10-19 RIS）：训练数据 10% → 100% 时 F1 从 0.574 升到 0.607，后一半只多 0.010；8.7 M / 50.4 M / 199.6 M 分别是 0.616 / 0.604–0.611 / 0.603 | GPU：normbq（f344bca，RIS 在跑）之后的跨样本、LOLO；multicancer ONT 重新预测（pansoma-3c） |
 | R1.8 | 训练集怎么构建 | **已解决** | 标签规则和代码出处；E21 覆盖所有 set；E9h | 只剩改稿 |
 | R1.m1 | 补充 benchmark（HCC1395、CASTLE） | 部分解决 | E12a：在 HCC1395 和 CASTLE 三株上的跨样本结果；E22：H1437 truth 约 30% 是 LOH 带进来的 germline，HCC1954 的 truth 没问题 | GPU：HCC1395 / CASTLE 的 in-sample 模型；同步：比较器 |
-| R1.m2 | tensor 窗口在 node 边界截断 | **已解决** | 跨 node 的 tensor 已实现；E1.1 | 只剩改稿 |
+| R1.m2 | tensor 窗口在 node 边界截断 | **已解决** | 跨 node 的 tensor 已实现；E1.1；10-20 Supplementary Fig. R1.m2（一个 somatic SNV 的 tensor：ALT reads 走 10–12 条 haplotype 的分支节点，REF reads 走 89 条的） | 只剩改稿 |
 | R2.1 | 为什么纳入 HapMap | 部分解决 | E8b 核实的事实；dilution 作替代 | 决定：HapMap 去留 |
 | R2.2 | truth set 怎么来的 | 部分解决 | E8b 按原始文献核实；E22：H1437 的 LOH germline，HCC1954 的 truth 没问题 | 决定：HG008 v0.2 还是 v0.3、rule (a)、H1437 怎么处理 |
 | R2.3 | recall 偏低；漏检位点上的 normal | 部分解决 | E1.6：各阶段的损失；normal 的组装证据 | 同步：和 DeepSomatic 的差距（等比较器结果） |
 | R2.4 | 低 VAF | 部分解决 | E2.4：按 VAF 分档的 recall，purity 系列（低于下限的比例从 16% 升到 27%） | GPU：BQ 伪影修好后重训；决定：E15 低 AF 配置、用哪个第二肿瘤 |
 | R2.5 | 精度提升从哪来 | 部分解决 | E4b / E10 / E19：graph 臂少了 germline candidate，GRCh38-only 多了着丝粒附近和 extreme 区域的 FP；附近 germline 越多，SNV 增益越大；去 ch6 重训和三 seed 已完成（10-19，HPRC − GRCh38-only 均值 +0.028 到 +0.292） | — |
 | R2.6 | PoN | 部分解决 | E8b：资源组成；E17c：SNV 规则就是 chr2–22 选出的；INDEL 换成留出肿瘤选出的规则（HP ≥ 8: AF ≥ 0.01，其余 ≥ 1e-4；用户 10-16 决定，pipeline 已改） | 已重算（10-16，44 个本地 INDEL call set 按新规则重新打分，R1.2 / R1.4 / R1.6 / R1.8 / R2.6 / R3.1 / R3.2 / R3.9 / R3.10 / R3.m2 已换数）；COLO829T v1.1 单样本 INDEL：10-19 用 RIS 的 matched lr 1e-4 run 在本地出了 valbest（R3.1 / R3.10 已填） |
-| R2.7 | 比对统计夸大 | **已解决** | E11a：两个肿瘤 × 三个平台 × 四个参考；E11b：放错率 | 只剩改稿 |
+| R2.7 | 比对统计夸大 | **已解决** | E11a 全量数据（10-19）：两个肿瘤 × 三个平台 × 四个参考，chr1–22 全部 reads 的 perfectly aligned / substitution / indel / soft clipping 读数和比例；原文那句逐条改写（soft clipping 的说法删掉）；不再用模拟 reads | 只剩改稿 |
 | R2.m | Minor 1–8 | 部分解决 | 大部分只是改图改字；E18 补了 SBS96 | 决定：第 5 条 "truth overlapping" 的原意；同步：比较器的 SBS96 |
 | R3.1 | 参考层面的 ablation | 部分解决 | Response 10-19 改成设计 + 三点结果（HPRC 全面优于 GRCh38-only；v2.1 对 v1.1 PoN 前 +0.079 到 +0.222、PoN 后在 seed 范围内；增益来自比对和 candidate 生成），300 词以内；E3 / E16 / E3b：关掉 rescue 后 12/12 个 run 都高于 GRCh38-only（10-19 用 matched d9 补上 COLO829T v1.1）；着丝粒是一项 caveat；CHM13 是一项 limitation；vg 版本已核实（E22）；10-19 RIS 三 seed：HPRC − GRCh38-only 均值 +0.028 到 +0.292，36 个同 seed 比较 35 个为正；去 ch6 后仍高于 GRCh38-only 均值（+0.011 到 +0.299） | 决定：vg 1.77 对照、COLO829T Illumina d9 用哪个 run（RIS 在跑 h90 seed 1 / 2；如果改用 h90，E3b / E16 / E9a 的 COLO829T Illumina 行要重算） |
 | R3.2 | 被去掉的 candidate 由什么组成 | 部分解决 | 三类 candidate × 三个参考臂；E4b：FP 的组成；E5b；去 ch6 重训已完成（10-19）；10-19 Response 按外部建议改写成 "selective reduction"，加了按图分层的 FP：HG008T 图里的 germline FP 129 → 4（少 97 %），不在图里的 2,036 → 1,794–1,944（少 5–12 %）；79 % / 73 % 改用新定义 | CPU：E4b 换成 matched d9 run（可选） |
 | R3.3 | graph 坐标 variant 的验证 | 部分解决 | E9c / E9d（9 个 run）；E9h：57–79% 的 off-ref key 有 reads 支持 | 决定：rescue 默认值、graph PoN 怎么用；同步：COLO829T 的 tumor 组装 |
-| R3.4 | 指标不含 graph 坐标 call；"about 2%"；CHM13 | 部分解决 | "about 2%" 实际是 8–68%；E9a 投影；E3b 关掉 rescue 后的完整输出；CHM13 不做 | 决定：rescue 默认值 |
-| R3.5 | mutational signature | 部分解决 | E18：COLO829T 余弦 0.996–0.997（SBS7a），HG008T 0.94–0.96；比较器（E8，10-19 填入）COLO829T 0.913–0.995、HG008T 0.878–0.943；graph-coordinate calls 按验证类别的 SBS96（10-19，Supplement）：population / germline 类（95 %）像 normal germline（余弦 0.79–0.91），不像 truth（0.61–0.70） | 决定：COLO829T v1.1 跑不跑 E9c / E9d（R3.3） |
-| R3.6 | perfect 不等于 correct | 部分解决 | E11b：Illumina 上 MAPQ ≥ 30 放错从 0.093% 降到 0.019% / 0.013%；ONT 在 v2.1 上更差（如实写出）；E11a | 决定：E11c 做不做、vg 版本对照 |
+| R3.4 | 指标不含 graph 坐标 call；"about 2%"；CHM13 | 部分解决 | "about 2%" 实际是 8–68%；E9a 投影；E3b 关掉 rescue 后的完整输出；E9b CHM13（10-20）：36.7–63.1 % 有 CHM13 allele，32.9–61.9 % 两张参考都没有 | 决定：rescue 默认值 |
+| R3.5 | mutational signature | 部分解决 | E18：COLO829T 余弦 0.996–0.997（SBS7a），HG008T 0.94–0.96；比较器（E8，10-19 填入）COLO829T 0.913–0.995、HG008T 0.878–0.943；10-19 按用户要求只改两点：Figure 4a 并排 truth 和三个 caller 的 SBS96（PoN 后、chr1、三平台分开），Supplement 给 graph-coordinate 的 SBS96（Fiber-seq 以外五套更像 germline，COLO829T Fiber-seq 偏肿瘤、UV 42 %） | Figure 4 改版（文字） |
+| R3.6 | perfect 不等于 correct | 部分解决 | E11b：Illumina 上 MAPQ ≥ 30 放错从 0.093% 降到 0.019% / 0.013%；ONT 在 v2.1 上更差（如实写出）；E11a；CHM13-only 对照（10-20）：CHM13 单独变化很小（Illumina perfect 63.7 → 64.8 %，HPRC 73 %），增益主要来自人群 haplotype | 决定：E11c 做不做、vg 版本对照 |
 | R3.7 | 重新归类 FN 要谨慎 | **已解决** | 单倍型组装证据 | 只剩改稿 |
-| R3.8 | tumor-only 和 mosaicism | **已解决** | 统一写成 tumor-only | 只剩改稿 |
+| R3.8 | tumor-only 和 mosaicism | **已解决** | 统一写成 tumor-only；10-19 改成 "has not been trained or validated for"，加 low VAF ≠ mosaicism、purity dilution（R2.4）、四株新细胞系名单 | 改稿（标题由用户定） |
 | R3.9 | 稳定性、统计不确定性 | 部分解决 | E16：所有 run 的区间和配对差；30 个 checkpoint 重跑复现 RIS 的 F1，差 ≤ 0.002；10-19 RIS 三个 seed：PASS F1 seed 极差 HPRC 0.003–0.080（中位 0.022），GRCh38-only 最大 0.144，AP 最多差 0.046；同 seed 重训 bit-identical | GPU：INDEL 和跨样本模型的多 seed |
 | R3.10 | 低 VAF 和 INDEL 的结论 | 部分解决 | E17a：INDEL 分层；E3b：validation best-F1 阈值；E2.4 | 决定：INDEL 的 operating point；GPU：BQ 伪影修好后重训；同步：比较器 |
 | R3.m1 | 参数不一致 | 部分解决 | 参数只剩一套，从 checkpoint 能复现；vg 版本已核实；Normalisation 按 f344bca 重写（报的模型都是 `--norm train`；BQ 按数据集是可选） | 等 normbq、最终模型和 INDEL 阈值定了再出参数表 |
@@ -163,7 +163,7 @@
 | E9c_offref_filter_validation | graph PoN 和组装验证 | R3.3、R3.4 |
 | E9h_offref_key_reads | 用 reads 核实 off-ref key | R1.1、R3.3、R3.4 |
 | E10_region_strata | SMaHT 区域和重复区分层 | R1.3 |
-| E11a_alignment_stats | 同一批 reads 在四个参考上的统计 | R2.7、R3.6 |
+| E11a_alignment_stats | 四个参考上的比对统计：全量 chr1–22 计数（`full/`，R2.7）；同一批 reads 的窗口 / 抽样对比 | R2.7、R3.6 |
 | E11b_simulated_alignment | 模拟 reads 的比对正确性（Illumina / HiFi / ONT） | R3.6、R1.3 |
 | E12a_cross_sample | 40 个跨样本 run，包括 CASTLE | R1.7、R1.m1、R3.9 |
 | E16_bootstrap | block-bootstrap 区间；配对差 | R3.9、R3.1 |
@@ -316,10 +316,11 @@ We compared three graph references with the same reads, tensor code and labels: 
 
 *Mapping ambiguity.* Graph alignment with Giraffe is as accurate as linear mapping and reduces reference bias (Sirén et al., 2021). On the same 10%-filtered HPRC v1.1 graph, Giraffe-based calling made 34% fewer small-variant errors than GRCh38, with the largest gains in difficult regions (challenging medically relevant genes, regions where GRCh38 is erroneous, L1HS repeats), and mapping to GRCh38 left 6.6–8.5 times more reads unmapped in VNTRs (Liao et al., 2023).
 
-*Absorbed somatic alleles.* The concern holds for indels. Relative to GRCh38-only, v2.1 leaves 24–42% of HG008T and COLO829T truth indels without a candidate; at 85–96% of these loci the alternative reads follow graph nodes, entirely (43–59%) or with a residual edit (30–52%), mostly in repeats. Population filtering removes 76–86% of these indels anyway, so the net loss is 3.5–7.0% of truth indels. Population filtering itself removes 53–63% of truth indels, and comparable panels are the standard germline filter of tumor-only callers (Mutect2, ClairS-TO, DeepSomatic), so the graph adds little to a loss that every tumor-only caller shares (R1.4).
+*Absorbed somatic alleles.* The concern holds for indels. Relative to GRCh38-only, v2.1 leaves 24–42% of HG008T and COLO829T truth indels without a candidate; at 85–96% of these loci the alternative reads follow graph nodes, entirely (43–59%) or with one remaining mismatch or indel (30–52%), mostly in repeats. Population filtering removes 76–86% of these indels anyway, so the net loss is 3.5–7.0% of truth indels. Population filtering itself removes 53–63% of truth indels, and comparable panels are the standard germline filter of tumor-only callers (Mutect2, ClairS-TO, DeepSomatic), so the graph adds little to a loss that every tumor-only caller shares (R1.4).
 
 **证据（内部）。**
 
+- 2026-10-20 措辞：用户 10-19 要求 Response 不再用 "edit" 这类说法（读者不一定知道 edit 是什么，pansoma-1c 转达），改成 "perfectly aligned"（两端对齐、没有错配、indel 和 soft clip）或 "mismatch / indel"。本条改了："entirely (43–59%) or with a residual edit (30–52%)" → "entirely (43–59%) or with one remaining mismatch or indel (30–52%)"。数字没变。
 - 2026-10-19 PoN 前 v2.1 − v1.1 的 SNV F1 换成三 seed 均值（+0.079 到 +0.222；推导见 R3.1 证据同日 "三点" 一条）；原来的 "+0.105 to +0.132" 是 seed 0、COLO829T 用旧 d9 run。
 - 2026-10-19 "all nine pairs tested" → "all twelve pairs"（加上 COLO829T v1.1 三对，E16；见 R3.1 证据同日一条）。
 - 2026-10-19 按用户要求压字数（462 → 见 assemble 输出；用户 10-16 要求约 350 词；旧版在 session scratchpad `R1.2.before_trim_20261019.md`）：数字没改。删掉的细节："including 29 European individuals absent from v1.1"（R3.m3 有）、"84–90% and 85–91%" 合成 "84–91%"、"SNVs within 0.4 percentage points, indels −0.4 to +4.3 points"、INDEL "0.018 before"、COLO829T Illumina d9 的 "1,340–1,900 false calls"（R3.1 有），以及吸收段的 "mostly loci where the reads follow a graph allele with a residual edit"（E5c 证据仍在下面）。
@@ -385,7 +386,7 @@ We compared three graph references with the same reads, tensor code and labels: 
     - Sirén J. et al. Pangenomics enables genotyping of known structural variants in 5202 diverse genomes. Science 374, abg8871 (2021)：Giraffe 在已知来源的模拟 reads 上 "as accurate as the most accurate previously published mappers"，图里 allele 越多 reference allele bias 越小（PMC9365333）。
     - Liao W.-W. et al. A draft human pangenome reference. Nature 617, 312–324 (2023)：摘要 "reduced small variant discovery errors by 34%" 相对 GRCh38-based workflows（short reads）。
     - Hickey G. et al. Pangenome graph construction from genome alignments with Minigraph-Cactus. Nat Biotechnol 42, 663–673 (2024)。HPRC 的资源页（hpp_pangenome_resources `hprc-v1.0-mc.md`）写 minaf.0.1 图（去掉少于 9 条 haplotype 的 node，即 d9 这一类）"recommended when using with DeepVariant"，"accuracy is improved if all alleles with frequency < 10% are removed from the graph before indexing"。[待核实] Liao 2023 的 34 % 用的是不是这个过滤图、Hickey 2024 正文里有没有同样的结论：只核实了资源页，没读两篇正文。若不确定，可以把 "frequency-filtered" 改成只引资源页的说法。
-    - Tumor-only caller 的 population 过滤：DeepSomatic（Park et al., Nat Biotechnol 2025, doi 10.1038/s41587-025-02839-x）tumor-only 文档 `--use_default_pon_filtering=true`："filtered using the default PON vcf that contains variant calls from dbSNP, gnomAD and 1000 genomes"（google/deepsomatic `docs/deepsomatic-case-study-wgs-tumor-only.md`）；ClairS-TO（Chen et al., Nat Commun 2025, doi 10.1038/s41467-025-64547-z）用 gnomAD、dbSNP、1000G、CoLoRSdb 四个 PoN（bioRxiv 2025.03.10.642523；只看了摘要 / 综述，[待核实] 正文）；Mutect2 tumor-only 用 germline resource（gnomAD）和 PoN（GATK 文档）。正式引用时 Mutect2 用 Benjamin et al. 2019 bioRxiv 或 GATK 文档 [待核实]。
+    - Tumor-only caller 的 population 过滤：DeepSomatic（Park et al., Nat Biotechnol 2025, doi 10.1038/s41587-025-02839-x）tumor-only 文档 `--use_default_pon_filtering=true`："filtered using the default PON vcf that contains variant calls from dbSNP, gnomAD and 1000 genomes"（google/deepsomatic `docs/deepsomatic-case-study-wgs-tumor-only.md`）；ClairS-TO（Chen et al., Nat Commun 2025, doi 10.1038/s41467-025-64547-z）用 gnomAD、dbSNP、1000G、CoLoRSdb 四个 PoN（2026-10-20 已核实：HKU-BAL/ClairS-TO README，默认 "tags variants if they exist in provided panels of normals"：gnomAD r2.1 AF ≥ 0.001 和 dbSNP b138 non-somatic 要求 allele 匹配，1000G PoN 全部位点和 CoLoRSdb AF ≥ 0.001 不要求；`--panel_of_normals`、`--disable_nonsomatic_tagging` 可改）；Mutect2 tumor-only 用 germline resource 和 PoN（2026-10-20 已核实：GATK `Mutect2.java` 类文档，tumor-only 要 "a PoN and germline resource"，示例命令 `--germline-resource af-only-gnomad.vcf.gz --panel-of-normals pon.vcf.gz`）。正式引用：Mutect2 用 Benjamin D. et al. Calling somatic SNVs and indels with Mutect2. bioRxiv (2019), doi 10.1101/861054；ClairS-TO 用 Chen et al., Nat Commun 2025 加软件文档。
   - 模拟 reads：E11b `results/tables.md`，wrong / placed Illumina GRCh38-only 1.235 %、d9 0.983 %、d46 0.927 %；HiFi 0.495 / 0.328 / 0.383 %；ONT 0.773 / 0.614 / 1.483 %，d46 多出的 282 个里 274 个在 SMaHT extreme（见下面旧证据）。
   - 吸收（E5b，d46，chr1-22，全部 truth）：
     - "17–18 %"：`tables.md` §6 / README §5.3，absorbed on >= 1 platform（no candidate on d46、linear 有 tensor、ALT 被 d46 spell）HG008T 1,467 / 8,496 = 17.3 %，COLO829T 347 / 1,912 = 18.1 %（我按计数算的）。SNV：140 / 8,690 = 1.6 %，54 / 42,035 = 0.1 % → "at most 2%"。
@@ -468,7 +469,7 @@ We compared three graph references with the same reads, tensor code and labels: 
 - （已完成）E7 的 `s7_tables.py` 和 README（2026-10-13 23:03），Response 的校准数字已核对。剩下的只有图（`curves.tsv` 可直接画）。
 - （已完成）E5b graph spelling（387428 / 387429 / 387430 COMPLETED 2026-10-13 22:47–22:52）。"图里没有的 somatic INDEL 也有 0.29–0.36 丢了 candidate" 现在按 E5b 的分类写（not spelled / filtered），但 "representation / alignment" 这个原因本身没有测。要的话，可以在 E5b 的 `lost_alleles.tsv.gz` 上抽几十个 "not spelled" 的位点看 read 在 d9 上怎么走（CPU，可选）。
 - （已完成，2026-10-16）E7 的 v2.1 轴（job 417207），Response 的 in-silico 一句已换成 v2.1 的数（E7 README "HPRC v2.1 axis"）。
-- [文字] 文献引用核实：Liao 2023 已核实（见证据 2026-10-16 第一条）；还剩 ClairS-TO 正文的 PoN、Mutect2 的引用。
+- （已完成 2026-10-20）文献引用核实：Liao 2023（10-16）；ClairS-TO 的 PoN（README）、Mutect2 的 germline resource + PoN（GATK 文档，Benjamin et al. 2019 bioRxiv），见证据里 "Tumor-only caller 的 population 过滤" 一条。
 - [用户决定] centromere（chr1:121–126 Mb）：Response 已去掉，等用户决定怎么处理。
 - （已完成，2026-10-15）E11a 六套（`compare.py` 18:36）和 E11b（Illumina / HiFi）已进 Response 的 "Mapping ambiguity"。[文字] E11a README（14:07）还写着 ONT / COLO829T held，要按 tables.md 更新（不在本次可改的文件里）。
 - [文字]（E7 负责人）E7 README 的 Caveats 加一句：模型把 CHM13 当普通 haplotype 过滤，真实 GBZ 里 CHM13 是不过滤的 reference path（见证据 "2026-10-15 一致性"）。
@@ -496,7 +497,7 @@ We agree that aggregate statistics do not show where alignment improves, and add
 
 1. *Alignment by region* (same reads, six datasets, SMaHT region classes). In easy regions the graphs give cleaner alignments at the same locus: on the HPRC v1.1 graph (d9 filter), HG008T PacBio mismatched bases per kb fall from 1.02 to 0.16, and 99.93–99.99% of long reads keep their placement. In extreme regions they add ambiguity: on v1.1, 6.26–7.41% of long reads lose MAPQ ≥ 30 and 3.05–4.93% gain it; on the HPRC v2.1 graph (d46 filter), aligned with a newer aligner release, 13.97–17.30% lose it. For short reads, lower MAPQ is not more misplacement: of simulated HG008-N Illumina reads of known origin, v1.1 and v2.1 misplace 0.98% and 0.93% of placed reads against 1.24% on a GRCh38-only graph (R3.6). Simulated ONT reads differ: v1.1 misplaces slightly fewer (0.61% against 0.77%), but v2.1 about twice as many (1.48%), almost all in extreme regions, in line with the more frequent confident disagreements of real ONT reads on v2.1 (HG008T: 1,953 against 1,019 reads on v1.1).
 
-2. *Calls by region* (chr1 SNVs, PASS after population filtering, benchmark regions). On HG008T the arms are close in easy regions (F1 0.627–0.642 on GRCh38-only, 0.636–0.659 on the HPRC graphs). In extreme regions the GRCh38-only graph makes 351–2,210 PASS calls per dataset at precision 0.056–0.253, against 102–281 at 0.161–0.764 on the HPRC graphs. Placed ONT SNVs lose no more recall in extreme regions (HG008T, v2.1: 0.451 against 0.341–0.374), but on COLO829T their precision there is lower (0.452 against 0.693–0.764). [待补: per-stratum intervals]
+2. *Calls by region* (chr1 SNVs, PASS after population filtering, benchmark regions; paired 1-Mb block-bootstrap intervals in the Supplementary Table). On HG008T the arms are close in easy regions (F1 0.627–0.642 on GRCh38-only, 0.636–0.659 on the HPRC graphs; all six paired intervals include zero), whereas on COLO829T the HPRC graphs gain +0.053 to +0.154 there, through recall (all six exclude zero). In extreme regions the GRCh38-only graph makes 351–2,210 PASS calls per dataset at precision 0.056–0.253, against 102–382 at 0.161–0.764 on the HPRC graphs; the precision gain excludes zero in 10 of 12 pairs. The exceptions are COLO829T on v1.1 with Fiber-seq (wide interval) and Illumina, whose matched-recipe model makes 1,725 such calls at precision 0.076 (R1.2). Placed ONT SNVs lose no more recall in extreme regions (HG008T, v2.1: 0.451 against 0.341–0.374), but on COLO829T their precision there is lower (v2.1: 0.452 against 0.693–0.764).
 
 3. *ONT graph-coordinate calls.* ONT makes the most graph-coordinate calls (chr1: HG008T 1,409 / 1,261 on v1.1 / v2.1, against 116–754 for Illumina and 211–244 for PacBio; COLO829T 1,675 / 4,566). Most are produced by the off-reference rescue; without it, 6–162 per run remain (R3.4). In the nine graph runs available (R3.3):
    - 2.8–19.1% can be written as a GRCh38 variant; after filtering this adds six true positives across the nine runs (0–2 per run; three distinct truth SNVs; R3.4).
@@ -506,6 +507,11 @@ We agree that aggregate statistics do not show where alignment improves, and add
 
 **证据（内部）。**
 
+- 2026-10-20 [待补: per-stratum intervals] 做了：`experiments/E16_bootstrap/e16_strata.py`（`strata.md`、`strata_ci.tsv`、`strata_paired.tsv`）；和 E16 同样的 1-Mb block、2,000 次、seed 20261015，记录按 E10 的每条记录表（`call_level/E10/<run>__<vcf dir>.v2.tsv.gz`，eval_bed）分到 SMaHT easy / difficult / extreme。E10 在 2026-10-20 重跑（job 448088，2.5 min），补进 COLO829T v1.1（matched seed 0）等新 call set，所以现在是 18 个 SNV call set、12 对。
+  - easy：HG008T HPRC − GRCh38-only F1 +0.020 [−0.000, +0.039]、+0.010 [−0.009, +0.028]（Illumina d9 / d46）、+0.017 [−0.000, +0.032]、+0.002（PacBio）、−0.001、−0.003（ONT）→ 6 对都含 0；COLO829T +0.084 / +0.092（Illumina）、+0.059 / +0.053（Fiber-seq）、+0.154 / +0.152（ONT），6 对都不含 0，dR +0.094 到 +0.166。
+  - extreme：dP HG008T +0.102 / +0.106、+0.224 / +0.182、+0.162 / +0.087（都不含 0）；COLO829T Illumina d9 +0.020 [−0.088, +0.072]、d46 +0.708 [+0.446, +0.804]；Fiber-seq d9 +0.103 [−0.164, +0.491]、d46 +0.440；ONT d9 +0.464、d46 +0.396 → 10 / 12 不含 0。
+  - HPRC 图 extreme PASS call 数（不含 COLO829T Illumina d9）102–382、precision 0.161–0.764（原来 9 个 run 是 102–281）；COLO829T Illumina d9（matched 4 GPU）1,725 个、precision 0.076（R1.2 的 4-GPU 异常，用户还没定用哪个 run）。GRCh38-only 的 351–2,210、0.056–0.253 不变。
+  - "v2.1:" 加在 COLO829T ONT 那句：d9 时 ONT 的 extreme precision（0.520）不比 Fiber-seq（0.356）低。
 - 2026-10-16 用户要求：centromere 一句先从 Response 去掉。chr1:121–126 Mb 不是注释的 centromere 区间：是 E16 刷新时一个 sub-agent 在 login node 上把 linear 臂的 rtg fp.vcf.gz 按 1-Mb 分块计数（COLO829T Illumina 最多的块 123 / 124 / 122 Mb），事后选的窗口，"centromere" 是凭常识起的名字，本地没有 centromere / cytoBand 注释。下面证据里的 1,888 / 2,221 和 +0.020 到 +0.209 只作内部记录，等用户决定（注释定义的 centromere 重算、改叫 FP 聚集窗口、或改用 SMaHT extreme）。
 - 2026-10-15 E1.6/E9h/E22/E11b-ONT（本条用到 E11b-ONT 和 E22 check 2；Response 470 → 481 词）：
   - 第 1 条新加的 ONT 一句（`experiments/E11b_simulated_alignment/results/tables.md` "## ont: overall"，collect 407748，19:39；README Interpretation 7）：wrong / placed 0.773 / 0.614 / 1.483 %（GRCh38-only / d9 / d46）→ "0.77% ... 0.61% ... 1.48%"；wrong at MAPQ ≥ 30 0.433 / 0.335 / 0.764 %（没进本条 Response，R3.6 有）。"almost all in extreme regions"：`eval/<arm>.ont.json` `strata.smaht_region` 的 wrong 数 extreme 216 / 148 / 490，easy 88 / 93 / 94，difficult 3 / 3 / 5；d46 比 GRCh38-only 多的 282 个 wrong 里 274 个在 extreme（我按计数相减）；extreme 区 wrong / placed 12.919 / 9.080 / 30.284 %（`tables.md` "ont: by smaht region"）。
@@ -516,7 +522,7 @@ We agree that aggregate statistics do not show where alignment improves, and add
   - E22 check 2（`experiments/E22_truth_and_version_checks/README.md`）：COLO829T v1.1 GAM 的 giraffe 版本由 GAM 里的 `PARAMS_JSON` 指纹定到范围：Fiber-seq 1.64.1–1.66.0、ONT 1.64.0–1.66.0、Illumina ≤ 1.62。下面 "第 1 条的 vg 版本和 F1" 一条里 "只有 COLO829T 的 d9 未核实" 以此为准。
 
 - 2026-10-15 终稿一致性（Response 534 → 470 词）：
-  - 移出 Response 的细节：E11b 的 "among placements with MAPQ ≥ 30, 0.019% and 0.013% against 0.093%" 和 "carry sequence absent from GRCh38"（在 R3.6 / R2.7 的 Response 里）；extreme 区的 F1（0.100–0.343 vs 0.200–0.637，E10）留在证据；linear 多出来的 FP 的成分（COLO829T / HG008T Illumina 主要是低 AF、不匹配 germline / population；HG008T 长读长 60–73 % 在 germline ≤ 10 bp 内，E4b）改成指向 R3.2；"The assembly test calls 145–149 of 150 placed HG008T true positives tumor-only" 只留在 R3.3（对照组）。
+  - 移出 Response 的细节：E11b 的 "among placements with MAPQ ≥ 30, 0.019% and 0.013% against 0.093%" 和 "carry sequence absent from GRCh38"（在 R3.6 的 Response 里；2026-10-20 起 R2.7 改成全量数据，不再有这些数）；extreme 区的 F1（0.100–0.343 vs 0.200–0.637，E10）留在证据；linear 多出来的 FP 的成分（COLO829T / HG008T Illumina 主要是低 AF、不匹配 germline / population；HG008T 长读长 60–73 % 在 germline ≤ 10 bp 内，E4b）改成指向 R3.2；"The assembly test calls 145–149 of 150 placed HG008T true positives tumor-only" 只留在 R3.3（对照组）。
   - 第 3 点按全套统一写法：rescue "Most are produced by the off-reference rescue; without it, 6–162 per run remain (R3.4)"（E3b §1）；projection "six true positives across the nine runs (0–2 per run; three distinct truth SNVs)"（E9a README Interpretation 2）；BED 内外 "all nine HPRC runs re-called locally are above GRCh38-only; inside the benchmark regions HG008T ONT on v2.1 stays 0.004 below (0.533 against 0.537)"；"We report every SNV result with and without the rescue"。
   - HG008T ONT v2.1 rescue 开的 complete-output F1 用 RIS 的 0.354（E3 §2，和 R3.4 第 2 点的表同一来源；E3b 本地 re-predict 是 0.3548，原来写的 0.355），rescue 关的 0.579 / 0.524 是 E3b 本地数（RIS 没有 rescue 关的 run）。
   - E9 的类别范围（49.8–91.4 % population、4.2–45.4 % germline、HG008T tumor-only 每个 run 1–4 个 / 只看组装 4–24 个）和 E9c README §1 / Interpretation 1 一致，没改。
@@ -576,13 +582,13 @@ We agree that aggregate statistics do not show where alignment improves, and add
 
 **还缺什么。**
 
-- [CPU 本地]（可选）每个 SMaHT stratum 的 block-bootstrap 区间（E16 现在只给整体 P / R / F1；`e16_bootstrap.py` 加一个按 E10 stratum 过滤的模式即可，login node）。做完替换 Response 第 2 条的 [待补]；不做就删掉 [待补]，Response 照现在写（extreme 区的差别远大于整体区间的宽度）。
+- （已完成 2026-10-20）每个 SMaHT stratum 的 block-bootstrap 区间（`E16_bootstrap/e16_strata.py`）。
 - [数据同步] COLO829T v1.1 单样本 SNV run（`*_SNV_h90`）没 re-predict：E9a / E9c / E10 / E3b 都缺这三个 run（Response 的 "all nine" 不含它们）。 2026-10-19 更新：E9a 和 E3b 已用 matched d9 seed 0 补上（`reviewer_cpu_20261013/COLO829_*_SNV_7fc7396_ddp4_b1024`）；E9c / E10 还没跑这三个 run。
 - [用户决定] HG008T 的分层用不用 GIAB stratification（本地没有，v3.5 tarball 1.3 GB）；不下载就在 Methods 写 SMaHT v2 easy / difficult / extreme + segdup（E10 就是这样做的）。
 - [用户决定]（不影响 Response）SNV off-ref rescue 是否作为软件默认（与 R3.3 / R3.4 同一个决定）。E3b 已给出九个图 run 两边的数（见证据），Response 两种都报。
 - [CPU 本地]（可选）E9c / E9d 的 COLO829T ONT 只处理了随机 3,000 / 4,569 个 unplaced PASS（seed 0）；要全量数就补跑剩下的 1,569 个。
 - [文字] 简版 R1.3 换成 7fc7396 / 九个 run 的数字，删掉 "resolution" 的说法，改为 "added ambiguity, mostly population and germline alleles"；类别互斥、有优先顺序；graph PoN 是 "match an HPRC allele"，对 somatic 不特异；"equally often perfect" 限定为长读长。
-- （已完成，2026-10-15 终稿一致性）Response 压到约 469 词：MAPQ ≥ 30 误放数移到 R3.6 / R2.7，FP 成分指向 R3.2（见证据）。
+- （已完成，2026-10-15 终稿一致性）Response 压到约 469 词：MAPQ ≥ 30 误放数移到 R3.6（2026-10-20：R2.7 已不含），FP 成分指向 R3.2（见证据）。
 
 ### R1.4 Candidate generation removes somatic variants already encoded in the graph
 
@@ -597,20 +603,26 @@ We agree that aggregate statistics do not show where alignment improves, and add
 
 **Response.**
 
-The reviewer is correct: an allele on a graph path is not necessarily germline, and reads that align to it without edit give no candidate. We withdrew the reference-bias reading of Supplementary Fig. 3, state the mechanism as a limitation, and quantified the loss.
+The reviewer is correct: an allele on a graph path is not necessarily germline, and reads that align perfectly to it give no candidate. We withdrew the reference-bias reading of Supplementary Fig. 3, state the mechanism as a limitation, and quantified the loss.
 
-*Read level (HPRC v1.1 graph, d9 filter; patient assemblies; R3.7).* ALT reads of 2,478 HG008T truth alleles (201 SNVs, 2,277 INDELs; 26.8% of truth INDELs) and 497 COLO829T alleles (67 SNVs, 430 INDELs; 22.5%) align without edit to an existing path. Only 110 (4.4%) and 34 (6.8%) are the patient's germline allele; 2,085 (84.1%) and 430 (86.5%) are carried only by other HPRC individuals.
+*Read level (HPRC v1.1 graph, d9 filter; patient assemblies; R3.7).* ALT reads of 2,478 HG008T truth alleles (201 SNVs, 2,277 INDELs; 26.8% of truth INDELs) and 497 COLO829T alleles (67 SNVs, 430 INDELs; 22.5%) align perfectly to an existing path. Only 110 (4.4%) and 34 (6.8%) are the patient's germline allele; 2,085 (84.1%) and 430 (86.5%) are carried only by other HPRC individuals.
 
 *Population filtering.* Tumor-only pipelines remove such alleles at filtering; ours (R2.6) tags 98.5–99.0% of these SNVs and 95.0–97.7% of these INDELs, against 3.6–10.2% of all truth SNVs and 53.0–62.7% of all truth INDELs. Absorbed and untagged remain 2 SNVs and 113 INDELs for HG008T (1.2% of truth INDELs) and 1 SNV and 10 INDELs for COLO829T (0.5%); on the HPRC v2.1 graph (d46 filter), 0.2–0.7% of truth INDELs per platform.
 
 *Against a GRCh38-only graph* (same reads and code; chr1–22; tensor level). Net of gains, the HPRC graphs give a tensor to 0.2–0.6% fewer truth SNVs and 1.7–7.7% fewer truth INDELs that filtering would keep. Absorption is a small part: of the untagged INDELs lost on v1.1 (HG008T Illumina / PacBio / ONT: 461 / 550 / 276), 35 / 30 / 16 are absorbed by a strict spelling test; most others get no candidate without an exactly matching graph path or fall below the candidate allele-fraction cut. In the scored region (chr1, benchmark BED), 0–2 absorbed, untagged INDELs are lost per dataset and graph, and the GRCh38-only arm calls most of the untagged INDELs that the graphs lose (HG008T: 16–26 of 16–29; COLO829T: 4–12 of 10–13). Its final INDEL recall is similar: in a per-allele recall funnel, about two thirds of truth INDELs are population alleles, most of which it calls and filtering removes, and 24–27% of truth INDELs are called on every reference, slightly more on GRCh38-only (R1.6). But it also makes the patient's germline INDELs candidates and ranks somatic ones worse: its chr1 INDEL F1 after filtering is lower on all six datasets at the validation best-F1 threshold and by test-tuned best F1 (upper bound), though higher at the recall-0.9 validation threshold on the four long-read datasets, where every arm scores 0.133 or less (R3.1).
 
-Linear tumor-only callers drop such alleles too: an earlier DeepSomatic tumor-only run labels 72 of 131 COLO829T Fiber-seq chr1 truth INDELs germline. [待补: ClairS-TO and DeepSomatic at the absorbed loci]
+Linear tumor-only callers lose such alleles too, at filtering instead of alignment. At the alleles that the HPRC v1.1 graph absorbs on chr1 (benchmark regions; 4–14 SNVs and 19–136 indels per dataset), DeepSomatic-TO and ClairS-TO emit a record for many of the indels (4–85%), but their own filters pass 7 of 882 absorbed allele–caller pairs, all indels, against 56–91% of all truth SNVs and 2–21% of all truth indels; after the same population filtering they call none.
 
 The classifier applies the population prior a second time through the haplotype-count channel: of the assembly-derived HG008T somatic SNVs on off-reference nodes, 57–79% per dataset have read support as somatic, yet the models call only 0–4 of these (R1.1, R3.3). The Discussion states both as limitations of population-based tumor-only calling.
 
 **证据（内部）。**
 
+- 2026-10-20 措辞：用户 10-19 要求 Response 不再用 "edit" 这类说法（读者不一定知道 edit 是什么，pansoma-1c 转达），改成 "perfectly aligned"（两端对齐、没有错配、indel 和 soft clip）或 "mismatch / indel"。本条改了："reads that align to it without edit give no candidate" → "reads that align perfectly to it give no candidate"；"align without edit to an existing path" → "align perfectly to an existing path"。数字没变。
+- 2026-10-20 [待补: ClairS-TO and DeepSomatic at the absorbed loci] 填上了（新实验 `experiments/E8c_comparators_absorbed/`，`absorbed_comparators.py`，`tables.md`）。吸收的 allele = graph-absorbed 两个分析里每个平台的 perfect bypass truth（HPRC v1.1 d9），只取 chr1（比较器只有 chr1）；比较器是用户已有的 tumor-only run（E8 重新打分，DeepSomatic 1.9.0，ClairS-TO 0.4.2 / 0.4.1），在 BED 内的 rtg tp-baseline 里查。
+  - 每套 chr1 BED 内吸收的：SNV 12 / 14 / 14（HG008T Illumina / PacBio / ONT）、4 / 5 / 4（COLO829T Illumina / Fiber-seq / ONT）→ "4–14"；INDEL 136 / 102 / 74、34 / 23 / 19 → "19–136"。
+  - 有记录（any FILTER）的 INDEL：DeepSomatic-TO 85 / 41 / 28 / 76 / 83 / 53 %，ClairS-TO 44 / 4 / 7 / 74 / 22 / 32 % → "4–85%"。
+  - PASS：882 对（SNV 53 × 2 = 106，INDEL 388 × 2 = 776）里 7 对，DeepSomatic-TO HG008T Illumina INDEL 6 / 136、COLO829T Illumina INDEL 1 / 34；全部 truth 的 PASS 比例 SNV 56–91 %、INDEL 2–21 %（同一张表括号里的数）。PASS + 我们的 PoN：0。
+  - 原来那句 "an earlier DeepSomatic tumor-only run labels 72 of 131 COLO829T Fiber-seq chr1 truth INDELs germline" 换掉了（更早的 run，现在有同口径的数）。
 - 2026-10-16 按新 INDEL PoN 规则（HP ≥ 8: 0.01，其余 1e-4）重算：truth 重新打标（`tmp/reviewer_cpu_20261013/pon_hp8_20261016/truth/`），read 层面吸收的 crosstab 重跑（`pon_hp8_20261016/crosstab/crosstab.md`、`crosstab_colo.md`）：HG008T 吸收 INDEL 2,164 / 2,277 被标（95.0 %，旧 94.7 %），剩 113（9,362 的 1.2 %，旧 121、1.3 %）；COLO829T 420 / 430（97.7 %，旧 97.0 %），剩 10（2,059 的 0.5 %，旧 13、0.6 %）；SNV 不变；全部 truth INDEL 被标 HG008T 62.7 %、COLO829T 53.0 %。E5b 重跑（s5 / s6）：§1 净损失 INDEL d9 −4.6 / −5.7 / −1.7 %（HG008T）、−6.4 / −7.7 / −4.1 %（COLO829T），d46 −4.3 / −5.5 / −1.7、−5.9 / −7.6 / −4.4 → "1.7–7.7%"；§2 HG008T d9 lost after PoN 461 / 550 / 276，其中 absorbed 35 / 30 / 16；§5.5 d46 absorbed after PoN 0.4–0.7 %（HG008T）、0.2–0.3 %（COLO829T）→ 仍是 0.2–0.7 %；§5.6 chr1 BED absorbed 0–2 不变；`linear_recovery.md`：HG008T 丢失且不被标 25 / 24、28 / 29、16 / 18（d9 / d46），linear PASS 叫出 21 / 19、25 / 26、16 / 18 → "16–26 of 16–29"；COLO829T 不变（4–12 of 10–13）。r0.9 长读长最高 F1 是 HG008T PacBio linear 0.133（旧 0.125）。
 - 2026-10-15 E1.6/E9h/E22/E11b-ONT（本条用到 E1.6 和 E9h；Response 465 → 485 词）：
   - "Its final INDEL recall is similar ..."（E1.6，`experiments/E1.6_recall_funnel/README.md` Results §3 / §4 和 Interpretation 3，`tables.md` §10 / §10e；chr1，BED 内，recall-0.9 阈值，三个平台的 per-run 记录相加）：truth INDEL 本身被 PoN 标的 HG008T 1,137 / 1,761（64.6 %）、COLO829T 243 / 393（61.8 %）→ "about two thirds"。GRCh38-only 上它们大多走到 PASS 再被 PoN 去掉（stage 3：HG008T 42.3 %、COLO829T 39.7 %），图臂上大多没有 tensor（stage 1：HG008T d9 56.0 %、d46 55.6 %，COLO829T d46 52.9 %；HG008T d9 stage 1 的 987 个里 815 个是 PoN 标的）→ "most of which it calls and filtering removes"。最终叫出（stage 4）HG008T 25.4 / 24.1 / 24.5 %（GRCh38-only / d9 / d46）、COLO829T 26.7 / 24.4 %（GRCh38-only / d46）→ "24–27% ... slightly more on GRCh38-only"。E1.6 的 per-run stage 4 和 `report.json` 的 rtg TP 在 32 个 call set 上完全一致（README Results §2）。
@@ -679,8 +691,8 @@ The classifier applies the population prior a second time through the haplotype-
 **还缺什么。**
 
 - （已完成，2026-10-15）E5b `linear_recovery.md`：HG008T 三平台三臂、COLO829T linear / d46 和 fiberseq joint d9 都有，Response 已用。剩下 COLO829T Illumina / ONT 的 joint d9 列（4 个 rtg 输出，[数据同步] 或 tequila re-predict），不影响 Response 的数。
-- [数据同步] E5c：用户给出已有 ClairS-TO / DeepSomatic 结果的路径（不重跑）。
-- [CPU 本地] E5c：在 2,478 / 497 个吸收位点上数 PASS，分 raw、各自默认过滤、同一 PoN 三档。
+- （已完成 2026-10-20）比较器的结果用 E8 重新打分的用户已有 run（chr1）。
+- （已完成 2026-10-20，E8c）在吸收位点上数比较器的 any record / PASS / PASS + PoN（chr1，比较器只有 chr1）。
 - （已完成，2026-10-15，15 个 run）INDEL 的 validation best-F1 阈值（valbest，chr2–22 validation blocks 上选 best F1）已由 E3b 算出，Response 已用。COLO829T v1.1 INDEL（`*_INDEL_small`）没有 valbest（本地没有 predictions）。[用户决定] 主文 INDEL 报 recall-0.9 还是 valbest（COLO829T 的 valbest 只有 2–8 个 TP，见证据）。
 - [用户决定] graph-specific loss 主文报哪个数：read 层面 1.3 % / 0.6 %、d46 graph spelling 的 0.2–0.7 %，还是相对 linear 的端到端 INDEL 2.0–8.2 %（其中吸收只占小部分）。建议都报，Response 现在就是都报。
 - [用户决定] E6 / E25（branch candidate）做不做；Response 现在按不做写（只写成 limitation）；如果做，在最后一段加一句它找回多少吸收的 allele、多出多少 candidate。按 E5b，吸收的 truth 95.5–100 % 本来就被 PoN 标掉，branch candidate 能多叫回来的、PoN 后还在的 truth 很少（chr1 BED 内每套 0–2 个；strict spelling 口径，是下界，按 read 层面的定义会多一些），可以作为不做的理由。
@@ -1185,15 +1197,30 @@ The classifier uses this path information.
 
 - Alone, the site column's path count separates somatic from germline chr1 SNV test tensors with an AUC of 0.831–0.865 on the HPRC v1.1 graph (d9 filter) and 0.885–0.915 on the HPRC v2.1 graph (d46 filter), and the number of distinct codes within ±10 columns, a proxy for node changes, with 0.803–0.842 (all 12 graph-based test sets; 0.500 on the GRCh38-only graph).
 - We edited channel 6 at inference, without retraining, in the same 12 SNV models (HG008T and COLO829T, three platforms, two graphs). With the plane set to its training mean, somatic average precision falls from 0.199–0.352 to 0.044–0.066 (HG008T) and from 0.639–0.829 to 0.329–0.520 (COLO829T). Setting every node to "all haplotypes" has a similar effect and raises the germline tensors called somatic 3.4- to 7.6-fold. On the GRCh38-only graph, where the plane is constant, nothing changes.
-- After population filtering (a per-tensor estimate), these two edits change F1 by only −0.066 to +0.007, except HG008T ONT on v1.1 with the training mean (0.596 to 0.145); replacing the plane with another tensor's lowers F1 to 0.212–0.551. Whether the plane improves the final calls is the retraining ablation of R1.1.
+- After population filtering (a per-tensor estimate), these two changes to the plane alter F1 by only −0.066 to +0.007, except HG008T ONT on v1.1 with the training mean (0.596 to 0.145); replacing the plane with another tensor's lowers F1 to 0.212–0.551. Whether the plane improves the final calls is the retraining ablation of R1.1.
 - The plane also suppresses somatic SNVs off GRCh38: of the assembly-derived HG008T somatic SNVs whose allele lies on an off-reference node, the models call 0 of 112 (PacBio) and 1 of 89 (ONT) on v1.1, against 61 and 49 with every node set to all haplotypes (v2.1, three platforms: 1–4 of 67–135, against 49–97), although 57–79% per dataset have read support as somatic (R1.1). An optional off-reference rescue recovers 22–66 of the read-supported ones per dataset at tensor level (R3.m1); we report every SNV result with and without the rescue (R3.4).
 
-A schematic of a tensor crossing node boundaries is added as Supplementary Fig. [待补].
+Supplementary Fig. R1.m2 shows one such tensor: at a somatic SNV, its rows cross several nodes, and the ALT reads follow a node carried by 10–12 of the 90 haplotypes about 15 bp upstream, while the REF reads follow one carried by 89.
 
 We agree that the tensors do not model bubbles explicitly: competing path support is represented through the reads' walks and per-node haplotype counts, not as a bubble-level object, and we state this as a limitation (R1.1).
 
+**Supplementary (R1.m2).**
+
+![A chr1 SNV tensor whose rows follow their reads across node boundaries](supplementary/R1.m2/fig_R1.m2_tensor_across_nodes.png)
+
+*R1.m2,* the eight channels of one chr1 SNV tensor (HG008T PacBio HiFi, HPRC v1.1 graph with the d9 filter; somatic truth
+SNV chr1:242,680,268 G>A, allele fraction 0.50; 49 ALT, 47 REF and 2 other reads). Rows are reads, grouped by the
+allele they carry at the site (A1 = ALT, REF, OTHER); columns are the 101 positions centred on the site (column 50).
+Each row follows its read's alignment walk, so the window spans several graph nodes. Panel 6 gives the graph base of the
+node the read traverses at each column, panel 7 the number of haplotype paths through that node (coded relative to the
+graph's 90 haplotypes: 99 = 89 haplotypes, 10 = 10). In columns 30–37 the ALT reads traverse a node carried by 10–12
+haplotypes and the REF reads one carried by 89, so the tensor records that the somatic allele lies on the haplotype with
+the less common upstream allele. Rendered with `scripts/visualize_tensor.py` (`supplementary/R1.m2/make_figure.sh`).
+
 **证据（内部）。**
 
+- 2026-10-20 措辞：用户 10-19 要求 Response 不再用 "edit" 这类说法（读者不一定知道 edit 是什么，pansoma-1c 转达），改成 "perfectly aligned"（两端对齐、没有错配、indel 和 soft clip）或 "mismatch / indel"。本条改了："these two edits change F1 by only" → "these two changes to the plane alter F1 by only"。数字没变。
+- 2026-10-20 Supplementary Fig. 的 [待补] 做了（`supplementary/R1.m2/make_figure.sh`，`fig_R1.m2_tensor_across_nodes.png`，用仓库的 `scripts/visualize_tensor.py`，hunyuanvideo15 环境的 Python 3.10，`sambcfenv` 的 3.9 不支持脚本里的 `str | Colormap`）。例子的选法：HG008T PacBio d9 chr1 的 703 个 somatic tensor（`chr1_labels.ndjson` label 1）里，找窗口内（除位点 ±2 列外）有一列的 reads 在两个 path count 不同的节点上各占 ≥ 25 % 的（43 个），挑 `3133114:8:SNP:G>A`（shard 0、index 32328）。数值：第 30 列 code 10 × 46、99 × 52；第 33–37 列 10 × 46、12 × 5、99 × 47；ALT 的 49 行全是 10 / 12，REF 的 47 行全是 99；第 25、40、50 列都是 99（共享节点）。ch6 编码（H = 90）：1–40 精确值，99 = 89 条（见 memory 的 ch6 编码规则）。"about 15 bp upstream"：第 30–37 列在位点（第 50 列）上游 13–20 bp。
 - 2026-10-15 E1.6/E9h/E22/E11b-ONT（本条用到 E9h；Response 457 → 467 词；状态仍是已解决）：
   - 第 4 点（"The plane also suppresses ..."）按 E9h 改（`experiments/E9h_offref_key_reads/README.md` "Answer"、`tables.md` §0，h50 strict）：加了 "although 57–79% per dataset have read support as somatic (R1.1)"（A1 reads 的共识在 HG008-T 组装里、不在 HG008-N 里：72 / 112、51 / 89、93 / 135、65 / 82、50 / 67，另 HG008T Illumina d9 115 / 184；57.3–79.3 %，我算的；定义写在 R1.1 的 Response 里）；rescue 一句从全部 key 上的 "32 and 46 of the v1.1 keys" 改成 read-supported key 上的 "22–66 ... per dataset"（`site10_high` argmax 22 / 29 / 66 / 33 / 32，tensor 层面）。0 / 112、1 / 89、61 / 49、1–4 / 67–135、49–97 仍是全部 key 上的 E1.1 数，没改；read-supported 子集上 base 0 / 0 / 3 / 1 / 4，all_H 43 / 30 / 76 / 50 / 40（§0）。"truth SNVs" 改成 "somatic SNVs"（全集仍是 "assembly-derived"）。
 
@@ -1262,7 +1289,7 @@ We agree that the tensors do not model bubbles explicitly: competing path suppor
 
 **还缺什么。**
 
-- [文字] Supplementary Fig.：一个跨节点 tensor 的示意图（`scripts/visualize_tensor.py`，本地出图，挑一个单碱基 branch
+- （已完成 2026-10-20）Supplementary Fig. R1.m2：跨节点 tensor 的实例图（见 Supplementary 块）。
   节点上的 site）。
 - [GPU RIS] E3 的无 ch6 臂（`--drop-planes path_count`，d9 / d46 重训）：回答 "path 信息是否带来收益"，属于 R1.1；本条
   Response 只引用，不依赖它的数字。
@@ -1550,10 +1577,11 @@ none). On chr1, our test chromosome, this is negligible (19 of 4,266 truth SNVs)
 
 *The two categories.* "Variant node not ranked #1" and "first aligned node mismatch" belonged to the earlier pipeline, which we replaced. Every truth allele without a candidate now gets one read-level class, on six datasets (later losses: R1.6): no read with MAPQ > 10; fewer than three ALT reads or an allele fraction below the threshold; the ALT is an existing graph allele; repeat absorption or respelling; an indel longer than 50 bp. For example, of 2,976 HG008T PacBio truth INDELs without a candidate (chr1–22), 2,739 (92.0%) are fully or partly encoded in the graph.
 
-*The normal at missed sites on graph nodes.* Instead of realigning normal reads, we used the haplotype-resolved matched-normal assemblies (HG008-N v6.2; COLO829BL), which show the normal's sequence directly. Of the truth alleles whose tumor reads align without edit to an existing v1.1 graph path (HG008T 2,478; COLO829T 497), only 110 (4.4%) and 34 (6.8%) are carried by the matched normal; 2,085 (84.1%) and 430 (86.5%) are absent from both normal haplotypes and lie on nodes walked by other HPRC individuals. At the 1,935 HG008T INDEL loci absent from the normal, the HG008-T tumor assembly carries a sequence found in neither normal haplotype at 1,931 and exactly the truth allele at 1,652, and the tumor's Illumina reads show the expected allele at 96.2% of them (95.7% at random non-absorbed truth INDELs). On HG008T these are real somatic events hidden by the graph, and the manuscript now says so; most also coincide with population alleles that the filter removes on any reference (R1.4): in the chr1 benchmark regions, the GRCh38-only arm calls at most one of the 38–114 HG008T truth INDELs that v1.1 absorbs. COLO829T has no tumor assembly, and up to 15.8% of its absorbed INDELs may be germline-like.
+*The normal at missed sites on graph nodes.* Instead of realigning normal reads, we used the haplotype-resolved matched-normal assemblies (HG008-N v6.2; COLO829BL), which show the normal's sequence directly. Of the truth alleles whose tumor reads align perfectly to an existing v1.1 graph path (HG008T 2,478; COLO829T 497), only 110 (4.4%) and 34 (6.8%) are carried by the matched normal; 2,085 (84.1%) and 430 (86.5%) are absent from both normal haplotypes and lie on nodes walked by other HPRC individuals. At the 1,935 HG008T INDEL loci absent from the normal, the HG008-T tumor assembly carries a sequence found in neither normal haplotype at 1,931 and exactly the truth allele at 1,652, and the tumor's Illumina reads show the expected allele at 96.2% of them (95.7% at random non-absorbed truth INDELs). On HG008T these are real somatic events hidden by the graph, and the manuscript now says so; most also coincide with population alleles that the filter removes on any reference (R1.4): in the chr1 benchmark regions, the GRCh38-only arm calls at most one of the 38–114 HG008T truth INDELs that v1.1 absorbs. COLO829T has no tumor assembly, and up to 15.8% of its absorbed INDELs may be germline-like.
 
 **证据（内部）。**
 
+- 2026-10-20 措辞：用户 10-19 要求 Response 不再用 "edit" 这类说法（读者不一定知道 edit 是什么，pansoma-1c 转达），改成 "perfectly aligned"（两端对齐、没有错配、indel 和 soft clip）或 "mismatch / indel"。本条改了："whose tumor reads align without edit to an existing v1.1 graph path" → "whose tumor reads align perfectly to an existing v1.1 graph path"。数字没变。
 - 2026-10-16 比较器结果填入第一段（`experiments/E8_comparators/README.md` §9、`tables.md`（collect.py 2026-10-16 20:26；chr1、BED 内、PoN = 现行规则，INDEL 是 HP ≥ 8: 0.01 / 其余 1e-4））。用户指出已有结果在 `/scratch/jshen/Pansoma_testing_results_V2`（P100 COLO829T 在 `Pansoma_testing_results/VCF_results`）；全部 tumor-only、chr1、同一批 reads（GIAB / SMaHT 的 GRCh38 BAM）；DeepSomatic 1.9.0（PON filtering 开），ClairS-TO 0.4.2（HG008T）/ 0.4.1（COLO829T）。HG008T ONT 的 DeepSomatic 原来用了 PacBio 模型，用 ONT 模型在 tequila GPU 上重跑（E8 README §9）。
   - HG008T SNV PASS + 我们的 PoN 的 recall：DeepSomatic 0.889 / 0.806 / 0.869，ClairS-TO 0.845 / 0.844 / 0.831（Illumina / PacBio / ONT）；Pansoma v1.1 0.831 / 0.828 / 0.826，v2.1 0.852 / 0.839 / 0.859。F1：Pansoma v1.1 0.585 / 0.621 / 0.596，比较器最好的 0.552 / 0.591 / 0.552。
   - COLO829T：DeepSomatic 0.835 / 0.555 / 0.695，ClairS-TO 0.764 / 0.745 / 0.684（Illumina / fiberseq / ONT）；Pansoma v1.1 0.711 / 0.717 / 0.686，v2.1 0.715 / 0.707 / 0.692。F1：Pansoma v1.1 0.778 / 0.781 / 0.706，v2.1 0.783 / 0.779 / 0.737；比较器最好的 0.565 / 0.762 / 0.715 → "five of six (six with v2.1)"（v1.1 只在 COLO829T ONT 输给 ClairS-TO 0.715）。
@@ -2086,7 +2114,7 @@ precision over v1.1 after filtering (R1.2).
 
 ### R2.7 Alignment statistics overstated
 
-**状态：已解决**: 审稿人要的 read 数和比例现在两个肿瘤 × 三个平台都有了（E11a `compare.py` 10-15 18:36 重跑：HG008T 和 COLO829T 的 Illumina 窗口样本含 v2.1，HG008T ONT 的 v1.1 / v2.1 全量扫描，COLO829T Fiber-seq / ONT 的三个图臂全量扫描和 GRCh38 BAM 窗口臂），Response 的 [待补] 已填；E11b 的模拟 reads 给了 "更多 perfect 不等于更正确" 的直接测量（Illumina 正确放置率三臂一样，MAPQ ≥ 30 的错误放置 0.093 % → 0.019 % / 0.013 %），也写进了 Response。2026-10-15 晚 E11b 的 ONT 模拟也出了（v2.1 上 ONT 错放约两倍，Response 的 Correctness 一条已写成例外），COLO829T v1.1 GAM 的 giraffe 版本也由 E22 定到范围。剩下的只是文字：改第 292–294 行、换 Supplementary Fig. 4、表注里的比对软件版本（COLO829T ONT BAM 的 minimap2 版本查不到就写 "not recorded"）。
+**状态：已解决（2026-10-19 晚改为全量数据）**: 按用户要求，统计改成每个数据集的全部 reads（比对到 chr1–22 的），两个肿瘤 × 三个平台 × 四个参考（GRCh38 linear BAM、GRCh38 graph、HPRC v1.1、v2.1），每组给 read 数和比例：mapped reads、perfectly aligned、with substitution、with indel、with soft clipping（E11a `full/`，24 个文件全部扫完、总数核对过）。Response 不再用 "edit-free"，模拟 reads（E11b）和窗口样本从 R2.7 拿掉；原文第 292–294 行那句逐条回应（"up to 11%" 约 10 个百分点成立，"more than four-fold" 只在极小的基数上，"substantially reducing soft-clipped bases" 不成立，删）。剩下的只是文字：把改写的句子放进正文、Supplementary Fig. 4 换成本条的表和图。
 
 **Comment（要点）。**
 
@@ -2095,102 +2123,142 @@ precision over v1.1 after filtering (R1.2).
 
 **Response.**
 
-We agree that lines 292–294 overstated the effect, and have rewritten them. Supplementary Fig. 4 is replaced by counts
-and proportions for the same reads on four references (the GRCh38 BAM, a GRCh38-only graph, and the HPRC v1.1 and v2.1
-graphs), for both tumors and all three platforms (Supplementary Table and Figure below). In summary:
+We agree that lines 292–294 overstated the effect. They read: "Across both datasets, graph alignment increased perfect
+alignments by up to 11% in WGS data and by more than four-fold in long-read datasets, while substantially reducing
+soft-clipped bases, substitutions and indel events (Supplementary Fig. 4)." Supplementary Fig. 4 is replaced by read
+counts and proportions for all reads of both tumors on the three platforms, aligned to four references: GRCh38 (linear,
+the data providers' alignments), a GRCh38-only graph, and the HPRC v1.1 and v2.1 graphs, counting the reads aligned to
+chr1–22 (Supplementary Table and Figure below). In summary:
 
-- *Illumina:* full-length edit-free alignments of the same reads rise by about 10 percentage points on the HPRC graphs
-  (HG008T 69% to 79%, COLO829T 71% to 81–82%). The GRCh38 BAM and the GRCh38-only graph give the same rate (HG008T
-  68.5% and 68.8%, COLO829T 70.6% and 70.7%), so the gain comes from the graph's content, not from the aligner.
-- *Long reads* are rarely edit-free end to end. On HPRC v1.1 their mismatched bases per kb fall (HiFi 1.57 to 0.63, ONT
-  5.22 to 4.26), while indel rates, soft clipping and unmapped reads change little. HPRC v2.1 aligns nearly every HiFi
-  read, but places the additional ones in difficult regions at lower mapping quality.
-- *More edit-free alignments are not more correct alignments.* On reads simulated from the HG008-N assembly, the share
-  placed correctly is the same on every reference (Illumina 98.6–98.7%), while confident misplacements fall for short
-  reads and HiFi; ONT reads are the exception on v2.1 (R3.6).
+- *Illumina.* Perfectly aligned reads rise by about 10 percentage points on the HPRC graphs: HG008T from 1.87 billion of
+  2.74 billion reads (68.3%) on linear GRCh38 to 2.12 billion of 2.70 billion (78.5–78.7%), COLO829T from 69.9% to
+  79.8–80.5%. Reads with a substitution fall from 27–30% to 18–21%, and reads with an indel from 2.9–3.2% to 0.7–1.0%.
+  The GRCh38-only graph gives nearly the same rates as linear GRCh38 (68.7% against 68.3%, 70.0% against 69.9%
+  perfectly aligned), so the gain comes from the graph's content, not from the aligner.
+- *PacBio.* Perfectly aligned reads remain rare: 0.15–0.18% on GRCh38 and 1.4–1.5% on the HPRC graphs, so the
+  "four-fold" increase was on a very small base. Reads with a substitution fall from 95–96% to 66–75%, while nearly
+  every read still carries an indel (99% on GRCh38, 97% on the graphs).
+- *ONT.* Perfectly aligned reads are 1.4% on GRCh38 and 2.7–2.8% on the HPRC graphs for HG008T, and 0.01% on every
+  reference for COLO829T. Reads with a substitution fall from 93–94% on linear GRCh38 to 87–90%; indels change
+  little.
+- *Soft clipping* is not substantially reduced: 2.4–4.1% of Illumina reads on every reference, and for long reads it
+  depends more on the aligner than on the reference.
+
+The revised text reads: "Alignment to the HPRC graphs increased the proportion of perfectly aligned Illumina reads by
+about 10 percentage points in both tumors (HG008T, 68.3% on linear GRCh38 to 78.5–78.7%; COLO829T, 69.9% to
+79.8–80.5%), mainly by removing substitutions and indels at alleles shared with the HPRC haplotypes. Perfectly aligned
+long reads remained rare (at most 2.8%), while the proportion of long reads with a substitution decreased (PacBio 95–96%
+to 66–75%, ONT 93–94% to 87–90%); indels and soft clipping changed little (Supplementary Table X)."
 
 *Published benchmarks agree.* On the 10%-filtered HPRC release 1 graph (the filter of our v1.1 graph), 78.1–78.9% of
 Illumina reads aligned perfectly, against 68.7% with BWA-MEM on GRCh38, at a slight cost in mapping confidence (Hickey et
-al., 2024), and Giraffe-based calling made 34% fewer small-variant errors than GRCh38-based workflows (Liao et al.,
-2023). Giraffe is as accurate as linear mappers on simulated short reads (Sirén et al., 2021) and, on the HPRC release
-2 graph with the same d46 filter as our v2.1 graph, mapped simulated HiFi reads with the highest true-positive rate and
-the fewest confident errors, with similar or slightly better variant calls than linear mappers (Chang et al., 2025,
-preprint).
-
-The revised text says that the graph mainly removes edits at alleles that the sample shares with HPRC haplotypes.
+al., 2024), close to our 68.3% and 78.5% for HG008T; Giraffe-based calling on that graph made 34% fewer small-variant
+errors than GRCh38-based workflows (Liao et al., 2023).
 
 **Supplementary (R2.7).**
 
-![Illumina, the same reads on four references](supplementary/R2.7/fig_R2.7a.png)
+![Reads on chr1–22 on four references, by platform](supplementary/R2.7/fig_R2.7.png)
 
-*a,* Illumina reads in 48 GRCh38 windows (24 random, 24 at segmental duplications): the share aligned end to end with no
-mismatch, indel or soft clip.
+Reads aligned to chr1–22 for each dataset and reference: the share perfectly aligned (no substitution, indel or soft
+clipping) and the shares with at least one substitution, indel or soft-clipped end. Rows: Illumina; PacBio (HG008T HiFi,
+COLO829T Fiber-seq); ONT. Note the different y-axis ranges.
 
-![Long reads, mismatched bases and indel events per kb](supplementary/R2.7/fig_R2.7b.png)
+Supplementary Table (reads aligned to chr1–22; N (% of these reads)):
 
-*b,* Long reads (a 10% genome-wide sample of read names, the same reads on every graph): mismatched bases and indel
-events per aligned kb. The higher HiFi and Fiber-seq rates on v2.1 come from the reads it newly aligns (unmapped 2.6–3.4%
-on v1.1, 0.01% on v2.1), mostly in difficult regions.
+| dataset | reference | reads on chr1–22 | perfectly aligned | with substitution | with indel | with soft clipping |
+|---|---|---:|---:|---:|---:|---:|
+| HG008T Illumina | GRCh38 (linear) | 2,739,599,264 | 1,869,903,341 (68.25%) | 810,918,802 (29.60%) | 78,905,626 (2.88%) | 96,334,574 (3.52%) |
+| HG008T Illumina | GRCh38 graph | 2,710,092,615 | 1,861,828,942 (68.70%) | 800,943,101 (29.55%) | 79,136,287 (2.92%) | 74,218,393 (2.74%) |
+| HG008T Illumina | HPRC v1.1 graph | 2,704,033,209 | 2,121,622,695 (78.46%) | 560,922,772 (20.74%) | 21,774,798 (0.81%) | 66,387,175 (2.46%) |
+| HG008T Illumina | HPRC v2.1 graph | 2,695,745,607 | 2,121,713,347 (78.71%) | 552,985,555 (20.51%) | 19,851,148 (0.74%) | 63,829,495 (2.37%) |
+| COLO829T Illumina | GRCh38 (linear) | 2,296,226,777 | 1,604,645,813 (69.88%) | 627,386,769 (27.32%) | 72,684,106 (3.17%) | 95,094,133 (4.14%) |
+| COLO829T Illumina | GRCh38 graph | 2,283,443,818 | 1,599,146,760 (70.03%) | 629,366,832 (27.56%) | 71,551,146 (3.13%) | 78,056,743 (3.42%) |
+| COLO829T Illumina | HPRC v1.1 graph | 2,285,859,727 | 1,823,482,724 (79.77%) | 423,169,962 (18.51%) | 23,805,599 (1.04%) | 78,789,217 (3.45%) |
+| COLO829T Illumina | HPRC v2.1 graph | 2,265,562,422 | 1,822,701,086 (80.45%) | 410,679,337 (18.13%) | 20,250,428 (0.89%) | 66,561,782 (2.94%) |
+| HG008T PacBio HiFi | GRCh38 (linear) | 12,931,641 | 18,818 (0.15%) | 12,264,874 (94.84%) | 12,862,468 (99.47%) | 961,155 (7.43%) |
+| HG008T PacBio HiFi | GRCh38 graph | 12,675,374 | 18,819 (0.15%) | 12,020,862 (94.84%) | 12,606,854 (99.46%) | 314,848 (2.48%) |
+| HG008T PacBio HiFi | HPRC v1.1 graph | 12,689,479 | 179,824 (1.42%) | 8,558,774 (67.45%) | 12,377,219 (97.54%) | 228,857 (1.80%) |
+| HG008T PacBio HiFi | HPRC v2.1 graph | 12,977,109 | 184,297 (1.42%) | 8,605,339 (66.31%) | 12,666,519 (97.61%) | 422,918 (3.26%) |
+| COLO829T PacBio Fiber-seq | GRCh38 (linear) | 25,308,248 | 44,846 (0.18%) | 24,325,270 (96.12%) | 25,138,324 (99.33%) | 2,529,764 (10.00%) |
+| COLO829T PacBio Fiber-seq | GRCh38 graph | 25,026,903 | 44,873 (0.18%) | 24,011,605 (95.94%) | 24,858,107 (99.33%) | 936,884 (3.74%) |
+| COLO829T PacBio Fiber-seq | HPRC v1.1 graph | 25,070,732 | 386,300 (1.54%) | 18,732,761 (74.72%) | 24,353,478 (97.14%) | 717,920 (2.86%) |
+| COLO829T PacBio Fiber-seq | HPRC v2.1 graph | 26,066,512 | 397,244 (1.52%) | 19,343,766 (74.21%) | 25,350,225 (97.25%) | 1,538,959 (5.90%) |
+| HG008T ONT | GRCh38 (linear) | 3,208,600 | 43,815 (1.37%) | 3,009,593 (93.80%) | 3,084,419 (96.13%) | 1,215,595 (37.89%) |
+| HG008T ONT | GRCh38 graph | 3,100,754 | 43,748 (1.41%) | 2,869,956 (92.56%) | 2,950,998 (95.17%) | 930,380 (30.00%) |
+| HG008T ONT | HPRC v1.1 graph | 3,099,600 | 85,847 (2.77%) | 2,691,454 (86.83%) | 2,929,825 (94.52%) | 913,057 (29.46%) |
+| HG008T ONT | HPRC v2.1 graph | 3,087,083 | 84,623 (2.74%) | 2,704,935 (87.62%) | 2,944,975 (95.40%) | 899,235 (29.13%) |
+| COLO829T ONT | GRCh38 (linear) | 12,636,129 | 723 (0.01%) | 11,794,165 (93.34%) | 11,928,948 (94.40%) | 12,590,223 (99.64%) |
+| COLO829T ONT | GRCh38 graph | 11,839,534 | 778 (0.01%) | 10,956,152 (92.54%) | 11,047,335 (93.31%) | 11,723,760 (99.02%) |
+| COLO829T ONT | HPRC v1.1 graph | 11,877,368 | 1,121 (0.01%) | 10,662,112 (89.77%) | 11,030,919 (92.87%) | 11,760,246 (99.01%) |
+| COLO829T ONT | HPRC v2.1 graph | 11,789,372 | 1,098 (0.01%) | 10,645,364 (90.30%) | 11,021,767 (93.49%) | 11,674,637 (99.03%) |
 
-![Simulated reads, correct placements and confident misplacements](supplementary/R2.7/fig_R2.7c.png)
-
-*c,* Reads simulated from the HG008-N assembly (Illumina 5,000,000; HiFi-like and ONT-like 40,000 each): the share placed
-within 50 bp of the true origin, and the misplaced reads with MAPQ ≥ 30 per 1,000 reads.
-
-Supplementary Table (same samples as *a* and *b*; MAPQ as reported by each aligner, so not comparable between the BAM and
-the graphs):
-
-| dataset | reference | unmapped % | MAPQ 60 % | soft-clipped reads % | edit-free reads % | mismatched bases / kb | indel events / kb |
-|---|---|---:|---:|---:|---:|---:|---:|
-| HG008T Illumina | GRCh38 BAM (BWA-MEM) | 0.00 | 88.2 | 2.8 | 68.50 | 4.73 | 0.21 |
-| HG008T Illumina | GRCh38-only graph | 0.00 | 86.9 | 2.2 | 68.85 | 4.63 | 0.21 |
-| HG008T Illumina | HPRC v1.1 graph (d9) | 0.00 | 86.2 | 1.9 | 79.15 | 3.69 | 0.05 |
-| HG008T Illumina | HPRC v2.1 graph (d46) | 0.00 | 86.3 | 1.9 | 79.24 | 3.67 | 0.05 |
-| COLO829T Illumina | GRCh38 BAM (BWA-MEM) | 0.00 | 86.5 | 3.3 | 70.57 | 3.93 | 0.20 |
-| COLO829T Illumina | GRCh38-only graph | 0.00 | 85.6 | 2.6 | 70.72 | 3.95 | 0.21 |
-| COLO829T Illumina | HPRC v1.1 graph (d9) | 0.00 | 85.1 | 2.6 | 81.25 | 2.97 | 0.04 |
-| COLO829T Illumina | HPRC v2.1 graph (d46) | 0.00 | 85.5 | 2.4 | 81.61 | 2.94 | 0.04 |
-| HG008T PacBio HiFi | GRCh38-only graph | 2.79 | 95.9 | 2.6 | 0.15 | 1.57 | 1.58 |
-| HG008T PacBio HiFi | HPRC v1.1 graph (d9) | 2.64 | 95.9 | 2.0 | 1.39 | 0.63 | 1.39 |
-| HG008T PacBio HiFi | HPRC v2.1 graph (d46) | 0.01 | 83.3 | 3.8 | 1.42 | 1.72 | 1.56 |
-| COLO829T Fiber-seq | GRCh38-only graph | 3.37 | 93.1 | 3.3 | 0.18 | 1.80 | 1.82 |
-| COLO829T Fiber-seq | HPRC v1.1 graph (d9) | 3.23 | 93.3 | 2.6 | 1.50 | 0.84 | 1.62 |
-| COLO829T Fiber-seq | HPRC v2.1 graph (d46) | 0.01 | 79.3 | 5.0 | 1.54 | 2.19 | 1.87 |
-| HG008T ONT | GRCh38-only graph | 7.86 | 95.2 | 30.4 | 1.32 | 5.22 | 4.27 |
-| HG008T ONT | HPRC v1.1 graph (d9) | 7.75 | 95.0 | 29.9 | 2.54 | 4.26 | 4.12 |
-| HG008T ONT | HPRC v2.1 graph (d46) | 8.01 | 94.2 | 29.6 | 2.50 | 4.35 | 4.33 |
-| COLO829T ONT | GRCh38-only graph | 13.53 | 93.9 | 99.0 | 0.00 | 9.16 | 8.59 |
-| COLO829T ONT | HPRC v1.1 graph (d9) | 13.23 | 93.5 | 99.0 | 0.01 | 8.36 | 8.55 |
-| COLO829T ONT | HPRC v2.1 graph (d46) | 13.61 | 89.5 | 99.0 | 0.01 | 8.93 | 9.12 |
-
-Data: `supplementary/R2.7/alignment_stats.tsv`, `supplementary/R2.7/simulated_placement.tsv` (made by
-`supplementary/R2.7/make_figures.py` from `experiments/E11a_alignment_stats/results/*.json` and
-`experiments/E11b_simulated_alignment/results/summary.tsv`).
+Data: `supplementary/R2.7/alignment_counts.tsv` (made by `supplementary/R2.7/make_figures.py` from
+`experiments/E11a_alignment_stats/full/summary.json`).
 
 *Methods.*
 1. *Alignments.* Each dataset's tumor reads were aligned with vg Giraffe to the GRCh38-only graph and to the HPRC v1.1
-   (d9) and v2.1 (d46) graphs (versions as in R3.m1); the GRCh38 BAMs are the data providers' BWA-MEM 0.7.17 alignments
-   (HG008T: GIAB; COLO829T: SMaHT, Sentieon 202308.01 with duplicate marking, indel realignment and base recalibration).
-2. *Same reads.* Reads are selected by a hash of the read name, so every reference sees the same reads. Illumina: 10% of
-   the reads in the 48 windows (± 1 kb) that any reference places there; long reads: 10% of all read names, whole files
-   scanned.
-3. *Measures.* Edit-free: mapped with no mismatch, indel or soft clip. Mismatched bases and indel events per kb of
-   aligned bases, from each alignment's edits; unmapped, soft-clipped and MAPQ shares per read.
-4. *Simulation.* Reads drawn from one-to-one segments of the HG008-N assembly on chr1 and chr20, with known GRCh38
-   origin (Illumina 2 × 150 bp, 0.2% substitutions; HiFi-like ~15 kb, 0.1% errors; ONT-like with the pbsim3 R10.4
-   model), aligned to each graph and projected to GRCh38. Correct: the right chromosome and a read end within 50 bp of
-   the truth.
+   (d9) and v2.1 (d46) graphs (versions as in R3.m1). Linear GRCh38 is the data providers' alignment: for HG008T (GIAB)
+   BWA-MEM 0.7.17, pbmm2 1.10.0 and minimap2 2.26; for COLO829T (SMaHT) BWA-MEM 0.7.17 in Sentieon 202308.01 (with
+   duplicate marking, indel realignment and base recalibration), pbmm2 1.13.0 and minimap2 2.26.
+2. *Reads counted.* Every read of the dataset, each mate of a pair separately, whose alignment is on chr1–22: on linear
+   GRCh38 the primary alignment (secondary and supplementary alignments are not counted); on a graph, the GRCh38
+   chromosome holding most of the read's reference-path bases. Unmapped reads, reads on other contigs and reads aligned
+   only to non-reference nodes are not counted.
+3. *Measures.* Perfectly aligned: aligned end to end with no substitution, indel or soft clipping. Substitution: at least
+   one mismatched base (linear: NM minus inserted and deleted bases; graph: substitution edits against the read's graph
+   path, so a match to a non-reference allele is not a substitution). Indel: at least one inserted or deleted base. Soft
+   clipping: unaligned bases at a read end (linear: S or H CIGAR operations; graph: an insertion at the alignment end).
+4. On linear GRCh38 a long read split by the aligner keeps its remainder as a supplementary alignment, so its primary
+   alignment is soft-clipped; Giraffe writes one alignment per read.
 
 *References.*
-- Sirén J. et al. Pangenomics enables genotyping of known structural variants in 5202 diverse genomes. *Science* 374,
-  abg8871 (2021).
 - Liao W.-W. et al. A draft human pangenome reference. *Nature* 617, 312–324 (2023).
 - Hickey G. et al. Pangenome graph construction from genome alignments with Minigraph-Cactus. *Nat. Biotechnol.* 42,
   663–673 (2024).
-- Chang X. et al. Rapid, accurate long- and short-read mapping to large pangenome graphs with vg Giraffe. Research
-  Square preprint, doi:10.21203/rs.3.rs-7747403/v1 (2025; not peer reviewed).
 
 **证据（内部）。**
+
+- 2026-10-19 晚 改为全量数据（用户："得用全数据来看, chr1-22 的全数据来跑"；Illumina / PacBio / ONT 都要；每组 total mapped reads、
+  perfectly aligned、reads with substitution、with indel、with soft clipping 的 N (%)；四个参考 GRCh38 linear / GRCh38 graph / v1.1 / v2.1；
+  "response 里面不要再说 edit free"；"不用 simulated reads 了"）。旧版（窗口样本 + G 样本 + E11b 模拟，图 a–c）备份在 session scratchpad
+  `R2.7_before_full_20261019.md`，下面 10-19 及更早的条目是旧版的证据，数以本条为准。
+  - 扫描：`experiments/E11a_alignment_stats/full/`。`gam_fullstats.c`（C，htslib BGZF，按 GAI group 起点分段，逐条解析 Alignment 的
+    wire format；规则和 `scan_gam.read_stats` 一样：substitution = from == to 且有 sequence 的 edit 或 complex edit，indel = 不在两端的
+    插入 / 缺失，soft clip = 第一条 mapping 的第一个 edit 或最后一条 mapping 的最后一个 edit 是插入；placement = GRCh38-path 碱基最多的
+    contig）。`bam_fullstats.c`（htslib，每条染色体一个进程，只算 primary，substitution = NM − I − D，indel = CIGAR I/D，soft clip = S/H）。
+    `full_scan.py` 并行驱动（线程池调 C；`<out>.parts/` 每段一个结果文件，重跑时复用），`collect_full.py` 出 `results.tsv` / `results.md` /
+    `summary.json`；`tasks.tsv` 24 行。
+  - 核对：C 和 Python `read_stats` 在三个分段上计数逐项相同（COLO829T Illumina d46 129,000 条，HG008T ONT d46 2,000 条，HG008T PacBio
+    linear GAM 开头 389,000 条 unmapped）；`bam_fullstats` 和 pysam 在 COLO829T Illumina / ONT BAM 的 chr21 500 kb 上相同。24 个文件：GAM
+    总 record 数都等于已知总数（HG008T Illumina 2,974,694,440，COLO829T Illumina 2,479,603,422，长读长等于 E11a G 扫描的 records），
+    secondary 0；BAM 的 chr1–22 primary + secondary + supplementary 都等于 `samtools idxstats` 的 chr1–22 mapped，flag 0x4 但放在 mate 位置的
+    记录数也相等（HG008T Illumina 6,654,602，COLO829T Illumina 2,327,717，不算进 mapped）。COLO829T Illumina BAM 有 86,279,500 条 duplicate
+    标记（保留，和 GAM 一样；HG008T BAM 没有标记）。
+  - 作业（`tmp/reviewer_cpu_20261019/E11a_full/jobs.txt`）：446080（试跑 6、7）、446179、446272（8–10 重提，原来 16 GB OOM：
+    多进程 fork 复制了 Illumina GAI）、446400（17–23 提前开跑）、446493（11、15、16 挪出 guinness）、446691（BAM 11、15、19、23 等 GAM 跑完再跑；
+    和 GAM 同时跑时 BAM 只有 1–2 MB/s）。BeeGFS 是瓶颈（全部任务合计约 230 MB/s，登录节点 `dd` 6.8 MB/s），10-19 14:41 到 23:00 全部 COMPLETED。
+  - 结果（`experiments/E11a_alignment_stats/full/results.md`；% = 占 chr1–22 mapped reads）：
+    - Illumina perfectly aligned：HG008T linear 68.25 / GRCh38 graph 68.70 / v1.1 78.46 / v2.1 78.71（1,869,903,341 / 2,739,599,264 →
+      2,121,622,695 / 2,704,033,209、2,121,713,347 / 2,695,745,607）；COLO829T 69.88 / 70.03 / 79.77 / 80.45。substitution 29.60 / 29.55 /
+      20.74 / 20.51，27.32 / 27.56 / 18.51 / 18.13；indel 2.88 / 2.92 / 0.81 / 0.74，3.17 / 3.13 / 1.04 / 0.89；soft clipping 3.52 / 2.74 /
+      2.46 / 2.37，4.14 / 3.42 / 3.45 / 2.94。
+    - PacBio perfectly aligned：HiFi 0.15 / 0.15 / 1.42 / 1.42，Fiber-seq 0.18 / 0.18 / 1.54 / 1.52；substitution 94.84 / 94.84 / 67.45 /
+      66.31，96.12 / 95.94 / 74.72 / 74.21；indel 99.47 / 99.46 / 97.54 / 97.61，99.33 / 99.33 / 97.14 / 97.25；soft clipping 7.43 / 2.48 /
+      1.80 / 3.26，10.00 / 3.74 / 2.86 / 5.90（linear 高是 pbmm2 把 read 拆成 supplementary 后 primary 被 clip；v2.1 比 v1.1 高，和 v2.1
+      多比上的 reads 有关，E11a G 样本已见）。
+    - ONT perfectly aligned：HG008T 1.37 / 1.41 / 2.77 / 2.74，COLO829T 0.01 四个参考都是（723 / 778 / 1,121 / 1,098 条）；substitution
+      93.80 / 92.56 / 86.83 / 87.62，93.34 / 92.54 / 89.77 / 90.30；indel 96.13 / 95.17 / 94.52 / 95.40，94.40 / 93.31 / 92.87 / 93.49；
+      soft clipping 37.89 / 30.00 / 29.46 / 29.13，COLO829T 99.64 / 99.02 / 99.01 / 99.03（几乎每条 COLO829T ONT read 两端都有 clip，四个
+      参考一样，原因没查，可能是没切的 adapter）。
+    - 碱基层面（`summary.json`，没写进 Response）：Illumina 每 aligned kb substitution 碱基 HG008T 4.93 / 4.88 / 3.98 / 3.90，indel 事件
+      0.208 / 0.220 / 0.069 / 0.062；soft-clipped 碱基占 read 碱基 1.07 / 0.93 / 0.86 / 0.83 %。
+  - 原文那句逐条对照：WGS "up to 11%" ≈ +10.2–10.6 个百分点（对 linear），成立；long-read "more than four-fold" = HiFi / Fiber-seq
+    0.15–0.18 % → 1.4–1.5 %（约 8–10 倍）、HG008T ONT 1.4 → 2.8 %（2 倍）、COLO829T ONT 0.01 % 不变，基数太小，不再报倍数；
+    "substantially reducing soft-clipped bases" 不成立（Illumina 2.4–4.1 % 各参考，长读长取决于 aligner）；substitution 和 indel 的减少成立
+    （Illumina 两项都减少，长读长主要是 substitution）。改写的句子在 Response 里。
+  - 文献段只留 Hickey 2024 和 Liao 2023（都是真实 reads / 变异检测）；Sirén 2021 和 Chang 2025 预印本讲的是模拟 reads 的比对准确性，按
+    "不用 simulated reads" 一起拿掉（核实记录仍在下面 10-19 的文献条目）。图：`supplementary/R2.7/fig_R2.7.png`（3 行平台 × 4 列指标），
+    表：`alignment_counts.tsv`；旧的 `fig_R2.7a/b/c.png`、`alignment_stats.tsv`、`simulated_placement.tsv` 删掉。
 
 - 2026-10-19 COLO829T Illumina 的 GRCh38 BAM 臂（用户问图 a 为什么 COLO829T 没有 GRCh38 列，给了本地 BAM
   `/scratch/qfu/COLO829T_WGS/SMHTCOLO829T-X-X-M45-A001-uwsc-SMAFIZO17Q9I-sentieon_bwamem_202308.01_GRCh38.aligned.sorted.bam`，
@@ -2295,9 +2363,9 @@ Data: `supplementary/R2.7/alignment_stats.tsv`, `supplementary/R2.7/simulated_pl
 **还缺什么。**
 
 - 已完成，删掉（2026-10-15）：E11a 的 HG008T ONT d9 / d46 扫描、HG008T Illumina d46 和 COLO829T 全部 arm，`compare.py` 已重跑；Response 的 [待补] 已填。
-- [文字] 改写第 292–294 行；把 Supplementary Fig. 4 换成计数表（E11a `results/tables.md` 的 G / W 主表和分层表，两个肿瘤 × 三个平台）；[待核实] Supplementary Fig. 4 原来画的是哪些数据集、哪个参考。
+- [文字] 正文第 292–294 行换成 Response 里 "The revised text reads" 的句子（2026-10-19 全量数据版）；Supplementary Fig. 4 换成本条的 Supplementary 图和表（E11a `full/`），表号 "Supplementary Table X" 定稿时填。
 - [文字] 表注写上各臂的比对软件和版本：GRCh38 BAM 已核实（HG008T BWA-MEM 0.7.17 / pbmm2 1.10.0 / minimap2 2.26；COLO829T Illumina Sentieon 202308.01 bwa mem 0.7.17，Fiber-seq pbmm2 1.13.0），HG008T 的 giraffe 已核实（GRCh38-only 和 v1.1 vg 1.66.0，v2.1 1.77）。COLO829T v1.1 GAM 的 giraffe 版本已由 E22 定到范围（Fiber-seq 1.64.1–1.66.0、ONT 1.64.0–1.66.0、Illumina ≤ 1.62，2026-10-15；E11b 的 d9 臂用的 1.65.0 是 E11b 自己选的，不是生产版本），表注照写范围；COLO829T ONT BAM 的 header 同时有 minimap2 2.24 和 2.26，需向数据来源（SMaHT）确认，查不到同样写明。
-- [文字] E11a README 的 Status / Results 段还是 10-13 的，结果段要按 18:36 的 `tables.md` 更新（E11a 的事，不影响本条 Response）。
+- 已完成（2026-10-19）：E11a README 加了全量数据一节（Full data, chr1–22），Status 段已更新。
 
 ### R2.m Minor comments 1–8
 
@@ -2820,6 +2888,8 @@ So on HG008T at most 1.1–5.2% of graph-coordinate calls per run have assembly 
 
 **状态：部分解决**: 三个问题都有最终 run 上的证据，2026-10-15 又从三个 d46 run 扩到九个本地 graph SNV run（HG008T d9 / d46 × 三平台，COLO829T d46 × 三平台；tequila GPU re-predict，复现 RIS）。(1) complete-output 的 worst-case 指标和更正后的 unplaced 比例回答 "about 2%" 和 "metrics cover a subset"。(2) 投影（E9a，九个 run）：只有 2.8–19.1 % 的 unplaced PASS 能写成 GRCh38 allele，PoN 后每个 run 多 0–2 个 TP（九个 run 一共 6 个）；class ii 区间里九个 run 只有 1 个对上漏掉的 truth（COLO829T Illumina）；投影让 complete-output F1 只动 0.001–0.009。组装验证（R3.3）：HG008T 上只看组装 tumor-only 每个 run 1.1–5.2 %。(3) rescue 关掉（E3b，九个 run）：placed call 不变，complete-output F1 0.524–0.780，no BED 时每一对都高于 linear；但 BED 内 HG008T ONT d46 仍低 0.004（0.533 对 0.537），Response 照实写了。(4) "是否 graph-specific" 由 E9a 的分类回答，CHM13 按用户决定不做。(5) 2026-10-15 晚 E9h 补了 rescue 收益一侧的 read 层面证据：组装 off-ref key 里 rescue 叫回每套 22–66 个 read-supported somatic SNV（不用 rescue 0–4 个），它在这些 key 上的 call 63–87 % 有 read 支持；但 chr1 上每个 run 只有 2–8 个，对 210–1,410 个 graph-coordinate PASS。第 4 点照实写了两边，仍按 "两种都报"。还缺：COLO829T d9 三个 run（不在本地）的 E9a 和 rescue off；rescue 默认值是否改不影响 Response（两种都报）。
 
+**CHM13（E9b）2026-10-20 完成**（用户 2026-10-19 决定恢复，取代 10-13 的放弃）：第 5 点改成 E9b 的结果（十二个 SNV run 的 graph-coordinate PASS 里 36.7–63.1 % 有 CHM13 allele；连同 GRCh38 class i 38.1–67.1 %；两边都没有 32.9–61.9 %），pipeline 也加了可选的 CHM13 VCF。出处和推导见证据 2026-10-20 一条。
+
 **Comment（要点）。**
 
 - TP / FP / FN are computed only for calls that project to GRCh38, so precision, recall and F1 describe a subset, not the complete output.
@@ -2841,10 +2911,17 @@ We agree, and the revised evaluation covers the complete output.
    Under this worst case the HPRC graphs fall below the GRCh38-only graph in four of the twelve SNV comparisons, all long-read: HG008T ONT on both graphs, COLO829T ONT on v2.1 (0.369 against 0.418) and COLO829T Fiber-seq on v1.1 (0.572 against 0.680).
 3. *Graph-specific or merely unprojected?* In the twelve graph runs, the GRCh38 nodes flanking each call's bubble give a GRCh38 allele for 2.2–19.1% of calls. After population filtering this adds six true positives across the twelve runs (0–2 per run; three distinct truth SNVs), and of the 89–1,718 calls per run placed only to a GRCh38 interval, one matches a missed truth variant. The rest have no GRCh38 allele (inserted sequence, the GRCh38 base on a branch node, no consistent anchors); most are population or germline alleles, and on HG008T only 1.1–5.2% per run have tumor-only support in the assemblies (R3.3). Projection moves complete-output F1 by at most 0.009. A Supplementary Table lists each call's node, offset, class, GRCh38 interval and assembly class.
 4. *Origin and trade-off.* Most graph-coordinate SNV PASS calls are produced by an off-reference rescue step that raises the haplotype count on nodes off GRCh38 (R3.3); without it, 6–162 per run remain. The rescue recovers off-reference somatic SNVs that rtg cannot credit: at the assembly-derived HG008T sites, it calls 22–66 read-supported somatic SNVs per dataset (0–4 without it; tensor level), and 63–87% of its calls there are read-supported (R3.3). On chr1, however, that is 2–8 such SNVs per HG008T run against 210–1,410 graph-coordinate PASS calls, and the rescue causes the long-read losses above. Without it, the placed calls are unchanged and all twelve HPRC runs are above the GRCh38-only graph without benchmark regions (complete-output F1 0.524–0.780 against 0.197–0.680); inside the benchmark regions, HG008T ONT on v2.1 stays 0.004 below (0.533 against 0.537). We report every SNV result with and without the rescue.
-5. *CHM13.* We did not compute a CHM13 projection. CHM13 is an unfiltered reference path in both graphs, but our truth sets are on GRCh38, so CHM13 coordinates would not change any score; point 3 separates the calls that GRCh38 can represent from those it cannot.
+5. *CHM13.* Both graphs carry T2T-CHM13 as an unfiltered reference path, and Pansoma now also writes its calls in CHM13 coordinates (an optional CHM13 VCF). Of the graph-coordinate PASS SNV calls in the twelve runs, 36.7–63.1% per run lie on CHM13 nodes and have a CHM13 allele; with the GRCh38 alleles of point 3, 38.1–67.1% can be written on one of the two linear references. The other 32.9–61.9% have an allele on neither and are specific to the graph. Our truth sets are on GRCh38, so CHM13 positions do not change any score.
 
 **证据（内部）。**
 
+- 2026-10-20 第 5 点（E9b，用户 2026-10-19 恢复 CHM13）：
+  - CHM13 坐标：pipeline 的 `graph_prep ref-path-scan --reference-sample CHM13` + `ref-path-check`，写到 `<graph_index>/<graph>.chm13_path`。scan 读的是 `experiments/E9a_unplaced_projection/chm13_mini_gfa.py` 建的小 GFA（GRCh38 path 的 segment 长度 + E9a 10-13 留下的 `vg paths -A -S CHM13` GAF 里的 CHM13 W lines），因为 2026-10-19 BeeGFS 只有约 9 MB/s，整个 GFA（d46 375 GB）读不完；d9 的 109 条 walk 和 d9 GFA 的 CHM13 W lines（GRCh38 scan 的 walks.ndjson）在 contig / start / end / node 数 / min / max 上完全一致。
+  - FASTA：逐碱基比对（`tmp/reviewer_cpu_20261019/E9b_chm13/compare_chm13_paths.py`，446746 / 446758 / 446760）：d9 的两条 CHM13 chrY walk 其实是 GRCh38 的 chrY（23.9 Mb 0 差异），其余 107 条和 chm13v2.0.fa 完全一致；d46 的 93 条和 chm13v2.0_maskedY_rCRS.fa 完全一致（rCRS chrM）。所以 d9 用 chm13v2.0.fa 并 `--exclude-contigs chrY`（447886），d46 用 maskedY_rCRS（447959）；两个 check 都是 0 / ~10 万 序列不一致。第 5 点的 "unfiltered reference path" 不受影响（chr1 上没有 chrY），没写 chrY 的事。
+  - 投影：E9a `project_unplaced.py` 原本就有 CHM13 分类（direct = 事件的 node 在 CHM13 path 上只走一次，即可以写成 CHM13 allele；anchor_interval = 只能给 CHM13 区间；none），重跑十二个 SNV run 到 `<scratch>/runs_e9b`（447961）。GRCh38 的列和 metrics 与 `runs/` 逐行相同，只是 chm13_* 从 not_built 变成实际值。
+  - "36.7–63.1% per run lie on CHM13 nodes and have a CHM13 allele"：`runs_e9b/*/vcf_chr1/projected.tsv` PASS 行的 chm13_class = direct 比例（我算的）：COLO829T Illumina 111 / 186、312 / 516，ONT 1,981 / 3,421、1,677 / 4,569，Fiber-seq 663 / 1,483、115 / 257，HG008T Illumina 57 / 115、476 / 754，ONT 612 / 1,410、660 / 1,258，PacBio 85 / 210、111 / 240（d9 / d46）；合计 6,860 / 14,419 = 47.6 %。
+  - "with the GRCh38 alleles of point 3, 38.1–67.1%"：proj_class = i 或 chm13_class = direct，每个 run 38.1 %（COLO829T ONT d46）到 67.1 %（HG008T Illumina d46）；合计 7,127 / 14,419 = 49.4 %。"The other 32.9–61.9%" 是 1 减去它（合计 7,292，50.6 %）；其中 4,818 个至少有 CHM13 anchor 区间，2,474 个两张参考上都没有 anchor（2,044 个在 COLO829T ONT d46）。为了字数这两个没写进 Response。
+  - "an optional CHM13 VCF"：`machine_learning/pansoma_net_v2/linear_vcf.py` 用 CHM13 reference path（`jobs/vcf.sh CHM13=1`）。24 个 SNV / INDEL run 的 CHM13 VCF（448043，`experiments/E9a_unplaced_projection/results/chm13_vcf_by_run.tsv`）：十二个 SNV run 里 "只在 CHM13 上有位置" 的 PASS 数和上面的 direct 数逐个相等（两条独立路径）。在 GRCh38 上有位置、CHM13 上没有的 PASS 每个 SNV run 0–101 个，例外是 COLO829T Illumina d9 的 2,581 个，其中 2,554 个在 GRCh38 chr1 120–145 Mb（CHM13 path 在那里被 clip）。没写进 Response。
 - 2026-10-19 COLO829T v1.1 的 [待补] 填上了（COLO829T v1.1 = RIS 上 matched recipe 的 seed 0（SNV `COLO829_*_SNV_7fc7396_ddp4_b1024`，4 GPU；INDEL `COLO829_*_INDEL_7fc7396`，lr 1e-4），2026-10-19 同步到本地后放进 `reviewer_cpu_20261013/<run>/`（best.pth 链到 `ris_7fc7396_20261012`，test_chr1 拷贝，metrics.json 的 checkpoint 改成本地路径，原值记在 `checkpoint_ris`）；本地 `jobs/vcf.sh` 的 PASS / best F1、TP、FP、unplaced 和 RIS 的 vcf_chr1（INDEL：`vcf_chr1_pon71cb51a`）六个 run 完全一致。jobs：E3b 446053（`tmp/reviewer_cpu_20261019/E3b_colo_d9/`），E9a 446057（`tmp/reviewer_cpu_20261019/E9a_colo_d9/`），然后在 login node 上重跑了 E3b `collect.py`、E16 `collect.sh`、E9a `collect.py`。COLO829T Illumina 用哪个 v1.1 run 还等用户定（RIS 在跑单 GPU 的 seed 1 / 2）；如果改用 `h90`，这些数要重算。）：
   - 第 2 点：COLO829T Fiber-seq v1.1 的 worst case（BED 外，PoN 后，unplaced 全算 FP）是 0.572，原来的 0.636 是 `h90` run；仍是四个反转之一。COLO829T ONT v1.1 是 0.427，比 GRCh38-only 0.418 只高 0.009，不算反转。
   - 第 3 点：E9a `results/tables.md`，COLO829T d9 有 GRCh38 allele 的比例（class i）是 4.3 % / 3.2 % / 2.2 %（Illumina / Fiber-seq / ONT），所以范围变成 2.2–19.1 %。三个 run 的 class i 都没有新增 TP（recall 不变），仍然是六个 TP、三个不同的 truth SNV。只落到 interval 的（class ii）是 127 / 1,241 / 1,718 个，没有一个对上 truth，所以范围变成 89–1,718。投影前后 complete-output F1（BED 外，PoN 后）变化 0.0006 / 0.0037 / 0.0032；12 个 run 是 0.0006–0.0084，所以写成 "by at most 0.009"。
@@ -2954,6 +3031,7 @@ We agree, and the revised evaluation covers the complete output.
 
 **还缺什么。**
 
+- [文字] Methods / Supplementary：CHM13 VCF 输出（`linear_vcf` 用 CHM13 reference path），每张图的 CHM13 FASTA（v1.1 用 chm13v2.0.fa 且排除 chrY，因为它的 CHM13 chrY 是 GRCh38 的 chrY；v2.1 用 chm13v2.0_maskedY_rCRS.fa）。逐个 call 的 Supplementary Table 加 CHM13 类别（`runs_e9b` 的 `projected.tsv`）。
 - （已完成）COLO829T v1.1 的 E9a 投影和 E3b rescue off （2026-10-19 用 matched d9 seed 0 补上了：E3b / E16 / E9a，见证据同日一条；COLO829T Illumina 如果改用 `h90`（RIS 在跑单 GPU seed 1 / 2），要同步它的 test_chr1 后重跑）。用 matched run 时，COLO829T Fiber-seq v1.1 的反转在 rescue 关掉后解掉（0.572 → 0.747，GRCh38-only 0.680）。
 - [用户决定]（不影响 Response：第 4 点已写成 "We therefore report every SNV result with and without the rescue"）SNV off-ref rescue 是否作为软件默认。现在两边的证据（九个 run）：
   - 代价：rescue 开时 complete-output F1 例 HG008T ONT d9 0.342、COLO829T ONT 0.369；关掉时九个 run 0.524–0.780，no BED 全部高于 linear（BED 内 HG008T ONT d46 仍低 0.004）。
@@ -2975,52 +3053,73 @@ We agree, and the revised evaluation covers the complete output.
 
 **Response.**
 
-We agree, and Figure 4 is revised accordingly.
+We agree and made both changes.
 
-*Truth spectrum beside each caller.* For each dataset, Figure 4a now shows the SBS96 spectrum of the truth set next to those of Pansoma, DeepSomatic-TO and ClairS-TO (chr1, PASS, after the same population filtering), and the Supplement gives the SBS96 profile of every call set, split into true and false positives, with the cosine similarity of each to the truth spectrum. Pansoma's calls reproduce the truth spectrum at least as closely as the comparators': the cosine similarity of all PASS calls on the HPRC graphs is 0.996–0.997 on COLO829T and 0.940–0.958 on HG008T (true positives alone 0.982–0.995), against 0.913–0.995 and 0.878–0.943 for DeepSomatic-TO and ClairS-TO.
+1. *Truth spectrum beside each caller (Figure 4a).* For each tumor and platform, Figure 4a now shows the SBS96 spectra of the chr1 truth set and of the matched normal's germline variants beside those of Pansoma, DeepSomatic-TO and ClairS-TO (PASS SNVs after the same population filtering, benchmark regions; Supplementary Fig. R3.5a). On five of six datasets Pansoma's spectrum is the closest to the truth (cosine 0.996–0.997 on COLO829T and 0.940–0.941 on HG008T, against 0.913–0.995 and 0.878–0.943 for the comparators) and the furthest from the germline (0.39–0.41 and 0.78–0.79, against 0.46–0.62 and 0.76–0.86); on HG008T PacBio, DeepSomatic-TO is as close to the truth and as far from the germline (0.943 and 0.763, against 0.941 and 0.776). The germline row matters most for HG008T, whose truth spectrum is heterogeneous (best single COSMIC v3.4 match SBS40a, cosine 0.780) and where precision after filtering is below 0.5 for every caller: each caller adds T>C changes, the hallmark of the germline spectrum (15–21% of calls, against 9% in the truth and 33% in the germline; R3.2).
 
-*HG008T.* The HG008T truth spectrum is indeed heterogeneous. Its best single COSMIC v3.4 match is SBS40a (cosine 0.780; SBS5 0.625, SBS1 0.241), whereas COLO829T matches the UV signature SBS7a (0.917). With an SNV precision of 0.43–0.50 after filtering on HG008T chr1, the false positives shape the spectrum of a whole call set, which is why we show them separately: HG008T's false positives resemble the matched normal's germline spectrum (cosine 0.845–0.913; best COSMIC match SBS5 in five of six call sets), consistent with the private germline variants that dominate them (R3.2). On COLO829T, 57–63% of the false-positive spectrum resembles the tumor's UV spectrum, consistent with, but not proof of, real mutations missing from the truth set.
-
-*Training spectrum.* Our main models are trained on chr2–22 of the tumor they are tested on, so their calls could follow its spectrum. A preliminary cross-tumor test (HPRC v2.1 graph with the d46 filter, earlier normalisation, one seed; R1.7) shows that this depends on the training tumor. The true positives of the HG008T models on COLO829T, HCC1395 and two lung adenocarcinoma lines match each target's truth spectrum (cosine 0.986–0.999). The COLO829T models drift towards UV-type changes on other tumors (0.793–0.978); on HG008T, 44.2–55.6% of their true positives are UV-type C>T, against 28.8% in its truth. A model trained on one UV-dominated tumor thus ranks UV-context changes higher elsewhere, which supports training on several tumors (R1.7).
-
-*Graph-coordinate calls.* We no longer use the spectrum as evidence that these calls are biological, because a spectrum cannot distinguish somatic mutations from population alleles that GRCh38 lacks. We tested them directly instead: placement on GRCh38, a graph-native population filter and the tumor and normal assemblies show that on HG008T at most 1.1–5.2% per run have assembly support as somatic, and most are population or germline alleles (R3.3, R3.4). Their SBS96 profiles, with trinucleotide context taken from the graph, are shown in the Supplement by validation class: the population and germline classes (95% of these calls) resemble the matched normal's germline spectrum (cosine 0.79–0.91) more than the tumor truth (0.61–0.70); only the small classes absent from the normal lean towards the tumor (COLO829T, 103 calls not in COLO829BL: 0.64 against 0.51; HG008T, 13 tumor-only calls: 0.55 against 0.21).
+2. *SBS96 profiles of the graph-coordinate calls (Supplementary).* The Supplement gives the SBS96 profiles of Pansoma's graph-coordinate SNV calls for each tumor and platform (chr1; trinucleotide context from the graph path; Supplementary Fig. R3.5b). They do not support the original claim on their own: on five of six datasets they resemble the matched normal's germline spectrum (cosine 0.64–0.91) more than the tumor truth (0.50–0.71). Only COLO829T Fiber-seq leans towards the tumor (0.67 against 0.47; UV-type C>T 42%, against 16% in the germline and 59% in the truth). We therefore no longer use spectral concordance as evidence that graph-coordinate calls are somatic. Direct validation against the tumor and normal assemblies and the population haplotypes (R3.3) shows that most are population or germline alleles, while the off-reference rescue recovers 22–66 assembly-validated somatic SNVs per HG008T dataset that GRCh38 cannot represent.
 
 **Supplementary (R3.5).**
 
-![SBS96 spectra of the graph-coordinate SNV calls by validation class](supplementary/R3.5/fig_R3.5_sbs96_by_class.png)
+![Figure 4a revision, HG008T](supplementary/R3.5/fig_R3.5a_HG008T.png)
 
-SBS96 spectra (percent of SNVs per channel) of the graph-coordinate SNV PASS calls on chr1, by validation class (R3.3),
-with the chr1 somatic truth and the matched-normal germline spectra of each tumor for reference. Calls of nine runs:
-HG008T on the HPRC v1.1 (d9) and v2.1 (d46) graphs and COLO829T on v2.1, three platforms each (COLO829T ONT: a random
-3,000 of its 4,569 calls). The trinucleotide context is read from the graph path: the bases flanking the site in the
-REF graph-path context spelled from each call's reads (0.1% of calls without a usable context are left out). Classes
-are exclusive, in this order: population allele (the ALT context is spelled by GRCh38 or an HPRC haplotype), germline
-(ALT context in the matched normal's assembly), tumor-only (HG008T: in the HG008-T tumor assembly and not in HG008-N) or
-not in the normal (COLO829T, which has no tumor assembly: absent from both COLO829BL haplotypes), and unverifiable or
-unsupported. Classes with fewer than 10 calls are not drawn.
+![Figure 4a revision, COLO829T](supplementary/R3.5/fig_R3.5a_COLO829T.png)
 
-Supplementary Table (cosine similarities to the reference spectra; UV-type C>T: C>T at a 5' pyrimidine):
+*R3.5a,* revised Figure 4a: SBS96 spectra (percent of SNVs per channel) of the chr1 somatic truth, of the matched normal's
+germline SNVs on chr1 in the same regions (HG008-N / COLO829BL, Dipcall), and of the PASS SNV calls
+after population filtering of Pansoma (HPRC v2.1 graph, d46 filter), DeepSomatic-TO (1.9.0) and ClairS-TO (0.4.1 / 0.4.2),
+in the benchmark regions, three platforms separately.
 
-| sample | spectrum | SNVs | cosine to truth | cosine to normal germline | UV-type C>T share | best COSMIC v3.4 matches |
-|---|---|---:|---:|---:|---:|---|
-| HG008T | population allele | 3,205 | 0.623 | 0.787 | 0.179 | SBS58 0.801, SBS40a 0.767, SBS5 0.766 |
-| HG008T | germline (normal assembly) | 603 | 0.653 | 0.831 | 0.148 | SBS3 0.783, SBS5 0.772, SBS40a 0.750 |
-| HG008T | tumor-only (in HG008-T, not in HG008-N) | 13 | 0.554 | 0.213 | 0.692 | SBS2 0.562, SBS31 0.477, SBS30 0.456 |
-| HG008T | unverifiable / unsupported | 158 | 0.348 | 0.370 | 0.184 | SBS47 0.812, SBS51 0.756, SBS58 0.745 |
-| COLO829T | population allele | 1,968 | 0.703 | 0.835 | 0.258 | SBS40a 0.841, SBS40c 0.809, SBS5 0.800 |
-| COLO829T | germline (normal assembly) | 1,611 | 0.608 | 0.908 | 0.215 | SBS5 0.855, SBS40c 0.821, SBS40a 0.811 |
-| COLO829T | not in the normal (COLO829BL) | 103 | 0.643 | 0.507 | 0.340 | SBS58 0.705, SBS40a 0.673, SBS40c 0.643 |
-| COLO829T | unverifiable / unsupported | 88 | 0.426 | 0.298 | 0.364 | SBS58 0.798, SBS47 0.721, SBS85 0.528 |
-| HG008T | chr1 somatic truth (reference) | 697 | 1.000 | 0.585 | 0.288 | - |
-| HG008T | matched-normal germline (reference) | 296,786 | 0.585 | 1.000 | 0.158 | - |
-| COLO829T | chr1 somatic truth (reference) | 2,443 | 1.000 | 0.428 | 0.585 | - |
-| COLO829T | matched-normal germline (reference) | 298,057 | 0.428 | 1.000 | 0.158 | - |
+![SBS96 of the graph-coordinate SNV calls](supplementary/R3.5/fig_R3.5b_graph_coordinate.png)
 
-Data and code: `supplementary/R3.5/sbs96_by_class.tsv` (96 counts per run and class, and per tumor and class),
-`cosine_by_class.tsv`, `make_sbs96_by_class.py` (classes and contexts from E9c / E9d, reference spectra and COSMIC from E18).
+*R3.5b,* SBS96 spectra of Pansoma's graph-coordinate SNV PASS calls on chr1 (same runs; no GRCh38 position, so neither
+the population filter nor the benchmark regions apply). The trinucleotide context is read from the graph: the bases
+flanking the site in the REF graph-path context spelled from each call's reads (7 of 6,025 calls without a usable
+context are left out). COLO829T ONT: a random 3,000 of its 4,569 calls.
+
+Supplementary Table (UV-type C>T: C>T at a 5' pyrimidine):
+
+| use | tumor | platform | call set | SNVs | cosine to truth | cosine to normal germline | UV-type C>T share |
+|---|---|---|---|---:|---:|---:|---:|
+| Fig. 4a | HG008T | Illumina | Pansoma | 1,386 | 0.940 | 0.786 | 0.240 |
+| Fig. 4a | HG008T | Illumina | DeepSomatic-TO | 1,649 | 0.921 | 0.815 | 0.216 |
+| Fig. 4a | HG008T | Illumina | ClairS-TO | 1,435 | 0.912 | 0.821 | 0.248 |
+| Fig. 4a | HG008T | PacBio HiFi | Pansoma | 1,232 | 0.941 | 0.776 | 0.260 |
+| Fig. 4a | HG008T | PacBio HiFi | DeepSomatic-TO | 1,321 | 0.943 | 0.763 | 0.245 |
+| Fig. 4a | HG008T | PacBio HiFi | ClairS-TO | 1,292 | 0.918 | 0.827 | 0.236 |
+| Fig. 4a | HG008T | ONT | Pansoma | 1,387 | 0.941 | 0.786 | 0.254 |
+| Fig. 4a | HG008T | ONT | DeepSomatic-TO | 1,954 | 0.878 | 0.858 | 0.236 |
+| Fig. 4a | HG008T | ONT | ClairS-TO | 1,399 | 0.899 | 0.847 | 0.238 |
+| Fig. 4a | COLO829T | Illumina | Pansoma | 2,013 | 0.996 | 0.394 | 0.643 |
+| Fig. 4a | COLO829T | Illumina | DeepSomatic-TO | 4,779 | 0.913 | 0.596 | 0.336 |
+| Fig. 4a | COLO829T | Illumina | ClairS-TO | 4,335 | 0.913 | 0.620 | 0.414 |
+| Fig. 4a | COLO829T | Fiber-seq | Pansoma | 1,996 | 0.997 | 0.387 | 0.652 |
+| Fig. 4a | COLO829T | Fiber-seq | DeepSomatic-TO | 1,853 | 0.982 | 0.457 | 0.477 |
+| Fig. 4a | COLO829T | Fiber-seq | ClairS-TO | 2,334 | 0.995 | 0.490 | 0.539 |
+| Fig. 4a | COLO829T | ONT | Pansoma | 2,147 | 0.996 | 0.405 | 0.631 |
+| Fig. 4a | COLO829T | ONT | DeepSomatic-TO | 2,915 | 0.984 | 0.549 | 0.463 |
+| Fig. 4a | COLO829T | ONT | ClairS-TO | 2,233 | 0.993 | 0.494 | 0.546 |
+| graph-coordinate | HG008T | Illumina | Pansoma graph-coordinate | 754 | 0.604 | 0.793 | 0.142 |
+| graph-coordinate | HG008T | PacBio HiFi | Pansoma graph-coordinate | 240 | 0.496 | 0.635 | 0.171 |
+| graph-coordinate | HG008T | ONT | Pansoma graph-coordinate | 1,254 | 0.618 | 0.753 | 0.181 |
+| graph-coordinate | COLO829T | Illumina | Pansoma graph-coordinate | 516 | 0.711 | 0.736 | 0.260 |
+| graph-coordinate | COLO829T | Fiber-seq | Pansoma graph-coordinate | 257 | 0.674 | 0.468 | 0.416 |
+| graph-coordinate | COLO829T | ONT | Pansoma graph-coordinate | 2,997 | 0.646 | 0.906 | 0.227 |
+| reference | HG008T | - | matched-normal germline | 296,786 | 0.585 | 1.000 | 0.158 |
+| reference | HG008T | - | chr1 somatic truth | 697 | 1.000 | 0.585 | 0.288 |
+| reference | COLO829T | - | matched-normal germline | 298,057 | 0.428 | 1.000 | 0.158 |
+| reference | COLO829T | - | chr1 somatic truth | 2,443 | 1.000 | 0.428 | 0.585 |
+
+Data and code: `supplementary/R3.5/sbs96.tsv` (96 counts of every spectrum), `cosine.tsv`, `make_sbs96.py` (caller and
+truth counts from E8, graph-coordinate contexts from E9c, germline spectra from E18).
 
 **证据（内部）。**
 
+- 2026-10-19（晚）用户要求重做，只改审稿人说的两点：Figure 4a 并排放 truth 和三个 caller 的 SBS96；Supplement 给 graph-coordinate variants 的 SBS96。每个 caller 只用一个 call set（PoN 后的最终 PASS），三个平台分开，只看 chr1。按验证类别拆分的那一版（`make_sbs96_by_class.py` 等，c4741b3）删掉了；"Training spectrum" 一段也删了（R1.7 有）。旧版备份在 session scratchpad `R3.5.before_simple_20261019.md`。
+  - 脚本 `supplementary/R3.5/make_sbs96.py`：caller 和 truth 的计数来自 E8 `sbs96.tsv`（每个 call set 的 TP + FP，PoN 后、BED 内，pansoma-3c 407e1c3），Pansoma 两个肿瘤都用 HPRC v2.1 d46（E8 里 COLO829T 只有 d46）；graph-coordinate 用 E9c 的 `rcpu__<run>__vcf_chr1/calls.tsv`（unplaced_pass、SNP、`ref_graph` 上下文），normal germline 谱来自 E18。
+  - 第 1 点：余弦（`cosine.tsv`）Pansoma d46 0.940 / 0.941 / 0.941（HG008T Illumina / PacBio / ONT）、0.996 / 0.997 / 0.996（COLO829T）；DeepSomatic-TO 0.921 / 0.943 / 0.878、0.913 / 0.982 / 0.984；ClairS-TO 0.912 / 0.918 / 0.899、0.913 / 0.995 / 0.993。HG008T PacBio 上 DeepSomatic-TO 0.943 比 Pansoma 0.941 略高，所以写 "five of six"（之前写的 "at least as closely as the comparators" 用的是 HPRC 两个图的范围，含 d9 0.958）。HG008T precision（PoN 后、BED 内）：Pansoma d46 0.429 / 0.472 / 0.432，DeepSomatic 0.376 / 0.425 / 0.310，ClairS-TO 0.410 / 0.455 / 0.414 → "below 0.5 for every caller"。"0.845–0.913"：E18 Pansoma 的 FP 谱和 germline 的余弦（原来就有）。
+  - 第 2 点：graph-coordinate 和 truth / normal germline 的余弦：HG008T 0.604 / 0.793、0.496 / 0.635、0.618 / 0.753，COLO829T 0.711 / 0.736、0.674 / 0.468、0.646 / 0.906；Fiber-seq 以外五套 germline 0.64–0.91 > truth 0.50–0.71。UV-type C>T：COLO829T Fiber-seq 0.416，normal germline 0.158，truth 0.585。"22–66 assembly-validated somatic SNVs per HG008T dataset"：E9h（`h50 strict`，rescue 找回的 tumor-only key，全 autosome；R3.3 第 1 点）。
+  - 2026-10-19（再晚）用户要求 Figure 4a 加上 germline：每张图五行（truth、matched-normal germline、Pansoma、DeepSomatic-TO、ClairS-TO）。germline 谱是 E18 的 "germline <tumor>"（normal 的 germline truth，Dipcall，chr1，同一个 BED，PASS / . / GAP1 / GAP2，单碱基 ALT）。和 germline 的余弦（`cosine.tsv`）：Pansoma 0.786 / 0.776 / 0.786（HG008T）、0.394 / 0.387 / 0.405（COLO829T）；DeepSomatic-TO 0.815 / 0.763 / 0.858、0.596 / 0.457 / 0.549；ClairS-TO 0.821 / 0.827 / 0.847、0.620 / 0.490 / 0.494 → Pansoma 在六套里五套离 germline 最远，例外 HG008T PacBio（DeepSomatic-TO 0.763 < 0.776）。T>C 一句（`sbs96.tsv` 按 6 类相加，HG008T）：T>C 占比 truth 0.089、germline 0.329，Pansoma 0.157 / 0.147 / 0.154，DeepSomatic-TO 0.178 / 0.160 / 0.207，ClairS-TO 0.166 / 0.186 / 0.199 → "15–21% ... 9% ... 33%"；C>T 在 truth（0.373）和 germline（0.343）之间差不多，所以没写 C>T。原来引用的 E18 FP 谱和 germline 的余弦 0.845–0.913 删了（那是 FP 单独的谱，现在图里不分 TP / FP）。
 - 2026-10-19 Response 最后一段的 [待补]（graph-coordinate calls 按验证类别的 SBS96）做了，用户 10-19 决定放 Supplement（上面的 Supplementary 块，不算 Response 字数）。脚本 `supplementary/R3.5/make_sbs96_by_class.py`，`sambcfenv` 的 python，login node 上几秒钟。没有新跑 E9c / E9d：类别是 E9c `per_call.tsv.gz` 的 `category`（unplaced_pass、SNP、`rcpu__` 的 9 个 run），三核苷酸上下文用 E9c 每个 run 的 `calls.tsv` 里的 `ref_graph`（从 tensor 拼出的图路径 REF 上下文，两边各 50 bp，`ref_graph_site` 是位点位置；缺的话用 `alt_graph`），要求位点碱基等于 REF；7,760 个 call 里 11 个没有可用上下文。对照谱是 E18 `sbs96.tsv` 的 "truth <sample>" 和 "germline <sample>"，COSMIC 用 E18 的 loader（v3.4）。
   - Response 里的数（`cosine_by_class.tsv`）：population HG008T 3,205 个、COLO829T 1,968 个，germline 603 / 1,611 个，合计 7,387 / 7,749 = 95 %。和 normal germline 的余弦 0.787 / 0.835（population）、0.831 / 0.908（germline）→ "0.79–0.91"；和 truth 的余弦 0.623 / 0.703、0.653 / 0.608 → "0.61–0.70"。COLO829T not in normal 103 个：truth 0.643、germline 0.507；HG008T tumor-only 13 个：truth 0.554、germline 0.213。unverifiable / unsupported 158 / 88 个，两边都不像（0.30–0.43）。
   - UV-type C>T 占比：COLO829T truth 0.585、normal germline 0.158；COLO829T population 0.258、germline 0.215、not in normal 0.340。原稿 Fig. 4c 的 "UV 成分" 大部分来自 population / germline 类，只比 germline 背景略高。
@@ -3061,14 +3160,16 @@ Data and code: `supplementary/R3.5/sbs96_by_class.tsv` (96 counts per run and cl
 
 - （已完成 2026-10-19）比较器的 SBS96 余弦已写进 Response（E8，407e1c3，用户已有的 DeepSomatic 1.9.0 / ClairS-TO 0.4.1 / 0.4.2 call set，按 Pansoma 的 chr1 口径重新打分）。E18 的 `comparators.tsv` 还是空的；如果 Figure 4a 要用 E18 的统一作图，再把 E8 的 rtg 目录写进去重跑 E18。
 - [数据同步] COLO829T d9 单样本 run（`*_SNV_h90`）不在本地，E18 没有 COLO829T 的 d9 行（Response 只用 HPRC 图的范围，不受影响）。（其余 in-sample run 已在 2026-10-15 re-predict 完，E18 已用上。）
-- （已完成 2026-10-19）graph 坐标 calls 按验证类别的 SBS96，放在 Supplementary 块（`supplementary/R3.5/`）；COLO829T v1.1 跑了 E9c / E9d 以后要重跑 `make_sbs96_by_class.py`。
+- （已完成 2026-10-19，用户要求的简化版）Figure 4a 的并排 SBS96 和 graph-coordinate calls 的 SBS96（`supplementary/R3.5/make_sbs96.py`）。按验证类别拆分的版本已删。
 - [用户决定] 是否撤回 "SBS96 说明 graph 坐标 variants 是 biological" 的说法。Response 现在按撤回写（九个 run 的 E9c / E9d：HG008T 上只看组装 tumor-only 每个 run 1.1–5.2 %，R3.3）；如果不撤回，要改最后一段。
 - [用户决定]（可选）要不要做 signature refit（SigProfilerAssignment 已装），现在只报单个 signature 的 cosine。
 - [文字] Figure 4 改版（truth 并排、TP / FP 分开）；Supplementary SBS96 图（`E18_sbs96/sbs96.tsv` 有每个谱的 96 维计数）。
 
 ### R3.6 More perfect alignment is not more correct alignment
 
-**状态：部分解决**（原来是待解决）: 关键证据——已知来源的比对正确性——2026-10-15 有了：E11b 的 Illumina（500 万条 reads）和 HiFi-like（4 万条）在 GRCh38-only / HPRC v1.1 d9 / HPRC v2.1 d46 三个图上的结果都已出（`results/tables.md` 17:57）。结论支持 Response 的改写，但不是一边倒：HPRC 图 perfect 更多（72.94 / 73.06 % 对 63.69 %）、错放更少（0.983 / 0.927 % 对 1.235 %），"perfect but wrong" 没有增加（33,204 / 32,025 对 33,847，几乎都在 SMaHT extreme 区），MAPQ ≥ 30 的错放率 0.019 / 0.013 % 对 0.093 %；但跨 SV 的 reads 正确放置的比例反而略低（21.2 / 21.7 % 对 25.1 %），离 HG008-N 变异 > 500 bp 的 reads 错放略多（0.807 % 对 0.697 %），三个图的 MAPQ 都过度自信。E11a 现在两个肿瘤 × 三平台都有（MAPQ 60 的下降主要在 v2.1 的 HiFi 类数据上）。2026-10-15 晚 ONT-like 模拟 reads 也出了，结果对 v2.1 不利，Response 照实写了：v1.1 错放略少（0.614 % 对 0.773 %），v2.1 约两倍（1.483 %；MAPQ ≥ 30 0.764 % 对 0.433 %），几乎全在 SMaHT extreme 区，和 E11a 真实 ONT reads 在 v2.1 上 confident 不一致更多的现象一致。还缺：E11c（phased haplotype 对照，用户决定）；CHM13 按用户决定写成 limitation；E11b 的 d9 臂是 vg 1.65（生产是 1.66），v2.1 是 1.77（和 graph 混在一起）。
+**状态：部分解决**（原来是待解决）: 关键证据——已知来源的比对正确性——2026-10-15 有了：E11b 的 Illumina（500 万条 reads）和 HiFi-like（4 万条）在 GRCh38-only / HPRC v1.1 d9 / HPRC v2.1 d46 三个图上的结果都已出（`results/tables.md` 17:57）。结论支持 Response 的改写，但不是一边倒：HPRC 图 perfect 更多（72.94 / 73.06 % 对 63.69 %）、错放更少（0.983 / 0.927 % 对 1.235 %），"perfect but wrong" 没有增加（33,204 / 32,025 对 33,847，几乎都在 SMaHT extreme 区），MAPQ ≥ 30 的错放率 0.019 / 0.013 % 对 0.093 %；但跨 SV 的 reads 正确放置的比例反而略低（21.2 / 21.7 % 对 25.1 %），离 HG008-N 变异 > 500 bp 的 reads 错放略多（0.807 % 对 0.697 %），三个图的 MAPQ 都过度自信。E11a 现在两个肿瘤 × 三平台都有（MAPQ 60 的下降主要在 v2.1 的 HiFi 类数据上）。2026-10-15 晚 ONT-like 模拟 reads 也出了，结果对 v2.1 不利，Response 照实写了：v1.1 错放略少（0.614 % 对 0.773 %），v2.1 约两倍（1.483 %；MAPQ ≥ 30 0.764 % 对 0.433 %），几乎全在 SMaHT extreme 区，和 E11a 真实 ONT reads 在 v2.1 上 confident 不一致更多的现象一致。还缺：E11c（phased haplotype 对照，用户决定）；CHM13-only 对照 2026-10-20 完成（第 5 点，见证据同日一条）；E11b 的 d9 臂是 vg 1.65（生产是 1.66），v2.1 是 1.77（和 graph 混在一起）。
+
+**CHM13-only 对照 2026-10-20 完成**（用户 2026-10-19 决定恢复，取代 10-13 的放弃）：第 5 点从 limitation 改成 E11b 的 CHM13-only arm 结果：在两张参考上都有一对一 truth 的 reads 上，CHM13 单独带来的变化很小，HPRC 的增益主要来自人群 haplotype。出处见证据 2026-10-20 一条。
 
 **Comment（要点）。**
 
@@ -3080,18 +3181,27 @@ Data and code: `supplementary/R3.5/sbs96_by_class.tsv` (96 counts per run and cl
 
 We agree and removed the inference from "more perfect" to "more correct".
 
-1. *What the gain is.* For the same HG008T Illumina reads (48 GRCh38 windows; R2.7), 79.36% align without any edit on the HPRC v1.1 graph (d9 filter) against 69.12% on the GRCh38-only graph, and 99.74% of the reads that become edit-free keep their GRCh38 position. The graph removes edits at alleles that the sample shares with HPRC haplotypes; this alone is not evidence of more correct placement.
+1. *What the gain is.* Of all HG008T Illumina reads aligned to chr1–22, 78.5% are perfectly aligned (end to end, with no substitution, indel or soft clipping) on the HPRC v1.1 graph (d9 filter) against 68.7% on the GRCh38-only graph (R2.7), and in a sample of reads from 48 GRCh38 windows, 99.74% of the reads that become perfectly aligned keep their GRCh38 position. The graph removes mismatches and indels at alleles that the sample shares with HPRC haplotypes; this alone is not evidence of more correct placement.
 
 2. *MAPQ, same reads.* Over whole files, the share of mapped reads with MAPQ 60 on the GRCh38-only, v1.1 and v2.1 (d46 filter) graphs is 95.88%, 95.88% and 83.32% for HG008T PacBio and 92.38%, 92.63% and 76.87% for COLO829T Fiber-seq. The v2.1 drop is smaller on ONT and absent in Illumina windows. v2.1 was aligned with a newer Giraffe version, so graph and aligner effects are not separated. By region, both HPRC graphs add some ambiguity in SMaHT extreme regions and segmental duplications (R1.3).
 
-3. *Correctness with known origin.* We simulated reads from the HG008-N v6.2 diploid assembly (in neither HPRC graph) on chr1 and chr20, where it aligns one-to-one to GRCh38. For 5 million Illumina reads, v1.1 and v2.1 give more edit-free alignments than the GRCh38-only graph (72.94% and 73.06% against 63.69%) and fewer misplaced reads (0.983% and 0.927% of placed reads against 1.235%). "Perfect but wrong" alignments do not increase (33,204 and 32,025 against 33,847, nearly all in SMaHT extreme regions), and the error rate among placements with MAPQ ≥ 30 falls from 0.093% to 0.019% and 0.013%; MAPQ is over-confident on all three. The gain concentrates in reads spanning a structural variant (misplaced 51.0% and 46.0% against 71.7%), although fewer of them are placed correctly (21.2% and 21.7% against 25.1%); far from any HG008-N variant the HPRC graphs misplace slightly more (0.807% against 0.697%). HiFi-like reads go the same way (misplaced 0.328% and 0.383% against 0.495%). Noisy ONT-like reads do not: v1.1 misplaces slightly fewer (0.614% against 0.773%), but v2.1 about twice as many (1.483%; at MAPQ ≥ 30, 0.764% against 0.433%), almost all in SMaHT extreme regions, as the confident disagreements of real ONT reads on v2.1 suggested (R1.3); its newer Giraffe release may contribute. The hardest regions are under-represented, and the v1.1 arm used Giraffe 1.65.
+3. *Correctness with known origin.* We simulated reads from the HG008-N v6.2 diploid assembly (in neither HPRC graph) on chr1 and chr20, where it aligns one-to-one to GRCh38. For 5 million Illumina reads, v1.1 and v2.1 align more reads perfectly than the GRCh38-only graph (72.94% and 73.06% against 63.69%) and fewer misplaced reads (0.983% and 0.927% of placed reads against 1.235%). "Perfect but wrong" alignments do not increase (33,204 and 32,025 against 33,847, nearly all in SMaHT extreme regions), and the error rate among placements with MAPQ ≥ 30 falls from 0.093% to 0.019% and 0.013%; MAPQ is over-confident on all three. The gain concentrates in reads spanning a structural variant (misplaced 51.0% and 46.0% against 71.7%), although fewer of them are placed correctly (21.2% and 21.7% against 25.1%); far from any HG008-N variant the HPRC graphs misplace slightly more (0.807% against 0.697%). HiFi-like reads go the same way (misplaced 0.328% and 0.383% against 0.495%). Noisy ONT-like reads do not: v1.1 misplaces slightly fewer (0.614% against 0.773%), but v2.1 about twice as many (1.483%; at MAPQ ≥ 30, 0.764% against 0.433%), almost all in SMaHT extreme regions, as the confident disagreements of real ONT reads on v2.1 suggested (R1.3); its newer Giraffe release may contribute. The hardest regions are under-represented, and the v1.1 arm used Giraffe 1.65.
 
 4. *Phased haplotypes on real reads.* We compare the graph placement of real HG008-T reads in difficult regions with their placement on the phased HG008-N assembly [待补].
 
-5. *Completeness versus multi-haplotype modelling.* In the reference ablation (R3.1), the HPRC graphs raise chr1 SNV F1 after population filtering by +0.028 to +0.292 on all six datasets (means over three training seeds). Both HPRC graphs contain CHM13 as an unfiltered reference path, so this gain, like the simulation above, combines reference completeness and haplotype diversity. We did not add a T2T-CHM13 arm, because our truth sets are on GRCh38, and state this as a limitation.
+5. *Completeness versus multi-haplotype modelling.* Both HPRC graphs contain CHM13 as an unfiltered reference path, so we added a CHM13-only graph, built like the GRCh38-only graph with the same Giraffe release, and aligned the same simulated reads, scored against the haplotypes lifted to CHM13. On the 99.8% of Illumina reads with a one-to-one truth on both references, CHM13 alone changes little: 64.8% align perfectly against 63.7% on GRCh38, 1.12% are misplaced against 1.19%, and misplaced reads at MAPQ ≥ 30 do not fall (4,574 against 4,240), whereas the HPRC graphs give 73.0–73.1%, 0.90–0.95% and 567–823. HiFi-like and ONT-like reads change as little (misplaced 0.41% and 0.68% against 0.47% and 0.75%). Within the simulated regions, most of the gain thus comes from the population haplotypes; sequence that only T2T resolves is under-represented there. The calling ablation (R3.1) has no CHM13 arm, because our truth sets are on GRCh38.
 
 **证据（内部）。**
 
+- 2026-10-20 第 5 点（E11b CHM13-only arm，用户 2026-10-19 恢复）：`experiments/E11b_simulated_alignment/results/tables.md` 三个 "all arms on the reads that have a one-to-one truth on both GRCh38 and CHM13" 表（collect 448821，2026-10-20 10:16；README Interpretation 9）。
+  - CHM13-only graph：vg 1.66.0 autoindex（giraffe + lr-giraffe）of `/scratch/qfu/reference/chm13/chm13v2.0_maskedY_rCRS.fa`（446259），和 GRCh38-only arm 同样的建法和 giraffe 版本（GRCh38-only 1.66.0，日志核实），所以 "built like the GRCh38-only graph with the same Giraffe release"。align 446263（Illumina / HiFi / ONT）。truth 是 hap → CHM13 的 dipcall 比对（387282 / 387283）上 lift 的模板位置；Illumina 的 `chm13_truth.npz` 10-13 写坏了（截断），10-20 重建。
+  - "99.8% of Illumina reads"：4,988,641 / 5,000,000 = 99.77 %（HiFi 39,743、ONT 39,744 / 40,000 = 99.36 %）。
+  - Illumina（同一批 4,988,641 reads；GRCh38-only / CHM13-only / v1.1 / v2.1）：perfect 63.71 / 64.81 / 72.95 / 73.07 %；wrong / placed 1.188 / 1.119 / 0.950 / 0.896 %；wrong at MAPQ ≥ 30 4,240 / 4,574 / 823 / 567；correct（50 bp）98.749 / 98.831 / 98.713 / 98.732 %。Response 用两位 / 三位有效数字（64.8 vs 63.7、1.12 vs 1.19、73.0–73.1、0.90–0.95）。这些是同一批 reads 上的数，所以和第 3 点全部 reads 上的 72.94 / 73.06 %、0.983 / 0.927 % 略有不同。
+  - HiFi（39,743 reads）：wrong / placed 0.473 / 0.413 / 0.310 / 0.355 %；ONT（39,744）：0.750 / 0.681 / 0.595 / 1.452 %。"HiFi-like and ONT-like reads change as little (misplaced 0.41% and 0.68% against 0.47% and 0.75%)"。
+  - "most of the gain thus comes from the population haplotypes"：perfect +1.1 点（CHM13）对 +9.2 / +9.4 点（HPRC），MAPQ ≥ 30 错放 +8 %（4,574 / 4,240）对 −81 / −87 %（823、567 / 4,240），我算的。
+  - "sequence that only T2T resolves is under-represented there"：模拟只取 HG008-N 和 GRCh38 一对一的片段（E11b Method 1、Caveats "Simulated reads"），CHM13 独有、GRCh38 解析不了的区域几乎不在其中。
+  - 删掉了旧第 5 点里 R3.1 的 "+0.028 to +0.292" 那句（R3.1 本身已写；新第 5 点只说 calling ablation 没有 CHM13 arm）。
+- 2026-10-20 措辞按用户 10-19 的要求（pansoma-1c 转达）把 "edit-free" / "without any edit" / "edits" 换成 "perfectly aligned"（两端对齐、没有错配、indel 和 soft clip；E11b 的 "perfect" 定义相同：GAF 覆盖整条 read、没有 mismatch / indel）和 "mismatches and indels"。第 1 点的比例换成 R2.7 的全量数据（pansoma-1c e3fed14 把 R2.7 改成全量，不再有 48 个窗口的样本；E11a `full/results.md`：HG008T Illumina GRCh38-only graph 1,861,828,942 / 2,710,092,615 = 68.70 %，HPRC v1.1 2,121,622,695 / 2,704,033,209 = 78.46 %）。"99.74% ... keep their GRCh38 position" 只有窗口样本有（逐条 read 比位置），所以保留并写明是窗口样本（E11a `results/tables.md` §3），不再指向 R2.7。
 - 2026-10-19 "+0.038 to +0.319"（seed 0）换成三 seed 均值 "+0.028 to +0.292"（RIS 总结 `analysis/benchmark_7fc7396_20261012/reviewer_gpu_7fc7396_20261016/`（538012c；`tables.md`、`summary.json`；chr1、BED 内、PoN 后、PASS = recall-0.9 validation 阈值，INDEL 用 71cb51a 规则）；推导见 R3.1 证据同日一条）。
 - 2026-10-15 E1.6/E9h/E22/E11b-ONT（本条用到 E11b-ONT 和 E22 check 2；Response 457 → 478 词）：
   - 第 3 点的 [待补: ONT-like reads] 换成 ONT 结果（`experiments/E11b_simulated_alignment/results/tables.md` "## ont: overall"，collect 407748，2026-10-15 19:39；README Interpretation 7）：wrong / placed 0.773 / 0.614 / 1.483 %（GRCh38-only / d9 / d46），wrong at MAPQ ≥ 30 170（0.433 %）/ 131（0.335 %）/ 299（0.764 %），分母是 MAPQ ≥ 30 的 placed reads（39,221 / 39,121 / 39,132，`eval/<arm>.ont.json` 的 `mapq_ge30`）；correct（50 bp）98.528 / 98.690 / 97.817 %。"about twice"：1.483 / 0.773 = 1.92（我算的）。
@@ -3138,11 +3248,11 @@ We agree and removed the inference from "more perfect" to "more correct".
 
 **还缺什么。**
 
-- （已完成，2026-10-15）E11b README 的 Results / Interpretation / Status 已按 9 个 set（含 ONT）重写。[文字] detailed doc 的 R3.6 Response 第 2 条删掉 CHM13-only graph（E11b README 里 CHM13 现在只作为 dropped control 出现）。
+- （已完成，2026-10-15）E11b README 的 Results / Interpretation / Status 已按 9 个 set（含 ONT）重写。（2026-10-20 起不再适用：CHM13-only graph 已经跑完，E11b README 把它作为第四个 arm，Interpretation 9。）
 - [文字] E11a README 开头 "In short (2026-10-13)" 已过时（两个肿瘤 × 三平台都已出），由负责人更新。
 - [用户决定] E11c（P2，HG008-T reads 在 HG008-N hap1 BAM 上的位置 vs graph 位置，只有 hap1）做不做；审稿人还点名了 "phased-haplotype concordance"，第 4 条是 [待补]。不做就把第 4 条改成一句 limitation（写明没有做 personal-genome / phased-haplotype 对照），不要整条删掉，否则这项要求没有回应。E11b 的模拟（已知来源）部分回答了 "assembly-based truth"。
 - [用户决定] vg 版本对照（linear graph 用 vg 1.77 重建索引并重比对，E3 caveat 4）做不做；不做就在 Response 里明确写 v2.1 的 MAPQ 变化可能部分来自 giraffe 版本（第 2 条已这样写），E11b 的 d9 臂是 1.65（第 3 条已写）。2026-10-15 起这个对照也关系到 E11b 的 ONT 结果：v2.1 的 ONT 错放加倍是 vg 1.77 + d46 一起造成的，分不开（第 3 条写了 "its newer Giraffe release may contribute"）。最便宜的拆法是用 vg 1.77 在 d9（或 GRCh38-only）上重比对 4 万条模拟 ONT reads（E11b `align_arm.sh`，约 5 分钟一个臂；d9 的 longread 索引要能被 1.77 读，没试过）。
-- [文字] 改 detailed doc / 简版 R3.6：删掉 CHM13-only arm 的描述；"same vg giraffe version" 只能用于 HG008T 的 GRCh38-only vs v1.1（都是 1.66.0，R1.2 就是这样用的），v2.1 是 1.77；COLO829T 的 v1.1 是 Fiber-seq 1.64.1–1.66.0、ONT 1.64.0–1.66.0、Illumina ≤ 1.62（E22 check 2，2026-10-15）。
+- [文字] 改 detailed doc / 简版 R3.6：CHM13-only arm 按 2026-10-20 的结果写（不再删）；"same vg giraffe version" 只能用于 HG008T 的 GRCh38-only vs v1.1（都是 1.66.0，R1.2 就是这样用的），v2.1 是 1.77；COLO829T 的 v1.1 是 Fiber-seq 1.64.1–1.66.0、ONT 1.64.0–1.66.0、Illumina ≤ 1.62（E22 check 2，2026-10-15）。
 
 ### R3.7 Caution on reclassifying benchmark false negatives
 
@@ -3161,7 +3271,7 @@ errors. We tested them with orthogonal evidence: haplotype-resolved assemblies o
 COLO829BL) and, for HG008T, of the tumor (HG008-T v3.2), together with the HPRC haplotype walks (R1.4).
 
 - *HG008T.* On the HPRC v1.1 graph (d9 filter), 2,478 truth alleles (201 SNVs, 2,277 INDELs) are lost because their reads align
-  without edits to an existing graph path. Only 110 (4.4%) are carried by the matched normal, and in 109 of them the
+  perfectly to an existing graph path. Only 110 (4.4%) are carried by the matched normal, and in 109 of them the
   tumor allele is the germline allele of the other normal haplotype. For 2,085 (84.1%), neither normal haplotype carries
   the allele, but other HPRC haplotypes walk the same nodes (1,854 with exactly this allele). At 1,652 of the 1,935 such
   INDELs the tumor assembly carries exactly the truth allele over the repeat, and at 1,931 it carries a sequence found
@@ -3181,6 +3291,7 @@ alleles).
 
 **证据（内部）。**
 
+- 2026-10-20 措辞：用户 10-19 要求 Response 不再用 "edit" 这类说法（读者不一定知道 edit 是什么，pansoma-1c 转达），改成 "perfectly aligned"（两端对齐、没有错配、indel 和 soft clip）或 "mismatch / indel"。本条改了："align without edits to an existing graph path" → "align perfectly to an existing graph path"。数字没变。
 - 2026-10-15 结果并入：今天的新结果都不改变本条（状态仍是已解决，Response 不改）。相关的只有一条旁证：E5b `linear_recovery.md`（18:00 版，chr1、BED 内）里，图上 absorbed 的 truth INDEL 几乎都被 PoN 标掉（not PoN-tagged 只有 0–2 个 / dataset × 图），GRCh38-only 臂在 PoN 后也只叫出其中 0–2 个；也就是 absorption 在最终指标里的代价很小，和 R1.4 的写法一致。组装分类（present / absent-other-HPRC）仍只在 d9 上做过。
 - 2026-10-15 改稿（适用性检查）：删掉 Response 里的可选 E20 括号（内部标记，挪到还缺什么）；"no HG008-N reads were available to us" 改成 "We did not realign matched-normal reads"（HG008-N reads 是公开数据，"not available" 站不住，只是本地没有）；加 "(d9 filter)"。数字没有改。
 - HG008T：`analysis/graph_absorbed_somatic_20261001/README.md`
@@ -3226,7 +3337,7 @@ alleles).
 
 ### R3.8 Scope: tumor-only versus somatic mosaicism
 
-**状态：已解决**: 选择审稿人给的第一条路（全文统一为 tumor-only cancer calling），不做 SMaHT 组织的 mosaicism 验证；理由（candidate 门槛 AF ≥ 0.08、≥ 3 ALT reads，训练正样本几乎都是克隆性变异）都有现成数字，剩下的只是改标题、摘要、结果和讨论的措辞；最后一段提到的新增细胞系只是交叉引用（R1.7 / R1.m1），名单等那两条定了再填。
+**状态：已解决**: 选择审稿人给的第一条路（全文统一为 tumor-only cancer calling），不做 SMaHT 组织的 mosaicism 验证；理由（candidate 门槛 AF ≥ 0.08、≥ 3 ALT reads，训练正样本几乎都是克隆性变异）都有现成数字，剩下的只是改标题、摘要、结果和讨论的措辞；最后一段的新增细胞系已写明名单（R1.7 / R1.m1）。2026-10-19 按外部建议改成 "has not been trained or validated for"；HapMap 不在本条提（用户 10-19：没必要，R1.5 单独回答）。
 
 **Comment（要点）。**
 
@@ -3235,29 +3346,23 @@ alleles).
 
 **Response.**
 
-We keep the scope to tumor-only somatic calling in cancer samples. The title, abstract, Results and Discussion now state
-this consistently, and broader claims about "somatic variation" in general were removed.
+We agree and have narrowed the scope of the manuscript to tumor-only somatic variant calling in cancer samples. The title, Abstract, Results and Discussion have been revised accordingly, and broader claims about somatic variation in general or normal-tissue mosaicism have been removed.
 
-The method is not built for mosaicism in normal tissue, and the revised Methods say why:
+Pansoma has not been trained or validated for somatic mosaicism in normal tissues. The models are trained on tumor-derived somatic variants, predominantly moderate- to high-allele-fraction events (Methods), and the standard candidate configuration requires at least three ALT-supporting reads and an allele fraction of at least 0.08, so the much lower allele fractions typical of mosaicism in normal tissue are not evaluated. A low allele fraction is not the same as normal-tissue mosaicism: within the cancer scope, low tumor fractions are tested with in-silico purity dilutions of COLO829T (75, 50 and 25%; R2.4), and these results are not extrapolated to normal tissue.
 
-- A candidate needs at least three ALT reads and an allele fraction of at least 0.08 for SNVs and INDELs, so variants at
-  the much lower allele fractions typical of mosaicism in normal tissue are not evaluated.
-- The training positives are tumor variants, mostly clonal: the somatic SNV training tensors of the single-sample
-  models have a median allele fraction of 0.53–0.54 (HG008T) and 0.46–0.51 (COLO829T), and only 0.4–1.2% (HG008T) and
-  6.5–7.3% (COLO829T) lie below 0.20.
-- The classifier is trained to separate a tumor's somatic variants from the germline variants and sequencing errors of
-  the same sample.
+Validation on independently characterised normal-tissue datasets such as the SMaHT tissues would require dedicated low-allele-fraction candidate settings, training labels and models; the Discussion identifies this as future work.
 
-Validating on an independently characterised mosaicism dataset such as the SMaHT tissues would need a low-allele-fraction
-candidate configuration, new training labels and new models. We describe this in the Discussion as future work rather
-than claim it.
-
-Within the cancer scope we extend the validation beyond HG008T and COLO829T to further cancer cell lines (R1.7,
-R1.m1) [待补: the lines with final results], and the HapMap mixture, whose positives are germline alleles of other individuals, is no longer used as evidence of
-somatic performance (R1.5).
+Within the cancer scope, we have instead expanded validation beyond HG008T and COLO829T to four further cancer cell lines, two breast (HCC1395, HCC1954) and two lung adenocarcinoma lines (H1437, H2009), three platforms each, tested with models trained on other tumors and with multi-tumor models (R1.7, R1.m1).
 
 **证据（内部）。**
 
+- 2026-10-19 用户：R3.8 不提 HapMap（审稿人在这里只是顺带提到 admixture，HapMap 由 R1.5 回答），HapMap 一句和 [待定] 删掉。
+- 2026-10-19 按外部建议（用户转来，用户同意）改写，原则："不是我们做不了 mosaicism，而是没有证据支持，所以主动收窄 claim"。旧版备份在 session scratchpad `R3.8.before_20261019.md`。
+  - "not built for" 改成 "has not been trained or validated for"；加了 "low allele fraction ≠ normal-tissue mosaicism"。
+  - 训练正样本 VAF 的具体数字（中位 0.53–0.54 HG008T / 0.46–0.51 COLO829T，低于 0.20 的 0.4–1.2 % / 6.5–7.3 %）从 Response 移到 Methods / Supplement，Response 只写 "predominantly moderate- to high-allele-fraction events"；数字的出处见下面原来的证据条目。
+  - 和其他 point 对齐（我加的三处）：(1) 癌症范围内的低 VAF 证据引 COLO829T purity dilution（R2.4，75 / 50 / 25 %），而不是 HapMap；(2) HapMap 一句和 R1.5 一致，HapMap 是删掉还是放 Supplement 用户还没定，所以加了 [待定]：放 Supplement 就保留这句，删掉就整句删；(3) 原来的 "[待补: the lines with final results]" 换成四株细胞系的名字和平台（R1.7 / R1.m1 已有初步结果；没写数字，因为 multicancer 的 ONT 和 normbq 还会改）。
+  - "candidate configuration requires at least three ALT-supporting reads and an allele fraction of at least 0.08"：R3.m1 Candidates 一条。
+  - 要真的改正文：标题（现在是 "...identifying somatic variants using pangenome graphs"）、摘要、结果、讨论都要改成 tumor-only cancer calling；标题怎么改由用户定。
 - 2026-10-15 E1.6/E9h/E22/E11b-ONT（本条用到 E22 check 1；Response 不改，状态仍是已解决）：E22（`experiments/E22_truth_and_version_checks/README.md` check 1）查了 CASTLE truth。HCC1954 truth 没有 germline 问题（1 个 truth SNV 是 normal genotype 的 allele，2.39 % 是常见 gnomAD allele，没有 normal-LOH 段），所以下面 "HCC1954T 的低分更可能和 truth / germline 标签有关" 一句已过时：它的低 precision 是模型的 germline leakage（FP 93.4–99.2 % 是 normal 的 germline 同 allele，E4b），R1.7 / R1.m1 的 Response 已这样写。H1437 truth 约 30 % 是 B-lymphoblastoid normal 因 LOH 丢掉的 germline allele（chr9q、chr1:9–12 Mb），chr1 上可忽略（19 / 4,266），H2009 约 5 %。对本条最后一段的细胞系名单：HCC1954 可以照常列出（不再是 truth 问题），H1437 的 chr1 结果可用，训练怎么处理是 R1.7 / R1.m1 / R2.2 的用户决定。
 
 - 2026-10-15 结果并入（Response 不改，状态仍是已解决）：
@@ -3501,7 +3606,7 @@ INDEL accuracy is thus limited by overlap with population alleles, long-read hom
 We agree. One parameter table (Supplementary Table [待补]) now serves the main and Supplementary Methods, and every value is recorded in each run's manifest and checkpoint; re-running prediction and evaluation of 30 in-sample checkpoints on a second cluster reproduces the reported chr1 F1 within 0.002 (R3.9). Where the texts disagreed, the values below were used for every reported result; the others (including 80–120 epochs) are superseded. "MAPQ ≤ 5" and "MAPQ ≥ 10" were two different steps, now both stated:
 
 - *Alignment:* vg Giraffe 1.66 for the GRCh38-only graph and, on HG008T, the HPRC v1.1 graph (d9 filter); on COLO829T v1.1, 1.64–1.66 (Fiber-seq, ONT) and ≤ 1.62 (Illumina), dated from the alignment files; 1.77 for the HPRC v2.1 graph (d46 filter).
-- *Node selection:* alignments with MAPQ > 5; a node is a target when more than 5% of its alignments carry an edit.
+- *Node selection:* alignments with MAPQ > 5; a node is a target when more than 5% of the reads aligned to it carry a mismatch, insertion or deletion on it.
 - *Candidates:* reads with MAPQ ≤ 10 are dropped; at least 3 ALT reads, each ALT observation with base quality ≥ 10 (per observation, not a mean); allele fraction ≥ 0.08 for SNVs and INDELs; INDELs up to 50 bp; at most 800 reads per node (deterministic subsampling).
 - *Tensors:* 8 channels × 200 rows × 101 columns (R1.m2).
 - *Training:* chromosomes 2–22, 5% of their ~1-Mb blocks held out for validation; chromosome 1 is the test chromosome. SNV: 50.4 M-parameter ConvNeXt, 20 epochs, class weights pow 0.75. INDEL: 8.7 M parameters, 12 epochs, square-root class weights. Both: learning rate 1e-4, batch 1,024 per GPU. The table lists the GPU count of every model and the deviations of eight HPRC v1.1 models, which were also retrained with the matched recipes (R3.1); SNV models of the reference comparison were trained with three seeds (R3.9). The checkpoint is the epoch with the best thresholded validation somatic F1.
@@ -3514,6 +3619,7 @@ The Methods now describe these upstream and downstream steps in the same detail 
 
 **证据（内部）。**
 
+- 2026-10-20 措辞：用户 10-19 要求 Response 不再用 "edit" 这类说法（读者不一定知道 edit 是什么，pansoma-1c 转达），改成 "perfectly aligned"（两端对齐、没有错配、indel 和 soft clip）或 "mismatch / indel"。本条改了："more than 5% of its alignments carry an edit" → "more than 5% of the reads aligned to it carry a mismatch, insertion or deletion on it"（pipeline 的 imperfect mapping：normalize 后任何非 match 的列，`indexed_gam_pipeline_v4/README.md` discover 一节）。数字没变。
 - 2026-10-19 Normalisation 一条按 f344bca 重写（commit 说明；`machine_learning/pansoma_net_v2/README.md` normalization 段）：
   - `encode.DATASET_NORM = (base_quality,)`。理由：MAPQ 来自 pipeline 自己的 vg 比对，各数据集的尺度相同（同平台 HG008T 和 COLO829T 差在 0.12 SD 以内）；BQ 随仪器、化学和 basecaller 变（HG008T / COLO829T ONT 均值 41.2 / 29.8）。
   - train 用该数据集全部染色体的 tensor 拟合统计量（不用 label），predict 对训练数据集用 checkpoint 里的那一行。

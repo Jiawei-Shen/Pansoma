@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-16 18:52",
+ "generated": "2026-10-20 00:43",
  "call_sets": [
   {
    "id": "COLO829_Illumina_SNV_linear_7fc7396__vcf_chr1",
@@ -107,6 +107,251 @@
    },
    "unplaced": {
     "unplaced_pass": 0,
+    "projected": false
+   },
+   "rgn_vs_bed": {
+    "extreme -> extreme": 234,
+    "easy -> easy": 1918,
+    "difficult -> difficult": 291
+   }
+  },
+  {
+   "id": "COLO829_Illumina_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "label": "COLO829T Illumina SNV d9",
+   "group": "insample",
+   "variant": "main",
+   "sample": "COLO829T",
+   "platform": "Illumina",
+   "kind": "SNV",
+   "arm": "d9",
+   "purity": "P100",
+   "smaht": {
+    "easy": {
+     "tpb": 1375,
+     "fn": 543,
+     "tpc": 1375,
+     "fp": 152,
+     "truth_tensor": 1584,
+     "tpb_tensor": 1375,
+     "precision": 0.9004584151931893,
+     "recall": 0.7168925964546402,
+     "f1": 0.7982583454281567,
+     "truth": 1918,
+     "calls": 1527,
+     "tensor_share": 0.8258602711157456,
+     "recall_with_tensor": 0.8680555555555556
+    },
+    "difficult": {
+     "tpb": 199,
+     "fn": 92,
+     "tpc": 199,
+     "fp": 69,
+     "truth_tensor": 246,
+     "tpb_tensor": 199,
+     "precision": 0.7425373134328358,
+     "recall": 0.6838487972508591,
+     "f1": 0.7119856887298748,
+     "truth": 291,
+     "calls": 268,
+     "tensor_share": 0.845360824742268,
+     "recall_with_tensor": 0.8089430894308943
+    },
+    "extreme": {
+     "tpb": 131,
+     "fn": 103,
+     "tpc": 131,
+     "fp": 1594,
+     "truth_tensor": 178,
+     "tpb_tensor": 131,
+     "precision": 0.07594202898550724,
+     "recall": 0.5598290598290598,
+     "f1": 0.13374170495150586,
+     "truth": 234,
+     "calls": 1725,
+     "tensor_share": 0.7606837606837606,
+     "recall_with_tensor": 0.7359550561797753
+    }
+   },
+   "repeat": {
+    "HP>=7": {
+     "tpb": 15,
+     "fn": 16,
+     "tpc": 15,
+     "fp": 26,
+     "truth_tensor": 24,
+     "tpb_tensor": 15,
+     "precision": 0.36585365853658536,
+     "recall": 0.4838709677419355,
+     "f1": 0.4166666666666667,
+     "truth": 31,
+     "calls": 41,
+     "tensor_share": 0.7741935483870968,
+     "recall_with_tensor": 0.625
+    },
+    "STR": {
+     "tpb": 79,
+     "fn": 48,
+     "tpc": 79,
+     "fp": 115,
+     "truth_tensor": 96,
+     "tpb_tensor": 79,
+     "precision": 0.4072164948453608,
+     "recall": 0.6220472440944882,
+     "f1": 0.4922118380062304,
+     "truth": 127,
+     "calls": 194,
+     "tensor_share": 0.7559055118110236,
+     "recall_with_tensor": 0.8229166666666666
+    },
+    "other": {
+     "tpb": 1611,
+     "fn": 674,
+     "tpc": 1611,
+     "fp": 1674,
+     "truth_tensor": 1888,
+     "tpb_tensor": 1611,
+     "precision": 0.4904109589041096,
+     "recall": 0.7050328227571115,
+     "f1": 0.578456014362657,
+     "truth": 2285,
+     "calls": 3285,
+     "tensor_share": 0.8262582056892779,
+     "recall_with_tensor": 0.8532838983050848
+    }
+   },
+   "unplaced": {
+    "unplaced_pass": 186,
+    "projected": true,
+    "tsv": "/scratch/jshen/data/reviewer_experiments_20261013/E9a_unplaced_projection/COLO829_Illumina_SNV_7fc7396_ddp4_b1024.projected.tsv",
+    "classes": {
+     "ii": 127,
+     "iii": 51,
+     "i": 8
+    },
+    "smaht": {
+     "difficult": 29,
+     "extreme": 83,
+     "easy": 23,
+     "no position": 51
+    },
+    "bench": {
+     "inside": 135,
+     "no position": 51
+    },
+    "total": 186
+   },
+   "rgn_vs_bed": {
+    "extreme -> extreme": 234,
+    "easy -> easy": 1918,
+    "difficult -> difficult": 291
+   }
+  },
+  {
+   "id": "COLO829_Illumina_SNV_7fc7396_ddp4_b1024__norescue__vcf_chr1",
+   "label": "COLO829T Illumina SNV d9 [norescue]",
+   "group": "insample",
+   "variant": "norescue",
+   "sample": "COLO829T",
+   "platform": "Illumina",
+   "kind": "SNV",
+   "arm": "d9",
+   "purity": "P100",
+   "smaht": {
+    "easy": {
+     "tpb": 1375,
+     "fn": 543,
+     "tpc": 1375,
+     "fp": 152,
+     "truth_tensor": 1584,
+     "tpb_tensor": 1375,
+     "precision": 0.9004584151931893,
+     "recall": 0.7168925964546402,
+     "f1": 0.7982583454281567,
+     "truth": 1918,
+     "calls": 1527,
+     "tensor_share": 0.8258602711157456,
+     "recall_with_tensor": 0.8680555555555556
+    },
+    "difficult": {
+     "tpb": 199,
+     "fn": 92,
+     "tpc": 199,
+     "fp": 69,
+     "truth_tensor": 246,
+     "tpb_tensor": 199,
+     "precision": 0.7425373134328358,
+     "recall": 0.6838487972508591,
+     "f1": 0.7119856887298748,
+     "truth": 291,
+     "calls": 268,
+     "tensor_share": 0.845360824742268,
+     "recall_with_tensor": 0.8089430894308943
+    },
+    "extreme": {
+     "tpb": 131,
+     "fn": 103,
+     "tpc": 131,
+     "fp": 1594,
+     "truth_tensor": 178,
+     "tpb_tensor": 131,
+     "precision": 0.07594202898550724,
+     "recall": 0.5598290598290598,
+     "f1": 0.13374170495150586,
+     "truth": 234,
+     "calls": 1725,
+     "tensor_share": 0.7606837606837606,
+     "recall_with_tensor": 0.7359550561797753
+    }
+   },
+   "repeat": {
+    "HP>=7": {
+     "tpb": 15,
+     "fn": 16,
+     "tpc": 15,
+     "fp": 26,
+     "truth_tensor": 24,
+     "tpb_tensor": 15,
+     "precision": 0.36585365853658536,
+     "recall": 0.4838709677419355,
+     "f1": 0.4166666666666667,
+     "truth": 31,
+     "calls": 41,
+     "tensor_share": 0.7741935483870968,
+     "recall_with_tensor": 0.625
+    },
+    "STR": {
+     "tpb": 79,
+     "fn": 48,
+     "tpc": 79,
+     "fp": 115,
+     "truth_tensor": 96,
+     "tpb_tensor": 79,
+     "precision": 0.4072164948453608,
+     "recall": 0.6220472440944882,
+     "f1": 0.4922118380062304,
+     "truth": 127,
+     "calls": 194,
+     "tensor_share": 0.7559055118110236,
+     "recall_with_tensor": 0.8229166666666666
+    },
+    "other": {
+     "tpb": 1611,
+     "fn": 674,
+     "tpc": 1611,
+     "fp": 1674,
+     "truth_tensor": 1888,
+     "tpb_tensor": 1611,
+     "precision": 0.4904109589041096,
+     "recall": 0.7050328227571115,
+     "f1": 0.578456014362657,
+     "truth": 2285,
+     "calls": 3285,
+     "tensor_share": 0.8262582056892779,
+     "recall_with_tensor": 0.8532838983050848
+    }
+   },
+   "unplaced": {
+    "unplaced_pass": 53,
     "projected": false
    },
    "rgn_vs_bed": {
@@ -475,6 +720,251 @@
    }
   },
   {
+   "id": "COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "label": "COLO829T fiberseq SNV d9",
+   "group": "insample",
+   "variant": "main",
+   "sample": "COLO829T",
+   "platform": "fiberseq",
+   "kind": "SNV",
+   "arm": "d9",
+   "purity": "P100",
+   "smaht": {
+    "easy": {
+     "tpb": 1426,
+     "fn": 492,
+     "tpc": 1426,
+     "fp": 195,
+     "truth_tensor": 1586,
+     "tpb_tensor": 1426,
+     "precision": 0.8797038864898211,
+     "recall": 0.7434827945776851,
+     "f1": 0.8058773664877084,
+     "truth": 1918,
+     "calls": 1621,
+     "tensor_share": 0.8269030239833159,
+     "recall_with_tensor": 0.8991172761664565
+    },
+    "difficult": {
+     "tpb": 203,
+     "fn": 88,
+     "tpc": 203,
+     "fp": 43,
+     "truth_tensor": 244,
+     "tpb_tensor": 203,
+     "precision": 0.8252032520325203,
+     "recall": 0.697594501718213,
+     "f1": 0.7560521415270018,
+     "truth": 291,
+     "calls": 246,
+     "tensor_share": 0.8384879725085911,
+     "recall_with_tensor": 0.8319672131147541
+    },
+    "extreme": {
+     "tpb": 136,
+     "fn": 98,
+     "tpc": 136,
+     "fp": 246,
+     "truth_tensor": 176,
+     "tpb_tensor": 136,
+     "precision": 0.35602094240837695,
+     "recall": 0.5811965811965812,
+     "f1": 0.44155844155844154,
+     "truth": 234,
+     "calls": 382,
+     "tensor_share": 0.7521367521367521,
+     "recall_with_tensor": 0.7727272727272727
+    }
+   },
+   "repeat": {
+    "HP>=7": {
+     "tpb": 15,
+     "fn": 16,
+     "tpc": 15,
+     "fp": 20,
+     "truth_tensor": 23,
+     "tpb_tensor": 15,
+     "precision": 0.42857142857142855,
+     "recall": 0.4838709677419355,
+     "f1": 0.4545454545454545,
+     "truth": 31,
+     "calls": 35,
+     "tensor_share": 0.7419354838709677,
+     "recall_with_tensor": 0.6521739130434783
+    },
+    "STR": {
+     "tpb": 80,
+     "fn": 47,
+     "tpc": 80,
+     "fp": 37,
+     "truth_tensor": 97,
+     "tpb_tensor": 80,
+     "precision": 0.6837606837606838,
+     "recall": 0.6299212598425197,
+     "f1": 0.6557377049180328,
+     "truth": 127,
+     "calls": 117,
+     "tensor_share": 0.7637795275590551,
+     "recall_with_tensor": 0.8247422680412371
+    },
+    "other": {
+     "tpb": 1670,
+     "fn": 615,
+     "tpc": 1670,
+     "fp": 427,
+     "truth_tensor": 1886,
+     "tpb_tensor": 1670,
+     "precision": 0.7963757749165474,
+     "recall": 0.7308533916849015,
+     "f1": 0.7622090369694203,
+     "truth": 2285,
+     "calls": 2097,
+     "tensor_share": 0.825382932166302,
+     "recall_with_tensor": 0.8854718981972428
+    }
+   },
+   "unplaced": {
+    "unplaced_pass": 1483,
+    "projected": true,
+    "tsv": "/scratch/jshen/data/reviewer_experiments_20261013/E9a_unplaced_projection/COLO829_fiberseq_SNV_7fc7396_ddp4_b1024.projected.tsv",
+    "classes": {
+     "i": 48,
+     "ii": 1241,
+     "iii": 194
+    },
+    "smaht": {
+     "easy": 411,
+     "difficult": 388,
+     "extreme": 490,
+     "no position": 194
+    },
+    "bench": {
+     "inside": 1289,
+     "no position": 194
+    },
+    "total": 1483
+   },
+   "rgn_vs_bed": {
+    "extreme -> extreme": 234,
+    "easy -> easy": 1918,
+    "difficult -> difficult": 291
+   }
+  },
+  {
+   "id": "COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__norescue__vcf_chr1",
+   "label": "COLO829T fiberseq SNV d9 [norescue]",
+   "group": "insample",
+   "variant": "norescue",
+   "sample": "COLO829T",
+   "platform": "fiberseq",
+   "kind": "SNV",
+   "arm": "d9",
+   "purity": "P100",
+   "smaht": {
+    "easy": {
+     "tpb": 1426,
+     "fn": 492,
+     "tpc": 1426,
+     "fp": 195,
+     "truth_tensor": 1586,
+     "tpb_tensor": 1426,
+     "precision": 0.8797038864898211,
+     "recall": 0.7434827945776851,
+     "f1": 0.8058773664877084,
+     "truth": 1918,
+     "calls": 1621,
+     "tensor_share": 0.8269030239833159,
+     "recall_with_tensor": 0.8991172761664565
+    },
+    "difficult": {
+     "tpb": 203,
+     "fn": 88,
+     "tpc": 203,
+     "fp": 43,
+     "truth_tensor": 244,
+     "tpb_tensor": 203,
+     "precision": 0.8252032520325203,
+     "recall": 0.697594501718213,
+     "f1": 0.7560521415270018,
+     "truth": 291,
+     "calls": 246,
+     "tensor_share": 0.8384879725085911,
+     "recall_with_tensor": 0.8319672131147541
+    },
+    "extreme": {
+     "tpb": 136,
+     "fn": 98,
+     "tpc": 136,
+     "fp": 246,
+     "truth_tensor": 176,
+     "tpb_tensor": 136,
+     "precision": 0.35602094240837695,
+     "recall": 0.5811965811965812,
+     "f1": 0.44155844155844154,
+     "truth": 234,
+     "calls": 382,
+     "tensor_share": 0.7521367521367521,
+     "recall_with_tensor": 0.7727272727272727
+    }
+   },
+   "repeat": {
+    "HP>=7": {
+     "tpb": 15,
+     "fn": 16,
+     "tpc": 15,
+     "fp": 20,
+     "truth_tensor": 23,
+     "tpb_tensor": 15,
+     "precision": 0.42857142857142855,
+     "recall": 0.4838709677419355,
+     "f1": 0.4545454545454545,
+     "truth": 31,
+     "calls": 35,
+     "tensor_share": 0.7419354838709677,
+     "recall_with_tensor": 0.6521739130434783
+    },
+    "STR": {
+     "tpb": 80,
+     "fn": 47,
+     "tpc": 80,
+     "fp": 37,
+     "truth_tensor": 97,
+     "tpb_tensor": 80,
+     "precision": 0.6837606837606838,
+     "recall": 0.6299212598425197,
+     "f1": 0.6557377049180328,
+     "truth": 127,
+     "calls": 117,
+     "tensor_share": 0.7637795275590551,
+     "recall_with_tensor": 0.8247422680412371
+    },
+    "other": {
+     "tpb": 1670,
+     "fn": 615,
+     "tpc": 1670,
+     "fp": 427,
+     "truth_tensor": 1886,
+     "tpb_tensor": 1670,
+     "precision": 0.7963757749165474,
+     "recall": 0.7308533916849015,
+     "f1": 0.7622090369694203,
+     "truth": 2285,
+     "calls": 2097,
+     "tensor_share": 0.825382932166302,
+     "recall_with_tensor": 0.8854718981972428
+    }
+   },
+   "unplaced": {
+    "unplaced_pass": 35,
+    "projected": false
+   },
+   "rgn_vs_bed": {
+    "extreme -> extreme": 234,
+    "easy -> easy": 1918,
+    "difficult -> difficult": 291
+   }
+  },
+  {
    "id": "COLO829_fiberseq_SNV_d46_7fc7396__vcf_chr1",
    "label": "COLO829T fiberseq SNV d46",
    "group": "insample",
@@ -825,6 +1315,251 @@
    },
    "unplaced": {
     "unplaced_pass": 0,
+    "projected": false
+   },
+   "rgn_vs_bed": {
+    "extreme -> extreme": 234,
+    "easy -> easy": 1918,
+    "difficult -> difficult": 291
+   }
+  },
+  {
+   "id": "COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "label": "COLO829T ONT SNV d9",
+   "group": "insample",
+   "variant": "main",
+   "sample": "COLO829T",
+   "platform": "ONT",
+   "kind": "SNV",
+   "arm": "d9",
+   "purity": "P100",
+   "smaht": {
+    "easy": {
+     "tpb": 1377,
+     "fn": 541,
+     "tpc": 1377,
+     "fp": 263,
+     "truth_tensor": 1574,
+     "tpb_tensor": 1377,
+     "precision": 0.8396341463414634,
+     "recall": 0.7179353493222106,
+     "f1": 0.7740303541315344,
+     "truth": 1918,
+     "calls": 1640,
+     "tensor_share": 0.8206465067778936,
+     "recall_with_tensor": 0.874841168996188
+    },
+    "difficult": {
+     "tpb": 204,
+     "fn": 87,
+     "tpc": 204,
+     "fp": 62,
+     "truth_tensor": 244,
+     "tpb_tensor": 204,
+     "precision": 0.7669172932330827,
+     "recall": 0.7010309278350515,
+     "f1": 0.7324955116696588,
+     "truth": 291,
+     "calls": 266,
+     "tensor_share": 0.8384879725085911,
+     "recall_with_tensor": 0.8360655737704918
+    },
+    "extreme": {
+     "tpb": 131,
+     "fn": 103,
+     "tpc": 131,
+     "fp": 121,
+     "truth_tensor": 180,
+     "tpb_tensor": 131,
+     "precision": 0.5198412698412699,
+     "recall": 0.5598290598290598,
+     "f1": 0.5390946502057613,
+     "truth": 234,
+     "calls": 252,
+     "tensor_share": 0.7692307692307693,
+     "recall_with_tensor": 0.7277777777777777
+    }
+   },
+   "repeat": {
+    "HP>=7": {
+     "tpb": 14,
+     "fn": 17,
+     "tpc": 14,
+     "fp": 50,
+     "truth_tensor": 24,
+     "tpb_tensor": 14,
+     "precision": 0.21875,
+     "recall": 0.45161290322580644,
+     "f1": 0.29473684210526313,
+     "truth": 31,
+     "calls": 64,
+     "tensor_share": 0.7741935483870968,
+     "recall_with_tensor": 0.5833333333333334
+    },
+    "STR": {
+     "tpb": 79,
+     "fn": 48,
+     "tpc": 79,
+     "fp": 37,
+     "truth_tensor": 100,
+     "tpb_tensor": 79,
+     "precision": 0.6810344827586207,
+     "recall": 0.6220472440944882,
+     "f1": 0.6502057613168724,
+     "truth": 127,
+     "calls": 116,
+     "tensor_share": 0.7874015748031497,
+     "recall_with_tensor": 0.79
+    },
+    "other": {
+     "tpb": 1619,
+     "fn": 666,
+     "tpc": 1619,
+     "fp": 359,
+     "truth_tensor": 1874,
+     "tpb_tensor": 1619,
+     "precision": 0.8185035389282103,
+     "recall": 0.7085339168490153,
+     "f1": 0.759558996012198,
+     "truth": 2285,
+     "calls": 1978,
+     "tensor_share": 0.8201312910284464,
+     "recall_with_tensor": 0.8639274279615795
+    }
+   },
+   "unplaced": {
+    "unplaced_pass": 3421,
+    "projected": true,
+    "tsv": "/scratch/jshen/data/reviewer_experiments_20261013/E9a_unplaced_projection/COLO829_ONT_SNV_7fc7396_ddp4_b1024.projected.tsv",
+    "classes": {
+     "ii": 1718,
+     "i": 75,
+     "iii": 1628
+    },
+    "smaht": {
+     "extreme": 1118,
+     "easy": 277,
+     "difficult": 398,
+     "no position": 1628
+    },
+    "bench": {
+     "inside": 1793,
+     "no position": 1628
+    },
+    "total": 3421
+   },
+   "rgn_vs_bed": {
+    "extreme -> extreme": 234,
+    "easy -> easy": 1918,
+    "difficult -> difficult": 291
+   }
+  },
+  {
+   "id": "COLO829_ONT_SNV_7fc7396_ddp4_b1024__norescue__vcf_chr1",
+   "label": "COLO829T ONT SNV d9 [norescue]",
+   "group": "insample",
+   "variant": "norescue",
+   "sample": "COLO829T",
+   "platform": "ONT",
+   "kind": "SNV",
+   "arm": "d9",
+   "purity": "P100",
+   "smaht": {
+    "easy": {
+     "tpb": 1377,
+     "fn": 541,
+     "tpc": 1377,
+     "fp": 263,
+     "truth_tensor": 1574,
+     "tpb_tensor": 1377,
+     "precision": 0.8396341463414634,
+     "recall": 0.7179353493222106,
+     "f1": 0.7740303541315344,
+     "truth": 1918,
+     "calls": 1640,
+     "tensor_share": 0.8206465067778936,
+     "recall_with_tensor": 0.874841168996188
+    },
+    "difficult": {
+     "tpb": 204,
+     "fn": 87,
+     "tpc": 204,
+     "fp": 62,
+     "truth_tensor": 244,
+     "tpb_tensor": 204,
+     "precision": 0.7669172932330827,
+     "recall": 0.7010309278350515,
+     "f1": 0.7324955116696588,
+     "truth": 291,
+     "calls": 266,
+     "tensor_share": 0.8384879725085911,
+     "recall_with_tensor": 0.8360655737704918
+    },
+    "extreme": {
+     "tpb": 131,
+     "fn": 103,
+     "tpc": 131,
+     "fp": 121,
+     "truth_tensor": 180,
+     "tpb_tensor": 131,
+     "precision": 0.5198412698412699,
+     "recall": 0.5598290598290598,
+     "f1": 0.5390946502057613,
+     "truth": 234,
+     "calls": 252,
+     "tensor_share": 0.7692307692307693,
+     "recall_with_tensor": 0.7277777777777777
+    }
+   },
+   "repeat": {
+    "HP>=7": {
+     "tpb": 14,
+     "fn": 17,
+     "tpc": 14,
+     "fp": 50,
+     "truth_tensor": 24,
+     "tpb_tensor": 14,
+     "precision": 0.21875,
+     "recall": 0.45161290322580644,
+     "f1": 0.29473684210526313,
+     "truth": 31,
+     "calls": 64,
+     "tensor_share": 0.7741935483870968,
+     "recall_with_tensor": 0.5833333333333334
+    },
+    "STR": {
+     "tpb": 79,
+     "fn": 48,
+     "tpc": 79,
+     "fp": 37,
+     "truth_tensor": 100,
+     "tpb_tensor": 79,
+     "precision": 0.6810344827586207,
+     "recall": 0.6220472440944882,
+     "f1": 0.6502057613168724,
+     "truth": 127,
+     "calls": 116,
+     "tensor_share": 0.7874015748031497,
+     "recall_with_tensor": 0.79
+    },
+    "other": {
+     "tpb": 1619,
+     "fn": 666,
+     "tpc": 1619,
+     "fp": 359,
+     "truth_tensor": 1874,
+     "tpb_tensor": 1619,
+     "precision": 0.8185035389282103,
+     "recall": 0.7085339168490153,
+     "f1": 0.759558996012198,
+     "truth": 2285,
+     "calls": 1978,
+     "tensor_share": 0.8201312910284464,
+     "recall_with_tensor": 0.8639274279615795
+    }
+   },
+   "unplaced": {
+    "unplaced_pass": 152,
     "projected": false
    },
    "rgn_vs_bed": {
@@ -3527,6 +4262,234 @@
    }
   },
   {
+   "id": "COLO829_Illumina_INDEL_7fc7396__vcf_chr1",
+   "label": "COLO829T Illumina INDEL d9",
+   "group": "insample",
+   "variant": "main",
+   "sample": "COLO829T",
+   "platform": "Illumina",
+   "kind": "INDEL",
+   "arm": "d9",
+   "purity": "P100",
+   "smaht": {
+    "easy": {
+     "tpb": 18,
+     "fn": 10,
+     "tpc": 18,
+     "fp": 117,
+     "truth_tensor": 22,
+     "tpb_tensor": 18,
+     "precision": 0.13333333333333333,
+     "recall": 0.6428571428571429,
+     "f1": 0.22085889570552147,
+     "truth": 28,
+     "calls": 135,
+     "tensor_share": 0.7857142857142857,
+     "recall_with_tensor": 0.8181818181818182
+    },
+    "difficult": {
+     "tpb": 9,
+     "fn": 30,
+     "tpc": 9,
+     "fp": 141,
+     "truth_tensor": 17,
+     "tpb_tensor": 9,
+     "precision": 0.06,
+     "recall": 0.23076923076923078,
+     "f1": 0.09523809523809523,
+     "truth": 39,
+     "calls": 150,
+     "tensor_share": 0.4358974358974359,
+     "recall_with_tensor": 0.5294117647058824
+    },
+    "extreme": {
+     "tpb": 9,
+     "fn": 55,
+     "tpc": 9,
+     "fp": 264,
+     "truth_tensor": 18,
+     "tpb_tensor": 9,
+     "precision": 0.03296703296703297,
+     "recall": 0.140625,
+     "f1": 0.053412462908011875,
+     "truth": 64,
+     "calls": 273,
+     "tensor_share": 0.28125,
+     "recall_with_tensor": 0.5
+    }
+   },
+   "repeat": {
+    "HP>=7": {
+     "tpb": 20,
+     "fn": 50,
+     "tpc": 20,
+     "fp": 313,
+     "truth_tensor": 37,
+     "tpb_tensor": 20,
+     "precision": 0.06006006006006006,
+     "recall": 0.2857142857142857,
+     "f1": 0.09925558312655088,
+     "truth": 70,
+     "calls": 333,
+     "tensor_share": 0.5285714285714286,
+     "recall_with_tensor": 0.5405405405405406
+    },
+    "STR": {
+     "tpb": 1,
+     "fn": 26,
+     "tpc": 1,
+     "fp": 51,
+     "truth_tensor": 4,
+     "tpb_tensor": 1,
+     "precision": 0.019230769230769232,
+     "recall": 0.037037037037037035,
+     "f1": 0.025316455696202535,
+     "truth": 27,
+     "calls": 52,
+     "tensor_share": 0.14814814814814814,
+     "recall_with_tensor": 0.25
+    },
+    "other": {
+     "tpb": 15,
+     "fn": 19,
+     "tpc": 15,
+     "fp": 158,
+     "truth_tensor": 16,
+     "tpb_tensor": 15,
+     "precision": 0.08670520231213873,
+     "recall": 0.4411764705882353,
+     "f1": 0.14492753623188404,
+     "truth": 34,
+     "calls": 173,
+     "tensor_share": 0.47058823529411764,
+     "recall_with_tensor": 0.9375
+    }
+   },
+   "unplaced": {
+    "unplaced_pass": 590,
+    "projected": false
+   },
+   "rgn_vs_bed": {
+    "easy -> easy": 28,
+    "extreme -> extreme": 64,
+    "difficult -> difficult": 39
+   }
+  },
+  {
+   "id": "COLO829_Illumina_INDEL_7fc7396__vcf_chr1_valbest",
+   "label": "COLO829T Illumina INDEL d9 [valbest]",
+   "group": "insample",
+   "variant": "valbest",
+   "sample": "COLO829T",
+   "platform": "Illumina",
+   "kind": "INDEL",
+   "arm": "d9",
+   "purity": "P100",
+   "smaht": {
+    "easy": {
+     "tpb": 3,
+     "fn": 25,
+     "tpc": 3,
+     "fp": 3,
+     "truth_tensor": 22,
+     "tpb_tensor": 3,
+     "precision": 0.5,
+     "recall": 0.10714285714285714,
+     "f1": 0.17647058823529413,
+     "truth": 28,
+     "calls": 6,
+     "tensor_share": 0.7857142857142857,
+     "recall_with_tensor": 0.13636363636363635
+    },
+    "difficult": {
+     "tpb": 3,
+     "fn": 36,
+     "tpc": 3,
+     "fp": 2,
+     "truth_tensor": 17,
+     "tpb_tensor": 3,
+     "precision": 0.6,
+     "recall": 0.07692307692307693,
+     "f1": 0.13636363636363635,
+     "truth": 39,
+     "calls": 5,
+     "tensor_share": 0.4358974358974359,
+     "recall_with_tensor": 0.17647058823529413
+    },
+    "extreme": {
+     "tpb": 0,
+     "fn": 64,
+     "tpc": 0,
+     "fp": 9,
+     "truth_tensor": 18,
+     "tpb_tensor": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "truth": 64,
+     "calls": 9,
+     "tensor_share": 0.28125,
+     "recall_with_tensor": 0.0
+    }
+   },
+   "repeat": {
+    "HP>=7": {
+     "tpb": 4,
+     "fn": 66,
+     "tpc": 4,
+     "fp": 9,
+     "truth_tensor": 37,
+     "tpb_tensor": 4,
+     "precision": 0.3076923076923077,
+     "recall": 0.05714285714285714,
+     "f1": 0.09638554216867469,
+     "truth": 70,
+     "calls": 13,
+     "tensor_share": 0.5285714285714286,
+     "recall_with_tensor": 0.10810810810810811
+    },
+    "STR": {
+     "tpb": 0,
+     "fn": 27,
+     "tpc": 0,
+     "fp": 1,
+     "truth_tensor": 4,
+     "tpb_tensor": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "truth": 27,
+     "calls": 1,
+     "tensor_share": 0.14814814814814814,
+     "recall_with_tensor": 0.0
+    },
+    "other": {
+     "tpb": 2,
+     "fn": 32,
+     "tpc": 2,
+     "fp": 4,
+     "truth_tensor": 16,
+     "tpb_tensor": 2,
+     "precision": 0.3333333333333333,
+     "recall": 0.058823529411764705,
+     "f1": 0.1,
+     "truth": 34,
+     "calls": 6,
+     "tensor_share": 0.47058823529411764,
+     "recall_with_tensor": 0.125
+    }
+   },
+   "unplaced": {
+    "unplaced_pass": 7,
+    "projected": false
+   },
+   "rgn_vs_bed": {
+    "easy -> easy": 28,
+    "difficult -> difficult": 39,
+    "extreme -> extreme": 64
+   }
+  },
+  {
    "id": "COLO829_Illumina_INDEL_d46_7fc7396__vcf_chr1",
    "label": "COLO829T Illumina INDEL d46",
    "group": "insample",
@@ -3983,6 +4946,234 @@
    }
   },
   {
+   "id": "COLO829_fiberseq_INDEL_7fc7396__vcf_chr1",
+   "label": "COLO829T fiberseq INDEL d9",
+   "group": "insample",
+   "variant": "main",
+   "sample": "COLO829T",
+   "platform": "fiberseq",
+   "kind": "INDEL",
+   "arm": "d9",
+   "purity": "P100",
+   "smaht": {
+    "easy": {
+     "tpb": 18,
+     "fn": 10,
+     "tpc": 18,
+     "fp": 307,
+     "truth_tensor": 24,
+     "tpb_tensor": 18,
+     "precision": 0.055384615384615386,
+     "recall": 0.6428571428571429,
+     "f1": 0.1019830028328612,
+     "truth": 28,
+     "calls": 325,
+     "tensor_share": 0.8571428571428571,
+     "recall_with_tensor": 0.75
+    },
+    "difficult": {
+     "tpb": 9,
+     "fn": 30,
+     "tpc": 9,
+     "fp": 876,
+     "truth_tensor": 20,
+     "tpb_tensor": 9,
+     "precision": 0.010169491525423728,
+     "recall": 0.23076923076923078,
+     "f1": 0.01948051948051948,
+     "truth": 39,
+     "calls": 885,
+     "tensor_share": 0.5128205128205128,
+     "recall_with_tensor": 0.45
+    },
+    "extreme": {
+     "tpb": 8,
+     "fn": 56,
+     "tpc": 8,
+     "fp": 1554,
+     "truth_tensor": 23,
+     "tpb_tensor": 8,
+     "precision": 0.005121638924455826,
+     "recall": 0.125,
+     "f1": 0.009840098400984008,
+     "truth": 64,
+     "calls": 1562,
+     "tensor_share": 0.359375,
+     "recall_with_tensor": 0.34782608695652173
+    }
+   },
+   "repeat": {
+    "HP>=7": {
+     "tpb": 20,
+     "fn": 50,
+     "tpc": 20,
+     "fp": 2084,
+     "truth_tensor": 45,
+     "tpb_tensor": 20,
+     "precision": 0.009505703422053232,
+     "recall": 0.2857142857142857,
+     "f1": 0.01839926402943882,
+     "truth": 70,
+     "calls": 2104,
+     "tensor_share": 0.6428571428571429,
+     "recall_with_tensor": 0.4444444444444444
+    },
+    "STR": {
+     "tpb": 1,
+     "fn": 26,
+     "tpc": 1,
+     "fp": 179,
+     "truth_tensor": 4,
+     "tpb_tensor": 1,
+     "precision": 0.005555555555555556,
+     "recall": 0.037037037037037035,
+     "f1": 0.00966183574879227,
+     "truth": 27,
+     "calls": 180,
+     "tensor_share": 0.14814814814814814,
+     "recall_with_tensor": 0.25
+    },
+    "other": {
+     "tpb": 14,
+     "fn": 20,
+     "tpc": 14,
+     "fp": 474,
+     "truth_tensor": 18,
+     "tpb_tensor": 14,
+     "precision": 0.028688524590163935,
+     "recall": 0.4117647058823529,
+     "f1": 0.05363984674329503,
+     "truth": 34,
+     "calls": 488,
+     "tensor_share": 0.5294117647058824,
+     "recall_with_tensor": 0.7777777777777778
+    }
+   },
+   "unplaced": {
+    "unplaced_pass": 1357,
+    "projected": false
+   },
+   "rgn_vs_bed": {
+    "easy -> easy": 28,
+    "difficult -> difficult": 39,
+    "extreme -> extreme": 64
+   }
+  },
+  {
+   "id": "COLO829_fiberseq_INDEL_7fc7396__vcf_chr1_valbest",
+   "label": "COLO829T fiberseq INDEL d9 [valbest]",
+   "group": "insample",
+   "variant": "valbest",
+   "sample": "COLO829T",
+   "platform": "fiberseq",
+   "kind": "INDEL",
+   "arm": "d9",
+   "purity": "P100",
+   "smaht": {
+    "easy": {
+     "tpb": 0,
+     "fn": 28,
+     "tpc": 0,
+     "fp": 1,
+     "truth_tensor": 24,
+     "tpb_tensor": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "truth": 28,
+     "calls": 1,
+     "tensor_share": 0.8571428571428571,
+     "recall_with_tensor": 0.0
+    },
+    "difficult": {
+     "tpb": 2,
+     "fn": 37,
+     "tpc": 2,
+     "fp": 3,
+     "truth_tensor": 20,
+     "tpb_tensor": 2,
+     "precision": 0.4,
+     "recall": 0.05128205128205128,
+     "f1": 0.09090909090909091,
+     "truth": 39,
+     "calls": 5,
+     "tensor_share": 0.5128205128205128,
+     "recall_with_tensor": 0.1
+    },
+    "extreme": {
+     "tpb": 1,
+     "fn": 63,
+     "tpc": 1,
+     "fp": 7,
+     "truth_tensor": 23,
+     "tpb_tensor": 1,
+     "precision": 0.125,
+     "recall": 0.015625,
+     "f1": 0.027777777777777776,
+     "truth": 64,
+     "calls": 8,
+     "tensor_share": 0.359375,
+     "recall_with_tensor": 0.043478260869565216
+    }
+   },
+   "repeat": {
+    "HP>=7": {
+     "tpb": 3,
+     "fn": 67,
+     "tpc": 3,
+     "fp": 9,
+     "truth_tensor": 45,
+     "tpb_tensor": 3,
+     "precision": 0.25,
+     "recall": 0.04285714285714286,
+     "f1": 0.07317073170731707,
+     "truth": 70,
+     "calls": 12,
+     "tensor_share": 0.6428571428571429,
+     "recall_with_tensor": 0.06666666666666667
+    },
+    "STR": {
+     "tpb": 0,
+     "fn": 27,
+     "tpc": 0,
+     "fp": 0,
+     "truth_tensor": 4,
+     "tpb_tensor": 0,
+     "precision": null,
+     "recall": 0.0,
+     "f1": null,
+     "truth": 27,
+     "calls": 0,
+     "tensor_share": 0.14814814814814814,
+     "recall_with_tensor": 0.0
+    },
+    "other": {
+     "tpb": 0,
+     "fn": 34,
+     "tpc": 0,
+     "fp": 2,
+     "truth_tensor": 18,
+     "tpb_tensor": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "truth": 34,
+     "calls": 2,
+     "tensor_share": 0.5294117647058824,
+     "recall_with_tensor": 0.0
+    }
+   },
+   "unplaced": {
+    "unplaced_pass": 0,
+    "projected": false
+   },
+   "rgn_vs_bed": {
+    "extreme -> extreme": 64,
+    "difficult -> difficult": 39,
+    "easy -> easy": 28
+   }
+  },
+  {
    "id": "COLO829_fiberseq_INDEL_d46_7fc7396__vcf_chr1",
    "label": "COLO829T fiberseq INDEL d46",
    "group": "insample",
@@ -4430,6 +5621,234 @@
    },
    "unplaced": {
     "unplaced_pass": 0,
+    "projected": false
+   },
+   "rgn_vs_bed": {
+    "easy -> easy": 28,
+    "extreme -> extreme": 64,
+    "difficult -> difficult": 39
+   }
+  },
+  {
+   "id": "COLO829_ONT_INDEL_7fc7396__vcf_chr1",
+   "label": "COLO829T ONT INDEL d9",
+   "group": "insample",
+   "variant": "main",
+   "sample": "COLO829T",
+   "platform": "ONT",
+   "kind": "INDEL",
+   "arm": "d9",
+   "purity": "P100",
+   "smaht": {
+    "easy": {
+     "tpb": 18,
+     "fn": 10,
+     "tpc": 18,
+     "fp": 4126,
+     "truth_tensor": 23,
+     "tpb_tensor": 18,
+     "precision": 0.004343629343629344,
+     "recall": 0.6428571428571429,
+     "f1": 0.00862895493767977,
+     "truth": 28,
+     "calls": 4144,
+     "tensor_share": 0.8214285714285714,
+     "recall_with_tensor": 0.782608695652174
+    },
+    "difficult": {
+     "tpb": 7,
+     "fn": 32,
+     "tpc": 7,
+     "fp": 8011,
+     "truth_tensor": 21,
+     "tpb_tensor": 7,
+     "precision": 0.000873035669743078,
+     "recall": 0.1794871794871795,
+     "f1": 0.0017376194613379669,
+     "truth": 39,
+     "calls": 8018,
+     "tensor_share": 0.5384615384615384,
+     "recall_with_tensor": 0.3333333333333333
+    },
+    "extreme": {
+     "tpb": 7,
+     "fn": 57,
+     "tpc": 8,
+     "fp": 8937,
+     "truth_tensor": 25,
+     "tpb_tensor": 7,
+     "precision": 0.0008943543879262158,
+     "recall": 0.109375,
+     "f1": 0.0017742012134269014,
+     "truth": 64,
+     "calls": 8945,
+     "tensor_share": 0.390625,
+     "recall_with_tensor": 0.28
+    }
+   },
+   "repeat": {
+    "HP>=7": {
+     "tpb": 18,
+     "fn": 52,
+     "tpc": 18,
+     "fp": 16508,
+     "truth_tensor": 45,
+     "tpb_tensor": 18,
+     "precision": 0.0010891927871233208,
+     "recall": 0.2571428571428571,
+     "f1": 0.0021691973969631237,
+     "truth": 70,
+     "calls": 16526,
+     "tensor_share": 0.6428571428571429,
+     "recall_with_tensor": 0.4
+    },
+    "STR": {
+     "tpb": 1,
+     "fn": 26,
+     "tpc": 2,
+     "fp": 768,
+     "truth_tensor": 7,
+     "tpb_tensor": 1,
+     "precision": 0.0025974025974025974,
+     "recall": 0.037037037037037035,
+     "f1": 0.0048543689320388345,
+     "truth": 27,
+     "calls": 770,
+     "tensor_share": 0.25925925925925924,
+     "recall_with_tensor": 0.14285714285714285
+    },
+    "other": {
+     "tpb": 13,
+     "fn": 21,
+     "tpc": 13,
+     "fp": 3798,
+     "truth_tensor": 17,
+     "tpb_tensor": 13,
+     "precision": 0.003411178168459722,
+     "recall": 0.38235294117647056,
+     "f1": 0.006762028608582575,
+     "truth": 34,
+     "calls": 3811,
+     "tensor_share": 0.5,
+     "recall_with_tensor": 0.7647058823529411
+    }
+   },
+   "unplaced": {
+    "unplaced_pass": 6981,
+    "projected": false
+   },
+   "rgn_vs_bed": {
+    "easy -> easy": 28,
+    "difficult -> difficult": 39,
+    "extreme -> extreme": 64
+   }
+  },
+  {
+   "id": "COLO829_ONT_INDEL_7fc7396__vcf_chr1_valbest",
+   "label": "COLO829T ONT INDEL d9 [valbest]",
+   "group": "insample",
+   "variant": "valbest",
+   "sample": "COLO829T",
+   "platform": "ONT",
+   "kind": "INDEL",
+   "arm": "d9",
+   "purity": "P100",
+   "smaht": {
+    "easy": {
+     "tpb": 5,
+     "fn": 23,
+     "tpc": 5,
+     "fp": 18,
+     "truth_tensor": 23,
+     "tpb_tensor": 5,
+     "precision": 0.21739130434782608,
+     "recall": 0.17857142857142858,
+     "f1": 0.19607843137254902,
+     "truth": 28,
+     "calls": 23,
+     "tensor_share": 0.8214285714285714,
+     "recall_with_tensor": 0.21739130434782608
+    },
+    "difficult": {
+     "tpb": 0,
+     "fn": 39,
+     "tpc": 0,
+     "fp": 5,
+     "truth_tensor": 21,
+     "tpb_tensor": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "truth": 39,
+     "calls": 5,
+     "tensor_share": 0.5384615384615384,
+     "recall_with_tensor": 0.0
+    },
+    "extreme": {
+     "tpb": 0,
+     "fn": 64,
+     "tpc": 0,
+     "fp": 4,
+     "truth_tensor": 25,
+     "tpb_tensor": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "truth": 64,
+     "calls": 4,
+     "tensor_share": 0.390625,
+     "recall_with_tensor": 0.0
+    }
+   },
+   "repeat": {
+    "HP>=7": {
+     "tpb": 2,
+     "fn": 68,
+     "tpc": 2,
+     "fp": 10,
+     "truth_tensor": 45,
+     "tpb_tensor": 2,
+     "precision": 0.16666666666666666,
+     "recall": 0.02857142857142857,
+     "f1": 0.048780487804878044,
+     "truth": 70,
+     "calls": 12,
+     "tensor_share": 0.6428571428571429,
+     "recall_with_tensor": 0.044444444444444446
+    },
+    "STR": {
+     "tpb": 0,
+     "fn": 27,
+     "tpc": 0,
+     "fp": 0,
+     "truth_tensor": 7,
+     "tpb_tensor": 0,
+     "precision": null,
+     "recall": 0.0,
+     "f1": null,
+     "truth": 27,
+     "calls": 0,
+     "tensor_share": 0.25925925925925924,
+     "recall_with_tensor": 0.0
+    },
+    "other": {
+     "tpb": 3,
+     "fn": 31,
+     "tpc": 3,
+     "fp": 17,
+     "truth_tensor": 17,
+     "tpb_tensor": 3,
+     "precision": 0.15,
+     "recall": 0.08823529411764706,
+     "f1": 0.11111111111111112,
+     "truth": 34,
+     "calls": 20,
+     "tensor_share": 0.5,
+     "recall_with_tensor": 0.17647058823529413
+    }
+   },
+   "unplaced": {
+    "unplaced_pass": 2,
     "projected": false
    },
    "rgn_vs_bed": {

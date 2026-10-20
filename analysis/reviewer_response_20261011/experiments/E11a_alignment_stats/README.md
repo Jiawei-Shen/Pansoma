@@ -1,11 +1,81 @@
 # E11a: per-read alignment statistics of the same reads on four references
 
-Status: complete (2026-10-15; COLO829T Illumina GRCh38 BAM arm added 2026-10-19); see "Status" at the end. Tables:
+Status: complete (2026-10-15; COLO829T Illumina GRCh38 BAM arm and full data added 2026-10-19); see "Status" at the end. Tables:
 `results/tables.md` (written by `compare.py`, last run 2026-10-19 on COLO829T Illumina; the other five JSONs are from
 2026-10-15).
 
 In short: both tumors on all three platforms, every set on all four arms (GRCh38 BAM, GRCh38-only graph, HPRC v1.1 d9,
 HPRC v2.1 d46). The COLO829T Illumina BAM arm was added on 2026-10-19 (the SMaHT BAM, section 7).
+
+**Full data, chr1-22 (2026-10-19; the numbers R2.7 uses).** Every read of all 24 files (6 sets x 4 arms), counted when
+its alignment is on chr1-22, with the read counts and shares the user asked for: mapped reads, perfectly aligned, with
+substitution, with indel, with soft clipping. Section "Full data" below; scripts and tables in `full/`. The window (W)
+and 10 % name-hash (G) samples of the sections after it pair the same reads across arms (placement, MAPQ, strata).
+
+## Full data (chr1-22)
+
+Requested by the user on 2026-10-19 for R2.7: whole files instead of samples, chr1-22, Illumina / PacBio / ONT, four
+references, absolute read counts and proportions.
+
+- Counting (`full/gam_fullstats.c`, `full/bam_fullstats.c`, driver `full/full_scan.py`, table `full/collect_full.py`):
+  every record (one read, or one mate of a pair) placed on chr1-22. GAM: the contig holding most of the read's
+  GRCh38-path bases (the `scan_gam.read_stats` rule); reads on off-reference nodes only are "unplaced" and not counted.
+  BAM: primary records on chr1-22 (secondary, supplementary and flag 0x4 records placed at their mate are counted
+  separately and left out; duplicate-marked records are kept, as in the GAMs).
+- Per read: substitution = at least one mismatched base (GAM: an edit with from == to and a sequence, or a complex
+  edit; BAM: NM minus inserted and deleted bases); indel = an inserted or deleted base not at a read end (BAM: CIGAR I
+  or D); soft clipping = an insertion at the first or last edit (BAM: CIGAR S or H); perfect = mapped with none of them.
+- Checks: `gam_fullstats` gives the same counts as `scan_gam.read_stats` on three GAM segments (COLO829T Illumina d46,
+  129,000 records; HG008T ONT d46, 2,000; the unmapped head of the HG008T PacBio GRCh38-only GAM, 389,000) and
+  `bam_fullstats` the same as pysam on chr21:30.0-30.5 Mb of two BAMs. Every GAM's total record count equals the known
+  total (HG008T Illumina 2,974,694,440; COLO829T Illumina 2,479,603,422; long reads as the G scans) with no secondary
+  records; every BAM's chr1-22 primary + secondary + supplementary equals `samtools idxstats` (chr1-22 mapped), and
+  its mate-placed unmapped records equal the idxstats unmapped column.
+- Jobs (`tmp/reviewer_cpu_20261019/E11a_full/jobs.txt`): 446080, 446179, 446272, 446400, 446493, 446691; all done
+  2026-10-19 14:41-23:00. BeeGFS was the bottleneck (about 230 MB/s over all scans together); the BAM scans ran after
+  the GAM scans.
+- Outputs: `/scratch/jshen/data/reviewer_experiments_20261013/E11a_alignment_stats/full/<SET>.<ARM>.json` (per contig,
+  plus base-level sums: aligned, substituted, inserted, deleted, soft-clipped bases and indel events); `full/results.md`,
+  `full/results.tsv`, `full/summary.json` (also substituted bases and indel events per aligned kb, soft-clipped share
+  of read bases).
+
+Reads aligned to chr1-22, N (% of them) (`full/results.md`; "GRCh38 (linear, BAM)" = the GRCh38 BAM arm, "GRCh38
+graph" = the GRCh38-only graph):
+
+| tumor | platform | reference | mapped reads | perfectly aligned | with substitution | with indel | with soft clipping |
+|---|---|---|---:|---:|---:|---:|---:|
+| HG008T | Illumina | GRCh38 (linear, BAM) | 2,739,599,264 | 1,869,903,341 (68.25%) | 810,918,802 (29.60%) | 78,905,626 (2.88%) | 96,334,574 (3.52%) |
+| HG008T | Illumina | GRCh38 graph | 2,710,092,615 | 1,861,828,942 (68.70%) | 800,943,101 (29.55%) | 79,136,287 (2.92%) | 74,218,393 (2.74%) |
+| HG008T | Illumina | HPRC v1.1 graph | 2,704,033,209 | 2,121,622,695 (78.46%) | 560,922,772 (20.74%) | 21,774,798 (0.81%) | 66,387,175 (2.46%) |
+| HG008T | Illumina | HPRC v2.1 graph | 2,695,745,607 | 2,121,713,347 (78.71%) | 552,985,555 (20.51%) | 19,851,148 (0.74%) | 63,829,495 (2.37%) |
+| COLO829T | Illumina | GRCh38 (linear, BAM) | 2,296,226,777 | 1,604,645,813 (69.88%) | 627,386,769 (27.32%) | 72,684,106 (3.17%) | 95,094,133 (4.14%) |
+| COLO829T | Illumina | GRCh38 graph | 2,283,443,818 | 1,599,146,760 (70.03%) | 629,366,832 (27.56%) | 71,551,146 (3.13%) | 78,056,743 (3.42%) |
+| COLO829T | Illumina | HPRC v1.1 graph | 2,285,859,727 | 1,823,482,724 (79.77%) | 423,169,962 (18.51%) | 23,805,599 (1.04%) | 78,789,217 (3.45%) |
+| COLO829T | Illumina | HPRC v2.1 graph | 2,265,562,422 | 1,822,701,086 (80.45%) | 410,679,337 (18.13%) | 20,250,428 (0.89%) | 66,561,782 (2.94%) |
+| HG008T | PacBio HiFi | GRCh38 (linear, BAM) | 12,931,641 | 18,818 (0.15%) | 12,264,874 (94.84%) | 12,862,468 (99.47%) | 961,155 (7.43%) |
+| HG008T | PacBio HiFi | GRCh38 graph | 12,675,374 | 18,819 (0.15%) | 12,020,862 (94.84%) | 12,606,854 (99.46%) | 314,848 (2.48%) |
+| HG008T | PacBio HiFi | HPRC v1.1 graph | 12,689,479 | 179,824 (1.42%) | 8,558,774 (67.45%) | 12,377,219 (97.54%) | 228,857 (1.80%) |
+| HG008T | PacBio HiFi | HPRC v2.1 graph | 12,977,109 | 184,297 (1.42%) | 8,605,339 (66.31%) | 12,666,519 (97.61%) | 422,918 (3.26%) |
+| COLO829T | PacBio Fiber-seq | GRCh38 (linear, BAM) | 25,308,248 | 44,846 (0.18%) | 24,325,270 (96.12%) | 25,138,324 (99.33%) | 2,529,764 (10.00%) |
+| COLO829T | PacBio Fiber-seq | GRCh38 graph | 25,026,903 | 44,873 (0.18%) | 24,011,605 (95.94%) | 24,858,107 (99.33%) | 936,884 (3.74%) |
+| COLO829T | PacBio Fiber-seq | HPRC v1.1 graph | 25,070,732 | 386,300 (1.54%) | 18,732,761 (74.72%) | 24,353,478 (97.14%) | 717,920 (2.86%) |
+| COLO829T | PacBio Fiber-seq | HPRC v2.1 graph | 26,066,512 | 397,244 (1.52%) | 19,343,766 (74.21%) | 25,350,225 (97.25%) | 1,538,959 (5.90%) |
+| HG008T | ONT | GRCh38 (linear, BAM) | 3,208,600 | 43,815 (1.37%) | 3,009,593 (93.80%) | 3,084,419 (96.13%) | 1,215,595 (37.89%) |
+| HG008T | ONT | GRCh38 graph | 3,100,754 | 43,748 (1.41%) | 2,869,956 (92.56%) | 2,950,998 (95.17%) | 930,380 (30.00%) |
+| HG008T | ONT | HPRC v1.1 graph | 3,099,600 | 85,847 (2.77%) | 2,691,454 (86.83%) | 2,929,825 (94.52%) | 913,057 (29.46%) |
+| HG008T | ONT | HPRC v2.1 graph | 3,087,083 | 84,623 (2.74%) | 2,704,935 (87.62%) | 2,944,975 (95.40%) | 899,235 (29.13%) |
+| COLO829T | ONT | GRCh38 (linear, BAM) | 12,636,129 | 723 (0.01%) | 11,794,165 (93.34%) | 11,928,948 (94.40%) | 12,590,223 (99.64%) |
+| COLO829T | ONT | GRCh38 graph | 11,839,534 | 778 (0.01%) | 10,956,152 (92.54%) | 11,047,335 (93.31%) | 11,723,760 (99.02%) |
+| COLO829T | ONT | HPRC v1.1 graph | 11,877,368 | 1,121 (0.01%) | 10,662,112 (89.77%) | 11,030,919 (92.87%) | 11,760,246 (99.01%) |
+| COLO829T | ONT | HPRC v2.1 graph | 11,789,372 | 1,098 (0.01%) | 10,645,364 (90.30%) | 11,021,767 (93.49%) | 11,674,637 (99.03%) |
+
+- Illumina: +10.2 to +10.6 points perfectly aligned on HPRC v1.1 / v2.1 against linear GRCh38; the GRCh38-only graph is
+  within 0.5 points of the BAM. Fewer reads with a substitution (27-30 % -> 18-21 %) and with an indel (2.9-3.2 % ->
+  0.7-1.0 %); soft clipping 2.4-4.1 % everywhere.
+- PacBio: perfectly aligned 0.15-0.18 % -> 1.4-1.5 %; reads with a substitution 95-96 % -> 66-75 %; reads with an indel
+  99 % -> 97 %. Linear soft clipping (7.4 %, 10.0 %) is the pbmm2 primary of reads split into supplementary alignments.
+- ONT: HG008T perfectly aligned 1.4 % -> 2.7-2.8 %; COLO829T 0.01 % on every arm, and 99 % of its reads are
+  soft-clipped on every arm (not investigated; possibly untrimmed adapters).
 
 ## Question
 
@@ -1177,6 +1247,7 @@ Pairs by region (B relative to A):
 ## Status
 
 **DONE (2026-10-15; COLO829T Illumina BAM arm 2026-10-19).** Every scan job finished and `compare.py` has run on all six sets.
+Full data (chr1-22, all 24 files): done 2026-10-19 (section "Full data").
 
 - Scripts and design: `scan_gam.py`, `scan_bam.py`, `window_scan.py`, `choose_windows.py` (windows fixed), `compare.py`,
   `vg_stats_crosscheck.py` (`results/vg_stats_crosscheck.md`).

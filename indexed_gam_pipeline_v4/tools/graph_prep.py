@@ -3,6 +3,7 @@ index audit (the graph index itself: tools.graph_index_build; all steps as one j
 
     python -m indexed_gam_pipeline_v4.tools.graph_prep gfa --gbz G.gbz --output G.gfa [--threads 16] [--vg VG]
     python -m indexed_gam_pipeline_v4.tools.graph_prep ref-path-scan --gfa G.gfa --output DIR [--reference-sample GRCh38]
+        [--exclude-contigs chrY ...]
     python -m indexed_gam_pipeline_v4.tools.graph_prep ref-path-check --path DIR --graph-index DB --fasta FA [--samples 100000]
     python -m indexed_gam_pipeline_v4.tools.graph_prep components --gbz G.gbz --reference-path DIR --output DIR [--vg VG]
     python -m indexed_gam_pipeline_v4.tools.graph_prep chr-index --components-dir D --reference-path DIR --output PREFIX [--graph-index DB]
@@ -106,9 +107,12 @@ def reference_path_name(meta, contig):
     return f"{meta['reference_sample']}#{hap}#{contig}"
 
 
-def scan(gfa, output, reference_sample="GRCh38"):
+def scan(gfa, output, reference_sample="GRCh38", exclude_contigs=()):
     """Build the output directory from one streaming pass (awk prefilter) over `gfa`. The reference walks are the W
-    lines of `reference_sample`, or with GENERIC_SAMPLE the P lines (generic paths: hap 0, start 0)."""
+    lines of `reference_sample`, or with GENERIC_SAMPLE the P lines (generic paths: hap 0, start 0), except those of
+    `exclude_contigs`: a contig whose walks are not that reference's sequence (HPRC v1.1's CHM13 chrY is GRCh38's chrY)
+    is left off the path, so its nodes have no coordinate; its W lines are logged like any other walk."""
+    exclude = set(exclude_contigs)
     started = time.perf_counter()
     output = Path(output)
     if output.exists():
@@ -127,6 +131,8 @@ def scan(gfa, output, reference_sample="GRCh38"):
             if fields[0] == b"P":
                 if len(fields) < 3:
                     raise ValueError("Malformed GFA P line")
+                if fields[1].decode() in exclude:
+                    continue
                 ids, reverse = parse_path(fields[2])
                 paths.append((dict(sample=GENERIC_SAMPLE, hap="0", contig=fields[1].decode(), start=0, end=None,
                                    nodes=int(ids.size), min=int(ids.min()), max=int(ids.max())), ids, reverse))
@@ -134,7 +140,8 @@ def scan(gfa, output, reference_sample="GRCh38"):
             if len(fields) != 7:
                 raise ValueError("Malformed GFA W line")
             sample, hap, contig = (f.decode() for f in fields[1:4])
-            if sample == reference_sample:
+            on_path = sample == reference_sample and contig not in exclude
+            if on_path:
                 ids, reverse = parse_walk(fields[6])
             else:  # only the node count and ID range are recorded
                 ids = np.fromstring(fields[6].translate(SEPARATORS), dtype=np.int64, sep=" ")
@@ -145,7 +152,7 @@ def scan(gfa, output, reference_sample="GRCh38"):
             log.write(json.dumps(record) + "\n")
             n_walks += 1
             samples.add(sample)
-            if sample == reference_sample:
+            if on_path:
                 reference.append((record, ids, reverse))
     process.stdout.close()
     if process.wait():
@@ -202,6 +209,8 @@ def scan(gfa, output, reference_sample="GRCh38"):
                 contigs=contigs, reference_nodes=int(np.count_nonzero(visits)),
                 ambiguous_reference_nodes=int(np.count_nonzero(visits > 1)),
                 scan_seconds=time.perf_counter() - started, checks={})
+    if exclude:
+        meta["excluded_contigs"] = sorted(exclude)
     write_json(work / "meta.json", meta)
     work.rename(output)
     return meta
@@ -548,6 +557,9 @@ def main(argv=None):
     p.add_argument("--reference-sample", default="GRCh38",
                    help=f"sample of the reference W lines; {GENERIC_SAMPLE}: the generic paths, the GFA's P lines (a GBZ "
                         "built from a FASTA alone, e.g. a GRCh38-only vg autoindex graph)")
+    p.add_argument("--exclude-contigs", nargs="+", default=[], metavar="CONTIG",
+                   help="contigs left off the reference path (their nodes get no coordinate), e.g. chrY of the HPRC "
+                        "v1.1 graphs' CHM13, which is GRCh38's chrY")
 
     p = commands.add_parser("ref-path-check", help="check a ref-path directory against the graph index and a FASTA")
     p.add_argument("--path", required=True)
@@ -586,7 +598,7 @@ def main(argv=None):
                        processes=args.processes)
         result = {k: v for k, v in result.items() if k != "sequence_nodes"}
     elif args.command == "ref-path-scan":
-        result = scan(args.gfa, args.output, args.reference_sample)
+        result = scan(args.gfa, args.output, args.reference_sample, args.exclude_contigs)
         result = {k: v for k, v in result.items() if k != "contigs"}
     elif args.command == "ref-path-check":
         result = check(args.path, args.graph_index, args.fasta, args.samples)

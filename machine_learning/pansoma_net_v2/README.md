@@ -356,6 +356,32 @@ merge stored as the summaries' `grch38`.
   These are off-reference nodes, and deletions over nodes that are not GRCh38 neighbours. Placing them would
   need the graph's edges.
 
+**CHM13 VCF (optional).** The same `linear_vcf` on the graph's CHM13 reference path writes the calls in T2T-CHM13
+coordinates. Both HPRC graphs carry CHM13 as an unfiltered reference path next to GRCh38. The path is clipped
+(centromeric satellites, for example), so it is several walks per chromosome: 109 in d9, 93 in d46.
+
+```bash
+$P -m pansoma_net_v2.linear_vcf --graph-vcf out/HG008T_Illumina.SNV.graph.vcf.gz \
+    --reference-path $G/hprc-v1.1-mc-grch38.d9.chm13_path --fasta chm13v2.0.fa --output out/HG008T_Illumina.SNV.chm13.vcf.gz
+```
+
+- The CHM13 reference path is built once per graph: `graph_prep ref-path-scan --reference-sample CHM13`, then
+  `ref-path-check` against the CHM13 FASTA (`tools/jobs/graph_prep.sh` with `CHM13_FASTA=...` writes
+  `<graph>.chm13_path` next to `<graph>.grch38_path`). Use the FASTA it was checked with (its `meta.json`
+  `checks`). The two HPRC graphs differ, as their CHM13 paths compared base by base with the FASTAs show
+  (2026-10-19):
+  - v1.1 d9: chm13v2.0.fa (CHM13's own chrM), with `--exclude-contigs chrY`. Its CHM13 chrY walks are GRCh38's
+    chrY (0 differences over 23.9 Mb). With chrY on the path, calls there would get GRCh38 positions labelled
+    CHM13. The other 107 walks equal chm13v2.0.fa.
+  - v2.1 d46: chm13v2.0_maskedY_rCRS.fa (rCRS chrM), equal to it over all 93 walks.
+- The header says `##pansoma_coordinates=CHM13`. Records, merging, left-alignment and the REF check are those of the
+  GRCh38 VCF.
+- Unplaced on CHM13 (`<name>.chm13.unplaced.vcf.gz`): nodes off the CHM13 path. These include GRCh38's own alleles
+  where CHM13 differs, and the sequence the CHM13 path clips. A call can be placed on one reference and not on the
+  other, so the CHM13 and GRCh38 VCFs do not hold the same records.
+- No PoN and no evaluation: the PoN VCFs and the truth sets are on GRCh38.
+- `jobs/vcf.sh` writes it with `CHM13=1`, from the set's reference path (`.grch38_path` -> `.chm13_path`).
+
 **vcfeval.**
 
 - **PoN** (optional: `--pon` or `--pon-vcf`). `scripts/filter_panel_of_normals.py` with the four PoNs. It matches
@@ -589,7 +615,8 @@ cd machine_learning && $P -m unittest discover -s pansoma_net_v2/tests -t .
     `--min-af`; the off-reference rescue called by offref_call; no record for excluded tensors; a summary out of
     line; an event that does not fit the graph.
   - linear_vcf: projection equal to `ReferencePath.linear`, left-alignment, a merged junction insertion
-    (PASS kept, A1 reads summed), unplaced events, a FASTA that disagrees.
+    (PASS kept, A1 reads summed), unplaced events, a FASTA that disagrees; a CHM13 reference path of two walks
+    on one contig (the GRCh38 off-reference node placed, GRCh38's own node unplaced).
   - the PoN script: the rules of each kind and the homopolymer run.
   - vcfeval: record kinds, summary parsing (no baseline, NaN), the curve points. With rtg (`$RTG` or on PATH): PoN
     tags on calls and truth (a sites-only truth without ##contig), calls vs curve, `--pon-vcf` reuse and refusal,

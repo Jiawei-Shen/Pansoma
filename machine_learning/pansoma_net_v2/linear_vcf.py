@@ -1,14 +1,22 @@
-"""A graph VCF of graph_vcf -> a GRCh38 VCF, plus the records that have no GRCh38 position.
+"""A graph VCF of graph_vcf -> a GRCh38 VCF, plus the records that have no GRCh38 position. The same on any other
+reference path of the graph: with a CHM13 reference path (graph_prep ref-path-scan --reference-sample CHM13) and the
+CHM13 FASTA, a CHM13 VCF.
 
     cd machine_learning
     python -m pansoma_net_v2.linear_vcf --graph-vcf <name>.SNV.graph.vcf.gz \
         --reference-path <graph_index>/<graph>.grch38_path --fasta GRCh38.fasta --output <name>.SNV.linear.vcf.gz
+    python -m pansoma_net_v2.linear_vcf --graph-vcf <name>.SNV.graph.vcf.gz \
+        --reference-path <graph_index>/<graph>.chm13_path --fasta chm13v2.0.fa --output <name>.SNV.chm13.vcf.gz
 
+The reference is named after the reference path's sample (GRCh38, CHM13; --reference-name to set it): the header's
+##pansoma_coordinates and the messages. "GRCh38" below stands for it.
 Every record's event (INFO START, KIND, EVREF, EVALT, PATH on node CHROM) is projected with
 tensor_postprocessing's ReferencePath.linear, the same projection that merge stored as the summaries' grch38.
 - A node with no unique GRCh38 visit, or a deletion whose nodes are not neighbours on GRCh38, has no position.
   Its record goes unchanged to <output>.unplaced.vcf.gz, in graph coordinates. Off-reference events need the
-  graph's edges to be placed, and the reference path has none.
+  graph's edges to be placed, and the reference path has none. On CHM13, the nodes off the CHM13 path (GRCh38's
+  own alleles included) are unplaced; the HPRC graphs' CHM13 path is not frequency-filtered, but clipped (e.g.
+  centromeric satellites), so it is several walks per chromosome.
 - The projected REF must equal the FASTA; any difference stops the run, because it means that the reference
   path and the FASTA disagree.
 - INS and DEL are left-aligned on the FASTA (INFO LEFTSHIFT = bases moved) and padded with the FASTA base
@@ -31,7 +39,7 @@ from .vcfio import format_info, import_pipeline, meta, parse_info, read_vcf, sta
 
 EXTRA_INFO = """##INFO=<ID=NODE,Number=1,Type=Integer,Description="Graph node of the event (the graph VCF's CHROM)">
 ##INFO=<ID=LEFTSHIFT,Number=1,Type=Integer,Description="Bases the event moved left when left-aligned on the reference">
-##INFO=<ID=MERGED,Number=1,Type=Integer,Description="Graph records of this GRCh38 allele, this one included; ID lists their candidate IDs">
+##INFO=<ID=MERGED,Number=1,Type=Integer,Description="Graph records of this reference allele, this one included; ID lists their candidate IDs">
 ##INFO=<ID=MERGED_ALT,Number=1,Type=Integer,Description="A1 reads summed over the merged records (FORMAT DP/AD/AF are the kept record's)">"""
 WINDOW = 256
 
@@ -82,11 +90,19 @@ def graph_path(text):
     return [tuple(int(v) for v in step.split(":")) for step in text.split(",")] if text else []
 
 
+def reference_name(path):
+    """The reference path's sample; GRCh38 for generic paths (the GRCh38-only vg autoindex graph)."""
+    from indexed_gam_pipeline_v4.tools.graph_prep import GENERIC_SAMPLE
+    sample = path.meta.get("reference_sample", "GRCh38")
+    return "GRCh38" if sample == GENERIC_SAMPLE else sample
+
+
 def convert(args):
     import_pipeline()
     from indexed_gam_pipeline_v4.tensor_postprocessing.reference_path import ReferencePath
 
     path, genome = ReferencePath(args.reference_path), Genome(args.fasta)
+    reference = args.reference_name or reference_name(path)
     header, columns, records = read_vcf(args.graph_vcf)
     if meta(header, "source") != "pansoma_net_v2.graph_vcf":
         raise SystemExit(f"{args.graph_vcf} is not a graph_vcf output")
@@ -109,7 +125,7 @@ def convert(args):
             raise SystemExit(f"{record[2]}: contig {chrom} is not in {args.fasta}")
         bases = genome.get(chrom, pos0, pos0 + len(ref))
         if bases != ref:
-            raise SystemExit(f"{record[2]}: GRCh38 {chrom}:{pos0 + 1} REF {ref} but the FASTA has {bases}; "
+            raise SystemExit(f"{record[2]}: {reference} {chrom}:{pos0 + 1} REF {ref} but the FASTA has {bases}; "
                              f"the reference path and the FASTA disagree")
         moved = 0
         if kind in ("INS", "DEL"):
@@ -141,7 +157,7 @@ def convert(args):
     kept_header = [h for h in header if not h.startswith(("##contig=", "##fileformat", "##source", "##pansoma_coordinates"))]
     info_end = max(k for k, h in enumerate(kept_header) if h.startswith(("##INFO", "##FILTER", "##FORMAT")))
     new_header = (["##fileformat=VCFv4.2", "##source=pansoma_net_v2.linear_vcf",
-                   "##pansoma_coordinates=GRCh38", f"##pansoma_graph_vcf={Path(args.graph_vcf).resolve()}",
+                   f"##pansoma_coordinates={reference}", f"##pansoma_graph_vcf={Path(args.graph_vcf).resolve()}",
                    f"##pansoma_reference_path={Path(args.reference_path).resolve()}",
                    f"##reference=file://{Path(args.fasta).resolve()}"]
                   + kept_header[:info_end + 1] + EXTRA_INFO.split("\n") + kept_header[info_end + 1:]
@@ -152,21 +168,26 @@ def convert(args):
     for line in out:
         for name in line[6].split(";"):
             filters[name] = filters.get(name, 0) + 1
-    stats.update(records=len(out), filters=filters, output=str(Path(args.output).resolve()),
+    stats.update(records=len(out), filters=filters, reference=reference, output=str(Path(args.output).resolve()),
                  unplaced_output=str(Path(unplaced_out).resolve()))
     stats_path(args.output).write_text(json.dumps(stats, indent=2) + "\n")
-    print(f"{args.output}: {stats['graph_records']:,} graph records -> {len(out):,} GRCh38 records "
+    print(f"{args.output}: {stats['graph_records']:,} graph records -> {len(out):,} {reference} records "
           f"({stats['merged']:,} merged, {stats['left_shifted']:,} left-aligned); {stats['unplaced']:,} without "
-          f"a GRCh38 position ({stats['unplaced_pass']:,} PASS) in {unplaced_out}", flush=True)
+          f"a {reference} position ({stats['unplaced_pass']:,} PASS) in {unplaced_out}", flush=True)
     return stats
 
 
 def parse_args(argv=None):
     p = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     p.add_argument("--graph-vcf", required=True)
-    p.add_argument("--reference-path", required=True, help="reference path directory of tools.graph_prep ref-path-scan")
-    p.add_argument("--fasta", required=True, help="GRCh38 FASTA with .fai (the one the reference path was checked with)")
-    p.add_argument("--output", required=True, help="<name>.linear.vcf.gz (records without a GRCh38 position: <name>.linear.unplaced.vcf.gz)")
+    p.add_argument("--reference-path", required=True, help="reference path directory of tools.graph_prep ref-path-scan "
+                   "(<graph>.grch38_path; <graph>.chm13_path for a CHM13 VCF)")
+    p.add_argument("--fasta", required=True, help="FASTA of that reference with .fai (the one the reference path was "
+                   "checked with)")
+    p.add_argument("--output", required=True, help="<name>.linear.vcf.gz (records without a position: "
+                   "<name>.linear.unplaced.vcf.gz); <name>.chm13.vcf.gz on CHM13")
+    p.add_argument("--reference-name", help="name of the reference in the header and messages (default: the reference "
+                   "path's sample, GRCh38 for generic paths)")
     return p.parse_args(argv)
 
 
