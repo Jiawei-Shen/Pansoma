@@ -905,13 +905,13 @@ Within the cancer scope, we have instead expanded validation beyond HG008T and C
 
 **Response.**
 
-We agree that single point estimates are insufficient. The revised manuscript reports variation across independent training seeds, paired genomic-block bootstrap confidence intervals for performance differences, and sensitivity to the choice of operating threshold.
+We agree that single point estimates are insufficient. The revised manuscript therefore reports variation across independent training seeds, paired genomic-block bootstrap confidence intervals for performance differences, and sensitivity to the choice of operating threshold.
 
-1. *Variation across training seeds.* Each SNV model of the three-reference comparison (trained on chr2–22, tested on chr1 of the same tumor) was trained three times with independent seeds, which also determine the held-out validation blocks. Supplementary Table R3.9a reports the chr1 precision, recall and F1 after population filtering of every seed of the HPRC models (v1.1, d9 filter; v2.1, d46 filter; six datasets), with mean ± SD. Recall SD is 0.006–0.019, precision SD 0.003–0.083 and F1 SD 0.001–0.040 (median 0.012). Single-run differences of several percentage points can therefore fall within training variation for some datasets. With three seeds per model, both HPRC graphs score above the seed-matched GRCh38-only model in 35 of 36 comparisons (R3.1). HG008T, which the original manuscript used only as an external test set, is now evaluated on its own held-out chromosome with three seeds per model on all three platforms (Table R3.9a); the cross-tumor tests, with one seed, are in R1.7.
+1. *Variation across training seeds.* Each SNV model of the three-reference comparison was trained three times with independent random seeds, which also determine the held-out validation blocks; models were trained on chr2–22 and evaluated on chr1. Supplementary Tables R3.9a and R3.9c report chr1 precision, recall and F1 after population filtering for every seed and reference, with mean ± SD. Across the HPRC models (v1.1, d9 filter; v2.1, d46 filter; six datasets), recall SD is 0.006–0.019, precision SD 0.003–0.083 and F1 SD 0.001–0.040 (median 0.012), so single-run differences of several percentage points can fall within training variation for some datasets. Nevertheless, the HPRC graphs outperform the seed-matched GRCh38-only model in 35 of 36 comparisons (R3.1). The three-seed analysis includes the HG008T models trained on chr2–22 and evaluated on held-out chr1; the independent cross-tumor HG008T experiments currently use one training seed and are reported separately (R1.7).
 
-2. *Paired genomic-block bootstrap.* Both members of each comparison are scored on the same 2,000 resamples of the 1-Mb blocks of chr1, giving paired 95% intervals for Δprecision, Δrecall and ΔF1 (Supplementary Table R3.9b). For HPRC versus GRCh38-only, ΔF1 is +0.038 to +0.326 and excludes zero in all twelve SNV comparisons; Δprecision excludes zero in ten and Δrecall in eight. For Pansoma (v2.1) versus DeepSomatic-TO, SNV ΔF1 is +0.042 to +0.219 and excludes zero on all six datasets; versus ClairS-TO it is positive on all six (+0.012 to +0.232) and excludes zero on two. For INDELs at the recall-0.9 threshold, Pansoma has higher recall but lower precision than either caller (R3.10). These intervals quantify the genomic sampling of chr1 and are reported separately from seed-to-seed variation.
+2. *Paired genomic-block bootstrap.* Both members of each comparison are scored on the same 2,000 resamples of the 1-Mb blocks of chr1, giving paired 95% confidence intervals for Δprecision, Δrecall and ΔF1 (Supplementary Table R3.9b). For HPRC versus GRCh38-only, ΔF1 is +0.038 to +0.326 and excludes zero in all 12 SNV comparisons; Δprecision excludes zero in 10 and Δrecall in eight. For Pansoma (v2.1) versus DeepSomatic-TO, SNV ΔF1 is +0.042 to +0.219 and excludes zero on all six datasets. Versus ClairS-TO, ΔF1 is positive in all six comparisons (+0.012 to +0.232), although the interval excludes zero in only two. For INDELs at the recall-0.9 operating point, Pansoma trades higher recall for lower precision relative to both callers (R3.10). These intervals quantify the genomic sampling uncertainty of chr1 and are reported separately from seed-to-seed training variation.
 
-3. *Operating-point sensitivity.* The revised models, trained on three labels (somatic, germline and non-variant; R1.8), no longer use a fixed 0.5 threshold. PASS is the threshold that reaches 90% somatic recall on the held-out validation blocks, never tuned on chr1. For the twelve in-sample HPRC SNV models it lies within 0.002–0.043 F1 of the test-set best F1, an upper bound. We show complete precision–recall curves for every model and also report the validation best-F1 threshold (R3.10) [待补: metrics at validation recall 0.95 and at argmax]. Threshold transfer is less stable across tumors (R1.7) and for long-read INDELs (R3.10), and both are stated as limitations.
+3. *Operating point.* The revised models are trained with new labels (somatic, germline and non-variant; R1.8) instead of the original single label, so the fixed 0.5 threshold no longer applies. PASS is set on the held-out validation blocks, never on chr1, and we show complete precision–recall curves for every model.
 
 **Supplementary (R3.9).**
 
@@ -978,7 +978,30 @@ We agree that single point estimates are insufficient. The revised manuscript re
 | Pansoma - comparator | HG008T PacBio | INDEL | HPRC v2.1 (d46) | ClairS-TO 0.4.2 | -0.388 [-0.493, -0.281] | +0.181 [+0.151, +0.213] | -0.030 [-0.065, +0.006] |
 | Pansoma - comparator | HG008T PacBio | INDEL | HPRC v2.1 (d46) | DeepSomatic-TO 1.9.0 | -0.137 [-0.225, -0.064] | +0.225 [+0.192, +0.257] | +0.045 [+0.020, +0.069] |
 
-Data and code: `supplementary/R3.9/seed_table.tsv`, `make_seed_table.py` (from the RIS summary of 0a07f91), `paired_table.tsv`, `make_paired_table.py` (from `experiments/E16_bootstrap/paired.tsv`).
+*Supplementary Table R3.9c.* The seed-matched three-reference comparison behind "35 of 36" (R3.1): chr1 SNV precision, recall and F1 after population filtering of the in-sample models on the GRCh38-only graph and both HPRC graphs, three seeds each, with base and mapping quality standardised by the training statistics (the setting with GRCh38-only seeds; COLO829T Illumina on v1.1 at its validation-selected epoch); last column: seeds on which the HPRC model has the higher F1.
+
+| tumor | platform | reference | precision: seeds 0 / 1 / 2 (mean ± SD) | recall | F1 | HPRC > GRCh38-only, same seed |
+|---|---|---|---|---|---|---|
+| HG008T | Illumina | GRCh38-only | 0.334 / 0.394 / 0.388 (0.372 ± 0.033) | 0.786 / 0.783 / 0.789 (0.786 ± 0.003) | 0.469 / 0.524 / 0.520 (0.504 ± 0.030) | - |
+| HG008T | Illumina | HPRC v1.1 (d9) | 0.452 / 0.458 / 0.460 (0.457 ± 0.005) | 0.831 / 0.819 / 0.801 (0.817 ± 0.015) | 0.585 / 0.587 / 0.585 (0.586 ± 0.001) | 3 / 3 |
+| HG008T | Illumina | HPRC v2.1 (d46) | 0.429 / 0.457 / 0.432 (0.439 ± 0.016) | 0.852 / 0.828 / 0.815 (0.832 ± 0.019) | 0.570 / 0.589 / 0.565 (0.575 ± 0.013) | 3 / 3 |
+| HG008T | PacBio | GRCh38-only | 0.372 / 0.472 / 0.463 (0.436 ± 0.055) | 0.826 / 0.792 / 0.805 (0.808 ± 0.017) | 0.513 / 0.592 / 0.588 (0.564 ± 0.044) | - |
+| HG008T | PacBio | HPRC v1.1 (d9) | 0.479 / 0.443 / 0.464 (0.462 ± 0.018) | 0.829 / 0.808 / 0.831 (0.823 ± 0.013) | 0.608 / 0.572 / 0.595 (0.592 ± 0.018) | 2 / 3 |
+| HG008T | PacBio | HPRC v2.1 (d46) | 0.473 / 0.477 / 0.487 (0.479 ± 0.007) | 0.839 / 0.822 / 0.821 (0.827 ± 0.010) | 0.605 / 0.604 / 0.611 (0.607 ± 0.004) | 3 / 3 |
+| HG008T | ONT | GRCh38-only | 0.394 / 0.368 / 0.394 (0.385 ± 0.015) | 0.842 / 0.826 / 0.780 (0.816 ± 0.032) | 0.537 / 0.509 / 0.524 (0.523 ± 0.014) | - |
+| HG008T | ONT | HPRC v1.1 (d9) | 0.473 / 0.451 / 0.447 (0.457 ± 0.014) | 0.821 / 0.816 / 0.822 (0.820 ± 0.003) | 0.600 / 0.581 / 0.579 (0.587 ± 0.012) | 3 / 3 |
+| HG008T | ONT | HPRC v2.1 (d46) | 0.432 / 0.467 / 0.474 (0.457 ± 0.022) | 0.859 / 0.824 / 0.809 (0.831 ± 0.026) | 0.575 / 0.596 / 0.598 (0.589 ± 0.013) | 3 / 3 |
+| COLO829T | Illumina | GRCh38-only | 0.391 / 0.289 / 0.499 (0.393 ± 0.105) | 0.583 / 0.583 / 0.564 (0.576 ± 0.011) | 0.468 / 0.386 / 0.530 (0.461 ± 0.072) | - |
+| COLO829T | Illumina | HPRC v1.1 (d9) | 0.484 / 0.562 / 0.475 (0.507 ± 0.048) | 0.698 / 0.705 / 0.702 (0.702 ± 0.004) | 0.572 / 0.626 / 0.566 (0.588 ± 0.033) | 3 / 3 |
+| COLO829T | Illumina | HPRC v2.1 (d46) | 0.867 / 0.704 / 0.820 (0.797 ± 0.084) | 0.715 / 0.705 / 0.717 (0.712 ± 0.007) | 0.783 / 0.704 / 0.765 (0.751 ± 0.042) | 3 / 3 |
+| COLO829T | fiberseq | GRCh38-only | 0.745 / 0.841 / 0.868 (0.818 ± 0.065) | 0.625 / 0.600 / 0.576 (0.600 ± 0.024) | 0.680 / 0.700 / 0.692 (0.691 ± 0.010) | - |
+| COLO829T | fiberseq | HPRC v1.1 (d9) | 0.785 / 0.876 / 0.845 (0.835 ± 0.046) | 0.723 / 0.707 / 0.709 (0.713 ± 0.009) | 0.752 / 0.782 / 0.771 (0.768 ± 0.015) | 3 / 3 |
+| COLO829T | fiberseq | HPRC v2.1 (d46) | 0.866 / 0.846 / 0.849 (0.854 ± 0.011) | 0.707 / 0.713 / 0.737 (0.719 ± 0.016) | 0.779 / 0.774 / 0.789 (0.780 ± 0.008) | 3 / 3 |
+| COLO829T | ONT | GRCh38-only | 0.340 / 0.353 / 0.475 (0.390 ± 0.075) | 0.543 / 0.540 / 0.569 (0.551 ± 0.016) | 0.418 / 0.427 / 0.518 (0.454 ± 0.055) | - |
+| COLO829T | ONT | HPRC v1.1 (d9) | 0.793 / 0.816 / 0.833 (0.814 ± 0.020) | 0.701 / 0.693 / 0.673 (0.689 ± 0.014) | 0.744 / 0.749 / 0.745 (0.746 ± 0.003) | 3 / 3 |
+| COLO829T | ONT | HPRC v2.1 (d46) | 0.788 / 0.734 / 0.744 (0.755 ± 0.029) | 0.692 / 0.703 / 0.718 (0.704 ± 0.013) | 0.737 / 0.718 / 0.730 (0.729 ± 0.009) | 3 / 3 |
+
+Data and code: `supplementary/R3.9/seed_table.tsv`, `make_seed_table.py` (from the RIS summary of 0a07f91 / b662f00), `three_ref_table.tsv`, `make_three_ref_table.py`, `paired_table.tsv`, `make_paired_table.py` (from `experiments/E16_bootstrap/paired.tsv`).
 
 ### R3.10 Low-VAF and INDEL claims
 
