@@ -402,6 +402,204 @@
    }
   },
   {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "source": "rcpu",
+   "set": "COLO829T_Illumina",
+   "platform": "Illumina",
+   "purity": "P100",
+   "rtype": "in-sample",
+   "model": "COLO829_Illumina_SNV_d9_normbq_sweep_e06",
+   "graph": "d9",
+   "kind": "SNV",
+   "sample": "COLO829T",
+   "unplaced_pass": 693,
+   "processed": 693,
+   "with_context": 693,
+   "categories": {
+    "not_in_normal": 15,
+    "population": 469,
+    "germline": 208,
+    "unverifiable": 1
+   },
+   "pop_ingraph": 162,
+   "pop_hprc": 465,
+   "multi_copy": 328,
+   "tumor_only_multi_copy": 0,
+   "e9a_proj_class_of_unplaced_pass": {
+    "ii": 427,
+    "i": 23,
+    "iii": 243
+   },
+   "e9a_category_by_class": {
+    "i": {
+     "population": 14,
+     "not_in_normal": 2,
+     "germline": 7
+    },
+    "ii": {
+     "not_in_normal": 12,
+     "population": 351,
+     "germline": 63,
+     "unverifiable": 1
+    },
+    "iii": {
+     "germline": 138,
+     "population": 104,
+     "not_in_normal": 1
+    }
+   },
+   "eval_nobed": {
+    "tp": 1765,
+    "fp": 356,
+    "unplaced_pass": 693,
+    "recall": 0.7225,
+    "placed_only": [
+     0.8322,
+     0.7734
+    ],
+    "all_unplaced_fp": [
+     0.6272,
+     0.6715
+    ],
+    "after_graph_pon": [
+     0.7527,
+     0.7373
+    ],
+    "after_graph_pon_tumor_only_tp": [
+     0.7527,
+     0.7373
+    ],
+    "remaining_unplaced_after_graph_pon": 224.0,
+    "unplaced_share_of_pass": 0.2463,
+    "unplaced_share_after_graph_pon": 0.0955
+   },
+   "eval_bed": {
+    "tp": 1765,
+    "fp": 356,
+    "unplaced_pass": 693.0,
+    "recall": 0.7225,
+    "placed_only": [
+     0.8322,
+     0.7734
+    ],
+    "all_unplaced_fp": [
+     0.6272,
+     0.6715
+    ],
+    "after_graph_pon": [
+     0.7527,
+     0.7373
+    ],
+    "after_graph_pon_tumor_only_tp": [
+     0.7527,
+     0.7373
+    ],
+    "remaining_unplaced_after_graph_pon": 224.0,
+    "unplaced_share_of_pass": 0.2463,
+    "unplaced_share_after_graph_pon": 0.0955
+   }
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "source": "rcpu",
+   "set": "COLO829T_ONT",
+   "platform": "ONT",
+   "purity": "P100",
+   "rtype": "in-sample",
+   "model": "COLO829_ONT_SNV_7fc7396_ddp4_b1024",
+   "graph": "d9",
+   "kind": "SNV",
+   "sample": "COLO829T",
+   "unplaced_pass": 3421,
+   "processed": 3000,
+   "with_context": 3000,
+   "categories": {
+    "population": 1945,
+    "germline": 905,
+    "unverifiable": 85,
+    "not_in_normal": 65
+   },
+   "pop_ingraph": 510,
+   "pop_hprc": 1922,
+   "multi_copy": 1746,
+   "tumor_only_multi_copy": 0,
+   "e9a_proj_class_of_unplaced_pass": {
+    "ii": 1517,
+    "i": 67,
+    "iii": 1416
+   },
+   "e9a_category_by_class": {
+    "i": {
+     "population": 50,
+     "not_in_normal": 3,
+     "germline": 12,
+     "unverifiable": 2
+    },
+    "ii": {
+     "population": 1228,
+     "germline": 165,
+     "unverifiable": 82,
+     "not_in_normal": 42
+    },
+    "iii": {
+     "population": 667,
+     "germline": 728,
+     "not_in_normal": 20,
+     "unverifiable": 1
+    }
+   },
+   "eval_nobed": {
+    "tp": 1712,
+    "fp": 446,
+    "unplaced_pass": 3421,
+    "recall": 0.7008,
+    "placed_only": [
+     0.7933,
+     0.7442
+    ],
+    "all_unplaced_fp": [
+     0.3069,
+     0.4268
+    ],
+    "after_graph_pon": [
+     0.5094,
+     0.5899
+    ],
+    "after_graph_pon_tumor_only_tp": [
+     0.5094,
+     0.5899
+    ],
+    "remaining_unplaced_after_graph_pon": 1203.1,
+    "unplaced_share_of_pass": 0.6132,
+    "unplaced_share_after_graph_pon": 0.3579
+   },
+   "eval_bed": {
+    "tp": 1712,
+    "fp": 446,
+    "unplaced_pass": 3421.0,
+    "recall": 0.7008,
+    "placed_only": [
+     0.7933,
+     0.7442
+    ],
+    "all_unplaced_fp": [
+     0.3069,
+     0.4268
+    ],
+    "after_graph_pon": [
+     0.5094,
+     0.5899
+    ],
+    "after_graph_pon_tumor_only_tp": [
+     0.5094,
+     0.5899
+    ],
+    "remaining_unplaced_after_graph_pon": 1203.1,
+    "unplaced_share_of_pass": 0.6132,
+    "unplaced_share_after_graph_pon": 0.3579
+   }
+  },
+  {
    "name": "rcpu__COLO829_ONT_SNV_d46_7fc7396__vcf_chr1",
    "source": "rcpu",
    "set": "COLO829T_ONT_d46",
@@ -497,6 +695,105 @@
     "remaining_unplaced_after_graph_pon": 2292.1,
     "unplaced_share_of_pass": 0.6803,
     "unplaced_share_after_graph_pon": 0.5163
+   }
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "source": "rcpu",
+   "set": "COLO829T_fiberseq",
+   "platform": "fiberseq",
+   "purity": "P100",
+   "rtype": "in-sample",
+   "model": "COLO829_fiberseq_SNV_7fc7396_ddp4_b1024",
+   "graph": "d9",
+   "kind": "SNV",
+   "sample": "COLO829T",
+   "unplaced_pass": 1483,
+   "processed": 1483,
+   "with_context": 1483,
+   "categories": {
+    "population": 1193,
+    "germline": 177,
+    "not_in_normal": 35,
+    "unverifiable": 78
+   },
+   "pop_ingraph": 156,
+   "pop_hprc": 1188,
+   "multi_copy": 270,
+   "tumor_only_multi_copy": 0,
+   "e9a_proj_class_of_unplaced_pass": {
+    "i": 48,
+    "ii": 1241,
+    "iii": 194
+   },
+   "e9a_category_by_class": {
+    "i": {
+     "population": 32,
+     "not_in_normal": 1,
+     "germline": 13,
+     "unverifiable": 2
+    },
+    "ii": {
+     "population": 1062,
+     "germline": 70,
+     "not_in_normal": 33,
+     "unverifiable": 76
+    },
+    "iii": {
+     "population": 99,
+     "germline": 94,
+     "not_in_normal": 1
+    }
+   },
+   "eval_nobed": {
+    "tp": 1765,
+    "fp": 484,
+    "unplaced_pass": 1483,
+    "recall": 0.7225,
+    "placed_only": [
+     0.7848,
+     0.7523
+    ],
+    "all_unplaced_fp": [
+     0.4729,
+     0.5717
+    ],
+    "after_graph_pon": [
+     0.6952,
+     0.7086
+    ],
+    "after_graph_pon_tumor_only_tp": [
+     0.6952,
+     0.7086
+    ],
+    "remaining_unplaced_after_graph_pon": 290.0,
+    "unplaced_share_of_pass": 0.3974,
+    "unplaced_share_after_graph_pon": 0.1142
+   },
+   "eval_bed": {
+    "tp": 1765,
+    "fp": 484,
+    "unplaced_pass": 1483.0,
+    "recall": 0.7225,
+    "placed_only": [
+     0.7848,
+     0.7523
+    ],
+    "all_unplaced_fp": [
+     0.4729,
+     0.5717
+    ],
+    "after_graph_pon": [
+     0.6952,
+     0.7086
+    ],
+    "after_graph_pon_tumor_only_tp": [
+     0.6952,
+     0.7086
+    ],
+    "remaining_unplaced_after_graph_pon": 290.0,
+    "unplaced_share_of_pass": 0.3974,
+    "unplaced_share_after_graph_pon": 0.1142
    }
   },
   {
@@ -4662,6 +4959,108 @@
    }
   },
   {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_tp",
+   "n": 150,
+   "pop": 0,
+   "asm": {
+    "not_in_normal": 146,
+    "germline": 4
+   }
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_fp",
+   "n": 150,
+   "pop": 16,
+   "asm": {
+    "germline": 123,
+    "not_in_normal": 27
+   }
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_pon",
+   "n": 150,
+   "pop": 10,
+   "asm": {
+    "germline": 146,
+    "not_in_normal": 4
+   }
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "unplaced_pass",
+   "n": 693,
+   "pop": 469,
+   "asm": {
+    "not_in_normal": 41,
+    "germline": 641,
+    "unverifiable": 11
+   }
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "gold",
+   "n": 2,
+   "pop": 2,
+   "asm": {
+    "germline": 1,
+    "unverifiable": 1
+   }
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_tp",
+   "n": 150,
+   "pop": 0,
+   "asm": {
+    "not_in_normal": 149,
+    "unverifiable": 1
+   }
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_fp",
+   "n": 150,
+   "pop": 5,
+   "asm": {
+    "not_in_normal": 58,
+    "germline": 92
+   }
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_pon",
+   "n": 150,
+   "pop": 13,
+   "asm": {
+    "germline": 145,
+    "not_in_normal": 5
+   }
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "unplaced_pass",
+   "n": 3000,
+   "pop": 1945,
+   "asm": {
+    "germline": 2345,
+    "not_in_normal": 235,
+    "unverifiable": 419,
+    "not_checked": 1
+   }
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "gold",
+   "n": 2,
+   "pop": 2,
+   "asm": {
+    "unverifiable": 2
+   }
+  },
+  {
    "name": "rcpu__COLO829_ONT_SNV_d46_7fc7396__vcf_chr1",
    "group": "ctrl_tp",
    "n": 150,
@@ -4709,6 +5108,56 @@
    "pop": 2,
    "asm": {
     "germline": 1,
+    "unverifiable": 1
+   }
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_tp",
+   "n": 150,
+   "pop": 0,
+   "asm": {
+    "not_in_normal": 147,
+    "germline": 3
+   }
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_fp",
+   "n": 150,
+   "pop": 6,
+   "asm": {
+    "germline": 134,
+    "not_in_normal": 16
+   }
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_pon",
+   "n": 150,
+   "pop": 13,
+   "asm": {
+    "germline": 146,
+    "not_in_normal": 4
+   }
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "unplaced_pass",
+   "n": 1483,
+   "pop": 1193,
+   "asm": {
+    "germline": 867,
+    "unverifiable": 469,
+    "not_in_normal": 147
+   }
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "gold",
+   "n": 1,
+   "pop": 1,
+   "asm": {
     "unverifiable": 1
    }
   },
@@ -8295,6 +8744,1286 @@
    "tagged": 1
   },
   {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 20
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 20
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 20
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 19
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 17
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 17
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 14
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 13
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 17
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 17
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 13
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 10
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 16
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 16
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 13
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 10
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 10
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 10
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 10
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 10
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 693,
+   "tagged": 527
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 693,
+   "tagged": 513
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 693,
+   "tagged": 498
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 693,
+   "tagged": 474
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 693,
+   "tagged": 466
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 693,
+   "tagged": 447
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 693,
+   "tagged": 422
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 693,
+   "tagged": 393
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 693,
+   "tagged": 440
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 693,
+   "tagged": 417
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 693,
+   "tagged": 388
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 693,
+   "tagged": 355
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 693,
+   "tagged": 469
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 693,
+   "tagged": 448
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 693,
+   "tagged": 415
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 693,
+   "tagged": 382
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 2,
+   "tagged": 1
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 26
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 25
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 24
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 24
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 10
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 10
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 9
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 9
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 6
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 6
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 4
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 4
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 5
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 5
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 3
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 3
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 13
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 5
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 4
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 4
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 13
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 4
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 3
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 3
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 12
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 3
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 13
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 4
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 3
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 3000,
+   "tagged": 2184
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 3000,
+   "tagged": 2142
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 3000,
+   "tagged": 2093
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 3000,
+   "tagged": 1924
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 3000,
+   "tagged": 1976
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 3000,
+   "tagged": 1925
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 3000,
+   "tagged": 1859
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 3000,
+   "tagged": 1608
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 3000,
+   "tagged": 1826
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 3000,
+   "tagged": 1756
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 3000,
+   "tagged": 1651
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 3000,
+   "tagged": 1349
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 3000,
+   "tagged": 1945
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 3000,
+   "tagged": 1884
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 3000,
+   "tagged": 1792
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 3000,
+   "tagged": 1526
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 2,
+   "tagged": 1
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 2,
+   "tagged": 1
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 2,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 2,
+   "tagged": 0
+  },
+  {
    "name": "rcpu__COLO829_ONT_SNV_d46_7fc7396__vcf_chr1",
    "group": "ctrl_tp",
    "flank": "5",
@@ -8933,6 +10662,646 @@
    "min_ac": 9,
    "n": 2,
    "tagged": 1
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 11
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 11
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 9
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 9
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 6
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 6
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 4
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 4
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 5
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 5
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 3
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 3
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 6
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 6
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 4
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 4
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 15
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 5
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 3
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 3
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 14
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 4
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 13
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 3
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 13
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 3
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 1483,
+   "tagged": 1331
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 1483,
+   "tagged": 1324
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 1483,
+   "tagged": 1310
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 1483,
+   "tagged": 1280
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 1483,
+   "tagged": 1209
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 1483,
+   "tagged": 1194
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 1483,
+   "tagged": 1164
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 1483,
+   "tagged": 1119
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 1483,
+   "tagged": 1127
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 1483,
+   "tagged": 1100
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 1483,
+   "tagged": 1041
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 1483,
+   "tagged": 971
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 1483,
+   "tagged": 1193
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 1483,
+   "tagged": 1173
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 1483,
+   "tagged": 1133
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 1483,
+   "tagged": 1073
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 1,
+   "tagged": 1
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 1,
+   "tagged": 1
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 1,
+   "tagged": 1
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 1,
+   "tagged": 1
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 1,
+   "tagged": 1
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 1,
+   "tagged": 1
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 1,
+   "tagged": 1
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 1,
+   "tagged": 1
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 1,
+   "tagged": 1
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 1,
+   "tagged": 1
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 1,
+   "tagged": 1
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 1,
+   "tagged": 1
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 1,
+   "tagged": 1
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 1,
+   "tagged": 1
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 1,
+   "tagged": 0
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 1,
+   "tagged": 0
   },
   {
    "name": "rcpu__COLO829_fiberseq_SNV_d46_7fc7396__vcf_chr1",
@@ -13574,6 +15943,70 @@
    }
   },
   {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "stratum": "homopolymer>=7",
+   "n": 44,
+   "categories": {
+    "population": 34,
+    "germline": 7,
+    "unverifiable": 1,
+    "not_in_normal": 2
+   }
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "stratum": "STR",
+   "n": 122,
+   "categories": {
+    "population": 105,
+    "not_in_normal": 5,
+    "germline": 12
+   }
+  },
+  {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "stratum": "other",
+   "n": 527,
+   "categories": {
+    "not_in_normal": 8,
+    "population": 330,
+    "germline": 189
+   }
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "stratum": "homopolymer>=7",
+   "n": 433,
+   "categories": {
+    "population": 329,
+    "unverifiable": 64,
+    "not_in_normal": 26,
+    "germline": 14
+   }
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "stratum": "STR",
+   "n": 340,
+   "categories": {
+    "population": 264,
+    "not_in_normal": 12,
+    "germline": 54,
+    "unverifiable": 10
+   }
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "stratum": "other",
+   "n": 2227,
+   "categories": {
+    "population": 1352,
+    "germline": 837,
+    "not_in_normal": 27,
+    "unverifiable": 11
+   }
+  },
+  {
    "name": "rcpu__COLO829_ONT_SNV_d46_7fc7396__vcf_chr1",
    "stratum": "homopolymer>=7",
    "n": 303,
@@ -13604,6 +16037,39 @@
     "not_in_normal": 44,
     "unverifiable": 13,
     "germline": 1276
+   }
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "stratum": "homopolymer>=7",
+   "n": 355,
+   "categories": {
+    "population": 282,
+    "germline": 6,
+    "unverifiable": 47,
+    "not_in_normal": 20
+   }
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "stratum": "STR",
+   "n": 190,
+   "categories": {
+    "not_in_normal": 9,
+    "population": 155,
+    "germline": 14,
+    "unverifiable": 12
+   }
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "stratum": "other",
+   "n": 938,
+   "categories": {
+    "population": 756,
+    "germline": 157,
+    "unverifiable": 19,
+    "not_in_normal": 6
    }
   },
   {
@@ -13967,6 +16433,89 @@
    }
   },
   {
+   "group": "rcpu/d9/COLO829T/SNV",
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "platforms": 3,
+   "unplaced_pass": 693,
+   "in_another": 127,
+   "by_category": {
+    "not_in_normal": {
+     "0": 11,
+     "2": 2,
+     "1": 2
+    },
+    "population": {
+     "0": 378,
+     "2": 47,
+     "1": 44
+    },
+    "germline": {
+     "0": 176,
+     "2": 13,
+     "1": 19
+    },
+    "unverifiable": {
+     "0": 1
+    }
+   }
+  },
+  {
+   "group": "rcpu/d9/COLO829T/SNV",
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "platforms": 3,
+   "unplaced_pass": 3421,
+   "in_another": 709,
+   "by_category": {
+    "population": {
+     "0": 1445,
+     "1": 462,
+     "2": 38
+    },
+    "germline": {
+     "0": 818,
+     "1": 76,
+     "2": 11
+    },
+    "unverifiable": {
+     "0": 63,
+     "1": 22
+    },
+    "not_in_normal": {
+     "2": 2,
+     "1": 18,
+     "0": 45
+    }
+   }
+  },
+  {
+   "group": "rcpu/d9/COLO829T/SNV",
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "platforms": 3,
+   "unplaced_pass": 1483,
+   "in_another": 682,
+   "by_category": {
+    "population": {
+     "1": 505,
+     "0": 642,
+     "2": 46
+    },
+    "germline": {
+     "1": 75,
+     "2": 14,
+     "0": 88
+    },
+    "not_in_normal": {
+     "2": 2,
+     "0": 16,
+     "1": 17
+    },
+    "unverifiable": {
+     "1": 23,
+     "0": 55
+    }
+   }
+  },
+  {
    "group": "rcpu/d9/HG008T/SNV",
    "name": "rcpu__HG008_Illumina_SNV_7fc7396_ddp4_b1024__vcf_chr1",
    "platforms": 3,
@@ -14192,6 +16741,27 @@
    }
   },
   {
+   "name": "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1",
+   "gold_with_tensor": 2,
+   "pass_unplaced": 0,
+   "pass_and_tagged": 0,
+   "tagged": 2,
+   "asm": {
+    "germline": 1,
+    "unverifiable": 1
+   }
+  },
+  {
+   "name": "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "gold_with_tensor": 2,
+   "pass_unplaced": 1,
+   "pass_and_tagged": 1,
+   "tagged": 2,
+   "asm": {
+    "unverifiable": 2
+   }
+  },
+  {
    "name": "rcpu__COLO829_ONT_SNV_d46_7fc7396__vcf_chr1",
    "gold_with_tensor": 2,
    "pass_unplaced": 1,
@@ -14199,6 +16769,16 @@
    "tagged": 2,
    "asm": {
     "germline": 1,
+    "unverifiable": 1
+   }
+  },
+  {
+   "name": "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1",
+   "gold_with_tensor": 1,
+   "pass_unplaced": 0,
+   "pass_and_tagged": 0,
+   "tagged": 1,
+   "asm": {
     "unverifiable": 1
    }
   },
