@@ -1,0 +1,179 @@
+{
+ "HG008T_d9": {
+  "n": 2002,
+  "SNV": 184,
+  "INDEL": 1818,
+  "pon_tagged": 1947,
+  "SNV_cat": {
+   "absent": 175,
+   "present": 5,
+   "ambiguous": 4
+  },
+  "INDEL_cat": {
+   "present": 99,
+   "absent": 1706,
+   "ambiguous": 13
+  },
+  "all_cat": {
+   "absent": 1881,
+   "present": 104,
+   "ambiguous": 17
+  },
+  "alt_min_paths": {
+   "n": 1310,
+   "min": 1,
+   "median": 27.0,
+   "skip_only": 692
+  },
+  "absent_INDEL_tumor": {
+   "n": 1706,
+   "novel_ALT": 1478,
+   "novel_any": 1702,
+   "verdicts": {
+    "novel_ALT": 1478,
+    "novel_other": 224,
+    "all_eq_hap1": 1,
+    "all_eq_hap2": 1,
+    "no_change_both": 1,
+    "NA": 1
+   }
+  },
+  "absent_INDEL_reads_Illumina": {
+   "ok": 1621,
+   "EXP_seen": 1586
+  },
+  "absent_INDEL_reads_PacBio": {
+   "ok": 1637,
+   "EXP_seen": 1605
+  }
+ },
+ "HG008T_d46": {
+  "n": 1607,
+  "SNV": 140,
+  "INDEL": 1467,
+  "pon_tagged": 1558,
+  "SNV_cat": {
+   "absent": 130,
+   "present": 6,
+   "ambiguous": 4
+  },
+  "INDEL_cat": {
+   "present": 104,
+   "absent": 1351,
+   "ambiguous": 12
+  },
+  "all_cat": {
+   "absent": 1481,
+   "present": 110,
+   "ambiguous": 16
+  },
+  "alt_min_paths": {
+   "n": 973,
+   "min": 2,
+   "median": 138,
+   "skip_only": 634
+  },
+  "absent_INDEL_tumor": {
+   "n": 1351,
+   "novel_ALT": 1153,
+   "novel_any": 1347,
+   "verdicts": {
+    "novel_ALT": 1153,
+    "novel_other": 194,
+    "all_eq_hap2": 1,
+    "all_eq_hap1": 1,
+    "NA": 2
+   }
+  },
+  "absent_INDEL_reads_Illumina": {
+   "ok": 1273,
+   "EXP_seen": 1240
+  },
+  "absent_INDEL_reads_PacBio": {
+   "ok": 1292,
+   "EXP_seen": 1260
+  }
+ },
+ "COLO829T_d9": {
+  "n": 446,
+  "SNV": 64,
+  "INDEL": 382,
+  "pon_tagged": 440,
+  "SNV_cat": {
+   "absent": 63,
+   "present": 1
+  },
+  "INDEL_cat": {
+   "absent": 356,
+   "present": 25,
+   "ambiguous": 1
+  },
+  "all_cat": {
+   "absent": 419,
+   "present": 26,
+   "ambiguous": 1
+  },
+  "alt_min_paths": {
+   "n": 298,
+   "min": 2,
+   "median": 23.5,
+   "skip_only": 148
+  },
+  "INDEL_present": 25,
+  "INDEL_germline_like": 24,
+  "INDEL_up_to_germline_like": 49
+ },
+ "COLO829T_d46": {
+  "n": 401,
+  "SNV": 54,
+  "INDEL": 347,
+  "pon_tagged": 395,
+  "SNV_cat": {
+   "absent": 52,
+   "ambiguous": 1,
+   "present": 1
+  },
+  "INDEL_cat": {
+   "absent": 319,
+   "present": 26,
+   "ambiguous": 2
+  },
+  "all_cat": {
+   "absent": 371,
+   "present": 27,
+   "ambiguous": 3
+  },
+  "alt_min_paths": {
+   "n": 244,
+   "min": 6,
+   "median": 110.0,
+   "skip_only": 157
+  },
+  "INDEL_present": 26,
+  "INDEL_germline_like": 22,
+  "INDEL_up_to_germline_like": 48
+ },
+ "control_INDEL_reads_Illumina": {
+  "ok": 369,
+  "EXP_seen": 353
+ },
+ "control_INDEL_reads_PacBio": {
+  "ok": 386,
+  "EXP_seen": 372
+ },
+ "check_HG008T_old_vs_rules": {
+  "absent->absent": 2085,
+  "ambiguous->absent": 264,
+  "ambiguous->ambiguous": 18,
+  "ambiguous->present": 1,
+  "present->present": 110
+ },
+ "check_COLO829T_old_vs_rules": {
+  "absent->absent": 430,
+  "ambiguous->absent": 31,
+  "ambiguous->ambiguous": 1,
+  "ambiguous->present": 1,
+  "present->absent": 1,
+  "present->present": 33
+ }
+}

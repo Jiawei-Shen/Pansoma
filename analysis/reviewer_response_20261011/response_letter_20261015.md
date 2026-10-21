@@ -146,12 +146,14 @@ Supplementary block below).
 
 1. *A new pipeline with higher recall.* Tensors now follow each read's path across graph nodes and carry the number of
    haplotypes through every node, and the training sets label each candidate as somatic, germline (from the matched
-   normal's truth) or other, with exact allele matches only. On chr1 after population filtering, recall rose from
-   0.575–0.596 to 0.686–0.717 for COLO829T SNVs and from 0.759–0.828 to 0.826–0.831 for HG008T SNVs (three platforms
-   each), and for INDELs from the 13–19% (HG008T) and 4–22% (COLO829T) of the original submission to 23–26% and 24–27%.
+   normal's truth) or other, with exact allele matches only. On chr1 after population filtering (HPRC v2.1 graph, three
+   training seeds), recall rose from 0.575–0.596 to 0.700–0.734 for COLO829T SNVs and from 0.759–0.828 to 0.814–0.859
+   for HG008T SNVs (three platforms each; the three-seed mean is higher on every platform), and for INDELs from the
+   13–19% (HG008T) and 4–22% (COLO829T) of the original submission to 24–26% and 23–26%.
 2. *Recall at equal precision.* Under the identical protocol (R3.m2), at each comparator's post-filter precision,
-   Pansoma's SNV recall on HG008T is 0.858–0.891, against 0.806–0.889 for DeepSomatic-TO and ClairS-TO. It is lower
-   only than DeepSomatic-TO's on Illumina (HG008T 0.871 against 0.889; COLO829T, v2.1: 0.791 against 0.835).
+   Pansoma's SNV recall on HG008T is 0.856–0.898 (v2.1, three-seed means), against 0.806–0.889 for DeepSomatic-TO and
+   ClairS-TO. It is lower only than DeepSomatic-TO's on Illumina (HG008T 0.871 against 0.889; COLO829T 0.781 against
+   0.835).
 3. *Where recall is lost.* A per-allele funnel places each missed truth variant at its first loss. For HG008T SNVs the
    largest loss is the threshold; on COLO829T, 15–16% of truth SNVs are subclonal mutations below the 0.08 candidate
    allele-fraction floor. Most truth INDELs are population alleles: under the same population-filtering policy, the
@@ -160,45 +162,49 @@ Supplementary block below).
 
 **Supplementary (R1.6).**
 
-*Recall before and after the revision* (chr1, after population filtering, HPRC v1.1 graph with the d9 filter; original
-submission: the chr1 results of the submitted models; revision: PASS at the recall-0.9 validation threshold):
+*Recall before and after the revision* (chr1, after population filtering; original submission: the chr1 results of
+the submitted models on the HPRC v1.1 graph (d9 filter); revision: PASS at the recall-0.9 validation threshold, ranges
+over three platforms and, for SNVs, three training seeds):
 
 | | HG008T SNV | COLO829T SNV | HG008T INDEL | COLO829T INDEL |
 |---|---|---|---|---|
-| original submission | 0.759–0.828 | 0.575–0.596 | 0.13–0.19 | 0.04–0.22 |
-| revision | 0.826–0.831 | 0.686–0.717 | 0.228–0.256 | 0.237–0.267 |
+| original submission (v1.1) | 0.759–0.828 | 0.575–0.596 | 0.13–0.19 | 0.04–0.22 |
+| revision, HPRC v1.1 | 0.803–0.831 | 0.675–0.723 | 0.228–0.256 | 0.244–0.275 |
+| revision, HPRC v2.1 (d46 filter) | 0.814–0.859 | 0.700–0.734 | 0.237–0.256 | 0.229–0.260 |
 
-*Where recall is lost* (chr1, benchmark regions, HPRC v1.1 graph, models trained on chr2–22 of the same tumor; ranges
-over three platforms; HG008T INDEL candidates include partial allele matches):
+*Where recall is lost* (chr1, benchmark regions, HPRC v2.1 graph (d46 filter), models trained on chr2–22 of the same
+tumor; ranges over three platforms and, for SNVs, three training seeds; INDEL candidates include partial allele
+matches):
 
 | Recall | SNV HG008T | SNV COLO829T | INDEL HG008T | INDEL COLO829T |
 |---|---|---|---|---|
-| truth allele reaches a candidate | 0.944–0.951 | 0.812–0.816 | 0.539–0.702 | 0.397–0.458 |
-| PASS | 0.855–0.862 | 0.705–0.736 | 0.359–0.431 | 0.321–0.420 |
-| PASS, after population filtering | 0.826–0.831 | 0.686–0.717 | 0.228–0.256 | 0.237–0.267 |
-| any threshold, after population filtering | 0.888–0.897 | 0.790–0.795 | 0.238–0.257 | 0.237–0.275 |
+| truth allele reaches a candidate | 0.948–0.954 | 0.812–0.817 | 0.611–0.757 | 0.565–0.695 |
+| PASS | 0.841–0.900 | 0.716–0.751 | 0.375–0.431 | 0.382–0.443 |
+| PASS, after population filtering | 0.814–0.859 | 0.700–0.734 | 0.237–0.256 | 0.229–0.260 |
+| any threshold, after population filtering | 0.889–0.900 | 0.788–0.795 | 0.237–0.257 | 0.244–0.267 |
 | maximum attainable under the same population-filtering policy (whole chr1 truth) | 0.913 | 0.966 | 0.342 | 0.382 |
 
 - *Operating point.* PASS is the recall-0.9 validation threshold, set on held-out validation blocks before population
   filtering. Records down to p = 0.01 are kept as LowQual and population matches are tagged, not deleted, so users can
   move along the precision–recall curve.
 - *Funnel.* On all three references (GRCh38-only, HPRC v1.1, HPRC v2.1 with the d46 filter), HG008T SNVs are called at
-  81.8%, 82.8% and 84.9%, the threshold being the largest loss on every reference; candidate-stage losses are mostly
-  graph alleles and repeat absorption that filtering would tag anyway (R1.4). On COLO829T, 17–18% of truth SNVs get no
-  candidate, mostly subclonal mutations below the 0.08 allele-fraction floor (15.1–16.1% of chr1 truth SNVs), whereas
-  recall at allele fraction 0.05–0.2 is 0.850–0.966 once a candidate exists (R2.3, R2.4).
+  81.8%, 82.0% and 83.2% (HPRC graphs: mean over three seeds), the threshold being the largest loss on every reference
+  and seed; candidate-stage losses are mostly graph alleles and repeat absorption that filtering would tag anyway
+  (R1.4). On COLO829T, 17–18% of truth SNVs get no candidate, mostly subclonal mutations below the 0.08 allele-fraction
+  floor (15.1–16.1% of chr1 truth SNVs), whereas recall at allele fraction 0.05–0.2 is 0.850–0.966 once a candidate
+  exists (R2.3, R2.4).
 - *INDELs.* 418 of the 635 HG008T chr1 truth INDELs (81 of 131 on COLO829T) are exact population alleles at the
   filtering frequencies, which sets the maximum attainable recall above; our post-filter recall at the recall-0.9
   validation threshold is close to the curve's maximum. A GRCh38-only graph gives more HG008T truth INDELs a candidate
-  (0.75–0.87 against 0.54–0.70), but these are almost all population alleles, so 24–27% of truth INDELs are called on
-  every reference and both tumors. At the validation best-F1 threshold, long-read INDEL F1 rises (HG008T PacBio, v1.1:
-  0.092 to 0.227) while recall falls to 0.073–0.158 on HG008T (v1.1) and 0.015–0.061 on COLO829T (v2.1); we report both
-  operating points. On HCC1395 (SEQC2), only 7.9% of truth INDELs are population-tagged and 0.76–0.85 reach a candidate
-  (v2.1; HG008T: 0.43–0.50). The Abstract and Discussion state the INDEL limitation (R3.10).
+  (0.75–0.87 against 0.61–0.76 on v2.1), but these are almost all population alleles, so 24–27% of truth INDELs are
+  called on every reference and both tumors. At the validation best-F1 threshold, long-read INDEL F1 rises (HG008T
+  PacBio, v1.1: 0.092 to 0.227) while recall falls to 0.073–0.158 on HG008T (v1.1) and 0.015–0.061 on COLO829T (v2.1);
+  we report both operating points. On HCC1395 (SEQC2), only 7.9% of truth INDELs are population-tagged and 0.76–0.85
+  reach a candidate (v2.1; HG008T: 0.43–0.50). The Abstract and Discussion state the INDEL limitation (R3.10).
 - *Comparators* (R3.m2). At their own PASS, DeepSomatic-TO and ClairS-TO reach HG008T SNV recall 0.816–0.911 and
   0.845–0.859 (precision 0.167–0.359), and after the same population filtering 0.806–0.889 and 0.831–0.845, against
-  Pansoma's 0.826–0.831; on COLO829T they reach 0.555–0.835 and Pansoma 0.686–0.717, DeepSomatic-TO on Illumina being the
-  highest (R2.3). For INDELs their post-filter recall is 0.019–0.141 on HG008T and 0.015–0.183 on COLO829T.
+  Pansoma's 0.814–0.859 (v2.1); on COLO829T they reach 0.555–0.835 and Pansoma 0.700–0.734, DeepSomatic-TO on Illumina
+  being the highest (R2.3). For INDELs their post-filter recall is 0.019–0.141 on HG008T and 0.015–0.183 on COLO829T.
 - *Other tumors* (HPRC v2.1; R1.7, R1.m1). A model trained on four other lines keeps post-filter SNV recall at
   0.684–0.726 on the unseen HG008T, at higher precision than HG008T's own models; models trained on a single tumor lose
   recall on another mainly through the transferred threshold (COLO829T models on HCC1395 Illumina: recall 0.157 at
@@ -507,11 +513,72 @@ none). On chr1, our test chromosome, this is negligible (19 of 4,266 truth SNVs)
 
 **Response.**
 
-*Recall difference to DeepSomatic.* We withdrew the truth-error explanation: on HG008T the tumor assembly shows that most graph-absorbed truth alleles are genuine somatic events (below; R1.4, R3.7). We re-scored the original DeepSomatic tumor-only and ClairS-TO call sets with our protocol (chr1, benchmark regions, the same population filter; R3.m2). On HG008T the SNV recall gap is then small: 0.806–0.889 (DeepSomatic) and 0.831–0.845 (ClairS-TO), against 0.826–0.831 for Pansoma on the HPRC v1.1 graph (d9 filter; 0.839–0.859 on the HPRC v2.1 graph, d46 filter), with models trained on chr2–22 of the same tumor. On COLO829T the comparators reach 0.555–0.835 and Pansoma 0.686–0.717. Pansoma's F1 is the highest on five of the six datasets (on all six with v2.1). The largest remaining gap, DeepSomatic on COLO829T Illumina (0.835 against 0.711–0.715), lies both below an allele fraction of 0.08, where Pansoma builds no candidate (30% of these truth SNVs recovered against 6%), and above it (94% against 84%). For indels Pansoma's recall is the highest on both tumors (0.228–0.260 against 0.015–0.183). A per-allele funnel (R1.6) shows where Pansoma loses the rest. On HG008T the largest loss on every reference is the threshold (6.8–10.9% of truth SNVs, against 2.1–5.2% without a candidate and 3.0–5.2% removed by filtering); 61 of the 702 truth SNVs are population alleles that any caller using the same filter loses. On COLO829T (GRCh38-only graph and HPRC v2.1 graph, d46 filter), 17–18% of truth SNVs get no candidate, mainly because 15.1–16.1% have a tumor VAF below the 0.08 candidate floor (R2.4).
+We thank the reviewer for this important point. We agree that the recall deficit needed a clearer explanation and that
+graph alignment alone cannot establish errors in the benchmark truth. We have withdrawn that interpretation, reassessed
+recall under a common protocol, and replaced the original false-negative categories with an allele-level analysis of
+where variants are lost.
 
-*The two categories.* "Variant node not ranked #1" and "first aligned node mismatch" belonged to the earlier pipeline, which we replaced. Every truth allele without a candidate now gets one read-level class, on six datasets (later losses: R1.6): no read with MAPQ > 10; fewer than three ALT reads or an allele fraction below the threshold; the ALT is an existing graph allele; repeat absorption or respelling; an indel longer than 50 bp. For example, of 2,976 HG008T PacBio truth INDELs without a candidate (chr1–22), 2,739 (92.0%) are fully or partly encoded in the graph.
+*Recall under a common protocol.* We re-scored the original DeepSomatic-TO and ClairS-TO call sets with our protocol
+(chr1, benchmark regions, the same population filter; R3.m2). On HG008T, SNV recall is now comparable: 0.814–0.859 for
+Pansoma on the HPRC v2.1 graph (d46 filter; three training seeds; v1.1: R1.6), against 0.806–0.889 for DeepSomatic-TO
+and 0.831–0.845 for ClairS-TO, with Pansoma's models trained on chr2–22 of the same tumor. On COLO829T, Pansoma reaches
+0.700–0.734 and the comparators 0.555–0.835, and a substantial deficit remains against DeepSomatic-TO on Illumina
+(0.705–0.717 against 0.835). This deficit lies both among truth SNVs with an allele fraction below 0.08 (30% recovered
+against 6–7%; Pansoma's floor applies to the allele fraction in the reads, which exceeds 0.08 at a few of these sites)
+and above it (94% against 83–85%), so the candidate floor does not explain it fully; we address low-allele-fraction
+detection in R2.4. INDEL recall remains low in absolute terms, although under the same protocol it is higher than the
+comparators' on both tumors (0.229–0.260 against 0.015–0.183).
 
-*The normal at missed sites on graph nodes.* Instead of realigning normal reads, we used the haplotype-resolved matched-normal assemblies (HG008-N v6.2; COLO829BL), which show the normal's sequence directly. Of the truth alleles whose tumor reads align perfectly to an existing v1.1 graph path (HG008T 2,478; COLO829T 497), only 110 (4.4%) and 34 (6.8%) are carried by the matched normal; 2,085 (84.1%) and 430 (86.5%) are absent from both normal haplotypes and lie on nodes walked by other HPRC individuals. At the 1,935 HG008T INDEL loci absent from the normal, the HG008-T tumor assembly carries a sequence found in neither normal haplotype at 1,931 and exactly the truth allele at 1,652, and the tumor's Illumina reads show the expected allele at 96.2% of them (95.7% at random non-absorbed truth INDELs). On HG008T these are real somatic events hidden by the graph, and the manuscript now says so; most also coincide with population alleles that the filter removes on any reference (R1.4): in the chr1 benchmark regions, the GRCh38-only arm calls at most one of the 38–114 HG008T truth INDELs that v1.1 absorbs. COLO829T has no tumor assembly, and up to 15.8% of its absorbed INDELs may be germline-like.
+*Where recall is lost.* A per-allele funnel assigns each missed truth allele to the first stage at which it is lost
+(R1.6). On HG008T the largest loss on every reference is the classification threshold (8.9–10.9% of truth SNVs, against
+2.1–5.2% without a candidate and 3.2–5.2% first lost at filtering). The population filter tags 61 of the 702 truth SNVs
+(8.7%), which any caller using the same filter loses; the tagged alleles not counted at the filtering stage are already
+lost before it. On COLO829T, candidate generation is the main limitation: 17–18% of truth SNVs get no candidate
+(GRCh38-only graph and HPRC v2.1 graph), mainly because 15.1–16.1% have a truth allele fraction below the 0.08 candidate
+floor.
+
+*The two categories.* We regret that the original labels were not explained. "Variant node not ranked #1" and "first
+aligned node mismatch" described implementation-specific failure modes of the original pipeline's node-level candidate
+selection, which the revised pipeline replaces. We have therefore replaced them in Supplementary Fig. 2 with one
+read-level class for every truth allele without a candidate, on six datasets: no read with MAPQ > 10; fewer than three
+ALT reads or an allele fraction below the threshold; the ALT is an existing graph allele; repeat absorption or
+respelling; an indel longer than 50 bp. Losses after candidate generation, at the threshold and at filtering, are
+reported separately (R1.6). For example, on the HPRC v1.1 graph, 2,739 (92.0%) of the 2,976 HG008T PacBio truth INDELs
+without a candidate (chr1–22) are fully or partly encoded in the graph. [待补: the same classes on the HPRC v2.1 tensor
+sets (E1.7, running)]
+
+*The normal at missed sites on graph nodes.* We examined the matched normal directly, using its haplotype-resolved
+assemblies (HG008-N v6.2; COLO829BL). [待补: E20, COLO829BL ONT reads at the absorbed sites] On the HPRC v2.1 graph (d46
+filter), 1,607 HG008T and 401 COLO829T truth alleles get no candidate on at least one platform although a graph path
+spells their ALT and the GRCh38-only graph gives them a candidate. Only 110 (6.8%) and 27 (6.7%) are carried by the
+matched normal; 1,481 (92.2%) and 371 (92.5%) are absent from both normal haplotypes, and their ALT paths run through
+nodes walked by other HPRC haplotypes (median 138 and 110). At the 1,351 HG008T INDEL loci absent from the normal, the
+HG008-T tumor assembly carries a sequence found in neither normal haplotype at 1,347 and exactly the truth allele at
+1,153, and the tumor's Illumina reads show the expected allele at 97.4% of them (95.7% at random non-absorbed truth
+INDELs). The HPRC v1.1 graph of the original submission gives the same picture (Supplementary block). At these HG008T
+loci the absorbed alleles are therefore supported somatic events that escape candidate generation because the graph
+already represents them, and the manuscript now describes graph absorption as a cause of missed somatic alleles rather
+than as evidence of benchmark error. Most of these alleles also match population resources (the population filter tags
+97.0% of the HG008T and 98.5% of the COLO829T ones) and would be removed by population filtering on any reference (R1.4;
+in the chr1 benchmark regions, the GRCh38-only graph calls at most two of the 39–93 HG008T truth INDELs per platform
+that v2.1 absorbs), but this overlap does not establish that they are germline in the patient. COLO829T has no tumor
+assembly; its matched normal carries the exact ALT at 26 (7.5%) of the 347 absorbed INDELs and an ALT of the same length
+with other bases at 22 more, so up to 48 (13.8%) may be germline-like, and we state this uncertainty explicitly.
+
+**Supplementary (R2.3).**
+
+- *The HPRC v1.1 graph (original submission).* By the read-level definition used originally (tumor reads align perfectly
+  to an existing graph path), 2,478 HG008T and 497 COLO829T truth alleles are absorbed; 110 (4.4%) and 34 (6.8%) are
+  carried by the matched normal and 2,085 (84.1%) and 430 (86.5%) are absent from both normal haplotypes. At the 1,935
+  HG008T INDEL loci absent from the normal, the tumor assembly carries a sequence in neither normal haplotype at 1,931
+  and exactly the truth allele at 1,652, and the tumor's Illumina reads show the expected allele at 95.4%. With the v2.1
+  definition above, v1.1 absorbs 2,002 HG008T and 446 COLO829T truth alleles, of which 104 (5.2%) and 26 (5.8%) are
+  carried by the normal; the GRCh38-only graph calls at most one of the 38–114 HG008T truth INDELs per platform that
+  v1.1 absorbs (chr1, benchmark regions).
+- *Definitions.* Absorbed on v2.1: no candidate on at least one platform, a tensor on the GRCh38-only graph, and an HPRC
+  v2.1 path that spells the ALT exactly. Carried by the normal: a normal haplotype has the ALT at the locus.
+  Germline-like (COLO829T): no normal haplotype carries the ALT, but one has an allele of exactly the ALT length with
+  other bases.
 
 ### R2.4 Low-VAF detection and the low-VAF model
 
