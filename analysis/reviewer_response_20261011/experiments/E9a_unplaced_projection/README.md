@@ -461,11 +461,14 @@ chr1 SNV F1 after the PoN in the BED, linear against the pangenome arms' complet
      `task.sh` with an explicit task list, as was done with `tasks.snv_rest_20261015.txt`.
    - Each needs a Slurm array task (CPU, `general`, `-c 4 --mem 16G`, about 5 min per directory, at most 6 at a time),
      then `python collect.py`. Not submitted here.
-2. **COLO829T d9 single-set runs** are not on this cluster (only the joint d9 model), so COLO829T has no d9 row.
+2. **COLO829T d9 single-set runs**: added 2026-10-19 (matched recipe, seed 0; top of this README). COLO829T Illumina v1.1
+   at epoch 6 (the user's choice for R3.1 / R3.9, 2026-10-20) is projected separately on 2026-10-21 (see the 2026-10-21
+   block below).
 3. **Comparators** (E8: ClairS-TO, DeepSomatic on GRCh38) are not yet re-scored. They are GRCh38 callers with no
    unplaced calls, so they enter only the linear-style comparison of §7.
 4. **Seed repeats** of the 7fc7396 models are pending GPU (R3.9); every number here is one seed.
 5. **Final E9e.** E9c / E9d now cover the same nine SNV runs (`../E9c_offref_filter_validation/`, its §2 and the E9a
    class cross-tab of its §6). The combined number (class i placed by E9a, E9c / E9d on the rest: precision =
    TP_rtg / (TP_rtg + FP_rtg + remaining unplaced PASS - confirmed)) is not assembled yet.
-6. **E9b (CHM13).** Dropped by the user, not pending.
+6. **E9b (CHM13).** Done 2026-10-19 (restarted by the user; Status above, `runs_e9b`); E9b x E9c by category:
+   `chm13_by_category.py` -> `results/chm13_by_category.tsv` (2026-10-21).
