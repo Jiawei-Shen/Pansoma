@@ -1,0 +1,10 @@
+run	stratum	truth	calls	fp	recall	precision	f1
+COLO829_Illumina_SNV_d9_normbq_sweep_e06	easy	1918	1606	194	0.736	0.879	0.801
+COLO829_Illumina_SNV_d9_normbq_sweep_e06	difficult	291	272	63	0.718	0.768	0.742
+COLO829_Illumina_SNV_d9_normbq_sweep_e06	extreme	234	243	99	0.615	0.593	0.604
+COLO829_Illumina_SNV_d9_normbq_s1_sweep_e05	easy	1918	1553	150	0.731	0.903	0.808
+COLO829_Illumina_SNV_d9_normbq_s1_sweep_e05	difficult	291	248	51	0.677	0.794	0.731
+COLO829_Illumina_SNV_d9_normbq_s1_sweep_e05	extreme	234	640	518	0.521	0.191	0.279
+COLO829_Illumina_SNV_d9_normbq_s2_sweep_e06	easy	1918	1561	184	0.718	0.882	0.792
+COLO829_Illumina_SNV_d9_normbq_s2_sweep_e06	difficult	291	246	47	0.684	0.809	0.741
+COLO829_Illumina_SNV_d9_normbq_s2_sweep_e06	extreme	234	372	243	0.551	0.347	0.426

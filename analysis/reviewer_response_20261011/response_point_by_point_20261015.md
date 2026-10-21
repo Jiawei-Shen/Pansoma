@@ -40,7 +40,7 @@
 | R2.2 | truth set 怎么来的 | 部分解决 | E8b 按原始文献核实；E22：H1437 的 LOH germline，HCC1954 的 truth 没问题 | 决定：HG008 v0.2 还是 v0.3、rule (a)、H1437 怎么处理 |
 | R2.3 | recall 偏低；漏检位点上的 normal | 部分解决 | E1.6：各阶段的损失；normal 的组装证据 | 同步：和 DeepSomatic 的差距（等比较器结果） |
 | R2.4 | 低 VAF | 部分解决 | E2.4：按 VAF 分档的 recall，purity 系列（低于下限的比例从 16% 升到 27%） | GPU：BQ 伪影修好后重训；决定：E15 低 AF 配置、用哪个第二肿瘤 |
-| R2.5 | 精度提升从哪来 | 部分解决 | E4b / E10 / E19：graph 臂少了 germline candidate，GRCh38-only 多了着丝粒附近和 extreme 区域的 FP；附近 germline 越多，SNV 增益越大；去 ch6 重训和三 seed 已完成（10-19，HPRC − GRCh38-only 均值 +0.028 到 +0.292） | — |
+| R2.5 | 精度提升从哪来 | 部分解决 | E4b / E10 / E19：graph 臂少了 germline candidate（PoN 前几乎全是 germline）；PoN 后多出来的 FP 里 germline 占 HG008T PacBio / ONT 60–73 %、Illumina 22–30 %、COLO829T 0（那里是 extreme 区低 AF call）；extreme 区 12 组比较 precision 都更高；附近 germline ≥ 2 时 SNV 增益最大；去 ch6 重训和三 seed 已完成（10-19，HPRC − GRCh38-only 均值 +0.028 到 +0.292） | — |
 | R2.6 | PoN | 部分解决 | E8b：资源组成；E17c：SNV 规则就是 chr2–22 选出的；INDEL 换成留出肿瘤选出的规则（HP ≥ 8: AF ≥ 0.01，其余 ≥ 1e-4；用户 10-16 决定，pipeline 已改） | 已重算（10-16，44 个本地 INDEL call set 按新规则重新打分，R1.2 / R1.4 / R1.6 / R1.8 / R2.6 / R3.1 / R3.2 / R3.9 / R3.10 / R3.m2 已换数）；COLO829T v1.1 单样本 INDEL：10-19 用 RIS 的 matched lr 1e-4 run 在本地出了 valbest（R3.1 / R3.10 已填） |
 | R2.7 | 比对统计夸大 | **已解决** | E11a 全量数据（10-19）：两个肿瘤 × 三个平台 × 四个参考，chr1–22 全部 reads 的 perfectly aligned / substitution / indel / soft clipping 读数和比例，比例的分母是各参考上 chr1–22 的 reads；原文那句逐条改写（soft clipping 的说法删掉；10-21 措辞收紧：增益"主要反映"图里多出的 allele 序列，比对一致性不等于放置正确，删掉文献段）；不再用模拟 reads | 只剩改稿 |
 | R2.m | Minor 1–8 | 部分解决 | 大部分只是改图改字；E18 补了 SBS96 | 决定：第 5 条 "truth overlapping" 的原意；同步：比较器的 SBS96 |
@@ -2182,7 +2182,7 @@ Recall falls below 50% in the 0.05–0.10 bin, where only 34–68 truth SNVs hav
 
 ### R2.5 What drives the higher precision
 
-**状态：部分解决**: 第一问现在三层都有数：germline candidate 减少（三臂，R1.2）、ch6 在用（E1.1，18 个 SNV 模型）、PoN 后剩下的 FP 是什么（E4b，2026-10-15：三臂 9 组 SNV 对比，配合 E10 的 SMaHT 分层）。E4b 改了机制的说法：图臂 PoN 后的 FP 大多是病人自己的 germline allele（HG008T 82.7–97.9 % 和 normal 是同一个 allele，其中每套最多 2 个同时是 HPRC v1.1 allele）；GRCh38-only 多出来的 FP 在 HG008T PacBio / ONT 上主要仍在 germline 附近（60.3–73.3 %），但在 HG008T Illumina 和 COLO829T 三个平台上主要是不匹配 germline / population 的低 AF call，集中在 SMaHT extreme 区（COLO829T Illumina 2,221 个 FP 里 1,888 个在 chr1:121–126 Mb 着丝粒附近；去掉这一段 v2.1 仍在六个数据集上领先 +0.020 到 +0.209，E16 README）。所以 Response 第一句是 "PoN 前几乎全是 germline；PoN 后难区 artefact 也贡献，按数据集不同"。第二问 E19 已出（0 / 1 / 2+，±50 / ±500 bp，McNemar）：HG008T 三个平台 2+ 档增益最大、来自 precision；COLO829T Illumina / ONT 因分层方式不适用，Fiber-seq 也是 2+ 最大；INDEL 相反，2+ 档图臂只给 5.9–21.6 % 的 truth 建 exact tensor（linear 62.7–94.1 %），HG008T PacBio 的 recall 因此更低。complete-output（rescue 开、no BED）的 4 个反转里本地的 3 个在关掉 rescue 后消失（E3b：no BED 9 个图 run 全部领先，BED 内只有 HG008T ONT d46 低 0.004），第 4 个（COLO829T Fiber-seq d9 `_h90`）的 predictions 不在本地。还缺：第 4 个反转、去掉 ch6 的重训和 d9 配对重跑 / 多 seed（GPU RIS）、graph PoN 用法（用户决定）。
+**状态：部分解决（2026-10-21 Response 按外部意见收紧，见证据同日一条）**: 第一问现在三层都有数：germline candidate 减少（三臂，R1.2）、ch6 在用（E1.1，18 个 SNV 模型）、PoN 后剩下的 FP 是什么（E4b，2026-10-15：三臂 9 组 SNV 对比，配合 E10 的 SMaHT 分层）。E4b 改了机制的说法：图臂 PoN 后的 FP 大多是病人自己的 germline allele（HG008T 82.7–97.9 % 和 normal 是同一个 allele，其中每套最多 2 个同时是 HPRC v1.1 allele）；GRCh38-only 多出来的 FP 在 HG008T PacBio / ONT 上主要仍在 germline 附近（60.3–73.3 %），但在 HG008T Illumina 和 COLO829T 三个平台上主要是不匹配 germline / population 的低 AF call，集中在 SMaHT extreme 区（COLO829T Illumina 2,221 个 FP 里 1,888 个在 chr1:121–126 Mb 着丝粒附近；去掉这一段 v2.1 仍在六个数据集上领先 +0.020 到 +0.209，E16 README）。所以 Response 第一句是 "PoN 前几乎全是 germline；PoN 后难区 artefact 也贡献，按数据集不同"。第二问 E19 已出（0 / 1 / 2+，±50 / ±500 bp，McNemar）：HG008T 三个平台 2+ 档增益最大、来自 precision；COLO829T Illumina / ONT 因分层方式不适用，Fiber-seq 也是 2+ 最大；INDEL 相反，2+ 档图臂只给 5.9–21.6 % 的 truth 建 exact tensor（linear 62.7–94.1 %），HG008T PacBio 的 recall 因此更低。complete-output（rescue 开、no BED）的 4 个反转里本地的 3 个在关掉 rescue 后消失（E3b：no BED 9 个图 run 全部领先，BED 内只有 HG008T ONT d46 低 0.004），第 4 个（COLO829T Fiber-seq d9 `_h90`）的 predictions 不在本地。还缺：第 4 个反转、去掉 ch6 的重训和 d9 配对重跑 / 多 seed（GPU RIS）、graph PoN 用法（用户决定）。
 
 **Comment（要点）。**
 
@@ -2191,37 +2191,41 @@ Recall falls below 50% in the 0.05–0.10 bin, where only 34–68 truth SNVs hav
 
 **Response.**
 
-We compared three references built from the same reads, tensor code and labels: a GRCh38-only graph and the HPRC v1.1
-and v2.1 graphs (R1.2, R3.1). The precision gain comes mainly from fewer germline candidates, and it is largest in
-difficult regions and where germline variants cluster.
+We agree that the precision gain needs a mechanism. Comparing the same reads, tensors and labels on a GRCh38-only graph
+and the HPRC v1.1 and v2.1 graphs (R1.2, R3.1), fewer germline candidates are a major contributor; after population
+filtering, fewer false calls in the hardest regions and near clustered germline variants also contribute, in
+proportions that differ by dataset and overlap.
 
-*Fewer germline candidates.* At candidate generation the HPRC v1.1 and v2.1 graphs produce 84–90% and 85–91% fewer
-germline candidates than the GRCh38-only graph, because reads carrying a germline allele already in the graph follow its
-path without a mismatch. Before population filtering, the HG008T models call 117,205–144,251 germline tensors somatic on
-GRCh38-only, against 2,528–5,147 on the HPRC graphs. After filtering, in the benchmark regions, the HPRC graphs lead by
-+0.028 to +0.292 SNV F1 (means over three training seeds; single-run paired block-bootstrap intervals exclude zero in all twelve comparisons; R3.9).
+*Germline contamination.* At candidate generation the HPRC v1.1 and v2.1 graphs produce 84–90% and 85–91% fewer
+candidates at the normal's germline variants than the GRCh38-only graph, consistent with reads carrying a
+graph-represented germline allele following its path without a mismatch. Before population filtering, the HG008T models
+call 117,205–144,251 germline tensors somatic on the GRCh38-only graph, against 2,528–5,147 on the HPRC graphs, so most
+germline contamination is removed before the population filter rather than by it. After filtering, the false calls that
+the GRCh38-only graph adds over an HPRC graph are 60–73% germline (the normal's allele, an overlapping allele, or within
+10 bp of one) on HG008T PacBio and ONT, 22–30% on HG008T Illumina, and none on COLO829T, where v2.1 makes more germline
+false calls and 71–94% of the GRCh38-only false calls lie in SMaHT extreme regions at low allele fraction (median
+0.15–0.29).
 
-*Difficult regions.* We stratified chr1 by the SMaHT easy, difficult and extreme regions. They are defined on GRCh38
-from the 1000 Genomes accessibility mask and a pangenome mask, not from any sample, so they apply to HG008T as well as
-COLO829T (R1.3). The gain grows with difficulty: in extreme regions the HPRC graphs raise SNV precision from 0.056–0.253
-to 0.161–0.764 (F1 +0.099 to +0.531 in all nine graph–dataset comparisons; COLO829T Illumina: 39 instead of 2,087 false
-calls); in difficult regions F1 rises in eight of nine (−0.005 to +0.259); in easy regions HG008T changes by −0.003 to
-+0.020.
+*Difficult regions.* In SMaHT extreme regions (R1.3) the HPRC graphs raise SNV precision from 0.056–0.253 to
+0.161–0.764 in all twelve comparisons (six datasets, two graphs; COLO829T Illumina on v1.1 at epochs 5–6, as in R3.1);
+COLO829T Illumina makes 39 false calls there on v2.1 against 2,087 on the GRCh38-only graph. Elsewhere the gain is less
+uniform: in difficult regions F1 changes by −0.005 to +0.259 (higher in eleven of twelve), and in easy regions by −0.003
+to +0.020 on HG008T but +0.054 to +0.154 on COLO829T, through recall (on ONT also precision).
 
-*Clustered germline variation.* We grouped calls by the number of the normal's germline variants within 50 bp (0, 1,
-2+). For HG008T SNVs the F1 gain is largest with two or more nearby (0.107–0.204, against 0.022–0.087 with none), through
-precision; recall stays 0.256–0.308 on every reference. The reads show why. At truth SNVs with two or more germline
-variants nearby, reads differ from the reference at 1.8–3.0 positions each on GRCh38-only, against 0.4–1.8 on the HPRC
-graphs, and the share of reads with at least two differences falls from 53–74% to 5–30%; with none nearby the
-references give the same reads, and mapping quality is the same throughout (mean 58–60). The GRCh38-only false calls at
-such sites (125–236 per HG008T platform) are 82–97% germline alleles of the normal or calls within 10 bp of one; 86–94%
-of them are not called on the HPRC graphs, and 41–87% are not even candidates there. COLO829T agrees (94–97% of 23–49
-false calls removed).
+*Clustered germline variation.* We grouped calls by the number of the normal's germline variants within 50 bp,
+excluding variants that overlap the call itself (0, 1, 2+). For HG008T SNVs the HPRC graphs raise F1 most with two or
+more nearby (+0.107 to +0.204, against +0.022 to +0.087 with none), through precision; recall in that stratum is
+0.256–0.308 on every reference. The reads are consistent with better local sequence agreement: at truth SNVs with two
+or more germline variants nearby, reads differ from the traversed reference at 1.8–3.0 positions each on GRCh38-only
+against 0.4–1.8 on the HPRC graphs (at least two differences: 53–74% against 5–30% of reads). Mean MAPQ is 58–60 on
+every reference, which alone does not show equally accurate placement. Of the 125–236 GRCh38-only false calls per
+HG008T platform in that stratum, 82–97% are germline alleles of the normal or lie within 10 bp of one; 86–94% are not
+called on the HPRC graphs, and 41–87% are not even candidates there. COLO829T agrees (94–97% of 23–49 such false calls
+removed). The benefit therefore extends beyond the germline allele at the site.
 
 *Limits.* For indels the graphs lose where germline variants cluster: only 5.9–21.6% of the truth indels in that
 stratum get an exact candidate, against 62.7–94.1% on GRCh38-only (R1.4). The false calls left after filtering are
-mostly the patient's rare germline alleles, which neither the graph nor the filter contains (R2.6), and v2.1 adds no
-precision over v1.1 after filtering (R1.2).
+mostly the patient's rare germline alleles, which neither the graph nor the filter contains (R2.6).
 
 **证据（内部）。**
 
@@ -2393,6 +2397,28 @@ precision over v1.1 after filtering (R1.2).
   - E2.4（README 18:50 版 §4）：INDEL 的 PoN 拿掉 linear 0.300–0.494 的 recall、图臂 0.121–0.183（PoN 后 linear 0.221–0.298，图臂 0.228–0.260）：linear 多出来的 INDEL recall 是 PoN 会去掉的 population allele。这支持 R2.3 / R1.4 的 "absorbed truth 大多是 population allele"；本条 Response 没用。
   - "in the BED / without" 的说明（coordinator 要求）：Response 里 after-filtering 的 F1 差、E16 区间、FP 拆分、E10 extreme、着丝粒、E19 都是 BED 内；complete-output 的 4 / 12 和 rescue 那条是 no BED（E3 §2、E3b）；E1.1 的 germline tensor 数是 chr1 的 labelled test tensor（`eval_label >= 0`，label 0 / 1 / 2 只在 confident 区内，E1.1 README "Test tensors"），per-tensor 的数，不是 rtg。
   - Response 约 670 词（原来 506），超出 450：E4b、E10 / E16 着丝粒和 E19 是本条两问的直接答案，没再压。要压的话先删 Clustered 段的 COLO829T 和 INDEL 两句（细节在这里）。
+
+- 2026-10-21 按用户贴来的外部意见改 Response（"主要由 germline 减少解释" 改成 "a major contributor"，给统一分母；"gain grows
+  with difficulty"、"The reads show why"、"the references give the same reads" 去掉；比较范围写明；F1 / bootstrap / 区域定义缩短）：
+  - 统一分母（E4b `tables.md` §4，7fc7396 单 run，PoN 后、BED 内，GRCh38-only 比 HPRC 多出的 FP 里 germline 三类 = 同 allele +
+    重叠 allele + 10 bp 内）：HG008T Illumina lin − d9 387 个里 118（30 %），lin − d46 297 里 64（22 %），其余主要是 other
+    （222 / 206）；PacBio 386 里 283（73 %）、319 里 227（71 %）；ONT 244 里 155（64 %）、116 里 70（60 %）；COLO829T（只有
+    lin − d46）germline 三类是负的：Illumina −89 / 1,953、Fiber-seq −29 / 253、ONT −34 / 2,118（d46 的同 allele germline FP
+    191 / 172 / 195 多于 GRCh38-only 的 101 / 133 / 126），减少的都在 other（1,942 / 255 / 1,903）。GRCh38-only 的 other
+    中位 AF（E4b §5）：COLO829T Illumina 0.286、Fiber-seq 0.195、ONT 0.153 → "median 0.15–0.29"。"71–94 %" = E10 extreme 区
+    FP（2,087 / 369 / 1,940：calls − R × 234 truth）÷ E4b 总 FP（2,221 / 521 / 2,575）= 94.0 / 70.8 / 75.3 %。
+  - 邻近 germline 分层确实排除了 call 本身：`E19_germline_density/germline_density.py` 第 6 行 "not counting records that
+    intersect the variant itself"；E19b 的 read 差异数也在 site 列之外（`dense_reads.py` "outside the site column"）。
+  - "twelve comparisons"：六个数据集 × v1.1 / v2.1。E10 `tables.md` 的 HG008T d9 / d46、COLO829T d46 和 COLO829T Fiber-seq /
+    ONT d9（7fc7396）；COLO829T Illumina d9 在 E10 里是 validation 选的 epoch 8（`COLO829_Illumina_SNV_7fc7396_ddp4_b1024`，
+    extreme P 0.076），按 R3.1 换成 epoch 6 / 5 / 6 三个 seed：`experiments/E10_region_strata/colo829t_illumina_d9_epochs.py`
+    → `colo829t_illumina_d9_epochs.tsv`（extreme P 0.593 / 0.191 / 0.347，F1 0.604 / 0.279 / 0.426；difficult F1 0.742 / 0.731 /
+    0.741；easy F1 0.801 / 0.808 / 0.792）。extreme：GRCh38-only P 0.056–0.253，HPRC 0.161–0.764，12 / 12 都更高；COLO829T
+    Illumina extreme FP 2,087 → 39 是 v2.1（d46，165 calls，P 0.764）。difficult F1 −0.005（HG008T ONT d46）到 +0.259（COLO829T
+    ONT d46），12 里 11 个更高；easy HG008T −0.003 到 +0.020，COLO829T +0.054 到 +0.154（Illumina / Fiber-seq 只靠 recall，
+    precision 略降；ONT recall 0.552 → 0.714–0.718、precision 0.708 → 0.840–0.841）。旧 Response 的 "nine" 是 E10 README 当时的
+    范围（HG008T d9 / d46 + COLO829T d46）。
+  - 保留了 *Limits* 段（外部意见的改写版没有）：INDEL 在 germline 密集处的损失是第二问的反面结果，删掉会只报有利的一面。
 
 **还缺什么。**
 
