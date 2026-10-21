@@ -153,6 +153,10 @@ D9_NOTES = {
     "HG008_ONT_SNV_7fc7396": "d9 trained on 1 GPU (global batch 1,024), linear / d46 on 4 GPUs (4,096): not a matched arm (E3 caveat 1)",
 }
 
+# Reference-arm call set to use when a base set has more than one in-sample run on that arm (user 2026-10-20: COLO829T
+# Illumina v1.1 at epoch 6, seed 0, as in R3.1 / R3.4; the validation-selected epoch 8 run stays as a call set in ci.tsv).
+ARM_RUN = {("COLO829T_Illumina", "SNV", "d9"): "COLO829_Illumina_SNV_d9_normbq_sweep_e06"}
+
 
 def pairs(units):
     """(type, A, B, note): A - B differences of F1 on identical blocks."""
@@ -163,6 +167,9 @@ def pairs(units):
     groups = defaultdict(dict)
     for u in std:
         if u.role == "insample":
+            want = ARM_RUN.get((u.base_set, u.kind, u.arm))
+            if want and u.arm in groups[(u.base_set, u.kind)] and u.run != want:
+                continue
             groups[(u.base_set, u.kind)][u.arm] = u
     for (bs, kind), arms in sorted(groups.items()):
         for a, b in (("d9", "linear"), ("d46", "linear"), ("d46", "d9")):

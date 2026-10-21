@@ -2,7 +2,7 @@
 differences in chr1 precision, recall and F1 after population filtering (benchmark regions), from
 experiments/E16_bootstrap/paired.tsv: HPRC graph minus the GRCh38-only graph (SNVs), and Pansoma on the HPRC v2.1 graph
 minus DeepSomatic-TO 1.9.0 and ClairS-TO (0.4.2 on HG008T, 0.4.1 on COLO829T; the user's existing tumor-only runs,
-re-scored by E8). Pansoma call sets: the first-seed in-sample models. Writes paired_table.tsv and paired_table.md.
+re-scored by E8). Pansoma call sets: the first-seed in-sample models (COLO829T Illumina v1.1: epoch 6, E16's ARM_RUN). Writes paired_table.tsv and paired_table.md.
 usage: python3 make_paired_table.py
 """
 import csv

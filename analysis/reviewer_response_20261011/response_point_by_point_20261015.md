@@ -3383,20 +3383,39 @@ So on HG008T at most 1.1–5.2% of graph-coordinate calls per run have assembly 
 
 **Response.**
 
-We agree, and the revised evaluation covers the complete output.
+We agree, and the evaluation now covers the complete output.
 
-1. *"About 2%" was wrong and has been removed.* On chr1, after population filtering and without benchmark regions, graph-coordinate calls are 8.1–52.4% of the PASS SNV output on the HPRC v1.1 graph (d9 filter) and 11.4–68.0% on the HPRC v2.1 graph (d46 filter), highest for ONT throughout. Every benchmark table now reports this fraction, replacing Supplementary Table 6.
-2. *Complete-output metrics.* Every run reports F1 for the GRCh38-evaluable calls and for the complete output, counting every graph-coordinate PASS call as a false positive (a worst case). HG008T SNV, chr1, after population filtering, no benchmark regions, HPRC v1.1 / v2.1 / GRCh38-only graph:
+1. *"About 2%" was wrong and has been removed.* Every benchmark table now reports the share of graph-coordinate calls and
+F1 both for the GRCh38-evaluable calls and for the complete output, counting each graph-coordinate PASS call as a false
+positive (a worst case; this replaces Supplementary Table 6). Chr1 SNVs after population filtering, no benchmark regions,
+twelve runs (two tumors, three platforms, HPRC v1.1 and v2.1 graphs):
 
-   | | Illumina | PacBio | ONT |
-   |---|---|---|---|
-   | evaluable calls | 0.577 / 0.561 / 0.197 | 0.614 / 0.600 / 0.359 | 0.586 / 0.563 / 0.365 |
-   | complete output | 0.546 / 0.414 / 0.197 | 0.553 / 0.533 / 0.359 | 0.342 / 0.354 / 0.365 |
+   | | with the off-reference rescue | without it |
+   |---|---|---|
+   | graph-coordinate share of PASS calls | 8.0–68.0% (highest for ONT) | 0.5–10.1% |
+   | complete-output F1 (GRCh38-only graph: 0.197–0.680) | 0.342–0.736 | 0.524–0.780 |
+   | graph-coordinate calls with a CHM13 allele | 36.7–65.9% per run | 76.6% (663 calls) |
 
-   Under this worst case the HPRC graphs fall below the GRCh38-only graph in four of the twelve SNV comparisons, all long-read: HG008T ONT on both graphs, COLO829T ONT on v2.1 (0.369 against 0.418) and COLO829T Fiber-seq on v1.1 (0.572 against 0.680).
-3. *Graph-specific or merely unprojected?* In the twelve graph runs, the GRCh38 nodes flanking each call's bubble give a GRCh38 allele for 2.2–19.1% of calls. After population filtering this adds seven true positives across the twelve runs (0–2 per run; four distinct truth SNVs), and of the 89–1,718 calls per run placed only to a GRCh38 interval, one matches a missed truth variant. The rest have no GRCh38 allele (inserted sequence, the GRCh38 base on a branch node, no consistent anchors); most are population or germline alleles, and on HG008T only 1.1–5.2% per run have tumor-only support in the assemblies (R3.3). Projection moves complete-output F1 by at most 0.009. A Supplementary Table lists each call's node, offset, class, GRCh38 interval, CHM13 position and assembly class.
-4. *Origin and trade-off.* Most graph-coordinate SNV PASS calls are produced by an off-reference rescue step that raises the haplotype count on nodes off GRCh38 (R3.3); without it, 6–162 per run remain. The rescue recovers off-reference somatic SNVs that rtg cannot credit: at the assembly-derived HG008T sites, it calls 22–66 read-supported somatic SNVs per dataset (0–4 without it; tensor level), and 63–87% of its calls there are read-supported (R3.3). On chr1, however, that is 2–8 such SNVs per HG008T run against 210–1,410 graph-coordinate PASS calls, and the rescue causes the long-read losses above. Without it, the placed calls are unchanged and all twelve HPRC runs are above the GRCh38-only graph without benchmark regions (complete-output F1 0.524–0.780 against 0.197–0.680); inside the benchmark regions, HG008T ONT on v2.1 stays 0.004 below (0.533 against 0.537). We report every SNV result with and without the rescue.
-5. *CHM13.* Both graphs carry T2T-CHM13 as an unfiltered reference path, and Pansoma now also writes its calls in CHM13 coordinates (an optional CHM13 VCF; Supplementary Methods). Of the graph-coordinate PASS SNV calls in the twelve runs, 36.7–65.9% per run lie on CHM13 nodes and have a CHM13 allele; with the GRCh38 alleles of point 3, 38.1–67.8% can be written on one of the two linear references. The other 32.2–61.9% have an allele on neither and are specific to the graph. For indels, 36.2–48.6% of the graph-coordinate PASS calls per run have a CHM13 allele. A linear position does not single out somatic calls: of the SNV calls with a CHM13 allele and of those on neither reference, 95% each are HPRC or germline alleles and 1–2% have assembly support as somatic or are absent from the normal (R3.3). Our truth sets are on GRCh38, so CHM13 positions do not change any score.
+   With the rescue, the HPRC graphs fall below the GRCh38-only graph in four of the twelve comparisons, all long-read
+   (HG008T ONT on both graphs, COLO829T ONT on v2.1, COLO829T Fiber-seq on v1.1). Without it, all twelve are above it
+   except HG008T ONT on v2.1 inside the benchmark regions (0.533 against 0.537).
+2. *Why the rescue exists.* Our truth sets are on GRCh38, so the labelled training examples lie almost entirely on nodes
+   of the GRCh38 path, which nearly every haplotype traverses (93.6–99.7% of the somatic examples; all germline and
+   non-variant ones). Through the path-count channel, the classifier therefore scores variants on nodes carried by few
+   haplotypes low (R1.1). The optional rescue re-scores tensors on nodes off GRCh38 with the path count of a node that
+   all haplotypes traverse, which yields more calls on alternative paths. It recovers read-supported off-reference
+   somatic SNVs that rtg cannot credit (22–66 per HG008T dataset genome-wide, 0–4 without it; R3.3), but on chr1 these
+   are 2–8 per HG008T run against 210–1,410 graph-coordinate calls, and it causes the long-read losses above. We report
+   every SNV result with and without it.
+3. *Graph-specific or merely unprojected?* The GRCh38 nodes flanking a call's bubble give a GRCh38 allele for 2.2–19.1%
+   of graph-coordinate calls; after population filtering this adds seven true positives across the twelve runs and moves
+   complete-output F1 by at most 0.009. Pansoma can also write its calls on the graphs' T2T-CHM13 reference path (an
+   optional CHM13 VCF; Supplementary Methods): with either linear reference, 38.1–67.8% of the graph-coordinate calls
+   per run have an allele (77.4% of all such calls without the rescue), and those on neither are at most 2.9% of a run's
+   output without the rescue. For indels, 36.2–48.6% per run have a CHM13 allele. A linear position does not single out
+   somatic calls: with or without one, about 95% of the SNV calls are HPRC or germline alleles, and 1–2% are tumor-only
+   or absent from the normal in the assemblies (R3.3). A Supplementary Table lists each call's node, class, GRCh38
+   interval, CHM13 position and assembly class. Our truth sets are on GRCh38, so CHM13 positions do not change any score.
 
 **Supplementary (R3.4).**
 
@@ -3552,6 +3571,41 @@ or the projection of point 3 gives one.
     11.2–18.7 %，其中有 CHM13 allele 的 36.2–48.6 %（HG008T Illumina d9 最低，COLO829T Illumina d46 最高）。
   - Supplementary Methods（CHM13 坐标）：每张图的 CHM13 FASTA 见 `tmp/reviewer_cpu_20261019/E9b_chm13/jobs.txt` 的比对记录（v1.1 用 chm13v2.0.fa 且排除 chrY：它的 CHM13
     chrY 是 GRCh38 chrY，逐碱基相同；v2.1 = chm13v2.0_maskedY_rCRS.fa）。
+
+- 2026-10-21 第 1 点的来源统一（用户问数从哪来）：原来的 8.1–52.4 % / 11.4–68.0 % 来自 `E3_reference_arms/tables.md` §2（RIS 2026-10-12
+  benchmark summary，U / (TP + FP + U)，PoN 后、no BED），但那里 COLO829T v1.1 是 2026-10-03 单 GPU 的 `*_SNV_h90` run，不是第 2–5 点、R3.1、
+  R3.9 用的 matched seed 0 / epoch 6；HG008T 是 RIS 原始 run（和本地 re-predict 差 1–4 个 call）。改用第 2–5 点同一批 12 个本地 run
+  （`reviewer_cpu_20261013/<run>/vcf_chr1`：eval_nobed pon_calls 的 TP / FP，linear.stats.json 的 unplaced_pass）重算：v1.1 HG008T
+  8.0 / 15.0 / 52.5 %，COLO829T 24.6（epoch 6）/ 39.7 / 61.3 %；v2.1 HG008T 34.5 / 16.0 / 46.6 %，COLO829T 20.4 / 11.4 / 68.0 % -> v1.1 8.0–61.3 %
+  （上限变了：matched seed 0 的 COLO829T ONT v1.1 U 3,421，h90 是 1,675），v2.1 11.4–68.0 % 不变，"highest for ONT throughout" 仍成立。
+  同一批 run 的 complete-output F1 和第 2 点一致（HG008T 0.546 / 0.553 / 0.342，COLO829T Fiber-seq v1.1 0.572，COLO829T ONT v1.1 0.427）。
+  E3 的 COLO829T d9 行仍是 h90（E3 README caveat），第 1 点不再用它。
+
+- 2026-10-21 用户：加上关掉 rescue 的结果，并说明 rescue 的由来（训练的 true 都在 GRCh38 path 上、ch6 让模型偏向很多 path 经过的节点、rescue 去掉 ch6
+  的影响、在 alt path 上多出 prediction）。
+  - 第 1 点加 "without the off-reference rescue (point 4), they are 0.5–10.1%"：同一批 12 个 run 的 `<run>__norescue/vcf_chr1`（E3b），
+    U / (TP + FP + U)（PoN 后、no BED；placed 的 TP / FP 和开 rescue 时一样）：v1.1 HG008T 0.9 / 0.8 / 2.0 %，COLO829T 1.8（epoch 6）/ 1.5 / 6.6 %；
+    v2.1 HG008T 2.0 / 0.5 / 10.1 %，COLO829T 0.9 / 3.8 / 4.4 %。U 12 / 9 / 26 / 38 / 35 / 152 / 29 / 6 / 162 / 18 / 78 / 98（6–162，和第 4 点一致）；
+    complete-output F1 0.574 / 0.612 / 0.579 / 0.767 / 0.747 / 0.720 / 0.553 / 0.596 / 0.524 / 0.780 / 0.765 / 0.721（0.524–0.780，和第 4 点一致）。
+  - 第 4 点的由来：chr1 test tensors（和训练同一套标签规则；各 run 的 `test_chr1/*.SNV.predictions.ndjson.gz` 的 label / off_reference）里 somatic
+    在 GRCh38 path 节点上的比例：HG008T v1.1 94.7 / 97.2 / 97.2 %，COLO829T v1.1 99.2 / 99.7 / 99.7 %，HG008T v2.1 93.6 / 96.9 / 97.2 %，COLO829T
+    v2.1 99.5 / 99.6 / 99.6 %（off-reference 上 6–53 个，R8 分支节点对上 somatic truth）；off-reference tensor 的 label 0 / 2 一个都没有
+    （truth_labels：分支节点只能是 1 或 −1）。所以用户说的 "全部" 写成 "almost entirely ... 93.6–99.7% of the somatic examples and all
+    germline and non-variant examples"。rescue 的做法按 graph VCF header：OFFREF_P_* "probability ... with the site's path count raised to the
+    every-haplotype code"（predict `--offref-site90 10`），Response 写成 "with the site's path count set to that of a node all haplotypes
+    traverse"。ch6 的因果证据见 R1.1（E1.1 counterfactual / nopc ablation）。
+  - 第 5 点加关 rescue 时的 CHM13：norescue 的 graph-coordinate PASS（663 个）按 candidate ID 查开 rescue 时的 E9b `projected.tsv`（投影和
+    FILTER 无关，663 个全部查到）：CHM13 direct 508（76.6 %；每个 run 31.6–100 %，COLO829T ONT v2.1 最低），加 class i 513（77.4 %），两边都
+    没有 150（65 个在 COLO829T ONT v2.1）；占各 run PASS 输出（TP + FP + U）最多 2.9 %（COLO829T ONT v2.1 65 / 2,245），其余 0–1.0 %。
+    E9c 类别只有开 rescue 时也是 PASS 的 361 个有（有类别的里 CHM13 组 94 %、neither 组 95 % 是 population / germline），没写进 Response。
+
+- 2026-10-21 用户："你的回答可以更凝练一些，现在感觉太多字数了"：Response 从 759 词压到 431 词（不含表），五点并成三点：1 完整输出（一张表：
+  开 / 关 rescue 的 graph 坐标比例、complete-output F1、CHM13 比例），2 rescue 的由来和代价，3 投影 + CHM13 + 类别。旧版备份在 session scratchpad
+  `R3.4.before_condense_20261021.md`。删掉的细节（证据里都有）：HG008T 的 evaluable / complete F1 小表、"0–2 per run; four distinct truth SNVs"、
+  "89–1,718 calls ... one matches a missed truth variant"（R3.3 第 2 点仍有）、"63–87% of its calls there are read-supported"。新增的范围：
+  开 rescue 时 complete-output F1 0.342–0.736（12 个 run：0.546 / 0.553 / 0.342 / 0.671 / 0.572 / 0.427 / 0.414 / 0.533 / 0.355 / 0.702 / 0.736 /
+  0.369）；GRCh38-only 0.197–0.680（no BED：HG008T 0.197 / 0.359 / 0.365，COLO829T 0.468 / 0.680 / 0.418）；graph 坐标比例开 rescue 时
+  v1.1 + v2.1 合成 8.0–68.0 %。
 
 **还缺什么。**
 
@@ -4011,7 +4065,7 @@ We agree that single point estimates are insufficient. The revised manuscript th
 
 1. *Variation across training seeds.* Each SNV model of the three-reference comparison was trained three times with independent random seeds, which also determine the held-out validation blocks; models were trained on chr2–22 and evaluated on chr1. Supplementary Tables R3.9a and R3.9c report chr1 precision, recall and F1 after population filtering for every seed and reference, with mean ± SD. Across the HPRC models (v1.1, d9 filter; v2.1, d46 filter; six datasets), recall SD is 0.006–0.019, precision SD 0.003–0.083 and F1 SD 0.001–0.040 (median 0.012), so single-run differences of several percentage points can fall within training variation for some datasets. Nevertheless, the HPRC graphs outperform the seed-matched GRCh38-only model in 35 of 36 comparisons (R3.1). The three-seed analysis includes the HG008T models trained on chr2–22 and evaluated on held-out chr1; the independent cross-tumor HG008T experiments currently use one training seed and are reported separately (R1.7).
 
-2. *Paired genomic-block bootstrap.* Both members of each comparison are scored on the same 2,000 resamples of the 1-Mb blocks of chr1, giving paired 95% confidence intervals for Δprecision, Δrecall and ΔF1 (Supplementary Table R3.9b). For HPRC versus GRCh38-only, ΔF1 is +0.038 to +0.326 and excludes zero in all 12 SNV comparisons; Δprecision excludes zero in 10 and Δrecall in eight. For Pansoma (v2.1) versus DeepSomatic-TO, SNV ΔF1 is +0.042 to +0.219 and excludes zero on all six datasets. Versus ClairS-TO, ΔF1 is positive in all six comparisons (+0.012 to +0.232), although the interval excludes zero in only two. For INDELs at the recall-0.9 operating point, Pansoma trades higher recall for lower precision relative to both callers (R3.10). These intervals quantify the genomic sampling uncertainty of chr1 and are reported separately from seed-to-seed training variation.
+2. *Paired genomic-block bootstrap.* Both members of each comparison are scored on the same 2,000 resamples of the 1-Mb blocks of chr1, giving paired 95% confidence intervals for Δprecision, Δrecall and ΔF1 (Supplementary Table R3.9b). For HPRC versus GRCh38-only, ΔF1 is +0.038 to +0.326 and excludes zero in all 12 SNV comparisons; Δprecision excludes zero in 11 and Δrecall in eight. For Pansoma (v2.1) versus DeepSomatic-TO, SNV ΔF1 is +0.042 to +0.219 and excludes zero on all six datasets. Versus ClairS-TO, ΔF1 is positive in all six comparisons (+0.012 to +0.232), although the interval excludes zero in only two. For INDELs at the recall-0.9 operating point, Pansoma trades higher recall for lower precision relative to both callers (R3.10). These intervals quantify the genomic sampling uncertainty of chr1 and are reported separately from seed-to-seed training variation.
 
 3. *Operating point.* The revised models are trained with new labels (somatic, germline and non-variant; R1.8) instead of the original single label, so the fixed 0.5 threshold no longer applies. PASS is set on the held-out validation blocks, never on chr1, and we show complete precision–recall curves for every model.
 
@@ -4039,11 +4093,11 @@ We agree that single point estimates are insufficient. The revised manuscript th
 
 *Supplementary Methods (reproducibility).* Training is deterministic for a given seed and dataset (three models retrained with the same seed reproduced their chr1 calls exactly), and re-running prediction and evaluation of 30 in-sample checkpoints on a second cluster reproduced their chr1 F1 after population filtering within 0.002.
 
-*Supplementary Table R3.9b.* Paired 1-Mb block-bootstrap 95% intervals (2,000 resamples) of the differences A − B in chr1 precision, recall and F1 after population filtering (benchmark regions). Pansoma call sets are the first-seed models; comparators are DeepSomatic-TO 1.9.0 and ClairS-TO (0.4.2 on HG008T, 0.4.1 on COLO829T), tumor-only, scored with the same population filter.
+*Supplementary Table R3.9b.* Paired 1-Mb block-bootstrap 95% intervals (2,000 resamples) of the differences A − B in chr1 precision, recall and F1 after population filtering (benchmark regions). Pansoma call sets are the first-seed models (COLO829T Illumina on v1.1 at epoch 6, as in R3.1); comparators are DeepSomatic-TO 1.9.0 and ClairS-TO (0.4.2 on HG008T, 0.4.1 on COLO829T), tumor-only, scored with the same population filter.
 
 | comparison | dataset | kind | A | B | Δprecision [95% CI] | Δrecall [95% CI] | ΔF1 [95% CI] |
 |---|---|---|---|---|---|---|---|
-| HPRC - GRCh38-only | COLO829T Illumina | SNV | HPRC v1.1 (d9) | GRCh38-only graph | +0.094 [-0.068, +0.158] | +0.115 [+0.095, +0.135] | +0.104 [+0.022, +0.151] |
+| HPRC - GRCh38-only | COLO829T Illumina | SNV | HPRC v1.1 (d9) | GRCh38-only graph | +0.442 [+0.056, +0.602] | +0.140 [+0.118, +0.161] | +0.306 [+0.107, +0.441] |
 | HPRC - GRCh38-only | COLO829T Illumina | SNV | HPRC v2.1 (d46) | GRCh38-only graph | +0.476 [+0.086, +0.634] | +0.132 [+0.109, +0.153] | +0.316 [+0.116, +0.453] |
 | HPRC - GRCh38-only | COLO829T ONT | SNV | HPRC v1.1 (d9) | GRCh38-only graph | +0.454 [+0.283, +0.566] | +0.158 [+0.133, +0.181] | +0.326 [+0.219, +0.422] |
 | HPRC - GRCh38-only | COLO829T ONT | SNV | HPRC v2.1 (d46) | GRCh38-only graph | +0.447 [+0.276, +0.569] | +0.149 [+0.122, +0.175] | +0.319 [+0.208, +0.417] |
@@ -4170,6 +4224,14 @@ Data and code: `supplementary/R3.9/seed_table.tsv`, `make_seed_table.py` (from t
 - 跨肿瘤的阈值敏感性（新，E12a）：COLO829T Illumina -> HCC1395T，阈值 0.640，PoN 后 P / R 0.934 / 0.157、F1 0.269，曲线 best F1 0.810；-> HG008T 0.359 vs best 0.554。E12a README："The ranking transfers; the calibration of p_somatic does not." HG008T 模型 PASS 与 best 差小（如 -> COLO829T 0.708 / 0.717）。
 - 本地已有的 vcfeval 输出：`/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/xs__*/vcf_chr1/eval_bed/vcfeval/pon_calls/{tp,fp,tp-baseline,fn}.vcf.gz`（E12a 16 个 cross-sample）和同目录下 `{HG008_PacBio,HG008_ONT,COLO829_ONT}_SNV_d46_7fc7396/vcf_chr1/eval_bed/vcfeval/pon_calls/`（3 个 in-sample），可以先拿来开发 bootstrap 脚本。
 - 比较器：用户 2026-10-13 决定不重跑，已有结果的路径待给；`experiments/E8_comparators/` 有 `score_comparator.py`。
+
+- 2026-10-21 第 2 点的 COLO829T Illumina v1.1 那一对换成 epoch 6 seed 0（`COLO829_Illumina_SNV_d9_normbq_sweep_e06`，和 R3.1 / R3.4 / R2.5
+  一致；之前是 validation 选的 epoch 8 `COLO829_Illumina_SNV_7fc7396_ddp4_b1024`）：`E16_bootstrap/e16_bootstrap.py` 加了 `ARM_RUN`，同一个
+  base set 同一臂有两个 in-sample run 时显式选 epoch 6（不靠排序覆盖），重跑 E16（180 个 call set，report check 312 / 312；已有的 616 个配对
+  行除了这一对的 8 行外一行没变，另多了其他 session 新 run 的 32 个 cross-sample 配对），`supplementary/R3.9/make_paired_table.py` 重出 R3.9b。
+  这一对：ΔP +0.094 [−0.068, +0.158] -> +0.442 [+0.056, +0.602]，ΔR +0.115 -> +0.140 [+0.118, +0.161]，ΔF1 +0.104 [+0.022, +0.151] ->
+  +0.306 [+0.107, +0.441]。所以 "Δprecision excludes zero in 10" -> 11（唯一例外 COLO829T Fiber-seq v1.1 +0.039 [−0.109, +0.179]）；ΔF1
+  +0.038 到 +0.326、12 / 12 不含 0、Δrecall 8 不变；Pansoma − 比较器的配对用的是 d46，不变。
 
 **还缺什么。**
 
