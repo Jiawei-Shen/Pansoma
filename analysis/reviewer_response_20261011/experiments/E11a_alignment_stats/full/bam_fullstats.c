@@ -7,7 +7,8 @@ one mate; duplicates (0x400) are kept, as in the GAMs, and counted.
 Per mapped primary record (flag 0x4 records placed at their mate are counted as unmapped):
   substitution  NM - inserted - deleted bases > 0 (NM counts mismatches, inserted and deleted bases)
   indel      a CIGAR I or D operation
-  soft clip  a CIGAR S or H operation
+  soft clip  a CIGAR S or H operation (only primary alignments are scanned; in a sample of the six BAMs, 2026-10-21,
+             H occurs only in supplementary alignments, so in practice this counts S)
   perfect    mapped, no substitution, no indel, no soft clip
 Output (stdout, TSV): "CONTIG records perfect sub indel clip read_bases aligned_bases sub_bases ins_bases del_bases
 indel_events clip_bases", then "#other unmapped_placed secondary supplementary duplicates no_nm".

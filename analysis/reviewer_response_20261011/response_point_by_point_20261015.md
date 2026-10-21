@@ -42,7 +42,7 @@
 | R2.4 | 低 VAF | 部分解决 | E2.4：按 VAF 分档的 recall，purity 系列（低于下限的比例从 16% 升到 27%） | GPU：BQ 伪影修好后重训；决定：E15 低 AF 配置、用哪个第二肿瘤 |
 | R2.5 | 精度提升从哪来 | 部分解决 | E4b / E10 / E19：graph 臂少了 germline candidate，GRCh38-only 多了着丝粒附近和 extreme 区域的 FP；附近 germline 越多，SNV 增益越大；去 ch6 重训和三 seed 已完成（10-19，HPRC − GRCh38-only 均值 +0.028 到 +0.292） | — |
 | R2.6 | PoN | 部分解决 | E8b：资源组成；E17c：SNV 规则就是 chr2–22 选出的；INDEL 换成留出肿瘤选出的规则（HP ≥ 8: AF ≥ 0.01，其余 ≥ 1e-4；用户 10-16 决定，pipeline 已改） | 已重算（10-16，44 个本地 INDEL call set 按新规则重新打分，R1.2 / R1.4 / R1.6 / R1.8 / R2.6 / R3.1 / R3.2 / R3.9 / R3.10 / R3.m2 已换数）；COLO829T v1.1 单样本 INDEL：10-19 用 RIS 的 matched lr 1e-4 run 在本地出了 valbest（R3.1 / R3.10 已填） |
-| R2.7 | 比对统计夸大 | **已解决** | E11a 全量数据（10-19）：两个肿瘤 × 三个平台 × 四个参考，chr1–22 全部 reads 的 perfectly aligned / substitution / indel / soft clipping 读数和比例；原文那句逐条改写（soft clipping 的说法删掉）；不再用模拟 reads | 只剩改稿 |
+| R2.7 | 比对统计夸大 | **已解决** | E11a 全量数据（10-19）：两个肿瘤 × 三个平台 × 四个参考，chr1–22 全部 reads 的 perfectly aligned / substitution / indel / soft clipping 读数和比例，比例的分母是各参考上 chr1–22 的 reads；原文那句逐条改写（soft clipping 的说法删掉；10-21 措辞收紧：增益"主要反映"图里多出的 allele 序列，比对一致性不等于放置正确，删掉文献段）；不再用模拟 reads | 只剩改稿 |
 | R2.m | Minor 1–8 | 部分解决 | 大部分只是改图改字；E18 补了 SBS96 | 决定：第 5 条 "truth overlapping" 的原意；同步：比较器的 SBS96 |
 | R3.1 | 参考层面的 ablation | 部分解决 | Response 10-19 改成设计 + 三点结果（HPRC 全面优于 GRCh38-only；v2.1 对 v1.1 PoN 前 +0.079 到 +0.222、PoN 后在 seed 范围内；增益来自比对和 candidate 生成），300 词以内；E3 / E16 / E3b：关掉 rescue 后 12/12 个 run 都高于 GRCh38-only（10-19 用 matched d9 补上 COLO829T v1.1）；着丝粒是一项 caveat；CHM13 是一项 limitation；vg 版本已核实（E22）；10-19 RIS 三 seed：HPRC − GRCh38-only 均值 +0.028 到 +0.292，36 个同 seed 比较 35 个为正；去 ch6 后仍高于 GRCh38-only 均值（+0.011 到 +0.299）；10-20 RIS b662f00：COLO829T Illumina v1.1 用 epoch 6 / 5 / 6（用户决定，在 chr1 上选），d46 − d9 六套都在 seed 范围内（−0.015 到 +0.021），validation 选的 epoch 8 低 0.164 | 决定：vg 1.77 对照；E3b / E16 / E9a 的 COLO829T Illumina v1.1 行还是 epoch 8 的 seed 0（`--norm train`；epoch 6 的 run 已在本地，`--norm dataset` d46 seed 0 没同步） |
 | R3.2 | 被去掉的 candidate 由什么组成 | 部分解决 | 三类 candidate × 三个参考臂；E4b：FP 的组成；E5b；去 ch6 重训已完成（10-19）；10-19 Response 按外部建议改写成 "selective reduction"，加了按图分层的 FP：HG008T 图里的 germline FP 129 → 4（少 97 %），不在图里的 2,036 → 1,794–1,944（少 5–12 %）；79 % / 73 % 改用新定义 | CPU：E4b 换成 matched d9 run（可选） |
@@ -2544,7 +2544,7 @@ precision over v1.1 after filtering (R1.2).
 
 ### R2.7 Alignment statistics overstated
 
-**状态：已解决（2026-10-19 晚改为全量数据）**: 按用户要求，统计改成每个数据集的全部 reads（比对到 chr1–22 的），两个肿瘤 × 三个平台 × 四个参考（GRCh38 linear BAM、GRCh38 graph、HPRC v1.1、v2.1），每组给 read 数和比例：mapped reads、perfectly aligned、with substitution、with indel、with soft clipping（E11a `full/`，24 个文件全部扫完、总数核对过）。Response 不再用 "edit-free"，模拟 reads（E11b）和窗口样本从 R2.7 拿掉；原文第 292–294 行那句逐条回应（"up to 11%" 约 10 个百分点成立，"more than four-fold" 只在极小的基数上，"substantially reducing soft-clipped bases" 不成立，删）。剩下的只是文字：把改写的句子放进正文、Supplementary Fig. 4 换成本条的表和图。
+**状态：已解决（2026-10-19 晚改为全量数据；2026-10-21 措辞收紧）**: 按用户要求，统计改成每个数据集的全部 reads（比对到 chr1–22 的），两个肿瘤 × 三个平台 × 四个参考（GRCh38 linear BAM、GRCh38 graph、HPRC v1.1、v2.1），每组给 read 数和比例：mapped reads、perfectly aligned、with substitution、with indel、with soft clipping（E11a `full/`，24 个文件全部扫完、总数核对过）。Response 不再用 "edit-free"，模拟 reads（E11b）和窗口样本从 R2.7 拿掉；原文第 292–294 行那句逐条回应（"up to 11%" 约 10 个百分点成立，"more than four-fold" 只在极小的基数上，"substantially reducing soft-clipped bases" 不成立，删）。剩下的只是文字：把改写的句子放进正文、Supplementary Fig. 4 换成本条的表和图。
 
 **Comment（要点）。**
 
@@ -2555,43 +2555,45 @@ precision over v1.1 after filtering (R1.2).
 
 We agree that lines 292–294 overstated the effect. They read: "Across both datasets, graph alignment increased perfect
 alignments by up to 11% in WGS data and by more than four-fold in long-read datasets, while substantially reducing
-soft-clipped bases, substitutions and indel events (Supplementary Fig. 4)." Supplementary Fig. 4 is replaced by read
-counts and proportions for all reads of both tumors on the three platforms, aligned to four references: GRCh38 (linear,
-the data providers' alignments), a GRCh38-only graph, and the HPRC v1.1 and v2.1 graphs, counting the reads aligned to
-chr1–22 (Supplementary Table and Figure below). In summary:
+soft-clipped bases, substitutions and indel events (Supplementary Fig. 4)." Supplementary Fig. 4 is replaced by
+absolute read counts and proportions for both tumors on the three platforms, aligned to four references: GRCh38 (linear,
+the data providers' alignments), a GRCh38-only graph, and the HPRC v1.1 and v2.1 graphs (Supplementary Table and Figure
+below). Each proportion is among the reads assigned to chr1–22 on that reference; the denominators differ slightly and
+are given for every dataset and reference, so the comparison is not read by read. In summary:
 
 - *Illumina.* Perfectly aligned reads rise by about 10 percentage points on the HPRC graphs: HG008T from 1.87 billion of
   2.74 billion reads (68.3%) on linear GRCh38 to 2.12 billion of 2.70 billion (78.5–78.7%), COLO829T from 69.9% to
   79.8–80.5%. Reads with a substitution fall from 27–30% to 18–21%, and reads with an indel from 2.9–3.2% to 0.7–1.0%.
   The GRCh38-only graph gives nearly the same rates as linear GRCh38 (68.7% against 68.3%, 70.0% against 69.9%
-  perfectly aligned), so the gain comes from the graph's content, not from the aligner.
+  perfectly aligned), which suggests that the increase mainly reflects the additional allelic sequence in the HPRC
+  graphs.
 - *PacBio.* Perfectly aligned reads remain rare: 0.15–0.18% on GRCh38 and 1.4–1.5% on the HPRC graphs, so the
   "four-fold" increase was on a very small base. Reads with a substitution fall from 95–96% to 66–75%, while nearly
-  every read still carries an indel (99% on GRCh38, 97% on the graphs).
+  every read still carries an indel (99% on GRCh38, 97% on the HPRC graphs).
 - *ONT.* Perfectly aligned reads are 1.4% on GRCh38 and 2.7–2.8% on the HPRC graphs for HG008T, and 0.01% on every
   reference for COLO829T. Reads with a substitution fall from 93–94% on linear GRCh38 to 87–90%; indels change
   little.
 - *Soft clipping* is not substantially reduced: 2.4–4.1% of Illumina reads on every reference, and for long reads it
   depends more on the aligner than on the reference.
 
-The revised text reads: "Alignment to the HPRC graphs increased the proportion of perfectly aligned Illumina reads by
-about 10 percentage points in both tumors (HG008T, 68.3% on linear GRCh38 to 78.5–78.7%; COLO829T, 69.9% to
-79.8–80.5%), mainly by removing substitutions and indels at alleles shared with the HPRC haplotypes. Perfectly aligned
-long reads remained rare (at most 2.8%), while the proportion of long reads with a substitution decreased (PacBio 95–96%
-to 66–75%, ONT 93–94% to 87–90%); indels and soft clipping changed little (Supplementary Table X)."
+These measures describe agreement with the traversed reference sequence, not the accuracy of read placement, which we
+test with simulated reads of known origin (R3.6).
 
-*Published benchmarks agree.* On the 10%-filtered HPRC release 1 graph (the filter of our v1.1 graph), 78.1–78.9% of
-Illumina reads aligned perfectly, against 68.7% with BWA-MEM on GRCh38, at a slight cost in mapping confidence (Hickey et
-al., 2024), close to our 68.3% and 78.5% for HG008T; Giraffe-based calling on that graph made 34% fewer small-variant
-errors than GRCh38-based workflows (Liao et al., 2023).
+The revised text reads: "Alignment to the HPRC graphs increased the proportion of perfectly aligned Illumina reads by
+about 10 percentage points in both tumors (HG008T, 68.3% on linear GRCh38 against 78.5–78.7%; COLO829T, 69.9% against
+79.8–80.5%), consistent with reads matching alternative alleles represented in the graphs. Perfectly aligned long reads
+remained uncommon (at most 2.8%), although the proportion with a substitution decreased (PacBio, 95–96% against 66–75%;
+ONT, 93–94% against 87–90%). The proportion of long reads with an indel changed little, and soft clipping showed no
+consistent reduction across references. These statistics measure agreement with the traversed reference sequence
+rather than the accuracy of read placement (Supplementary Table X)."
 
 **Supplementary (R2.7).**
 
 ![Reads on chr1–22 on four references, by platform](supplementary/R2.7/fig_R2.7.png)
 
 Reads aligned to chr1–22 for each dataset and reference: the share perfectly aligned (no substitution, indel or soft
-clipping) and the shares with at least one substitution, indel or soft-clipped end. Rows: Illumina; PacBio (HG008T HiFi,
-COLO829T Fiber-seq); ONT. Note the different y-axis ranges.
+clipping) and the shares with at least one substitution, indel or soft-clipped end. Rows: Illumina; PacBio (HG008T HiFi, COLO829T
+Fiber-seq); ONT. Note the different y-axis ranges.
 
 Supplementary Table (reads aligned to chr1–22; N (% of these reads)):
 
@@ -2637,15 +2639,12 @@ Data: `supplementary/R2.7/alignment_counts.tsv` (made by `supplementary/R2.7/mak
 3. *Measures.* Perfectly aligned: aligned end to end with no substitution, indel or soft clipping. Substitution: at least
    one mismatched base (linear: NM minus inserted and deleted bases; graph: mismatches against the sequence of the
    read's graph path, so a match to a non-reference allele is not a substitution). Indel: at least one inserted or
-   deleted base. Soft clipping: unaligned bases at a read end (linear: S or H CIGAR operations; graph: an insertion at
-   the alignment end).
+   deleted base. Soft clipping: read bases at either end not aligned to the reference (linear: CIGAR S in the primary
+   alignment; hard clipping occurs only in supplementary alignments, which are not counted; graph: read bases at an
+   alignment end not aligned to the path).
 4. On linear GRCh38 a long read split by the aligner keeps its remainder as a supplementary alignment, so its primary
    alignment is soft-clipped; Giraffe writes one alignment per read.
 
-*References.*
-- Liao W.-W. et al. A draft human pangenome reference. *Nature* 617, 312–324 (2023).
-- Hickey G. et al. Pangenome graph construction from genome alignments with Minigraph-Cactus. *Nat. Biotechnol.* 42,
-  663–673 (2024).
 
 **证据（内部）。**
 
@@ -2790,6 +2789,26 @@ Data: `supplementary/R2.7/alignment_counts.tsv` (made by `supplementary/R2.7/mak
     - HiFi 40,000 条：correct 99.455 / 99.552 / 99.490 %，wrong at MAPQ ≥ 30 13（0.033 %）/ 6（0.015 %）/ 3（0.008 %），数太少，Response 没写。ONT 模拟的结果不在 tables.md 里（10-15 13:35 d46 HiFi + ONT 还在跑；之后的 collect 只写了 illumina 和 hifi），R3.6 要的话再查。（已过时：ONT 在 19:39 已出，见本节开头 "2026-10-15 E1.6/E9h/E22/E11b-ONT" 一条。）
     - 局限（E11b README）：d9 臂用的是 vg 1.65.0（生产 GAM 是 1.66.0）；truth 只含一对一比对的区域，最难的区域代表性不足；没有 CHM13 臂（用户 10-13 取消）。按 SMaHT 区域，extreme 区错误放置最多（wrong at MAPQ ≥ 30：1.502 / 0.317 / 0.213 %），easy 区几乎为 0。
   - Response 改动：[待补] 换成 v2.1 / ONT / COLO829T 的数；Illumina 那条加了 v2.1 和 COLO829T；长读长加了四个数据集的 mismatch / kb；MAPQ 条加了 COLO829T Fiber-seq 和 v2.1 的 ONT；新加 E11b 的 Correctness 一条；最后一句改成 "on simulated reads the graphs mainly reduce confident misplacements (R3.6)"。Response 约 510 词（原来 423）。
+
+- 2026-10-21 按用户贴来的外部意见改 Response 措辞（数字和表不变）：
+  - "so the gain comes from the graph's content, not from the aligner" 改成 "which suggests that the increase mainly
+    reflects the additional allelic sequence in the HPRC graphs"（GRCh38-only graph 是对照，但排除不了 aligner 和参考内容的交互）。
+  - 改写正文里的机制句 "mainly by removing substitutions and indels at alleles shared with the HPRC haplotypes" 改成
+    "consistent with reads matching alternative alleles represented in the graphs"（没有逐位点证明减少的 substitution / indel
+    就是共享 allele）；Response 和改写正文都加一句：这些统计量描述的是和所走参考序列的一致性，不能单独证明放置更正确（R3.6）。
+  - 分母写明：比例是每个参考上分到 chr1–22 的 reads 的比例，各参考分母不同（表里每格都有），不是同一批 reads 的逐条比较。
+  - 改写正文最后一句的范围：indel "changed little" 只指长读长（Illumina 的 indel reads 从约 3 % 降到 1 % 以下）；
+    clipping 写成 "no consistent reduction across references"。
+  - 删掉 "*Published benchmarks agree.*" 一段和 Supplementary 的 *References*（Hickey 2024、Liao 2023）：R2.7 要的是我们
+    自己数据的准确呈现，34 % fewer variant errors 会把话题带到下游准确性。这推翻了 2026-10-19 用户要加文献的要求，
+    是用户 10-21 贴来的意见；上面 10-19 一条的核实记录保留，需要时可恢复（只留 Hickey 的 perfect 比例那半句最贴题）。
+  - 名字仍叫 "soft clipping"（同日先改成 "end clipping (soft or hard)"，用户 OK 后改回）：`bam_fullstats.c` 把 CIGAR S 和
+    H 都算进 clip，但只扫 primary 比对，而 H 只出现在 supplementary 上。抽样核实（2026-10-21，六个 linear BAM 各取
+    chr1:50.0–50.3 Mb、chr10:70.0–70.3 Mb、chr20:30.0–30.3 Mb，`samtools view -F 0x904` / `-f 0x800`）：primary 带 S / 带 H =
+    HG008T Illumina 37,439 / 0（共 841,417 条），PacBio 658 / 0（4,828），ONT 441 / 0（1,025），COLO829T Illumina 29,016 / 0
+    （602,490），Fiber-seq 1,393 / 0（7,543），ONT 3,497 / 0（3,510）；H 只在 supplementary 上（BWA-MEM / Sentieon 1,488 / 1,452
+    条，HG008T ONT minimap2 81 条全是 H；pbmm2 和 COLO829T ONT 的 supplementary 是 S）。graph 侧的定义（read 端上没对上
+    path 的碱基）也是 soft clip 的含义。Methods 第 3 条写明这一点；图、表头保持 "soft clipping"。
 
 **还缺什么。**
 

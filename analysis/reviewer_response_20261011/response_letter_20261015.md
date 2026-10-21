@@ -615,43 +615,45 @@ precision over v1.1 after filtering (R1.2).
 
 We agree that lines 292–294 overstated the effect. They read: "Across both datasets, graph alignment increased perfect
 alignments by up to 11% in WGS data and by more than four-fold in long-read datasets, while substantially reducing
-soft-clipped bases, substitutions and indel events (Supplementary Fig. 4)." Supplementary Fig. 4 is replaced by read
-counts and proportions for all reads of both tumors on the three platforms, aligned to four references: GRCh38 (linear,
-the data providers' alignments), a GRCh38-only graph, and the HPRC v1.1 and v2.1 graphs, counting the reads aligned to
-chr1–22 (Supplementary Table and Figure below). In summary:
+soft-clipped bases, substitutions and indel events (Supplementary Fig. 4)." Supplementary Fig. 4 is replaced by
+absolute read counts and proportions for both tumors on the three platforms, aligned to four references: GRCh38 (linear,
+the data providers' alignments), a GRCh38-only graph, and the HPRC v1.1 and v2.1 graphs (Supplementary Table and Figure
+below). Each proportion is among the reads assigned to chr1–22 on that reference; the denominators differ slightly and
+are given for every dataset and reference, so the comparison is not read by read. In summary:
 
 - *Illumina.* Perfectly aligned reads rise by about 10 percentage points on the HPRC graphs: HG008T from 1.87 billion of
   2.74 billion reads (68.3%) on linear GRCh38 to 2.12 billion of 2.70 billion (78.5–78.7%), COLO829T from 69.9% to
   79.8–80.5%. Reads with a substitution fall from 27–30% to 18–21%, and reads with an indel from 2.9–3.2% to 0.7–1.0%.
   The GRCh38-only graph gives nearly the same rates as linear GRCh38 (68.7% against 68.3%, 70.0% against 69.9%
-  perfectly aligned), so the gain comes from the graph's content, not from the aligner.
+  perfectly aligned), which suggests that the increase mainly reflects the additional allelic sequence in the HPRC
+  graphs.
 - *PacBio.* Perfectly aligned reads remain rare: 0.15–0.18% on GRCh38 and 1.4–1.5% on the HPRC graphs, so the
   "four-fold" increase was on a very small base. Reads with a substitution fall from 95–96% to 66–75%, while nearly
-  every read still carries an indel (99% on GRCh38, 97% on the graphs).
+  every read still carries an indel (99% on GRCh38, 97% on the HPRC graphs).
 - *ONT.* Perfectly aligned reads are 1.4% on GRCh38 and 2.7–2.8% on the HPRC graphs for HG008T, and 0.01% on every
   reference for COLO829T. Reads with a substitution fall from 93–94% on linear GRCh38 to 87–90%; indels change
   little.
 - *Soft clipping* is not substantially reduced: 2.4–4.1% of Illumina reads on every reference, and for long reads it
   depends more on the aligner than on the reference.
 
-The revised text reads: "Alignment to the HPRC graphs increased the proportion of perfectly aligned Illumina reads by
-about 10 percentage points in both tumors (HG008T, 68.3% on linear GRCh38 to 78.5–78.7%; COLO829T, 69.9% to
-79.8–80.5%), mainly by removing substitutions and indels at alleles shared with the HPRC haplotypes. Perfectly aligned
-long reads remained rare (at most 2.8%), while the proportion of long reads with a substitution decreased (PacBio 95–96%
-to 66–75%, ONT 93–94% to 87–90%); indels and soft clipping changed little (Supplementary Table X)."
+These measures describe agreement with the traversed reference sequence, not the accuracy of read placement, which we
+test with simulated reads of known origin (R3.6).
 
-*Published benchmarks agree.* On the 10%-filtered HPRC release 1 graph (the filter of our v1.1 graph), 78.1–78.9% of
-Illumina reads aligned perfectly, against 68.7% with BWA-MEM on GRCh38, at a slight cost in mapping confidence (Hickey et
-al., 2024), close to our 68.3% and 78.5% for HG008T; Giraffe-based calling on that graph made 34% fewer small-variant
-errors than GRCh38-based workflows (Liao et al., 2023).
+The revised text reads: "Alignment to the HPRC graphs increased the proportion of perfectly aligned Illumina reads by
+about 10 percentage points in both tumors (HG008T, 68.3% on linear GRCh38 against 78.5–78.7%; COLO829T, 69.9% against
+79.8–80.5%), consistent with reads matching alternative alleles represented in the graphs. Perfectly aligned long reads
+remained uncommon (at most 2.8%), although the proportion with a substitution decreased (PacBio, 95–96% against 66–75%;
+ONT, 93–94% against 87–90%). The proportion of long reads with an indel changed little, and soft clipping showed no
+consistent reduction across references. These statistics measure agreement with the traversed reference sequence
+rather than the accuracy of read placement (Supplementary Table X)."
 
 **Supplementary (R2.7).**
 
 ![Reads on chr1–22 on four references, by platform](supplementary/R2.7/fig_R2.7.png)
 
 Reads aligned to chr1–22 for each dataset and reference: the share perfectly aligned (no substitution, indel or soft
-clipping) and the shares with at least one substitution, indel or soft-clipped end. Rows: Illumina; PacBio (HG008T HiFi,
-COLO829T Fiber-seq); ONT. Note the different y-axis ranges.
+clipping) and the shares with at least one substitution, indel or soft-clipped end. Rows: Illumina; PacBio (HG008T HiFi, COLO829T
+Fiber-seq); ONT. Note the different y-axis ranges.
 
 Supplementary Table (reads aligned to chr1–22; N (% of these reads)):
 
@@ -697,15 +699,11 @@ Data: `supplementary/R2.7/alignment_counts.tsv` (made by `supplementary/R2.7/mak
 3. *Measures.* Perfectly aligned: aligned end to end with no substitution, indel or soft clipping. Substitution: at least
    one mismatched base (linear: NM minus inserted and deleted bases; graph: mismatches against the sequence of the
    read's graph path, so a match to a non-reference allele is not a substitution). Indel: at least one inserted or
-   deleted base. Soft clipping: unaligned bases at a read end (linear: S or H CIGAR operations; graph: an insertion at
-   the alignment end).
+   deleted base. Soft clipping: read bases at either end not aligned to the reference (linear: CIGAR S in the primary
+   alignment; hard clipping occurs only in supplementary alignments, which are not counted; graph: read bases at an
+   alignment end not aligned to the path).
 4. On linear GRCh38 a long read split by the aligner keeps its remainder as a supplementary alignment, so its primary
    alignment is soft-clipped; Giraffe writes one alignment per read.
-
-*References.*
-- Liao W.-W. et al. A draft human pangenome reference. *Nature* 617, 312–324 (2023).
-- Hickey G. et al. Pangenome graph construction from genome alignments with Minigraph-Cactus. *Nat. Biotechnol.* 42,
-  663–673 (2024).
 
 ### R2.m Minor comments 1–8
 
