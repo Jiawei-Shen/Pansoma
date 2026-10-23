@@ -41,8 +41,9 @@ with open(TRUTH_DIR / "germline.graph.tsv") as f:
 germ = {c: np.array(sorted(v)) for c, v in germ.items()}
 vaf = {}
 with pysam.VariantFile(SOMATIC_VCF) as vcf:
+    vaf_keys = [k if k in vcf.header.info else None for k in ("VAF_Ill", "VAF_PB")]  # HG008T's VCF has neither
     for v in vcf:
-        vaf[(v.chrom, str(v.pos), v.ref, v.alts[0])] = (v.info.get("VAF_Ill"), v.info.get("VAF_PB"))
+        vaf[(v.chrom, str(v.pos), v.ref, v.alts[0])] = tuple(v.info.get(k) if k else None for k in vaf_keys)
 
 
 def tensor_labels():
@@ -157,7 +158,7 @@ for r in rows:
     r["germline_same_allele"] = any(a.startswith(f"{t['ref'] or '-'}>{t['alt'] or '-'}(")
                                     for a in germ_alleles.get((r["chrom"], pos0), []))
     r["passed"], r["in_bed"] = t["passed"], t["in_bed"]
-    r["truth_vaf_illumina"], r["truth_vaf_pacbio"] = vaf[(t["chrom"], t["vcf_pos"], t["vcf_ref"], t["vcf_alt"])]
+    r["truth_vaf_illumina"], r["truth_vaf_pacbio"] = vaf.get((t["chrom"], t["vcf_pos"], t["vcf_ref"], t["vcf_alt"]), (None, None))  # COLO829T only
     alt = r["alt_exact"] + r["alt_like"]
     r["alt_fraction"] = round(alt / r["spanning"], 3) if r["spanning"] else ""
 

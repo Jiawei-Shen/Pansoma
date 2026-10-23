@@ -30,8 +30,12 @@ import pysam
 SAMPLE = os.environ.get("SAMPLE", "HG008T_PacBio_d46")
 RUN = Path("/scratch/jshen/data/pansoma_v2_tensors") / SAMPLE
 CONFIG = json.load(open(RUN / "run/config.json"))
-PKG = CONFIG["package"]  # the run's frozen package (relative imports: import it as a package)
-sys.path.insert(0, str(RUN / "run/source"))
+PKG = CONFIG["package"]  # indexed_gam_pipeline_v4 (relative imports: import it as a package)
+# E1.7, 2026-10-21: the package of the current repository, not the run's frozen copy (2026-10-03): its IndexedGam reads
+# the long-read GAMs through their per-record index (<gam>.gri, gam_record_index), which the frozen copy predates; the
+# frozen reader read whole GAI bins of ultra-long records (HG008T ONT: no locus done in 70 min, 48 GB exceeded). Same
+# records, same decoder. E17_SOURCE overrides (e.g. str(RUN / "run/source") for the frozen copy).
+sys.path.insert(0, os.environ.get("E17_SOURCE", "/scratch/jshen/Github/Pansoma"))
 vg_pb2 = importlib.import_module(f"{PKG}.vg_pb2")
 IndexedGam = importlib.import_module(f"{PKG}.gam_reader").IndexedGam
 GraphIndex = importlib.import_module(f"{PKG}.graph_index").GraphIndex

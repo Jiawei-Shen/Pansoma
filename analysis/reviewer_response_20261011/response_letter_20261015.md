@@ -520,53 +520,66 @@ where variants are lost.
 
 *Recall under a common protocol.* We re-scored the original DeepSomatic-TO and ClairS-TO call sets with our protocol
 (chr1, benchmark regions, the same population filter; R3.m2). On HG008T, SNV recall is now comparable: 0.814–0.859 for
-Pansoma on the HPRC v2.1 graph (d46 filter; three training seeds; v1.1: R1.6), against 0.806–0.889 for DeepSomatic-TO
-and 0.831–0.845 for ClairS-TO, with Pansoma's models trained on chr2–22 of the same tumor. On COLO829T, Pansoma reaches
-0.700–0.734 and the comparators 0.555–0.835, and a substantial deficit remains against DeepSomatic-TO on Illumina
-(0.705–0.717 against 0.835). This deficit lies both among truth SNVs with an allele fraction below 0.08 (30% recovered
-against 6–7%; Pansoma's floor applies to the allele fraction in the reads, which exceeds 0.08 at a few of these sites)
-and above it (94% against 83–85%), so the candidate floor does not explain it fully; we address low-allele-fraction
-detection in R2.4. INDEL recall remains low in absolute terms, although under the same protocol it is higher than the
-comparators' on both tumors (0.229–0.260 against 0.015–0.183).
+Pansoma on the HPRC v2.1 graph (three training seeds), against 0.806–0.889 for DeepSomatic-TO and 0.831–0.845 for
+ClairS-TO, with Pansoma's models trained on chr2–22 of the same tumor. On COLO829T, Pansoma reaches 0.700–0.734 and the
+comparators 0.555–0.835, and a substantial deficit remains against DeepSomatic-TO on Illumina (0.705–0.717 against
+0.835). Among truth SNVs whose allele fraction in the truth set (its Illumina VAF) is below 0.08, DeepSomatic-TO
+recovers 30%, compared with 6–7% for Pansoma, whose 0.08 candidate floor applies to the allele fraction observed in its
+own reads (above 0.08 at a few of these sites); at 0.08 or above, DeepSomatic-TO recovers 94%, compared with 83–85% for
+Pansoma, so the floor does not explain the deficit fully (low-allele-fraction detection: R2.4). INDEL recall remains low
+in absolute terms, although under the same protocol it is higher than the comparators' on both tumors (0.229–0.260
+against 0.015–0.183).
 
 *Where recall is lost.* A per-allele funnel assigns each missed truth allele to the first stage at which it is lost
 (R1.6). On HG008T the largest loss on every reference is the classification threshold (8.9–10.9% of truth SNVs, against
 2.1–5.2% without a candidate and 3.2–5.2% first lost at filtering). The population filter tags 61 of the 702 truth SNVs
-(8.7%), which any caller using the same filter loses; the tagged alleles not counted at the filtering stage are already
-lost before it. On COLO829T, candidate generation is the main limitation: 17–18% of truth SNVs get no candidate
-(GRCh38-only graph and HPRC v2.1 graph), mainly because 15.1–16.1% have a truth allele fraction below the 0.08 candidate
-floor.
+(8.7%); these would also be tagged if the same allele-level rules were applied to another caller's output, and those not
+counted at the filtering stage are already lost before it. On COLO829T, candidate generation is the main limitation:
+17–18% of truth SNVs get no candidate, mainly because 15.1–16.1% have a truth-set allele fraction below 0.08.
 
-*The two categories.* We regret that the original labels were not explained. "Variant node not ranked #1" and "first
-aligned node mismatch" described implementation-specific failure modes of the original pipeline's node-level candidate
-selection, which the revised pipeline replaces. We have therefore replaced them in Supplementary Fig. 2 with one
-read-level class for every truth allele without a candidate, on six datasets: no read with MAPQ > 10; fewer than three
-ALT reads or an allele fraction below the threshold; the ALT is an existing graph allele; repeat absorption or
-respelling; an indel longer than 50 bp. Losses after candidate generation, at the threshold and at filtering, are
-reported separately (R1.6). For example, on the HPRC v1.1 graph, 2,739 (92.0%) of the 2,976 HG008T PacBio truth INDELs
-without a candidate (chr1–22) are fully or partly encoded in the graph. [待补: the same classes on the HPRC v2.1 tensor
-sets (E1.7, running)]
+*The two categories.* We regret that these categories were not explained. The false-negative statistics of the original
+Supplementary Fig. 2, including "variant node not ranked #1" and "first aligned node mismatch", came from the original
+pipeline and had shortcomings, and we have replaced them with a detailed allele-level classification (revised
+Supplementary Fig. 2; HPRC v2.1 graph, six datasets): one read-level class for every truth allele without a candidate,
+with later losses in the funnel above. For INDELs, 81–93% of those without a candidate already have their ALT in the
+graph (HG008T PacBio: 2,939 of 3,169). SNVs without a candidate lie mostly in repeats on HG008T (52–81%), whereas on
+COLO829T they have too few ALT reads (19–70%) or no read with MAPQ > 10 (34–42% on Illumina and Fiber-seq).
 
-*The normal at missed sites on graph nodes.* We examined the matched normal directly, using its haplotype-resolved
-assemblies (HG008-N v6.2; COLO829BL). [待补: E20, COLO829BL ONT reads at the absorbed sites] On the HPRC v2.1 graph (d46
-filter), 1,607 HG008T and 401 COLO829T truth alleles get no candidate on at least one platform although a graph path
-spells their ALT and the GRCh38-only graph gives them a candidate. Only 110 (6.8%) and 27 (6.7%) are carried by the
-matched normal; 1,481 (92.2%) and 371 (92.5%) are absent from both normal haplotypes, and their ALT paths run through
-nodes walked by other HPRC haplotypes (median 138 and 110). At the 1,351 HG008T INDEL loci absent from the normal, the
-HG008-T tumor assembly carries a sequence found in neither normal haplotype at 1,347 and exactly the truth allele at
-1,153, and the tumor's Illumina reads show the expected allele at 97.4% of them (95.7% at random non-absorbed truth
-INDELs). The HPRC v1.1 graph of the original submission gives the same picture (Supplementary block). At these HG008T
-loci the absorbed alleles are therefore supported somatic events that escape candidate generation because the graph
-already represents them, and the manuscript now describes graph absorption as a cause of missed somatic alleles rather
-than as evidence of benchmark error. Most of these alleles also match population resources (the population filter tags
-97.0% of the HG008T and 98.5% of the COLO829T ones) and would be removed by population filtering on any reference (R1.4;
-in the chr1 benchmark regions, the GRCh38-only graph calls at most two of the 39–93 HG008T truth INDELs per platform
-that v2.1 absorbs), but this overlap does not establish that they are germline in the patient. COLO829T has no tumor
-assembly; its matched normal carries the exact ALT at 26 (7.5%) of the 347 absorbed INDELs and an ALT of the same length
-with other bases at 22 more, so up to 48 (13.8%) may be germline-like, and we state this uncertainty explicitly.
+*The normal at missed sites on graph nodes.* We examined the matched normal directly, in two ways. First, as the
+reviewer suggested, we realigned the COLO829BL normal's ONT reads, with the tumor's aligner settings, at the 401
+COLO829T truth alleles that the HPRC v2.1 graph absorbs (below). The graph does not pull reads onto the alternative
+path: 1.1% of normal reads whose own bases match GRCh38 take the ALT path (tumor: 1.6%), against 95% of reads that carry
+the ALT. At the absorbed SNVs, 2.2% of normal and 45% of tumor reads carry the ALT; at the absorbed INDELs, mostly
+repeat-length changes, ONT length errors prevent a read-level call (42% of normal and 59% of tumor reads resemble the
+ALT). Second, we used the haplotype-resolved matched-normal assemblies (HG008-N v6.2; COLO829BL). On the HPRC v2.1
+graph, 1,607 HG008T and 401 COLO829T truth alleles get no candidate on at least one platform although a graph path
+spells their ALT. Only 110 (6.8%) and 27 (6.7%) are carried by the matched normal, and 1,481 (92.2%) and 371 (92.5%) are
+absent from both normal haplotypes. At the 1,351 HG008T INDEL loci absent from the normal, the HG008-T tumor assembly
+carries exactly the truth allele at 1,153 and a sequence found in neither normal haplotype at 1,347. These HG008T
+alleles are therefore supported somatic events that the graph already represents, and the manuscript now describes graph
+absorption as a cause of missed somatic alleles, not as evidence of benchmark error. Most of them would also be tagged
+by the same allele-level population-filtering rules on any reference (R1.4), but this overlap does not establish that
+they are germline in the patient. COLO829T has no tumor assembly: its normal carries the exact ALT at 26 of the 347
+absorbed INDELs, and at another 22 a different allele of the same length, which we keep as ambiguous rather than
+germline.
 
 **Supplementary (R2.3).**
 
+- *Definitions.* Absorbed on v2.1: no candidate on at least one platform, a tensor on the GRCh38-only graph, and an HPRC
+  v2.1 path that spells the ALT exactly. Carried by the normal: a normal haplotype has the ALT at the locus. Ambiguous
+  (COLO829T): no normal haplotype carries the ALT, but one has an allele of exactly the ALT length with other bases. The
+  v1.1 and v2.1 counts use different definitions (below) and are not a comparison of the two graphs.
+- *Further v2.1 evidence.* The ALT paths of the absorbed alleles run through nodes walked by a median of 138 (HG008T)
+  and 110 (COLO829T) HPRC haplotypes. At the 1,351 HG008T INDEL loci absent from the normal, the tumor's Illumina reads
+  show the expected allele at 97.4% (PacBio 97.5%), against 95.7% at random non-absorbed truth INDELs. The population
+  filter tags 97.0% of the HG008T and 98.5% of the COLO829T absorbed alleles; in the chr1 benchmark regions the
+  GRCh38-only graph calls at most two of the 39–93 HG008T truth INDELs per platform that v2.1 absorbs.
+- *Normal reads (COLO829BL ONT).* Reads overlapping the absorbed loci (+-500 bp) in the SMaHT GRCh38 BAMs, realigned
+  with Giraffe to each graph; tumor (COLO829T ONT) reads processed identically; a read is labelled by its own bases
+  (REF-like / ALT-like) and by the graph path it walks at the locus. Median 145 normal and 84 tumor reads span a locus.
+  On the v1.1 graph (497 loci): 1.1% of REF-like normal reads take the ALT path; at SNVs 4.0% of normal against 45.2% of
+  tumor reads carry the ALT. The realigned tumor reads agree with Pansoma's own tumor alignments (per-locus ALT fraction
+  within 0.1 at 256 of 258 v2.1 loci).
 - *The HPRC v1.1 graph (original submission).* By the read-level definition used originally (tumor reads align perfectly
   to an existing graph path), 2,478 HG008T and 497 COLO829T truth alleles are absorbed; 110 (4.4%) and 34 (6.8%) are
   carried by the matched normal and 2,085 (84.1%) and 430 (86.5%) are absent from both normal haplotypes. At the 1,935
@@ -575,10 +588,6 @@ with other bases at 22 more, so up to 48 (13.8%) may be germline-like, and we st
   definition above, v1.1 absorbs 2,002 HG008T and 446 COLO829T truth alleles, of which 104 (5.2%) and 26 (5.8%) are
   carried by the normal; the GRCh38-only graph calls at most one of the 38–114 HG008T truth INDELs per platform that
   v1.1 absorbs (chr1, benchmark regions).
-- *Definitions.* Absorbed on v2.1: no candidate on at least one platform, a tensor on the GRCh38-only graph, and an HPRC
-  v2.1 path that spells the ALT exactly. Carried by the normal: a normal haplotype has the ALT at the locus.
-  Germline-like (COLO829T): no normal haplotype carries the ALT, but one has an allele of exactly the ALT length with
-  other bases.
 
 ### R2.4 Low-VAF detection and the low-VAF model
 

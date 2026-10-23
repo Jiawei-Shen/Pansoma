@@ -1,0 +1,392 @@
+{
+ "d9": {
+  "normal_all": {
+   "reads": 71763,
+   "alt_path": 25437,
+   "alt_path_frac": 0.3544584256511015,
+   "path": {
+    "grch38": 35284,
+    "alt_like": 12065,
+    "alt": 13372,
+    "other": 11042
+   },
+   "ref_reads": 41728,
+   "ref_on_alt_path": 451,
+   "ref_on_alt_frac": 0.010808090490797546,
+   "alt_reads": 25917,
+   "alt_reads_frac": 0.3611471092345638,
+   "alt_on_alt_path": 24348,
+   "alt_on_grch38": 913,
+   "alt_on_alt_frac": 0.9394605857159394,
+   "loci": 497,
+   "loci_covered": 497,
+   "median_spanning": 145
+  },
+  "normal_SNV": {
+   "reads": 9916,
+   "alt_path": 505,
+   "alt_path_frac": 0.050927793465106896,
+   "path": {
+    "grch38": 8667,
+    "alt_like": 258,
+    "other": 744,
+    "alt": 247
+   },
+   "ref_reads": 8366,
+   "ref_on_alt_path": 9,
+   "ref_on_alt_frac": 0.0010757829309108295,
+   "alt_reads": 393,
+   "alt_reads_frac": 0.03963291649858814,
+   "alt_on_alt_path": 356,
+   "alt_on_grch38": 15,
+   "alt_on_alt_frac": 0.905852417302799,
+   "loci": 67,
+   "loci_covered": 67,
+   "median_spanning": 146
+  },
+  "normal_INDEL": {
+   "reads": 61847,
+   "alt_path": 24932,
+   "alt_path_frac": 0.40312383785793976,
+   "path": {
+    "grch38": 26617,
+    "alt_like": 11807,
+    "alt": 13125,
+    "other": 10298
+   },
+   "ref_reads": 33362,
+   "ref_on_alt_path": 442,
+   "ref_on_alt_frac": 0.013248606198669145,
+   "alt_reads": 25524,
+   "alt_reads_frac": 0.41269584620110916,
+   "alt_on_alt_path": 23992,
+   "alt_on_grch38": 898,
+   "alt_on_alt_frac": 0.9399780598652249,
+   "loci": 430,
+   "loci_covered": 430,
+   "median_spanning": 145.0
+  },
+  "tumor_all": {
+   "reads": 42481,
+   "alt_path": 23917,
+   "alt_path_frac": 0.5630046373672936,
+   "path": {
+    "alt": 15283,
+    "alt_like": 8634,
+    "other": 4789,
+    "grch38": 13775
+   },
+   "ref_reads": 16090,
+   "ref_on_alt_path": 289,
+   "ref_on_alt_frac": 0.01796146674953387,
+   "alt_reads": 24188,
+   "alt_reads_frac": 0.5693839598879499,
+   "alt_on_alt_path": 23116,
+   "alt_on_grch38": 551,
+   "alt_on_alt_frac": 0.9556805027286258,
+   "loci": 497,
+   "loci_covered": 497,
+   "median_spanning": 85
+  },
+  "tumor_SNV": {
+   "reads": 6445,
+   "alt_path": 2917,
+   "alt_path_frac": 0.4525989138867339,
+   "path": {
+    "alt": 2526,
+    "grch38": 3096,
+    "other": 432,
+    "alt_like": 391
+   },
+   "ref_reads": 2842,
+   "ref_on_alt_path": 11,
+   "ref_on_alt_frac": 0.0038705137227304713,
+   "alt_reads": 2914,
+   "alt_reads_frac": 0.452133436772692,
+   "alt_on_alt_path": 2795,
+   "alt_on_grch38": 21,
+   "alt_on_alt_frac": 0.959162663006177,
+   "loci": 67,
+   "loci_covered": 67,
+   "median_spanning": 97
+  },
+  "tumor_INDEL": {
+   "reads": 36036,
+   "alt_path": 21000,
+   "alt_path_frac": 0.5827505827505828,
+   "path": {
+    "alt": 12757,
+    "alt_like": 8243,
+    "other": 4357,
+    "grch38": 10679
+   },
+   "ref_reads": 13248,
+   "ref_on_alt_path": 278,
+   "ref_on_alt_frac": 0.020984299516908212,
+   "alt_reads": 21274,
+   "alt_reads_frac": 0.5903540903540904,
+   "alt_on_alt_path": 20321,
+   "alt_on_grch38": 530,
+   "alt_on_alt_frac": 0.9552035348312494,
+   "loci": 430,
+   "loci_covered": 430,
+   "median_spanning": 83.0
+  },
+  "per_locus": {
+   "loci_min_span": 496,
+   "zero_normal_alt_path": 12,
+   "normal_alt_path_ge_0p2": 340,
+   "normal_alt_seq_ge_0p2": 345
+  },
+  "by_category": {
+   "normal_absent_HPRC_other": {
+    "loci": 429,
+    "normal_alt_path_median": 0.30718954248366015,
+    "normal_alt_path_max": 1.0,
+    "zero": 9,
+    "normal_alt_seq_median": 0.3023255813953488,
+    "ref_on_alt": 359,
+    "ref": 37207,
+    "tumor_alt_path_median": 0.532258064516129
+   },
+   "normal_present_broad": {
+    "loci": 25,
+    "normal_alt_path_median": 0.5,
+    "normal_alt_path_max": 0.9769230769230769,
+    "zero": 0,
+    "normal_alt_seq_median": 0.512987012987013,
+    "ref_on_alt": 12,
+    "ref": 1691,
+    "tumor_alt_path_median": 0.9454545454545454
+   },
+   "normal_present_rare": {
+    "loci": 9,
+    "normal_alt_path_median": 0.5202312138728323,
+    "normal_alt_path_max": 0.9699248120300752,
+    "zero": 0,
+    "normal_alt_seq_median": 0.5202312138728323,
+    "ref_on_alt": 10,
+    "ref": 864,
+    "tumor_alt_path_median": 0.9629629629629629
+   },
+   "other_ambiguous": {
+    "loci": 33,
+    "normal_alt_path_median": 0.45652173913043476,
+    "normal_alt_path_max": 0.9722222222222222,
+    "zero": 3,
+    "normal_alt_seq_median": 0.5,
+    "ref_on_alt": 70,
+    "ref": 1964,
+    "tumor_alt_path_median": 0.7230769230769231
+   }
+  },
+  "realigned_vs_pansoma_gam": {
+   "source": "graph_absorbed_somatic_colo829t_20261005 variant_set.tsv ONT_alt_reads / ONT_spanning (miss analysis on the d9 GAM)",
+   "loci": 250,
+   "median_abs_diff_alt_read_fraction": 0.0,
+   "within_0p1": 249,
+   "median_spanning_gam": 83.0,
+   "median_spanning_realigned": 82.5
+  }
+ },
+ "d46": {
+  "normal_all": {
+   "reads": 57574,
+   "alt_path": 21306,
+   "alt_path_frac": 0.37006287560357104,
+   "path": {
+    "grch38": 29953,
+    "alt_like": 8429,
+    "alt": 12877,
+    "other": 6315
+   },
+   "ref_reads": 33418,
+   "ref_on_alt_path": 367,
+   "ref_on_alt_frac": 0.010982105452151536,
+   "alt_reads": 21285,
+   "alt_reads_frac": 0.3696981276270539,
+   "alt_on_alt_path": 20288,
+   "alt_on_grch38": 673,
+   "alt_on_alt_frac": 0.9531595019967113,
+   "loci": 401,
+   "loci_covered": 401,
+   "median_spanning": 145
+  },
+  "normal_SNV": {
+   "reads": 7723,
+   "alt_path": 273,
+   "alt_path_frac": 0.035348957658940826,
+   "path": {
+    "grch38": 7023,
+    "alt": 191,
+    "other": 427,
+    "alt_like": 82
+   },
+   "ref_reads": 6847,
+   "ref_on_alt_path": 10,
+   "ref_on_alt_frac": 0.0014604936468526361,
+   "alt_reads": 168,
+   "alt_reads_frac": 0.021753204713194356,
+   "alt_on_alt_path": 152,
+   "alt_on_grch38": 8,
+   "alt_on_alt_frac": 0.9047619047619048,
+   "loci": 54,
+   "loci_covered": 54,
+   "median_spanning": 144.5
+  },
+  "normal_INDEL": {
+   "reads": 49851,
+   "alt_path": 21033,
+   "alt_path_frac": 0.4219173135945116,
+   "path": {
+    "grch38": 22930,
+    "alt_like": 8347,
+    "alt": 12686,
+    "other": 5888
+   },
+   "ref_reads": 26571,
+   "ref_on_alt_path": 357,
+   "ref_on_alt_frac": 0.013435700575815739,
+   "alt_reads": 21117,
+   "alt_reads_frac": 0.42360233495817534,
+   "alt_on_alt_path": 20136,
+   "alt_on_grch38": 665,
+   "alt_on_alt_frac": 0.9535445375763603,
+   "loci": 347,
+   "loci_covered": 347,
+   "median_spanning": 145
+  },
+  "tumor_all": {
+   "reads": 34177,
+   "alt_path": 19502,
+   "alt_path_frac": 0.5706176668519765,
+   "path": {
+    "alt": 13957,
+    "alt_like": 5545,
+    "grch38": 11838,
+    "other": 2837
+   },
+   "ref_reads": 13161,
+   "ref_on_alt_path": 213,
+   "ref_on_alt_frac": 0.01618418053339412,
+   "alt_reads": 19413,
+   "alt_reads_frac": 0.5680135763817772,
+   "alt_on_alt_path": 18782,
+   "alt_on_grch38": 477,
+   "alt_on_alt_frac": 0.9674960078298047,
+   "loci": 401,
+   "loci_covered": 401,
+   "median_spanning": 84
+  },
+  "tumor_SNV": {
+   "reads": 5056,
+   "alt_path": 2362,
+   "alt_path_frac": 0.46716772151898733,
+   "path": {
+    "alt": 2112,
+    "grch38": 2476,
+    "other": 218,
+    "alt_like": 250
+   },
+   "ref_reads": 2320,
+   "ref_on_alt_path": 4,
+   "ref_on_alt_frac": 0.0017241379310344827,
+   "alt_reads": 2295,
+   "alt_reads_frac": 0.45391613924050633,
+   "alt_on_alt_path": 2254,
+   "alt_on_grch38": 25,
+   "alt_on_alt_frac": 0.9821350762527233,
+   "loci": 54,
+   "loci_covered": 54,
+   "median_spanning": 94.5
+  },
+  "tumor_INDEL": {
+   "reads": 29121,
+   "alt_path": 17140,
+   "alt_path_frac": 0.5885786889186497,
+   "path": {
+    "alt": 11845,
+    "alt_like": 5295,
+    "grch38": 9362,
+    "other": 2619
+   },
+   "ref_reads": 10841,
+   "ref_on_alt_path": 209,
+   "ref_on_alt_frac": 0.01927866432985887,
+   "alt_reads": 17118,
+   "alt_reads_frac": 0.5878232203564439,
+   "alt_on_alt_path": 16528,
+   "alt_on_grch38": 452,
+   "alt_on_alt_frac": 0.9655333567005492,
+   "loci": 347,
+   "loci_covered": 347,
+   "median_spanning": 82
+  },
+  "per_locus": {
+   "loci_min_span": 401,
+   "zero_normal_alt_path": 10,
+   "normal_alt_path_ge_0p2": 289,
+   "normal_alt_seq_ge_0p2": 293
+  },
+  "by_category": {
+   "normal_absent_HPRC_other": {
+    "loci": 295,
+    "normal_alt_path_median": 0.3153846153846154,
+    "normal_alt_path_max": 1.0,
+    "zero": 10,
+    "normal_alt_seq_median": 0.30357142857142855,
+    "ref_on_alt": 265,
+    "ref": 26125,
+    "tumor_alt_path_median": 0.5340909090909091
+   },
+   "normal_present_broad": {
+    "loci": 19,
+    "normal_alt_path_median": 0.4855072463768116,
+    "normal_alt_path_max": 0.9770992366412213,
+    "zero": 0,
+    "normal_alt_seq_median": 0.48148148148148145,
+    "ref_on_alt": 9,
+    "ref": 1221,
+    "tumor_alt_path_median": 0.9468085106382979
+   },
+   "normal_present_rare": {
+    "loci": 5,
+    "normal_alt_path_median": 0.53,
+    "normal_alt_path_max": 0.6918918918918919,
+    "zero": 0,
+    "normal_alt_seq_median": 0.51,
+    "ref_on_alt": 1,
+    "ref": 432,
+    "tumor_alt_path_median": 0.7608695652173914
+   },
+   "not in the d9 set": {
+    "loci": 76,
+    "normal_alt_path_median": 0.4593791141122011,
+    "normal_alt_path_max": 0.9937888198757764,
+    "zero": 0,
+    "normal_alt_seq_median": 0.4447207280354545,
+    "ref_on_alt": 89,
+    "ref": 5252,
+    "tumor_alt_path_median": 0.5823308270676693
+   },
+   "other_ambiguous": {
+    "loci": 6,
+    "normal_alt_path_median": 0.48305200729927006,
+    "normal_alt_path_max": 0.9121621621621622,
+    "zero": 0,
+    "normal_alt_seq_median": 0.47472627737226275,
+    "ref_on_alt": 3,
+    "ref": 388,
+    "tumor_alt_path_median": 0.544984387197502
+   }
+  },
+  "realigned_vs_pansoma_gam": {
+   "source": "E5c per_locus.tsv.gz, COLO829T_ONT_d46 alt_reads / spanning",
+   "loci": 258,
+   "median_abs_diff_alt_read_fraction": 0.0,
+   "within_0p1": 256,
+   "median_spanning_gam": 84.5,
+   "median_spanning_realigned": 83.0
+  }
+ }
+}

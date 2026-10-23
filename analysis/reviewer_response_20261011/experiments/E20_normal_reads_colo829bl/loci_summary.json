@@ -1,0 +1,11 @@
+{
+ "d9": 497,
+ "d9_snv": 67,
+ "d46": 401,
+ "d46_snv": 54,
+ "d46_source": "/scratch/jshen/Github/Pansoma/analysis/reviewer_response_20261011/experiments/E5d_absorbed_normal_d46/colo829t_d46_absorbed_loci.tsv",
+ "d46_in_d9": 325,
+ "region_loci": 1371,
+ "regions": 1330,
+ "region_bp": 1342723
+}
