@@ -1,10 +1,13 @@
 # E22: CASTLE truth germline check and COLO829T d9 giraffe version
 
-Reviewer points: check 1 serves **R2.2, R2.6 and R1.m1**; check 2 serves **R3.1 and R3.m1**.
+Reviewer points: check 1 serves **R2.2, R2.6 and R1.m1**; check 2 serves **R3.1 and R3.m1**; check 3 (added
+2026-10-26) serves **R1.m1**.
 
 Status (2026-10-15): both checks are done. Every number below comes from the outputs listed in "Files". All data were
 opened read-only. Compute was light: one Slurm job (408124, `-p general -c 4`) made the bcftools subsets, and the
-rest ran on the login node. No GAM was modified.
+rest ran on the login node. No GAM was modified. Check 3 (2026-10-26): E7 step 2 for the three CASTLE lines on the
+login node, `graph_overlap.py` as Slurm 452211 (general, miao, 2 min), `graph_overlap_reads.py` on the login node
+(samtools over https on the public CASTLE BAMs, 21 sites).
 
 ## Short answers
 
@@ -26,6 +29,11 @@ rest ran on the login node. No GAM was modified.
   - COLO829T_ONT: vg **1.64.0–1.66.0**.
   - COLO829T_Illumina: vg **≤ 1.62**. This is not 1.66.0, so it differs from the HG008T d9 GAMs. The exact version
     cannot be recovered.
+- **Check 3, overlap with the pangenome.** With one method for all six tumors, 24.5 % of H1437's and 4.6 % of
+  H2009's truth SNVs (benchmark BED, chr1-22) are alleles of the HPRC v2.1 d46 graph (>= 46 of 463 haplotypes),
+  against 0.15-1.87 % for COLO829T, HCC1395 (SEQC2), HG008T and HCC1954. 99.1 % (H1437) and 91.2 % (H2009) of these
+  lie in the normal-LOH bins. At 21 example sites the tumor carries the population allele on 11-71 PacBio reads and the
+  normal shows 0-5 ALT reads. HCC1954 is not elevated.
 
 ---
 
@@ -170,6 +178,93 @@ effect is on chr2-22 training labels: about 10 % of H1437's somatic SNV tensors 
 
 ---
 
+## Check 3: how many truth alleles are already alleles of the pangenome? (R1.m1, 2026-10-26)
+
+Question (user, 2026-10-26): is the overlap between the CASTLE truth sets and the pangenome graph higher than for the
+other benchmarks, which would point to germline alleles in these truth sets? Look at examples.
+
+### Method (`graph_overlap.py`)
+
+- Truth alleles: E7 step 2 tables (`E7_graph_composition/s2_sample_alleles.py`: left-aligned, split into primitive
+  keys). HG008, COLO829 and HCC1395 come from E7 (2026-10-13). HCC1954, H1437 and H2009 were added on 2026-10-26 with
+  `s2_sample_alleles.py <LINE> <LINE>T_PacBio_d46 somatic`, run on the login node; logs are in
+  `tmp/reviewer_cpu_20261013/E7_graph_composition/castle_20261026/`. The normalized counts are 25,014, 84,744 and
+  161,091 alleles, equal to the table counts.
+- HPRC carriers: E7 step 1 on the v2.1 wave VCF (`WORK/v2.1/hprc_alleles`, 463 non-GRCh38 haplotypes). A
+  multi-primitive allele counts only when one haplotype set carries all of its primitives, as in E7.
+  - `in_hprc`: at least 1 haplotype carries the allele.
+  - `in_d46`: at least 46 haplotypes carry it, which means the allele is on a node of the d46 graph used for these
+    lines (E7 `predicted_d46`).
+- Scope: `bed` = FILTER PASS and inside the truth's benchmark BED, chr1-22; `bed_chr1` = the same on chr1.
+- The CASTLE lines and HCC1395 are also joined to this check's per-allele tables (`<set>.alleles.tsv.gz`), by the
+  truth table's VCF allele, to split by LOH in the normal. LOH = a 1-Mb bin with a normal het fraction < 0.2. The join
+  also gives gnomAD AF >= 1 %.
+- Regression: HG008 and COLO829 reproduce E7's `v2.1/d46_content.tsv` (SNV in_hprc / in_d46 5.57 / 1.67 % and
+  1.33 / 0.15 %).
+
+### Results (`graph_overlap.tsv`; bed scope, chr1-22)
+
+| tumor (truth) | SNVs | SNV in HPRC v2.1 | SNV in d46 graph | INDELs | INDEL in d46 graph | SNV gnomAD >= 1 % |
+|---|---|---|---|---|---|---|
+| COLO829T (SMaHT) | 42,035 | 1.33 % | 0.15 % | 1,912 | 17.8 % | - |
+| HCC1395 (SEQC2 v1.2.1) | 39,447 | 1.55 % | 0.56 % | 1,564 | 3.0 % | 0.54 % |
+| HG008T (GIAB v0.2) | 8,543 | 5.57 % | 1.67 % | 7,982 | 19.1 % | - |
+| HCC1954 (CASTLE) | 20,846 | 4.65 % | 1.87 % | 2,272 | 7.6 % | 2.29 % |
+| H2009 (CASTLE) | 144,177 | 6.06 % | **4.60 %** | 5,843 | 14.9 % | 5.31 % |
+| H1437 (CASTLE) | 73,623 | 30.03 % | **24.49 %** | 4,439 | **39.5 %** | 28.77 % |
+
+- **The excess is the normal-LOH segments.** The share of truth SNVs that are d46 alleles, inside vs outside the
+  normal-LOH bins:
+  - H1437: 73.9 % of 24,160 inside vs 0.34 % of 49,463 outside, so 99.1 % of its d46-allele SNVs lie in normal-LOH
+    bins.
+  - H2009: 54.4 % of 11,140 inside vs 0.44 % outside (91.2 %).
+  - HCC1954: no normal LOH (222 SNVs in such bins), and it is not elevated.
+  - Outside the normal-LOH bins, all three CASTLE lines (0.34-1.88 %) are in the range of the other benchmarks.
+- INDELs: HG008T and COLO829T truth INDELs are rich in long homopolymers, so their graph share (18-19 %) is
+  higher than HCC1954's and H2009's. Only H1437 stands out (39.5 %; 74.2 % inside its normal-LOH bins, 4.0 % outside).
+- chr1, the test chromosome: at most 0.76 % of SNVs are d46 alleles in every line, so chr1 is not affected.
+
+### Examples (`graph_overlap_examples.tsv`, `graph_overlap_reads.py` -> `graph_overlap_examples_reads.tsv`)
+
+The examples are d46-allele truth SNVs in the BED, four per line and LOH class, spread evenly over the sorted list.
+Each was piled up in the CASTLE tumor and normal PacBio HiFi BAMs, read over https from the public bucket
+`gs://brain-genomics-public/publications/park2024_deepsomatic/bams/HiFi/pbmm2_grch38_bams/` (MAPQ >= 5,
+BQ >= 10, primary, non-duplicate).
+
+- Every one of the 21 sites is a common population allele. It is carried by 47-386 of the 463 HPRC haplotypes, and
+  17 of the sites have gnomAD AF 0.013-0.80.
+- The tumor carries it on 11-71 reads, at VAF 0.21-1.0.
+- The normal shows 0-5 ALT reads in 22-95. No site has a germline record of the normal (`normal_gt` empty).
+- Examples:
+  - H1437 chr9:105,525,779 T>G (normal-LOH bin): 309 HPRC carriers, gnomAD 0.67; tumor 22 ALT / 40 REF, normal
+    5 / 87.
+  - H2009 chr7:126,843,996 C>T (normal-LOH bin): 122 carriers, gnomAD 0.40; tumor 66 / 44, normal 0 / 39.
+  - HCC1954 chr7:90,755,952 G>A: 327 carriers, gnomAD 0.63; tumor 44 / 22, normal 0 / 37. This is in the chr7:90-91
+    Mb cluster of check 1.
+  - H1437 chr22:22,558,886 G>C and 22,802,556 T>G lie in the IGL locus, where a B-lymphoblastoid line can have lost
+    DNA by rearrangement.
+
+### Effect on training and on evaluation (`graph_overlap_training.py` -> `graph_overlap_training.tsv`)
+
+- **Training: the graph absorbs these alleles.** Each tensor set's per-allele status (`tensors/somatic.recall.tsv`)
+  was checked for the truth SNVs in the BED, chr1-22. The CASTLE lines are trained on every autosome.
+  - H1437: 99.1-99.7 % of its 18,028 d46-allele truth SNVs produce no candidate. Only 31-56 per platform become
+    somatic training examples, 0.06-0.11 % of H1437's somatic SNV examples.
+  - H2009: 0.04-0.07 %. HCC1954: 0.04-0.08 %.
+  - INDELs: the d46-allele truth INDELs make up 0.02-2.3 % of the somatic INDEL examples (highest on ONT).
+  - Check 1's "about 10 % of H1437's somatic SNV training tensors lie in the normal-LOH segments" refers to the
+    truth alleles there that are not graph alleles. The segments hold 33 % of H1437's truth SNVs.
+- **Evaluation: they would count as missed somatic variants.** Population filtering (gnomAD or CoLoRSdb AF >= 1e-4,
+  exact allele) tags all of them: 18,028 of 18,028 in H1437 and 6,635 of 6,637 in H2009. On their own they would
+  cap the recall of every caller on H1437, after filtering, at 75.5 %; 31.1 % of H1437's truth SNVs are tagged in
+  all.
+
+Reading: a new somatic mutation rarely recreates a common population allele. The tumor carrying the allele while the
+B-lymphoblastoid normal has lost it (LOH or deletion) is the likely explanation. A tumor–normal comparison then labels
+an inherited allele as somatic. This is check 1's conclusion, now seen through the graph.
+
+---
+
 ## Check 2: vg giraffe version of the COLO829T HPRC v1.1 (d9) GAMs
 
 ### The GAMs behind the tensor sets
@@ -270,6 +365,9 @@ In this folder:
 | `gam_tag_scan.py` | read-only GAM group/tag scanner |
 | `vg_version_fingerprint.sh` | test-graph giraffe runs per vg version |
 | `gam_params.sh` | `vg_fingerprint.tsv`: PARAMS_JSON of the real GAMs vs the test runs |
+| `graph_overlap.py` | check 3: `graph_overlap.tsv`, `graph_overlap_examples.tsv`; WORK `graph_overlap.alleles.tsv.gz` (per allele) |
+| `graph_overlap_reads.py` | check 3: `graph_overlap_examples_reads.tsv` (tumor / normal PacBio read counts at the examples) |
+| `graph_overlap_training.py` | check 3: `graph_overlap_training.tsv` (do d46-allele truths become somatic training examples) |
 
 Intermediate files are in `/scratch/jshen/data/reviewer_experiments_20261013/E22_truth_and_version_checks/`:
 

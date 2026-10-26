@@ -1,0 +1,73 @@
+stratum	sample	platform	group	n	training_example	pct_training_example	no_candidate	pct_no_candidate
+SNV	HCC1954	Illumina	in_d46	389	15	3.86	368	94.6
+SNV	HCC1954	Illumina	not_in_d46	20457	19530	95.47	86	0.42
+SNV	HCC1954	Illumina	share_of_somatic_examples_that_are_d46_alleles	19545	15	0.08		
+SNV	HCC1954	PacBio	in_d46	389	10	2.57	375	96.4
+SNV	HCC1954	PacBio	not_in_d46	20457	19396	94.81	104	0.51
+SNV	HCC1954	PacBio	share_of_somatic_examples_that_are_d46_alleles	19406	10	0.05		
+SNV	HCC1954	ONT	in_d46	389	8	2.06	360	92.54
+SNV	HCC1954	ONT	not_in_d46	20457	19191	93.81	82	0.4
+SNV	HCC1954	ONT	share_of_somatic_examples_that_are_d46_alleles	19199	8	0.04		
+SNV	H1437	Illumina	in_d46	18028	56	0.31	17898	99.28
+SNV	H1437	Illumina	not_in_d46	55595	52579	94.58	461	0.83
+SNV	H1437	Illumina	share_of_somatic_examples_that_are_d46_alleles	52635	56	0.11		
+SNV	H1437	PacBio	in_d46	18028	31	0.17	17967	99.66
+SNV	H1437	PacBio	not_in_d46	55595	52688	94.77	387	0.7
+SNV	H1437	PacBio	share_of_somatic_examples_that_are_d46_alleles	52719	31	0.06		
+SNV	H1437	ONT	in_d46	18028	55	0.31	17861	99.07
+SNV	H1437	ONT	not_in_d46	55595	52492	94.42	364	0.65
+SNV	H1437	ONT	share_of_somatic_examples_that_are_d46_alleles	52547	55	0.1		
+SNV	H2009	Illumina	in_d46	6637	87	1.31	6483	97.68
+SNV	H2009	Illumina	not_in_d46	137540	134982	98.14	774	0.56
+SNV	H2009	Illumina	share_of_somatic_examples_that_are_d46_alleles	135069	87	0.06		
+SNV	H2009	PacBio	in_d46	6637	57	0.86	6549	98.67
+SNV	H2009	PacBio	not_in_d46	137540	135323	98.39	531	0.39
+SNV	H2009	PacBio	share_of_somatic_examples_that_are_d46_alleles	135380	57	0.04		
+SNV	H2009	ONT	in_d46	6637	89	1.34	6424	96.79
+SNV	H2009	ONT	not_in_d46	137540	135283	98.36	428	0.31
+SNV	H2009	ONT	share_of_somatic_examples_that_are_d46_alleles	135372	89	0.07		
+SNV	HCC1395	Illumina	in_d46	221	3	1.36	218	98.64
+SNV	HCC1395	Illumina	not_in_d46	39226	35263	89.9	218	0.56
+SNV	HCC1395	Illumina	share_of_somatic_examples_that_are_d46_alleles	35266	3	0.01		
+SNV	HCC1395	PacBio	in_d46	221	0	0.0	218	98.64
+SNV	HCC1395	PacBio	not_in_d46	39226	34374	87.63	606	1.54
+SNV	HCC1395	PacBio	share_of_somatic_examples_that_are_d46_alleles	34374	0	0.0		
+SNV	HCC1395	ONT	in_d46	221	0	0.0	219	99.1
+SNV	HCC1395	ONT	not_in_d46	39226	30869	78.7	2262	5.77
+SNV	HCC1395	ONT	share_of_somatic_examples_that_are_d46_alleles	30869	0	0.0		
+INDEL	HCC1954	Illumina	in_d46	173	2	1.16	136	78.61
+INDEL	HCC1954	Illumina	not_in_d46	2099	1969	93.81	67	3.19
+INDEL	HCC1954	Illumina	share_of_somatic_examples_that_are_d46_alleles	1971	2	0.1		
+INDEL	HCC1954	PacBio	in_d46	173	3	1.73	125	72.25
+INDEL	HCC1954	PacBio	not_in_d46	2099	2017	96.09	47	2.24
+INDEL	HCC1954	PacBio	share_of_somatic_examples_that_are_d46_alleles	2020	3	0.15		
+INDEL	HCC1954	ONT	in_d46	173	41	23.7	87	50.29
+INDEL	HCC1954	ONT	not_in_d46	2099	1975	94.09	36	1.72
+INDEL	HCC1954	ONT	share_of_somatic_examples_that_are_d46_alleles	2016	41	2.03		
+INDEL	H1437	Illumina	in_d46	1752	3	0.17	1712	97.72
+INDEL	H1437	Illumina	not_in_d46	2687	2427	90.32	201	7.48
+INDEL	H1437	Illumina	share_of_somatic_examples_that_are_d46_alleles	2430	3	0.12		
+INDEL	H1437	PacBio	in_d46	1752	9	0.51	1636	93.38
+INDEL	H1437	PacBio	not_in_d46	2687	2462	91.63	184	6.85
+INDEL	H1437	PacBio	share_of_somatic_examples_that_are_d46_alleles	2471	9	0.36		
+INDEL	H1437	ONT	in_d46	1752	28	1.6	1524	86.99
+INDEL	H1437	ONT	not_in_d46	2687	2438	90.73	166	6.18
+INDEL	H1437	ONT	share_of_somatic_examples_that_are_d46_alleles	2466	28	1.14		
+INDEL	H2009	Illumina	in_d46	869	1	0.12	755	86.88
+INDEL	H2009	Illumina	not_in_d46	4974	4623	92.94	244	4.91
+INDEL	H2009	Illumina	share_of_somatic_examples_that_are_d46_alleles	4624	1	0.02		
+INDEL	H2009	PacBio	in_d46	869	20	2.3	685	78.83
+INDEL	H2009	PacBio	not_in_d46	4974	4692	94.33	174	3.5
+INDEL	H2009	PacBio	share_of_somatic_examples_that_are_d46_alleles	4712	20	0.42		
+INDEL	H2009	ONT	in_d46	869	111	12.77	567	65.25
+INDEL	H2009	ONT	not_in_d46	4974	4650	93.49	148	2.98
+INDEL	H2009	ONT	share_of_somatic_examples_that_are_d46_alleles	4761	111	2.33		
+INDEL	HCC1395	Illumina	in_d46	47	0	0.0	46	97.87
+INDEL	HCC1395	Illumina	not_in_d46	1517	1290	85.04	28	1.85
+INDEL	HCC1395	Illumina	share_of_somatic_examples_that_are_d46_alleles	1290	0	0.0		
+INDEL	HCC1395	PacBio	in_d46	47	3	6.38	33	70.21
+INDEL	HCC1395	PacBio	not_in_d46	1517	1317	86.82	39	2.57
+INDEL	HCC1395	PacBio	share_of_somatic_examples_that_are_d46_alleles	1320	3	0.23		
+INDEL	HCC1395	ONT	in_d46	47	7	14.89	26	55.32
+INDEL	HCC1395	ONT	not_in_d46	1517	1179	77.72	100	6.59
+INDEL	HCC1395	ONT	share_of_somatic_examples_that_are_d46_alleles	1186	7	0.59		
