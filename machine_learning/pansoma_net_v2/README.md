@@ -288,7 +288,7 @@ Off-reference tensors are marked for analysis only; the test scores them like th
 
 **Off-reference rescue (SNV).** The model learned that a low path count (ch6: how many HPRC haplotypes run
 through the node) is not somatic, and on an off-reference node every read has a low path count, so it hardly ever
-calls somatic there. `predict --offref-site90 W` (default 10; 0 turns it off) scores every SNV off-reference tensor
+calls somatic there. `predict --offref-site90 W` (off by default; W = 10 turns it on) scores every SNV off-reference tensor
 again with its ch6 cells below the every-haplotype code raised to it in the site columns (the middle column ± W;
 uncovered cells stay 0), and calls it somatic when somatic is the most probable class of those probabilities. The
 every-haplotype code is the set's channel-6 storage's (`data.PATH_COUNT_ALL`): 100 on `int8-count-haplotypes100` (the
@@ -301,8 +301,8 @@ threshold on the others.
 **SNV recipe** (HG008T Illumina, PacBio, ONT): the 50.4 M model `--depths 3 3 27 3 --dims 96 192 384 768` (the
 default widths halved), `--class-weights pow:0.75 --batch-size 1024 --lr 1e-4 --epochs 20 --non-fraction 1.0
 --block v2 --ignore-reasons residual_partial_somatic_truth allele_partial_somatic_truth`, every plane kept (ch6
-included), one whole GPU; calls at the validation recall-0.9 threshold, off-reference tensors by the rescue above
-(graph_vcf's defaults). On HG008T PacBio chr1 (12 epochs) the default 199.6 M model at lr 1e-4 overfits after
+included), one whole GPU; calls at the validation recall-0.9 threshold (graph_vcf's defaults); with `predict --offref-site90 10`,
+off-reference tensors are called by the rescue above. On HG008T PacBio chr1 (12 epochs) the default 199.6 M model at lr 1e-4 overfits after
 epoch ~7 (validation loss 0.51 -> 2.16) and the 50.4 M model does not; with the PoN in the BED both reach P/R/F1
 0.473/0.832/0.604 (199.6 M, best epoch 5) and 0.493/0.822/0.616 (50.4 M).
 

@@ -329,8 +329,11 @@ class TrainPredictTest(unittest.TestCase):
                                                           lambda m: None, "check"))
 
             pred = tmp / "pred"
+            self.assertEqual(predict.parse_args(["--checkpoint", "c", "--tensors", "t", "--output", "o"]).offref_site90,
+                             0)  # the off-reference rescue is off by default
             predict.main(["--checkpoint", str(out / "best.pth"), "--tensors", str(root), "--output", str(pred),
-                          "--chroms", "chr1", "--num-workers", "0", "--amp", "off", "--batch-size", "5"])
+                          "--chroms", "chr1", "--num-workers", "0", "--amp", "off", "--batch-size", "5",
+                          "--offref-site90", "10"])
             with gzip.open(pred / "sample.tensors.SNV.predictions.ndjson.gz", "rt") as f:
                 records = [json.loads(line) for line in f]
             chr1 = [t for t in truth["SNV"] if t["chrom"] == "chr1"]
@@ -474,7 +477,7 @@ class TrainPredictTest(unittest.TestCase):
             train.main(["--tensors", str(new), "--output", str(out), "--epochs", "1"] + SMALL_ARGS)
             ckpt = torch.load(out / "best.pth", weights_only=False)
             self.assertEqual((ckpt["path_count_storage"], ckpt["path_count_haplotypes"]), ("int8-count-haplotypes100", [90]))
-            args = ["--chroms", "chr1", "--num-workers", "0", "--amp", "off", "--kinds", "SNV"]
+            args = ["--chroms", "chr1", "--num-workers", "0", "--amp", "off", "--kinds", "SNV", "--offref-site90", "10"]
 
             def run_predict(checkpoint, sets, output):
                 """predict.main with the floors main() gives OffrefRescue recorded, and its stdout."""

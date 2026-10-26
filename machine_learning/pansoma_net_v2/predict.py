@@ -28,7 +28,7 @@ Writes, per <sample>.<set>.<KIND>:
   excluded: true; graph_vcf writes no record for them. A found truth allele of the other kind (an SNV tensor matching
   an INDEL truth partially) is a true call too, once. `ceiling` is the recall of a perfect model.
 
-Off-reference rescue (SNV, --offref-site90 W, default 10; 0 turns it off). The model learned that a low path count
+Off-reference rescue (SNV, --offref-site90 W; off by default, W = 10 turns it on). The model learned that a low path count
 (ch6, how many HPRC haplotypes run through the node) is not somatic, so it does not call somatic on an
 off-reference node, where every read has a low path count. Each SNV off-reference tensor is scored again with its
 ch6 cells below the every-haplotype code raised to it in the site columns (the middle column +- W; uncovered cells
@@ -112,10 +112,10 @@ def parse_args(argv=None):
     p.add_argument("--num-workers", type=int, default=8)
     p.add_argument("--amp", choices=["bf16", "off"], default="bf16")
     p.add_argument("--threshold", type=float, help="somatic threshold (default: the checkpoint's)")
-    p.add_argument("--offref-site90", type=int, default=10, metavar="W",
+    p.add_argument("--offref-site90", type=int, default=0, metavar="W",
                    help="SNV off-reference rescue: score the off-reference tensors again with ch6 below the "
                         "every-haplotype code (90 on int8-count-linear100-log2 sets, 100 on int8-count-haplotypes100) "
-                        "raised to it in the site columns +- W and call them by argmax (0: off)")
+                        "raised to it in the site columns +- W and call them by argmax (default 0: off; 10 turns it on)")
     p.add_argument("--exclude-candidates", nargs="?", const="",
                    help="file of candidate ids taken out before the model (train --exclude-candidates): left out of "
                         "the test like -1, records get excluded: true and graph_vcf leaves them out of the calls "
