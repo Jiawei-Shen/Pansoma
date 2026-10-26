@@ -236,7 +236,12 @@ alleles present in dbSNP 138) does not separate the groups (HG008-N 33.2 %, HapM
 
 ### 4.5 Somatic truth alleles found in the resources (`somatic_truth_in_resources.py`, Slurm array 387253)
 
-Six somatic truth sets DONE (tasks 0-5); HapMap contrast PENDING (task 6 held, see Status).
+Six somatic truth sets DONE (tasks 0-5); HapMap contrast DONE (task 6, 2026-10-15; in `somatic_truth_in_resources.tsv`
+since then). HapMap chr20 positives (donor alleles absent from HG005, all records, no BED): SNV n 129,857, Pansoma
+rule 125,026 (96.3 %), ClairS-TO rule 123,210 (94.9 %); INDEL n 41,174, Pansoma rule 16,182 (39.3 %) under the rule
+of this table (HP >= 7: 0.01, else 1e-3), 16,630 (40.4 %) under the 2026-10-16 rule (HP >= 8: 0.01, else 1e-4; job
+450562, `/scratch/jshen/data/reviewer_experiments_20261013/E8b_literature_facts/somatic_truth_in_resources.HapMap_positives_chr20.pon_hp8_1e-4.tsv`),
+ClairS-TO rule 19,755 (48.0 %). Used by R2.1 point 3 (96.3 % / 40.4 %).
 
 For every ALT of every record of a truth VCF (all chromosomes, no BED; multi-allelic records split, so n can exceed
 the record count by a few), the four resources are queried and the script counts: exact allele matches (POS, REF,

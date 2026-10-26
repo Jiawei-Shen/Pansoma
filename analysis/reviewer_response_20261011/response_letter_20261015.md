@@ -120,13 +120,12 @@ population-based tumor-only calling, and describe candidate generation on altern
 
 **Response.**
 
-We agree with the first point. On the second, there was no leakage: the submitted HapMap results were produced on a graph built without any of the six donors, with the same Minigraph-Cactus construction and d9 filter but from 40 HPRC year-1 individuals plus GRCh38 and CHM13 (82 haplotypes; HG00438, HG02257, HG02486, HG02622, HG002, HG005 and NA19240 excluded). The Methods now state this. The HAPMAP6 positives are germline alleles of the five minor donors (VAF 0.25–16.5%), not acquired mutations. Four of the donors are in the HPRC v1.1 graph and all six in the HPRC v2.1 graph (d46 filter), as our companion study noted, which is why the donor-free graph was used. Even with the donors in a graph, the overlap could not inflate the results: apart from the GRCh38 and CHM13 reference paths, our graphs keep only nodes on about 10% or more of their haplotypes, so a donor's private alleles are filtered out, and a donor allele the graph carries is absorbed and removes a positive. The donors' rare alleles are also found in CoLoRSdb, one of our population filtering resources, far more often than those of our cancer benchmarks' normals (chr20 SNVs: 14.5–25.9% against 4.0–7.9%). The benchmark therefore asks the caller to report alleles that its population prior, used by the trained model (R2.1), is designed to suppress.
+We agree with the first point. On the second, the submitted HapMap results used a graph built without any of the six mixture donors, so the donors' presence in the standard HPRC graphs did not apply to this analysis. That graph had the same Minigraph-Cactus construction and d9 filter but was built from 40 HPRC year-1 individuals plus GRCh38 and CHM13 (82 haplotypes; HG00438, HG02257, HG02486, HG02622, HG002, HG005 and NA19240 excluded); the Methods now state this. Four of the donors are in the HPRC v1.1 graph and all six in the HPRC v2.1 graph (d46 filter), as our companion study noted, which is why the donor-free graph was used. The HAPMAP6 positives are germline alleles of the five minor donors (VAF 0.25–16.5%), not acquired mutations. The donors' rare alleles are also found in CoLoRSdb, one of our population filtering resources, far more often than those of our cancer benchmarks' normals (chr20 SNVs: 14.5–25.9% against 4.0–7.9%). The benchmark therefore asks the caller to report alleles that its population prior, used by the trained model (R2.1), is designed to suppress.
 
-We removed the HapMap mixture from the main benchmark and withdrew the HapMap-trained low-VAF model as a somatic model. We keep the mixture only to measure how far down in allele fraction candidates and calls reach, rerun with the current pipeline on the donor-free graph and reported before population filtering (Supplement; R2.4); no claim about somatic accuracy rests on it. Low-VAF performance is now measured on in-silico dilutions of COLO829T with COLO829BL on three platforms (nominal purity 75, 50 and 25%; measured 0.66 / 0.40 / 0.20 for Illumina and Fiber-seq, 0.70 / 0.44 / 0.22 for ONT). One model per platform and variant type is trained on chr2–22 of all four purities and tested on chr1 of each; the tumor itself is not held out.
+We removed the HapMap mixture from the main benchmark and withdrew the HapMap-trained low-VAF model as a somatic model. We keep the mixture only to measure empirical sensitivity by allele fraction, rerun with the current pipeline on the donor-free graph and scored before population filtering (Supplement; R2.4); no claim about somatic accuracy rests on it. Low-VAF performance is now measured on in-silico dilutions of COLO829T with COLO829BL on three platforms (nominal purity 75, 50 and 25%; measured 0.66 / 0.40 / 0.20 for Illumina and Fiber-seq, 0.70 / 0.44 / 0.22 for ONT). One model per platform and variant type is trained on chr2–22 of all four purities and tested on chr1 of each; the tumor itself is not held out. Results by purity and allele fraction are in R2.4 (Fiber-seq SNV F1 after population filtering 0.665–0.779 across purities). Two limitations apply:
 
-- Fiber-seq SNV F1 after population filtering, at one recall-0.9 validation threshold pooled over all purities, is 0.779 / 0.687 / 0.665 / 0.720 at 100 / 75 / 50 / 25% purity (95% block-bootstrap interval at 50%: 0.648–0.682; 547–705 graph-coordinate calls per purity are not scored; R3.4). The share of truth SNVs that any model can reach falls from 0.821 to 0.711; on chr1, 16.1% of truth SNVs at full purity and 26.9% at 25% purity lie below the 0.08 candidate allele-fraction floor.
-- The dip at 75 and 50% comes from the tumor's loss of heterozygosity: where the tumor lost the ALT copy of a germline heterozygous SNV, the admixed normal reads put that allele at (1 − purity)/2, inside the somatic allele-fraction range of those mixtures. The false positives at these two purities have a germline-like spectrum (cosine to the germline spectrum 0.788 and 0.768, against 0.536 at full purity).
-- In the Illumina and ONT mixtures, tumor- and normal-derived reads differ in base quality, a cue that a real tumor lacks, so those scores are likely optimistic. For Illumina INDELs, removing the cue (per-read base-quality centring) lowers the dilutions' test-tuned best F1 (upper bound) to 0.133–0.146, below the 100% sample (0.182), as expected if the cue had inflated them. For Illumina SNVs, the dilutions' PASS F1 falls from 0.804–0.840 to 0.678–0.709 (precision from 0.97 to 0.68–0.74) [待补: ONT after removing this cue].
+- At 75 and 50% purity the false positives have a germline-like spectrum (cosine to the germline spectrum 0.788 and 0.768, against 0.536 at full purity), consistent with a contribution from the tumor's loss of heterozygosity: where the tumor lost the ALT copy of a germline heterozygous SNV, the admixed normal reads put that allele at (1 − purity)/2, inside the somatic allele-fraction range of those mixtures.
+- In the Illumina and ONT mixtures, tumor- and normal-derived reads differ in base quality, a cue that a real tumor lacks, so their scores are likely optimistic. With per-read base-quality centring, the Illumina dilutions' INDEL best F1 (upper bound) falls to 0.133–0.146, below the 100% sample (0.182), and their SNV PASS F1 from 0.804–0.840 to 0.678–0.709. These runs also changed the quality normalization and, for SNVs, the batch size, so not all of the decrease can be attributed to the cue [待补: ONT after removing this cue].
 
 [待补: dilutions of a second tumor not used in training (HCC1395)]
 
@@ -431,12 +430,12 @@ Rendered with `scripts/visualize_tensor.py` (`supplementary/R1.m2/make_figure.sh
 We included the SMaHT HAPMAP6 mixture because it offers a large truth set at very low allele fractions (0.25–16.5%). We agree that it has three limits for a pangenome-based tumor-only caller:
 
 1. Its positives are germline alleles of the five minor donors that the HG005 background lacks. They are not acquired mutations, so they carry no somatic mutational process, clonal structure or tumor copy-number context.
-2. Four of the donors are in the HPRC v1.1 graph (d9 filter), and all six are in the HPRC v2.1 graph (d46 filter); the submitted HapMap results used a graph built without any of them (R1.5). Apart from their GRCh38 and CHM13 reference paths, both graphs keep only nodes carried by about 10% or more of their haplotypes, so they absorb the positives that are common among those haplotypes; a donor's private alleles are filtered out even when the donor is in the graph. The trained classifier relies on this prior: on our tumor benchmarks, when the haplotype-count channel is set at inference so that every node appears to carry all haplotypes, 3.4–7.6 times as many germline tensors pass the calling threshold (12 HPRC-graph SNV models, chr1), although population filtering removes most of them again (R1.1).
+2. Four of the donors are in the HPRC v1.1 graph (d9 filter), and all six are in the HPRC v2.1 graph (d46 filter); the submitted HapMap results used a graph built without any of them (R1.5). Apart from their GRCh38 and CHM13 reference paths, both graphs keep only nodes carried by about 10% or more of their haplotypes, so they absorb the positives that are common among those haplotypes; a donor's private alleles are filtered out even when the donor is in the graph. The trained classifier uses this population prior through its haplotype-count channel (R1.1).
 3. The donors are public reference samples. Their rare alleles are found in CoLoRSdb, one of our population filtering resources, far more often than those of our cancer benchmarks' normals (chr20 SNVs: 14.5–25.9% against 4.0–7.9%; R2.6), so filtering also works against these positives: it tags 96.3% of the mixture's SNV positives and 40.4% of its indel positives on chr20.
 
 The mixture therefore measures sensitivity to low-fraction germline alleles. It does not measure tumor-only somatic calling.
 
-We removed it from the main benchmark. The Supplement reports it only on a graph without any of the six donors (40 HPRC individuals plus GRCh38 and CHM13), as a measure of how far down in allele fraction the read evidence reaches before population filtering (R2.4), not of somatic accuracy. For tumor-only calling we use tumor/normal dilutions that contain true somatic mutations: COLO829T at 75, 50 and 25% purity on three platforms, with one model per platform trained on chr2–22 of all purities and tested per purity on chr1; the tumor itself is not held out (R1.5, R2.4). [待补: Illumina SNVs and ONT after removing a read-source base-quality cue (R1.5; done for Illumina INDELs); dilutions of a second tumor not used in training (HCC1395)]
+We removed it from the main benchmark. The Supplement reports it only on a graph without any of the six donors (40 HPRC individuals plus GRCh38 and CHM13), as the empirical sensitivity by allele fraction in this mixture, before population filtering and excluding alleles that graph paths already carry (R2.4), not as somatic accuracy. For tumor-only calling we use tumor/normal dilutions that contain true somatic mutations: COLO829T at 75, 50 and 25% purity on three platforms, with one model per platform trained on chr2–22 of all purities and tested per purity on chr1; the tumor itself is not held out, so these results describe a held-out chromosome of one tumor, not other tumors (R1.5, R2.4). The Illumina and ONT dilutions carry a read-source base-quality cue, discussed in R1.5.
 
 ### R2.2 How the truth sets were generated
 
@@ -506,50 +505,50 @@ graph alignment alone cannot establish errors in the benchmark truth. We have wi
 recall under a common protocol, and replaced the original false-negative categories with an allele-level analysis of
 where variants are lost.
 
-*Recall under a common protocol.* We re-scored the original DeepSomatic-TO and ClairS-TO call sets with our protocol
-(chr1, benchmark regions, the same population filter; R3.m2). On HG008T, SNV recall is now comparable: 0.814–0.859 for
-Pansoma on the HPRC v2.1 graph (three training seeds), against 0.806–0.889 for DeepSomatic-TO and 0.831–0.845 for
-ClairS-TO, with Pansoma's models trained on chr2–22 of the same tumor. On COLO829T, Pansoma reaches 0.700–0.734 and the
-comparators 0.555–0.835, and a substantial deficit remains against DeepSomatic-TO on Illumina (0.705–0.717 against
-0.835). Among truth SNVs whose allele fraction in the truth set (its Illumina VAF) is below 0.08, DeepSomatic-TO
-recovers 30%, compared with 6–7% for Pansoma, whose 0.08 candidate floor applies to the allele fraction observed in its
-own reads (above 0.08 at a few of these sites); at 0.08 or above, DeepSomatic-TO recovers 94%, compared with 83–85% for
-Pansoma, so the floor does not explain the deficit fully (low-allele-fraction detection: R2.4). INDEL recall remains low
-in absolute terms, although under the same protocol it is higher than the comparators' on both tumors (0.229–0.260
-against 0.015–0.183).
+*Recall under a common protocol.* We evaluated the revised Pansoma models and the comparator call sets with a common
+scoring protocol (chr1, benchmark regions, the same additional population filter for all callers; R3.m2). The ranges
+below span sequencing platforms and, for Pansoma's SNV models, three training seeds; they are not confidence intervals. On HG008T,
+SNV recall is comparable: 0.814–0.859 for Pansoma on the HPRC v2.1 graph, against 0.806–0.889 for DeepSomatic-TO and
+0.831–0.845 for ClairS-TO, with Pansoma's models trained on chr2–22 of the same tumor. On COLO829T, Pansoma reaches
+0.700–0.734 and the comparators 0.555–0.835, and a substantial deficit remains against DeepSomatic-TO on Illumina
+(0.705–0.717 against 0.835). Among truth SNVs whose allele fraction in the truth set (its Illumina VAF) is below 0.08,
+DeepSomatic-TO recovers 30%, compared with 6–7% for Pansoma, whose 0.08 candidate floor applies to the allele fraction
+observed in its own reads; at 0.08 or above, DeepSomatic-TO recovers 94%, compared with 83–85% for Pansoma, so the floor
+does not explain the deficit fully (low-allele-fraction detection: R2.4). INDEL recall remains low in absolute terms,
+although under the same protocol it is higher than the comparators' on both tumors (0.229–0.260 against 0.015–0.183).
 
-*Where recall is lost.* A per-allele funnel assigns each missed truth allele to the first stage at which it is lost
-(R1.6). On HG008T the largest loss on every reference is the classification threshold (8.9–10.9% of truth SNVs, against
-2.1–5.2% without a candidate and 3.2–5.2% first lost at filtering). The population filter tags 61 of the 702 truth SNVs
-(8.7%); these would also be tagged if the same allele-level rules were applied to another caller's output, and those not
-counted at the filtering stage are already lost before it. On COLO829T, candidate generation is the main limitation:
-17–18% of truth SNVs get no candidate, mainly because 15.1–16.1% have a truth-set allele fraction below 0.08.
+*Where recall is lost (chr1).* A per-allele funnel assigns each missed truth allele to the first stage at which it is
+lost (R1.6). On HG008T the largest loss on every reference and seed is the classification threshold (on the HPRC
+v2.1 graph 5.6–10.9% of truth SNVs, against 4.4–5.0% without a candidate and 2.6–4.0% first lost at filtering). On COLO829T, candidate generation is the main
+limitation: 17–18% of truth SNVs get no candidate, mainly because 15.1–16.1% have a truth-set allele fraction below 0.08.
 
-*The two categories.* We regret that these categories were not explained. The false-negative statistics of the original
-Supplementary Fig. 2, including "variant node not ranked #1" and "first aligned node mismatch", came from the original
-pipeline and had shortcomings, and we have replaced them with a detailed allele-level classification (revised
-Supplementary Fig. 2; HPRC v2.1 graph, six datasets): one read-level class for every truth allele without a candidate,
-with later losses in the funnel above. For INDELs, 81–93% of those without a candidate already have their ALT in the
-graph (HG008T PacBio: 2,939 of 3,169). SNVs without a candidate lie mostly in repeats on HG008T (52–81%), whereas on
-COLO829T they have too few ALT reads (19–70%) or no read with MAPQ > 10 (34–42% on Illumina and Fiber-seq).
+*Revised false-negative classification.* We have withdrawn the original category assignments, including "variant node
+not ranked #1" and "first aligned node mismatch", together with their statistics, and replaced them with an allele-level
+classification based on read evidence and the stage of candidate loss (revised Supplementary Fig. 2; class definitions
+in Supplementary Table [X]). We additionally examined candidate-generation failures across chr1–22 on the HPRC v2.1
+graph (six datasets). For INDELs, 81–93% of candidate-generation failures involve complete or partial absorption into
+graph paths, including cases that leave a residual edit with a different representation. SNVs without a candidate lie
+mostly in repeats on HG008T (52–81%), whereas on COLO829T they have too few ALT reads (19–70%) or no read with MAPQ > 10
+(34–42% on Illumina and Fiber-seq).
 
-*The normal at missed sites on graph nodes.* We examined the matched normal directly, in two ways. First, as the
-reviewer suggested, we realigned the COLO829BL normal's ONT reads, with the tumor's aligner settings, at the 401
-COLO829T truth alleles that the HPRC v2.1 graph absorbs (below). The graph does not pull reads onto the alternative
-path: 1.1% of normal reads whose own bases match GRCh38 take the ALT path (tumor: 1.6%), against 95% of reads that carry
-the ALT. At the absorbed SNVs, 2.2% of normal and 45% of tumor reads carry the ALT; at the absorbed INDELs, mostly
-repeat-length changes, ONT length errors prevent a read-level call (42% of normal and 59% of tumor reads resemble the
-ALT). Second, we used the haplotype-resolved matched-normal assemblies (HG008-N v6.2; COLO829BL). On the HPRC v2.1
-graph, 1,607 HG008T and 401 COLO829T truth alleles get no candidate on at least one platform although a graph path
-spells their ALT. Only 110 (6.8%) and 27 (6.7%) are carried by the matched normal, and 1,481 (92.2%) and 371 (92.5%) are
-absent from both normal haplotypes. At the 1,351 HG008T INDEL loci absent from the normal, the HG008-T tumor assembly
-carries exactly the truth allele at 1,153 and a sequence found in neither normal haplotype at 1,347. These HG008T
-alleles are therefore supported somatic events that the graph already represents, and the manuscript now describes graph
-absorption as a cause of missed somatic alleles, not as evidence of benchmark error. Most of them would also be tagged
-by the same allele-level population-filtering rules on any reference (R1.4), but this overlap does not establish that
-they are germline in the patient. COLO829T has no tumor assembly: its normal carries the exact ALT at 26 of the 347
-absorbed INDELs, and at another 22 a different allele of the same length, which we keep as ambiguous rather than
-germline.
+*The normal at missed sites on graph nodes.* We examined the matched normal directly at a strict subset of these
+alleles: those without a candidate on the HPRC v2.1 graph on at least one platform, although the GRCh38-only analysis
+produces one, and whose ALT an HPRC v2.1 graph path spells exactly (1,607 HG008T and 401 COLO829T truth alleles,
+chr1–22). First, as the reviewer suggested, we realigned the COLO829BL normal's
+ONT reads with the tumor's aligner settings at the 401 COLO829T loci. At these loci, only 1.1% of evaluable REF-like
+normal reads traversed an ALT-like path, compared with 95% of ALT-like normal reads. At the absorbed SNVs, 2.2% of
+normal and 45% of tumor reads carry the ALT. For the repeat-associated INDELs, the high ALT-like fractions in both normal
+and tumor reads made read-level classification inconclusive; we therefore relied on assembly evidence to assess normal
+allele status. Second, we used the haplotype-resolved matched-normal assemblies (HG008-N v6.2; COLO829BL). Only 110
+(6.8%) HG008T and 27 (6.7%) COLO829T alleles are carried by the matched normal, and 1,481 (92.2%) and 371 (92.5%) are
+absent from both normal haplotypes. At the 1,351 HG008T INDEL loci absent from the normal, the tumor assembly
+supports the exact benchmark allele at 1,153. At 1,347 loci, it supports a tumor sequence absent from both
+normal haplotypes, although this broader category does not necessarily confirm the exact benchmark allele. The
+manuscript now describes graph absorption as a cause of missed somatic alleles, not as evidence of benchmark error. Most
+of these alleles would also be tagged by the same allele-level population filter on any reference (R1.4), but this does
+not establish that they are germline in the patient. COLO829T has no tumor assembly independent of the sequencing data
+analysed here (the one used in R3.3 is built from the same long reads); its normal carries the exact ALT at 26 of the 347 absorbed INDELs and a different allele of the same
+length at another 22, which we treat as ambiguous rather than germline.
 
 **Supplementary (R2.3).**
 
@@ -559,12 +558,19 @@ germline.
   v1.1 and v2.1 counts use different definitions (below) and are not a comparison of the two graphs.
 - *Further v2.1 evidence.* The ALT paths of the absorbed alleles run through nodes walked by a median of 138 (HG008T)
   and 110 (COLO829T) HPRC haplotypes. At the 1,351 HG008T INDEL loci absent from the normal, the tumor's Illumina reads
-  show the expected allele at 97.4% (PacBio 97.5%), against 95.7% at random non-absorbed truth INDELs. The population
+  show the expected allele at 97.4% of the evaluable loci (PacBio 97.5%), against 95.7% at random non-absorbed truth
+  INDELs. The population
   filter tags 97.0% of the HG008T and 98.5% of the COLO829T absorbed alleles; in the chr1 benchmark regions the
   GRCh38-only graph calls at most two of the 39–93 HG008T truth INDELs per platform that v2.1 absorbs.
+- *Filtering overlap (chr1).* The population filter tags 61 of the 702 HG008T truth SNVs (8.7%); these would also be
+  tagged if the same allele-level rules were applied to another caller's output, and those not counted at the
+  filtering stage of the funnel are already lost before it.
 - *Normal reads (COLO829BL ONT).* Reads overlapping the absorbed loci (+-500 bp) in the SMaHT GRCh38 BAMs, realigned
   with Giraffe to each graph; tumor (COLO829T ONT) reads processed identically; a read is labelled by its own bases
-  (REF-like / ALT-like) and by the graph path it walks at the locus. Median 145 normal and 84 tumor reads span a locus.
+  (REF-like / ALT-like) and by the graph path it walks at the locus. Evaluable reads span the allele with MAPQ > 10;
+  reads are selected by their GRCh38 placement, so a read placed elsewhere on GRCh38 is not examined, for normal and
+  tumor alike. Median 145 normal and 84 tumor reads span a locus. At the absorbed INDELs (mostly homopolymer and STR
+  length changes), 42% of normal and 59% of tumor reads are ALT-like.
   On the v1.1 graph (497 loci): 1.1% of REF-like normal reads take the ALT path; at SNVs 4.0% of normal against 45.2% of
   tumor reads carry the ALT. The realigned tumor reads agree with Pansoma's own tumor alignments (per-locus ALT fraction
   within 0.1 at 256 of 258 v2.1 loci).
@@ -603,11 +609,11 @@ germline.
 
 Recall falls below 50% in the 0.05–0.10 bin, where only 34–68 truth SNVs have a candidate; once a candidate exists, recall is 0.804–0.966 in every bin. HG008T has too few low-VAF truth SNVs on chr1 for this analysis.
 
-*Decreasing purity.* For each platform, one model was trained on chr2–22 of COLO829T and its in-silico dilutions with COLO829BL (nominal purity 75, 50, 25%) and tested on chr1 of each purity at one recall-0.9 validation threshold shared by all purities; training and test share the tumor (one seed). On Fiber-seq, after population filtering and in the benchmark regions (graph-coordinate calls not scored; R3.4), SNV recall is 0.698 / 0.639 / 0.621 / 0.663 from 100% to 25% purity, at precision 0.881 / 0.741 / 0.715 / 0.786, while the share of truth SNVs whose expected VAF is below the 0.08 floor rises from 16.1% to 26.9%. At 25% purity, recall is close to the highest the curve reaches after filtering (0.663 against 0.688), so candidate generation is the main limit; by VAF it is 0.899 at 0.10–0.20 (829 of 922 truth SNVs) and 0.420 at 0.05–0.10. At 75% and 50% the classifier loses more (curve maxima 0.767 / 0.740) and precision falls: 86.1% and 86.5% of the false calls carry a germline allele of the normal (68.4% undiluted), as expected when germline SNVs in the tumor's regions of loss of heterozygosity enter the somatic allele-fraction range (R1.5). [待补: Illumina SNVs and ONT after removing a read-source base-quality cue that makes their current scores optimistic (R1.5; done for Illumina INDELs); dilutions of a second tumor not used in training (HCC1395)]
+*Decreasing purity.* For each platform, one model was trained on chr2–22 of COLO829T and its in-silico dilutions with COLO829BL (nominal purity 75, 50, 25%) and tested on chr1 of each purity at one recall-0.9 validation threshold shared by all purities; training and test share the tumor (one seed). On Fiber-seq, after population filtering and in the benchmark regions (graph-coordinate calls not scored; R3.4), SNV recall is 0.698 / 0.639 / 0.621 / 0.663 from 100% to 25% purity, at precision 0.881 / 0.741 / 0.715 / 0.786, while the share of truth SNVs whose expected VAF is below the 0.08 floor rises from 16.1% to 26.9%. At 25% purity, 29.3% of the truth SNVs have no candidate (18.4% undiluted), while recall is close to the highest the curve reaches after filtering (0.663 against 0.688), so most of the loss occurs at candidate generation; by VAF it is 0.899 at 0.10–0.20 (829 of 922 truth SNVs) and 0.420 at 0.05–0.10. At 75% and 50% the classifier loses more (curve maxima 0.767 / 0.740) and precision falls: 86.1% and 86.5% of the false calls carry a germline allele of the normal (68.4% undiluted), as expected when germline SNVs in the tumor's regions of loss of heterozygosity enter the somatic allele-fraction range (R1.5). Illumina and ONT dilutions carry a read-source base-quality cue that makes their scores optimistic; R1.5 reports Illumina without it. [待补: ONT without the cue; dilutions of a second tumor not used in training (HCC1395)]
 
-*Below the candidate floor.* The dilutions reach truth VAFs of about 0.05. To measure detection below the 0.08 floor, we reran the SMaHT HAPMAP6 mixture (about 500x; minor-donor alleles at VAF 0.0025–0.165) with the current pipeline on a graph built without its six donors (R1.5), with a candidate floor of 0.015 (about eight ALT reads at this depth), and trained one model per variant type on chr2–22. Its positives are germline alleles of other individuals, so it measures how far the read evidence reaches, not somatic accuracy. We therefore score chr1 before population filtering, which removes most of these positives (R2.1), and leave out positives carried by a path of the graph (mostly alleles shared by several donors): their reads align without an edit, which concerns at most 2% of real somatic SNVs (R1.2). At the recall-0.9 validation threshold, SNV recall is 0.006 / 0.03 / 0.30 / 0.81 / 0.91 at VAF 0.0025 / 0.005 / 0.01 / 0.02–0.025 / 0.05–0.075, with precision 0.98–0.99 at every called allele fraction; in the last three bins, 85–95% of the truth SNVs that reach the classifier are called. INDEL recall is 0.05 / 0.06 / 0.12 / 0.19 / 0.37 at the same VAFs (precision 0.62–0.88). These precisions are likely optimistic: 35% of the chr1 positives lie within 50 bp of another positive, against 4% of COLO829T somatic variants, so reads often carry several donor alleles at once.
+*Below the candidate floor.* The dilutions reach truth VAFs of about 0.05. To measure sensitivity below the 0.08 floor, we reran the SMaHT HAPMAP6 mixture (about 500x; minor-donor alleles at VAF 0.0025–0.165) with the current pipeline on a graph built without its six donors (R1.5), with a candidate floor of 0.015 (about eight ALT reads at this depth), and trained one model per variant type on chr2–22. Its positives are germline alleles of other individuals, so it gives the empirical sensitivity by VAF in this mixture, not somatic accuracy. We therefore score chr1 before population filtering, which removes most of these positives (R2.1), and leave out positives carried by a path of the graph (mostly alleles shared by several donors): their reads align without an edit, which concerns at most 2% of the HG008T and COLO829T somatic truth SNVs on the HPRC v2.1 graph (R1.2). At the recall-0.9 validation threshold, SNV recall by truth VAF is 0.006 / 0.03 / 0.30 / 0.81 / 0.91 at VAF 0.0025 / 0.005 / 0.01 / 0.02–0.025 / 0.05–0.075, and precision by the calls' own allele fraction is 0.98–0.99 in every bin; in the last three bins, 85–95% of the truth SNVs that reach the classifier are called. INDEL recall is 0.05 / 0.06 / 0.12 / 0.19 / 0.37 at the same VAFs (precision 0.62–0.88 by call allele fraction). These precisions are likely optimistic: 35% of the chr1 positives lie within 50 bp of another positive, against 4% of COLO829T somatic variants, so reads often carry several donor alleles at once.
 
-*The low-VAF model.* The original low-VAF model was the same kind of network trained on the HapMap mixture, with candidates built at an allele fraction of 0.015 instead of 0.10. Its positives were germline alleles, so it is withdrawn as a somatic model (R1.5). The HapMap models above use the same floor with the current pipeline and serve only to measure the detection limit.
+*The low-VAF model.* The original low-VAF model was the same kind of network trained on the HapMap mixture, with candidates built at an allele fraction of 0.015 instead of 0.10 and tensors of up to 500 reads instead of 200. Its positives were germline alleles, so it is withdrawn as a somatic model (R1.5). The HapMap models above use the same floor with the current pipeline (200 reads per tensor) and serve only to measure this sensitivity.
 
 *Usage.* We recommend the default model for expected somatic VAFs of about 0.10 and above, where call-level recall in the 0.10–0.20 bin is 0.672–0.897 in undiluted COLO829T and 0.899 at 25% purity. No truth SNV below VAF 0.05 was called by the default model. Lower VAFs need both a lower candidate floor and depth: three ALT reads correspond to VAF 0.03 at 100x, and below about 0.005 a true allele (one to three reads even at 500x) is hard to separate from sequencing errors in a single sample.
 
@@ -858,8 +864,9 @@ Candidate reduction on the pangenome graphs is therefore selective rather than i
 
 We agree. We no longer present graph-coordinate calls as a strength, and every run also reports a complete output
 counting them as false positives (R3.4). We validated the graph-coordinate SNV PASS calls on chr1 of twelve final runs
-(HG008T and COLO829T, three platforms, HPRC v1.1 and v2.1 graphs; 115–4,569 calls per run, a random 3,000 for COLO829T
-ONT).
+(HG008T and COLO829T, three platforms, HPRC v1.1 and v2.1 graphs), predicted with the optional off-reference rescue,
+which yields most of these calls: 115–4,569 per run (a random 3,000 for COLO829T ONT), against 6–162 without it, the
+default (point 5).
 
 1. *Assemblies.* Each call's ALT context was aligned to a tumor assembly and both normal haplotypes (HG008T: HG008-T v3.2
    and HG008-N v6.2; COLO829T: a hifiasm assembly of the tumor's HiFi and ONT reads, not independent of its long-read
@@ -882,10 +889,11 @@ ONT).
    (HG008T) and 24 of 25 (COLO829T) are read-supported. A graph-native population filter tags 74–88% of the HG008T ones,
    so we use it only to describe calls as population alleles, not to remove them.
 
-So at most 0.6–5.2% of graph-coordinate calls per run have support as somatic; the rest are mostly population or
-germline alleles that a GRCh38-based filter cannot reach, and counting them as false positives (R3.4) is close to their
-true status. The rescue is optional and off by default, and we report every SNV result with and without it; we state as a limitation that training with
-assembly-derived off-reference labels would address the cause.
+Assembly comparisons provided tumor-only support for 0.6–5.2% of graph-coordinate calls per run, while population
+overlap and matched-normal evidence were common. We therefore report the analysis counting all graph-coordinate calls as
+false positives (R3.4) as a conservative sensitivity analysis, rather than as a determination of each call's biological
+status. The rescue is optional and off by default, and we report every SNV result with and without it; we state as a
+limitation that training with assembly-derived off-reference labels may improve classification.
 
 ### R3.4 Metrics exclude graph-coordinate calls; "about 2%"; CHM13
 
@@ -1232,21 +1240,21 @@ Data and code: `supplementary/R3.9/seed_table.tsv`, `make_seed_table.py` (from t
 
 **Response.**
 
-*Low VAF.* We agree: the HapMap mixture, whose positives are germline alleles of other individuals, is no longer a main benchmark (R1.5). It is replaced by in-silico dilutions of COLO829T, whose somatic variants are validated, at 75, 50 and 25% purity on three platforms (R2.4). On Fiber-seq, one model gives SNV F1 0.665–0.779 across purities and SNV recall 0.779–0.899 at truth allele fractions of 0.1–0.2, 0.212–0.420 at 0.05–0.1 and zero below 0.05, where no candidate is built. Below that, the HapMap mixture (about 500x), rerun on a graph without its donors with a candidate floor of 0.015, shows how far the read evidence reaches: before population filtering, SNV recall is 0.91 at VAF 0.05–0.075, 0.81 at 0.02–0.025, 0.30 at 0.01 and 0.03 at 0.005; because its positives are germline alleles of other individuals, we report it as a detection limit rather than as somatic accuracy (R2.4). The Illumina and ONT dilutions are reported only after removing a base-quality cue that separates their tumor and normal reads (R1.5) [待补].
+*Low VAF.* We agree: the HapMap mixture, whose positives are germline alleles of other individuals, is no longer a main benchmark (R1.5). It is replaced by in-silico dilutions of COLO829T, whose somatic variants are validated, at 75, 50 and 25% purity on three platforms (R2.4). On Fiber-seq, one model gives SNV F1 0.665–0.779 across purities and SNV recall 0.779–0.899 at truth allele fractions of 0.1–0.2, 0.212–0.420 at 0.05–0.1 and zero below 0.05, where no candidate is built. Below that, the HapMap mixture (about 500x), rerun on a graph without its donors with a candidate floor of 0.015, gives the empirical sensitivity by truth VAF in that mixture: before population filtering and excluding truth alleles that graph paths already carry, SNV recall is 0.91 at VAF 0.05–0.075, 0.81 at 0.02–0.025, 0.30 at 0.01 and 0.03 at 0.005. Its positives are germline alleles of other individuals, so these values do not measure somatic accuracy (R2.4). The Illumina and ONT dilutions carry a base-quality cue that separates their tumor and normal reads; R1.5 reports Illumina without it [待补: ONT without it].
 
-*SNVs and INDELs are reported separately* throughout, and any claimed advantage is limited to SNVs where the re-scored comparators support it. Below: chr1, HPRC v1.1 graph (d9 filter) unless stated, benchmark regions, after population filtering, same-tumor models (graph-coordinate calls: R3.4).
+*SNVs and INDELs are reported separately* throughout, and any claimed advantage is limited to SNVs where the re-scored comparators support it. Below: chr1, benchmark regions, after population filtering, same-tumor models, comparators re-scored with the same filter and evaluation (R3.m2; graph-coordinate calls: R3.4). SNVs: HPRC v2.1 graph (d46 filter), ranges over three training seeds; INDELs: HPRC v1.1 graph (d9 filter), one model each [待更新: final INDEL models].
 
-- SNV F1 at the recall-0.9 validation threshold is 0.585 / 0.621 / 0.596 on HG008T (Illumina / PacBio / ONT) and 0.778 / 0.781 / 0.706 on COLO829T (Illumina / Fiber-seq / ONT).
+- SNV F1 at the recall-0.9 validation threshold is 0.566–0.585 / 0.603–0.609 / 0.576–0.607 on HG008T (Illumina / PacBio / ONT) and 0.705–0.782 / 0.773–0.788 / 0.726–0.753 on COLO829T (Illumina / Fiber-seq / ONT), above both comparators in all six settings: ClairS-TO 0.552 / 0.591 / 0.552 and 0.551 / 0.762 / 0.715, DeepSomatic-TO 0.529 / 0.557 / 0.457 and 0.565 / 0.632 / 0.633.
 - INDEL F1 is far lower: 0.251 / 0.092 / 0.015 on HG008T at that threshold and 0.270 / 0.262 / 0.144 as test-tuned best F1 (upper bound); on COLO829T 0.104 / 0.024 / 0.003 and 0.161 / 0.142 / 0.095. At the validation best-F1 threshold it is 0.218 / 0.227 / 0.117 on HG008T; on COLO829T that threshold passes only 14–32 calls (F1 0.041–0.080).
-- ClairS-TO and DeepSomatic-TO are re-scored under the same protocol (R3.m2) [待补: numbers]; we state every setting where ClairS-TO is better, including ONT INDELs.
+- For INDELs, ClairS-TO has the higher F1 on both long-read platforms of both tumors (0.103–0.158 against 0.003–0.092), and both comparators on COLO829T Illumina (ClairS-TO 0.122, DeepSomatic-TO 0.191, Pansoma 0.104); Pansoma is higher only on HG008T Illumina (0.251 against 0.208 and 0.132) [待更新: final INDEL models].
 
-*INDEL stratification.* A Supplementary Table stratifies INDEL performance by insertion or deletion, length (1, 2–4, 5–10, > 10 bp), repeat context and platform, for every Pansoma model and both comparators [待补: comparators]:
+*INDEL stratification.* A Supplementary Table stratifies Pansoma's INDEL performance by insertion or deletion, length (1, 2–4, 5–10, > 10 bp), repeat context and platform [待补: the same strata for both comparators, with the final INDEL models]:
 
 - *Classes.* On HG008T chr1, 74.1% of truth INDELs lie in homopolymers of ≥ 7 bp and 11.1% in STRs. Population filtering removes 418 of the 635, capping recall at 0.342 for any caller using it (COLO829T: 0.382; R1.6); of the truth INDELs it keeps, 64.0–72.2% are called on every reference. On the HPRC graphs recall is lower for insertions than deletions (0.20–0.23 against 0.26–0.30), lowest for 2–4-bp changes (0.05–0.08) and near zero in STRs (0.00–0.04), where filtering removes most truth (57 of 65 on HG008T).
 - *Platform error modes* (HG008T). On ONT, 15,797 of 17,023 false INDEL calls lie in homopolymers of ≥ 7 bp, where only 92 of 15,889 calls are true; at the validation best-F1 threshold, precision there rises to 0.25 (ONT) and 0.40 (PacBio). On Illumina, homopolymer precision (0.26) is not far below that outside repeats (0.35).
 - *Allele fraction.* In the Fiber-seq dilutions, test-tuned best INDEL F1 is 0.049–0.074 at every purity (7–17 true calls), too few to resolve a trend.
 
-INDEL accuracy is thus limited by overlap with population alleles, long-read homopolymer errors and, on long reads, the threshold, rather than by allele fraction.
+These analyses identify overlap with population alleles, long-read homopolymer errors and, on long reads, threshold selection as important limitations of INDEL calling. The few true-positive INDELs in the dilution series prevent a reliable assessment of the additional effect of allele fraction.
 
 ### R3.m1 Parameter discrepancies between Methods and Supplement
 

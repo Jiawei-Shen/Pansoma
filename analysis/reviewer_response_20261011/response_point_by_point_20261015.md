@@ -30,30 +30,30 @@
 | R1.2 | 泛基因组组成、单倍型数、v2.1 | 部分解决 | 三参考 ablation 的主体（10-16 从 R1.1 移来）：GRCh38-only 上 76–82% 的 germline 成为 candidate，HPRC 上 7–13%；HPRC 比 GRCh38-only 高 +0.028 到 +0.292（三 seed 均值，10-19），12 个配对区间都不含 0；d46 和 d9 在五套上的差都在 seed 范围内（三 seed 均值 −0.018 到 +0.015），COLO829T Illumina 的 matched d9（4 GPU）三个 seed 都偏低，FP 集中在 chr1 两段（−0.163）；E7：吸收多少由频率阈值决定（10-16 v2.1 轴：10% 过滤下 16 到 463 条 haplotype，HG008 somatic INDEL 0.18–0.21）；E11a / E11b：ONT 在 v2.1 上更差。Response 10-16 重写成约 350 词：mapping ambiguity 引文献（Giraffe、HPRC、Minigraph-Cactus），并指出其他 tumor-only caller 也用 PoN；10-19 吸收段改用 E5c（六套 d46 全部跑完）：任一 tensor allele 算有 tensor，v2.1 上 24–42% 的 truth INDEL 丢掉 candidate，85–96% 的丢失位点 ALT reads 走图 alt 节点（整段 43–59%，部分 + 残余 edit 30–52%），76–86% 本来就被 PoN 标，PoN 后净损失 3.5–7.0%，主要是部分走 alt 节点的 | 决定：主图、centromere 窗口（含 COLO829T Illumina d9 的 FP 段）怎么处理 |
 | R1.3 | 困难区域；ONT 的歧义 | 部分解决 | E10：GRCh38-only 在 extreme 区域的 FP 更多；E9a / E9c：ONT 的 graph-coordinate calls 主要是人群 allele 和 germline；E11b：ONT 在 v2.1 上放错更多；10-20 分 SMaHT 区的配对 bootstrap（E16 `e16_strata.py`）：HG008T easy 区 6 对都含 0，COLO829T easy 区 +0.053 到 +0.154，extreme 区 precision 增益 12 对里 10 对不含 0；E10b（10-20，GIAB v3.5 分层）：SNV 在 GIAB 所有困难区域 12 / 12 对提升（11 对显著，COLO829T Illumina v1.1 用 epoch 6），各困难分层没有显著变差；INDEL 在 homopolymer 区 Illumina 提升、长读长 precision 下降 | 决定：GIAB 分层是否下载、rescue 默认值 |
 | R1.4 | 图吸收已有的 somatic | 部分解决 | 10-20 改成技术性反驳（不是 fatal：tumor-only 用 population 信息换 precision 的固有 trade-off，Pansoma 只是把一部分压制提前到 candidate 生成；ClairS-TO 默认 PoN 标掉更多 truth INDEL；没有在 pangenome 比对上做 somatic calling 的现成 caller）；E5b：被吸收的 truth 中 95.5–100% 本来就会被 PoN 标掉；E1.6：三个参考臂 INDEL 都叫出 24–27%；E9h；E8c（10-20）：DeepSomatic-TO / ClairS-TO 在吸收位点上 PASS 882 对里只有 7 对，PoN 后 0 | E6 / E25 不做（10-20），写成 future work |
-| R1.5 | HapMap mixture 和数据泄漏 | 部分解决 | 没有泄漏：原稿 HapMap 跑在去掉 6 个 donor 的 `mgi_non_HG005.d9` 上（用户 10-20 确认），Response 改成直接反驳；HapMap 只作低 VAF 检测极限放 Supplement（用户 10-22；E23 重跑完成）；COLO829T dilution（fiberseq 干净），LOH 解释了 P75 / P50 的低谷 | GPU：BQ 伪影修好后重训；决定：第二个肿瘤 |
+| R1.5 | HapMap mixture 和数据泄漏 | 部分解决 | 没有泄漏：原稿 HapMap 跑在去掉 6 个 donor 的 `mgi_non_HG005.d9` 上（用户 10-20 确认），Response 只陈述这个事实（10-26 删掉 "donor 在图里也不会抬高分数" 的论证）；HapMap 只作 Supplement 里按 VAF 的 empirical sensitivity（用户 10-22；E23 完成）；COLO829T dilution（fiberseq 干净），P75 / P50 的低谷与 LOH 一致 | GPU：ONT 去 BQ cue 重训；决定：第二个肿瘤 |
 | R1.6 | sensitivity 低 | 部分解决 | E1.6 漏斗：HG008T SNV 叫出 82–85%；COLO829T 有 17–18% 低于 0.08 的 AF 下限；PoN 的 INDEL 上限 0.35；10-20 第一段改成同一协议下的对比（HG008T 差距小，COLO829T DeepSomatic-TO Illumina 领先，INDEL Pansoma 最高） | - |
 | R1.7 | 训练规模、肿瘤多样性 | 部分解决 | E21；E12a：HG008T 模型在 COLO829T / HCC1395 / H1437 / H2009 上 0.63–0.94；COLO829T 模型带 UV 偏好；E13（10-19 RIS）：训练数据 10% → 100% 时 F1 从 0.574 升到 0.607，后一半只多 0.010；8.7 M / 50.4 M / 199.6 M 分别是 0.616 / 0.604–0.611 / 0.603；10-20 第三轮：网络大小按训练集大小说，overfitting 用选中 checkpoint 的 train / val loss（12 个 v2.1 模型，val 是最低点的 1.00–1.27 倍；199.6 M 的对比只在 Supplementary），多肿瘤训练计数（E21 `capacity_multitumor.md`），跨肿瘤 / 同肿瘤两种测试分开 | E12b 修正后重新预测完成（10-20，ONT 已补：HCC1395T 0.658，HG008T 0.587）；GPU：normbq checkpoint 的跨样本预测（tequila 449822 在跑）；Supplementary Table 编号 |
 | R1.8 | 训练集怎么构建 | **已解决** | 标签规则和代码出处；E21 覆盖所有 set；E9h；10-20 按用户的解释重写：GRCh38 path 一一对应精确定位、reads 覆盖建 tensor、INDEL 跨 node、off-path reads 由 channel 5 / 6 表示、吸收见 R1.4、graph-only 用新 tensor、三类标签、COLO829T purity mixture；第四轮：GRCh38 节点 = 路径经过一次的节点、left-align 按实现写、丢正样本在 candidate 生成阶段、germline INDEL 部分匹配给理由 | 只剩改稿 |
 | R1.m1 | 补充 benchmark（HCC1395、CASTLE） | 部分解决 | E12a：在 HCC1395 和 CASTLE 三株上的跨样本结果；E22：H1437 truth 约 30% 是 LOH 带进来的 germline，HCC1954 的 truth 没问题；E12b + HCC1395T 比较器（10-20）：SNV 和 DeepSomatic-TO 打平（Illumina）或低 0.014–0.030（长读长），INDEL DeepSomatic-TO 领先 | GPU：LOLO；用户：为什么没加 HCC1937 / Hs578T |
 | R1.m2 | tensor 窗口在 node 边界截断 | **已解决** | 跨 node 的 tensor 已实现；E1.1；10-20 Supplementary Fig. R1.m2（一个 somatic SNV 的 tensor：ALT reads 走 10–12 条 haplotype 的分支节点，REF reads 走 89 条的） | 只剩改稿 |
-| R2.1 | 为什么纳入 HapMap | 部分解决 | E8b 核实的事实（population filtering 标掉 chr20 positives：SNV 96.3%、INDEL 40.4%）；dilution 作替代；HapMap 只作检测极限（Supplement，E23） | GPU：BQ 伪影修好后重训；决定：第二个肿瘤 |
+| R2.1 | 为什么纳入 HapMap | 部分解决 | E8b 核实的事实（population filtering 标掉 chr20 positives：SNV 96.3%、INDEL 40.4%）；dilution 作替代；HapMap 只作 Supplement 里按 VAF 的 empirical sensitivity（E23）；结论限定为同一肿瘤的 held-out 染色体 | 只剩改稿 |
 | R2.2 | truth set 怎么来的 | 部分解决 | E8b 按原始文献核实；E22：H1437 的 LOH germline，HCC1954 的 truth 没问题 | 决定：HG008 v0.2 还是 v0.3、rule (a)、H1437 怎么处理 |
-| R2.3 | recall 偏低；漏检位点上的 normal | **已解决** | E8 `latest_models.py`（最新模型、v2.1）；E1.6 漏斗；E1.7 v2.1 read-level 分类 + 新 Supp. Fig. 2；E5d v2.1 吸收位点的 normal / tumor 组装；E20 COLO829BL normal reads（REF reads 走 ALT path 1.1 %）；Reviewer 2 的语气（humble） | 只剩改稿（Supp. Fig. 2 换图） |
-| R2.4 | 低 VAF | 部分解决 | E2.4：按 VAF 分档的 recall，purity 系列（低于下限的比例从 16% 升到 27%）；E23：HapMap 约 500x、candidate floor 0.015，SNV recall 0.30 / 0.81 / 0.91（VAF 0.01 / 0.02–0.025 / 0.05–0.075，PoN 前） | GPU：BQ 伪影修好后重训；决定：E15 低 AF 配置、用哪个第二肿瘤 |
+| R2.3 | recall 偏低；漏检位点上的 normal | **已解决** | E8 `latest_models.py`（最新模型、v2.1）；E1.6 漏斗；E1.7 v2.1 read-level 分类 + 新 Supp. Fig. 2；E5d v2.1 吸收位点的 normal / tumor 组装；E20 COLO829BL normal reads（REF reads 走 ALT path 1.1 %）；Reviewer 2 的语气（humble）；10-26 funnel 换成最新三 seed 的数 | INDEL recall 等 final INDEL 模型（10-27）；改稿（Supp. Fig. 2 换图） |
+| R2.4 | 低 VAF | 部分解决 | E2.4：按 VAF 分档的 recall，purity 系列（低于下限的比例从 16% 升到 27%）；E23：HapMap 约 500x、candidate floor 0.015，SNV recall 0.30 / 0.81 / 0.91（VAF 0.01 / 0.02–0.025 / 0.05–0.075，PoN 前，去掉图路径带着的 truth） | GPU：ONT 去 BQ cue 重训；决定：E15 低 AF 配置、用哪个第二肿瘤、原稿 low-VAF Methods（1 % / 10 %）和 Supp. Table 3 的口径要不要在 Response 里说明 |
 | R2.5 | 精度提升从哪来 | 部分解决 | E4b / E10 / E19：graph 臂少了 germline candidate（PoN 前几乎全是 germline）；PoN 后多出来的 FP 里 germline 占 HG008T PacBio / ONT 60–73 %、Illumina 22–30 %、COLO829T 0（那里是 extreme 区低 AF call）；extreme 区 12 组比较 precision 都更高；附近 germline ≥ 2 时 SNV 增益最大；去 ch6 重训和三 seed 已完成（10-19，HPRC − GRCh38-only 均值 +0.028 到 +0.292） | — |
 | R2.6 | PoN | 部分解决 | E8b：资源组成；E17c：SNV 规则就是 chr2–22 选出的；INDEL 换成留出肿瘤选出的规则（HP ≥ 8: AF ≥ 0.01，其余 ≥ 1e-4；用户 10-16 决定，pipeline 已改） | 已重算（10-16，44 个本地 INDEL call set 按新规则重新打分，R1.2 / R1.4 / R1.6 / R1.8 / R2.6 / R3.1 / R3.2 / R3.9 / R3.10 / R3.m2 已换数）；COLO829T v1.1 单样本 INDEL：10-19 用 RIS 的 matched lr 1e-4 run 在本地出了 valbest（R3.1 / R3.10 已填） |
 | R2.7 | 比对统计夸大 | **已解决** | E11a 全量数据（10-19）：两个肿瘤 × 三个平台 × 四个参考，chr1–22 全部 reads 的 perfectly aligned / substitution / indel / soft clipping 读数和比例，比例的分母是各参考上 chr1–22 的 reads；原文那句逐条改写（soft clipping 的说法删掉；10-21 措辞收紧：增益"主要反映"图里多出的 allele 序列，比对一致性不等于放置正确，删掉文献段）；不再用模拟 reads | 只剩改稿 |
 | R2.m | Minor 1–8 | 部分解决 | 大部分只是改图改字；E18 补了 SBS96 | 决定：第 5 条 "truth overlapping" 的原意；同步：比较器的 SBS96 |
 | R3.1 | 参考层面的 ablation | 部分解决 | Response 10-19 改成设计 + 三点结果（HPRC 全面优于 GRCh38-only；v2.1 对 v1.1 PoN 前 +0.079 到 +0.222、PoN 后在 seed 范围内；增益来自比对和 candidate 生成），300 词以内；E3 / E16 / E3b：关掉 rescue 后 12/12 个 run 都高于 GRCh38-only（10-19 用 matched d9 补上 COLO829T v1.1）；着丝粒是一项 caveat；CHM13 是一项 limitation；vg 版本已核实（E22）；10-19 RIS 三 seed：HPRC − GRCh38-only 均值 +0.028 到 +0.292，36 个同 seed 比较 35 个为正；去 ch6 后仍高于 GRCh38-only 均值（+0.011 到 +0.299）；10-20 RIS b662f00：COLO829T Illumina v1.1 用 epoch 6 / 5 / 6（用户决定，在 chr1 上选），d46 − d9 六套都在 seed 范围内（−0.015 到 +0.021），validation 选的 epoch 8 低 0.164 | 决定：vg 1.77 对照；E3b / E16 / E9a 的 COLO829T Illumina v1.1 行还是 epoch 8 的 seed 0（`--norm train`；epoch 6 的 run 已在本地，`--norm dataset` d46 seed 0 没同步） |
 | R3.2 | 被去掉的 candidate 由什么组成 | 部分解决 | 三类 candidate × 三个参考臂；E4b：FP 的组成；E5b；去 ch6 重训已完成（10-19）；10-19 Response 按外部建议改写成 "selective reduction"，加了按图分层的 FP：HG008T 图里的 germline FP 129 → 4（少 97 %），不在图里的 2,036 → 1,794–1,944（少 5–12 %）；79 % / 73 % 改用新定义 | CPU：E4b 换成 matched d9 run（可选） |
-| R3.3 | graph 坐标 variant 的验证 | 已解决 | E9c / E9d（12 个 run，COLO829T 用 hifiasm tumor 组装 + COLO829BL DSA）；E9i：COLO829BL ONT reads 核对（somatic 候选 0.7–3.1 %）；E9h / E9j：off-ref somatic key 有 reads 支持，rescue 能叫回（HG008T 22–66、COLO829T 2–7） | 已定（10-26）：rescue 默认关（可选打开）、graph PoN 只描述 population allele、E9f 不做 |
+| R3.3 | graph 坐标 variant 的验证 | 已解决 | E9c / E9d（12 个 run，COLO829T 用 hifiasm tumor 组装 + COLO829BL DSA）；E9i：COLO829BL ONT reads 核对（somatic 候选 0.7–3.1 %）；E9h / E9j：off-ref somatic key 有 reads 支持，rescue 能叫回（HG008T 22–66、COLO829T 2–7）；10-26 最后一段改成保守的 sensitivity analysis | 已定（10-26）：rescue 默认关（可选打开）、graph PoN 只描述 population allele、E9f 不做 |
 | R3.4 | 指标不含 graph 坐标 call；"about 2%"；CHM13 | 部分解决 | "about 2%" 实际是 8–68%；E9a 投影；E3b 关掉 rescue 后的完整输出；E9b CHM13（10-20；10-21 COLO829T Illumina v1.1 换 epoch 6）：SNV 36.7–65.9 % 有 CHM13 allele，32.2–61.9 % 两张参考都没有；INDEL 36.2–48.6 % 有 CHM13 allele；能不能放到线性参考上和是不是 somatic 无关（两组都约 95 % 是人群 / germline allele） | 已定（10-26）：rescue 默认关（可选打开） |
 | R3.5 | mutational signature | 部分解决 | E18：COLO829T 余弦 0.996–0.997（SBS7a），HG008T 0.94–0.96；比较器（E8，10-19 填入）COLO829T 0.913–0.995、HG008T 0.878–0.943；10-19 按用户要求只改两点：Figure 4a 并排 truth 和三个 caller 的 SBS96（PoN 后、chr1、三平台分开），Supplement 给 graph-coordinate 的 SBS96（Fiber-seq 以外五套更像 germline，COLO829T Fiber-seq 偏肿瘤、UV 42 %） | Figure 4 改版（文字） |
 | R3.6 | perfect 不等于 correct | 部分解决 | E11b：Illumina 上 MAPQ ≥ 30 放错从 0.093% 降到 0.019% / 0.013%；ONT 在 v2.1 上更差（如实写出）；E11a；CHM13-only 对照（10-20）：CHM13 单独变化很小（Illumina perfect 63.7 → 64.8 %，HPRC 73 %），HPRC 的改进超出 CHM13；10-21 重写成三段（四参考表、SV reads 分四类、MAPQ 校准），不提 Giraffe 版本；T2T 修正区（> 9 Mbp 假重复，Aganezov 2022）评不了，照写；phased-haplotype 对照不做，写成 limitation | 决定：T2T 独有序列的模拟做不做 |
 | R3.7 | 重新归类 FN 要谨慎 | **已解决** | 单倍型组装证据 | 只剩改稿 |
 | R3.8 | tumor-only 和 mosaicism | **已解决** | 统一写成 tumor-only；10-19 改成 "has not been trained or validated for"，加 low VAF ≠ mosaicism、purity dilution（R2.4）、四株新细胞系名单 | 改稿（标题由用户定） |
 | R3.9 | 稳定性、统计不确定性 | 部分解决 | E16：所有 run 的区间和配对差；10-20 按用户三点重写：d9 / d46 三 seed（`--norm dataset`）每个 seed 的 P / R / F1 和 mean ± SD（F1 SD 0.001–0.040）；ΔP / ΔR / ΔF1 配对区间，HPRC − GRCh38-only ΔF1 12 / 12 不含 0，Pansoma v2.1 − DeepSomatic-TO SNV 6 / 6、− ClairS-TO 6 / 6 为正（2 对不含 0）；三类 label 取代固定 0.5；COLO829T Illumina v1.1 在 seed 表里用 epoch 6 / 5 / 6，epoch 8 并列 | GPU：INDEL 和跨样本模型的多 seed；CPU：val R0.95 / argmax 的 rtg 表 |
-| R3.10 | 低 VAF 和 INDEL 的结论 | 部分解决 | E17a：INDEL 分层；E3b：validation best-F1 阈值；E2.4；E23（HapMap 检测极限） | 决定：INDEL 的 operating point；GPU：BQ 伪影修好后重训；同步：比较器 |
+| R3.10 | 低 VAF 和 INDEL 的结论 | 部分解决 | E17a：INDEL 分层；E3b：validation best-F1 阈值；E2.4；E23（HapMap 按 VAF 的 sensitivity）；E8 latest_models：SNV 三 seed v2.1 六个 setting 都高于两个 comparator | INDEL 数、comparator 的 INDEL 分层等 final INDEL 模型（10-27）；GPU：ONT 去 BQ cue 重训 |
 | R3.m1 | 参数不一致 | 部分解决 | 参数只剩一套，从 checkpoint 能复现；vg 版本已核实；Normalisation 按 f344bca 重写（报的模型都是 `--norm train`；BQ 按数据集是可选） | 等 normbq、最终模型和 INDEL 阈值定了再出参数表 |
 | R3.m2 | 比较器设置 | 部分解决 | E8b 核实了版本和训练数据；打分脚本已就绪 | 同步：你已有结果的路径和元数据 |
 | R3.m3 | 泛基因组参考的组成 | **已解决** | E8b；E7 的近亲检查（共享罕见 SNV v1.1 ≤ 8.2%、v2.1 ≤ 2.9%，10-16 补了 v2.1）；CHM13 是 reference path | 只剩改稿 |
@@ -792,6 +792,8 @@ population-based tumor-only calling, and describe candidate generation on altern
 
 **2026-10-22：HapMap 去留定了（用户）：只作低 VAF 检测极限放进 Supplement（R2.4 的 "Below the candidate floor"），不支撑任何 somatic 准确度的结论。** Response 第二段第一句相应改写。donor-free 图上的重跑已经出了 tensor（E23：43,201,211 个，10-20 完成），labels（450540）和模型（450542–450544）在跑；数字只进 R2.4，R1.5 不放数字。见证据同日一条。
 
+**2026-10-26：按用户转来的外部审阅意见改了 Response**：删掉 "donor 在图里也不会抬高分数" 的假设性论证，LOH 改成 "consistent with a contribution"，BQ cue 加上 "同时改了其他训练设置"，dilution 细数移到 R2.4。见证据同日一条。
+
 **Comment（要点）。**
 
 - HapMap 的 "somatic-like" positives 是少数个体（minor donors）的 germline allele；Pansoma 的前提是图会压掉 population germline allele，两者冲突，这个 benchmark 可能系统性地对 pangenome caller 不利，也不是获得性低 VAF 突变的合适检验。
@@ -799,17 +801,24 @@ population-based tumor-only calling, and describe candidate generation on altern
 
 **Response.**
 
-We agree with the first point. On the second, there was no leakage: the submitted HapMap results were produced on a graph built without any of the six donors, with the same Minigraph-Cactus construction and d9 filter but from 40 HPRC year-1 individuals plus GRCh38 and CHM13 (82 haplotypes; HG00438, HG02257, HG02486, HG02622, HG002, HG005 and NA19240 excluded). The Methods now state this. The HAPMAP6 positives are germline alleles of the five minor donors (VAF 0.25–16.5%), not acquired mutations. Four of the donors are in the HPRC v1.1 graph and all six in the HPRC v2.1 graph (d46 filter), as our companion study noted, which is why the donor-free graph was used. Even with the donors in a graph, the overlap could not inflate the results: apart from the GRCh38 and CHM13 reference paths, our graphs keep only nodes on about 10% or more of their haplotypes, so a donor's private alleles are filtered out, and a donor allele the graph carries is absorbed and removes a positive. The donors' rare alleles are also found in CoLoRSdb, one of our population filtering resources, far more often than those of our cancer benchmarks' normals (chr20 SNVs: 14.5–25.9% against 4.0–7.9%). The benchmark therefore asks the caller to report alleles that its population prior, used by the trained model (R2.1), is designed to suppress.
+We agree with the first point. On the second, the submitted HapMap results used a graph built without any of the six mixture donors, so the donors' presence in the standard HPRC graphs did not apply to this analysis. That graph had the same Minigraph-Cactus construction and d9 filter but was built from 40 HPRC year-1 individuals plus GRCh38 and CHM13 (82 haplotypes; HG00438, HG02257, HG02486, HG02622, HG002, HG005 and NA19240 excluded); the Methods now state this. Four of the donors are in the HPRC v1.1 graph and all six in the HPRC v2.1 graph (d46 filter), as our companion study noted, which is why the donor-free graph was used. The HAPMAP6 positives are germline alleles of the five minor donors (VAF 0.25–16.5%), not acquired mutations. The donors' rare alleles are also found in CoLoRSdb, one of our population filtering resources, far more often than those of our cancer benchmarks' normals (chr20 SNVs: 14.5–25.9% against 4.0–7.9%). The benchmark therefore asks the caller to report alleles that its population prior, used by the trained model (R2.1), is designed to suppress.
 
-We removed the HapMap mixture from the main benchmark and withdrew the HapMap-trained low-VAF model as a somatic model. We keep the mixture only to measure how far down in allele fraction candidates and calls reach, rerun with the current pipeline on the donor-free graph and reported before population filtering (Supplement; R2.4); no claim about somatic accuracy rests on it. Low-VAF performance is now measured on in-silico dilutions of COLO829T with COLO829BL on three platforms (nominal purity 75, 50 and 25%; measured 0.66 / 0.40 / 0.20 for Illumina and Fiber-seq, 0.70 / 0.44 / 0.22 for ONT). One model per platform and variant type is trained on chr2–22 of all four purities and tested on chr1 of each; the tumor itself is not held out.
+We removed the HapMap mixture from the main benchmark and withdrew the HapMap-trained low-VAF model as a somatic model. We keep the mixture only to measure empirical sensitivity by allele fraction, rerun with the current pipeline on the donor-free graph and scored before population filtering (Supplement; R2.4); no claim about somatic accuracy rests on it. Low-VAF performance is now measured on in-silico dilutions of COLO829T with COLO829BL on three platforms (nominal purity 75, 50 and 25%; measured 0.66 / 0.40 / 0.20 for Illumina and Fiber-seq, 0.70 / 0.44 / 0.22 for ONT). One model per platform and variant type is trained on chr2–22 of all four purities and tested on chr1 of each; the tumor itself is not held out. Results by purity and allele fraction are in R2.4 (Fiber-seq SNV F1 after population filtering 0.665–0.779 across purities). Two limitations apply:
 
-- Fiber-seq SNV F1 after population filtering, at one recall-0.9 validation threshold pooled over all purities, is 0.779 / 0.687 / 0.665 / 0.720 at 100 / 75 / 50 / 25% purity (95% block-bootstrap interval at 50%: 0.648–0.682; 547–705 graph-coordinate calls per purity are not scored; R3.4). The share of truth SNVs that any model can reach falls from 0.821 to 0.711; on chr1, 16.1% of truth SNVs at full purity and 26.9% at 25% purity lie below the 0.08 candidate allele-fraction floor.
-- The dip at 75 and 50% comes from the tumor's loss of heterozygosity: where the tumor lost the ALT copy of a germline heterozygous SNV, the admixed normal reads put that allele at (1 − purity)/2, inside the somatic allele-fraction range of those mixtures. The false positives at these two purities have a germline-like spectrum (cosine to the germline spectrum 0.788 and 0.768, against 0.536 at full purity).
-- In the Illumina and ONT mixtures, tumor- and normal-derived reads differ in base quality, a cue that a real tumor lacks, so those scores are likely optimistic. For Illumina INDELs, removing the cue (per-read base-quality centring) lowers the dilutions' test-tuned best F1 (upper bound) to 0.133–0.146, below the 100% sample (0.182), as expected if the cue had inflated them. For Illumina SNVs, the dilutions' PASS F1 falls from 0.804–0.840 to 0.678–0.709 (precision from 0.97 to 0.68–0.74) [待补: ONT after removing this cue].
+- At 75 and 50% purity the false positives have a germline-like spectrum (cosine to the germline spectrum 0.788 and 0.768, against 0.536 at full purity), consistent with a contribution from the tumor's loss of heterozygosity: where the tumor lost the ALT copy of a germline heterozygous SNV, the admixed normal reads put that allele at (1 − purity)/2, inside the somatic allele-fraction range of those mixtures.
+- In the Illumina and ONT mixtures, tumor- and normal-derived reads differ in base quality, a cue that a real tumor lacks, so their scores are likely optimistic. With per-read base-quality centring, the Illumina dilutions' INDEL best F1 (upper bound) falls to 0.133–0.146, below the 100% sample (0.182), and their SNV PASS F1 from 0.804–0.840 to 0.678–0.709. These runs also changed the quality normalization and, for SNVs, the batch size, so not all of the decrease can be attributed to the cue [待补: ONT after removing this cue].
 
 [待补: dilutions of a second tumor not used in training (HCC1395)]
 
 **证据（内部）。**
+
+- 2026-10-26（用户转来的外部审阅意见）：
+  - 删掉 "Even with the donors in a graph, the overlap could not inflate the results ..." 整句：private allele 被过滤、部分 positive 被吸收，不能证明 donor 在图里时分数一定不会被抬高（还可能通过 background germline suppression、比对等影响 precision），这个假设性论证反而给审稿人留下新的争论点。开头换成审阅建议的事实陈述（"the submitted HapMap results used a graph built without any of the six mixture donors, so the donors' presence in the standard HPRC graphs did not apply to this analysis"），donor-free 图的构成不变。
+  - LOH："comes from" → "consistent with a contribution from"（E4b / E18 支持，但不能证明是唯一原因）。
+  - BQ cue：加一句 readnorm 的 run 同时改了 normalization（`--norm dataset`）和 SNV 的 batch（8 GPU，global batch 8,192 对 4,096），降幅不能全归给 cue（`analysis/benchmark_7fc7396_20261012/colo829t_purity_joint_7fc7396_20261012/README.md` §5 "Not a clean comparison"）。
+  - dilution 的细数（Fiber-seq 各 purity F1、block-bootstrap 区间、547–705 个 graph-coordinate call、0.821 → 0.711、16.1 / 26.9 %）移出，只留设计、两条限制和一个 F1 范围（0.665–0.779，R3.10 也用），其余看 R2.4。数和出处仍在下面各条。
+  - HapMap 的说法和 R2.4 / R2.1 统一成 "empirical sensitivity by allele fraction ... scored before population filtering"。
+  - Response 594 → 488 词。
 
 - 2026-10-22：用户决定 HapMap 留在 Supplement，只用来量检测极限（"结合 R1.5, R2.1, R2.4, R3.10 回答，思考 low VAF"）。Response 第二段第一句从 "no claim of the revised manuscript rests on HapMap results" 改成 "no claim about somatic accuracy rests on it"，因为现在 R2.4 引用了 HapMap 的检测极限。重跑的状态：run 446688 在 2026-10-20 23:29 完成（2001 个 task，tensor 43,201,211 个：SNV 42,415,603、INDEL 785,608）；finalize 446690 的 merge 和 verify 做完，串行打 label 太慢（一个 SNV shard 约 2.6 分钟，估计还要 41 小时，超过时限），10-22 改成按染色体并行（`tmp/hapmap_nonHG005_20261012/label_parallel.py`，job 450540）；训练 450542–450544（tequila H100）。细节在 `experiments/E23_hapmap_lowvaf/README.md` 和 memory。
 
@@ -900,9 +909,9 @@ We removed the HapMap mixture from the main benchmark and withdrew the HapMap-tr
 - （已完成 2026-10-20）原稿 HapMap 用的是 donor-free 图 `mgi_non_HG005.d9`（用户确认），Response 第一段已改成 "there was no leakage"。[文字] Methods 写明 HapMap 用的图（40 个 HPRC year-1 individual + GRCh38 + CHM13，82 条 haplotype，d9，去掉 6 个 donor 和 NA19240）。
 - [GPU RIS] 修掉 read-source BQ cue 以后，重训 Illumina / ONT 的 purity joint model（SNV + INDEL），重新报 per-purity 数字（E14b）。同时按每个 purity 自己的 validation blocks 定阈值，解决 Illumina P100 被 pooled threshold 压低的问题。
 - [用户决定] 第二个肿瘤用哪种数据（Response 最后的 [待补] 就是这一项；如果两种都不做，把它换成一句 limitation："Low-purity results come from one tumor."）：E14c in-silico HCC1395 dilution（不用下载，约一周集群时间），还是 E14d SEQC2 湿实验 titration（DNA 先混再测序，按构造就没有 read-source cue [inference]；本地只有 50 % 一档，其他档要下载）。
-- [GPU RIS] 如果选 (b)：HapMap_Illumina_nonHG005 的 tensor 做完以后再训练和测试（E23；用哪个模型也要用户定）。
-- [CPU 本地] E8b §4.5 里 HapMap chr20 positives 被 PoN 标掉的比例，量化 "PoN 也会去掉 HapMap positives"。task 6（387253_6）已在 2026-10-15 13:12 完成（SNV 96.3 %、INDEL 39.3 % 被 Pansoma 规则标掉，见证据）；还要跑 E8b 的 `collect.sh` 汇进 §4.5。[用户决定] 要不要在 Response 第一段加一句（例如 "our population filtering tags 96.3% of the HapMap SNV positives on chr20"）。
-- [CPU 本地]（可选，同 R2.1）数一下 HapMap positives 落在 d9 / d46 / `mgi_non_HG005.d9` 非 reference node 上的个数（例如 chr20），量化 donor 在图里到底多吸收了多少 positives。
+- （已完成 2026-10-26）E23：三个模型（tequila H100）和 chr1 打分，数在 R2.4。原来这条：如果选 (b)：HapMap_Illumina_nonHG005 的 tensor 做完以后再训练和测试（E23；用哪个模型也要用户定）。
+- （已完成 2026-10-26）E8b §4.5 已写进 HapMap chr20 的行（task 6 在 10-15 就已汇进 `somatic_truth_in_resources.tsv`；新 INDEL 规则 40.4 %，job 450562）。原来这条：E8b §4.5 里 HapMap chr20 positives 被 PoN 标掉的比例，量化 "PoN 也会去掉 HapMap positives"。task 6（387253_6）已在 2026-10-15 13:12 完成（SNV 96.3 %、INDEL 39.3 % 被 Pansoma 规则标掉，见证据）；还要跑 E8b 的 `collect.sh` 汇进 §4.5。[用户决定] 要不要在 Response 第一段加一句（例如 "our population filtering tags 96.3% of the HapMap SNV positives on chr20"）。
+- （不再需要，2026-10-26）Response 删掉了 "donor 在图里也不会抬高分数" 的论证，这个计数只是为它服务的；`mgi_non_HG005.d9` 上的数已有（E23 `donors_in_graph.chr1.tsv`）。原来这条：数一下 HapMap positives 落在 d9 / d46 / `mgi_non_HG005.d9` 非 reference node 上的个数（例如 chr20），量化 donor 在图里到底多吸收了多少 positives。
 - [文字] Methods 补 dilution 的构建方法和 measured purity；Response 里 donor 和图的对应要按 E8b H8 写（v2.1 是 6/6）。
 
 ### R1.6 Low sensitivity
@@ -1704,6 +1713,8 @@ Rendered with `scripts/visualize_tensor.py` (`supplementary/R1.m2/make_figure.sh
 
 **2026-10-22：HapMap 只作低 VAF 检测极限放进 Supplement（用户决定，同 R1.5 / R2.4）。** 最后一段改成 Supplement 只在 donor-free 图上报告、只量 read evidence 能到多低的 VAF；第 2 条加了原稿用的是 donor-free 图（和 R1.5 一致）；第 3 条加了 population filtering 标掉的比例（chr20：SNV 96.3 %、INDEL 40.4 %，E8b task 6；INDEL 按 10-16 的新规则重算），因为 R2.4 新写的 "population filtering removes most of these positives (R2.1)" 指向这里。见证据同日一条。
 
+**2026-10-26：按用户转来的外部审阅意见改了 Response**：第 2 条的 ch6 实验压成一句指向 R1.1，HapMap 限定和 R2.4 统一，删掉过时的 [待补]，第二个肿瘤不在这条承诺。见证据同日一条。
+
 **Comment（要点）。**
 
 - HapMap 的 positives 是 germline variant，它们的 donor 在 HPRC 图里，所以理论上 pangenome 比对会把它们去掉。
@@ -1714,14 +1725,16 @@ Rendered with `scripts/visualize_tensor.py` (`supplementary/R1.m2/make_figure.sh
 We included the SMaHT HAPMAP6 mixture because it offers a large truth set at very low allele fractions (0.25–16.5%). We agree that it has three limits for a pangenome-based tumor-only caller:
 
 1. Its positives are germline alleles of the five minor donors that the HG005 background lacks. They are not acquired mutations, so they carry no somatic mutational process, clonal structure or tumor copy-number context.
-2. Four of the donors are in the HPRC v1.1 graph (d9 filter), and all six are in the HPRC v2.1 graph (d46 filter); the submitted HapMap results used a graph built without any of them (R1.5). Apart from their GRCh38 and CHM13 reference paths, both graphs keep only nodes carried by about 10% or more of their haplotypes, so they absorb the positives that are common among those haplotypes; a donor's private alleles are filtered out even when the donor is in the graph. The trained classifier relies on this prior: on our tumor benchmarks, when the haplotype-count channel is set at inference so that every node appears to carry all haplotypes, 3.4–7.6 times as many germline tensors pass the calling threshold (12 HPRC-graph SNV models, chr1), although population filtering removes most of them again (R1.1).
+2. Four of the donors are in the HPRC v1.1 graph (d9 filter), and all six are in the HPRC v2.1 graph (d46 filter); the submitted HapMap results used a graph built without any of them (R1.5). Apart from their GRCh38 and CHM13 reference paths, both graphs keep only nodes carried by about 10% or more of their haplotypes, so they absorb the positives that are common among those haplotypes; a donor's private alleles are filtered out even when the donor is in the graph. The trained classifier uses this population prior through its haplotype-count channel (R1.1).
 3. The donors are public reference samples. Their rare alleles are found in CoLoRSdb, one of our population filtering resources, far more often than those of our cancer benchmarks' normals (chr20 SNVs: 14.5–25.9% against 4.0–7.9%; R2.6), so filtering also works against these positives: it tags 96.3% of the mixture's SNV positives and 40.4% of its indel positives on chr20.
 
 The mixture therefore measures sensitivity to low-fraction germline alleles. It does not measure tumor-only somatic calling.
 
-We removed it from the main benchmark. The Supplement reports it only on a graph without any of the six donors (40 HPRC individuals plus GRCh38 and CHM13), as a measure of how far down in allele fraction the read evidence reaches before population filtering (R2.4), not of somatic accuracy. For tumor-only calling we use tumor/normal dilutions that contain true somatic mutations: COLO829T at 75, 50 and 25% purity on three platforms, with one model per platform trained on chr2–22 of all purities and tested per purity on chr1; the tumor itself is not held out (R1.5, R2.4). [待补: Illumina SNVs and ONT after removing a read-source base-quality cue (R1.5; done for Illumina INDELs); dilutions of a second tumor not used in training (HCC1395)]
+We removed it from the main benchmark. The Supplement reports it only on a graph without any of the six donors (40 HPRC individuals plus GRCh38 and CHM13), as the empirical sensitivity by allele fraction in this mixture, before population filtering and excluding alleles that graph paths already carry (R2.4), not as somatic accuracy. For tumor-only calling we use tumor/normal dilutions that contain true somatic mutations: COLO829T at 75, 50 and 25% purity on three platforms, with one model per platform trained on chr2–22 of all purities and tested per purity on chr1; the tumor itself is not held out, so these results describe a held-out chromosome of one tumor, not other tumors (R1.5, R2.4). The Illumina and ONT dilutions carry a read-source base-quality cue, discussed in R1.5.
 
 **证据（内部）。**
+
+- 2026-10-26（用户转来的外部审阅意见）：第 2 条的 ch6 counterfactual（3.4–7.6 倍）压成一句 "uses this population prior through its haplotype-count channel (R1.1)"，细节在 R1.1。最后一段的 HapMap 限定和 R2.4 统一（PoN 前、去掉图路径带着的 allele、empirical sensitivity）。原来的 [待补: Illumina SNVs and ONT ...; second tumor] 删掉：Illumina SNV 去 cue 的结果 R1.5 已有，这里只说 dilution 有 cue、见 R1.5；第二个肿瘤不在这条里承诺（审阅意见），改成明说结论只适用于同一肿瘤的 held-out 染色体。Response 401 → 366 词。
 
 - 2026-10-22：
   - 第 3 条的 96.3 % / 39.3 %：R1.5 证据 "E8b task 6（HapMap positives chr20，387253_6）"：`/scratch/jshen/data/reviewer_experiments_20261013/E8b_literature_facts/somatic_truth_in_resources.HapMap_positives_chr20.tsv`，SNV 129,857 个里 Pansoma 规则标 125,026（96.3 %），INDEL 41,174 个里标 16,182（39.3 %）。INDEL 规则在 10-16 改过（HP ≥ 8：AF ≥ 0.01，其余 ≥ 1e-4），task 6 是 10-15 用旧规则跑的；10-22 用新规则重跑了 HapMap chr20（job 450562，`/scratch/jshen/data/reviewer_experiments_20261013/E8b_literature_facts/somatic_truth_in_resources.HapMap_positives_chr20.pon_hp8_1e-4.tsv`）：INDEL 16,630 / 41,174 = 40.4 %（旧规则 16,182，39.3 %），SNV 不变（125,026 / 129,857 = 96.3 %）。Response 用 40.4 %。
@@ -1767,8 +1780,8 @@ We removed it from the main benchmark. The Supplement reports it only on a graph
 - [用户决定] 原稿纳入 HapMap 的理由和当时用的图（`mgi_non_HG005.d9` 还是 `hprc-v1.1 d9`）。这两个 [待核实] 已在 10-15 从 Response 删掉：如果原稿有别的理由，加在第一句；如果原稿用的是 donor-free 图，在第三段（"The mixture therefore ..."）后面加 "The submitted HapMap results used a graph without the donors; we state this and correct the Methods."
 - （已完成 2026-10-22）第 3 条要不要加 HapMap positives 被我们的 population filtering 标掉的比例（chr20：SNV 96.3 %、INDEL 39.3 %，E8b task 6，10-15 已完成）。 已加进第 3 条，INDEL 按 10-16 的新规则重算为 40.4 %（job 450562）。
 - [GPU RIS] Illumina / ONT dilution 在修掉 read-source BQ cue 以后重训（E14b，同 R1.5）；在这之前它们的分数偏乐观，Response 不引用 dilution 的数字（只指向 R1.5），并在 [待补] 里写明。
-- [用户决定] 第二个肿瘤的 dilution 用 E14c（in-silico）还是 E14d（SEQC2 湿实验 titration）。
-- [CPU 本地]（可选）数一下 HapMap positives 里有多少落在 d9 / d46 / `mgi_non_HG005.d9` 的非 reference node 上（例如 chr20），量化 "图只吸收常见的 positives"、donor 进不进图差多少。没有这个数之前，Response 第 2 条只写定性的说法。 2026-10-26：`mgi_non_HG005.d9` 上有了（E23 `donors_in_graph.chr1.tsv`，chr1 BED 内：被 1 / 2 / 3 / 4 / 5 个 minor donor 携带的 SNV 被图带着的比例 0.238 / 0.654 / 0.905 / 0.974 / 0.990）；d9 / d46 还没数。
+- [用户决定] 第二个肿瘤的 dilution 用 E14c（in-silico）还是 E14d（SEQC2 湿实验 titration）。R2.1 的 Response 不再等它（10-26：结论限定为同一肿瘤的 held-out 染色体），做了的话只改 R1.5 / R2.4。
+- （d9 / d46 不再做，2026-10-26）第 2 条只写图的过滤规则，不再推断 donor 进图的影响（R1.5 同日删掉了那条论证）。原来这条：数一下 HapMap positives 里有多少落在 d9 / d46 / `mgi_non_HG005.d9` 的非 reference node 上（例如 chr20），量化 "图只吸收常见的 positives"、donor 进不进图差多少。没有这个数之前，Response 第 2 条只写定性的说法。 2026-10-26：`mgi_non_HG005.d9` 上有了（E23 `donors_in_graph.chr1.tsv`，chr1 BED 内：被 1 / 2 / 3 / 4 / 5 个 minor donor 携带的 SNV 被图带着的比例 0.238 / 0.654 / 0.905 / 0.974 / 0.990）；d9 / d46 还没数。
 - [文字] Discussion 里加一段 HapMap 局限，三条和 Response 一致。
 - [文字] Response 里的两个 [待核实] 已在 10-15 删掉（处理方式见上面第二条）。HapMap 去留和 R1.5 一样不在 Response 里写成二选一：Response 只写两种选择共有的部分（"removed it from the main benchmark, and no claim of the revised manuscript rests on HapMap results"）。如果用户选 (b)，在最后一段加一句："The Supplement reports it only on a graph without any of the six donors (40 HPRC individuals + GRCh38 + CHM13), with these limits stated." E1.1 那句已在 10-15 和 R1.1 / R3.2 对齐（3.4–7.6 倍，all_H）；第二个肿瘤的占位和 R1.5 用同一种写法。
 
@@ -1969,7 +1982,9 @@ none). On chr1, our test chromosome, this is negligible (19 of 4,266 truth SNVs)
 
 ### R2.3 Explaining the lower recall; normal sample at missed sites
 
-**状态：已解决**: 三问都有回答（2026-10-21/22 按 Reviewer 2 的语气重写）。第一段最新模型（RIS `--norm dataset` 三 seed，v2.1 为主；E8 `latest_models.py`）；第二段 v2.1 read-level 分类（E1.7，新 Supp. Fig. 2）；第三段 v2.1 吸收位点上的 COLO829BL normal reads（E20）和 normal / tumor 组装（E5d），v1.1 在 Supplementary。只剩改稿（Supplementary Fig. 2 换成 E1.7 的图）。
+**状态：已解决**: 2026-10-26 按用户转来的建议改（pansoma-9f 接手）：(1) INDEL 81–93 % 写成完全或部分吸收（I1 + I2，含 residual edit）；(2) HG008T tumor 组装的两种支持分开写（exact 1,153 / 非 normal 序列 1,347）；(3) 'does not pull' 改成直接陈述 1.1 % vs 95 %，ONT 一句改成 inconclusive；(4) 标明 chr1（recall、funnel）和 chr1–22（read-level 分类、1,607 / 401），范围是平台和 seed 的范围；(5) 'original comparator call sets' 改成 revised models + comparator call sets、'the same additional population filter'；(6) 旧类别写明撤回，小标题改成 'Revised false-negative classification'，引用 Supplementary Table [X]。61 / 702 和 ONT INDEL 的比例移到 Supplementary。另外：COLO829T 现在有 hifiasm tumor 组装（10-23，R3.3），但和测序数据不独立，所以写 'no tumor assembly independent of the sequencing data'。
+
+**2026-10-26：按用户转来的外部审阅意见改了几处（pansoma-13）**：funnel 换成最新三 seed 的 v2.1 数、seed 限定到 SNV、strict subset 定义写进正文、"independently" 删掉、97.4 % 写明分母。INDEL 数等 final INDEL 模型（10-27）。见证据同日一条。
 
 **Comment（要点）。**
 
@@ -1984,50 +1999,50 @@ graph alignment alone cannot establish errors in the benchmark truth. We have wi
 recall under a common protocol, and replaced the original false-negative categories with an allele-level analysis of
 where variants are lost.
 
-*Recall under a common protocol.* We re-scored the original DeepSomatic-TO and ClairS-TO call sets with our protocol
-(chr1, benchmark regions, the same population filter; R3.m2). On HG008T, SNV recall is now comparable: 0.814–0.859 for
-Pansoma on the HPRC v2.1 graph (three training seeds), against 0.806–0.889 for DeepSomatic-TO and 0.831–0.845 for
-ClairS-TO, with Pansoma's models trained on chr2–22 of the same tumor. On COLO829T, Pansoma reaches 0.700–0.734 and the
-comparators 0.555–0.835, and a substantial deficit remains against DeepSomatic-TO on Illumina (0.705–0.717 against
-0.835). Among truth SNVs whose allele fraction in the truth set (its Illumina VAF) is below 0.08, DeepSomatic-TO
-recovers 30%, compared with 6–7% for Pansoma, whose 0.08 candidate floor applies to the allele fraction observed in its
-own reads (above 0.08 at a few of these sites); at 0.08 or above, DeepSomatic-TO recovers 94%, compared with 83–85% for
-Pansoma, so the floor does not explain the deficit fully (low-allele-fraction detection: R2.4). INDEL recall remains low
-in absolute terms, although under the same protocol it is higher than the comparators' on both tumors (0.229–0.260
-against 0.015–0.183).
+*Recall under a common protocol.* We evaluated the revised Pansoma models and the comparator call sets with a common
+scoring protocol (chr1, benchmark regions, the same additional population filter for all callers; R3.m2). The ranges
+below span sequencing platforms and, for Pansoma's SNV models, three training seeds; they are not confidence intervals. On HG008T,
+SNV recall is comparable: 0.814–0.859 for Pansoma on the HPRC v2.1 graph, against 0.806–0.889 for DeepSomatic-TO and
+0.831–0.845 for ClairS-TO, with Pansoma's models trained on chr2–22 of the same tumor. On COLO829T, Pansoma reaches
+0.700–0.734 and the comparators 0.555–0.835, and a substantial deficit remains against DeepSomatic-TO on Illumina
+(0.705–0.717 against 0.835). Among truth SNVs whose allele fraction in the truth set (its Illumina VAF) is below 0.08,
+DeepSomatic-TO recovers 30%, compared with 6–7% for Pansoma, whose 0.08 candidate floor applies to the allele fraction
+observed in its own reads; at 0.08 or above, DeepSomatic-TO recovers 94%, compared with 83–85% for Pansoma, so the floor
+does not explain the deficit fully (low-allele-fraction detection: R2.4). INDEL recall remains low in absolute terms,
+although under the same protocol it is higher than the comparators' on both tumors (0.229–0.260 against 0.015–0.183).
 
-*Where recall is lost.* A per-allele funnel assigns each missed truth allele to the first stage at which it is lost
-(R1.6). On HG008T the largest loss on every reference is the classification threshold (8.9–10.9% of truth SNVs, against
-2.1–5.2% without a candidate and 3.2–5.2% first lost at filtering). The population filter tags 61 of the 702 truth SNVs
-(8.7%); these would also be tagged if the same allele-level rules were applied to another caller's output, and those not
-counted at the filtering stage are already lost before it. On COLO829T, candidate generation is the main limitation:
-17–18% of truth SNVs get no candidate, mainly because 15.1–16.1% have a truth-set allele fraction below 0.08.
+*Where recall is lost (chr1).* A per-allele funnel assigns each missed truth allele to the first stage at which it is
+lost (R1.6). On HG008T the largest loss on every reference and seed is the classification threshold (on the HPRC
+v2.1 graph 5.6–10.9% of truth SNVs, against 4.4–5.0% without a candidate and 2.6–4.0% first lost at filtering). On COLO829T, candidate generation is the main
+limitation: 17–18% of truth SNVs get no candidate, mainly because 15.1–16.1% have a truth-set allele fraction below 0.08.
 
-*The two categories.* We regret that these categories were not explained. The false-negative statistics of the original
-Supplementary Fig. 2, including "variant node not ranked #1" and "first aligned node mismatch", came from the original
-pipeline and had shortcomings, and we have replaced them with a detailed allele-level classification (revised
-Supplementary Fig. 2; HPRC v2.1 graph, six datasets): one read-level class for every truth allele without a candidate,
-with later losses in the funnel above. For INDELs, 81–93% of those without a candidate already have their ALT in the
-graph (HG008T PacBio: 2,939 of 3,169). SNVs without a candidate lie mostly in repeats on HG008T (52–81%), whereas on
-COLO829T they have too few ALT reads (19–70%) or no read with MAPQ > 10 (34–42% on Illumina and Fiber-seq).
+*Revised false-negative classification.* We have withdrawn the original category assignments, including "variant node
+not ranked #1" and "first aligned node mismatch", together with their statistics, and replaced them with an allele-level
+classification based on read evidence and the stage of candidate loss (revised Supplementary Fig. 2; class definitions
+in Supplementary Table [X]). We additionally examined candidate-generation failures across chr1–22 on the HPRC v2.1
+graph (six datasets). For INDELs, 81–93% of candidate-generation failures involve complete or partial absorption into
+graph paths, including cases that leave a residual edit with a different representation. SNVs without a candidate lie
+mostly in repeats on HG008T (52–81%), whereas on COLO829T they have too few ALT reads (19–70%) or no read with MAPQ > 10
+(34–42% on Illumina and Fiber-seq).
 
-*The normal at missed sites on graph nodes.* We examined the matched normal directly, in two ways. First, as the
-reviewer suggested, we realigned the COLO829BL normal's ONT reads, with the tumor's aligner settings, at the 401
-COLO829T truth alleles that the HPRC v2.1 graph absorbs (below). The graph does not pull reads onto the alternative
-path: 1.1% of normal reads whose own bases match GRCh38 take the ALT path (tumor: 1.6%), against 95% of reads that carry
-the ALT. At the absorbed SNVs, 2.2% of normal and 45% of tumor reads carry the ALT; at the absorbed INDELs, mostly
-repeat-length changes, ONT length errors prevent a read-level call (42% of normal and 59% of tumor reads resemble the
-ALT). Second, we used the haplotype-resolved matched-normal assemblies (HG008-N v6.2; COLO829BL). On the HPRC v2.1
-graph, 1,607 HG008T and 401 COLO829T truth alleles get no candidate on at least one platform although a graph path
-spells their ALT. Only 110 (6.8%) and 27 (6.7%) are carried by the matched normal, and 1,481 (92.2%) and 371 (92.5%) are
-absent from both normal haplotypes. At the 1,351 HG008T INDEL loci absent from the normal, the HG008-T tumor assembly
-carries exactly the truth allele at 1,153 and a sequence found in neither normal haplotype at 1,347. These HG008T
-alleles are therefore supported somatic events that the graph already represents, and the manuscript now describes graph
-absorption as a cause of missed somatic alleles, not as evidence of benchmark error. Most of them would also be tagged
-by the same allele-level population-filtering rules on any reference (R1.4), but this overlap does not establish that
-they are germline in the patient. COLO829T has no tumor assembly: its normal carries the exact ALT at 26 of the 347
-absorbed INDELs, and at another 22 a different allele of the same length, which we keep as ambiguous rather than
-germline.
+*The normal at missed sites on graph nodes.* We examined the matched normal directly at a strict subset of these
+alleles: those without a candidate on the HPRC v2.1 graph on at least one platform, although the GRCh38-only analysis
+produces one, and whose ALT an HPRC v2.1 graph path spells exactly (1,607 HG008T and 401 COLO829T truth alleles,
+chr1–22). First, as the reviewer suggested, we realigned the COLO829BL normal's
+ONT reads with the tumor's aligner settings at the 401 COLO829T loci. At these loci, only 1.1% of evaluable REF-like
+normal reads traversed an ALT-like path, compared with 95% of ALT-like normal reads. At the absorbed SNVs, 2.2% of
+normal and 45% of tumor reads carry the ALT. For the repeat-associated INDELs, the high ALT-like fractions in both normal
+and tumor reads made read-level classification inconclusive; we therefore relied on assembly evidence to assess normal
+allele status. Second, we used the haplotype-resolved matched-normal assemblies (HG008-N v6.2; COLO829BL). Only 110
+(6.8%) HG008T and 27 (6.7%) COLO829T alleles are carried by the matched normal, and 1,481 (92.2%) and 371 (92.5%) are
+absent from both normal haplotypes. At the 1,351 HG008T INDEL loci absent from the normal, the tumor assembly
+supports the exact benchmark allele at 1,153. At 1,347 loci, it supports a tumor sequence absent from both
+normal haplotypes, although this broader category does not necessarily confirm the exact benchmark allele. The
+manuscript now describes graph absorption as a cause of missed somatic alleles, not as evidence of benchmark error. Most
+of these alleles would also be tagged by the same allele-level population filter on any reference (R1.4), but this does
+not establish that they are germline in the patient. COLO829T has no tumor assembly independent of the sequencing data
+analysed here (the one used in R3.3 is built from the same long reads); its normal carries the exact ALT at 26 of the 347 absorbed INDELs and a different allele of the same
+length at another 22, which we treat as ambiguous rather than germline.
 
 **Supplementary (R2.3).**
 
@@ -2037,12 +2052,19 @@ germline.
   v1.1 and v2.1 counts use different definitions (below) and are not a comparison of the two graphs.
 - *Further v2.1 evidence.* The ALT paths of the absorbed alleles run through nodes walked by a median of 138 (HG008T)
   and 110 (COLO829T) HPRC haplotypes. At the 1,351 HG008T INDEL loci absent from the normal, the tumor's Illumina reads
-  show the expected allele at 97.4% (PacBio 97.5%), against 95.7% at random non-absorbed truth INDELs. The population
+  show the expected allele at 97.4% of the evaluable loci (PacBio 97.5%), against 95.7% at random non-absorbed truth
+  INDELs. The population
   filter tags 97.0% of the HG008T and 98.5% of the COLO829T absorbed alleles; in the chr1 benchmark regions the
   GRCh38-only graph calls at most two of the 39–93 HG008T truth INDELs per platform that v2.1 absorbs.
+- *Filtering overlap (chr1).* The population filter tags 61 of the 702 HG008T truth SNVs (8.7%); these would also be
+  tagged if the same allele-level rules were applied to another caller's output, and those not counted at the
+  filtering stage of the funnel are already lost before it.
 - *Normal reads (COLO829BL ONT).* Reads overlapping the absorbed loci (+-500 bp) in the SMaHT GRCh38 BAMs, realigned
   with Giraffe to each graph; tumor (COLO829T ONT) reads processed identically; a read is labelled by its own bases
-  (REF-like / ALT-like) and by the graph path it walks at the locus. Median 145 normal and 84 tumor reads span a locus.
+  (REF-like / ALT-like) and by the graph path it walks at the locus. Evaluable reads span the allele with MAPQ > 10;
+  reads are selected by their GRCh38 placement, so a read placed elsewhere on GRCh38 is not examined, for normal and
+  tumor alike. Median 145 normal and 84 tumor reads span a locus. At the absorbed INDELs (mostly homopolymer and STR
+  length changes), 42% of normal and 59% of tumor reads are ALT-like.
   On the v1.1 graph (497 loci): 1.1% of REF-like normal reads take the ALT path; at SNVs 4.0% of normal against 45.2% of
   tumor reads carry the ALT. The realigned tumor reads agree with Pansoma's own tumor alignments (per-locus ALT fraction
   within 0.1 at 256 of 258 v2.1 loci).
@@ -2056,6 +2078,15 @@ germline.
   v1.1 absorbs (chr1, benchmark regions).
 
 **证据（内部）。**
+
+- 2026-10-26（用户转来的外部审阅意见，pansoma-13 改；R2.3 原 session 已不在，pansoma-27 确认不是它的）：
+  - Funnel 换成最新模型：`experiments/E8_comparators/latest_models.md` "HG008T SNV funnel with the latest models"，d46 三个 seed × 三个平台：tensor below threshold 5.6–10.9 %（ONT d46 s0 5.6 %，Illumina s2 / PacBio s1 10.9 %），no tensor 4.4–5.0 %，PASS 后被 PoN 标 2.6–4.0 %；每个 run 都是 threshold 最大（ONT s0：5.6 > 4.4 > 4.0）。原来的 8.9–10.9 / 2.1–5.2 / 3.2–5.2 % 是 E1.6 的单 run（含 GRCh38-only）。d9 三 seed 是 8.3–11.3 / 4.7–5.5 / 3.0–3.7 %，"on every reference and seed" 仍成立（R1.6 同说法）。
+  - "three training seeds" 限定到 SNV（INDEL 是每个平台一个模型）。
+  - strict subset 的定义按 E5b（同 Supplementary Definitions）：d46 上至少一个平台没有 candidate、GRCh38-only 有 tensor、d46 path 精确 spell ALT；1,607 = 1,467 INDEL + 140 SNV，401 = 347 + 54（R1.2 证据）。
+  - "independently supports" → "supports"：HG008-T v3.2 组装和 truth 构建是否独立没核实。
+  - 97.4 % 的分母是可评估的位点：1,240 个（下面一条）/ 0.974 ≈ 1,273，不是 1,351（1,240 / 1,351 = 91.8 %）；Supplementary 写 "of the evaluable loci"。
+  - COLO829T：补一句 R3.3 用的 hifiasm 组装来自同一批长读长，免得读成 "没有 tumor assembly"。
+  - INDEL recall（0.229–0.260 对 0.015–0.183）没动：pansoma-27 说 final INDEL 模型（PASS = post-PoN val recall 0.8，m4 / m6，3 seeds）的数 10-27 早上进 `tmp/indel_gap_20261020/final_20261023/results_ppr8.md`，到时一起换。
 
 - 2026-10-22 定稿（E1.7 + E20 填完；811 → 786 词）：
   - 第二段（`experiments/E1.7_readlevel_d46/`：`classes.md` / `classes.tsv`、`supp_fig2.png` / `.pdf`（`make_supp_fig2.py`），每个 set 的 `summary.json`、
@@ -2229,12 +2260,19 @@ germline.
   - "in the benchmark regions"：第一段 recall 和第三段 E5b 那半句都加了（coordinator 10-15 要求每个比较都写明 BED 内还是外）。
   - COLO829T 的 absorbed 行 E5b README 说 n 漏了 PoN 标的 allele（`s6_linear_recovery.py` 读的是 per_truth.tsv.gz，README Caveats），而且 d9 的 Illumina / ONT 两列还是 pending（joint INDEL 的 rtg 没跑完），所以 Response 不写 COLO829T。
 
+- (2026-10-26) 核对：E1.7 README / classes.md 的 "ALT already in the graph" = I1（完全吸收）+ I2（部分吸收，留下另一种写法的 residual edit），范围 chr1-22；INDEL 81.3–92.7 %。E5d README：1,607 / 401 吸收 allele（chr1-22，全部 truth），HG008T INDEL 1,351 个不在 normal 的位点里 tumor 组装 exact 1,153（85.3 %）、非 normal 序列 1,347（99.7 %）。E20 tables.md d46：REF-like normal reads 走 ALT 路径 367 / 33,418（1.1 %），ALT-like normal reads 20,288 / 21,285（95.3 %）；SNV normal 2.2 %、tumor 45.4 %；INDEL normal 42.4 %、tumor 58.8 % ALT-like；reads 按 GRCh38（minimap2）位置选取、MAPQ > 10、跨过 allele（E20 Caveats）。
+- (2026-10-26) COLO829T tumor 组装：E9c / E9j 从 10-23 起用 qfu 的 hifiasm（COLO829T Fiber-seq HiFi + ONT D003），和 COLO829T 的长读长数据不独立；E5d 没有用它重算，所以 Response 写 "no tumor assembly independent of the sequencing data analysed here"。
+
 **还缺什么。**
+
+- [CPU 本地] 10-27 final INDEL 模型的数出来以后换 INDEL recall（"0.229–0.260 against 0.015–0.183"）。
 
 - [文字] 稿件：Supplementary Fig. 2 换成 `experiments/E1.7_readlevel_d46/supp_fig2.pdf`（legend：HPRC v2.1，chr1–22，没有 candidate 的 truth allele 的
   read-level 类别，SNV / INDEL 两个面板，五组的定义见 `make_supp_fig2.py` 开头）；Discussion 写 graph absorption 是漏检的原因之一（不是 benchmark 错误）。
 - 已完成（2026-10-21/22）：比较器同一协议 re-score（E8）、最新模型（`latest_models.py`）、v2.1 吸收位点的 normal / tumor 组装（E5d）、COLO829BL normal
   reads（E20）、v2.1 read-level 分类（E1.7）；旧类别不再按旧规则定义（用户）。
+- (2026-10-26) [改稿] Supplementary Table [X]：列出新的 false-negative 类别定义（SNV S1–S4c、INDEL I1–I9 及五个合并组，`analysis/tensor_recall_20260930/README.md` 第 2 节和 E1.7 README 的表），新 Supplementary Fig. 2 的 legend 引用它。
+- (2026-10-26) [可选] 用 COLO829T hifiasm tumor 组装在 401 个吸收位点上重算 E5d（需要注明和长读长数据不独立）。
 
 ### R2.4 Low-VAF detection and the low-VAF model
 
@@ -2243,6 +2281,8 @@ germline.
 **2026-10-26：E23 的数字填进 "Below the candidate floor"，两个 [待补] 都去掉了。** chr1、BED 内、PoN 前、去掉图路径带着的 positive；SNV 用两卡全量模型（和抽样模型基本一样），INDEL 用 INDEL 模型。原来那句 "close to what Poisson read sampling predicts" 删了：实测在 VAF 0.01 比 Poisson 高（0.35 对 0.13），在 0.03 附近比它低，说不上 close。加了一句 precision 偏乐观的说明（50 bp 内有另一个 positive：HapMap 35 %，COLO829T 4 %）。出处见证据同日一条。
 
 **2026-10-22：HapMap 回到 R2.4，只用来量低 VAF 的检测极限（用户决定）。** 加了 "Below the candidate floor" 一段：donor-free 图 `mgi_non_HG005.d9` 上的 HapMap 重跑（E23，candidate floor 0.015，约 500x，每种变异一个模型，chr2–22 训练、chr1 测试），E23 的数字（labels 450540，模型 450542–450544）出来以前是两个 [待补]；"The low-VAF model" 一段改成旧模型作为 somatic 模型撤回、新的 HapMap 模型只用来量检测极限；Usage 加了深度的约束。出处和推导见证据同日一条。
+
+**2026-10-26：按用户转来的外部审阅意见改了 Response**：HapMap 三个条件写在一起、"detection limit" 改成 empirical sensitivity、recall / precision 的分 bin 写清；purity 段加 candidate funnel；[待补] 同步（Illumina 去 cue 已有）；low-VAF model 对照了原稿 Methods（有出入，要你定）。见证据同日一条。
 
 **Comment（要点）。**
 
@@ -2268,15 +2308,23 @@ germline.
 
 Recall falls below 50% in the 0.05–0.10 bin, where only 34–68 truth SNVs have a candidate; once a candidate exists, recall is 0.804–0.966 in every bin. HG008T has too few low-VAF truth SNVs on chr1 for this analysis.
 
-*Decreasing purity.* For each platform, one model was trained on chr2–22 of COLO829T and its in-silico dilutions with COLO829BL (nominal purity 75, 50, 25%) and tested on chr1 of each purity at one recall-0.9 validation threshold shared by all purities; training and test share the tumor (one seed). On Fiber-seq, after population filtering and in the benchmark regions (graph-coordinate calls not scored; R3.4), SNV recall is 0.698 / 0.639 / 0.621 / 0.663 from 100% to 25% purity, at precision 0.881 / 0.741 / 0.715 / 0.786, while the share of truth SNVs whose expected VAF is below the 0.08 floor rises from 16.1% to 26.9%. At 25% purity, recall is close to the highest the curve reaches after filtering (0.663 against 0.688), so candidate generation is the main limit; by VAF it is 0.899 at 0.10–0.20 (829 of 922 truth SNVs) and 0.420 at 0.05–0.10. At 75% and 50% the classifier loses more (curve maxima 0.767 / 0.740) and precision falls: 86.1% and 86.5% of the false calls carry a germline allele of the normal (68.4% undiluted), as expected when germline SNVs in the tumor's regions of loss of heterozygosity enter the somatic allele-fraction range (R1.5). [待补: Illumina SNVs and ONT after removing a read-source base-quality cue that makes their current scores optimistic (R1.5; done for Illumina INDELs); dilutions of a second tumor not used in training (HCC1395)]
+*Decreasing purity.* For each platform, one model was trained on chr2–22 of COLO829T and its in-silico dilutions with COLO829BL (nominal purity 75, 50, 25%) and tested on chr1 of each purity at one recall-0.9 validation threshold shared by all purities; training and test share the tumor (one seed). On Fiber-seq, after population filtering and in the benchmark regions (graph-coordinate calls not scored; R3.4), SNV recall is 0.698 / 0.639 / 0.621 / 0.663 from 100% to 25% purity, at precision 0.881 / 0.741 / 0.715 / 0.786, while the share of truth SNVs whose expected VAF is below the 0.08 floor rises from 16.1% to 26.9%. At 25% purity, 29.3% of the truth SNVs have no candidate (18.4% undiluted), while recall is close to the highest the curve reaches after filtering (0.663 against 0.688), so most of the loss occurs at candidate generation; by VAF it is 0.899 at 0.10–0.20 (829 of 922 truth SNVs) and 0.420 at 0.05–0.10. At 75% and 50% the classifier loses more (curve maxima 0.767 / 0.740) and precision falls: 86.1% and 86.5% of the false calls carry a germline allele of the normal (68.4% undiluted), as expected when germline SNVs in the tumor's regions of loss of heterozygosity enter the somatic allele-fraction range (R1.5). Illumina and ONT dilutions carry a read-source base-quality cue that makes their scores optimistic; R1.5 reports Illumina without it. [待补: ONT without the cue; dilutions of a second tumor not used in training (HCC1395)]
 
-*Below the candidate floor.* The dilutions reach truth VAFs of about 0.05. To measure detection below the 0.08 floor, we reran the SMaHT HAPMAP6 mixture (about 500x; minor-donor alleles at VAF 0.0025–0.165) with the current pipeline on a graph built without its six donors (R1.5), with a candidate floor of 0.015 (about eight ALT reads at this depth), and trained one model per variant type on chr2–22. Its positives are germline alleles of other individuals, so it measures how far the read evidence reaches, not somatic accuracy. We therefore score chr1 before population filtering, which removes most of these positives (R2.1), and leave out positives carried by a path of the graph (mostly alleles shared by several donors): their reads align without an edit, which concerns at most 2% of real somatic SNVs (R1.2). At the recall-0.9 validation threshold, SNV recall is 0.006 / 0.03 / 0.30 / 0.81 / 0.91 at VAF 0.0025 / 0.005 / 0.01 / 0.02–0.025 / 0.05–0.075, with precision 0.98–0.99 at every called allele fraction; in the last three bins, 85–95% of the truth SNVs that reach the classifier are called. INDEL recall is 0.05 / 0.06 / 0.12 / 0.19 / 0.37 at the same VAFs (precision 0.62–0.88). These precisions are likely optimistic: 35% of the chr1 positives lie within 50 bp of another positive, against 4% of COLO829T somatic variants, so reads often carry several donor alleles at once.
+*Below the candidate floor.* The dilutions reach truth VAFs of about 0.05. To measure sensitivity below the 0.08 floor, we reran the SMaHT HAPMAP6 mixture (about 500x; minor-donor alleles at VAF 0.0025–0.165) with the current pipeline on a graph built without its six donors (R1.5), with a candidate floor of 0.015 (about eight ALT reads at this depth), and trained one model per variant type on chr2–22. Its positives are germline alleles of other individuals, so it gives the empirical sensitivity by VAF in this mixture, not somatic accuracy. We therefore score chr1 before population filtering, which removes most of these positives (R2.1), and leave out positives carried by a path of the graph (mostly alleles shared by several donors): their reads align without an edit, which concerns at most 2% of the HG008T and COLO829T somatic truth SNVs on the HPRC v2.1 graph (R1.2). At the recall-0.9 validation threshold, SNV recall by truth VAF is 0.006 / 0.03 / 0.30 / 0.81 / 0.91 at VAF 0.0025 / 0.005 / 0.01 / 0.02–0.025 / 0.05–0.075, and precision by the calls' own allele fraction is 0.98–0.99 in every bin; in the last three bins, 85–95% of the truth SNVs that reach the classifier are called. INDEL recall is 0.05 / 0.06 / 0.12 / 0.19 / 0.37 at the same VAFs (precision 0.62–0.88 by call allele fraction). These precisions are likely optimistic: 35% of the chr1 positives lie within 50 bp of another positive, against 4% of COLO829T somatic variants, so reads often carry several donor alleles at once.
 
-*The low-VAF model.* The original low-VAF model was the same kind of network trained on the HapMap mixture, with candidates built at an allele fraction of 0.015 instead of 0.10. Its positives were germline alleles, so it is withdrawn as a somatic model (R1.5). The HapMap models above use the same floor with the current pipeline and serve only to measure the detection limit.
+*The low-VAF model.* The original low-VAF model was the same kind of network trained on the HapMap mixture, with candidates built at an allele fraction of 0.015 instead of 0.10 and tensors of up to 500 reads instead of 200. Its positives were germline alleles, so it is withdrawn as a somatic model (R1.5). The HapMap models above use the same floor with the current pipeline (200 reads per tensor) and serve only to measure this sensitivity.
 
 *Usage.* We recommend the default model for expected somatic VAFs of about 0.10 and above, where call-level recall in the 0.10–0.20 bin is 0.672–0.897 in undiluted COLO829T and 0.899 at 25% purity. No truth SNV below VAF 0.05 was called by the default model. Lower VAFs need both a lower candidate floor and depth: three ALT reads correspond to VAF 0.03 at 100x, and below about 0.005 a true allele (one to three reads even at 500x) is hard to separate from sequencing errors in a single sample.
 
 **证据（内部）。**
+
+- 2026-10-26（用户转来的外部审阅意见）：
+  - HapMap 段：三个条件（donor-free 图、PoN 前、去掉图路径带着的 truth）都写在同一处；"detection limit" 一律改成 empirical sensitivity（没有定义达到某个 sensitivity 的正式检出限）；写明 recall 按 truth VAF 分 bin、precision 按 call 自己的 AF 分 bin（E23 `call_vaf.py` 本来就是这样）；"at most 2% of real somatic SNVs" 限定为 "the HG008T and COLO829T somatic truth SNVs on the HPRC v2.1 graph"（R1.2 证据：E5b d46 absorbed SNV 140 / 8,690 = 1.6 %、54 / 42,035 = 0.1 %，chr1–22）。
+  - purity 段：0.663 对 0.688 只说明降阈值收益有限，不能单独证明 candidate 是主要限制，所以加 candidate funnel：`analysis/benchmark_7fc7396_20261012/colo829t_purity_joint_7fc7396_20261012/tables.md` "chr1 per purity" 表 fiberseq SNV "truth with a tensor" P100 1993 / 2443（0.816）、P25 1726 / 2443（0.707）→ 没有 candidate 18.4 % / 29.3 %；P25 有 tensor 0.707、PoN 后 ceiling 0.688、recall 0.663，所以大部分损失在 candidate。
+  - purity 段的 [待补] 同步：Illumina SNV 去 cue 的结果在 R1.5（10-13 RIS），这里只留 ONT 和第二个肿瘤。
+  - low-VAF model 段对照了原稿（`/scratch/jshen/Pansoma_papers/ver1/Jiawei-Smaht-Paper/Submit_Folder/Pansoma.pdf` Methods）：原稿写 "candidate variants with allele frequency greater than 10% were excluded, candidate variants with allele frequency greater than 1% were retained, and the maximum pileup depth was increased to 500 reads"。legacy 代码：`/scratch/jshen/Scripts/HapMap_train_data_preparation.sh`（及 INDEL 版）第 82 行 `--min_af 0.015 --min_variants 3`；builder `node_pileup_tensors/node_6channel_batchP_pileup_tensor_Ver7_Multi_HapMap.py` `TENSOR_MAX_READ_ROWS = 499`（加 reference 行共 500），AF 下限只对 SNV（`v_type == 'X'`）生效，builder 里没有 10 % 的上限；主模型当时的 builder `..._Ver7.py` 是 200 行。原稿的主模型阈值是 "more than two variant supporting reads and variant allele frequency greater than 10%"（Results），所以 "instead of 0.10" 对。Response 加了 "tensors of up to 500 reads instead of 200"；1 % 对 1.5 %、10 % 上限、INDEL 没有 AF 下限这三点和原稿 Methods 不一致，没写进 Response（见还缺什么）。
+  - 原稿 Supplementary Table 3 的 HapMap SNV recall（1–16.5 % 0.938；1–2 % 0.877，2–5 % 0.966，5–10 % 0.935，10–16.5 % 0.738）远高于 E23（VAF 0.01 档 0.30）。原稿 1–16.5 % 的 recall 分母只有 96,393 个 SNV（TP 90,405 + FN 5,988），而 E23 的 chr1 BED 内 0.01–0.165 有约 39 万个；所以原稿的 recall 不是对全部 truth 算的（[inference]：可能只算有 candidate 的 truth，或只用了某条染色体 / 某个子集），旧的评估脚本本地没找到。Response 没有引用原稿的数，也没解释这个差别（见还缺什么）。
+  - Response 749 → 801 词。
 
 - 2026-10-26 "Below the candidate floor" 的数字（`experiments/E23_hapmap_lowvaf/README.md` Results）：
   - 模型和打分：SNV `HapMap_Illumina_SNV_full`（所有训练 tensor，2 × H100 DDP，job 450544，best epoch 8），INDEL `HapMap_Illumina_INDEL`（450543）；`vcf.sh`（rtg vcfeval，chr1，benchmark BED，PASS = validation recall-0.9 阈值：SNV 0.98756，INDEL 0.33516）的 raw_calls（PoN 前），`call_vaf.py`。抽样模型（每 epoch 4 M，450542）chr1 BED 内 PoN 前 P / R 0.990 / 0.277，全量 0.990 / 0.277（ceiling 0.308），不被图带着的 truth 按 VAF bin 差 ≤ 0.022（`atomized/call_vaf.*.md`），留在证据里。
@@ -2369,7 +2417,8 @@ Recall falls below 50% in the 0.05–0.10 bin, where only 34–68 truth SNVs hav
 - 已完成，删掉（2026-10-15）：现行 build 上按 truth VAF 分 bin（E2.4，替换了旧表）；call 层面按 VAF bin 的 recall（E2.4）；COLO829T Illumina / fiberseq 和 fiberseq joint model 的 chr1 re-predict（405185）；HG008T 的 VAF 来源（E2.4 用本套 tensor AF，HG008T 低 VAF truth 太少，不分析）。
 - [GPU RIS] 修掉 read-source BQ cue 以后重训 Illumina / ONT 的 purity joint model，按每个 purity 的 validation 定阈值（E14b）。之后在 tequila GPU 上 re-predict，再跑 E2.4（`collect.sh`）加上 Illumina / ONT 的按 purity、按 VAF 的 recall；Response purity 段的 [待补] 填这一项。Illumina / ONT 的 joint model 现在不在 E2.4 里。
 - [用户决定] 做不做 E15 低 AF 配置。build 用 `--snv-min-af 0.03`，tensor 预计多 3–5 倍；如果做，训练要 [GPU RIS]。决定后在 "The low-VAF model" 段末加一句（原来 Response 里的 [待定]，10-15 移到这里）：做的话 "It is replaced by a low-AF configuration (candidate floor 0.03, default network and recipe, trained on the dilutions)" 加 per-VAF-bin recall / precision 和 candidate 增量 [待补]；不做的话 "It is not replaced; the dilution-trained models are our low-purity models." E2.4 显示 0.05–0.10 档的损失几乎全在 candidate（有 candidate 时 recall 0.853–0.941），这是做 E15 的理由。
-- [文字] 对照原稿 Methods 核实旧 low-VAF model 的 candidate AF（0.015，来自 legacy 脚本）和 "0.10" 的说法（原来 Response 里的 [待核实]，10-15 移到这里）；对不上就改 "The low-VAF model" 第一句。
+- [用户决定]（10-26 对照过原稿，见证据同日一条）原稿 Methods 写的 low-VAF model 是 AF > 1 % 保留、> 10 % 排除、500 reads；legacy 代码是 SNV 0.015、499 reads + reference 行、INDEL 没有 AF 下限、没有 10 % 上限。Response 现在写 "0.015 instead of 0.10 and tensors of up to 500 reads instead of 200"（按代码）。要不要在 Response 里更正原稿 Methods 的 1 % / 10 % 写法，要你定。
+- [用户决定] 原稿 Supplementary Table 3 的 HapMap recall（1–2 % 档 0.877）和 E23（0.01 档 0.30）差很多，原稿的分母只有约 1 / 4（96,393 个 SNV，可能只算了有 candidate 的 truth）。要不要在 Response 里说明两者口径不同；旧的评估脚本在哪，你知道的话告诉我。
 - [用户决定] 第二个肿瘤用 E14c（in-silico HCC1395，约一周集群时间），还是 E14d（SEQC2 湿实验 titration，需要下载 75 / 20 / 10 / 5 % 各档，没有 read-source cue）。做完以后的预测在 tequila GPU 上跑（用户 10-13 的规则：inference 不用 CPU），训练是 [GPU RIS]。
 - [文字] Methods 里写清楚候选阈值、dilution 的构建方法和 E2.4 的 VAF 定义（混合来源，见证据）；用法建议的分界按 E2.4 写成 0.10（Response 已写）。Supplement 放 E2.4 的完整表（含 linear 臂、PoN 前的 §2 和 call AF 的 precision §8）。
 
@@ -2754,10 +2803,10 @@ mostly the patient's rare germline alleles, which neither the graph nor the filt
 - （已完成，2026-10-16）按新 INDEL PoN 规则重算：truth 被标比例、第 3 段 INDEL F1，以及 R1.2 / R1.4 / R1.6 / R1.8 / R3.1 / R3.2 / R3.9 / R3.10 / R3.m2 里依赖 INDEL PoN 的数都已换。COLO829T v1.1 单样本 INDEL run 只在 RIS 上，[RIS] 按新规则重新打分。
 - 已完成，删掉（2026-10-15）：E17c 的规则重选（SNV 和 INDEL，tensor 层面 chr2–22 + chr1 calls 上 leave-one-tumor-out；不再需要 RIS 上的 validation predictions 才能回答）；E3b 的 INDEL valbest（只有 PoN 后的数，没进第 3 条，见证据）；第 2 条按图成员的拆分（E4b，call 层面）。
 - [用户决定] INDEL PoN 规则：保留现行（HP ≥ 7: 0.01，其余 1e-3），还是换成 E17c leave-one-tumor-out 选出的近邻（HP ≥ 8: 0.01，其余 1e-4；两个 held-out 肿瘤都不更差，+0.002 / +0.005）。换的话：`scripts/filter_panel_of_normals.py` 的 INDEL 规则、所有 INDEL 的 PoN 后数字（R1.2、R1.6、R3.1、R3.10 等）都要重算（E17c 的 `calls_chr1.json` 已有 16 个 in-sample call set 在近邻规则下的 PASS F1），memory 里的 INDEL PoN 规则也要改。不换的话本条状态可改成已解决。
-- [CPU 本地] `bash experiments/E8b_literature_facts/collect.sh` 把 task 6（HapMap positives）汇进 §4.5 的表（Response 第 1 条已用）。
+- （已完成 2026-10-26）E8b §4.5 已写进 HapMap chr20 的行（task 6 在 10-15 就已汇进 `somatic_truth_in_resources.tsv`；新 INDEL 规则 40.4 %，job 450562）。原来这条：`bash experiments/E8b_literature_facts/collect.sh` 把 task 6（HapMap positives）汇进 §4.5 的表（Response 第 1 条已用）。
 - [CPU 本地]（可选）E4c：tensor 层面把 germline tensor 按 allele 是否在 d9 / d46 图里分两组，各算 PoN 标的比例。E4b 已在 call 层面回答了第 2 条，E4c 只是补 tensor 层面的分母；`experiments/E1.1_ch6_counterfactual/ch6_counterfactual.py` 已经会算每个 on-reference tensor 的 GRCh38 allele 和 PoN 标记。
 - [用户决定]（和 R3.3 / R3.4 共用）graph-native PoN 的用法。E9c（现在 9 个图 run）：能给 unplaced calls 分类，但在 assembly-derived 的 off-ref somatic gold 上也标掉 74.2–88.3 %，所以不能当保留 somatic 的过滤器。Response 写的是 "Graph-coordinate calls cannot be filtered this way and are classified separately (R3.3, R3.4)"；如果用户决定把它当过滤器，这里要改，并写明 gold 上的损失。
-- [用户决定] HapMap：从主 benchmark 去掉，还是用已有的去 donor 图 `mgi_non_HG005.d9`（E8b H10）放进 Supplement（和 R1.5 一起定；donor-free 图的重跑 10-15 因内存失败）。
+- （已决定 2026-10-22，用户）HapMap 只在 donor-free 图上放进 Supplement，作按 VAF 的 empirical sensitivity，PoN 前打分（R1.5 / R2.4，E23）。所以第 4 段最后一句 "The HapMap positives were already filtered in that benchmark (R1.5)" 和现在的做法不一致（E23 是 PoN 前；Pansoma 规则标掉 chr20 SNV positives 96.3 %，R2.1）；这段按 10-16 的约定由用户改，10-26 给用户的建议写法见 pansoma-13 的回复。原来这条：HapMap：从主 benchmark 去掉，还是用已有的去 donor 图 `mgi_non_HG005.d9`（E8b H10）放进 Supplement（和 R1.5 一起定；donor-free 图的重跑 10-15 因内存失败）。
 - [数据同步] 用户给已有 ClairS-TO / DeepSomatic 结果的路径，按同一 PoN 重新评分（"the filtering we apply to all callers"）。
 - [文字] 资源改名（R3.m4）；"gnomAD r2.1" 改成 GATK af-only 文件的真实来源；详版的 "selected on validation chromosomes" 改成 E17c 的写法（chr1 选的，chr2–22 重选：SNV 一样；INDEL 近邻）；详版第 2 条换成 E1.1 + E4b 的数。Supplement 写 E17c 的目标函数、grid、per-platform 和 valbest 的结果。
 
@@ -3498,6 +3547,8 @@ Candidate reduction on the pangenome graphs is therefore selective rather than i
 
 **状态：已解决**（2026-10-26 用户定了三项：E9f 不做；off-ref rescue 默认关闭（可选打开）；graph PoN 只用来描述 population allele。实验都已完成，见下）（2026-10-23：十二个 run 齐了；COLO829T 加了 tumor 组装、matched-normal reads（E9i）和 off-reference 分析（E9j），Response 压到 446 词）: 关键证据已经有了，2026-10-15 又从三个 run 扩到九个：HG008T 在 d9 / d46 上各三个平台、COLO829T 在 d46 上三个平台（chr1，tequila GPU re-predict，复现 RIS）的 unplaced SNV PASS 都做了组装验证（E9d）、graph-native PoN（E9c）和 GRCh38 投影（E9a），d46 的 assembly-key 打分（E1.1 §5）也并进了第 1 点。九个 run 的结论和三个 run 一致：HG008T 上按 population 优先的互斥分类 tumor-only 只有 0.2–0.9 %，只看组装 1.1–5.2 %（其中多数也是 population allele）；population 49.8–91.4 %、germline 4.2–45.4 %。对照仍然说明 assay 有效（HG008T placed TP 145–149 / 150 tumor-only，placed FP 135–146 / 150 在 normal 里）。和三个 run 时相比有三处变了，Response 照实改了：class ii 区间里第一次有 1 个对上漏掉的 truth（COLO829T Illumina），class i 每个 run 多 0–2 个 PoN 后的 TP；chr1 上 rescue 叫成 PASS 的 gold 不再是 "全部" 被 graph PoN 标掉（26 个 PASS 里 20 个）。2026-10-15 晚 E9h 补了第 1 点的 read 层面核实：组装 off-ref somatic SNV key 每套 57–79 % 有 read 支持（A1 reads 的共识在 HG008-T 组装里、不在 HG008-N 里），模型不用 rescue 只叫出 0–4 个，rescue 叫回 22–66 个，rescue 在这些 key 上的 call 63–87 % 有 read 支持；原来 "只有 30 个 tumor-only" 是旧方法看不到重复长度变化造成的。还缺：COLO829T d9 的三个 run（不在本地）；COLO829T 只能排除 germline（没有 tumor 组装）。rescue 在 Response 里按 "with and without it" 两种都报。
 
+**2026-10-26：按用户转来的外部审阅意见改了最后一段（pansoma-13，pansoma-9f 同意）**：改成保守的 sensitivity analysis，不再推断真实 status；第一段写明 115–4,569 个 call 来自打开 rescue 的预测。见证据同日一条。
+
 **Comment（要点）。**
 
 - A subset of the final predictions exists only in graph coordinates. The evidence for them (signatures, read examples) is indirect.
@@ -3507,8 +3558,9 @@ Candidate reduction on the pangenome graphs is therefore selective rather than i
 
 We agree. We no longer present graph-coordinate calls as a strength, and every run also reports a complete output
 counting them as false positives (R3.4). We validated the graph-coordinate SNV PASS calls on chr1 of twelve final runs
-(HG008T and COLO829T, three platforms, HPRC v1.1 and v2.1 graphs; 115–4,569 calls per run, a random 3,000 for COLO829T
-ONT).
+(HG008T and COLO829T, three platforms, HPRC v1.1 and v2.1 graphs), predicted with the optional off-reference rescue,
+which yields most of these calls: 115–4,569 per run (a random 3,000 for COLO829T ONT), against 6–162 without it, the
+default (point 5).
 
 1. *Assemblies.* Each call's ALT context was aligned to a tumor assembly and both normal haplotypes (HG008T: HG008-T v3.2
    and HG008-N v6.2; COLO829T: a hifiasm assembly of the tumor's HiFi and ONT reads, not independent of its long-read
@@ -3531,12 +3583,15 @@ ONT).
    (HG008T) and 24 of 25 (COLO829T) are read-supported. A graph-native population filter tags 74–88% of the HG008T ones,
    so we use it only to describe calls as population alleles, not to remove them.
 
-So at most 0.6–5.2% of graph-coordinate calls per run have support as somatic; the rest are mostly population or
-germline alleles that a GRCh38-based filter cannot reach, and counting them as false positives (R3.4) is close to their
-true status. The rescue is optional and off by default, and we report every SNV result with and without it; we state as a limitation that training with
-assembly-derived off-reference labels would address the cause.
+Assembly comparisons provided tumor-only support for 0.6–5.2% of graph-coordinate calls per run, while population
+overlap and matched-normal evidence were common. We therefore report the analysis counting all graph-coordinate calls as
+false positives (R3.4) as a conservative sensitivity analysis, rather than as a determination of each call's biological
+status. The rescue is optional and off by default, and we report every SNV result with and without it; we state as a
+limitation that training with assembly-derived off-reference labels may improve classification.
 
 **证据（内部）。**
+
+- 2026-10-26（用户转来的外部审阅意见，pansoma-13 改）：最后一段原来的 "at most 0.6–5.2% ... have support as somatic" 和 "counting them as false positives ... is close to their true status" 推得太远：assembly 支持的比例不是真实 somatic 比例的上限，没有支持也不等于证明是 FP，而且 graph PoN 会标到有 somatic 支持的位点（point 5），population overlap 不能直接当 germline。改成审阅建议的写法：全部算 FP 是保守的 sensitivity analysis，不是逐个判定。"would address the cause" 改成 "may improve classification"（E9f 不做，没有这个训练实验）。第一段写明 115–4,569 个 call 来自打开 rescue 的预测（`predict --offref-site90 10`，E9c / E9a 的十二个 run），不开 rescue（默认）每个 run 6–162 个（E3b；R3.4 表 0.5–10.1 % 对 8.0–68.0 %）；数字和出处由 pansoma-9f 核对（10-26）。0.6–5.2 % 是只看 assembly 的 tumor-only 比例，population 优先排序时是 0.2–3.3 %（E9c `tables.md` §1），point 1 两个都写了。
 
 - 2026-10-19 Placement 一句加上 COLO829T v1.1 的三个 run（E9a；推导见 R3.4 证据同日一条）。
 - 2026-10-15 E1.6/E9h/E22/E11b-ONT（本条用到 E9h；Response 472 → 490 词）：
@@ -4359,7 +4414,7 @@ Within the cancer scope, we have instead expanded validation beyond HG008T and C
 
 - [文字] 标题、摘要、Results、Discussion 统一为 tumor-only cancer calling；删掉泛指 "somatic variation" 的句子；Discussion 加
   mosaicism 作为 future work。
-- [用户决定] HapMap 去留（R1.5）：Response 最后一句两种情况都成立，但要和 R1.5 / R2.1 的最终措辞一致。donor-free 图的重跑 2026-10-15 因内存不足失败（见证据），要用它就得加内存重新提交 discovery（387101 是 32 GB 上限）。
+- （已决定 2026-10-22，用户）HapMap 只作 Supplement 里按 VAF 的 empirical sensitivity（R1.5 / R2.4，E23 已完成）；Response 最后一句只提 COLO829T dilution，和 R1.5 / R2.1 一致，不用改。原来这条：HapMap 去留（R1.5）：Response 最后一句两种情况都成立，但要和 R1.5 / R2.1 的最终措辞一致。donor-free 图的重跑 2026-10-15 因内存不足失败（见证据），要用它就得加内存重新提交 discovery（387101 是 32 GB 上限）。
 - [文字] 最后一段的细胞系那句要和 R1.7 / R1.m1 的最终状态一致：如果最后只评估了部分细胞系，就写出名字（现在四株都有跨样本的 preliminary chr1 结果；E22 2026-10-15 查清 HCC1954 truth 没有 germline 问题、低 precision 是模型的 germline leakage，H1437 truth 约 30 % 是 germline 来源但 chr1 上可忽略，见证据）。
 
 ### R3.9 Model stability and statistical uncertainty
@@ -4566,6 +4621,8 @@ Data and code: `supplementary/R3.9/seed_table.tsv`, `make_seed_table.py` (from t
 
 **2026-10-22：Low VAF 一段加了 HapMap 的检测极限（用户决定 HapMap 只作这个用途，同 R1.5 / R2.1 / R2.4）。** 加的一句指向 R2.4 的 "Below the candidate floor"，带审稿人要的限定（positives 是别人的 germline allele，只报检测极限，不报 somatic 准确度）；数字等 E23（[待补]）。INDEL 部分没动；另一个 session（INDEL gap，`tmp/indel_gap_20261020/README.md`）报告 HCC1395T INDEL 在新的 label 规则和阈值下三个平台都不低于 DeepSomatic / ClairS-TO，如果那套方法进正式结果，"INDEL accuracy is thus limited by ..." 一段要重写（见还缺什么）。
 
+**2026-10-26：按用户转来的外部审阅意见改了 Response**：SNV 换成最新三 seed 的 v2.1 数并填了 comparators（六个 setting 都高于两个 comparator）；INDEL comparators 填了但标 [待更新]（final INDEL 模型 10-27）；分层表不再说已含 comparators；HapMap 加分母限定；最后一句不再排除 VAF 的影响。见证据同日一条。
+
 **Comment（要点）。**
 
 - HapMap 的低 VAF 结果要加限定：那是 germline 细胞系，不是 somatic lineage。
@@ -4575,23 +4632,31 @@ Data and code: `supplementary/R3.9/seed_table.tsv`, `make_seed_table.py` (from t
 
 **Response.**
 
-*Low VAF.* We agree: the HapMap mixture, whose positives are germline alleles of other individuals, is no longer a main benchmark (R1.5). It is replaced by in-silico dilutions of COLO829T, whose somatic variants are validated, at 75, 50 and 25% purity on three platforms (R2.4). On Fiber-seq, one model gives SNV F1 0.665–0.779 across purities and SNV recall 0.779–0.899 at truth allele fractions of 0.1–0.2, 0.212–0.420 at 0.05–0.1 and zero below 0.05, where no candidate is built. Below that, the HapMap mixture (about 500x), rerun on a graph without its donors with a candidate floor of 0.015, shows how far the read evidence reaches: before population filtering, SNV recall is 0.91 at VAF 0.05–0.075, 0.81 at 0.02–0.025, 0.30 at 0.01 and 0.03 at 0.005; because its positives are germline alleles of other individuals, we report it as a detection limit rather than as somatic accuracy (R2.4). The Illumina and ONT dilutions are reported only after removing a base-quality cue that separates their tumor and normal reads (R1.5) [待补].
+*Low VAF.* We agree: the HapMap mixture, whose positives are germline alleles of other individuals, is no longer a main benchmark (R1.5). It is replaced by in-silico dilutions of COLO829T, whose somatic variants are validated, at 75, 50 and 25% purity on three platforms (R2.4). On Fiber-seq, one model gives SNV F1 0.665–0.779 across purities and SNV recall 0.779–0.899 at truth allele fractions of 0.1–0.2, 0.212–0.420 at 0.05–0.1 and zero below 0.05, where no candidate is built. Below that, the HapMap mixture (about 500x), rerun on a graph without its donors with a candidate floor of 0.015, gives the empirical sensitivity by truth VAF in that mixture: before population filtering and excluding truth alleles that graph paths already carry, SNV recall is 0.91 at VAF 0.05–0.075, 0.81 at 0.02–0.025, 0.30 at 0.01 and 0.03 at 0.005. Its positives are germline alleles of other individuals, so these values do not measure somatic accuracy (R2.4). The Illumina and ONT dilutions carry a base-quality cue that separates their tumor and normal reads; R1.5 reports Illumina without it [待补: ONT without it].
 
-*SNVs and INDELs are reported separately* throughout, and any claimed advantage is limited to SNVs where the re-scored comparators support it. Below: chr1, HPRC v1.1 graph (d9 filter) unless stated, benchmark regions, after population filtering, same-tumor models (graph-coordinate calls: R3.4).
+*SNVs and INDELs are reported separately* throughout, and any claimed advantage is limited to SNVs where the re-scored comparators support it. Below: chr1, benchmark regions, after population filtering, same-tumor models, comparators re-scored with the same filter and evaluation (R3.m2; graph-coordinate calls: R3.4). SNVs: HPRC v2.1 graph (d46 filter), ranges over three training seeds; INDELs: HPRC v1.1 graph (d9 filter), one model each [待更新: final INDEL models].
 
-- SNV F1 at the recall-0.9 validation threshold is 0.585 / 0.621 / 0.596 on HG008T (Illumina / PacBio / ONT) and 0.778 / 0.781 / 0.706 on COLO829T (Illumina / Fiber-seq / ONT).
+- SNV F1 at the recall-0.9 validation threshold is 0.566–0.585 / 0.603–0.609 / 0.576–0.607 on HG008T (Illumina / PacBio / ONT) and 0.705–0.782 / 0.773–0.788 / 0.726–0.753 on COLO829T (Illumina / Fiber-seq / ONT), above both comparators in all six settings: ClairS-TO 0.552 / 0.591 / 0.552 and 0.551 / 0.762 / 0.715, DeepSomatic-TO 0.529 / 0.557 / 0.457 and 0.565 / 0.632 / 0.633.
 - INDEL F1 is far lower: 0.251 / 0.092 / 0.015 on HG008T at that threshold and 0.270 / 0.262 / 0.144 as test-tuned best F1 (upper bound); on COLO829T 0.104 / 0.024 / 0.003 and 0.161 / 0.142 / 0.095. At the validation best-F1 threshold it is 0.218 / 0.227 / 0.117 on HG008T; on COLO829T that threshold passes only 14–32 calls (F1 0.041–0.080).
-- ClairS-TO and DeepSomatic-TO are re-scored under the same protocol (R3.m2) [待补: numbers]; we state every setting where ClairS-TO is better, including ONT INDELs.
+- For INDELs, ClairS-TO has the higher F1 on both long-read platforms of both tumors (0.103–0.158 against 0.003–0.092), and both comparators on COLO829T Illumina (ClairS-TO 0.122, DeepSomatic-TO 0.191, Pansoma 0.104); Pansoma is higher only on HG008T Illumina (0.251 against 0.208 and 0.132) [待更新: final INDEL models].
 
-*INDEL stratification.* A Supplementary Table stratifies INDEL performance by insertion or deletion, length (1, 2–4, 5–10, > 10 bp), repeat context and platform, for every Pansoma model and both comparators [待补: comparators]:
+*INDEL stratification.* A Supplementary Table stratifies Pansoma's INDEL performance by insertion or deletion, length (1, 2–4, 5–10, > 10 bp), repeat context and platform [待补: the same strata for both comparators, with the final INDEL models]:
 
 - *Classes.* On HG008T chr1, 74.1% of truth INDELs lie in homopolymers of ≥ 7 bp and 11.1% in STRs. Population filtering removes 418 of the 635, capping recall at 0.342 for any caller using it (COLO829T: 0.382; R1.6); of the truth INDELs it keeps, 64.0–72.2% are called on every reference. On the HPRC graphs recall is lower for insertions than deletions (0.20–0.23 against 0.26–0.30), lowest for 2–4-bp changes (0.05–0.08) and near zero in STRs (0.00–0.04), where filtering removes most truth (57 of 65 on HG008T).
 - *Platform error modes* (HG008T). On ONT, 15,797 of 17,023 false INDEL calls lie in homopolymers of ≥ 7 bp, where only 92 of 15,889 calls are true; at the validation best-F1 threshold, precision there rises to 0.25 (ONT) and 0.40 (PacBio). On Illumina, homopolymer precision (0.26) is not far below that outside repeats (0.35).
 - *Allele fraction.* In the Fiber-seq dilutions, test-tuned best INDEL F1 is 0.049–0.074 at every purity (7–17 true calls), too few to resolve a trend.
 
-INDEL accuracy is thus limited by overlap with population alleles, long-read homopolymer errors and, on long reads, the threshold, rather than by allele fraction.
+These analyses identify overlap with population alleles, long-read homopolymer errors and, on long reads, threshold selection as important limitations of INDEL calling. The few true-positive INDELs in the dilution series prevent a reliable assessment of the additional effect of allele fraction.
 
 **证据（内部）。**
+
+- 2026-10-26（用户转来的外部审阅意见）：
+  - SNV 数换成最新模型：`experiments/E8_comparators/latest_models.md`（`--norm dataset` SNV 三个 seed，chr1、BED 内、PASS 后过我们的 PoN），HPRC v2.1（d46）列：HG008T 0.566–0.585 / 0.603–0.609 / 0.576–0.607，COLO829T 0.705–0.782 / 0.773–0.788 / 0.726–0.753；comparators 同表：ClairS-TO 0.552 / 0.591 / 0.552、0.551 / 0.762 / 0.715，DeepSomatic-TO 0.529 / 0.557 / 0.457、0.565 / 0.632 / 0.633。六个 setting 里 Pansoma 每个 seed 都高于两个 comparator（最接近的是 COLO829T Fiber-seq 0.773 对 0.762、COLO829T ONT 0.726 对 0.715）。d9 列里 HG008T PacBio 有一个 seed 0.555 < ClairS-TO 0.591，所以 Response 只用 d46（和 R1.6 / R2.3 一致）。原来的 0.585 / 0.621 / 0.596、0.778 / 0.781 / 0.706 是 d9 的旧单 run（`reviewer_gpu_7fc7396_20261016/tables.md` "d9 earlier"）。
+  - INDEL comparators（同表 INDEL 部分，F1）：ClairS-TO HG008T PacBio 0.129、ONT 0.127，COLO829T Fiber-seq 0.158、ONT 0.103 → "0.103–0.158"；Pansoma d9 0.092 / 0.015 / 0.024 / 0.003 → "0.003–0.092"；COLO829T Illumina ClairS-TO 0.122、DeepSomatic-TO 0.191、Pansoma d9 0.104；HG008T Illumina Pansoma 0.251（Response 上一条的数；`latest_models.md` d9 normbq 0.250）对 DeepSomatic-TO 0.208、ClairS-TO 0.132。INDEL 都标了 [待更新: final INDEL models]：pansoma-27 说新的 INDEL pipeline（9919d4a，PASS = post-PoN val recall 0.8，m4 / m6，3 seeds）的数 10-27 早上进 `tmp/indel_gap_20261020/final_20261023/results_ppr8.md`。
+  - INDEL 分层表：comparators 的分层在 `experiments/E8_comparators/indel_strata.tsv` 已有（context / length / type），但长度分档是 1 / 2–4 / 5–15 / 16–50 / > 50，和 Response 的 1 / 2–4 / 5–10 / > 10 不同，Pansoma 的分层也要用 final INDEL 模型重算（E17a），所以 Response 不再说表里已经有 comparators，改成 [待补]。
+  - HapMap 一句加 "excluding truth alleles that graph paths already carry"，"detection limit" 改 empirical sensitivity（同 R2.4）。Illumina / ONT dilution 那句同步：Illumina 去 cue 的结果见 R1.5，只剩 ONT。
+  - 最后一句按审阅意见改：前一句说 dilution 里只有 7–17 个 true INDEL call、看不出趋势，就不能据此排除 VAF 的影响。
+  - Response 553 → 664 词。
 
 - 2026-10-26：HapMap 一句的数字：`experiments/E23_hapmap_lowvaf/atomized/call_vaf.HapMap_Illumina_SNV_full.md`（raw_calls，不被图带着的 truth）0.05–0.075 档 0.905、0.02–0.025 档 0.809、0.01 档 0.295、0.005 档 0.033 → 0.91 / 0.81 / 0.30 / 0.03。"about 500x" 同 R2.4 证据 10-22 一条。INDEL 的数（0.05–0.37）只在 R2.4，这里没写。
 - 2026-10-22：Low VAF 一段新加的 HapMap 一句：数据和限定同 R2.4 证据同日一条（`experiments/E23_hapmap_lowvaf/README.md`；donor-free 图 `mgi_non_HG005.d9`，candidate floor 0.015）。"germline alleles of other individuals" 和审稿人的 "germline cell lines rather than a somatic lineage" 对应。
@@ -4658,11 +4723,13 @@ INDEL accuracy is thus limited by overlap with population alleles, long-read hom
 
 **还缺什么。**
 
+- [CPU 本地] 10-27 final INDEL 模型的数（`tmp/indel_gap_20261020/final_20261023/results_ppr8.md`）出来以后：换 Response 里 INDEL F1 两条和 comparator 那条（去掉 [待更新]）；E17a 用 final 模型加两个 comparator、同一长度分档重算分层，填分层段的 [待补]。
+
 - [用户决定] INDEL gap 那边（`tmp/indel_gap_20261020/README.md`：新的 INDEL label 规则、PoN 后阈值、population-AF 特征，HCC1395T INDEL 三个平台都 ≥ DeepSomatic / ClairS-TO）要不要进正式结果；进的话本条 INDEL 部分（"INDEL F1 is far lower"、"INDEL accuracy is thus limited by ..."）要按新结果重写。
 
 - （已完成）COLO829T v1.1 INDEL 的 valbest 用了 RIS 的 matched lr 1e-4 run（`COLO829_*_INDEL_7fc7396`）（2026-10-19 用 matched d9 seed 0 补上了：E3b / E16 / E9a，见证据同日一条；COLO829T Illumina 如果改用 `h90`（RIS 在跑单 GPU seed 1 / 2），要同步它的 test_chr1 后重跑）。E17a 的 COLO829T v1.1 行和 Illumina / ONT joint 的 rtg 输出仍不在本地。
-- [用户决定] 给出 ClairS-TO / DeepSomatic 已有结果的路径。之后 [CPU 本地] 用 `E8_comparators/score_comparator.py` 在同一协议下 re-score，写进 `E16_bootstrap/comparators.tsv`，E17a 会自动做同样的分层，核实 "ClairS-TO 在 ONT INDEL 上更好" 是哪些设置（Response 的 [待补: numbers] 和 [待补: comparators]）。
-- [用户决定] INDEL 默认阈值：valbest（长读长好、Illumina 略差、COLO829T 几乎不出 call）还是 recall-0.9；test-tuned best F1 只作上界。E17c 另外显示 INDEL PoN 规则的 leave-one-tumor-out 选择挑的是现行规则的邻居（HP ≥ 8: 0.01，其余 1e-4），held-out F1 只多 0.002–0.005（R2.6 的事，只报告）。
+- （10-26：comparators 已经重新打分，`experiments/E8_comparators/latest_models.md`；SNV 已填，INDEL 等 final INDEL 模型）原来这条：[用户决定] 给出 ClairS-TO / DeepSomatic 已有结果的路径。之后 [CPU 本地] 用 `E8_comparators/score_comparator.py` 在同一协议下 re-score，写进 `E16_bootstrap/comparators.tsv`，E17a 会自动做同样的分层，核实 "ClairS-TO 在 ONT INDEL 上更好" 是哪些设置（Response 的 [待补: numbers] 和 [待补: comparators]）。
+- （已决定 2026-10-26，用户；pansoma-27 转告）INDEL 的 PASS = PoN 后的 validation recall 0.8（9919d4a），final 模型 m4 / m6、3 seeds，数 10-27 出来后换掉 Response 里 recall-0.9 / valbest / test-tuned best 三套 INDEL 数。原来这条：INDEL 默认阈值：valbest（长读长好、Illumina 略差、COLO829T 几乎不出 call）还是 recall-0.9；test-tuned best F1 只作上界。E17c 另外显示 INDEL PoN 规则的 leave-one-tumor-out 选择挑的是现行规则的邻居（HP ≥ 8: 0.01，其余 1e-4），held-out F1 只多 0.002–0.005（R2.6 的事，只报告）。
 - [GPU RIS] 修掉 BQ cue 以后重训 Illumina / ONT 的 dilution INDEL 模型（E14b，同 R1.5、R2.4）。
 - [用户决定] 是否做 E17b 跨个体 error panel（长读长 INDEL，可选）。规则已有（`tmp/indel_non_20261006`），可以在最终模型上 [CPU 本地] 评估。
 - [文字] Abstract / Discussion 里把 SNV 和 INDEL 分开写；INDEL 只说限制，不主张优势；写明 HCC1395 / CASTLE 的 truth 少了 HP / STR INDEL（rule (a)）。
