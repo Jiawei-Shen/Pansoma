@@ -233,3 +233,66 @@ def decision_rules(labels, probs, thresholds, truth=None, preds=None):
             entry["truth"] = dict(truth_alleles=tr["truth_alleles"], ceiling=tr["ceiling"], **counts)
         out[rule] = entry
     return out
+
+
+def _somatic_curve(score, positive):
+    """Distinct thresholds from the highest p_somatic down: (threshold, true calls, calls) when somatic is called at
+    p_somatic >= threshold."""
+    order = np.argsort(-score, kind="stable")
+    s, pos = score[order], positive[order]
+    last = np.r_[s[1:] != s[:-1], True] if len(s) else np.zeros(0, bool)
+    return s[last], np.cumsum(pos)[last], (np.flatnonzero(last) + 1)
+
+
+def postpon_report(labels, probs, pon, truth=None, recalls=RECALLS):
+    """Validation after a panel-of-normals filter. pon: per tensor 1 when the PoN rule tags its allele (the filter
+    removes the call), 0 when not, -1 without a GRCh38 allele (not tagged). Tagged tensors are never called, so their
+    somatic positives count as misses (recall over every positive); the others are called somatic at
+    p_somatic >= t. labels: evaluation labels (-1 left out).
+    Returns threshold / precision / recall / f1 / calls at the best post-PoN somatic F1 (threshold 0.5 without
+    positives, as best_somatic_threshold), at_recall (somatic_at_recall's records over the untagged tensors, recall
+    still over every positive: a target above the ceiling is out of reach), at_recall_callable (the same with the
+    targets relative to the callable positives, the untagged ones: the highest threshold whose true calls reach
+    target x callable positives; each record also gives recall_callable, while recall and f1 stay over every
+    positive), callable_positives, ceiling (the recall of calling every untagged tensor) and the tagged counts per
+    label; with truth = (truth keys, per-tensor matched keys, other-kind keys) also `truth`: truth_report with the
+    tagged tensors left out (their truth alleles are misses unless an untagged tensor finds them, a tagged negative is
+    no false call), at the per-tensor post-PoN threshold, with its own best threshold."""
+    labels, pon = np.asarray(labels), np.asarray(pon)
+    keep = labels >= 0
+    lab, p, tagged = labels[keep].astype(np.int64), probs[keep], pon[keep] == 1
+    positive = lab == SOMATIC
+    n_pos = int(positive.sum())
+    s, tp, calls = _somatic_curve(p[~tagged, SOMATIC], positive[~tagged])
+    n_callable = int(positive[~tagged].sum())
+    out = dict(tensors=int(len(lab)), tagged=int(tagged.sum()),
+               tagged_by_label={c: int((tagged & (lab == k)).sum()) for k, c in enumerate(CLASSES)},
+               no_grch38=int((pon[keep] == -1).sum()), positives=n_pos, callable_positives=n_callable,
+               ceiling=float(n_callable / n_pos) if n_pos else 0.0)
+    if n_pos == 0 or len(s) == 0:
+        out.update(threshold=0.5, precision=0.0, recall=0.0, f1=0.0, calls=0)
+    else:
+        prec, rec = tp / calls, tp / n_pos
+        f1 = np.where(prec + rec > 0, 2 * prec * rec / np.maximum(prec + rec, 1e-12), 0.0)
+        i = int(np.argmax(f1))
+        out.update(threshold=float(s[i]), precision=float(prec[i]), recall=float(rec[i]), f1=float(f1[i]),
+                   calls=int(calls[i]))
+    for name, base in (("at_recall", n_pos), ("at_recall_callable", n_callable)):
+        at = {}
+        for r in recalls:
+            hit = np.flatnonzero(tp >= r * base) if base else np.zeros(0, np.int64)
+            if len(hit) == 0:
+                at[f"{r:g}"] = None
+                continue
+            i = int(hit[0])
+            prec, rec = tp[i] / calls[i], tp[i] / n_pos
+            at[f"{r:g}"] = dict(threshold=float(s[i]), precision=float(prec), recall=float(rec),
+                                f1=float(2 * prec * rec / (prec + rec)) if prec + rec else 0.0, calls=int(calls[i]))
+            if name == "at_recall_callable":
+                at[f"{r:g}"]["recall_callable"] = float(tp[i] / n_callable)
+        out[name] = at
+    if truth is not None:
+        keys, matches, other = truth
+        untagged = np.where(pon == 1, -1, labels)
+        out["truth"] = truth_report(keys, matches, untagged, probs, out["threshold"], other)
+    return out

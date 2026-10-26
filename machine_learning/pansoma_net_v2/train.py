@@ -14,6 +14,27 @@ chromosomes (labels not used), saved in the checkpoint; predict reuses them for 
 same way on any other (encode.py). MAPQ and path count keep the training statistics. Each epoch the somatic threshold of
 the best validation F1 is found (metrics.py); the best checkpoint has the highest thresholded somatic F1 and
 stores its threshold.
+
+--site-features DIR feeds each tensor's population-database features (<DIR>/<SET>.<KIND>.npz, site_features.py) to
+the head as extra scalars, through a fixed map to [0, 1]; the checkpoint records DIR and the map, and predict loads
+the same files. With site features the validation also reports the post-PoN somatic threshold
+(metrics.postpon_report: tensors the PoN rule tags are never called): val somatic_threshold_postpon, val.postpon and
+the report-only keys somatic_at_recall_postpon, somatic_at_recall_postpon_callable and truth_threshold_postpon. The
+checkpoint records the sha256 of every feature file read (feature_files), so predict can warn when one has changed.
+The best epoch has the highest pre-PoN per-tensor somatic F1 (--best-by f1, the default) or, with --best-by postpon,
+the highest post-PoN per-tensor somatic F1 (needs --site-features). The checkpoint records its call rule
+(call_rule), the PASS threshold graph_vcf applies by default: with --best-by postpon "postpon-recall" at call_recall
+(--call-recall, 0.8 by default): the threshold at which the post-PoN validation recall of the callable positives (those
+the PoN does not tag) reaches it, val somatic_at_recall_postpon_callable; else "recall" (val somatic_at_recall at
+graph_vcf's --target-recall, 0.9 by default). The post-PoN best-F1 threshold (somatic_threshold_postpon) stays
+available as graph_vcf --threshold postpon.
+
+--non-reasons R [R ...] trains and validates the tensors whose label reason is R (e.g. repeat_indel_without_truth,
+-1 in the label files) as non where they lie inside the benchmark (the confident region or the somatic truth BED);
+--non-reasons-in-bed R [R ...] does the same for reasons such as outside_confident_region where the tensor lies inside
+the somatic truth BED. predict scores them the same way. The label files are not changed.
+
+The data steps (indexes, label changes, features, chromosome split, validation selection) are `prepare_data`.
 """
 import argparse
 import json
@@ -21,6 +42,7 @@ import math
 import os
 import time
 from pathlib import Path
+from types import SimpleNamespace
 
 import numpy as np
 import torch
@@ -30,6 +52,7 @@ from torch.nn.parallel import DistributedDataParallel
 from torch.utils.data import DataLoader, Subset
 
 from . import metrics
+from . import site_features as sitef
 from .env import triton_libcuda
 from .chunks import ChunkLoader, build_cache
 from .data import (CHECKPOINT_PATH_COUNT, CLASSES, KINDS, SCALARS, EpochSampler, TensorDataset, block_split,
@@ -57,6 +80,19 @@ def parse_args(argv=None):
     p.add_argument("--val-fraction", type=float, default=0.05, help="node blocks of the training chromosomes")
     p.add_argument("--val-block-nodes", type=int, default=20000)
     p.add_argument("--scalars", action="store_true", help="feed the site scalars (data.SCALARS) to the head")
+    p.add_argument("--site-features", metavar="DIR",
+                   help="feed each tensor's site features (<DIR>/<SET>.<KIND>.npz: population AF of the exact allele and "
+                        "of the position, PoN tag, homopolymer length; site_features.py) to the head as extra scalars; "
+                        "a set without its file, or with a stale one, is an error; the checkpoint records DIR and the "
+                        "transform, and their PoN tags also give the post-PoN validation thresholds")
+    p.add_argument("--best-by", choices=["f1", "postpon"], default="f1",
+                   help="best epoch (best.pth): highest validation somatic F1 (f1), or highest validation post-PoN "
+                        "somatic F1, PoN-tagged tensors never called (postpon; needs --site-features); postpon also "
+                        "makes the post-PoN recall threshold of --call-recall the checkpoint's call rule (graph_vcf's "
+                        "default)")
+    p.add_argument("--call-recall", type=float, default=0.8, choices=metrics.RECALLS,
+                   help="with --best-by postpon: the call rule's post-PoN validation recall of the callable positives "
+                        "(call_rule postpon-recall, call_recall)")
     p.add_argument("--epochs", type=int, default=30)
     p.add_argument("--epoch-samples", type=int, help="training tensors per epoch (a fresh random subset each epoch)")
     p.add_argument("--val-samples", type=int, help="fixed random subset of the validation tensors")
@@ -76,6 +112,15 @@ def parse_args(argv=None):
                    help="file of candidate ids (first column; a header line candidate_id is skipped) taken out before "
                         "the model, as if never built: left out of training and validation (-1); predict leaves them "
                         "out of the test and graph_vcf out of the calls (predict's default is this file)")
+    p.add_argument("--non-reasons", nargs="+", default=[],
+                   help="label reasons trained and validated as class 0 (non) instead of their label where the tensor "
+                        "lies inside the benchmark (confident region or somatic truth BED), e.g. "
+                        "repeat_indel_without_truth (-1 in the label files); the label files are unchanged; predict "
+                        "scores them as 0 too")
+    p.add_argument("--non-reasons-in-bed", nargs="+", default=[],
+                   help="label reasons trained and validated as class 0 where the tensor's GRCh38 position is inside the "
+                        "set's somatic truth BED, e.g. outside_confident_region (somatic BED minus germline BED); "
+                        "predict scores them as 0 too")
     p.add_argument("--keep-non-af", type=float,
                    help="non tensors with AF >= this are taken every epoch; the sampled rest weigh 1/--non-fraction "
                         "in the loss and the class weights use all tensors, so the expected loss is that of all non "
@@ -205,6 +250,14 @@ def class_weights(spec, counts):
     return torch.tensor(w)
 
 
+def epoch_class_weights(args, counts):
+    """(class weights of the loss, importance) for the training class counts: the weights follow one epoch's classes;
+    with --keep-non-af (importance) the importance weights restore all non."""
+    importance = args.keep_non_af is not None and args.non_fraction < 1.0
+    epoch_counts = counts.astype(np.float64) * np.array([1.0 if importance else args.non_fraction, 1.0, 1.0])
+    return class_weights(args.class_weights, epoch_counts), importance
+
+
 def predict_probs(model, loader, device, amp):
     """(labels, probabilities) of loader's samples on this rank."""
     model.eval()
@@ -220,10 +273,17 @@ def predict_probs(model, loader, device, amp):
             np.concatenate(probs) if probs else np.zeros((0, len(CLASSES)), np.float32))
 
 
-def evaluate(model, loader, criterion, run, amp, truth=None):
+def evaluate(model, loader, criterion, run, amp, truth=None, pon=None):
     """Validation report (metrics.report at the best tensor-level somatic threshold), weighted loss and, with
     truth = (truth keys, other-kind truth keys, per-sample matched keys), metrics.truth_report at the same
-    threshold; all ranks."""
+    threshold; with pon (each validation sample's PoN tag, site_features) the post-PoN report
+    (metrics.postpon_report) as postpon, somatic_threshold_postpon, somatic_at_recall_postpon,
+    somatic_at_recall_postpon_callable and, with truth, truth_threshold_postpon; all ranks."""
+    return validation_report(*validation_predictions(model, loader, run, amp), criterion, truth, pon)
+
+
+def validation_predictions(model, loader, run, amp):
+    """(dataset indices, labels, probabilities) of the loader's samples over all ranks, in dataset-index order."""
     labels, probs = predict_probs(model, loader, run.device, amp)
     order = np.asarray(list(loader.sampler), np.int64)[:len(labels)]  # dataset indices of this rank's samples
     if run.ddp:
@@ -231,12 +291,29 @@ def evaluate(model, loader, criterion, run, amp, truth=None):
         dist.all_gather_object(parts, (order, labels, probs))
         order, labels, probs = (np.concatenate([p[k] for p in parts]) for k in range(3))
     s = np.argsort(order, kind="stable")
-    order, labels, probs = order[s], labels[s], probs[s]
+    return order[s], labels[s], probs[s]
+
+
+def validation_report(order, labels, probs, criterion, truth=None, pon=None):
+    """evaluate's report from validation_predictions (order: the samples' dataset indices, which index truth's
+    matches and pon)."""
     threshold, _, _, _ = metrics.best_somatic_threshold(labels, probs)
     out = metrics.report(labels, probs, threshold)
     if truth is not None:
         keys, other, matches = truth
         out["truth"] = metrics.truth_report(keys, [matches[i] for i in order], labels, probs, threshold, other)
+    if pon is not None:
+        tr = None
+        if truth is not None:
+            keys, other, matches = truth
+            tr = (keys, [matches[i] for i in order], other)
+        post = metrics.postpon_report(labels, probs, pon[order], tr)
+        out["postpon"] = post
+        out["somatic_threshold_postpon"] = post["threshold"]
+        out["somatic_at_recall_postpon"] = post["at_recall"]
+        out["somatic_at_recall_postpon_callable"] = post["at_recall_callable"]
+        if tr is not None:
+            out["truth_threshold_postpon"] = post["truth"]["best"]["threshold"]
     w = criterion.weight.cpu().numpy() if criterion.weight is not None else np.ones(len(CLASSES))
     nll = -np.log(np.clip(probs[np.arange(len(labels)), labels], 1e-12, None))
     out["loss"] = float((w[labels] * nll).sum() / max(w[labels].sum(), 1e-12))
@@ -256,6 +333,13 @@ def describe(report):
         line += (f" | truth F1 {at['f1']:.3f} (P {at['precision']:.3f} R {at['recall']:.3f}; {tr['truth_alleles']:,} "
                  f"truth, {at['other_tp']:,} of the other kind found, ceiling {tr['ceiling']:.3f}, best F1 "
                  f"{tr['best']['f1']:.3f} @ p>={tr['best']['threshold']:.3f})")
+    if report.get("postpon"):
+        q = report["postpon"]
+        line += (f" | post-PoN F1 {q['f1']:.3f} (P {q['precision']:.3f} R {q['recall']:.3f} @ p>={q['threshold']:.3f}; "
+                 f"{q['tagged']:,} tagged, ceiling {q['ceiling']:.3f})")
+        if q.get("truth"):
+            b = q["truth"]["best"]
+            line += f" truth F1 {b['f1']:.3f} @ p>={b['threshold']:.3f}"
     return line + (f" | germline AP {report['germline_ap']:.3f} F1 {a['germline']['f1']:.3f} | "
                    f"non F1 {a['non']['f1']:.3f}")
 
@@ -332,16 +416,83 @@ def exclude(index, candidate_ids):
     return len(pos)
 
 
-def main(argv=None):
-    args = parse_args(argv)
-    run = Run(args)
-    if run.main:
-        (run.out / "args.json").write_text(json.dumps(vars(args), indent=2) + "\n")
-    torch.manual_seed(args.seed)
+def as_non(index, reasons):
+    """Set the training and evaluation label of the index's tensors whose label reason is in `reasons` to 0 where they
+    lie inside the benchmark (the confident region or the somatic truth BED, where test-time calls are scored), in
+    place (--non-reasons); outside it they stay -1. Returns (tensors with the reasons, of them set to 0)."""
+    a = index.arrays
+    mask = np.isin(a["reason"], [k for k, r in enumerate(index.meta["reasons"]) if r in set(reasons)])
+    inside = mask & (a["in_region"] | in_somatic_bed(index))
+    label, evl = a["label"].copy(), a["eval_label"].copy()
+    label[inside] = 0
+    evl[inside] = 0
+    a["label"], a["eval_label"] = label, evl
+    return int(mask.sum()), int(inside.sum())
+
+
+def in_somatic_bed(index):
+    """Tensors whose pos0 (GRCh38 start; off-reference: the anchor's middle base, as the labeller's region test) lies
+    inside the somatic truth BED of the set's labels (labels.manifest.json); the somatic truth is complete there,
+    whatever the germline BED says. A point test: agrees with the labeller's span test on 99.3 % of HCC1395T Illumina
+    INDEL tensors (the rest cross a BED edge)."""
+    from .bed import Bed
+    manifest = Path(index.dir) / "labels.manifest.json"
+    truth = (json.loads(manifest.read_text()).get("truth") or {}) if manifest.exists() else {}
+    path = (truth.get("somatic") or {}).get("bed")
+    a, names = index.arrays, index.meta["chroms"]
+    inside = np.zeros(len(a["label"]), bool)
+    if not path:
+        return inside
+    bed = Bed.read(path)
+    for c, name in enumerate(names):
+        if name not in bed.data:
+            continue
+        sel = np.flatnonzero((a["chrom"] == c) & (a["pos0"] >= 0))
+        starts, ends = bed.data[name]
+        k = np.searchsorted(starts, a["pos0"][sel], side="right") - 1
+        ok = k >= 0
+        ok[ok] = ends[k[ok]] > a["pos0"][sel][ok]
+        inside[sel[ok]] = True
+    return inside
+
+
+def as_non_in_bed(index, reasons):
+    """--non-reasons-in-bed: tensors with a reason in `reasons` (e.g. outside_confident_region) whose pos0 is inside the
+    somatic truth BED become 0 for training and evaluation, in place; returns the count."""
+    a = index.arrays
+    mask = np.isin(a["reason"], [k for k, r in enumerate(index.meta["reasons"]) if r in set(reasons)]) & \
+        in_somatic_bed(index)
+    label, evl = a["label"].copy(), a["eval_label"].copy()
+    label[mask] = 0
+    evl[mask] = 0
+    a["label"], a["eval_label"] = label, evl
+    return int(mask.sum())
+
+
+def attach_features(index, directory, model_input):
+    """site_features.attach as a clean exit: a missing or stale feature file stops the run."""
+    try:
+        return sitef.attach(index, directory, model_input)
+    except ValueError as e:
+        raise SystemExit(f"site features: {e}") from None
+
+
+def prepare_data(args, log, refresh_index=True, barrier=None):
+    """The data of a training run from its arguments: the index of every set x kind with the label changes of
+    --exclude-candidates / --non-reasons / --non-reasons-in-bed, the site features (--site-features, which also give
+    the PoN tags), the chromosome split, the training and validation selections (node-block split or --val-chroms,
+    --set-test-chroms, --ignore-reasons), the datasets, the --val-samples subset, the truth-level validation keys
+    and the validation samples' PoN tags. log: the log function; refresh_index: build / refresh the index cache first
+    (with --rebuild-index: rebuild it), train's rank 0; barrier: called after that (DDP).
+    Returns a SimpleNamespace: cache, everything ([(KindIndex, positions)] of every set x kind), reads_path_count,
+    path_count, haplotypes, site_record, feature_files ({"site_features": {<SET>.<KIND>: sha256}} or None),
+    train_chroms, val_chroms, test_chroms, held (--set-test-chroms), train_parts, val_parts, train_set, val_set (a
+    Subset with --val-samples), val_keep, val_truth, val_pon, counts (training class counts)."""
     cache = args.cache_dir or str(Path(args.output) / "index_cache")
-    if run.main:  # rank 0 builds / refreshes the index cache, the others read it
+    if refresh_index:  # rank 0 builds / refreshes the index cache, the others read it
         load_parts(args.tensors, args.kinds, cache, rebuild=args.rebuild_index)
-    run.barrier()
+    if barrier is not None:
+        barrier()
     everything = load_parts(args.tensors, args.kinds, cache)
     reads_path_count = "path_count" not in args.drop_planes  # the only plane made from channel 6
     if reads_path_count:
@@ -349,22 +500,42 @@ def main(argv=None):
             path_count, haplotypes = common_path_count(everything)
         except ValueError as e:
             raise SystemExit(str(e)) from None
-        run.log(f"channel 6 (path count): {path_count}" + (f", --haplotypes {haplotypes}" if haplotypes else ""))
+        log(f"channel 6 (path count): {path_count}" + (f", --haplotypes {haplotypes}" if haplotypes else ""))
     else:  # the model never reads channel 6: sets of any storage
         path_count, haplotypes = None, sorted({i.haplotypes for i, _ in everything if i.haplotypes is not None})
-        run.log("channel 6 (path count) not read (--drop-planes path_count)")
+        log("channel 6 (path count) not read (--drop-planes path_count)")
     if args.exclude_candidates:
         excluded = read_candidate_ids(args.exclude_candidates)
-        run.log(f"--exclude-candidates {args.exclude_candidates}: {len(excluded):,} candidate ids")
+        log(f"--exclude-candidates {args.exclude_candidates}: {len(excluded):,} candidate ids")
         for index, _ in everything:
-            run.log(f"{index.dir}: {exclude(index, excluded):,} tensors excluded")
+            log(f"{index.dir}: {exclude(index, excluded):,} tensors excluded")
+    if args.non_reasons:
+        for index, _ in everything:
+            n, inside = as_non(index, args.non_reasons)
+            log(f"{index.dir}: --non-reasons {' '.join(args.non_reasons)}: {n:,} tensors, {inside:,} inside the "
+                f"benchmark trained and validated as non")
+    if args.non_reasons_in_bed:
+        for index, _ in everything:
+            n = as_non_in_bed(index, args.non_reasons_in_bed)
+            log(f"{index.dir}: --non-reasons-in-bed {' '.join(args.non_reasons_in_bed)}: {n:,} tensors inside "
+                f"the somatic BED trained and validated as non")
+    files, loaded = {}, {}  # <SET>.<KIND> -> sha256 of the file read / its arrays' record
+    for index, _ in everything:  # before any TensorDataset: they read index.arrays["site_features"]
+        if args.site_features:
+            data = attach_features(index, args.site_features, True)
+            files[sitef.key(index)], loaded[sitef.key(index)] = data["sha256"], data
+            log(sitef.describe(index, data) + " (model input)")
+            for w in sitef.pon_check(data):
+                log(f"warning: {w}")
+    site_record = sitef.record(args.site_features, loaded) if args.site_features else None
+    feature_files = {"site_features": files} if files else None
     available = sorted({c for index, _ in everything for c in index.meta["chroms"]})
     train_chroms, val_chroms, test_chroms, missing = split_chroms(args, available)
-    run.log(f"train {train_chroms}\nval {val_chroms}\ntest (left out) {test_chroms}"
-            + (f"\nnot in the data: {missing}" if missing else ""))
+    log(f"train {train_chroms}\nval {val_chroms}\ntest (left out) {test_chroms}"
+        + (f"\nnot in the data: {missing}" if missing else ""))
     held = set_test_chroms(args)
     for path, chroms in held.items():
-        run.log(f"test (left out) of {path} only: {chroms}")
+        log(f"test (left out) of {path} only: {chroms}")
 
     def chroms_of(index, chroms):
         """The chromosomes of `chroms` that index's set trains / validates on (without its --set-test-chroms)."""
@@ -382,7 +553,7 @@ def main(argv=None):
                                  args.val_block_nodes, args.seed)
             train_parts.append((i, tr[i.arrays["label"][tr] >= 0]))
             val_parts.append((i, va[i.arrays["eval_label"][va] >= 0]))
-        run.log(f"validation: {args.val_fraction:.0%} of the {args.val_block_nodes}-node blocks of the training chromosomes")
+        log(f"validation: {args.val_fraction:.0%} of the {args.val_block_nodes}-node blocks of the training chromosomes")
     if args.ignore_reasons:
         def without_ignored(i, pos):
             codes = [k for k, r in enumerate(i.meta["reasons"]) if r in set(args.ignore_reasons)]
@@ -390,21 +561,21 @@ def main(argv=None):
         before = sum(len(p) for _, p in train_parts), sum(len(p) for _, p in val_parts)
         train_parts = [(i, without_ignored(i, p)) for i, p in train_parts]
         val_parts = [(i, without_ignored(i, p)) for i, p in val_parts]
-        run.log(f"left out (--ignore-reasons {' '.join(args.ignore_reasons)}): "
-                f"{before[0] - sum(len(p) for _, p in train_parts):,} training, "
-                f"{before[1] - sum(len(p) for _, p in val_parts):,} validation tensors")
+        log(f"left out (--ignore-reasons {' '.join(args.ignore_reasons)}): "
+            f"{before[0] - sum(len(p) for _, p in train_parts):,} training, "
+            f"{before[1] - sum(len(p) for _, p in val_parts):,} validation tensors")
     train_set, val_set = TensorDataset(train_parts), TensorDataset(val_parts, labels="eval_label")
     n_off = sum(int((i.arrays["eval_label"][v] != i.arrays["label"][v]).sum()) for i, v in val_parts)
-    run.log(f"validation includes {n_off:,} off-reference tensors without a truth match, as non")
+    log(f"validation includes {n_off:,} off-reference tensors without a truth match, as non")
     counts = train_set.class_counts()
     for index, pos in train_parts:
         labels = index.arrays["label"][pos]
         lm = index.meta["labels"]
-        run.log(f"{index.dir}: labels {lm.get('version') or (lm.get('format'), (lm.get('rules_sha256') or '')[:12])} "
-                f"({lm['created']}), "
-                f"train {len(pos):,} " + " ".join(f"{c}={int((labels == k).sum()):,}" for k, c in enumerate(CLASSES)))
-    run.log(f"training tensors {len(train_set):,} ({dict(zip(CLASSES, counts.tolist()))}), validation {len(val_set):,} "
-            f"({dict(zip(CLASSES, val_set.class_counts().tolist()))})")
+        log(f"{index.dir}: labels {lm.get('version') or (lm.get('format'), (lm.get('rules_sha256') or '')[:12])} "
+            f"({lm['created']}), "
+            f"train {len(pos):,} " + " ".join(f"{c}={int((labels == k).sum()):,}" for k, c in enumerate(CLASSES)))
+    log(f"training tensors {len(train_set):,} ({dict(zip(CLASSES, counts.tolist()))}), validation {len(val_set):,} "
+        f"({dict(zip(CLASSES, val_set.class_counts().tolist()))})")
     if len(train_set) == 0 or len(val_set) == 0:
         raise SystemExit("empty training or validation set")
     val_keep = None
@@ -417,7 +588,7 @@ def main(argv=None):
     for p, ((index, _), (_, va)) in enumerate(zip(train_parts, val_parts)):
         t_all = somatic_truth(index, chroms=chroms_of(index, val_chroms or train_chroms))
         if t_all is None:
-            run.log(f"{index.dir}: no somatic.recall.tsv, no truth-level validation")
+            log(f"{index.dir}: no somatic.recall.tsv, no truth-level validation")
             truth_keys = None
             break
         vt = set(t_all) if val_chroms else validation_truth(
@@ -431,18 +602,52 @@ def main(argv=None):
         matches = [{(int(val_set.part[i]), int(t)) for t in val_parts[val_set.part[i]][0].truth_of(val_set.position[i])}
                    for i in ids]
         val_truth = (truth_keys, other_keys, matches)
-        run.log(f"truth-level validation: {len(truth_keys):,} somatic truth alleles in the validation region "
-                f"({len(set().union(*matches) & truth_keys) if matches else 0:,} with a validation tensor)")
+        log(f"truth-level validation: {len(truth_keys):,} somatic truth alleles in the validation region "
+            f"({len(set().union(*matches) & truth_keys) if matches else 0:,} with a validation tensor)")
+    val_pon = None
+    if args.site_features:  # each validation sample's PoN tag, in val_set order (then the --val-samples subset)
+        val_pon = np.concatenate([i.arrays["pon_tag"][va] for i, va in val_parts]).astype(np.int8)
+        if val_keep is not None:
+            val_pon = val_pon[val_keep]
+        vl = val_set.label if val_keep is None else val_set.label[val_keep]
+        log(f"post-PoN validation: {int((val_pon == 1).sum()):,} of {len(val_pon):,} validation tensors PoN-tagged "
+            f"(" + ", ".join(f"{c} {int(((val_pon == 1) & (vl == k)).sum()):,}" for k, c in enumerate(CLASSES))
+            + f"), {int((val_pon == -1).sum()):,} without a GRCh38 allele (callable)")
     if val_keep is not None:
         val_set = Subset(val_set, val_keep.tolist())
 
+    return SimpleNamespace(
+        cache=cache, everything=everything, reads_path_count=reads_path_count, path_count=path_count,
+        haplotypes=haplotypes, site_record=site_record, feature_files=feature_files,
+        train_chroms=train_chroms, val_chroms=val_chroms, test_chroms=test_chroms, held=held, train_parts=train_parts,
+        val_parts=val_parts, train_set=train_set, val_set=val_set, val_keep=val_keep, val_truth=val_truth,
+        val_pon=val_pon, counts=counts)
+
+
+def main(argv=None):
+    args = parse_args(argv)
+    if args.best_by == "postpon" and not args.site_features:
+        raise SystemExit("--best-by postpon needs the PoN tags of --site-features")
+    run = Run(args)
+    if run.main:
+        (run.out / "args.json").write_text(json.dumps(vars(args), indent=2) + "\n")
+    torch.manual_seed(args.seed)
+    prep = prepare_data(args, run.log, refresh_index=run.main, barrier=run.barrier)
+    train_parts, train_set, val_set, counts = prep.train_parts, prep.train_set, prep.val_set, prep.counts
+    path_count, haplotypes, reads_path_count = prep.path_count, prep.haplotypes, prep.reads_path_count
+    cache, held = prep.cache, prep.held
+
     model = PansomaNetV2(len(CLASSES), args.depths, args.dims, args.front, args.drop_path,
                          scalars=len(SCALARS) if args.scalars else 0, block=args.block, drop_planes=args.drop_planes,
-                         norm=args.norm)
+                         norm=args.norm, site_features=len(sitef.SITE_FEATURES) if args.site_features else 0)
     checkpoint = torch.load(args.resume, map_location="cpu", weights_only=False) if args.resume else None
     if checkpoint is not None:
         if full_config(checkpoint["config"]) != model.config:
             raise SystemExit(f"--resume model config {checkpoint['config']} differs from the arguments' {model.config}")
+        recorded = checkpoint.get("site_features")
+        if recorded and recorded.get("version") != sitef.VERSION:
+            raise SystemExit(f"--resume checkpoint's site features are {recorded.get('version')}, this code's "
+                             f"{sitef.VERSION}")
         trained = checkpoint.get("path_count_storage", CHECKPOINT_PATH_COUNT)
         if reads_path_count and trained != path_count:
             raise SystemExit(f"--resume checkpoint was trained on channel 6 {trained}, the tensors are {path_count}")
@@ -491,7 +696,7 @@ def main(argv=None):
         part_stats = box[0]
     model.encoder.set_part_stats(part_stats)
     if args.scalars and checkpoint is None:  # all training tensors (the arrays are in memory)
-        s = train_set.scalars.astype(np.float64)
+        s = train_set.scalars[:, :len(SCALARS)].astype(np.float64)  # without the site features
         model.set_scalar_stats(s.mean(0), s.std(0))
         run.log("scalar statistics: " + json.dumps({n: [round(float(m), 4), round(float(d), 4)]
                                                    for n, m, d in zip(SCALARS, s.mean(0), s.std(0))}))
@@ -504,9 +709,8 @@ def main(argv=None):
         net = torch.compile(net)  # after DDP, as PyTorch recommends; the checkpoint saves `model`
 
     # class weights follow one epoch's classes; with --keep-non-af the importance weights restore all non
-    importance = args.keep_non_af is not None and args.non_fraction < 1.0
-    epoch_counts = counts.astype(np.float64) * np.array([1.0 if importance else args.non_fraction, 1.0, 1.0])
-    weights = class_weights(args.class_weights, epoch_counts).to(run.device)
+    weights, importance = epoch_class_weights(args, counts)
+    weights = weights.to(run.device)
     criterion = nn.CrossEntropyLoss(weight=weights, ignore_index=-1)
     per_sample = nn.CrossEntropyLoss(weight=weights, ignore_index=-1, reduction="none")
     keep_af = train_set.scalars[:, AF] >= args.keep_non_af if args.keep_non_af is not None else None
@@ -554,11 +758,18 @@ def main(argv=None):
         optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
         scheduler.load_state_dict(checkpoint["scheduler_state_dict"])
         start_epoch, best = checkpoint["epoch"], checkpoint.get("best", best)
+        if best.get("select", "f1") != args.best_by:  # scores of another selection are not comparable
+            run.log(f"--resume: the checkpoint's best epoch {best.get('epoch')} was selected by "
+                    f"{best.get('select', 'f1')}, this run selects by {args.best_by}: best epoch chosen afresh")
+            best = {"score": -1.0, "loss": math.inf, "epoch": None, "threshold": None}
     amp = args.amp == "bf16" and run.device.type == "cuda"
     n_params = sum(p.numel() for p in model.parameters())
     run.log(f"model {model.config}, {n_params / 1e6:.1f} M parameters, input planes {len(PLANES)}; "
             f"device {run.device} x {run.world}, amp {amp}, compile {args.compile and run.device.type == 'cuda'}, "
             f"channels_last {args.channels_last and run.device.type == 'cuda'}; {steps_per_epoch} steps per epoch")
+
+    # graph_vcf's default PASS threshold
+    call_rule, call_recall = ("postpon-recall", args.call_recall) if args.best_by == "postpon" else ("recall", None)
 
     def save(path, epoch, val, threshold):
         if run.main:
@@ -566,12 +777,14 @@ def main(argv=None):
                            optimizer_state_dict=optimizer.state_dict(), scheduler_state_dict=scheduler.state_dict(),
                            epoch=epoch, best=best, val=val, somatic_threshold=threshold, classes=list(CLASSES),
                            planes=list(PLANES), scalars=list(SCALARS) if args.scalars else [],
+                           site_features=prep.site_record,
+                           feature_files=prep.feature_files, call_rule=call_rule, call_recall=call_recall,
                            stats=model.encoder.stats(), args=vars(args), path_count_storage=path_count,
                            dataset_stats=[dict(directory=str(i.dir), stats=st) for (i, _), st in zip(train_parts, part_stats)],
                            path_count_haplotypes=haplotypes,
                            data=[dict(directory=str(i.dir), labels=i.meta["labels"], train=int(len(p)))
                                  for i, p in train_parts],
-                           chroms=dict(train=train_chroms, val=val_chroms, test=test_chroms,
+                           chroms=dict(train=prep.train_chroms, val=prep.val_chroms, test=prep.test_chroms,
                                        **({"set_test": {str(k): v for k, v in held.items()}} if held else {})))
             tmp = run.out / (path + ".tmp")
             torch.save(payload, tmp)
@@ -617,11 +830,13 @@ def main(argv=None):
                       f"lr {scheduler.get_last_lr()[0]:.2e} {seen * run.world / (time.time() - t0):.0f} tensors/s",
                       flush=True)
         train_time = time.time() - t0
-        val = evaluate(net, val_loader, criterion, run, amp, val_truth)
-        score, threshold = val["thresholded"]["somatic"]["f1"], val["threshold"]
+        val = evaluate(net, val_loader, criterion, run, amp, prep.val_truth, prep.val_pon)
+        threshold = val["threshold"]
+        score = val["postpon"]["f1"] if args.best_by == "postpon" else val["thresholded"]["somatic"]["f1"]
         improved = score > best["score"] or (score == best["score"] and val["loss"] < best["loss"])
         if improved:
-            best = {"score": score, "select": "f1", "loss": val["loss"], "epoch": epoch + 1, "threshold": threshold}
+            best = {"score": score, "select": args.best_by, "loss": val["loss"], "epoch": epoch + 1,
+                    "threshold": threshold}
         gpu = gpu_peak(run)
         row = dict(epoch=epoch + 1, train_loss=loss_sum / max(seen, 1), train_accuracy=correct / max(seen, 1),
                    train_seconds=round(train_time, 1), tensors_per_second=round(seen * run.world / train_time, 1),

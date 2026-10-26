@@ -101,6 +101,12 @@ python scripts/visualize_tensor.py TENSORS/SNV/chr1_shard_00000_data.npy -i 0 -o
 ### 4. Model
 
 Training and prediction on the merged, labelled sets: [machine_learning/pansoma_net_v2/README.md](machine_learning/pansoma_net_v2/README.md).
+SNVs: one model per sample and platform ("SNV recipe" there). INDELs: one model per platform trained on several tumors
+("INDEL recipe" there): labels that follow the benchmark, five population site features
+(`python -m pansoma_net_v2.site_features build`) and one PASS threshold per model, the post-PoN validation recall 0.8.
+SNVs: one model per sample and platform ("SNV recipe" there). INDELs: one model per platform trained on several tumors
+("INDEL recipe" there): labels that follow the benchmark, five population site features
+(`python -m pansoma_net_v2.site_features build`) and one PASS threshold per model, the post-PoN validation recall 0.8.
 The same README covers the calls: `pansoma_net_v2.graph_vcf` (predictions → VCF in graph node coordinates),
 `linear_vcf` (→ GRCh38 VCF) and `vcfeval` (the PoN filter below, with the rule of each kind, then `rtg vcfeval`
 against the truth VCF).

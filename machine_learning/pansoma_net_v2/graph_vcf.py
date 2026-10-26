@@ -30,11 +30,20 @@ A record is the site's representative allele A1, the allele the model scores. Th
     --offref-site90: ch6 raised to the every-haplotype code at the site) is called by offref_call, somatic the
     most probable class of the rescored probabilities, instead of the threshold; INFO OFFREF_P_* keeps those
     probabilities. Predictions without these fields (INDEL, older runs) use the threshold for every tensor.
-  - LowQual: not called somatic: p_somatic < the threshold. The default threshold is the checkpoint's
-    validation threshold at --target-recall (0.9): the highest p_somatic at which the validation somatic recall
-    reaches it (train's val.somatic_at_recall, for recall 0.5, 0.8, 0.9, 0.95). The model favours recall and
-    a PoN raises precision afterwards. --threshold T sets it. --threshold predict keeps predict's own call
-    (`pred`, made with the checkpoint's best-F1 threshold before the probabilities were rounded).
+  - LowQual: not called somatic: p_somatic < the threshold. The default threshold is the checkpoint's call rule
+    (train's call_rule and call_recall; a checkpoint without them trained with --best-by postpon counts as
+    postpon-recall at 0.8, any other as recall):
+    - recall (every SNV model): the validation threshold at --target-recall (0.9 unless given), the highest
+      p_somatic at which the validation somatic recall reaches it (train's val.somatic_at_recall, for recall 0.5,
+      0.8, 0.9, 0.95). The model favours recall and a PoN raises precision afterwards.
+    - postpon-recall (the INDEL recipe, train --site-features --best-by postpon): the highest p_somatic at which
+      the post-PoN validation recall of the callable positives (those the PoN does not tag) reaches the
+      checkpoint's call_recall (0.8; --target-recall overrides it when given), val
+      somatic_at_recall_postpon_callable. The PoN itself is applied later, by vcfeval.
+    --threshold T sets the threshold; --threshold postpon-recall / recall take those rules; --threshold postpon
+    takes the post-PoN validation best-F1 threshold, val somatic_threshold_postpon (a checkpoint without the
+    post-PoN keys is an error). --threshold predict keeps predict's own call (`pred`, made with the checkpoint's
+    best-F1 threshold before the probabilities were rounded).
   - LowAF: AF < --min-af. The default is the AF floor of the checkpoint's training labels (data[].labels
     snv_min_af / indel_min_af, the labels' optional AF floor; none when the training labels had no floor, and
     then no record is LowAF): the model never trained on tensors below it (below_snv_min_af). The labels of the
@@ -119,13 +128,51 @@ def predict_report(predictions):
     return json.loads(report.read_text()) if report.exists() else {}
 
 
+POSTPON_CALL_RECALL = 0.8  # the call recall of a --best-by postpon checkpoint that records no call_recall
+
+
+def call_rule_of(checkpoint):
+    """A checkpoint's call rule and its recall: call_rule / call_recall when recorded, else postpon-recall at 0.8 for
+    one trained with --best-by postpon, else recall (the recall then comes from --target-recall)."""
+    if checkpoint.get("call_rule"):
+        rule = checkpoint["call_rule"]
+        recall = checkpoint.get("call_recall")
+        if rule == "postpon-recall" and recall is None:
+            recall = POSTPON_CALL_RECALL
+        return rule, recall
+    if (checkpoint.get("args") or {}).get("best_by") == "postpon":
+        return "postpon-recall", POSTPON_CALL_RECALL
+    return "recall", None
+
+
 def read_checkpoint(path):
-    """The validation thresholds at fixed recalls and the training sets' labels of a checkpoint (memory-mapped,
-    so the weights are not read)."""
+    """The validation thresholds (at fixed recalls, post-PoN), the call rule and the training sets' labels of a
+    checkpoint (memory-mapped, so the weights are not read)."""
     import torch
     checkpoint = torch.load(path, map_location="cpu", weights_only=False, mmap=True)
-    return dict(at_recall=(checkpoint.get("val") or {}).get("somatic_at_recall") or {},
+    val = checkpoint.get("val") or {}
+    rule, recall = call_rule_of(checkpoint)
+    return dict(at_recall=val.get("somatic_at_recall") or {}, postpon=val.get("somatic_threshold_postpon"),
+                at_recall_postpon_callable=val.get("somatic_at_recall_postpon_callable") or {},
+                call_rule=rule, call_recall=recall,
                 labels=[d.get("labels") or {} for d in checkpoint.get("data") or []])
+
+
+def postpon_threshold(checkpoint, path):
+    """The checkpoint's post-PoN validation threshold (val.somatic_threshold_postpon)."""
+    if checkpoint["postpon"] is None:
+        raise SystemExit(f"{path}: no post-PoN validation threshold (train --site-features records it)")
+    return checkpoint["postpon"]
+
+
+def postpon_recall_threshold(checkpoint, path, recall):
+    """The checkpoint's post-PoN validation threshold at this recall of the callable positives
+    (val.somatic_at_recall_postpon_callable)."""
+    t = (checkpoint["at_recall_postpon_callable"].get(f"{recall:g}") or {}).get("threshold")
+    if t is None:
+        raise SystemExit(f"{path}: no post-PoN validation threshold at recall {recall} of the callable positives "
+                         f"(val.somatic_at_recall_postpon_callable; train --site-features records it)")
+    return t
 
 
 def recall_threshold(checkpoint, path, recall):
@@ -216,7 +263,7 @@ def build(args):
 
     report = predict_report(args.predictions)
     checkpoint_path, checkpoint = args.checkpoint or report.get("checkpoint"), None
-    if args.threshold is None or args.min_af is None:
+    if args.threshold in (None, "postpon", "postpon-recall", "recall") or args.min_af is None:
         if not checkpoint_path:
             raise SystemExit("no --checkpoint, and no .metrics.json with the checkpoint beside the predictions")
         checkpoint = read_checkpoint(checkpoint_path)
@@ -227,11 +274,23 @@ def build(args):
         call_rule = "predict's call (pred: the checkpoint's best-F1 threshold)"
         called = lambda p: p["pred"] == "somatic"  # noqa: E731
     else:
-        if args.threshold is not None:
-            threshold, source = args.threshold, "--threshold"
+        rule = args.threshold if args.threshold in ("postpon", "postpon-recall", "recall") else \
+            checkpoint["call_rule"] if args.threshold is None else None
+        if rule == "postpon":
+            threshold = postpon_threshold(checkpoint, checkpoint_path)
+            source = "validation post-PoN best F1 (val.somatic_threshold_postpon)"
+        elif rule == "postpon-recall":
+            recall = args.target_recall if args.target_recall is not None else \
+                checkpoint["call_recall"] or POSTPON_CALL_RECALL
+            threshold = postpon_recall_threshold(checkpoint, checkpoint_path, recall)
+            source = f"validation post-PoN recall {recall:g} of the callable positives " \
+                     f"(val.somatic_at_recall_postpon_callable)"
+        elif rule == "recall":
+            recall = args.target_recall if args.target_recall is not None else 0.9
+            threshold = recall_threshold(checkpoint, checkpoint_path, recall)
+            source = f"validation recall {recall:g}"
         else:
-            threshold = recall_threshold(checkpoint, checkpoint_path, args.target_recall)
-            source = f"validation recall {args.target_recall}"
+            threshold, source = args.threshold, "--threshold"
         call_rule = f"p_somatic >= {threshold} ({source})"
         called = lambda p: p["p_somatic"] >= threshold  # noqa: E731
     by_rule = called
@@ -304,10 +363,15 @@ def parse_args(argv=None):
     p.add_argument("--graph-index", required=True, help="graph SQLite with the node sequences (indexed_gam_pipeline_v4)")
     p.add_argument("--output", required=True, help="<name>.graph.vcf.gz")
     p.add_argument("--checkpoint", help="the model's checkpoint (default: the one in predict's .metrics.json)")
-    p.add_argument("--target-recall", type=float, default=0.9, choices=RECALLS,
-                   help="the threshold is the checkpoint's validation threshold at this somatic recall")
-    p.add_argument("--threshold", type=lambda text: text if text == "predict" else float(text),
-                   help="somatic threshold instead, or 'predict' for predict's own calls (best-F1 threshold)")
+    p.add_argument("--target-recall", type=float, choices=RECALLS,
+                   help="the recall of the recall rule (default 0.9) or of the postpon-recall rule (default: the "
+                        "checkpoint's call_recall, 0.8)")
+    p.add_argument("--threshold",
+                   type=lambda text: text if text in ("predict", "postpon", "postpon-recall", "recall") else float(text),
+                   help="somatic threshold instead of the checkpoint's call rule: a number, 'predict' for predict's own "
+                        "calls (best-F1 threshold), 'postpon-recall' for the checkpoint's post-PoN validation threshold "
+                        "at a recall of the callable positives, 'postpon' for its post-PoN validation best-F1 "
+                        "threshold, or 'recall' for its validation threshold at --target-recall")
     p.add_argument("--min-score", type=float, default=0.01,
                    help="leave out tensors with a lower p_somatic that are not called")
     p.add_argument("--min-af", type=float,

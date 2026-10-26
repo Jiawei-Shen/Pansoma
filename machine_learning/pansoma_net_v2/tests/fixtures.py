@@ -159,3 +159,35 @@ def make_tensor_set(root, spec, shard_size=4, seed=0, labels_created="2026-09-28
         for tid, chrom, pos, kind, in_bed, status in truth_rows:
             f.write(f"{tid}\t{chrom}\t{pos}\t{kind}\tTrue\t{in_bed}\t{status}\t\n")
     return truth
+
+
+def make_site_features(directory, index, seed=0, pon="random", vcf=True, meta=None):
+    """<directory>/<SET>.<KIND>.npz (site_features.py) for a KindIndex: random population AFs and homopolymer
+    lengths, -1 / 0 for its off-reference tensors; pon_tag random (pon="random", 30 % tagged), "none" (all 0) or
+    "all" (all 1) on the GRCh38 tensors; vcf_pos = the index's pos0 (an anchor base just before the event);
+    candidates_sha1 of the index's candidate ids (as the builder writes); meta (dict) as the file's meta JSON.
+    Returns the arrays written."""
+    from .. import site_features
+    rng = np.random.default_rng(seed)
+    n, off = len(index), index.arrays["off_reference"]
+    popaf = rng.choice(np.array([0.0, 1e-5, 2e-4, 3e-3, 0.05, 0.5], np.float32), n)
+    data = dict(chroms=np.array(index.meta["chroms"]),
+                chrom_counts=np.bincount(index.arrays["chrom"].astype(np.int64), minlength=len(index.meta["chroms"])),
+                candidates_sha1=np.array(site_features.candidates_sha1(index)),
+                popaf_exact=np.where(off, -1, popaf).astype(np.float32),
+                popaf_gnomad=np.where(off, -1, popaf * rng.random(n)).astype(np.float32),
+                popaf_colors=np.where(off, -1, popaf).astype(np.float32),
+                popaf_pos=np.where(off, -1, np.maximum(popaf, rng.choice(np.array([0.0, 0.01, 0.2], np.float32), n)))
+                .astype(np.float32),
+                pon_tag=np.where(off, -1, {"random": rng.random(n) < 0.3, "none": np.zeros(n, bool),
+                                           "all": np.ones(n, bool)}[pon]).astype(np.int8),
+                hp_len=np.where(off, 0, rng.integers(0, 25, n)).astype(np.int16))
+    if vcf:
+        data.update(vcf_pos=np.where(off, 0, index.arrays["pos0"]).astype(np.int64),
+                    vcf_ref=np.where(off, "", "CA"), vcf_alt=np.where(off, "", "C"))
+    if meta is not None:
+        data["meta"] = np.array(json.dumps(meta))
+    path = site_features.feature_path(directory, index)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    np.savez(path, **data)
+    return data

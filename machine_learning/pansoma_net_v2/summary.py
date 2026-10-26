@@ -8,7 +8,8 @@ RUNS is $PANSOMA_RUNS or /scratch/jshen/data/pansoma_net_v2_runs. Columns: train
 of the epoch, GPU peak (allocated GiB); validation per tensor: somatic AP, F1 / precision / recall at the
 best-F1 threshold t (s.*), t itself, the precision where the somatic recall reaches 0.9 (P@R.9); against the truth VCF at the same t (t.*, metrics.truth_report: every
 truth allele once, truth alleles without a tensor are misses, found truth of the other kind are true calls)
-and its ceiling; germline argmax F1; "*" marks the best epoch so far (by s.F1, the criterion of best.pth). Below the
+and its ceiling; germline argmax F1; "*" marks the best epoch so far (by s.F1, the criterion of best.pth; by the
+post-PoN F1 for a run with train --best-by postpon). Below the
 test: each rtg vcfeval report of the run's calls
 (<run>/vcf_*/eval_bed and eval_nobed, vcfeval.py), raw and after the PoN: the PASS result and the best point of the
 curve (its p_somatic; chosen on the test chromosomes, so for reference only).
@@ -47,18 +48,22 @@ def show(d):
         print(f"{'epoch':>5} {'loss':>7} {'t/s':>6} {'min':>5} {'GPU':>5} | {'s.AP':>6} {'s.F1':>6} {'s.P':>6} {'s.R':>6} "
               f"{'t':>6} {'P@R.9':>6} | {'t.AP':>6} {'t.F1':>6} {'t.P':>6} {'t.R':>6} {'ceil':>6} | {'g.F1':>6}")
         best = -1.0
+        args = json.loads((d / "args.json").read_text()) if (d / "args.json").exists() else {}
+        by_postpon = args.get("best_by") == "postpon"
         for r in rows:
             v = r["val"]
             s = v["thresholded"]["somatic"]
             tr = v.get("truth")
-            mark = "*" if s["f1"] > best else " "
-            best = max(best, s["f1"])
+            score = v["postpon"]["f1"] if by_postpon and v.get("postpon") else s["f1"]
+            mark = "*" if score > best else " "
+            best = max(best, score)
             gpu = (r.get("gpu_peak_gib") or {}).get("allocated")
             truth = (f"{tr['ap']:>6.3f} {tr['at_threshold']['f1']:>6.3f} {tr['at_threshold']['precision']:>6.3f} "
                      f"{tr['at_threshold']['recall']:>6.3f} {tr['ceiling']:>6.3f}") if tr else f"{'-':>6} " * 4 + f"{'-':>6}"
             print(f"{r['epoch']:>5} {r['train_loss']:>7.4f} {r['tensors_per_second']:>6.0f} {r['train_seconds'] / 60:>5.1f} "
                   f"{gpu if gpu is not None else '-':>5} | {v['somatic_ap']:>6.3f} {s['f1']:>6.3f} {s['precision']:>6.3f} "
-                  f"{s['recall']:>6.3f} {v['threshold']:>6.3f} {_p_at(v, '0.9'):>6} | {truth} | {v['argmax']['germline']['f1']:>6.3f} {mark}")
+                  f"{s['recall']:>6.3f} {v['threshold']:>6.3f} {_p_at(v, '0.9'):>6} | {truth} | {v['argmax']['germline']['f1']:>6.3f} {mark}"
+                  + (f" | post-PoN F1 {v['postpon']['f1']:.3f} t {v['postpon']['threshold']:.3f}" if v.get("postpon") else ""))
     else:
         print("  no finished epoch yet")
     step = current_step(d)

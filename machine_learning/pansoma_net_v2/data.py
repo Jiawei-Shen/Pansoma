@@ -19,6 +19,10 @@ non, because test-time calling meets them inside the BED, and that every tensor 
 included, because test-time calling drops it with the BED. The other -1 reasons are left out too: outside the
 BED, below the AF floors and without a GRCh38 position can all be dropped without truth.
 
+An unlabelled set (no labels.manifest.json, e.g. a new sample) is indexed from its summaries alone: every tensor
+-1 with reason "unlabelled", in the region, its GRCh38 allele the summary's grch38 (merge --reference-path; a summary
+without it is refused). predict writes its probabilities and calls; its test metrics are empty.
+
 For the truth-level metrics (metrics.truth_report) the index also keeps each tensor's GRCh38 position (pos0; the
 middle of the anchor interval off the reference path; -1 without either) and, for tensors labelled 1, the
 somatic truth ids they stand for (the representative matches and the partial truth of labels.ndjson), as
@@ -29,6 +33,7 @@ Channel 6 (path count) is coded by the set's tensor_storage (path_count_storage,
 it with the build's --haplotypes; training needs one storage for all its sets (common_path_count) and the checkpoint
 records it, so predict can refuse tensors coded otherwise.
 """
+import contextlib
 import csv
 import hashlib
 import json
@@ -96,13 +101,26 @@ def site_scalars(v):
             log(v["other_count"]), v["af"], v["second_allele_af"], v["allele_count"], log(v["event_length"])]
 
 
+UNLABELLED = "unlabelled"  # the reason of every tensor of a set without labels
+
+
+def labelled(kind_dir):
+    """Whether a kind directory has labels (labels.manifest.json)."""
+    return (Path(kind_dir) / "labels.manifest.json").exists()
+
+
 def _labels_meta(kind_dir):
+    keys = ("format", "version", "rules_sha256", "created", "tensors", "snv_min_af", "indel_min_af")
+    if not labelled(kind_dir):
+        return {k: UNLABELLED if k == "format" else None for k in keys}
     m = json.loads((kind_dir / "labels.manifest.json").read_text())
-    return {k: m.get(k) for k in ("format", "version", "rules_sha256", "created", "tensors", "snv_min_af", "indel_min_af")}
+    return {k: m.get(k) for k in keys}
 
 
 def confident_region(kind_dir):
-    """somatic BED ∩ germline BED of the labels, or None when labels.manifest.json names no BEDs."""
+    """somatic BED ∩ germline BED of the labels, or None when labels.manifest.json names no BEDs (or is missing)."""
+    if not labelled(kind_dir):
+        return None, None
     truth = json.loads((kind_dir / "labels.manifest.json").read_text()).get("truth") or {}
     beds = [truth.get(k, {}).get("bed") for k in ("somatic", "germline")]
     if not all(beds):
@@ -130,8 +148,10 @@ def common_path_count(parts):
 
 
 def build_index(kind_dir):
-    """Index arrays of one merged kind directory (every tensor, labels -1 included)."""
+    """Index arrays of one merged kind directory (every tensor, labels -1 included; an unlabelled directory: every
+    tensor -1, reason UNLABELLED, the GRCh38 allele from the summaries)."""
     kind_dir = Path(kind_dir)
+    has_labels = labelled(kind_dir)
     manifest = json.loads((kind_dir / "manifest.json").read_text())
     confident, beds = confident_region(kind_dir)
     if manifest.get("layout", "").split("-")[0] != "chromosome" or list(manifest.get("shape", [])) != [8, 200, 101]:
@@ -147,15 +167,21 @@ def build_index(kind_dir):
         for s in info["shards"]:
             local[s["file"]] = len(shards)
             shards.append(s["file"])
-        labels = {f: np.load(kind_dir / f.replace("_data.npy", "_labels.npy")) for f in local}
+        labels = {f: np.load(kind_dir / f.replace("_data.npy", "_labels.npy")) for f in local} if has_labels else None
         before = len(cols["chrom"])
-        label_lines = open(kind_dir / f"{chrom}_labels.ndjson", "rb")  # same order as the summary
-        with open(kind_dir / info["summary"], "rb") as src, label_lines:
+        label_lines = open(kind_dir / f"{chrom}_labels.ndjson", "rb") if has_labels else contextlib.nullcontext()
+        with open(kind_dir / info["summary"], "rb") as src, label_lines:  # the labels: same order as the summary
             for line in src:
-                lab = label_lines.readline()
-                if _CANDIDATE.search(lab).group(1) != _CANDIDATE.search(line).group(1):
-                    raise ValueError(f"{kind_dir}/{chrom}_labels.ndjson is not in the summary's order")
-                reason = _REASON.search(lab).group(1).decode()
+                if has_labels:
+                    lab = label_lines.readline()
+                    if _CANDIDATE.search(lab).group(1) != _CANDIDATE.search(line).group(1):
+                        raise ValueError(f"{kind_dir}/{chrom}_labels.ndjson is not in the summary's order")
+                    reason = _REASON.search(lab).group(1).decode()
+                else:
+                    lab, reason = line, UNLABELLED
+                    if _GRCH38.search(line) is None:
+                        raise ValueError(f"{kind_dir}/{info['summary']}: an unlabelled set needs the summaries' grch38 "
+                                         f"(merge --reference-path)")
                 cols["reason"].append(reasons.setdefault(reason, len(reasons)))
                 g = _GRCH38.search(lab).group(1)
                 grch38 = json.loads(g)
@@ -168,7 +194,8 @@ def build_index(kind_dir):
                 f = _SHARD.search(line).group(1).decode()
                 row = int(_ROW.search(line).group(1))
                 ids = []
-                if labels[f][row] == 1:  # the truth alleles this tensor stands for
+                label = int(labels[f][row]) if has_labels else -1
+                if label == 1:  # the truth alleles this tensor stands for
                     r = json.loads(lab)
                     ids = sorted({d["truth_id"] for d in r.get("somatic") or [] if d.get("representative")}
                                  | ({r["partial_truth"]["truth_id"]} if r.get("partial_truth") else set()))
@@ -179,7 +206,7 @@ def build_index(kind_dir):
                 cols["node"].append(int(v["node_id"]))
                 cols["shard"].append(local[f])
                 cols["row"].append(row)
-                cols["label"].append(int(labels[f][row]))
+                cols["label"].append(label)
                 cols["blocks"].append(block_ends(json.loads(_ROW_GROUPS.search(line).group(1))))
                 cols["scalars"].append(site_scalars(v))
                 candidates.append(_CANDIDATE.search(line).group(1).decode())
@@ -350,9 +377,15 @@ class TensorDataset(Dataset):
     statistics."""
 
     def __init__(self, parts, labels="label"):
-        """parts: [(KindIndex, positions)]; labels: "label" (training) or "eval_label" (evaluation)."""
-        # 63 bytes per sample, pickled to every DataLoader worker
+        """parts: [(KindIndex, positions)]; labels: "label" (training) or "eval_label" (evaluation).
+        When every part's index carries site features (index.arrays['site_features'], site_features.attach), they
+        follow the SCALARS in each sample's scalars: (len(SCALARS) + features,) instead of (len(SCALARS),)."""
+        # 63 bytes per sample (+ 4 per site feature), pickled to every DataLoader worker
         self.files, shard, row, label, blocks, scalars, part, position = [], [], [], [], [], [], [], []
+        with_site = {"site_features" in index.arrays for index, _ in parts}
+        if len(with_site) > 1:
+            raise ValueError("site features for some tensor sets only: " + ", ".join(
+                f"{index.dir} {'with' if 'site_features' in index.arrays else 'without'}" for index, _ in parts))
         for p, (index, positions) in enumerate(parts):
             part.append(np.full(len(positions), p, np.int16))
             position.append(np.asarray(positions, np.int64))
@@ -363,7 +396,8 @@ class TensorDataset(Dataset):
             row.append(a["row"][positions])
             label.append(a[labels][positions])
             blocks.append(a["blocks"][positions])
-            scalars.append(a["scalars"][positions])
+            scalars.append(np.concatenate([a["scalars"][positions], a["site_features"][positions]], 1)
+                           if "site_features" in a else a["scalars"][positions])
         cat = lambda xs, shape, dtype: np.concatenate(xs).astype(dtype) if xs else np.zeros(shape, dtype)  # noqa: E731
         self.shard, self.row = cat(shard, 0, np.int32), cat(row, 0, np.int32)
         self.label, self.blocks = cat(label, 0, np.int8), cat(blocks, (0, 4), np.int16)

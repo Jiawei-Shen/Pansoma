@@ -18,6 +18,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from timm.layers import DropPath, trunc_normal_
 
+from .data import SCALARS
 from .encode import DATASET_NORM, DATASET_NORM_BEFORE_20261019, TensorEncoder
 
 
@@ -204,12 +205,17 @@ class PansomaNetV2(nn.Module):
     (buffers, like the encoder's), go through a Linear(scalars, 64) + GELU and join the pooled features before the
     head.
 
+    site_features > 0: that many per-tensor site features (site_features.SITE_FEATURES, already mapped to [0, 1], not
+    z-scored) are the last columns of the scalars input, which then has len(data.SCALARS) + site_features columns;
+    they join the z-scored scalars (if any) in the same Linear(scalars + site_features, 64) + GELU.
+
     norm: "dataset" z-scores the dataset_norm channels (default encode.DATASET_NORM, BQ) with the statistics of each
     sample's own dataset (the encoder's per-dataset table, set by train / predict); "train" every channel with the
     training statistics (encode.py)."""
 
     def __init__(self, num_classes=3, depths=(3, 3, 27, 3), dims=(192, 384, 768, 1536), front=(64, 64),
-                 drop_path_rate=0.1, stats=None, scalars=0, block="v2", drop_planes=(), norm="train", dataset_norm=None):
+                 drop_path_rate=0.1, stats=None, scalars=0, block="v2", drop_planes=(), norm="train", dataset_norm=None,
+                 site_features=0):
         super().__init__()
         if norm not in ("train", "dataset"):
             raise ValueError(f"norm must be train or dataset, not {norm!r}")
@@ -219,6 +225,8 @@ class PansomaNetV2(nn.Module):
         self.config = dict(num_classes=num_classes, depths=list(depths), dims=list(dims), front=list(front),
                            drop_path_rate=drop_path_rate, scalars=scalars, block=block, drop_planes=list(drop_planes),
                            norm=norm, dataset_norm=list(self.encoder.dataset_norm))
+        if site_features:  # only then, so a config without site features stays as before
+            self.config["site_features"] = int(site_features)
         layers, c = [], self.encoder.n_planes
         for width in front:
             layers += [nn.Conv2d(c, width, kernel_size=1), nn.GELU()]
@@ -228,9 +236,11 @@ class PansomaNetV2(nn.Module):
         if scalars:
             self.register_buffer("scalar_mean", torch.zeros(scalars))
             self.register_buffer("scalar_std", torch.ones(scalars))
-            self.scalar_mlp = nn.Sequential(nn.Linear(scalars, 64), nn.GELU())
+        if scalars or site_features:
+            self.scalar_mlp = nn.Sequential(nn.Linear(scalars + site_features, 64), nn.GELU())
             self.backbone.head = nn.Linear(dims[-1] + 64, num_classes)
-        for m in list(self.front.modules()) + list(self.scalar_mlp.modules() if scalars else []) + [self.backbone.head]:
+        for m in (list(self.front.modules()) + list(self.scalar_mlp.modules() if scalars or site_features else [])
+                  + [self.backbone.head]):
             if isinstance(m, (nn.Conv2d, nn.Linear)):
                 trunc_normal_(m.weight, std=.02)
                 nn.init.constant_(m.bias, 0)
@@ -243,8 +253,14 @@ class PansomaNetV2(nn.Module):
         """x: (B, 8, 200, 101) int8 tensors; blocks: (B, 4) row-block ends; scalars: (B, S); part: (B,) dataset of each
         sample (the encoder's per-dataset table) -> logits (B, classes)."""
         features = self.backbone.forward_features(self.front(self.encoder(x, blocks, part=part)))
-        if self.config["scalars"]:
-            z = (scalars.to(features.device, torch.float32) - self.scalar_mean) / self.scalar_std
+        n, site = self.config["scalars"], self.config.get("site_features", 0)
+        if n or site:
+            scalars = scalars.to(features.device, torch.float32)
+            if site and scalars.shape[1] != len(SCALARS) + site:
+                raise ValueError(f"scalars have {scalars.shape[1]} columns, the model needs {len(SCALARS)} + {site} "
+                                 f"site features")
+            z = [(scalars[:, :n] - self.scalar_mean) / self.scalar_std] if n else []
+            z = torch.cat(z + [scalars[:, -site:]], 1) if site else z[0]
             features = torch.cat([features, self.scalar_mlp(z).to(features.dtype)], 1)
         return self.backbone.head(features)
 

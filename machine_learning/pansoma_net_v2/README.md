@@ -60,8 +60,8 @@ The width is zero-padded from 101 to 104 so the stem also covers column 100. The
 
 ## Use
 
-One model per sample, platform and kind (SNV or INDEL). The test chromosome is chr1; it is never used for
-training or selection.
+SNV: one model per sample and platform. INDEL: one model per platform, trained on several tumor sets. The test
+chromosome is chr1; it is never used for training or selection.
 
 ```bash
 cd machine_learning
@@ -73,9 +73,14 @@ T=/scratch/jshen/data/pansoma_v2_tensors/HG008T_Illumina/tensors
 $P -m pansoma_net_v2.train --tensors $T --kinds SNV --output runs/HG008_Illumina_SNV \
     --depths 3 3 27 3 --dims 96 192 384 768 --epochs 20 --batch-size 1024 --lr 1e-4 --class-weights pow:0.75 \
     --non-fraction 1.0 --block v2 --ignore-reasons residual_partial_somatic_truth allele_partial_somatic_truth
-$P -m pansoma_net_v2.train --tensors $T --kinds INDEL --output runs/HG008_Illumina_INDEL \
-    --depths 2 2 6 2 --dims 64 128 256 512 --epochs 12 --batch-size 1024 --lr 1e-4 --class-weights sqrt \
-    --non-fraction 1.0 --block v2 --ignore-reasons residual_partial_somatic_truth allele_partial_somatic_truth
+# INDEL: one model per platform on several tumor sets T1 T2 ... (chr1 of each left out), site features in SF
+$P -m pansoma_net_v2.train --tensors $T1 $T2 ... --kinds INDEL --output runs/Illumina_INDEL \
+    --test-chroms --set-test-chroms $T1 chr1 --set-test-chroms $T2 chr1 ... \
+    --depths 2 2 6 2 --dims 64 128 256 512 --epochs 12 --batch-size 1024 --lr 1e-4 --weight-decay 0.05 \
+    --warmup-epochs 1 --class-weights sqrt --non-fraction 1.0 --block v2 \
+    --ignore-reasons residual_partial_somatic_truth allele_partial_somatic_truth \
+    --non-reasons repeat_indel_without_truth --non-reasons-in-bed outside_confident_region \
+    --site-features $SF --best-by postpon
 torchrun --nproc_per_node=2 -m pansoma_net_v2.train --ddp ...           # several GPUs, same options
 
 # test: every chr1 tensor (-1 included), the checkpoint's statistics and somatic threshold
@@ -124,7 +129,8 @@ Useful `train` options (the recipes, "SNV recipe" and "INDEL recipe" below, set 
   - `--block v2` (the default; below, Model).
   - `--drop-planes PLANE ...` leaves encoder planes out of the input (e.g. `path_count`; "Channel 6 storage" below).
 - **Selection.** `best.pth` is the epoch with the highest thresholded per-tensor somatic F1 on the validation tensors
-  (ties: the lower validation loss); it stores that threshold.
+  (ties: the lower validation loss); it stores that threshold. `--best-by postpon` (the INDEL recipe) selects by the
+  post-PoN F1 instead (below, "Site features and post-PoN thresholds").
 - **Speed.** `--no-compile` and `--no-channels-last` turn off the defaults on CUDA (below). Training reads
   chunks from a zstd cache (`--read-threads 16`, `--chunk-rows 512`, `--window-chunks 32`, `--chunk-cache`;
   "Reading the training tensors" below). `--num-workers` sets the DataLoader workers of the statistics (0 also reads
@@ -151,6 +157,56 @@ Options kept for older checkpoints and experiments (no recipe uses them):
 - `--epoch-samples N` (a fresh random subset of the training tensors each epoch) and `--val-samples N` (a fixed random
   subset of the validation tensors).
 - `--no-chunk-cache`: training reads the chunks from the raw shards instead of the zstd cache.
+
+**Site features and post-PoN thresholds** (`site_features.py`; the INDEL recipe).
+
+- `python -m pansoma_net_v2.site_features build --tensors <set>/tensors --fasta <GRCh38 FASTA> --gnomad <gnomAD
+  af-only VCF> --colors <CoLoRSdb VCF> --out DIR [--cache-dir R/index_cache] [--workers 8]` writes
+  `DIR/<SET>.INDEL.npz` (SET: the directory above `tensors/`, e.g. `HCC1395T_ONT_d46`) from the label-free
+  `<chrom>_variant_summary.ndjson` files: per tensor, in index order, the largest gnomAD / CoLoRSdb AF of the exact
+  left-aligned allele (`popaf_exact`) and of any INDEL allele at its position (`popaf_pos`), the tag of the PoN rule of
+  `scripts/filter_panel_of_normals.py` (`pon_tag`, the same exact-record match the PoN applies) and the homopolymer
+  length (`hp_len`); -1 / 0 without a GRCh38 allele. The file records the PoN rule's constants and the script's
+  sha256.
+- `--site-features DIR` reads the files. A file whose chromosomes, per-chromosome counts or `candidates_sha1` (sha1
+  of the index's candidate ids joined by newlines) disagree with the index is refused, as is a missing file, a file
+  of another PoN rule, a file that gives an off-reference tensor an allele, or a tensor with a GRCh38 allele none.
+  The labels do not enter the file, so a relabel keeps it valid.
+- The model gets five numbers per tensor after the scalars, through a fixed map to [0, 1] (no z-score):
+  `1 + log10(AF + 1e-6) / 6` for the two AFs, the tag, `min(hp_len, 20) / 20` and a has-GRCh38 flag
+  (`site_features.TRANSFORM`); they join the head through `Linear(5 (+ 9 with --scalars), 64)` + GELU. The checkpoint
+  records `site_features` (directory, `VERSION`, names, transform, each set's `candidates_sha1` and PoN rule) and
+  `feature_files` (the sha256 of each feature file read, per `<SET>.<KIND>`); `predict` loads the same directory (or
+  `--site-features DIR`) for every predicted set and stops before any output when one is missing or stale, and warns
+  (stderr, `.metrics.json` `feature_files` / `feature_file_warnings`) when a training set's file has changed or a file
+  was built with another version of the PoN script.
+- With site features each validation also reports the post-PoN result (`metrics.postpon_report`, `val.postpon`): the
+  PoN-tagged tensors are never called, so their positives are misses, the others are called at p_somatic ≥ t. The
+  checkpoint's `val` gets `somatic_threshold_postpon` (best per-tensor F1) and, as a report, `somatic_at_recall_postpon`
+  (0.5, 0.8, 0.9, 0.95 of every positive), `somatic_at_recall_postpon_callable` (of the positives the PoN does not tag)
+  and, with the truth-level validation, `truth_threshold_postpon`.
+- `--best-by postpon` selects the best epoch (`best.pth`) by the validation post-PoN somatic F1 instead of the
+  pre-PoN F1 (`--best-by f1`, the default), and makes the post-PoN recall threshold the checkpoint's call rule
+  (`call_rule` postpon-recall, `call_recall` from `--call-recall`, 0.8): the highest p_somatic at which the
+  validation recall of the callable positives (those the PoN does not tag) reaches 0.8,
+  `somatic_at_recall_postpon_callable["0.8"]`. `graph_vcf` calls with it by default (`--threshold postpon-recall`
+  explicitly); `--threshold postpon` gives the post-PoN best-F1 threshold. A checkpoint trained with `--best-by
+  postpon` that records no call rule counts as postpon-recall at 0.8. Other checkpoints keep call rule `recall`, the
+  validation recall-0.9 threshold. `best.select` records the selection; `--resume` with another selection starts the
+  best epoch afresh. The stored `somatic_threshold` stays the pre-PoN best-F1 one.
+- `predict` with site features writes `pon_tag` in each record and adds the rules after the PoN `pipeline_pon`,
+  `threshold_t_pon`, `val_postpon_recall` (the call rule above), `val_postpon` and `val_postpon_truth` (tagged
+  tensors not called).
+
+**Labels inside the benchmark** (`--non-reasons`, `--non-reasons-in-bed`; the INDEL recipe). The labeller leaves some
+candidates at -1 that calling still emits inside the benchmark BED, where rtg scores every PASS call without a truth
+match as a false positive. `--non-reasons R ...` trains and validates the tensors of label reason R as non (0) where
+they lie inside the benchmark (the confident region or the somatic truth BED; outside it they stay -1), e.g.
+`repeat_indel_without_truth` (INDELs in GRCh38 homopolymers / tandem repeats without a truth allele).
+`--non-reasons-in-bed R ...` does the same where the tensor's GRCh38 position is inside the somatic truth BED, e.g.
+`outside_confident_region` (inside the somatic BED, outside the germline BED). The label files are unchanged; predict
+scores the same tensors as non (the checkpoint's arguments), and the calls do not depend on it. Off-reference
+candidates without a truth match stay -1 in training (`off_reference_no_truth_match`).
 
 **Evaluation** (`metrics.py`). The target is the somatic class; germline is reported too.
 
@@ -250,40 +306,41 @@ included), one whole GPU; calls at the validation recall-0.9 threshold, off-refe
 epoch ~7 (validation loss 0.51 -> 2.16) and the 50.4 M model does not; with the PoN in the BED both reach P/R/F1
 0.473/0.832/0.604 (199.6 M, best epoch 5) and 0.493/0.822/0.616 (50.4 M).
 
-**INDEL recipe** (every platform; chosen on the six P100 sets): the 8.7 M model `--depths 2 2 6 2 --dims
-64 128 256 512`, `--class-weights sqrt --batch-size 1024 --lr 1e-4 --epochs 12 --non-fraction 1.0 --block v2
---ignore-reasons residual_partial_somatic_truth allele_partial_somatic_truth`, every plane and every candidate kept
-(no `--exclude-candidates`); calls at the validation recall-0.9 threshold (graph_vcf's default; no off-reference
-rescue for INDELs), then the INDEL PoN rule (gnomAD / CoLoRSdb exact allele: AF ≥ 0.01 in homopolymers of ≥ 8 bases,
-else AF ≥ 0.0001; below). The chr1 curve's best point is recorded next to the PASS result (vcfeval's report,
-`summary`); it is chosen on the test chromosome and never used as the threshold. On a MIG 2g.24gb slice the batch
-needs `--micro-batches 4` (about 23 GB as one batch). `machine_learning/pansoma_net_v2/jobs/submit_indel.sh SET ...`
-submits the recipe per set from that directory (chunk cache, training + chr1 test, calls + vcfeval); logs and
-`submitted.txt` go to `pansoma_net_v2_runs/jobs`. The recipe's chr1 results on HG008T:
-`analysis/hg008t_snv_indel_7fc7396_20261012`.
+**INDEL recipe** (one model per platform, trained on several tumors): the 8.7 M model `--depths 2 2 6 2 --dims
+64 128 256 512`, `--class-weights sqrt --batch-size 1024 --lr 1e-4 --weight-decay 0.05 --warmup-epochs 1 --epochs 12
+--non-fraction 1.0 --block v2 --ignore-reasons residual_partial_somatic_truth allele_partial_somatic_truth`, every plane
+and every candidate kept (no `--exclude-candidates`), and:
 
-Why (chr1 in the BED after the INDEL PoN, F1 at the validation recall-0.9 threshold; the runs
-`<sample>_<platform>_INDEL_small_*` in `pansoma_net_v2_runs`):
+- labels that follow the benchmark: `--non-reasons repeat_indel_without_truth --non-reasons-in-bed
+  outside_confident_region` (above, "Labels inside the benchmark");
+- the five site features: `--site-features DIR` (`site_features build` for each training and test set);
+- `--best-by postpon`: the epoch with the best post-PoN validation somatic F1; the PASS threshold is the post-PoN
+  validation recall 0.8 of the callable positives (call rule postpon-recall, `graph_vcf`'s default for these
+  checkpoints; no off-reference rescue for INDELs), then the INDEL PoN rule (gnomAD / CoLoRSdb exact allele: AF ≥
+  0.01 in homopolymers of ≥ 8 bases, else AF ≥ 0.0001; below). One threshold per model, stored in the checkpoint and
+  applied unchanged to every sample. No post-filter. The post-PoN best-F1 threshold (`--threshold postpon`) is
+  reported beside it.
+- Training data: chr2-22 of each training tumor of the platform (`--test-chroms --set-test-chroms <set> chr1 ...`:
+  chr1 of every tumor left out of training and validation), validation on 5 % of the node blocks.
 
-- **lr 1e-4.** With the candidate filter (below) HG008T Illumina / PacBio / ONT 0.241 / 0.135 / 0.017 against
-  0.226 / 0.130 / 0.016 at 4e-4; without it the two are within 0.01 (`analysis/hg008t_snv_indel_7fc7396_20261012`).
-- **sqrt class weights.** pow:0.8 lowers the validation somatic AP in six of the eight long-read pairs and the
-  recall-0.9 F1 in seven (more calls at the same recall).
-- **No candidate filter.** The filter (INDEL candidates with AF < 0.10, and with AF < 0.15 whose allele is not in the
-  other sample's set of the platform) takes out tensors the model already ranks low; on HG008T the unfiltered runs
-  are about equal or better (0.239 / 0.132 / 0.015 against 0.226 / 0.130 / 0.016). On COLO829T's long reads the filtered
-  runs score higher, but on at most about 33 truth INDELs left after the PoN.
-- **The recall-0.9 rule.** The validation best-F1 threshold t scores higher on the HG008T long reads (PacBio 0.214,
-  ONT 0.101 against 0.132, 0.015) and lower on Illumina (0.194 against 0.239), and calls only 9–185 tensors on
-  COLO829T; argmax called 0–2 INDELs in three Illumina runs.
+On a MIG 2g.24gb slice the batch needs `--micro-batches 4` (about 23 GB as one batch). The chr1 curve's best point is
+recorded next to the PASS result (vcfeval's report, `summary`); it is chosen on the test chromosome and never used as
+the threshold. `machine_learning/pansoma_net_v2/jobs/submit_indel.sh` submits the recipe (training, prediction of
+each test set, calls + vcfeval).
 
-The 8.7 M model is within noise of the 199.6 M model on chr1 (best F1 0.13–0.15 without the PoN, with or without the
-partial labels or ch6) and trains about four times faster (HG008T Illumina: 55 s against 214 s per epoch). What
-limits INDELs is outside the model: the PoN rule tags 413 of the 635 HG008T chr1 truth INDELs (81 of 131 on
-COLO829T), so the curves' recall after it stops at 0.24–0.26; 46 % of the HG008T Illumina truth INDELs get no
-candidate (the allele is a path of the HPRC graph); and
-the false calls are the patient's germline homopolymer INDELs at the same VAF as the somatic ones
-(`analysis/indel_20260930`, `analysis/tensor_recall_20260930`).
+Why:
+
+- **Labels.** Inside the benchmark BED every PASS call without a truth match is a false positive. Repeat INDELs
+  without a truth allele and candidates outside the germline BED are the most frequent INDEL candidates there; left at
+  -1 the model never sees them as negatives, yet calling emits them.
+- **Site features.** In tumor-only data the other main source of false INDEL calls is germline alleles at somatic-like
+  allele fractions. Population allele frequencies are label-free, public and computed the same way for every sample.
+- **Threshold.** INDEL candidates are 30–300 times more often negative than positive, so a recall target over every
+  validation positive before the PoN admits thousands of false calls. The PoN is a fixed, label-free step of the
+  caller, so the threshold is set on the calls it leaves: a recall of 0.8 of the positives it does not tag. One
+  threshold serves every tumor, including tumors whose somatic INDELs score lower than those of the training cell
+  lines; the post-PoN best-F1 threshold is stricter. The epoch is chosen by the post-PoN validation F1. SNVs keep the
+  recall-0.9 rule.
 
 ## Calls: graph VCF → GRCh38 VCF → PoN → rtg vcfeval
 
@@ -332,9 +389,11 @@ thresholds). vcfeval runs twice there:
 - QUAL = −10 log10(1 − p_somatic). rtg rounds scores to 3 decimals, so p near 1 would collapse on a
   linear scale.
 - FILTER:
-  - PASS: p_somatic ≥ the checkpoint's validation threshold at recall 0.9 (`--target-recall`; the checkpoint
-    is the one in predict's `.metrics.json`). The model favours recall and the PoN raises precision.
-    `--threshold T` sets the threshold. `--threshold predict` keeps `predict`'s own call (best-F1 threshold).
+  - PASS: p_somatic ≥ the threshold of the checkpoint's call rule (the checkpoint is the one in predict's
+    `.metrics.json`): for SNV models the validation threshold at recall 0.9 (`--target-recall`; the model favours
+    recall and the PoN raises precision), for the INDEL recipe the post-PoN validation threshold at recall 0.8 of the
+    callable positives (above, "INDEL recipe"). `--threshold T` sets the threshold; `--threshold postpon-recall`,
+    `postpon` and `recall` pick a rule; `--threshold predict` keeps `predict`'s own call (best-F1 threshold).
     A record with predict's off-reference rescue is called by offref_call instead; its QUAL is from
     p_offref_somatic and INFO OFFREF_P_* keeps the rescored probabilities. INDEL predictions have no rescue.
   - LowQual: not called.
@@ -477,6 +536,10 @@ evaluation labels. Jobs can share a cache: each process writes its own temporary
 renames them. Reading the summaries takes about a minute per
 2.5 M tensors.
 
+A set without `labels.manifest.json` (a new sample) is indexed from its summaries alone: every tensor -1 with reason
+`unlabelled`, in the region, its GRCh38 allele from the summary's `grch38` (merge `--reference-path`). `predict`,
+`site_features build`, `graph_vcf` and `linear_vcf` run on it; its test metrics are empty.
+
 **Channel 6 storage.** The path-count channel has two codes: `int8-count-haplotypes100` (what indexed_gam_pipeline_v4
 builds, every set on disk: relative to `--haplotypes` H, H → 100, one code per missing haplotype down to 51) and
 `int8-count-linear100-log2` (the count up to 100, then 100 + ceil(log2(count − 99)): the HPRC v1.1 d9 sets built before
@@ -596,6 +659,17 @@ cd machine_learning && $P -m unittest discover -s pansoma_net_v2/tests -t .
     records the storage, predict refuses another storage before any output (a checkpoint without the record
     counts as `int8-count-linear100-log2`), the rescue floor is 100 on `int8-count-haplotypes100` and 90 on
     `int8-count-linear100-log2`.
+- `test_site_features`: the feature file's checks (candidate ids, chromosomes, counts, lengths, values, off-reference
+  tensors, `vcf_pos`, the PoN rule, missing keys or file; a relabel keeps the file valid), the transform, the
+  dataset's extra scalars, the model's site-feature input and round trip, `postpon_report` (no tags = the plain
+  threshold, tagged tensors never called, truth level, targets over the callable positives), `evaluate`'s alignment
+  of the tags (also with a shuffled sampler), train / resume / predict with `--site-features` (feature files' sha256
+  recorded, predict's warning on a changed file), `--best-by postpon` and the call rule, `--non-reasons` /
+  `--non-reasons-in-bed` (train and predict, inside the benchmark only), the builder on a small FASTA and two
+  database VCFs (exact, normalised and position AFs, the PoN tag against `filter_panel_of_normals`, off-reference
+  tensors), predict on an unlabelled set (same probabilities as its labelled copy, no test labels) and `graph_vcf
+  --threshold postpon` / `postpon-recall` and its default call rule (the end-to-end case needs
+  `indexed_gam_pipeline_v4`).
 - `test_real_data`: runs if `PANSOMA_TEST_TENSORS` exists (default: COLO829T Illumina `tensors`); ~70 s.
   Checks the index counts against the manifests (and the region flag against the labeller's reasons, the truth
   ids against `somatic.recall.tsv`), candidates against a summary, and that the row blocks agree

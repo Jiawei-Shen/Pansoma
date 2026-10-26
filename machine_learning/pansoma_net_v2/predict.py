@@ -51,21 +51,41 @@ otherwise than the checkpoint's training sets (checkpoint path_count_storage; in
 records none), predict exits before predicting anything (a model trained with --drop-planes path_count never reads
 channel 6 and takes sets of any storage); a set built with another --haplotypes is predicted with a
 note, and .metrics.json `path_count` gives the set's storage and H and the checkpoint's H.
+
+Site features: a checkpoint trained with --site-features reads every predicted set's <DIR>/<SET>.<KIND>.npz
+(site_features.py; DIR: the checkpoint's, or --site-features), with the transform the checkpoint records; a set without
+its file, or with a stale one (another tensor order, another PoN rule), stops predict before anything is predicted.
+Each record then gets pon_tag, and .metrics.json `rules` adds the rules after the PoN (tagged tensors never called):
+pipeline_pon (the validation recall-0.9 threshold + PoN), threshold_t_pon (the threshold t + PoN),
+val_postpon_recall (the post-PoN validation threshold at the checkpoint's call_recall, 0.8, of the callable positives:
+the PASS rule of a checkpoint with call_rule postpon-recall, the INDEL recipe) and, as reports, val_postpon (train's
+somatic_threshold_postpon, the post-PoN best-F1 threshold) and val_postpon_truth (truth_threshold_postpon), each when
+the checkpoint has it. The checkpoint records the sha256 of
+each training set's feature file (feature_files); when the file predict reads for one of those sets differs, predict
+prints a warning to stderr and .metrics.json has it (feature_files: the file, its sha256, the checkpoint's and changed;
+feature_file_warnings, which also name a file built with another version of the PoN script).
+--non-reasons / the checkpoint's train --non-reasons and --non-reasons-in-bed score those tensors as non inside the
+benchmark, as train did; the calls (graph_vcf) do not depend on it.
+
+An unlabelled set (no labels.manifest.json, e.g. a new sample; data.py) is predicted the same way: every record has
+test_label null and reason "unlabelled", and the test metrics are empty. graph_vcf and linear_vcf need no labels.
 """
 import argparse
 import gzip
 import json
+import sys
 from pathlib import Path
 
 import numpy as np
 import torch
 
 from . import metrics
+from . import site_features as sitef
 from .data import (CHECKPOINT_PATH_COUNT, CLASSES, KINDS, PATH_COUNT_ALL, TENSOR_SHAPE, EpochSampler, TensorDataset,
                    load_parts, read_candidate_ids, somatic_truth)
 from .encode import CONTINUOUS, DATASET_NORM
 from .model import PansomaNetV2
-from .train import dataset_stats, describe, make_loader, predict_probs, retry_workers
+from .train import dataset_stats, describe, in_somatic_bed, make_loader, predict_probs, retry_workers
 
 
 def stat_shift(stats, references):
@@ -110,6 +130,13 @@ def parse_args(argv=None):
                    help="label reasons left out of the test, as if -1 (default: the checkpoint's train --ignore-reasons, "
                         "minus the partial somatic reasons for INDEL sets); their records keep label, reason and "
                         "truth_ids and get ignored: true")
+    p.add_argument("--site-features", metavar="DIR",
+                   help="site-feature directory of a checkpoint trained with --site-features (default: the one the "
+                        "checkpoint records); <DIR>/<SET>.<KIND>.npz must exist for every predicted set")
+    p.add_argument("--non-reasons", nargs="*",
+                   help="label reasons scored as non (0) inside the benchmark, the confident region or the somatic "
+                        "truth BED (default: the checkpoint's train --non-reasons); the calls (graph_vcf) do not "
+                        "depend on it")
     return p.parse_args(argv)
 
 
@@ -163,6 +190,32 @@ def main(argv=None):
     for index, _ in parts:  # before any prediction: every set must code channel 6 like the training sets
         if reads_path_count and index.path_count != trained:
             raise SystemExit(f"{index.dir}: channel 6 is {index.path_count}, the checkpoint was trained on {trained}")
+    n_site, recorded = model.config.get("site_features", 0), checkpoint.get("site_features")
+    if n_site:
+        if not recorded or recorded.get("version") != sitef.VERSION or recorded.get("names") != list(sitef.SITE_FEATURES):
+            raise SystemExit(f"{args.checkpoint}: site features {recorded and recorded.get('version')} "
+                             f"{recorded and recorded.get('names')}; this code reads {sitef.VERSION} {list(sitef.SITE_FEATURES)}")
+        site_dir = args.site_features or recorded["directory"]
+    elif args.site_features:
+        raise SystemExit(f"{args.checkpoint} was trained without site features")
+    tagged = bool(n_site)
+    recorded_files = (checkpoint.get("feature_files") or {}).get("site_features")  # train's sha256 of each file
+    feature_files = {}  # index directory -> (metrics.json feature_files, warnings)
+    for index, _ in parts:  # every set's file before any prediction: a missing or stale one stops predict here
+        entry, warnings = None, []
+        if n_site:
+            try:
+                d = sitef.attach(index, site_dir, True)
+            except ValueError as e:
+                raise SystemExit(f"site features: {e}") from None
+            print(sitef.describe(index, d) + " (model input)", flush=True)
+            compared, warnings = sitef.compare_files({sitef.key(index): (d["path"], d["sha256"])}, recorded_files,
+                                                     "site-features")
+            entry = compared[sitef.key(index)]
+            warnings += [f"warning: {w}" for w in sitef.pon_check(d)]
+        for w in warnings:
+            print(w, file=sys.stderr, flush=True)
+        feature_files[str(index.dir)] = (entry, warnings)
     exclude_path = args.exclude_candidates if args.exclude_candidates is not None else \
         checkpoint.get("args", {}).get("exclude_candidates")
     exclude = read_candidate_ids(exclude_path) if exclude_path else set()
@@ -202,6 +255,18 @@ def main(argv=None):
         excluded = np.array([index.candidates()[p] in exclude for p in positions], bool) if exclude else \
             np.zeros(len(positions), bool)
         dataset.label[excluded] = -1  # never built, as far as the test and the calls are concerned
+        non = args.non_reasons if args.non_reasons is not None else checkpoint.get("args", {}).get("non_reasons") or []
+        as_non = (np.isin(index.arrays["reason"][positions],
+                          [k for k, r in enumerate(index.meta["reasons"]) if r in set(non)])
+                  & (index.arrays["in_region"] | in_somatic_bed(index))[positions] & ~ignored & ~excluded)
+        dataset.label[as_non] = 0  # e.g. rule (a) INDELs: test-time calling meets them inside the BED
+        bed_non = checkpoint.get("args", {}).get("non_reasons_in_bed") or []
+        if bed_non:  # e.g. outside_confident_region inside the somatic BED (train --non-reasons-in-bed)
+            in_bed = (np.isin(index.arrays["reason"][positions],
+                              [k for k, r in enumerate(index.meta["reasons"]) if r in set(bed_non)])
+                      & in_somatic_bed(index)[positions] & ~ignored & ~excluded)
+            dataset.label[in_bed] = 0
+            as_non = as_non | in_bed
         labels, probs = probs_of(dataset, f"{index.dir}")
         threshold = args.threshold if args.threshold is not None else checkpoint.get("somatic_threshold")
         pred = metrics.call(probs, threshold)
@@ -221,6 +286,7 @@ def main(argv=None):
                     test_label=int(labels[k]) if labels[k] >= 0 else None, in_test=bool(labels[k] >= 0),
                     reason=index.reason(pos), ignored=bool(ignored[k]), excluded=bool(excluded[k]),
                     off_reference=bool(a["off_reference"][pos]),
+                    **({"pon_tag": int(a["pon_tag"][pos])} if tagged else {}),
                     truth_ids=index.truth_of(pos).tolist(),
                     **{f"p_{c}": round(float(probs[k][j]), 5) for j, c in enumerate(CLASSES)},
                     pred=CLASSES[pred[k]],
@@ -243,6 +309,22 @@ def main(argv=None):
             if off_probs:
                 preds["pipeline"][off_k] = np.stack([off_probs[k] for k in off_k.tolist()]).argmax(1)
             rules["pipeline"] = r09["threshold"]
+        if tagged:  # after the PoN: tagged tensors are never called (their calls go to non / germline)
+            pon = a["pon_tag"][positions] == 1
+            val = checkpoint.get("val") or {}
+            call_recall = checkpoint.get("call_recall") or 0.8  # graph_vcf's postpon-recall call rule
+            ppr = ((val.get("somatic_at_recall_postpon_callable") or {}).get(f"{call_recall:g}") or {}).get("threshold")
+            for rule, t in (("pipeline_pon", r09["threshold"] if r09 else None),
+                            ("threshold_t_pon", threshold),
+                            ("val_postpon_recall", ppr),
+                            ("val_postpon", val.get("somatic_threshold_postpon")),
+                            ("val_postpon_truth", val.get("truth_threshold_postpon"))):
+                if t is None:
+                    continue
+                pred_pon = preds["pipeline"].copy() if rule == "pipeline_pon" else metrics.call(probs, t)
+                pred_pon[pon] = np.where(probs[pon, 2] > probs[pon, 0], 2, 0)
+                rules[rule], preds[rule] = t, pred_pon
+            report["pon_tagged"] = int(pon.sum())
         report["rules"] = metrics.decision_rules(labels, probs, rules, truth_args, preds)
         in_test = labels >= 0
         off = a["off_reference"][positions]
@@ -257,11 +339,15 @@ def main(argv=None):
                       off_reference_in_test=int((in_test & off).sum()),
                       off_reference_somatic_in_test=int((in_test & off & (labels == 1)).sum()),
                       ignored_reasons=list(ignore), ignored=int(ignored.sum()),
+                      non_reasons=list(non), as_non=int(as_non.sum()),
                       exclude_candidates=exclude_path or None, excluded=int(excluded.sum()),
                       directory=str(index.dir), labels=index.meta["labels"],
                       path_count=dict(storage=index.path_count, haplotypes=index.haplotypes,
                                       checkpoint_haplotypes=trained_haplotypes),
                       checkpoint=str(Path(args.checkpoint).resolve()), chroms=args.chroms,
+                      site_features=dict(directory=str(Path(site_dir).resolve()), version=sitef.VERSION) if n_site else None,
+                      feature_files=feature_files[str(index.dir)][0],
+                      feature_file_warnings=feature_files[str(index.dir)][1],
                       normalization=dict(norm=norm, channels=channels, source=source, dataset_stats=part_stats,
                                          shift=shift, checkpoint_stats=model.encoder.stats()))
         (out / f"{name}.metrics.json").write_text(json.dumps(report, indent=2) + "\n")
