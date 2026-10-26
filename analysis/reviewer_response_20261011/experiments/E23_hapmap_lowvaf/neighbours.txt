@@ -1,0 +1,2 @@
+HapMap_somatic_snv_indel.vcf.gz: 528455 positions on chr1, 0.352 with another truth position within 50 bp
+COLO829T_somatic_snv_indel.vcf.gz: 2574 positions on chr1, 0.044 with another truth position within 50 bp

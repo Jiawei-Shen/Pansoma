@@ -1,0 +1,13 @@
+kind	donors carrying	truth	in graph (E23_graph_alleles.mgi_non_HG005.d9.tsv.gz)	in graph (E23_graph_alleles.mgi_non_HG005.d9.atomized.tsv.gz)
+INDEL	1	34909	0.138	0.139
+INDEL	2	12573	0.419	0.420
+INDEL	3	6115	0.591	0.594
+INDEL	4	3100	0.676	0.679
+INDEL	5	1122	0.703	0.704
+INDEL	unknown	81035	0.137	0.138
+SNV	1	255758	0.233	0.238
+SNV	2	84437	0.643	0.654
+SNV	3	40118	0.888	0.905
+SNV	4	21270	0.957	0.974
+SNV	5	8328	0.972	0.990
+SNV	unknown	20098	0.219	0.279
