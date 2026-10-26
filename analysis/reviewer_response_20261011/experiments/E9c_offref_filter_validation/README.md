@@ -4,6 +4,14 @@ Reviewer points: **R3.3** (validation of graph-coordinate variants), **R3.4** (m
 "about 2 %"), **R1.3** (ONT graph-coordinate calls: resolution or ambiguity). Design: `../../response_to_reviewers_detailed.md`,
 sections R3.3 / R3.4 / R1.3 and rows E9c / E9d / E9e of the E-table (section 6).
 
+> **2026-10-23: COLO829T assemblies changed.** Normal = the COLO829BL donor-specific assembly (SMaHT verkko 2.1 hapX / hapY,
+> all contigs; before: their ragtag-hg38 primary + unlocalized parts); tumor = qfu's hifiasm 0.25.0 of the COLO829T Fiber-seq
+> HiFi reads with the COLO829T ONT D003 reads (`asm_targets/`; not independent of the COLO829T Fiber-seq / ONT call sets).
+> COLO829T now has the HG008T categories (tumor_only / unsupported instead of not_in_normal); asm 451718, collect 451719
+> (`tmp/reviewer_cpu_20261023/E9i/`). `tables.md` / `summary.json` / `per_call.tsv.gz` are the new ones; COLO829T numbers in
+> the text below that say "not in normal" are the old classification. Controls: COLO829T ctrl_tp tumor-only 130-137 / 150,
+> ctrl_fp germline 94-134 / 150; unplaced PASS tumor-only 0.3-3.3 % (population first), 0.6-4.0 % by the assemblies alone.
+
 **Status (2026-10-15, tables of collect job 405796, 15:27): every in-sample SNV run on d9 / d46 done.** 13 runs: the 9
 RIS 7fc7396 in-sample SNV re-predictions on a pangenome graph (HG008T Illumina / PacBio / ONT on HPRC v1.1 d9 and on
 HPRC v2.1 d46; COLO829T Illumina / fiber-seq / ONT on d46) and 4 of the 12 legacy d9 runs; the 6 gold-set calibrations

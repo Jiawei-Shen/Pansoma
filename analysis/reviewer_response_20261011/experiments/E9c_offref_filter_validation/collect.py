@@ -12,9 +12,10 @@ Assembly class (E9d) of the ALT context (read consensus when >= 40 bp, else grap
   HG008T   germline (in HG008-N v6.2) / tumor_only (in HG008-T v3.2, not in HG008-N) / unsupported (in neither, but the
            REF context is found) / unverifiable (neither the ALT nor the REF context is found); multi-copy flag when a
            context hits > 2 loci in one assembly (both haplotypes = 2)
-  COLO829T germline (in COLO829BL hapX / hapY) / not_in_normal / unverifiable (no tumor assembly)
+  COLO829T the same with the COLO829BL donor-specific assembly (hapX / hapY) as normal and the COLO829T hifiasm haplotypes
+           as tumor (2026-10-23; before: germline / not_in_normal / unverifiable, no tumor assembly)
 Exclusive categories of an unplaced PASS call, in this order: population (graph PoN), germline, tumor_only,
-unverifiable, unsupported (COLO829T: population, germline, not_in_normal, unverifiable).
+unverifiable, unsupported (a sample without a tumor assembly: population, germline, not_in_normal, unverifiable).
 """
 import csv
 import glob
@@ -33,7 +34,7 @@ E9A = '/scratch/jshen/data/reviewer_experiments_20261013/E9a_unplaced_projection
 FLANKS = ('5', '10', '15', 'A')
 MIN_AC = (1, 2, 5, 9)
 CATS = {'HG008T': ('population', 'germline', 'tumor_only', 'unverifiable', 'unsupported'),
-        'COLO829T': ('population', 'germline', 'not_in_normal', 'unverifiable')}
+        'COLO829T': ('population', 'germline', 'tumor_only', 'unverifiable', 'unsupported')}
 
 
 def num(x):
@@ -81,7 +82,7 @@ def asm_class(r, sample, asm):
     multi = max([ha.get('normal', 0), ha.get('tumor', 0)] + [h.get('normal', 0) for h in href] + [0]) > 2
     if ha.get('normal', 0) > 0:
         c = 'germline'
-    elif sample == 'COLO829T':
+    elif sample not in L.TUMOR_ASM:
         c = 'not_in_normal' if ref_any else 'unverifiable'
     elif ha.get('tumor', 0) > 0:
         c = 'tumor_only'

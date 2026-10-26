@@ -1,0 +1,397 @@
+{
+ "rcpu__COLO829_Illumina_SNV_d46_7fc7396__vcf_chr1": {
+  "unplaced_pass": {
+   "calls": 516,
+   "status": {
+    "absent from normal": 35,
+    "ALT in normal": 440,
+    "no k-mer": 5,
+    "one normal read": 29,
+    "low normal coverage": 7
+   },
+   "somatic_candidates": 12,
+   "by_category": {
+    "tumor_only": {
+     "absent from normal": 11,
+     "somatic candidate": 10,
+     "ALT in normal": 5,
+     "low normal coverage": 1
+    },
+    "germline": {
+     "ALT in normal": 177,
+     "somatic candidate": 1,
+     "absent from normal": 19,
+     "one normal read": 20,
+     "low normal coverage": 5,
+     "no k-mer": 1
+    },
+    "population": {
+     "ALT in normal": 258,
+     "somatic candidate": 1,
+     "no k-mer": 4,
+     "one normal read": 9,
+     "absent from normal": 4,
+     "low normal coverage": 1
+    },
+    "unsupported": {
+     "absent from normal": 1,
+     "somatic candidate": 0
+    }
+   }
+  },
+  "ctrl_tp": {
+   "calls": 150,
+   "status": {
+    "absent from normal": 139,
+    "one normal read": 5,
+    "ALT in normal": 6
+   },
+   "somatic_candidates": 139,
+   "by_category": {}
+  },
+  "ctrl_fp": {
+   "calls": 150,
+   "status": {
+    "ALT in normal": 126,
+    "absent from normal": 21,
+    "one normal read": 2,
+    "low normal coverage": 1
+   },
+   "somatic_candidates": 18,
+   "by_category": {}
+  }
+ },
+ "rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1": {
+  "unplaced_pass": {
+   "calls": 693,
+   "status": {
+    "absent from normal": 43,
+    "ALT in normal": 592,
+    "one normal read": 37,
+    "no k-mer": 7,
+    "low normal coverage": 14
+   },
+   "somatic_candidates": 10,
+   "by_category": {
+    "tumor_only": {
+     "absent from normal": 12,
+     "somatic candidate": 9
+    },
+    "population": {
+     "ALT in normal": 446,
+     "somatic candidate": 0,
+     "no k-mer": 6,
+     "one normal read": 12,
+     "low normal coverage": 5
+    },
+    "germline": {
+     "ALT in normal": 143,
+     "somatic candidate": 1,
+     "absent from normal": 30,
+     "one normal read": 25,
+     "no k-mer": 1,
+     "low normal coverage": 9
+    },
+    "unsupported": {
+     "ALT in normal": 2,
+     "somatic candidate": 0,
+     "absent from normal": 1
+    },
+    "unverifiable": {
+     "ALT in normal": 1,
+     "somatic candidate": 0
+    }
+   }
+  },
+  "ctrl_tp": {
+   "calls": 150,
+   "status": {
+    "absent from normal": 140,
+    "one normal read": 6,
+    "ALT in normal": 4
+   },
+   "somatic_candidates": 139,
+   "by_category": {}
+  },
+  "ctrl_fp": {
+   "calls": 150,
+   "status": {
+    "ALT in normal": 121,
+    "low normal coverage": 2,
+    "absent from normal": 23,
+    "one normal read": 4
+   },
+   "somatic_candidates": 13,
+   "by_category": {}
+  }
+ },
+ "rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1": {
+  "unplaced_pass": {
+   "calls": 3000,
+   "status": {
+    "ALT in normal": 2334,
+    "absent from normal": 165,
+    "one normal read": 381,
+    "low normal coverage": 106,
+    "no k-mer": 14
+   },
+   "somatic_candidates": 24,
+   "by_category": {
+    "population": {
+     "ALT in normal": 1588,
+     "somatic candidate": 3,
+     "absent from normal": 73,
+     "one normal read": 235,
+     "low normal coverage": 38,
+     "no k-mer": 11
+    },
+    "unverifiable": {
+     "ALT in normal": 79,
+     "somatic candidate": 0,
+     "low normal coverage": 3,
+     "one normal read": 3,
+     "no k-mer": 1
+    },
+    "germline": {
+     "ALT in normal": 622,
+     "somatic candidate": 8,
+     "one normal read": 140,
+     "low normal coverage": 64,
+     "absent from normal": 76,
+     "no k-mer": 2
+    },
+    "tumor_only": {
+     "absent from normal": 10,
+     "somatic candidate": 10
+    },
+    "unsupported": {
+     "ALT in normal": 45,
+     "somatic candidate": 3,
+     "absent from normal": 6,
+     "one normal read": 3,
+     "low normal coverage": 1
+    }
+   }
+  },
+  "ctrl_tp": {
+   "calls": 150,
+   "status": {
+    "absent from normal": 138,
+    "ALT in normal": 5,
+    "one normal read": 7
+   },
+   "somatic_candidates": 138,
+   "by_category": {}
+  },
+  "ctrl_fp": {
+   "calls": 150,
+   "status": {
+    "absent from normal": 41,
+    "ALT in normal": 107,
+    "one normal read": 2
+   },
+   "somatic_candidates": 38,
+   "by_category": {}
+  }
+ },
+ "rcpu__COLO829_ONT_SNV_d46_7fc7396__vcf_chr1": {
+  "unplaced_pass": {
+   "calls": 3000,
+   "status": {
+    "ALT in normal": 1981,
+    "absent from normal": 480,
+    "one normal read": 341,
+    "low normal coverage": 187,
+    "no k-mer": 11
+   },
+   "somatic_candidates": 40,
+   "by_category": {
+    "population": {
+     "ALT in normal": 1260,
+     "somatic candidate": 17,
+     "one normal read": 157,
+     "low normal coverage": 15,
+     "absent from normal": 53,
+     "no k-mer": 10
+    },
+    "germline": {
+     "ALT in normal": 607,
+     "somatic candidate": 10,
+     "absent from normal": 410,
+     "one normal read": 175,
+     "low normal coverage": 168,
+     "no k-mer": 1
+    },
+    "unverifiable": {
+     "ALT in normal": 67,
+     "somatic candidate": 0,
+     "low normal coverage": 1,
+     "one normal read": 4
+    },
+    "unsupported": {
+     "one normal read": 5,
+     "somatic candidate": 2,
+     "ALT in normal": 46,
+     "absent from normal": 6,
+     "low normal coverage": 3
+    },
+    "tumor_only": {
+     "absent from normal": 11,
+     "somatic candidate": 11,
+     "ALT in normal": 1
+    }
+   }
+  },
+  "ctrl_tp": {
+   "calls": 150,
+   "status": {
+    "absent from normal": 139,
+    "ALT in normal": 2,
+    "one normal read": 9
+   },
+   "somatic_candidates": 139,
+   "by_category": {}
+  },
+  "ctrl_fp": {
+   "calls": 150,
+   "status": {
+    "ALT in normal": 88,
+    "absent from normal": 59,
+    "one normal read": 2,
+    "low normal coverage": 1
+   },
+   "somatic_candidates": 24,
+   "by_category": {}
+  }
+ },
+ "rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1": {
+  "unplaced_pass": {
+   "calls": 1483,
+   "status": {
+    "ALT in normal": 1376,
+    "no k-mer": 3,
+    "one normal read": 37,
+    "absent from normal": 33,
+    "low normal coverage": 34
+   },
+   "somatic_candidates": 10,
+   "by_category": {
+    "population": {
+     "ALT in normal": 1157,
+     "somatic candidate": 0,
+     "no k-mer": 3,
+     "one normal read": 17,
+     "low normal coverage": 11,
+     "absent from normal": 5
+    },
+    "unsupported": {
+     "ALT in normal": 22,
+     "somatic candidate": 4,
+     "one normal read": 4,
+     "absent from normal": 5
+    },
+    "unverifiable": {
+     "ALT in normal": 70,
+     "somatic candidate": 0,
+     "low normal coverage": 4,
+     "one normal read": 2
+    },
+    "germline": {
+     "ALT in normal": 126,
+     "somatic candidate": 1,
+     "one normal read": 14,
+     "absent from normal": 18,
+     "low normal coverage": 19
+    },
+    "tumor_only": {
+     "absent from normal": 5,
+     "somatic candidate": 5,
+     "ALT in normal": 1
+    }
+   }
+  },
+  "ctrl_tp": {
+   "calls": 150,
+   "status": {
+    "absent from normal": 133,
+    "ALT in normal": 6,
+    "one normal read": 10,
+    "low normal coverage": 1
+   },
+   "somatic_candidates": 133,
+   "by_category": {}
+  },
+  "ctrl_fp": {
+   "calls": 150,
+   "status": {
+    "ALT in normal": 117,
+    "low normal coverage": 1,
+    "one normal read": 17,
+    "absent from normal": 15
+   },
+   "somatic_candidates": 12,
+   "by_category": {}
+  }
+ },
+ "rcpu__COLO829_fiberseq_SNV_d46_7fc7396__vcf_chr1": {
+  "unplaced_pass": {
+   "calls": 257,
+   "status": {
+    "ALT in normal": 225,
+    "low normal coverage": 2,
+    "one normal read": 21,
+    "absent from normal": 9
+   },
+   "somatic_candidates": 8,
+   "by_category": {
+    "population": {
+     "ALT in normal": 187,
+     "somatic candidate": 3,
+     "one normal read": 9,
+     "absent from normal": 4
+    },
+    "unsupported": {
+     "ALT in normal": 9,
+     "somatic candidate": 0
+    },
+    "unverifiable": {
+     "low normal coverage": 1,
+     "somatic candidate": 0,
+     "ALT in normal": 13
+    },
+    "germline": {
+     "ALT in normal": 15,
+     "somatic candidate": 0,
+     "one normal read": 12
+    },
+    "tumor_only": {
+     "absent from normal": 5,
+     "somatic candidate": 5,
+     "low normal coverage": 1,
+     "ALT in normal": 1
+    }
+   }
+  },
+  "ctrl_tp": {
+   "calls": 150,
+   "status": {
+    "absent from normal": 141,
+    "ALT in normal": 6,
+    "one normal read": 3
+   },
+   "somatic_candidates": 141,
+   "by_category": {}
+  },
+  "ctrl_fp": {
+   "calls": 150,
+   "status": {
+    "ALT in normal": 131,
+    "absent from normal": 17,
+    "low normal coverage": 1,
+    "one normal read": 1
+   },
+   "somatic_candidates": 17,
+   "by_category": {}
+  }
+ }
+}

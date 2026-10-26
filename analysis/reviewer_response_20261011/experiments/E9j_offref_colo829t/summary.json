@@ -1,0 +1,114 @@
+{
+ "COLO829T_Illumina": {
+  "graph": "d9",
+  "run": "COLO829_Illumina_SNV_d9_normbq_sweep_e06",
+  "keys": 12,
+  "keys_chr1": 2,
+  "tumor_only": 7,
+  "tumor_only_chr1": 0,
+  "base_t_on_tumor_only": 1,
+  "rescue_on_tumor_only": 2,
+  "all_H_on_tumor_only": 4,
+  "rescue_calls_all": 2,
+  "rescue_calls_tumor_only": 2,
+  "classes": {
+   "tumor_only": 7,
+   "neither": 2,
+   "normal": 3
+  },
+  "scored": true
+ },
+ "COLO829T_fiberseq": {
+  "graph": "d9",
+  "run": "COLO829_fiberseq_SNV_7fc7396_ddp4_b1024",
+  "keys": 8,
+  "keys_chr1": 0,
+  "tumor_only": 7,
+  "tumor_only_chr1": 0,
+  "base_t_on_tumor_only": 1,
+  "rescue_on_tumor_only": 4,
+  "all_H_on_tumor_only": 6,
+  "rescue_calls_all": 4,
+  "rescue_calls_tumor_only": 4,
+  "classes": {
+   "tumor_only": 7,
+   "neither": 1
+  },
+  "scored": true
+ },
+ "COLO829T_ONT": {
+  "graph": "d9",
+  "run": "COLO829_ONT_SNV_7fc7396_ddp4_b1024",
+  "keys": 9,
+  "keys_chr1": 1,
+  "tumor_only": 7,
+  "tumor_only_chr1": 0,
+  "base_t_on_tumor_only": 1,
+  "rescue_on_tumor_only": 3,
+  "all_H_on_tumor_only": 3,
+  "rescue_calls_all": 3,
+  "rescue_calls_tumor_only": 3,
+  "classes": {
+   "tumor_only": 7,
+   "neither": 1,
+   "normal": 1
+  },
+  "scored": true
+ },
+ "COLO829T_Illumina_d46": {
+  "graph": "d46",
+  "run": "COLO829_Illumina_SNV_d46_7fc7396",
+  "keys": 16,
+  "keys_chr1": 6,
+  "tumor_only": 12,
+  "tumor_only_chr1": 3,
+  "base_t_on_tumor_only": 0,
+  "rescue_on_tumor_only": 7,
+  "all_H_on_tumor_only": 5,
+  "rescue_calls_all": 8,
+  "rescue_calls_tumor_only": 7,
+  "classes": {
+   "tumor_only": 12,
+   "normal": 2,
+   "neither": 2
+  },
+  "scored": true
+ },
+ "COLO829T_fiberseq_d46": {
+  "graph": "d46",
+  "run": "COLO829_fiberseq_SNV_d46_7fc7396",
+  "keys": 12,
+  "keys_chr1": 4,
+  "tumor_only": 10,
+  "tumor_only_chr1": 3,
+  "base_t_on_tumor_only": 0,
+  "rescue_on_tumor_only": 4,
+  "all_H_on_tumor_only": 4,
+  "rescue_calls_all": 4,
+  "rescue_calls_tumor_only": 4,
+  "classes": {
+   "tumor_only": 10,
+   "normal": 1,
+   "neither": 1
+  },
+  "scored": true
+ },
+ "COLO829T_ONT_d46": {
+  "graph": "d46",
+  "run": "COLO829_ONT_SNV_d46_7fc7396",
+  "keys": 11,
+  "keys_chr1": 3,
+  "tumor_only": 10,
+  "tumor_only_chr1": 3,
+  "base_t_on_tumor_only": 0,
+  "rescue_on_tumor_only": 4,
+  "all_H_on_tumor_only": 5,
+  "rescue_calls_all": 4,
+  "rescue_calls_tumor_only": 4,
+  "classes": {
+   "tumor_only": 10,
+   "normal": 1
+  },
+  "scored": true
+ }
+}

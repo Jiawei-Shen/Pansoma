@@ -32,15 +32,21 @@ GRAPHS = {
 FASTA = '/scratch/jshen/data/HapMap/GCA_000001405.15_GRCh38_no_alt_analysis_set.fasta'
 HPRC_VCF = f'{DATA}/ref/hprc-v1.1-mc-grch38.raw.vcf.gz'   # symlink to /scratch/jshen/data/hprc-v1.1-mc-grch38.raw.vcf.gz
 GOLD = f'{RUNS}/assembly_offref_20260929/offref_somatic.tsv'
-_Q = '/scratch/qfu/COLO829BL_DSA/ragtag_hg38'
+_Q = '/scratch/qfu/COLO829BL_DSA'
+_T = '/scratch/jshen/data/reviewer_experiments_20261013/E9c_offref_filter_validation/asm_targets'
 ASSEMBLIES = {   # sample -> [(target label, role, fasta)]
     'HG008T': [('HG008T_v3.2', 'tumor', '/scratch/jshen/data/HG008_GIAB/HG008T_v3.2.fasta.gz'),
                ('HG008N_v6.2', 'normal', '/scratch/jshen/data/HG008_GIAB/HG008N_curatedv6_250714_bothhaps_polished6.2.fasta.gz')],
-    'COLO829T': [('COLO829BL_hapX', 'normal', f'{_Q}/ragtag_SMHTCOLO829BL-X-X-M45-XX-uwsc-SMASFTH1B2J6-verkko_2.1_hapX_primary_normalized.fa'),
-                 ('COLO829BL_hapY', 'normal', f'{_Q}/ragtag_SMHTCOLO829BL-X-X-M45-XX-uwsc-SMASFK4V33V8-verkko_2.1_hapY_primary_normalized.fa'),
-                 ('COLO829BL_hapX_unloc', 'normal', f'{_Q}/ragtag_SMHTCOLO829BL-X-X-M45-XX-uwsc-SMASFTH1B2J6-verkko_2.1_hapX_unlocalized_normalized.fa'),
-                 ('COLO829BL_hapY_unloc', 'normal', f'{_Q}/ragtag_SMHTCOLO829BL-X-X-M45-XX-uwsc-SMASFK4V33V8-verkko_2.1_hapY_unlocalized_normalized.fa')],
+    # COLO829T (2026-10-23): normal = the COLO829BL donor-specific assembly (SMaHT verkko 2.1 hapX / hapY, all contigs; before:
+    # their ragtag-hg38 primary + unlocalized parts); tumor = hifiasm 0.25.0 of the COLO829T Fiber-seq HiFi reads with the
+    # COLO829T ONT D003 reads as ultra-long (qfu, /scratch/qfu/COLO829T_fiberseq/COLO829T_hifiasm, bp.hap1 / hap2 p_ctg GFA
+    # -> FASTA). The tumor assembly shares reads with the COLO829T Fiber-seq and ONT call sets, not with Illumina.
+    'COLO829T': [('COLO829BL_DSA_hapX', 'normal', f'{_Q}/SMHTCOLO829BL-X-X-M45-XX-uwsc-SMASFTH1B2J6-verkko_2.1_hapX.fa'),
+                 ('COLO829BL_DSA_hapY', 'normal', f'{_Q}/SMHTCOLO829BL-X-X-M45-XX-uwsc-SMASFK4V33V8-verkko_2.1_hapY.fa'),
+                 ('COLO829T_hifiasm_hap1', 'tumor', f'{_T}/COLO829T_hifiasm_hap1.fa.gz'),
+                 ('COLO829T_hifiasm_hap2', 'tumor', f'{_T}/COLO829T_hifiasm_hap2.fa.gz')],
 }
+TUMOR_ASM = {s for s, ts in ASSEMBLIES.items() if any(r == 'tumor' for _, r, _ in ts)}
 BASE = {1: 'A', 2: 'C', 3: 'G', 4: 'T', 5: 'N'}
 GAP = 6
 COMP = str.maketrans('ACGTN', 'TGCAN')

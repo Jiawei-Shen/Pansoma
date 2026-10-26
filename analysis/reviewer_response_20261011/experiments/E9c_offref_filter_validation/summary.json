@@ -16,14 +16,15 @@
    "with_context": 2505,
    "categories": {
     "population": 1892,
-    "germline": 445,
-    "unverifiable": 109,
-    "not_in_normal": 59
+    "germline": 444,
+    "unverifiable": 110,
+    "tumor_only": 9,
+    "unsupported": 50
    },
    "pop_ingraph": 564,
    "pop_hprc": 1886,
-   "multi_copy": 1298,
-   "tumor_only_multi_copy": 0,
+   "multi_copy": 1284,
+   "tumor_only_multi_copy": 18,
    "eval_nobed": {
     "tp": 1765,
     "fp": 691,
@@ -42,8 +43,8 @@
      0.6401
     ],
     "after_graph_pon_tumor_only_tp": [
-     0.5746,
-     0.6401
+     0.5776,
+     0.642
     ],
     "remaining_unplaced_after_graph_pon": 615.4,
     "unplaced_share_of_pass": 0.5059,
@@ -67,8 +68,8 @@
      0.6401
     ],
     "after_graph_pon_tumor_only_tp": [
-     0.5746,
-     0.6401
+     0.5776,
+     0.642
     ],
     "remaining_unplaced_after_graph_pon": 615.4,
     "unplaced_share_of_pass": 0.5059,
@@ -317,15 +318,15 @@
    "processed": 516,
    "with_context": 516,
    "categories": {
-    "not_in_normal": 16,
+    "tumor_only": 17,
     "population": 276,
     "germline": 222,
-    "unverifiable": 2
+    "unsupported": 1
    },
    "pop_ingraph": 90,
    "pop_hprc": 233,
    "multi_copy": 196,
-   "tumor_only_multi_copy": 0,
+   "tumor_only_multi_copy": 8,
    "e9a_proj_class_of_unplaced_pass": {
     "ii": 250,
     "iii": 227,
@@ -334,20 +335,19 @@
    "e9a_category_by_class": {
     "i": {
      "population": 17,
-     "not_in_normal": 1,
-     "germline": 20,
-     "unverifiable": 1
+     "tumor_only": 2,
+     "germline": 20
     },
     "ii": {
-     "not_in_normal": 10,
+     "tumor_only": 10,
      "population": 195,
      "germline": 44,
-     "unverifiable": 1
+     "unsupported": 1
     },
     "iii": {
      "germline": 158,
      "population": 64,
-     "not_in_normal": 5
+     "tumor_only": 5
     }
    },
    "eval_nobed": {
@@ -368,8 +368,8 @@
      0.7432
     ],
     "after_graph_pon_tumor_only_tp": [
-     0.7745,
-     0.7432
+     0.7821,
+     0.7466
     ],
     "remaining_unplaced_after_graph_pon": 240.0,
     "unplaced_share_of_pass": 0.204,
@@ -393,8 +393,8 @@
      0.7432
     ],
     "after_graph_pon_tumor_only_tp": [
-     0.7745,
-     0.7432
+     0.7821,
+     0.7466
     ],
     "remaining_unplaced_after_graph_pon": 240.0,
     "unplaced_share_of_pass": 0.204,
@@ -416,15 +416,16 @@
    "processed": 693,
    "with_context": 693,
    "categories": {
-    "not_in_normal": 15,
+    "tumor_only": 12,
     "population": 469,
     "germline": 208,
+    "unsupported": 3,
     "unverifiable": 1
    },
    "pop_ingraph": 162,
    "pop_hprc": 465,
-   "multi_copy": 328,
-   "tumor_only_multi_copy": 0,
+   "multi_copy": 333,
+   "tumor_only_multi_copy": 12,
    "e9a_proj_class_of_unplaced_pass": {
     "ii": 427,
     "i": 23,
@@ -433,19 +434,20 @@
    "e9a_category_by_class": {
     "i": {
      "population": 14,
-     "not_in_normal": 2,
+     "tumor_only": 2,
      "germline": 7
     },
     "ii": {
-     "not_in_normal": 12,
+     "tumor_only": 9,
      "population": 351,
      "germline": 63,
+     "unsupported": 3,
      "unverifiable": 1
     },
     "iii": {
      "germline": 138,
      "population": 104,
-     "not_in_normal": 1
+     "tumor_only": 1
     }
    },
    "eval_nobed": {
@@ -466,8 +468,8 @@
      0.7373
     ],
     "after_graph_pon_tumor_only_tp": [
-     0.7527,
-     0.7373
+     0.7578,
+     0.7397
     ],
     "remaining_unplaced_after_graph_pon": 224.0,
     "unplaced_share_of_pass": 0.2463,
@@ -491,8 +493,8 @@
      0.7373
     ],
     "after_graph_pon_tumor_only_tp": [
-     0.7527,
-     0.7373
+     0.7578,
+     0.7397
     ],
     "remaining_unplaced_after_graph_pon": 224.0,
     "unplaced_share_of_pass": 0.2463,
@@ -515,14 +517,15 @@
    "with_context": 3000,
    "categories": {
     "population": 1945,
-    "germline": 905,
-    "unverifiable": 85,
-    "not_in_normal": 65
+    "germline": 904,
+    "unverifiable": 86,
+    "tumor_only": 10,
+    "unsupported": 55
    },
    "pop_ingraph": 510,
    "pop_hprc": 1922,
-   "multi_copy": 1746,
-   "tumor_only_multi_copy": 0,
+   "multi_copy": 1732,
+   "tumor_only_multi_copy": 15,
    "e9a_proj_class_of_unplaced_pass": {
     "ii": 1517,
     "i": 67,
@@ -531,20 +534,23 @@
    "e9a_category_by_class": {
     "i": {
      "population": 50,
-     "not_in_normal": 3,
+     "unsupported": 2,
      "germline": 12,
-     "unverifiable": 2
+     "unverifiable": 2,
+     "tumor_only": 1
     },
     "ii": {
      "population": 1228,
-     "germline": 165,
-     "unverifiable": 82,
-     "not_in_normal": 42
+     "germline": 164,
+     "unverifiable": 83,
+     "tumor_only": 5,
+     "unsupported": 37
     },
     "iii": {
      "population": 667,
      "germline": 728,
-     "not_in_normal": 20,
+     "tumor_only": 4,
+     "unsupported": 16,
      "unverifiable": 1
     }
    },
@@ -566,8 +572,8 @@
      0.5899
     ],
     "after_graph_pon_tumor_only_tp": [
-     0.5094,
-     0.5899
+     0.5128,
+     0.5922
     ],
     "remaining_unplaced_after_graph_pon": 1203.1,
     "unplaced_share_of_pass": 0.6132,
@@ -591,8 +597,8 @@
      0.5899
     ],
     "after_graph_pon_tumor_only_tp": [
-     0.5094,
-     0.5899
+     0.5128,
+     0.5922
     ],
     "remaining_unplaced_after_graph_pon": 1203.1,
     "unplaced_share_of_pass": 0.6132,
@@ -615,14 +621,15 @@
    "with_context": 3000,
    "categories": {
     "population": 1495,
-    "not_in_normal": 72,
-    "unverifiable": 71,
-    "germline": 1362
+    "tumor_only": 12,
+    "unverifiable": 72,
+    "germline": 1361,
+    "unsupported": 60
    },
    "pop_ingraph": 272,
    "pop_hprc": 1466,
-   "multi_copy": 1594,
-   "tumor_only_multi_copy": 0,
+   "multi_copy": 1588,
+   "tumor_only_multi_copy": 10,
    "e9a_proj_class_of_unplaced_pass": {
     "ii": 885,
     "i": 85,
@@ -636,14 +643,16 @@
     },
     "ii": {
      "population": 717,
-     "not_in_normal": 41,
-     "unverifiable": 70,
-     "germline": 57
+     "tumor_only": 6,
+     "unverifiable": 71,
+     "germline": 56,
+     "unsupported": 35
     },
     "iii": {
      "population": 727,
      "germline": 1272,
-     "not_in_normal": 31
+     "tumor_only": 6,
+     "unsupported": 25
     }
    },
    "eval_nobed": {
@@ -664,8 +673,8 @@
      0.4911
     ],
     "after_graph_pon_tumor_only_tp": [
-     0.3807,
-     0.4911
+     0.3848,
+     0.4945
     ],
     "remaining_unplaced_after_graph_pon": 2292.1,
     "unplaced_share_of_pass": 0.6803,
@@ -689,8 +698,8 @@
      0.4911
     ],
     "after_graph_pon_tumor_only_tp": [
-     0.3807,
-     0.4911
+     0.3848,
+     0.4945
     ],
     "remaining_unplaced_after_graph_pon": 2292.1,
     "unplaced_share_of_pass": 0.6803,
@@ -714,13 +723,14 @@
    "categories": {
     "population": 1193,
     "germline": 177,
-    "not_in_normal": 35,
-    "unverifiable": 78
+    "tumor_only": 6,
+    "unverifiable": 76,
+    "unsupported": 31
    },
    "pop_ingraph": 156,
    "pop_hprc": 1188,
-   "multi_copy": 270,
-   "tumor_only_multi_copy": 0,
+   "multi_copy": 271,
+   "tumor_only_multi_copy": 2,
    "e9a_proj_class_of_unplaced_pass": {
     "i": 48,
     "ii": 1241,
@@ -729,20 +739,22 @@
    "e9a_category_by_class": {
     "i": {
      "population": 32,
-     "not_in_normal": 1,
+     "unsupported": 1,
      "germline": 13,
-     "unverifiable": 2
+     "tumor_only": 1,
+     "unverifiable": 1
     },
     "ii": {
      "population": 1062,
      "germline": 70,
-     "not_in_normal": 33,
-     "unverifiable": 76
+     "tumor_only": 4,
+     "unverifiable": 75,
+     "unsupported": 30
     },
     "iii": {
      "population": 99,
      "germline": 94,
-     "not_in_normal": 1
+     "tumor_only": 1
     }
    },
    "eval_nobed": {
@@ -763,8 +775,8 @@
      0.7086
     ],
     "after_graph_pon_tumor_only_tp": [
-     0.6952,
-     0.7086
+     0.6975,
+     0.7098
     ],
     "remaining_unplaced_after_graph_pon": 290.0,
     "unplaced_share_of_pass": 0.3974,
@@ -788,8 +800,8 @@
      0.7086
     ],
     "after_graph_pon_tumor_only_tp": [
-     0.6952,
-     0.7086
+     0.6975,
+     0.7098
     ],
     "remaining_unplaced_after_graph_pon": 290.0,
     "unplaced_share_of_pass": 0.3974,
@@ -812,14 +824,15 @@
    "with_context": 257,
    "categories": {
     "population": 200,
-    "not_in_normal": 15,
+    "tumor_only": 7,
     "germline": 27,
-    "unverifiable": 15
+    "unverifiable": 14,
+    "unsupported": 9
    },
    "pop_ingraph": 35,
    "pop_hprc": 197,
-   "multi_copy": 48,
-   "tumor_only_multi_copy": 0,
+   "multi_copy": 46,
+   "tumor_only_multi_copy": 3,
    "e9a_proj_class_of_unplaced_pass": {
     "i": 12,
     "ii": 203,
@@ -829,18 +842,19 @@
     "i": {
      "population": 8,
      "germline": 2,
-     "not_in_normal": 2
+     "unsupported": 2
     },
     "ii": {
-     "not_in_normal": 11,
+     "tumor_only": 5,
      "population": 164,
-     "unverifiable": 15,
+     "unverifiable": 14,
+     "unsupported": 7,
      "germline": 13
     },
     "iii": {
      "population": 28,
      "germline": 12,
-     "not_in_normal": 2
+     "tumor_only": 2
     }
    },
    "eval_nobed": {
@@ -861,8 +875,8 @@
      0.7687
     ],
     "after_graph_pon_tumor_only_tp": [
-     0.8417,
-     0.7687
+     0.8451,
+     0.7701
     ],
     "remaining_unplaced_after_graph_pon": 57.0,
     "unplaced_share_of_pass": 0.1141,
@@ -886,8 +900,8 @@
      0.7687
     ],
     "after_graph_pon_tumor_only_tp": [
-     0.8417,
-     0.7687
+     0.8451,
+     0.7701
     ],
     "remaining_unplaced_after_graph_pon": 57.0,
     "unplaced_share_of_pass": 0.1141,
@@ -4702,8 +4716,9 @@
    "n": 146,
    "pop": 0,
    "asm": {
-    "not_in_normal": 144,
-    "germline": 2
+    "tumor_only": 122,
+    "unsupported": 23,
+    "germline": 1
    }
   },
   {
@@ -4712,9 +4727,9 @@
    "n": 125,
    "pop": 10,
    "asm": {
-    "not_in_normal": 37,
-    "germline": 87,
-    "unverifiable": 1
+    "unsupported": 30,
+    "germline": 83,
+    "tumor_only": 12
    }
   },
   {
@@ -4724,7 +4739,8 @@
    "pop": 2,
    "asm": {
     "germline": 132,
-    "not_in_normal": 5
+    "tumor_only": 1,
+    "unsupported": 4
    }
   },
   {
@@ -4733,9 +4749,10 @@
    "n": 2505,
    "pop": 1892,
    "asm": {
-    "germline": 1814,
-    "unverifiable": 456,
-    "not_in_normal": 235
+    "germline": 1800,
+    "tumor_only": 31,
+    "unverifiable": 454,
+    "unsupported": 220
    }
   },
   {
@@ -4913,7 +4930,8 @@
    "n": 150,
    "pop": 0,
    "asm": {
-    "not_in_normal": 148,
+    "tumor_only": 137,
+    "unsupported": 11,
     "germline": 2
    }
   },
@@ -4924,7 +4942,8 @@
    "pop": 2,
    "asm": {
     "germline": 125,
-    "not_in_normal": 25
+    "tumor_only": 21,
+    "unsupported": 4
    }
   },
   {
@@ -4933,9 +4952,9 @@
    "n": 150,
    "pop": 7,
    "asm": {
-    "germline": 136,
-    "not_in_normal": 13,
-    "unverifiable": 1
+    "germline": 137,
+    "tumor_only": 11,
+    "unsupported": 2
    }
   },
   {
@@ -4944,9 +4963,10 @@
    "n": 516,
    "pop": 276,
    "asm": {
-    "not_in_normal": 23,
+    "tumor_only": 20,
     "germline": 487,
-    "unverifiable": 6
+    "unverifiable": 4,
+    "unsupported": 5
    }
   },
   {
@@ -4964,8 +4984,9 @@
    "n": 150,
    "pop": 0,
    "asm": {
-    "not_in_normal": 146,
-    "germline": 4
+    "tumor_only": 130,
+    "germline": 3,
+    "unsupported": 17
    }
   },
   {
@@ -4975,7 +4996,8 @@
    "pop": 16,
    "asm": {
     "germline": 123,
-    "not_in_normal": 27
+    "tumor_only": 15,
+    "unsupported": 12
    }
   },
   {
@@ -4984,8 +5006,9 @@
    "n": 150,
    "pop": 10,
    "asm": {
-    "germline": 146,
-    "not_in_normal": 4
+    "germline": 147,
+    "tumor_only": 2,
+    "unsupported": 1
    }
   },
   {
@@ -4994,9 +5017,10 @@
    "n": 693,
    "pop": 469,
    "asm": {
-    "not_in_normal": 41,
-    "germline": 641,
-    "unverifiable": 11
+    "tumor_only": 28,
+    "germline": 633,
+    "unsupported": 25,
+    "unverifiable": 7
    }
   },
   {
@@ -5015,8 +5039,9 @@
    "n": 150,
    "pop": 0,
    "asm": {
-    "not_in_normal": 149,
-    "unverifiable": 1
+    "tumor_only": 130,
+    "unverifiable": 1,
+    "unsupported": 19
    }
   },
   {
@@ -5025,8 +5050,9 @@
    "n": 150,
    "pop": 5,
    "asm": {
-    "not_in_normal": 58,
-    "germline": 92
+    "tumor_only": 15,
+    "germline": 94,
+    "unsupported": 41
    }
   },
   {
@@ -5036,7 +5062,7 @@
    "pop": 13,
    "asm": {
     "germline": 145,
-    "not_in_normal": 5
+    "tumor_only": 5
    }
   },
   {
@@ -5045,9 +5071,10 @@
    "n": 3000,
    "pop": 1945,
    "asm": {
-    "germline": 2345,
-    "not_in_normal": 235,
-    "unverifiable": 419,
+    "germline": 2331,
+    "unsupported": 218,
+    "unverifiable": 421,
+    "tumor_only": 29,
     "not_checked": 1
    }
   },
@@ -5066,7 +5093,8 @@
    "n": 150,
    "pop": 0,
    "asm": {
-    "not_in_normal": 150
+    "tumor_only": 135,
+    "unsupported": 15
    }
   },
   {
@@ -5076,7 +5104,8 @@
    "pop": 3,
    "asm": {
     "germline": 110,
-    "not_in_normal": 40
+    "tumor_only": 11,
+    "unsupported": 29
    }
   },
   {
@@ -5086,7 +5115,8 @@
    "pop": 11,
    "asm": {
     "germline": 144,
-    "not_in_normal": 6
+    "tumor_only": 3,
+    "unsupported": 3
    }
   },
   {
@@ -5095,9 +5125,10 @@
    "n": 3000,
    "pop": 1495,
    "asm": {
-    "germline": 2493,
-    "not_in_normal": 197,
-    "unverifiable": 309,
+    "germline": 2488,
+    "tumor_only": 18,
+    "unverifiable": 310,
+    "unsupported": 183,
     "not_checked": 1
    }
   },
@@ -5117,7 +5148,8 @@
    "n": 150,
    "pop": 0,
    "asm": {
-    "not_in_normal": 147,
+    "unsupported": 17,
+    "tumor_only": 130,
     "germline": 3
    }
   },
@@ -5128,7 +5160,8 @@
    "pop": 6,
    "asm": {
     "germline": 134,
-    "not_in_normal": 16
+    "tumor_only": 11,
+    "unsupported": 5
    }
   },
   {
@@ -5138,7 +5171,8 @@
    "pop": 13,
    "asm": {
     "germline": 146,
-    "not_in_normal": 4
+    "tumor_only": 3,
+    "unsupported": 1
    }
   },
   {
@@ -5147,9 +5181,10 @@
    "n": 1483,
    "pop": 1193,
    "asm": {
-    "germline": 867,
-    "unverifiable": 469,
-    "not_in_normal": 147
+    "germline": 868,
+    "unverifiable": 459,
+    "tumor_only": 19,
+    "unsupported": 137
    }
   },
   {
@@ -5167,8 +5202,9 @@
    "n": 150,
    "pop": 0,
    "asm": {
-    "germline": 2,
-    "not_in_normal": 148
+    "germline": 1,
+    "tumor_only": 132,
+    "unsupported": 17
    }
   },
   {
@@ -5178,7 +5214,8 @@
    "pop": 1,
    "asm": {
     "germline": 131,
-    "not_in_normal": 19
+    "tumor_only": 17,
+    "unsupported": 2
    }
   },
   {
@@ -5188,7 +5225,8 @@
    "pop": 7,
    "asm": {
     "germline": 140,
-    "not_in_normal": 10
+    "tumor_only": 8,
+    "unsupported": 2
    }
   },
   {
@@ -5198,8 +5236,9 @@
    "pop": 200,
    "asm": {
     "germline": 137,
-    "not_in_normal": 38,
-    "unverifiable": 82
+    "tumor_only": 9,
+    "unsupported": 31,
+    "unverifiable": 80
    }
   },
   {
@@ -15791,9 +15830,9 @@
    "n": 443,
    "categories": {
     "population": 334,
-    "unverifiable": 73,
-    "not_in_normal": 26,
-    "germline": 10
+    "unverifiable": 74,
+    "unsupported": 26,
+    "germline": 9
    }
   },
   {
@@ -15802,9 +15841,10 @@
    "n": 291,
    "categories": {
     "population": 235,
-    "not_in_normal": 15,
+    "tumor_only": 4,
     "unverifiable": 13,
-    "germline": 28
+    "germline": 28,
+    "unsupported": 11
    }
   },
   {
@@ -15815,7 +15855,8 @@
     "population": 1323,
     "germline": 407,
     "unverifiable": 23,
-    "not_in_normal": 18
+    "unsupported": 13,
+    "tumor_only": 5
    }
   },
   {
@@ -15917,8 +15958,7 @@
    "categories": {
     "germline": 5,
     "population": 34,
-    "not_in_normal": 1,
-    "unverifiable": 1
+    "tumor_only": 2
    }
   },
   {
@@ -15928,7 +15968,7 @@
    "categories": {
     "germline": 13,
     "population": 61,
-    "not_in_normal": 3
+    "tumor_only": 3
    }
   },
   {
@@ -15936,10 +15976,10 @@
    "stratum": "other",
    "n": 398,
    "categories": {
-    "not_in_normal": 12,
+    "tumor_only": 12,
     "population": 181,
     "germline": 204,
-    "unverifiable": 1
+    "unsupported": 1
    }
   },
   {
@@ -15950,7 +15990,7 @@
     "population": 34,
     "germline": 7,
     "unverifiable": 1,
-    "not_in_normal": 2
+    "unsupported": 2
    }
   },
   {
@@ -15959,7 +15999,7 @@
    "n": 122,
    "categories": {
     "population": 105,
-    "not_in_normal": 5,
+    "tumor_only": 5,
     "germline": 12
    }
   },
@@ -15968,9 +16008,10 @@
    "stratum": "other",
    "n": 527,
    "categories": {
-    "not_in_normal": 8,
+    "tumor_only": 7,
     "population": 330,
-    "germline": 189
+    "germline": 189,
+    "unsupported": 1
    }
   },
   {
@@ -15979,9 +16020,9 @@
    "n": 433,
    "categories": {
     "population": 329,
-    "unverifiable": 64,
-    "not_in_normal": 26,
-    "germline": 14
+    "unverifiable": 65,
+    "unsupported": 26,
+    "germline": 13
    }
   },
   {
@@ -15990,7 +16031,8 @@
    "n": 340,
    "categories": {
     "population": 264,
-    "not_in_normal": 12,
+    "tumor_only": 3,
+    "unsupported": 9,
     "germline": 54,
     "unverifiable": 10
    }
@@ -16002,7 +16044,8 @@
    "categories": {
     "population": 1352,
     "germline": 837,
-    "not_in_normal": 27,
+    "unsupported": 20,
+    "tumor_only": 7,
     "unverifiable": 11
    }
   },
@@ -16013,7 +16056,7 @@
    "categories": {
     "population": 211,
     "unverifiable": 49,
-    "not_in_normal": 24,
+    "unsupported": 24,
     "germline": 19
    }
   },
@@ -16023,9 +16066,10 @@
    "n": 289,
    "categories": {
     "population": 209,
-    "germline": 67,
-    "not_in_normal": 4,
-    "unverifiable": 9
+    "germline": 66,
+    "tumor_only": 1,
+    "unverifiable": 10,
+    "unsupported": 3
    }
   },
   {
@@ -16034,9 +16078,10 @@
    "n": 2408,
    "categories": {
     "population": 1075,
-    "not_in_normal": 44,
+    "tumor_only": 11,
     "unverifiable": 13,
-    "germline": 1276
+    "germline": 1276,
+    "unsupported": 33
    }
   },
   {
@@ -16046,8 +16091,9 @@
    "categories": {
     "population": 282,
     "germline": 6,
-    "unverifiable": 47,
-    "not_in_normal": 20
+    "unverifiable": 46,
+    "unsupported": 20,
+    "tumor_only": 1
    }
   },
   {
@@ -16055,10 +16101,11 @@
    "stratum": "STR",
    "n": 190,
    "categories": {
-    "not_in_normal": 9,
+    "tumor_only": 2,
     "population": 155,
     "germline": 14,
-    "unverifiable": 12
+    "unverifiable": 12,
+    "unsupported": 7
    }
   },
   {
@@ -16068,8 +16115,9 @@
    "categories": {
     "population": 756,
     "germline": 157,
-    "unverifiable": 19,
-    "not_in_normal": 6
+    "unverifiable": 18,
+    "unsupported": 4,
+    "tumor_only": 3
    }
   },
   {
@@ -16078,9 +16126,10 @@
    "n": 113,
    "categories": {
     "population": 92,
-    "unverifiable": 12,
-    "not_in_normal": 7,
-    "germline": 2
+    "unverifiable": 11,
+    "unsupported": 7,
+    "germline": 2,
+    "tumor_only": 1
    }
   },
   {
@@ -16088,8 +16137,9 @@
    "stratum": "STR",
    "n": 39,
    "categories": {
-    "not_in_normal": 4,
+    "tumor_only": 2,
     "population": 32,
+    "unsupported": 2,
     "germline": 3
    }
   },
@@ -16099,7 +16149,7 @@
    "n": 105,
    "categories": {
     "population": 76,
-    "not_in_normal": 4,
+    "tumor_only": 4,
     "germline": 22,
     "unverifiable": 3
    }
@@ -16355,9 +16405,9 @@
    "unplaced_pass": 516,
    "in_another": 187,
    "by_category": {
-    "not_in_normal": {
+    "tumor_only": {
      "2": 4,
-     "1": 9,
+     "1": 10,
      "0": 3
     },
     "population": {
@@ -16370,9 +16420,8 @@
      "1": 85,
      "2": 7
     },
-    "unverifiable": {
-     "0": 1,
-     "1": 1
+    "unsupported": {
+     "0": 1
     }
    }
   },
@@ -16388,19 +16437,23 @@
      "1": 95,
      "2": 14
     },
-    "not_in_normal": {
-     "0": 58,
+    "tumor_only": {
+     "0": 4,
      "2": 3,
-     "1": 11
+     "1": 5
     },
     "unverifiable": {
-     "0": 64,
+     "0": 65,
      "1": 7
     },
     "germline": {
-     "0": 1289,
+     "0": 1288,
      "1": 69,
      "2": 4
+    },
+    "unsupported": {
+     "0": 54,
+     "1": 6
     }
    }
   },
@@ -16416,10 +16469,9 @@
      "2": 26,
      "0": 64
     },
-    "not_in_normal": {
+    "tumor_only": {
      "2": 4,
-     "0": 4,
-     "1": 7
+     "1": 3
     },
     "germline": {
      "1": 11,
@@ -16427,8 +16479,12 @@
      "0": 9
     },
     "unverifiable": {
-     "1": 10,
+     "1": 9,
      "0": 5
+    },
+    "unsupported": {
+     "0": 4,
+     "1": 5
     }
    }
   },
@@ -16439,8 +16495,8 @@
    "unplaced_pass": 693,
    "in_another": 127,
    "by_category": {
-    "not_in_normal": {
-     "0": 11,
+    "tumor_only": {
+     "0": 8,
      "2": 2,
      "1": 2
     },
@@ -16453,6 +16509,9 @@
      "0": 176,
      "2": 13,
      "1": 19
+    },
+    "unsupported": {
+     "0": 3
     },
     "unverifiable": {
      "0": 1
@@ -16472,18 +16531,22 @@
      "2": 38
     },
     "germline": {
-     "0": 818,
+     "0": 817,
      "1": 76,
      "2": 11
     },
     "unverifiable": {
-     "0": 63,
+     "0": 64,
      "1": 22
     },
-    "not_in_normal": {
+    "tumor_only": {
      "2": 2,
-     "1": 18,
-     "0": 45
+     "0": 4,
+     "1": 4
+    },
+    "unsupported": {
+     "1": 14,
+     "0": 41
     }
    }
   },
@@ -16504,14 +16567,18 @@
      "2": 14,
      "0": 88
     },
-    "not_in_normal": {
+    "tumor_only": {
      "2": 2,
-     "0": 16,
-     "1": 17
+     "1": 3,
+     "0": 1
     },
     "unverifiable": {
-     "1": 23,
+     "1": 21,
      "0": 55
+    },
+    "unsupported": {
+     "0": 15,
+     "1": 16
     }
    }
   },

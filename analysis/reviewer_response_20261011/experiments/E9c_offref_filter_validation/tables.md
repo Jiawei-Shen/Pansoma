@@ -6,16 +6,16 @@ Fractions of the unplaced PASS calls with a tensor context (`with ctx`); `proces
 
 | run | type | graph | kind | sample | platform | purity | unplaced PASS | processed | with ctx | population (graph PoN) | in-graph | HPRC hap | germline (normal asm) | tumor-only | not in normal | unverifiable | unsupported | not checked |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| legacy__COLO829T_ONT_SNV_pow075_S_lr1e4_e20__vcf_chr1 | legacy | d9 | SNV | COLO829T | ONT | P100 | 2515 | 2515 | 2505 | 1892 (75.5 %) | 564 (22.5 %) | 1886 (75.3 %) | 445 (17.8 %) | 0 (0.0 %) | 59 (2.4 %) | 109 (4.4 %) | 0 (0.0 %) | 0 (0.0 %) |
+| legacy__COLO829T_ONT_SNV_pow075_S_lr1e4_e20__vcf_chr1 | legacy | d9 | SNV | COLO829T | ONT | P100 | 2515 | 2515 | 2505 | 1892 (75.5 %) | 564 (22.5 %) | 1886 (75.3 %) | 444 (17.7 %) | 9 (0.4 %) | 0 (0.0 %) | 110 (4.4 %) | 50 (2.0 %) | 0 (0.0 %) |
 | legacy__HG008_Illumina_INDEL_small_nofilt__vcf_chr1 | legacy | d9 | INDEL | HG008T | Illumina | P100 | 534 | 534 | 534 | 478 (89.5 %) | 39 (7.3 %) | 477 (89.3 %) | 37 (6.9 %) | 9 (1.7 %) | 0 (0.0 %) | 4 (0.7 %) | 6 (1.1 %) | 0 (0.0 %) |
 | legacy__HG008_Illumina_SNV_pow075_S_lr1e4_e20__vcf_chr1 | legacy | d9 | SNV | HG008T | Illumina | P100 | 595 | 595 | 595 | 469 (78.8 %) | 143 (24.0 %) | 461 (77.5 %) | 122 (20.5 %) | 2 (0.3 %) | 0 (0.0 %) | 1 (0.2 %) | 1 (0.2 %) | 0 (0.0 %) |
 | legacy__HG008_PacBio_SNV_pow075_S_lr1e4_e20__vcf_chr1 | legacy | d9 | SNV | HG008T | PacBio | P100 | 105 | 105 | 105 | 88 (83.8 %) | 15 (14.3 %) | 88 (83.8 %) | 15 (14.3 %) | 1 (1.0 %) | 0 (0.0 %) | 1 (1.0 %) | 0 (0.0 %) | 0 (0.0 %) |
-| rcpu__COLO829_Illumina_SNV_d46_7fc7396__vcf_chr1 | in-sample | d46 | SNV | COLO829T | Illumina | P100 | 516 | 516 | 516 | 276 (53.5 %) | 90 (17.4 %) | 233 (45.2 %) | 222 (43.0 %) | 0 (0.0 %) | 16 (3.1 %) | 2 (0.4 %) | 0 (0.0 %) | 0 (0.0 %) |
-| rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1 | in-sample | d9 | SNV | COLO829T | Illumina | P100 | 693 | 693 | 693 | 469 (67.7 %) | 162 (23.4 %) | 465 (67.1 %) | 208 (30.0 %) | 0 (0.0 %) | 15 (2.2 %) | 1 (0.1 %) | 0 (0.0 %) | 0 (0.0 %) |
-| rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1 | in-sample | d9 | SNV | COLO829T | ONT | P100 | 3421 | 3000 | 3000 | 1945 (64.8 %) | 510 (17.0 %) | 1922 (64.1 %) | 905 (30.2 %) | 0 (0.0 %) | 65 (2.2 %) | 85 (2.8 %) | 0 (0.0 %) | 0 (0.0 %) |
-| rcpu__COLO829_ONT_SNV_d46_7fc7396__vcf_chr1 | in-sample | d46 | SNV | COLO829T | ONT | P100 | 4569 | 3000 | 3000 | 1495 (49.8 %) | 272 (9.1 %) | 1466 (48.9 %) | 1362 (45.4 %) | 0 (0.0 %) | 72 (2.4 %) | 71 (2.4 %) | 0 (0.0 %) | 0 (0.0 %) |
-| rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1 | in-sample | d9 | SNV | COLO829T | fiberseq | P100 | 1483 | 1483 | 1483 | 1193 (80.4 %) | 156 (10.5 %) | 1188 (80.1 %) | 177 (11.9 %) | 0 (0.0 %) | 35 (2.4 %) | 78 (5.3 %) | 0 (0.0 %) | 0 (0.0 %) |
-| rcpu__COLO829_fiberseq_SNV_d46_7fc7396__vcf_chr1 | in-sample | d46 | SNV | COLO829T | fiberseq | P100 | 257 | 257 | 257 | 200 (77.8 %) | 35 (13.6 %) | 197 (76.7 %) | 27 (10.5 %) | 0 (0.0 %) | 15 (5.8 %) | 15 (5.8 %) | 0 (0.0 %) | 0 (0.0 %) |
+| rcpu__COLO829_Illumina_SNV_d46_7fc7396__vcf_chr1 | in-sample | d46 | SNV | COLO829T | Illumina | P100 | 516 | 516 | 516 | 276 (53.5 %) | 90 (17.4 %) | 233 (45.2 %) | 222 (43.0 %) | 17 (3.3 %) | 0 (0.0 %) | 0 (0.0 %) | 1 (0.2 %) | 0 (0.0 %) |
+| rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1 | in-sample | d9 | SNV | COLO829T | Illumina | P100 | 693 | 693 | 693 | 469 (67.7 %) | 162 (23.4 %) | 465 (67.1 %) | 208 (30.0 %) | 12 (1.7 %) | 0 (0.0 %) | 1 (0.1 %) | 3 (0.4 %) | 0 (0.0 %) |
+| rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1 | in-sample | d9 | SNV | COLO829T | ONT | P100 | 3421 | 3000 | 3000 | 1945 (64.8 %) | 510 (17.0 %) | 1922 (64.1 %) | 904 (30.1 %) | 10 (0.3 %) | 0 (0.0 %) | 86 (2.9 %) | 55 (1.8 %) | 0 (0.0 %) |
+| rcpu__COLO829_ONT_SNV_d46_7fc7396__vcf_chr1 | in-sample | d46 | SNV | COLO829T | ONT | P100 | 4569 | 3000 | 3000 | 1495 (49.8 %) | 272 (9.1 %) | 1466 (48.9 %) | 1361 (45.4 %) | 12 (0.4 %) | 0 (0.0 %) | 72 (2.4 %) | 60 (2.0 %) | 0 (0.0 %) |
+| rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1 | in-sample | d9 | SNV | COLO829T | fiberseq | P100 | 1483 | 1483 | 1483 | 1193 (80.4 %) | 156 (10.5 %) | 1188 (80.1 %) | 177 (11.9 %) | 6 (0.4 %) | 0 (0.0 %) | 76 (5.1 %) | 31 (2.1 %) | 0 (0.0 %) |
+| rcpu__COLO829_fiberseq_SNV_d46_7fc7396__vcf_chr1 | in-sample | d46 | SNV | COLO829T | fiberseq | P100 | 257 | 257 | 257 | 200 (77.8 %) | 35 (13.6 %) | 197 (76.7 %) | 27 (10.5 %) | 7 (2.7 %) | 0 (0.0 %) | 14 (5.4 %) | 9 (3.5 %) | 0 (0.0 %) |
 | rcpu__HG008_Illumina_SNV_7fc7396_ddp4_b1024__vcf_chr1 | in-sample | d9 | SNV | HG008T | Illumina | P100 | 115 | 115 | 115 | 95 (82.6 %) | 10 (8.7 %) | 95 (82.6 %) | 19 (16.5 %) | 1 (0.9 %) | 0 (0.0 %) | 0 (0.0 %) | 0 (0.0 %) | 0 (0.0 %) |
 | rcpu__HG008_Illumina_SNV_d46_7fc7396__vcf_chr1 | in-sample | d46 | SNV | HG008T | Illumina | P100 | 754 | 754 | 754 | 496 (65.8 %) | 209 (27.7 %) | 425 (56.4 %) | 250 (33.2 %) | 4 (0.5 %) | 0 (0.0 %) | 2 (0.3 %) | 2 (0.3 %) | 0 (0.0 %) |
 | rcpu__HG008_ONT_SNV_7fc7396__vcf_chr1 | in-sample | d9 | SNV | HG008T | ONT | P100 | 1410 | 1410 | 1410 | 1289 (91.4 %) | 189 (13.4 %) | 1285 (91.1 %) | 59 (4.2 %) | 3 (0.2 %) | 0 (0.0 %) | 52 (3.7 %) | 7 (0.5 %) | 0 (0.0 %) |
@@ -29,26 +29,26 @@ Fractions of the unplaced PASS calls with a tensor context (`with ctx`); `proces
 
 | run | eval | TP | FP | unplaced PASS | unplaced share of PASS | recall | P placed | F1 placed | P all FP | F1 all FP | P graph PoN | F1 graph PoN | P +tumor-only | F1 +tumor-only | unplaced left | unplaced share left |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| legacy__COLO829T_ONT_SNV_pow075_S_lr1e4_e20__vcf_chr1 | bed | 1765 | 691 | 2515.0 | 0.5059 | 0.7225 | 0.7186 | 0.7206 | 0.3551 | 0.4761 | 0.5746 | 0.6401 | 0.5746 | 0.6401 | 615.4 | 0.2004 |
-| legacy__COLO829T_ONT_SNV_pow075_S_lr1e4_e20__vcf_chr1 | nobed | 1765 | 691 | 2515 | 0.5059 | 0.7225 | 0.7186 | 0.7206 | 0.3551 | 0.4761 | 0.5746 | 0.6401 | 0.5746 | 0.6401 | 615.4 | 0.2004 |
+| legacy__COLO829T_ONT_SNV_pow075_S_lr1e4_e20__vcf_chr1 | bed | 1765 | 691 | 2515.0 | 0.5059 | 0.7225 | 0.7186 | 0.7206 | 0.3551 | 0.4761 | 0.5746 | 0.6401 | 0.5776 | 0.642 | 615.4 | 0.2004 |
+| legacy__COLO829T_ONT_SNV_pow075_S_lr1e4_e20__vcf_chr1 | nobed | 1765 | 691 | 2515 | 0.5059 | 0.7225 | 0.7186 | 0.7206 | 0.3551 | 0.4761 | 0.5746 | 0.6401 | 0.5776 | 0.642 | 615.4 | 0.2004 |
 | legacy__HG008_Illumina_INDEL_small_nofilt__vcf_chr1 | bed | 137 | 423 | 475.0 | 0.4589 | 0.2334 | 0.2446 | 0.2389 | 0.1324 | 0.1689 | 0.225 | 0.2291 | 0.2381 | 0.2357 | 49.0 | 0.0805 |
 | legacy__HG008_Illumina_INDEL_small_nofilt__vcf_chr1 | nobed | 145 | 477 | 534 | 0.4619 | 0.2283 | 0.2331 | 0.2307 | 0.1254 | 0.1619 | 0.2139 | 0.2209 | 0.2271 | 0.2277 | 56.0 | 0.0826 |
 | legacy__HG008_Illumina_SNV_pow075_S_lr1e4_e20__vcf_chr1 | bed | 584 | 702 | 425.0 | 0.2484 | 0.8379 | 0.4541 | 0.589 | 0.3413 | 0.485 | 0.4339 | 0.5717 | 0.4354 | 0.573 | 60.0 | 0.0446 |
 | legacy__HG008_Illumina_SNV_pow075_S_lr1e4_e20__vcf_chr1 | nobed | 588 | 745 | 595 | 0.3086 | 0.8376 | 0.4411 | 0.5779 | 0.305 | 0.4471 | 0.403 | 0.5442 | 0.4044 | 0.5454 | 126.0 | 0.0864 |
 | legacy__HG008_PacBio_SNV_pow075_S_lr1e4_e20__vcf_chr1 | bed | 579 | 588 | 88.0 | 0.0701 | 0.8307 | 0.4961 | 0.6212 | 0.4614 | 0.5932 | 0.4907 | 0.6169 | 0.4915 | 0.6176 | 13.0 | 0.011 |
 | legacy__HG008_PacBio_SNV_pow075_S_lr1e4_e20__vcf_chr1 | nobed | 583 | 617 | 105 | 0.0805 | 0.8305 | 0.4858 | 0.613 | 0.4467 | 0.581 | 0.479 | 0.6076 | 0.4799 | 0.6083 | 17.0 | 0.014 |
-| rcpu__COLO829_Illumina_SNV_d46_7fc7396__vcf_chr1 | bed | 1745 | 268 | 516.0 | 0.204 | 0.7143 | 0.8669 | 0.7832 | 0.69 | 0.7019 | 0.7745 | 0.7432 | 0.7745 | 0.7432 | 240.0 | 0.1065 |
-| rcpu__COLO829_Illumina_SNV_d46_7fc7396__vcf_chr1 | nobed | 1745 | 268 | 516 | 0.204 | 0.7143 | 0.8669 | 0.7832 | 0.69 | 0.7019 | 0.7745 | 0.7432 | 0.7745 | 0.7432 | 240.0 | 0.1065 |
-| rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1 | bed | 1765 | 356 | 693.0 | 0.2463 | 0.7225 | 0.8322 | 0.7734 | 0.6272 | 0.6715 | 0.7527 | 0.7373 | 0.7527 | 0.7373 | 224.0 | 0.0955 |
-| rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1 | nobed | 1765 | 356 | 693 | 0.2463 | 0.7225 | 0.8322 | 0.7734 | 0.6272 | 0.6715 | 0.7527 | 0.7373 | 0.7527 | 0.7373 | 224.0 | 0.0955 |
-| rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1 | bed | 1712 | 446 | 3421.0 | 0.6132 | 0.7008 | 0.7933 | 0.7442 | 0.3069 | 0.4268 | 0.5094 | 0.5899 | 0.5094 | 0.5899 | 1203.1 | 0.3579 |
-| rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1 | nobed | 1712 | 446 | 3421 | 0.6132 | 0.7008 | 0.7933 | 0.7442 | 0.3069 | 0.4268 | 0.5094 | 0.5899 | 0.5094 | 0.5899 | 1203.1 | 0.3579 |
-| rcpu__COLO829_ONT_SNV_d46_7fc7396__vcf_chr1 | bed | 1690 | 457 | 4569.0 | 0.6803 | 0.6918 | 0.7871 | 0.7364 | 0.2516 | 0.369 | 0.3807 | 0.4911 | 0.3807 | 0.4911 | 2292.1 | 0.5163 |
-| rcpu__COLO829_ONT_SNV_d46_7fc7396__vcf_chr1 | nobed | 1690 | 457 | 4569 | 0.6803 | 0.6918 | 0.7871 | 0.7364 | 0.2516 | 0.369 | 0.3807 | 0.4911 | 0.3807 | 0.4911 | 2292.1 | 0.5163 |
-| rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1 | bed | 1765 | 484 | 1483.0 | 0.3974 | 0.7225 | 0.7848 | 0.7523 | 0.4729 | 0.5717 | 0.6952 | 0.7086 | 0.6952 | 0.7086 | 290.0 | 0.1142 |
-| rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1 | nobed | 1765 | 484 | 1483 | 0.3974 | 0.7225 | 0.7848 | 0.7523 | 0.4729 | 0.5717 | 0.6952 | 0.7086 | 0.6952 | 0.7086 | 290.0 | 0.1142 |
-| rcpu__COLO829_fiberseq_SNV_d46_7fc7396__vcf_chr1 | bed | 1728 | 268 | 257.0 | 0.1141 | 0.7073 | 0.8657 | 0.7786 | 0.767 | 0.7359 | 0.8417 | 0.7687 | 0.8417 | 0.7687 | 57.0 | 0.0278 |
-| rcpu__COLO829_fiberseq_SNV_d46_7fc7396__vcf_chr1 | nobed | 1728 | 268 | 257 | 0.1141 | 0.7073 | 0.8657 | 0.7786 | 0.767 | 0.7359 | 0.8417 | 0.7687 | 0.8417 | 0.7687 | 57.0 | 0.0278 |
+| rcpu__COLO829_Illumina_SNV_d46_7fc7396__vcf_chr1 | bed | 1745 | 268 | 516.0 | 0.204 | 0.7143 | 0.8669 | 0.7832 | 0.69 | 0.7019 | 0.7745 | 0.7432 | 0.7821 | 0.7466 | 240.0 | 0.1065 |
+| rcpu__COLO829_Illumina_SNV_d46_7fc7396__vcf_chr1 | nobed | 1745 | 268 | 516 | 0.204 | 0.7143 | 0.8669 | 0.7832 | 0.69 | 0.7019 | 0.7745 | 0.7432 | 0.7821 | 0.7466 | 240.0 | 0.1065 |
+| rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1 | bed | 1765 | 356 | 693.0 | 0.2463 | 0.7225 | 0.8322 | 0.7734 | 0.6272 | 0.6715 | 0.7527 | 0.7373 | 0.7578 | 0.7397 | 224.0 | 0.0955 |
+| rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1 | nobed | 1765 | 356 | 693 | 0.2463 | 0.7225 | 0.8322 | 0.7734 | 0.6272 | 0.6715 | 0.7527 | 0.7373 | 0.7578 | 0.7397 | 224.0 | 0.0955 |
+| rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1 | bed | 1712 | 446 | 3421.0 | 0.6132 | 0.7008 | 0.7933 | 0.7442 | 0.3069 | 0.4268 | 0.5094 | 0.5899 | 0.5128 | 0.5922 | 1203.1 | 0.3579 |
+| rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1 | nobed | 1712 | 446 | 3421 | 0.6132 | 0.7008 | 0.7933 | 0.7442 | 0.3069 | 0.4268 | 0.5094 | 0.5899 | 0.5128 | 0.5922 | 1203.1 | 0.3579 |
+| rcpu__COLO829_ONT_SNV_d46_7fc7396__vcf_chr1 | bed | 1690 | 457 | 4569.0 | 0.6803 | 0.6918 | 0.7871 | 0.7364 | 0.2516 | 0.369 | 0.3807 | 0.4911 | 0.3848 | 0.4945 | 2292.1 | 0.5163 |
+| rcpu__COLO829_ONT_SNV_d46_7fc7396__vcf_chr1 | nobed | 1690 | 457 | 4569 | 0.6803 | 0.6918 | 0.7871 | 0.7364 | 0.2516 | 0.369 | 0.3807 | 0.4911 | 0.3848 | 0.4945 | 2292.1 | 0.5163 |
+| rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1 | bed | 1765 | 484 | 1483.0 | 0.3974 | 0.7225 | 0.7848 | 0.7523 | 0.4729 | 0.5717 | 0.6952 | 0.7086 | 0.6975 | 0.7098 | 290.0 | 0.1142 |
+| rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1 | nobed | 1765 | 484 | 1483 | 0.3974 | 0.7225 | 0.7848 | 0.7523 | 0.4729 | 0.5717 | 0.6952 | 0.7086 | 0.6975 | 0.7098 | 290.0 | 0.1142 |
+| rcpu__COLO829_fiberseq_SNV_d46_7fc7396__vcf_chr1 | bed | 1728 | 268 | 257.0 | 0.1141 | 0.7073 | 0.8657 | 0.7786 | 0.767 | 0.7359 | 0.8417 | 0.7687 | 0.8451 | 0.7701 | 57.0 | 0.0278 |
+| rcpu__COLO829_fiberseq_SNV_d46_7fc7396__vcf_chr1 | nobed | 1728 | 268 | 257 | 0.1141 | 0.7073 | 0.8657 | 0.7786 | 0.767 | 0.7359 | 0.8417 | 0.7687 | 0.8451 | 0.7701 | 57.0 | 0.0278 |
 | rcpu__HG008_Illumina_SNV_7fc7396_ddp4_b1024__vcf_chr1 | bed | 579 | 702 | 104.0 | 0.0751 | 0.8307 | 0.452 | 0.5854 | 0.4181 | 0.5562 | 0.4464 | 0.5807 | 0.4472 | 0.5814 | 16.0 | 0.0123 |
 | rcpu__HG008_Illumina_SNV_7fc7396_ddp4_b1024__vcf_chr1 | nobed | 583 | 734 | 115 | 0.0803 | 0.8305 | 0.4427 | 0.5775 | 0.4071 | 0.5464 | 0.4361 | 0.5718 | 0.4368 | 0.5725 | 20.0 | 0.015 |
 | rcpu__HG008_Illumina_SNV_d46_7fc7396__vcf_chr1 | bed | 594 | 792 | 634.0 | 0.3139 | 0.8522 | 0.4286 | 0.5703 | 0.2941 | 0.4372 | 0.3738 | 0.5197 | 0.3763 | 0.5221 | 203.0 | 0.1278 |
@@ -68,10 +68,10 @@ Fractions of the unplaced PASS calls with a tensor context (`with ctx`); `proces
 
 | run | group | n | graph PoN tagged | assembly classes |
 |---|---|---|---|---|
-| legacy__COLO829T_ONT_SNV_pow075_S_lr1e4_e20__vcf_chr1 | ctrl_tp | 146 | 0 (0.0 %) | germline 2, not_in_normal 144 |
-| legacy__COLO829T_ONT_SNV_pow075_S_lr1e4_e20__vcf_chr1 | ctrl_fp | 125 | 10 (8.0 %) | germline 87, not_in_normal 37, unverifiable 1 |
-| legacy__COLO829T_ONT_SNV_pow075_S_lr1e4_e20__vcf_chr1 | ctrl_pon | 137 | 2 (1.5 %) | germline 132, not_in_normal 5 |
-| legacy__COLO829T_ONT_SNV_pow075_S_lr1e4_e20__vcf_chr1 | unplaced_pass | 2505 | 1892 (75.5 %) | germline 1814, not_in_normal 235, unverifiable 456 |
+| legacy__COLO829T_ONT_SNV_pow075_S_lr1e4_e20__vcf_chr1 | ctrl_tp | 146 | 0 (0.0 %) | germline 1, tumor_only 122, unsupported 23 |
+| legacy__COLO829T_ONT_SNV_pow075_S_lr1e4_e20__vcf_chr1 | ctrl_fp | 125 | 10 (8.0 %) | germline 83, tumor_only 12, unsupported 30 |
+| legacy__COLO829T_ONT_SNV_pow075_S_lr1e4_e20__vcf_chr1 | ctrl_pon | 137 | 2 (1.5 %) | germline 132, tumor_only 1, unsupported 4 |
+| legacy__COLO829T_ONT_SNV_pow075_S_lr1e4_e20__vcf_chr1 | unplaced_pass | 2505 | 1892 (75.5 %) | germline 1800, tumor_only 31, unsupported 220, unverifiable 454 |
 | legacy__COLO829T_ONT_SNV_pow075_S_lr1e4_e20__vcf_chr1 | gold | 2 | 2 (100.0 %) | unverifiable 2 |
 | legacy__HG008_Illumina_INDEL_small_nofilt__vcf_chr1 | ctrl_tp | 145 | 35 (24.1 %) | germline 1, tumor_only 144 |
 | legacy__HG008_Illumina_INDEL_small_nofilt__vcf_chr1 | ctrl_fp | 150 | 71 (47.3 %) | germline 137, tumor_only 9, unsupported 4 |
@@ -88,35 +88,35 @@ Fractions of the unplaced PASS calls with a tensor context (`with ctx`); `proces
 | legacy__HG008_PacBio_SNV_pow075_S_lr1e4_e20__vcf_chr1 | ctrl_pon | 150 | 8 (5.3 %) | germline 149, tumor_only 1 |
 | legacy__HG008_PacBio_SNV_pow075_S_lr1e4_e20__vcf_chr1 | unplaced_pass | 105 | 88 (83.8 %) | germline 78, tumor_only 9, unsupported 2, unverifiable 16 |
 | legacy__HG008_PacBio_SNV_pow075_S_lr1e4_e20__vcf_chr1 | gold | 7 | 3 (42.9 %) | tumor_only 7 |
-| rcpu__COLO829_Illumina_SNV_d46_7fc7396__vcf_chr1 | ctrl_tp | 150 | 0 (0.0 %) | germline 2, not_in_normal 148 |
-| rcpu__COLO829_Illumina_SNV_d46_7fc7396__vcf_chr1 | ctrl_fp | 150 | 2 (1.3 %) | germline 125, not_in_normal 25 |
-| rcpu__COLO829_Illumina_SNV_d46_7fc7396__vcf_chr1 | ctrl_pon | 150 | 7 (4.7 %) | germline 136, not_in_normal 13, unverifiable 1 |
-| rcpu__COLO829_Illumina_SNV_d46_7fc7396__vcf_chr1 | unplaced_pass | 516 | 276 (53.5 %) | germline 487, not_in_normal 23, unverifiable 6 |
+| rcpu__COLO829_Illumina_SNV_d46_7fc7396__vcf_chr1 | ctrl_tp | 150 | 0 (0.0 %) | germline 2, tumor_only 137, unsupported 11 |
+| rcpu__COLO829_Illumina_SNV_d46_7fc7396__vcf_chr1 | ctrl_fp | 150 | 2 (1.3 %) | germline 125, tumor_only 21, unsupported 4 |
+| rcpu__COLO829_Illumina_SNV_d46_7fc7396__vcf_chr1 | ctrl_pon | 150 | 7 (4.7 %) | germline 137, tumor_only 11, unsupported 2 |
+| rcpu__COLO829_Illumina_SNV_d46_7fc7396__vcf_chr1 | unplaced_pass | 516 | 276 (53.5 %) | germline 487, tumor_only 20, unsupported 5, unverifiable 4 |
 | rcpu__COLO829_Illumina_SNV_d46_7fc7396__vcf_chr1 | gold | 1 | 1 (100.0 %) | unverifiable 1 |
-| rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1 | ctrl_tp | 150 | 0 (0.0 %) | germline 4, not_in_normal 146 |
-| rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1 | ctrl_fp | 150 | 16 (10.7 %) | germline 123, not_in_normal 27 |
-| rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1 | ctrl_pon | 150 | 10 (6.7 %) | germline 146, not_in_normal 4 |
-| rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1 | unplaced_pass | 693 | 469 (67.7 %) | germline 641, not_in_normal 41, unverifiable 11 |
+| rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1 | ctrl_tp | 150 | 0 (0.0 %) | germline 3, tumor_only 130, unsupported 17 |
+| rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1 | ctrl_fp | 150 | 16 (10.7 %) | germline 123, tumor_only 15, unsupported 12 |
+| rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1 | ctrl_pon | 150 | 10 (6.7 %) | germline 147, tumor_only 2, unsupported 1 |
+| rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1 | unplaced_pass | 693 | 469 (67.7 %) | germline 633, tumor_only 28, unsupported 25, unverifiable 7 |
 | rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1 | gold | 2 | 2 (100.0 %) | germline 1, unverifiable 1 |
-| rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1 | ctrl_tp | 150 | 0 (0.0 %) | not_in_normal 149, unverifiable 1 |
-| rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1 | ctrl_fp | 150 | 5 (3.3 %) | germline 92, not_in_normal 58 |
-| rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1 | ctrl_pon | 150 | 13 (8.7 %) | germline 145, not_in_normal 5 |
-| rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1 | unplaced_pass | 3000 | 1945 (64.8 %) | germline 2345, not_checked 1, not_in_normal 235, unverifiable 419 |
+| rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1 | ctrl_tp | 150 | 0 (0.0 %) | tumor_only 130, unsupported 19, unverifiable 1 |
+| rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1 | ctrl_fp | 150 | 5 (3.3 %) | germline 94, tumor_only 15, unsupported 41 |
+| rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1 | ctrl_pon | 150 | 13 (8.7 %) | germline 145, tumor_only 5 |
+| rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1 | unplaced_pass | 3000 | 1945 (64.8 %) | germline 2331, not_checked 1, tumor_only 29, unsupported 218, unverifiable 421 |
 | rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1 | gold | 2 | 2 (100.0 %) | unverifiable 2 |
-| rcpu__COLO829_ONT_SNV_d46_7fc7396__vcf_chr1 | ctrl_tp | 150 | 0 (0.0 %) | not_in_normal 150 |
-| rcpu__COLO829_ONT_SNV_d46_7fc7396__vcf_chr1 | ctrl_fp | 150 | 3 (2.0 %) | germline 110, not_in_normal 40 |
-| rcpu__COLO829_ONT_SNV_d46_7fc7396__vcf_chr1 | ctrl_pon | 150 | 11 (7.3 %) | germline 144, not_in_normal 6 |
-| rcpu__COLO829_ONT_SNV_d46_7fc7396__vcf_chr1 | unplaced_pass | 3000 | 1495 (49.8 %) | germline 2493, not_checked 1, not_in_normal 197, unverifiable 309 |
+| rcpu__COLO829_ONT_SNV_d46_7fc7396__vcf_chr1 | ctrl_tp | 150 | 0 (0.0 %) | tumor_only 135, unsupported 15 |
+| rcpu__COLO829_ONT_SNV_d46_7fc7396__vcf_chr1 | ctrl_fp | 150 | 3 (2.0 %) | germline 110, tumor_only 11, unsupported 29 |
+| rcpu__COLO829_ONT_SNV_d46_7fc7396__vcf_chr1 | ctrl_pon | 150 | 11 (7.3 %) | germline 144, tumor_only 3, unsupported 3 |
+| rcpu__COLO829_ONT_SNV_d46_7fc7396__vcf_chr1 | unplaced_pass | 3000 | 1495 (49.8 %) | germline 2488, not_checked 1, tumor_only 18, unsupported 183, unverifiable 310 |
 | rcpu__COLO829_ONT_SNV_d46_7fc7396__vcf_chr1 | gold | 2 | 2 (100.0 %) | germline 1, unverifiable 1 |
-| rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1 | ctrl_tp | 150 | 0 (0.0 %) | germline 3, not_in_normal 147 |
-| rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1 | ctrl_fp | 150 | 6 (4.0 %) | germline 134, not_in_normal 16 |
-| rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1 | ctrl_pon | 150 | 13 (8.7 %) | germline 146, not_in_normal 4 |
-| rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1 | unplaced_pass | 1483 | 1193 (80.4 %) | germline 867, not_in_normal 147, unverifiable 469 |
+| rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1 | ctrl_tp | 150 | 0 (0.0 %) | germline 3, tumor_only 130, unsupported 17 |
+| rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1 | ctrl_fp | 150 | 6 (4.0 %) | germline 134, tumor_only 11, unsupported 5 |
+| rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1 | ctrl_pon | 150 | 13 (8.7 %) | germline 146, tumor_only 3, unsupported 1 |
+| rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1 | unplaced_pass | 1483 | 1193 (80.4 %) | germline 868, tumor_only 19, unsupported 137, unverifiable 459 |
 | rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1 | gold | 1 | 1 (100.0 %) | unverifiable 1 |
-| rcpu__COLO829_fiberseq_SNV_d46_7fc7396__vcf_chr1 | ctrl_tp | 150 | 0 (0.0 %) | germline 2, not_in_normal 148 |
-| rcpu__COLO829_fiberseq_SNV_d46_7fc7396__vcf_chr1 | ctrl_fp | 150 | 1 (0.7 %) | germline 131, not_in_normal 19 |
-| rcpu__COLO829_fiberseq_SNV_d46_7fc7396__vcf_chr1 | ctrl_pon | 150 | 7 (4.7 %) | germline 140, not_in_normal 10 |
-| rcpu__COLO829_fiberseq_SNV_d46_7fc7396__vcf_chr1 | unplaced_pass | 257 | 200 (77.8 %) | germline 137, not_in_normal 38, unverifiable 82 |
+| rcpu__COLO829_fiberseq_SNV_d46_7fc7396__vcf_chr1 | ctrl_tp | 150 | 0 (0.0 %) | germline 1, tumor_only 132, unsupported 17 |
+| rcpu__COLO829_fiberseq_SNV_d46_7fc7396__vcf_chr1 | ctrl_fp | 150 | 1 (0.7 %) | germline 131, tumor_only 17, unsupported 2 |
+| rcpu__COLO829_fiberseq_SNV_d46_7fc7396__vcf_chr1 | ctrl_pon | 150 | 7 (4.7 %) | germline 140, tumor_only 8, unsupported 2 |
+| rcpu__COLO829_fiberseq_SNV_d46_7fc7396__vcf_chr1 | unplaced_pass | 257 | 200 (77.8 %) | germline 137, tumor_only 9, unsupported 31, unverifiable 80 |
 | rcpu__COLO829_fiberseq_SNV_d46_7fc7396__vcf_chr1 | gold | 2 | 2 (100.0 %) | germline 1, unverifiable 1 |
 | rcpu__HG008_Illumina_SNV_7fc7396_ddp4_b1024__vcf_chr1 | ctrl_tp | 150 | 0 (0.0 %) | germline 2, tumor_only 147, unverifiable 1 |
 | rcpu__HG008_Illumina_SNV_7fc7396_ddp4_b1024__vcf_chr1 | ctrl_fp | 150 | 18 (12.0 %) | germline 145, tumor_only 3, unsupported 2 |
@@ -598,9 +598,9 @@ Graph PoN (main rule) against the GRCh38 PoN (repository rule) applied to the sa
 
 | run | stratum | n | categories |
 |---|---|---|---|
-| legacy__COLO829T_ONT_SNV_pow075_S_lr1e4_e20__vcf_chr1 | homopolymer>=7 | 443 | germline 10, not_in_normal 26, population 334, unverifiable 73 |
-| legacy__COLO829T_ONT_SNV_pow075_S_lr1e4_e20__vcf_chr1 | STR | 291 | germline 28, not_in_normal 15, population 235, unverifiable 13 |
-| legacy__COLO829T_ONT_SNV_pow075_S_lr1e4_e20__vcf_chr1 | other | 1771 | germline 407, not_in_normal 18, population 1323, unverifiable 23 |
+| legacy__COLO829T_ONT_SNV_pow075_S_lr1e4_e20__vcf_chr1 | homopolymer>=7 | 443 | germline 9, population 334, unsupported 26, unverifiable 74 |
+| legacy__COLO829T_ONT_SNV_pow075_S_lr1e4_e20__vcf_chr1 | STR | 291 | germline 28, population 235, tumor_only 4, unsupported 11, unverifiable 13 |
+| legacy__COLO829T_ONT_SNV_pow075_S_lr1e4_e20__vcf_chr1 | other | 1771 | germline 407, population 1323, tumor_only 5, unsupported 13, unverifiable 23 |
 | legacy__HG008_Illumina_INDEL_small_nofilt__vcf_chr1 | homopolymer>=7 | 411 | germline 25, population 369, tumor_only 9, unsupported 6, unverifiable 2 |
 | legacy__HG008_Illumina_INDEL_small_nofilt__vcf_chr1 | STR | 114 | germline 10, population 103, unverifiable 1 |
 | legacy__HG008_Illumina_INDEL_small_nofilt__vcf_chr1 | other | 9 | germline 2, population 6, unverifiable 1 |
@@ -610,24 +610,24 @@ Graph PoN (main rule) against the GRCh38 PoN (repository rule) applied to the sa
 | legacy__HG008_PacBio_SNV_pow075_S_lr1e4_e20__vcf_chr1 | homopolymer>=7 | 41 | germline 3, population 37, unverifiable 1 |
 | legacy__HG008_PacBio_SNV_pow075_S_lr1e4_e20__vcf_chr1 | STR | 23 | germline 5, population 18 |
 | legacy__HG008_PacBio_SNV_pow075_S_lr1e4_e20__vcf_chr1 | other | 41 | germline 7, population 33, tumor_only 1 |
-| rcpu__COLO829_Illumina_SNV_d46_7fc7396__vcf_chr1 | homopolymer>=7 | 41 | germline 5, not_in_normal 1, population 34, unverifiable 1 |
-| rcpu__COLO829_Illumina_SNV_d46_7fc7396__vcf_chr1 | STR | 77 | germline 13, not_in_normal 3, population 61 |
-| rcpu__COLO829_Illumina_SNV_d46_7fc7396__vcf_chr1 | other | 398 | germline 204, not_in_normal 12, population 181, unverifiable 1 |
-| rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1 | homopolymer>=7 | 44 | germline 7, not_in_normal 2, population 34, unverifiable 1 |
-| rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1 | STR | 122 | germline 12, not_in_normal 5, population 105 |
-| rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1 | other | 527 | germline 189, not_in_normal 8, population 330 |
-| rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1 | homopolymer>=7 | 433 | germline 14, not_in_normal 26, population 329, unverifiable 64 |
-| rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1 | STR | 340 | germline 54, not_in_normal 12, population 264, unverifiable 10 |
-| rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1 | other | 2227 | germline 837, not_in_normal 27, population 1352, unverifiable 11 |
-| rcpu__COLO829_ONT_SNV_d46_7fc7396__vcf_chr1 | homopolymer>=7 | 303 | germline 19, not_in_normal 24, population 211, unverifiable 49 |
-| rcpu__COLO829_ONT_SNV_d46_7fc7396__vcf_chr1 | STR | 289 | germline 67, not_in_normal 4, population 209, unverifiable 9 |
-| rcpu__COLO829_ONT_SNV_d46_7fc7396__vcf_chr1 | other | 2408 | germline 1276, not_in_normal 44, population 1075, unverifiable 13 |
-| rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1 | homopolymer>=7 | 355 | germline 6, not_in_normal 20, population 282, unverifiable 47 |
-| rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1 | STR | 190 | germline 14, not_in_normal 9, population 155, unverifiable 12 |
-| rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1 | other | 938 | germline 157, not_in_normal 6, population 756, unverifiable 19 |
-| rcpu__COLO829_fiberseq_SNV_d46_7fc7396__vcf_chr1 | homopolymer>=7 | 113 | germline 2, not_in_normal 7, population 92, unverifiable 12 |
-| rcpu__COLO829_fiberseq_SNV_d46_7fc7396__vcf_chr1 | STR | 39 | germline 3, not_in_normal 4, population 32 |
-| rcpu__COLO829_fiberseq_SNV_d46_7fc7396__vcf_chr1 | other | 105 | germline 22, not_in_normal 4, population 76, unverifiable 3 |
+| rcpu__COLO829_Illumina_SNV_d46_7fc7396__vcf_chr1 | homopolymer>=7 | 41 | germline 5, population 34, tumor_only 2 |
+| rcpu__COLO829_Illumina_SNV_d46_7fc7396__vcf_chr1 | STR | 77 | germline 13, population 61, tumor_only 3 |
+| rcpu__COLO829_Illumina_SNV_d46_7fc7396__vcf_chr1 | other | 398 | germline 204, population 181, tumor_only 12, unsupported 1 |
+| rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1 | homopolymer>=7 | 44 | germline 7, population 34, unsupported 2, unverifiable 1 |
+| rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1 | STR | 122 | germline 12, population 105, tumor_only 5 |
+| rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1 | other | 527 | germline 189, population 330, tumor_only 7, unsupported 1 |
+| rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1 | homopolymer>=7 | 433 | germline 13, population 329, unsupported 26, unverifiable 65 |
+| rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1 | STR | 340 | germline 54, population 264, tumor_only 3, unsupported 9, unverifiable 10 |
+| rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1 | other | 2227 | germline 837, population 1352, tumor_only 7, unsupported 20, unverifiable 11 |
+| rcpu__COLO829_ONT_SNV_d46_7fc7396__vcf_chr1 | homopolymer>=7 | 303 | germline 19, population 211, unsupported 24, unverifiable 49 |
+| rcpu__COLO829_ONT_SNV_d46_7fc7396__vcf_chr1 | STR | 289 | germline 66, population 209, tumor_only 1, unsupported 3, unverifiable 10 |
+| rcpu__COLO829_ONT_SNV_d46_7fc7396__vcf_chr1 | other | 2408 | germline 1276, population 1075, tumor_only 11, unsupported 33, unverifiable 13 |
+| rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1 | homopolymer>=7 | 355 | germline 6, population 282, tumor_only 1, unsupported 20, unverifiable 46 |
+| rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1 | STR | 190 | germline 14, population 155, tumor_only 2, unsupported 7, unverifiable 12 |
+| rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1 | other | 938 | germline 157, population 756, tumor_only 3, unsupported 4, unverifiable 18 |
+| rcpu__COLO829_fiberseq_SNV_d46_7fc7396__vcf_chr1 | homopolymer>=7 | 113 | germline 2, population 92, tumor_only 1, unsupported 7, unverifiable 11 |
+| rcpu__COLO829_fiberseq_SNV_d46_7fc7396__vcf_chr1 | STR | 39 | germline 3, population 32, tumor_only 2, unsupported 2 |
+| rcpu__COLO829_fiberseq_SNV_d46_7fc7396__vcf_chr1 | other | 105 | germline 22, population 76, tumor_only 4, unverifiable 3 |
 | rcpu__HG008_Illumina_SNV_7fc7396_ddp4_b1024__vcf_chr1 | homopolymer>=7 | 36 | germline 5, population 31 |
 | rcpu__HG008_Illumina_SNV_7fc7396_ddp4_b1024__vcf_chr1 | STR | 26 | germline 2, population 24 |
 | rcpu__HG008_Illumina_SNV_7fc7396_ddp4_b1024__vcf_chr1 | other | 53 | germline 12, population 40, tumor_only 1 |
@@ -653,12 +653,12 @@ Graph PoN (main rule) against the GRCh38 PoN (repository rule) applied to the sa
 |---|---|---|---|---|---|
 | legacy/d9/HG008T/SNV | legacy__HG008_Illumina_SNV_pow075_S_lr1e4_e20__vcf_chr1 | 2 | 595 | 50 (8.4 %) | {"germline": {"0": 109, "1": 13}, "population": {"0": 433, "1": 36}, "tumor_only": {"0": 1, "1": 1}, "unsupported": {"0": 1}, "unverifiable": {"0": 1}} |
 | legacy/d9/HG008T/SNV | legacy__HG008_PacBio_SNV_pow075_S_lr1e4_e20__vcf_chr1 | 2 | 105 | 50 (47.6 %) | {"germline": {"0": 2, "1": 13}, "population": {"0": 52, "1": 36}, "tumor_only": {"1": 1}, "unverifiable": {"0": 1}} |
-| rcpu/d46/COLO829T/SNV | rcpu__COLO829_Illumina_SNV_d46_7fc7396__vcf_chr1 | 3 | 516 | 187 (36.2 %) | {"germline": {"0": 130, "1": 85, "2": 7}, "not_in_normal": {"0": 3, "1": 9, "2": 4}, "population": {"0": 195, "1": 55, "2": 26}, "unverifiable": {"0": 1, "1": 1}} |
-| rcpu/d46/COLO829T/SNV | rcpu__COLO829_ONT_SNV_d46_7fc7396__vcf_chr1 | 3 | 4569 | 303 (6.6 %) | {"germline": {"0": 1289, "1": 69, "2": 4}, "not_in_normal": {"0": 58, "1": 11, "2": 3}, "population": {"0": 1386, "1": 95, "2": 14}, "unverifiable": {"0": 64, "1": 7}} |
-| rcpu/d46/COLO829T/SNV | rcpu__COLO829_fiberseq_SNV_d46_7fc7396__vcf_chr1 | 3 | 257 | 175 (68.1 %) | {"germline": {"0": 9, "1": 11, "2": 7}, "not_in_normal": {"0": 4, "1": 7, "2": 4}, "population": {"0": 64, "1": 110, "2": 26}, "unverifiable": {"0": 5, "1": 10}} |
-| rcpu/d9/COLO829T/SNV | rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1 | 3 | 693 | 127 (18.3 %) | {"germline": {"0": 176, "1": 19, "2": 13}, "not_in_normal": {"0": 11, "1": 2, "2": 2}, "population": {"0": 378, "1": 44, "2": 47}, "unverifiable": {"0": 1}} |
-| rcpu/d9/COLO829T/SNV | rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1 | 3 | 3421 | 709 (20.7 %) | {"germline": {"0": 818, "1": 76, "2": 11}, "not_in_normal": {"0": 45, "1": 18, "2": 2}, "population": {"0": 1445, "1": 462, "2": 38}, "unverifiable": {"0": 63, "1": 22}} |
-| rcpu/d9/COLO829T/SNV | rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1 | 3 | 1483 | 682 (46.0 %) | {"germline": {"0": 88, "1": 75, "2": 14}, "not_in_normal": {"0": 16, "1": 17, "2": 2}, "population": {"0": 642, "1": 505, "2": 46}, "unverifiable": {"0": 55, "1": 23}} |
+| rcpu/d46/COLO829T/SNV | rcpu__COLO829_Illumina_SNV_d46_7fc7396__vcf_chr1 | 3 | 516 | 187 (36.2 %) | {"germline": {"0": 130, "1": 85, "2": 7}, "population": {"0": 195, "1": 55, "2": 26}, "tumor_only": {"0": 3, "1": 10, "2": 4}, "unsupported": {"0": 1}} |
+| rcpu/d46/COLO829T/SNV | rcpu__COLO829_ONT_SNV_d46_7fc7396__vcf_chr1 | 3 | 4569 | 303 (6.6 %) | {"germline": {"0": 1288, "1": 69, "2": 4}, "population": {"0": 1386, "1": 95, "2": 14}, "tumor_only": {"0": 4, "1": 5, "2": 3}, "unsupported": {"0": 54, "1": 6}, "unverifiable": {"0": 65, "1": 7}} |
+| rcpu/d46/COLO829T/SNV | rcpu__COLO829_fiberseq_SNV_d46_7fc7396__vcf_chr1 | 3 | 257 | 175 (68.1 %) | {"germline": {"0": 9, "1": 11, "2": 7}, "population": {"0": 64, "1": 110, "2": 26}, "tumor_only": {"1": 3, "2": 4}, "unsupported": {"0": 4, "1": 5}, "unverifiable": {"0": 5, "1": 9}} |
+| rcpu/d9/COLO829T/SNV | rcpu__COLO829_Illumina_SNV_d9_normbq_sweep_e06__vcf_chr1 | 3 | 693 | 127 (18.3 %) | {"germline": {"0": 176, "1": 19, "2": 13}, "population": {"0": 378, "1": 44, "2": 47}, "tumor_only": {"0": 8, "1": 2, "2": 2}, "unsupported": {"0": 3}, "unverifiable": {"0": 1}} |
+| rcpu/d9/COLO829T/SNV | rcpu__COLO829_ONT_SNV_7fc7396_ddp4_b1024__vcf_chr1 | 3 | 3421 | 709 (20.7 %) | {"germline": {"0": 817, "1": 76, "2": 11}, "population": {"0": 1445, "1": 462, "2": 38}, "tumor_only": {"0": 4, "1": 4, "2": 2}, "unsupported": {"0": 41, "1": 14}, "unverifiable": {"0": 64, "1": 22}} |
+| rcpu/d9/COLO829T/SNV | rcpu__COLO829_fiberseq_SNV_7fc7396_ddp4_b1024__vcf_chr1 | 3 | 1483 | 682 (46.0 %) | {"germline": {"0": 88, "1": 75, "2": 14}, "population": {"0": 642, "1": 505, "2": 46}, "tumor_only": {"0": 1, "1": 3, "2": 2}, "unsupported": {"0": 15, "1": 16}, "unverifiable": {"0": 55, "1": 21}} |
 | rcpu/d9/HG008T/SNV | rcpu__HG008_Illumina_SNV_7fc7396_ddp4_b1024__vcf_chr1 | 3 | 115 | 61 (53.0 %) | {"germline": {"0": 8, "1": 4, "2": 7}, "population": {"0": 46, "1": 17, "2": 32}, "tumor_only": {"2": 1}} |
 | rcpu/d9/HG008T/SNV | rcpu__HG008_ONT_SNV_7fc7396__vcf_chr1 | 3 | 1410 | 169 (12.0 %) | {"germline": {"0": 43, "1": 10, "2": 6}, "population": {"0": 1142, "1": 115, "2": 32}, "tumor_only": {"0": 2, "2": 1}, "unsupported": {"0": 5, "1": 1, "2": 1}, "unverifiable": {"0": 49, "1": 3}} |
 | rcpu/d9/HG008T/SNV | rcpu__HG008_PacBio_SNV_7fc7396__vcf_chr1 | 3 | 210 | 158 (75.2 %) | {"germline": {"0": 2, "1": 6, "2": 7}, "population": {"0": 45, "1": 109, "2": 32}, "tumor_only": {"2": 1}, "unsupported": {"0": 1}, "unverifiable": {"0": 4, "1": 3}} |
