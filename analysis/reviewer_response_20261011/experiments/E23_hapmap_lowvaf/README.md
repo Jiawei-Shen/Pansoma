@@ -82,6 +82,18 @@ within 50 bp.
 5. **INDELs** stay low even without graph absorption: 45 % of the not-in-graph INDELs at 0.05-0.075 have no
    candidate (chr1, atomized) [not investigated; probably repeat indels represented or aligned differently, as on
    HG008T / COLO829T (R1.2)].
+6. **The submitted Supplementary Table 3 used a different truth set.** Its SNV recall was 0.938 at VAF 1-16.5 %
+   (0.877 / 0.966 / 0.935 / 0.738 at 1-2 / 2-5 / 5-10 / 10-16.5 %) over 96,393 truth SNVs (17,147 / 54,462 / 22,641 /
+   2,143 per bin). Mutect2 in the same table has the same recall denominator in every bin (TP + FN 96,393; 1-2 %
+   17,147), so the denominator was a fixed truth subset, not the truth with a Pansoma candidate. The truth used here
+   (SMHTHAPMAP6 v1.6 without HG005) has 5,170,790 SNVs at VAF 1-16.5 % (no autosome as small as 96,393: chr21 75,587,
+   chr22 76,692, chr19 119,230, chr20 119,931), and its bins are shaped differently (chr1 167,058 / 53,500 / 139,404 /
+   32,604), so the old subset is not one chromosome of this truth [how it was chosen is not known; the evaluation
+   script was not found]. The precision TP of the old table (174,082) exceeds its recall denominator, so precision was
+   scored against a larger truth than recall. In these bins (`old_protocol.py`, chr1, BED, before population
+   filtering, graph-carried truth included) the full SNV model has recall 0.225 / 0.232 / 0.466 / 0.105 (0.302
+   overall, 392,566 truth SNVs) and, over the 131,909 truth SNVs with a tensor, 0.840 / 0.917 / 0.936 / 0.812
+   (0.898). The two evaluations are not comparable; the revised Supplement reports the evaluation above.
 
 ## Expected limits (reasoning before the results)
 
