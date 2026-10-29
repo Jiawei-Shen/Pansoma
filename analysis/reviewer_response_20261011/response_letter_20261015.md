@@ -120,14 +120,50 @@ population-based tumor-only calling, and describe candidate generation on altern
 
 **Response.**
 
-We agree with the first point. On the second, the submitted HapMap results used a graph built without any of the six mixture donors, so the donors' presence in the standard HPRC graphs did not apply to this analysis. That graph had the same Minigraph-Cactus construction and d9 filter but was built from 40 HPRC year-1 individuals plus GRCh38 and CHM13 (82 haplotypes; none of the six mixture individuals HG005, HG00438, HG02257, HG02486, HG02622 and HG002); the Methods now state this. Four of the donors are in the HPRC v1.1 graph and all six in the HPRC v2.1 graph (d46 filter), as our companion study noted, which is why the donor-free graph was used. The HAPMAP6 positives are germline alleles of the five minor donors (evaluated at VAF 1–16.5%), not acquired mutations. The donors' rare alleles are also found in CoLoRSdb, one of our population filtering resources, far more often than those of our cancer benchmarks' normals (chr20 SNVs: 14.5–25.9% against 4.0–7.9%). The benchmark therefore asks the caller to report alleles that its population prior, used by the trained model (R2.1), is designed to suppress.
+We agree that the HapMap mixture does not establish accuracy for detecting acquired somatic mutations: its positives are
+germline alleles of the five minor donors (evaluated at VAF 1–16.5%), which Pansoma's population prior, used by the
+trained model (R2.1), is designed to suppress. The donors' rare alleles are also found in CoLoRSdb, one of our
+population filtering resources, far more often than those of our cancer benchmarks' normals (chr20 SNVs: 14.5–25.9%
+against 4.0–7.9%).
 
-We removed the HapMap mixture from the main benchmark and withdrew the HapMap-trained low-VAF model as a somatic model. We keep the mixture only to measure empirical sensitivity by allele fraction, rerun with the current pipeline on the donor-free graph and scored without population filtering, which would remove many of its germline positives (Supplement; R2.4); no claim about somatic accuracy rests on it. Low-VAF performance is now measured on in-silico dilutions of COLO829T with COLO829BL on three platforms (nominal purity 75, 50 and 25%; measured 0.66 / 0.40 / 0.20 for Illumina and Fiber-seq, 0.70 / 0.44 / 0.22 for ONT). One model per platform and variant type is trained on chr2–22 of all four purities and tested on chr1 of each; the tumor itself is not held out. Results by purity and allele fraction are in R2.4 (Fiber-seq SNV F1 after population filtering 0.665–0.779 across purities). Two limitations apply:
+On data leakage, the submitted HapMap results used a graph built without any of the six mixture donors, so the donors'
+presence in the standard HPRC graphs did not apply to this analysis. That graph had the same Minigraph-Cactus
+construction and d9 filter but was built from 40 HPRC year-1 individuals plus GRCh38 and CHM13 (82 haplotypes; none of
+the six mixture individuals HG005, HG00438, HG02257, HG02486, HG02622 and HG002); the Methods now state this. Four of
+the donors are in the HPRC v1.1 graph and all six in the HPRC v2.1 graph (d46 filter), as our companion study noted,
+which is why the donor-free graph was used. Alleles that a donor shares with other individuals of the graph can still be
+graph paths; only 1.4% of the graph-carried SNV positives on the autosomes have a tensor, and the recall we report
+leaves them out (R2.1). This removes the graph overlap from the reported recall but does not make the remaining germline
+positives equivalent to somatic mutations.
 
-- At 75 and 50% purity the false positives have a germline-like spectrum (cosine to the germline spectrum 0.788 and 0.768, against 0.536 at full purity), consistent with a contribution from the tumor's loss of heterozygosity: where the tumor lost the ALT copy of a germline heterozygous SNV, the admixed normal reads put that allele at (1 − purity)/2, inside the somatic allele-fraction range of those mixtures.
-- In the Illumina and ONT mixtures, tumor- and normal-derived reads differ in base quality, a cue that a real tumor lacks, so their scores can be optimistic. With per-read base-quality centring, the Illumina dilutions' INDEL best F1 (upper bound) falls to 0.133–0.146, below the 100% sample (0.182), and their SNV PASS F1 from 0.804–0.840 to 0.678–0.709. These runs also changed the quality normalization and, for SNVs, the batch size, so not all of the decrease can be attributed to the cue. For ONT, two models that differ only in this centring (same code, hardware, seed, recipe and normalization) give SNV PASS F1 0.733 / 0.721 / 0.691 / 0.714 without centring and 0.724 / 0.693 / 0.666 / 0.700 with it (100 / 75 / 50 / 25% purity; chr1, after population filtering). In neither does a dilution score above the undiluted sample, and centring costs 0.009 at 100% purity and 0.014–0.028 in the dilutions, so the cue adds at most about 0.02 to the ONT dilution scores.
+We therefore removed the HapMap mixture from the main benchmark and withdrew the HapMap-trained low-VAF model as a
+somatic model. We keep the mixture in the Supplement because, sequenced to about 500x, it has a large truth set at
+allele fractions of 1–16.5%, below those our tumor/normal dilutions reach; it is rerun with the current pipeline on the
+donor-free graph and scored without population filtering, which would remove many of its germline positives (R2.4). No
+claim about somatic accuracy rests on it.
 
-These low-purity results come from one tumor.
+Low-VAF performance is now measured on in-silico dilutions of COLO829T with COLO829BL on three platforms (nominal purity
+75, 50 and 25%). One model per platform and variant type is trained on chr2–22 of all four purities and tested on chr1
+of each, so the tumor itself is not held out. Two effects bear on these results. Admixed normal reads can reintroduce
+germline alleles that the tumor lost through loss of heterozygosity, placing them in the somatic allele-fraction range;
+the false positives of the 75 and 50% mixtures have a germline-like spectrum. In the Illumina and ONT mixtures, tumor-
+and normal-derived reads also differ in base quality, a cue that a real tumor lacks; we evaluated per-read base-quality
+centring, which in the matched ONT comparison reduced the dilutions' SNV F1 by 0.014–0.028, and no dilution scores above
+the undiluted sample (Supplementary block). Results by purity and allele fraction are in R2.4. These low-purity results
+come from one tumor.
+
+**Supplementary (R1.5).**
+
+- *Dilutions.* Measured purity 0.66 / 0.40 / 0.20 for Illumina and Fiber-seq, 0.70 / 0.44 / 0.22 for ONT (nominal 75 /
+  50 / 25%). Fiber-seq SNV F1 after population filtering 0.665–0.779 across purities (R2.4). Cosine of the
+  false-positive spectrum to the germline spectrum 0.788 (75%) and 0.768 (50%), against 0.536 at full purity.
+- *Base-quality centring, Illumina.* The dilutions' INDEL best F1 (upper bound) falls to 0.133–0.146, below the 100%
+  sample (0.182), and their SNV PASS F1 from 0.804–0.840 to 0.678–0.709. These runs also changed the quality
+  normalization and, for SNVs, the batch size, so not all of the decrease can be attributed to the cue.
+- *Base-quality centring, ONT.* Two models that differ only in this centring (same code, hardware, seed, recipe and
+  normalization): SNV PASS F1 0.733 / 0.721 / 0.691 / 0.714 without centring and 0.724 / 0.693 / 0.666 / 0.700 with it
+  (100 / 75 / 50 / 25% purity; chr1, after population filtering); centring costs 0.009 at 100% purity and 0.014–0.028 in
+  the dilutions.
 
 ### R1.6 Low sensitivity
 
