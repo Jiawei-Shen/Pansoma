@@ -40,6 +40,9 @@ filtering as a read-evidence limit, and with it only to show why the mixture is 
 
 ## Results (2026-10-26)
 
+**Reported range (user 2026-10-29): truth VAF 0.01-0.165 only.** The response and the Supplement use the bins from
+0.01 up; the 0.0025 and 0.005 bins below stay in these tables for reference and are not reported.
+
 Files: `tables.md` / `tensor_vaf.tsv` (tensor level) and `call_vaf.<run>.md` (call level) use the exact graph alleles
 (`graph_alleles.sh`); `atomized/` repeats them with multi-base graph alleles of <= 50 bp split into SNVs and indels
 (`ATOMIZE=1`), the definition the response uses. `donors_in_graph.chr1.tsv` (`donors_in_graph.py`): in-graph share by
