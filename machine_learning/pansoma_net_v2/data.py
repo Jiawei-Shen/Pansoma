@@ -397,8 +397,9 @@ def read_shard_header(path, shape=TENSOR_SHAPE):
 
 class TensorDataset(Dataset):
     """Samples from several KindIndex selections: (x int8 (8, rows, 101), blocks int16 (4,), scalars float32 (9,),
-    label int, part int); every selection's tensors have one shape (self.shape). part is the sample's selection (dataset) in `parts`: its row of the encoder's per-dataset
-    statistics."""
+    label int, part int); every selection's tensors have one shape (self.shape). part is the sample's selection
+    (dataset) in `parts`: its row of the encoder's per-dataset statistics."""
+    shape = TENSOR_SHAPE  # the class default: a dataset pickled by code without the attribute stays readable
 
     def __init__(self, parts, labels="label"):
         """parts: [(KindIndex, positions)]; labels: "label" (training) or "eval_label" (evaluation).
