@@ -37,8 +37,9 @@ cross-platform reproducibility and the fate of the assembly-verified off-referen
 
 - **Runs (local, "legacy")**: the local d9 runs of the current recipes, chr1 test, PASS at the checkpoint's
   validation recall-0.9 threshold, GRCh38 PoN of the run's time:
-  - SNV `{HG008,COLO829T}_{Illumina,PacBio|fiberseq,ONT}_SNV_pow075_S_lr1e4_e20` (2026-09-30 / 10-01; the RIS 7fc7396
-    SNV runs reproduce the PacBio / ONT ones exactly according to `analysis/benchmark_7fc7396_20261012/README.md`);
+  - SNV `{HG008,COLO829T}_{Illumina,PacBio|fiberseq,ONT}_SNV_pow075_S_lr1e4_e20` (2026-09-30 / 10-01; earlier than
+    the 2026-10-03 `*_SNV_h90` runs, which the RIS 7fc7396 SNV runs reproduce exactly for HG008T PacBio / ONT according
+    to `analysis/benchmark_7fc7396_20261012/README.md`);
   - INDEL `{HG008,COLO829T}_*_INDEL_small_nofilt` (2026-10-10: small model, sqrt, no filter, lr 4e-4 (`args.json`);
     the 7fc7396 RIS recipe uses lr 1e-4, which the benchmark README reports as equal under the same PoN).
   - Processed: `HG008_Illumina_SNV`, `HG008_Illumina_INDEL`, `HG008_PacBio_SNV`, `COLO829T_ONT_SNV`.
