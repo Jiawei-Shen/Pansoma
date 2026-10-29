@@ -11,11 +11,13 @@ from .fixtures import make_tensor_set
 
 
 class ChunkLoaderTest(unittest.TestCase):
+    HEIGHT = 200  # rows per tensor (the build's --rows)
+
     @classmethod
     def setUpClass(cls):
         cls.tmp = tempfile.TemporaryDirectory()
         root = Path(cls.tmp.name) / "s" / "tensors"
-        make_tensor_set(root, {"SNV": {"chr1": 50, "chr2": 37}}, shard_size=16, seed=2)
+        make_tensor_set(root, {"SNV": {"chr1": 50, "chr2": 37}}, shard_size=16, seed=2, height=cls.HEIGHT)
         cls.ds = TensorDataset(load_parts([root], ["SNV"], Path(cls.tmp.name) / "c", labelled=False))
         cls.x = np.stack([cls.ds[k][0].numpy() for k in range(len(cls.ds))])
 
@@ -31,6 +33,7 @@ class ChunkLoaderTest(unittest.TestCase):
         """Every batch holds the dataset's own tensor, blocks, scalars, label and part for its index."""
         got = []
         for x, blocks, scalars, y, part in batches:
+            self.assertEqual(tuple(x.shape[1:]), (8, self.HEIGHT, 101))
             self.assertEqual((x.dtype, blocks.dtype, scalars.dtype, y.dtype, part.dtype),
                              (torch.int8, torch.int16, torch.float32, torch.int64, torch.int64))
             for k in range(len(y)):  # find the index by the tensor itself (tensors are distinct)
@@ -90,6 +93,11 @@ class ChunkLoaderTest(unittest.TestCase):
         loader.headers = [(10 ** 12, 0)] * len(self.ds.files)                # offsets past the end: short reads
         with self.assertRaises(IOError):
             list(loader)
+
+
+class TallChunkLoaderTest(ChunkLoaderTest):
+    """The same tests on tensors of 500 rows (a build with --rows 500, e.g. HapMap at about 500x)."""
+    HEIGHT = 500
 
 
 if __name__ == "__main__":

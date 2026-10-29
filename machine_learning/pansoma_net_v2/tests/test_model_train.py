@@ -221,6 +221,30 @@ class ExcludeTest(unittest.TestCase):
             self.assertEqual((rep0["excluded"], rep0["tensors"]), (0, rep["tensors"] + len(test_drop)))
 
 
+    def test_tall_tensors_train_and_predict(self):
+        """A set built with --rows 500 trains and predicts (the network pools over any height); the checkpoint
+        records the shape, and predict refuses tensors of another height."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            tall, short = tmp / "tall" / "tensors", tmp / "short" / "tensors"
+            make_tensor_set(tall, {"SNV": SPEC["SNV"]}, shard_size=8, height=500)
+            make_tensor_set(short, {"SNV": SPEC["SNV"]}, shard_size=8)
+            out = tmp / "run"
+            train.main(["--tensors", str(tall), "--output", str(out), "--epochs", "1", "--kinds", "SNV"] + SMALL_ARGS)
+            ckpt = torch.load(out / "best.pth", weights_only=False)
+            self.assertEqual(ckpt["tensor_shape"], [8, 500, 101])
+            predict.main(["--checkpoint", str(out / "best.pth"), "--tensors", str(tall), "--output", str(tmp / "p"),
+                          "--kinds", "SNV", "--chroms", "chr1", "--num-workers", "0", "--amp", "off"])
+            with gzip.open(tmp / "p" / "tall.tensors.SNV.predictions.ndjson.gz", "rt") as f:
+                self.assertEqual(sum(1 for _ in f), SPEC["SNV"]["chr1"])
+            with self.assertRaisesRegex(SystemExit, "trained on \\(8, 500, 101\\)"):
+                predict.main(["--checkpoint", str(out / "best.pth"), "--tensors", str(short), "--output",
+                              str(tmp / "p2"), "--kinds", "SNV", "--chroms", "chr1", "--num-workers", "0", "--amp", "off"])
+            with self.assertRaisesRegex(ValueError, "different shapes"):
+                train.main(["--tensors", str(tall), str(short), "--output", str(tmp / "mixed"), "--epochs", "1",
+                            "--kinds", "SNV"] + SMALL_ARGS)
+
+
 class SetTestChromsTest(unittest.TestCase):
     """--set-test-chroms: a chromosome left out of one set only; the other sets train and validate on theirs."""
 

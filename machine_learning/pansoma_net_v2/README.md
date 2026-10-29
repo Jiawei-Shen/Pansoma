@@ -1,7 +1,9 @@
 # pansoma_net_v2
 
 PansomaNetV2 trains and predicts directly on the merged Pansoma tensor sets. Each set is a directory with
-`SNV/` and `INDEL/` from `tensor_postprocessing` merge + label. The tensors are (8, 200, 101) int8. Labels
+`SNV/` and `INDEL/` from `tensor_postprocessing` merge + label. The tensors are (8, rows, 101) int8, rows from the
+set's manifest (the build's `--rows`: 200 by default, 500 for deep data such as HapMap); the sets of one run share
+it, the checkpoint records it (`tensor_shape`) and predict refuses tensors of another height. Labels
 are 0 non, 1 somatic, 2 germline and −1 ignore.
 
 It differs from v1 (`../pansoma_net`: one `.npy` file per sample in class folders, 6 channels, z-score with

@@ -30,9 +30,8 @@ import numpy as np
 import torch
 import zstandard
 
-from .data import KINDS, TENSOR_SHAPE, TensorDataset, load_parts, read_shard_header
+from .data import KINDS, TensorDataset, load_parts, read_shard_header, shard_layout
 
-ROW_BYTES = int(np.prod(TENSOR_SHAPE))
 ZSTD_LEVEL = 1
 
 
@@ -49,7 +48,8 @@ def build_shard(shard, cache, chunk_rows):
     stem = Path(cache) / cache_name(shard, chunk_rows)
     if Path(f"{stem}.idx.npy").exists():
         return stem
-    offset, rows = read_shard_header(shard)
+    offset, rows, shape = shard_layout(shard)
+    row_bytes = int(np.prod(shape))
     tmp = f"{stem}.zst.tmp{os.getpid()}.{threading.get_ident()}"
     compressor = zstandard.ZstdCompressor(level=ZSTD_LEVEL)
     index, pos = [], 0
@@ -57,8 +57,8 @@ def build_shard(shard, cache, chunk_rows):
     try:
         with open(tmp, "wb") as out:
             for lo in range(0, rows, chunk_rows):
-                buf = np.empty((min(chunk_rows, rows - lo), *TENSOR_SHAPE), np.int8)
-                if os.preadv(fd, [buf], offset + lo * ROW_BYTES) != buf.nbytes:
+                buf = np.empty((min(chunk_rows, rows - lo), *shape), np.int8)
+                if os.preadv(fd, [buf], offset + lo * row_bytes) != buf.nbytes:
                     raise IOError(f"{shard}: short read of rows {lo}-{lo + len(buf)}")
                 z = compressor.compress(buf.data)
                 out.write(z)
@@ -97,6 +97,7 @@ class ChunkLoader:
         self.threads, self.chunk_rows, self.window = threads, chunk_rows, window
         self.rank, self.world, self.seed, self.prefetch = rank, world, seed, prefetch
         self.pin = torch.cuda.is_available() if pin_memory is None else pin_memory
+        self.shape, self.row_bytes = dataset.shape, int(np.prod(dataset.shape))  # (8, rows, 101) of every tensor
         self.headers = [None] * len(dataset.files)  # (row-0 offset, rows) per shard, read on first use
         self.cache = [cache.get(f) for f in dataset.files] if cache is not None else None  # None: not cached
         self.chunk_index = [None] * len(dataset.files)
@@ -112,7 +113,7 @@ class ChunkLoader:
 
     def _header(self, f):
         if self.headers[f] is None:
-            self.headers[f] = read_shard_header(self.ds.files[f])
+            self.headers[f] = read_shard_header(self.ds.files[f], self.shape)
         return self.headers[f]
 
     def plan(self):
@@ -136,17 +137,17 @@ class ChunkLoader:
         return sel, starts, ends, chunks
 
     def _read(self, idx):
-        """x (len(idx), 8, 200, 101) of the dataset indices idx (one shard, one chunk, ascending rows)."""
+        """x (len(idx), 8, rows, 101) of the dataset indices idx (one shard, one chunk, ascending rows)."""
         f = int(self.ds.shard[idx[0]])
         rows = self.ds.row[idx].astype(np.int64)
         if self.cache is not None and self.cache[f] is not None:
             return self._read_cached(f, rows)
         offset, _ = self._header(f)
         lo, hi = int(rows[0]), int(rows[-1]) + 1
-        buf = np.empty((hi - lo, *TENSOR_SHAPE), np.int8)
+        buf = np.empty((hi - lo, *self.shape), np.int8)
         fd = os.open(self.ds.files[f], os.O_RDONLY)
         try:
-            got = os.preadv(fd, [buf], offset + lo * ROW_BYTES)
+            got = os.preadv(fd, [buf], offset + lo * self.row_bytes)
         finally:
             os.close(fd)
         if got != buf.nbytes:
@@ -170,10 +171,10 @@ class ChunkLoader:
             os.close(fd)
         if got != size:
             raise IOError(f"{stem}.zst: short read of chunk {c}")
-        raw = zstandard.ZstdDecompressor().decompress(z, max_output_size=n * ROW_BYTES)
-        if len(raw) != n * ROW_BYTES:
+        raw = zstandard.ZstdDecompressor().decompress(z, max_output_size=n * self.row_bytes)
+        if len(raw) != n * self.row_bytes:
             raise IOError(f"{stem}.zst: chunk {c} has {len(raw)} bytes, not {n} rows")
-        chunk = np.frombuffer(raw, np.int8).reshape(n, *TENSOR_SHAPE)
+        chunk = np.frombuffer(raw, np.int8).reshape(n, *self.shape)
         return chunk[rows - c * self.chunk_rows].copy() if len(rows) < n else chunk.copy()
 
     def _batches(self, out, stop):
@@ -227,9 +228,8 @@ class ChunkLoader:
         finally:
             pool_exec.shutdown(wait=False, cancel_futures=True)
 
-    @staticmethod
-    def _gather(where, parts):
-        x = np.empty((len(where), *TENSOR_SHAPE), np.int8)
+    def _gather(self, where, parts):
+        x = np.empty((len(where), *self.shape), np.int8)
         for j in np.unique(where[:, 0]).tolist():
             m = where[:, 0] == j
             x[m] = parts[j][where[m, 1]]

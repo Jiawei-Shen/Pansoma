@@ -19,7 +19,7 @@ def reason_of(label, k):
 
 
 def make_tensor(rng, blocks, alt="A", ref="C", width=101, height=200):
-    """One (8, 200, 101) int8 tensor: rows below blocks[3] carry reads (some cells uncovered at read ends),
+    """One (8, height, 101) int8 tensor: rows below blocks[3] carry reads (some cells uncovered at read ends),
     the rest is padding. A1 rows carry `alt` at column 50, REF rows `ref`, ALT rows another base, OTHER 0."""
     x = np.zeros((8, height, width), np.int8)
     a1, alt_end, ref_end, rows = blocks
@@ -48,13 +48,14 @@ GAP = (1070, 1140)  # positions left out of the somatic BED (the confident regio
 
 
 def make_tensor_set(root, spec, shard_size=4, seed=0, labels_created="2026-09-28T00:00:00+00:00",
-                    storage="int8-count-linear100-log2", haplotypes=None, storage_key="tensor_storage"):
+                    storage="int8-count-linear100-log2", haplotypes=None, storage_key="tensor_storage", height=200):
     """root/<KIND>/ merged directories from spec {kind: {chrom: n}}, the BEDs of the labels and root's
     somatic.recall.tsv (every truth allele, some without a tensor); returns {kind: [dict per tensor]}.
     Tensor k of a kind sits at node / GRCh38 position 1000 + 7k. Inside GAP a label 0 or -1 becomes -1
     outside_confident_region (as the labeller does); labels 1 and 2 keep theirs but are out of the region.
     The manifest names the channel-6 `storage` under `storage_key` (the deleted HPRC v1.1 d9 linear100 sets used
-    tensor_storage_version, with a -v1 suffix) and, when given, parameters.haplotypes."""
+    tensor_storage_version, with a -v1 suffix) and, when given, parameters.haplotypes. height: rows per tensor (the
+    build's --rows)."""
     rng = np.random.default_rng(seed)
     root = Path(root)
     root.mkdir(parents=True, exist_ok=True)
@@ -66,7 +67,7 @@ def make_tensor_set(root, spec, shard_size=4, seed=0, labels_created="2026-09-28
         d = root / kind
         d.mkdir(parents=True, exist_ok=True)
         manifest = dict(status="complete", layout="chromosome-shards", kind=kind, **{storage_key: storage},
-                        shape=[8, 200, 101], dtype="int8", tensors=sum(chroms.values()), chromosomes={},
+                        shape=[8, height, 101], dtype="int8", tensors=sum(chroms.values()), chromosomes={},
                         **({"parameters": dict(haplotypes=haplotypes)} if haplotypes else {}))
         truth[kind] = []
         for chrom, n in chroms.items():
@@ -74,14 +75,14 @@ def make_tensor_set(root, spec, shard_size=4, seed=0, labels_created="2026-09-28
             for s in range(0, n, shard_size):
                 count = min(shard_size, n - s)
                 name = f"{chrom}_shard_{s // shard_size:05d}_data.npy"
-                data, labels = np.zeros((count, 8, 200, 101), np.int8), np.zeros(count, np.int8)
+                data, labels = np.zeros((count, 8, height, 101), np.int8), np.zeros(count, np.int8)
                 for i in range(count):
                     rows = int(rng.integers(3, 40))
                     a1 = int(rng.integers(1, rows))
                     alt_end = a1 + int(rng.integers(0, 3)) if a1 + 2 < rows else a1
                     ref_end = int(rng.integers(alt_end, rows + 1))
                     blocks = [a1, alt_end, ref_end, rows]
-                    data[i] = make_tensor(rng, blocks)
+                    data[i] = make_tensor(rng, blocks, height=height)
                     k = len(truth[kind])
                     node = 1000 + 7 * k
                     label = int(rng.choice([-1, 0, 0, 1, 2]))

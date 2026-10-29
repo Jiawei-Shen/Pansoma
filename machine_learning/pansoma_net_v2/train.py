@@ -565,6 +565,9 @@ def prepare_data(args, log, refresh_index=True, barrier=None):
             f"{before[0] - sum(len(p) for _, p in train_parts):,} training, "
             f"{before[1] - sum(len(p) for _, p in val_parts):,} validation tensors")
     train_set, val_set = TensorDataset(train_parts), TensorDataset(val_parts, labels="eval_label")
+    if val_parts and val_set.shape != train_set.shape:
+        raise SystemExit(f"validation tensors {val_set.shape} differ from the training tensors {train_set.shape}")
+    log(f"tensors of shape {train_set.shape}")
     n_off = sum(int((i.arrays["eval_label"][v] != i.arrays["label"][v]).sum()) for i, v in val_parts)
     log(f"validation includes {n_off:,} off-reference tensors without a truth match, as non")
     counts = train_set.class_counts()
@@ -781,7 +784,7 @@ def main(argv=None):
                            feature_files=prep.feature_files, call_rule=call_rule, call_recall=call_recall,
                            stats=model.encoder.stats(), args=vars(args), path_count_storage=path_count,
                            dataset_stats=[dict(directory=str(i.dir), stats=st) for (i, _), st in zip(train_parts, part_stats)],
-                           path_count_haplotypes=haplotypes,
+                           path_count_haplotypes=haplotypes, tensor_shape=list(train_set.shape),
                            data=[dict(directory=str(i.dir), labels=i.meta["labels"], train=int(len(p)))
                                  for i, p in train_parts],
                            chroms=dict(train=prep.train_chroms, val=prep.val_chroms, test=prep.test_chroms,

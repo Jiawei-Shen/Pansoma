@@ -1,4 +1,4 @@
-"""Merged Pansoma tensor sets -> samples (x int8 (8, 200, 101), blocks int16 (4,), scalars float32 (9,), label).
+"""Merged Pansoma tensor sets -> samples (x int8 (8, rows, 101), blocks int16 (4,), scalars float32 (9,), label).
 
 A tensor set is a directory with SNV/ and INDEL/ in the merged layout of tensor_postprocessing:
 <chrom>_shard_NNNNN_data.npy (N, 8, 200, 101) int8, <chrom>_shard_NNNNN_labels.npy (N,) int8
@@ -50,7 +50,7 @@ from .bed import Bed, in_region
 from .metrics import CLASSES  # label values 0, 1, 2; -1 = ignore
 
 KINDS = ("SNV", "INDEL")
-TENSOR_SHAPE = (8, 200, 101)
+TENSOR_SHAPE = (8, 200, 101)  # the default; a set's own shape is its manifest's (the build's --rows, e.g. 500)
 MAX_OPEN_SHARDS = 256  # open shard files per DataLoader worker
 INDEX_VERSION = 6  # 6: pos0, truth ids; 5: confident-region flags; 4: label reasons, off-reference flags
 EVAL_AS_NON = ("off_reference_no_truth_match",)  # -1 for training, 0 (non) when evaluating
@@ -154,8 +154,10 @@ def build_index(kind_dir):
     has_labels = labelled(kind_dir)
     manifest = json.loads((kind_dir / "manifest.json").read_text())
     confident, beds = confident_region(kind_dir)
-    if manifest.get("layout", "").split("-")[0] != "chromosome" or list(manifest.get("shape", [])) != [8, 200, 101]:
-        raise ValueError(f"{kind_dir}: not a merged (8, 200, 101) tensor directory")
+    try:
+        tensor_shape(manifest)
+    except ValueError as e:
+        raise ValueError(f"{kind_dir}: {e}") from None
     chroms, shards = list(manifest["chromosomes"]), []
     cols = {k: [] for k in ("chrom", "node", "shard", "row", "label", "blocks", "scalars", "reason", "off_reference",
                             "in_region", "pos0", "truth_n")}
@@ -233,12 +235,14 @@ def build_index(kind_dir):
 
 
 class KindIndex:
-    """The cached index of one merged kind directory (e.g. <sample>/<set>/SNV)."""
+    """The cached index of one merged kind directory (e.g. <sample>/<set>/SNV); shape: its tensors' (8, rows, 101)."""
 
     def __init__(self, kind_dir, cache_dir=None, rebuild=False):
         self.dir = Path(kind_dir).resolve()
         try:
-            self.path_count, self.haplotypes = path_count_storage(json.loads((self.dir / "manifest.json").read_text()))
+            manifest = json.loads((self.dir / "manifest.json").read_text())
+            self.path_count, self.haplotypes = path_count_storage(manifest)
+            self.shape = tensor_shape(manifest)
         except ValueError as e:
             raise ValueError(f"{self.dir}: {e}") from None
         cache = None
@@ -359,21 +363,41 @@ def validation_truth(index, positions, truth, fraction, block_nodes=20000, seed=
     return out
 
 
-def read_shard_header(path):
-    """(offset of row 0, rows) of a shard's .npy file, checked to be C-order int8 (N, 8, 200, 101)."""
+def tensor_shape(manifest):
+    """(8, rows, 101) of a merged kind directory's manifest: channels and width are fixed, rows is the build's --rows
+    (200 by default)."""
+    shape = tuple(manifest.get("shape", []))
+    if (manifest.get("layout", "").split("-")[0] != "chromosome" or len(shape) != 3 or shape[0] != TENSOR_SHAPE[0]
+            or shape[2] != TENSOR_SHAPE[2] or shape[1] < 1):
+        raise ValueError(f"not a merged (8, rows, 101) tensor directory (shape {list(shape)})")
+    return shape
+
+
+def shard_layout(path):
+    """(offset of row 0, tensors, (8, rows, 101)) of a shard's .npy file, checked to be a C-order int8 array of
+    (N, 8, rows, 101) tensors."""
     with open(path, "rb") as fh:
         version = np.lib.format.read_magic(fh)
         read = np.lib.format.read_array_header_1_0 if version == (1, 0) else np.lib.format.read_array_header_2_0
         shape, fortran, dtype = read(fh)
         offset = fh.tell()
-    if tuple(shape[1:]) != TENSOR_SHAPE or dtype != np.int8 or fortran:
-        raise ValueError(f"{path}: {shape} {dtype} is not a C-order int8 (N, 8, 200, 101) array")
-    return offset, int(shape[0])
+    if (len(shape) != 4 or shape[1] != TENSOR_SHAPE[0] or shape[3] != TENSOR_SHAPE[2] or dtype != np.int8
+            or fortran):
+        raise ValueError(f"{path}: {shape} {dtype} is not a C-order int8 (N, 8, rows, 101) array")
+    return offset, int(shape[0]), tuple(int(v) for v in shape[1:])
+
+
+def read_shard_header(path, shape=TENSOR_SHAPE):
+    """(offset of row 0, tensors) of a shard's .npy file, checked to hold (N, *shape) tensors."""
+    offset, n, found = shard_layout(path)
+    if found != tuple(shape):
+        raise ValueError(f"{path}: tensors of shape {found}, not {tuple(shape)}")
+    return offset, n
 
 
 class TensorDataset(Dataset):
-    """Samples from several KindIndex selections: (x int8 (8, 200, 101), blocks int16 (4,), scalars float32 (9,),
-    label int, part int). part is the sample's selection (dataset) in `parts`: its row of the encoder's per-dataset
+    """Samples from several KindIndex selections: (x int8 (8, rows, 101), blocks int16 (4,), scalars float32 (9,),
+    label int, part int); every selection's tensors have one shape (self.shape). part is the sample's selection (dataset) in `parts`: its row of the encoder's per-dataset
     statistics."""
 
     def __init__(self, parts, labels="label"):
@@ -382,6 +406,11 @@ class TensorDataset(Dataset):
         follow the SCALARS in each sample's scalars: (len(SCALARS) + features,) instead of (len(SCALARS),)."""
         # 63 bytes per sample (+ 4 per site feature), pickled to every DataLoader worker
         self.files, shard, row, label, blocks, scalars, part, position = [], [], [], [], [], [], [], []
+        shapes = {getattr(index, "shape", TENSOR_SHAPE) for index, _ in parts}
+        if len(shapes) > 1:
+            raise ValueError("tensor sets of different shapes: " + ", ".join(
+                f"{index.dir} {getattr(index, 'shape', TENSOR_SHAPE)}" for index, _ in parts))
+        self.shape = shapes.pop() if shapes else TENSOR_SHAPE
         with_site = {"site_features" in index.arrays for index, _ in parts}
         if len(with_site) > 1:
             raise ValueError("site features for some tensor sets only: " + ", ".join(
@@ -412,7 +441,7 @@ class TensorDataset(Dataset):
         """(fd, offset of row 0) of shard f. Tensors are read with pread, not a memory map: mapped pages stay
         in every worker's RSS, and Slurm's summed-RSS limit counts them once per worker."""
         if f not in self._open:
-            offset, _ = read_shard_header(self.files[f])
+            offset, _ = read_shard_header(self.files[f], self.shape)
             if len(self._open) >= MAX_OPEN_SHARDS:  # stay far below the per-process file limit
                 os.close(self._open.pop(next(iter(self._open)))[0])
             self._open[f] = (os.open(self.files[f], os.O_RDONLY), offset)
@@ -420,7 +449,7 @@ class TensorDataset(Dataset):
 
     def __getitem__(self, i):
         fd, offset = self._file(self.shard[i])
-        x = np.empty(TENSOR_SHAPE, np.int8)
+        x = np.empty(self.shape, np.int8)
         if os.preadv(fd, [x], offset + int(self.row[i]) * x.nbytes) != x.nbytes:
             raise IOError(f"{self.files[self.shard[i]]}: short read at row {self.row[i]}")
         return (torch.from_numpy(x), torch.from_numpy(self.blocks[i].copy()), torch.from_numpy(self.scalars[i].copy()),

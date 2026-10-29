@@ -226,6 +226,9 @@ def main(argv=None):
             print(f"note: {index.dir} was built with --haplotypes {index.haplotypes}, the checkpoint's training sets "
                   f"with {trained_haplotypes or 'none recorded'}", flush=True)
         dataset = TensorDataset([(index, positions)], labels="eval_label")
+        trained_shape = tuple(checkpoint.get("tensor_shape", TENSOR_SHAPE))  # checkpoints before it: (8, 200, 101)
+        if dataset.shape != trained_shape:
+            raise SystemExit(f"{index.dir}: tensors of shape {dataset.shape}, the checkpoint was trained on {trained_shape}")
         part_stats, source, shift = None, None, None
         if norm == "dataset":  # this dataset's statistics: row 0 of the table, the part of every sample here
             if str(index.dir) in trained_stats:  # a training dataset: the statistics the model was trained with

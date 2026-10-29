@@ -47,6 +47,26 @@ class IndexTest(unittest.TestCase):
                 self.assertAlmostEqual(float(a["scalars"][k][SCALARS.index("af")]), t["af"], places=4)
             self.assertEqual(index.candidates(), [t["candidate_id"] for t in rows])
 
+    def test_tensor_height_follows_the_set(self):
+        """A set built with --rows 50 gives (8, 50, 101) samples, read at the right offsets; sets of different
+        heights do not mix in one dataset, and a shard is checked against the shape asked for."""
+        tall = Path(self.tmp.name) / "tall" / "tensors"
+        truth = make_tensor_set(tall, {"SNV": {"chr1": 6}}, shard_size=4, height=50)["SNV"]
+        index = KindIndex(tall / "SNV", self.cache)
+        self.assertEqual(index.shape, (8, 50, 101))
+        ds = TensorDataset([(index, np.arange(len(index)))])
+        self.assertEqual(ds.shape, (8, 50, 101))
+        for k, t in enumerate(truth):
+            raw = np.load(tall / "SNV" / t["file"])[t["row"]]
+            self.assertTrue(np.array_equal(ds[k][0].numpy(), raw))
+        with self.assertRaisesRegex(ValueError, "different shapes"):
+            TensorDataset([(index, np.arange(2)), (KindIndex(self.root / "SNV", self.cache), np.arange(2))])
+        with self.assertRaisesRegex(ValueError, "not \\(8, 200, 101\\)"):
+            data.read_shard_header(tall / "SNV" / truth[0]["file"])
+        self.assertEqual(data.tensor_shape({"layout": "chromosome-shards", "shape": [8, 500, 101]}), (8, 500, 101))
+        with self.assertRaisesRegex(ValueError, "not a merged"):
+            data.tensor_shape({"layout": "chromosome-shards", "shape": [8, 200, 100]})
+
     def test_channel_6_storage_of_a_set(self):
         """Older sets name the storage tensor_storage_version with -v1; an unknown storage is refused."""
         self.assertEqual(data.path_count_storage({"tensor_storage_version": "int8-count-linear100-log2-v1"}),
