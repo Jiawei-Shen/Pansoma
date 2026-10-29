@@ -132,15 +132,16 @@ construction and d9 filter but was built from 40 HPRC year-1 individuals plus GR
 the six mixture individuals HG005, HG00438, HG02257, HG02486, HG02622 and HG002); the Methods now state this. Four of
 the donors are in the HPRC v1.1 graph and all six in the HPRC v2.1 graph (d46 filter), as our companion study noted,
 which is why the donor-free graph was used. Alleles that a donor shares with other individuals of the graph can still be
-graph paths; only 1.4% of the graph-carried SNV positives on the autosomes have a tensor, and the recall we report
-leaves them out (R2.1). This removes the graph overlap from the reported recall but does not make the remaining germline
-positives equivalent to somatic mutations.
+graph paths; only 1.4% of the graph-carried SNV positives on the autosomes have a tensor; they are removed from training
+and left out of the evaluation (R2.1). This removes the graph overlap from training and evaluation but does not make the
+remaining germline positives equivalent to somatic mutations.
 
-We therefore removed the HapMap mixture from the main benchmark and withdrew the HapMap-trained low-VAF model as a
-somatic model. We keep the mixture in the Supplement because, sequenced to about 500x, it has a large truth set at
-allele fractions of 1–16.5%, below those our tumor/normal dilutions reach; it is rerun with the current pipeline on the
-donor-free graph and scored without population filtering, which would remove many of its germline positives (R2.4). No
-claim about somatic accuracy rests on it.
+We therefore removed the HapMap mixture from the main benchmark; the HapMap-trained low-VAF configuration is kept in the
+Supplement only as an option for data deeper than 200x, and its behaviour on somatic variants is assessed on the
+COLO829T dilutions (R2.4). We keep the mixture in the Supplement because, sequenced to about 500x, it has a large truth
+set at allele fractions of 1–16.5%, below those our tumor/normal dilutions reach; it is rerun with the current pipeline
+on the donor-free graph and scored without population filtering, which would remove many of its germline positives
+(R2.4). No claim about somatic accuracy rests on it.
 
 Low-VAF performance is now measured on in-silico dilutions of COLO829T with COLO829BL on three platforms (nominal purity
 75, 50 and 25%). One model per platform and variant type is trained on chr2–22 of all four purities and tested on chr1

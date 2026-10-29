@@ -789,6 +789,8 @@ population-based tumor-only calling, and describe candidate generation on altern
 
 **状态：部分解决**: "HapMap 退出主结果、换成含真实 somatic 突变的 dilution" 这条主线已有 2026-10-12 RIS 上 COLO829T 三平台 purity joint model 的结果（fiberseq 没有 artefact，可以直接用），2026-10-15 又补了 fiberseq 各 purity 的 block-bootstrap 区间（E16）、低于 0.08 candidate floor 的 truth 比例（E2.4：P100 16.1 % → P25 26.9 %）和支持 LOH 解释的 FP 谱（E18：P75 / P50 的 FP 像 germline）；donor 在图里的事实已核实（E8b），E1.1 表明分类器确实用 ch6 压 germline allele（过 PoN 以后影响小得多）。但 Illumina / ONT dilution 带 read-source BQ artefact，分数偏乐观（要在 RIS 上修），HCC1395 dilution（E14c）没开始；原稿用的是 donor-free 图 `mgi_non_HG005.d9`（用户 2026-10-20 确认，Response 已写没有泄漏）。（2026-10-26 更新）HapMap 只作 Supplement 里按 VAF 的 empirical sensitivity（用户 10-22），donor-free 图上的重跑 E23 已完成，数字在 R2.4；Illumina dilution 去 cue 的结果已在 Response；ONT 去 cue 的干净一对也做完了（E14b，10-29 填进 Response：cue 对 ONT dilution 最多约 0.02）。第二个肿瘤不做，写成限制（用户 10-26）。
 
+**2026-10-29（深夜）：和用户 10-29 的两个决定同步（pansoma-7a 转告；已在 repo 核实）。** 1. HapMap 模型不撤回：用户选 "可选配置，放 Supplement"（R2.4 证据同日一条原话："HapMap 模型和主模型最大的区别是 tensor 深度（500 对 200 条 read），深度 > 200 时建议用它，放 Supplement ... R1.5 的 'withdrew ... as a somatic model' 同步改掉"）→ "the HapMap-trained low-VAF configuration is kept in the Supplement only as an option for data deeper than 200x, and its behaviour on somatic variants is assessed on the COLO829T dilutions (R2.4)"。2. graph-carried positives 真的从训练和评估里去掉（R2.1 HEAD e0d421b 证据第一条："用户 10-29 选 '真的删掉再重训'"；E23 用 500-read tensor 和 --exclude-candidates 重做）→ "they are removed from training and left out of the evaluation (R2.1)"，和 R2.1 正文一致。注意：E23 重训重评完成以前，这句话描述的是正在做的重跑。
+
 **2026-10-29（夜）：按用户贴来的 R1.5 审阅意见改（8.5/10；五处）。** 1. 开头不再是 "We agree with the first point"，改成只同意一层：HapMap 不能证明检测获得性 somatic 突变的准确度（positives 是群体 germline allele，Pansoma 本来就要压）。2. 补 graph overlap：意见建议写 "we removed these tensors from the training sets and excluded graph-represented truth alleles from the evaluation sets"——**和事实不符，没写**：R2.1 的 owner 10-29 核对过，这次重跑（模型 10-24 训练）chr2–22 上 graph-carried 且有 tensor 的 SNV positives 31,632 个在训练里、标 somatic，chr1 上只从报告的 recall 去掉；所以和 R2.1 一样写真实的版本（1.4 % 有 tensor，报告的 recall 不含它们），再加意见的第二句（overlap 处理不让 germline positives 变成 somatic）。是否真的删掉重训由用户在 R2.1 那边定，定了以后这里同步。3. 加一句保留 HapMap 的目的（约 500x、1–16.5 %，低于 dilution 能到的 AF；和 R2.1 第二段同一说法）。4. dilution 压成一段：purity 比例、chr2–22 训练 / chr1 测试、LOH、BQ cue；ONT 八个 F1、Illumina 两组数、measured purity、Fiber-seq F1、cosine 都移到新加的 Supplementary (R1.5) 一节（R2.4 证据写着 Illumina 去 cue 的结果在 R1.5，所以不能只靠 R2.4）。5. "the cue adds at most about 0.02" 删掉（依赖 "其他影响相同" 的假设），改成直接的 "reduced the dilutions' SNV F1 by 0.014–0.028"；"(1 − purity)/2" 删掉（只对 copy-neutral 情形成立），改成 "can reintroduce germline alleles ... placing them in the somatic allele-fraction range"。旧版 `R1.5_before_20261029.md`（session scratchpad）。
 
 **2026-10-29（夜）：Response 里删掉 NA19240（用户问 "NA19240 这个哪来的"）。** 它不是 HapMap mixture 的样本：HPRC year-1 组装了 47 个样本，HG002、HG005、NA19240 三个留作评估、没进 year-1 图（E8b H1，HPRC README-v1 原话）。donor-free 图 = year-1 的 44 个个体去掉其中 4 个 donor （HG00438、HG02257、HG02486、HG02622）= 40 个 + GRCh38 + CHM13 = 82 haplotypes，NA19240 本来就不在里面，写出来只会让人以为它和 mixture 有关。核对（10-29）：`mgi_non_HG005.seqfile` 84 行里六个 mixture 样本和 NA19240 都没有；`mgi_non_HG005.d9.raw.vcf.gz` 41 个 sample 里也没有。
@@ -824,15 +826,16 @@ construction and d9 filter but was built from 40 HPRC year-1 individuals plus GR
 the six mixture individuals HG005, HG00438, HG02257, HG02486, HG02622 and HG002); the Methods now state this. Four of
 the donors are in the HPRC v1.1 graph and all six in the HPRC v2.1 graph (d46 filter), as our companion study noted,
 which is why the donor-free graph was used. Alleles that a donor shares with other individuals of the graph can still be
-graph paths; only 1.4% of the graph-carried SNV positives on the autosomes have a tensor, and the recall we report
-leaves them out (R2.1). This removes the graph overlap from the reported recall but does not make the remaining germline
-positives equivalent to somatic mutations.
+graph paths; only 1.4% of the graph-carried SNV positives on the autosomes have a tensor; they are removed from training
+and left out of the evaluation (R2.1). This removes the graph overlap from training and evaluation but does not make the
+remaining germline positives equivalent to somatic mutations.
 
-We therefore removed the HapMap mixture from the main benchmark and withdrew the HapMap-trained low-VAF model as a
-somatic model. We keep the mixture in the Supplement because, sequenced to about 500x, it has a large truth set at
-allele fractions of 1–16.5%, below those our tumor/normal dilutions reach; it is rerun with the current pipeline on the
-donor-free graph and scored without population filtering, which would remove many of its germline positives (R2.4). No
-claim about somatic accuracy rests on it.
+We therefore removed the HapMap mixture from the main benchmark; the HapMap-trained low-VAF configuration is kept in the
+Supplement only as an option for data deeper than 200x, and its behaviour on somatic variants is assessed on the
+COLO829T dilutions (R2.4). We keep the mixture in the Supplement because, sequenced to about 500x, it has a large truth
+set at allele fractions of 1–16.5%, below those our tumor/normal dilutions reach; it is rerun with the current pipeline
+on the donor-free graph and scored without population filtering, which would remove many of its germline positives
+(R2.4). No claim about somatic accuracy rests on it.
 
 Low-VAF performance is now measured on in-silico dilutions of COLO829T with COLO829BL on three platforms (nominal purity
 75, 50 and 25%). One model per platform and variant type is trained on chr2–22 of all four purities and tested on chr1
