@@ -138,3 +138,9 @@ Further limits, by step:
   (452208, on the 1.6 Mb REF / 1.28 Mb ALT allele at chr5:69,765,910, SMN region), so only alleles <= 50 bp are
   atomized (452298, 5 min, 1.1 GB); tables 452299, SNV full call table 452300. Numbers filled into R2.4 ("Below the
   candidate floor") and R3.10 (Low VAF).
+- 2026-10-29: the graph-carried positives (31,632 chr2-22 SNV tensors, 2.0 % of the SNV positives with a tensor) were in
+  the 10-24 training. `exclude_graph_carried.py` (job 460499; `nograph_exclude_summary.tsv`) lists the candidates whose
+  somatic truth is graph-carried (82,597 SNV, 20,303 INDEL ids; train / predict `--exclude-candidates`) and the chr1
+  evaluation BED without these sites; `call_vaf.py --eval` scores such an evaluation. The retrain on these 200-row
+  tensors was cancelled: the user wants the HapMap tensors at 500 reads (about 500x), as the original low-VAF model;
+  pansoma_net_v2 reads the tensor height from the manifest since then. Rebuild at `--rows 500` not submitted yet (user).

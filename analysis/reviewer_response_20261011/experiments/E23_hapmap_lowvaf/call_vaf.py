@@ -6,7 +6,7 @@
   tp + fp            PASS calls, FORMAT AF = the allele fraction in the reads
 raw_calls = before population filtering (the detection limit E23 reports), pon_calls = after it.
 --graph-alleles (graph_alleles.sh): truth recall is also split by whether the allele is a path of the graph.
-usage: python call_vaf.py --run /scratch/jshen/data/pansoma_net_v2_runs/<RUN> --kind SNV|INDEL [--graph-alleles G.tsv.gz]
+usage: python call_vaf.py --run /scratch/jshen/data/pansoma_net_v2_runs/<RUN> --kind SNV|INDEL [--graph-alleles G.tsv.gz] [--eval DIR]
        --output DIR
 """
 import argparse
@@ -48,6 +48,7 @@ def main():
     p.add_argument("--run", required=True)
     p.add_argument("--kind", required=True)
     p.add_argument("--graph-alleles")
+    p.add_argument("--eval", help="evaluation directory (default <run>/vcf_chr1/eval_bed); an arm it lacks is skipped")
     p.add_argument("--output", required=True)
     a = p.parse_args()
     run, out = Path(a.run), Path(a.output)
@@ -62,7 +63,9 @@ def main():
     result = {}
     lines = [f"# E23 call level: {run.name}, {a.kind}, chr1, benchmark BED", ""]
     for arm, title in (("raw_calls", "before population filtering"), ("pon_calls", "after population filtering")):
-        d = run / "vcf_chr1" / "eval_bed" / "vcfeval" / arm
+        d = (Path(a.eval) if a.eval else run / "vcf_chr1" / "eval_bed") / "vcfeval" / arm
+        if not d.exists():
+            continue
         tp, fn = Counter(map(vaf_bin, records_af(d / "tp-baseline.vcf.gz"))), Counter(map(vaf_bin, records_af(d / "fn.vcf.gz")))
         ctp, cfp = Counter(map(call_bin, records_af(d / "tp.vcf.gz"))), Counter(map(call_bin, records_af(d / "fp.vcf.gz")))
         result[arm] = dict(truth_tp=dict(tp), truth_fn=dict(fn), call_tp=dict(ctp), call_fp=dict(cfp))
