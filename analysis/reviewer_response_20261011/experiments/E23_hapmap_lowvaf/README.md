@@ -144,3 +144,9 @@ Further limits, by step:
   evaluation BED without these sites; `call_vaf.py --eval` scores such an evaluation. The retrain on these 200-row
   tensors was cancelled: the user wants the HapMap tensors at 500 reads (about 500x), as the original low-VAF model;
   pansoma_net_v2 reads the tensor height from the manifest since then. Rebuild at `--rows 500` not submitted yet (user).
+- 2026-10-29 night: `call_vaf_by_value.py` (every truth VAF value 1-16.5 %, the ranges 1-2 / 2-5 / 5-10 / 10-16.5 %,
+  precision by call AF; `--eval-dir` reads any vcfeval output) and `tensor_metrics_chr1.py` (tensor level from the chr1
+  predictions, graph-carried tensors left out). The 200-read results scored inside `eval_chr1.bed` (graph-carried truth
+  out of recall and precision; job 461100) are `mutect2/call_vaf_by_value.Pansoma_*.md`: SNV R / P 0.302 / 0.990,
+  0.807 / 0.985, 0.906 / 0.994, 0.796 / 0.990 (1-2 / 2-5 / 5-10 / 10-16.5 %); R2.4 uses these (user: 200 reads, no
+  retrain). Mutect2 rerun on chr1 (tumor-only, no germline resource / PoN; `tmp/mutect2_hapmap_20261029`) running.
