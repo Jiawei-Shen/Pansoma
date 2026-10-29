@@ -136,12 +136,12 @@ graph paths; only 1.4% of the graph-carried SNV positives on the autosomes have 
 and left out of the evaluation (R2.1). This removes the graph overlap from training and evaluation but does not make the
 remaining germline positives equivalent to somatic mutations.
 
-We therefore removed the HapMap mixture from the main benchmark; the HapMap-trained low-VAF configuration is kept in the
-Supplement only as an option for data deeper than 200x, and its behaviour on somatic variants is assessed on the
-COLO829T dilutions (R2.4). We keep the mixture in the Supplement because, sequenced to about 500x, it has a large truth
-set at allele fractions of 1–16.5%, below those our tumor/normal dilutions reach; it is rerun with the current pipeline
-on the donor-free graph and scored without population filtering, which would remove many of its germline positives
-(R2.4). No claim about somatic accuracy rests on it.
+We therefore removed the HapMap mixture from the main benchmark; the HapMap-trained low-VAF configuration (up to 500
+reads per tensor) is kept in the Supplement only as an exploratory option, and its behaviour on somatic variants is
+assessed on the COLO829T dilutions (R2.4). We keep the mixture in the Supplement because, sequenced to about 500x, it
+has a large truth set at allele fractions of 1–16.5%, below those our tumor/normal dilutions reach; it is rerun with the
+current pipeline on the donor-free graph and scored without population filtering, which would remove many of its
+germline positives (R2.4). No claim about somatic accuracy rests on it.
 
 Low-VAF performance is now measured on in-silico dilutions of COLO829T with COLO829BL on three platforms (nominal purity
 75, 50 and 25%). One model per platform and variant type is trained on chr2–22 of all four purities and tested on chr1
