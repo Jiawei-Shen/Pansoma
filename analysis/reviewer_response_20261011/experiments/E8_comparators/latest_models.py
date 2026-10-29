@@ -169,6 +169,32 @@ def main():
                                        reach_candidate=reach, **vals))
                 L.append(f"| {ds} | {kind} | {arm} | {reach:.3f} | {mm(vals['raw'])} | {mm(vals['r'])} | {mm(vals['ceil'])} | "
                          f"{mm(vals['clairs_to'])} | {mm(vals['deepsomatic'])} |")
+    # INDEL: the final models of the INDEL pipeline (9919d4a; PASS = post-PoN validation recall 0.8 of the callable
+    # positives, "ppr8"; tmp/indel_gap_20261020/final_20261023): release = trained with chr2-22 of every tumor (HG008T and
+    # COLO829T included), unseen = without HG008T / COLO829T; Illumina 3 seeds, long reads 2
+    L += ["", "## INDEL, final models (ppr8), chr1: recall / precision per seed against the comparators' PASS + PoN", "",
+          "| dataset | model | seeds | recall (mean) | precision (mean) | ClairS-TO R / P | DeepSomatic-TO R / P |", "|---|---|---|---|---|---|---|"]
+    out["indel_final"] = []
+    for sample, s, p in SETS:
+        ds = f"{sample}_{p}"
+        comp = {c: json.loads((E8 / c / ds / "INDEL" / "report.json").read_text())["eval_bed"]["pass_pon"]["at_threshold"]
+                for c, _ in CALLERS}
+        tset = f"{sample}_{p}_d46"
+        plat = "PacBio" if p == "fiberseq" else p
+        for model in ("release", "unseen"):
+            vals = []
+            for seed in ("s0", "s1", "s2"):
+                f = RIS.parent / f"{model}_{seed}_{plat}_INDEL" / f"vcf_ppr8_chr1_{tset}" / "eval_bed" / "report.json"
+                if f.exists():
+                    a = json.loads(f.read_text())["pon"]["at_threshold"]
+                    vals.append(dict(seed=seed, report=str(f), p=a["precision"], r=a["recall"], f1=a["f1"]))
+            if not vals:
+                continue
+            out["indel_final"].append(dict(dataset=ds, model=model, seeds=vals,
+                                           comparators={c: dict(r=v["recall"], p=v["precision"]) for c, v in comp.items()}))
+            L.append(f"| {ds} | {model} | {len(vals)} | {mm([v['r'] for v in vals])} | {mm([v['p'] for v in vals])} | "
+                     f"{comp['clairs_to']['recall']:.3f} / {comp['clairs_to']['precision']:.3f} | "
+                     f"{comp['deepsomatic']['recall']:.3f} / {comp['deepsomatic']['precision']:.3f} |")
     (HERE / "latest_models.md").write_text("\n".join(L) + "\n")
     (HERE / "latest_models.json").write_text(json.dumps(out, indent=1) + "\n")
     print("\n".join(L))

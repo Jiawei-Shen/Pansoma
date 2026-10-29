@@ -1744,5 +1744,395 @@
     0.1756
    ]
   }
+ ],
+ "indel_final": [
+  {
+   "dataset": "HG008T_Illumina",
+   "model": "release",
+   "seeds": [
+    {
+     "seed": "s0",
+     "report": "/scratch/jshen/data/pansoma_net_v2_runs/release_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46/eval_bed/report.json",
+     "p": 0.3757,
+     "r": 0.1107,
+     "f1": 0.1711
+    },
+    {
+     "seed": "s1",
+     "report": "/scratch/jshen/data/pansoma_net_v2_runs/release_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46/eval_bed/report.json",
+     "p": 0.3785,
+     "r": 0.138,
+     "f1": 0.2022
+    },
+    {
+     "seed": "s2",
+     "report": "/scratch/jshen/data/pansoma_net_v2_runs/release_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46/eval_bed/report.json",
+     "p": 0.4603,
+     "r": 0.1482,
+     "f1": 0.2242
+    }
+   ],
+   "comparators": {
+    "clairs_to": {
+     "r": 0.0801,
+     "p": 0.379
+    },
+    "deepsomatic": {
+     "r": 0.1414,
+     "p": 0.3934
+    }
+   }
+  },
+  {
+   "dataset": "HG008T_Illumina",
+   "model": "unseen",
+   "seeds": [
+    {
+     "seed": "s0",
+     "report": "/scratch/jshen/data/pansoma_net_v2_runs/unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46/eval_bed/report.json",
+     "p": 0.4845,
+     "r": 0.0801,
+     "f1": 0.1374
+    },
+    {
+     "seed": "s1",
+     "report": "/scratch/jshen/data/pansoma_net_v2_runs/unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46/eval_bed/report.json",
+     "p": 0.5522,
+     "r": 0.063,
+     "f1": 0.1131
+    },
+    {
+     "seed": "s2",
+     "report": "/scratch/jshen/data/pansoma_net_v2_runs/unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46/eval_bed/report.json",
+     "p": 0.5342,
+     "r": 0.0664,
+     "f1": 0.1182
+    }
+   ],
+   "comparators": {
+    "clairs_to": {
+     "r": 0.0801,
+     "p": 0.379
+    },
+    "deepsomatic": {
+     "r": 0.1414,
+     "p": 0.3934
+    }
+   }
+  },
+  {
+   "dataset": "HG008T_PacBio",
+   "model": "release",
+   "seeds": [
+    {
+     "seed": "s0",
+     "report": "/scratch/jshen/data/pansoma_net_v2_runs/release_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46/eval_bed/report.json",
+     "p": 0.4677,
+     "r": 0.1601,
+     "f1": 0.2386
+    },
+    {
+     "seed": "s1",
+     "report": "/scratch/jshen/data/pansoma_net_v2_runs/release_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46/eval_bed/report.json",
+     "p": 0.4484,
+     "r": 0.1704,
+     "f1": 0.2469
+    }
+   ],
+   "comparators": {
+    "clairs_to": {
+     "r": 0.075,
+     "p": 0.449
+    },
+    "deepsomatic": {
+     "r": 0.0307,
+     "p": 0.1978
+    }
+   }
+  },
+  {
+   "dataset": "HG008T_PacBio",
+   "model": "unseen",
+   "seeds": [
+    {
+     "seed": "s0",
+     "report": "/scratch/jshen/data/pansoma_net_v2_runs/unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46/eval_bed/report.json",
+     "p": 0.4312,
+     "r": 0.0801,
+     "f1": 0.1351
+    },
+    {
+     "seed": "s1",
+     "report": "/scratch/jshen/data/pansoma_net_v2_runs/unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46/eval_bed/report.json",
+     "p": 0.4848,
+     "r": 0.0818,
+     "f1": 0.1399
+    }
+   ],
+   "comparators": {
+    "clairs_to": {
+     "r": 0.075,
+     "p": 0.449
+    },
+    "deepsomatic": {
+     "r": 0.0307,
+     "p": 0.1978
+    }
+   }
+  },
+  {
+   "dataset": "HG008T_ONT",
+   "model": "release",
+   "seeds": [
+    {
+     "seed": "s0",
+     "report": "/scratch/jshen/data/pansoma_net_v2_runs/release_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46/eval_bed/report.json",
+     "p": 0.1917,
+     "r": 0.1499,
+     "f1": 0.1683
+    },
+    {
+     "seed": "s1",
+     "report": "/scratch/jshen/data/pansoma_net_v2_runs/release_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46/eval_bed/report.json",
+     "p": 0.2118,
+     "r": 0.1533,
+     "f1": 0.1779
+    }
+   ],
+   "comparators": {
+    "clairs_to": {
+     "r": 0.075,
+     "p": 0.4112
+    },
+    "deepsomatic": {
+     "r": 0.0187,
+     "p": 0.1719
+    }
+   }
+  },
+  {
+   "dataset": "HG008T_ONT",
+   "model": "unseen",
+   "seeds": [
+    {
+     "seed": "s0",
+     "report": "/scratch/jshen/data/pansoma_net_v2_runs/unseen_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46/eval_bed/report.json",
+     "p": 0.4188,
+     "r": 0.0835,
+     "f1": 0.1392
+    },
+    {
+     "seed": "s1",
+     "report": "/scratch/jshen/data/pansoma_net_v2_runs/unseen_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46/eval_bed/report.json",
+     "p": 0.4386,
+     "r": 0.0852,
+     "f1": 0.1427
+    }
+   ],
+   "comparators": {
+    "clairs_to": {
+     "r": 0.075,
+     "p": 0.4112
+    },
+    "deepsomatic": {
+     "r": 0.0187,
+     "p": 0.1719
+    }
+   }
+  },
+  {
+   "dataset": "COLO829T_Illumina",
+   "model": "release",
+   "seeds": [
+    {
+     "seed": "s0",
+     "report": "/scratch/jshen/data/pansoma_net_v2_runs/release_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46/eval_bed/report.json",
+     "p": 0.2615,
+     "r": 0.1298,
+     "f1": 0.1735
+    },
+    {
+     "seed": "s1",
+     "report": "/scratch/jshen/data/pansoma_net_v2_runs/release_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46/eval_bed/report.json",
+     "p": 0.1759,
+     "r": 0.145,
+     "f1": 0.159
+    },
+    {
+     "seed": "s2",
+     "report": "/scratch/jshen/data/pansoma_net_v2_runs/release_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46/eval_bed/report.json",
+     "p": 0.3542,
+     "r": 0.1298,
+     "f1": 0.1899
+    }
+   ],
+   "comparators": {
+    "clairs_to": {
+     "r": 0.145,
+     "p": 0.1056
+    },
+    "deepsomatic": {
+     "r": 0.1832,
+     "p": 0.1983
+    }
+   }
+  },
+  {
+   "dataset": "COLO829T_Illumina",
+   "model": "unseen",
+   "seeds": [
+    {
+     "seed": "s0",
+     "report": "/scratch/jshen/data/pansoma_net_v2_runs/unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46/eval_bed/report.json",
+     "p": 0.4054,
+     "r": 0.1145,
+     "f1": 0.1786
+    },
+    {
+     "seed": "s1",
+     "report": "/scratch/jshen/data/pansoma_net_v2_runs/unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46/eval_bed/report.json",
+     "p": 0.4643,
+     "r": 0.0992,
+     "f1": 0.1635
+    },
+    {
+     "seed": "s2",
+     "report": "/scratch/jshen/data/pansoma_net_v2_runs/unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46/eval_bed/report.json",
+     "p": 0.4483,
+     "r": 0.0992,
+     "f1": 0.1625
+    }
+   ],
+   "comparators": {
+    "clairs_to": {
+     "r": 0.145,
+     "p": 0.1056
+    },
+    "deepsomatic": {
+     "r": 0.1832,
+     "p": 0.1983
+    }
+   }
+  },
+  {
+   "dataset": "COLO829T_fiberseq",
+   "model": "release",
+   "seeds": [
+    {
+     "seed": "s0",
+     "report": "/scratch/jshen/data/pansoma_net_v2_runs/release_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46/eval_bed/report.json",
+     "p": 0.35,
+     "r": 0.1069,
+     "f1": 0.1637
+    },
+    {
+     "seed": "s1",
+     "report": "/scratch/jshen/data/pansoma_net_v2_runs/release_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46/eval_bed/report.json",
+     "p": 0.3273,
+     "r": 0.1374,
+     "f1": 0.1935
+    }
+   ],
+   "comparators": {
+    "clairs_to": {
+     "r": 0.1069,
+     "p": 0.3043
+    },
+    "deepsomatic": {
+     "r": 0.084,
+     "p": 0.3143
+    }
+   }
+  },
+  {
+   "dataset": "COLO829T_fiberseq",
+   "model": "unseen",
+   "seeds": [
+    {
+     "seed": "s0",
+     "report": "/scratch/jshen/data/pansoma_net_v2_runs/unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46/eval_bed/report.json",
+     "p": 0.2308,
+     "r": 0.1145,
+     "f1": 0.1531
+    },
+    {
+     "seed": "s1",
+     "report": "/scratch/jshen/data/pansoma_net_v2_runs/unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46/eval_bed/report.json",
+     "p": 0.1538,
+     "r": 0.0916,
+     "f1": 0.1148
+    }
+   ],
+   "comparators": {
+    "clairs_to": {
+     "r": 0.1069,
+     "p": 0.3043
+    },
+    "deepsomatic": {
+     "r": 0.084,
+     "p": 0.3143
+    }
+   }
+  },
+  {
+   "dataset": "COLO829T_ONT",
+   "model": "release",
+   "seeds": [
+    {
+     "seed": "s0",
+     "report": "/scratch/jshen/data/pansoma_net_v2_runs/release_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46/eval_bed/report.json",
+     "p": 0.0824,
+     "r": 0.1603,
+     "f1": 0.1088
+    },
+    {
+     "seed": "s1",
+     "report": "/scratch/jshen/data/pansoma_net_v2_runs/release_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46/eval_bed/report.json",
+     "p": 0.0605,
+     "r": 0.1603,
+     "f1": 0.0879
+    }
+   ],
+   "comparators": {
+    "clairs_to": {
+     "r": 0.0916,
+     "p": 0.1188
+    },
+    "deepsomatic": {
+     "r": 0.0153,
+     "p": 0.0317
+    }
+   }
+  },
+  {
+   "dataset": "COLO829T_ONT",
+   "model": "unseen",
+   "seeds": [
+    {
+     "seed": "s0",
+     "report": "/scratch/jshen/data/pansoma_net_v2_runs/unseen_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46/eval_bed/report.json",
+     "p": 0.047,
+     "r": 0.1298,
+     "f1": 0.069
+    },
+    {
+     "seed": "s1",
+     "report": "/scratch/jshen/data/pansoma_net_v2_runs/unseen_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46/eval_bed/report.json",
+     "p": 0.0364,
+     "r": 0.1069,
+     "f1": 0.0543
+    }
+   ],
+   "comparators": {
+    "clairs_to": {
+     "r": 0.0916,
+     "p": 0.1188
+    },
+    "deepsomatic": {
+     "r": 0.0153,
+     "p": 0.0317
+    }
+   }
+  }
  ]
 }

@@ -510,15 +510,17 @@ where variants are lost.
 
 *Recall under a common protocol.* We evaluated the revised Pansoma models and the comparator call sets with a common
 scoring protocol (chr1, benchmark regions, the same additional population filter for all callers; R3.m2). The ranges
-below span sequencing platforms and, for Pansoma's SNV models, three training seeds; they are not confidence intervals. On HG008T,
-SNV recall is comparable: 0.814–0.859 for Pansoma on the HPRC v2.1 graph, against 0.806–0.889 for DeepSomatic-TO and
-0.831–0.845 for ClairS-TO, with Pansoma's models trained on chr2–22 of the same tumor. On COLO829T, Pansoma reaches
-0.700–0.734 and the comparators 0.555–0.835, and a substantial deficit remains against DeepSomatic-TO on Illumina
-(0.705–0.717 against 0.835). Among truth SNVs whose allele fraction in the truth set (its Illumina VAF) is below 0.08,
-DeepSomatic-TO recovers 30%, compared with 6–7% for Pansoma, whose 0.08 candidate floor applies to the allele fraction
-observed in its own reads; at 0.08 or above, DeepSomatic-TO recovers 94%, compared with 83–85% for Pansoma, so the floor
-does not explain the deficit fully (low-allele-fraction detection: R2.4). INDEL recall remains low in absolute terms,
-although under the same protocol it is higher than the comparators' on both tumors (0.229–0.260 against 0.015–0.183).
+below span sequencing platforms and, for Pansoma's SNV models, three training seeds; they are not confidence intervals.
+On HG008T, SNV recall is comparable: 0.814–0.859 for Pansoma on the HPRC v2.1 graph, against 0.806–0.889 for
+DeepSomatic-TO and 0.831–0.845 for ClairS-TO, with Pansoma's models trained on chr2–22 of the same tumor. On COLO829T,
+Pansoma reaches 0.700–0.734 and the comparators 0.555–0.835, and a substantial deficit remains against DeepSomatic-TO on
+Illumina (0.705–0.717 against 0.835). Among truth SNVs whose allele fraction in the truth set (its Illumina VAF) is
+below 0.08, DeepSomatic-TO recovers 30%, compared with 6–7% for Pansoma, whose 0.08 candidate floor applies to the
+allele fraction observed in its own reads; at 0.08 or above, DeepSomatic-TO recovers 94%, compared with 83–85% for
+Pansoma, so the floor does not explain the deficit fully (low-allele-fraction detection: R2.4). INDEL recall remains low
+in absolute terms (0.11–0.17 for the revised INDEL models; R3.10). Under the same protocol it is higher than the
+comparators' on the four long-read datasets and lower on Illumina (HG008T: 0.13 against 0.14 for DeepSomatic-TO;
+COLO829T: 0.14 against 0.18 for DeepSomatic-TO and 0.15 for ClairS-TO).
 
 *Where recall is lost (chr1).* A per-allele funnel assigns each missed truth allele to the first stage at which it is
 lost (R1.6). On HG008T the largest loss on every reference and seed is the classification threshold (on the HPRC
