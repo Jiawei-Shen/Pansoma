@@ -1,0 +1,38 @@
+{
+ "d9|COLO829T_Illumina": {
+  "keys": 2264,
+  "exact": 462,
+  "site": 32,
+  "b_exact": 155
+ },
+ "d9|COLO829T_fiberseq": {
+  "keys": 2264,
+  "exact": 306,
+  "site": 22,
+  "b_exact": 149
+ },
+ "d9|COLO829T_ONT": {
+  "keys": 2264,
+  "exact": 302,
+  "site": 31,
+  "b_exact": 148
+ },
+ "d46|COLO829T_Illumina_d46": {
+  "keys": 2200,
+  "exact": 425,
+  "site": 21,
+  "b_exact": 166
+ },
+ "d46|COLO829T_fiberseq_d46": {
+  "keys": 2200,
+  "exact": 347,
+  "site": 45,
+  "b_exact": 177
+ },
+ "d46|COLO829T_ONT_d46": {
+  "keys": 2200,
+  "exact": 312,
+  "site": 36,
+  "b_exact": 162
+ }
+}

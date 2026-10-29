@@ -1,0 +1,18 @@
+{
+ "n": 44810,
+ "classes": {
+  "grch38_same": 39310,
+  "dsa_only": 5352,
+  "grch38_diff_ref": 148
+ },
+ "in_truth": {
+  "grch38_same": 35150
+ },
+ "truth_autosomal_snvs": 42035,
+ "offref_sites": {
+  "grch38_same|False": 10,
+  "dsa_only|False": 17,
+  "grch38_same|True": 6,
+  "grch38_diff_ref|False": 2
+ }
+}

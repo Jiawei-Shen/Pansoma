@@ -1,0 +1,337 @@
+{
+ "d9|chr1-22, label region|dsa_only|COLO829T_Illumina": {
+  "events": 194,
+  "tensor": 40,
+  "non": 18,
+  "none": 154,
+  "somatic": 20,
+  "germline": 2
+ },
+ "d9|chr1-22, label region|dsa_only|COLO829T_fiberseq": {
+  "events": 194,
+  "tensor": 30,
+  "non": 11,
+  "none": 164,
+  "somatic": 17,
+  "germline": 2
+ },
+ "d9|chr1-22, label region|dsa_only|COLO829T_ONT": {
+  "events": 194,
+  "tensor": 25,
+  "non": 8,
+  "none": 169,
+  "somatic": 15,
+  "germline": 2
+ },
+ "d9|chr1-22, label region|grch38_diff_ref|COLO829T_Illumina": {
+  "events": 9,
+  "tensor": 9,
+  "non": 3,
+  "germline": 6
+ },
+ "d9|chr1-22, label region|grch38_diff_ref|COLO829T_fiberseq": {
+  "events": 9,
+  "tensor": 5,
+  "non": 2,
+  "none": 4,
+  "germline": 3
+ },
+ "d9|chr1-22, label region|grch38_diff_ref|COLO829T_ONT": {
+  "events": 9,
+  "tensor": 5,
+  "non": 2,
+  "none": 4,
+  "germline": 3
+ },
+ "d9|chr1-22, outside the label region|dsa_only|COLO829T_Illumina": {
+  "events": 1273,
+  "tensor": 226,
+  "somatic": 95,
+  "none": 1047,
+  "ignore": 131
+ },
+ "d9|chr1-22, outside the label region|dsa_only|COLO829T_fiberseq": {
+  "events": 1273,
+  "tensor": 118,
+  "somatic": 77,
+  "none": 1155,
+  "ignore": 41
+ },
+ "d9|chr1-22, outside the label region|dsa_only|COLO829T_ONT": {
+  "events": 1273,
+  "tensor": 119,
+  "somatic": 76,
+  "none": 1154,
+  "ignore": 43
+ },
+ "d9|chr1-22, outside the label region|grch38_diff_ref|COLO829T_Illumina": {
+  "events": 7,
+  "tensor": 3,
+  "somatic": 1,
+  "none": 4,
+  "ignore": 2
+ },
+ "d9|chr1-22, outside the label region|grch38_diff_ref|COLO829T_fiberseq": {
+  "events": 7,
+  "tensor": 4,
+  "somatic": 1,
+  "none": 3,
+  "ignore": 3
+ },
+ "d9|chr1-22, outside the label region|grch38_diff_ref|COLO829T_ONT": {
+  "events": 7,
+  "tensor": 5,
+  "somatic": 1,
+  "none": 2,
+  "ignore": 4
+ },
+ "d9|chrX / chrY|dsa_only|COLO829T_Illumina": {
+  "events": 30,
+  "tensor": 0,
+  "none": 30
+ },
+ "d9|chrX / chrY|dsa_only|COLO829T_fiberseq": {
+  "events": 30,
+  "tensor": 0,
+  "none": 30
+ },
+ "d9|chrX / chrY|dsa_only|COLO829T_ONT": {
+  "events": 30,
+  "tensor": 0,
+  "none": 30
+ },
+ "d9|other GRCh38 contig (Un / random / M)|dsa_only|COLO829T_Illumina": {
+  "events": 550,
+  "tensor": 0,
+  "none": 550
+ },
+ "d9|other GRCh38 contig (Un / random / M)|dsa_only|COLO829T_fiberseq": {
+  "events": 550,
+  "tensor": 0,
+  "none": 550
+ },
+ "d9|other GRCh38 contig (Un / random / M)|dsa_only|COLO829T_ONT": {
+  "events": 550,
+  "tensor": 0,
+  "none": 550
+ },
+ "d9|off-reference node|dsa_only|COLO829T_Illumina": {
+  "events": 171,
+  "tensor": 126,
+  "none": 45,
+  "ignore": 121,
+  "somatic": 5
+ },
+ "d9|off-reference node|dsa_only|COLO829T_fiberseq": {
+  "events": 171,
+  "tensor": 132,
+  "none": 39,
+  "ignore": 127,
+  "somatic": 5
+ },
+ "d9|off-reference node|dsa_only|COLO829T_ONT": {
+  "events": 171,
+  "tensor": 131,
+  "none": 40,
+  "ignore": 126,
+  "somatic": 5
+ },
+ "d9|off-reference node|grch38_diff_ref|COLO829T_Illumina": {
+  "events": 30,
+  "tensor": 27,
+  "ignore": 26,
+  "somatic": 1,
+  "none": 3
+ },
+ "d9|off-reference node|grch38_diff_ref|COLO829T_fiberseq": {
+  "events": 30,
+  "tensor": 17,
+  "ignore": 16,
+  "none": 13,
+  "somatic": 1
+ },
+ "d9|off-reference node|grch38_diff_ref|COLO829T_ONT": {
+  "events": 30,
+  "tensor": 17,
+  "ignore": 16,
+  "none": 13,
+  "somatic": 1
+ },
+ "baseline|COLO829T_Illumina": {
+  "truth_in_bed": 41230,
+  "a1_somatic": 37286
+ },
+ "baseline|COLO829T_fiberseq": {
+  "truth_in_bed": 41230,
+  "a1_somatic": 37237
+ },
+ "baseline|COLO829T_ONT": {
+  "truth_in_bed": 41230,
+  "a1_somatic": 36948
+ },
+ "d46|chr1-22, label region|dsa_only|COLO829T_Illumina_d46": {
+  "events": 138,
+  "tensor": 40,
+  "non": 20,
+  "somatic": 19,
+  "none": 98,
+  "germline": 1
+ },
+ "d46|chr1-22, label region|dsa_only|COLO829T_fiberseq_d46": {
+  "events": 138,
+  "tensor": 30,
+  "non": 13,
+  "somatic": 16,
+  "none": 108,
+  "germline": 1
+ },
+ "d46|chr1-22, label region|dsa_only|COLO829T_ONT_d46": {
+  "events": 138,
+  "tensor": 27,
+  "non": 11,
+  "somatic": 15,
+  "none": 111,
+  "germline": 1
+ },
+ "d46|chr1-22, label region|grch38_diff_ref|COLO829T_Illumina_d46": {
+  "events": 5,
+  "tensor": 4,
+  "none": 1,
+  "germline": 4
+ },
+ "d46|chr1-22, label region|grch38_diff_ref|COLO829T_fiberseq_d46": {
+  "events": 5,
+  "tensor": 1,
+  "none": 4,
+  "germline": 1
+ },
+ "d46|chr1-22, label region|grch38_diff_ref|COLO829T_ONT_d46": {
+  "events": 5,
+  "tensor": 1,
+  "none": 4,
+  "germline": 1
+ },
+ "d46|chr1-22, outside the label region|dsa_only|COLO829T_Illumina_d46": {
+  "events": 1078,
+  "tensor": 213,
+  "somatic": 94,
+  "none": 865,
+  "ignore": 119
+ },
+ "d46|chr1-22, outside the label region|dsa_only|COLO829T_fiberseq_d46": {
+  "events": 1078,
+  "tensor": 137,
+  "somatic": 77,
+  "none": 941,
+  "ignore": 60
+ },
+ "d46|chr1-22, outside the label region|dsa_only|COLO829T_ONT_d46": {
+  "events": 1078,
+  "tensor": 118,
+  "somatic": 74,
+  "none": 960,
+  "ignore": 44
+ },
+ "d46|chr1-22, outside the label region|grch38_diff_ref|COLO829T_Illumina_d46": {
+  "events": 6,
+  "tensor": 2,
+  "none": 4,
+  "ignore": 2
+ },
+ "d46|chr1-22, outside the label region|grch38_diff_ref|COLO829T_fiberseq_d46": {
+  "events": 6,
+  "tensor": 2,
+  "none": 4,
+  "ignore": 2
+ },
+ "d46|chr1-22, outside the label region|grch38_diff_ref|COLO829T_ONT_d46": {
+  "events": 6,
+  "tensor": 4,
+  "none": 2,
+  "ignore": 4
+ },
+ "d46|chrX / chrY|dsa_only|COLO829T_Illumina_d46": {
+  "events": 30,
+  "tensor": 0,
+  "none": 30
+ },
+ "d46|chrX / chrY|dsa_only|COLO829T_fiberseq_d46": {
+  "events": 30,
+  "tensor": 0,
+  "none": 30
+ },
+ "d46|chrX / chrY|dsa_only|COLO829T_ONT_d46": {
+  "events": 30,
+  "tensor": 0,
+  "none": 30
+ },
+ "d46|other GRCh38 contig (Un / random / M)|dsa_only|COLO829T_Illumina_d46": {
+  "events": 516,
+  "tensor": 0,
+  "none": 516
+ },
+ "d46|other GRCh38 contig (Un / random / M)|dsa_only|COLO829T_fiberseq_d46": {
+  "events": 516,
+  "tensor": 0,
+  "none": 516
+ },
+ "d46|other GRCh38 contig (Un / random / M)|dsa_only|COLO829T_ONT_d46": {
+  "events": 516,
+  "tensor": 0,
+  "none": 516
+ },
+ "d46|off-reference node|dsa_only|COLO829T_Illumina_d46": {
+  "events": 398,
+  "tensor": 139,
+  "none": 259,
+  "ignore": 135,
+  "somatic": 4
+ },
+ "d46|off-reference node|dsa_only|COLO829T_fiberseq_d46": {
+  "events": 398,
+  "tensor": 155,
+  "none": 243,
+  "ignore": 151,
+  "somatic": 4
+ },
+ "d46|off-reference node|dsa_only|COLO829T_ONT_d46": {
+  "events": 398,
+  "tensor": 142,
+  "none": 256,
+  "ignore": 138,
+  "somatic": 4
+ },
+ "d46|off-reference node|grch38_diff_ref|COLO829T_Illumina_d46": {
+  "events": 29,
+  "tensor": 27,
+  "ignore": 26,
+  "somatic": 1,
+  "none": 2
+ },
+ "d46|off-reference node|grch38_diff_ref|COLO829T_fiberseq_d46": {
+  "events": 29,
+  "tensor": 22,
+  "ignore": 21,
+  "none": 7,
+  "somatic": 1
+ },
+ "d46|off-reference node|grch38_diff_ref|COLO829T_ONT_d46": {
+  "events": 29,
+  "tensor": 20,
+  "ignore": 19,
+  "none": 9,
+  "somatic": 1
+ },
+ "baseline|COLO829T_Illumina_d46": {
+  "truth_in_bed": 41230,
+  "a1_somatic": 37297
+ },
+ "baseline|COLO829T_fiberseq_d46": {
+  "truth_in_bed": 41230,
+  "a1_somatic": 37243
+ },
+ "baseline|COLO829T_ONT_d46": {
+  "truth_in_bed": 41230,
+  "a1_somatic": 36943
+ }
+}

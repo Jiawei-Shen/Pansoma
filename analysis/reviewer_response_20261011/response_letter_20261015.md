@@ -907,7 +907,10 @@ default (point 5).
    them without the rescue and 22–66 with it. COLO829T, whose truth set is called on GRCh38, has only 25–35 such SNVs per
    graph, of which the models call 0–1 without the rescue and 2–7 with it. Of the rescue's calls on these sites, 63–87%
    (HG008T) and 24 of 25 (COLO829T) are read-supported. A graph-native population filter tags 74–88% of the HG008T ones,
-   so we use it only to describe calls as population alleles, not to remove them.
+   so we use it only to describe calls as population alleles, not to remove them. Somatic SNVs called from COLO829T
+   Fiber-seq reads on the phased COLO829BL donor-specific assembly (which include 82–91% of placed true positives) give a
+   further check: 2–8 of the 18–152 graph-coordinate calls per COLO829T run without the rescue are among them (10
+   distinct SNVs, 9 outside the assembly's alignment to GRCh38).
 
 Assembly comparisons provided tumor-only support for 0.6–5.2% of graph-coordinate calls per run, while population
 overlap and matched-normal evidence were common. We therefore report the analysis counting all graph-coordinate calls as
