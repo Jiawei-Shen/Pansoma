@@ -1,5 +1,22 @@
 # E17a: INDEL results by type, length and repeat context (R3.10)
 
+> **2026-10-29, final INDEL models** (`e17a_final_models.py` -> `final_models.md` / `.tsv` / `.json`; R3.10, R1.6, R2.3).
+> The same strata for the final models of the INDEL pipeline (`tmp/indel_gap_20261020/final_20261023/`: PASS = ppr8,
+> release = chr2-22 of six tumors, tumor-unseen = the four cell lines, three seeds each, seeds pooled) and for both
+> comparators (PASS + our PoN, `../E16_bootstrap/comparators.tsv`). All 36 Pansoma call sets match report.json. chr1, in
+> the BED; release models:
+> - Overall F1 (seed means): HG008T 0.199 / 0.249 / 0.168 (Illumina / PacBio / ONT), COLO829T 0.174 / 0.170 / 0.090; ClairS-TO 0.132 /
+>   0.129 / 0.127 and 0.122 / 0.158 / 0.103; DeepSomatic-TO 0.208 / 0.053 / 0.034 and 0.191 / 0.133 / 0.021. Recall
+>   0.117-0.169 (seed means); in the BED the PoN tags 384 of 587 HG008T truth INDELs (bound 0.346) and 81 of 131 on COLO829T
+>   (0.382); recall among the truth INDELs the filter keeps is 0.31-0.49.
+> - Type: DEL recall above INS in every Pansoma set on HG008T (0.19-0.21 against 0.10-0.14), as for both comparators.
+> - Length: 1 bp is recalled best (HG008T 0.19-0.25); 2-4 bp worst (0.02-0.06 on both tumors).
+> - Context: STR truth is almost never called (0.00-0.04; 57 of 65 HG008T STR truths are PoN-tagged); outside repeats recall
+>   is 0.31-0.44.
+> - Long homopolymers: on HG008T, 44 / 61 / 70 % of Pansoma's FPs are HP>=7 calls (Illumina / PacBio / ONT), precision of
+>   HP>=7 calls 0.44 / 0.46 / 0.14. COLO829T ONT FPs spread over HP>=7 (105 per seed), HP4-6 (about 99) and no context (96).
+> The sections below describe the 2026-10-15 call sets (earlier models, recall-0.9 / valbest thresholds).
+
 > **2026-10-16, INDEL PoN rule changed** (user decision: gnomAD / CoLoRSdb exact allele, AF >= 0.01 in homopolymers >= 8 bp, else AF >= 1e-4; was >= 7 bp and 1e-3). The 44 local chr1 INDEL call sets were re-scored in place (`tmp/reviewer_cpu_20261013/pon_hp8_20261016/rescore.sh`, array 418042; the old evaluations are kept as `eval_bed.pon_hp7_1e-3` / `eval_nobed.pon_hp7_1e-3`) and this experiment's collector was rerun (job 418071), so `tables.md` / `summary.json` / TSVs now use the new rule. INDEL numbers quoted in the prose below may still be those of the earlier rule (changes are small: e.g. HG008T Illumina v1.1 PASS F1 0.241 -> 0.251, best 0.265 -> 0.270; HG008T chr1 truth INDELs tagged 413 -> 418 of 635). SNV results are unchanged.
 
 
@@ -44,6 +61,8 @@ The PoN-tagged truth per stratum gives the recall bound that no caller can excee
 | `tables.md` | overall, by type, by length, by context, INS / DEL x context |
 | `strata.tsv` | every call set x axis x class: TPb, FN, recall, TPc, FP, precision, PoN-tagged truth, recall bound; also the type x context and type x length crosses |
 | `summary.json` | the same counts per call set, with the threshold and checks |
+| `e17a_final_models.py` | the same strata for the final INDEL models (release / tumor-unseen, three seeds pooled) and both comparators |
+| `final_models.md` / `.tsv` / `.json` | its tables (also FP in HP>=7, retained recall, test-tuned best F1, ceiling), per call set x axis x class, and per group |
 
 ## Results (all call sets, 2026-10-15 18:00; 44 INDEL call sets)
 

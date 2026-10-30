@@ -1755,31 +1755,42 @@
      "report": "/scratch/jshen/data/pansoma_net_v2_runs/release_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46/eval_bed/report.json",
      "p": 0.3757,
      "r": 0.1107,
-     "f1": 0.1711
+     "f1": 0.1711,
+     "raw_r": 0.1107,
+     "ceiling": 0.2555,
+     "best_f1": 0.2505
     },
     {
      "seed": "s1",
      "report": "/scratch/jshen/data/pansoma_net_v2_runs/release_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46/eval_bed/report.json",
      "p": 0.3785,
      "r": 0.138,
-     "f1": 0.2022
+     "f1": 0.2022,
+     "raw_r": 0.1516,
+     "ceiling": 0.2538,
+     "best_f1": 0.248
     },
     {
      "seed": "s2",
      "report": "/scratch/jshen/data/pansoma_net_v2_runs/release_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46/eval_bed/report.json",
      "p": 0.4603,
      "r": 0.1482,
-     "f1": 0.2242
+     "f1": 0.2242,
+     "raw_r": 0.1482,
+     "ceiling": 0.2555,
+     "best_f1": 0.2836
     }
    ],
    "comparators": {
     "clairs_to": {
      "r": 0.0801,
-     "p": 0.379
+     "p": 0.379,
+     "f1": 0.1322
     },
     "deepsomatic": {
      "r": 0.1414,
-     "p": 0.3934
+     "p": 0.3934,
+     "f1": 0.208
     }
    }
   },
@@ -1792,31 +1803,42 @@
      "report": "/scratch/jshen/data/pansoma_net_v2_runs/unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46/eval_bed/report.json",
      "p": 0.4845,
      "r": 0.0801,
-     "f1": 0.1374
+     "f1": 0.1374,
+     "raw_r": 0.0801,
+     "ceiling": 0.2266,
+     "best_f1": 0.2417
     },
     {
      "seed": "s1",
      "report": "/scratch/jshen/data/pansoma_net_v2_runs/unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46/eval_bed/report.json",
      "p": 0.5522,
      "r": 0.063,
-     "f1": 0.1131
+     "f1": 0.1131,
+     "raw_r": 0.063,
+     "ceiling": 0.2232,
+     "best_f1": 0.2436
     },
     {
      "seed": "s2",
      "report": "/scratch/jshen/data/pansoma_net_v2_runs/unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46/eval_bed/report.json",
      "p": 0.5342,
      "r": 0.0664,
-     "f1": 0.1182
+     "f1": 0.1182,
+     "raw_r": 0.0664,
+     "ceiling": 0.2249,
+     "best_f1": 0.2492
     }
    ],
    "comparators": {
     "clairs_to": {
      "r": 0.0801,
-     "p": 0.379
+     "p": 0.379,
+     "f1": 0.1322
     },
     "deepsomatic": {
      "r": 0.1414,
-     "p": 0.3934
+     "p": 0.3934,
+     "f1": 0.208
     }
    }
   },
@@ -1829,24 +1851,42 @@
      "report": "/scratch/jshen/data/pansoma_net_v2_runs/release_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46/eval_bed/report.json",
      "p": 0.4677,
      "r": 0.1601,
-     "f1": 0.2386
+     "f1": 0.2386,
+     "raw_r": 0.1635,
+     "ceiling": 0.2555,
+     "best_f1": 0.2746
     },
     {
      "seed": "s1",
      "report": "/scratch/jshen/data/pansoma_net_v2_runs/release_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46/eval_bed/report.json",
      "p": 0.4484,
      "r": 0.1704,
-     "f1": 0.2469
+     "f1": 0.2469,
+     "raw_r": 0.1772,
+     "ceiling": 0.2589,
+     "best_f1": 0.2626
+    },
+    {
+     "seed": "s2",
+     "report": "/scratch/jshen/data/pansoma_net_v2_runs/release_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46/eval_bed/report.json",
+     "p": 0.5098,
+     "r": 0.1772,
+     "f1": 0.263,
+     "raw_r": 0.1908,
+     "ceiling": 0.2572,
+     "best_f1": 0.275
     }
    ],
    "comparators": {
     "clairs_to": {
      "r": 0.075,
-     "p": 0.449
+     "p": 0.449,
+     "f1": 0.1285
     },
     "deepsomatic": {
      "r": 0.0307,
-     "p": 0.1978
+     "p": 0.1978,
+     "f1": 0.0531
     }
    }
   },
@@ -1859,24 +1899,42 @@
      "report": "/scratch/jshen/data/pansoma_net_v2_runs/unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46/eval_bed/report.json",
      "p": 0.4312,
      "r": 0.0801,
-     "f1": 0.1351
+     "f1": 0.1351,
+     "raw_r": 0.0801,
+     "ceiling": 0.2385,
+     "best_f1": 0.1529
     },
     {
      "seed": "s1",
      "report": "/scratch/jshen/data/pansoma_net_v2_runs/unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46/eval_bed/report.json",
      "p": 0.4848,
      "r": 0.0818,
-     "f1": 0.1399
+     "f1": 0.1399,
+     "raw_r": 0.0818,
+     "ceiling": 0.2095,
+     "best_f1": 0.1923
+    },
+    {
+     "seed": "s2",
+     "report": "/scratch/jshen/data/pansoma_net_v2_runs/unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46/eval_bed/report.json",
+     "p": 0.5196,
+     "r": 0.0903,
+     "f1": 0.1538,
+     "raw_r": 0.0903,
+     "ceiling": 0.2027,
+     "best_f1": 0.2092
     }
    ],
    "comparators": {
     "clairs_to": {
      "r": 0.075,
-     "p": 0.449
+     "p": 0.449,
+     "f1": 0.1285
     },
     "deepsomatic": {
      "r": 0.0307,
-     "p": 0.1978
+     "p": 0.1978,
+     "f1": 0.0531
     }
    }
   },
@@ -1889,24 +1947,42 @@
      "report": "/scratch/jshen/data/pansoma_net_v2_runs/release_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46/eval_bed/report.json",
      "p": 0.1917,
      "r": 0.1499,
-     "f1": 0.1683
+     "f1": 0.1683,
+     "raw_r": 0.1652,
+     "ceiling": 0.2368,
+     "best_f1": 0.1869
     },
     {
      "seed": "s1",
      "report": "/scratch/jshen/data/pansoma_net_v2_runs/release_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46/eval_bed/report.json",
      "p": 0.2118,
      "r": 0.1533,
-     "f1": 0.1779
+     "f1": 0.1779,
+     "raw_r": 0.1772,
+     "ceiling": 0.23,
+     "best_f1": 0.1937
+    },
+    {
+     "seed": "s2",
+     "report": "/scratch/jshen/data/pansoma_net_v2_runs/release_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46/eval_bed/report.json",
+     "p": 0.153,
+     "r": 0.1618,
+     "f1": 0.1573,
+     "raw_r": 0.184,
+     "ceiling": 0.2351,
+     "best_f1": 0.182
     }
    ],
    "comparators": {
     "clairs_to": {
      "r": 0.075,
-     "p": 0.4112
+     "p": 0.4112,
+     "f1": 0.1268
     },
     "deepsomatic": {
      "r": 0.0187,
-     "p": 0.1719
+     "p": 0.1719,
+     "f1": 0.0338
     }
    }
   },
@@ -1919,24 +1995,42 @@
      "report": "/scratch/jshen/data/pansoma_net_v2_runs/unseen_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46/eval_bed/report.json",
      "p": 0.4188,
      "r": 0.0835,
-     "f1": 0.1392
+     "f1": 0.1392,
+     "raw_r": 0.0835,
+     "ceiling": 0.1141,
+     "best_f1": 0.1635
     },
     {
      "seed": "s1",
      "report": "/scratch/jshen/data/pansoma_net_v2_runs/unseen_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46/eval_bed/report.json",
      "p": 0.4386,
      "r": 0.0852,
-     "f1": 0.1427
+     "f1": 0.1427,
+     "raw_r": 0.0852,
+     "ceiling": 0.1738,
+     "best_f1": 0.1639
+    },
+    {
+     "seed": "s2",
+     "report": "/scratch/jshen/data/pansoma_net_v2_runs/unseen_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46/eval_bed/report.json",
+     "p": 0.416,
+     "r": 0.0886,
+     "f1": 0.1461,
+     "raw_r": 0.0886,
+     "ceiling": 0.1261,
+     "best_f1": 0.1615
     }
    ],
    "comparators": {
     "clairs_to": {
      "r": 0.075,
-     "p": 0.4112
+     "p": 0.4112,
+     "f1": 0.1268
     },
     "deepsomatic": {
      "r": 0.0187,
-     "p": 0.1719
+     "p": 0.1719,
+     "f1": 0.0338
     }
    }
   },
@@ -1949,31 +2043,42 @@
      "report": "/scratch/jshen/data/pansoma_net_v2_runs/release_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46/eval_bed/report.json",
      "p": 0.2615,
      "r": 0.1298,
-     "f1": 0.1735
+     "f1": 0.1735,
+     "raw_r": 0.1298,
+     "ceiling": 0.2748,
+     "best_f1": 0.2126
     },
     {
      "seed": "s1",
      "report": "/scratch/jshen/data/pansoma_net_v2_runs/release_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46/eval_bed/report.json",
      "p": 0.1759,
      "r": 0.145,
-     "f1": 0.159
+     "f1": 0.159,
+     "raw_r": 0.1756,
+     "ceiling": 0.2748,
+     "best_f1": 0.1667
     },
     {
      "seed": "s2",
      "report": "/scratch/jshen/data/pansoma_net_v2_runs/release_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46/eval_bed/report.json",
      "p": 0.3542,
      "r": 0.1298,
-     "f1": 0.1899
+     "f1": 0.1899,
+     "raw_r": 0.1298,
+     "ceiling": 0.2748,
+     "best_f1": 0.2381
     }
    ],
    "comparators": {
     "clairs_to": {
      "r": 0.145,
-     "p": 0.1056
+     "p": 0.1056,
+     "f1": 0.1222
     },
     "deepsomatic": {
      "r": 0.1832,
-     "p": 0.1983
+     "p": 0.1983,
+     "f1": 0.1905
     }
    }
   },
@@ -1986,31 +2091,42 @@
      "report": "/scratch/jshen/data/pansoma_net_v2_runs/unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46/eval_bed/report.json",
      "p": 0.4054,
      "r": 0.1145,
-     "f1": 0.1786
+     "f1": 0.1786,
+     "raw_r": 0.1145,
+     "ceiling": 0.2595,
+     "best_f1": 0.1839
     },
     {
      "seed": "s1",
      "report": "/scratch/jshen/data/pansoma_net_v2_runs/unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46/eval_bed/report.json",
      "p": 0.4643,
      "r": 0.0992,
-     "f1": 0.1635
+     "f1": 0.1635,
+     "raw_r": 0.0992,
+     "ceiling": 0.2595,
+     "best_f1": 0.1829
     },
     {
      "seed": "s2",
      "report": "/scratch/jshen/data/pansoma_net_v2_runs/unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46/eval_bed/report.json",
      "p": 0.4483,
      "r": 0.0992,
-     "f1": 0.1625
+     "f1": 0.1625,
+     "raw_r": 0.0992,
+     "ceiling": 0.2519,
+     "best_f1": 0.1925
     }
    ],
    "comparators": {
     "clairs_to": {
      "r": 0.145,
-     "p": 0.1056
+     "p": 0.1056,
+     "f1": 0.1222
     },
     "deepsomatic": {
      "r": 0.1832,
-     "p": 0.1983
+     "p": 0.1983,
+     "f1": 0.1905
     }
    }
   },
@@ -2023,24 +2139,42 @@
      "report": "/scratch/jshen/data/pansoma_net_v2_runs/release_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46/eval_bed/report.json",
      "p": 0.35,
      "r": 0.1069,
-     "f1": 0.1637
+     "f1": 0.1637,
+     "raw_r": 0.1069,
+     "ceiling": 0.2672,
+     "best_f1": 0.2128
     },
     {
      "seed": "s1",
      "report": "/scratch/jshen/data/pansoma_net_v2_runs/release_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46/eval_bed/report.json",
      "p": 0.3273,
      "r": 0.1374,
-     "f1": 0.1935
+     "f1": 0.1935,
+     "raw_r": 0.1374,
+     "ceiling": 0.2672,
+     "best_f1": 0.1946
+    },
+    {
+     "seed": "s2",
+     "report": "/scratch/jshen/data/pansoma_net_v2_runs/release_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46/eval_bed/report.json",
+     "p": 0.2745,
+     "r": 0.1069,
+     "f1": 0.1538,
+     "raw_r": 0.1069,
+     "ceiling": 0.2595,
+     "best_f1": 0.1923
     }
    ],
    "comparators": {
     "clairs_to": {
      "r": 0.1069,
-     "p": 0.3043
+     "p": 0.3043,
+     "f1": 0.1582
     },
     "deepsomatic": {
      "r": 0.084,
-     "p": 0.3143
+     "p": 0.3143,
+     "f1": 0.1325
     }
    }
   },
@@ -2053,24 +2187,42 @@
      "report": "/scratch/jshen/data/pansoma_net_v2_runs/unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46/eval_bed/report.json",
      "p": 0.2308,
      "r": 0.1145,
-     "f1": 0.1531
+     "f1": 0.1531,
+     "raw_r": 0.1145,
+     "ceiling": 0.2672,
+     "best_f1": 0.1592
     },
     {
      "seed": "s1",
      "report": "/scratch/jshen/data/pansoma_net_v2_runs/unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46/eval_bed/report.json",
      "p": 0.1538,
      "r": 0.0916,
-     "f1": 0.1148
+     "f1": 0.1148,
+     "raw_r": 0.0916,
+     "ceiling": 0.2443,
+     "best_f1": 0.1429
+    },
+    {
+     "seed": "s2",
+     "report": "/scratch/jshen/data/pansoma_net_v2_runs/unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46/eval_bed/report.json",
+     "p": 0.1772,
+     "r": 0.1069,
+     "f1": 0.1333,
+     "raw_r": 0.1069,
+     "ceiling": 0.2519,
+     "best_f1": 0.1476
     }
    ],
    "comparators": {
     "clairs_to": {
      "r": 0.1069,
-     "p": 0.3043
+     "p": 0.3043,
+     "f1": 0.1582
     },
     "deepsomatic": {
      "r": 0.084,
-     "p": 0.3143
+     "p": 0.3143,
+     "f1": 0.1325
     }
    }
   },
@@ -2083,24 +2235,42 @@
      "report": "/scratch/jshen/data/pansoma_net_v2_runs/release_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46/eval_bed/report.json",
      "p": 0.0824,
      "r": 0.1603,
-     "f1": 0.1088
+     "f1": 0.1088,
+     "raw_r": 0.1603,
+     "ceiling": 0.2443,
+     "best_f1": 0.1509
     },
     {
      "seed": "s1",
      "report": "/scratch/jshen/data/pansoma_net_v2_runs/release_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46/eval_bed/report.json",
      "p": 0.0605,
      "r": 0.1603,
-     "f1": 0.0879
+     "f1": 0.0879,
+     "raw_r": 0.1679,
+     "ceiling": 0.2214,
+     "best_f1": 0.1255
+    },
+    {
+     "seed": "s2",
+     "report": "/scratch/jshen/data/pansoma_net_v2_runs/release_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46/eval_bed/report.json",
+     "p": 0.0483,
+     "r": 0.1603,
+     "f1": 0.0742,
+     "raw_r": 0.1679,
+     "ceiling": 0.229,
+     "best_f1": 0.1458
     }
    ],
    "comparators": {
     "clairs_to": {
      "r": 0.0916,
-     "p": 0.1188
+     "p": 0.1188,
+     "f1": 0.1034
     },
     "deepsomatic": {
      "r": 0.0153,
-     "p": 0.0317
+     "p": 0.0317,
+     "f1": 0.0206
     }
    }
   },
@@ -2113,24 +2283,42 @@
      "report": "/scratch/jshen/data/pansoma_net_v2_runs/unseen_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46/eval_bed/report.json",
      "p": 0.047,
      "r": 0.1298,
-     "f1": 0.069
+     "f1": 0.069,
+     "raw_r": 0.1298,
+     "ceiling": 0.1527,
+     "best_f1": 0.0836
     },
     {
      "seed": "s1",
      "report": "/scratch/jshen/data/pansoma_net_v2_runs/unseen_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46/eval_bed/report.json",
      "p": 0.0364,
      "r": 0.1069,
-     "f1": 0.0543
+     "f1": 0.0543,
+     "raw_r": 0.1145,
+     "ceiling": 0.229,
+     "best_f1": 0.0744
+    },
+    {
+     "seed": "s2",
+     "report": "/scratch/jshen/data/pansoma_net_v2_runs/unseen_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46/eval_bed/report.json",
+     "p": 0.0656,
+     "r": 0.1221,
+     "f1": 0.0853,
+     "raw_r": 0.1221,
+     "ceiling": 0.1908,
+     "best_f1": 0.0957
     }
    ],
    "comparators": {
     "clairs_to": {
      "r": 0.0916,
-     "p": 0.1188
+     "p": 0.1188,
+     "f1": 0.1034
     },
     "deepsomatic": {
      "r": 0.0153,
-     "p": 0.0317
+     "p": 0.0317,
+     "f1": 0.0206
     }
    }
   }

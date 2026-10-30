@@ -12,6 +12,9 @@ Every Pansoma report is <run>/vcf_chr1*/eval_bed/report.json (jobs/vcf.sh; pon a
 recall-0.9 threshold, after the PoN); INDEL reports are checked to carry the current rule (HG008T 418 / COLO829T 81 truth
 INDELs tagged). Comparators: the E8 score reports (`pass_pon` = the tool's PASS + our PoN).
 
+  INDEL, final  the final models of the INDEL pipeline (tmp/indel_gap_20261020/final_20261023; PASS = ppr8), release and
+         tumor-unseen, three seeds: <model>_s{0,1,2}_<P>_INDEL/vcf_ppr8_chr1_<set>_d46 (last section).
+
 Also: COLO829T Illumina SNV recall split at the 0.08 candidate floor by the truth's Illumina VAF (INFO VAF_Ill), from
 rtg's tp-baseline / fn of each call set.
 Writes latest_models.md and latest_models.json next to this script.
@@ -171,9 +174,11 @@ def main():
                          f"{mm(vals['clairs_to'])} | {mm(vals['deepsomatic'])} |")
     # INDEL: the final models of the INDEL pipeline (9919d4a; PASS = post-PoN validation recall 0.8 of the callable
     # positives, "ppr8"; tmp/indel_gap_20261020/final_20261023): release = trained with chr2-22 of every tumor (HG008T and
-    # COLO829T included), unseen = without HG008T / COLO829T; Illumina 3 seeds, long reads 2
-    L += ["", "## INDEL, final models (ppr8), chr1: recall / precision per seed against the comparators' PASS + PoN", "",
-          "| dataset | model | seeds | recall (mean) | precision (mean) | ClairS-TO R / P | DeepSomatic-TO R / P |", "|---|---|---|---|---|---|---|"]
+    # COLO829T included), unseen = without HG008T / COLO829T; three seeds each. raw R = PASS before the PoN; ceiling =
+    # highest recall on the post-filter curve; best F1 = the best F1 obtained by optimizing the threshold on the test set
+    L += ["", "## INDEL, final models (ppr8), chr1: per seed (min-max; mean) against the comparators' PASS + PoN", "",
+          "| dataset | model | seeds | recall | precision | F1 | raw PASS R | ceiling | best F1 (test-tuned) | "
+          "ClairS-TO R / P / F1 | DeepSomatic-TO R / P / F1 |", "|---|---|---|---|---|---|---|---|---|---|---|"]
     out["indel_final"] = []
     for sample, s, p in SETS:
         ds = f"{sample}_{p}"
@@ -186,15 +191,20 @@ def main():
             for seed in ("s0", "s1", "s2"):
                 f = RIS.parent / f"{model}_{seed}_{plat}_INDEL" / f"vcf_ppr8_chr1_{tset}" / "eval_bed" / "report.json"
                 if f.exists():
-                    a = json.loads(f.read_text())["pon"]["at_threshold"]
-                    vals.append(dict(seed=seed, report=str(f), p=a["precision"], r=a["recall"], f1=a["f1"]))
+                    rep = json.loads(f.read_text())
+                    a = rep["pon"]["at_threshold"]
+                    vals.append(dict(seed=seed, report=str(f), p=a["precision"], r=a["recall"], f1=a["f1"],
+                                     raw_r=rep["raw"]["at_threshold"]["recall"], ceiling=rep["pon"]["ceiling"],
+                                     best_f1=rep["pon"]["best"]["f1"]))
             if not vals:
                 continue
             out["indel_final"].append(dict(dataset=ds, model=model, seeds=vals,
-                                           comparators={c: dict(r=v["recall"], p=v["precision"]) for c, v in comp.items()}))
-            L.append(f"| {ds} | {model} | {len(vals)} | {mm([v['r'] for v in vals])} | {mm([v['p'] for v in vals])} | "
-                     f"{comp['clairs_to']['recall']:.3f} / {comp['clairs_to']['precision']:.3f} | "
-                     f"{comp['deepsomatic']['recall']:.3f} / {comp['deepsomatic']['precision']:.3f} |")
+                                           comparators={c: dict(r=v["recall"], p=v["precision"], f1=v["f1"])
+                                                        for c, v in comp.items()}))
+            cs = lambda c: f"{comp[c]['recall']:.3f} / {comp[c]['precision']:.3f} / {comp[c]['f1']:.3f}"  # noqa: E731
+            L.append(f"| {ds} | {model} | {len(vals)} | " +
+                     " | ".join(mm([v[k] for v in vals]) for k in ("r", "p", "f1", "raw_r", "ceiling", "best_f1")) +
+                     f" | {cs('clairs_to')} | {cs('deepsomatic')} |")
     (HERE / "latest_models.md").write_text("\n".join(L) + "\n")
     (HERE / "latest_models.json").write_text(json.dumps(out, indent=1) + "\n")
     print("\n".join(L))

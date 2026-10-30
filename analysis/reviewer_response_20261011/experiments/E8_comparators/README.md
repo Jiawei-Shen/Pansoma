@@ -255,8 +255,8 @@ name them in their `vcfeval.log` (`-c`). All runs are tumor-only and chr1 only; 
   32G each; the first submission 417661 failed in 1 s on anaconda's `bcftools` (missing `libcrypto.so.1.0.0`), the
   script now loads `bcftools/1.18`). Outputs: `score/<caller>/<dataset>/<KIND>/`. Then `collect.py` (labels set to
   ClairS-TO 0.4.1 / 0.4.2 and DeepSomatic 1.9.0).
-- Not scored yet: the COLO829T P25 / P50 / P75 comparator VCFs (`V2/COLO829T_*/{clairs-to,deepsomatic-to}_INDEL_COLO829_*_chr1_P*/`;
-  which mixture BAMs they used is not checked) and the HapMap runs (`V2/HapMap/`, `V2/clairs-to_HapMap_WGS/`).
+- The COLO829T P25 / P50 / P75 comparator VCFs: checked and scored on 2026-10-29 (section 10). Not scored yet: the HapMap
+  runs (`V2/HapMap/`, `V2/clairs-to_HapMap_WGS/`).
 - **INDEL PoN rule.** The INDEL PoN rule changed during the re-scoring (user decision 2026-10-16: HP >= 8 bp AF >= 0.01,
   else >= 1e-4; `scripts/filter_panel_of_normals.py` rewritten 17:33, commit 71cb51a). The two HG008T Illumina INDEL
   reports (tasks 3 / 4) had run with the old rule (truth tagged 413 of 635; new rule 418): moved to
@@ -266,3 +266,55 @@ name them in their `vcfeval.log` (`-c`). All runs are tumor-only and chr1 only; 
   old reports kept as `eval_bed.pon_hp7_1e-3`; tmp/reviewer_cpu_20261013/pon_hp8_20261016) instead of the 7fc7396
   summaries; rows without a local re-scored call set (COLO829T d9 single-set runs) are marked "old INDEL PoN rule".
   SNV is unaffected.
+
+## 10. COLO829T purity mixtures P75 / P50 / P25 (2026-10-29)
+
+The user asked whether the ClairS-TO / DeepSomatic evaluations of the COLO829T purity mixtures are correct, and to redo
+them for every purity except P100 (no re-calling if the existing calls are sound). Result: `purity_comparators.py` ->
+`purity_comparators.md` / `.json`.
+
+**Calls (the user's runs of the original manuscript, `V2/COLO829T_{WGS,Pacbio,ONT}/{clairs-to,deepsomatic-to}_INDEL_COLO829_*_chr1_P*/`;
+each directory holds the run's full output despite the "INDEL" in its name).** All 18 are sound; none was re-called.
+- ClairS-TO: every VCF header has `##clairs_to_version=0.4.2` and the command line: tumor-only, `--ctg_name chr1`,
+  default PoNs, `--platform` `ilmn_ssrs` / `hifi_revio_ssrs` / `ont_r10_dorado_sup_5khz_ssrs`, and the mixture BAM of
+  that purity (`Tumor_Normal_inSilico_Mix/COLO829_{WGS,Pacbio,ONT}/MIX_p{75,50,25}_*.mixed.sorted.bam`).
+- DeepSomatic 1.9.0: the VCF header does not name the model (identical header lines for the WGS / PacBio / ONT models)
+  and no logs were kept. Check by re-calling (`tmp/E8_purity_20261029/model_check.sh`, array 461256, tequila gpu:12gb,
+  1.9.0-gpu image, default PON filtering): chr1:20,000,001-25,000,000 of each mixture BAM with the expected model
+  (WGS_TUMOR_ONLY / PACBIO_TUMOR_ONLY / ONT_TUMOR_ONLY), records matched against the existing VCF in that window
+  (`compare.py`). All nine reproduce the existing calls: PASS sets identical (Jaccard 1.000, 78-200 PASS records per
+  window), all records Jaccard >= 0.9998, at most two records with another FILTER / GT, |QUAL diff| <= 0.9 (CPU vs GPU
+  inference). Controls with the other long-read model on P75 differ clearly (PASS Jaccard 0.21 ONT with the PacBio model,
+  0.48 fiber-seq with the ONT model). So each run used the right model on the right purity's BAM.
+- Mixture BAMs (`/scratch/jshen/Scripts/mix_tumor_normal_{WGS,COLO829-Pacbio,COLO829-ONT}.sh`: `samtools view -s` of the
+  SMaHT tumor and COLO829BL BAMs, seed 88, merged; read groups `tumor.sub` / `normal.sub`). Tumor sources are the BAMs of
+  the P100 comparator runs (Illumina SMaHT sentieon bwa; fiber-seq MERGED pbmm2; ONT `COLO829T_ONT_merged.bam`). Bases
+  per read group on chr1:20-22 Mb: tumor : normal = ONT 54 : 25 / 35 : 51 / 16 : 78 x, fiber-seq P50 30 : 48 x, Illumina
+  P50 31 : 45 x; reads: tumor P75 / P25 = 3.0 and normal P25 / P75 = 3.0 on all three platforms. The tumor share is
+  p x k / (p x k + 1 - p) with one local factor k = 0.63-0.70 (tumor copy number there) -> purities as labelled.
+
+**Scoring.** The original manuscript's evaluation (`*_SNV_rtg_chr1_*_p*.somatic`) used `rtg vcfeval --region chr1`
+without the BED and without our PoN (tools' own filters only), SNVs only, so it is not the protocol of the P100 rows.
+Re-scored here exactly like P100 (section 9): `score_comparator.py`, set `COLO829T_<platform>_P<q>` (the same COLO829T
+truth and BED as P100), SNV and INDEL, all four call sets (`tmp/E8_purity_20261029/score.sh`, array 461262, 36 tasks, all
+COMPLETED; outputs `score/<caller>/COLO829T_<platform>_P<q>/<KIND>/`). PoN tags on the truth: SNV 84, INDEL 81 of chr1
+(as P100).
+
+**Findings** (PASS after our PoN, chr1, BED; `purity_comparators.md`):
+- SNV F1 falls with purity for ClairS-TO on fiber-seq and ONT (0.762 / 0.688 / 0.659 / 0.614; 0.715 / 0.664 / 0.630 /
+  0.565 for P100 / P75 / P50 / P25) and for DeepSomatic on Illumina and ONT.
+- DeepSomatic fiber-seq and ONT recall is LOWER at P100 than at P75 (fiber-seq 0.555 vs 0.835; ONT 0.695 vs 0.756): at
+  P100 it labels 858 (fiber-seq) / 292 (ONT) truth SNVs GERMLINE, against 103 / 72 at P75 and 6 / 4 at P25 (truth
+  alleles by the FILTER of the caller's record). Clonal somatic variants at VAF ~0.5 in a pure tumor look germline to a
+  tumor-only model; this is the caller's behaviour, not a scoring error.
+- ClairS-TO Illumina P100 (0.551) is below its P75 (0.661): the P100 run is ClairS-TO 0.4.1 with `--platform ilmn`
+  (`Pansoma_testing_results/VCF_results/clairs-to_COLO829T_WGS/`), the mixtures 0.4.2 with `ilmn_ssrs`; recall is about
+  the same (0.764 vs 0.752), precision differs (0.431 vs 0.589). The fiber-seq / ONT P100 runs are 0.4.1 with the same
+  model names as the mixtures. So the P100 column is not the same caller configuration for ClairS-TO Illumina.
+- INDEL: low everywhere (F1 0.010-0.191); ClairS-TO collapses at P25 on long reads (fiber-seq 0.028, ONT 0.010).
+- Against the original manuscript's SNV numbers, our PoN mostly raises precision: e.g. DeepSomatic Illumina P75 F1 0.324
+  -> 0.500, ClairS-TO ONT P75 0.611 -> 0.664.
+- Reads versus Pansoma's mixture tensors: ONT and fiber-seq mixtures come from the same mixing scripts and source BAMs
+  as Pansoma's (fiber-seq: `giraffe_depthx100`, 100x BAM mode); Pansoma's Illumina mixtures are the FASTQ-mode
+  `depth120x` files, a different random subset of the same tumor / normal libraries.
+

@@ -1,0 +1,1324 @@
+uid	group	seed	dataset	axis	cls	tp_baseline	fn	truth	recall	tp_call	fp	calls	precision	truth_pon_tagged
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s0	HG008T_Illumina	all	all	65	522	587	0.1107	65	108	173	0.3757	384
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s0	HG008T_Illumina	context	HP4-6	7	0	7	1.0000	7	16	23	0.3043	0
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s0	HG008T_Illumina	context	HP>=7	26	409	435	0.0598	26	32	58	0.4483	294
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s0	HG008T_Illumina	context	STR	1	64	65	0.0154	1	6	7	0.1429	57
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s0	HG008T_Illumina	context	none	31	49	80	0.3875	31	54	85	0.3647	33
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s0	HG008T_Illumina	length	1	47	273	320	0.1469	47	67	114	0.4123	188
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s0	HG008T_Illumina	length	2-4	6	129	135	0.0444	6	23	29	0.2069	102
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s0	HG008T_Illumina	length	5-10	5	57	62	0.0806	5	8	13	0.3846	47
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s0	HG008T_Illumina	length	>10	7	63	70	0.1000	7	10	17	0.4118	47
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s0	HG008T_Illumina	type	DEL	35	184	219	0.1598	35	78	113	0.3097	136
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s0	HG008T_Illumina	type	INS	30	338	368	0.0815	30	30	60	0.5000	248
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s0	HG008T_Illumina	type x context	DEL HP4-6	1	0	1	1.0000	1	7	8	0.1250	0
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s0	HG008T_Illumina	type x context	DEL HP>=7	10	148	158	0.0633	10	18	28	0.3571	107
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s0	HG008T_Illumina	type x context	DEL STR	1	16	17	0.0588	1	6	7	0.1429	16
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s0	HG008T_Illumina	type x context	DEL none	23	20	43	0.5349	23	47	70	0.3286	13
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s0	HG008T_Illumina	type x context	INS HP4-6	6	0	6	1.0000	6	9	15	0.4000	0
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s0	HG008T_Illumina	type x context	INS HP>=7	16	261	277	0.0578	16	14	30	0.5333	187
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s0	HG008T_Illumina	type x context	INS STR	0	48	48	0.0000	0	0	0		41
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s0	HG008T_Illumina	type x context	INS none	8	29	37	0.2162	8	7	15	0.5333	20
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s0	HG008T_Illumina	type x length	DEL 1	18	105	123	0.1463	18	40	58	0.3103	75
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s0	HG008T_Illumina	type x length	DEL 2-4	5	43	48	0.1042	5	22	27	0.1852	33
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s0	HG008T_Illumina	type x length	DEL 5-10	5	16	21	0.2381	5	6	11	0.4545	14
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s0	HG008T_Illumina	type x length	DEL >10	7	20	27	0.2593	7	10	17	0.4118	14
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s0	HG008T_Illumina	type x length	INS 1	29	168	197	0.1472	29	27	56	0.5179	113
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s0	HG008T_Illumina	type x length	INS 2-4	1	86	87	0.0115	1	1	2	0.5000	69
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s0	HG008T_Illumina	type x length	INS 5-10	0	41	41	0.0000	0	2	2	0.0000	33
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s0	HG008T_Illumina	type x length	INS >10	0	43	43	0.0000	0	0	0		33
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s1	HG008T_Illumina	all	all	81	506	587	0.1380	81	133	214	0.3785	384
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s1	HG008T_Illumina	context	HP4-6	5	2	7	0.7143	5	11	16	0.3125	0
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s1	HG008T_Illumina	context	HP>=7	47	388	435	0.1080	47	63	110	0.4273	294
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s1	HG008T_Illumina	context	STR	0	65	65	0.0000	0	12	12	0.0000	57
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s1	HG008T_Illumina	context	none	29	51	80	0.3625	29	47	76	0.3816	33
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s1	HG008T_Illumina	length	1	64	256	320	0.2000	64	89	153	0.4183	188
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s1	HG008T_Illumina	length	2-4	5	130	135	0.0370	5	27	32	0.1562	102
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s1	HG008T_Illumina	length	5-10	5	57	62	0.0806	5	6	11	0.4545	47
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s1	HG008T_Illumina	length	>10	7	63	70	0.1000	7	11	18	0.3889	47
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s1	HG008T_Illumina	type	DEL	50	169	219	0.2283	50	97	147	0.3401	136
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s1	HG008T_Illumina	type	INS	31	337	368	0.0842	31	36	67	0.4627	248
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s1	HG008T_Illumina	type x context	DEL HP4-6	1	0	1	1.0000	1	4	5	0.2000	0
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s1	HG008T_Illumina	type x context	DEL HP>=7	25	133	158	0.1582	25	42	67	0.3731	107
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s1	HG008T_Illumina	type x context	DEL STR	0	17	17	0.0000	0	12	12	0.0000	16
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s1	HG008T_Illumina	type x context	DEL none	24	19	43	0.5581	24	39	63	0.3810	13
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s1	HG008T_Illumina	type x context	INS HP4-6	4	2	6	0.6667	4	7	11	0.3636	0
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s1	HG008T_Illumina	type x context	INS HP>=7	22	255	277	0.0794	22	21	43	0.5116	187
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s1	HG008T_Illumina	type x context	INS STR	0	48	48	0.0000	0	0	0		41
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s1	HG008T_Illumina	type x context	INS none	5	32	37	0.1351	5	8	13	0.3846	20
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s1	HG008T_Illumina	type x length	DEL 1	33	90	123	0.2683	33	56	89	0.3708	75
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s1	HG008T_Illumina	type x length	DEL 2-4	5	43	48	0.1042	5	27	32	0.1562	33
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s1	HG008T_Illumina	type x length	DEL 5-10	5	16	21	0.2381	5	5	10	0.5000	14
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s1	HG008T_Illumina	type x length	DEL >10	7	20	27	0.2593	7	9	16	0.4375	14
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s1	HG008T_Illumina	type x length	INS 1	31	166	197	0.1574	31	33	64	0.4844	113
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s1	HG008T_Illumina	type x length	INS 2-4	0	87	87	0.0000	0	0	0		69
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s1	HG008T_Illumina	type x length	INS 5-10	0	41	41	0.0000	0	1	1	0.0000	33
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s1	HG008T_Illumina	type x length	INS >10	0	43	43	0.0000	0	2	2	0.0000	33
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s2	HG008T_Illumina	all	all	87	500	587	0.1482	87	102	189	0.4603	384
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s2	HG008T_Illumina	context	HP4-6	7	0	7	1.0000	7	12	19	0.3684	0
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s2	HG008T_Illumina	context	HP>=7	48	387	435	0.1103	48	57	105	0.4571	294
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s2	HG008T_Illumina	context	STR	1	64	65	0.0154	1	2	3	0.3333	57
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s2	HG008T_Illumina	context	none	31	49	80	0.3875	31	31	62	0.5000	33
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s2	HG008T_Illumina	length	1	68	252	320	0.2125	68	87	155	0.4387	188
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s2	HG008T_Illumina	length	2-4	7	128	135	0.0519	7	12	19	0.3684	102
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s2	HG008T_Illumina	length	5-10	6	56	62	0.0968	6	1	7	0.8571	47
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s2	HG008T_Illumina	length	>10	6	64	70	0.0857	6	2	8	0.7500	47
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s2	HG008T_Illumina	type	DEL	40	179	219	0.1826	40	60	100	0.4000	136
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s2	HG008T_Illumina	type	INS	47	321	368	0.1277	47	42	89	0.5281	248
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s2	HG008T_Illumina	type x context	DEL HP4-6	1	0	1	1.0000	1	6	7	0.1429	0
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s2	HG008T_Illumina	type x context	DEL HP>=7	14	144	158	0.0886	14	26	40	0.3500	107
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s2	HG008T_Illumina	type x context	DEL STR	1	16	17	0.0588	1	2	3	0.3333	16
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s2	HG008T_Illumina	type x context	DEL none	24	19	43	0.5581	24	26	50	0.4800	13
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s2	HG008T_Illumina	type x context	INS HP4-6	6	0	6	1.0000	6	6	12	0.5000	0
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s2	HG008T_Illumina	type x context	INS HP>=7	34	243	277	0.1227	34	31	65	0.5231	187
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s2	HG008T_Illumina	type x context	INS STR	0	48	48	0.0000	0	0	0		41
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s2	HG008T_Illumina	type x context	INS none	7	30	37	0.1892	7	5	12	0.5833	20
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s2	HG008T_Illumina	type x length	DEL 1	22	101	123	0.1789	22	46	68	0.3235	75
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s2	HG008T_Illumina	type x length	DEL 2-4	6	42	48	0.1250	6	12	18	0.3333	33
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s2	HG008T_Illumina	type x length	DEL 5-10	6	15	21	0.2857	6	0	6	1.0000	14
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s2	HG008T_Illumina	type x length	DEL >10	6	21	27	0.2222	6	2	8	0.7500	14
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s2	HG008T_Illumina	type x length	INS 1	46	151	197	0.2335	46	41	87	0.5287	113
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s2	HG008T_Illumina	type x length	INS 2-4	1	86	87	0.0115	1	0	1	1.0000	69
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s2	HG008T_Illumina	type x length	INS 5-10	0	41	41	0.0000	0	1	1	0.0000	33
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	release	s2	HG008T_Illumina	type x length	INS >10	0	43	43	0.0000	0	0	0		33
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s0	HG008T_Illumina	all	all	47	540	587	0.0801	47	50	97	0.4845	384
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s0	HG008T_Illumina	context	HP4-6	7	0	7	1.0000	7	6	13	0.5385	0
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s0	HG008T_Illumina	context	HP>=7	10	425	435	0.0230	10	12	22	0.4545	294
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s0	HG008T_Illumina	context	STR	0	65	65	0.0000	0	2	2	0.0000	57
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s0	HG008T_Illumina	context	none	30	50	80	0.3750	30	30	60	0.5000	33
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s0	HG008T_Illumina	length	1	31	289	320	0.0969	31	36	67	0.4627	188
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s0	HG008T_Illumina	length	2-4	5	130	135	0.0370	5	9	14	0.3571	102
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s0	HG008T_Illumina	length	5-10	5	57	62	0.0806	5	2	7	0.7143	47
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s0	HG008T_Illumina	length	>10	6	64	70	0.0857	6	3	9	0.6667	47
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s0	HG008T_Illumina	type	DEL	27	192	219	0.1233	27	37	64	0.4219	136
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s0	HG008T_Illumina	type	INS	20	348	368	0.0543	20	13	33	0.6061	248
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s0	HG008T_Illumina	type x context	DEL HP4-6	1	0	1	1.0000	1	2	3	0.3333	0
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s0	HG008T_Illumina	type x context	DEL HP>=7	3	155	158	0.0190	3	8	11	0.2727	107
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s0	HG008T_Illumina	type x context	DEL STR	0	17	17	0.0000	0	2	2	0.0000	16
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s0	HG008T_Illumina	type x context	DEL none	23	20	43	0.5349	23	25	48	0.4792	13
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s0	HG008T_Illumina	type x context	INS HP4-6	6	0	6	1.0000	6	4	10	0.6000	0
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s0	HG008T_Illumina	type x context	INS HP>=7	7	270	277	0.0253	7	4	11	0.6364	187
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s0	HG008T_Illumina	type x context	INS STR	0	48	48	0.0000	0	0	0		41
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s0	HG008T_Illumina	type x context	INS none	7	30	37	0.1892	7	5	12	0.5833	20
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s0	HG008T_Illumina	type x length	DEL 1	11	112	123	0.0894	11	24	35	0.3143	75
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s0	HG008T_Illumina	type x length	DEL 2-4	5	43	48	0.1042	5	9	14	0.3571	33
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s0	HG008T_Illumina	type x length	DEL 5-10	5	16	21	0.2381	5	1	6	0.8333	14
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s0	HG008T_Illumina	type x length	DEL >10	6	21	27	0.2222	6	3	9	0.6667	14
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s0	HG008T_Illumina	type x length	INS 1	20	177	197	0.1015	20	12	32	0.6250	113
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s0	HG008T_Illumina	type x length	INS 2-4	0	87	87	0.0000	0	0	0		69
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s0	HG008T_Illumina	type x length	INS 5-10	0	41	41	0.0000	0	1	1	0.0000	33
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s0	HG008T_Illumina	type x length	INS >10	0	43	43	0.0000	0	0	0		33
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s1	HG008T_Illumina	all	all	37	550	587	0.0630	37	30	67	0.5522	384
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s1	HG008T_Illumina	context	HP4-6	5	2	7	0.7143	5	4	9	0.5556	0
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s1	HG008T_Illumina	context	HP>=7	7	428	435	0.0161	7	5	12	0.5833	294
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s1	HG008T_Illumina	context	STR	0	65	65	0.0000	0	1	1	0.0000	57
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s1	HG008T_Illumina	context	none	25	55	80	0.3125	25	20	45	0.5556	33
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s1	HG008T_Illumina	length	1	24	296	320	0.0750	24	22	46	0.5217	188
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s1	HG008T_Illumina	length	2-4	3	132	135	0.0222	3	6	9	0.3333	102
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s1	HG008T_Illumina	length	5-10	4	58	62	0.0645	4	0	4	1.0000	47
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s1	HG008T_Illumina	length	>10	6	64	70	0.0857	6	2	8	0.7500	47
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s1	HG008T_Illumina	type	DEL	22	197	219	0.1005	22	23	45	0.4889	136
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s1	HG008T_Illumina	type	INS	15	353	368	0.0408	15	7	22	0.6818	248
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s1	HG008T_Illumina	type x context	DEL HP4-6	1	0	1	1.0000	1	2	3	0.3333	0
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s1	HG008T_Illumina	type x context	DEL HP>=7	1	157	158	0.0063	1	3	4	0.2500	107
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s1	HG008T_Illumina	type x context	DEL STR	0	17	17	0.0000	0	1	1	0.0000	16
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s1	HG008T_Illumina	type x context	DEL none	20	23	43	0.4651	20	17	37	0.5405	13
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s1	HG008T_Illumina	type x context	INS HP4-6	4	2	6	0.6667	4	2	6	0.6667	0
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s1	HG008T_Illumina	type x context	INS HP>=7	6	271	277	0.0217	6	2	8	0.7500	187
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s1	HG008T_Illumina	type x context	INS STR	0	48	48	0.0000	0	0	0		41
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s1	HG008T_Illumina	type x context	INS none	5	32	37	0.1351	5	3	8	0.6250	20
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s1	HG008T_Illumina	type x length	DEL 1	9	114	123	0.0732	9	15	24	0.3750	75
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s1	HG008T_Illumina	type x length	DEL 2-4	3	45	48	0.0625	3	6	9	0.3333	33
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s1	HG008T_Illumina	type x length	DEL 5-10	4	17	21	0.1905	4	0	4	1.0000	14
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s1	HG008T_Illumina	type x length	DEL >10	6	21	27	0.2222	6	2	8	0.7500	14
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s1	HG008T_Illumina	type x length	INS 1	15	182	197	0.0761	15	7	22	0.6818	113
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s1	HG008T_Illumina	type x length	INS 2-4	0	87	87	0.0000	0	0	0		69
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s1	HG008T_Illumina	type x length	INS 5-10	0	41	41	0.0000	0	0	0		33
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s1	HG008T_Illumina	type x length	INS >10	0	43	43	0.0000	0	0	0		33
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s2	HG008T_Illumina	all	all	39	548	587	0.0664	39	34	73	0.5342	384
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s2	HG008T_Illumina	context	HP4-6	6	1	7	0.8571	6	5	11	0.5455	0
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s2	HG008T_Illumina	context	HP>=7	9	426	435	0.0207	9	5	14	0.6429	294
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s2	HG008T_Illumina	context	STR	0	65	65	0.0000	0	1	1	0.0000	57
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s2	HG008T_Illumina	context	none	24	56	80	0.3000	24	23	47	0.5106	33
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s2	HG008T_Illumina	length	1	26	294	320	0.0813	26	26	52	0.5000	188
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s2	HG008T_Illumina	length	2-4	4	131	135	0.0296	4	6	10	0.4000	102
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s2	HG008T_Illumina	length	5-10	3	59	62	0.0484	3	0	3	1.0000	47
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s2	HG008T_Illumina	length	>10	6	64	70	0.0857	6	2	8	0.7500	47
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s2	HG008T_Illumina	type	DEL	23	196	219	0.1050	23	26	49	0.4694	136
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s2	HG008T_Illumina	type	INS	16	352	368	0.0435	16	8	24	0.6667	248
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s2	HG008T_Illumina	type x context	DEL HP4-6	1	0	1	1.0000	1	3	4	0.2500	0
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s2	HG008T_Illumina	type x context	DEL HP>=7	3	155	158	0.0190	3	3	6	0.5000	107
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s2	HG008T_Illumina	type x context	DEL STR	0	17	17	0.0000	0	1	1	0.0000	16
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s2	HG008T_Illumina	type x context	DEL none	19	24	43	0.4419	19	19	38	0.5000	13
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s2	HG008T_Illumina	type x context	INS HP4-6	5	1	6	0.8333	5	2	7	0.7143	0
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s2	HG008T_Illumina	type x context	INS HP>=7	6	271	277	0.0217	6	2	8	0.7500	187
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s2	HG008T_Illumina	type x context	INS STR	0	48	48	0.0000	0	0	0		41
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s2	HG008T_Illumina	type x context	INS none	5	32	37	0.1351	5	4	9	0.5556	20
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s2	HG008T_Illumina	type x length	DEL 1	11	112	123	0.0894	11	18	29	0.3793	75
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s2	HG008T_Illumina	type x length	DEL 2-4	3	45	48	0.0625	3	6	9	0.3333	33
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s2	HG008T_Illumina	type x length	DEL 5-10	3	18	21	0.1429	3	0	3	1.0000	14
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s2	HG008T_Illumina	type x length	DEL >10	6	21	27	0.2222	6	2	8	0.7500	14
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s2	HG008T_Illumina	type x length	INS 1	15	182	197	0.0761	15	8	23	0.6522	113
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s2	HG008T_Illumina	type x length	INS 2-4	1	86	87	0.0115	1	0	1	1.0000	69
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s2	HG008T_Illumina	type x length	INS 5-10	0	41	41	0.0000	0	0	0		33
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	unseen	s2	HG008T_Illumina	type x length	INS >10	0	43	43	0.0000	0	0	0		33
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s0	HG008T_PacBio	all	all	94	493	587	0.1601	94	107	201	0.4677	384
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s0	HG008T_PacBio	context	HP4-6	7	0	7	1.0000	7	9	16	0.4375	0
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s0	HG008T_PacBio	context	HP>=7	53	382	435	0.1218	53	59	112	0.4732	294
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s0	HG008T_PacBio	context	STR	1	64	65	0.0154	1	4	5	0.2000	57
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s0	HG008T_PacBio	context	none	33	47	80	0.4125	33	35	68	0.4853	33
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s0	HG008T_PacBio	length	1	75	245	320	0.2344	75	84	159	0.4717	188
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s0	HG008T_PacBio	length	2-4	7	128	135	0.0519	7	16	23	0.3043	102
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s0	HG008T_PacBio	length	5-10	6	56	62	0.0968	6	5	11	0.5455	47
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s0	HG008T_PacBio	length	>10	6	64	70	0.0857	6	2	8	0.7500	47
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s0	HG008T_PacBio	type	DEL	45	174	219	0.2055	45	63	108	0.4167	136
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s0	HG008T_PacBio	type	INS	49	319	368	0.1332	49	44	93	0.5269	248
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s0	HG008T_PacBio	type x context	DEL HP4-6	1	0	1	1.0000	1	4	5	0.2000	0
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s0	HG008T_PacBio	type x context	DEL HP>=7	18	140	158	0.1139	18	32	50	0.3600	107
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s0	HG008T_PacBio	type x context	DEL STR	1	16	17	0.0588	1	2	3	0.3333	16
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s0	HG008T_PacBio	type x context	DEL none	25	18	43	0.5814	25	25	50	0.5000	13
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s0	HG008T_PacBio	type x context	INS HP4-6	6	0	6	1.0000	6	5	11	0.5455	0
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s0	HG008T_PacBio	type x context	INS HP>=7	35	242	277	0.1264	35	27	62	0.5645	187
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s0	HG008T_PacBio	type x context	INS STR	0	48	48	0.0000	0	2	2	0.0000	41
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s0	HG008T_PacBio	type x context	INS none	8	29	37	0.2162	8	10	18	0.4444	20
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s0	HG008T_PacBio	type x length	DEL 1	27	96	123	0.2195	27	47	74	0.3649	75
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s0	HG008T_PacBio	type x length	DEL 2-4	6	42	48	0.1250	6	11	17	0.3529	33
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s0	HG008T_PacBio	type x length	DEL 5-10	6	15	21	0.2857	6	3	9	0.6667	14
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s0	HG008T_PacBio	type x length	DEL >10	6	21	27	0.2222	6	2	8	0.7500	14
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s0	HG008T_PacBio	type x length	INS 1	48	149	197	0.2437	48	37	85	0.5647	113
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s0	HG008T_PacBio	type x length	INS 2-4	1	86	87	0.0115	1	5	6	0.1667	69
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s0	HG008T_PacBio	type x length	INS 5-10	0	41	41	0.0000	0	2	2	0.0000	33
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s0	HG008T_PacBio	type x length	INS >10	0	43	43	0.0000	0	0	0		33
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s1	HG008T_PacBio	all	all	100	487	587	0.1704	100	123	223	0.4484	384
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s1	HG008T_PacBio	context	HP4-6	7	0	7	1.0000	7	11	18	0.3889	0
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s1	HG008T_PacBio	context	HP>=7	57	378	435	0.1310	57	71	128	0.4453	294
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s1	HG008T_PacBio	context	STR	1	64	65	0.0154	1	4	5	0.2000	57
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s1	HG008T_PacBio	context	none	35	45	80	0.4375	35	37	72	0.4861	33
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s1	HG008T_PacBio	length	1	79	241	320	0.2469	79	100	179	0.4413	188
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s1	HG008T_PacBio	length	2-4	8	127	135	0.0593	8	17	25	0.3200	102
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s1	HG008T_PacBio	length	5-10	6	56	62	0.0968	6	2	8	0.7500	47
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s1	HG008T_PacBio	length	>10	7	63	70	0.1000	7	4	11	0.6364	47
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s1	HG008T_PacBio	type	DEL	47	172	219	0.2146	47	69	116	0.4052	136
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s1	HG008T_PacBio	type	INS	53	315	368	0.1440	53	54	107	0.4953	248
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s1	HG008T_PacBio	type x context	DEL HP4-6	1	0	1	1.0000	1	4	5	0.2000	0
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s1	HG008T_PacBio	type x context	DEL HP>=7	18	140	158	0.1139	18	34	52	0.3462	107
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s1	HG008T_PacBio	type x context	DEL STR	1	16	17	0.0588	1	2	3	0.3333	16
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s1	HG008T_PacBio	type x context	DEL none	27	16	43	0.6279	27	29	56	0.4821	13
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s1	HG008T_PacBio	type x context	INS HP4-6	6	0	6	1.0000	6	7	13	0.4615	0
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s1	HG008T_PacBio	type x context	INS HP>=7	39	238	277	0.1408	39	37	76	0.5132	187
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s1	HG008T_PacBio	type x context	INS STR	0	48	48	0.0000	0	2	2	0.0000	41
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s1	HG008T_PacBio	type x context	INS none	8	29	37	0.2162	8	8	16	0.5000	20
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s1	HG008T_PacBio	type x length	DEL 1	27	96	123	0.2195	27	52	79	0.3418	75
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s1	HG008T_PacBio	type x length	DEL 2-4	7	41	48	0.1458	7	12	19	0.3684	33
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s1	HG008T_PacBio	type x length	DEL 5-10	6	15	21	0.2857	6	1	7	0.8571	14
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s1	HG008T_PacBio	type x length	DEL >10	7	20	27	0.2593	7	4	11	0.6364	14
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s1	HG008T_PacBio	type x length	INS 1	52	145	197	0.2640	52	48	100	0.5200	113
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s1	HG008T_PacBio	type x length	INS 2-4	1	86	87	0.0115	1	5	6	0.1667	69
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s1	HG008T_PacBio	type x length	INS 5-10	0	41	41	0.0000	0	1	1	0.0000	33
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s1	HG008T_PacBio	type x length	INS >10	0	43	43	0.0000	0	0	0		33
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s2	HG008T_PacBio	all	all	104	483	587	0.1772	104	100	204	0.5098	384
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s2	HG008T_PacBio	context	HP4-6	7	0	7	1.0000	7	5	12	0.5833	0
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s2	HG008T_PacBio	context	HP>=7	63	372	435	0.1448	63	71	134	0.4701	294
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s2	HG008T_PacBio	context	STR	1	64	65	0.0154	1	1	2	0.5000	57
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s2	HG008T_PacBio	context	none	33	47	80	0.4125	33	23	56	0.5893	33
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s2	HG008T_PacBio	length	1	84	236	320	0.2625	84	88	172	0.4884	188
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s2	HG008T_PacBio	length	2-4	8	127	135	0.0593	8	7	15	0.5333	102
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s2	HG008T_PacBio	length	5-10	6	56	62	0.0968	6	3	9	0.6667	47
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s2	HG008T_PacBio	length	>10	6	64	70	0.0857	6	2	8	0.7500	47
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s2	HG008T_PacBio	type	DEL	47	172	219	0.2146	47	57	104	0.4519	136
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s2	HG008T_PacBio	type	INS	57	311	368	0.1549	57	43	100	0.5700	248
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s2	HG008T_PacBio	type x context	DEL HP4-6	1	0	1	1.0000	1	2	3	0.3333	0
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s2	HG008T_PacBio	type x context	DEL HP>=7	20	138	158	0.1266	20	37	57	0.3509	107
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s2	HG008T_PacBio	type x context	DEL STR	1	16	17	0.0588	1	1	2	0.5000	16
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s2	HG008T_PacBio	type x context	DEL none	25	18	43	0.5814	25	17	42	0.5952	13
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s2	HG008T_PacBio	type x context	INS HP4-6	6	0	6	1.0000	6	3	9	0.6667	0
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s2	HG008T_PacBio	type x context	INS HP>=7	43	234	277	0.1552	43	34	77	0.5584	187
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s2	HG008T_PacBio	type x context	INS STR	0	48	48	0.0000	0	0	0		41
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s2	HG008T_PacBio	type x context	INS none	8	29	37	0.2162	8	6	14	0.5714	20
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s2	HG008T_PacBio	type x length	DEL 1	28	95	123	0.2276	28	47	75	0.3733	75
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s2	HG008T_PacBio	type x length	DEL 2-4	7	41	48	0.1458	7	7	14	0.5000	33
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s2	HG008T_PacBio	type x length	DEL 5-10	6	15	21	0.2857	6	1	7	0.8571	14
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s2	HG008T_PacBio	type x length	DEL >10	6	21	27	0.2222	6	2	8	0.7500	14
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s2	HG008T_PacBio	type x length	INS 1	56	141	197	0.2843	56	41	97	0.5773	113
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s2	HG008T_PacBio	type x length	INS 2-4	1	86	87	0.0115	1	0	1	1.0000	69
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s2	HG008T_PacBio	type x length	INS 5-10	0	41	41	0.0000	0	2	2	0.0000	33
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	release	s2	HG008T_PacBio	type x length	INS >10	0	43	43	0.0000	0	0	0		33
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s0	HG008T_PacBio	all	all	47	540	587	0.0801	47	62	109	0.4312	384
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s0	HG008T_PacBio	context	HP4-6	6	1	7	0.8571	6	5	11	0.5455	0
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s0	HG008T_PacBio	context	HP>=7	11	424	435	0.0253	11	22	33	0.3333	294
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s0	HG008T_PacBio	context	STR	1	64	65	0.0154	1	1	2	0.5000	57
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s0	HG008T_PacBio	context	none	29	51	80	0.3625	29	34	63	0.4603	33
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s0	HG008T_PacBio	length	1	30	290	320	0.0938	30	41	71	0.4225	188
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s0	HG008T_PacBio	length	2-4	7	128	135	0.0519	7	12	19	0.3684	102
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s0	HG008T_PacBio	length	5-10	4	58	62	0.0645	4	5	9	0.4444	47
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s0	HG008T_PacBio	length	>10	6	64	70	0.0857	6	4	10	0.6000	47
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s0	HG008T_PacBio	type	DEL	26	193	219	0.1187	26	49	75	0.3467	136
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s0	HG008T_PacBio	type	INS	21	347	368	0.0571	21	13	34	0.6176	248
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s0	HG008T_PacBio	type x context	DEL HP4-6	1	0	1	1.0000	1	4	5	0.2000	0
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s0	HG008T_PacBio	type x context	DEL HP>=7	2	156	158	0.0127	2	16	18	0.1111	107
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s0	HG008T_PacBio	type x context	DEL STR	1	16	17	0.0588	1	1	2	0.5000	16
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s0	HG008T_PacBio	type x context	DEL none	22	21	43	0.5116	22	28	50	0.4400	13
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s0	HG008T_PacBio	type x context	INS HP4-6	5	1	6	0.8333	5	1	6	0.8333	0
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s0	HG008T_PacBio	type x context	INS HP>=7	9	268	277	0.0325	9	6	15	0.6000	187
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s0	HG008T_PacBio	type x context	INS STR	0	48	48	0.0000	0	0	0		41
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s0	HG008T_PacBio	type x context	INS none	7	30	37	0.1892	7	6	13	0.5385	20
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s0	HG008T_PacBio	type x length	DEL 1	10	113	123	0.0813	10	31	41	0.2439	75
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s0	HG008T_PacBio	type x length	DEL 2-4	6	42	48	0.1250	6	12	18	0.3333	33
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s0	HG008T_PacBio	type x length	DEL 5-10	4	17	21	0.1905	4	3	7	0.5714	14
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s0	HG008T_PacBio	type x length	DEL >10	6	21	27	0.2222	6	3	9	0.6667	14
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s0	HG008T_PacBio	type x length	INS 1	20	177	197	0.1015	20	10	30	0.6667	113
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s0	HG008T_PacBio	type x length	INS 2-4	1	86	87	0.0115	1	0	1	1.0000	69
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s0	HG008T_PacBio	type x length	INS 5-10	0	41	41	0.0000	0	2	2	0.0000	33
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s0	HG008T_PacBio	type x length	INS >10	0	43	43	0.0000	0	1	1	0.0000	33
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s1	HG008T_PacBio	all	all	48	539	587	0.0818	48	51	99	0.4848	384
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s1	HG008T_PacBio	context	HP4-6	6	1	7	0.8571	6	6	12	0.5000	0
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s1	HG008T_PacBio	context	HP>=7	16	419	435	0.0368	16	25	41	0.3902	294
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s1	HG008T_PacBio	context	STR	0	65	65	0.0000	0	2	2	0.0000	57
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s1	HG008T_PacBio	context	none	26	54	80	0.3250	26	18	44	0.5909	33
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s1	HG008T_PacBio	length	1	35	285	320	0.1094	35	43	78	0.4487	188
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s1	HG008T_PacBio	length	2-4	5	130	135	0.0370	5	4	9	0.5556	102
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s1	HG008T_PacBio	length	5-10	2	60	62	0.0323	2	2	4	0.5000	47
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s1	HG008T_PacBio	length	>10	6	64	70	0.0857	6	2	8	0.7500	47
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s1	HG008T_PacBio	type	DEL	24	195	219	0.1096	24	38	62	0.3871	136
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s1	HG008T_PacBio	type	INS	24	344	368	0.0652	24	13	37	0.6486	248
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s1	HG008T_PacBio	type x context	DEL HP4-6	1	0	1	1.0000	1	4	5	0.2000	0
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s1	HG008T_PacBio	type x context	DEL HP>=7	4	154	158	0.0253	4	19	23	0.1739	107
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s1	HG008T_PacBio	type x context	DEL STR	0	17	17	0.0000	0	2	2	0.0000	16
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s1	HG008T_PacBio	type x context	DEL none	19	24	43	0.4419	19	13	32	0.5938	13
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s1	HG008T_PacBio	type x context	INS HP4-6	5	1	6	0.8333	5	2	7	0.7143	0
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s1	HG008T_PacBio	type x context	INS HP>=7	12	265	277	0.0433	12	6	18	0.6667	187
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s1	HG008T_PacBio	type x context	INS STR	0	48	48	0.0000	0	0	0		41
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s1	HG008T_PacBio	type x context	INS none	7	30	37	0.1892	7	5	12	0.5833	20
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s1	HG008T_PacBio	type x length	DEL 1	12	111	123	0.0976	12	30	42	0.2857	75
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s1	HG008T_PacBio	type x length	DEL 2-4	4	44	48	0.0833	4	4	8	0.5000	33
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s1	HG008T_PacBio	type x length	DEL 5-10	2	19	21	0.0952	2	2	4	0.5000	14
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s1	HG008T_PacBio	type x length	DEL >10	6	21	27	0.2222	6	2	8	0.7500	14
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s1	HG008T_PacBio	type x length	INS 1	23	174	197	0.1168	23	13	36	0.6389	113
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s1	HG008T_PacBio	type x length	INS 2-4	1	86	87	0.0115	1	0	1	1.0000	69
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s1	HG008T_PacBio	type x length	INS 5-10	0	41	41	0.0000	0	0	0		33
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s1	HG008T_PacBio	type x length	INS >10	0	43	43	0.0000	0	0	0		33
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s2	HG008T_PacBio	all	all	53	534	587	0.0903	53	49	102	0.5196	384
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s2	HG008T_PacBio	context	HP4-6	7	0	7	1.0000	7	7	14	0.5000	0
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s2	HG008T_PacBio	context	HP>=7	17	418	435	0.0391	17	19	36	0.4722	294
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s2	HG008T_PacBio	context	STR	0	65	65	0.0000	0	2	2	0.0000	57
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s2	HG008T_PacBio	context	none	29	51	80	0.3625	29	21	50	0.5800	33
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s2	HG008T_PacBio	length	1	37	283	320	0.1156	37	36	73	0.5068	188
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s2	HG008T_PacBio	length	2-4	5	130	135	0.0370	5	9	14	0.3571	102
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s2	HG008T_PacBio	length	5-10	4	58	62	0.0645	4	2	6	0.6667	47
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s2	HG008T_PacBio	length	>10	7	63	70	0.1000	7	2	9	0.7778	47
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s2	HG008T_PacBio	type	DEL	28	191	219	0.1279	28	33	61	0.4590	136
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s2	HG008T_PacBio	type	INS	25	343	368	0.0679	25	16	41	0.6098	248
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s2	HG008T_PacBio	type x context	DEL HP4-6	1	0	1	1.0000	1	4	5	0.2000	0
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s2	HG008T_PacBio	type x context	DEL HP>=7	4	154	158	0.0253	4	11	15	0.2667	107
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s2	HG008T_PacBio	type x context	DEL STR	0	17	17	0.0000	0	2	2	0.0000	16
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s2	HG008T_PacBio	type x context	DEL none	23	20	43	0.5349	23	16	39	0.5897	13
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s2	HG008T_PacBio	type x context	INS HP4-6	6	0	6	1.0000	6	3	9	0.6667	0
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s2	HG008T_PacBio	type x context	INS HP>=7	13	264	277	0.0469	13	8	21	0.6190	187
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s2	HG008T_PacBio	type x context	INS STR	0	48	48	0.0000	0	0	0		41
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s2	HG008T_PacBio	type x context	INS none	6	31	37	0.1622	6	5	11	0.5455	20
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s2	HG008T_PacBio	type x length	DEL 1	13	110	123	0.1057	13	21	34	0.3824	75
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s2	HG008T_PacBio	type x length	DEL 2-4	4	44	48	0.0833	4	9	13	0.3077	33
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s2	HG008T_PacBio	type x length	DEL 5-10	4	17	21	0.1905	4	1	5	0.8000	14
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s2	HG008T_PacBio	type x length	DEL >10	7	20	27	0.2593	7	2	9	0.7778	14
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s2	HG008T_PacBio	type x length	INS 1	24	173	197	0.1218	24	15	39	0.6154	113
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s2	HG008T_PacBio	type x length	INS 2-4	1	86	87	0.0115	1	0	1	1.0000	69
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s2	HG008T_PacBio	type x length	INS 5-10	0	41	41	0.0000	0	1	1	0.0000	33
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	unseen	s2	HG008T_PacBio	type x length	INS >10	0	43	43	0.0000	0	0	0		33
+release_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s0	HG008T_ONT	all	all	88	499	587	0.1499	88	371	459	0.1917	384
+release_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s0	HG008T_ONT	context	HP4-6	7	0	7	1.0000	7	18	25	0.2800	0
+release_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s0	HG008T_ONT	context	HP>=7	45	390	435	0.1034	45	258	303	0.1485	294
+release_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s0	HG008T_ONT	context	STR	1	64	65	0.0154	1	16	17	0.0588	57
+release_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s0	HG008T_ONT	context	VNTR	0	0	0		0	1	1	0.0000	0
+release_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s0	HG008T_ONT	context	none	35	45	80	0.4375	35	78	113	0.3097	33
+release_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s0	HG008T_ONT	length	1	67	253	320	0.2094	67	295	362	0.1851	188
+release_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s0	HG008T_ONT	length	2-4	8	127	135	0.0593	8	48	56	0.1429	102
+release_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s0	HG008T_ONT	length	5-10	6	56	62	0.0968	6	13	19	0.3158	47
+release_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s0	HG008T_ONT	length	>10	7	63	70	0.1000	7	15	22	0.3182	47
+release_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s0	HG008T_ONT	type	DEL	39	180	219	0.1781	39	146	185	0.2108	136
+release_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s0	HG008T_ONT	type	INS	49	319	368	0.1332	49	225	274	0.1788	248
+release_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s0	HG008T_ONT	type x context	DEL HP4-6	1	0	1	1.0000	1	8	9	0.1111	0
+release_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s0	HG008T_ONT	type x context	DEL HP>=7	10	148	158	0.0633	10	81	91	0.1099	107
+release_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s0	HG008T_ONT	type x context	DEL STR	1	16	17	0.0588	1	5	6	0.1667	16
+release_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s0	HG008T_ONT	type x context	DEL none	27	16	43	0.6279	27	52	79	0.3418	13
+release_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s0	HG008T_ONT	type x context	INS HP4-6	6	0	6	1.0000	6	10	16	0.3750	0
+release_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s0	HG008T_ONT	type x context	INS HP>=7	35	242	277	0.1264	35	177	212	0.1651	187
+release_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s0	HG008T_ONT	type x context	INS STR	0	48	48	0.0000	0	11	11	0.0000	41
+release_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s0	HG008T_ONT	type x context	INS VNTR	0	0	0		0	1	1	0.0000	0
+release_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s0	HG008T_ONT	type x context	INS none	8	29	37	0.2162	8	26	34	0.2353	20
+release_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s0	HG008T_ONT	type x length	DEL 1	19	104	123	0.1545	19	103	122	0.1557	75
+release_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s0	HG008T_ONT	type x length	DEL 2-4	7	41	48	0.1458	7	25	32	0.2188	33
+release_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s0	HG008T_ONT	type x length	DEL 5-10	6	15	21	0.2857	6	7	13	0.4615	14
+release_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s0	HG008T_ONT	type x length	DEL >10	7	20	27	0.2593	7	11	18	0.3889	14
+release_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s0	HG008T_ONT	type x length	INS 1	48	149	197	0.2437	48	192	240	0.2000	113
+release_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s0	HG008T_ONT	type x length	INS 2-4	1	86	87	0.0115	1	23	24	0.0417	69
+release_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s0	HG008T_ONT	type x length	INS 5-10	0	41	41	0.0000	0	6	6	0.0000	33
+release_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s0	HG008T_ONT	type x length	INS >10	0	43	43	0.0000	0	4	4	0.0000	33
+release_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s1	HG008T_ONT	all	all	90	497	587	0.1533	90	335	425	0.2118	384
+release_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s1	HG008T_ONT	context	HP4-6	7	0	7	1.0000	7	17	24	0.2917	0
+release_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s1	HG008T_ONT	context	HP>=7	47	388	435	0.1080	47	229	276	0.1703	294
+release_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s1	HG008T_ONT	context	STR	1	64	65	0.0154	1	18	19	0.0526	57
+release_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s1	HG008T_ONT	context	VNTR	0	0	0		0	1	1	0.0000	0
+release_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s1	HG008T_ONT	context	none	35	45	80	0.4375	35	70	105	0.3333	33
+release_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s1	HG008T_ONT	length	1	69	251	320	0.2156	69	263	332	0.2078	188
+release_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s1	HG008T_ONT	length	2-4	8	127	135	0.0593	8	45	53	0.1509	102
+release_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s1	HG008T_ONT	length	5-10	6	56	62	0.0968	6	18	24	0.2500	47
+release_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s1	HG008T_ONT	length	>10	7	63	70	0.1000	7	9	16	0.4375	47
+release_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s1	HG008T_ONT	type	DEL	42	177	219	0.1918	42	128	170	0.2471	136
+release_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s1	HG008T_ONT	type	INS	48	320	368	0.1304	48	207	255	0.1882	248
+release_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s1	HG008T_ONT	type x context	DEL HP4-6	1	0	1	1.0000	1	10	11	0.0909	0
+release_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s1	HG008T_ONT	type x context	DEL HP>=7	13	145	158	0.0823	13	62	75	0.1733	107
+release_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s1	HG008T_ONT	type x context	DEL STR	1	16	17	0.0588	1	5	6	0.1667	16
+release_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s1	HG008T_ONT	type x context	DEL none	27	16	43	0.6279	27	51	78	0.3462	13
+release_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s1	HG008T_ONT	type x context	INS HP4-6	6	0	6	1.0000	6	7	13	0.4615	0
+release_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s1	HG008T_ONT	type x context	INS HP>=7	34	243	277	0.1227	34	167	201	0.1692	187
+release_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s1	HG008T_ONT	type x context	INS STR	0	48	48	0.0000	0	13	13	0.0000	41
+release_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s1	HG008T_ONT	type x context	INS VNTR	0	0	0		0	1	1	0.0000	0
+release_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s1	HG008T_ONT	type x context	INS none	8	29	37	0.2162	8	19	27	0.2963	20
+release_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s1	HG008T_ONT	type x length	DEL 1	22	101	123	0.1789	22	85	107	0.2056	75
+release_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s1	HG008T_ONT	type x length	DEL 2-4	7	41	48	0.1458	7	27	34	0.2059	33
+release_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s1	HG008T_ONT	type x length	DEL 5-10	6	15	21	0.2857	6	10	16	0.3750	14
+release_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s1	HG008T_ONT	type x length	DEL >10	7	20	27	0.2593	7	6	13	0.5385	14
+release_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s1	HG008T_ONT	type x length	INS 1	47	150	197	0.2386	47	178	225	0.2089	113
+release_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s1	HG008T_ONT	type x length	INS 2-4	1	86	87	0.0115	1	18	19	0.0526	69
+release_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s1	HG008T_ONT	type x length	INS 5-10	0	41	41	0.0000	0	8	8	0.0000	33
+release_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s1	HG008T_ONT	type x length	INS >10	0	43	43	0.0000	0	3	3	0.0000	33
+release_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s2	HG008T_ONT	all	all	95	492	587	0.1618	95	526	621	0.1530	384
+release_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s2	HG008T_ONT	context	HP4-6	6	1	7	0.8571	6	22	28	0.2143	0
+release_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s2	HG008T_ONT	context	HP>=7	53	382	435	0.1218	53	372	425	0.1247	294
+release_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s2	HG008T_ONT	context	STR	1	64	65	0.0154	1	30	31	0.0323	57
+release_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s2	HG008T_ONT	context	VNTR	0	0	0		0	3	3	0.0000	0
+release_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s2	HG008T_ONT	context	none	35	45	80	0.4375	35	99	134	0.2612	33
+release_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s2	HG008T_ONT	length	1	74	246	320	0.2313	74	401	475	0.1558	188
+release_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s2	HG008T_ONT	length	2-4	8	127	135	0.0593	8	73	81	0.0988	102
+release_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s2	HG008T_ONT	length	5-10	6	56	62	0.0968	6	28	34	0.1765	47
+release_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s2	HG008T_ONT	length	>10	7	63	70	0.1000	7	24	31	0.2258	47
+release_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s2	HG008T_ONT	type	DEL	43	176	219	0.1963	43	233	276	0.1558	136
+release_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s2	HG008T_ONT	type	INS	52	316	368	0.1413	52	293	345	0.1507	248
+release_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s2	HG008T_ONT	type x context	DEL HP4-6	1	0	1	1.0000	1	13	14	0.0714	0
+release_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s2	HG008T_ONT	type x context	DEL HP>=7	14	144	158	0.0886	14	134	148	0.0946	107
+release_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s2	HG008T_ONT	type x context	DEL STR	1	16	17	0.0588	1	10	11	0.0909	16
+release_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s2	HG008T_ONT	type x context	DEL VNTR	0	0	0		0	2	2	0.0000	0
+release_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s2	HG008T_ONT	type x context	DEL none	27	16	43	0.6279	27	74	101	0.2673	13
+release_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s2	HG008T_ONT	type x context	INS HP4-6	5	1	6	0.8333	5	9	14	0.3571	0
+release_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s2	HG008T_ONT	type x context	INS HP>=7	39	238	277	0.1408	39	238	277	0.1408	187
+release_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s2	HG008T_ONT	type x context	INS STR	0	48	48	0.0000	0	20	20	0.0000	41
+release_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s2	HG008T_ONT	type x context	INS VNTR	0	0	0		0	1	1	0.0000	0
+release_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s2	HG008T_ONT	type x context	INS none	8	29	37	0.2162	8	25	33	0.2424	20
+release_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s2	HG008T_ONT	type x length	DEL 1	23	100	123	0.1870	23	162	185	0.1243	75
+release_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s2	HG008T_ONT	type x length	DEL 2-4	7	41	48	0.1458	7	40	47	0.1489	33
+release_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s2	HG008T_ONT	type x length	DEL 5-10	6	15	21	0.2857	6	15	21	0.2857	14
+release_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s2	HG008T_ONT	type x length	DEL >10	7	20	27	0.2593	7	16	23	0.3043	14
+release_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s2	HG008T_ONT	type x length	INS 1	51	146	197	0.2589	51	239	290	0.1759	113
+release_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s2	HG008T_ONT	type x length	INS 2-4	1	86	87	0.0115	1	33	34	0.0294	69
+release_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s2	HG008T_ONT	type x length	INS 5-10	0	41	41	0.0000	0	13	13	0.0000	33
+release_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	release	s2	HG008T_ONT	type x length	INS >10	0	43	43	0.0000	0	8	8	0.0000	33
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s0	HG008T_ONT	all	all	49	538	587	0.0835	49	68	117	0.4188	384
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s0	HG008T_ONT	context	HP4-6	6	1	7	0.8571	6	6	12	0.5000	0
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s0	HG008T_ONT	context	HP>=7	13	422	435	0.0299	13	19	32	0.4062	294
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s0	HG008T_ONT	context	STR	1	64	65	0.0154	1	7	8	0.1250	57
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s0	HG008T_ONT	context	VNTR	0	0	0		0	1	1	0.0000	0
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s0	HG008T_ONT	context	none	29	51	80	0.3625	29	35	64	0.4531	33
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s0	HG008T_ONT	length	1	32	288	320	0.1000	32	37	69	0.4638	188
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s0	HG008T_ONT	length	2-4	5	130	135	0.0370	5	19	24	0.2083	102
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s0	HG008T_ONT	length	5-10	5	57	62	0.0806	5	4	9	0.5556	47
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s0	HG008T_ONT	length	>10	7	63	70	0.1000	7	8	15	0.4667	47
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s0	HG008T_ONT	type	DEL	26	193	219	0.1187	26	39	65	0.4000	136
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s0	HG008T_ONT	type	INS	23	345	368	0.0625	23	29	52	0.4423	248
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s0	HG008T_ONT	type x context	DEL HP4-6	1	0	1	1.0000	1	2	3	0.3333	0
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s0	HG008T_ONT	type x context	DEL HP>=7	1	157	158	0.0063	1	5	6	0.1667	107
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s0	HG008T_ONT	type x context	DEL STR	1	16	17	0.0588	1	4	5	0.2000	16
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s0	HG008T_ONT	type x context	DEL VNTR	0	0	0		0	1	1	0.0000	0
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s0	HG008T_ONT	type x context	DEL none	23	20	43	0.5349	23	27	50	0.4600	13
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s0	HG008T_ONT	type x context	INS HP4-6	5	1	6	0.8333	5	4	9	0.5556	0
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s0	HG008T_ONT	type x context	INS HP>=7	12	265	277	0.0433	12	14	26	0.4615	187
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s0	HG008T_ONT	type x context	INS STR	0	48	48	0.0000	0	3	3	0.0000	41
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s0	HG008T_ONT	type x context	INS none	6	31	37	0.1622	6	8	14	0.4286	20
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s0	HG008T_ONT	type x length	DEL 1	9	114	123	0.0732	9	15	24	0.3750	75
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s0	HG008T_ONT	type x length	DEL 2-4	5	43	48	0.1042	5	15	20	0.2500	33
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s0	HG008T_ONT	type x length	DEL 5-10	5	16	21	0.2381	5	3	8	0.6250	14
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s0	HG008T_ONT	type x length	DEL >10	7	20	27	0.2593	7	6	13	0.5385	14
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s0	HG008T_ONT	type x length	INS 1	23	174	197	0.1168	23	22	45	0.5111	113
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s0	HG008T_ONT	type x length	INS 2-4	0	87	87	0.0000	0	4	4	0.0000	69
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s0	HG008T_ONT	type x length	INS 5-10	0	41	41	0.0000	0	1	1	0.0000	33
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s0	HG008T_ONT	type x length	INS >10	0	43	43	0.0000	0	2	2	0.0000	33
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s1	HG008T_ONT	all	all	50	537	587	0.0852	50	64	114	0.4386	384
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s1	HG008T_ONT	context	HP4-6	7	0	7	1.0000	7	10	17	0.4118	0
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s1	HG008T_ONT	context	HP>=7	11	424	435	0.0253	11	12	23	0.4783	294
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s1	HG008T_ONT	context	STR	1	64	65	0.0154	1	2	3	0.3333	57
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s1	HG008T_ONT	context	none	31	49	80	0.3875	31	40	71	0.4366	33
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s1	HG008T_ONT	length	1	33	287	320	0.1031	33	43	76	0.4342	188
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s1	HG008T_ONT	length	2-4	7	128	135	0.0519	7	15	22	0.3182	102
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s1	HG008T_ONT	length	5-10	4	58	62	0.0645	4	3	7	0.5714	47
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s1	HG008T_ONT	length	>10	6	64	70	0.0857	6	3	9	0.6667	47
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s1	HG008T_ONT	type	DEL	28	191	219	0.1279	28	37	65	0.4308	136
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s1	HG008T_ONT	type	INS	22	346	368	0.0598	22	27	49	0.4490	248
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s1	HG008T_ONT	type x context	DEL HP4-6	1	0	1	1.0000	1	5	6	0.1667	0
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s1	HG008T_ONT	type x context	DEL HP>=7	2	156	158	0.0127	2	2	4	0.5000	107
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s1	HG008T_ONT	type x context	DEL STR	1	16	17	0.0588	1	1	2	0.5000	16
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s1	HG008T_ONT	type x context	DEL none	24	19	43	0.5581	24	29	53	0.4528	13
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s1	HG008T_ONT	type x context	INS HP4-6	6	0	6	1.0000	6	5	11	0.5455	0
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s1	HG008T_ONT	type x context	INS HP>=7	9	268	277	0.0325	9	10	19	0.4737	187
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s1	HG008T_ONT	type x context	INS STR	0	48	48	0.0000	0	1	1	0.0000	41
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s1	HG008T_ONT	type x context	INS none	7	30	37	0.1892	7	11	18	0.3889	20
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s1	HG008T_ONT	type x length	DEL 1	11	112	123	0.0894	11	20	31	0.3548	75
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s1	HG008T_ONT	type x length	DEL 2-4	7	41	48	0.1458	7	12	19	0.3684	33
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s1	HG008T_ONT	type x length	DEL 5-10	4	17	21	0.1905	4	2	6	0.6667	14
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s1	HG008T_ONT	type x length	DEL >10	6	21	27	0.2222	6	3	9	0.6667	14
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s1	HG008T_ONT	type x length	INS 1	22	175	197	0.1117	22	23	45	0.4889	113
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s1	HG008T_ONT	type x length	INS 2-4	0	87	87	0.0000	0	3	3	0.0000	69
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s1	HG008T_ONT	type x length	INS 5-10	0	41	41	0.0000	0	1	1	0.0000	33
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s1	HG008T_ONT	type x length	INS >10	0	43	43	0.0000	0	0	0		33
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s2	HG008T_ONT	all	all	52	535	587	0.0886	52	73	125	0.4160	384
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s2	HG008T_ONT	context	HP4-6	6	1	7	0.8571	6	7	13	0.4615	0
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s2	HG008T_ONT	context	HP>=7	11	424	435	0.0253	11	12	23	0.4783	294
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s2	HG008T_ONT	context	STR	1	64	65	0.0154	1	6	7	0.1429	57
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s2	HG008T_ONT	context	none	34	46	80	0.4250	34	48	82	0.4146	33
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s2	HG008T_ONT	length	1	33	287	320	0.1031	33	34	67	0.4925	188
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s2	HG008T_ONT	length	2-4	6	129	135	0.0444	6	22	28	0.2143	102
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s2	HG008T_ONT	length	5-10	6	56	62	0.0968	6	9	15	0.4000	47
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s2	HG008T_ONT	length	>10	7	63	70	0.1000	7	8	15	0.4667	47
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s2	HG008T_ONT	type	DEL	30	189	219	0.1370	30	42	72	0.4167	136
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s2	HG008T_ONT	type	INS	22	346	368	0.0598	22	31	53	0.4151	248
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s2	HG008T_ONT	type x context	DEL HP4-6	1	0	1	1.0000	1	3	4	0.2500	0
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s2	HG008T_ONT	type x context	DEL HP>=7	2	156	158	0.0127	2	3	5	0.4000	107
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s2	HG008T_ONT	type x context	DEL STR	1	16	17	0.0588	1	3	4	0.2500	16
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s2	HG008T_ONT	type x context	DEL none	26	17	43	0.6047	26	33	59	0.4407	13
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s2	HG008T_ONT	type x context	INS HP4-6	5	1	6	0.8333	5	4	9	0.5556	0
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s2	HG008T_ONT	type x context	INS HP>=7	9	268	277	0.0325	9	9	18	0.5000	187
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s2	HG008T_ONT	type x context	INS STR	0	48	48	0.0000	0	3	3	0.0000	41
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s2	HG008T_ONT	type x context	INS none	8	29	37	0.2162	8	15	23	0.3478	20
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s2	HG008T_ONT	type x length	DEL 1	11	112	123	0.0894	11	16	27	0.4074	75
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s2	HG008T_ONT	type x length	DEL 2-4	6	42	48	0.1250	6	15	21	0.2857	33
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s2	HG008T_ONT	type x length	DEL 5-10	6	15	21	0.2857	6	5	11	0.5455	14
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s2	HG008T_ONT	type x length	DEL >10	7	20	27	0.2593	7	6	13	0.5385	14
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s2	HG008T_ONT	type x length	INS 1	22	175	197	0.1117	22	18	40	0.5500	113
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s2	HG008T_ONT	type x length	INS 2-4	0	87	87	0.0000	0	7	7	0.0000	69
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s2	HG008T_ONT	type x length	INS 5-10	0	41	41	0.0000	0	4	4	0.0000	33
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	unseen	s2	HG008T_ONT	type x length	INS >10	0	43	43	0.0000	0	2	2	0.0000	33
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s0	COLO829T_Illumina	all	all	17	114	131	0.1298	17	48	65	0.2615	81
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s0	COLO829T_Illumina	context	HP4-6	3	3	6	0.5000	3	9	12	0.2500	3
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s0	COLO829T_Illumina	context	HP>=7	4	66	70	0.0571	4	8	12	0.3333	42
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s0	COLO829T_Illumina	context	STR	1	26	27	0.0370	1	4	5	0.2000	24
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s0	COLO829T_Illumina	context	none	9	19	28	0.3214	9	27	36	0.2500	12
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s0	COLO829T_Illumina	length	1	12	57	69	0.1739	12	28	40	0.3000	37
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s0	COLO829T_Illumina	length	2-4	2	35	37	0.0541	2	10	12	0.1667	28
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s0	COLO829T_Illumina	length	5-10	1	9	10	0.1000	1	7	8	0.1250	8
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s0	COLO829T_Illumina	length	>10	2	13	15	0.1333	2	3	5	0.4000	8
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s0	COLO829T_Illumina	type	DEL	10	44	54	0.1852	10	37	47	0.2128	29
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s0	COLO829T_Illumina	type	INS	7	70	77	0.0909	7	11	18	0.3889	52
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s0	COLO829T_Illumina	type x context	DEL HP4-6	3	1	4	0.7500	3	5	8	0.3750	1
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s0	COLO829T_Illumina	type x context	DEL HP>=7	2	33	35	0.0571	2	6	8	0.2500	22
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s0	COLO829T_Illumina	type x context	DEL STR	0	4	4	0.0000	0	3	3	0.0000	3
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s0	COLO829T_Illumina	type x context	DEL none	5	6	11	0.4545	5	23	28	0.1786	3
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s0	COLO829T_Illumina	type x context	INS HP4-6	0	2	2	0.0000	0	4	4	0.0000	2
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s0	COLO829T_Illumina	type x context	INS HP>=7	2	33	35	0.0571	2	2	4	0.5000	20
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s0	COLO829T_Illumina	type x context	INS STR	1	22	23	0.0435	1	1	2	0.5000	21
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s0	COLO829T_Illumina	type x context	INS none	4	13	17	0.2353	4	4	8	0.5000	9
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s0	COLO829T_Illumina	type x length	DEL 1	6	29	35	0.1714	6	21	27	0.2222	20
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s0	COLO829T_Illumina	type x length	DEL 2-4	1	11	12	0.0833	1	6	7	0.1429	7
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s0	COLO829T_Illumina	type x length	DEL 5-10	1	2	3	0.3333	1	7	8	0.1250	2
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s0	COLO829T_Illumina	type x length	DEL >10	2	2	4	0.5000	2	3	5	0.4000	0
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s0	COLO829T_Illumina	type x length	INS 1	6	28	34	0.1765	6	7	13	0.4615	17
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s0	COLO829T_Illumina	type x length	INS 2-4	1	24	25	0.0400	1	4	5	0.2000	21
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s0	COLO829T_Illumina	type x length	INS 5-10	0	7	7	0.0000	0	0	0		6
+release_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s0	COLO829T_Illumina	type x length	INS >10	0	11	11	0.0000	0	0	0		8
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s1	COLO829T_Illumina	all	all	19	112	131	0.1450	19	89	108	0.1759	81
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s1	COLO829T_Illumina	context	HP4-6	2	4	6	0.3333	2	7	9	0.2222	3
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s1	COLO829T_Illumina	context	HP>=7	9	61	70	0.1286	9	45	54	0.1667	42
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s1	COLO829T_Illumina	context	STR	0	27	27	0.0000	0	2	2	0.0000	24
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s1	COLO829T_Illumina	context	none	8	20	28	0.2857	8	35	43	0.1860	12
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s1	COLO829T_Illumina	length	1	15	54	69	0.2174	15	63	78	0.1923	37
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s1	COLO829T_Illumina	length	2-4	1	36	37	0.0270	1	12	13	0.0769	28
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s1	COLO829T_Illumina	length	5-10	0	10	10	0.0000	0	7	7	0.0000	8
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s1	COLO829T_Illumina	length	>10	3	12	15	0.2000	3	7	10	0.3000	8
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s1	COLO829T_Illumina	type	DEL	10	44	54	0.1852	10	73	83	0.1205	29
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s1	COLO829T_Illumina	type	INS	9	68	77	0.1169	9	16	25	0.3600	52
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s1	COLO829T_Illumina	type x context	DEL HP4-6	2	2	4	0.5000	2	4	6	0.3333	1
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s1	COLO829T_Illumina	type x context	DEL HP>=7	4	31	35	0.1143	4	36	40	0.1000	22
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s1	COLO829T_Illumina	type x context	DEL STR	0	4	4	0.0000	0	2	2	0.0000	3
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s1	COLO829T_Illumina	type x context	DEL none	4	7	11	0.3636	4	31	35	0.1143	3
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s1	COLO829T_Illumina	type x context	INS HP4-6	0	2	2	0.0000	0	3	3	0.0000	2
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s1	COLO829T_Illumina	type x context	INS HP>=7	5	30	35	0.1429	5	9	14	0.3571	20
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s1	COLO829T_Illumina	type x context	INS STR	0	23	23	0.0000	0	0	0		21
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s1	COLO829T_Illumina	type x context	INS none	4	13	17	0.2353	4	4	8	0.5000	9
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s1	COLO829T_Illumina	type x length	DEL 1	6	29	35	0.1714	6	50	56	0.1071	20
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s1	COLO829T_Illumina	type x length	DEL 2-4	1	11	12	0.0833	1	10	11	0.0909	7
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s1	COLO829T_Illumina	type x length	DEL 5-10	0	3	3	0.0000	0	7	7	0.0000	2
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s1	COLO829T_Illumina	type x length	DEL >10	3	1	4	0.7500	3	6	9	0.3333	0
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s1	COLO829T_Illumina	type x length	INS 1	9	25	34	0.2647	9	13	22	0.4091	17
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s1	COLO829T_Illumina	type x length	INS 2-4	0	25	25	0.0000	0	2	2	0.0000	21
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s1	COLO829T_Illumina	type x length	INS 5-10	0	7	7	0.0000	0	0	0		6
+release_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s1	COLO829T_Illumina	type x length	INS >10	0	11	11	0.0000	0	1	1	0.0000	8
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s2	COLO829T_Illumina	all	all	17	114	131	0.1298	17	31	48	0.3542	81
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s2	COLO829T_Illumina	context	HP4-6	2	4	6	0.3333	2	6	8	0.2500	3
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s2	COLO829T_Illumina	context	HP>=7	6	64	70	0.0857	6	11	17	0.3529	42
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s2	COLO829T_Illumina	context	STR	0	27	27	0.0000	0	0	0		24
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s2	COLO829T_Illumina	context	none	9	19	28	0.3214	9	14	23	0.3913	12
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s2	COLO829T_Illumina	length	1	13	56	69	0.1884	13	26	39	0.3333	37
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s2	COLO829T_Illumina	length	2-4	1	36	37	0.0270	1	3	4	0.2500	28
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s2	COLO829T_Illumina	length	5-10	0	10	10	0.0000	0	0	0		8
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s2	COLO829T_Illumina	length	>10	3	12	15	0.2000	3	2	5	0.6000	8
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s2	COLO829T_Illumina	type	DEL	8	46	54	0.1481	8	22	30	0.2667	29
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s2	COLO829T_Illumina	type	INS	9	68	77	0.1169	9	9	18	0.5000	52
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s2	COLO829T_Illumina	type x context	DEL HP4-6	2	2	4	0.5000	2	4	6	0.3333	1
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s2	COLO829T_Illumina	type x context	DEL HP>=7	1	34	35	0.0286	1	7	8	0.1250	22
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s2	COLO829T_Illumina	type x context	DEL STR	0	4	4	0.0000	0	0	0		3
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s2	COLO829T_Illumina	type x context	DEL none	5	6	11	0.4545	5	11	16	0.3125	3
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s2	COLO829T_Illumina	type x context	INS HP4-6	0	2	2	0.0000	0	2	2	0.0000	2
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s2	COLO829T_Illumina	type x context	INS HP>=7	5	30	35	0.1429	5	4	9	0.5556	20
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s2	COLO829T_Illumina	type x context	INS STR	0	23	23	0.0000	0	0	0		21
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s2	COLO829T_Illumina	type x context	INS none	4	13	17	0.2353	4	3	7	0.5714	9
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s2	COLO829T_Illumina	type x length	DEL 1	4	31	35	0.1143	4	18	22	0.1818	20
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s2	COLO829T_Illumina	type x length	DEL 2-4	1	11	12	0.0833	1	2	3	0.3333	7
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s2	COLO829T_Illumina	type x length	DEL 5-10	0	3	3	0.0000	0	0	0		2
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s2	COLO829T_Illumina	type x length	DEL >10	3	1	4	0.7500	3	2	5	0.6000	0
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s2	COLO829T_Illumina	type x length	INS 1	9	25	34	0.2647	9	8	17	0.5294	17
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s2	COLO829T_Illumina	type x length	INS 2-4	0	25	25	0.0000	0	1	1	0.0000	21
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s2	COLO829T_Illumina	type x length	INS 5-10	0	7	7	0.0000	0	0	0		6
+release_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	release	s2	COLO829T_Illumina	type x length	INS >10	0	11	11	0.0000	0	0	0		8
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s0	COLO829T_Illumina	all	all	15	116	131	0.1145	15	22	37	0.4054	81
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s0	COLO829T_Illumina	context	HP4-6	3	3	6	0.5000	3	5	8	0.3750	3
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s0	COLO829T_Illumina	context	HP>=7	2	68	70	0.0286	2	3	5	0.4000	42
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s0	COLO829T_Illumina	context	STR	0	27	27	0.0000	0	0	0		24
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s0	COLO829T_Illumina	context	none	10	18	28	0.3571	10	14	24	0.4167	12
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s0	COLO829T_Illumina	length	1	11	58	69	0.1594	11	19	30	0.3667	37
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s0	COLO829T_Illumina	length	2-4	1	36	37	0.0270	1	2	3	0.3333	28
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s0	COLO829T_Illumina	length	5-10	0	10	10	0.0000	0	0	0		8
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s0	COLO829T_Illumina	length	>10	3	12	15	0.2000	3	1	4	0.7500	8
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s0	COLO829T_Illumina	type	DEL	9	45	54	0.1667	9	19	28	0.3214	29
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s0	COLO829T_Illumina	type	INS	6	71	77	0.0779	6	3	9	0.6667	52
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s0	COLO829T_Illumina	type x context	DEL HP4-6	3	1	4	0.7500	3	4	7	0.4286	1
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s0	COLO829T_Illumina	type x context	DEL HP>=7	0	35	35	0.0000	0	3	3	0.0000	22
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s0	COLO829T_Illumina	type x context	DEL STR	0	4	4	0.0000	0	0	0		3
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s0	COLO829T_Illumina	type x context	DEL none	6	5	11	0.5455	6	12	18	0.3333	3
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s0	COLO829T_Illumina	type x context	INS HP4-6	0	2	2	0.0000	0	1	1	0.0000	2
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s0	COLO829T_Illumina	type x context	INS HP>=7	2	33	35	0.0571	2	0	2	1.0000	20
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s0	COLO829T_Illumina	type x context	INS STR	0	23	23	0.0000	0	0	0		21
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s0	COLO829T_Illumina	type x context	INS none	4	13	17	0.2353	4	2	6	0.6667	9
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s0	COLO829T_Illumina	type x length	DEL 1	5	30	35	0.1429	5	16	21	0.2381	20
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s0	COLO829T_Illumina	type x length	DEL 2-4	1	11	12	0.0833	1	2	3	0.3333	7
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s0	COLO829T_Illumina	type x length	DEL 5-10	0	3	3	0.0000	0	0	0		2
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s0	COLO829T_Illumina	type x length	DEL >10	3	1	4	0.7500	3	1	4	0.7500	0
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s0	COLO829T_Illumina	type x length	INS 1	6	28	34	0.1765	6	3	9	0.6667	17
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s0	COLO829T_Illumina	type x length	INS 2-4	0	25	25	0.0000	0	0	0		21
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s0	COLO829T_Illumina	type x length	INS 5-10	0	7	7	0.0000	0	0	0		6
+unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s0	COLO829T_Illumina	type x length	INS >10	0	11	11	0.0000	0	0	0		8
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s1	COLO829T_Illumina	all	all	13	118	131	0.0992	13	15	28	0.4643	81
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s1	COLO829T_Illumina	context	HP4-6	3	3	6	0.5000	3	4	7	0.4286	3
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s1	COLO829T_Illumina	context	HP>=7	2	68	70	0.0286	2	2	4	0.5000	42
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s1	COLO829T_Illumina	context	STR	0	27	27	0.0000	0	0	0		24
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s1	COLO829T_Illumina	context	none	8	20	28	0.2857	8	9	17	0.4706	12
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s1	COLO829T_Illumina	length	1	10	59	69	0.1449	10	14	24	0.4167	37
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s1	COLO829T_Illumina	length	2-4	1	36	37	0.0270	1	0	1	1.0000	28
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s1	COLO829T_Illumina	length	5-10	0	10	10	0.0000	0	0	0		8
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s1	COLO829T_Illumina	length	>10	2	13	15	0.1333	2	1	3	0.6667	8
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s1	COLO829T_Illumina	type	DEL	8	46	54	0.1481	8	12	20	0.4000	29
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s1	COLO829T_Illumina	type	INS	5	72	77	0.0649	5	3	8	0.6250	52
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s1	COLO829T_Illumina	type x context	DEL HP4-6	3	1	4	0.7500	3	2	5	0.6000	1
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s1	COLO829T_Illumina	type x context	DEL HP>=7	0	35	35	0.0000	0	2	2	0.0000	22
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s1	COLO829T_Illumina	type x context	DEL STR	0	4	4	0.0000	0	0	0		3
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s1	COLO829T_Illumina	type x context	DEL none	5	6	11	0.4545	5	8	13	0.3846	3
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s1	COLO829T_Illumina	type x context	INS HP4-6	0	2	2	0.0000	0	2	2	0.0000	2
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s1	COLO829T_Illumina	type x context	INS HP>=7	2	33	35	0.0571	2	0	2	1.0000	20
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s1	COLO829T_Illumina	type x context	INS STR	0	23	23	0.0000	0	0	0		21
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s1	COLO829T_Illumina	type x context	INS none	3	14	17	0.1765	3	1	4	0.7500	9
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s1	COLO829T_Illumina	type x length	DEL 1	5	30	35	0.1429	5	11	16	0.3125	20
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s1	COLO829T_Illumina	type x length	DEL 2-4	1	11	12	0.0833	1	0	1	1.0000	7
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s1	COLO829T_Illumina	type x length	DEL 5-10	0	3	3	0.0000	0	0	0		2
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s1	COLO829T_Illumina	type x length	DEL >10	2	2	4	0.5000	2	1	3	0.6667	0
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s1	COLO829T_Illumina	type x length	INS 1	5	29	34	0.1471	5	3	8	0.6250	17
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s1	COLO829T_Illumina	type x length	INS 2-4	0	25	25	0.0000	0	0	0		21
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s1	COLO829T_Illumina	type x length	INS 5-10	0	7	7	0.0000	0	0	0		6
+unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s1	COLO829T_Illumina	type x length	INS >10	0	11	11	0.0000	0	0	0		8
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s2	COLO829T_Illumina	all	all	13	118	131	0.0992	13	16	29	0.4483	81
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s2	COLO829T_Illumina	context	HP4-6	3	3	6	0.5000	3	4	7	0.4286	3
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s2	COLO829T_Illumina	context	HP>=7	1	69	70	0.0143	1	2	3	0.3333	42
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s2	COLO829T_Illumina	context	STR	0	27	27	0.0000	0	0	0		24
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s2	COLO829T_Illumina	context	none	9	19	28	0.3214	9	10	19	0.4737	12
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s2	COLO829T_Illumina	length	1	10	59	69	0.1449	10	15	25	0.4000	37
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s2	COLO829T_Illumina	length	2-4	1	36	37	0.0270	1	0	1	1.0000	28
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s2	COLO829T_Illumina	length	5-10	0	10	10	0.0000	0	0	0		8
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s2	COLO829T_Illumina	length	>10	2	13	15	0.1333	2	1	3	0.6667	8
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s2	COLO829T_Illumina	type	DEL	8	46	54	0.1481	8	13	21	0.3810	29
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s2	COLO829T_Illumina	type	INS	5	72	77	0.0649	5	3	8	0.6250	52
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s2	COLO829T_Illumina	type x context	DEL HP4-6	3	1	4	0.7500	3	3	6	0.5000	1
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s2	COLO829T_Illumina	type x context	DEL HP>=7	0	35	35	0.0000	0	2	2	0.0000	22
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s2	COLO829T_Illumina	type x context	DEL STR	0	4	4	0.0000	0	0	0		3
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s2	COLO829T_Illumina	type x context	DEL none	5	6	11	0.4545	5	8	13	0.3846	3
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s2	COLO829T_Illumina	type x context	INS HP4-6	0	2	2	0.0000	0	1	1	0.0000	2
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s2	COLO829T_Illumina	type x context	INS HP>=7	1	34	35	0.0286	1	0	1	1.0000	20
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s2	COLO829T_Illumina	type x context	INS STR	0	23	23	0.0000	0	0	0		21
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s2	COLO829T_Illumina	type x context	INS none	4	13	17	0.2353	4	2	6	0.6667	9
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s2	COLO829T_Illumina	type x length	DEL 1	5	30	35	0.1429	5	12	17	0.2941	20
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s2	COLO829T_Illumina	type x length	DEL 2-4	1	11	12	0.0833	1	0	1	1.0000	7
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s2	COLO829T_Illumina	type x length	DEL 5-10	0	3	3	0.0000	0	0	0		2
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s2	COLO829T_Illumina	type x length	DEL >10	2	2	4	0.5000	2	1	3	0.6667	0
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s2	COLO829T_Illumina	type x length	INS 1	5	29	34	0.1471	5	3	8	0.6250	17
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s2	COLO829T_Illumina	type x length	INS 2-4	0	25	25	0.0000	0	0	0		21
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s2	COLO829T_Illumina	type x length	INS 5-10	0	7	7	0.0000	0	0	0		6
+unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46	unseen	s2	COLO829T_Illumina	type x length	INS >10	0	11	11	0.0000	0	0	0		8
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s0	COLO829T_fiberseq	all	all	14	117	131	0.1069	14	26	40	0.3500	81
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s0	COLO829T_fiberseq	context	HP4-6	3	3	6	0.5000	3	6	9	0.3333	3
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s0	COLO829T_fiberseq	context	HP>=7	1	69	70	0.0143	1	7	8	0.1250	42
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s0	COLO829T_fiberseq	context	STR	0	27	27	0.0000	0	0	0		24
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s0	COLO829T_fiberseq	context	none	10	18	28	0.3571	10	13	23	0.4348	12
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s0	COLO829T_fiberseq	length	1	9	60	69	0.1304	9	20	29	0.3103	37
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s0	COLO829T_fiberseq	length	2-4	1	36	37	0.0270	1	2	3	0.3333	28
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s0	COLO829T_fiberseq	length	5-10	1	9	10	0.1000	1	1	2	0.5000	8
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s0	COLO829T_fiberseq	length	>10	3	12	15	0.2000	3	3	6	0.5000	8
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s0	COLO829T_fiberseq	type	DEL	10	44	54	0.1852	10	20	30	0.3333	29
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s0	COLO829T_fiberseq	type	INS	4	73	77	0.0519	4	6	10	0.4000	52
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s0	COLO829T_fiberseq	type x context	DEL HP4-6	3	1	4	0.7500	3	4	7	0.4286	1
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s0	COLO829T_fiberseq	type x context	DEL HP>=7	0	35	35	0.0000	0	4	4	0.0000	22
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s0	COLO829T_fiberseq	type x context	DEL STR	0	4	4	0.0000	0	0	0		3
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s0	COLO829T_fiberseq	type x context	DEL none	7	4	11	0.6364	7	12	19	0.3684	3
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s0	COLO829T_fiberseq	type x context	INS HP4-6	0	2	2	0.0000	0	2	2	0.0000	2
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s0	COLO829T_fiberseq	type x context	INS HP>=7	1	34	35	0.0286	1	3	4	0.2500	20
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s0	COLO829T_fiberseq	type x context	INS STR	0	23	23	0.0000	0	0	0		21
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s0	COLO829T_fiberseq	type x context	INS none	3	14	17	0.1765	3	1	4	0.7500	9
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s0	COLO829T_fiberseq	type x length	DEL 1	5	30	35	0.1429	5	15	20	0.2500	20
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s0	COLO829T_fiberseq	type x length	DEL 2-4	1	11	12	0.0833	1	1	2	0.5000	7
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s0	COLO829T_fiberseq	type x length	DEL 5-10	1	2	3	0.3333	1	1	2	0.5000	2
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s0	COLO829T_fiberseq	type x length	DEL >10	3	1	4	0.7500	3	3	6	0.5000	0
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s0	COLO829T_fiberseq	type x length	INS 1	4	30	34	0.1176	4	5	9	0.4444	17
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s0	COLO829T_fiberseq	type x length	INS 2-4	0	25	25	0.0000	0	1	1	0.0000	21
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s0	COLO829T_fiberseq	type x length	INS 5-10	0	7	7	0.0000	0	0	0		6
+release_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s0	COLO829T_fiberseq	type x length	INS >10	0	11	11	0.0000	0	0	0		8
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s1	COLO829T_fiberseq	all	all	18	113	131	0.1374	18	37	55	0.3273	81
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s1	COLO829T_fiberseq	context	HP4-6	3	3	6	0.5000	3	11	14	0.2143	3
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s1	COLO829T_fiberseq	context	HP>=7	5	65	70	0.0714	5	10	15	0.3333	42
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s1	COLO829T_fiberseq	context	STR	0	27	27	0.0000	0	0	0		24
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s1	COLO829T_fiberseq	context	none	10	18	28	0.3571	10	16	26	0.3846	12
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s1	COLO829T_fiberseq	length	1	13	56	69	0.1884	13	30	43	0.3023	37
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s1	COLO829T_fiberseq	length	2-4	1	36	37	0.0270	1	3	4	0.2500	28
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s1	COLO829T_fiberseq	length	5-10	1	9	10	0.1000	1	0	1	1.0000	8
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s1	COLO829T_fiberseq	length	>10	3	12	15	0.2000	3	4	7	0.4286	8
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s1	COLO829T_fiberseq	type	DEL	10	44	54	0.1852	10	26	36	0.2778	29
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s1	COLO829T_fiberseq	type	INS	8	69	77	0.1039	8	11	19	0.4211	52
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s1	COLO829T_fiberseq	type x context	DEL HP4-6	3	1	4	0.7500	3	7	10	0.3000	1
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s1	COLO829T_fiberseq	type x context	DEL HP>=7	0	35	35	0.0000	0	5	5	0.0000	22
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s1	COLO829T_fiberseq	type x context	DEL STR	0	4	4	0.0000	0	0	0		3
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s1	COLO829T_fiberseq	type x context	DEL none	7	4	11	0.6364	7	14	21	0.3333	3
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s1	COLO829T_fiberseq	type x context	INS HP4-6	0	2	2	0.0000	0	4	4	0.0000	2
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s1	COLO829T_fiberseq	type x context	INS HP>=7	5	30	35	0.1429	5	5	10	0.5000	20
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s1	COLO829T_fiberseq	type x context	INS STR	0	23	23	0.0000	0	0	0		21
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s1	COLO829T_fiberseq	type x context	INS none	3	14	17	0.1765	3	2	5	0.6000	9
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s1	COLO829T_fiberseq	type x length	DEL 1	5	30	35	0.1429	5	21	26	0.1923	20
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s1	COLO829T_fiberseq	type x length	DEL 2-4	1	11	12	0.0833	1	1	2	0.5000	7
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s1	COLO829T_fiberseq	type x length	DEL 5-10	1	2	3	0.3333	1	0	1	1.0000	2
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s1	COLO829T_fiberseq	type x length	DEL >10	3	1	4	0.7500	3	4	7	0.4286	0
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s1	COLO829T_fiberseq	type x length	INS 1	8	26	34	0.2353	8	9	17	0.4706	17
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s1	COLO829T_fiberseq	type x length	INS 2-4	0	25	25	0.0000	0	2	2	0.0000	21
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s1	COLO829T_fiberseq	type x length	INS 5-10	0	7	7	0.0000	0	0	0		6
+release_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s1	COLO829T_fiberseq	type x length	INS >10	0	11	11	0.0000	0	0	0		8
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s2	COLO829T_fiberseq	all	all	14	117	131	0.1069	14	37	51	0.2745	81
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s2	COLO829T_fiberseq	context	HP4-6	2	4	6	0.3333	2	9	11	0.1818	3
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s2	COLO829T_fiberseq	context	HP>=7	3	67	70	0.0429	3	15	18	0.1667	42
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s2	COLO829T_fiberseq	context	STR	0	27	27	0.0000	0	0	0		24
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s2	COLO829T_fiberseq	context	none	9	19	28	0.3214	9	13	22	0.4091	12
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s2	COLO829T_fiberseq	length	1	10	59	69	0.1449	10	31	41	0.2439	37
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s2	COLO829T_fiberseq	length	2-4	0	37	37	0.0000	0	1	1	0.0000	28
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s2	COLO829T_fiberseq	length	5-10	1	9	10	0.1000	1	1	2	0.5000	8
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s2	COLO829T_fiberseq	length	>10	3	12	15	0.2000	3	4	7	0.4286	8
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s2	COLO829T_fiberseq	type	DEL	8	46	54	0.1481	8	24	32	0.2500	29
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s2	COLO829T_fiberseq	type	INS	6	71	77	0.0779	6	13	19	0.3158	52
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s2	COLO829T_fiberseq	type x context	DEL HP4-6	2	2	4	0.5000	2	4	6	0.3333	1
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s2	COLO829T_fiberseq	type x context	DEL HP>=7	0	35	35	0.0000	0	10	10	0.0000	22
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s2	COLO829T_fiberseq	type x context	DEL STR	0	4	4	0.0000	0	0	0		3
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s2	COLO829T_fiberseq	type x context	DEL none	6	5	11	0.5455	6	10	16	0.3750	3
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s2	COLO829T_fiberseq	type x context	INS HP4-6	0	2	2	0.0000	0	5	5	0.0000	2
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s2	COLO829T_fiberseq	type x context	INS HP>=7	3	32	35	0.0857	3	5	8	0.3750	20
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s2	COLO829T_fiberseq	type x context	INS STR	0	23	23	0.0000	0	0	0		21
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s2	COLO829T_fiberseq	type x context	INS none	3	14	17	0.1765	3	3	6	0.5000	9
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s2	COLO829T_fiberseq	type x length	DEL 1	4	31	35	0.1143	4	19	23	0.1739	20
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s2	COLO829T_fiberseq	type x length	DEL 2-4	0	12	12	0.0000	0	0	0		7
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s2	COLO829T_fiberseq	type x length	DEL 5-10	1	2	3	0.3333	1	1	2	0.5000	2
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s2	COLO829T_fiberseq	type x length	DEL >10	3	1	4	0.7500	3	4	7	0.4286	0
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s2	COLO829T_fiberseq	type x length	INS 1	6	28	34	0.1765	6	12	18	0.3333	17
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s2	COLO829T_fiberseq	type x length	INS 2-4	0	25	25	0.0000	0	1	1	0.0000	21
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s2	COLO829T_fiberseq	type x length	INS 5-10	0	7	7	0.0000	0	0	0		6
+release_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	release	s2	COLO829T_fiberseq	type x length	INS >10	0	11	11	0.0000	0	0	0		8
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s0	COLO829T_fiberseq	all	all	15	116	131	0.1145	15	50	65	0.2308	81
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s0	COLO829T_fiberseq	context	HP4-6	3	3	6	0.5000	3	13	16	0.1875	3
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s0	COLO829T_fiberseq	context	HP>=7	2	68	70	0.0286	2	13	15	0.1333	42
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s0	COLO829T_fiberseq	context	STR	0	27	27	0.0000	0	3	3	0.0000	24
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s0	COLO829T_fiberseq	context	none	10	18	28	0.3571	10	21	31	0.3226	12
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s0	COLO829T_fiberseq	length	1	11	58	69	0.1594	11	38	49	0.2245	37
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s0	COLO829T_fiberseq	length	2-4	1	36	37	0.0270	1	7	8	0.1250	28
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s0	COLO829T_fiberseq	length	5-10	0	10	10	0.0000	0	0	0		8
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s0	COLO829T_fiberseq	length	>10	3	12	15	0.2000	3	5	8	0.3750	8
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s0	COLO829T_fiberseq	type	DEL	9	45	54	0.1667	9	44	53	0.1698	29
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s0	COLO829T_fiberseq	type	INS	6	71	77	0.0779	6	6	12	0.5000	52
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s0	COLO829T_fiberseq	type x context	DEL HP4-6	3	1	4	0.7500	3	10	13	0.2308	1
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s0	COLO829T_fiberseq	type x context	DEL HP>=7	0	35	35	0.0000	0	11	11	0.0000	22
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s0	COLO829T_fiberseq	type x context	DEL STR	0	4	4	0.0000	0	3	3	0.0000	3
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s0	COLO829T_fiberseq	type x context	DEL none	6	5	11	0.5455	6	20	26	0.2308	3
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s0	COLO829T_fiberseq	type x context	INS HP4-6	0	2	2	0.0000	0	3	3	0.0000	2
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s0	COLO829T_fiberseq	type x context	INS HP>=7	2	33	35	0.0571	2	2	4	0.5000	20
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s0	COLO829T_fiberseq	type x context	INS STR	0	23	23	0.0000	0	0	0		21
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s0	COLO829T_fiberseq	type x context	INS none	4	13	17	0.2353	4	1	5	0.8000	9
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s0	COLO829T_fiberseq	type x length	DEL 1	5	30	35	0.1429	5	33	38	0.1316	20
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s0	COLO829T_fiberseq	type x length	DEL 2-4	1	11	12	0.0833	1	6	7	0.1429	7
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s0	COLO829T_fiberseq	type x length	DEL 5-10	0	3	3	0.0000	0	0	0		2
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s0	COLO829T_fiberseq	type x length	DEL >10	3	1	4	0.7500	3	5	8	0.3750	0
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s0	COLO829T_fiberseq	type x length	INS 1	6	28	34	0.1765	6	5	11	0.5455	17
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s0	COLO829T_fiberseq	type x length	INS 2-4	0	25	25	0.0000	0	1	1	0.0000	21
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s0	COLO829T_fiberseq	type x length	INS 5-10	0	7	7	0.0000	0	0	0		6
+unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s0	COLO829T_fiberseq	type x length	INS >10	0	11	11	0.0000	0	0	0		8
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s1	COLO829T_fiberseq	all	all	12	119	131	0.0916	12	66	78	0.1538	81
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s1	COLO829T_fiberseq	context	HP4-6	3	3	6	0.5000	3	18	21	0.1429	3
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s1	COLO829T_fiberseq	context	HP>=7	1	69	70	0.0143	1	27	28	0.0357	42
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s1	COLO829T_fiberseq	context	STR	0	27	27	0.0000	0	0	0		24
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s1	COLO829T_fiberseq	context	none	8	20	28	0.2857	8	21	29	0.2759	12
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s1	COLO829T_fiberseq	length	1	9	60	69	0.1304	9	65	74	0.1216	37
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s1	COLO829T_fiberseq	length	2-4	1	36	37	0.0270	1	1	2	0.5000	28
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s1	COLO829T_fiberseq	length	5-10	0	10	10	0.0000	0	0	0		8
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s1	COLO829T_fiberseq	length	>10	2	13	15	0.1333	2	0	2	1.0000	8
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s1	COLO829T_fiberseq	type	DEL	7	47	54	0.1296	7	54	61	0.1148	29
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s1	COLO829T_fiberseq	type	INS	5	72	77	0.0649	5	12	17	0.2941	52
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s1	COLO829T_fiberseq	type x context	DEL HP4-6	3	1	4	0.7500	3	14	17	0.1765	1
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s1	COLO829T_fiberseq	type x context	DEL HP>=7	0	35	35	0.0000	0	24	24	0.0000	22
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s1	COLO829T_fiberseq	type x context	DEL STR	0	4	4	0.0000	0	0	0		3
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s1	COLO829T_fiberseq	type x context	DEL none	4	7	11	0.3636	4	16	20	0.2000	3
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s1	COLO829T_fiberseq	type x context	INS HP4-6	0	2	2	0.0000	0	4	4	0.0000	2
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s1	COLO829T_fiberseq	type x context	INS HP>=7	1	34	35	0.0286	1	3	4	0.2500	20
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s1	COLO829T_fiberseq	type x context	INS STR	0	23	23	0.0000	0	0	0		21
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s1	COLO829T_fiberseq	type x context	INS none	4	13	17	0.2353	4	5	9	0.4444	9
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s1	COLO829T_fiberseq	type x length	DEL 1	4	31	35	0.1143	4	54	58	0.0690	20
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s1	COLO829T_fiberseq	type x length	DEL 2-4	1	11	12	0.0833	1	0	1	1.0000	7
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s1	COLO829T_fiberseq	type x length	DEL 5-10	0	3	3	0.0000	0	0	0		2
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s1	COLO829T_fiberseq	type x length	DEL >10	2	2	4	0.5000	2	0	2	1.0000	0
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s1	COLO829T_fiberseq	type x length	INS 1	5	29	34	0.1471	5	11	16	0.3125	17
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s1	COLO829T_fiberseq	type x length	INS 2-4	0	25	25	0.0000	0	1	1	0.0000	21
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s1	COLO829T_fiberseq	type x length	INS 5-10	0	7	7	0.0000	0	0	0		6
+unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s1	COLO829T_fiberseq	type x length	INS >10	0	11	11	0.0000	0	0	0		8
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s2	COLO829T_fiberseq	all	all	14	117	131	0.1069	14	65	79	0.1772	81
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s2	COLO829T_fiberseq	context	HP4-6	3	3	6	0.5000	3	22	25	0.1200	3
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s2	COLO829T_fiberseq	context	HP>=7	2	68	70	0.0286	2	16	18	0.1111	42
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s2	COLO829T_fiberseq	context	STR	0	27	27	0.0000	0	0	0		24
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s2	COLO829T_fiberseq	context	none	9	19	28	0.3214	9	27	36	0.2500	12
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s2	COLO829T_fiberseq	length	1	11	58	69	0.1594	11	61	72	0.1528	37
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s2	COLO829T_fiberseq	length	2-4	1	36	37	0.0270	1	0	1	1.0000	28
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s2	COLO829T_fiberseq	length	5-10	0	10	10	0.0000	0	0	0		8
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s2	COLO829T_fiberseq	length	>10	2	13	15	0.1333	2	4	6	0.3333	8
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s2	COLO829T_fiberseq	type	DEL	8	46	54	0.1481	8	56	64	0.1250	29
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s2	COLO829T_fiberseq	type	INS	6	71	77	0.0779	6	9	15	0.4000	52
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s2	COLO829T_fiberseq	type x context	DEL HP4-6	3	1	4	0.7500	3	18	21	0.1429	1
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s2	COLO829T_fiberseq	type x context	DEL HP>=7	0	35	35	0.0000	0	14	14	0.0000	22
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s2	COLO829T_fiberseq	type x context	DEL STR	0	4	4	0.0000	0	0	0		3
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s2	COLO829T_fiberseq	type x context	DEL none	5	6	11	0.4545	5	24	29	0.1724	3
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s2	COLO829T_fiberseq	type x context	INS HP4-6	0	2	2	0.0000	0	4	4	0.0000	2
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s2	COLO829T_fiberseq	type x context	INS HP>=7	2	33	35	0.0571	2	2	4	0.5000	20
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s2	COLO829T_fiberseq	type x context	INS STR	0	23	23	0.0000	0	0	0		21
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s2	COLO829T_fiberseq	type x context	INS none	4	13	17	0.2353	4	3	7	0.5714	9
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s2	COLO829T_fiberseq	type x length	DEL 1	5	30	35	0.1429	5	52	57	0.0877	20
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s2	COLO829T_fiberseq	type x length	DEL 2-4	1	11	12	0.0833	1	0	1	1.0000	7
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s2	COLO829T_fiberseq	type x length	DEL 5-10	0	3	3	0.0000	0	0	0		2
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s2	COLO829T_fiberseq	type x length	DEL >10	2	2	4	0.5000	2	4	6	0.3333	0
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s2	COLO829T_fiberseq	type x length	INS 1	6	28	34	0.1765	6	9	15	0.4000	17
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s2	COLO829T_fiberseq	type x length	INS 2-4	0	25	25	0.0000	0	0	0		21
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s2	COLO829T_fiberseq	type x length	INS 5-10	0	7	7	0.0000	0	0	0		6
+unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46	unseen	s2	COLO829T_fiberseq	type x length	INS >10	0	11	11	0.0000	0	0	0		8
+release_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s0	COLO829T_ONT	all	all	21	110	131	0.1603	21	234	255	0.0824	81
+release_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s0	COLO829T_ONT	context	HP4-6	2	4	6	0.3333	2	55	57	0.0351	3
+release_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s0	COLO829T_ONT	context	HP>=7	8	62	70	0.1143	8	63	71	0.1127	42
+release_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s0	COLO829T_ONT	context	STR	1	26	27	0.0370	1	21	22	0.0455	24
+release_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s0	COLO829T_ONT	context	VNTR	0	0	0		0	2	2	0.0000	0
+release_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s0	COLO829T_ONT	context	none	10	18	28	0.3571	10	93	103	0.0971	12
+release_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s0	COLO829T_ONT	length	1	14	55	69	0.2029	14	163	177	0.0791	37
+release_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s0	COLO829T_ONT	length	2-4	2	35	37	0.0541	2	43	45	0.0444	28
+release_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s0	COLO829T_ONT	length	5-10	1	9	10	0.1000	1	10	11	0.0909	8
+release_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s0	COLO829T_ONT	length	>10	4	11	15	0.2667	4	18	22	0.1818	8
+release_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s0	COLO829T_ONT	type	DEL	8	46	54	0.1481	8	112	120	0.0667	29
+release_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s0	COLO829T_ONT	type	INS	13	64	77	0.1688	13	122	135	0.0963	52
+release_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s0	COLO829T_ONT	type x context	DEL HP4-6	2	2	4	0.5000	2	24	26	0.0769	1
+release_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s0	COLO829T_ONT	type x context	DEL HP>=7	0	35	35	0.0000	0	24	24	0.0000	22
+release_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s0	COLO829T_ONT	type x context	DEL STR	0	4	4	0.0000	0	12	12	0.0000	3
+release_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s0	COLO829T_ONT	type x context	DEL VNTR	0	0	0		0	1	1	0.0000	0
+release_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s0	COLO829T_ONT	type x context	DEL none	6	5	11	0.5455	6	51	57	0.1053	3
+release_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s0	COLO829T_ONT	type x context	INS HP4-6	0	2	2	0.0000	0	31	31	0.0000	2
+release_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s0	COLO829T_ONT	type x context	INS HP>=7	8	27	35	0.2286	8	39	47	0.1702	20
+release_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s0	COLO829T_ONT	type x context	INS STR	1	22	23	0.0435	1	9	10	0.1000	21
+release_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s0	COLO829T_ONT	type x context	INS VNTR	0	0	0		0	1	1	0.0000	0
+release_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s0	COLO829T_ONT	type x context	INS none	4	13	17	0.2353	4	42	46	0.0870	9
+release_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s0	COLO829T_ONT	type x length	DEL 1	3	32	35	0.0857	3	67	70	0.0429	20
+release_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s0	COLO829T_ONT	type x length	DEL 2-4	1	11	12	0.0833	1	23	24	0.0417	7
+release_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s0	COLO829T_ONT	type x length	DEL 5-10	1	2	3	0.3333	1	8	9	0.1111	2
+release_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s0	COLO829T_ONT	type x length	DEL >10	3	1	4	0.7500	3	14	17	0.1765	0
+release_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s0	COLO829T_ONT	type x length	INS 1	11	23	34	0.3235	11	96	107	0.1028	17
+release_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s0	COLO829T_ONT	type x length	INS 2-4	1	24	25	0.0400	1	20	21	0.0476	21
+release_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s0	COLO829T_ONT	type x length	INS 5-10	0	7	7	0.0000	0	2	2	0.0000	6
+release_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s0	COLO829T_ONT	type x length	INS >10	1	10	11	0.0909	1	4	5	0.2000	8
+release_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s1	COLO829T_ONT	all	all	21	110	131	0.1603	21	326	347	0.0605	81
+release_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s1	COLO829T_ONT	context	HP4-6	2	4	6	0.3333	2	112	114	0.0175	3
+release_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s1	COLO829T_ONT	context	HP>=7	8	62	70	0.1143	8	109	117	0.0684	42
+release_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s1	COLO829T_ONT	context	STR	1	26	27	0.0370	1	23	24	0.0417	24
+release_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s1	COLO829T_ONT	context	none	10	18	28	0.3571	10	82	92	0.1087	12
+release_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s1	COLO829T_ONT	length	1	15	54	69	0.2174	15	270	285	0.0526	37
+release_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s1	COLO829T_ONT	length	2-4	2	35	37	0.0541	2	40	42	0.0476	28
+release_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s1	COLO829T_ONT	length	5-10	1	9	10	0.1000	1	6	7	0.1429	8
+release_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s1	COLO829T_ONT	length	>10	3	12	15	0.2000	3	10	13	0.2308	8
+release_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s1	COLO829T_ONT	type	DEL	9	45	54	0.1667	9	194	203	0.0443	29
+release_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s1	COLO829T_ONT	type	INS	12	65	77	0.1558	12	132	144	0.0833	52
+release_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s1	COLO829T_ONT	type x context	DEL HP4-6	2	2	4	0.5000	2	68	70	0.0286	1
+release_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s1	COLO829T_ONT	type x context	DEL HP>=7	0	35	35	0.0000	0	56	56	0.0000	22
+release_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s1	COLO829T_ONT	type x context	DEL STR	0	4	4	0.0000	0	21	21	0.0000	3
+release_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s1	COLO829T_ONT	type x context	DEL none	7	4	11	0.6364	7	49	56	0.1250	3
+release_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s1	COLO829T_ONT	type x context	INS HP4-6	0	2	2	0.0000	0	44	44	0.0000	2
+release_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s1	COLO829T_ONT	type x context	INS HP>=7	8	27	35	0.2286	8	53	61	0.1311	20
+release_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s1	COLO829T_ONT	type x context	INS STR	1	22	23	0.0435	1	2	3	0.3333	21
+release_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s1	COLO829T_ONT	type x context	INS none	3	14	17	0.1765	3	33	36	0.0833	9
+release_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s1	COLO829T_ONT	type x length	DEL 1	4	31	35	0.1143	4	149	153	0.0261	20
+release_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s1	COLO829T_ONT	type x length	DEL 2-4	1	11	12	0.0833	1	31	32	0.0312	7
+release_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s1	COLO829T_ONT	type x length	DEL 5-10	1	2	3	0.3333	1	5	6	0.1667	2
+release_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s1	COLO829T_ONT	type x length	DEL >10	3	1	4	0.7500	3	9	12	0.2500	0
+release_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s1	COLO829T_ONT	type x length	INS 1	11	23	34	0.3235	11	121	132	0.0833	17
+release_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s1	COLO829T_ONT	type x length	INS 2-4	1	24	25	0.0400	1	9	10	0.1000	21
+release_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s1	COLO829T_ONT	type x length	INS 5-10	0	7	7	0.0000	0	1	1	0.0000	6
+release_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s1	COLO829T_ONT	type x length	INS >10	0	11	11	0.0000	0	1	1	0.0000	8
+release_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s2	COLO829T_ONT	all	all	21	110	131	0.1603	21	414	435	0.0483	81
+release_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s2	COLO829T_ONT	context	HP4-6	2	4	6	0.3333	2	130	132	0.0152	3
+release_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s2	COLO829T_ONT	context	HP>=7	8	62	70	0.1143	8	144	152	0.0526	42
+release_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s2	COLO829T_ONT	context	STR	1	26	27	0.0370	1	27	28	0.0357	24
+release_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s2	COLO829T_ONT	context	VNTR	0	0	0		0	1	1	0.0000	0
+release_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s2	COLO829T_ONT	context	none	10	18	28	0.3571	10	112	122	0.0820	12
+release_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s2	COLO829T_ONT	length	1	15	54	69	0.2174	15	322	337	0.0445	37
+release_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s2	COLO829T_ONT	length	2-4	2	35	37	0.0541	2	56	58	0.0345	28
+release_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s2	COLO829T_ONT	length	5-10	1	9	10	0.1000	1	20	21	0.0476	8
+release_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s2	COLO829T_ONT	length	>10	3	12	15	0.2000	3	16	19	0.1579	8
+release_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s2	COLO829T_ONT	type	DEL	9	45	54	0.1667	9	273	282	0.0319	29
+release_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s2	COLO829T_ONT	type	INS	12	65	77	0.1558	12	141	153	0.0784	52
+release_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s2	COLO829T_ONT	type x context	DEL HP4-6	2	2	4	0.5000	2	111	113	0.0177	1
+release_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s2	COLO829T_ONT	type x context	DEL HP>=7	0	35	35	0.0000	0	66	66	0.0000	22
+release_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s2	COLO829T_ONT	type x context	DEL STR	0	4	4	0.0000	0	15	15	0.0000	3
+release_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s2	COLO829T_ONT	type x context	DEL none	7	4	11	0.6364	7	81	88	0.0795	3
+release_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s2	COLO829T_ONT	type x context	INS HP4-6	0	2	2	0.0000	0	19	19	0.0000	2
+release_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s2	COLO829T_ONT	type x context	INS HP>=7	8	27	35	0.2286	8	78	86	0.0930	20
+release_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s2	COLO829T_ONT	type x context	INS STR	1	22	23	0.0435	1	12	13	0.0769	21
+release_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s2	COLO829T_ONT	type x context	INS VNTR	0	0	0		0	1	1	0.0000	0
+release_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s2	COLO829T_ONT	type x context	INS none	3	14	17	0.1765	3	31	34	0.0882	9
+release_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s2	COLO829T_ONT	type x length	DEL 1	4	31	35	0.1143	4	215	219	0.0183	20
+release_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s2	COLO829T_ONT	type x length	DEL 2-4	1	11	12	0.0833	1	32	33	0.0303	7
+release_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s2	COLO829T_ONT	type x length	DEL 5-10	1	2	3	0.3333	1	13	14	0.0714	2
+release_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s2	COLO829T_ONT	type x length	DEL >10	3	1	4	0.7500	3	13	16	0.1875	0
+release_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s2	COLO829T_ONT	type x length	INS 1	11	23	34	0.3235	11	107	118	0.0932	17
+release_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s2	COLO829T_ONT	type x length	INS 2-4	1	24	25	0.0400	1	24	25	0.0400	21
+release_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s2	COLO829T_ONT	type x length	INS 5-10	0	7	7	0.0000	0	7	7	0.0000	6
+release_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	release	s2	COLO829T_ONT	type x length	INS >10	0	11	11	0.0000	0	3	3	0.0000	8
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s0	COLO829T_ONT	all	all	17	114	131	0.1298	17	345	362	0.0470	81
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s0	COLO829T_ONT	context	HP4-6	2	4	6	0.3333	2	157	159	0.0126	3
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s0	COLO829T_ONT	context	HP>=7	5	65	70	0.0714	5	114	119	0.0420	42
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s0	COLO829T_ONT	context	STR	1	26	27	0.0370	1	6	7	0.1429	24
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s0	COLO829T_ONT	context	none	9	19	28	0.3214	9	68	77	0.1169	12
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s0	COLO829T_ONT	length	1	12	57	69	0.1739	12	322	334	0.0359	37
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s0	COLO829T_ONT	length	2-4	2	35	37	0.0541	2	18	20	0.1000	28
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s0	COLO829T_ONT	length	5-10	0	10	10	0.0000	0	0	0		8
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s0	COLO829T_ONT	length	>10	3	12	15	0.2000	3	5	8	0.3750	8
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s0	COLO829T_ONT	type	DEL	8	46	54	0.1481	8	233	241	0.0332	29
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s0	COLO829T_ONT	type	INS	9	68	77	0.1169	9	112	121	0.0744	52
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s0	COLO829T_ONT	type x context	DEL HP4-6	2	2	4	0.5000	2	116	118	0.0169	1
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s0	COLO829T_ONT	type x context	DEL HP>=7	0	35	35	0.0000	0	67	67	0.0000	22
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s0	COLO829T_ONT	type x context	DEL STR	0	4	4	0.0000	0	6	6	0.0000	3
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s0	COLO829T_ONT	type x context	DEL none	6	5	11	0.5455	6	44	50	0.1200	3
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s0	COLO829T_ONT	type x context	INS HP4-6	0	2	2	0.0000	0	41	41	0.0000	2
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s0	COLO829T_ONT	type x context	INS HP>=7	5	30	35	0.1429	5	47	52	0.0962	20
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s0	COLO829T_ONT	type x context	INS STR	1	22	23	0.0435	1	0	1	1.0000	21
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s0	COLO829T_ONT	type x context	INS none	3	14	17	0.1765	3	24	27	0.1111	9
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s0	COLO829T_ONT	type x length	DEL 1	4	31	35	0.1143	4	213	217	0.0184	20
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s0	COLO829T_ONT	type x length	DEL 2-4	1	11	12	0.0833	1	15	16	0.0625	7
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s0	COLO829T_ONT	type x length	DEL 5-10	0	3	3	0.0000	0	0	0		2
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s0	COLO829T_ONT	type x length	DEL >10	3	1	4	0.7500	3	5	8	0.3750	0
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s0	COLO829T_ONT	type x length	INS 1	8	26	34	0.2353	8	109	117	0.0684	17
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s0	COLO829T_ONT	type x length	INS 2-4	1	24	25	0.0400	1	3	4	0.2500	21
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s0	COLO829T_ONT	type x length	INS 5-10	0	7	7	0.0000	0	0	0		6
+unseen_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s0	COLO829T_ONT	type x length	INS >10	0	11	11	0.0000	0	0	0		8
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s1	COLO829T_ONT	all	all	14	117	131	0.1069	14	371	385	0.0364	81
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s1	COLO829T_ONT	context	HP4-6	2	4	6	0.3333	2	207	209	0.0096	3
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s1	COLO829T_ONT	context	HP>=7	4	66	70	0.0571	4	66	70	0.0571	42
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s1	COLO829T_ONT	context	STR	0	27	27	0.0000	0	5	5	0.0000	24
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s1	COLO829T_ONT	context	none	8	20	28	0.2857	8	93	101	0.0792	12
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s1	COLO829T_ONT	length	1	11	58	69	0.1594	11	345	356	0.0309	37
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s1	COLO829T_ONT	length	2-4	1	36	37	0.0270	1	18	19	0.0526	28
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s1	COLO829T_ONT	length	5-10	0	10	10	0.0000	0	1	1	0.0000	8
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s1	COLO829T_ONT	length	>10	2	13	15	0.1333	2	7	9	0.2222	8
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s1	COLO829T_ONT	type	DEL	7	47	54	0.1296	7	244	251	0.0279	29
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s1	COLO829T_ONT	type	INS	7	70	77	0.0909	7	127	134	0.0522	52
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s1	COLO829T_ONT	type x context	DEL HP4-6	2	2	4	0.5000	2	129	131	0.0153	1
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s1	COLO829T_ONT	type x context	DEL HP>=7	0	35	35	0.0000	0	61	61	0.0000	22
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s1	COLO829T_ONT	type x context	DEL STR	0	4	4	0.0000	0	4	4	0.0000	3
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s1	COLO829T_ONT	type x context	DEL none	5	6	11	0.4545	5	50	55	0.0909	3
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s1	COLO829T_ONT	type x context	INS HP4-6	0	2	2	0.0000	0	78	78	0.0000	2
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s1	COLO829T_ONT	type x context	INS HP>=7	4	31	35	0.1143	4	5	9	0.4444	20
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s1	COLO829T_ONT	type x context	INS STR	0	23	23	0.0000	0	1	1	0.0000	21
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s1	COLO829T_ONT	type x context	INS none	3	14	17	0.1765	3	43	46	0.0652	9
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s1	COLO829T_ONT	type x length	DEL 1	4	31	35	0.1143	4	225	229	0.0175	20
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s1	COLO829T_ONT	type x length	DEL 2-4	1	11	12	0.0833	1	12	13	0.0769	7
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s1	COLO829T_ONT	type x length	DEL 5-10	0	3	3	0.0000	0	1	1	0.0000	2
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s1	COLO829T_ONT	type x length	DEL >10	2	2	4	0.5000	2	6	8	0.2500	0
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s1	COLO829T_ONT	type x length	INS 1	7	27	34	0.2059	7	120	127	0.0551	17
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s1	COLO829T_ONT	type x length	INS 2-4	0	25	25	0.0000	0	6	6	0.0000	21
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s1	COLO829T_ONT	type x length	INS 5-10	0	7	7	0.0000	0	0	0		6
+unseen_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s1	COLO829T_ONT	type x length	INS >10	0	11	11	0.0000	0	1	1	0.0000	8
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s2	COLO829T_ONT	all	all	16	115	131	0.1221	16	228	244	0.0656	81
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s2	COLO829T_ONT	context	HP4-6	2	4	6	0.3333	2	95	97	0.0206	3
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s2	COLO829T_ONT	context	HP>=7	6	64	70	0.0857	6	73	79	0.0759	42
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s2	COLO829T_ONT	context	STR	0	27	27	0.0000	0	7	7	0.0000	24
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s2	COLO829T_ONT	context	none	8	20	28	0.2857	8	53	61	0.1311	12
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s2	COLO829T_ONT	length	1	13	56	69	0.1884	13	205	218	0.0596	37
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s2	COLO829T_ONT	length	2-4	1	36	37	0.0270	1	13	14	0.0714	28
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s2	COLO829T_ONT	length	5-10	0	10	10	0.0000	0	3	3	0.0000	8
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s2	COLO829T_ONT	length	>10	2	13	15	0.1333	2	7	9	0.2222	8
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s2	COLO829T_ONT	type	DEL	7	47	54	0.1296	7	132	139	0.0504	29
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s2	COLO829T_ONT	type	INS	9	68	77	0.1169	9	96	105	0.0857	52
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s2	COLO829T_ONT	type x context	DEL HP4-6	2	2	4	0.5000	2	59	61	0.0328	1
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s2	COLO829T_ONT	type x context	DEL HP>=7	0	35	35	0.0000	0	37	37	0.0000	22
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s2	COLO829T_ONT	type x context	DEL STR	0	4	4	0.0000	0	6	6	0.0000	3
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s2	COLO829T_ONT	type x context	DEL none	5	6	11	0.4545	5	30	35	0.1429	3
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s2	COLO829T_ONT	type x context	INS HP4-6	0	2	2	0.0000	0	36	36	0.0000	2
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s2	COLO829T_ONT	type x context	INS HP>=7	6	29	35	0.1714	6	36	42	0.1429	20
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s2	COLO829T_ONT	type x context	INS STR	0	23	23	0.0000	0	1	1	0.0000	21
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s2	COLO829T_ONT	type x context	INS none	3	14	17	0.1765	3	23	26	0.1154	9
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s2	COLO829T_ONT	type x length	DEL 1	4	31	35	0.1143	4	114	118	0.0339	20
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s2	COLO829T_ONT	type x length	DEL 2-4	1	11	12	0.0833	1	8	9	0.1111	7
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s2	COLO829T_ONT	type x length	DEL 5-10	0	3	3	0.0000	0	3	3	0.0000	2
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s2	COLO829T_ONT	type x length	DEL >10	2	2	4	0.5000	2	7	9	0.2222	0
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s2	COLO829T_ONT	type x length	INS 1	9	25	34	0.2647	9	91	100	0.0900	17
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s2	COLO829T_ONT	type x length	INS 2-4	0	25	25	0.0000	0	5	5	0.0000	21
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s2	COLO829T_ONT	type x length	INS 5-10	0	7	7	0.0000	0	0	0		6
+unseen_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46	unseen	s2	COLO829T_ONT	type x length	INS >10	0	11	11	0.0000	0	0	0		8
+comparator:DeepSomatic-TO 1.9.0:HG008T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_Illumina	all	all	83	504	587	0.1414	83	128	211	0.3934	384
+comparator:DeepSomatic-TO 1.9.0:HG008T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_Illumina	context	HP4-6	7	0	7	1.0000	7	17	24	0.2917	0
+comparator:DeepSomatic-TO 1.9.0:HG008T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_Illumina	context	HP>=7	42	393	435	0.0966	42	52	94	0.4468	294
+comparator:DeepSomatic-TO 1.9.0:HG008T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_Illumina	context	STR	1	64	65	0.0154	1	9	10	0.1000	57
+comparator:DeepSomatic-TO 1.9.0:HG008T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_Illumina	context	VNTR	0	0	0		0	1	1	0.0000	0
+comparator:DeepSomatic-TO 1.9.0:HG008T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_Illumina	context	none	33	47	80	0.4125	33	49	82	0.4024	33
+comparator:DeepSomatic-TO 1.9.0:HG008T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_Illumina	length	1	60	260	320	0.1875	60	83	143	0.4196	188
+comparator:DeepSomatic-TO 1.9.0:HG008T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_Illumina	length	2-4	9	126	135	0.0667	9	35	44	0.2045	102
+comparator:DeepSomatic-TO 1.9.0:HG008T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_Illumina	length	5-10	7	55	62	0.1129	7	6	13	0.5385	47
+comparator:DeepSomatic-TO 1.9.0:HG008T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_Illumina	length	>10	7	63	70	0.1000	7	4	11	0.6364	47
+comparator:DeepSomatic-TO 1.9.0:HG008T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_Illumina	type	DEL	42	177	219	0.1918	42	70	112	0.3750	136
+comparator:DeepSomatic-TO 1.9.0:HG008T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_Illumina	type	INS	41	327	368	0.1114	41	58	99	0.4141	248
+comparator:DeepSomatic-TO 1.9.0:HG008T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_Illumina	type x context	DEL HP4-6	1	0	1	1.0000	1	9	10	0.1000	0
+comparator:DeepSomatic-TO 1.9.0:HG008T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_Illumina	type x context	DEL HP>=7	15	143	158	0.0949	15	21	36	0.4167	107
+comparator:DeepSomatic-TO 1.9.0:HG008T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_Illumina	type x context	DEL STR	1	16	17	0.0588	1	3	4	0.2500	16
+comparator:DeepSomatic-TO 1.9.0:HG008T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_Illumina	type x context	DEL none	25	18	43	0.5814	25	37	62	0.4032	13
+comparator:DeepSomatic-TO 1.9.0:HG008T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_Illumina	type x context	INS HP4-6	6	0	6	1.0000	6	8	14	0.4286	0
+comparator:DeepSomatic-TO 1.9.0:HG008T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_Illumina	type x context	INS HP>=7	27	250	277	0.0975	27	31	58	0.4655	187
+comparator:DeepSomatic-TO 1.9.0:HG008T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_Illumina	type x context	INS STR	0	48	48	0.0000	0	6	6	0.0000	41
+comparator:DeepSomatic-TO 1.9.0:HG008T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_Illumina	type x context	INS VNTR	0	0	0		0	1	1	0.0000	0
+comparator:DeepSomatic-TO 1.9.0:HG008T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_Illumina	type x context	INS none	8	29	37	0.2162	8	12	20	0.4000	20
+comparator:DeepSomatic-TO 1.9.0:HG008T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_Illumina	type x length	DEL 1	23	100	123	0.1870	23	42	65	0.3538	75
+comparator:DeepSomatic-TO 1.9.0:HG008T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_Illumina	type x length	DEL 2-4	6	42	48	0.1250	6	21	27	0.2222	33
+comparator:DeepSomatic-TO 1.9.0:HG008T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_Illumina	type x length	DEL 5-10	6	15	21	0.2857	6	3	9	0.6667	14
+comparator:DeepSomatic-TO 1.9.0:HG008T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_Illumina	type x length	DEL >10	7	20	27	0.2593	7	4	11	0.6364	14
+comparator:DeepSomatic-TO 1.9.0:HG008T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_Illumina	type x length	INS 1	37	160	197	0.1878	37	41	78	0.4744	113
+comparator:DeepSomatic-TO 1.9.0:HG008T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_Illumina	type x length	INS 2-4	3	84	87	0.0345	3	14	17	0.1765	69
+comparator:DeepSomatic-TO 1.9.0:HG008T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_Illumina	type x length	INS 5-10	1	40	41	0.0244	1	3	4	0.2500	33
+comparator:DeepSomatic-TO 1.9.0:HG008T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_Illumina	type x length	INS >10	0	43	43	0.0000	0	0	0		33
+comparator:DeepSomatic-TO 1.9.0:HG008T_PacBio:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_PacBio	all	all	18	569	587	0.0307	18	73	91	0.1978	384
+comparator:DeepSomatic-TO 1.9.0:HG008T_PacBio:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_PacBio	context	HP4-6	1	6	7	0.1429	1	10	11	0.0909	0
+comparator:DeepSomatic-TO 1.9.0:HG008T_PacBio:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_PacBio	context	HP>=7	7	428	435	0.0161	7	46	53	0.1321	294
+comparator:DeepSomatic-TO 1.9.0:HG008T_PacBio:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_PacBio	context	STR	0	65	65	0.0000	0	0	0		57
+comparator:DeepSomatic-TO 1.9.0:HG008T_PacBio:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_PacBio	context	none	10	70	80	0.1250	10	17	27	0.3704	33
+comparator:DeepSomatic-TO 1.9.0:HG008T_PacBio:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_PacBio	length	1	11	309	320	0.0344	11	63	74	0.1486	188
+comparator:DeepSomatic-TO 1.9.0:HG008T_PacBio:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_PacBio	length	2-4	2	133	135	0.0148	2	4	6	0.3333	102
+comparator:DeepSomatic-TO 1.9.0:HG008T_PacBio:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_PacBio	length	5-10	1	61	62	0.0161	1	1	2	0.5000	47
+comparator:DeepSomatic-TO 1.9.0:HG008T_PacBio:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_PacBio	length	>10	4	66	70	0.0571	4	5	9	0.4444	47
+comparator:DeepSomatic-TO 1.9.0:HG008T_PacBio:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_PacBio	type	DEL	16	203	219	0.0731	16	68	84	0.1905	136
+comparator:DeepSomatic-TO 1.9.0:HG008T_PacBio:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_PacBio	type	INS	2	366	368	0.0054	2	5	7	0.2857	248
+comparator:DeepSomatic-TO 1.9.0:HG008T_PacBio:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_PacBio	type x context	DEL HP4-6	1	0	1	1.0000	1	9	10	0.1000	0
+comparator:DeepSomatic-TO 1.9.0:HG008T_PacBio:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_PacBio	type x context	DEL HP>=7	6	152	158	0.0380	6	43	49	0.1224	107
+comparator:DeepSomatic-TO 1.9.0:HG008T_PacBio:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_PacBio	type x context	DEL STR	0	17	17	0.0000	0	0	0		16
+comparator:DeepSomatic-TO 1.9.0:HG008T_PacBio:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_PacBio	type x context	DEL none	9	34	43	0.2093	9	16	25	0.3600	13
+comparator:DeepSomatic-TO 1.9.0:HG008T_PacBio:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_PacBio	type x context	INS HP4-6	0	6	6	0.0000	0	1	1	0.0000	0
+comparator:DeepSomatic-TO 1.9.0:HG008T_PacBio:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_PacBio	type x context	INS HP>=7	1	276	277	0.0036	1	3	4	0.2500	187
+comparator:DeepSomatic-TO 1.9.0:HG008T_PacBio:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_PacBio	type x context	INS STR	0	48	48	0.0000	0	0	0		41
+comparator:DeepSomatic-TO 1.9.0:HG008T_PacBio:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_PacBio	type x context	INS none	1	36	37	0.0270	1	1	2	0.5000	20
+comparator:DeepSomatic-TO 1.9.0:HG008T_PacBio:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_PacBio	type x length	DEL 1	9	114	123	0.0732	9	58	67	0.1343	75
+comparator:DeepSomatic-TO 1.9.0:HG008T_PacBio:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_PacBio	type x length	DEL 2-4	2	46	48	0.0417	2	4	6	0.3333	33
+comparator:DeepSomatic-TO 1.9.0:HG008T_PacBio:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_PacBio	type x length	DEL 5-10	1	20	21	0.0476	1	1	2	0.5000	14
+comparator:DeepSomatic-TO 1.9.0:HG008T_PacBio:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_PacBio	type x length	DEL >10	4	23	27	0.1481	4	5	9	0.4444	14
+comparator:DeepSomatic-TO 1.9.0:HG008T_PacBio:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_PacBio	type x length	INS 1	2	195	197	0.0102	2	5	7	0.2857	113
+comparator:DeepSomatic-TO 1.9.0:HG008T_PacBio:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_PacBio	type x length	INS 2-4	0	87	87	0.0000	0	0	0		69
+comparator:DeepSomatic-TO 1.9.0:HG008T_PacBio:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_PacBio	type x length	INS 5-10	0	41	41	0.0000	0	0	0		33
+comparator:DeepSomatic-TO 1.9.0:HG008T_PacBio:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_PacBio	type x length	INS >10	0	43	43	0.0000	0	0	0		33
+comparator:DeepSomatic-TO 1.9.0:HG008T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_ONT	all	all	11	576	587	0.0187	11	53	64	0.1719	384
+comparator:DeepSomatic-TO 1.9.0:HG008T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_ONT	context	HP4-6	1	6	7	0.1429	1	12	13	0.0769	0
+comparator:DeepSomatic-TO 1.9.0:HG008T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_ONT	context	HP>=7	0	435	435	0.0000	0	4	4	0.0000	294
+comparator:DeepSomatic-TO 1.9.0:HG008T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_ONT	context	STR	1	64	65	0.0154	1	4	5	0.2000	57
+comparator:DeepSomatic-TO 1.9.0:HG008T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_ONT	context	none	9	71	80	0.1125	9	33	42	0.2143	33
+comparator:DeepSomatic-TO 1.9.0:HG008T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_ONT	length	1	3	317	320	0.0094	3	24	27	0.1111	188
+comparator:DeepSomatic-TO 1.9.0:HG008T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_ONT	length	2-4	0	135	135	0.0000	0	4	4	0.0000	102
+comparator:DeepSomatic-TO 1.9.0:HG008T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_ONT	length	5-10	2	60	62	0.0323	2	7	9	0.2222	47
+comparator:DeepSomatic-TO 1.9.0:HG008T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_ONT	length	>10	6	64	70	0.0857	6	18	24	0.2500	47
+comparator:DeepSomatic-TO 1.9.0:HG008T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_ONT	type	DEL	9	210	219	0.0411	9	31	40	0.2250	136
+comparator:DeepSomatic-TO 1.9.0:HG008T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_ONT	type	INS	2	366	368	0.0054	2	22	24	0.0833	248
+comparator:DeepSomatic-TO 1.9.0:HG008T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_ONT	type x context	DEL HP4-6	1	0	1	1.0000	1	8	9	0.1111	0
+comparator:DeepSomatic-TO 1.9.0:HG008T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_ONT	type x context	DEL HP>=7	0	158	158	0.0000	0	4	4	0.0000	107
+comparator:DeepSomatic-TO 1.9.0:HG008T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_ONT	type x context	DEL STR	0	17	17	0.0000	0	2	2	0.0000	16
+comparator:DeepSomatic-TO 1.9.0:HG008T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_ONT	type x context	DEL none	8	35	43	0.1860	8	17	25	0.3200	13
+comparator:DeepSomatic-TO 1.9.0:HG008T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_ONT	type x context	INS HP4-6	0	6	6	0.0000	0	4	4	0.0000	0
+comparator:DeepSomatic-TO 1.9.0:HG008T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_ONT	type x context	INS HP>=7	0	277	277	0.0000	0	0	0		187
+comparator:DeepSomatic-TO 1.9.0:HG008T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_ONT	type x context	INS STR	1	47	48	0.0208	1	2	3	0.3333	41
+comparator:DeepSomatic-TO 1.9.0:HG008T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_ONT	type x context	INS none	1	36	37	0.0270	1	16	17	0.0588	20
+comparator:DeepSomatic-TO 1.9.0:HG008T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_ONT	type x length	DEL 1	2	121	123	0.0163	2	18	20	0.1000	75
+comparator:DeepSomatic-TO 1.9.0:HG008T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_ONT	type x length	DEL 2-4	0	48	48	0.0000	0	2	2	0.0000	33
+comparator:DeepSomatic-TO 1.9.0:HG008T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_ONT	type x length	DEL 5-10	1	20	21	0.0476	1	3	4	0.2500	14
+comparator:DeepSomatic-TO 1.9.0:HG008T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_ONT	type x length	DEL >10	6	21	27	0.2222	6	8	14	0.4286	14
+comparator:DeepSomatic-TO 1.9.0:HG008T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_ONT	type x length	INS 1	1	196	197	0.0051	1	6	7	0.1429	113
+comparator:DeepSomatic-TO 1.9.0:HG008T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_ONT	type x length	INS 2-4	0	87	87	0.0000	0	2	2	0.0000	69
+comparator:DeepSomatic-TO 1.9.0:HG008T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_ONT	type x length	INS 5-10	1	40	41	0.0244	1	4	5	0.2000	33
+comparator:DeepSomatic-TO 1.9.0:HG008T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	HG008T_ONT	type x length	INS >10	0	43	43	0.0000	0	10	10	0.0000	33
+comparator:DeepSomatic-TO 1.9.0:COLO829T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_Illumina	all	all	24	107	131	0.1832	24	97	121	0.1983	81
+comparator:DeepSomatic-TO 1.9.0:COLO829T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_Illumina	context	HP4-6	3	3	6	0.5000	3	16	19	0.1579	3
+comparator:DeepSomatic-TO 1.9.0:COLO829T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_Illumina	context	HP>=7	9	61	70	0.1286	9	21	30	0.3000	42
+comparator:DeepSomatic-TO 1.9.0:COLO829T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_Illumina	context	STR	2	25	27	0.0741	2	3	5	0.4000	24
+comparator:DeepSomatic-TO 1.9.0:COLO829T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_Illumina	context	VNTR	0	0	0		0	1	1	0.0000	0
+comparator:DeepSomatic-TO 1.9.0:COLO829T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_Illumina	context	none	10	18	28	0.3571	10	56	66	0.1515	12
+comparator:DeepSomatic-TO 1.9.0:COLO829T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_Illumina	length	1	16	53	69	0.2319	16	70	86	0.1860	37
+comparator:DeepSomatic-TO 1.9.0:COLO829T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_Illumina	length	2-4	3	34	37	0.0811	3	16	19	0.1579	28
+comparator:DeepSomatic-TO 1.9.0:COLO829T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_Illumina	length	5-10	1	9	10	0.1000	1	5	6	0.1667	8
+comparator:DeepSomatic-TO 1.9.0:COLO829T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_Illumina	length	>10	4	11	15	0.2667	4	6	10	0.4000	8
+comparator:DeepSomatic-TO 1.9.0:COLO829T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_Illumina	type	DEL	14	40	54	0.2593	14	72	86	0.1628	29
+comparator:DeepSomatic-TO 1.9.0:COLO829T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_Illumina	type	INS	10	67	77	0.1299	10	25	35	0.2857	52
+comparator:DeepSomatic-TO 1.9.0:COLO829T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_Illumina	type x context	DEL HP4-6	3	1	4	0.7500	3	10	13	0.2308	1
+comparator:DeepSomatic-TO 1.9.0:COLO829T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_Illumina	type x context	DEL HP>=7	5	30	35	0.1429	5	10	15	0.3333	22
+comparator:DeepSomatic-TO 1.9.0:COLO829T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_Illumina	type x context	DEL STR	0	4	4	0.0000	0	2	2	0.0000	3
+comparator:DeepSomatic-TO 1.9.0:COLO829T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_Illumina	type x context	DEL VNTR	0	0	0		0	1	1	0.0000	0
+comparator:DeepSomatic-TO 1.9.0:COLO829T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_Illumina	type x context	DEL none	6	5	11	0.5455	6	49	55	0.1091	3
+comparator:DeepSomatic-TO 1.9.0:COLO829T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_Illumina	type x context	INS HP4-6	0	2	2	0.0000	0	6	6	0.0000	2
+comparator:DeepSomatic-TO 1.9.0:COLO829T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_Illumina	type x context	INS HP>=7	4	31	35	0.1143	4	11	15	0.2667	20
+comparator:DeepSomatic-TO 1.9.0:COLO829T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_Illumina	type x context	INS STR	2	21	23	0.0870	2	1	3	0.6667	21
+comparator:DeepSomatic-TO 1.9.0:COLO829T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_Illumina	type x context	INS none	4	13	17	0.2353	4	7	11	0.3636	9
+comparator:DeepSomatic-TO 1.9.0:COLO829T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_Illumina	type x length	DEL 1	9	26	35	0.2571	9	50	59	0.1525	20
+comparator:DeepSomatic-TO 1.9.0:COLO829T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_Illumina	type x length	DEL 2-4	1	11	12	0.0833	1	12	13	0.0769	7
+comparator:DeepSomatic-TO 1.9.0:COLO829T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_Illumina	type x length	DEL 5-10	1	2	3	0.3333	1	4	5	0.2000	2
+comparator:DeepSomatic-TO 1.9.0:COLO829T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_Illumina	type x length	DEL >10	3	1	4	0.7500	3	6	9	0.3333	0
+comparator:DeepSomatic-TO 1.9.0:COLO829T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_Illumina	type x length	INS 1	7	27	34	0.2059	7	20	27	0.2593	17
+comparator:DeepSomatic-TO 1.9.0:COLO829T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_Illumina	type x length	INS 2-4	2	23	25	0.0800	2	4	6	0.3333	21
+comparator:DeepSomatic-TO 1.9.0:COLO829T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_Illumina	type x length	INS 5-10	0	7	7	0.0000	0	1	1	0.0000	6
+comparator:DeepSomatic-TO 1.9.0:COLO829T_Illumina:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_Illumina	type x length	INS >10	1	10	11	0.0909	1	0	1	1.0000	8
+comparator:DeepSomatic-TO 1.9.0:COLO829T_fiberseq:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_fiberseq	all	all	11	120	131	0.0840	11	24	35	0.3143	81
+comparator:DeepSomatic-TO 1.9.0:COLO829T_fiberseq:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_fiberseq	context	HP4-6	3	3	6	0.5000	3	4	7	0.4286	3
+comparator:DeepSomatic-TO 1.9.0:COLO829T_fiberseq:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_fiberseq	context	HP>=7	5	65	70	0.0714	5	13	18	0.2778	42
+comparator:DeepSomatic-TO 1.9.0:COLO829T_fiberseq:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_fiberseq	context	STR	0	27	27	0.0000	0	0	0		24
+comparator:DeepSomatic-TO 1.9.0:COLO829T_fiberseq:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_fiberseq	context	none	3	25	28	0.1071	3	7	10	0.3000	12
+comparator:DeepSomatic-TO 1.9.0:COLO829T_fiberseq:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_fiberseq	length	1	9	60	69	0.1304	9	22	31	0.2903	37
+comparator:DeepSomatic-TO 1.9.0:COLO829T_fiberseq:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_fiberseq	length	2-4	1	36	37	0.0270	1	0	1	1.0000	28
+comparator:DeepSomatic-TO 1.9.0:COLO829T_fiberseq:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_fiberseq	length	5-10	0	10	10	0.0000	0	1	1	0.0000	8
+comparator:DeepSomatic-TO 1.9.0:COLO829T_fiberseq:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_fiberseq	length	>10	1	14	15	0.0667	1	1	2	0.5000	8
+comparator:DeepSomatic-TO 1.9.0:COLO829T_fiberseq:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_fiberseq	type	DEL	8	46	54	0.1481	8	24	32	0.2500	29
+comparator:DeepSomatic-TO 1.9.0:COLO829T_fiberseq:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_fiberseq	type	INS	3	74	77	0.0390	3	0	3	1.0000	52
+comparator:DeepSomatic-TO 1.9.0:COLO829T_fiberseq:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_fiberseq	type x context	DEL HP4-6	3	1	4	0.7500	3	4	7	0.4286	1
+comparator:DeepSomatic-TO 1.9.0:COLO829T_fiberseq:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_fiberseq	type x context	DEL HP>=7	3	32	35	0.0857	3	13	16	0.1875	22
+comparator:DeepSomatic-TO 1.9.0:COLO829T_fiberseq:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_fiberseq	type x context	DEL STR	0	4	4	0.0000	0	0	0		3
+comparator:DeepSomatic-TO 1.9.0:COLO829T_fiberseq:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_fiberseq	type x context	DEL none	2	9	11	0.1818	2	7	9	0.2222	3
+comparator:DeepSomatic-TO 1.9.0:COLO829T_fiberseq:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_fiberseq	type x context	INS HP4-6	0	2	2	0.0000	0	0	0		2
+comparator:DeepSomatic-TO 1.9.0:COLO829T_fiberseq:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_fiberseq	type x context	INS HP>=7	2	33	35	0.0571	2	0	2	1.0000	20
+comparator:DeepSomatic-TO 1.9.0:COLO829T_fiberseq:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_fiberseq	type x context	INS STR	0	23	23	0.0000	0	0	0		21
+comparator:DeepSomatic-TO 1.9.0:COLO829T_fiberseq:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_fiberseq	type x context	INS none	1	16	17	0.0588	1	0	1	1.0000	9
+comparator:DeepSomatic-TO 1.9.0:COLO829T_fiberseq:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_fiberseq	type x length	DEL 1	6	29	35	0.1714	6	22	28	0.2143	20
+comparator:DeepSomatic-TO 1.9.0:COLO829T_fiberseq:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_fiberseq	type x length	DEL 2-4	1	11	12	0.0833	1	0	1	1.0000	7
+comparator:DeepSomatic-TO 1.9.0:COLO829T_fiberseq:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_fiberseq	type x length	DEL 5-10	0	3	3	0.0000	0	1	1	0.0000	2
+comparator:DeepSomatic-TO 1.9.0:COLO829T_fiberseq:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_fiberseq	type x length	DEL >10	1	3	4	0.2500	1	1	2	0.5000	0
+comparator:DeepSomatic-TO 1.9.0:COLO829T_fiberseq:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_fiberseq	type x length	INS 1	3	31	34	0.0882	3	0	3	1.0000	17
+comparator:DeepSomatic-TO 1.9.0:COLO829T_fiberseq:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_fiberseq	type x length	INS 2-4	0	25	25	0.0000	0	0	0		21
+comparator:DeepSomatic-TO 1.9.0:COLO829T_fiberseq:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_fiberseq	type x length	INS 5-10	0	7	7	0.0000	0	0	0		6
+comparator:DeepSomatic-TO 1.9.0:COLO829T_fiberseq:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_fiberseq	type x length	INS >10	0	11	11	0.0000	0	0	0		8
+comparator:DeepSomatic-TO 1.9.0:COLO829T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_ONT	all	all	2	129	131	0.0153	2	61	63	0.0317	81
+comparator:DeepSomatic-TO 1.9.0:COLO829T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_ONT	context	HP4-6	0	6	6	0.0000	0	24	24	0.0000	3
+comparator:DeepSomatic-TO 1.9.0:COLO829T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_ONT	context	HP>=7	0	70	70	0.0000	0	10	10	0.0000	42
+comparator:DeepSomatic-TO 1.9.0:COLO829T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_ONT	context	STR	0	27	27	0.0000	0	4	4	0.0000	24
+comparator:DeepSomatic-TO 1.9.0:COLO829T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_ONT	context	none	2	26	28	0.0714	2	23	25	0.0800	12
+comparator:DeepSomatic-TO 1.9.0:COLO829T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_ONT	length	1	1	68	69	0.0145	1	45	46	0.0217	37
+comparator:DeepSomatic-TO 1.9.0:COLO829T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_ONT	length	2-4	0	37	37	0.0000	0	7	7	0.0000	28
+comparator:DeepSomatic-TO 1.9.0:COLO829T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_ONT	length	5-10	0	10	10	0.0000	0	1	1	0.0000	8
+comparator:DeepSomatic-TO 1.9.0:COLO829T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_ONT	length	>10	1	14	15	0.0667	1	8	9	0.1111	8
+comparator:DeepSomatic-TO 1.9.0:COLO829T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_ONT	type	DEL	1	53	54	0.0185	1	48	49	0.0204	29
+comparator:DeepSomatic-TO 1.9.0:COLO829T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_ONT	type	INS	1	76	77	0.0130	1	13	14	0.0714	52
+comparator:DeepSomatic-TO 1.9.0:COLO829T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_ONT	type x context	DEL HP4-6	0	4	4	0.0000	0	20	20	0.0000	1
+comparator:DeepSomatic-TO 1.9.0:COLO829T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_ONT	type x context	DEL HP>=7	0	35	35	0.0000	0	7	7	0.0000	22
+comparator:DeepSomatic-TO 1.9.0:COLO829T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_ONT	type x context	DEL STR	0	4	4	0.0000	0	3	3	0.0000	3
+comparator:DeepSomatic-TO 1.9.0:COLO829T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_ONT	type x context	DEL none	1	10	11	0.0909	1	18	19	0.0526	3
+comparator:DeepSomatic-TO 1.9.0:COLO829T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_ONT	type x context	INS HP4-6	0	2	2	0.0000	0	4	4	0.0000	2
+comparator:DeepSomatic-TO 1.9.0:COLO829T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_ONT	type x context	INS HP>=7	0	35	35	0.0000	0	3	3	0.0000	20
+comparator:DeepSomatic-TO 1.9.0:COLO829T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_ONT	type x context	INS STR	0	23	23	0.0000	0	1	1	0.0000	21
+comparator:DeepSomatic-TO 1.9.0:COLO829T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_ONT	type x context	INS none	1	16	17	0.0588	1	5	6	0.1667	9
+comparator:DeepSomatic-TO 1.9.0:COLO829T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_ONT	type x length	DEL 1	0	35	35	0.0000	0	36	36	0.0000	20
+comparator:DeepSomatic-TO 1.9.0:COLO829T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_ONT	type x length	DEL 2-4	0	12	12	0.0000	0	7	7	0.0000	7
+comparator:DeepSomatic-TO 1.9.0:COLO829T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_ONT	type x length	DEL 5-10	0	3	3	0.0000	0	0	0		2
+comparator:DeepSomatic-TO 1.9.0:COLO829T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_ONT	type x length	DEL >10	1	3	4	0.2500	1	5	6	0.1667	0
+comparator:DeepSomatic-TO 1.9.0:COLO829T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_ONT	type x length	INS 1	1	33	34	0.0294	1	9	10	0.1000	17
+comparator:DeepSomatic-TO 1.9.0:COLO829T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_ONT	type x length	INS 2-4	0	25	25	0.0000	0	0	0		21
+comparator:DeepSomatic-TO 1.9.0:COLO829T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_ONT	type x length	INS 5-10	0	7	7	0.0000	0	1	1	0.0000	6
+comparator:DeepSomatic-TO 1.9.0:COLO829T_ONT:INDEL	DeepSomatic-TO	DeepSomatic-TO 1.9.0	COLO829T_ONT	type x length	INS >10	0	11	11	0.0000	0	3	3	0.0000	8
+comparator:ClairS-TO 0.4.2:HG008T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_Illumina	all	all	47	540	587	0.0801	47	77	124	0.3790	384
+comparator:ClairS-TO 0.4.2:HG008T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_Illumina	context	HP4-6	7	0	7	1.0000	7	7	14	0.5000	0
+comparator:ClairS-TO 0.4.2:HG008T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_Illumina	context	HP>=7	10	425	435	0.0230	10	10	20	0.5000	294
+comparator:ClairS-TO 0.4.2:HG008T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_Illumina	context	STR	1	64	65	0.0154	1	5	6	0.1667	57
+comparator:ClairS-TO 0.4.2:HG008T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_Illumina	context	VNTR	0	0	0		0	1	1	0.0000	0
+comparator:ClairS-TO 0.4.2:HG008T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_Illumina	context	none	29	51	80	0.3625	29	54	83	0.3494	33
+comparator:ClairS-TO 0.4.2:HG008T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_Illumina	length	1	27	293	320	0.0844	27	31	58	0.4655	188
+comparator:ClairS-TO 0.4.2:HG008T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_Illumina	length	2-4	8	127	135	0.0593	8	27	35	0.2286	102
+comparator:ClairS-TO 0.4.2:HG008T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_Illumina	length	5-10	6	56	62	0.0968	6	9	15	0.4000	47
+comparator:ClairS-TO 0.4.2:HG008T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_Illumina	length	>10	6	64	70	0.0857	6	10	16	0.3750	47
+comparator:ClairS-TO 0.4.2:HG008T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_Illumina	type	DEL	28	191	219	0.1279	28	47	75	0.3733	136
+comparator:ClairS-TO 0.4.2:HG008T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_Illumina	type	INS	19	349	368	0.0516	19	30	49	0.3878	248
+comparator:ClairS-TO 0.4.2:HG008T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_Illumina	type x context	DEL HP4-6	1	0	1	1.0000	1	4	5	0.2000	0
+comparator:ClairS-TO 0.4.2:HG008T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_Illumina	type x context	DEL HP>=7	2	156	158	0.0127	2	2	4	0.5000	107
+comparator:ClairS-TO 0.4.2:HG008T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_Illumina	type x context	DEL STR	1	16	17	0.0588	1	2	3	0.3333	16
+comparator:ClairS-TO 0.4.2:HG008T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_Illumina	type x context	DEL VNTR	0	0	0		0	1	1	0.0000	0
+comparator:ClairS-TO 0.4.2:HG008T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_Illumina	type x context	DEL none	24	19	43	0.5581	24	38	62	0.3871	13
+comparator:ClairS-TO 0.4.2:HG008T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_Illumina	type x context	INS HP4-6	6	0	6	1.0000	6	3	9	0.6667	0
+comparator:ClairS-TO 0.4.2:HG008T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_Illumina	type x context	INS HP>=7	8	269	277	0.0289	8	8	16	0.5000	187
+comparator:ClairS-TO 0.4.2:HG008T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_Illumina	type x context	INS STR	0	48	48	0.0000	0	3	3	0.0000	41
+comparator:ClairS-TO 0.4.2:HG008T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_Illumina	type x context	INS none	5	32	37	0.1351	5	16	21	0.2381	20
+comparator:ClairS-TO 0.4.2:HG008T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_Illumina	type x length	DEL 1	9	114	123	0.0732	9	17	26	0.3462	75
+comparator:ClairS-TO 0.4.2:HG008T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_Illumina	type x length	DEL 2-4	7	41	48	0.1458	7	19	26	0.2692	33
+comparator:ClairS-TO 0.4.2:HG008T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_Illumina	type x length	DEL 5-10	6	15	21	0.2857	6	3	9	0.6667	14
+comparator:ClairS-TO 0.4.2:HG008T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_Illumina	type x length	DEL >10	6	21	27	0.2222	6	8	14	0.4286	14
+comparator:ClairS-TO 0.4.2:HG008T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_Illumina	type x length	INS 1	18	179	197	0.0914	18	14	32	0.5625	113
+comparator:ClairS-TO 0.4.2:HG008T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_Illumina	type x length	INS 2-4	1	86	87	0.0115	1	8	9	0.1111	69
+comparator:ClairS-TO 0.4.2:HG008T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_Illumina	type x length	INS 5-10	0	41	41	0.0000	0	6	6	0.0000	33
+comparator:ClairS-TO 0.4.2:HG008T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_Illumina	type x length	INS >10	0	43	43	0.0000	0	2	2	0.0000	33
+comparator:ClairS-TO 0.4.2:HG008T_PacBio:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_PacBio	all	all	44	543	587	0.0750	44	54	98	0.4490	384
+comparator:ClairS-TO 0.4.2:HG008T_PacBio:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_PacBio	context	HP4-6	7	0	7	1.0000	7	7	14	0.5000	0
+comparator:ClairS-TO 0.4.2:HG008T_PacBio:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_PacBio	context	HP>=7	10	425	435	0.0230	10	10	20	0.5000	294
+comparator:ClairS-TO 0.4.2:HG008T_PacBio:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_PacBio	context	STR	1	64	65	0.0154	1	2	3	0.3333	57
+comparator:ClairS-TO 0.4.2:HG008T_PacBio:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_PacBio	context	none	26	54	80	0.3250	26	35	61	0.4262	33
+comparator:ClairS-TO 0.4.2:HG008T_PacBio:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_PacBio	length	1	27	293	320	0.0844	27	29	56	0.4821	188
+comparator:ClairS-TO 0.4.2:HG008T_PacBio:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_PacBio	length	2-4	6	129	135	0.0444	6	21	27	0.2222	102
+comparator:ClairS-TO 0.4.2:HG008T_PacBio:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_PacBio	length	5-10	7	55	62	0.1129	7	3	10	0.7000	47
+comparator:ClairS-TO 0.4.2:HG008T_PacBio:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_PacBio	length	>10	4	66	70	0.0571	4	1	5	0.8000	47
+comparator:ClairS-TO 0.4.2:HG008T_PacBio:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_PacBio	type	DEL	24	195	219	0.1096	24	36	60	0.4000	136
+comparator:ClairS-TO 0.4.2:HG008T_PacBio:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_PacBio	type	INS	20	348	368	0.0543	20	18	38	0.5263	248
+comparator:ClairS-TO 0.4.2:HG008T_PacBio:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_PacBio	type x context	DEL HP4-6	1	0	1	1.0000	1	4	5	0.2000	0
+comparator:ClairS-TO 0.4.2:HG008T_PacBio:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_PacBio	type x context	DEL HP>=7	2	156	158	0.0127	2	4	6	0.3333	107
+comparator:ClairS-TO 0.4.2:HG008T_PacBio:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_PacBio	type x context	DEL STR	1	16	17	0.0588	1	2	3	0.3333	16
+comparator:ClairS-TO 0.4.2:HG008T_PacBio:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_PacBio	type x context	DEL none	20	23	43	0.4651	20	26	46	0.4348	13
+comparator:ClairS-TO 0.4.2:HG008T_PacBio:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_PacBio	type x context	INS HP4-6	6	0	6	1.0000	6	3	9	0.6667	0
+comparator:ClairS-TO 0.4.2:HG008T_PacBio:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_PacBio	type x context	INS HP>=7	8	269	277	0.0289	8	6	14	0.5714	187
+comparator:ClairS-TO 0.4.2:HG008T_PacBio:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_PacBio	type x context	INS STR	0	48	48	0.0000	0	0	0		41
+comparator:ClairS-TO 0.4.2:HG008T_PacBio:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_PacBio	type x context	INS none	6	31	37	0.1622	6	9	15	0.4000	20
+comparator:ClairS-TO 0.4.2:HG008T_PacBio:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_PacBio	type x length	DEL 1	9	114	123	0.0732	9	16	25	0.3600	75
+comparator:ClairS-TO 0.4.2:HG008T_PacBio:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_PacBio	type x length	DEL 2-4	5	43	48	0.1042	5	18	23	0.2174	33
+comparator:ClairS-TO 0.4.2:HG008T_PacBio:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_PacBio	type x length	DEL 5-10	6	15	21	0.2857	6	1	7	0.8571	14
+comparator:ClairS-TO 0.4.2:HG008T_PacBio:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_PacBio	type x length	DEL >10	4	23	27	0.1481	4	1	5	0.8000	14
+comparator:ClairS-TO 0.4.2:HG008T_PacBio:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_PacBio	type x length	INS 1	18	179	197	0.0914	18	13	31	0.5806	113
+comparator:ClairS-TO 0.4.2:HG008T_PacBio:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_PacBio	type x length	INS 2-4	1	86	87	0.0115	1	3	4	0.2500	69
+comparator:ClairS-TO 0.4.2:HG008T_PacBio:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_PacBio	type x length	INS 5-10	1	40	41	0.0244	1	2	3	0.3333	33
+comparator:ClairS-TO 0.4.2:HG008T_PacBio:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_PacBio	type x length	INS >10	0	43	43	0.0000	0	0	0		33
+comparator:ClairS-TO 0.4.2:HG008T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_ONT	all	all	44	543	587	0.0750	44	63	107	0.4112	384
+comparator:ClairS-TO 0.4.2:HG008T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_ONT	context	HP4-6	7	0	7	1.0000	7	14	21	0.3333	0
+comparator:ClairS-TO 0.4.2:HG008T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_ONT	context	HP>=7	7	428	435	0.0161	7	5	12	0.5833	294
+comparator:ClairS-TO 0.4.2:HG008T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_ONT	context	STR	1	64	65	0.0154	1	3	4	0.2500	57
+comparator:ClairS-TO 0.4.2:HG008T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_ONT	context	none	29	51	80	0.3625	29	41	70	0.4143	33
+comparator:ClairS-TO 0.4.2:HG008T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_ONT	length	1	25	295	320	0.0781	25	35	60	0.4167	188
+comparator:ClairS-TO 0.4.2:HG008T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_ONT	length	2-4	6	129	135	0.0444	6	21	27	0.2222	102
+comparator:ClairS-TO 0.4.2:HG008T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_ONT	length	5-10	7	55	62	0.1129	7	5	12	0.5833	47
+comparator:ClairS-TO 0.4.2:HG008T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_ONT	length	>10	6	64	70	0.0857	6	2	8	0.7500	47
+comparator:ClairS-TO 0.4.2:HG008T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_ONT	type	DEL	26	193	219	0.1187	26	49	75	0.3467	136
+comparator:ClairS-TO 0.4.2:HG008T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_ONT	type	INS	18	350	368	0.0489	18	14	32	0.5625	248
+comparator:ClairS-TO 0.4.2:HG008T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_ONT	type x context	DEL HP4-6	1	0	1	1.0000	1	11	12	0.0833	0
+comparator:ClairS-TO 0.4.2:HG008T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_ONT	type x context	DEL HP>=7	1	157	158	0.0063	1	2	3	0.3333	107
+comparator:ClairS-TO 0.4.2:HG008T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_ONT	type x context	DEL STR	1	16	17	0.0588	1	3	4	0.2500	16
+comparator:ClairS-TO 0.4.2:HG008T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_ONT	type x context	DEL none	23	20	43	0.5349	23	33	56	0.4107	13
+comparator:ClairS-TO 0.4.2:HG008T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_ONT	type x context	INS HP4-6	6	0	6	1.0000	6	3	9	0.6667	0
+comparator:ClairS-TO 0.4.2:HG008T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_ONT	type x context	INS HP>=7	6	271	277	0.0217	6	3	9	0.6667	187
+comparator:ClairS-TO 0.4.2:HG008T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_ONT	type x context	INS STR	0	48	48	0.0000	0	0	0		41
+comparator:ClairS-TO 0.4.2:HG008T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_ONT	type x context	INS none	6	31	37	0.1622	6	8	14	0.4286	20
+comparator:ClairS-TO 0.4.2:HG008T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_ONT	type x length	DEL 1	8	115	123	0.0650	8	25	33	0.2424	75
+comparator:ClairS-TO 0.4.2:HG008T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_ONT	type x length	DEL 2-4	6	42	48	0.1250	6	19	25	0.2400	33
+comparator:ClairS-TO 0.4.2:HG008T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_ONT	type x length	DEL 5-10	6	15	21	0.2857	6	3	9	0.6667	14
+comparator:ClairS-TO 0.4.2:HG008T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_ONT	type x length	DEL >10	6	21	27	0.2222	6	2	8	0.7500	14
+comparator:ClairS-TO 0.4.2:HG008T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_ONT	type x length	INS 1	17	180	197	0.0863	17	10	27	0.6296	113
+comparator:ClairS-TO 0.4.2:HG008T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_ONT	type x length	INS 2-4	0	87	87	0.0000	0	2	2	0.0000	69
+comparator:ClairS-TO 0.4.2:HG008T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_ONT	type x length	INS 5-10	1	40	41	0.0244	1	2	3	0.3333	33
+comparator:ClairS-TO 0.4.2:HG008T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.2	HG008T_ONT	type x length	INS >10	0	43	43	0.0000	0	0	0		33
+comparator:ClairS-TO 0.4.1:COLO829T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_Illumina	all	all	19	112	131	0.1450	19	161	180	0.1056	81
+comparator:ClairS-TO 0.4.1:COLO829T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_Illumina	context	HP4-6	3	3	6	0.5000	3	31	34	0.0882	3
+comparator:ClairS-TO 0.4.1:COLO829T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_Illumina	context	HP>=7	5	65	70	0.0714	5	10	15	0.3333	42
+comparator:ClairS-TO 0.4.1:COLO829T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_Illumina	context	STR	0	27	27	0.0000	0	3	3	0.0000	24
+comparator:ClairS-TO 0.4.1:COLO829T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_Illumina	context	VNTR	0	0	0		0	2	2	0.0000	0
+comparator:ClairS-TO 0.4.1:COLO829T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_Illumina	context	complex	0	0	0		0	1	1	0.0000	0
+comparator:ClairS-TO 0.4.1:COLO829T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_Illumina	context	none	11	17	28	0.3929	11	114	125	0.0880	12
+comparator:ClairS-TO 0.4.1:COLO829T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_Illumina	length	1	14	55	69	0.2029	14	83	97	0.1443	37
+comparator:ClairS-TO 0.4.1:COLO829T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_Illumina	length	2-4	1	36	37	0.0270	1	46	47	0.0213	28
+comparator:ClairS-TO 0.4.1:COLO829T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_Illumina	length	5-10	1	9	10	0.1000	1	13	14	0.0714	8
+comparator:ClairS-TO 0.4.1:COLO829T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_Illumina	length	>10	3	12	15	0.2000	3	19	22	0.1364	8
+comparator:ClairS-TO 0.4.1:COLO829T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_Illumina	type	DEL	10	44	54	0.1852	10	109	119	0.0840	29
+comparator:ClairS-TO 0.4.1:COLO829T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_Illumina	type	INS	9	68	77	0.1169	9	51	60	0.1500	52
+comparator:ClairS-TO 0.4.1:COLO829T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_Illumina	type	complex	0	0	0		0	1	1	0.0000	0
+comparator:ClairS-TO 0.4.1:COLO829T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_Illumina	type x context	DEL HP4-6	3	1	4	0.7500	3	18	21	0.1429	1
+comparator:ClairS-TO 0.4.1:COLO829T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_Illumina	type x context	DEL HP>=7	0	35	35	0.0000	0	4	4	0.0000	22
+comparator:ClairS-TO 0.4.1:COLO829T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_Illumina	type x context	DEL STR	0	4	4	0.0000	0	1	1	0.0000	3
+comparator:ClairS-TO 0.4.1:COLO829T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_Illumina	type x context	DEL VNTR	0	0	0		0	1	1	0.0000	0
+comparator:ClairS-TO 0.4.1:COLO829T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_Illumina	type x context	DEL none	7	4	11	0.6364	7	85	92	0.0761	3
+comparator:ClairS-TO 0.4.1:COLO829T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_Illumina	type x context	INS HP4-6	0	2	2	0.0000	0	13	13	0.0000	2
+comparator:ClairS-TO 0.4.1:COLO829T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_Illumina	type x context	INS HP>=7	5	30	35	0.1429	5	6	11	0.4545	20
+comparator:ClairS-TO 0.4.1:COLO829T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_Illumina	type x context	INS STR	0	23	23	0.0000	0	2	2	0.0000	21
+comparator:ClairS-TO 0.4.1:COLO829T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_Illumina	type x context	INS VNTR	0	0	0		0	1	1	0.0000	0
+comparator:ClairS-TO 0.4.1:COLO829T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_Illumina	type x context	INS none	4	13	17	0.2353	4	29	33	0.1212	9
+comparator:ClairS-TO 0.4.1:COLO829T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_Illumina	type x context	complex complex	0	0	0		0	1	1	0.0000	0
+comparator:ClairS-TO 0.4.1:COLO829T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_Illumina	type x length	DEL 1	5	30	35	0.1429	5	54	59	0.0847	20
+comparator:ClairS-TO 0.4.1:COLO829T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_Illumina	type x length	DEL 2-4	1	11	12	0.0833	1	31	32	0.0312	7
+comparator:ClairS-TO 0.4.1:COLO829T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_Illumina	type x length	DEL 5-10	1	2	3	0.3333	1	9	10	0.1000	2
+comparator:ClairS-TO 0.4.1:COLO829T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_Illumina	type x length	DEL >10	3	1	4	0.7500	3	15	18	0.1667	0
+comparator:ClairS-TO 0.4.1:COLO829T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_Illumina	type x length	INS 1	9	25	34	0.2647	9	28	37	0.2432	17
+comparator:ClairS-TO 0.4.1:COLO829T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_Illumina	type x length	INS 2-4	0	25	25	0.0000	0	15	15	0.0000	21
+comparator:ClairS-TO 0.4.1:COLO829T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_Illumina	type x length	INS 5-10	0	7	7	0.0000	0	4	4	0.0000	6
+comparator:ClairS-TO 0.4.1:COLO829T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_Illumina	type x length	INS >10	0	11	11	0.0000	0	4	4	0.0000	8
+comparator:ClairS-TO 0.4.1:COLO829T_Illumina:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_Illumina	type x length	complex 1	0	0	0		0	1	1	0.0000	0
+comparator:ClairS-TO 0.4.1:COLO829T_fiberseq:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_fiberseq	all	all	14	117	131	0.1069	14	32	46	0.3043	81
+comparator:ClairS-TO 0.4.1:COLO829T_fiberseq:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_fiberseq	context	HP4-6	2	4	6	0.3333	2	5	7	0.2857	3
+comparator:ClairS-TO 0.4.1:COLO829T_fiberseq:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_fiberseq	context	HP>=7	4	66	70	0.0571	4	2	6	0.6667	42
+comparator:ClairS-TO 0.4.1:COLO829T_fiberseq:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_fiberseq	context	STR	0	27	27	0.0000	0	1	1	0.0000	24
+comparator:ClairS-TO 0.4.1:COLO829T_fiberseq:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_fiberseq	context	none	8	20	28	0.2857	8	24	32	0.2500	12
+comparator:ClairS-TO 0.4.1:COLO829T_fiberseq:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_fiberseq	length	1	10	59	69	0.1449	10	17	27	0.3704	37
+comparator:ClairS-TO 0.4.1:COLO829T_fiberseq:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_fiberseq	length	2-4	1	36	37	0.0270	1	10	11	0.0909	28
+comparator:ClairS-TO 0.4.1:COLO829T_fiberseq:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_fiberseq	length	5-10	1	9	10	0.1000	1	1	2	0.5000	8
+comparator:ClairS-TO 0.4.1:COLO829T_fiberseq:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_fiberseq	length	>10	2	13	15	0.1333	2	4	6	0.3333	8
+comparator:ClairS-TO 0.4.1:COLO829T_fiberseq:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_fiberseq	type	DEL	7	47	54	0.1296	7	23	30	0.2333	29
+comparator:ClairS-TO 0.4.1:COLO829T_fiberseq:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_fiberseq	type	INS	7	70	77	0.0909	7	9	16	0.4375	52
+comparator:ClairS-TO 0.4.1:COLO829T_fiberseq:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_fiberseq	type x context	DEL HP4-6	2	2	4	0.5000	2	3	5	0.4000	1
+comparator:ClairS-TO 0.4.1:COLO829T_fiberseq:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_fiberseq	type x context	DEL HP>=7	0	35	35	0.0000	0	0	0		22
+comparator:ClairS-TO 0.4.1:COLO829T_fiberseq:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_fiberseq	type x context	DEL STR	0	4	4	0.0000	0	1	1	0.0000	3
+comparator:ClairS-TO 0.4.1:COLO829T_fiberseq:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_fiberseq	type x context	DEL none	5	6	11	0.4545	5	19	24	0.2083	3
+comparator:ClairS-TO 0.4.1:COLO829T_fiberseq:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_fiberseq	type x context	INS HP4-6	0	2	2	0.0000	0	2	2	0.0000	2
+comparator:ClairS-TO 0.4.1:COLO829T_fiberseq:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_fiberseq	type x context	INS HP>=7	4	31	35	0.1143	4	2	6	0.6667	20
+comparator:ClairS-TO 0.4.1:COLO829T_fiberseq:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_fiberseq	type x context	INS STR	0	23	23	0.0000	0	0	0		21
+comparator:ClairS-TO 0.4.1:COLO829T_fiberseq:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_fiberseq	type x context	INS none	3	14	17	0.1765	3	5	8	0.3750	9
+comparator:ClairS-TO 0.4.1:COLO829T_fiberseq:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_fiberseq	type x length	DEL 1	3	32	35	0.0857	3	11	14	0.2143	20
+comparator:ClairS-TO 0.4.1:COLO829T_fiberseq:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_fiberseq	type x length	DEL 2-4	1	11	12	0.0833	1	9	10	0.1000	7
+comparator:ClairS-TO 0.4.1:COLO829T_fiberseq:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_fiberseq	type x length	DEL 5-10	1	2	3	0.3333	1	1	2	0.5000	2
+comparator:ClairS-TO 0.4.1:COLO829T_fiberseq:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_fiberseq	type x length	DEL >10	2	2	4	0.5000	2	2	4	0.5000	0
+comparator:ClairS-TO 0.4.1:COLO829T_fiberseq:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_fiberseq	type x length	INS 1	7	27	34	0.2059	7	6	13	0.5385	17
+comparator:ClairS-TO 0.4.1:COLO829T_fiberseq:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_fiberseq	type x length	INS 2-4	0	25	25	0.0000	0	1	1	0.0000	21
+comparator:ClairS-TO 0.4.1:COLO829T_fiberseq:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_fiberseq	type x length	INS 5-10	0	7	7	0.0000	0	0	0		6
+comparator:ClairS-TO 0.4.1:COLO829T_fiberseq:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_fiberseq	type x length	INS >10	0	11	11	0.0000	0	2	2	0.0000	8
+comparator:ClairS-TO 0.4.1:COLO829T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_ONT	all	all	12	119	131	0.0916	12	89	101	0.1188	81
+comparator:ClairS-TO 0.4.1:COLO829T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_ONT	context	HP4-6	2	4	6	0.3333	2	44	46	0.0435	3
+comparator:ClairS-TO 0.4.1:COLO829T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_ONT	context	HP>=7	2	68	70	0.0286	2	4	6	0.3333	42
+comparator:ClairS-TO 0.4.1:COLO829T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_ONT	context	STR	0	27	27	0.0000	0	4	4	0.0000	24
+comparator:ClairS-TO 0.4.1:COLO829T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_ONT	context	none	8	20	28	0.2857	8	37	45	0.1778	12
+comparator:ClairS-TO 0.4.1:COLO829T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_ONT	length	1	8	61	69	0.1159	8	71	79	0.1013	37
+comparator:ClairS-TO 0.4.1:COLO829T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_ONT	length	2-4	1	36	37	0.0270	1	15	16	0.0625	28
+comparator:ClairS-TO 0.4.1:COLO829T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_ONT	length	5-10	1	9	10	0.1000	1	1	2	0.5000	8
+comparator:ClairS-TO 0.4.1:COLO829T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_ONT	length	>10	2	13	15	0.1333	2	2	4	0.5000	8
+comparator:ClairS-TO 0.4.1:COLO829T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_ONT	type	DEL	7	47	54	0.1296	7	69	76	0.0921	29
+comparator:ClairS-TO 0.4.1:COLO829T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_ONT	type	INS	5	72	77	0.0649	5	20	25	0.2000	52
+comparator:ClairS-TO 0.4.1:COLO829T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_ONT	type x context	DEL HP4-6	2	2	4	0.5000	2	32	34	0.0588	1
+comparator:ClairS-TO 0.4.1:COLO829T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_ONT	type x context	DEL HP>=7	0	35	35	0.0000	0	2	2	0.0000	22
+comparator:ClairS-TO 0.4.1:COLO829T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_ONT	type x context	DEL STR	0	4	4	0.0000	0	4	4	0.0000	3
+comparator:ClairS-TO 0.4.1:COLO829T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_ONT	type x context	DEL none	5	6	11	0.4545	5	31	36	0.1389	3
+comparator:ClairS-TO 0.4.1:COLO829T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_ONT	type x context	INS HP4-6	0	2	2	0.0000	0	12	12	0.0000	2
+comparator:ClairS-TO 0.4.1:COLO829T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_ONT	type x context	INS HP>=7	2	33	35	0.0571	2	2	4	0.5000	20
+comparator:ClairS-TO 0.4.1:COLO829T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_ONT	type x context	INS STR	0	23	23	0.0000	0	0	0		21
+comparator:ClairS-TO 0.4.1:COLO829T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_ONT	type x context	INS none	3	14	17	0.1765	3	6	9	0.3333	9
+comparator:ClairS-TO 0.4.1:COLO829T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_ONT	type x length	DEL 1	3	32	35	0.0857	3	53	56	0.0536	20
+comparator:ClairS-TO 0.4.1:COLO829T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_ONT	type x length	DEL 2-4	1	11	12	0.0833	1	13	14	0.0714	7
+comparator:ClairS-TO 0.4.1:COLO829T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_ONT	type x length	DEL 5-10	1	2	3	0.3333	1	1	2	0.5000	2
+comparator:ClairS-TO 0.4.1:COLO829T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_ONT	type x length	DEL >10	2	2	4	0.5000	2	2	4	0.5000	0
+comparator:ClairS-TO 0.4.1:COLO829T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_ONT	type x length	INS 1	5	29	34	0.1471	5	18	23	0.2174	17
+comparator:ClairS-TO 0.4.1:COLO829T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_ONT	type x length	INS 2-4	0	25	25	0.0000	0	2	2	0.0000	21
+comparator:ClairS-TO 0.4.1:COLO829T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_ONT	type x length	INS 5-10	0	7	7	0.0000	0	0	0		6
+comparator:ClairS-TO 0.4.1:COLO829T_ONT:INDEL	ClairS-TO	ClairS-TO 0.4.1	COLO829T_ONT	type x length	INS >10	0	11	11	0.0000	0	0	0		8

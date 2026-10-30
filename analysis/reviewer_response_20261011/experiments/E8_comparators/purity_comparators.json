@@ -1,0 +1,1082 @@
+[
+ {
+  "kind": "SNV",
+  "platform": "Illumina",
+  "caller": "ClairS-TO",
+  "purities": {
+   "P100": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/clairs_to/COLO829T_Illumina/SNV/report.json",
+    "pass": {
+     "p": 0.4023,
+     "r": 0.7736,
+     "f1": 0.5293,
+     "tp": 1890,
+     "fp": 2808,
+     "fn": 553
+    },
+    "pass_pon": {
+     "p": 0.4307,
+     "r": 0.7642,
+     "f1": 0.5509,
+     "tp": 1867,
+     "fp": 2468,
+     "fn": 576
+    },
+    "truth_tagged": 84
+   },
+   "P75": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/clairs_to/COLO829T_Illumina_P75/SNV/report.json",
+    "pass": {
+     "p": 0.5063,
+     "r": 0.7614,
+     "f1": 0.6081,
+     "tp": 1860,
+     "fp": 1814,
+     "fn": 583
+    },
+    "pass_pon": {
+     "p": 0.589,
+     "r": 0.7519,
+     "f1": 0.6606,
+     "tp": 1837,
+     "fp": 1282,
+     "fn": 606
+    },
+    "truth_tagged": 84
+   },
+   "P50": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/clairs_to/COLO829T_Illumina_P50/SNV/report.json",
+    "pass": {
+     "p": 0.4644,
+     "r": 0.6946,
+     "f1": 0.5567,
+     "tp": 1697,
+     "fp": 1957,
+     "fn": 746
+    },
+    "pass_pon": {
+     "p": 0.5422,
+     "r": 0.6865,
+     "f1": 0.6059,
+     "tp": 1677,
+     "fp": 1416,
+     "fn": 766
+    },
+    "truth_tagged": 84
+   },
+   "P25": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/clairs_to/COLO829T_Illumina_P25/SNV/report.json",
+    "pass": {
+     "p": 0.4188,
+     "r": 0.6279,
+     "f1": 0.5025,
+     "tp": 1534,
+     "fp": 2129,
+     "fn": 909
+    },
+    "pass_pon": {
+     "p": 0.493,
+     "r": 0.6222,
+     "f1": 0.5501,
+     "tp": 1520,
+     "fp": 1563,
+     "fn": 923
+    },
+    "truth_tagged": 84
+   }
+  },
+  "orig_snv_f1": [
+   0.5293,
+   0.6081,
+   0.5567,
+   0.5025
+  ]
+ },
+ {
+  "kind": "SNV",
+  "platform": "Illumina",
+  "caller": "DeepSomatic-TO",
+  "purities": {
+   "P100": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/deepsomatic/COLO829T_Illumina/SNV/report.json",
+    "pass": {
+     "p": 0.2604,
+     "r": 0.8461,
+     "f1": 0.3982,
+     "tp": 2067,
+     "fp": 5871,
+     "fn": 376
+    },
+    "pass_pon": {
+     "p": 0.4267,
+     "r": 0.8346,
+     "f1": 0.5647,
+     "tp": 2039,
+     "fp": 2740,
+     "fn": 404
+    },
+    "truth_tagged": 84
+   },
+   "P75": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/deepsomatic/COLO829T_Illumina_P75/SNV/report.json",
+    "pass": {
+     "p": 0.2013,
+     "r": 0.8264,
+     "f1": 0.3238,
+     "tp": 2019,
+     "fp": 8009,
+     "fn": 424
+    },
+    "pass_pon": {
+     "p": 0.3603,
+     "r": 0.8146,
+     "f1": 0.4996,
+     "tp": 1990,
+     "fp": 3533,
+     "fn": 453
+    },
+    "truth_tagged": 84
+   },
+   "P50": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/deepsomatic/COLO829T_Illumina_P50/SNV/report.json",
+    "pass": {
+     "p": 0.187,
+     "r": 0.79,
+     "f1": 0.3024,
+     "tp": 1930,
+     "fp": 8390,
+     "fn": 513
+    },
+    "pass_pon": {
+     "p": 0.3464,
+     "r": 0.7786,
+     "f1": 0.4795,
+     "tp": 1902,
+     "fp": 3589,
+     "fn": 541
+    },
+    "truth_tagged": 84
+   },
+   "P25": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/deepsomatic/COLO829T_Illumina_P25/SNV/report.json",
+    "pass": {
+     "p": 0.1736,
+     "r": 0.7364,
+     "f1": 0.281,
+     "tp": 1799,
+     "fp": 8564,
+     "fn": 644
+    },
+    "pass_pon": {
+     "p": 0.3257,
+     "r": 0.7257,
+     "f1": 0.4497,
+     "tp": 1773,
+     "fp": 3670,
+     "fn": 670
+    },
+    "truth_tagged": 84
+   }
+  },
+  "orig_snv_f1": [
+   0.3982,
+   0.3239,
+   0.3025,
+   0.281
+  ]
+ },
+ {
+  "kind": "SNV",
+  "platform": "fiberseq",
+  "caller": "ClairS-TO",
+  "purities": {
+   "P100": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/clairs_to/COLO829T_fiberseq/SNV/report.json",
+    "pass": {
+     "p": 0.7043,
+     "r": 0.7528,
+     "f1": 0.7277,
+     "tp": 1839,
+     "fp": 772,
+     "fn": 604
+    },
+    "pass_pon": {
+     "p": 0.7793,
+     "r": 0.7446,
+     "f1": 0.7616,
+     "tp": 1819,
+     "fp": 515,
+     "fn": 624
+    },
+    "truth_tagged": 84
+   },
+   "P75": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/clairs_to/COLO829T_fiberseq_P75/SNV/report.json",
+    "pass": {
+     "p": 0.5518,
+     "r": 0.7364,
+     "f1": 0.6309,
+     "tp": 1799,
+     "fp": 1461,
+     "fn": 644
+    },
+    "pass_pon": {
+     "p": 0.6514,
+     "r": 0.7282,
+     "f1": 0.6877,
+     "tp": 1779,
+     "fp": 952,
+     "fn": 664
+    },
+    "truth_tagged": 84
+   },
+   "P50": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/clairs_to/COLO829T_fiberseq_P50/SNV/report.json",
+    "pass": {
+     "p": 0.5123,
+     "r": 0.7237,
+     "f1": 0.5999,
+     "tp": 1768,
+     "fp": 1683,
+     "fn": 675
+    },
+    "pass_pon": {
+     "p": 0.61,
+     "r": 0.7159,
+     "f1": 0.6588,
+     "tp": 1749,
+     "fp": 1118,
+     "fn": 694
+    },
+    "truth_tagged": 84
+   },
+   "P25": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/clairs_to/COLO829T_fiberseq_P25/SNV/report.json",
+    "pass": {
+     "p": 0.4837,
+     "r": 0.657,
+     "f1": 0.5572,
+     "tp": 1605,
+     "fp": 1713,
+     "fn": 838
+    },
+    "pass_pon": {
+     "p": 0.5813,
+     "r": 0.65,
+     "f1": 0.6137,
+     "tp": 1588,
+     "fp": 1144,
+     "fn": 855
+    },
+    "truth_tagged": 84
+   }
+  },
+  "orig_snv_f1": [
+   0.7277,
+   0.6309,
+   0.5999,
+   0.5572
+  ]
+ },
+ {
+  "kind": "SNV",
+  "platform": "fiberseq",
+  "caller": "DeepSomatic-TO",
+  "purities": {
+   "P100": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/deepsomatic/COLO829T_fiberseq/SNV/report.json",
+    "pass": {
+     "p": 0.5907,
+     "r": 0.5624,
+     "f1": 0.5762,
+     "tp": 1374,
+     "fp": 952,
+     "fn": 1069
+    },
+    "pass_pon": {
+     "p": 0.7323,
+     "r": 0.5555,
+     "f1": 0.6318,
+     "tp": 1357,
+     "fp": 496,
+     "fn": 1086
+    },
+    "truth_tagged": 84
+   },
+   "P75": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/deepsomatic/COLO829T_fiberseq_P75/SNV/report.json",
+    "pass": {
+     "p": 0.4389,
+     "r": 0.8461,
+     "f1": 0.5779,
+     "tp": 2067,
+     "fp": 2643,
+     "fn": 376
+    },
+    "pass_pon": {
+     "p": 0.6038,
+     "r": 0.8346,
+     "f1": 0.7007,
+     "tp": 2039,
+     "fp": 1338,
+     "fn": 404
+    },
+    "truth_tagged": 84
+   },
+   "P50": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/deepsomatic/COLO829T_fiberseq_P50/SNV/report.json",
+    "pass": {
+     "p": 0.4003,
+     "r": 0.8469,
+     "f1": 0.5437,
+     "tp": 2069,
+     "fp": 3099,
+     "fn": 374
+    },
+    "pass_pon": {
+     "p": 0.5677,
+     "r": 0.8354,
+     "f1": 0.6761,
+     "tp": 2041,
+     "fp": 1554,
+     "fn": 402
+    },
+    "truth_tagged": 84
+   },
+   "P25": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/deepsomatic/COLO829T_fiberseq_P25/SNV/report.json",
+    "pass": {
+     "p": 0.3582,
+     "r": 0.7937,
+     "f1": 0.4936,
+     "tp": 1939,
+     "fp": 3474,
+     "fn": 504
+    },
+    "pass_pon": {
+     "p": 0.5176,
+     "r": 0.7835,
+     "f1": 0.6234,
+     "tp": 1914,
+     "fp": 1784,
+     "fn": 529
+    },
+    "truth_tagged": 84
+   }
+  },
+  "orig_snv_f1": [
+   0.5762,
+   0.578,
+   0.5438,
+   0.4936
+  ]
+ },
+ {
+  "kind": "SNV",
+  "platform": "ONT",
+  "caller": "ClairS-TO",
+  "purities": {
+   "P100": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/clairs_to/COLO829T_ONT/SNV/report.json",
+    "pass": {
+     "p": 0.6713,
+     "r": 0.6922,
+     "f1": 0.6816,
+     "tp": 1691,
+     "fp": 828,
+     "fn": 752
+    },
+    "pass_pon": {
+     "p": 0.7488,
+     "r": 0.6844,
+     "f1": 0.7151,
+     "tp": 1672,
+     "fp": 561,
+     "fn": 771
+    },
+    "truth_tagged": 84
+   },
+   "P75": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/clairs_to/COLO829T_ONT_P75/SNV/report.json",
+    "pass": {
+     "p": 0.5495,
+     "r": 0.6885,
+     "f1": 0.6112,
+     "tp": 1682,
+     "fp": 1379,
+     "fn": 761
+    },
+    "pass_pon": {
+     "p": 0.6496,
+     "r": 0.6799,
+     "f1": 0.6644,
+     "tp": 1661,
+     "fp": 896,
+     "fn": 782
+    },
+    "truth_tagged": 84
+   },
+   "P50": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/clairs_to/COLO829T_ONT_P50/SNV/report.json",
+    "pass": {
+     "p": 0.5,
+     "r": 0.6709,
+     "f1": 0.573,
+     "tp": 1639,
+     "fp": 1639,
+     "fn": 804
+    },
+    "pass_pon": {
+     "p": 0.6007,
+     "r": 0.6631,
+     "f1": 0.6304,
+     "tp": 1620,
+     "fp": 1077,
+     "fn": 823
+    },
+    "truth_tagged": 84
+   },
+   "P25": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/clairs_to/COLO829T_ONT_P25/SNV/report.json",
+    "pass": {
+     "p": 0.457,
+     "r": 0.578,
+     "f1": 0.5104,
+     "tp": 1412,
+     "fp": 1678,
+     "fn": 1031
+    },
+    "pass_pon": {
+     "p": 0.5571,
+     "r": 0.5727,
+     "f1": 0.5648,
+     "tp": 1399,
+     "fp": 1112,
+     "fn": 1044
+    },
+    "truth_tagged": 84
+   }
+  },
+  "orig_snv_f1": [
+   0.6816,
+   0.6112,
+   0.573,
+   0.5104
+  ]
+ },
+ {
+  "kind": "SNV",
+  "platform": "ONT",
+  "caller": "DeepSomatic-TO",
+  "purities": {
+   "P100": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/deepsomatic/COLO829T_ONT/SNV/report.json",
+    "pass": {
+     "p": 0.4028,
+     "r": 0.7045,
+     "f1": 0.5125,
+     "tp": 1721,
+     "fp": 2552,
+     "fn": 722
+    },
+    "pass_pon": {
+     "p": 0.5822,
+     "r": 0.6946,
+     "f1": 0.6334,
+     "tp": 1697,
+     "fp": 1218,
+     "fn": 746
+    },
+    "truth_tagged": 84
+   },
+   "P75": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/deepsomatic/COLO829T_ONT_P75/SNV/report.json",
+    "pass": {
+     "p": 0.3312,
+     "r": 0.7667,
+     "f1": 0.4625,
+     "tp": 1873,
+     "fp": 3783,
+     "fn": 570
+    },
+    "pass_pon": {
+     "p": 0.526,
+     "r": 0.7564,
+     "f1": 0.6206,
+     "tp": 1848,
+     "fp": 1665,
+     "fn": 595
+    },
+    "truth_tagged": 84
+   },
+   "P50": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/deepsomatic/COLO829T_ONT_P50/SNV/report.json",
+    "pass": {
+     "p": 0.3143,
+     "r": 0.7589,
+     "f1": 0.4446,
+     "tp": 1854,
+     "fp": 4044,
+     "fn": 589
+    },
+    "pass_pon": {
+     "p": 0.5129,
+     "r": 0.7483,
+     "f1": 0.6086,
+     "tp": 1828,
+     "fp": 1736,
+     "fn": 615
+    },
+    "truth_tagged": 84
+   },
+   "P25": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/deepsomatic/COLO829T_ONT_P25/SNV/report.json",
+    "pass": {
+     "p": 0.2973,
+     "r": 0.6885,
+     "f1": 0.4153,
+     "tp": 1682,
+     "fp": 3975,
+     "fn": 761
+    },
+    "pass_pon": {
+     "p": 0.493,
+     "r": 0.6799,
+     "f1": 0.5716,
+     "tp": 1661,
+     "fp": 1708,
+     "fn": 782
+    },
+    "truth_tagged": 84
+   }
+  },
+  "orig_snv_f1": [
+   0.5127,
+   0.4626,
+   0.4447,
+   0.4153
+  ]
+ },
+ {
+  "kind": "INDEL",
+  "platform": "Illumina",
+  "caller": "ClairS-TO",
+  "purities": {
+   "P100": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/clairs_to/COLO829T_Illumina/INDEL/report.json",
+    "pass": {
+     "p": 0.0892,
+     "r": 0.145,
+     "f1": 0.1105,
+     "tp": 19,
+     "fp": 194,
+     "fn": 112
+    },
+    "pass_pon": {
+     "p": 0.1056,
+     "r": 0.145,
+     "f1": 0.1222,
+     "tp": 19,
+     "fp": 161,
+     "fn": 112
+    },
+    "truth_tagged": 81
+   },
+   "P75": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/clairs_to/COLO829T_Illumina_P75/INDEL/report.json",
+    "pass": {
+     "p": 0.1161,
+     "r": 0.0992,
+     "f1": 0.107,
+     "tp": 13,
+     "fp": 99,
+     "fn": 118
+    },
+    "pass_pon": {
+     "p": 0.1461,
+     "r": 0.0992,
+     "f1": 0.1182,
+     "tp": 13,
+     "fp": 76,
+     "fn": 118
+    },
+    "truth_tagged": 81
+   },
+   "P50": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/clairs_to/COLO829T_Illumina_P50/INDEL/report.json",
+    "pass": {
+     "p": 0.0933,
+     "r": 0.1069,
+     "f1": 0.0996,
+     "tp": 14,
+     "fp": 136,
+     "fn": 117
+    },
+    "pass_pon": {
+     "p": 0.1207,
+     "r": 0.1069,
+     "f1": 0.1134,
+     "tp": 14,
+     "fp": 102,
+     "fn": 117
+    },
+    "truth_tagged": 81
+   },
+   "P25": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/clairs_to/COLO829T_Illumina_P25/INDEL/report.json",
+    "pass": {
+     "p": 0.0405,
+     "r": 0.0458,
+     "f1": 0.043,
+     "tp": 6,
+     "fp": 142,
+     "fn": 125
+    },
+    "pass_pon": {
+     "p": 0.0531,
+     "r": 0.0458,
+     "f1": 0.0492,
+     "tp": 6,
+     "fp": 107,
+     "fn": 125
+    },
+    "truth_tagged": 81
+   }
+  }
+ },
+ {
+  "kind": "INDEL",
+  "platform": "Illumina",
+  "caller": "DeepSomatic-TO",
+  "purities": {
+   "P100": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/deepsomatic/COLO829T_Illumina/INDEL/report.json",
+    "pass": {
+     "p": 0.027,
+     "r": 0.2137,
+     "f1": 0.048,
+     "tp": 28,
+     "fp": 1008,
+     "fn": 103
+    },
+    "pass_pon": {
+     "p": 0.1983,
+     "r": 0.1832,
+     "f1": 0.1905,
+     "tp": 24,
+     "fp": 97,
+     "fn": 107
+    },
+    "truth_tagged": 81
+   },
+   "P75": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/deepsomatic/COLO829T_Illumina_P75/INDEL/report.json",
+    "pass": {
+     "p": 0.0165,
+     "r": 0.2595,
+     "f1": 0.0311,
+     "tp": 34,
+     "fp": 2025,
+     "fn": 97
+    },
+    "pass_pon": {
+     "p": 0.1422,
+     "r": 0.2214,
+     "f1": 0.1731,
+     "tp": 29,
+     "fp": 175,
+     "fn": 102
+    },
+    "truth_tagged": 81
+   },
+   "P50": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/deepsomatic/COLO829T_Illumina_P50/INDEL/report.json",
+    "pass": {
+     "p": 0.0116,
+     "r": 0.2672,
+     "f1": 0.0222,
+     "tp": 35,
+     "fp": 2990,
+     "fn": 96
+    },
+    "pass_pon": {
+     "p": 0.1045,
+     "r": 0.2137,
+     "f1": 0.1404,
+     "tp": 28,
+     "fp": 240,
+     "fn": 103
+    },
+    "truth_tagged": 81
+   },
+   "P25": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/deepsomatic/COLO829T_Illumina_P25/INDEL/report.json",
+    "pass": {
+     "p": 0.0071,
+     "r": 0.1832,
+     "f1": 0.0137,
+     "tp": 24,
+     "fp": 3343,
+     "fn": 107
+    },
+    "pass_pon": {
+     "p": 0.0769,
+     "r": 0.1603,
+     "f1": 0.104,
+     "tp": 21,
+     "fp": 252,
+     "fn": 110
+    },
+    "truth_tagged": 81
+   }
+  }
+ },
+ {
+  "kind": "INDEL",
+  "platform": "fiberseq",
+  "caller": "ClairS-TO",
+  "purities": {
+   "P100": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/clairs_to/COLO829T_fiberseq/INDEL/report.json",
+    "pass": {
+     "p": 0.2333,
+     "r": 0.1069,
+     "f1": 0.1466,
+     "tp": 14,
+     "fp": 46,
+     "fn": 117
+    },
+    "pass_pon": {
+     "p": 0.3043,
+     "r": 0.1069,
+     "f1": 0.1582,
+     "tp": 14,
+     "fp": 32,
+     "fn": 117
+    },
+    "truth_tagged": 81
+   },
+   "P75": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/clairs_to/COLO829T_fiberseq_P75/INDEL/report.json",
+    "pass": {
+     "p": 0.2258,
+     "r": 0.1069,
+     "f1": 0.1451,
+     "tp": 14,
+     "fp": 48,
+     "fn": 117
+    },
+    "pass_pon": {
+     "p": 0.2692,
+     "r": 0.1069,
+     "f1": 0.153,
+     "tp": 14,
+     "fp": 38,
+     "fn": 117
+    },
+    "truth_tagged": 81
+   },
+   "P50": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/clairs_to/COLO829T_fiberseq_P50/INDEL/report.json",
+    "pass": {
+     "p": 0.1222,
+     "r": 0.084,
+     "f1": 0.0995,
+     "tp": 11,
+     "fp": 79,
+     "fn": 120
+    },
+    "pass_pon": {
+     "p": 0.1618,
+     "r": 0.084,
+     "f1": 0.1106,
+     "tp": 11,
+     "fp": 57,
+     "fn": 120
+    },
+    "truth_tagged": 81
+   },
+   "P25": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/clairs_to/COLO829T_fiberseq_P25/INDEL/report.json",
+    "pass": {
+     "p": 0.027,
+     "r": 0.0229,
+     "f1": 0.0248,
+     "tp": 3,
+     "fp": 108,
+     "fn": 128
+    },
+    "pass_pon": {
+     "p": 0.0366,
+     "r": 0.0229,
+     "f1": 0.0282,
+     "tp": 3,
+     "fp": 79,
+     "fn": 128
+    },
+    "truth_tagged": 81
+   }
+  }
+ },
+ {
+  "kind": "INDEL",
+  "platform": "fiberseq",
+  "caller": "DeepSomatic-TO",
+  "purities": {
+   "P100": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/deepsomatic/COLO829T_fiberseq/INDEL/report.json",
+    "pass": {
+     "p": 0.2353,
+     "r": 0.0916,
+     "f1": 0.1319,
+     "tp": 12,
+     "fp": 39,
+     "fn": 119
+    },
+    "pass_pon": {
+     "p": 0.3143,
+     "r": 0.084,
+     "f1": 0.1325,
+     "tp": 11,
+     "fp": 24,
+     "fn": 120
+    },
+    "truth_tagged": 81
+   },
+   "P75": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/deepsomatic/COLO829T_fiberseq_P75/INDEL/report.json",
+    "pass": {
+     "p": 0.1024,
+     "r": 0.0992,
+     "f1": 0.1008,
+     "tp": 13,
+     "fp": 114,
+     "fn": 118
+    },
+    "pass_pon": {
+     "p": 0.1818,
+     "r": 0.0916,
+     "f1": 0.1218,
+     "tp": 12,
+     "fp": 54,
+     "fn": 119
+    },
+    "truth_tagged": 81
+   },
+   "P50": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/deepsomatic/COLO829T_fiberseq_P50/INDEL/report.json",
+    "pass": {
+     "p": 0.0829,
+     "r": 0.1298,
+     "f1": 0.1012,
+     "tp": 17,
+     "fp": 188,
+     "fn": 114
+    },
+    "pass_pon": {
+     "p": 0.1441,
+     "r": 0.1221,
+     "f1": 0.1322,
+     "tp": 16,
+     "fp": 95,
+     "fn": 115
+    },
+    "truth_tagged": 81
+   },
+   "P25": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/deepsomatic/COLO829T_fiberseq_P25/INDEL/report.json",
+    "pass": {
+     "p": 0.0388,
+     "r": 0.0687,
+     "f1": 0.0496,
+     "tp": 9,
+     "fp": 223,
+     "fn": 122
+    },
+    "pass_pon": {
+     "p": 0.0672,
+     "r": 0.0687,
+     "f1": 0.0679,
+     "tp": 9,
+     "fp": 125,
+     "fn": 122
+    },
+    "truth_tagged": 81
+   }
+  }
+ },
+ {
+  "kind": "INDEL",
+  "platform": "ONT",
+  "caller": "ClairS-TO",
+  "purities": {
+   "P100": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/clairs_to/COLO829T_ONT/INDEL/report.json",
+    "pass": {
+     "p": 0.1,
+     "r": 0.0916,
+     "f1": 0.0956,
+     "tp": 12,
+     "fp": 108,
+     "fn": 119
+    },
+    "pass_pon": {
+     "p": 0.1188,
+     "r": 0.0916,
+     "f1": 0.1034,
+     "tp": 12,
+     "fp": 89,
+     "fn": 119
+    },
+    "truth_tagged": 81
+   },
+   "P75": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/clairs_to/COLO829T_ONT_P75/INDEL/report.json",
+    "pass": {
+     "p": 0.1512,
+     "r": 0.0992,
+     "f1": 0.1198,
+     "tp": 13,
+     "fp": 73,
+     "fn": 118
+    },
+    "pass_pon": {
+     "p": 0.1831,
+     "r": 0.0992,
+     "f1": 0.1287,
+     "tp": 13,
+     "fp": 58,
+     "fn": 118
+    },
+    "truth_tagged": 81
+   },
+   "P50": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/clairs_to/COLO829T_ONT_P50/INDEL/report.json",
+    "pass": {
+     "p": 0.0833,
+     "r": 0.0611,
+     "f1": 0.0705,
+     "tp": 8,
+     "fp": 88,
+     "fn": 123
+    },
+    "pass_pon": {
+     "p": 0.1096,
+     "r": 0.0611,
+     "f1": 0.0784,
+     "tp": 8,
+     "fp": 65,
+     "fn": 123
+    },
+    "truth_tagged": 81
+   },
+   "P25": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/clairs_to/COLO829T_ONT_P25/INDEL/report.json",
+    "pass": {
+     "p": 0.0102,
+     "r": 0.0076,
+     "f1": 0.0087,
+     "tp": 1,
+     "fp": 97,
+     "fn": 130
+    },
+    "pass_pon": {
+     "p": 0.0145,
+     "r": 0.0076,
+     "f1": 0.01,
+     "tp": 1,
+     "fp": 68,
+     "fn": 130
+    },
+    "truth_tagged": 81
+   }
+  }
+ },
+ {
+  "kind": "INDEL",
+  "platform": "ONT",
+  "caller": "DeepSomatic-TO",
+  "purities": {
+   "P100": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/deepsomatic/COLO829T_ONT/INDEL/report.json",
+    "pass": {
+     "p": 0.0244,
+     "r": 0.0153,
+     "f1": 0.0188,
+     "tp": 2,
+     "fp": 80,
+     "fn": 129
+    },
+    "pass_pon": {
+     "p": 0.0317,
+     "r": 0.0153,
+     "f1": 0.0206,
+     "tp": 2,
+     "fp": 61,
+     "fn": 129
+    },
+    "truth_tagged": 81
+   },
+   "P75": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/deepsomatic/COLO829T_ONT_P75/INDEL/report.json",
+    "pass": {
+     "p": 0.0233,
+     "r": 0.0229,
+     "f1": 0.0231,
+     "tp": 3,
+     "fp": 126,
+     "fn": 128
+    },
+    "pass_pon": {
+     "p": 0.0455,
+     "r": 0.0229,
+     "f1": 0.0305,
+     "tp": 3,
+     "fp": 63,
+     "fn": 128
+    },
+    "truth_tagged": 81
+   },
+   "P50": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/deepsomatic/COLO829T_ONT_P50/INDEL/report.json",
+    "pass": {
+     "p": 0.0349,
+     "r": 0.0458,
+     "f1": 0.0396,
+     "tp": 6,
+     "fp": 166,
+     "fn": 125
+    },
+    "pass_pon": {
+     "p": 0.0779,
+     "r": 0.0458,
+     "f1": 0.0577,
+     "tp": 6,
+     "fp": 71,
+     "fn": 125
+    },
+    "truth_tagged": 81
+   },
+   "P25": {
+    "report": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/deepsomatic/COLO829T_ONT_P25/INDEL/report.json",
+    "pass": {
+     "p": 0.0166,
+     "r": 0.0229,
+     "f1": 0.0192,
+     "tp": 3,
+     "fp": 178,
+     "fn": 128
+    },
+    "pass_pon": {
+     "p": 0.0405,
+     "r": 0.0229,
+     "f1": 0.0293,
+     "tp": 3,
+     "fp": 71,
+     "fn": 128
+    },
+    "truth_tagged": 81
+   }
+  }
+ }
+]

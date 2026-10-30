@@ -1,0 +1,15055 @@
+{
+ "generated": "2026-10-29T20:34:16",
+ "units": [
+  {
+   "uid": "release_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46",
+   "group": "release",
+   "seed": "s0",
+   "sample": "HG008T",
+   "dataset": "HG008T_Illumina",
+   "threshold": 0.38437458872795105,
+   "best_f1": 0.2505,
+   "ceiling": 0.2555,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": true,
+   "strata": {
+    "type|DEL": [
+     35,
+     184,
+     35,
+     78,
+     136
+    ],
+    "length|2-4": [
+     6,
+     129,
+     6,
+     23,
+     102
+    ],
+    "context|none": [
+     31,
+     49,
+     31,
+     54,
+     33
+    ],
+    "type x context|DEL none": [
+     23,
+     20,
+     23,
+     47,
+     13
+    ],
+    "type x length|DEL 2-4": [
+     5,
+     43,
+     5,
+     22,
+     33
+    ],
+    "all|all": [
+     65,
+     522,
+     65,
+     108,
+     384
+    ],
+    "length|>10": [
+     7,
+     63,
+     7,
+     10,
+     47
+    ],
+    "type x length|DEL >10": [
+     7,
+     20,
+     7,
+     10,
+     14
+    ],
+    "type|INS": [
+     30,
+     338,
+     30,
+     30,
+     248
+    ],
+    "length|1": [
+     47,
+     273,
+     47,
+     67,
+     188
+    ],
+    "type x context|INS none": [
+     8,
+     29,
+     8,
+     7,
+     20
+    ],
+    "type x length|INS 1": [
+     29,
+     168,
+     29,
+     27,
+     113
+    ],
+    "context|HP4-6": [
+     7,
+     0,
+     7,
+     16,
+     0
+    ],
+    "type x context|INS HP4-6": [
+     6,
+     0,
+     6,
+     9,
+     0
+    ],
+    "context|HP>=7": [
+     26,
+     409,
+     26,
+     32,
+     294
+    ],
+    "type x context|INS HP>=7": [
+     16,
+     261,
+     16,
+     14,
+     187
+    ],
+    "type x context|DEL HP>=7": [
+     10,
+     148,
+     10,
+     18,
+     107
+    ],
+    "type x length|DEL 1": [
+     18,
+     105,
+     18,
+     40,
+     75
+    ],
+    "length|5-10": [
+     5,
+     57,
+     5,
+     8,
+     47
+    ],
+    "type x length|DEL 5-10": [
+     5,
+     16,
+     5,
+     6,
+     14
+    ],
+    "type x context|DEL HP4-6": [
+     1,
+     0,
+     1,
+     7,
+     0
+    ],
+    "context|STR": [
+     1,
+     64,
+     1,
+     6,
+     57
+    ],
+    "type x context|DEL STR": [
+     1,
+     16,
+     1,
+     6,
+     16
+    ],
+    "type x length|INS 2-4": [
+     1,
+     86,
+     1,
+     1,
+     69
+    ],
+    "type x context|INS STR": [
+     0,
+     48,
+     0,
+     0,
+     41
+    ],
+    "type x length|INS 5-10": [
+     0,
+     41,
+     0,
+     2,
+     33
+    ],
+    "type x length|INS >10": [
+     0,
+     43,
+     0,
+     0,
+     33
+    ]
+   }
+  },
+  {
+   "uid": "release_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46",
+   "group": "release",
+   "seed": "s1",
+   "sample": "HG008T",
+   "dataset": "HG008T_Illumina",
+   "threshold": 0.19937816262245178,
+   "best_f1": 0.248,
+   "ceiling": 0.2538,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": true,
+   "strata": {
+    "type|DEL": [
+     50,
+     169,
+     50,
+     97,
+     136
+    ],
+    "length|2-4": [
+     5,
+     130,
+     5,
+     27,
+     102
+    ],
+    "context|none": [
+     29,
+     51,
+     29,
+     47,
+     33
+    ],
+    "type x context|DEL none": [
+     24,
+     19,
+     24,
+     39,
+     13
+    ],
+    "type x length|DEL 2-4": [
+     5,
+     43,
+     5,
+     27,
+     33
+    ],
+    "all|all": [
+     81,
+     506,
+     81,
+     133,
+     384
+    ],
+    "length|>10": [
+     7,
+     63,
+     7,
+     11,
+     47
+    ],
+    "type x length|DEL >10": [
+     7,
+     20,
+     7,
+     9,
+     14
+    ],
+    "type|INS": [
+     31,
+     337,
+     31,
+     36,
+     248
+    ],
+    "length|1": [
+     64,
+     256,
+     64,
+     89,
+     188
+    ],
+    "type x context|INS none": [
+     5,
+     32,
+     5,
+     8,
+     20
+    ],
+    "type x length|INS 1": [
+     31,
+     166,
+     31,
+     33,
+     113
+    ],
+    "context|HP>=7": [
+     47,
+     388,
+     47,
+     63,
+     294
+    ],
+    "type x context|INS HP>=7": [
+     22,
+     255,
+     22,
+     21,
+     187
+    ],
+    "type x length|DEL 1": [
+     33,
+     90,
+     33,
+     56,
+     75
+    ],
+    "type x context|DEL HP>=7": [
+     25,
+     133,
+     25,
+     42,
+     107
+    ],
+    "length|5-10": [
+     5,
+     57,
+     5,
+     6,
+     47
+    ],
+    "type x length|DEL 5-10": [
+     5,
+     16,
+     5,
+     5,
+     14
+    ],
+    "context|HP4-6": [
+     5,
+     2,
+     5,
+     11,
+     0
+    ],
+    "type x context|INS HP4-6": [
+     4,
+     2,
+     4,
+     7,
+     0
+    ],
+    "type x context|DEL HP4-6": [
+     1,
+     0,
+     1,
+     4,
+     0
+    ],
+    "type x length|INS 2-4": [
+     0,
+     87,
+     0,
+     0,
+     69
+    ],
+    "context|STR": [
+     0,
+     65,
+     0,
+     12,
+     57
+    ],
+    "type x context|DEL STR": [
+     0,
+     17,
+     0,
+     12,
+     16
+    ],
+    "type x context|INS STR": [
+     0,
+     48,
+     0,
+     0,
+     41
+    ],
+    "type x length|INS 5-10": [
+     0,
+     41,
+     0,
+     1,
+     33
+    ],
+    "type x length|INS >10": [
+     0,
+     43,
+     0,
+     2,
+     33
+    ]
+   }
+  },
+  {
+   "uid": "release_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46",
+   "group": "release",
+   "seed": "s2",
+   "sample": "HG008T",
+   "dataset": "HG008T_Illumina",
+   "threshold": 0.5997829437255859,
+   "best_f1": 0.2836,
+   "ceiling": 0.2555,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": true,
+   "strata": {
+    "type|DEL": [
+     40,
+     179,
+     40,
+     60,
+     136
+    ],
+    "length|2-4": [
+     7,
+     128,
+     7,
+     12,
+     102
+    ],
+    "context|none": [
+     31,
+     49,
+     31,
+     31,
+     33
+    ],
+    "type x context|DEL none": [
+     24,
+     19,
+     24,
+     26,
+     13
+    ],
+    "type x length|DEL 2-4": [
+     6,
+     42,
+     6,
+     12,
+     33
+    ],
+    "all|all": [
+     87,
+     500,
+     87,
+     102,
+     384
+    ],
+    "length|>10": [
+     6,
+     64,
+     6,
+     2,
+     47
+    ],
+    "type x length|DEL >10": [
+     6,
+     21,
+     6,
+     2,
+     14
+    ],
+    "type|INS": [
+     47,
+     321,
+     47,
+     42,
+     248
+    ],
+    "length|1": [
+     68,
+     252,
+     68,
+     87,
+     188
+    ],
+    "type x context|INS none": [
+     7,
+     30,
+     7,
+     5,
+     20
+    ],
+    "type x length|INS 1": [
+     46,
+     151,
+     46,
+     41,
+     113
+    ],
+    "context|HP4-6": [
+     7,
+     0,
+     7,
+     12,
+     0
+    ],
+    "type x context|INS HP4-6": [
+     6,
+     0,
+     6,
+     6,
+     0
+    ],
+    "context|HP>=7": [
+     48,
+     387,
+     48,
+     57,
+     294
+    ],
+    "type x context|INS HP>=7": [
+     34,
+     243,
+     34,
+     31,
+     187
+    ],
+    "type x length|DEL 1": [
+     22,
+     101,
+     22,
+     46,
+     75
+    ],
+    "type x context|DEL HP>=7": [
+     14,
+     144,
+     14,
+     26,
+     107
+    ],
+    "length|5-10": [
+     6,
+     56,
+     6,
+     1,
+     47
+    ],
+    "type x length|DEL 5-10": [
+     6,
+     15,
+     6,
+     0,
+     14
+    ],
+    "type x context|DEL HP4-6": [
+     1,
+     0,
+     1,
+     6,
+     0
+    ],
+    "context|STR": [
+     1,
+     64,
+     1,
+     2,
+     57
+    ],
+    "type x context|DEL STR": [
+     1,
+     16,
+     1,
+     2,
+     16
+    ],
+    "type x length|INS 2-4": [
+     1,
+     86,
+     1,
+     0,
+     69
+    ],
+    "type x context|INS STR": [
+     0,
+     48,
+     0,
+     0,
+     41
+    ],
+    "type x length|INS 5-10": [
+     0,
+     41,
+     0,
+     1,
+     33
+    ],
+    "type x length|INS >10": [
+     0,
+     43,
+     0,
+     0,
+     33
+    ]
+   }
+  },
+  {
+   "uid": "unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46",
+   "group": "unseen",
+   "seed": "s0",
+   "sample": "HG008T",
+   "dataset": "HG008T_Illumina",
+   "threshold": 0.6276426315307617,
+   "best_f1": 0.2417,
+   "ceiling": 0.2266,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": true,
+   "strata": {
+    "type|DEL": [
+     27,
+     192,
+     27,
+     37,
+     136
+    ],
+    "length|2-4": [
+     5,
+     130,
+     5,
+     9,
+     102
+    ],
+    "context|none": [
+     30,
+     50,
+     30,
+     30,
+     33
+    ],
+    "type x context|DEL none": [
+     23,
+     20,
+     23,
+     25,
+     13
+    ],
+    "type x length|DEL 2-4": [
+     5,
+     43,
+     5,
+     9,
+     33
+    ],
+    "all|all": [
+     47,
+     540,
+     47,
+     50,
+     384
+    ],
+    "length|>10": [
+     6,
+     64,
+     6,
+     3,
+     47
+    ],
+    "type x length|DEL >10": [
+     6,
+     21,
+     6,
+     3,
+     14
+    ],
+    "type|INS": [
+     20,
+     348,
+     20,
+     13,
+     248
+    ],
+    "length|1": [
+     31,
+     289,
+     31,
+     36,
+     188
+    ],
+    "type x context|INS none": [
+     7,
+     30,
+     7,
+     5,
+     20
+    ],
+    "type x length|INS 1": [
+     20,
+     177,
+     20,
+     12,
+     113
+    ],
+    "context|HP4-6": [
+     7,
+     0,
+     7,
+     6,
+     0
+    ],
+    "type x context|INS HP4-6": [
+     6,
+     0,
+     6,
+     4,
+     0
+    ],
+    "context|HP>=7": [
+     10,
+     425,
+     10,
+     12,
+     294
+    ],
+    "type x context|INS HP>=7": [
+     7,
+     270,
+     7,
+     4,
+     187
+    ],
+    "type x length|DEL 1": [
+     11,
+     112,
+     11,
+     24,
+     75
+    ],
+    "type x context|DEL HP>=7": [
+     3,
+     155,
+     3,
+     8,
+     107
+    ],
+    "length|5-10": [
+     5,
+     57,
+     5,
+     2,
+     47
+    ],
+    "type x length|DEL 5-10": [
+     5,
+     16,
+     5,
+     1,
+     14
+    ],
+    "type x context|DEL HP4-6": [
+     1,
+     0,
+     1,
+     2,
+     0
+    ],
+    "type x length|INS 2-4": [
+     0,
+     87,
+     0,
+     0,
+     69
+    ],
+    "context|STR": [
+     0,
+     65,
+     0,
+     2,
+     57
+    ],
+    "type x context|DEL STR": [
+     0,
+     17,
+     0,
+     2,
+     16
+    ],
+    "type x context|INS STR": [
+     0,
+     48,
+     0,
+     0,
+     41
+    ],
+    "type x length|INS 5-10": [
+     0,
+     41,
+     0,
+     1,
+     33
+    ],
+    "type x length|INS >10": [
+     0,
+     43,
+     0,
+     0,
+     33
+    ]
+   }
+  },
+  {
+   "uid": "unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46",
+   "group": "unseen",
+   "seed": "s1",
+   "sample": "HG008T",
+   "dataset": "HG008T_Illumina",
+   "threshold": 0.6669604182243347,
+   "best_f1": 0.2436,
+   "ceiling": 0.2232,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": true,
+   "strata": {
+    "type|DEL": [
+     22,
+     197,
+     22,
+     23,
+     136
+    ],
+    "length|2-4": [
+     3,
+     132,
+     3,
+     6,
+     102
+    ],
+    "context|none": [
+     25,
+     55,
+     25,
+     20,
+     33
+    ],
+    "type x context|DEL none": [
+     20,
+     23,
+     20,
+     17,
+     13
+    ],
+    "type x length|DEL 2-4": [
+     3,
+     45,
+     3,
+     6,
+     33
+    ],
+    "all|all": [
+     37,
+     550,
+     37,
+     30,
+     384
+    ],
+    "length|>10": [
+     6,
+     64,
+     6,
+     2,
+     47
+    ],
+    "type x length|DEL >10": [
+     6,
+     21,
+     6,
+     2,
+     14
+    ],
+    "type|INS": [
+     15,
+     353,
+     15,
+     7,
+     248
+    ],
+    "length|1": [
+     24,
+     296,
+     24,
+     22,
+     188
+    ],
+    "type x context|INS none": [
+     5,
+     32,
+     5,
+     3,
+     20
+    ],
+    "type x length|INS 1": [
+     15,
+     182,
+     15,
+     7,
+     113
+    ],
+    "context|HP>=7": [
+     7,
+     428,
+     7,
+     5,
+     294
+    ],
+    "type x context|INS HP>=7": [
+     6,
+     271,
+     6,
+     2,
+     187
+    ],
+    "type x length|DEL 1": [
+     9,
+     114,
+     9,
+     15,
+     75
+    ],
+    "context|HP4-6": [
+     5,
+     2,
+     5,
+     4,
+     0
+    ],
+    "type x context|INS HP4-6": [
+     4,
+     2,
+     4,
+     2,
+     0
+    ],
+    "length|5-10": [
+     4,
+     58,
+     4,
+     0,
+     47
+    ],
+    "type x length|DEL 5-10": [
+     4,
+     17,
+     4,
+     0,
+     14
+    ],
+    "type x context|DEL HP4-6": [
+     1,
+     0,
+     1,
+     2,
+     0
+    ],
+    "type x context|DEL HP>=7": [
+     1,
+     157,
+     1,
+     3,
+     107
+    ],
+    "type x length|INS 2-4": [
+     0,
+     87,
+     0,
+     0,
+     69
+    ],
+    "context|STR": [
+     0,
+     65,
+     0,
+     1,
+     57
+    ],
+    "type x context|DEL STR": [
+     0,
+     17,
+     0,
+     1,
+     16
+    ],
+    "type x context|INS STR": [
+     0,
+     48,
+     0,
+     0,
+     41
+    ],
+    "type x length|INS 5-10": [
+     0,
+     41,
+     0,
+     0,
+     33
+    ],
+    "type x length|INS >10": [
+     0,
+     43,
+     0,
+     0,
+     33
+    ]
+   }
+  },
+  {
+   "uid": "unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46",
+   "group": "unseen",
+   "seed": "s2",
+   "sample": "HG008T",
+   "dataset": "HG008T_Illumina",
+   "threshold": 0.7244706749916077,
+   "best_f1": 0.2492,
+   "ceiling": 0.2249,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": true,
+   "strata": {
+    "type|DEL": [
+     23,
+     196,
+     23,
+     26,
+     136
+    ],
+    "length|2-4": [
+     4,
+     131,
+     4,
+     6,
+     102
+    ],
+    "context|none": [
+     24,
+     56,
+     24,
+     23,
+     33
+    ],
+    "type x context|DEL none": [
+     19,
+     24,
+     19,
+     19,
+     13
+    ],
+    "type x length|DEL 2-4": [
+     3,
+     45,
+     3,
+     6,
+     33
+    ],
+    "all|all": [
+     39,
+     548,
+     39,
+     34,
+     384
+    ],
+    "length|>10": [
+     6,
+     64,
+     6,
+     2,
+     47
+    ],
+    "type x length|DEL >10": [
+     6,
+     21,
+     6,
+     2,
+     14
+    ],
+    "type|INS": [
+     16,
+     352,
+     16,
+     8,
+     248
+    ],
+    "length|1": [
+     26,
+     294,
+     26,
+     26,
+     188
+    ],
+    "type x context|INS none": [
+     5,
+     32,
+     5,
+     4,
+     20
+    ],
+    "type x length|INS 1": [
+     15,
+     182,
+     15,
+     8,
+     113
+    ],
+    "context|HP>=7": [
+     9,
+     426,
+     9,
+     5,
+     294
+    ],
+    "type x context|INS HP>=7": [
+     6,
+     271,
+     6,
+     2,
+     187
+    ],
+    "type x length|DEL 1": [
+     11,
+     112,
+     11,
+     18,
+     75
+    ],
+    "type x context|DEL HP>=7": [
+     3,
+     155,
+     3,
+     3,
+     107
+    ],
+    "context|HP4-6": [
+     6,
+     1,
+     6,
+     5,
+     0
+    ],
+    "type x context|INS HP4-6": [
+     5,
+     1,
+     5,
+     2,
+     0
+    ],
+    "length|5-10": [
+     3,
+     59,
+     3,
+     0,
+     47
+    ],
+    "type x length|DEL 5-10": [
+     3,
+     18,
+     3,
+     0,
+     14
+    ],
+    "type x context|DEL HP4-6": [
+     1,
+     0,
+     1,
+     3,
+     0
+    ],
+    "type x length|INS 2-4": [
+     1,
+     86,
+     1,
+     0,
+     69
+    ],
+    "context|STR": [
+     0,
+     65,
+     0,
+     1,
+     57
+    ],
+    "type x context|DEL STR": [
+     0,
+     17,
+     0,
+     1,
+     16
+    ],
+    "type x context|INS STR": [
+     0,
+     48,
+     0,
+     0,
+     41
+    ],
+    "type x length|INS 5-10": [
+     0,
+     41,
+     0,
+     0,
+     33
+    ],
+    "type x length|INS >10": [
+     0,
+     43,
+     0,
+     0,
+     33
+    ]
+   }
+  },
+  {
+   "uid": "release_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46",
+   "group": "release",
+   "seed": "s0",
+   "sample": "HG008T",
+   "dataset": "HG008T_PacBio",
+   "threshold": 0.6854676604270935,
+   "best_f1": 0.2746,
+   "ceiling": 0.2555,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": true,
+   "strata": {
+    "type|DEL": [
+     45,
+     174,
+     45,
+     63,
+     136
+    ],
+    "length|2-4": [
+     7,
+     128,
+     7,
+     16,
+     102
+    ],
+    "context|none": [
+     33,
+     47,
+     33,
+     35,
+     33
+    ],
+    "type x context|DEL none": [
+     25,
+     18,
+     25,
+     25,
+     13
+    ],
+    "type x length|DEL 2-4": [
+     6,
+     42,
+     6,
+     11,
+     33
+    ],
+    "all|all": [
+     94,
+     493,
+     94,
+     107,
+     384
+    ],
+    "length|>10": [
+     6,
+     64,
+     6,
+     2,
+     47
+    ],
+    "type x length|DEL >10": [
+     6,
+     21,
+     6,
+     2,
+     14
+    ],
+    "type|INS": [
+     49,
+     319,
+     49,
+     44,
+     248
+    ],
+    "length|1": [
+     75,
+     245,
+     75,
+     84,
+     188
+    ],
+    "type x context|INS none": [
+     8,
+     29,
+     8,
+     10,
+     20
+    ],
+    "type x length|INS 1": [
+     48,
+     149,
+     48,
+     37,
+     113
+    ],
+    "context|HP4-6": [
+     7,
+     0,
+     7,
+     9,
+     0
+    ],
+    "type x context|INS HP4-6": [
+     6,
+     0,
+     6,
+     5,
+     0
+    ],
+    "context|HP>=7": [
+     53,
+     382,
+     53,
+     59,
+     294
+    ],
+    "type x context|INS HP>=7": [
+     35,
+     242,
+     35,
+     27,
+     187
+    ],
+    "type x length|DEL 1": [
+     27,
+     96,
+     27,
+     47,
+     75
+    ],
+    "type x context|DEL HP>=7": [
+     18,
+     140,
+     18,
+     32,
+     107
+    ],
+    "length|5-10": [
+     6,
+     56,
+     6,
+     5,
+     47
+    ],
+    "type x length|DEL 5-10": [
+     6,
+     15,
+     6,
+     3,
+     14
+    ],
+    "type x context|DEL HP4-6": [
+     1,
+     0,
+     1,
+     4,
+     0
+    ],
+    "context|STR": [
+     1,
+     64,
+     1,
+     4,
+     57
+    ],
+    "type x context|DEL STR": [
+     1,
+     16,
+     1,
+     2,
+     16
+    ],
+    "type x length|INS 2-4": [
+     1,
+     86,
+     1,
+     5,
+     69
+    ],
+    "type x context|INS STR": [
+     0,
+     48,
+     0,
+     2,
+     41
+    ],
+    "type x length|INS 5-10": [
+     0,
+     41,
+     0,
+     2,
+     33
+    ],
+    "type x length|INS >10": [
+     0,
+     43,
+     0,
+     0,
+     33
+    ]
+   }
+  },
+  {
+   "uid": "release_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46",
+   "group": "release",
+   "seed": "s1",
+   "sample": "HG008T",
+   "dataset": "HG008T_PacBio",
+   "threshold": 0.6684039235115051,
+   "best_f1": 0.2626,
+   "ceiling": 0.2589,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": true,
+   "strata": {
+    "type|DEL": [
+     47,
+     172,
+     47,
+     69,
+     136
+    ],
+    "length|2-4": [
+     8,
+     127,
+     8,
+     17,
+     102
+    ],
+    "context|none": [
+     35,
+     45,
+     35,
+     37,
+     33
+    ],
+    "type x context|DEL none": [
+     27,
+     16,
+     27,
+     29,
+     13
+    ],
+    "type x length|DEL 2-4": [
+     7,
+     41,
+     7,
+     12,
+     33
+    ],
+    "all|all": [
+     100,
+     487,
+     100,
+     123,
+     384
+    ],
+    "length|>10": [
+     7,
+     63,
+     7,
+     4,
+     47
+    ],
+    "type x length|DEL >10": [
+     7,
+     20,
+     7,
+     4,
+     14
+    ],
+    "type|INS": [
+     53,
+     315,
+     53,
+     54,
+     248
+    ],
+    "length|1": [
+     79,
+     241,
+     79,
+     100,
+     188
+    ],
+    "type x context|INS none": [
+     8,
+     29,
+     8,
+     8,
+     20
+    ],
+    "type x length|INS 1": [
+     52,
+     145,
+     52,
+     48,
+     113
+    ],
+    "context|HP4-6": [
+     7,
+     0,
+     7,
+     11,
+     0
+    ],
+    "type x context|INS HP4-6": [
+     6,
+     0,
+     6,
+     7,
+     0
+    ],
+    "context|HP>=7": [
+     57,
+     378,
+     57,
+     71,
+     294
+    ],
+    "type x context|INS HP>=7": [
+     39,
+     238,
+     39,
+     37,
+     187
+    ],
+    "type x length|DEL 1": [
+     27,
+     96,
+     27,
+     52,
+     75
+    ],
+    "type x context|DEL HP>=7": [
+     18,
+     140,
+     18,
+     34,
+     107
+    ],
+    "length|5-10": [
+     6,
+     56,
+     6,
+     2,
+     47
+    ],
+    "type x length|DEL 5-10": [
+     6,
+     15,
+     6,
+     1,
+     14
+    ],
+    "type x context|DEL HP4-6": [
+     1,
+     0,
+     1,
+     4,
+     0
+    ],
+    "context|STR": [
+     1,
+     64,
+     1,
+     4,
+     57
+    ],
+    "type x context|DEL STR": [
+     1,
+     16,
+     1,
+     2,
+     16
+    ],
+    "type x length|INS 2-4": [
+     1,
+     86,
+     1,
+     5,
+     69
+    ],
+    "type x context|INS STR": [
+     0,
+     48,
+     0,
+     2,
+     41
+    ],
+    "type x length|INS 5-10": [
+     0,
+     41,
+     0,
+     1,
+     33
+    ],
+    "type x length|INS >10": [
+     0,
+     43,
+     0,
+     0,
+     33
+    ]
+   }
+  },
+  {
+   "uid": "release_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46",
+   "group": "release",
+   "seed": "s2",
+   "sample": "HG008T",
+   "dataset": "HG008T_PacBio",
+   "threshold": 0.7070106863975525,
+   "best_f1": 0.275,
+   "ceiling": 0.2572,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": true,
+   "strata": {
+    "type|DEL": [
+     47,
+     172,
+     47,
+     57,
+     136
+    ],
+    "length|2-4": [
+     8,
+     127,
+     8,
+     7,
+     102
+    ],
+    "context|none": [
+     33,
+     47,
+     33,
+     23,
+     33
+    ],
+    "type x context|DEL none": [
+     25,
+     18,
+     25,
+     17,
+     13
+    ],
+    "type x length|DEL 2-4": [
+     7,
+     41,
+     7,
+     7,
+     33
+    ],
+    "all|all": [
+     104,
+     483,
+     104,
+     100,
+     384
+    ],
+    "length|>10": [
+     6,
+     64,
+     6,
+     2,
+     47
+    ],
+    "type x length|DEL >10": [
+     6,
+     21,
+     6,
+     2,
+     14
+    ],
+    "type|INS": [
+     57,
+     311,
+     57,
+     43,
+     248
+    ],
+    "length|1": [
+     84,
+     236,
+     84,
+     88,
+     188
+    ],
+    "type x context|INS none": [
+     8,
+     29,
+     8,
+     6,
+     20
+    ],
+    "type x length|INS 1": [
+     56,
+     141,
+     56,
+     41,
+     113
+    ],
+    "context|HP4-6": [
+     7,
+     0,
+     7,
+     5,
+     0
+    ],
+    "type x context|INS HP4-6": [
+     6,
+     0,
+     6,
+     3,
+     0
+    ],
+    "context|HP>=7": [
+     63,
+     372,
+     63,
+     71,
+     294
+    ],
+    "type x context|INS HP>=7": [
+     43,
+     234,
+     43,
+     34,
+     187
+    ],
+    "type x length|DEL 1": [
+     28,
+     95,
+     28,
+     47,
+     75
+    ],
+    "type x context|DEL HP>=7": [
+     20,
+     138,
+     20,
+     37,
+     107
+    ],
+    "length|5-10": [
+     6,
+     56,
+     6,
+     3,
+     47
+    ],
+    "type x length|DEL 5-10": [
+     6,
+     15,
+     6,
+     1,
+     14
+    ],
+    "type x context|DEL HP4-6": [
+     1,
+     0,
+     1,
+     2,
+     0
+    ],
+    "context|STR": [
+     1,
+     64,
+     1,
+     1,
+     57
+    ],
+    "type x context|DEL STR": [
+     1,
+     16,
+     1,
+     1,
+     16
+    ],
+    "type x length|INS 2-4": [
+     1,
+     86,
+     1,
+     0,
+     69
+    ],
+    "type x context|INS STR": [
+     0,
+     48,
+     0,
+     0,
+     41
+    ],
+    "type x length|INS 5-10": [
+     0,
+     41,
+     0,
+     2,
+     33
+    ],
+    "type x length|INS >10": [
+     0,
+     43,
+     0,
+     0,
+     33
+    ]
+   }
+  },
+  {
+   "uid": "unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46",
+   "group": "unseen",
+   "seed": "s0",
+   "sample": "HG008T",
+   "dataset": "HG008T_PacBio",
+   "threshold": 0.8322527408599854,
+   "best_f1": 0.1529,
+   "ceiling": 0.2385,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": true,
+   "strata": {
+    "type|DEL": [
+     26,
+     193,
+     26,
+     49,
+     136
+    ],
+    "length|2-4": [
+     7,
+     128,
+     7,
+     12,
+     102
+    ],
+    "context|none": [
+     29,
+     51,
+     29,
+     34,
+     33
+    ],
+    "type x context|DEL none": [
+     22,
+     21,
+     22,
+     28,
+     13
+    ],
+    "type x length|DEL 2-4": [
+     6,
+     42,
+     6,
+     12,
+     33
+    ],
+    "all|all": [
+     47,
+     540,
+     47,
+     62,
+     384
+    ],
+    "length|>10": [
+     6,
+     64,
+     6,
+     4,
+     47
+    ],
+    "type x length|DEL >10": [
+     6,
+     21,
+     6,
+     3,
+     14
+    ],
+    "type|INS": [
+     21,
+     347,
+     21,
+     13,
+     248
+    ],
+    "length|1": [
+     30,
+     290,
+     30,
+     41,
+     188
+    ],
+    "type x context|INS none": [
+     7,
+     30,
+     7,
+     6,
+     20
+    ],
+    "type x length|INS 1": [
+     20,
+     177,
+     20,
+     10,
+     113
+    ],
+    "context|HP4-6": [
+     6,
+     1,
+     6,
+     5,
+     0
+    ],
+    "type x context|INS HP4-6": [
+     5,
+     1,
+     5,
+     1,
+     0
+    ],
+    "context|HP>=7": [
+     11,
+     424,
+     11,
+     22,
+     294
+    ],
+    "type x context|INS HP>=7": [
+     9,
+     268,
+     9,
+     6,
+     187
+    ],
+    "type x length|DEL 1": [
+     10,
+     113,
+     10,
+     31,
+     75
+    ],
+    "length|5-10": [
+     4,
+     58,
+     4,
+     5,
+     47
+    ],
+    "type x length|DEL 5-10": [
+     4,
+     17,
+     4,
+     3,
+     14
+    ],
+    "type x context|DEL HP4-6": [
+     1,
+     0,
+     1,
+     4,
+     0
+    ],
+    "type x context|DEL HP>=7": [
+     2,
+     156,
+     2,
+     16,
+     107
+    ],
+    "context|STR": [
+     1,
+     64,
+     1,
+     1,
+     57
+    ],
+    "type x context|DEL STR": [
+     1,
+     16,
+     1,
+     1,
+     16
+    ],
+    "type x length|INS 2-4": [
+     1,
+     86,
+     1,
+     0,
+     69
+    ],
+    "type x context|INS STR": [
+     0,
+     48,
+     0,
+     0,
+     41
+    ],
+    "type x length|INS 5-10": [
+     0,
+     41,
+     0,
+     2,
+     33
+    ],
+    "type x length|INS >10": [
+     0,
+     43,
+     0,
+     1,
+     33
+    ]
+   }
+  },
+  {
+   "uid": "unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46",
+   "group": "unseen",
+   "seed": "s1",
+   "sample": "HG008T",
+   "dataset": "HG008T_PacBio",
+   "threshold": 0.8279844522476196,
+   "best_f1": 0.1923,
+   "ceiling": 0.2095,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": true,
+   "strata": {
+    "type|DEL": [
+     24,
+     195,
+     24,
+     38,
+     136
+    ],
+    "length|2-4": [
+     5,
+     130,
+     5,
+     4,
+     102
+    ],
+    "context|none": [
+     26,
+     54,
+     26,
+     18,
+     33
+    ],
+    "type x context|DEL none": [
+     19,
+     24,
+     19,
+     13,
+     13
+    ],
+    "type x length|DEL 2-4": [
+     4,
+     44,
+     4,
+     4,
+     33
+    ],
+    "all|all": [
+     48,
+     539,
+     48,
+     51,
+     384
+    ],
+    "length|>10": [
+     6,
+     64,
+     6,
+     2,
+     47
+    ],
+    "type x length|DEL >10": [
+     6,
+     21,
+     6,
+     2,
+     14
+    ],
+    "type|INS": [
+     24,
+     344,
+     24,
+     13,
+     248
+    ],
+    "length|1": [
+     35,
+     285,
+     35,
+     43,
+     188
+    ],
+    "type x context|INS none": [
+     7,
+     30,
+     7,
+     5,
+     20
+    ],
+    "type x length|INS 1": [
+     23,
+     174,
+     23,
+     13,
+     113
+    ],
+    "context|HP4-6": [
+     6,
+     1,
+     6,
+     6,
+     0
+    ],
+    "type x context|INS HP4-6": [
+     5,
+     1,
+     5,
+     2,
+     0
+    ],
+    "context|HP>=7": [
+     16,
+     419,
+     16,
+     25,
+     294
+    ],
+    "type x context|INS HP>=7": [
+     12,
+     265,
+     12,
+     6,
+     187
+    ],
+    "type x context|DEL HP>=7": [
+     4,
+     154,
+     4,
+     19,
+     107
+    ],
+    "type x length|DEL 1": [
+     12,
+     111,
+     12,
+     30,
+     75
+    ],
+    "length|5-10": [
+     2,
+     60,
+     2,
+     2,
+     47
+    ],
+    "type x length|DEL 5-10": [
+     2,
+     19,
+     2,
+     2,
+     14
+    ],
+    "type x context|DEL HP4-6": [
+     1,
+     0,
+     1,
+     4,
+     0
+    ],
+    "type x length|INS 2-4": [
+     1,
+     86,
+     1,
+     0,
+     69
+    ],
+    "context|STR": [
+     0,
+     65,
+     0,
+     2,
+     57
+    ],
+    "type x context|DEL STR": [
+     0,
+     17,
+     0,
+     2,
+     16
+    ],
+    "type x context|INS STR": [
+     0,
+     48,
+     0,
+     0,
+     41
+    ],
+    "type x length|INS 5-10": [
+     0,
+     41,
+     0,
+     0,
+     33
+    ],
+    "type x length|INS >10": [
+     0,
+     43,
+     0,
+     0,
+     33
+    ]
+   }
+  },
+  {
+   "uid": "unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46",
+   "group": "unseen",
+   "seed": "s2",
+   "sample": "HG008T",
+   "dataset": "HG008T_PacBio",
+   "threshold": 0.7924565076828003,
+   "best_f1": 0.2092,
+   "ceiling": 0.2027,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": true,
+   "strata": {
+    "type|DEL": [
+     28,
+     191,
+     28,
+     33,
+     136
+    ],
+    "length|2-4": [
+     5,
+     130,
+     5,
+     9,
+     102
+    ],
+    "context|none": [
+     29,
+     51,
+     29,
+     21,
+     33
+    ],
+    "type x context|DEL none": [
+     23,
+     20,
+     23,
+     16,
+     13
+    ],
+    "type x length|DEL 2-4": [
+     4,
+     44,
+     4,
+     9,
+     33
+    ],
+    "all|all": [
+     53,
+     534,
+     53,
+     49,
+     384
+    ],
+    "length|>10": [
+     7,
+     63,
+     7,
+     2,
+     47
+    ],
+    "type x length|DEL >10": [
+     7,
+     20,
+     7,
+     2,
+     14
+    ],
+    "type|INS": [
+     25,
+     343,
+     25,
+     16,
+     248
+    ],
+    "length|1": [
+     37,
+     283,
+     37,
+     36,
+     188
+    ],
+    "type x context|INS none": [
+     6,
+     31,
+     6,
+     5,
+     20
+    ],
+    "type x length|INS 1": [
+     24,
+     173,
+     24,
+     15,
+     113
+    ],
+    "context|HP4-6": [
+     7,
+     0,
+     7,
+     7,
+     0
+    ],
+    "type x context|INS HP4-6": [
+     6,
+     0,
+     6,
+     3,
+     0
+    ],
+    "context|HP>=7": [
+     17,
+     418,
+     17,
+     19,
+     294
+    ],
+    "type x context|INS HP>=7": [
+     13,
+     264,
+     13,
+     8,
+     187
+    ],
+    "type x length|DEL 1": [
+     13,
+     110,
+     13,
+     21,
+     75
+    ],
+    "length|5-10": [
+     4,
+     58,
+     4,
+     2,
+     47
+    ],
+    "type x length|DEL 5-10": [
+     4,
+     17,
+     4,
+     1,
+     14
+    ],
+    "type x context|DEL HP4-6": [
+     1,
+     0,
+     1,
+     4,
+     0
+    ],
+    "type x context|DEL HP>=7": [
+     4,
+     154,
+     4,
+     11,
+     107
+    ],
+    "type x length|INS 2-4": [
+     1,
+     86,
+     1,
+     0,
+     69
+    ],
+    "context|STR": [
+     0,
+     65,
+     0,
+     2,
+     57
+    ],
+    "type x context|DEL STR": [
+     0,
+     17,
+     0,
+     2,
+     16
+    ],
+    "type x context|INS STR": [
+     0,
+     48,
+     0,
+     0,
+     41
+    ],
+    "type x length|INS 5-10": [
+     0,
+     41,
+     0,
+     1,
+     33
+    ],
+    "type x length|INS >10": [
+     0,
+     43,
+     0,
+     0,
+     33
+    ]
+   }
+  },
+  {
+   "uid": "release_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46",
+   "group": "release",
+   "seed": "s0",
+   "sample": "HG008T",
+   "dataset": "HG008T_ONT",
+   "threshold": 0.3256518840789795,
+   "best_f1": 0.1869,
+   "ceiling": 0.2368,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": true,
+   "strata": {
+    "type|DEL": [
+     39,
+     180,
+     39,
+     146,
+     136
+    ],
+    "length|2-4": [
+     8,
+     127,
+     8,
+     48,
+     102
+    ],
+    "context|none": [
+     35,
+     45,
+     35,
+     78,
+     33
+    ],
+    "type x context|DEL none": [
+     27,
+     16,
+     27,
+     52,
+     13
+    ],
+    "type x length|DEL 2-4": [
+     7,
+     41,
+     7,
+     25,
+     33
+    ],
+    "all|all": [
+     88,
+     499,
+     88,
+     371,
+     384
+    ],
+    "length|>10": [
+     7,
+     63,
+     7,
+     15,
+     47
+    ],
+    "type x length|DEL >10": [
+     7,
+     20,
+     7,
+     11,
+     14
+    ],
+    "type|INS": [
+     49,
+     319,
+     49,
+     225,
+     248
+    ],
+    "length|1": [
+     67,
+     253,
+     67,
+     295,
+     188
+    ],
+    "type x context|INS none": [
+     8,
+     29,
+     8,
+     26,
+     20
+    ],
+    "type x length|INS 1": [
+     48,
+     149,
+     48,
+     192,
+     113
+    ],
+    "context|HP4-6": [
+     7,
+     0,
+     7,
+     18,
+     0
+    ],
+    "type x context|INS HP4-6": [
+     6,
+     0,
+     6,
+     10,
+     0
+    ],
+    "context|HP>=7": [
+     45,
+     390,
+     45,
+     258,
+     294
+    ],
+    "type x context|INS HP>=7": [
+     35,
+     242,
+     35,
+     177,
+     187
+    ],
+    "type x length|DEL 1": [
+     19,
+     104,
+     19,
+     103,
+     75
+    ],
+    "type x context|DEL HP>=7": [
+     10,
+     148,
+     10,
+     81,
+     107
+    ],
+    "length|5-10": [
+     6,
+     56,
+     6,
+     13,
+     47
+    ],
+    "type x length|DEL 5-10": [
+     6,
+     15,
+     6,
+     7,
+     14
+    ],
+    "type x context|DEL HP4-6": [
+     1,
+     0,
+     1,
+     8,
+     0
+    ],
+    "context|STR": [
+     1,
+     64,
+     1,
+     16,
+     57
+    ],
+    "type x context|DEL STR": [
+     1,
+     16,
+     1,
+     5,
+     16
+    ],
+    "type x length|INS 2-4": [
+     1,
+     86,
+     1,
+     23,
+     69
+    ],
+    "type x context|INS STR": [
+     0,
+     48,
+     0,
+     11,
+     41
+    ],
+    "type x length|INS 5-10": [
+     0,
+     41,
+     0,
+     6,
+     33
+    ],
+    "type x length|INS >10": [
+     0,
+     43,
+     0,
+     4,
+     33
+    ],
+    "context|VNTR": [
+     0,
+     0,
+     0,
+     1,
+     0
+    ],
+    "type x context|INS VNTR": [
+     0,
+     0,
+     0,
+     1,
+     0
+    ]
+   }
+  },
+  {
+   "uid": "release_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46",
+   "group": "release",
+   "seed": "s1",
+   "sample": "HG008T",
+   "dataset": "HG008T_ONT",
+   "threshold": 0.24007463455200195,
+   "best_f1": 0.1937,
+   "ceiling": 0.23,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": true,
+   "strata": {
+    "type|DEL": [
+     42,
+     177,
+     42,
+     128,
+     136
+    ],
+    "length|2-4": [
+     8,
+     127,
+     8,
+     45,
+     102
+    ],
+    "context|none": [
+     35,
+     45,
+     35,
+     70,
+     33
+    ],
+    "type x context|DEL none": [
+     27,
+     16,
+     27,
+     51,
+     13
+    ],
+    "type x length|DEL 2-4": [
+     7,
+     41,
+     7,
+     27,
+     33
+    ],
+    "all|all": [
+     90,
+     497,
+     90,
+     335,
+     384
+    ],
+    "length|>10": [
+     7,
+     63,
+     7,
+     9,
+     47
+    ],
+    "type x length|DEL >10": [
+     7,
+     20,
+     7,
+     6,
+     14
+    ],
+    "type|INS": [
+     48,
+     320,
+     48,
+     207,
+     248
+    ],
+    "length|1": [
+     69,
+     251,
+     69,
+     263,
+     188
+    ],
+    "type x context|INS none": [
+     8,
+     29,
+     8,
+     19,
+     20
+    ],
+    "type x length|INS 1": [
+     47,
+     150,
+     47,
+     178,
+     113
+    ],
+    "context|HP4-6": [
+     7,
+     0,
+     7,
+     17,
+     0
+    ],
+    "type x context|INS HP4-6": [
+     6,
+     0,
+     6,
+     7,
+     0
+    ],
+    "context|HP>=7": [
+     47,
+     388,
+     47,
+     229,
+     294
+    ],
+    "type x context|INS HP>=7": [
+     34,
+     243,
+     34,
+     167,
+     187
+    ],
+    "type x length|DEL 1": [
+     22,
+     101,
+     22,
+     85,
+     75
+    ],
+    "type x context|DEL HP>=7": [
+     13,
+     145,
+     13,
+     62,
+     107
+    ],
+    "length|5-10": [
+     6,
+     56,
+     6,
+     18,
+     47
+    ],
+    "type x length|DEL 5-10": [
+     6,
+     15,
+     6,
+     10,
+     14
+    ],
+    "type x context|DEL HP4-6": [
+     1,
+     0,
+     1,
+     10,
+     0
+    ],
+    "context|STR": [
+     1,
+     64,
+     1,
+     18,
+     57
+    ],
+    "type x context|DEL STR": [
+     1,
+     16,
+     1,
+     5,
+     16
+    ],
+    "type x length|INS 2-4": [
+     1,
+     86,
+     1,
+     18,
+     69
+    ],
+    "type x context|INS STR": [
+     0,
+     48,
+     0,
+     13,
+     41
+    ],
+    "type x length|INS 5-10": [
+     0,
+     41,
+     0,
+     8,
+     33
+    ],
+    "type x length|INS >10": [
+     0,
+     43,
+     0,
+     3,
+     33
+    ],
+    "context|VNTR": [
+     0,
+     0,
+     0,
+     1,
+     0
+    ],
+    "type x context|INS VNTR": [
+     0,
+     0,
+     0,
+     1,
+     0
+    ]
+   }
+  },
+  {
+   "uid": "release_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46",
+   "group": "release",
+   "seed": "s2",
+   "sample": "HG008T",
+   "dataset": "HG008T_ONT",
+   "threshold": 0.2895215153694153,
+   "best_f1": 0.182,
+   "ceiling": 0.2351,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": true,
+   "strata": {
+    "type|DEL": [
+     43,
+     176,
+     43,
+     233,
+     136
+    ],
+    "length|2-4": [
+     8,
+     127,
+     8,
+     73,
+     102
+    ],
+    "context|none": [
+     35,
+     45,
+     35,
+     99,
+     33
+    ],
+    "type x context|DEL none": [
+     27,
+     16,
+     27,
+     74,
+     13
+    ],
+    "type x length|DEL 2-4": [
+     7,
+     41,
+     7,
+     40,
+     33
+    ],
+    "all|all": [
+     95,
+     492,
+     95,
+     526,
+     384
+    ],
+    "length|>10": [
+     7,
+     63,
+     7,
+     24,
+     47
+    ],
+    "type x length|DEL >10": [
+     7,
+     20,
+     7,
+     16,
+     14
+    ],
+    "type|INS": [
+     52,
+     316,
+     52,
+     293,
+     248
+    ],
+    "length|1": [
+     74,
+     246,
+     74,
+     401,
+     188
+    ],
+    "type x context|INS none": [
+     8,
+     29,
+     8,
+     25,
+     20
+    ],
+    "type x length|INS 1": [
+     51,
+     146,
+     51,
+     239,
+     113
+    ],
+    "context|HP4-6": [
+     6,
+     1,
+     6,
+     22,
+     0
+    ],
+    "type x context|INS HP4-6": [
+     5,
+     1,
+     5,
+     9,
+     0
+    ],
+    "context|HP>=7": [
+     53,
+     382,
+     53,
+     372,
+     294
+    ],
+    "type x context|INS HP>=7": [
+     39,
+     238,
+     39,
+     238,
+     187
+    ],
+    "type x length|DEL 1": [
+     23,
+     100,
+     23,
+     162,
+     75
+    ],
+    "type x context|DEL HP>=7": [
+     14,
+     144,
+     14,
+     134,
+     107
+    ],
+    "length|5-10": [
+     6,
+     56,
+     6,
+     28,
+     47
+    ],
+    "type x length|DEL 5-10": [
+     6,
+     15,
+     6,
+     15,
+     14
+    ],
+    "type x context|DEL HP4-6": [
+     1,
+     0,
+     1,
+     13,
+     0
+    ],
+    "context|STR": [
+     1,
+     64,
+     1,
+     30,
+     57
+    ],
+    "type x context|DEL STR": [
+     1,
+     16,
+     1,
+     10,
+     16
+    ],
+    "type x length|INS 2-4": [
+     1,
+     86,
+     1,
+     33,
+     69
+    ],
+    "type x context|INS STR": [
+     0,
+     48,
+     0,
+     20,
+     41
+    ],
+    "type x length|INS 5-10": [
+     0,
+     41,
+     0,
+     13,
+     33
+    ],
+    "type x length|INS >10": [
+     0,
+     43,
+     0,
+     8,
+     33
+    ],
+    "context|VNTR": [
+     0,
+     0,
+     0,
+     3,
+     0
+    ],
+    "type x context|DEL VNTR": [
+     0,
+     0,
+     0,
+     2,
+     0
+    ],
+    "type x context|INS VNTR": [
+     0,
+     0,
+     0,
+     1,
+     0
+    ]
+   }
+  },
+  {
+   "uid": "unseen_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46",
+   "group": "unseen",
+   "seed": "s0",
+   "sample": "HG008T",
+   "dataset": "HG008T_ONT",
+   "threshold": 0.3217044472694397,
+   "best_f1": 0.1635,
+   "ceiling": 0.1141,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": true,
+   "strata": {
+    "type|DEL": [
+     26,
+     193,
+     26,
+     39,
+     136
+    ],
+    "length|2-4": [
+     5,
+     130,
+     5,
+     19,
+     102
+    ],
+    "context|none": [
+     29,
+     51,
+     29,
+     35,
+     33
+    ],
+    "type x context|DEL none": [
+     23,
+     20,
+     23,
+     27,
+     13
+    ],
+    "type x length|DEL 2-4": [
+     5,
+     43,
+     5,
+     15,
+     33
+    ],
+    "all|all": [
+     49,
+     538,
+     49,
+     68,
+     384
+    ],
+    "length|>10": [
+     7,
+     63,
+     7,
+     8,
+     47
+    ],
+    "type x length|DEL >10": [
+     7,
+     20,
+     7,
+     6,
+     14
+    ],
+    "type|INS": [
+     23,
+     345,
+     23,
+     29,
+     248
+    ],
+    "length|1": [
+     32,
+     288,
+     32,
+     37,
+     188
+    ],
+    "type x context|INS none": [
+     6,
+     31,
+     6,
+     8,
+     20
+    ],
+    "type x length|INS 1": [
+     23,
+     174,
+     23,
+     22,
+     113
+    ],
+    "context|HP4-6": [
+     6,
+     1,
+     6,
+     6,
+     0
+    ],
+    "type x context|INS HP4-6": [
+     5,
+     1,
+     5,
+     4,
+     0
+    ],
+    "context|HP>=7": [
+     13,
+     422,
+     13,
+     19,
+     294
+    ],
+    "type x context|INS HP>=7": [
+     12,
+     265,
+     12,
+     14,
+     187
+    ],
+    "type x length|DEL 1": [
+     9,
+     114,
+     9,
+     15,
+     75
+    ],
+    "length|5-10": [
+     5,
+     57,
+     5,
+     4,
+     47
+    ],
+    "type x length|DEL 5-10": [
+     5,
+     16,
+     5,
+     3,
+     14
+    ],
+    "type x context|DEL HP4-6": [
+     1,
+     0,
+     1,
+     2,
+     0
+    ],
+    "context|STR": [
+     1,
+     64,
+     1,
+     7,
+     57
+    ],
+    "type x context|DEL STR": [
+     1,
+     16,
+     1,
+     4,
+     16
+    ],
+    "type x context|DEL HP>=7": [
+     1,
+     157,
+     1,
+     5,
+     107
+    ],
+    "type x length|INS 2-4": [
+     0,
+     87,
+     0,
+     4,
+     69
+    ],
+    "type x context|INS STR": [
+     0,
+     48,
+     0,
+     3,
+     41
+    ],
+    "type x length|INS 5-10": [
+     0,
+     41,
+     0,
+     1,
+     33
+    ],
+    "type x length|INS >10": [
+     0,
+     43,
+     0,
+     2,
+     33
+    ],
+    "context|VNTR": [
+     0,
+     0,
+     0,
+     1,
+     0
+    ],
+    "type x context|DEL VNTR": [
+     0,
+     0,
+     0,
+     1,
+     0
+    ]
+   }
+  },
+  {
+   "uid": "unseen_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46",
+   "group": "unseen",
+   "seed": "s1",
+   "sample": "HG008T",
+   "dataset": "HG008T_ONT",
+   "threshold": 0.676965594291687,
+   "best_f1": 0.1639,
+   "ceiling": 0.1738,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": true,
+   "strata": {
+    "type|DEL": [
+     28,
+     191,
+     28,
+     37,
+     136
+    ],
+    "length|2-4": [
+     7,
+     128,
+     7,
+     15,
+     102
+    ],
+    "context|none": [
+     31,
+     49,
+     31,
+     40,
+     33
+    ],
+    "type x context|DEL none": [
+     24,
+     19,
+     24,
+     29,
+     13
+    ],
+    "type x length|DEL 2-4": [
+     7,
+     41,
+     7,
+     12,
+     33
+    ],
+    "all|all": [
+     50,
+     537,
+     50,
+     64,
+     384
+    ],
+    "length|>10": [
+     6,
+     64,
+     6,
+     3,
+     47
+    ],
+    "type x length|DEL >10": [
+     6,
+     21,
+     6,
+     3,
+     14
+    ],
+    "type|INS": [
+     22,
+     346,
+     22,
+     27,
+     248
+    ],
+    "length|1": [
+     33,
+     287,
+     33,
+     43,
+     188
+    ],
+    "type x context|INS none": [
+     7,
+     30,
+     7,
+     11,
+     20
+    ],
+    "type x length|INS 1": [
+     22,
+     175,
+     22,
+     23,
+     113
+    ],
+    "context|HP4-6": [
+     7,
+     0,
+     7,
+     10,
+     0
+    ],
+    "type x context|INS HP4-6": [
+     6,
+     0,
+     6,
+     5,
+     0
+    ],
+    "context|HP>=7": [
+     11,
+     424,
+     11,
+     12,
+     294
+    ],
+    "type x context|INS HP>=7": [
+     9,
+     268,
+     9,
+     10,
+     187
+    ],
+    "type x length|DEL 1": [
+     11,
+     112,
+     11,
+     20,
+     75
+    ],
+    "type x context|DEL HP>=7": [
+     2,
+     156,
+     2,
+     2,
+     107
+    ],
+    "length|5-10": [
+     4,
+     58,
+     4,
+     3,
+     47
+    ],
+    "type x length|DEL 5-10": [
+     4,
+     17,
+     4,
+     2,
+     14
+    ],
+    "type x context|DEL HP4-6": [
+     1,
+     0,
+     1,
+     5,
+     0
+    ],
+    "context|STR": [
+     1,
+     64,
+     1,
+     2,
+     57
+    ],
+    "type x context|DEL STR": [
+     1,
+     16,
+     1,
+     1,
+     16
+    ],
+    "type x length|INS 2-4": [
+     0,
+     87,
+     0,
+     3,
+     69
+    ],
+    "type x context|INS STR": [
+     0,
+     48,
+     0,
+     1,
+     41
+    ],
+    "type x length|INS 5-10": [
+     0,
+     41,
+     0,
+     1,
+     33
+    ],
+    "type x length|INS >10": [
+     0,
+     43,
+     0,
+     0,
+     33
+    ]
+   }
+  },
+  {
+   "uid": "unseen_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46",
+   "group": "unseen",
+   "seed": "s2",
+   "sample": "HG008T",
+   "dataset": "HG008T_ONT",
+   "threshold": 0.5580074191093445,
+   "best_f1": 0.1615,
+   "ceiling": 0.1261,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": true,
+   "strata": {
+    "type|DEL": [
+     30,
+     189,
+     30,
+     42,
+     136
+    ],
+    "length|>10": [
+     7,
+     63,
+     7,
+     8,
+     47
+    ],
+    "context|none": [
+     34,
+     46,
+     34,
+     48,
+     33
+    ],
+    "type x context|DEL none": [
+     26,
+     17,
+     26,
+     33,
+     13
+    ],
+    "type x length|DEL >10": [
+     7,
+     20,
+     7,
+     6,
+     14
+    ],
+    "all|all": [
+     52,
+     535,
+     52,
+     73,
+     384
+    ],
+    "type|INS": [
+     22,
+     346,
+     22,
+     31,
+     248
+    ],
+    "length|1": [
+     33,
+     287,
+     33,
+     34,
+     188
+    ],
+    "type x context|INS none": [
+     8,
+     29,
+     8,
+     15,
+     20
+    ],
+    "type x length|INS 1": [
+     22,
+     175,
+     22,
+     18,
+     113
+    ],
+    "context|HP4-6": [
+     6,
+     1,
+     6,
+     7,
+     0
+    ],
+    "type x context|INS HP4-6": [
+     5,
+     1,
+     5,
+     4,
+     0
+    ],
+    "context|HP>=7": [
+     11,
+     424,
+     11,
+     12,
+     294
+    ],
+    "type x context|INS HP>=7": [
+     9,
+     268,
+     9,
+     9,
+     187
+    ],
+    "type x length|DEL 1": [
+     11,
+     112,
+     11,
+     16,
+     75
+    ],
+    "type x context|DEL HP>=7": [
+     2,
+     156,
+     2,
+     3,
+     107
+    ],
+    "length|2-4": [
+     6,
+     129,
+     6,
+     22,
+     102
+    ],
+    "type x length|DEL 2-4": [
+     6,
+     42,
+     6,
+     15,
+     33
+    ],
+    "length|5-10": [
+     6,
+     56,
+     6,
+     9,
+     47
+    ],
+    "type x length|DEL 5-10": [
+     6,
+     15,
+     6,
+     5,
+     14
+    ],
+    "type x context|DEL HP4-6": [
+     1,
+     0,
+     1,
+     3,
+     0
+    ],
+    "context|STR": [
+     1,
+     64,
+     1,
+     6,
+     57
+    ],
+    "type x context|DEL STR": [
+     1,
+     16,
+     1,
+     3,
+     16
+    ],
+    "type x length|INS 2-4": [
+     0,
+     87,
+     0,
+     7,
+     69
+    ],
+    "type x context|INS STR": [
+     0,
+     48,
+     0,
+     3,
+     41
+    ],
+    "type x length|INS 5-10": [
+     0,
+     41,
+     0,
+     4,
+     33
+    ],
+    "type x length|INS >10": [
+     0,
+     43,
+     0,
+     2,
+     33
+    ]
+   }
+  },
+  {
+   "uid": "release_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46",
+   "group": "release",
+   "seed": "s0",
+   "sample": "COLO829T",
+   "dataset": "COLO829T_Illumina",
+   "threshold": 0.38437458872795105,
+   "best_f1": 0.2126,
+   "ceiling": 0.2748,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": true,
+   "strata": {
+    "type|INS": [
+     7,
+     70,
+     7,
+     11,
+     52
+    ],
+    "length|1": [
+     12,
+     57,
+     12,
+     28,
+     37
+    ],
+    "context|none": [
+     9,
+     19,
+     9,
+     27,
+     12
+    ],
+    "type x context|INS none": [
+     4,
+     13,
+     4,
+     4,
+     9
+    ],
+    "type x length|INS 1": [
+     6,
+     28,
+     6,
+     7,
+     17
+    ],
+    "all|all": [
+     17,
+     114,
+     17,
+     48,
+     81
+    ],
+    "type|DEL": [
+     10,
+     44,
+     10,
+     37,
+     29
+    ],
+    "type x context|DEL none": [
+     5,
+     6,
+     5,
+     23,
+     3
+    ],
+    "type x length|DEL 1": [
+     6,
+     29,
+     6,
+     21,
+     20
+    ],
+    "context|HP4-6": [
+     3,
+     3,
+     3,
+     9,
+     3
+    ],
+    "type x context|DEL HP4-6": [
+     3,
+     1,
+     3,
+     5,
+     1
+    ],
+    "length|>10": [
+     2,
+     13,
+     2,
+     3,
+     8
+    ],
+    "type x length|DEL >10": [
+     2,
+     2,
+     2,
+     3,
+     0
+    ],
+    "context|HP>=7": [
+     4,
+     66,
+     4,
+     8,
+     42
+    ],
+    "type x context|INS HP>=7": [
+     2,
+     33,
+     2,
+     2,
+     20
+    ],
+    "length|5-10": [
+     1,
+     9,
+     1,
+     7,
+     8
+    ],
+    "type x length|DEL 5-10": [
+     1,
+     2,
+     1,
+     7,
+     2
+    ],
+    "type x context|DEL HP>=7": [
+     2,
+     33,
+     2,
+     6,
+     22
+    ],
+    "length|2-4": [
+     2,
+     35,
+     2,
+     10,
+     28
+    ],
+    "context|STR": [
+     1,
+     26,
+     1,
+     4,
+     24
+    ],
+    "type x context|INS STR": [
+     1,
+     22,
+     1,
+     1,
+     21
+    ],
+    "type x length|INS 2-4": [
+     1,
+     24,
+     1,
+     4,
+     21
+    ],
+    "type x length|DEL 2-4": [
+     1,
+     11,
+     1,
+     6,
+     7
+    ],
+    "type x length|INS >10": [
+     0,
+     11,
+     0,
+     0,
+     8
+    ],
+    "type x context|DEL STR": [
+     0,
+     4,
+     0,
+     3,
+     3
+    ],
+    "type x length|INS 5-10": [
+     0,
+     7,
+     0,
+     0,
+     6
+    ],
+    "type x context|INS HP4-6": [
+     0,
+     2,
+     0,
+     4,
+     2
+    ]
+   }
+  },
+  {
+   "uid": "release_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46",
+   "group": "release",
+   "seed": "s1",
+   "sample": "COLO829T",
+   "dataset": "COLO829T_Illumina",
+   "threshold": 0.19937816262245178,
+   "best_f1": 0.1667,
+   "ceiling": 0.2748,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": true,
+   "strata": {
+    "type|INS": [
+     9,
+     68,
+     9,
+     16,
+     52
+    ],
+    "length|1": [
+     15,
+     54,
+     15,
+     63,
+     37
+    ],
+    "context|none": [
+     8,
+     20,
+     8,
+     35,
+     12
+    ],
+    "type x context|INS none": [
+     4,
+     13,
+     4,
+     4,
+     9
+    ],
+    "type x length|INS 1": [
+     9,
+     25,
+     9,
+     13,
+     17
+    ],
+    "all|all": [
+     19,
+     112,
+     19,
+     89,
+     81
+    ],
+    "type|DEL": [
+     10,
+     44,
+     10,
+     73,
+     29
+    ],
+    "type x context|DEL none": [
+     4,
+     7,
+     4,
+     31,
+     3
+    ],
+    "type x length|DEL 1": [
+     6,
+     29,
+     6,
+     50,
+     20
+    ],
+    "context|HP4-6": [
+     2,
+     4,
+     2,
+     7,
+     3
+    ],
+    "type x context|DEL HP4-6": [
+     2,
+     2,
+     2,
+     4,
+     1
+    ],
+    "context|HP>=7": [
+     9,
+     61,
+     9,
+     45,
+     42
+    ],
+    "type x context|INS HP>=7": [
+     5,
+     30,
+     5,
+     9,
+     20
+    ],
+    "length|>10": [
+     3,
+     12,
+     3,
+     7,
+     8
+    ],
+    "type x length|DEL >10": [
+     3,
+     1,
+     3,
+     6,
+     0
+    ],
+    "type x context|DEL HP>=7": [
+     4,
+     31,
+     4,
+     36,
+     22
+    ],
+    "length|2-4": [
+     1,
+     36,
+     1,
+     12,
+     28
+    ],
+    "type x length|DEL 2-4": [
+     1,
+     11,
+     1,
+     10,
+     7
+    ],
+    "type x length|INS >10": [
+     0,
+     11,
+     0,
+     1,
+     8
+    ],
+    "context|STR": [
+     0,
+     27,
+     0,
+     2,
+     24
+    ],
+    "type x context|INS STR": [
+     0,
+     23,
+     0,
+     0,
+     21
+    ],
+    "type x length|INS 2-4": [
+     0,
+     25,
+     0,
+     2,
+     21
+    ],
+    "length|5-10": [
+     0,
+     10,
+     0,
+     7,
+     8
+    ],
+    "type x context|DEL STR": [
+     0,
+     4,
+     0,
+     2,
+     3
+    ],
+    "type x length|DEL 5-10": [
+     0,
+     3,
+     0,
+     7,
+     2
+    ],
+    "type x length|INS 5-10": [
+     0,
+     7,
+     0,
+     0,
+     6
+    ],
+    "type x context|INS HP4-6": [
+     0,
+     2,
+     0,
+     3,
+     2
+    ]
+   }
+  },
+  {
+   "uid": "release_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46",
+   "group": "release",
+   "seed": "s2",
+   "sample": "COLO829T",
+   "dataset": "COLO829T_Illumina",
+   "threshold": 0.5997829437255859,
+   "best_f1": 0.2381,
+   "ceiling": 0.2748,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": true,
+   "strata": {
+    "type|INS": [
+     9,
+     68,
+     9,
+     9,
+     52
+    ],
+    "length|1": [
+     13,
+     56,
+     13,
+     26,
+     37
+    ],
+    "context|none": [
+     9,
+     19,
+     9,
+     14,
+     12
+    ],
+    "type x context|INS none": [
+     4,
+     13,
+     4,
+     3,
+     9
+    ],
+    "type x length|INS 1": [
+     9,
+     25,
+     9,
+     8,
+     17
+    ],
+    "all|all": [
+     17,
+     114,
+     17,
+     31,
+     81
+    ],
+    "type|DEL": [
+     8,
+     46,
+     8,
+     22,
+     29
+    ],
+    "type x context|DEL none": [
+     5,
+     6,
+     5,
+     11,
+     3
+    ],
+    "type x length|DEL 1": [
+     4,
+     31,
+     4,
+     18,
+     20
+    ],
+    "context|HP>=7": [
+     6,
+     64,
+     6,
+     11,
+     42
+    ],
+    "type x context|INS HP>=7": [
+     5,
+     30,
+     5,
+     4,
+     20
+    ],
+    "context|HP4-6": [
+     2,
+     4,
+     2,
+     6,
+     3
+    ],
+    "type x context|DEL HP4-6": [
+     2,
+     2,
+     2,
+     4,
+     1
+    ],
+    "length|>10": [
+     3,
+     12,
+     3,
+     2,
+     8
+    ],
+    "type x length|DEL >10": [
+     3,
+     1,
+     3,
+     2,
+     0
+    ],
+    "type x context|DEL HP>=7": [
+     1,
+     34,
+     1,
+     7,
+     22
+    ],
+    "length|2-4": [
+     1,
+     36,
+     1,
+     3,
+     28
+    ],
+    "type x length|DEL 2-4": [
+     1,
+     11,
+     1,
+     2,
+     7
+    ],
+    "type x length|INS >10": [
+     0,
+     11,
+     0,
+     0,
+     8
+    ],
+    "context|STR": [
+     0,
+     27,
+     0,
+     0,
+     24
+    ],
+    "type x context|INS STR": [
+     0,
+     23,
+     0,
+     0,
+     21
+    ],
+    "type x length|INS 2-4": [
+     0,
+     25,
+     0,
+     1,
+     21
+    ],
+    "length|5-10": [
+     0,
+     10,
+     0,
+     0,
+     8
+    ],
+    "type x context|DEL STR": [
+     0,
+     4,
+     0,
+     0,
+     3
+    ],
+    "type x length|DEL 5-10": [
+     0,
+     3,
+     0,
+     0,
+     2
+    ],
+    "type x length|INS 5-10": [
+     0,
+     7,
+     0,
+     0,
+     6
+    ],
+    "type x context|INS HP4-6": [
+     0,
+     2,
+     0,
+     2,
+     2
+    ]
+   }
+  },
+  {
+   "uid": "unseen_s0_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46",
+   "group": "unseen",
+   "seed": "s0",
+   "sample": "COLO829T",
+   "dataset": "COLO829T_Illumina",
+   "threshold": 0.6276426315307617,
+   "best_f1": 0.1839,
+   "ceiling": 0.2595,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": true,
+   "strata": {
+    "type|INS": [
+     6,
+     71,
+     6,
+     3,
+     52
+    ],
+    "length|1": [
+     11,
+     58,
+     11,
+     19,
+     37
+    ],
+    "context|none": [
+     10,
+     18,
+     10,
+     14,
+     12
+    ],
+    "type x context|INS none": [
+     4,
+     13,
+     4,
+     2,
+     9
+    ],
+    "type x length|INS 1": [
+     6,
+     28,
+     6,
+     3,
+     17
+    ],
+    "all|all": [
+     15,
+     116,
+     15,
+     22,
+     81
+    ],
+    "type|DEL": [
+     9,
+     45,
+     9,
+     19,
+     29
+    ],
+    "type x context|DEL none": [
+     6,
+     5,
+     6,
+     12,
+     3
+    ],
+    "type x length|DEL 1": [
+     5,
+     30,
+     5,
+     16,
+     20
+    ],
+    "context|HP4-6": [
+     3,
+     3,
+     3,
+     5,
+     3
+    ],
+    "type x context|DEL HP4-6": [
+     3,
+     1,
+     3,
+     4,
+     1
+    ],
+    "length|>10": [
+     3,
+     12,
+     3,
+     1,
+     8
+    ],
+    "type x length|DEL >10": [
+     3,
+     1,
+     3,
+     1,
+     0
+    ],
+    "context|HP>=7": [
+     2,
+     68,
+     2,
+     3,
+     42
+    ],
+    "type x context|INS HP>=7": [
+     2,
+     33,
+     2,
+     0,
+     20
+    ],
+    "length|2-4": [
+     1,
+     36,
+     1,
+     2,
+     28
+    ],
+    "type x length|DEL 2-4": [
+     1,
+     11,
+     1,
+     2,
+     7
+    ],
+    "type x length|INS >10": [
+     0,
+     11,
+     0,
+     0,
+     8
+    ],
+    "context|STR": [
+     0,
+     27,
+     0,
+     0,
+     24
+    ],
+    "type x context|INS STR": [
+     0,
+     23,
+     0,
+     0,
+     21
+    ],
+    "type x context|DEL HP>=7": [
+     0,
+     35,
+     0,
+     3,
+     22
+    ],
+    "type x length|INS 2-4": [
+     0,
+     25,
+     0,
+     0,
+     21
+    ],
+    "length|5-10": [
+     0,
+     10,
+     0,
+     0,
+     8
+    ],
+    "type x context|DEL STR": [
+     0,
+     4,
+     0,
+     0,
+     3
+    ],
+    "type x length|DEL 5-10": [
+     0,
+     3,
+     0,
+     0,
+     2
+    ],
+    "type x length|INS 5-10": [
+     0,
+     7,
+     0,
+     0,
+     6
+    ],
+    "type x context|INS HP4-6": [
+     0,
+     2,
+     0,
+     1,
+     2
+    ]
+   }
+  },
+  {
+   "uid": "unseen_s1_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46",
+   "group": "unseen",
+   "seed": "s1",
+   "sample": "COLO829T",
+   "dataset": "COLO829T_Illumina",
+   "threshold": 0.6669604182243347,
+   "best_f1": 0.1829,
+   "ceiling": 0.2595,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": true,
+   "strata": {
+    "type|INS": [
+     5,
+     72,
+     5,
+     3,
+     52
+    ],
+    "length|1": [
+     10,
+     59,
+     10,
+     14,
+     37
+    ],
+    "context|none": [
+     8,
+     20,
+     8,
+     9,
+     12
+    ],
+    "type x context|INS none": [
+     3,
+     14,
+     3,
+     1,
+     9
+    ],
+    "type x length|INS 1": [
+     5,
+     29,
+     5,
+     3,
+     17
+    ],
+    "all|all": [
+     13,
+     118,
+     13,
+     15,
+     81
+    ],
+    "type|DEL": [
+     8,
+     46,
+     8,
+     12,
+     29
+    ],
+    "type x context|DEL none": [
+     5,
+     6,
+     5,
+     8,
+     3
+    ],
+    "type x length|DEL 1": [
+     5,
+     30,
+     5,
+     11,
+     20
+    ],
+    "context|HP4-6": [
+     3,
+     3,
+     3,
+     4,
+     3
+    ],
+    "type x context|DEL HP4-6": [
+     3,
+     1,
+     3,
+     2,
+     1
+    ],
+    "length|>10": [
+     2,
+     13,
+     2,
+     1,
+     8
+    ],
+    "type x length|DEL >10": [
+     2,
+     2,
+     2,
+     1,
+     0
+    ],
+    "context|HP>=7": [
+     2,
+     68,
+     2,
+     2,
+     42
+    ],
+    "type x context|INS HP>=7": [
+     2,
+     33,
+     2,
+     0,
+     20
+    ],
+    "length|2-4": [
+     1,
+     36,
+     1,
+     0,
+     28
+    ],
+    "type x length|DEL 2-4": [
+     1,
+     11,
+     1,
+     0,
+     7
+    ],
+    "type x length|INS >10": [
+     0,
+     11,
+     0,
+     0,
+     8
+    ],
+    "context|STR": [
+     0,
+     27,
+     0,
+     0,
+     24
+    ],
+    "type x context|INS STR": [
+     0,
+     23,
+     0,
+     0,
+     21
+    ],
+    "type x context|DEL HP>=7": [
+     0,
+     35,
+     0,
+     2,
+     22
+    ],
+    "type x length|INS 2-4": [
+     0,
+     25,
+     0,
+     0,
+     21
+    ],
+    "length|5-10": [
+     0,
+     10,
+     0,
+     0,
+     8
+    ],
+    "type x context|DEL STR": [
+     0,
+     4,
+     0,
+     0,
+     3
+    ],
+    "type x length|DEL 5-10": [
+     0,
+     3,
+     0,
+     0,
+     2
+    ],
+    "type x length|INS 5-10": [
+     0,
+     7,
+     0,
+     0,
+     6
+    ],
+    "type x context|INS HP4-6": [
+     0,
+     2,
+     0,
+     2,
+     2
+    ]
+   }
+  },
+  {
+   "uid": "unseen_s2_Illumina_INDEL/vcf_ppr8_chr1_COLO829T_Illumina_d46",
+   "group": "unseen",
+   "seed": "s2",
+   "sample": "COLO829T",
+   "dataset": "COLO829T_Illumina",
+   "threshold": 0.7244706749916077,
+   "best_f1": 0.1925,
+   "ceiling": 0.2519,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": true,
+   "strata": {
+    "type|INS": [
+     5,
+     72,
+     5,
+     3,
+     52
+    ],
+    "length|1": [
+     10,
+     59,
+     10,
+     15,
+     37
+    ],
+    "context|none": [
+     9,
+     19,
+     9,
+     10,
+     12
+    ],
+    "type x context|INS none": [
+     4,
+     13,
+     4,
+     2,
+     9
+    ],
+    "type x length|INS 1": [
+     5,
+     29,
+     5,
+     3,
+     17
+    ],
+    "all|all": [
+     13,
+     118,
+     13,
+     16,
+     81
+    ],
+    "type|DEL": [
+     8,
+     46,
+     8,
+     13,
+     29
+    ],
+    "type x context|DEL none": [
+     5,
+     6,
+     5,
+     8,
+     3
+    ],
+    "type x length|DEL 1": [
+     5,
+     30,
+     5,
+     12,
+     20
+    ],
+    "context|HP4-6": [
+     3,
+     3,
+     3,
+     4,
+     3
+    ],
+    "type x context|DEL HP4-6": [
+     3,
+     1,
+     3,
+     3,
+     1
+    ],
+    "length|>10": [
+     2,
+     13,
+     2,
+     1,
+     8
+    ],
+    "type x length|DEL >10": [
+     2,
+     2,
+     2,
+     1,
+     0
+    ],
+    "context|HP>=7": [
+     1,
+     69,
+     1,
+     2,
+     42
+    ],
+    "type x context|INS HP>=7": [
+     1,
+     34,
+     1,
+     0,
+     20
+    ],
+    "length|2-4": [
+     1,
+     36,
+     1,
+     0,
+     28
+    ],
+    "type x length|DEL 2-4": [
+     1,
+     11,
+     1,
+     0,
+     7
+    ],
+    "type x length|INS >10": [
+     0,
+     11,
+     0,
+     0,
+     8
+    ],
+    "context|STR": [
+     0,
+     27,
+     0,
+     0,
+     24
+    ],
+    "type x context|INS STR": [
+     0,
+     23,
+     0,
+     0,
+     21
+    ],
+    "type x context|DEL HP>=7": [
+     0,
+     35,
+     0,
+     2,
+     22
+    ],
+    "type x length|INS 2-4": [
+     0,
+     25,
+     0,
+     0,
+     21
+    ],
+    "length|5-10": [
+     0,
+     10,
+     0,
+     0,
+     8
+    ],
+    "type x context|DEL STR": [
+     0,
+     4,
+     0,
+     0,
+     3
+    ],
+    "type x length|DEL 5-10": [
+     0,
+     3,
+     0,
+     0,
+     2
+    ],
+    "type x length|INS 5-10": [
+     0,
+     7,
+     0,
+     0,
+     6
+    ],
+    "type x context|INS HP4-6": [
+     0,
+     2,
+     0,
+     1,
+     2
+    ]
+   }
+  },
+  {
+   "uid": "release_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46",
+   "group": "release",
+   "seed": "s0",
+   "sample": "COLO829T",
+   "dataset": "COLO829T_fiberseq",
+   "threshold": 0.6854676604270935,
+   "best_f1": 0.2128,
+   "ceiling": 0.2672,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": true,
+   "strata": {
+    "type|INS": [
+     4,
+     73,
+     4,
+     6,
+     52
+    ],
+    "length|1": [
+     9,
+     60,
+     9,
+     20,
+     37
+    ],
+    "context|none": [
+     10,
+     18,
+     10,
+     13,
+     12
+    ],
+    "type x context|INS none": [
+     3,
+     14,
+     3,
+     1,
+     9
+    ],
+    "type x length|INS 1": [
+     4,
+     30,
+     4,
+     5,
+     17
+    ],
+    "all|all": [
+     14,
+     117,
+     14,
+     26,
+     81
+    ],
+    "type|DEL": [
+     10,
+     44,
+     10,
+     20,
+     29
+    ],
+    "type x context|DEL none": [
+     7,
+     4,
+     7,
+     12,
+     3
+    ],
+    "type x length|DEL 1": [
+     5,
+     30,
+     5,
+     15,
+     20
+    ],
+    "context|HP4-6": [
+     3,
+     3,
+     3,
+     6,
+     3
+    ],
+    "type x context|DEL HP4-6": [
+     3,
+     1,
+     3,
+     4,
+     1
+    ],
+    "length|>10": [
+     3,
+     12,
+     3,
+     3,
+     8
+    ],
+    "type x length|DEL >10": [
+     3,
+     1,
+     3,
+     3,
+     0
+    ],
+    "context|HP>=7": [
+     1,
+     69,
+     1,
+     7,
+     42
+    ],
+    "type x context|INS HP>=7": [
+     1,
+     34,
+     1,
+     3,
+     20
+    ],
+    "length|5-10": [
+     1,
+     9,
+     1,
+     1,
+     8
+    ],
+    "type x length|DEL 5-10": [
+     1,
+     2,
+     1,
+     1,
+     2
+    ],
+    "length|2-4": [
+     1,
+     36,
+     1,
+     2,
+     28
+    ],
+    "type x length|DEL 2-4": [
+     1,
+     11,
+     1,
+     1,
+     7
+    ],
+    "type x length|INS >10": [
+     0,
+     11,
+     0,
+     0,
+     8
+    ],
+    "context|STR": [
+     0,
+     27,
+     0,
+     0,
+     24
+    ],
+    "type x context|INS STR": [
+     0,
+     23,
+     0,
+     0,
+     21
+    ],
+    "type x context|DEL HP>=7": [
+     0,
+     35,
+     0,
+     4,
+     22
+    ],
+    "type x length|INS 2-4": [
+     0,
+     25,
+     0,
+     1,
+     21
+    ],
+    "type x context|DEL STR": [
+     0,
+     4,
+     0,
+     0,
+     3
+    ],
+    "type x length|INS 5-10": [
+     0,
+     7,
+     0,
+     0,
+     6
+    ],
+    "type x context|INS HP4-6": [
+     0,
+     2,
+     0,
+     2,
+     2
+    ]
+   }
+  },
+  {
+   "uid": "release_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46",
+   "group": "release",
+   "seed": "s1",
+   "sample": "COLO829T",
+   "dataset": "COLO829T_fiberseq",
+   "threshold": 0.6684039235115051,
+   "best_f1": 0.1946,
+   "ceiling": 0.2672,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": true,
+   "strata": {
+    "type|INS": [
+     8,
+     69,
+     8,
+     11,
+     52
+    ],
+    "length|1": [
+     13,
+     56,
+     13,
+     30,
+     37
+    ],
+    "context|none": [
+     10,
+     18,
+     10,
+     16,
+     12
+    ],
+    "type x context|INS none": [
+     3,
+     14,
+     3,
+     2,
+     9
+    ],
+    "type x length|INS 1": [
+     8,
+     26,
+     8,
+     9,
+     17
+    ],
+    "all|all": [
+     18,
+     113,
+     18,
+     37,
+     81
+    ],
+    "type|DEL": [
+     10,
+     44,
+     10,
+     26,
+     29
+    ],
+    "type x context|DEL none": [
+     7,
+     4,
+     7,
+     14,
+     3
+    ],
+    "type x length|DEL 1": [
+     5,
+     30,
+     5,
+     21,
+     20
+    ],
+    "context|HP>=7": [
+     5,
+     65,
+     5,
+     10,
+     42
+    ],
+    "type x context|INS HP>=7": [
+     5,
+     30,
+     5,
+     5,
+     20
+    ],
+    "context|HP4-6": [
+     3,
+     3,
+     3,
+     11,
+     3
+    ],
+    "type x context|DEL HP4-6": [
+     3,
+     1,
+     3,
+     7,
+     1
+    ],
+    "length|>10": [
+     3,
+     12,
+     3,
+     4,
+     8
+    ],
+    "type x length|DEL >10": [
+     3,
+     1,
+     3,
+     4,
+     0
+    ],
+    "length|5-10": [
+     1,
+     9,
+     1,
+     0,
+     8
+    ],
+    "type x length|DEL 5-10": [
+     1,
+     2,
+     1,
+     0,
+     2
+    ],
+    "length|2-4": [
+     1,
+     36,
+     1,
+     3,
+     28
+    ],
+    "type x length|DEL 2-4": [
+     1,
+     11,
+     1,
+     1,
+     7
+    ],
+    "type x length|INS >10": [
+     0,
+     11,
+     0,
+     0,
+     8
+    ],
+    "context|STR": [
+     0,
+     27,
+     0,
+     0,
+     24
+    ],
+    "type x context|INS STR": [
+     0,
+     23,
+     0,
+     0,
+     21
+    ],
+    "type x context|DEL HP>=7": [
+     0,
+     35,
+     0,
+     5,
+     22
+    ],
+    "type x length|INS 2-4": [
+     0,
+     25,
+     0,
+     2,
+     21
+    ],
+    "type x context|DEL STR": [
+     0,
+     4,
+     0,
+     0,
+     3
+    ],
+    "type x length|INS 5-10": [
+     0,
+     7,
+     0,
+     0,
+     6
+    ],
+    "type x context|INS HP4-6": [
+     0,
+     2,
+     0,
+     4,
+     2
+    ]
+   }
+  },
+  {
+   "uid": "release_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46",
+   "group": "release",
+   "seed": "s2",
+   "sample": "COLO829T",
+   "dataset": "COLO829T_fiberseq",
+   "threshold": 0.7070106863975525,
+   "best_f1": 0.1923,
+   "ceiling": 0.2595,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": true,
+   "strata": {
+    "type|INS": [
+     6,
+     71,
+     6,
+     13,
+     52
+    ],
+    "length|1": [
+     10,
+     59,
+     10,
+     31,
+     37
+    ],
+    "context|none": [
+     9,
+     19,
+     9,
+     13,
+     12
+    ],
+    "type x context|INS none": [
+     3,
+     14,
+     3,
+     3,
+     9
+    ],
+    "type x length|INS 1": [
+     6,
+     28,
+     6,
+     12,
+     17
+    ],
+    "all|all": [
+     14,
+     117,
+     14,
+     37,
+     81
+    ],
+    "type|DEL": [
+     8,
+     46,
+     8,
+     24,
+     29
+    ],
+    "type x context|DEL none": [
+     6,
+     5,
+     6,
+     10,
+     3
+    ],
+    "type x length|DEL 1": [
+     4,
+     31,
+     4,
+     19,
+     20
+    ],
+    "context|HP>=7": [
+     3,
+     67,
+     3,
+     15,
+     42
+    ],
+    "type x context|INS HP>=7": [
+     3,
+     32,
+     3,
+     5,
+     20
+    ],
+    "context|HP4-6": [
+     2,
+     4,
+     2,
+     9,
+     3
+    ],
+    "type x context|DEL HP4-6": [
+     2,
+     2,
+     2,
+     4,
+     1
+    ],
+    "length|>10": [
+     3,
+     12,
+     3,
+     4,
+     8
+    ],
+    "type x length|DEL >10": [
+     3,
+     1,
+     3,
+     4,
+     0
+    ],
+    "length|5-10": [
+     1,
+     9,
+     1,
+     1,
+     8
+    ],
+    "type x length|DEL 5-10": [
+     1,
+     2,
+     1,
+     1,
+     2
+    ],
+    "type x length|INS >10": [
+     0,
+     11,
+     0,
+     0,
+     8
+    ],
+    "context|STR": [
+     0,
+     27,
+     0,
+     0,
+     24
+    ],
+    "type x context|INS STR": [
+     0,
+     23,
+     0,
+     0,
+     21
+    ],
+    "type x context|DEL HP>=7": [
+     0,
+     35,
+     0,
+     10,
+     22
+    ],
+    "length|2-4": [
+     0,
+     37,
+     0,
+     1,
+     28
+    ],
+    "type x length|DEL 2-4": [
+     0,
+     12,
+     0,
+     0,
+     7
+    ],
+    "type x length|INS 2-4": [
+     0,
+     25,
+     0,
+     1,
+     21
+    ],
+    "type x context|DEL STR": [
+     0,
+     4,
+     0,
+     0,
+     3
+    ],
+    "type x length|INS 5-10": [
+     0,
+     7,
+     0,
+     0,
+     6
+    ],
+    "type x context|INS HP4-6": [
+     0,
+     2,
+     0,
+     5,
+     2
+    ]
+   }
+  },
+  {
+   "uid": "unseen_s0_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46",
+   "group": "unseen",
+   "seed": "s0",
+   "sample": "COLO829T",
+   "dataset": "COLO829T_fiberseq",
+   "threshold": 0.8322527408599854,
+   "best_f1": 0.1592,
+   "ceiling": 0.2672,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": true,
+   "strata": {
+    "type|INS": [
+     6,
+     71,
+     6,
+     6,
+     52
+    ],
+    "length|1": [
+     11,
+     58,
+     11,
+     38,
+     37
+    ],
+    "context|none": [
+     10,
+     18,
+     10,
+     21,
+     12
+    ],
+    "type x context|INS none": [
+     4,
+     13,
+     4,
+     1,
+     9
+    ],
+    "type x length|INS 1": [
+     6,
+     28,
+     6,
+     5,
+     17
+    ],
+    "all|all": [
+     15,
+     116,
+     15,
+     50,
+     81
+    ],
+    "type|DEL": [
+     9,
+     45,
+     9,
+     44,
+     29
+    ],
+    "type x context|DEL none": [
+     6,
+     5,
+     6,
+     20,
+     3
+    ],
+    "type x length|DEL 1": [
+     5,
+     30,
+     5,
+     33,
+     20
+    ],
+    "context|HP4-6": [
+     3,
+     3,
+     3,
+     13,
+     3
+    ],
+    "type x context|DEL HP4-6": [
+     3,
+     1,
+     3,
+     10,
+     1
+    ],
+    "length|>10": [
+     3,
+     12,
+     3,
+     5,
+     8
+    ],
+    "type x length|DEL >10": [
+     3,
+     1,
+     3,
+     5,
+     0
+    ],
+    "context|HP>=7": [
+     2,
+     68,
+     2,
+     13,
+     42
+    ],
+    "type x context|INS HP>=7": [
+     2,
+     33,
+     2,
+     2,
+     20
+    ],
+    "length|2-4": [
+     1,
+     36,
+     1,
+     7,
+     28
+    ],
+    "type x length|DEL 2-4": [
+     1,
+     11,
+     1,
+     6,
+     7
+    ],
+    "type x length|INS >10": [
+     0,
+     11,
+     0,
+     0,
+     8
+    ],
+    "context|STR": [
+     0,
+     27,
+     0,
+     3,
+     24
+    ],
+    "type x context|INS STR": [
+     0,
+     23,
+     0,
+     0,
+     21
+    ],
+    "type x context|DEL HP>=7": [
+     0,
+     35,
+     0,
+     11,
+     22
+    ],
+    "type x length|INS 2-4": [
+     0,
+     25,
+     0,
+     1,
+     21
+    ],
+    "length|5-10": [
+     0,
+     10,
+     0,
+     0,
+     8
+    ],
+    "type x context|DEL STR": [
+     0,
+     4,
+     0,
+     3,
+     3
+    ],
+    "type x length|DEL 5-10": [
+     0,
+     3,
+     0,
+     0,
+     2
+    ],
+    "type x length|INS 5-10": [
+     0,
+     7,
+     0,
+     0,
+     6
+    ],
+    "type x context|INS HP4-6": [
+     0,
+     2,
+     0,
+     3,
+     2
+    ]
+   }
+  },
+  {
+   "uid": "unseen_s1_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46",
+   "group": "unseen",
+   "seed": "s1",
+   "sample": "COLO829T",
+   "dataset": "COLO829T_fiberseq",
+   "threshold": 0.8279844522476196,
+   "best_f1": 0.1429,
+   "ceiling": 0.2443,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": true,
+   "strata": {
+    "type|INS": [
+     5,
+     72,
+     5,
+     12,
+     52
+    ],
+    "length|1": [
+     9,
+     60,
+     9,
+     65,
+     37
+    ],
+    "context|none": [
+     8,
+     20,
+     8,
+     21,
+     12
+    ],
+    "type x context|INS none": [
+     4,
+     13,
+     4,
+     5,
+     9
+    ],
+    "type x length|INS 1": [
+     5,
+     29,
+     5,
+     11,
+     17
+    ],
+    "all|all": [
+     12,
+     119,
+     12,
+     66,
+     81
+    ],
+    "type|DEL": [
+     7,
+     47,
+     7,
+     54,
+     29
+    ],
+    "type x context|DEL none": [
+     4,
+     7,
+     4,
+     16,
+     3
+    ],
+    "type x length|DEL 1": [
+     4,
+     31,
+     4,
+     54,
+     20
+    ],
+    "context|HP4-6": [
+     3,
+     3,
+     3,
+     18,
+     3
+    ],
+    "type x context|DEL HP4-6": [
+     3,
+     1,
+     3,
+     14,
+     1
+    ],
+    "length|>10": [
+     2,
+     13,
+     2,
+     0,
+     8
+    ],
+    "type x length|DEL >10": [
+     2,
+     2,
+     2,
+     0,
+     0
+    ],
+    "context|HP>=7": [
+     1,
+     69,
+     1,
+     27,
+     42
+    ],
+    "type x context|INS HP>=7": [
+     1,
+     34,
+     1,
+     3,
+     20
+    ],
+    "length|2-4": [
+     1,
+     36,
+     1,
+     1,
+     28
+    ],
+    "type x length|DEL 2-4": [
+     1,
+     11,
+     1,
+     0,
+     7
+    ],
+    "type x length|INS >10": [
+     0,
+     11,
+     0,
+     0,
+     8
+    ],
+    "context|STR": [
+     0,
+     27,
+     0,
+     0,
+     24
+    ],
+    "type x context|INS STR": [
+     0,
+     23,
+     0,
+     0,
+     21
+    ],
+    "type x context|DEL HP>=7": [
+     0,
+     35,
+     0,
+     24,
+     22
+    ],
+    "type x length|INS 2-4": [
+     0,
+     25,
+     0,
+     1,
+     21
+    ],
+    "length|5-10": [
+     0,
+     10,
+     0,
+     0,
+     8
+    ],
+    "type x context|DEL STR": [
+     0,
+     4,
+     0,
+     0,
+     3
+    ],
+    "type x length|DEL 5-10": [
+     0,
+     3,
+     0,
+     0,
+     2
+    ],
+    "type x length|INS 5-10": [
+     0,
+     7,
+     0,
+     0,
+     6
+    ],
+    "type x context|INS HP4-6": [
+     0,
+     2,
+     0,
+     4,
+     2
+    ]
+   }
+  },
+  {
+   "uid": "unseen_s2_PacBio_INDEL/vcf_ppr8_chr1_COLO829T_fiberseq_d46",
+   "group": "unseen",
+   "seed": "s2",
+   "sample": "COLO829T",
+   "dataset": "COLO829T_fiberseq",
+   "threshold": 0.7924565076828003,
+   "best_f1": 0.1476,
+   "ceiling": 0.2519,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": true,
+   "strata": {
+    "type|INS": [
+     6,
+     71,
+     6,
+     9,
+     52
+    ],
+    "length|1": [
+     11,
+     58,
+     11,
+     61,
+     37
+    ],
+    "context|none": [
+     9,
+     19,
+     9,
+     27,
+     12
+    ],
+    "type x context|INS none": [
+     4,
+     13,
+     4,
+     3,
+     9
+    ],
+    "type x length|INS 1": [
+     6,
+     28,
+     6,
+     9,
+     17
+    ],
+    "all|all": [
+     14,
+     117,
+     14,
+     65,
+     81
+    ],
+    "type|DEL": [
+     8,
+     46,
+     8,
+     56,
+     29
+    ],
+    "type x context|DEL none": [
+     5,
+     6,
+     5,
+     24,
+     3
+    ],
+    "type x length|DEL 1": [
+     5,
+     30,
+     5,
+     52,
+     20
+    ],
+    "context|HP4-6": [
+     3,
+     3,
+     3,
+     22,
+     3
+    ],
+    "type x context|DEL HP4-6": [
+     3,
+     1,
+     3,
+     18,
+     1
+    ],
+    "length|>10": [
+     2,
+     13,
+     2,
+     4,
+     8
+    ],
+    "type x length|DEL >10": [
+     2,
+     2,
+     2,
+     4,
+     0
+    ],
+    "context|HP>=7": [
+     2,
+     68,
+     2,
+     16,
+     42
+    ],
+    "type x context|INS HP>=7": [
+     2,
+     33,
+     2,
+     2,
+     20
+    ],
+    "length|2-4": [
+     1,
+     36,
+     1,
+     0,
+     28
+    ],
+    "type x length|DEL 2-4": [
+     1,
+     11,
+     1,
+     0,
+     7
+    ],
+    "type x length|INS >10": [
+     0,
+     11,
+     0,
+     0,
+     8
+    ],
+    "context|STR": [
+     0,
+     27,
+     0,
+     0,
+     24
+    ],
+    "type x context|INS STR": [
+     0,
+     23,
+     0,
+     0,
+     21
+    ],
+    "type x context|DEL HP>=7": [
+     0,
+     35,
+     0,
+     14,
+     22
+    ],
+    "type x length|INS 2-4": [
+     0,
+     25,
+     0,
+     0,
+     21
+    ],
+    "length|5-10": [
+     0,
+     10,
+     0,
+     0,
+     8
+    ],
+    "type x context|DEL STR": [
+     0,
+     4,
+     0,
+     0,
+     3
+    ],
+    "type x length|DEL 5-10": [
+     0,
+     3,
+     0,
+     0,
+     2
+    ],
+    "type x length|INS 5-10": [
+     0,
+     7,
+     0,
+     0,
+     6
+    ],
+    "type x context|INS HP4-6": [
+     0,
+     2,
+     0,
+     4,
+     2
+    ]
+   }
+  },
+  {
+   "uid": "release_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46",
+   "group": "release",
+   "seed": "s0",
+   "sample": "COLO829T",
+   "dataset": "COLO829T_ONT",
+   "threshold": 0.3256518840789795,
+   "best_f1": 0.1509,
+   "ceiling": 0.2443,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": true,
+   "strata": {
+    "type|INS": [
+     13,
+     64,
+     13,
+     122,
+     52
+    ],
+    "length|1": [
+     14,
+     55,
+     14,
+     163,
+     37
+    ],
+    "context|none": [
+     10,
+     18,
+     10,
+     93,
+     12
+    ],
+    "type x context|INS none": [
+     4,
+     13,
+     4,
+     42,
+     9
+    ],
+    "type x length|INS 1": [
+     11,
+     23,
+     11,
+     96,
+     17
+    ],
+    "all|all": [
+     21,
+     110,
+     21,
+     234,
+     81
+    ],
+    "length|>10": [
+     4,
+     11,
+     4,
+     18,
+     8
+    ],
+    "type x length|INS >10": [
+     1,
+     10,
+     1,
+     4,
+     8
+    ],
+    "type|DEL": [
+     8,
+     46,
+     8,
+     112,
+     29
+    ],
+    "type x context|DEL none": [
+     6,
+     5,
+     6,
+     51,
+     3
+    ],
+    "type x length|DEL 1": [
+     3,
+     32,
+     3,
+     67,
+     20
+    ],
+    "context|HP>=7": [
+     8,
+     62,
+     8,
+     63,
+     42
+    ],
+    "type x context|INS HP>=7": [
+     8,
+     27,
+     8,
+     39,
+     20
+    ],
+    "type x length|DEL >10": [
+     3,
+     1,
+     3,
+     14,
+     0
+    ],
+    "length|5-10": [
+     1,
+     9,
+     1,
+     10,
+     8
+    ],
+    "type x length|DEL 5-10": [
+     1,
+     2,
+     1,
+     8,
+     2
+    ],
+    "context|HP4-6": [
+     2,
+     4,
+     2,
+     55,
+     3
+    ],
+    "type x context|DEL HP4-6": [
+     2,
+     2,
+     2,
+     24,
+     1
+    ],
+    "length|2-4": [
+     2,
+     35,
+     2,
+     43,
+     28
+    ],
+    "context|STR": [
+     1,
+     26,
+     1,
+     21,
+     24
+    ],
+    "type x context|INS STR": [
+     1,
+     22,
+     1,
+     9,
+     21
+    ],
+    "type x length|INS 2-4": [
+     1,
+     24,
+     1,
+     20,
+     21
+    ],
+    "type x length|DEL 2-4": [
+     1,
+     11,
+     1,
+     23,
+     7
+    ],
+    "type x context|DEL HP>=7": [
+     0,
+     35,
+     0,
+     24,
+     22
+    ],
+    "type x context|DEL STR": [
+     0,
+     4,
+     0,
+     12,
+     3
+    ],
+    "type x length|INS 5-10": [
+     0,
+     7,
+     0,
+     2,
+     6
+    ],
+    "type x context|INS HP4-6": [
+     0,
+     2,
+     0,
+     31,
+     2
+    ],
+    "context|VNTR": [
+     0,
+     0,
+     0,
+     2,
+     0
+    ],
+    "type x context|INS VNTR": [
+     0,
+     0,
+     0,
+     1,
+     0
+    ],
+    "type x context|DEL VNTR": [
+     0,
+     0,
+     0,
+     1,
+     0
+    ]
+   }
+  },
+  {
+   "uid": "release_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46",
+   "group": "release",
+   "seed": "s1",
+   "sample": "COLO829T",
+   "dataset": "COLO829T_ONT",
+   "threshold": 0.24007463455200195,
+   "best_f1": 0.1255,
+   "ceiling": 0.2214,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": true,
+   "strata": {
+    "type|INS": [
+     12,
+     65,
+     12,
+     132,
+     52
+    ],
+    "length|1": [
+     15,
+     54,
+     15,
+     270,
+     37
+    ],
+    "context|none": [
+     10,
+     18,
+     10,
+     82,
+     12
+    ],
+    "type x context|INS none": [
+     3,
+     14,
+     3,
+     33,
+     9
+    ],
+    "type x length|INS 1": [
+     11,
+     23,
+     11,
+     121,
+     17
+    ],
+    "all|all": [
+     21,
+     110,
+     21,
+     326,
+     81
+    ],
+    "type|DEL": [
+     9,
+     45,
+     9,
+     194,
+     29
+    ],
+    "type x context|DEL none": [
+     7,
+     4,
+     7,
+     49,
+     3
+    ],
+    "type x length|DEL 1": [
+     4,
+     31,
+     4,
+     149,
+     20
+    ],
+    "context|HP>=7": [
+     8,
+     62,
+     8,
+     109,
+     42
+    ],
+    "type x context|INS HP>=7": [
+     8,
+     27,
+     8,
+     53,
+     20
+    ],
+    "length|>10": [
+     3,
+     12,
+     3,
+     10,
+     8
+    ],
+    "type x length|DEL >10": [
+     3,
+     1,
+     3,
+     9,
+     0
+    ],
+    "length|5-10": [
+     1,
+     9,
+     1,
+     6,
+     8
+    ],
+    "type x length|DEL 5-10": [
+     1,
+     2,
+     1,
+     5,
+     2
+    ],
+    "context|HP4-6": [
+     2,
+     4,
+     2,
+     112,
+     3
+    ],
+    "type x context|DEL HP4-6": [
+     2,
+     2,
+     2,
+     68,
+     1
+    ],
+    "length|2-4": [
+     2,
+     35,
+     2,
+     40,
+     28
+    ],
+    "context|STR": [
+     1,
+     26,
+     1,
+     23,
+     24
+    ],
+    "type x context|INS STR": [
+     1,
+     22,
+     1,
+     2,
+     21
+    ],
+    "type x length|INS 2-4": [
+     1,
+     24,
+     1,
+     9,
+     21
+    ],
+    "type x length|DEL 2-4": [
+     1,
+     11,
+     1,
+     31,
+     7
+    ],
+    "type x length|INS >10": [
+     0,
+     11,
+     0,
+     1,
+     8
+    ],
+    "type x context|DEL HP>=7": [
+     0,
+     35,
+     0,
+     56,
+     22
+    ],
+    "type x context|DEL STR": [
+     0,
+     4,
+     0,
+     21,
+     3
+    ],
+    "type x length|INS 5-10": [
+     0,
+     7,
+     0,
+     1,
+     6
+    ],
+    "type x context|INS HP4-6": [
+     0,
+     2,
+     0,
+     44,
+     2
+    ]
+   }
+  },
+  {
+   "uid": "release_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46",
+   "group": "release",
+   "seed": "s2",
+   "sample": "COLO829T",
+   "dataset": "COLO829T_ONT",
+   "threshold": 0.2895215153694153,
+   "best_f1": 0.1458,
+   "ceiling": 0.229,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": true,
+   "strata": {
+    "type|INS": [
+     12,
+     65,
+     12,
+     141,
+     52
+    ],
+    "length|1": [
+     15,
+     54,
+     15,
+     322,
+     37
+    ],
+    "context|none": [
+     10,
+     18,
+     10,
+     112,
+     12
+    ],
+    "type x context|INS none": [
+     3,
+     14,
+     3,
+     31,
+     9
+    ],
+    "type x length|INS 1": [
+     11,
+     23,
+     11,
+     107,
+     17
+    ],
+    "all|all": [
+     21,
+     110,
+     21,
+     414,
+     81
+    ],
+    "type|DEL": [
+     9,
+     45,
+     9,
+     273,
+     29
+    ],
+    "type x context|DEL none": [
+     7,
+     4,
+     7,
+     81,
+     3
+    ],
+    "type x length|DEL 1": [
+     4,
+     31,
+     4,
+     215,
+     20
+    ],
+    "context|HP>=7": [
+     8,
+     62,
+     8,
+     144,
+     42
+    ],
+    "type x context|INS HP>=7": [
+     8,
+     27,
+     8,
+     78,
+     20
+    ],
+    "length|>10": [
+     3,
+     12,
+     3,
+     16,
+     8
+    ],
+    "type x length|DEL >10": [
+     3,
+     1,
+     3,
+     13,
+     0
+    ],
+    "length|5-10": [
+     1,
+     9,
+     1,
+     20,
+     8
+    ],
+    "type x length|DEL 5-10": [
+     1,
+     2,
+     1,
+     13,
+     2
+    ],
+    "context|HP4-6": [
+     2,
+     4,
+     2,
+     130,
+     3
+    ],
+    "type x context|DEL HP4-6": [
+     2,
+     2,
+     2,
+     111,
+     1
+    ],
+    "length|2-4": [
+     2,
+     35,
+     2,
+     56,
+     28
+    ],
+    "context|STR": [
+     1,
+     26,
+     1,
+     27,
+     24
+    ],
+    "type x context|INS STR": [
+     1,
+     22,
+     1,
+     12,
+     21
+    ],
+    "type x length|INS 2-4": [
+     1,
+     24,
+     1,
+     24,
+     21
+    ],
+    "type x length|DEL 2-4": [
+     1,
+     11,
+     1,
+     32,
+     7
+    ],
+    "type x length|INS >10": [
+     0,
+     11,
+     0,
+     3,
+     8
+    ],
+    "type x context|DEL HP>=7": [
+     0,
+     35,
+     0,
+     66,
+     22
+    ],
+    "type x context|DEL STR": [
+     0,
+     4,
+     0,
+     15,
+     3
+    ],
+    "type x length|INS 5-10": [
+     0,
+     7,
+     0,
+     7,
+     6
+    ],
+    "type x context|INS HP4-6": [
+     0,
+     2,
+     0,
+     19,
+     2
+    ],
+    "context|VNTR": [
+     0,
+     0,
+     0,
+     1,
+     0
+    ],
+    "type x context|INS VNTR": [
+     0,
+     0,
+     0,
+     1,
+     0
+    ]
+   }
+  },
+  {
+   "uid": "unseen_s0_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46",
+   "group": "unseen",
+   "seed": "s0",
+   "sample": "COLO829T",
+   "dataset": "COLO829T_ONT",
+   "threshold": 0.3217044472694397,
+   "best_f1": 0.0836,
+   "ceiling": 0.1527,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": true,
+   "strata": {
+    "type|INS": [
+     9,
+     68,
+     9,
+     112,
+     52
+    ],
+    "length|1": [
+     12,
+     57,
+     12,
+     322,
+     37
+    ],
+    "context|none": [
+     9,
+     19,
+     9,
+     68,
+     12
+    ],
+    "type x context|INS none": [
+     3,
+     14,
+     3,
+     24,
+     9
+    ],
+    "type x length|INS 1": [
+     8,
+     26,
+     8,
+     109,
+     17
+    ],
+    "all|all": [
+     17,
+     114,
+     17,
+     345,
+     81
+    ],
+    "type|DEL": [
+     8,
+     46,
+     8,
+     233,
+     29
+    ],
+    "type x context|DEL none": [
+     6,
+     5,
+     6,
+     44,
+     3
+    ],
+    "type x length|DEL 1": [
+     4,
+     31,
+     4,
+     213,
+     20
+    ],
+    "context|HP>=7": [
+     5,
+     65,
+     5,
+     114,
+     42
+    ],
+    "type x context|INS HP>=7": [
+     5,
+     30,
+     5,
+     47,
+     20
+    ],
+    "length|>10": [
+     3,
+     12,
+     3,
+     5,
+     8
+    ],
+    "type x length|DEL >10": [
+     3,
+     1,
+     3,
+     5,
+     0
+    ],
+    "context|HP4-6": [
+     2,
+     4,
+     2,
+     157,
+     3
+    ],
+    "type x context|DEL HP4-6": [
+     2,
+     2,
+     2,
+     116,
+     1
+    ],
+    "length|2-4": [
+     2,
+     35,
+     2,
+     18,
+     28
+    ],
+    "context|STR": [
+     1,
+     26,
+     1,
+     6,
+     24
+    ],
+    "type x context|INS STR": [
+     1,
+     22,
+     1,
+     0,
+     21
+    ],
+    "type x length|INS 2-4": [
+     1,
+     24,
+     1,
+     3,
+     21
+    ],
+    "type x length|DEL 2-4": [
+     1,
+     11,
+     1,
+     15,
+     7
+    ],
+    "type x length|INS >10": [
+     0,
+     11,
+     0,
+     0,
+     8
+    ],
+    "type x context|DEL HP>=7": [
+     0,
+     35,
+     0,
+     67,
+     22
+    ],
+    "length|5-10": [
+     0,
+     10,
+     0,
+     0,
+     8
+    ],
+    "type x context|DEL STR": [
+     0,
+     4,
+     0,
+     6,
+     3
+    ],
+    "type x length|DEL 5-10": [
+     0,
+     3,
+     0,
+     0,
+     2
+    ],
+    "type x length|INS 5-10": [
+     0,
+     7,
+     0,
+     0,
+     6
+    ],
+    "type x context|INS HP4-6": [
+     0,
+     2,
+     0,
+     41,
+     2
+    ]
+   }
+  },
+  {
+   "uid": "unseen_s1_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46",
+   "group": "unseen",
+   "seed": "s1",
+   "sample": "COLO829T",
+   "dataset": "COLO829T_ONT",
+   "threshold": 0.676965594291687,
+   "best_f1": 0.0744,
+   "ceiling": 0.229,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": true,
+   "strata": {
+    "type|INS": [
+     7,
+     70,
+     7,
+     127,
+     52
+    ],
+    "length|1": [
+     11,
+     58,
+     11,
+     345,
+     37
+    ],
+    "context|none": [
+     8,
+     20,
+     8,
+     93,
+     12
+    ],
+    "type x context|INS none": [
+     3,
+     14,
+     3,
+     43,
+     9
+    ],
+    "type x length|INS 1": [
+     7,
+     27,
+     7,
+     120,
+     17
+    ],
+    "all|all": [
+     14,
+     117,
+     14,
+     371,
+     81
+    ],
+    "type|DEL": [
+     7,
+     47,
+     7,
+     244,
+     29
+    ],
+    "type x context|DEL none": [
+     5,
+     6,
+     5,
+     50,
+     3
+    ],
+    "type x length|DEL 1": [
+     4,
+     31,
+     4,
+     225,
+     20
+    ],
+    "context|HP>=7": [
+     4,
+     66,
+     4,
+     66,
+     42
+    ],
+    "type x context|INS HP>=7": [
+     4,
+     31,
+     4,
+     5,
+     20
+    ],
+    "length|>10": [
+     2,
+     13,
+     2,
+     7,
+     8
+    ],
+    "type x length|DEL >10": [
+     2,
+     2,
+     2,
+     6,
+     0
+    ],
+    "context|HP4-6": [
+     2,
+     4,
+     2,
+     207,
+     3
+    ],
+    "type x context|DEL HP4-6": [
+     2,
+     2,
+     2,
+     129,
+     1
+    ],
+    "length|2-4": [
+     1,
+     36,
+     1,
+     18,
+     28
+    ],
+    "type x length|DEL 2-4": [
+     1,
+     11,
+     1,
+     12,
+     7
+    ],
+    "type x length|INS >10": [
+     0,
+     11,
+     0,
+     1,
+     8
+    ],
+    "context|STR": [
+     0,
+     27,
+     0,
+     5,
+     24
+    ],
+    "type x context|INS STR": [
+     0,
+     23,
+     0,
+     1,
+     21
+    ],
+    "type x context|DEL HP>=7": [
+     0,
+     35,
+     0,
+     61,
+     22
+    ],
+    "type x length|INS 2-4": [
+     0,
+     25,
+     0,
+     6,
+     21
+    ],
+    "length|5-10": [
+     0,
+     10,
+     0,
+     1,
+     8
+    ],
+    "type x context|DEL STR": [
+     0,
+     4,
+     0,
+     4,
+     3
+    ],
+    "type x length|DEL 5-10": [
+     0,
+     3,
+     0,
+     1,
+     2
+    ],
+    "type x length|INS 5-10": [
+     0,
+     7,
+     0,
+     0,
+     6
+    ],
+    "type x context|INS HP4-6": [
+     0,
+     2,
+     0,
+     78,
+     2
+    ]
+   }
+  },
+  {
+   "uid": "unseen_s2_ONT_INDEL/vcf_ppr8_chr1_COLO829T_ONT_d46",
+   "group": "unseen",
+   "seed": "s2",
+   "sample": "COLO829T",
+   "dataset": "COLO829T_ONT",
+   "threshold": 0.5580074191093445,
+   "best_f1": 0.0957,
+   "ceiling": 0.1908,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": true,
+   "strata": {
+    "type|INS": [
+     9,
+     68,
+     9,
+     96,
+     52
+    ],
+    "length|1": [
+     13,
+     56,
+     13,
+     205,
+     37
+    ],
+    "context|none": [
+     8,
+     20,
+     8,
+     53,
+     12
+    ],
+    "type x context|INS none": [
+     3,
+     14,
+     3,
+     23,
+     9
+    ],
+    "type x length|INS 1": [
+     9,
+     25,
+     9,
+     91,
+     17
+    ],
+    "all|all": [
+     16,
+     115,
+     16,
+     228,
+     81
+    ],
+    "type|DEL": [
+     7,
+     47,
+     7,
+     132,
+     29
+    ],
+    "type x context|DEL none": [
+     5,
+     6,
+     5,
+     30,
+     3
+    ],
+    "type x length|DEL 1": [
+     4,
+     31,
+     4,
+     114,
+     20
+    ],
+    "context|HP>=7": [
+     6,
+     64,
+     6,
+     73,
+     42
+    ],
+    "type x context|INS HP>=7": [
+     6,
+     29,
+     6,
+     36,
+     20
+    ],
+    "length|>10": [
+     2,
+     13,
+     2,
+     7,
+     8
+    ],
+    "type x length|DEL >10": [
+     2,
+     2,
+     2,
+     7,
+     0
+    ],
+    "context|HP4-6": [
+     2,
+     4,
+     2,
+     95,
+     3
+    ],
+    "type x context|DEL HP4-6": [
+     2,
+     2,
+     2,
+     59,
+     1
+    ],
+    "length|2-4": [
+     1,
+     36,
+     1,
+     13,
+     28
+    ],
+    "type x length|DEL 2-4": [
+     1,
+     11,
+     1,
+     8,
+     7
+    ],
+    "type x length|INS >10": [
+     0,
+     11,
+     0,
+     0,
+     8
+    ],
+    "context|STR": [
+     0,
+     27,
+     0,
+     7,
+     24
+    ],
+    "type x context|INS STR": [
+     0,
+     23,
+     0,
+     1,
+     21
+    ],
+    "type x context|DEL HP>=7": [
+     0,
+     35,
+     0,
+     37,
+     22
+    ],
+    "type x length|INS 2-4": [
+     0,
+     25,
+     0,
+     5,
+     21
+    ],
+    "length|5-10": [
+     0,
+     10,
+     0,
+     3,
+     8
+    ],
+    "type x context|DEL STR": [
+     0,
+     4,
+     0,
+     6,
+     3
+    ],
+    "type x length|DEL 5-10": [
+     0,
+     3,
+     0,
+     3,
+     2
+    ],
+    "type x length|INS 5-10": [
+     0,
+     7,
+     0,
+     0,
+     6
+    ],
+    "type x context|INS HP4-6": [
+     0,
+     2,
+     0,
+     36,
+     2
+    ]
+   }
+  },
+  {
+   "uid": "comparator:DeepSomatic-TO 1.9.0:HG008T_Illumina:INDEL",
+   "group": "DeepSomatic-TO",
+   "seed": "DeepSomatic-TO 1.9.0",
+   "sample": "HG008T",
+   "dataset": "HG008T_Illumina",
+   "threshold": null,
+   "best_f1": null,
+   "ceiling": null,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": null,
+   "strata": {
+    "type|DEL": [
+     42,
+     177,
+     42,
+     70,
+     136
+    ],
+    "length|2-4": [
+     9,
+     126,
+     9,
+     35,
+     102
+    ],
+    "context|none": [
+     33,
+     47,
+     33,
+     49,
+     33
+    ],
+    "type x context|DEL none": [
+     25,
+     18,
+     25,
+     37,
+     13
+    ],
+    "type x length|DEL 2-4": [
+     6,
+     42,
+     6,
+     21,
+     33
+    ],
+    "all|all": [
+     83,
+     504,
+     83,
+     128,
+     384
+    ],
+    "length|>10": [
+     7,
+     63,
+     7,
+     4,
+     47
+    ],
+    "type x length|DEL >10": [
+     7,
+     20,
+     7,
+     4,
+     14
+    ],
+    "type|INS": [
+     41,
+     327,
+     41,
+     58,
+     248
+    ],
+    "length|1": [
+     60,
+     260,
+     60,
+     83,
+     188
+    ],
+    "type x context|INS none": [
+     8,
+     29,
+     8,
+     12,
+     20
+    ],
+    "type x length|INS 1": [
+     37,
+     160,
+     37,
+     41,
+     113
+    ],
+    "context|HP4-6": [
+     7,
+     0,
+     7,
+     17,
+     0
+    ],
+    "type x context|INS HP4-6": [
+     6,
+     0,
+     6,
+     8,
+     0
+    ],
+    "context|HP>=7": [
+     42,
+     393,
+     42,
+     52,
+     294
+    ],
+    "type x context|INS HP>=7": [
+     27,
+     250,
+     27,
+     31,
+     187
+    ],
+    "type x length|DEL 1": [
+     23,
+     100,
+     23,
+     42,
+     75
+    ],
+    "type x context|DEL HP>=7": [
+     15,
+     143,
+     15,
+     21,
+     107
+    ],
+    "length|5-10": [
+     7,
+     55,
+     7,
+     6,
+     47
+    ],
+    "type x length|DEL 5-10": [
+     6,
+     15,
+     6,
+     3,
+     14
+    ],
+    "type x context|DEL HP4-6": [
+     1,
+     0,
+     1,
+     9,
+     0
+    ],
+    "type x length|INS 2-4": [
+     3,
+     84,
+     3,
+     14,
+     69
+    ],
+    "context|STR": [
+     1,
+     64,
+     1,
+     9,
+     57
+    ],
+    "type x context|DEL STR": [
+     1,
+     16,
+     1,
+     3,
+     16
+    ],
+    "type x length|INS 5-10": [
+     1,
+     40,
+     1,
+     3,
+     33
+    ],
+    "type x context|INS STR": [
+     0,
+     48,
+     0,
+     6,
+     41
+    ],
+    "type x length|INS >10": [
+     0,
+     43,
+     0,
+     0,
+     33
+    ],
+    "context|VNTR": [
+     0,
+     0,
+     0,
+     1,
+     0
+    ],
+    "type x context|INS VNTR": [
+     0,
+     0,
+     0,
+     1,
+     0
+    ]
+   }
+  },
+  {
+   "uid": "comparator:DeepSomatic-TO 1.9.0:HG008T_PacBio:INDEL",
+   "group": "DeepSomatic-TO",
+   "seed": "DeepSomatic-TO 1.9.0",
+   "sample": "HG008T",
+   "dataset": "HG008T_PacBio",
+   "threshold": null,
+   "best_f1": null,
+   "ceiling": null,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": null,
+   "strata": {
+    "type|DEL": [
+     16,
+     203,
+     16,
+     68,
+     136
+    ],
+    "length|>10": [
+     4,
+     66,
+     4,
+     5,
+     47
+    ],
+    "context|none": [
+     10,
+     70,
+     10,
+     17,
+     33
+    ],
+    "type x context|DEL none": [
+     9,
+     34,
+     9,
+     16,
+     13
+    ],
+    "type x length|DEL >10": [
+     4,
+     23,
+     4,
+     5,
+     14
+    ],
+    "all|all": [
+     18,
+     569,
+     18,
+     73,
+     384
+    ],
+    "type|INS": [
+     2,
+     366,
+     2,
+     5,
+     248
+    ],
+    "length|1": [
+     11,
+     309,
+     11,
+     63,
+     188
+    ],
+    "type x context|INS none": [
+     1,
+     36,
+     1,
+     1,
+     20
+    ],
+    "type x length|INS 1": [
+     2,
+     195,
+     2,
+     5,
+     113
+    ],
+    "context|HP>=7": [
+     7,
+     428,
+     7,
+     46,
+     294
+    ],
+    "type x context|DEL HP>=7": [
+     6,
+     152,
+     6,
+     43,
+     107
+    ],
+    "type x length|DEL 1": [
+     9,
+     114,
+     9,
+     58,
+     75
+    ],
+    "context|HP4-6": [
+     1,
+     6,
+     1,
+     10,
+     0
+    ],
+    "type x context|DEL HP4-6": [
+     1,
+     0,
+     1,
+     9,
+     0
+    ],
+    "type x context|INS HP>=7": [
+     1,
+     276,
+     1,
+     3,
+     187
+    ],
+    "length|5-10": [
+     1,
+     61,
+     1,
+     1,
+     47
+    ],
+    "type x length|DEL 5-10": [
+     1,
+     20,
+     1,
+     1,
+     14
+    ],
+    "length|2-4": [
+     2,
+     133,
+     2,
+     4,
+     102
+    ],
+    "type x length|DEL 2-4": [
+     2,
+     46,
+     2,
+     4,
+     33
+    ],
+    "type x length|INS 2-4": [
+     0,
+     87,
+     0,
+     0,
+     69
+    ],
+    "context|STR": [
+     0,
+     65,
+     0,
+     0,
+     57
+    ],
+    "type x context|DEL STR": [
+     0,
+     17,
+     0,
+     0,
+     16
+    ],
+    "type x context|INS STR": [
+     0,
+     48,
+     0,
+     0,
+     41
+    ],
+    "type x length|INS 5-10": [
+     0,
+     41,
+     0,
+     0,
+     33
+    ],
+    "type x length|INS >10": [
+     0,
+     43,
+     0,
+     0,
+     33
+    ],
+    "type x context|INS HP4-6": [
+     0,
+     6,
+     0,
+     1,
+     0
+    ]
+   }
+  },
+  {
+   "uid": "comparator:DeepSomatic-TO 1.9.0:HG008T_ONT:INDEL",
+   "group": "DeepSomatic-TO",
+   "seed": "DeepSomatic-TO 1.9.0",
+   "sample": "HG008T",
+   "dataset": "HG008T_ONT",
+   "threshold": null,
+   "best_f1": null,
+   "ceiling": null,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": null,
+   "strata": {
+    "type|DEL": [
+     9,
+     210,
+     9,
+     31,
+     136
+    ],
+    "length|>10": [
+     6,
+     64,
+     6,
+     18,
+     47
+    ],
+    "context|none": [
+     9,
+     71,
+     9,
+     33,
+     33
+    ],
+    "type x context|DEL none": [
+     8,
+     35,
+     8,
+     17,
+     13
+    ],
+    "type x length|DEL >10": [
+     6,
+     21,
+     6,
+     8,
+     14
+    ],
+    "all|all": [
+     11,
+     576,
+     11,
+     53,
+     384
+    ],
+    "type|INS": [
+     2,
+     366,
+     2,
+     22,
+     248
+    ],
+    "length|1": [
+     3,
+     317,
+     3,
+     24,
+     188
+    ],
+    "type x context|INS none": [
+     1,
+     36,
+     1,
+     16,
+     20
+    ],
+    "type x length|INS 1": [
+     1,
+     196,
+     1,
+     6,
+     113
+    ],
+    "context|HP4-6": [
+     1,
+     6,
+     1,
+     12,
+     0
+    ],
+    "type x context|DEL HP4-6": [
+     1,
+     0,
+     1,
+     8,
+     0
+    ],
+    "type x length|DEL 1": [
+     2,
+     121,
+     2,
+     18,
+     75
+    ],
+    "length|5-10": [
+     2,
+     60,
+     2,
+     7,
+     47
+    ],
+    "type x length|DEL 5-10": [
+     1,
+     20,
+     1,
+     3,
+     14
+    ],
+    "context|STR": [
+     1,
+     64,
+     1,
+     4,
+     57
+    ],
+    "type x context|INS STR": [
+     1,
+     47,
+     1,
+     2,
+     41
+    ],
+    "type x length|INS 5-10": [
+     1,
+     40,
+     1,
+     4,
+     33
+    ],
+    "length|2-4": [
+     0,
+     135,
+     0,
+     4,
+     102
+    ],
+    "type x length|DEL 2-4": [
+     0,
+     48,
+     0,
+     2,
+     33
+    ],
+    "context|HP>=7": [
+     0,
+     435,
+     0,
+     4,
+     294
+    ],
+    "type x context|INS HP>=7": [
+     0,
+     277,
+     0,
+     0,
+     187
+    ],
+    "type x context|DEL HP>=7": [
+     0,
+     158,
+     0,
+     4,
+     107
+    ],
+    "type x length|INS 2-4": [
+     0,
+     87,
+     0,
+     2,
+     69
+    ],
+    "type x context|DEL STR": [
+     0,
+     17,
+     0,
+     2,
+     16
+    ],
+    "type x length|INS >10": [
+     0,
+     43,
+     0,
+     10,
+     33
+    ],
+    "type x context|INS HP4-6": [
+     0,
+     6,
+     0,
+     4,
+     0
+    ]
+   }
+  },
+  {
+   "uid": "comparator:DeepSomatic-TO 1.9.0:COLO829T_Illumina:INDEL",
+   "group": "DeepSomatic-TO",
+   "seed": "DeepSomatic-TO 1.9.0",
+   "sample": "COLO829T",
+   "dataset": "COLO829T_Illumina",
+   "threshold": null,
+   "best_f1": null,
+   "ceiling": null,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": null,
+   "strata": {
+    "type|DEL": [
+     14,
+     40,
+     14,
+     72,
+     29
+    ],
+    "length|1": [
+     16,
+     53,
+     16,
+     70,
+     37
+    ],
+    "context|none": [
+     10,
+     18,
+     10,
+     56,
+     12
+    ],
+    "type x context|DEL none": [
+     6,
+     5,
+     6,
+     49,
+     3
+    ],
+    "type x length|DEL 1": [
+     9,
+     26,
+     9,
+     50,
+     20
+    ],
+    "all|all": [
+     24,
+     107,
+     24,
+     97,
+     81
+    ],
+    "context|HP4-6": [
+     3,
+     3,
+     3,
+     16,
+     3
+    ],
+    "type x context|DEL HP4-6": [
+     3,
+     1,
+     3,
+     10,
+     1
+    ],
+    "length|>10": [
+     4,
+     11,
+     4,
+     6,
+     8
+    ],
+    "type x length|DEL >10": [
+     3,
+     1,
+     3,
+     6,
+     0
+    ],
+    "type|INS": [
+     10,
+     67,
+     10,
+     25,
+     52
+    ],
+    "context|HP>=7": [
+     9,
+     61,
+     9,
+     21,
+     42
+    ],
+    "type x context|INS HP>=7": [
+     4,
+     31,
+     4,
+     11,
+     20
+    ],
+    "type x length|INS 1": [
+     7,
+     27,
+     7,
+     20,
+     17
+    ],
+    "length|5-10": [
+     1,
+     9,
+     1,
+     5,
+     8
+    ],
+    "type x length|DEL 5-10": [
+     1,
+     2,
+     1,
+     4,
+     2
+    ],
+    "type x context|INS none": [
+     4,
+     13,
+     4,
+     7,
+     9
+    ],
+    "type x context|DEL HP>=7": [
+     5,
+     30,
+     5,
+     10,
+     22
+    ],
+    "type x length|INS >10": [
+     1,
+     10,
+     1,
+     0,
+     8
+    ],
+    "length|2-4": [
+     3,
+     34,
+     3,
+     16,
+     28
+    ],
+    "context|STR": [
+     2,
+     25,
+     2,
+     3,
+     24
+    ],
+    "type x context|INS STR": [
+     2,
+     21,
+     2,
+     1,
+     21
+    ],
+    "type x length|INS 2-4": [
+     2,
+     23,
+     2,
+     4,
+     21
+    ],
+    "type x length|DEL 2-4": [
+     1,
+     11,
+     1,
+     12,
+     7
+    ],
+    "type x context|DEL STR": [
+     0,
+     4,
+     0,
+     2,
+     3
+    ],
+    "type x length|INS 5-10": [
+     0,
+     7,
+     0,
+     1,
+     6
+    ],
+    "type x context|INS HP4-6": [
+     0,
+     2,
+     0,
+     6,
+     2
+    ],
+    "context|VNTR": [
+     0,
+     0,
+     0,
+     1,
+     0
+    ],
+    "type x context|DEL VNTR": [
+     0,
+     0,
+     0,
+     1,
+     0
+    ]
+   }
+  },
+  {
+   "uid": "comparator:DeepSomatic-TO 1.9.0:COLO829T_fiberseq:INDEL",
+   "group": "DeepSomatic-TO",
+   "seed": "DeepSomatic-TO 1.9.0",
+   "sample": "COLO829T",
+   "dataset": "COLO829T_fiberseq",
+   "threshold": null,
+   "best_f1": null,
+   "ceiling": null,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": null,
+   "strata": {
+    "type|DEL": [
+     8,
+     46,
+     8,
+     24,
+     29
+    ],
+    "length|1": [
+     9,
+     60,
+     9,
+     22,
+     37
+    ],
+    "context|HP4-6": [
+     3,
+     3,
+     3,
+     4,
+     3
+    ],
+    "type x context|DEL HP4-6": [
+     3,
+     1,
+     3,
+     4,
+     1
+    ],
+    "type x length|DEL 1": [
+     6,
+     29,
+     6,
+     22,
+     20
+    ],
+    "all|all": [
+     11,
+     120,
+     11,
+     24,
+     81
+    ],
+    "type|INS": [
+     3,
+     74,
+     3,
+     0,
+     52
+    ],
+    "context|HP>=7": [
+     5,
+     65,
+     5,
+     13,
+     42
+    ],
+    "type x context|INS HP>=7": [
+     2,
+     33,
+     2,
+     0,
+     20
+    ],
+    "type x length|INS 1": [
+     3,
+     31,
+     3,
+     0,
+     17
+    ],
+    "length|>10": [
+     1,
+     14,
+     1,
+     1,
+     8
+    ],
+    "context|none": [
+     3,
+     25,
+     3,
+     7,
+     12
+    ],
+    "type x context|DEL none": [
+     2,
+     9,
+     2,
+     7,
+     3
+    ],
+    "type x length|DEL >10": [
+     1,
+     3,
+     1,
+     1,
+     0
+    ],
+    "type x context|INS none": [
+     1,
+     16,
+     1,
+     0,
+     9
+    ],
+    "type x context|DEL HP>=7": [
+     3,
+     32,
+     3,
+     13,
+     22
+    ],
+    "length|2-4": [
+     1,
+     36,
+     1,
+     0,
+     28
+    ],
+    "type x length|DEL 2-4": [
+     1,
+     11,
+     1,
+     0,
+     7
+    ],
+    "type x length|INS >10": [
+     0,
+     11,
+     0,
+     0,
+     8
+    ],
+    "context|STR": [
+     0,
+     27,
+     0,
+     0,
+     24
+    ],
+    "type x context|INS STR": [
+     0,
+     23,
+     0,
+     0,
+     21
+    ],
+    "type x length|INS 2-4": [
+     0,
+     25,
+     0,
+     0,
+     21
+    ],
+    "length|5-10": [
+     0,
+     10,
+     0,
+     1,
+     8
+    ],
+    "type x context|DEL STR": [
+     0,
+     4,
+     0,
+     0,
+     3
+    ],
+    "type x length|DEL 5-10": [
+     0,
+     3,
+     0,
+     1,
+     2
+    ],
+    "type x length|INS 5-10": [
+     0,
+     7,
+     0,
+     0,
+     6
+    ],
+    "type x context|INS HP4-6": [
+     0,
+     2,
+     0,
+     0,
+     2
+    ]
+   }
+  },
+  {
+   "uid": "comparator:DeepSomatic-TO 1.9.0:COLO829T_ONT:INDEL",
+   "group": "DeepSomatic-TO",
+   "seed": "DeepSomatic-TO 1.9.0",
+   "sample": "COLO829T",
+   "dataset": "COLO829T_ONT",
+   "threshold": null,
+   "best_f1": null,
+   "ceiling": null,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": null,
+   "strata": {
+    "type|DEL": [
+     1,
+     53,
+     1,
+     48,
+     29
+    ],
+    "length|>10": [
+     1,
+     14,
+     1,
+     8,
+     8
+    ],
+    "context|none": [
+     2,
+     26,
+     2,
+     23,
+     12
+    ],
+    "type x context|DEL none": [
+     1,
+     10,
+     1,
+     18,
+     3
+    ],
+    "type x length|DEL >10": [
+     1,
+     3,
+     1,
+     5,
+     0
+    ],
+    "all|all": [
+     2,
+     129,
+     2,
+     61,
+     81
+    ],
+    "type|INS": [
+     1,
+     76,
+     1,
+     13,
+     52
+    ],
+    "length|1": [
+     1,
+     68,
+     1,
+     45,
+     37
+    ],
+    "type x context|INS none": [
+     1,
+     16,
+     1,
+     5,
+     9
+    ],
+    "type x length|INS 1": [
+     1,
+     33,
+     1,
+     9,
+     17
+    ],
+    "type x length|INS >10": [
+     0,
+     11,
+     0,
+     3,
+     8
+    ],
+    "context|STR": [
+     0,
+     27,
+     0,
+     4,
+     24
+    ],
+    "type x context|INS STR": [
+     0,
+     23,
+     0,
+     1,
+     21
+    ],
+    "context|HP>=7": [
+     0,
+     70,
+     0,
+     10,
+     42
+    ],
+    "type x context|DEL HP>=7": [
+     0,
+     35,
+     0,
+     7,
+     22
+    ],
+    "type x length|DEL 1": [
+     0,
+     35,
+     0,
+     36,
+     20
+    ],
+    "length|2-4": [
+     0,
+     37,
+     0,
+     7,
+     28
+    ],
+    "type x length|DEL 2-4": [
+     0,
+     12,
+     0,
+     7,
+     7
+    ],
+    "type x context|INS HP>=7": [
+     0,
+     35,
+     0,
+     3,
+     20
+    ],
+    "type x length|INS 2-4": [
+     0,
+     25,
+     0,
+     0,
+     21
+    ],
+    "length|5-10": [
+     0,
+     10,
+     0,
+     1,
+     8
+    ],
+    "type x context|DEL STR": [
+     0,
+     4,
+     0,
+     3,
+     3
+    ],
+    "type x length|DEL 5-10": [
+     0,
+     3,
+     0,
+     0,
+     2
+    ],
+    "context|HP4-6": [
+     0,
+     6,
+     0,
+     24,
+     3
+    ],
+    "type x context|DEL HP4-6": [
+     0,
+     4,
+     0,
+     20,
+     1
+    ],
+    "type x length|INS 5-10": [
+     0,
+     7,
+     0,
+     1,
+     6
+    ],
+    "type x context|INS HP4-6": [
+     0,
+     2,
+     0,
+     4,
+     2
+    ]
+   }
+  },
+  {
+   "uid": "comparator:ClairS-TO 0.4.2:HG008T_Illumina:INDEL",
+   "group": "ClairS-TO",
+   "seed": "ClairS-TO 0.4.2",
+   "sample": "HG008T",
+   "dataset": "HG008T_Illumina",
+   "threshold": null,
+   "best_f1": null,
+   "ceiling": null,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": null,
+   "strata": {
+    "type|DEL": [
+     28,
+     191,
+     28,
+     47,
+     136
+    ],
+    "length|2-4": [
+     8,
+     127,
+     8,
+     27,
+     102
+    ],
+    "context|none": [
+     29,
+     51,
+     29,
+     54,
+     33
+    ],
+    "type x context|DEL none": [
+     24,
+     19,
+     24,
+     38,
+     13
+    ],
+    "type x length|DEL 2-4": [
+     7,
+     41,
+     7,
+     19,
+     33
+    ],
+    "all|all": [
+     47,
+     540,
+     47,
+     77,
+     384
+    ],
+    "length|>10": [
+     6,
+     64,
+     6,
+     10,
+     47
+    ],
+    "type x length|DEL >10": [
+     6,
+     21,
+     6,
+     8,
+     14
+    ],
+    "type|INS": [
+     19,
+     349,
+     19,
+     30,
+     248
+    ],
+    "length|1": [
+     27,
+     293,
+     27,
+     31,
+     188
+    ],
+    "type x context|INS none": [
+     5,
+     32,
+     5,
+     16,
+     20
+    ],
+    "type x length|INS 1": [
+     18,
+     179,
+     18,
+     14,
+     113
+    ],
+    "context|HP4-6": [
+     7,
+     0,
+     7,
+     7,
+     0
+    ],
+    "type x context|INS HP4-6": [
+     6,
+     0,
+     6,
+     3,
+     0
+    ],
+    "context|HP>=7": [
+     10,
+     425,
+     10,
+     10,
+     294
+    ],
+    "type x context|INS HP>=7": [
+     8,
+     269,
+     8,
+     8,
+     187
+    ],
+    "type x context|DEL HP>=7": [
+     2,
+     156,
+     2,
+     2,
+     107
+    ],
+    "type x length|DEL 1": [
+     9,
+     114,
+     9,
+     17,
+     75
+    ],
+    "length|5-10": [
+     6,
+     56,
+     6,
+     9,
+     47
+    ],
+    "type x length|DEL 5-10": [
+     6,
+     15,
+     6,
+     3,
+     14
+    ],
+    "type x context|DEL HP4-6": [
+     1,
+     0,
+     1,
+     4,
+     0
+    ],
+    "context|STR": [
+     1,
+     64,
+     1,
+     5,
+     57
+    ],
+    "type x context|DEL STR": [
+     1,
+     16,
+     1,
+     2,
+     16
+    ],
+    "type x length|INS 2-4": [
+     1,
+     86,
+     1,
+     8,
+     69
+    ],
+    "type x context|INS STR": [
+     0,
+     48,
+     0,
+     3,
+     41
+    ],
+    "type x length|INS 5-10": [
+     0,
+     41,
+     0,
+     6,
+     33
+    ],
+    "type x length|INS >10": [
+     0,
+     43,
+     0,
+     2,
+     33
+    ],
+    "context|VNTR": [
+     0,
+     0,
+     0,
+     1,
+     0
+    ],
+    "type x context|DEL VNTR": [
+     0,
+     0,
+     0,
+     1,
+     0
+    ]
+   }
+  },
+  {
+   "uid": "comparator:ClairS-TO 0.4.2:HG008T_PacBio:INDEL",
+   "group": "ClairS-TO",
+   "seed": "ClairS-TO 0.4.2",
+   "sample": "HG008T",
+   "dataset": "HG008T_PacBio",
+   "threshold": null,
+   "best_f1": null,
+   "ceiling": null,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": null,
+   "strata": {
+    "type|DEL": [
+     24,
+     195,
+     24,
+     36,
+     136
+    ],
+    "length|>10": [
+     4,
+     66,
+     4,
+     1,
+     47
+    ],
+    "context|none": [
+     26,
+     54,
+     26,
+     35,
+     33
+    ],
+    "type x context|DEL none": [
+     20,
+     23,
+     20,
+     26,
+     13
+    ],
+    "type x length|DEL >10": [
+     4,
+     23,
+     4,
+     1,
+     14
+    ],
+    "all|all": [
+     44,
+     543,
+     44,
+     54,
+     384
+    ],
+    "type|INS": [
+     20,
+     348,
+     20,
+     18,
+     248
+    ],
+    "length|1": [
+     27,
+     293,
+     27,
+     29,
+     188
+    ],
+    "type x context|INS none": [
+     6,
+     31,
+     6,
+     9,
+     20
+    ],
+    "type x length|INS 1": [
+     18,
+     179,
+     18,
+     13,
+     113
+    ],
+    "context|HP4-6": [
+     7,
+     0,
+     7,
+     7,
+     0
+    ],
+    "type x context|INS HP4-6": [
+     6,
+     0,
+     6,
+     3,
+     0
+    ],
+    "context|HP>=7": [
+     10,
+     425,
+     10,
+     10,
+     294
+    ],
+    "type x context|INS HP>=7": [
+     8,
+     269,
+     8,
+     6,
+     187
+    ],
+    "type x context|DEL HP>=7": [
+     2,
+     156,
+     2,
+     4,
+     107
+    ],
+    "type x length|DEL 1": [
+     9,
+     114,
+     9,
+     16,
+     75
+    ],
+    "length|2-4": [
+     6,
+     129,
+     6,
+     21,
+     102
+    ],
+    "type x length|DEL 2-4": [
+     5,
+     43,
+     5,
+     18,
+     33
+    ],
+    "length|5-10": [
+     7,
+     55,
+     7,
+     3,
+     47
+    ],
+    "type x length|DEL 5-10": [
+     6,
+     15,
+     6,
+     1,
+     14
+    ],
+    "type x context|DEL HP4-6": [
+     1,
+     0,
+     1,
+     4,
+     0
+    ],
+    "context|STR": [
+     1,
+     64,
+     1,
+     2,
+     57
+    ],
+    "type x context|DEL STR": [
+     1,
+     16,
+     1,
+     2,
+     16
+    ],
+    "type x length|INS 2-4": [
+     1,
+     86,
+     1,
+     3,
+     69
+    ],
+    "type x length|INS 5-10": [
+     1,
+     40,
+     1,
+     2,
+     33
+    ],
+    "type x context|INS STR": [
+     0,
+     48,
+     0,
+     0,
+     41
+    ],
+    "type x length|INS >10": [
+     0,
+     43,
+     0,
+     0,
+     33
+    ]
+   }
+  },
+  {
+   "uid": "comparator:ClairS-TO 0.4.2:HG008T_ONT:INDEL",
+   "group": "ClairS-TO",
+   "seed": "ClairS-TO 0.4.2",
+   "sample": "HG008T",
+   "dataset": "HG008T_ONT",
+   "threshold": null,
+   "best_f1": null,
+   "ceiling": null,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": null,
+   "strata": {
+    "type|DEL": [
+     26,
+     193,
+     26,
+     49,
+     136
+    ],
+    "length|2-4": [
+     6,
+     129,
+     6,
+     21,
+     102
+    ],
+    "context|none": [
+     29,
+     51,
+     29,
+     41,
+     33
+    ],
+    "type x context|DEL none": [
+     23,
+     20,
+     23,
+     33,
+     13
+    ],
+    "type x length|DEL 2-4": [
+     6,
+     42,
+     6,
+     19,
+     33
+    ],
+    "all|all": [
+     44,
+     543,
+     44,
+     63,
+     384
+    ],
+    "length|>10": [
+     6,
+     64,
+     6,
+     2,
+     47
+    ],
+    "type x length|DEL >10": [
+     6,
+     21,
+     6,
+     2,
+     14
+    ],
+    "type|INS": [
+     18,
+     350,
+     18,
+     14,
+     248
+    ],
+    "length|1": [
+     25,
+     295,
+     25,
+     35,
+     188
+    ],
+    "type x context|INS none": [
+     6,
+     31,
+     6,
+     8,
+     20
+    ],
+    "type x length|INS 1": [
+     17,
+     180,
+     17,
+     10,
+     113
+    ],
+    "context|HP4-6": [
+     7,
+     0,
+     7,
+     14,
+     0
+    ],
+    "type x context|INS HP4-6": [
+     6,
+     0,
+     6,
+     3,
+     0
+    ],
+    "context|HP>=7": [
+     7,
+     428,
+     7,
+     5,
+     294
+    ],
+    "type x context|INS HP>=7": [
+     6,
+     271,
+     6,
+     3,
+     187
+    ],
+    "type x context|DEL HP>=7": [
+     1,
+     157,
+     1,
+     2,
+     107
+    ],
+    "type x length|DEL 1": [
+     8,
+     115,
+     8,
+     25,
+     75
+    ],
+    "length|5-10": [
+     7,
+     55,
+     7,
+     5,
+     47
+    ],
+    "type x length|DEL 5-10": [
+     6,
+     15,
+     6,
+     3,
+     14
+    ],
+    "type x context|DEL HP4-6": [
+     1,
+     0,
+     1,
+     11,
+     0
+    ],
+    "context|STR": [
+     1,
+     64,
+     1,
+     3,
+     57
+    ],
+    "type x context|DEL STR": [
+     1,
+     16,
+     1,
+     3,
+     16
+    ],
+    "type x length|INS 5-10": [
+     1,
+     40,
+     1,
+     2,
+     33
+    ],
+    "type x length|INS 2-4": [
+     0,
+     87,
+     0,
+     2,
+     69
+    ],
+    "type x context|INS STR": [
+     0,
+     48,
+     0,
+     0,
+     41
+    ],
+    "type x length|INS >10": [
+     0,
+     43,
+     0,
+     0,
+     33
+    ]
+   }
+  },
+  {
+   "uid": "comparator:ClairS-TO 0.4.1:COLO829T_Illumina:INDEL",
+   "group": "ClairS-TO",
+   "seed": "ClairS-TO 0.4.1",
+   "sample": "COLO829T",
+   "dataset": "COLO829T_Illumina",
+   "threshold": null,
+   "best_f1": null,
+   "ceiling": null,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": null,
+   "strata": {
+    "type|INS": [
+     9,
+     68,
+     9,
+     51,
+     52
+    ],
+    "length|1": [
+     14,
+     55,
+     14,
+     83,
+     37
+    ],
+    "context|none": [
+     11,
+     17,
+     11,
+     114,
+     12
+    ],
+    "type x context|INS none": [
+     4,
+     13,
+     4,
+     29,
+     9
+    ],
+    "type x length|INS 1": [
+     9,
+     25,
+     9,
+     28,
+     17
+    ],
+    "all|all": [
+     19,
+     112,
+     19,
+     161,
+     81
+    ],
+    "type|DEL": [
+     10,
+     44,
+     10,
+     109,
+     29
+    ],
+    "type x context|DEL none": [
+     7,
+     4,
+     7,
+     85,
+     3
+    ],
+    "type x length|DEL 1": [
+     5,
+     30,
+     5,
+     54,
+     20
+    ],
+    "context|HP>=7": [
+     5,
+     65,
+     5,
+     10,
+     42
+    ],
+    "type x context|INS HP>=7": [
+     5,
+     30,
+     5,
+     6,
+     20
+    ],
+    "context|HP4-6": [
+     3,
+     3,
+     3,
+     31,
+     3
+    ],
+    "type x context|DEL HP4-6": [
+     3,
+     1,
+     3,
+     18,
+     1
+    ],
+    "length|>10": [
+     3,
+     12,
+     3,
+     19,
+     8
+    ],
+    "type x length|DEL >10": [
+     3,
+     1,
+     3,
+     15,
+     0
+    ],
+    "length|5-10": [
+     1,
+     9,
+     1,
+     13,
+     8
+    ],
+    "type x length|DEL 5-10": [
+     1,
+     2,
+     1,
+     9,
+     2
+    ],
+    "length|2-4": [
+     1,
+     36,
+     1,
+     46,
+     28
+    ],
+    "type x length|DEL 2-4": [
+     1,
+     11,
+     1,
+     31,
+     7
+    ],
+    "type x length|INS >10": [
+     0,
+     11,
+     0,
+     4,
+     8
+    ],
+    "context|STR": [
+     0,
+     27,
+     0,
+     3,
+     24
+    ],
+    "type x context|INS STR": [
+     0,
+     23,
+     0,
+     2,
+     21
+    ],
+    "type x context|DEL HP>=7": [
+     0,
+     35,
+     0,
+     4,
+     22
+    ],
+    "type x length|INS 2-4": [
+     0,
+     25,
+     0,
+     15,
+     21
+    ],
+    "type x context|DEL STR": [
+     0,
+     4,
+     0,
+     1,
+     3
+    ],
+    "type x length|INS 5-10": [
+     0,
+     7,
+     0,
+     4,
+     6
+    ],
+    "type x context|INS HP4-6": [
+     0,
+     2,
+     0,
+     13,
+     2
+    ],
+    "context|VNTR": [
+     0,
+     0,
+     0,
+     2,
+     0
+    ],
+    "type x context|DEL VNTR": [
+     0,
+     0,
+     0,
+     1,
+     0
+    ],
+    "type|complex": [
+     0,
+     0,
+     0,
+     1,
+     0
+    ],
+    "context|complex": [
+     0,
+     0,
+     0,
+     1,
+     0
+    ],
+    "type x context|complex complex": [
+     0,
+     0,
+     0,
+     1,
+     0
+    ],
+    "type x length|complex 1": [
+     0,
+     0,
+     0,
+     1,
+     0
+    ],
+    "type x context|INS VNTR": [
+     0,
+     0,
+     0,
+     1,
+     0
+    ]
+   }
+  },
+  {
+   "uid": "comparator:ClairS-TO 0.4.1:COLO829T_fiberseq:INDEL",
+   "group": "ClairS-TO",
+   "seed": "ClairS-TO 0.4.1",
+   "sample": "COLO829T",
+   "dataset": "COLO829T_fiberseq",
+   "threshold": null,
+   "best_f1": null,
+   "ceiling": null,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": null,
+   "strata": {
+    "type|INS": [
+     7,
+     70,
+     7,
+     9,
+     52
+    ],
+    "length|1": [
+     10,
+     59,
+     10,
+     17,
+     37
+    ],
+    "context|none": [
+     8,
+     20,
+     8,
+     24,
+     12
+    ],
+    "type x context|INS none": [
+     3,
+     14,
+     3,
+     5,
+     9
+    ],
+    "type x length|INS 1": [
+     7,
+     27,
+     7,
+     6,
+     17
+    ],
+    "all|all": [
+     14,
+     117,
+     14,
+     32,
+     81
+    ],
+    "type|DEL": [
+     7,
+     47,
+     7,
+     23,
+     29
+    ],
+    "type x context|DEL none": [
+     5,
+     6,
+     5,
+     19,
+     3
+    ],
+    "type x length|DEL 1": [
+     3,
+     32,
+     3,
+     11,
+     20
+    ],
+    "context|HP>=7": [
+     4,
+     66,
+     4,
+     2,
+     42
+    ],
+    "type x context|INS HP>=7": [
+     4,
+     31,
+     4,
+     2,
+     20
+    ],
+    "length|>10": [
+     2,
+     13,
+     2,
+     4,
+     8
+    ],
+    "type x length|DEL >10": [
+     2,
+     2,
+     2,
+     2,
+     0
+    ],
+    "length|5-10": [
+     1,
+     9,
+     1,
+     1,
+     8
+    ],
+    "type x length|DEL 5-10": [
+     1,
+     2,
+     1,
+     1,
+     2
+    ],
+    "context|HP4-6": [
+     2,
+     4,
+     2,
+     5,
+     3
+    ],
+    "type x context|DEL HP4-6": [
+     2,
+     2,
+     2,
+     3,
+     1
+    ],
+    "length|2-4": [
+     1,
+     36,
+     1,
+     10,
+     28
+    ],
+    "type x length|DEL 2-4": [
+     1,
+     11,
+     1,
+     9,
+     7
+    ],
+    "type x length|INS >10": [
+     0,
+     11,
+     0,
+     2,
+     8
+    ],
+    "context|STR": [
+     0,
+     27,
+     0,
+     1,
+     24
+    ],
+    "type x context|INS STR": [
+     0,
+     23,
+     0,
+     0,
+     21
+    ],
+    "type x context|DEL HP>=7": [
+     0,
+     35,
+     0,
+     0,
+     22
+    ],
+    "type x length|INS 2-4": [
+     0,
+     25,
+     0,
+     1,
+     21
+    ],
+    "type x context|DEL STR": [
+     0,
+     4,
+     0,
+     1,
+     3
+    ],
+    "type x length|INS 5-10": [
+     0,
+     7,
+     0,
+     0,
+     6
+    ],
+    "type x context|INS HP4-6": [
+     0,
+     2,
+     0,
+     2,
+     2
+    ]
+   }
+  },
+  {
+   "uid": "comparator:ClairS-TO 0.4.1:COLO829T_ONT:INDEL",
+   "group": "ClairS-TO",
+   "seed": "ClairS-TO 0.4.1",
+   "sample": "COLO829T",
+   "dataset": "COLO829T_ONT",
+   "threshold": null,
+   "best_f1": null,
+   "ceiling": null,
+   "skipped": 0,
+   "truth_pon": true,
+   "report_check": null,
+   "strata": {
+    "type|INS": [
+     5,
+     72,
+     5,
+     20,
+     52
+    ],
+    "length|1": [
+     8,
+     61,
+     8,
+     71,
+     37
+    ],
+    "context|none": [
+     8,
+     20,
+     8,
+     37,
+     12
+    ],
+    "type x context|INS none": [
+     3,
+     14,
+     3,
+     6,
+     9
+    ],
+    "type x length|INS 1": [
+     5,
+     29,
+     5,
+     18,
+     17
+    ],
+    "all|all": [
+     12,
+     119,
+     12,
+     89,
+     81
+    ],
+    "type|DEL": [
+     7,
+     47,
+     7,
+     69,
+     29
+    ],
+    "type x context|DEL none": [
+     5,
+     6,
+     5,
+     31,
+     3
+    ],
+    "type x length|DEL 1": [
+     3,
+     32,
+     3,
+     53,
+     20
+    ],
+    "context|HP>=7": [
+     2,
+     68,
+     2,
+     4,
+     42
+    ],
+    "type x context|INS HP>=7": [
+     2,
+     33,
+     2,
+     2,
+     20
+    ],
+    "length|>10": [
+     2,
+     13,
+     2,
+     2,
+     8
+    ],
+    "type x length|DEL >10": [
+     2,
+     2,
+     2,
+     2,
+     0
+    ],
+    "length|5-10": [
+     1,
+     9,
+     1,
+     1,
+     8
+    ],
+    "type x length|DEL 5-10": [
+     1,
+     2,
+     1,
+     1,
+     2
+    ],
+    "context|HP4-6": [
+     2,
+     4,
+     2,
+     44,
+     3
+    ],
+    "type x context|DEL HP4-6": [
+     2,
+     2,
+     2,
+     32,
+     1
+    ],
+    "length|2-4": [
+     1,
+     36,
+     1,
+     15,
+     28
+    ],
+    "type x length|DEL 2-4": [
+     1,
+     11,
+     1,
+     13,
+     7
+    ],
+    "type x length|INS >10": [
+     0,
+     11,
+     0,
+     0,
+     8
+    ],
+    "context|STR": [
+     0,
+     27,
+     0,
+     4,
+     24
+    ],
+    "type x context|INS STR": [
+     0,
+     23,
+     0,
+     0,
+     21
+    ],
+    "type x context|DEL HP>=7": [
+     0,
+     35,
+     0,
+     2,
+     22
+    ],
+    "type x length|INS 2-4": [
+     0,
+     25,
+     0,
+     2,
+     21
+    ],
+    "type x context|DEL STR": [
+     0,
+     4,
+     0,
+     4,
+     3
+    ],
+    "type x length|INS 5-10": [
+     0,
+     7,
+     0,
+     0,
+     6
+    ],
+    "type x context|INS HP4-6": [
+     0,
+     2,
+     0,
+     12,
+     2
+    ]
+   }
+  }
+ ],
+ "groups": [
+  {
+   "dataset": "HG008T_Illumina",
+   "group": "release",
+   "n": 3,
+   "best_f1": [
+    0.2505,
+    0.248,
+    0.2836
+   ],
+   "ceiling": [
+    0.2555,
+    0.2538,
+    0.2555
+   ],
+   "threshold": [
+    0.38437458872795105,
+    0.19937816262245178,
+    0.5997829437255859
+   ],
+   "strata": {
+    "type|DEL": [
+     125,
+     532,
+     125,
+     235,
+     136
+    ],
+    "length|2-4": [
+     18,
+     387,
+     18,
+     62,
+     102
+    ],
+    "context|none": [
+     91,
+     149,
+     91,
+     132,
+     33
+    ],
+    "type x context|DEL none": [
+     71,
+     58,
+     71,
+     112,
+     13
+    ],
+    "type x length|DEL 2-4": [
+     16,
+     128,
+     16,
+     61,
+     33
+    ],
+    "all|all": [
+     233,
+     1528,
+     233,
+     343,
+     384
+    ],
+    "length|>10": [
+     20,
+     190,
+     20,
+     23,
+     47
+    ],
+    "type x length|DEL >10": [
+     20,
+     61,
+     20,
+     21,
+     14
+    ],
+    "type|INS": [
+     108,
+     996,
+     108,
+     108,
+     248
+    ],
+    "length|1": [
+     179,
+     781,
+     179,
+     243,
+     188
+    ],
+    "type x context|INS none": [
+     20,
+     91,
+     20,
+     20,
+     20
+    ],
+    "type x length|INS 1": [
+     106,
+     485,
+     106,
+     101,
+     113
+    ],
+    "context|HP4-6": [
+     19,
+     2,
+     19,
+     39,
+     0
+    ],
+    "type x context|INS HP4-6": [
+     16,
+     2,
+     16,
+     22,
+     0
+    ],
+    "context|HP>=7": [
+     121,
+     1184,
+     121,
+     152,
+     294
+    ],
+    "type x context|INS HP>=7": [
+     72,
+     759,
+     72,
+     66,
+     187
+    ],
+    "type x context|DEL HP>=7": [
+     49,
+     425,
+     49,
+     86,
+     107
+    ],
+    "type x length|DEL 1": [
+     73,
+     296,
+     73,
+     142,
+     75
+    ],
+    "length|5-10": [
+     16,
+     170,
+     16,
+     15,
+     47
+    ],
+    "type x length|DEL 5-10": [
+     16,
+     47,
+     16,
+     11,
+     14
+    ],
+    "type x context|DEL HP4-6": [
+     3,
+     0,
+     3,
+     17,
+     0
+    ],
+    "context|STR": [
+     2,
+     193,
+     2,
+     20,
+     57
+    ],
+    "type x context|DEL STR": [
+     2,
+     49,
+     2,
+     20,
+     16
+    ],
+    "type x length|INS 2-4": [
+     2,
+     259,
+     2,
+     1,
+     69
+    ],
+    "type x context|INS STR": [
+     0,
+     144,
+     0,
+     0,
+     41
+    ],
+    "type x length|INS 5-10": [
+     0,
+     123,
+     0,
+     4,
+     33
+    ],
+    "type x length|INS >10": [
+     0,
+     129,
+     0,
+     2,
+     33
+    ]
+   }
+  },
+  {
+   "dataset": "HG008T_Illumina",
+   "group": "unseen",
+   "n": 3,
+   "best_f1": [
+    0.2417,
+    0.2436,
+    0.2492
+   ],
+   "ceiling": [
+    0.2266,
+    0.2232,
+    0.2249
+   ],
+   "threshold": [
+    0.6276426315307617,
+    0.6669604182243347,
+    0.7244706749916077
+   ],
+   "strata": {
+    "type|DEL": [
+     72,
+     585,
+     72,
+     86,
+     136
+    ],
+    "length|2-4": [
+     12,
+     393,
+     12,
+     21,
+     102
+    ],
+    "context|none": [
+     79,
+     161,
+     79,
+     73,
+     33
+    ],
+    "type x context|DEL none": [
+     62,
+     67,
+     62,
+     61,
+     13
+    ],
+    "type x length|DEL 2-4": [
+     11,
+     133,
+     11,
+     21,
+     33
+    ],
+    "all|all": [
+     123,
+     1638,
+     123,
+     114,
+     384
+    ],
+    "length|>10": [
+     18,
+     192,
+     18,
+     7,
+     47
+    ],
+    "type x length|DEL >10": [
+     18,
+     63,
+     18,
+     7,
+     14
+    ],
+    "type|INS": [
+     51,
+     1053,
+     51,
+     28,
+     248
+    ],
+    "length|1": [
+     81,
+     879,
+     81,
+     84,
+     188
+    ],
+    "type x context|INS none": [
+     17,
+     94,
+     17,
+     12,
+     20
+    ],
+    "type x length|INS 1": [
+     50,
+     541,
+     50,
+     27,
+     113
+    ],
+    "context|HP4-6": [
+     18,
+     3,
+     18,
+     15,
+     0
+    ],
+    "type x context|INS HP4-6": [
+     15,
+     3,
+     15,
+     8,
+     0
+    ],
+    "context|HP>=7": [
+     26,
+     1279,
+     26,
+     22,
+     294
+    ],
+    "type x context|INS HP>=7": [
+     19,
+     812,
+     19,
+     8,
+     187
+    ],
+    "type x length|DEL 1": [
+     31,
+     338,
+     31,
+     57,
+     75
+    ],
+    "type x context|DEL HP>=7": [
+     7,
+     467,
+     7,
+     14,
+     107
+    ],
+    "length|5-10": [
+     12,
+     174,
+     12,
+     2,
+     47
+    ],
+    "type x length|DEL 5-10": [
+     12,
+     51,
+     12,
+     1,
+     14
+    ],
+    "type x context|DEL HP4-6": [
+     3,
+     0,
+     3,
+     7,
+     0
+    ],
+    "type x length|INS 2-4": [
+     1,
+     260,
+     1,
+     0,
+     69
+    ],
+    "context|STR": [
+     0,
+     195,
+     0,
+     4,
+     57
+    ],
+    "type x context|DEL STR": [
+     0,
+     51,
+     0,
+     4,
+     16
+    ],
+    "type x context|INS STR": [
+     0,
+     144,
+     0,
+     0,
+     41
+    ],
+    "type x length|INS 5-10": [
+     0,
+     123,
+     0,
+     1,
+     33
+    ],
+    "type x length|INS >10": [
+     0,
+     129,
+     0,
+     0,
+     33
+    ]
+   }
+  },
+  {
+   "dataset": "HG008T_Illumina",
+   "group": "ClairS-TO",
+   "n": 1,
+   "best_f1": [],
+   "ceiling": [],
+   "threshold": [],
+   "strata": {
+    "type|DEL": [
+     28,
+     191,
+     28,
+     47,
+     136
+    ],
+    "length|2-4": [
+     8,
+     127,
+     8,
+     27,
+     102
+    ],
+    "context|none": [
+     29,
+     51,
+     29,
+     54,
+     33
+    ],
+    "type x context|DEL none": [
+     24,
+     19,
+     24,
+     38,
+     13
+    ],
+    "type x length|DEL 2-4": [
+     7,
+     41,
+     7,
+     19,
+     33
+    ],
+    "all|all": [
+     47,
+     540,
+     47,
+     77,
+     384
+    ],
+    "length|>10": [
+     6,
+     64,
+     6,
+     10,
+     47
+    ],
+    "type x length|DEL >10": [
+     6,
+     21,
+     6,
+     8,
+     14
+    ],
+    "type|INS": [
+     19,
+     349,
+     19,
+     30,
+     248
+    ],
+    "length|1": [
+     27,
+     293,
+     27,
+     31,
+     188
+    ],
+    "type x context|INS none": [
+     5,
+     32,
+     5,
+     16,
+     20
+    ],
+    "type x length|INS 1": [
+     18,
+     179,
+     18,
+     14,
+     113
+    ],
+    "context|HP4-6": [
+     7,
+     0,
+     7,
+     7,
+     0
+    ],
+    "type x context|INS HP4-6": [
+     6,
+     0,
+     6,
+     3,
+     0
+    ],
+    "context|HP>=7": [
+     10,
+     425,
+     10,
+     10,
+     294
+    ],
+    "type x context|INS HP>=7": [
+     8,
+     269,
+     8,
+     8,
+     187
+    ],
+    "type x context|DEL HP>=7": [
+     2,
+     156,
+     2,
+     2,
+     107
+    ],
+    "type x length|DEL 1": [
+     9,
+     114,
+     9,
+     17,
+     75
+    ],
+    "length|5-10": [
+     6,
+     56,
+     6,
+     9,
+     47
+    ],
+    "type x length|DEL 5-10": [
+     6,
+     15,
+     6,
+     3,
+     14
+    ],
+    "type x context|DEL HP4-6": [
+     1,
+     0,
+     1,
+     4,
+     0
+    ],
+    "context|STR": [
+     1,
+     64,
+     1,
+     5,
+     57
+    ],
+    "type x context|DEL STR": [
+     1,
+     16,
+     1,
+     2,
+     16
+    ],
+    "type x length|INS 2-4": [
+     1,
+     86,
+     1,
+     8,
+     69
+    ],
+    "type x context|INS STR": [
+     0,
+     48,
+     0,
+     3,
+     41
+    ],
+    "type x length|INS 5-10": [
+     0,
+     41,
+     0,
+     6,
+     33
+    ],
+    "type x length|INS >10": [
+     0,
+     43,
+     0,
+     2,
+     33
+    ],
+    "context|VNTR": [
+     0,
+     0,
+     0,
+     1,
+     0
+    ],
+    "type x context|DEL VNTR": [
+     0,
+     0,
+     0,
+     1,
+     0
+    ]
+   }
+  },
+  {
+   "dataset": "HG008T_Illumina",
+   "group": "DeepSomatic-TO",
+   "n": 1,
+   "best_f1": [],
+   "ceiling": [],
+   "threshold": [],
+   "strata": {
+    "type|DEL": [
+     42,
+     177,
+     42,
+     70,
+     136
+    ],
+    "length|2-4": [
+     9,
+     126,
+     9,
+     35,
+     102
+    ],
+    "context|none": [
+     33,
+     47,
+     33,
+     49,
+     33
+    ],
+    "type x context|DEL none": [
+     25,
+     18,
+     25,
+     37,
+     13
+    ],
+    "type x length|DEL 2-4": [
+     6,
+     42,
+     6,
+     21,
+     33
+    ],
+    "all|all": [
+     83,
+     504,
+     83,
+     128,
+     384
+    ],
+    "length|>10": [
+     7,
+     63,
+     7,
+     4,
+     47
+    ],
+    "type x length|DEL >10": [
+     7,
+     20,
+     7,
+     4,
+     14
+    ],
+    "type|INS": [
+     41,
+     327,
+     41,
+     58,
+     248
+    ],
+    "length|1": [
+     60,
+     260,
+     60,
+     83,
+     188
+    ],
+    "type x context|INS none": [
+     8,
+     29,
+     8,
+     12,
+     20
+    ],
+    "type x length|INS 1": [
+     37,
+     160,
+     37,
+     41,
+     113
+    ],
+    "context|HP4-6": [
+     7,
+     0,
+     7,
+     17,
+     0
+    ],
+    "type x context|INS HP4-6": [
+     6,
+     0,
+     6,
+     8,
+     0
+    ],
+    "context|HP>=7": [
+     42,
+     393,
+     42,
+     52,
+     294
+    ],
+    "type x context|INS HP>=7": [
+     27,
+     250,
+     27,
+     31,
+     187
+    ],
+    "type x length|DEL 1": [
+     23,
+     100,
+     23,
+     42,
+     75
+    ],
+    "type x context|DEL HP>=7": [
+     15,
+     143,
+     15,
+     21,
+     107
+    ],
+    "length|5-10": [
+     7,
+     55,
+     7,
+     6,
+     47
+    ],
+    "type x length|DEL 5-10": [
+     6,
+     15,
+     6,
+     3,
+     14
+    ],
+    "type x context|DEL HP4-6": [
+     1,
+     0,
+     1,
+     9,
+     0
+    ],
+    "type x length|INS 2-4": [
+     3,
+     84,
+     3,
+     14,
+     69
+    ],
+    "context|STR": [
+     1,
+     64,
+     1,
+     9,
+     57
+    ],
+    "type x context|DEL STR": [
+     1,
+     16,
+     1,
+     3,
+     16
+    ],
+    "type x length|INS 5-10": [
+     1,
+     40,
+     1,
+     3,
+     33
+    ],
+    "type x context|INS STR": [
+     0,
+     48,
+     0,
+     6,
+     41
+    ],
+    "type x length|INS >10": [
+     0,
+     43,
+     0,
+     0,
+     33
+    ],
+    "context|VNTR": [
+     0,
+     0,
+     0,
+     1,
+     0
+    ],
+    "type x context|INS VNTR": [
+     0,
+     0,
+     0,
+     1,
+     0
+    ]
+   }
+  },
+  {
+   "dataset": "HG008T_PacBio",
+   "group": "release",
+   "n": 3,
+   "best_f1": [
+    0.2746,
+    0.2626,
+    0.275
+   ],
+   "ceiling": [
+    0.2555,
+    0.2589,
+    0.2572
+   ],
+   "threshold": [
+    0.6854676604270935,
+    0.6684039235115051,
+    0.7070106863975525
+   ],
+   "strata": {
+    "type|DEL": [
+     139,
+     518,
+     139,
+     189,
+     136
+    ],
+    "length|2-4": [
+     23,
+     382,
+     23,
+     40,
+     102
+    ],
+    "context|none": [
+     101,
+     139,
+     101,
+     95,
+     33
+    ],
+    "type x context|DEL none": [
+     77,
+     52,
+     77,
+     71,
+     13
+    ],
+    "type x length|DEL 2-4": [
+     20,
+     124,
+     20,
+     30,
+     33
+    ],
+    "all|all": [
+     298,
+     1463,
+     298,
+     330,
+     384
+    ],
+    "length|>10": [
+     19,
+     191,
+     19,
+     8,
+     47
+    ],
+    "type x length|DEL >10": [
+     19,
+     62,
+     19,
+     8,
+     14
+    ],
+    "type|INS": [
+     159,
+     945,
+     159,
+     141,
+     248
+    ],
+    "length|1": [
+     238,
+     722,
+     238,
+     272,
+     188
+    ],
+    "type x context|INS none": [
+     24,
+     87,
+     24,
+     24,
+     20
+    ],
+    "type x length|INS 1": [
+     156,
+     435,
+     156,
+     126,
+     113
+    ],
+    "context|HP4-6": [
+     21,
+     0,
+     21,
+     25,
+     0
+    ],
+    "type x context|INS HP4-6": [
+     18,
+     0,
+     18,
+     15,
+     0
+    ],
+    "context|HP>=7": [
+     173,
+     1132,
+     173,
+     201,
+     294
+    ],
+    "type x context|INS HP>=7": [
+     117,
+     714,
+     117,
+     98,
+     187
+    ],
+    "type x length|DEL 1": [
+     82,
+     287,
+     82,
+     146,
+     75
+    ],
+    "type x context|DEL HP>=7": [
+     56,
+     418,
+     56,
+     103,
+     107
+    ],
+    "length|5-10": [
+     18,
+     168,
+     18,
+     10,
+     47
+    ],
+    "type x length|DEL 5-10": [
+     18,
+     45,
+     18,
+     5,
+     14
+    ],
+    "type x context|DEL HP4-6": [
+     3,
+     0,
+     3,
+     10,
+     0
+    ],
+    "context|STR": [
+     3,
+     192,
+     3,
+     9,
+     57
+    ],
+    "type x context|DEL STR": [
+     3,
+     48,
+     3,
+     5,
+     16
+    ],
+    "type x length|INS 2-4": [
+     3,
+     258,
+     3,
+     10,
+     69
+    ],
+    "type x context|INS STR": [
+     0,
+     144,
+     0,
+     4,
+     41
+    ],
+    "type x length|INS 5-10": [
+     0,
+     123,
+     0,
+     5,
+     33
+    ],
+    "type x length|INS >10": [
+     0,
+     129,
+     0,
+     0,
+     33
+    ]
+   }
+  },
+  {
+   "dataset": "HG008T_PacBio",
+   "group": "unseen",
+   "n": 3,
+   "best_f1": [
+    0.1529,
+    0.1923,
+    0.2092
+   ],
+   "ceiling": [
+    0.2385,
+    0.2095,
+    0.2027
+   ],
+   "threshold": [
+    0.8322527408599854,
+    0.8279844522476196,
+    0.7924565076828003
+   ],
+   "strata": {
+    "type|DEL": [
+     78,
+     579,
+     78,
+     120,
+     136
+    ],
+    "length|2-4": [
+     17,
+     388,
+     17,
+     25,
+     102
+    ],
+    "context|none": [
+     84,
+     156,
+     84,
+     73,
+     33
+    ],
+    "type x context|DEL none": [
+     64,
+     65,
+     64,
+     57,
+     13
+    ],
+    "type x length|DEL 2-4": [
+     14,
+     130,
+     14,
+     25,
+     33
+    ],
+    "all|all": [
+     148,
+     1613,
+     148,
+     162,
+     384
+    ],
+    "length|>10": [
+     19,
+     191,
+     19,
+     8,
+     47
+    ],
+    "type x length|DEL >10": [
+     19,
+     62,
+     19,
+     7,
+     14
+    ],
+    "type|INS": [
+     70,
+     1034,
+     70,
+     42,
+     248
+    ],
+    "length|1": [
+     102,
+     858,
+     102,
+     120,
+     188
+    ],
+    "type x context|INS none": [
+     20,
+     91,
+     20,
+     16,
+     20
+    ],
+    "type x length|INS 1": [
+     67,
+     524,
+     67,
+     38,
+     113
+    ],
+    "context|HP4-6": [
+     19,
+     2,
+     19,
+     18,
+     0
+    ],
+    "type x context|INS HP4-6": [
+     16,
+     2,
+     16,
+     6,
+     0
+    ],
+    "context|HP>=7": [
+     44,
+     1261,
+     44,
+     66,
+     294
+    ],
+    "type x context|INS HP>=7": [
+     34,
+     797,
+     34,
+     20,
+     187
+    ],
+    "type x length|DEL 1": [
+     35,
+     334,
+     35,
+     82,
+     75
+    ],
+    "length|5-10": [
+     10,
+     176,
+     10,
+     9,
+     47
+    ],
+    "type x length|DEL 5-10": [
+     10,
+     53,
+     10,
+     6,
+     14
+    ],
+    "type x context|DEL HP4-6": [
+     3,
+     0,
+     3,
+     12,
+     0
+    ],
+    "type x context|DEL HP>=7": [
+     10,
+     464,
+     10,
+     46,
+     107
+    ],
+    "context|STR": [
+     1,
+     194,
+     1,
+     5,
+     57
+    ],
+    "type x context|DEL STR": [
+     1,
+     50,
+     1,
+     5,
+     16
+    ],
+    "type x length|INS 2-4": [
+     3,
+     258,
+     3,
+     0,
+     69
+    ],
+    "type x context|INS STR": [
+     0,
+     144,
+     0,
+     0,
+     41
+    ],
+    "type x length|INS 5-10": [
+     0,
+     123,
+     0,
+     3,
+     33
+    ],
+    "type x length|INS >10": [
+     0,
+     129,
+     0,
+     1,
+     33
+    ]
+   }
+  },
+  {
+   "dataset": "HG008T_PacBio",
+   "group": "ClairS-TO",
+   "n": 1,
+   "best_f1": [],
+   "ceiling": [],
+   "threshold": [],
+   "strata": {
+    "type|DEL": [
+     24,
+     195,
+     24,
+     36,
+     136
+    ],
+    "length|>10": [
+     4,
+     66,
+     4,
+     1,
+     47
+    ],
+    "context|none": [
+     26,
+     54,
+     26,
+     35,
+     33
+    ],
+    "type x context|DEL none": [
+     20,
+     23,
+     20,
+     26,
+     13
+    ],
+    "type x length|DEL >10": [
+     4,
+     23,
+     4,
+     1,
+     14
+    ],
+    "all|all": [
+     44,
+     543,
+     44,
+     54,
+     384
+    ],
+    "type|INS": [
+     20,
+     348,
+     20,
+     18,
+     248
+    ],
+    "length|1": [
+     27,
+     293,
+     27,
+     29,
+     188
+    ],
+    "type x context|INS none": [
+     6,
+     31,
+     6,
+     9,
+     20
+    ],
+    "type x length|INS 1": [
+     18,
+     179,
+     18,
+     13,
+     113
+    ],
+    "context|HP4-6": [
+     7,
+     0,
+     7,
+     7,
+     0
+    ],
+    "type x context|INS HP4-6": [
+     6,
+     0,
+     6,
+     3,
+     0
+    ],
+    "context|HP>=7": [
+     10,
+     425,
+     10,
+     10,
+     294
+    ],
+    "type x context|INS HP>=7": [
+     8,
+     269,
+     8,
+     6,
+     187
+    ],
+    "type x context|DEL HP>=7": [
+     2,
+     156,
+     2,
+     4,
+     107
+    ],
+    "type x length|DEL 1": [
+     9,
+     114,
+     9,
+     16,
+     75
+    ],
+    "length|2-4": [
+     6,
+     129,
+     6,
+     21,
+     102
+    ],
+    "type x length|DEL 2-4": [
+     5,
+     43,
+     5,
+     18,
+     33
+    ],
+    "length|5-10": [
+     7,
+     55,
+     7,
+     3,
+     47
+    ],
+    "type x length|DEL 5-10": [
+     6,
+     15,
+     6,
+     1,
+     14
+    ],
+    "type x context|DEL HP4-6": [
+     1,
+     0,
+     1,
+     4,
+     0
+    ],
+    "context|STR": [
+     1,
+     64,
+     1,
+     2,
+     57
+    ],
+    "type x context|DEL STR": [
+     1,
+     16,
+     1,
+     2,
+     16
+    ],
+    "type x length|INS 2-4": [
+     1,
+     86,
+     1,
+     3,
+     69
+    ],
+    "type x length|INS 5-10": [
+     1,
+     40,
+     1,
+     2,
+     33
+    ],
+    "type x context|INS STR": [
+     0,
+     48,
+     0,
+     0,
+     41
+    ],
+    "type x length|INS >10": [
+     0,
+     43,
+     0,
+     0,
+     33
+    ]
+   }
+  },
+  {
+   "dataset": "HG008T_PacBio",
+   "group": "DeepSomatic-TO",
+   "n": 1,
+   "best_f1": [],
+   "ceiling": [],
+   "threshold": [],
+   "strata": {
+    "type|DEL": [
+     16,
+     203,
+     16,
+     68,
+     136
+    ],
+    "length|>10": [
+     4,
+     66,
+     4,
+     5,
+     47
+    ],
+    "context|none": [
+     10,
+     70,
+     10,
+     17,
+     33
+    ],
+    "type x context|DEL none": [
+     9,
+     34,
+     9,
+     16,
+     13
+    ],
+    "type x length|DEL >10": [
+     4,
+     23,
+     4,
+     5,
+     14
+    ],
+    "all|all": [
+     18,
+     569,
+     18,
+     73,
+     384
+    ],
+    "type|INS": [
+     2,
+     366,
+     2,
+     5,
+     248
+    ],
+    "length|1": [
+     11,
+     309,
+     11,
+     63,
+     188
+    ],
+    "type x context|INS none": [
+     1,
+     36,
+     1,
+     1,
+     20
+    ],
+    "type x length|INS 1": [
+     2,
+     195,
+     2,
+     5,
+     113
+    ],
+    "context|HP>=7": [
+     7,
+     428,
+     7,
+     46,
+     294
+    ],
+    "type x context|DEL HP>=7": [
+     6,
+     152,
+     6,
+     43,
+     107
+    ],
+    "type x length|DEL 1": [
+     9,
+     114,
+     9,
+     58,
+     75
+    ],
+    "context|HP4-6": [
+     1,
+     6,
+     1,
+     10,
+     0
+    ],
+    "type x context|DEL HP4-6": [
+     1,
+     0,
+     1,
+     9,
+     0
+    ],
+    "type x context|INS HP>=7": [
+     1,
+     276,
+     1,
+     3,
+     187
+    ],
+    "length|5-10": [
+     1,
+     61,
+     1,
+     1,
+     47
+    ],
+    "type x length|DEL 5-10": [
+     1,
+     20,
+     1,
+     1,
+     14
+    ],
+    "length|2-4": [
+     2,
+     133,
+     2,
+     4,
+     102
+    ],
+    "type x length|DEL 2-4": [
+     2,
+     46,
+     2,
+     4,
+     33
+    ],
+    "type x length|INS 2-4": [
+     0,
+     87,
+     0,
+     0,
+     69
+    ],
+    "context|STR": [
+     0,
+     65,
+     0,
+     0,
+     57
+    ],
+    "type x context|DEL STR": [
+     0,
+     17,
+     0,
+     0,
+     16
+    ],
+    "type x context|INS STR": [
+     0,
+     48,
+     0,
+     0,
+     41
+    ],
+    "type x length|INS 5-10": [
+     0,
+     41,
+     0,
+     0,
+     33
+    ],
+    "type x length|INS >10": [
+     0,
+     43,
+     0,
+     0,
+     33
+    ],
+    "type x context|INS HP4-6": [
+     0,
+     6,
+     0,
+     1,
+     0
+    ]
+   }
+  },
+  {
+   "dataset": "HG008T_ONT",
+   "group": "release",
+   "n": 3,
+   "best_f1": [
+    0.1869,
+    0.1937,
+    0.182
+   ],
+   "ceiling": [
+    0.2368,
+    0.23,
+    0.2351
+   ],
+   "threshold": [
+    0.3256518840789795,
+    0.24007463455200195,
+    0.2895215153694153
+   ],
+   "strata": {
+    "type|DEL": [
+     124,
+     533,
+     124,
+     507,
+     136
+    ],
+    "length|2-4": [
+     24,
+     381,
+     24,
+     166,
+     102
+    ],
+    "context|none": [
+     105,
+     135,
+     105,
+     247,
+     33
+    ],
+    "type x context|DEL none": [
+     81,
+     48,
+     81,
+     177,
+     13
+    ],
+    "type x length|DEL 2-4": [
+     21,
+     123,
+     21,
+     92,
+     33
+    ],
+    "all|all": [
+     273,
+     1488,
+     273,
+     1232,
+     384
+    ],
+    "length|>10": [
+     21,
+     189,
+     21,
+     48,
+     47
+    ],
+    "type x length|DEL >10": [
+     21,
+     60,
+     21,
+     33,
+     14
+    ],
+    "type|INS": [
+     149,
+     955,
+     149,
+     725,
+     248
+    ],
+    "length|1": [
+     210,
+     750,
+     210,
+     959,
+     188
+    ],
+    "type x context|INS none": [
+     24,
+     87,
+     24,
+     70,
+     20
+    ],
+    "type x length|INS 1": [
+     146,
+     445,
+     146,
+     609,
+     113
+    ],
+    "context|HP4-6": [
+     20,
+     1,
+     20,
+     57,
+     0
+    ],
+    "type x context|INS HP4-6": [
+     17,
+     1,
+     17,
+     26,
+     0
+    ],
+    "context|HP>=7": [
+     145,
+     1160,
+     145,
+     859,
+     294
+    ],
+    "type x context|INS HP>=7": [
+     108,
+     723,
+     108,
+     582,
+     187
+    ],
+    "type x length|DEL 1": [
+     64,
+     305,
+     64,
+     350,
+     75
+    ],
+    "type x context|DEL HP>=7": [
+     37,
+     437,
+     37,
+     277,
+     107
+    ],
+    "length|5-10": [
+     18,
+     168,
+     18,
+     59,
+     47
+    ],
+    "type x length|DEL 5-10": [
+     18,
+     45,
+     18,
+     32,
+     14
+    ],
+    "type x context|DEL HP4-6": [
+     3,
+     0,
+     3,
+     31,
+     0
+    ],
+    "context|STR": [
+     3,
+     192,
+     3,
+     64,
+     57
+    ],
+    "type x context|DEL STR": [
+     3,
+     48,
+     3,
+     20,
+     16
+    ],
+    "type x length|INS 2-4": [
+     3,
+     258,
+     3,
+     74,
+     69
+    ],
+    "type x context|INS STR": [
+     0,
+     144,
+     0,
+     44,
+     41
+    ],
+    "type x length|INS 5-10": [
+     0,
+     123,
+     0,
+     27,
+     33
+    ],
+    "type x length|INS >10": [
+     0,
+     129,
+     0,
+     15,
+     33
+    ],
+    "context|VNTR": [
+     0,
+     0,
+     0,
+     5,
+     0
+    ],
+    "type x context|INS VNTR": [
+     0,
+     0,
+     0,
+     3,
+     0
+    ],
+    "type x context|DEL VNTR": [
+     0,
+     0,
+     0,
+     2,
+     0
+    ]
+   }
+  },
+  {
+   "dataset": "HG008T_ONT",
+   "group": "unseen",
+   "n": 3,
+   "best_f1": [
+    0.1635,
+    0.1639,
+    0.1615
+   ],
+   "ceiling": [
+    0.1141,
+    0.1738,
+    0.1261
+   ],
+   "threshold": [
+    0.3217044472694397,
+    0.676965594291687,
+    0.5580074191093445
+   ],
+   "strata": {
+    "type|DEL": [
+     84,
+     573,
+     84,
+     118,
+     136
+    ],
+    "length|2-4": [
+     18,
+     387,
+     18,
+     56,
+     102
+    ],
+    "context|none": [
+     94,
+     146,
+     94,
+     123,
+     33
+    ],
+    "type x context|DEL none": [
+     73,
+     56,
+     73,
+     89,
+     13
+    ],
+    "type x length|DEL 2-4": [
+     18,
+     126,
+     18,
+     42,
+     33
+    ],
+    "all|all": [
+     151,
+     1610,
+     151,
+     205,
+     384
+    ],
+    "length|>10": [
+     20,
+     190,
+     20,
+     19,
+     47
+    ],
+    "type x length|DEL >10": [
+     20,
+     61,
+     20,
+     15,
+     14
+    ],
+    "type|INS": [
+     67,
+     1037,
+     67,
+     87,
+     248
+    ],
+    "length|1": [
+     98,
+     862,
+     98,
+     114,
+     188
+    ],
+    "type x context|INS none": [
+     21,
+     90,
+     21,
+     34,
+     20
+    ],
+    "type x length|INS 1": [
+     67,
+     524,
+     67,
+     63,
+     113
+    ],
+    "context|HP4-6": [
+     19,
+     2,
+     19,
+     23,
+     0
+    ],
+    "type x context|INS HP4-6": [
+     16,
+     2,
+     16,
+     13,
+     0
+    ],
+    "context|HP>=7": [
+     35,
+     1270,
+     35,
+     43,
+     294
+    ],
+    "type x context|INS HP>=7": [
+     30,
+     801,
+     30,
+     33,
+     187
+    ],
+    "type x length|DEL 1": [
+     31,
+     338,
+     31,
+     51,
+     75
+    ],
+    "length|5-10": [
+     15,
+     171,
+     15,
+     16,
+     47
+    ],
+    "type x length|DEL 5-10": [
+     15,
+     48,
+     15,
+     10,
+     14
+    ],
+    "type x context|DEL HP4-6": [
+     3,
+     0,
+     3,
+     10,
+     0
+    ],
+    "context|STR": [
+     3,
+     192,
+     3,
+     15,
+     57
+    ],
+    "type x context|DEL STR": [
+     3,
+     48,
+     3,
+     8,
+     16
+    ],
+    "type x context|DEL HP>=7": [
+     5,
+     469,
+     5,
+     10,
+     107
+    ],
+    "type x length|INS 2-4": [
+     0,
+     261,
+     0,
+     14,
+     69
+    ],
+    "type x context|INS STR": [
+     0,
+     144,
+     0,
+     7,
+     41
+    ],
+    "type x length|INS 5-10": [
+     0,
+     123,
+     0,
+     6,
+     33
+    ],
+    "type x length|INS >10": [
+     0,
+     129,
+     0,
+     4,
+     33
+    ],
+    "context|VNTR": [
+     0,
+     0,
+     0,
+     1,
+     0
+    ],
+    "type x context|DEL VNTR": [
+     0,
+     0,
+     0,
+     1,
+     0
+    ]
+   }
+  },
+  {
+   "dataset": "HG008T_ONT",
+   "group": "ClairS-TO",
+   "n": 1,
+   "best_f1": [],
+   "ceiling": [],
+   "threshold": [],
+   "strata": {
+    "type|DEL": [
+     26,
+     193,
+     26,
+     49,
+     136
+    ],
+    "length|2-4": [
+     6,
+     129,
+     6,
+     21,
+     102
+    ],
+    "context|none": [
+     29,
+     51,
+     29,
+     41,
+     33
+    ],
+    "type x context|DEL none": [
+     23,
+     20,
+     23,
+     33,
+     13
+    ],
+    "type x length|DEL 2-4": [
+     6,
+     42,
+     6,
+     19,
+     33
+    ],
+    "all|all": [
+     44,
+     543,
+     44,
+     63,
+     384
+    ],
+    "length|>10": [
+     6,
+     64,
+     6,
+     2,
+     47
+    ],
+    "type x length|DEL >10": [
+     6,
+     21,
+     6,
+     2,
+     14
+    ],
+    "type|INS": [
+     18,
+     350,
+     18,
+     14,
+     248
+    ],
+    "length|1": [
+     25,
+     295,
+     25,
+     35,
+     188
+    ],
+    "type x context|INS none": [
+     6,
+     31,
+     6,
+     8,
+     20
+    ],
+    "type x length|INS 1": [
+     17,
+     180,
+     17,
+     10,
+     113
+    ],
+    "context|HP4-6": [
+     7,
+     0,
+     7,
+     14,
+     0
+    ],
+    "type x context|INS HP4-6": [
+     6,
+     0,
+     6,
+     3,
+     0
+    ],
+    "context|HP>=7": [
+     7,
+     428,
+     7,
+     5,
+     294
+    ],
+    "type x context|INS HP>=7": [
+     6,
+     271,
+     6,
+     3,
+     187
+    ],
+    "type x context|DEL HP>=7": [
+     1,
+     157,
+     1,
+     2,
+     107
+    ],
+    "type x length|DEL 1": [
+     8,
+     115,
+     8,
+     25,
+     75
+    ],
+    "length|5-10": [
+     7,
+     55,
+     7,
+     5,
+     47
+    ],
+    "type x length|DEL 5-10": [
+     6,
+     15,
+     6,
+     3,
+     14
+    ],
+    "type x context|DEL HP4-6": [
+     1,
+     0,
+     1,
+     11,
+     0
+    ],
+    "context|STR": [
+     1,
+     64,
+     1,
+     3,
+     57
+    ],
+    "type x context|DEL STR": [
+     1,
+     16,
+     1,
+     3,
+     16
+    ],
+    "type x length|INS 5-10": [
+     1,
+     40,
+     1,
+     2,
+     33
+    ],
+    "type x length|INS 2-4": [
+     0,
+     87,
+     0,
+     2,
+     69
+    ],
+    "type x context|INS STR": [
+     0,
+     48,
+     0,
+     0,
+     41
+    ],
+    "type x length|INS >10": [
+     0,
+     43,
+     0,
+     0,
+     33
+    ]
+   }
+  },
+  {
+   "dataset": "HG008T_ONT",
+   "group": "DeepSomatic-TO",
+   "n": 1,
+   "best_f1": [],
+   "ceiling": [],
+   "threshold": [],
+   "strata": {
+    "type|DEL": [
+     9,
+     210,
+     9,
+     31,
+     136
+    ],
+    "length|>10": [
+     6,
+     64,
+     6,
+     18,
+     47
+    ],
+    "context|none": [
+     9,
+     71,
+     9,
+     33,
+     33
+    ],
+    "type x context|DEL none": [
+     8,
+     35,
+     8,
+     17,
+     13
+    ],
+    "type x length|DEL >10": [
+     6,
+     21,
+     6,
+     8,
+     14
+    ],
+    "all|all": [
+     11,
+     576,
+     11,
+     53,
+     384
+    ],
+    "type|INS": [
+     2,
+     366,
+     2,
+     22,
+     248
+    ],
+    "length|1": [
+     3,
+     317,
+     3,
+     24,
+     188
+    ],
+    "type x context|INS none": [
+     1,
+     36,
+     1,
+     16,
+     20
+    ],
+    "type x length|INS 1": [
+     1,
+     196,
+     1,
+     6,
+     113
+    ],
+    "context|HP4-6": [
+     1,
+     6,
+     1,
+     12,
+     0
+    ],
+    "type x context|DEL HP4-6": [
+     1,
+     0,
+     1,
+     8,
+     0
+    ],
+    "type x length|DEL 1": [
+     2,
+     121,
+     2,
+     18,
+     75
+    ],
+    "length|5-10": [
+     2,
+     60,
+     2,
+     7,
+     47
+    ],
+    "type x length|DEL 5-10": [
+     1,
+     20,
+     1,
+     3,
+     14
+    ],
+    "context|STR": [
+     1,
+     64,
+     1,
+     4,
+     57
+    ],
+    "type x context|INS STR": [
+     1,
+     47,
+     1,
+     2,
+     41
+    ],
+    "type x length|INS 5-10": [
+     1,
+     40,
+     1,
+     4,
+     33
+    ],
+    "length|2-4": [
+     0,
+     135,
+     0,
+     4,
+     102
+    ],
+    "type x length|DEL 2-4": [
+     0,
+     48,
+     0,
+     2,
+     33
+    ],
+    "context|HP>=7": [
+     0,
+     435,
+     0,
+     4,
+     294
+    ],
+    "type x context|INS HP>=7": [
+     0,
+     277,
+     0,
+     0,
+     187
+    ],
+    "type x context|DEL HP>=7": [
+     0,
+     158,
+     0,
+     4,
+     107
+    ],
+    "type x length|INS 2-4": [
+     0,
+     87,
+     0,
+     2,
+     69
+    ],
+    "type x context|DEL STR": [
+     0,
+     17,
+     0,
+     2,
+     16
+    ],
+    "type x length|INS >10": [
+     0,
+     43,
+     0,
+     10,
+     33
+    ],
+    "type x context|INS HP4-6": [
+     0,
+     6,
+     0,
+     4,
+     0
+    ]
+   }
+  },
+  {
+   "dataset": "COLO829T_Illumina",
+   "group": "release",
+   "n": 3,
+   "best_f1": [
+    0.2126,
+    0.1667,
+    0.2381
+   ],
+   "ceiling": [
+    0.2748,
+    0.2748,
+    0.2748
+   ],
+   "threshold": [
+    0.38437458872795105,
+    0.19937816262245178,
+    0.5997829437255859
+   ],
+   "strata": {
+    "type|INS": [
+     25,
+     206,
+     25,
+     36,
+     52
+    ],
+    "length|1": [
+     40,
+     167,
+     40,
+     117,
+     37
+    ],
+    "context|none": [
+     26,
+     58,
+     26,
+     76,
+     12
+    ],
+    "type x context|INS none": [
+     12,
+     39,
+     12,
+     11,
+     9
+    ],
+    "type x length|INS 1": [
+     24,
+     78,
+     24,
+     28,
+     17
+    ],
+    "all|all": [
+     53,
+     340,
+     53,
+     168,
+     81
+    ],
+    "type|DEL": [
+     28,
+     134,
+     28,
+     132,
+     29
+    ],
+    "type x context|DEL none": [
+     14,
+     19,
+     14,
+     65,
+     3
+    ],
+    "type x length|DEL 1": [
+     16,
+     89,
+     16,
+     89,
+     20
+    ],
+    "context|HP4-6": [
+     7,
+     11,
+     7,
+     22,
+     3
+    ],
+    "type x context|DEL HP4-6": [
+     7,
+     5,
+     7,
+     13,
+     1
+    ],
+    "length|>10": [
+     8,
+     37,
+     8,
+     12,
+     8
+    ],
+    "type x length|DEL >10": [
+     8,
+     4,
+     8,
+     11,
+     0
+    ],
+    "context|HP>=7": [
+     19,
+     191,
+     19,
+     64,
+     42
+    ],
+    "type x context|INS HP>=7": [
+     12,
+     93,
+     12,
+     15,
+     20
+    ],
+    "length|5-10": [
+     1,
+     29,
+     1,
+     14,
+     8
+    ],
+    "type x length|DEL 5-10": [
+     1,
+     8,
+     1,
+     14,
+     2
+    ],
+    "type x context|DEL HP>=7": [
+     7,
+     98,
+     7,
+     49,
+     22
+    ],
+    "length|2-4": [
+     4,
+     107,
+     4,
+     25,
+     28
+    ],
+    "context|STR": [
+     1,
+     80,
+     1,
+     6,
+     24
+    ],
+    "type x context|INS STR": [
+     1,
+     68,
+     1,
+     1,
+     21
+    ],
+    "type x length|INS 2-4": [
+     1,
+     74,
+     1,
+     7,
+     21
+    ],
+    "type x length|DEL 2-4": [
+     3,
+     33,
+     3,
+     18,
+     7
+    ],
+    "type x length|INS >10": [
+     0,
+     33,
+     0,
+     1,
+     8
+    ],
+    "type x context|DEL STR": [
+     0,
+     12,
+     0,
+     5,
+     3
+    ],
+    "type x length|INS 5-10": [
+     0,
+     21,
+     0,
+     0,
+     6
+    ],
+    "type x context|INS HP4-6": [
+     0,
+     6,
+     0,
+     9,
+     2
+    ]
+   }
+  },
+  {
+   "dataset": "COLO829T_Illumina",
+   "group": "unseen",
+   "n": 3,
+   "best_f1": [
+    0.1839,
+    0.1829,
+    0.1925
+   ],
+   "ceiling": [
+    0.2595,
+    0.2595,
+    0.2519
+   ],
+   "threshold": [
+    0.6276426315307617,
+    0.6669604182243347,
+    0.7244706749916077
+   ],
+   "strata": {
+    "type|INS": [
+     16,
+     215,
+     16,
+     9,
+     52
+    ],
+    "length|1": [
+     31,
+     176,
+     31,
+     48,
+     37
+    ],
+    "context|none": [
+     27,
+     57,
+     27,
+     33,
+     12
+    ],
+    "type x context|INS none": [
+     11,
+     40,
+     11,
+     5,
+     9
+    ],
+    "type x length|INS 1": [
+     16,
+     86,
+     16,
+     9,
+     17
+    ],
+    "all|all": [
+     41,
+     352,
+     41,
+     53,
+     81
+    ],
+    "type|DEL": [
+     25,
+     137,
+     25,
+     44,
+     29
+    ],
+    "type x context|DEL none": [
+     16,
+     17,
+     16,
+     28,
+     3
+    ],
+    "type x length|DEL 1": [
+     15,
+     90,
+     15,
+     39,
+     20
+    ],
+    "context|HP4-6": [
+     9,
+     9,
+     9,
+     13,
+     3
+    ],
+    "type x context|DEL HP4-6": [
+     9,
+     3,
+     9,
+     9,
+     1
+    ],
+    "length|>10": [
+     7,
+     38,
+     7,
+     3,
+     8
+    ],
+    "type x length|DEL >10": [
+     7,
+     5,
+     7,
+     3,
+     0
+    ],
+    "context|HP>=7": [
+     5,
+     205,
+     5,
+     7,
+     42
+    ],
+    "type x context|INS HP>=7": [
+     5,
+     100,
+     5,
+     0,
+     20
+    ],
+    "length|2-4": [
+     3,
+     108,
+     3,
+     2,
+     28
+    ],
+    "type x length|DEL 2-4": [
+     3,
+     33,
+     3,
+     2,
+     7
+    ],
+    "type x length|INS >10": [
+     0,
+     33,
+     0,
+     0,
+     8
+    ],
+    "context|STR": [
+     0,
+     81,
+     0,
+     0,
+     24
+    ],
+    "type x context|INS STR": [
+     0,
+     69,
+     0,
+     0,
+     21
+    ],
+    "type x context|DEL HP>=7": [
+     0,
+     105,
+     0,
+     7,
+     22
+    ],
+    "type x length|INS 2-4": [
+     0,
+     75,
+     0,
+     0,
+     21
+    ],
+    "length|5-10": [
+     0,
+     30,
+     0,
+     0,
+     8
+    ],
+    "type x context|DEL STR": [
+     0,
+     12,
+     0,
+     0,
+     3
+    ],
+    "type x length|DEL 5-10": [
+     0,
+     9,
+     0,
+     0,
+     2
+    ],
+    "type x length|INS 5-10": [
+     0,
+     21,
+     0,
+     0,
+     6
+    ],
+    "type x context|INS HP4-6": [
+     0,
+     6,
+     0,
+     4,
+     2
+    ]
+   }
+  },
+  {
+   "dataset": "COLO829T_Illumina",
+   "group": "ClairS-TO",
+   "n": 1,
+   "best_f1": [],
+   "ceiling": [],
+   "threshold": [],
+   "strata": {
+    "type|INS": [
+     9,
+     68,
+     9,
+     51,
+     52
+    ],
+    "length|1": [
+     14,
+     55,
+     14,
+     83,
+     37
+    ],
+    "context|none": [
+     11,
+     17,
+     11,
+     114,
+     12
+    ],
+    "type x context|INS none": [
+     4,
+     13,
+     4,
+     29,
+     9
+    ],
+    "type x length|INS 1": [
+     9,
+     25,
+     9,
+     28,
+     17
+    ],
+    "all|all": [
+     19,
+     112,
+     19,
+     161,
+     81
+    ],
+    "type|DEL": [
+     10,
+     44,
+     10,
+     109,
+     29
+    ],
+    "type x context|DEL none": [
+     7,
+     4,
+     7,
+     85,
+     3
+    ],
+    "type x length|DEL 1": [
+     5,
+     30,
+     5,
+     54,
+     20
+    ],
+    "context|HP>=7": [
+     5,
+     65,
+     5,
+     10,
+     42
+    ],
+    "type x context|INS HP>=7": [
+     5,
+     30,
+     5,
+     6,
+     20
+    ],
+    "context|HP4-6": [
+     3,
+     3,
+     3,
+     31,
+     3
+    ],
+    "type x context|DEL HP4-6": [
+     3,
+     1,
+     3,
+     18,
+     1
+    ],
+    "length|>10": [
+     3,
+     12,
+     3,
+     19,
+     8
+    ],
+    "type x length|DEL >10": [
+     3,
+     1,
+     3,
+     15,
+     0
+    ],
+    "length|5-10": [
+     1,
+     9,
+     1,
+     13,
+     8
+    ],
+    "type x length|DEL 5-10": [
+     1,
+     2,
+     1,
+     9,
+     2
+    ],
+    "length|2-4": [
+     1,
+     36,
+     1,
+     46,
+     28
+    ],
+    "type x length|DEL 2-4": [
+     1,
+     11,
+     1,
+     31,
+     7
+    ],
+    "type x length|INS >10": [
+     0,
+     11,
+     0,
+     4,
+     8
+    ],
+    "context|STR": [
+     0,
+     27,
+     0,
+     3,
+     24
+    ],
+    "type x context|INS STR": [
+     0,
+     23,
+     0,
+     2,
+     21
+    ],
+    "type x context|DEL HP>=7": [
+     0,
+     35,
+     0,
+     4,
+     22
+    ],
+    "type x length|INS 2-4": [
+     0,
+     25,
+     0,
+     15,
+     21
+    ],
+    "type x context|DEL STR": [
+     0,
+     4,
+     0,
+     1,
+     3
+    ],
+    "type x length|INS 5-10": [
+     0,
+     7,
+     0,
+     4,
+     6
+    ],
+    "type x context|INS HP4-6": [
+     0,
+     2,
+     0,
+     13,
+     2
+    ],
+    "context|VNTR": [
+     0,
+     0,
+     0,
+     2,
+     0
+    ],
+    "type x context|DEL VNTR": [
+     0,
+     0,
+     0,
+     1,
+     0
+    ],
+    "type|complex": [
+     0,
+     0,
+     0,
+     1,
+     0
+    ],
+    "context|complex": [
+     0,
+     0,
+     0,
+     1,
+     0
+    ],
+    "type x context|complex complex": [
+     0,
+     0,
+     0,
+     1,
+     0
+    ],
+    "type x length|complex 1": [
+     0,
+     0,
+     0,
+     1,
+     0
+    ],
+    "type x context|INS VNTR": [
+     0,
+     0,
+     0,
+     1,
+     0
+    ]
+   }
+  },
+  {
+   "dataset": "COLO829T_Illumina",
+   "group": "DeepSomatic-TO",
+   "n": 1,
+   "best_f1": [],
+   "ceiling": [],
+   "threshold": [],
+   "strata": {
+    "type|DEL": [
+     14,
+     40,
+     14,
+     72,
+     29
+    ],
+    "length|1": [
+     16,
+     53,
+     16,
+     70,
+     37
+    ],
+    "context|none": [
+     10,
+     18,
+     10,
+     56,
+     12
+    ],
+    "type x context|DEL none": [
+     6,
+     5,
+     6,
+     49,
+     3
+    ],
+    "type x length|DEL 1": [
+     9,
+     26,
+     9,
+     50,
+     20
+    ],
+    "all|all": [
+     24,
+     107,
+     24,
+     97,
+     81
+    ],
+    "context|HP4-6": [
+     3,
+     3,
+     3,
+     16,
+     3
+    ],
+    "type x context|DEL HP4-6": [
+     3,
+     1,
+     3,
+     10,
+     1
+    ],
+    "length|>10": [
+     4,
+     11,
+     4,
+     6,
+     8
+    ],
+    "type x length|DEL >10": [
+     3,
+     1,
+     3,
+     6,
+     0
+    ],
+    "type|INS": [
+     10,
+     67,
+     10,
+     25,
+     52
+    ],
+    "context|HP>=7": [
+     9,
+     61,
+     9,
+     21,
+     42
+    ],
+    "type x context|INS HP>=7": [
+     4,
+     31,
+     4,
+     11,
+     20
+    ],
+    "type x length|INS 1": [
+     7,
+     27,
+     7,
+     20,
+     17
+    ],
+    "length|5-10": [
+     1,
+     9,
+     1,
+     5,
+     8
+    ],
+    "type x length|DEL 5-10": [
+     1,
+     2,
+     1,
+     4,
+     2
+    ],
+    "type x context|INS none": [
+     4,
+     13,
+     4,
+     7,
+     9
+    ],
+    "type x context|DEL HP>=7": [
+     5,
+     30,
+     5,
+     10,
+     22
+    ],
+    "type x length|INS >10": [
+     1,
+     10,
+     1,
+     0,
+     8
+    ],
+    "length|2-4": [
+     3,
+     34,
+     3,
+     16,
+     28
+    ],
+    "context|STR": [
+     2,
+     25,
+     2,
+     3,
+     24
+    ],
+    "type x context|INS STR": [
+     2,
+     21,
+     2,
+     1,
+     21
+    ],
+    "type x length|INS 2-4": [
+     2,
+     23,
+     2,
+     4,
+     21
+    ],
+    "type x length|DEL 2-4": [
+     1,
+     11,
+     1,
+     12,
+     7
+    ],
+    "type x context|DEL STR": [
+     0,
+     4,
+     0,
+     2,
+     3
+    ],
+    "type x length|INS 5-10": [
+     0,
+     7,
+     0,
+     1,
+     6
+    ],
+    "type x context|INS HP4-6": [
+     0,
+     2,
+     0,
+     6,
+     2
+    ],
+    "context|VNTR": [
+     0,
+     0,
+     0,
+     1,
+     0
+    ],
+    "type x context|DEL VNTR": [
+     0,
+     0,
+     0,
+     1,
+     0
+    ]
+   }
+  },
+  {
+   "dataset": "COLO829T_fiberseq",
+   "group": "release",
+   "n": 3,
+   "best_f1": [
+    0.2128,
+    0.1946,
+    0.1923
+   ],
+   "ceiling": [
+    0.2672,
+    0.2672,
+    0.2595
+   ],
+   "threshold": [
+    0.6854676604270935,
+    0.6684039235115051,
+    0.7070106863975525
+   ],
+   "strata": {
+    "type|INS": [
+     18,
+     213,
+     18,
+     30,
+     52
+    ],
+    "length|1": [
+     32,
+     175,
+     32,
+     81,
+     37
+    ],
+    "context|none": [
+     29,
+     55,
+     29,
+     42,
+     12
+    ],
+    "type x context|INS none": [
+     9,
+     42,
+     9,
+     6,
+     9
+    ],
+    "type x length|INS 1": [
+     18,
+     84,
+     18,
+     26,
+     17
+    ],
+    "all|all": [
+     46,
+     347,
+     46,
+     100,
+     81
+    ],
+    "type|DEL": [
+     28,
+     134,
+     28,
+     70,
+     29
+    ],
+    "type x context|DEL none": [
+     20,
+     13,
+     20,
+     36,
+     3
+    ],
+    "type x length|DEL 1": [
+     14,
+     91,
+     14,
+     55,
+     20
+    ],
+    "context|HP4-6": [
+     8,
+     10,
+     8,
+     26,
+     3
+    ],
+    "type x context|DEL HP4-6": [
+     8,
+     4,
+     8,
+     15,
+     1
+    ],
+    "length|>10": [
+     9,
+     36,
+     9,
+     11,
+     8
+    ],
+    "type x length|DEL >10": [
+     9,
+     3,
+     9,
+     11,
+     0
+    ],
+    "context|HP>=7": [
+     9,
+     201,
+     9,
+     32,
+     42
+    ],
+    "type x context|INS HP>=7": [
+     9,
+     96,
+     9,
+     13,
+     20
+    ],
+    "length|5-10": [
+     3,
+     27,
+     3,
+     2,
+     8
+    ],
+    "type x length|DEL 5-10": [
+     3,
+     6,
+     3,
+     2,
+     2
+    ],
+    "length|2-4": [
+     2,
+     109,
+     2,
+     6,
+     28
+    ],
+    "type x length|DEL 2-4": [
+     2,
+     34,
+     2,
+     2,
+     7
+    ],
+    "type x length|INS >10": [
+     0,
+     33,
+     0,
+     0,
+     8
+    ],
+    "context|STR": [
+     0,
+     81,
+     0,
+     0,
+     24
+    ],
+    "type x context|INS STR": [
+     0,
+     69,
+     0,
+     0,
+     21
+    ],
+    "type x context|DEL HP>=7": [
+     0,
+     105,
+     0,
+     19,
+     22
+    ],
+    "type x length|INS 2-4": [
+     0,
+     75,
+     0,
+     4,
+     21
+    ],
+    "type x context|DEL STR": [
+     0,
+     12,
+     0,
+     0,
+     3
+    ],
+    "type x length|INS 5-10": [
+     0,
+     21,
+     0,
+     0,
+     6
+    ],
+    "type x context|INS HP4-6": [
+     0,
+     6,
+     0,
+     11,
+     2
+    ]
+   }
+  },
+  {
+   "dataset": "COLO829T_fiberseq",
+   "group": "unseen",
+   "n": 3,
+   "best_f1": [
+    0.1592,
+    0.1429,
+    0.1476
+   ],
+   "ceiling": [
+    0.2672,
+    0.2443,
+    0.2519
+   ],
+   "threshold": [
+    0.8322527408599854,
+    0.8279844522476196,
+    0.7924565076828003
+   ],
+   "strata": {
+    "type|INS": [
+     17,
+     214,
+     17,
+     27,
+     52
+    ],
+    "length|1": [
+     31,
+     176,
+     31,
+     164,
+     37
+    ],
+    "context|none": [
+     27,
+     57,
+     27,
+     69,
+     12
+    ],
+    "type x context|INS none": [
+     12,
+     39,
+     12,
+     9,
+     9
+    ],
+    "type x length|INS 1": [
+     17,
+     85,
+     17,
+     25,
+     17
+    ],
+    "all|all": [
+     41,
+     352,
+     41,
+     181,
+     81
+    ],
+    "type|DEL": [
+     24,
+     138,
+     24,
+     154,
+     29
+    ],
+    "type x context|DEL none": [
+     15,
+     18,
+     15,
+     60,
+     3
+    ],
+    "type x length|DEL 1": [
+     14,
+     91,
+     14,
+     139,
+     20
+    ],
+    "context|HP4-6": [
+     9,
+     9,
+     9,
+     53,
+     3
+    ],
+    "type x context|DEL HP4-6": [
+     9,
+     3,
+     9,
+     42,
+     1
+    ],
+    "length|>10": [
+     7,
+     38,
+     7,
+     9,
+     8
+    ],
+    "type x length|DEL >10": [
+     7,
+     5,
+     7,
+     9,
+     0
+    ],
+    "context|HP>=7": [
+     5,
+     205,
+     5,
+     56,
+     42
+    ],
+    "type x context|INS HP>=7": [
+     5,
+     100,
+     5,
+     7,
+     20
+    ],
+    "length|2-4": [
+     3,
+     108,
+     3,
+     8,
+     28
+    ],
+    "type x length|DEL 2-4": [
+     3,
+     33,
+     3,
+     6,
+     7
+    ],
+    "type x length|INS >10": [
+     0,
+     33,
+     0,
+     0,
+     8
+    ],
+    "context|STR": [
+     0,
+     81,
+     0,
+     3,
+     24
+    ],
+    "type x context|INS STR": [
+     0,
+     69,
+     0,
+     0,
+     21
+    ],
+    "type x context|DEL HP>=7": [
+     0,
+     105,
+     0,
+     49,
+     22
+    ],
+    "type x length|INS 2-4": [
+     0,
+     75,
+     0,
+     2,
+     21
+    ],
+    "length|5-10": [
+     0,
+     30,
+     0,
+     0,
+     8
+    ],
+    "type x context|DEL STR": [
+     0,
+     12,
+     0,
+     3,
+     3
+    ],
+    "type x length|DEL 5-10": [
+     0,
+     9,
+     0,
+     0,
+     2
+    ],
+    "type x length|INS 5-10": [
+     0,
+     21,
+     0,
+     0,
+     6
+    ],
+    "type x context|INS HP4-6": [
+     0,
+     6,
+     0,
+     11,
+     2
+    ]
+   }
+  },
+  {
+   "dataset": "COLO829T_fiberseq",
+   "group": "ClairS-TO",
+   "n": 1,
+   "best_f1": [],
+   "ceiling": [],
+   "threshold": [],
+   "strata": {
+    "type|INS": [
+     7,
+     70,
+     7,
+     9,
+     52
+    ],
+    "length|1": [
+     10,
+     59,
+     10,
+     17,
+     37
+    ],
+    "context|none": [
+     8,
+     20,
+     8,
+     24,
+     12
+    ],
+    "type x context|INS none": [
+     3,
+     14,
+     3,
+     5,
+     9
+    ],
+    "type x length|INS 1": [
+     7,
+     27,
+     7,
+     6,
+     17
+    ],
+    "all|all": [
+     14,
+     117,
+     14,
+     32,
+     81
+    ],
+    "type|DEL": [
+     7,
+     47,
+     7,
+     23,
+     29
+    ],
+    "type x context|DEL none": [
+     5,
+     6,
+     5,
+     19,
+     3
+    ],
+    "type x length|DEL 1": [
+     3,
+     32,
+     3,
+     11,
+     20
+    ],
+    "context|HP>=7": [
+     4,
+     66,
+     4,
+     2,
+     42
+    ],
+    "type x context|INS HP>=7": [
+     4,
+     31,
+     4,
+     2,
+     20
+    ],
+    "length|>10": [
+     2,
+     13,
+     2,
+     4,
+     8
+    ],
+    "type x length|DEL >10": [
+     2,
+     2,
+     2,
+     2,
+     0
+    ],
+    "length|5-10": [
+     1,
+     9,
+     1,
+     1,
+     8
+    ],
+    "type x length|DEL 5-10": [
+     1,
+     2,
+     1,
+     1,
+     2
+    ],
+    "context|HP4-6": [
+     2,
+     4,
+     2,
+     5,
+     3
+    ],
+    "type x context|DEL HP4-6": [
+     2,
+     2,
+     2,
+     3,
+     1
+    ],
+    "length|2-4": [
+     1,
+     36,
+     1,
+     10,
+     28
+    ],
+    "type x length|DEL 2-4": [
+     1,
+     11,
+     1,
+     9,
+     7
+    ],
+    "type x length|INS >10": [
+     0,
+     11,
+     0,
+     2,
+     8
+    ],
+    "context|STR": [
+     0,
+     27,
+     0,
+     1,
+     24
+    ],
+    "type x context|INS STR": [
+     0,
+     23,
+     0,
+     0,
+     21
+    ],
+    "type x context|DEL HP>=7": [
+     0,
+     35,
+     0,
+     0,
+     22
+    ],
+    "type x length|INS 2-4": [
+     0,
+     25,
+     0,
+     1,
+     21
+    ],
+    "type x context|DEL STR": [
+     0,
+     4,
+     0,
+     1,
+     3
+    ],
+    "type x length|INS 5-10": [
+     0,
+     7,
+     0,
+     0,
+     6
+    ],
+    "type x context|INS HP4-6": [
+     0,
+     2,
+     0,
+     2,
+     2
+    ]
+   }
+  },
+  {
+   "dataset": "COLO829T_fiberseq",
+   "group": "DeepSomatic-TO",
+   "n": 1,
+   "best_f1": [],
+   "ceiling": [],
+   "threshold": [],
+   "strata": {
+    "type|DEL": [
+     8,
+     46,
+     8,
+     24,
+     29
+    ],
+    "length|1": [
+     9,
+     60,
+     9,
+     22,
+     37
+    ],
+    "context|HP4-6": [
+     3,
+     3,
+     3,
+     4,
+     3
+    ],
+    "type x context|DEL HP4-6": [
+     3,
+     1,
+     3,
+     4,
+     1
+    ],
+    "type x length|DEL 1": [
+     6,
+     29,
+     6,
+     22,
+     20
+    ],
+    "all|all": [
+     11,
+     120,
+     11,
+     24,
+     81
+    ],
+    "type|INS": [
+     3,
+     74,
+     3,
+     0,
+     52
+    ],
+    "context|HP>=7": [
+     5,
+     65,
+     5,
+     13,
+     42
+    ],
+    "type x context|INS HP>=7": [
+     2,
+     33,
+     2,
+     0,
+     20
+    ],
+    "type x length|INS 1": [
+     3,
+     31,
+     3,
+     0,
+     17
+    ],
+    "length|>10": [
+     1,
+     14,
+     1,
+     1,
+     8
+    ],
+    "context|none": [
+     3,
+     25,
+     3,
+     7,
+     12
+    ],
+    "type x context|DEL none": [
+     2,
+     9,
+     2,
+     7,
+     3
+    ],
+    "type x length|DEL >10": [
+     1,
+     3,
+     1,
+     1,
+     0
+    ],
+    "type x context|INS none": [
+     1,
+     16,
+     1,
+     0,
+     9
+    ],
+    "type x context|DEL HP>=7": [
+     3,
+     32,
+     3,
+     13,
+     22
+    ],
+    "length|2-4": [
+     1,
+     36,
+     1,
+     0,
+     28
+    ],
+    "type x length|DEL 2-4": [
+     1,
+     11,
+     1,
+     0,
+     7
+    ],
+    "type x length|INS >10": [
+     0,
+     11,
+     0,
+     0,
+     8
+    ],
+    "context|STR": [
+     0,
+     27,
+     0,
+     0,
+     24
+    ],
+    "type x context|INS STR": [
+     0,
+     23,
+     0,
+     0,
+     21
+    ],
+    "type x length|INS 2-4": [
+     0,
+     25,
+     0,
+     0,
+     21
+    ],
+    "length|5-10": [
+     0,
+     10,
+     0,
+     1,
+     8
+    ],
+    "type x context|DEL STR": [
+     0,
+     4,
+     0,
+     0,
+     3
+    ],
+    "type x length|DEL 5-10": [
+     0,
+     3,
+     0,
+     1,
+     2
+    ],
+    "type x length|INS 5-10": [
+     0,
+     7,
+     0,
+     0,
+     6
+    ],
+    "type x context|INS HP4-6": [
+     0,
+     2,
+     0,
+     0,
+     2
+    ]
+   }
+  },
+  {
+   "dataset": "COLO829T_ONT",
+   "group": "release",
+   "n": 3,
+   "best_f1": [
+    0.1509,
+    0.1255,
+    0.1458
+   ],
+   "ceiling": [
+    0.2443,
+    0.2214,
+    0.229
+   ],
+   "threshold": [
+    0.3256518840789795,
+    0.24007463455200195,
+    0.2895215153694153
+   ],
+   "strata": {
+    "type|INS": [
+     37,
+     194,
+     37,
+     395,
+     52
+    ],
+    "length|1": [
+     44,
+     163,
+     44,
+     755,
+     37
+    ],
+    "context|none": [
+     30,
+     54,
+     30,
+     287,
+     12
+    ],
+    "type x context|INS none": [
+     10,
+     41,
+     10,
+     106,
+     9
+    ],
+    "type x length|INS 1": [
+     33,
+     69,
+     33,
+     324,
+     17
+    ],
+    "all|all": [
+     63,
+     330,
+     63,
+     974,
+     81
+    ],
+    "length|>10": [
+     10,
+     35,
+     10,
+     44,
+     8
+    ],
+    "type x length|INS >10": [
+     1,
+     32,
+     1,
+     8,
+     8
+    ],
+    "type|DEL": [
+     26,
+     136,
+     26,
+     579,
+     29
+    ],
+    "type x context|DEL none": [
+     20,
+     13,
+     20,
+     181,
+     3
+    ],
+    "type x length|DEL 1": [
+     11,
+     94,
+     11,
+     431,
+     20
+    ],
+    "context|HP>=7": [
+     24,
+     186,
+     24,
+     316,
+     42
+    ],
+    "type x context|INS HP>=7": [
+     24,
+     81,
+     24,
+     170,
+     20
+    ],
+    "type x length|DEL >10": [
+     9,
+     3,
+     9,
+     36,
+     0
+    ],
+    "length|5-10": [
+     3,
+     27,
+     3,
+     36,
+     8
+    ],
+    "type x length|DEL 5-10": [
+     3,
+     6,
+     3,
+     26,
+     2
+    ],
+    "context|HP4-6": [
+     6,
+     12,
+     6,
+     297,
+     3
+    ],
+    "type x context|DEL HP4-6": [
+     6,
+     6,
+     6,
+     203,
+     1
+    ],
+    "length|2-4": [
+     6,
+     105,
+     6,
+     139,
+     28
+    ],
+    "context|STR": [
+     3,
+     78,
+     3,
+     71,
+     24
+    ],
+    "type x context|INS STR": [
+     3,
+     66,
+     3,
+     23,
+     21
+    ],
+    "type x length|INS 2-4": [
+     3,
+     72,
+     3,
+     53,
+     21
+    ],
+    "type x length|DEL 2-4": [
+     3,
+     33,
+     3,
+     86,
+     7
+    ],
+    "type x context|DEL HP>=7": [
+     0,
+     105,
+     0,
+     146,
+     22
+    ],
+    "type x context|DEL STR": [
+     0,
+     12,
+     0,
+     48,
+     3
+    ],
+    "type x length|INS 5-10": [
+     0,
+     21,
+     0,
+     10,
+     6
+    ],
+    "type x context|INS HP4-6": [
+     0,
+     6,
+     0,
+     94,
+     2
+    ],
+    "context|VNTR": [
+     0,
+     0,
+     0,
+     3,
+     0
+    ],
+    "type x context|INS VNTR": [
+     0,
+     0,
+     0,
+     2,
+     0
+    ],
+    "type x context|DEL VNTR": [
+     0,
+     0,
+     0,
+     1,
+     0
+    ]
+   }
+  },
+  {
+   "dataset": "COLO829T_ONT",
+   "group": "unseen",
+   "n": 3,
+   "best_f1": [
+    0.0836,
+    0.0744,
+    0.0957
+   ],
+   "ceiling": [
+    0.1527,
+    0.229,
+    0.1908
+   ],
+   "threshold": [
+    0.3217044472694397,
+    0.676965594291687,
+    0.5580074191093445
+   ],
+   "strata": {
+    "type|INS": [
+     25,
+     206,
+     25,
+     335,
+     52
+    ],
+    "length|1": [
+     36,
+     171,
+     36,
+     872,
+     37
+    ],
+    "context|none": [
+     25,
+     59,
+     25,
+     214,
+     12
+    ],
+    "type x context|INS none": [
+     9,
+     42,
+     9,
+     90,
+     9
+    ],
+    "type x length|INS 1": [
+     24,
+     78,
+     24,
+     320,
+     17
+    ],
+    "all|all": [
+     47,
+     346,
+     47,
+     944,
+     81
+    ],
+    "type|DEL": [
+     22,
+     140,
+     22,
+     609,
+     29
+    ],
+    "type x context|DEL none": [
+     16,
+     17,
+     16,
+     124,
+     3
+    ],
+    "type x length|DEL 1": [
+     12,
+     93,
+     12,
+     552,
+     20
+    ],
+    "context|HP>=7": [
+     15,
+     195,
+     15,
+     253,
+     42
+    ],
+    "type x context|INS HP>=7": [
+     15,
+     90,
+     15,
+     88,
+     20
+    ],
+    "length|>10": [
+     7,
+     38,
+     7,
+     19,
+     8
+    ],
+    "type x length|DEL >10": [
+     7,
+     5,
+     7,
+     18,
+     0
+    ],
+    "context|HP4-6": [
+     6,
+     12,
+     6,
+     459,
+     3
+    ],
+    "type x context|DEL HP4-6": [
+     6,
+     6,
+     6,
+     304,
+     1
+    ],
+    "length|2-4": [
+     4,
+     107,
+     4,
+     49,
+     28
+    ],
+    "context|STR": [
+     1,
+     80,
+     1,
+     18,
+     24
+    ],
+    "type x context|INS STR": [
+     1,
+     68,
+     1,
+     2,
+     21
+    ],
+    "type x length|INS 2-4": [
+     1,
+     74,
+     1,
+     14,
+     21
+    ],
+    "type x length|DEL 2-4": [
+     3,
+     33,
+     3,
+     35,
+     7
+    ],
+    "type x length|INS >10": [
+     0,
+     33,
+     0,
+     1,
+     8
+    ],
+    "type x context|DEL HP>=7": [
+     0,
+     105,
+     0,
+     165,
+     22
+    ],
+    "length|5-10": [
+     0,
+     30,
+     0,
+     4,
+     8
+    ],
+    "type x context|DEL STR": [
+     0,
+     12,
+     0,
+     16,
+     3
+    ],
+    "type x length|DEL 5-10": [
+     0,
+     9,
+     0,
+     4,
+     2
+    ],
+    "type x length|INS 5-10": [
+     0,
+     21,
+     0,
+     0,
+     6
+    ],
+    "type x context|INS HP4-6": [
+     0,
+     6,
+     0,
+     155,
+     2
+    ]
+   }
+  },
+  {
+   "dataset": "COLO829T_ONT",
+   "group": "ClairS-TO",
+   "n": 1,
+   "best_f1": [],
+   "ceiling": [],
+   "threshold": [],
+   "strata": {
+    "type|INS": [
+     5,
+     72,
+     5,
+     20,
+     52
+    ],
+    "length|1": [
+     8,
+     61,
+     8,
+     71,
+     37
+    ],
+    "context|none": [
+     8,
+     20,
+     8,
+     37,
+     12
+    ],
+    "type x context|INS none": [
+     3,
+     14,
+     3,
+     6,
+     9
+    ],
+    "type x length|INS 1": [
+     5,
+     29,
+     5,
+     18,
+     17
+    ],
+    "all|all": [
+     12,
+     119,
+     12,
+     89,
+     81
+    ],
+    "type|DEL": [
+     7,
+     47,
+     7,
+     69,
+     29
+    ],
+    "type x context|DEL none": [
+     5,
+     6,
+     5,
+     31,
+     3
+    ],
+    "type x length|DEL 1": [
+     3,
+     32,
+     3,
+     53,
+     20
+    ],
+    "context|HP>=7": [
+     2,
+     68,
+     2,
+     4,
+     42
+    ],
+    "type x context|INS HP>=7": [
+     2,
+     33,
+     2,
+     2,
+     20
+    ],
+    "length|>10": [
+     2,
+     13,
+     2,
+     2,
+     8
+    ],
+    "type x length|DEL >10": [
+     2,
+     2,
+     2,
+     2,
+     0
+    ],
+    "length|5-10": [
+     1,
+     9,
+     1,
+     1,
+     8
+    ],
+    "type x length|DEL 5-10": [
+     1,
+     2,
+     1,
+     1,
+     2
+    ],
+    "context|HP4-6": [
+     2,
+     4,
+     2,
+     44,
+     3
+    ],
+    "type x context|DEL HP4-6": [
+     2,
+     2,
+     2,
+     32,
+     1
+    ],
+    "length|2-4": [
+     1,
+     36,
+     1,
+     15,
+     28
+    ],
+    "type x length|DEL 2-4": [
+     1,
+     11,
+     1,
+     13,
+     7
+    ],
+    "type x length|INS >10": [
+     0,
+     11,
+     0,
+     0,
+     8
+    ],
+    "context|STR": [
+     0,
+     27,
+     0,
+     4,
+     24
+    ],
+    "type x context|INS STR": [
+     0,
+     23,
+     0,
+     0,
+     21
+    ],
+    "type x context|DEL HP>=7": [
+     0,
+     35,
+     0,
+     2,
+     22
+    ],
+    "type x length|INS 2-4": [
+     0,
+     25,
+     0,
+     2,
+     21
+    ],
+    "type x context|DEL STR": [
+     0,
+     4,
+     0,
+     4,
+     3
+    ],
+    "type x length|INS 5-10": [
+     0,
+     7,
+     0,
+     0,
+     6
+    ],
+    "type x context|INS HP4-6": [
+     0,
+     2,
+     0,
+     12,
+     2
+    ]
+   }
+  },
+  {
+   "dataset": "COLO829T_ONT",
+   "group": "DeepSomatic-TO",
+   "n": 1,
+   "best_f1": [],
+   "ceiling": [],
+   "threshold": [],
+   "strata": {
+    "type|DEL": [
+     1,
+     53,
+     1,
+     48,
+     29
+    ],
+    "length|>10": [
+     1,
+     14,
+     1,
+     8,
+     8
+    ],
+    "context|none": [
+     2,
+     26,
+     2,
+     23,
+     12
+    ],
+    "type x context|DEL none": [
+     1,
+     10,
+     1,
+     18,
+     3
+    ],
+    "type x length|DEL >10": [
+     1,
+     3,
+     1,
+     5,
+     0
+    ],
+    "all|all": [
+     2,
+     129,
+     2,
+     61,
+     81
+    ],
+    "type|INS": [
+     1,
+     76,
+     1,
+     13,
+     52
+    ],
+    "length|1": [
+     1,
+     68,
+     1,
+     45,
+     37
+    ],
+    "type x context|INS none": [
+     1,
+     16,
+     1,
+     5,
+     9
+    ],
+    "type x length|INS 1": [
+     1,
+     33,
+     1,
+     9,
+     17
+    ],
+    "type x length|INS >10": [
+     0,
+     11,
+     0,
+     3,
+     8
+    ],
+    "context|STR": [
+     0,
+     27,
+     0,
+     4,
+     24
+    ],
+    "type x context|INS STR": [
+     0,
+     23,
+     0,
+     1,
+     21
+    ],
+    "context|HP>=7": [
+     0,
+     70,
+     0,
+     10,
+     42
+    ],
+    "type x context|DEL HP>=7": [
+     0,
+     35,
+     0,
+     7,
+     22
+    ],
+    "type x length|DEL 1": [
+     0,
+     35,
+     0,
+     36,
+     20
+    ],
+    "length|2-4": [
+     0,
+     37,
+     0,
+     7,
+     28
+    ],
+    "type x length|DEL 2-4": [
+     0,
+     12,
+     0,
+     7,
+     7
+    ],
+    "type x context|INS HP>=7": [
+     0,
+     35,
+     0,
+     3,
+     20
+    ],
+    "type x length|INS 2-4": [
+     0,
+     25,
+     0,
+     0,
+     21
+    ],
+    "length|5-10": [
+     0,
+     10,
+     0,
+     1,
+     8
+    ],
+    "type x context|DEL STR": [
+     0,
+     4,
+     0,
+     3,
+     3
+    ],
+    "type x length|DEL 5-10": [
+     0,
+     3,
+     0,
+     0,
+     2
+    ],
+    "context|HP4-6": [
+     0,
+     6,
+     0,
+     24,
+     3
+    ],
+    "type x context|DEL HP4-6": [
+     0,
+     4,
+     0,
+     20,
+     1
+    ],
+    "type x length|INS 5-10": [
+     0,
+     7,
+     0,
+     1,
+     6
+    ],
+    "type x context|INS HP4-6": [
+     0,
+     2,
+     0,
+     4,
+     2
+    ]
+   }
+  }
+ ]
+}
