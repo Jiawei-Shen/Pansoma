@@ -882,41 +882,13 @@ Candidate reduction on the pangenome graphs is therefore selective rather than i
 
 **Response.**
 
-We agree. We no longer present graph-coordinate calls as a strength, and every run also reports a complete output
-counting them as false positives (R3.4). We validated the graph-coordinate SNV PASS calls on chr1 of twelve final runs
-(HG008T and COLO829T, three platforms, HPRC v1.1 and v2.1 graphs), predicted with the optional off-reference rescue,
-which yields most of these calls: 115–4,569 per run (a random 3,000 for COLO829T ONT), against 6–162 without it, the
-default (point 5).
+We agree that signatures and read examples are insufficient. We therefore checked the graph-coordinate SNV PASS calls against tumor and phased normal assemblies, matched-normal reads and the other two platforms, on chr1 of twelve runs (HG008T and COLO829T, three platforms, HPRC v1.1 and v2.1 graphs). The results show that Pansoma does call variants on sequence absent from GRCh38, one of its design aims, and that most of these calls carry alleles already present in the population or in the matched normal, so they look germline rather than somatic; a small subset is supported as tumor-only. We have qualified our claims accordingly.
 
-1. *Assemblies.* Each call's ALT context was aligned to a tumor assembly and both normal haplotypes (HG008T: HG008-T v3.2
-   and HG008-N v6.2; COLO829T: a hifiasm assembly of the tumor's HiFi and ONT reads, not independent of its long-read
-   data, and the COLO829BL donor-specific assembly). On controls, 130–149 of 150 placed true positives per run are
-   tumor-only and 94–146 of 150 placed false positives are in the normal. The graph-coordinate calls are population
-   alleles (ALT context spelled by GRCh38 or an HPRC haplotype) in 49.8–91.4% per run, germline in 4.2–45.4% and
-   tumor-only in 0.2–3.3% (0.6–5.2% by the assemblies alone).
-2. *Matched-normal reads.* For COLO829T, the matched normal's ONT reads agree: 66–93% of the graph-coordinate calls per
-   run have the ALT in at least two normal reads, and 0.7–3.1% lack it while the tumor reads carry it, against 89–94% of
-   placed true positives lacking it.
-3. *Cross-platform.* Per tumor and graph, 37–81 calls (same node, offset and allele) are PASS on all three platforms;
-   70–85% of them are population alleles and 1–4 are tumor-only.
-4. *Placement.* Via the GRCh38 nodes flanking their bubble, 2.2–19.1% per run become a GRCh38 allele, adding seven true
-   positives after population filtering across the twelve runs (R3.4).
-5. *Origin.* Most graph-coordinate calls come from the off-reference rescue; without it, 6–162 per run remain (R3.4). The
-   rescue does recover real off-reference somatic SNVs. Of those derived from the assemblies, 57–79% per HG008T dataset
-   are read-supported (ALT-read consensus in the tumor assembly and in neither normal haplotype); the models call 0–4 of
-   them without the rescue and 22–66 with it. COLO829T, whose truth set is called on GRCh38, has only 25–35 such SNVs per
-   graph, of which the models call 0–1 without the rescue and 2–7 with it. Of the rescue's calls on these sites, 63–87%
-   (HG008T) and 24 of 25 (COLO829T) are read-supported. A graph-native population filter tags 74–88% of the HG008T ones,
-   so we use it only to describe calls as population alleles, not to remove them. Somatic SNVs called from COLO829T
-   Fiber-seq reads on the phased COLO829BL donor-specific assembly (which include 82–91% of placed true positives) give a
-   further check: 2–8 of the 18–152 graph-coordinate calls per COLO829T run without the rescue are among them (10
-   distinct SNVs, 9 outside the assembly's alignment to GRCh38).
+1. *Assemblies.* Each call's ALT context was aligned to a tumor assembly and to both normal haplotypes (HG008T: HG008-T v3.2 and HG008-N v6.2; COLO829T: a hifiasm assembly of the tumor's own HiFi and ONT reads, which shows consistency rather than independent support, and the COLO829BL donor-specific assembly). Calls are assigned in a fixed order to population-represented sequence (the ALT context is spelled by GRCh38 or an HPRC haplotype), matched-normal support (ALT in a normal haplotype), tumor-only assembly support, and unverifiable or unsupported. Per run, 49.8–91.4% are population-represented, 4.2–45.4% have matched-normal support and 0.2–3.3% tumor-only support; by the assemblies alone, without the population step, 0.6–5.2% are tumor-only, since representation in the population does not by itself establish the patient's germline status. On controls, the procedure classifies 130–149 of 150 placed true positives per run as tumor-only and 94–146 of 150 placed false positives as present in the normal.
+2. *Matched-normal reads* (COLO829T, ONT). Per run, 66–93% of the calls have the ALT in at least two normal reads, and 0.7–3.1% have no ALT read in a normal with at least five REF reads while the tumor reads carry it; 89–94% of placed true positives lack the ALT in the normal.
+3. *Other platforms.* Per tumor and graph, 37–81 calls are PASS on all three platforms; 70–85% of them are population-represented and 1–4 have tumor-only support.
 
-Assembly comparisons provided tumor-only support for 0.6–5.2% of graph-coordinate calls per run, while population
-overlap and matched-normal evidence were common. We therefore report the analysis counting all graph-coordinate calls as
-false positives (R3.4) as a conservative sensitivity analysis, rather than as a determination of each call's biological
-status. The rescue is optional and off by default, and we report every SNV result with and without it; we state as a
-limitation that training with assembly-derived off-reference labels may improve classification.
+Most graph-coordinate calls come from the optional off-reference rescue (115–4,569 per run with it, 6–162 without). The rescue recovers additional off-reference SNVs with tumor-only assembly and read support, but most of its additional calls lack evidence of somatic status, so it stays off by default and we report every SNV result with and without it (details in a Supplementary Table). Counting all graph-coordinate calls as false positives (R3.4) is a conservative sensitivity analysis, not a determination of each call's biological status. Reliable somatic classification of off-reference variants remains a limitation; whether assembly-derived training labels improve it requires further evaluation.
 
 ### R3.4 Metrics exclude graph-coordinate calls; "about 2%"; CHM13
 
