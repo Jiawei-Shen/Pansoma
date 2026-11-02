@@ -1,8 +1,9 @@
 # E28: reruns of 2026-11-01 (masked retraining, INDEL checkpoint selection, shared validation split)
 
-> **Running (submitted 2026-11-01 19:08 on tequila; `jobs.tsv`).** Results go to
-> `/scratch/jshen/data/pansoma_net_v2_runs/{offnode_retrain_20261101,selcheck_20261101,sharedsplit_20261101}/`; this
-> README gets the tables when the runs finish.
+> **Status (2026-11-02 12:00).** (1) done; (2) five of nine reruns done and their test predictions running, two running, two
+> waiting for an H100; (3) waiting for an H100 (`jobs.tsv`). Results go to
+> `/scratch/jshen/data/pansoma_net_v2_runs/{offnode_retrain_20261101,selcheck_20261101,sharedsplit_20261101}/`; the
+> tables are made by `results/collect_*.py` (they write next to themselves).
 
 The user asked to run the three experiments that the letter ver3 lists as not done. `submit.sh` submits all of them:
 
@@ -27,3 +28,29 @@ The user asked to run the three experiments that the letter ver3 lists as not do
    chr1.
 
 Every SNV training has a CPU job for `jobs/vcf.sh` (chr1, PASS, population filter, rtg vcfeval).
+
+## Results
+
+### (1) Cross-node context, retrained (`results/offnode.md`, `collect_offnode.py`)
+
+chr1 SNVs, benchmark BED, after the PoN, PASS at the checkpoint's validation recall-0.9 threshold; best = best F1 of the
+chr1 curve (test-tuned); AP = chr1 per-tensor somatic AP before the PoN; epoch = validation-selected epoch.
+
+| chr1 SNV, v2.1, seed 0 | no mask P / R / F1 (best; AP; epoch) | mask P / R / F1 (best; AP; epoch) | ΔF1 PASS | Δbest | ΔAP | seed range (Table R3.1, 3 seeds, no mask) |
+|---|---|---|---|---|---|---|
+| HG008_Illumina | 0.462 / 0.852 / 0.599 (0.619; 0.313; 9) | 0.446 / 0.858 / 0.587 (0.610; 0.323; 6) | -0.012 | -0.009 | +0.010 | 0.024 |
+| HG008_PacBio | 0.475 / 0.835 / 0.606 (0.621; 0.383; 14) | 0.467 / 0.831 / 0.598 (0.606; 0.303; 9) | -0.008 | -0.015 | -0.080 | 0.008 |
+| HG008_ONT | 0.451 / 0.862 / 0.592 (0.612; 0.339; 14) | 0.457 / 0.864 / 0.598 (0.608; 0.329; 17) | +0.005 | -0.004 | -0.010 | 0.023 |
+| COLO829_Illumina | 0.866 / 0.714 / 0.783 (0.785; 0.810; 8) | 0.849 / 0.710 / 0.773 (0.778; 0.807; 8) | -0.009 | -0.006 | -0.003 | 0.079 |
+| COLO829_fiberseq | 0.872 / 0.701 / 0.777 (0.793; 0.823; 19) | 0.840 / 0.718 / 0.774 (0.782; 0.790; 17) | -0.003 | -0.012 | -0.032 | 0.015 |
+| COLO829_ONT | 0.816 / 0.700 / 0.753 (0.754; 0.760; 8) | 0.781 / 0.698 / 0.737 (0.740; 0.740; 8) | -0.016 | -0.014 | -0.020 | 0.018 |
+
+Trained with the mask, PASS F1 is lower in 5 of 6 (-0.003 to -0.016), the best F1 in 6 of 6 and AP in 5 of 6; each
+PASS F1 difference is smaller than the three-seed range in 5 of 6 and the same size in HG008 PacBio. At inference only
+(E27 `ablation/q6/infer`), the same mask cost up to 0.074 PASS F1: models trained with the context use it, but a model
+trained without it recovers nearly all of the accuracy. The one-GPU controls are within 0.03 F1 of the four-GPU seed-0
+models of Table R3.1 (HG008 Illumina +0.028, HG008 ONT +0.018, COLO829 ONT +0.017; the others within 0.003).
+
+### (2) INDEL checkpoint selection without the off-path validation negatives (`collect_select.py`, `collect_select_eval.py`)
+
+Being filled.
