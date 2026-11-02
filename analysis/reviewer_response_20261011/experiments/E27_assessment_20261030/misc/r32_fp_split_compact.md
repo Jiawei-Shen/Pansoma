@@ -1,0 +1,32 @@
+| tumor platform kind | arm | FP | germline same allele: in v2.1 d46 graph (>=46/463) / not | germline same: HPRC v1.1 AC>0 / AC=0 (E4b) | germline same: v1.1 >=9/89 | germline overlap or <=10 bp | HPRC v1.1 allele, not germline | population classes | HP>=7/STR | other |
+|---|---|---|---|---|---|---|---|---|---|---|
+| HG008T Illumina SNV | linear | 1,089 | 17 / 625 | 40 / 602 | 25 | 169 | 6 | 15 | 33 | 224 |
+| HG008T Illumina SNV | d9 | 702 | 0 / 609 | 1 / 608 | 0 | 84 | 0 | 3 | 4 | 2 |
+| HG008T Illumina SNV | d46 | 792 | 0 / 655 | 2 / 653 | 0 | 92 | 2 | 8 | 17 | 18 |
+| HG008T Illumina INDEL | linear | 1,348 | 73 / 346 | 162 / 257 | 72 | 738 | 47 | 43 | 78 | 23 |
+| HG008T Illumina INDEL | d9 | 390 | 4 / 170 | 50 / 124 | 1 | 191 | 6 | 10 | 8 | 1 |
+| HG008T Illumina INDEL | d46 | 385 | 0 / 178 | 46 / 132 | 3 | 183 | 4 | 8 | 9 | 3 |
+| HG008T PacBio SNV | linear | 969 | 28 / 788 | 48 / 768 | 34 | 49 | 16 | 0 | 5 | 83 |
+| HG008T PacBio SNV | d9 | 583 | 0 / 571 | 1 / 570 | 0 | 11 | 0 | 0 | 0 | 1 |
+| HG008T PacBio SNV | d46 | 650 | 0 / 619 | 1 / 618 | 0 | 19 | 0 | 4 | 4 | 4 |
+| HG008T PacBio INDEL | linear | 1,523 | 117 / 519 | 246 / 390 | 114 | 720 | 69 | 72 | 13 | 13 |
+| HG008T PacBio INDEL | d9 | 2,534 | 12 / 260 | 89 / 183 | 6 | 1499 | 227 | 289 | 85 | 162 |
+| HG008T PacBio INDEL | d46 | 2,324 | 3 / 290 | 99 / 194 | 10 | 1544 | 177 | 185 | 48 | 77 |
+| HG008T ONT SNV | linear | 904 | 23 / 684 | 41 / 666 | 28 | 89 | 12 | 6 | 7 | 83 |
+| HG008T ONT SNV | d9 | 660 | 0 / 618 | 2 / 616 | 0 | 23 | 1 | 1 | 11 | 6 |
+| HG008T ONT SNV | d46 | 788 | 0 / 674 | 1 / 673 | 0 | 52 | 10 | 9 | 19 | 24 |
+| HG008T ONT INDEL | linear | 11,373 | 164 / 502 | 271 / 395 | 170 | 4937 | 1890 | 3131 | 528 | 221 |
+| HG008T ONT INDEL | d9 | 17,023 | 9 / 232 | 76 / 165 | 8 | 6914 | 3147 | 5638 | 948 | 135 |
+| HG008T ONT INDEL | d46 | 18,178 | 5 / 244 | 76 / 173 | 11 | 6140 | 3750 | 6759 | 1058 | 222 |
+| COLO829T Illumina SNV | linear | 2,221 | 2 / 99 | 1 / 100 | 0 | 13 | 7 | 11 | 95 | 1994 |
+| COLO829T Illumina SNV | d46 | 268 | 0 / 191 | 0 / 191 | 0 | 12 | 0 | 3 | 10 | 52 |
+| COLO829T Illumina INDEL | linear | 1,527 | 89 / 191 | 130 / 150 | 75 | 610 | 31 | 42 | 88 | 476 |
+| COLO829T Illumina INDEL | d46 | 384 | 0 / 145 | 45 / 100 | 2 | 171 | 4 | 20 | 17 | 27 |
+| COLO829T fiberseq SNV | linear | 521 | 0 / 133 | 0 / 133 | 0 | 18 | 13 | 8 | 23 | 326 |
+| COLO829T fiberseq SNV | d46 | 268 | 0 / 172 | 0 / 172 | 0 | 8 | 2 | 3 | 12 | 71 |
+| COLO829T fiberseq INDEL | linear | 1,601 | 158 / 431 | 241 / 348 | 144 | 577 | 88 | 77 | 40 | 230 |
+| COLO829T fiberseq INDEL | d46 | 3,069 | 4 / 249 | 96 / 157 | 4 | 1465 | 421 | 781 | 62 | 87 |
+| COLO829T ONT SNV | linear | 2,575 | 0 / 126 | 5 / 121 | 0 | 54 | 64 | 143 | 88 | 2100 |
+| COLO829T ONT SNV | d46 | 457 | 0 / 195 | 0 / 195 | 0 | 19 | 0 | 27 | 19 | 197 |
+| COLO829T ONT INDEL | linear | 18,380 | 159 / 489 | 268 / 380 | 136 | 5415 | 2788 | 5963 | 1150 | 2416 |
+| COLO829T ONT INDEL | d46 | 27,857 | 11 / 304 | 127 / 188 | 10 | 8796 | 3692 | 8322 | 1637 | 5095 |

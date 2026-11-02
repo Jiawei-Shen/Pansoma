@@ -1,0 +1,77 @@
+--- a/machine_learning/pansoma_net_v2/chunks.py
++++ b/machine_learning/pansoma_net_v2/chunks.py
+@@ -240,6 +240,9 @@
+ 
+     def _pack(self, idx, x):
+         ds = self.ds
++        if getattr(ds, "mstart", None) is not None:  # --mask-off-node (assessment 2026-10-30)
++            from . import offnode
++            offnode.apply(x, ds.mstart[idx], ds.mslots[idx], ds.mspan[idx], ds.mlen[idx])
+         t = (torch.from_numpy(x), torch.from_numpy(ds.blocks[idx]), torch.from_numpy(ds.scalars[idx]),
+              torch.from_numpy(ds.label[idx].astype(np.int64)), torch.from_numpy(ds.part[idx].astype(np.int64)))
+         return tuple(v.pin_memory() for v in t) if self.pin else t
+--- a/machine_learning/pansoma_net_v2/data.py
++++ b/machine_learning/pansoma_net_v2/data.py
+@@ -434,6 +434,10 @@
+         self.scalars = cat(scalars, (0, len(SCALARS)), np.float32)
+         self.part, self.position = cat(part, 0, np.int16), cat(position, 0, np.int64)  # sample -> (part, index position)
+         self._open = {}
++        from . import offnode  # assessment 2026-10-30: --mask-off-node
++        sides = [offnode.side_arrays(index, np.asarray(positions, np.int64)) for index, positions in parts]
++        if parts and sides[0] is not None:
++            self.mstart, self.mslots, self.mspan, self.mlen = (np.concatenate([s[k] for s in sides]) for k in range(4))
+ 
+     def __len__(self):
+         return len(self.label)
+@@ -453,6 +457,9 @@
+         x = np.empty(self.shape, np.int8)
+         if os.preadv(fd, [x], offset + int(self.row[i]) * x.nbytes) != x.nbytes:
+             raise IOError(f"{self.files[self.shard[i]]}: short read at row {self.row[i]}")
++        if getattr(self, "mstart", None) is not None:  # --mask-off-node
++            from . import offnode
++            offnode.apply(x, self.mstart[i], self.mslots[i], self.mspan[i], self.mlen[i])
+         return (torch.from_numpy(x), torch.from_numpy(self.blocks[i].copy()), torch.from_numpy(self.scalars[i].copy()),
+                 int(self.label[i]), int(self.part[i]))
+ 
+--- a/machine_learning/pansoma_net_v2/predict.py
++++ b/machine_learning/pansoma_net_v2/predict.py
+@@ -105,6 +105,7 @@
+     p.add_argument("--checkpoint", required=True)
+     p.add_argument("--tensors", nargs="+", required=True)
+     p.add_argument("--kinds", nargs="+", default=list(KINDS), choices=KINDS)
++    p.add_argument("--mask-off-node", metavar="DIR", help="assessment 2026-10-30: zero every cell outside the candidate's own node visit (offnode.py); DIR holds <SET>.<KIND>.side.npz")
+     p.add_argument("--chroms", nargs="+", help="default: all chromosomes of the sets")
+     p.add_argument("--output", required=True)
+     p.add_argument("--cache-dir", help="index cache (default: <output>/index_cache)")
+@@ -161,6 +162,10 @@
+ 
+ def main(argv=None):
+     args = parse_args(argv)
++    if args.mask_off_node:  # assessment 2026-10-30
++        from . import offnode
++        offnode.DIR = args.mask_off_node
++        print(f"--mask-off-node {args.mask_off_node}: cells outside the candidate's node visit are zeroed", flush=True)
+     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+     checkpoint = torch.load(args.checkpoint, map_location="cpu", weights_only=False)
+     model = PansomaNetV2.from_checkpoint(checkpoint).to(device).eval()
+--- a/machine_learning/pansoma_net_v2/train.py
++++ b/machine_learning/pansoma_net_v2/train.py
+@@ -129,6 +129,7 @@
+     p.add_argument("--dims", type=int, nargs=4, default=[192, 384, 768, 1536])
+     p.add_argument("--front", type=int, nargs="+", default=[64, 64], help="widths of the 1x1 layers before the stem")
+     p.add_argument("--drop-path", type=float, default=0.1)
++    p.add_argument("--mask-off-node", metavar="DIR", help="assessment 2026-10-30: zero every cell outside the candidate's own node visit (offnode.py); DIR holds <SET>.<KIND>.side.npz")
+     p.add_argument("--drop-planes", nargs="+", default=[], metavar="PLANE",
+                    help="encoder planes left out of the input (encode.PLANES), e.g. path_count")
+     p.add_argument("--block", choices=["v2", "v1"], default="v2",
+@@ -629,6 +630,10 @@
+ 
+ def main(argv=None):
+     args = parse_args(argv)
++    if args.mask_off_node:  # assessment 2026-10-30
++        from . import offnode
++        offnode.DIR = args.mask_off_node
++        print(f"--mask-off-node {args.mask_off_node}: cells outside the candidate's node visit are zeroed", flush=True)
+     if args.best_by == "postpon" and not args.site_features:
+         raise SystemExit("--best-by postpon needs the PoN tags of --site-features")
+     run = Run(args)

@@ -1,0 +1,1097 @@
+{
+ "HG008T_Illumina_d46|SNV": {
+  "checks": {
+   "exact_somatic_off_reference": 0,
+   "partial_somatic_off_reference": 541,
+   "partial_somatic_on_grch38": 1373
+  },
+  "chr1": {
+   "all": {
+    "exact": 666,
+    "_tagged": 60,
+    "_pon_missing": 0,
+    "no_candidate": 27,
+    "partial_only_offref": 2,
+    "filtered": 2,
+    "n": 697
+   },
+   "untagged": {
+    "exact": 626,
+    "no_candidate": 10,
+    "partial_only_offref": 1
+   }
+  },
+  "chr2-22": {
+   "all": {
+    "exact": 7521,
+    "_tagged": 816,
+    "_pon_missing": 0,
+    "no_candidate": 227,
+    "filtered": 67,
+    "partial_only_offref": 20,
+    "partial_only_grch38": 9,
+    "other_allele_of_site": 2,
+    "n": 7846
+   },
+   "untagged": {
+    "exact": 6950,
+    "filtered": 12,
+    "no_candidate": 56,
+    "partial_only_offref": 9,
+    "partial_only_grch38": 3
+   },
+   "seeds": {
+    "0": {
+     "training_region": 7467,
+     "exact_training_example": 7160,
+     "in_validation_region": 379,
+     "partial_only_training_block": 28
+    },
+    "1": {
+     "training_region": 7493,
+     "exact_training_example": 7176,
+     "in_validation_region": 353,
+     "partial_only_training_block": 27
+    },
+    "2": {
+     "training_region": 7493,
+     "exact_training_example": 7170,
+     "in_validation_region": 353,
+     "partial_only_training_block": 27
+    }
+   },
+   "truth_outside_bed_or_not_pass": {
+    "n": 142,
+    "with_exact_label1": 115
+   }
+  },
+  "train_blocks_seed0_tensors": {
+   "0|confident_no_truth_allele|grch38": 1220185,
+   "0|near_truth_allele_mismatch|grch38": 399077,
+   "2|representative_allele_is_germline_truth|grch38": 252123,
+   "-1|off_reference_no_truth_match|off": 87593,
+   "-1|outside_confident_region|grch38": 381510,
+   "-1|not_on_unique_grch38_node|off": 41333,
+   "1|residual_partial_somatic_truth|grch38": 1205,
+   "-1|outside_confident_region|off": 23658,
+   "2|representative_allele_is_germline_truth_gap_filtered|grch38": 4460,
+   "1|representative_allele_is_somatic_truth|grch38": 7274,
+   "0|truth_matches_non_representative_allele|grch38": 221,
+   "1|residual_partial_somatic_truth|off": 461,
+   "1|allele_partial_somatic_truth|grch38": 2
+  },
+  "outside_confident_region_seed0_train": {
+   "somatic_bed": "/scratch/jshen/data/HG008_GIAB/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_all.bed",
+   "total": 405168,
+   "inside_somatic_bed": 46562
+  }
+ },
+ "HG008T_Illumina_d46|INDEL": {
+  "checks": {
+   "exact_somatic_off_reference": 0,
+   "partial_somatic_off_reference": 970,
+   "partial_somatic_on_grch38": 761
+  },
+  "chr1": {
+   "all": {
+    "exact": 254,
+    "_tagged": 384,
+    "_pon_missing": 0,
+    "filtered": 44,
+    "partial_only_grch38": 41,
+    "no_candidate": 181,
+    "partial_only_offref": 65,
+    "other_allele_of_site": 3,
+    "n": 588
+   },
+   "untagged": {
+    "exact": 152,
+    "partial_only_offref": 15,
+    "no_candidate": 28,
+    "partial_only_grch38": 6,
+    "filtered": 3
+   }
+  },
+  "chr2-22": {
+   "all": {
+    "no_candidate": 2273,
+    "_tagged": 4562,
+    "_pon_missing": 0,
+    "exact": 3387,
+    "filtered": 507,
+    "partial_only_offref": 662,
+    "partial_only_grch38": 518,
+    "other_allele_of_site": 47,
+    "n": 7394
+   },
+   "untagged": {
+    "filtered": 121,
+    "exact": 2045,
+    "no_candidate": 351,
+    "partial_only_grch38": 149,
+    "other_allele_of_site": 21,
+    "partial_only_offref": 145
+   },
+   "seeds": {
+    "0": {
+     "training_region": 7021,
+     "exact_training_example": 3213,
+     "partial_only_training_block": 1114,
+     "in_validation_region": 373
+    },
+    "1": {
+     "training_region": 7059,
+     "exact_training_example": 3231,
+     "partial_only_training_block": 1111,
+     "in_validation_region": 335
+    },
+    "2": {
+     "training_region": 7077,
+     "exact_training_example": 3222,
+     "partial_only_training_block": 1130,
+     "in_validation_region": 317
+    }
+   },
+   "truth_outside_bed_or_not_pass": {
+    "n": 466,
+    "with_exact_label1": 161
+   }
+  },
+  "train_blocks_seed0_tensors": {
+   "0|near_truth_allele_mismatch|grch38": 15097,
+   "2|representative_allele_is_germline_truth|grch38": 46548,
+   "-1|off_reference_no_truth_match|off": 17075,
+   "1|representative_allele_is_somatic_truth|grch38": 3383,
+   "-1|outside_confident_region|grch38": 18447,
+   "-1|outside_confident_region|off": 3075,
+   "0|confident_no_truth_allele|grch38": 4971,
+   "2|allele_partial_germline_truth|grch38": 461,
+   "2|residual_partial_germline_truth|grch38": 7870,
+   "1|residual_partial_somatic_truth|off": 840,
+   "0|truth_matches_non_representative_allele|off": 119,
+   "1|residual_partial_somatic_truth|grch38": 633,
+   "0|truth_matches_non_representative_allele|grch38": 364,
+   "-1|not_on_unique_grch38_node|off": 2628,
+   "2|representative_allele_is_germline_truth_gap_filtered|grch38": 381,
+   "1|allele_partial_somatic_truth|grch38": 44
+  },
+  "outside_confident_region_seed0_train": {
+   "somatic_bed": "/scratch/jshen/data/HG008_GIAB/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_all.bed",
+   "total": 21522,
+   "inside_somatic_bed": 2512
+  }
+ },
+ "HG008T_PacBio_d46|SNV": {
+  "checks": {
+   "exact_somatic_off_reference": 0,
+   "partial_somatic_off_reference": 265,
+   "partial_somatic_on_grch38": 266
+  },
+  "chr1": {
+   "all": {
+    "exact": 662,
+    "_tagged": 60,
+    "_pon_missing": 0,
+    "filtered": 3,
+    "no_candidate": 30,
+    "partial_only_offref": 2,
+    "n": 697
+   },
+   "untagged": {
+    "exact": 623,
+    "filtered": 2,
+    "no_candidate": 12
+   }
+  },
+  "chr2-22": {
+   "all": {
+    "exact": 7467,
+    "_tagged": 816,
+    "_pon_missing": 0,
+    "no_candidate": 318,
+    "filtered": 43,
+    "partial_only_offref": 10,
+    "partial_only_grch38": 6,
+    "other_allele_of_site": 2,
+    "n": 7846
+   },
+   "untagged": {
+    "exact": 6948,
+    "no_candidate": 69,
+    "filtered": 8,
+    "partial_only_grch38": 3,
+    "partial_only_offref": 1,
+    "other_allele_of_site": 1
+   },
+   "seeds": {
+    "0": {
+     "training_region": 7465,
+     "exact_training_example": 7111,
+     "in_validation_region": 381,
+     "partial_only_training_block": 16
+    },
+    "1": {
+     "training_region": 7494,
+     "exact_training_example": 7127,
+     "in_validation_region": 352,
+     "partial_only_training_block": 15
+    },
+    "2": {
+     "training_region": 7494,
+     "exact_training_example": 7122,
+     "in_validation_region": 352,
+     "partial_only_training_block": 15
+    }
+   },
+   "truth_outside_bed_or_not_pass": {
+    "n": 142,
+    "with_exact_label1": 115
+   }
+  },
+  "train_blocks_seed0_tensors": {
+   "2|representative_allele_is_germline_truth|grch38": 260179,
+   "0|confident_no_truth_allele|grch38": 44756,
+   "-1|off_reference_no_truth_match|off": 33357,
+   "1|representative_allele_is_somatic_truth|grch38": 7227,
+   "0|near_truth_allele_mismatch|grch38": 26687,
+   "-1|outside_confident_region|grch38": 647701,
+   "-1|outside_confident_region|off": 24854,
+   "-1|not_on_unique_grch38_node|off": 75999,
+   "2|representative_allele_is_germline_truth_gap_filtered|grch38": 9996,
+   "1|residual_partial_somatic_truth|grch38": 228,
+   "1|residual_partial_somatic_truth|off": 235,
+   "0|truth_matches_non_representative_allele|grch38": 130,
+   "1|allele_partial_somatic_truth|grch38": 1
+  },
+  "outside_confident_region_seed0_train": {
+   "somatic_bed": "/scratch/jshen/data/HG008_GIAB/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_all.bed",
+   "total": 672555,
+   "inside_somatic_bed": 41036
+  }
+ },
+ "HG008T_PacBio_d46|INDEL": {
+  "checks": {
+   "exact_somatic_off_reference": 0,
+   "partial_somatic_off_reference": 1584,
+   "partial_somatic_on_grch38": 1058
+  },
+  "chr1": {
+   "all": {
+    "exact": 282,
+    "_tagged": 384,
+    "_pon_missing": 0,
+    "partial_only_grch38": 54,
+    "partial_only_offref": 110,
+    "no_candidate": 90,
+    "filtered": 36,
+    "other_allele_of_site": 16,
+    "n": 588
+   },
+   "untagged": {
+    "exact": 152,
+    "partial_only_offref": 17,
+    "no_candidate": 16,
+    "other_allele_of_site": 2,
+    "partial_only_grch38": 11,
+    "filtered": 6
+   }
+  },
+  "chr2-22": {
+   "all": {
+    "no_candidate": 1069,
+    "_tagged": 4562,
+    "_pon_missing": 0,
+    "exact": 3732,
+    "other_allele_of_site": 275,
+    "partial_only_offref": 1100,
+    "filtered": 460,
+    "partial_only_grch38": 758,
+    "n": 7394
+   },
+   "untagged": {
+    "filtered": 69,
+    "exact": 2051,
+    "no_candidate": 195,
+    "partial_only_grch38": 228,
+    "other_allele_of_site": 92,
+    "partial_only_offref": 197
+   },
+   "seeds": {
+    "0": {
+     "training_region": 7022,
+     "exact_training_example": 3546,
+     "partial_only_training_block": 1761,
+     "in_validation_region": 372
+    },
+    "1": {
+     "training_region": 7065,
+     "exact_training_example": 3568,
+     "partial_only_training_block": 1764,
+     "in_validation_region": 329
+    },
+    "2": {
+     "training_region": 7075,
+     "exact_training_example": 3561,
+     "partial_only_training_block": 1772,
+     "in_validation_region": 319
+    }
+   },
+   "truth_outside_bed_or_not_pass": {
+    "n": 466,
+    "with_exact_label1": 188
+   }
+  },
+  "train_blocks_seed0_tensors": {
+   "-1|outside_confident_region|grch38": 85996,
+   "2|representative_allele_is_germline_truth|grch38": 127293,
+   "0|near_truth_allele_mismatch|grch38": 173353,
+   "0|confident_no_truth_allele|grch38": 1152345,
+   "2|residual_partial_germline_truth|grch38": 31107,
+   "-1|off_reference_no_truth_match|off": 109118,
+   "-1|outside_confident_region|off": 14271,
+   "1|representative_allele_is_somatic_truth|grch38": 3761,
+   "-1|not_on_unique_grch38_node|off": 14777,
+   "2|representative_allele_is_germline_truth_gap_filtered|grch38": 1006,
+   "0|truth_matches_non_representative_allele|grch38": 3373,
+   "2|allele_partial_germline_truth|grch38": 3483,
+   "1|residual_partial_somatic_truth|off": 1372,
+   "1|residual_partial_somatic_truth|grch38": 870,
+   "1|allele_partial_somatic_truth|grch38": 68,
+   "0|truth_matches_non_representative_allele|off": 83
+  },
+  "outside_confident_region_seed0_train": {
+   "somatic_bed": "/scratch/jshen/data/HG008_GIAB/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_all.bed",
+   "total": 100267,
+   "inside_somatic_bed": 12027
+  }
+ },
+ "HG008T_ONT_d46|SNV": {
+  "checks": {
+   "exact_somatic_off_reference": 0,
+   "partial_somatic_off_reference": 254,
+   "partial_somatic_on_grch38": 243
+  },
+  "chr1": {
+   "all": {
+    "exact": 666,
+    "_tagged": 60,
+    "_pon_missing": 0,
+    "no_candidate": 24,
+    "filtered": 6,
+    "partial_only_offref": 1,
+    "n": 697
+   },
+   "untagged": {
+    "exact": 630,
+    "filtered": 3,
+    "no_candidate": 4
+   }
+  },
+  "chr2-22": {
+   "all": {
+    "exact": 7502,
+    "_tagged": 816,
+    "_pon_missing": 0,
+    "no_candidate": 272,
+    "filtered": 52,
+    "partial_only_offref": 9,
+    "partial_only_grch38": 9,
+    "other_allele_of_site": 2,
+    "n": 7846
+   },
+   "untagged": {
+    "exact": 6984,
+    "no_candidate": 32,
+    "filtered": 10,
+    "partial_only_grch38": 2,
+    "partial_only_offref": 1,
+    "other_allele_of_site": 1
+   },
+   "seeds": {
+    "0": {
+     "training_region": 7464,
+     "exact_training_example": 7141,
+     "in_validation_region": 382,
+     "partial_only_training_block": 17
+    },
+    "1": {
+     "training_region": 7495,
+     "exact_training_example": 7161,
+     "in_validation_region": 351,
+     "partial_only_training_block": 17
+    },
+    "2": {
+     "training_region": 7494,
+     "exact_training_example": 7159,
+     "in_validation_region": 352,
+     "partial_only_training_block": 18
+    }
+   },
+   "truth_outside_bed_or_not_pass": {
+    "n": 142,
+    "with_exact_label1": 117
+   }
+  },
+  "train_blocks_seed0_tensors": {
+   "-1|outside_confident_region|grch38": 793317,
+   "2|representative_allele_is_germline_truth|grch38": 282278,
+   "0|confident_no_truth_allele|grch38": 143001,
+   "0|near_truth_allele_mismatch|grch38": 40376,
+   "1|representative_allele_is_somatic_truth|grch38": 7259,
+   "-1|off_reference_no_truth_match|off": 34074,
+   "-1|not_on_unique_grch38_node|off": 76625,
+   "-1|outside_confident_region|off": 25673,
+   "2|representative_allele_is_germline_truth_gap_filtered|grch38": 20344,
+   "1|residual_partial_somatic_truth|grch38": 214,
+   "1|residual_partial_somatic_truth|off": 225,
+   "0|truth_matches_non_representative_allele|grch38": 133,
+   "1|allele_partial_somatic_truth|grch38": 1
+  },
+  "outside_confident_region_seed0_train": {
+   "somatic_bed": "/scratch/jshen/data/HG008_GIAB/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_all.bed",
+   "total": 818990,
+   "inside_somatic_bed": 67603
+  }
+ },
+ "HG008T_ONT_d46|INDEL": {
+  "checks": {
+   "exact_somatic_off_reference": 0,
+   "partial_somatic_off_reference": 1436,
+   "partial_somatic_on_grch38": 1393
+  },
+  "chr1": {
+   "all": {
+    "exact": 245,
+    "_tagged": 384,
+    "_pon_missing": 0,
+    "partial_only_offref": 101,
+    "no_candidate": 74,
+    "filtered": 51,
+    "partial_only_grch38": 81,
+    "other_allele_of_site": 36,
+    "n": 588
+   },
+   "untagged": {
+    "exact": 145,
+    "partial_only_offref": 14,
+    "no_candidate": 15,
+    "filtered": 12,
+    "other_allele_of_site": 7,
+    "partial_only_grch38": 11
+   }
+  },
+  "chr2-22": {
+   "all": {
+    "no_candidate": 1009,
+    "_tagged": 4562,
+    "_pon_missing": 0,
+    "exact": 3224,
+    "partial_only_grch38": 1043,
+    "filtered": 622,
+    "partial_only_offref": 1034,
+    "other_allele_of_site": 462,
+    "n": 7394
+   },
+   "untagged": {
+    "other_allele_of_site": 139,
+    "exact": 1834,
+    "partial_only_offref": 180,
+    "filtered": 142,
+    "no_candidate": 218,
+    "partial_only_grch38": 319
+   },
+   "seeds": {
+    "0": {
+     "training_region": 7024,
+     "exact_training_example": 3066,
+     "partial_only_training_block": 1966,
+     "in_validation_region": 370
+    },
+    "1": {
+     "training_region": 7063,
+     "exact_training_example": 3085,
+     "partial_only_training_block": 1969,
+     "in_validation_region": 331
+    },
+    "2": {
+     "training_region": 7075,
+     "exact_training_example": 3079,
+     "partial_only_training_block": 1995,
+     "in_validation_region": 319
+    }
+   },
+   "truth_outside_bed_or_not_pass": {
+    "n": 466,
+    "with_exact_label1": 155
+   }
+  },
+  "train_blocks_seed0_tensors": {
+   "-1|outside_confident_region|grch38": 105575,
+   "2|representative_allele_is_germline_truth|grch38": 126251,
+   "0|near_truth_allele_mismatch|grch38": 232840,
+   "0|confident_no_truth_allele|grch38": 1459598,
+   "-1|off_reference_no_truth_match|off": 158453,
+   "2|allele_partial_germline_truth|grch38": 14310,
+   "2|residual_partial_germline_truth|grch38": 33673,
+   "0|truth_matches_non_representative_allele|grch38": 17680,
+   "1|residual_partial_somatic_truth|grch38": 850,
+   "-1|outside_confident_region|off": 18487,
+   "-1|not_on_unique_grch38_node|off": 15691,
+   "2|representative_allele_is_germline_truth_gap_filtered|grch38": 1807,
+   "1|residual_partial_somatic_truth|off": 1248,
+   "0|truth_matches_non_representative_allele|off": 332,
+   "1|representative_allele_is_somatic_truth|grch38": 3249,
+   "1|allele_partial_somatic_truth|grch38": 370
+  },
+  "outside_confident_region_seed0_train": {
+   "somatic_bed": "/scratch/jshen/data/HG008_GIAB/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_all.bed",
+   "total": 124062,
+   "inside_somatic_bed": 17932
+  }
+ },
+ "COLO829T_Illumina_d46|SNV": {
+  "checks": {
+   "exact_somatic_off_reference": 0,
+   "partial_somatic_off_reference": 111,
+   "partial_somatic_on_grch38": 290
+  },
+  "chr1": {
+   "all": {
+    "no_candidate": 67,
+    "_tagged": 84,
+    "_pon_missing": 0,
+    "exact": 2003,
+    "filtered": 370,
+    "partial_only_offref": 3,
+    "n": 2443
+   },
+   "untagged": {
+    "no_candidate": 52,
+    "exact": 1942,
+    "filtered": 362,
+    "partial_only_offref": 3
+   }
+  },
+  "chr2-22": {
+   "all": {
+    "exact": 35858,
+    "_tagged": 1358,
+    "_pon_missing": 0,
+    "no_candidate": 637,
+    "filtered": 3075,
+    "partial_only_offref": 16,
+    "partial_only_grch38": 6,
+    "n": 39592
+   },
+   "untagged": {
+    "exact": 34656,
+    "no_candidate": 533,
+    "filtered": 3024,
+    "partial_only_offref": 16,
+    "partial_only_grch38": 5
+   },
+   "seeds": {
+    "0": {
+     "training_region": 37679,
+     "exact_training_example": 34095,
+     "partial_only_training_block": 20,
+     "in_validation_region": 1913
+    },
+    "1": {
+     "training_region": 37656,
+     "exact_training_example": 34058,
+     "in_validation_region": 1936,
+     "partial_only_training_block": 22
+    },
+    "2": {
+     "training_region": 37665,
+     "exact_training_example": 34157,
+     "in_validation_region": 1927,
+     "partial_only_training_block": 21
+    }
+   },
+   "truth_outside_bed_or_not_pass": {
+    "n": 0,
+    "with_exact_label1": 0
+   }
+  },
+  "train_blocks_seed0_tensors": {
+   "0|confident_no_truth_allele|grch38": 579386,
+   "0|near_truth_allele_mismatch|grch38": 224237,
+   "1|representative_allele_is_somatic_truth|grch38": 34110,
+   "2|representative_allele_is_germline_truth|grch38": 275225,
+   "-1|off_reference_no_truth_match|off": 44556,
+   "2|representative_allele_is_germline_truth_gap_filtered|grch38": 5317,
+   "-1|outside_confident_region|off": 13807,
+   "-1|outside_confident_region|grch38": 237314,
+   "-1|not_on_unique_grch38_node|off": 28862,
+   "1|residual_partial_somatic_truth|off": 97,
+   "1|residual_partial_somatic_truth|grch38": 258,
+   "0|truth_matches_non_representative_allele|grch38": 141,
+   "1|allele_partial_somatic_truth|grch38": 1
+  },
+  "outside_confident_region_seed0_train": {
+   "somatic_bed": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/SMaHT_v2_easy_difficult_extreme.union.bed",
+   "total": 251121,
+   "inside_somatic_bed": 251121
+  }
+ },
+ "COLO829T_Illumina_d46|INDEL": {
+  "checks": {
+   "exact_somatic_off_reference": 0,
+   "partial_somatic_off_reference": 116,
+   "partial_somatic_on_grch38": 92
+  },
+  "chr1": {
+   "all": {
+    "exact": 61,
+    "_tagged": 81,
+    "_pon_missing": 0,
+    "no_candidate": 54,
+    "partial_only_offref": 10,
+    "partial_only_grch38": 4,
+    "filtered": 2,
+    "n": 131
+   },
+   "untagged": {
+    "exact": 36,
+    "partial_only_grch38": 1,
+    "filtered": 1,
+    "no_candidate": 12
+   }
+  },
+  "chr2-22": {
+   "all": {
+    "exact": 1094,
+    "_tagged": 924,
+    "_pon_missing": 0,
+    "no_candidate": 501,
+    "partial_only_offref": 49,
+    "filtered": 74,
+    "partial_only_grch38": 53,
+    "other_allele_of_site": 10,
+    "n": 1781
+   },
+   "untagged": {
+    "exact": 704,
+    "filtered": 23,
+    "partial_only_grch38": 21,
+    "no_candidate": 89,
+    "partial_only_offref": 14,
+    "other_allele_of_site": 6
+   },
+   "seeds": {
+    "0": {
+     "training_region": 1702,
+     "exact_training_example": 1037,
+     "partial_only_training_block": 92,
+     "in_validation_region": 79
+    },
+    "1": {
+     "training_region": 1704,
+     "exact_training_example": 1043,
+     "partial_only_training_block": 99,
+     "in_validation_region": 77
+    },
+    "2": {
+     "training_region": 1701,
+     "exact_training_example": 1042,
+     "partial_only_training_block": 99,
+     "in_validation_region": 80
+    }
+   },
+   "truth_outside_bed_or_not_pass": {
+    "n": 0,
+    "with_exact_label1": 0
+   }
+  },
+  "train_blocks_seed0_tensors": {
+   "0|confident_no_truth_allele|grch38": 6941,
+   "-1|off_reference_no_truth_match|off": 18949,
+   "2|residual_partial_germline_truth|grch38": 9266,
+   "2|representative_allele_is_germline_truth|grch38": 50906,
+   "0|near_truth_allele_mismatch|grch38": 15982,
+   "-1|not_on_unique_grch38_node|off": 2479,
+   "-1|outside_confident_region|off": 1360,
+   "2|allele_partial_germline_truth|grch38": 444,
+   "1|representative_allele_is_somatic_truth|grch38": 1048,
+   "2|representative_allele_is_germline_truth_gap_filtered|grch38": 494,
+   "-1|outside_confident_region|grch38": 11939,
+   "0|truth_matches_non_representative_allele|grch38": 362,
+   "1|residual_partial_somatic_truth|off": 94,
+   "0|truth_matches_non_representative_allele|off": 101,
+   "1|residual_partial_somatic_truth|grch38": 75,
+   "1|allele_partial_somatic_truth|grch38": 4
+  },
+  "outside_confident_region_seed0_train": {
+   "somatic_bed": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/SMaHT_v2_easy_difficult_extreme.union.bed",
+   "total": 13299,
+   "inside_somatic_bed": 13299
+  }
+ },
+ "COLO829T_fiberseq_d46|SNV": {
+  "checks": {
+   "exact_somatic_off_reference": 0,
+   "partial_somatic_off_reference": 82,
+   "partial_somatic_on_grch38": 128
+  },
+  "chr1": {
+   "all": {
+    "no_candidate": 52,
+    "_tagged": 84,
+    "_pon_missing": 0,
+    "exact": 2007,
+    "filtered": 383,
+    "partial_only_offref": 1,
+    "n": 2443
+   },
+   "untagged": {
+    "no_candidate": 37,
+    "exact": 1947,
+    "filtered": 374,
+    "partial_only_offref": 1
+   }
+  },
+  "chr2-22": {
+   "all": {
+    "exact": 35729,
+    "_tagged": 1358,
+    "_pon_missing": 0,
+    "no_candidate": 568,
+    "filtered": 3281,
+    "partial_only_offref": 5,
+    "partial_only_grch38": 9,
+    "n": 39592
+   },
+   "untagged": {
+    "exact": 34544,
+    "no_candidate": 461,
+    "filtered": 3218,
+    "partial_only_grch38": 8,
+    "partial_only_offref": 3
+   },
+   "seeds": {
+    "0": {
+     "training_region": 37693,
+     "exact_training_example": 33982,
+     "in_validation_region": 1899,
+     "partial_only_training_block": 13
+    },
+    "1": {
+     "training_region": 37658,
+     "exact_training_example": 33936,
+     "in_validation_region": 1934,
+     "partial_only_training_block": 14
+    },
+    "2": {
+     "training_region": 37666,
+     "exact_training_example": 34039,
+     "in_validation_region": 1926,
+     "partial_only_training_block": 13
+    }
+   },
+   "truth_outside_bed_or_not_pass": {
+    "n": 0,
+    "with_exact_label1": 0
+   }
+  },
+  "train_blocks_seed0_tensors": {
+   "2|representative_allele_is_germline_truth|grch38": 301842,
+   "0|confident_no_truth_allele|grch38": 105769,
+   "0|near_truth_allele_mismatch|grch38": 46586,
+   "-1|off_reference_no_truth_match|off": 53346,
+   "1|representative_allele_is_somatic_truth|grch38": 33998,
+   "-1|not_on_unique_grch38_node|off": 89127,
+   "-1|outside_confident_region|grch38": 1459762,
+   "2|representative_allele_is_germline_truth_gap_filtered|grch38": 18589,
+   "-1|outside_confident_region|off": 28735,
+   "1|residual_partial_somatic_truth|grch38": 112,
+   "0|truth_matches_non_representative_allele|grch38": 366,
+   "1|residual_partial_somatic_truth|off": 71
+  },
+  "outside_confident_region_seed0_train": {
+   "somatic_bed": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/SMaHT_v2_easy_difficult_extreme.union.bed",
+   "total": 1488497,
+   "inside_somatic_bed": 1488497
+  }
+ },
+ "COLO829T_fiberseq_d46|INDEL": {
+  "checks": {
+   "exact_somatic_off_reference": 0,
+   "partial_somatic_off_reference": 239,
+   "partial_somatic_on_grch38": 171
+  },
+  "chr1": {
+   "all": {
+    "exact": 68,
+    "_tagged": 81,
+    "_pon_missing": 0,
+    "no_candidate": 32,
+    "partial_only_grch38": 13,
+    "other_allele_of_site": 2,
+    "partial_only_offref": 12,
+    "filtered": 4,
+    "n": 131
+   },
+   "untagged": {
+    "exact": 37,
+    "partial_only_grch38": 5,
+    "other_allele_of_site": 2,
+    "no_candidate": 4,
+    "filtered": 2
+   }
+  },
+  "chr2-22": {
+   "all": {
+    "exact": 1192,
+    "_tagged": 924,
+    "_pon_missing": 0,
+    "no_candidate": 238,
+    "partial_only_offref": 110,
+    "filtered": 120,
+    "other_allele_of_site": 32,
+    "partial_only_grch38": 89,
+    "n": 1781
+   },
+   "untagged": {
+    "exact": 709,
+    "other_allele_of_site": 13,
+    "partial_only_grch38": 32,
+    "filtered": 31,
+    "partial_only_offref": 18,
+    "no_candidate": 54
+   },
+   "seeds": {
+    "0": {
+     "training_region": 1701,
+     "exact_training_example": 1134,
+     "partial_only_training_block": 185,
+     "in_validation_region": 80
+    },
+    "1": {
+     "training_region": 1705,
+     "exact_training_example": 1135,
+     "partial_only_training_block": 194,
+     "in_validation_region": 76
+    },
+    "2": {
+     "training_region": 1702,
+     "exact_training_example": 1141,
+     "partial_only_training_block": 190,
+     "in_validation_region": 79
+    }
+   },
+   "truth_outside_bed_or_not_pass": {
+    "n": 0,
+    "with_exact_label1": 0
+   }
+  },
+  "train_blocks_seed0_tensors": {
+   "-1|outside_confident_region|grch38": 148629,
+   "0|near_truth_allele_mismatch|grch38": 210443,
+   "2|representative_allele_is_germline_truth|grch38": 139116,
+   "0|confident_no_truth_allele|grch38": 935463,
+   "-1|off_reference_no_truth_match|off": 158621,
+   "2|residual_partial_germline_truth|grch38": 36329,
+   "0|truth_matches_non_representative_allele|grch38": 3979,
+   "-1|not_on_unique_grch38_node|off": 21989,
+   "-1|outside_confident_region|off": 9270,
+   "2|representative_allele_is_germline_truth_gap_filtered|grch38": 1600,
+   "2|allele_partial_germline_truth|grch38": 3760,
+   "1|representative_allele_is_somatic_truth|grch38": 1141,
+   "1|residual_partial_somatic_truth|off": 209,
+   "1|residual_partial_somatic_truth|grch38": 136,
+   "0|truth_matches_non_representative_allele|off": 90,
+   "1|allele_partial_somatic_truth|grch38": 4,
+   "0|germline_truth_filtered|grch38": 1
+  },
+  "outside_confident_region_seed0_train": {
+   "somatic_bed": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/SMaHT_v2_easy_difficult_extreme.union.bed",
+   "total": 157899,
+   "inside_somatic_bed": 157899
+  }
+ },
+ "COLO829T_ONT_d46|SNV": {
+  "checks": {
+   "exact_somatic_off_reference": 0,
+   "partial_somatic_off_reference": 78,
+   "partial_somatic_on_grch38": 151
+  },
+  "chr1": {
+   "all": {
+    "exact": 2001,
+    "_tagged": 84,
+    "_pon_missing": 0,
+    "filtered": 392,
+    "no_candidate": 49,
+    "partial_only_offref": 1,
+    "n": 2443
+   },
+   "untagged": {
+    "exact": 1942,
+    "filtered": 381,
+    "no_candidate": 35,
+    "partial_only_offref": 1
+   }
+  },
+  "chr2-22": {
+   "all": {
+    "exact": 35513,
+    "_tagged": 1358,
+    "_pon_missing": 0,
+    "no_candidate": 467,
+    "filtered": 3597,
+    "partial_only_grch38": 8,
+    "partial_only_offref": 7,
+    "n": 39592
+   },
+   "untagged": {
+    "exact": 34321,
+    "no_candidate": 388,
+    "filtered": 3514,
+    "partial_only_grch38": 6,
+    "partial_only_offref": 5
+   },
+   "seeds": {
+    "0": {
+     "training_region": 37676,
+     "exact_training_example": 33760,
+     "in_validation_region": 1916,
+     "partial_only_training_block": 14
+    },
+    "1": {
+     "training_region": 37663,
+     "exact_training_example": 33727,
+     "in_validation_region": 1929,
+     "partial_only_training_block": 15
+    },
+    "2": {
+     "training_region": 37675,
+     "exact_training_example": 33831,
+     "in_validation_region": 1917,
+     "partial_only_training_block": 14
+    }
+   },
+   "truth_outside_bed_or_not_pass": {
+    "n": 0,
+    "with_exact_label1": 0
+   }
+  },
+  "train_blocks_seed0_tensors": {
+   "-1|outside_confident_region|grch38": 941995,
+   "2|representative_allele_is_germline_truth|grch38": 325259,
+   "0|confident_no_truth_allele|grch38": 401491,
+   "0|near_truth_allele_mismatch|grch38": 74595,
+   "-1|off_reference_no_truth_match|off": 68331,
+   "1|representative_allele_is_somatic_truth|grch38": 33779,
+   "2|representative_allele_is_germline_truth_gap_filtered|grch38": 30565,
+   "-1|outside_confident_region|off": 28930,
+   "-1|not_on_unique_grch38_node|off": 81893,
+   "1|residual_partial_somatic_truth|grch38": 133,
+   "0|truth_matches_non_representative_allele|grch38": 214,
+   "1|residual_partial_somatic_truth|off": 66,
+   "1|allele_partial_somatic_truth|grch38": 1
+  },
+  "outside_confident_region_seed0_train": {
+   "somatic_bed": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/SMaHT_v2_easy_difficult_extreme.union.bed",
+   "total": 970925,
+   "inside_somatic_bed": 970925
+  }
+ },
+ "COLO829T_ONT_d46|INDEL": {
+  "checks": {
+   "exact_somatic_off_reference": 0,
+   "partial_somatic_off_reference": 265,
+   "partial_somatic_on_grch38": 326
+  },
+  "chr1": {
+   "all": {
+    "exact": 56,
+    "_tagged": 81,
+    "_pon_missing": 0,
+    "no_candidate": 27,
+    "filtered": 9,
+    "partial_only_grch38": 19,
+    "other_allele_of_site": 7,
+    "partial_only_offref": 13,
+    "n": 131
+   },
+   "untagged": {
+    "exact": 34,
+    "partial_only_grch38": 5,
+    "other_allele_of_site": 5,
+    "no_candidate": 5,
+    "filtered": 1
+   }
+  },
+  "chr2-22": {
+   "all": {
+    "exact": 1060,
+    "_tagged": 924,
+    "_pon_missing": 0,
+    "no_candidate": 176,
+    "partial_only_offref": 125,
+    "partial_only_grch38": 189,
+    "filtered": 113,
+    "other_allele_of_site": 118,
+    "n": 1781
+   },
+   "untagged": {
+    "exact": 654,
+    "other_allele_of_site": 38,
+    "partial_only_grch38": 66,
+    "no_candidate": 50,
+    "filtered": 30,
+    "partial_only_offref": 19
+   },
+   "seeds": {
+    "0": {
+     "training_region": 1701,
+     "exact_training_example": 1007,
+     "partial_only_training_block": 300,
+     "in_validation_region": 80
+    },
+    "1": {
+     "training_region": 1705,
+     "exact_training_example": 1016,
+     "partial_only_training_block": 301,
+     "in_validation_region": 76
+    },
+    "2": {
+     "training_region": 1702,
+     "exact_training_example": 1014,
+     "partial_only_training_block": 298,
+     "in_validation_region": 79
+    }
+   },
+   "truth_outside_bed_or_not_pass": {
+    "n": 0,
+    "with_exact_label1": 0
+   }
+  },
+  "train_blocks_seed0_tensors": {
+   "-1|outside_confident_region|grch38": 110034,
+   "2|representative_allele_is_germline_truth|grch38": 151410,
+   "0|confident_no_truth_allele|grch38": 2895507,
+   "0|near_truth_allele_mismatch|grch38": 372261,
+   "-1|off_reference_no_truth_match|off": 246976,
+   "2|residual_partial_germline_truth|grch38": 36767,
+   "2|allele_partial_germline_truth|grch38": 21530,
+   "0|truth_matches_non_representative_allele|grch38": 21231,
+   "1|residual_partial_somatic_truth|grch38": 195,
+   "-1|outside_confident_region|off": 12924,
+   "-1|not_on_unique_grch38_node|off": 23451,
+   "2|representative_allele_is_germline_truth_gap_filtered|grch38": 2722,
+   "0|truth_matches_non_representative_allele|off": 717,
+   "1|representative_allele_is_somatic_truth|grch38": 1018,
+   "1|residual_partial_somatic_truth|off": 231,
+   "1|allele_partial_somatic_truth|grch38": 89,
+   "0|germline_truth_filtered|grch38": 1
+  },
+  "outside_confident_region_seed0_train": {
+   "somatic_bed": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/SMaHT_v2_easy_difficult_extreme.union.bed",
+   "total": 122958,
+   "inside_somatic_bed": 122958
+  }
+ }
+}

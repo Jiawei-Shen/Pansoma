@@ -1,0 +1,12 @@
+HG008T_Illumina_d46	HG008T_Illumina_d46.tensors.SNV.91645eef0a6a.npz
+HG008T_PacBio_d46	HG008T_PacBio_d46.tensors.SNV.98441ebf0fb7.npz
+HG008T_ONT_d46	HG008T_ONT_d46.tensors.SNV.4da62ace82a9.npz
+COLO829T_Illumina_d46	COLO829T_Illumina_d46.tensors.SNV.d651e40b0e9a.npz
+COLO829T_fiberseq_d46	COLO829T_fiberseq_d46.tensors.SNV.038636730ce3.npz
+COLO829T_ONT_d46	COLO829T_ONT_d46.tensors.SNV.46029440f280.npz
+HG008T_Illumina	HG008T_Illumina.tensors.SNV.0062217f8edf.npz
+HG008T_PacBio	HG008T_PacBio.tensors.SNV.63ee02d2a0bc.npz
+HG008T_ONT	HG008T_ONT.tensors.SNV.91cf0ad9502b.npz
+COLO829T_Illumina	COLO829T_Illumina.tensors.SNV.0428e5b605a2.npz
+COLO829T_fiberseq	COLO829T_fiberseq.tensors.SNV.3b5c36659e1e.npz
+COLO829T_ONT	COLO829T_ONT.tensors.SNV.d910a5c87a69.npz

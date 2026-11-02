@@ -1,0 +1,1694 @@
+{
+ "COLO829_Illumina_SNV_d46_normbq": {
+  "kind": "SNV",
+  "val_offref_non": 1899,
+  "val_tensors": 55174,
+  "val_non": 40055,
+  "val_somatic": 1737,
+  "val_germline": 13382,
+  "best_epoch": 7,
+  "best_epoch_metrics": 7,
+  "best_score": 0.7654,
+  "runner_up_epoch": 8,
+  "runner_up_score": 0.7631,
+  "margin": 0.0023,
+  "t_sel": 0.7976978421211243,
+  "t_pass": 0.6259005069732666,
+  "val_fp_at_sel": 515,
+  "epochs": 20,
+  "tests": {
+   "COLO829T_Illumina_d46": {
+    "test_tensors": 98961,
+    "test_non": 81977,
+    "test_offref_non": 3437,
+    "positives": 1990,
+    "sel_tp": 1605,
+    "sel_fp": 569,
+    "sel_fp_offref": 0,
+    "sel_prf_with": [
+     0.7383,
+     0.8065,
+     0.7709
+    ],
+    "sel_prf_without_offref": [
+     0.7383,
+     0.8065,
+     0.7709
+    ],
+    "pass_tp": 1771,
+    "pass_fp": 941,
+    "pass_fp_offref": 2,
+    "pass_prf_with": [
+     0.653,
+     0.8899,
+     0.7533
+    ],
+    "pass_prf_without_offref": [
+     0.6535,
+     0.8899,
+     0.7536
+    ]
+   }
+  }
+ },
+ "COLO829_Illumina_SNV_d46_normbq_s1": {
+  "kind": "SNV",
+  "val_offref_non": 2040,
+  "val_tensors": 55370,
+  "val_non": 40776,
+  "val_somatic": 1724,
+  "val_germline": 12870,
+  "best_epoch": 6,
+  "best_epoch_metrics": 6,
+  "best_score": 0.7659,
+  "runner_up_epoch": 7,
+  "runner_up_score": 0.7622,
+  "margin": 0.0038,
+  "t_sel": 0.8944700956344604,
+  "t_pass": 0.7012597322463989,
+  "val_fp_at_sel": 406,
+  "epochs": 20,
+  "tests": {
+   "COLO829T_Illumina_d46": {
+    "test_tensors": 98961,
+    "test_non": 81977,
+    "test_offref_non": 3437,
+    "positives": 1990,
+    "sel_tp": 1482,
+    "sel_fp": 413,
+    "sel_fp_offref": 0,
+    "sel_prf_with": [
+     0.7821,
+     0.7447,
+     0.7629
+    ],
+    "sel_prf_without_offref": [
+     0.7821,
+     0.7447,
+     0.7629
+    ],
+    "pass_tp": 1755,
+    "pass_fp": 946,
+    "pass_fp_offref": 2,
+    "pass_prf_with": [
+     0.6498,
+     0.8819,
+     0.7482
+    ],
+    "pass_prf_without_offref": [
+     0.6502,
+     0.8819,
+     0.7486
+    ]
+   }
+  }
+ },
+ "COLO829_Illumina_SNV_d46_normbq_s2": {
+  "kind": "SNV",
+  "val_offref_non": 2239,
+  "val_tensors": 56861,
+  "val_non": 41307,
+  "val_somatic": 1639,
+  "val_germline": 13915,
+  "best_epoch": 7,
+  "best_epoch_metrics": 7,
+  "best_score": 0.7397,
+  "runner_up_epoch": 6,
+  "runner_up_score": 0.739,
+  "margin": 0.0006,
+  "t_sel": 0.557716429233551,
+  "t_pass": 0.30395084619522095,
+  "val_fp_at_sel": 554,
+  "epochs": 20,
+  "tests": {
+   "COLO829T_Illumina_d46": {
+    "test_tensors": 98961,
+    "test_non": 81977,
+    "test_offref_non": 3437,
+    "positives": 1990,
+    "sel_tp": 1563,
+    "sel_fp": 569,
+    "sel_fp_offref": 2,
+    "sel_prf_with": [
+     0.7331,
+     0.7854,
+     0.7584
+    ],
+    "sel_prf_without_offref": [
+     0.7338,
+     0.7854,
+     0.7587
+    ],
+    "pass_tp": 1786,
+    "pass_fp": 1117,
+    "pass_fp_offref": 6,
+    "pass_prf_with": [
+     0.6152,
+     0.8975,
+     0.73
+    ],
+    "pass_prf_without_offref": [
+     0.6165,
+     0.8975,
+     0.7309
+    ]
+   }
+  }
+ },
+ "COLO829_ONT_SNV_d46_normbq": {
+  "kind": "SNV",
+  "val_offref_non": 3519,
+  "val_tensors": 45760,
+  "val_non": 29549,
+  "val_somatic": 1717,
+  "val_germline": 14494,
+  "best_epoch": 9,
+  "best_epoch_metrics": 9,
+  "best_score": 0.739,
+  "runner_up_epoch": 10,
+  "runner_up_score": 0.7389,
+  "margin": 0.0001,
+  "t_sel": 0.7038335800170898,
+  "t_pass": 0.5205546021461487,
+  "val_fp_at_sel": 728,
+  "epochs": 20,
+  "tests": {
+   "COLO829T_ONT_d46": {
+    "test_tensors": 69771,
+    "test_non": 49233,
+    "test_offref_non": 5401,
+    "positives": 1983,
+    "sel_tp": 1571,
+    "sel_fp": 763,
+    "sel_fp_offref": 3,
+    "sel_prf_with": [
+     0.6731,
+     0.7922,
+     0.7278
+    ],
+    "sel_prf_without_offref": [
+     0.674,
+     0.7922,
+     0.7283
+    ],
+    "pass_tp": 1740,
+    "pass_fp": 1214,
+    "pass_fp_offref": 7,
+    "pass_prf_with": [
+     0.589,
+     0.8775,
+     0.7049
+    ],
+    "pass_prf_without_offref": [
+     0.5904,
+     0.8775,
+     0.7059
+    ]
+   }
+  }
+ },
+ "COLO829_ONT_SNV_d46_normbq_s1": {
+  "kind": "SNV",
+  "val_offref_non": 3312,
+  "val_tensors": 45186,
+  "val_non": 27892,
+  "val_somatic": 1714,
+  "val_germline": 15580,
+  "best_epoch": 10,
+  "best_epoch_metrics": 10,
+  "best_score": 0.7481,
+  "runner_up_epoch": 9,
+  "runner_up_score": 0.7455,
+  "margin": 0.0026,
+  "t_sel": 0.8717410564422607,
+  "t_pass": 0.635680079460144,
+  "val_fp_at_sel": 535,
+  "epochs": 20,
+  "tests": {
+   "COLO829T_ONT_d46": {
+    "test_tensors": 69771,
+    "test_non": 49233,
+    "test_offref_non": 5401,
+    "positives": 1983,
+    "sel_tp": 1483,
+    "sel_fp": 630,
+    "sel_fp_offref": 2,
+    "sel_prf_with": [
+     0.7018,
+     0.7479,
+     0.7241
+    ],
+    "sel_prf_without_offref": [
+     0.7025,
+     0.7479,
+     0.7245
+    ],
+    "pass_tp": 1742,
+    "pass_fp": 1337,
+    "pass_fp_offref": 12,
+    "pass_prf_with": [
+     0.5658,
+     0.8785,
+     0.6883
+    ],
+    "pass_prf_without_offref": [
+     0.568,
+     0.8785,
+     0.6899
+    ]
+   }
+  }
+ },
+ "COLO829_ONT_SNV_d46_normbq_s2": {
+  "kind": "SNV",
+  "val_offref_non": 3209,
+  "val_tensors": 43878,
+  "val_non": 27335,
+  "val_somatic": 1622,
+  "val_germline": 14921,
+  "best_epoch": 8,
+  "best_epoch_metrics": 8,
+  "best_score": 0.7352,
+  "runner_up_epoch": 7,
+  "runner_up_score": 0.7319,
+  "margin": 0.0033,
+  "t_sel": 0.7666553854942322,
+  "t_pass": 0.519908607006073,
+  "val_fp_at_sel": 582,
+  "epochs": 20,
+  "tests": {
+   "COLO829T_ONT_d46": {
+    "test_tensors": 69771,
+    "test_non": 49233,
+    "test_offref_non": 5401,
+    "positives": 1983,
+    "sel_tp": 1543,
+    "sel_fp": 752,
+    "sel_fp_offref": 3,
+    "sel_prf_with": [
+     0.6723,
+     0.7781,
+     0.7214
+    ],
+    "sel_prf_without_offref": [
+     0.6732,
+     0.7781,
+     0.7219
+    ],
+    "pass_tp": 1784,
+    "pass_fp": 1623,
+    "pass_fp_offref": 7,
+    "pass_prf_with": [
+     0.5236,
+     0.8996,
+     0.662
+    ],
+    "pass_prf_without_offref": [
+     0.5247,
+     0.8996,
+     0.6628
+    ]
+   }
+  }
+ },
+ "COLO829_fiberseq_SNV_d46_normbq": {
+  "kind": "SNV",
+  "val_offref_non": 2546,
+  "val_tensors": 23653,
+  "val_non": 8016,
+  "val_somatic": 1725,
+  "val_germline": 13912,
+  "best_epoch": 9,
+  "best_epoch_metrics": 9,
+  "best_score": 0.7746,
+  "runner_up_epoch": 10,
+  "runner_up_score": 0.7698,
+  "margin": 0.0048,
+  "t_sel": 0.7271154522895813,
+  "t_pass": 0.4792889654636383,
+  "val_fp_at_sel": 474,
+  "epochs": 20,
+  "tests": {
+   "COLO829T_fiberseq_d46": {
+    "test_tensors": 26608,
+    "test_non": 8043,
+    "test_offref_non": 3724,
+    "positives": 1995,
+    "sel_tp": 1552,
+    "sel_fp": 480,
+    "sel_fp_offref": 1,
+    "sel_prf_with": [
+     0.7638,
+     0.7779,
+     0.7708
+    ],
+    "sel_prf_without_offref": [
+     0.7642,
+     0.7779,
+     0.771
+    ],
+    "pass_tp": 1760,
+    "pass_fp": 899,
+    "pass_fp_offref": 5,
+    "pass_prf_with": [
+     0.6619,
+     0.8822,
+     0.7563
+    ],
+    "pass_prf_without_offref": [
+     0.6631,
+     0.8822,
+     0.7572
+    ]
+   }
+  }
+ },
+ "COLO829_fiberseq_SNV_d46_normbq_s1": {
+  "kind": "SNV",
+  "val_offref_non": 2321,
+  "val_tensors": 26095,
+  "val_non": 10575,
+  "val_somatic": 1726,
+  "val_germline": 13794,
+  "best_epoch": 8,
+  "best_epoch_metrics": 8,
+  "best_score": 0.7631,
+  "runner_up_epoch": 10,
+  "runner_up_score": 0.7571,
+  "margin": 0.006,
+  "t_sel": 0.7029312252998352,
+  "t_pass": 0.47036322951316833,
+  "val_fp_at_sel": 501,
+  "epochs": 20,
+  "tests": {
+   "COLO829T_fiberseq_d46": {
+    "test_tensors": 26608,
+    "test_non": 8043,
+    "test_offref_non": 3724,
+    "positives": 1995,
+    "sel_tp": 1558,
+    "sel_fp": 531,
+    "sel_fp_offref": 0,
+    "sel_prf_with": [
+     0.7458,
+     0.781,
+     0.763
+    ],
+    "sel_prf_without_offref": [
+     0.7458,
+     0.781,
+     0.763
+    ],
+    "pass_tp": 1768,
+    "pass_fp": 1004,
+    "pass_fp_offref": 3,
+    "pass_prf_with": [
+     0.6378,
+     0.8862,
+     0.7418
+    ],
+    "pass_prf_without_offref": [
+     0.6385,
+     0.8862,
+     0.7422
+    ]
+   }
+  }
+ },
+ "COLO829_fiberseq_SNV_d46_normbq_s2": {
+  "kind": "SNV",
+  "val_offref_non": 2341,
+  "val_tensors": 22782,
+  "val_non": 6766,
+  "val_somatic": 1641,
+  "val_germline": 14375,
+  "best_epoch": 10,
+  "best_epoch_metrics": 10,
+  "best_score": 0.7514,
+  "runner_up_epoch": 12,
+  "runner_up_score": 0.7405,
+  "margin": 0.0109,
+  "t_sel": 0.7313368320465088,
+  "t_pass": 0.3675096929073334,
+  "val_fp_at_sel": 441,
+  "epochs": 20,
+  "tests": {
+   "COLO829T_fiberseq_d46": {
+    "test_tensors": 26608,
+    "test_non": 8043,
+    "test_offref_non": 3724,
+    "positives": 1995,
+    "sel_tp": 1542,
+    "sel_fp": 460,
+    "sel_fp_offref": 0,
+    "sel_prf_with": [
+     0.7702,
+     0.7729,
+     0.7716
+    ],
+    "sel_prf_without_offref": [
+     0.7702,
+     0.7729,
+     0.7716
+    ],
+    "pass_tp": 1829,
+    "pass_fp": 1170,
+    "pass_fp_offref": 3,
+    "pass_prf_with": [
+     0.6099,
+     0.9168,
+     0.7325
+    ],
+    "pass_prf_without_offref": [
+     0.6105,
+     0.9168,
+     0.7329
+    ]
+   }
+  }
+ },
+ "HG008_Illumina_SNV_d46_normbq": {
+  "kind": "SNV",
+  "val_offref_non": 4059,
+  "val_tensors": 93488,
+  "val_non": 80578,
+  "val_somatic": 357,
+  "val_germline": 12553,
+  "best_epoch": 5,
+  "best_epoch_metrics": 5,
+  "best_score": 0.3926,
+  "runner_up_epoch": 6,
+  "runner_up_score": 0.3911,
+  "margin": 0.0014,
+  "t_sel": 0.7901567816734314,
+  "t_pass": 0.3172060251235962,
+  "val_fp_at_sel": 507,
+  "epochs": 20,
+  "tests": {
+   "HG008T_Illumina_d46": {
+    "test_tensors": 185402,
+    "test_non": 164462,
+    "test_offref_non": 7972,
+    "positives": 665,
+    "sel_tp": 404,
+    "sel_fp": 907,
+    "sel_fp_offref": 1,
+    "sel_prf_with": [
+     0.3082,
+     0.6075,
+     0.4089
+    ],
+    "sel_prf_without_offref": [
+     0.3084,
+     0.6075,
+     0.4091
+    ],
+    "pass_tp": 617,
+    "pass_fp": 2877,
+    "pass_fp_offref": 27,
+    "pass_prf_with": [
+     0.1766,
+     0.9278,
+     0.2967
+    ],
+    "pass_prf_without_offref": [
+     0.178,
+     0.9278,
+     0.2986
+    ]
+   }
+  }
+ },
+ "HG008_Illumina_SNV_d46_normbq_s1": {
+  "kind": "SNV",
+  "val_offref_non": 4347,
+  "val_tensors": 94397,
+  "val_non": 83039,
+  "val_somatic": 340,
+  "val_germline": 11018,
+  "best_epoch": 5,
+  "best_epoch_metrics": 5,
+  "best_score": 0.3939,
+  "runner_up_epoch": 7,
+  "runner_up_score": 0.374,
+  "margin": 0.0199,
+  "t_sel": 0.8335391283035278,
+  "t_pass": 0.5501990914344788,
+  "val_fp_at_sel": 451,
+  "epochs": 20,
+  "tests": {
+   "HG008T_Illumina_d46": {
+    "test_tensors": 185402,
+    "test_non": 164462,
+    "test_offref_non": 7972,
+    "positives": 665,
+    "sel_tp": 369,
+    "sel_fp": 814,
+    "sel_fp_offref": 0,
+    "sel_prf_with": [
+     0.3119,
+     0.5549,
+     0.3994
+    ],
+    "sel_prf_without_offref": [
+     0.3119,
+     0.5549,
+     0.3994
+    ],
+    "pass_tp": 598,
+    "pass_fp": 2225,
+    "pass_fp_offref": 6,
+    "pass_prf_with": [
+     0.2118,
+     0.8992,
+     0.3429
+    ],
+    "pass_prf_without_offref": [
+     0.2123,
+     0.8992,
+     0.3435
+    ]
+   }
+  }
+ },
+ "HG008_Illumina_SNV_d46_normbq_s2": {
+  "kind": "SNV",
+  "val_offref_non": 3951,
+  "val_tensors": 95949,
+  "val_non": 82800,
+  "val_somatic": 346,
+  "val_germline": 12803,
+  "best_epoch": 6,
+  "best_epoch_metrics": 6,
+  "best_score": 0.3957,
+  "runner_up_epoch": 3,
+  "runner_up_score": 0.3931,
+  "margin": 0.0025,
+  "t_sel": 0.7279312014579773,
+  "t_pass": 0.3520398437976837,
+  "val_fp_at_sel": 473,
+  "epochs": 20,
+  "tests": {
+   "HG008T_Illumina_d46": {
+    "test_tensors": 185402,
+    "test_non": 164462,
+    "test_offref_non": 7972,
+    "positives": 665,
+    "sel_tp": 379,
+    "sel_fp": 757,
+    "sel_fp_offref": 1,
+    "sel_prf_with": [
+     0.3336,
+     0.5699,
+     0.4209
+    ],
+    "sel_prf_without_offref": [
+     0.3339,
+     0.5699,
+     0.4211
+    ],
+    "pass_tp": 589,
+    "pass_fp": 2371,
+    "pass_fp_offref": 44,
+    "pass_prf_with": [
+     0.199,
+     0.8857,
+     0.325
+    ],
+    "pass_prf_without_offref": [
+     0.202,
+     0.8857,
+     0.329
+    ]
+   }
+  }
+ },
+ "HG008_ONT_SNV_d46_normbq": {
+  "kind": "SNV",
+  "val_offref_non": 1748,
+  "val_tensors": 22659,
+  "val_non": 9488,
+  "val_somatic": 355,
+  "val_germline": 12816,
+  "best_epoch": 9,
+  "best_epoch_metrics": 9,
+  "best_score": 0.3813,
+  "runner_up_epoch": 7,
+  "runner_up_score": 0.3794,
+  "margin": 0.0019,
+  "t_sel": 0.7152201533317566,
+  "t_pass": 0.2210763841867447,
+  "val_fp_at_sel": 460,
+  "epochs": 20,
+  "tests": {
+   "HG008T_ONT_d46": {
+    "test_tensors": 40252,
+    "test_non": 18337,
+    "test_offref_non": 3020,
+    "positives": 665,
+    "sel_tp": 364,
+    "sel_fp": 806,
+    "sel_fp_offref": 1,
+    "sel_prf_with": [
+     0.3111,
+     0.5474,
+     0.3967
+    ],
+    "sel_prf_without_offref": [
+     0.3114,
+     0.5474,
+     0.3969
+    ],
+    "pass_tp": 626,
+    "pass_fp": 3013,
+    "pass_fp_offref": 21,
+    "pass_prf_with": [
+     0.172,
+     0.9414,
+     0.2909
+    ],
+    "pass_prf_without_offref": [
+     0.173,
+     0.9414,
+     0.2923
+    ]
+   }
+  }
+ },
+ "HG008_ONT_SNV_d46_normbq_s1": {
+  "kind": "SNV",
+  "val_offref_non": 1391,
+  "val_tensors": 25702,
+  "val_non": 12636,
+  "val_somatic": 338,
+  "val_germline": 12728,
+  "best_epoch": 12,
+  "best_epoch_metrics": 12,
+  "best_score": 0.3919,
+  "runner_up_epoch": 8,
+  "runner_up_score": 0.3892,
+  "margin": 0.0027,
+  "t_sel": 0.8908542394638062,
+  "t_pass": 0.4091297388076782,
+  "val_fp_at_sel": 421,
+  "epochs": 20,
+  "tests": {
+   "HG008T_ONT_d46": {
+    "test_tensors": 40252,
+    "test_non": 18337,
+    "test_offref_non": 3020,
+    "positives": 665,
+    "sel_tp": 361,
+    "sel_fp": 793,
+    "sel_fp_offref": 0,
+    "sel_prf_with": [
+     0.3128,
+     0.5429,
+     0.3969
+    ],
+    "sel_prf_without_offref": [
+     0.3128,
+     0.5429,
+     0.3969
+    ],
+    "pass_tp": 616,
+    "pass_fp": 2590,
+    "pass_fp_offref": 8,
+    "pass_prf_with": [
+     0.1921,
+     0.9263,
+     0.3183
+    ],
+    "pass_prf_without_offref": [
+     0.1926,
+     0.9263,
+     0.3189
+    ]
+   }
+  }
+ },
+ "HG008_ONT_SNV_d46_normbq_s2": {
+  "kind": "SNV",
+  "val_offref_non": 1577,
+  "val_tensors": 24736,
+  "val_non": 10326,
+  "val_somatic": 340,
+  "val_germline": 14070,
+  "best_epoch": 8,
+  "best_epoch_metrics": 8,
+  "best_score": 0.4136,
+  "runner_up_epoch": 7,
+  "runner_up_score": 0.4072,
+  "margin": 0.0064,
+  "t_sel": 0.7176294922828674,
+  "t_pass": 0.31078261137008667,
+  "val_fp_at_sel": 408,
+  "epochs": 20,
+  "tests": {
+   "HG008T_ONT_d46": {
+    "test_tensors": 40252,
+    "test_non": 18337,
+    "test_offref_non": 3020,
+    "positives": 665,
+    "sel_tp": 339,
+    "sel_fp": 698,
+    "sel_fp_offref": 0,
+    "sel_prf_with": [
+     0.3269,
+     0.5098,
+     0.3984
+    ],
+    "sel_prf_without_offref": [
+     0.3269,
+     0.5098,
+     0.3984
+    ],
+    "pass_tp": 591,
+    "pass_fp": 2225,
+    "pass_fp_offref": 1,
+    "pass_prf_with": [
+     0.2099,
+     0.8887,
+     0.3396
+    ],
+    "pass_prf_without_offref": [
+     0.2099,
+     0.8887,
+     0.3397
+    ]
+   }
+  }
+ },
+ "HG008_PacBio_SNV_d46_normbq": {
+  "kind": "SNV",
+  "val_offref_non": 1784,
+  "val_tensors": 17490,
+  "val_non": 4509,
+  "val_somatic": 350,
+  "val_germline": 12631,
+  "best_epoch": 7,
+  "best_epoch_metrics": 7,
+  "best_score": 0.3927,
+  "runner_up_epoch": 6,
+  "runner_up_score": 0.3823,
+  "margin": 0.0104,
+  "t_sel": 0.7952553033828735,
+  "t_pass": 0.2853841781616211,
+  "val_fp_at_sel": 313,
+  "epochs": 20,
+  "tests": {
+   "HG008T_PacBio_d46": {
+    "test_tensors": 27501,
+    "test_non": 6110,
+    "test_offref_non": 2930,
+    "positives": 661,
+    "sel_tp": 326,
+    "sel_fp": 593,
+    "sel_fp_offref": 0,
+    "sel_prf_with": [
+     0.3547,
+     0.4932,
+     0.4127
+    ],
+    "sel_prf_without_offref": [
+     0.3547,
+     0.4932,
+     0.4127
+    ],
+    "pass_tp": 608,
+    "pass_fp": 2644,
+    "pass_fp_offref": 5,
+    "pass_prf_with": [
+     0.187,
+     0.9198,
+     0.3108
+    ],
+    "pass_prf_without_offref": [
+     0.1872,
+     0.9198,
+     0.3112
+    ]
+   }
+  }
+ },
+ "HG008_PacBio_SNV_d46_normbq_s1": {
+  "kind": "SNV",
+  "val_offref_non": 1367,
+  "val_tensors": 17297,
+  "val_non": 5495,
+  "val_somatic": 337,
+  "val_germline": 11465,
+  "best_epoch": 7,
+  "best_epoch_metrics": 7,
+  "best_score": 0.3829,
+  "runner_up_epoch": 9,
+  "runner_up_score": 0.3824,
+  "margin": 0.0006,
+  "t_sel": 0.7279338836669922,
+  "t_pass": 0.3997536897659302,
+  "val_fp_at_sel": 478,
+  "epochs": 20,
+  "tests": {
+   "HG008T_PacBio_d46": {
+    "test_tensors": 27501,
+    "test_non": 6110,
+    "test_offref_non": 2930,
+    "positives": 661,
+    "sel_tp": 368,
+    "sel_fp": 762,
+    "sel_fp_offref": 0,
+    "sel_prf_with": [
+     0.3257,
+     0.5567,
+     0.4109
+    ],
+    "sel_prf_without_offref": [
+     0.3257,
+     0.5567,
+     0.4109
+    ],
+    "pass_tp": 585,
+    "pass_fp": 2049,
+    "pass_fp_offref": 2,
+    "pass_prf_with": [
+     0.2221,
+     0.885,
+     0.3551
+    ],
+    "pass_prf_without_offref": [
+     0.2223,
+     0.885,
+     0.3553
+    ]
+   }
+  }
+ },
+ "HG008_PacBio_SNV_d46_normbq_s2": {
+  "kind": "SNV",
+  "val_offref_non": 1622,
+  "val_tensors": 17180,
+  "val_non": 3818,
+  "val_somatic": 342,
+  "val_germline": 13020,
+  "best_epoch": 7,
+  "best_epoch_metrics": 7,
+  "best_score": 0.4155,
+  "runner_up_epoch": 9,
+  "runner_up_score": 0.4117,
+  "margin": 0.0039,
+  "t_sel": 0.7488455772399902,
+  "t_pass": 0.34464865922927856,
+  "val_fp_at_sel": 352,
+  "epochs": 20,
+  "tests": {
+   "HG008T_PacBio_d46": {
+    "test_tensors": 27501,
+    "test_non": 6110,
+    "test_offref_non": 2930,
+    "positives": 661,
+    "sel_tp": 339,
+    "sel_fp": 586,
+    "sel_fp_offref": 0,
+    "sel_prf_with": [
+     0.3665,
+     0.5129,
+     0.4275
+    ],
+    "sel_prf_without_offref": [
+     0.3665,
+     0.5129,
+     0.4275
+    ],
+    "pass_tp": 586,
+    "pass_fp": 2173,
+    "pass_fp_offref": 1,
+    "pass_prf_with": [
+     0.2124,
+     0.8865,
+     0.3427
+    ],
+    "pass_prf_without_offref": [
+     0.2125,
+     0.8865,
+     0.3428
+    ]
+   }
+  }
+ },
+ "release_s0_Illumina_INDEL": {
+  "kind": "INDEL",
+  "val_offref_non": 8813,
+  "val_tensors": 49841,
+  "val_non": 29942,
+  "val_somatic": 653,
+  "val_germline": 19246,
+  "best_epoch": 2,
+  "best_epoch_metrics": 2,
+  "best_score": 0.5449,
+  "runner_up_epoch": 3,
+  "runner_up_score": 0.5296,
+  "margin": 0.0152,
+  "t_sel": 0.622333824634552,
+  "t_pass": 0.38437458872795105,
+  "val_fp_at_sel": 271,
+  "epochs": 12,
+  "tests": {
+   "COLO829T_Illumina_d46": {
+    "test_tensors": 8488,
+    "test_non": 4530,
+    "test_offref_non": 1346,
+    "positives": 81,
+    "sel_tp": 6,
+    "sel_fp": 10,
+    "sel_fp_offref": 2,
+    "sel_prf_with": [
+     0.375,
+     0.0741,
+     0.1237
+    ],
+    "sel_prf_without_offref": [
+     0.4286,
+     0.0741,
+     0.1263
+    ],
+    "pass_tp": 17,
+    "pass_fp": 164,
+    "pass_fp_offref": 116,
+    "pass_prf_with": [
+     0.0939,
+     0.2099,
+     0.1298
+    ],
+    "pass_prf_without_offref": [
+     0.2615,
+     0.2099,
+     0.2329
+    ]
+   },
+   "HG008T_Illumina_d46": {
+    "test_tensors": 8716,
+    "test_non": 3549,
+    "test_offref_non": 1696,
+    "positives": 390,
+    "sel_tp": 24,
+    "sel_fp": 38,
+    "sel_fp_offref": 8,
+    "sel_prf_with": [
+     0.3871,
+     0.0615,
+     0.1062
+    ],
+    "sel_prf_without_offref": [
+     0.4444,
+     0.0615,
+     0.1081
+    ],
+    "pass_tp": 80,
+    "pass_fp": 223,
+    "pass_fp_offref": 116,
+    "pass_prf_with": [
+     0.264,
+     0.2051,
+     0.2309
+    ],
+    "pass_prf_without_offref": [
+     0.4278,
+     0.2051,
+     0.2773
+    ]
+   }
+  }
+ },
+ "release_s0_ONT_INDEL": {
+  "kind": "INDEL",
+  "val_offref_non": 53317,
+  "val_tensors": 868291,
+  "val_non": 813478,
+  "val_somatic": 649,
+  "val_germline": 54164,
+  "best_epoch": 5,
+  "best_epoch_metrics": 5,
+  "best_score": 0.5335,
+  "runner_up_epoch": 4,
+  "runner_up_score": 0.526,
+  "margin": 0.0076,
+  "t_sel": 0.7489863634109497,
+  "t_pass": 0.3256518840789795,
+  "val_fp_at_sel": 280,
+  "epochs": 12,
+  "tests": {
+   "COLO829T_ONT_d46": {
+    "test_tensors": 388266,
+    "test_non": 369168,
+    "test_offref_non": 24416,
+    "positives": 105,
+    "sel_tp": 11,
+    "sel_fp": 46,
+    "sel_fp_offref": 1,
+    "sel_prf_with": [
+     0.193,
+     0.1048,
+     0.1358
+    ],
+    "sel_prf_without_offref": [
+     0.1964,
+     0.1048,
+     0.1366
+    ],
+    "pass_tp": 24,
+    "pass_fp": 312,
+    "pass_fp_offref": 75,
+    "pass_prf_with": [
+     0.0714,
+     0.2286,
+     0.1088
+    ],
+    "pass_prf_without_offref": [
+     0.092,
+     0.2286,
+     0.1311
+    ]
+   },
+   "HG008T_ONT_d46": {
+    "test_tensors": 206591,
+    "test_non": 190345,
+    "test_offref_non": 16906,
+    "positives": 462,
+    "sel_tp": 47,
+    "sel_fp": 46,
+    "sel_fp_offref": 3,
+    "sel_prf_with": [
+     0.5054,
+     0.1017,
+     0.1694
+    ],
+    "sel_prf_without_offref": [
+     0.5222,
+     0.1017,
+     0.1703
+    ],
+    "pass_tp": 94,
+    "pass_fp": 486,
+    "pass_fp_offref": 117,
+    "pass_prf_with": [
+     0.1621,
+     0.2035,
+     0.1804
+    ],
+    "pass_prf_without_offref": [
+     0.203,
+     0.2035,
+     0.2032
+    ]
+   }
+  }
+ },
+ "release_s0_PacBio_INDEL": {
+  "kind": "INDEL",
+  "val_offref_non": 31560,
+  "val_tensors": 449980,
+  "val_non": 405393,
+  "val_somatic": 682,
+  "val_germline": 43905,
+  "best_epoch": 7,
+  "best_epoch_metrics": 7,
+  "best_score": 0.5734,
+  "runner_up_epoch": 6,
+  "runner_up_score": 0.5719,
+  "margin": 0.0016,
+  "t_sel": 0.8412442207336426,
+  "t_pass": 0.6854676604270935,
+  "val_fp_at_sel": 246,
+  "epochs": 12,
+  "tests": {
+   "COLO829T_fiberseq_d46": {
+    "test_tensors": 161692,
+    "test_non": 146068,
+    "test_offref_non": 14426,
+    "positives": 103,
+    "sel_tp": 11,
+    "sel_fp": 11,
+    "sel_fp_offref": 1,
+    "sel_prf_with": [
+     0.5,
+     0.1068,
+     0.176
+    ],
+    "sel_prf_without_offref": [
+     0.5238,
+     0.1068,
+     0.1774
+    ],
+    "pass_tp": 15,
+    "pass_fp": 36,
+    "pass_fp_offref": 10,
+    "pass_prf_with": [
+     0.2941,
+     0.1456,
+     0.1948
+    ],
+    "pass_prf_without_offref": [
+     0.3659,
+     0.1456,
+     0.2083
+    ]
+   },
+   "HG008T_PacBio_d46": {
+    "test_tensors": 154364,
+    "test_non": 139353,
+    "test_offref_non": 11224,
+    "positives": 489,
+    "sel_tp": 65,
+    "sel_fp": 62,
+    "sel_fp_offref": 13,
+    "sel_prf_with": [
+     0.5118,
+     0.1329,
+     0.211
+    ],
+    "sel_prf_without_offref": [
+     0.5702,
+     0.1329,
+     0.2156
+    ],
+    "pass_tp": 96,
+    "pass_fp": 132,
+    "pass_fp_offref": 24,
+    "pass_prf_with": [
+     0.4211,
+     0.1963,
+     0.2678
+    ],
+    "pass_prf_without_offref": [
+     0.4706,
+     0.1963,
+     0.2771
+    ]
+   }
+  }
+ },
+ "release_s1_Illumina_INDEL": {
+  "kind": "INDEL",
+  "val_offref_non": 8927,
+  "val_tensors": 52372,
+  "val_non": 32665,
+  "val_somatic": 623,
+  "val_germline": 19084,
+  "best_epoch": 1,
+  "best_epoch_metrics": 1,
+  "best_score": 0.5194,
+  "runner_up_epoch": 6,
+  "runner_up_score": 0.5156,
+  "margin": 0.0037,
+  "t_sel": 0.39170271158218384,
+  "t_pass": 0.19937816262245178,
+  "val_fp_at_sel": 295,
+  "epochs": 12,
+  "tests": {
+   "COLO829T_Illumina_d46": {
+    "test_tensors": 8488,
+    "test_non": 4530,
+    "test_offref_non": 1346,
+    "positives": 81,
+    "sel_tp": 5,
+    "sel_fp": 27,
+    "sel_fp_offref": 3,
+    "sel_prf_with": [
+     0.1562,
+     0.0617,
+     0.0885
+    ],
+    "sel_prf_without_offref": [
+     0.1724,
+     0.0617,
+     0.0909
+    ],
+    "pass_tp": 18,
+    "pass_fp": 98,
+    "pass_fp_offref": 9,
+    "pass_prf_with": [
+     0.1552,
+     0.2222,
+     0.1827
+    ],
+    "pass_prf_without_offref": [
+     0.1682,
+     0.2222,
+     0.1915
+    ]
+   },
+   "HG008T_Illumina_d46": {
+    "test_tensors": 8716,
+    "test_non": 3549,
+    "test_offref_non": 1696,
+    "positives": 390,
+    "sel_tp": 37,
+    "sel_fp": 49,
+    "sel_fp_offref": 1,
+    "sel_prf_with": [
+     0.4302,
+     0.0949,
+     0.1555
+    ],
+    "sel_prf_without_offref": [
+     0.4353,
+     0.0949,
+     0.1558
+    ],
+    "pass_tp": 83,
+    "pass_fp": 143,
+    "pass_fp_offref": 10,
+    "pass_prf_with": [
+     0.3673,
+     0.2128,
+     0.2695
+    ],
+    "pass_prf_without_offref": [
+     0.3843,
+     0.2128,
+     0.2739
+    ]
+   }
+  }
+ },
+ "release_s1_ONT_INDEL": {
+  "kind": "INDEL",
+  "val_offref_non": 53774,
+  "val_tensors": 858330,
+  "val_non": 803935,
+  "val_somatic": 620,
+  "val_germline": 53775,
+  "best_epoch": 6,
+  "best_epoch_metrics": 6,
+  "best_score": 0.5433,
+  "runner_up_epoch": 7,
+  "runner_up_score": 0.5398,
+  "margin": 0.0035,
+  "t_sel": 0.7716135382652283,
+  "t_pass": 0.24007463455200195,
+  "val_fp_at_sel": 230,
+  "epochs": 12,
+  "tests": {
+   "COLO829T_ONT_d46": {
+    "test_tensors": 388266,
+    "test_non": 369168,
+    "test_offref_non": 24416,
+    "positives": 105,
+    "sel_tp": 11,
+    "sel_fp": 40,
+    "sel_fp_offref": 1,
+    "sel_prf_with": [
+     0.2157,
+     0.1048,
+     0.141
+    ],
+    "sel_prf_without_offref": [
+     0.22,
+     0.1048,
+     0.1419
+    ],
+    "pass_tp": 22,
+    "pass_fp": 375,
+    "pass_fp_offref": 47,
+    "pass_prf_with": [
+     0.0554,
+     0.2095,
+     0.0876
+    ],
+    "pass_prf_without_offref": [
+     0.0629,
+     0.2095,
+     0.0967
+    ]
+   },
+   "HG008T_ONT_d46": {
+    "test_tensors": 206591,
+    "test_non": 190345,
+    "test_offref_non": 16906,
+    "positives": 462,
+    "sel_tp": 44,
+    "sel_fp": 43,
+    "sel_fp_offref": 3,
+    "sel_prf_with": [
+     0.5057,
+     0.0952,
+     0.1603
+    ],
+    "sel_prf_without_offref": [
+     0.5238,
+     0.0952,
+     0.1612
+    ],
+    "pass_tp": 97,
+    "pass_fp": 445,
+    "pass_fp_offref": 110,
+    "pass_prf_with": [
+     0.179,
+     0.21,
+     0.1932
+    ],
+    "pass_prf_without_offref": [
+     0.2245,
+     0.21,
+     0.217
+    ]
+   }
+  }
+ },
+ "release_s1_PacBio_INDEL": {
+  "kind": "INDEL",
+  "val_offref_non": 32686,
+  "val_tensors": 459514,
+  "val_non": 415083,
+  "val_somatic": 664,
+  "val_germline": 43767,
+  "best_epoch": 6,
+  "best_epoch_metrics": 6,
+  "best_score": 0.5645,
+  "runner_up_epoch": 3,
+  "runner_up_score": 0.5636,
+  "margin": 0.0009,
+  "t_sel": 0.8283752202987671,
+  "t_pass": 0.6684039235115051,
+  "val_fp_at_sel": 254,
+  "epochs": 12,
+  "tests": {
+   "COLO829T_fiberseq_d46": {
+    "test_tensors": 161692,
+    "test_non": 146068,
+    "test_offref_non": 14426,
+    "positives": 103,
+    "sel_tp": 13,
+    "sel_fp": 22,
+    "sel_fp_offref": 0,
+    "sel_prf_with": [
+     0.3714,
+     0.1262,
+     0.1884
+    ],
+    "sel_prf_without_offref": [
+     0.3714,
+     0.1262,
+     0.1884
+    ],
+    "pass_tp": 18,
+    "pass_fp": 50,
+    "pass_fp_offref": 13,
+    "pass_prf_with": [
+     0.2647,
+     0.1748,
+     0.2105
+    ],
+    "pass_prf_without_offref": [
+     0.3273,
+     0.1748,
+     0.2278
+    ]
+   },
+   "HG008T_PacBio_d46": {
+    "test_tensors": 154364,
+    "test_non": 139353,
+    "test_offref_non": 11224,
+    "positives": 489,
+    "sel_tp": 70,
+    "sel_fp": 70,
+    "sel_fp_offref": 19,
+    "sel_prf_with": [
+     0.5,
+     0.1431,
+     0.2226
+    ],
+    "sel_prf_without_offref": [
+     0.5785,
+     0.1431,
+     0.2295
+    ],
+    "pass_tp": 108,
+    "pass_fp": 186,
+    "pass_fp_offref": 64,
+    "pass_prf_with": [
+     0.3673,
+     0.2209,
+     0.2759
+    ],
+    "pass_prf_without_offref": [
+     0.4696,
+     0.2209,
+     0.3004
+    ]
+   }
+  }
+ },
+ "release_s2_Illumina_INDEL": {
+  "kind": "INDEL",
+  "val_offref_non": 9314,
+  "val_tensors": 52719,
+  "val_non": 32561,
+  "val_somatic": 648,
+  "val_germline": 19510,
+  "best_epoch": 4,
+  "best_epoch_metrics": 4,
+  "best_score": 0.5139,
+  "runner_up_epoch": 1,
+  "runner_up_score": 0.482,
+  "margin": 0.0319,
+  "t_sel": 0.8004040122032166,
+  "t_pass": 0.5997829437255859,
+  "val_fp_at_sel": 260,
+  "epochs": 12,
+  "tests": {
+   "COLO829T_Illumina_d46": {
+    "test_tensors": 8488,
+    "test_non": 4530,
+    "test_offref_non": 1346,
+    "positives": 81,
+    "sel_tp": 9,
+    "sel_fp": 49,
+    "sel_fp_offref": 38,
+    "sel_prf_with": [
+     0.1552,
+     0.1111,
+     0.1295
+    ],
+    "sel_prf_without_offref": [
+     0.45,
+     0.1111,
+     0.1782
+    ],
+    "pass_tp": 17,
+    "pass_fp": 155,
+    "pass_fp_offref": 124,
+    "pass_prf_with": [
+     0.0988,
+     0.2099,
+     0.1344
+    ],
+    "pass_prf_without_offref": [
+     0.3542,
+     0.2099,
+     0.2636
+    ]
+   },
+   "HG008T_Illumina_d46": {
+    "test_tensors": 8716,
+    "test_non": 3549,
+    "test_offref_non": 1696,
+    "positives": 390,
+    "sel_tp": 46,
+    "sel_fp": 92,
+    "sel_fp_offref": 64,
+    "sel_prf_with": [
+     0.3333,
+     0.1179,
+     0.1742
+    ],
+    "sel_prf_without_offref": [
+     0.6216,
+     0.1179,
+     0.1983
+    ],
+    "pass_tp": 106,
+    "pass_fp": 240,
+    "pass_fp_offref": 137,
+    "pass_prf_with": [
+     0.3064,
+     0.2718,
+     0.288
+    ],
+    "pass_prf_without_offref": [
+     0.5072,
+     0.2718,
+     0.3539
+    ]
+   }
+  }
+ },
+ "release_s2_ONT_INDEL": {
+  "kind": "INDEL",
+  "val_offref_non": 54260,
+  "val_tensors": 867230,
+  "val_non": 812565,
+  "val_somatic": 650,
+  "val_germline": 54015,
+  "best_epoch": 5,
+  "best_epoch_metrics": 5,
+  "best_score": 0.5082,
+  "runner_up_epoch": 6,
+  "runner_up_score": 0.5079,
+  "margin": 0.0002,
+  "t_sel": 0.8755925297737122,
+  "t_pass": 0.2895215153694153,
+  "val_fp_at_sel": 219,
+  "epochs": 12,
+  "tests": {
+   "COLO829T_ONT_d46": {
+    "test_tensors": 388266,
+    "test_non": 369168,
+    "test_offref_non": 24416,
+    "positives": 105,
+    "sel_tp": 9,
+    "sel_fp": 22,
+    "sel_fp_offref": 0,
+    "sel_prf_with": [
+     0.2903,
+     0.0857,
+     0.1324
+    ],
+    "sel_prf_without_offref": [
+     0.2903,
+     0.0857,
+     0.1324
+    ],
+    "pass_tp": 24,
+    "pass_fp": 555,
+    "pass_fp_offref": 133,
+    "pass_prf_with": [
+     0.0415,
+     0.2286,
+     0.0702
+    ],
+    "pass_prf_without_offref": [
+     0.0538,
+     0.2286,
+     0.0871
+    ]
+   },
+   "HG008T_ONT_d46": {
+    "test_tensors": 206591,
+    "test_non": 190345,
+    "test_offref_non": 16906,
+    "positives": 462,
+    "sel_tp": 46,
+    "sel_fp": 39,
+    "sel_fp_offref": 1,
+    "sel_prf_with": [
+     0.5412,
+     0.0996,
+     0.1682
+    ],
+    "sel_prf_without_offref": [
+     0.5476,
+     0.0996,
+     0.1685
+    ],
+    "pass_tp": 100,
+    "pass_fp": 704,
+    "pass_fp_offref": 177,
+    "pass_prf_with": [
+     0.1244,
+     0.2165,
+     0.158
+    ],
+    "pass_prf_without_offref": [
+     0.1595,
+     0.2165,
+     0.1837
+    ]
+   }
+  }
+ },
+ "release_s2_PacBio_INDEL": {
+  "kind": "INDEL",
+  "val_offref_non": 32576,
+  "val_tensors": 482557,
+  "val_non": 437500,
+  "val_somatic": 680,
+  "val_germline": 44377,
+  "best_epoch": 8,
+  "best_epoch_metrics": 8,
+  "best_score": 0.5667,
+  "runner_up_epoch": 9,
+  "runner_up_score": 0.5655,
+  "margin": 0.0012,
+  "t_sel": 0.8264174461364746,
+  "t_pass": 0.7070106863975525,
+  "val_fp_at_sel": 223,
+  "epochs": 12,
+  "tests": {
+   "COLO829T_fiberseq_d46": {
+    "test_tensors": 161692,
+    "test_non": 146068,
+    "test_offref_non": 14426,
+    "positives": 103,
+    "sel_tp": 6,
+    "sel_fp": 28,
+    "sel_fp_offref": 7,
+    "sel_prf_with": [
+     0.1765,
+     0.0583,
+     0.0876
+    ],
+    "sel_prf_without_offref": [
+     0.2222,
+     0.0583,
+     0.0923
+    ],
+    "pass_tp": 15,
+    "pass_fp": 56,
+    "pass_fp_offref": 19,
+    "pass_prf_with": [
+     0.2113,
+     0.1456,
+     0.1724
+    ],
+    "pass_prf_without_offref": [
+     0.2885,
+     0.1456,
+     0.1935
+    ]
+   },
+   "HG008T_PacBio_d46": {
+    "test_tensors": 154364,
+    "test_non": 139353,
+    "test_offref_non": 11224,
+    "positives": 489,
+    "sel_tp": 77,
+    "sel_fp": 72,
+    "sel_fp_offref": 26,
+    "sel_prf_with": [
+     0.5168,
+     0.1575,
+     0.2414
+    ],
+    "sel_prf_without_offref": [
+     0.626,
+     0.1575,
+     0.2516
+    ],
+    "pass_tp": 113,
+    "pass_fp": 168,
+    "pass_fp_offref": 68,
+    "pass_prf_with": [
+     0.4021,
+     0.2311,
+     0.2935
+    ],
+    "pass_prf_without_offref": [
+     0.5305,
+     0.2311,
+     0.3219
+    ]
+   }
+  }
+ }
+}

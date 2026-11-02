@@ -1,0 +1,615 @@
+{
+ "SNV": {
+  "truth_F": 392567,
+  "graph_carried": 175773,
+  "nonG": 216794,
+  "eval_E": 215094,
+  "E_minus_F": 0,
+  "E_and_graph": 1,
+  "extra_D": 1701,
+  "mutect2_eval_equals_pansoma_eval": true,
+  "mutect2_eval_n": 215094,
+  "D_tp_in_full_eval": 474,
+  "nonG_tp_full": 118308,
+  "categories": {
+   "within 1 bp of a graph-carried allele (the +-1 bp margin of the mask)": 1187,
+   "same VCF position as a graph-carried allele (another allele of the same site)": 383,
+   "REF span overlaps a graph-carried allele's REF span (different position)": 131
+  },
+  "by_mask_kind": {
+   "within 1 bp of a graph-carried allele (the +-1 bp margin of the mask) | masking allele kind: SNV": 967,
+   "within 1 bp of a graph-carried allele (the +-1 bp margin of the mask) | masking allele kind: INDEL": 210,
+   "same VCF position as a graph-carried allele (another allele of the same site) | masking allele kind: INDEL+SNV": 2,
+   "same VCF position as a graph-carried allele (another allele of the same site) | masking allele kind: SNV": 215,
+   "same VCF position as a graph-carried allele (another allele of the same site) | masking allele kind: INDEL": 166,
+   "REF span overlaps a graph-carried allele's REF span (different position) | masking allele kind: INDEL": 131,
+   "within 1 bp of a graph-carried allele (the +-1 bp margin of the mask) | masking allele kind: INDEL+SNV": 10
+  },
+  "by_mask_vaf": {
+   "within 1 bp of a graph-carried allele (the +-1 bp margin of the mask) | a masking allele at VAF 1-16.5 %: True": 1137,
+   "same VCF position as a graph-carried allele (another allele of the same site) | a masking allele at VAF 1-16.5 %: True": 363,
+   "REF span overlaps a graph-carried allele's REF span (different position) | a masking allele at VAF 1-16.5 %: False": 8,
+   "same VCF position as a graph-carried allele (another allele of the same site) | a masking allele at VAF 1-16.5 %: False": 20,
+   "REF span overlaps a graph-carried allele's REF span (different position) | a masking allele at VAF 1-16.5 %: True": 123,
+   "within 1 bp of a graph-carried allele (the +-1 bp margin of the mask) | a masking allele at VAF 1-16.5 %: False": 50
+  },
+  "detail": {
+   "within 1 bp of a graph-carried allele (the +-1 bp margin of the mask) / first base masked / REF span partly masked": 1187,
+   "same VCF position as a graph-carried allele (another allele of the same site) / first base masked / REF span partly masked": 383,
+   "REF span overlaps a graph-carried allele's REF span (different position) / first base masked / REF span partly masked": 131
+  },
+  "kept_records_within_1bp_of_mask": 0,
+  "examples": {
+   "within 1 bp of a graph-carried allele (the +-1 bp margin of the mask)": [
+    [
+     [
+      "chr1",
+      732227,
+      "A",
+      "T"
+     ],
+     [
+      [
+       732226,
+       "C",
+       "A"
+      ]
+     ]
+    ],
+    [
+     [
+      "chr1",
+      770502,
+      "G",
+      "A"
+     ],
+     [
+      [
+       770501,
+       "C",
+       "T"
+      ]
+     ]
+    ],
+    [
+     [
+      "chr1",
+      921796,
+      "G",
+      "A"
+     ],
+     [
+      [
+       921797,
+       "T",
+       "C"
+      ]
+     ]
+    ],
+    [
+     [
+      "chr1",
+      928253,
+      "G",
+      "A"
+     ],
+     [
+      [
+       928252,
+       "C",
+       "T"
+      ]
+     ]
+    ],
+    [
+     [
+      "chr1",
+      969371,
+      "G",
+      "A"
+     ],
+     [
+      [
+       969372,
+       "T",
+       "C"
+      ]
+     ]
+    ]
+   ],
+   "same VCF position as a graph-carried allele (another allele of the same site)": [
+    [
+     [
+      "chr1",
+      1502507,
+      "A",
+      "T"
+     ],
+     [
+      [
+       1502507,
+       "A",
+       "AT"
+      ],
+      [
+       1502507,
+       "A",
+       "C"
+      ]
+     ]
+    ],
+    [
+     [
+      "chr1",
+      1513923,
+      "G",
+      "T"
+     ],
+     [
+      [
+       1513923,
+       "G",
+       "C"
+      ]
+     ]
+    ],
+    [
+     [
+      "chr1",
+      2281985,
+      "G",
+      "A"
+     ],
+     [
+      [
+       2281985,
+       "G",
+       "GA"
+      ]
+     ]
+    ],
+    [
+     [
+      "chr1",
+      3203165,
+      "G",
+      "C"
+     ],
+     [
+      [
+       3203165,
+       "G",
+       "A"
+      ]
+     ]
+    ],
+    [
+     [
+      "chr1",
+      3465704,
+      "G",
+      "A"
+     ],
+     [
+      [
+       3465704,
+       "G",
+       "C"
+      ]
+     ]
+    ]
+   ],
+   "REF span overlaps a graph-carried allele's REF span (different position)": [
+    [
+     [
+      "chr1",
+      2826033,
+      "G",
+      "T"
+     ],
+     [
+      [
+       2826032,
+       "TG",
+       "T"
+      ]
+     ]
+    ],
+    [
+     [
+      "chr1",
+      4032019,
+      "G",
+      "T"
+     ],
+     [
+      [
+       4032016,
+       "TGGG",
+       "T"
+      ]
+     ]
+    ],
+    [
+     [
+      "chr1",
+      5732390,
+      "C",
+      "T"
+     ],
+     [
+      [
+       5732389,
+       "GCTGT",
+       "G"
+      ]
+     ]
+    ],
+    [
+     [
+      "chr1",
+      6775876,
+      "T",
+      "C"
+     ],
+     [
+      [
+       6775874,
+       "CTTT",
+       "C"
+      ]
+     ]
+    ],
+    [
+     [
+      "chr1",
+      8043102,
+      "C",
+      "A"
+     ],
+     [
+      [
+       8043096,
+       "ATCTCTC",
+       "A"
+      ]
+     ]
+    ]
+   ]
+  }
+ },
+ "INDEL": {
+  "truth_F": 124499,
+  "graph_carried": 25938,
+  "nonG": 98561,
+  "eval_E": 92079,
+  "E_minus_F": 0,
+  "E_and_graph": 0,
+  "extra_D": 6482,
+  "mutect2_eval_equals_pansoma_eval": true,
+  "mutect2_eval_n": 92079,
+  "D_tp_in_full_eval": 899,
+  "nonG_tp_full": 20118,
+  "categories": {
+   "same VCF position as a graph-carried allele (another allele of the same site)": 5009,
+   "REF span overlaps a graph-carried allele's REF span (different position)": 377,
+   "within 1 bp of a graph-carried allele (the +-1 bp margin of the mask)": 823,
+   "no graph-carried allele within 1 bp": 273
+  },
+  "by_mask_kind": {
+   "same VCF position as a graph-carried allele (another allele of the same site) | masking allele kind: INDEL": 4686,
+   "REF span overlaps a graph-carried allele's REF span (different position) | masking allele kind: INDEL": 179,
+   "within 1 bp of a graph-carried allele (the +-1 bp margin of the mask) | masking allele kind: INDEL+SNV": 41,
+   "no graph-carried allele within 1 bp | masking allele kind: -": 273,
+   "same VCF position as a graph-carried allele (another allele of the same site) | masking allele kind: SNV": 298,
+   "within 1 bp of a graph-carried allele (the +-1 bp margin of the mask) | masking allele kind: INDEL": 189,
+   "REF span overlaps a graph-carried allele's REF span (different position) | masking allele kind: SNV": 186,
+   "within 1 bp of a graph-carried allele (the +-1 bp margin of the mask) | masking allele kind: SNV": 593,
+   "REF span overlaps a graph-carried allele's REF span (different position) | masking allele kind: INDEL+SNV": 12,
+   "same VCF position as a graph-carried allele (another allele of the same site) | masking allele kind: INDEL+SNV": 25
+  },
+  "by_mask_vaf": {
+   "same VCF position as a graph-carried allele (another allele of the same site) | a masking allele at VAF 1-16.5 %: True": 4781,
+   "REF span overlaps a graph-carried allele's REF span (different position) | a masking allele at VAF 1-16.5 %: True": 353,
+   "within 1 bp of a graph-carried allele (the +-1 bp margin of the mask) | a masking allele at VAF 1-16.5 %: True": 798,
+   "same VCF position as a graph-carried allele (another allele of the same site) | a masking allele at VAF 1-16.5 %: False": 228,
+   "no graph-carried allele within 1 bp | a masking allele at VAF 1-16.5 %: False": 273,
+   "REF span overlaps a graph-carried allele's REF span (different position) | a masking allele at VAF 1-16.5 %: False": 24,
+   "within 1 bp of a graph-carried allele (the +-1 bp margin of the mask) | a masking allele at VAF 1-16.5 %: False": 25
+  },
+  "detail": {
+   "same VCF position as a graph-carried allele (another allele of the same site) / first base masked / REF span partly masked": 5009,
+   "REF span overlaps a graph-carried allele's REF span (different position) / first base masked / REF span partly masked": 297,
+   "within 1 bp of a graph-carried allele (the +-1 bp margin of the mask) / first base masked / REF span partly masked": 775,
+   "no graph-carried allele within 1 bp / first base in eval BED / whole REF span in eval BED": 273,
+   "REF span overlaps a graph-carried allele's REF span (different position) / first base in eval BED / REF span partly masked": 80,
+   "within 1 bp of a graph-carried allele (the +-1 bp margin of the mask) / first base in eval BED / REF span partly masked": 48
+  },
+  "kept_records_within_1bp_of_mask": 1815,
+  "examples": {
+   "same VCF position as a graph-carried allele (another allele of the same site)": [
+    [
+     [
+      "chr1",
+      744866,
+      "G",
+      "GTATATATATATATATATA"
+     ],
+     [
+      [
+       744866,
+       "G",
+       "GTATATATATATATATA"
+      ]
+     ]
+    ],
+    [
+     [
+      "chr1",
+      744866,
+      "G",
+      "GTATATATATATATATATATATA"
+     ],
+     [
+      [
+       744866,
+       "G",
+       "GTATATATATATATATA"
+      ]
+     ]
+    ],
+    [
+     [
+      "chr1",
+      744866,
+      "G",
+      "GTATATATATATATATATATATATATA"
+     ],
+     [
+      [
+       744866,
+       "G",
+       "GTATATATATATATATA"
+      ]
+     ]
+    ],
+    [
+     [
+      "chr1",
+      744866,
+      "G",
+      "GTATATATATATATATATATATATATATA"
+     ],
+     [
+      [
+       744866,
+       "G",
+       "GTATATATATATATATA"
+      ]
+     ]
+    ],
+    [
+     [
+      "chr1",
+      744866,
+      "G",
+      "GTATATATATATATATATATATATATATATATA"
+     ],
+     [
+      [
+       744866,
+       "G",
+       "GTATATATATATATATA"
+      ]
+     ]
+    ]
+   ],
+   "REF span overlaps a graph-carried allele's REF span (different position)": [
+    [
+     [
+      "chr1",
+      816107,
+      "AG",
+      "A"
+     ],
+     [
+      [
+       816108,
+       "G",
+       "GA"
+      ]
+     ]
+    ],
+    [
+     [
+      "chr1",
+      1028321,
+      "C",
+      "CA"
+     ],
+     [
+      [
+       1028320,
+       "GC",
+       "G"
+      ]
+     ]
+    ],
+    [
+     [
+      "chr1",
+      2186505,
+      "CG",
+      "C"
+     ],
+     [
+      [
+       2186506,
+       "G",
+       "C"
+      ]
+     ]
+    ],
+    [
+     [
+      "chr1",
+      2872930,
+      "CTT",
+      "C"
+     ],
+     [
+      [
+       2872932,
+       "T",
+       "C"
+      ]
+     ]
+    ],
+    [
+     [
+      "chr1",
+      3287606,
+      "T",
+      "TGCCACGCGGGCATCCAGGATTGCATTTACCGGGGCTGGAGCCGCCCC"
+     ],
+     [
+      [
+       3287605,
+       "CT",
+       "C"
+      ]
+     ]
+    ]
+   ],
+   "within 1 bp of a graph-carried allele (the +-1 bp margin of the mask)": [
+    [
+     [
+      "chr1",
+      1502506,
+      "C",
+      "CC"
+     ],
+     [
+      [
+       1502507,
+       "A",
+       "AT"
+      ],
+      [
+       1502507,
+       "A",
+       "C"
+      ]
+     ]
+    ],
+    [
+     [
+      "chr1",
+      2028423,
+      "C",
+      "CT"
+     ],
+     [
+      [
+       2028422,
+       "G",
+       "GC"
+      ]
+     ]
+    ],
+    [
+     [
+      "chr1",
+      2872927,
+      "T",
+      "TCTCTCTCT"
+     ],
+     [
+      [
+       2872928,
+       "T",
+       "C"
+      ]
+     ]
+    ],
+    [
+     [
+      "chr1",
+      2872939,
+      "T",
+      "TCTCT"
+     ],
+     [
+      [
+       2872940,
+       "T",
+       "C"
+      ]
+     ]
+    ],
+    [
+     [
+      "chr1",
+      4151655,
+      "A",
+      "AGA"
+     ],
+     [
+      [
+       4151656,
+       "A",
+       "AAG"
+      ]
+     ]
+    ]
+   ],
+   "no graph-carried allele within 1 bp": [
+    [
+     [
+      "chr1",
+      1534913,
+      "G",
+      "GC"
+     ],
+     []
+    ],
+    [
+     [
+      "chr1",
+      1546860,
+      "C",
+      "CA"
+     ],
+     []
+    ],
+    [
+     [
+      "chr1",
+      5964935,
+      "A",
+      "ATTTTTTTT"
+     ],
+     []
+    ],
+    [
+     [
+      "chr1",
+      6015032,
+      "T",
+      "TTT"
+     ],
+     []
+    ],
+    [
+     [
+      "chr1",
+      7270270,
+      "C",
+      "CAT"
+     ],
+     []
+    ]
+   ]
+  }
+ }
+}

@@ -1,0 +1,87 @@
+{
+ "SNV": {
+  "F": 392567,
+  "E": 215094,
+  "rule_agrees": 392567,
+  "rule_disagrees": 0,
+  "disagree_examples": [],
+  "graph_carried_kept": [
+   [
+    "chr1",
+    248755122,
+    "N",
+    "G",
+    false
+   ]
+  ]
+ },
+ "INDEL": {
+  "F": 124499,
+  "E": 92079,
+  "rule_agrees": 123110,
+  "rule_disagrees": 1389,
+  "disagree_examples": [
+   [
+    "chr1",
+    159470745,
+    "CAAAAAAAA",
+    "C"
+   ],
+   [
+    "chr1",
+    76777274,
+    "CAAAAAAAAAAAAA",
+    "C"
+   ],
+   [
+    "chr1",
+    8100206,
+    "GATAT",
+    "G"
+   ],
+   [
+    "chr1",
+    45190927,
+    "ATTTTTTTTTTTTTTTTT",
+    "A"
+   ],
+   [
+    "chr1",
+    52148947,
+    "ATTTTTTTTTTTT",
+    "A"
+   ],
+   [
+    "chr1",
+    80494183,
+    "TCCAAAAA",
+    "T"
+   ],
+   [
+    "chr1",
+    219306811,
+    "TATAGATAGATAG",
+    "T"
+   ],
+   [
+    "chr1",
+    35628631,
+    "ATTTT",
+    "A"
+   ],
+   [
+    "chr1",
+    2281984,
+    "AGGACGCCCGAGAAGACAGGC",
+    "A"
+   ],
+   [
+    "chr1",
+    238344476,
+    "CTTTTTTT",
+    "C"
+   ]
+  ],
+  "graph_carried_kept": []
+ }
+}

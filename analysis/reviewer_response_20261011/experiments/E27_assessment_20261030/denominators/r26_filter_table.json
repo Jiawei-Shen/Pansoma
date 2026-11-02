@@ -1,0 +1,1975 @@
+[
+ {
+  "kind": "SNV",
+  "platform": "Illumina",
+  "graph": "v2.1 d46",
+  "model": "final (--norm dataset, 3 seeds)",
+  "runs": [
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_Illumina_SNV_d46_normbq",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_Illumina_SNV_d46_normbq/vcf_chr1/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 618,
+     "tp_call": 618,
+     "fp": 2888,
+     "fn": 79,
+     "precision": 0.1763,
+     "recall": 0.8867,
+     "f1": 0.2941
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 594,
+     "tp_call": 594,
+     "fp": 800,
+     "fn": 103,
+     "precision": 0.4261,
+     "recall": 0.8522,
+     "f1": 0.5681
+    },
+    "raw_best": 0.4059,
+    "pon_best": 0.6127,
+    "ceiling": 0.8924,
+    "threshold": 0.3172060251235962,
+    "truth_pon_tagged": 61
+   },
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_Illumina_SNV_d46_normbq_s1",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_Illumina_SNV_d46_normbq_s1/vcf_chr1/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 599,
+     "tp_call": 599,
+     "fp": 2314,
+     "fn": 98,
+     "precision": 0.2056,
+     "recall": 0.8594,
+     "f1": 0.3319
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 579,
+     "tp_call": 579,
+     "fp": 705,
+     "fn": 118,
+     "precision": 0.4509,
+     "recall": 0.8307,
+     "f1": 0.5846
+    },
+    "raw_best": 0.4054,
+    "pon_best": 0.6117,
+    "ceiling": 0.8953,
+    "threshold": 0.5501990914344788,
+    "truth_pon_tagged": 61
+   },
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_Illumina_SNV_d46_normbq_s2",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_Illumina_SNV_d46_normbq_s2/vcf_chr1/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 590,
+     "tp_call": 590,
+     "fp": 2362,
+     "fn": 107,
+     "precision": 0.1999,
+     "recall": 0.8465,
+     "f1": 0.3234
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 567,
+     "tp_call": 567,
+     "fp": 741,
+     "fn": 130,
+     "precision": 0.4335,
+     "recall": 0.8135,
+     "f1": 0.5656
+    },
+    "raw_best": 0.4189,
+    "pon_best": 0.6108,
+    "ceiling": 0.891,
+    "threshold": 0.3520398437976837,
+    "truth_pon_tagged": 61
+   }
+  ]
+ },
+ {
+  "kind": "SNV",
+  "platform": "Illumina",
+  "graph": "v1.1 d9",
+  "model": "final (--norm dataset, 3 seeds)",
+  "runs": [
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_Illumina_SNV_d9_normbq",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_Illumina_SNV_d9_normbq/vcf_chr1/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 601,
+     "tp_call": 601,
+     "fp": 5056,
+     "fn": 96,
+     "precision": 0.1062,
+     "recall": 0.8623,
+     "f1": 0.1892
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 579,
+     "tp_call": 579,
+     "fp": 692,
+     "fn": 118,
+     "precision": 0.4555,
+     "recall": 0.8307,
+     "f1": 0.5884
+    },
+    "raw_best": 0.2856,
+    "pon_best": 0.608,
+    "ceiling": 0.8881,
+    "threshold": 0.25649169087409973,
+    "truth_pon_tagged": 61
+   },
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_Illumina_SNV_d9_normbq_s1",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_Illumina_SNV_d9_normbq_s1/vcf_chr1/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 592,
+     "tp_call": 592,
+     "fp": 5096,
+     "fn": 105,
+     "precision": 0.1041,
+     "recall": 0.8494,
+     "f1": 0.1854
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 571,
+     "tp_call": 571,
+     "fp": 673,
+     "fn": 126,
+     "precision": 0.459,
+     "recall": 0.8192,
+     "f1": 0.5884
+    },
+    "raw_best": 0.2552,
+    "pon_best": 0.6107,
+    "ceiling": 0.8666,
+    "threshold": 0.07002002000808716,
+    "truth_pon_tagged": 61
+   },
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_Illumina_SNV_d9_normbq_s2",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_Illumina_SNV_d9_normbq_s2/vcf_chr1/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 581,
+     "tp_call": 581,
+     "fp": 4775,
+     "fn": 116,
+     "precision": 0.1085,
+     "recall": 0.8336,
+     "f1": 0.192
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 560,
+     "tp_call": 560,
+     "fp": 654,
+     "fn": 137,
+     "precision": 0.4613,
+     "recall": 0.8034,
+     "f1": 0.5861
+    },
+    "raw_best": 0.2681,
+    "pon_best": 0.6045,
+    "ceiling": 0.8895,
+    "threshold": 0.31673818826675415,
+    "truth_pon_tagged": 61
+   }
+  ]
+ },
+ {
+  "kind": "SNV",
+  "platform": "Illumina",
+  "graph": "GRCh38-only",
+  "model": "7fc7396 recipe (--norm train, 3 seeds; no --norm dataset run exists)",
+  "runs": [
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_Illumina_SNV_linear_7fc7396",
+    "report": "/scratch/jshen/Github/Pansoma/analysis/benchmark_7fc7396_20261012/linear_grch38_7fc7396_20261012/runs/HG008_Illumina_SNV_linear_7fc7396/vcf_chr1.eval_bed.txt",
+    "raw": {
+     "precision": 0.005,
+     "recall": 0.836,
+     "f1": 0.009
+    },
+    "pon": {
+     "precision": 0.334,
+     "recall": 0.786,
+     "f1": 0.469
+    },
+    "raw_best": 0.041,
+    "pon_best": 0.544,
+    "ceiling": 0.874,
+    "threshold": null,
+    "truth_pon_tagged": null
+   },
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_Illumina_SNV_linear_7fc7396_s1",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_Illumina_SNV_linear_7fc7396_s1/vcf_chr1/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 584,
+     "tp_call": 584,
+     "fp": 117375,
+     "fn": 113,
+     "precision": 0.005,
+     "recall": 0.8379,
+     "f1": 0.0098
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 546,
+     "tp_call": 546,
+     "fp": 841,
+     "fn": 151,
+     "precision": 0.3937,
+     "recall": 0.7834,
+     "f1": 0.524
+    },
+    "raw_best": 0.0504,
+    "pon_best": 0.5472,
+    "ceiling": 0.8723,
+    "threshold": 0.12939807772636414,
+    "truth_pon_tagged": 61
+   },
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_Illumina_SNV_linear_7fc7396_s2",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_Illumina_SNV_linear_7fc7396_s2/vcf_chr1/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 585,
+     "tp_call": 585,
+     "fp": 111381,
+     "fn": 112,
+     "precision": 0.0052,
+     "recall": 0.8393,
+     "f1": 0.0104
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 550,
+     "tp_call": 550,
+     "fp": 869,
+     "fn": 147,
+     "precision": 0.3876,
+     "recall": 0.7891,
+     "f1": 0.5198
+    },
+    "raw_best": 0.0404,
+    "pon_best": 0.5498,
+    "ceiling": 0.8867,
+    "threshold": 0.09202271699905396,
+    "truth_pon_tagged": 61
+   }
+  ]
+ },
+ {
+  "kind": "SNV",
+  "platform": "Illumina",
+  "graph": "v2.1 d46",
+  "model": "7fc7396 recipe (matched to GRCh38-only)",
+  "runs": [
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_Illumina_SNV_d46_7fc7396",
+    "report": "/scratch/jshen/Github/Pansoma/analysis/benchmark_7fc7396_20261012/linear_grch38_7fc7396_20261012/runs/HG008_Illumina_SNV_d46_7fc7396/vcf_chr1.eval_bed.txt",
+    "raw": {
+     "precision": 0.177,
+     "recall": 0.887,
+     "f1": 0.295
+    },
+    "pon": {
+     "precision": 0.429,
+     "recall": 0.852,
+     "f1": 0.57
+    },
+    "raw_best": 0.406,
+    "pon_best": 0.613,
+    "ceiling": 0.892,
+    "threshold": null,
+    "truth_pon_tagged": null
+   },
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_Illumina_SNV_d46_7fc7396_s1",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_Illumina_SNV_d46_7fc7396_s1/vcf_chr1/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 597,
+     "tp_call": 597,
+     "fp": 2256,
+     "fn": 100,
+     "precision": 0.2093,
+     "recall": 0.8565,
+     "f1": 0.3363
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 577,
+     "tp_call": 577,
+     "fp": 685,
+     "fn": 120,
+     "precision": 0.4572,
+     "recall": 0.8278,
+     "f1": 0.5891
+    },
+    "raw_best": 0.4082,
+    "pon_best": 0.6115,
+    "ceiling": 0.8953,
+    "threshold": 0.5539389848709106,
+    "truth_pon_tagged": 61
+   },
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_Illumina_SNV_d46_7fc7396_s2",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_Illumina_SNV_d46_7fc7396_s2/vcf_chr1/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 591,
+     "tp_call": 591,
+     "fp": 2386,
+     "fn": 106,
+     "precision": 0.1985,
+     "recall": 0.8479,
+     "f1": 0.3217
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 568,
+     "tp_call": 568,
+     "fp": 747,
+     "fn": 129,
+     "precision": 0.4319,
+     "recall": 0.8149,
+     "f1": 0.5646
+    },
+    "raw_best": 0.4187,
+    "pon_best": 0.6106,
+    "ceiling": 0.891,
+    "threshold": 0.33952081203460693,
+    "truth_pon_tagged": 61
+   }
+  ]
+ },
+ {
+  "kind": "SNV",
+  "platform": "Illumina",
+  "graph": "v1.1 d9",
+  "model": "7fc7396 recipe (matched to GRCh38-only)",
+  "runs": [
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_Illumina_SNV_7fc7396_ddp4_b1024",
+    "report": "/scratch/jshen/Github/Pansoma/analysis/benchmark_7fc7396_20261012/linear_grch38_7fc7396_20261012/runs/HG008_Illumina_SNV_7fc7396_ddp4_b1024/vcf_chr1.eval_bed.txt",
+    "raw": {
+     "precision": 0.106,
+     "recall": 0.862,
+     "f1": 0.188
+    },
+    "pon": {
+     "precision": 0.452,
+     "recall": 0.831,
+     "f1": 0.585
+    },
+    "raw_best": 0.285,
+    "pon_best": 0.607,
+    "ceiling": 0.888,
+    "threshold": null,
+    "truth_pon_tagged": null
+   },
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_Illumina_SNV_7fc7396_ddp4_b1024_s1",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_Illumina_SNV_7fc7396_ddp4_b1024_s1/vcf_chr1/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 592,
+     "tp_call": 592,
+     "fp": 5129,
+     "fn": 105,
+     "precision": 0.1035,
+     "recall": 0.8494,
+     "f1": 0.1845
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 571,
+     "tp_call": 571,
+     "fp": 676,
+     "fn": 126,
+     "precision": 0.4579,
+     "recall": 0.8192,
+     "f1": 0.5874
+    },
+    "raw_best": 0.2544,
+    "pon_best": 0.6125,
+    "ceiling": 0.8709,
+    "threshold": 0.0708324983716011,
+    "truth_pon_tagged": 61
+   },
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_Illumina_SNV_7fc7396_ddp4_b1024_s2",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_Illumina_SNV_7fc7396_ddp4_b1024_s2/vcf_chr1/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 579,
+     "tp_call": 579,
+     "fp": 4776,
+     "fn": 118,
+     "precision": 0.1081,
+     "recall": 0.8307,
+     "f1": 0.1913
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 558,
+     "tp_call": 558,
+     "fp": 654,
+     "fn": 139,
+     "precision": 0.4604,
+     "recall": 0.8006,
+     "f1": 0.5846
+    },
+    "raw_best": 0.2682,
+    "pon_best": 0.6051,
+    "ceiling": 0.8895,
+    "threshold": 0.3173172175884247,
+    "truth_pon_tagged": 61
+   }
+  ]
+ },
+ {
+  "kind": "INDEL",
+  "platform": "Illumina",
+  "graph": "v2.1 d46",
+  "model": "final release model, ppr8 (3 seeds)",
+  "runs": [
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/release_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/release_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 65,
+     "tp_call": 65,
+     "fp": 109,
+     "fn": 522,
+     "precision": 0.3736,
+     "recall": 0.1107,
+     "f1": 0.1708
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 65,
+     "tp_call": 65,
+     "fp": 108,
+     "fn": 522,
+     "precision": 0.3757,
+     "recall": 0.1107,
+     "f1": 0.1711
+    },
+    "raw_best": 0.2376,
+    "pon_best": 0.2505,
+    "ceiling": 0.2555,
+    "threshold": 0.38437458872795105,
+    "truth_pon_tagged": 418
+   },
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/release_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/release_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 89,
+     "tp_call": 89,
+     "fp": 582,
+     "fn": 498,
+     "precision": 0.1326,
+     "recall": 0.1516,
+     "f1": 0.1415
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 81,
+     "tp_call": 81,
+     "fp": 133,
+     "fn": 506,
+     "precision": 0.3785,
+     "recall": 0.138,
+     "f1": 0.2022
+    },
+    "raw_best": 0.1505,
+    "pon_best": 0.248,
+    "ceiling": 0.2538,
+    "threshold": 0.19937816262245178,
+    "truth_pon_tagged": 418
+   },
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/release_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/release_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 87,
+     "tp_call": 87,
+     "fp": 102,
+     "fn": 500,
+     "precision": 0.4603,
+     "recall": 0.1482,
+     "f1": 0.2242
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 87,
+     "tp_call": 87,
+     "fp": 102,
+     "fn": 500,
+     "precision": 0.4603,
+     "recall": 0.1482,
+     "f1": 0.2242
+    },
+    "raw_best": 0.2845,
+    "pon_best": 0.2836,
+    "ceiling": 0.2555,
+    "threshold": 0.5997829437255859,
+    "truth_pon_tagged": 418
+   }
+  ]
+ },
+ {
+  "kind": "INDEL",
+  "platform": "Illumina",
+  "graph": "v2.1 d46",
+  "model": "7fc7396 / normbq single-set, recall-0.9 threshold (1 seed)",
+  "runs": [
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_Illumina_INDEL_d46_normbq",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_Illumina_INDEL_d46_normbq/vcf_chr1/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 220,
+     "tp_call": 220,
+     "fp": 2884,
+     "fn": 367,
+     "precision": 0.0709,
+     "recall": 0.3748,
+     "f1": 0.1192
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 141,
+     "tp_call": 141,
+     "fp": 388,
+     "fn": 446,
+     "precision": 0.2665,
+     "recall": 0.2402,
+     "f1": 0.2527
+    },
+    "raw_best": 0.1719,
+    "pon_best": 0.2564,
+    "ceiling": 0.2555,
+    "threshold": 0.10571947693824768,
+    "truth_pon_tagged": 418
+   }
+  ]
+ },
+ {
+  "kind": "INDEL",
+  "platform": "Illumina",
+  "graph": "v1.1 d9",
+  "model": "7fc7396 / normbq single-set, recall-0.9 threshold (1 seed)",
+  "runs": [
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_Illumina_INDEL_d9_normbq",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_Illumina_INDEL_d9_normbq/vcf_chr1/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 208,
+     "tp_call": 208,
+     "fp": 3332,
+     "fn": 379,
+     "precision": 0.0588,
+     "recall": 0.3543,
+     "f1": 0.1008
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 139,
+     "tp_call": 139,
+     "fp": 386,
+     "fn": 448,
+     "precision": 0.2648,
+     "recall": 0.2368,
+     "f1": 0.25
+    },
+    "raw_best": 0.1482,
+    "pon_best": 0.2699,
+    "ceiling": 0.2572,
+    "threshold": 0.12075485289096832,
+    "truth_pon_tagged": 418
+   }
+  ]
+ },
+ {
+  "kind": "INDEL",
+  "platform": "Illumina",
+  "graph": "GRCh38-only",
+  "model": "7fc7396 single-set, recall-0.9 threshold (1 seed)",
+  "runs": [
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_Illumina_INDEL_linear_7fc7396",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_Illumina_INDEL_linear_7fc7396/vcf_chr1_pon71cb51a/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 433,
+     "tp_call": 433,
+     "fp": 39918,
+     "fn": 154,
+     "precision": 0.0107,
+     "recall": 0.7376,
+     "f1": 0.0212
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 152,
+     "tp_call": 152,
+     "fp": 1346,
+     "fn": 435,
+     "precision": 0.1015,
+     "recall": 0.2589,
+     "f1": 0.1458
+    },
+    "raw_best": 0.048,
+    "pon_best": 0.2013,
+    "ceiling": 0.2811,
+    "threshold": 0.04801846295595169,
+    "truth_pon_tagged": 418
+   }
+  ]
+ },
+ {
+  "kind": "SNV",
+  "platform": "PacBio",
+  "graph": "v2.1 d46",
+  "model": "final (--norm dataset, 3 seeds)",
+  "runs": [
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_PacBio_SNV_d46_normbq",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_PacBio_SNV_d46_normbq/vcf_chr1/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 609,
+     "tp_call": 609,
+     "fp": 2659,
+     "fn": 88,
+     "precision": 0.1864,
+     "recall": 0.8737,
+     "f1": 0.3072
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 584,
+     "tp_call": 584,
+     "fp": 657,
+     "fn": 113,
+     "precision": 0.4706,
+     "recall": 0.8379,
+     "f1": 0.6027
+    },
+    "raw_best": 0.416,
+    "pon_best": 0.6234,
+    "ceiling": 0.8895,
+    "threshold": 0.2853841781616211,
+    "truth_pon_tagged": 61
+   },
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_PacBio_SNV_d46_normbq_s1",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_PacBio_SNV_d46_normbq_s1/vcf_chr1/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 586,
+     "tp_call": 586,
+     "fp": 2056,
+     "fn": 111,
+     "precision": 0.2218,
+     "recall": 0.8407,
+     "f1": 0.351
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 567,
+     "tp_call": 567,
+     "fp": 598,
+     "fn": 130,
+     "precision": 0.4867,
+     "recall": 0.8135,
+     "f1": 0.609
+    },
+    "raw_best": 0.4082,
+    "pon_best": 0.6173,
+    "ceiling": 0.8895,
+    "threshold": 0.3997536897659302,
+    "truth_pon_tagged": 61
+   },
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_PacBio_SNV_d46_normbq_s2",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_PacBio_SNV_d46_normbq_s2/vcf_chr1/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 587,
+     "tp_call": 587,
+     "fp": 2180,
+     "fn": 110,
+     "precision": 0.2121,
+     "recall": 0.8422,
+     "f1": 0.3389
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 567,
+     "tp_call": 567,
+     "fp": 603,
+     "fn": 130,
+     "precision": 0.4846,
+     "recall": 0.8135,
+     "f1": 0.6074
+    },
+    "raw_best": 0.4193,
+    "pon_best": 0.6177,
+    "ceiling": 0.891,
+    "threshold": 0.34464865922927856,
+    "truth_pon_tagged": 61
+   }
+  ]
+ },
+ {
+  "kind": "SNV",
+  "platform": "PacBio",
+  "graph": "v1.1 d9",
+  "model": "final (--norm dataset, 3 seeds)",
+  "runs": [
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_PacBio_SNV_d9_normbq",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_PacBio_SNV_d9_normbq/vcf_chr1/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 601,
+     "tp_call": 601,
+     "fp": 5308,
+     "fn": 96,
+     "precision": 0.1017,
+     "recall": 0.8623,
+     "f1": 0.182
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 577,
+     "tp_call": 577,
+     "fp": 616,
+     "fn": 120,
+     "precision": 0.4837,
+     "recall": 0.8278,
+     "f1": 0.6106
+    },
+    "raw_best": 0.2906,
+    "pon_best": 0.6296,
+    "ceiling": 0.8867,
+    "threshold": 0.230519637465477,
+    "truth_pon_tagged": 61
+   },
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_PacBio_SNV_d9_normbq_s1",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_PacBio_SNV_d9_normbq_s1/vcf_chr1/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 589,
+     "tp_call": 589,
+     "fp": 5452,
+     "fn": 108,
+     "precision": 0.0975,
+     "recall": 0.8451,
+     "f1": 0.1748
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 565,
+     "tp_call": 565,
+     "fp": 773,
+     "fn": 132,
+     "precision": 0.4223,
+     "recall": 0.8106,
+     "f1": 0.5553
+    },
+    "raw_best": 0.2543,
+    "pon_best": 0.6086,
+    "ceiling": 0.8766,
+    "threshold": 0.10113808512687683,
+    "truth_pon_tagged": 61
+   },
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_PacBio_SNV_d9_normbq_s2",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_PacBio_SNV_d9_normbq_s2/vcf_chr1/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 600,
+     "tp_call": 600,
+     "fp": 5804,
+     "fn": 97,
+     "precision": 0.0937,
+     "recall": 0.8608,
+     "f1": 0.169
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 578,
+     "tp_call": 578,
+     "fp": 679,
+     "fn": 119,
+     "precision": 0.4598,
+     "recall": 0.8293,
+     "f1": 0.5916
+    },
+    "raw_best": 0.2902,
+    "pon_best": 0.6235,
+    "ceiling": 0.8867,
+    "threshold": 0.10711543262004852,
+    "truth_pon_tagged": 61
+   }
+  ]
+ },
+ {
+  "kind": "SNV",
+  "platform": "PacBio",
+  "graph": "GRCh38-only",
+  "model": "7fc7396 recipe (--norm train, 3 seeds; no --norm dataset run exists)",
+  "runs": [
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_PacBio_SNV_linear_7fc7396",
+    "report": "/scratch/jshen/Github/Pansoma/analysis/benchmark_7fc7396_20261012/linear_grch38_7fc7396_20261012/runs/HG008_PacBio_SNV_linear_7fc7396/vcf_chr1.eval_bed.txt",
+    "raw": {
+     "precision": 0.005,
+     "recall": 0.882,
+     "f1": 0.009
+    },
+    "pon": {
+     "precision": 0.372,
+     "recall": 0.826,
+     "f1": 0.513
+    },
+    "raw_best": 0.036,
+    "pon_best": 0.596,
+    "ceiling": 0.878,
+    "threshold": null,
+    "truth_pon_tagged": null
+   },
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_PacBio_SNV_linear_7fc7396_s1",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_PacBio_SNV_linear_7fc7396_s1/vcf_chr1/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 589,
+     "tp_call": 589,
+     "fp": 116293,
+     "fn": 108,
+     "precision": 0.005,
+     "recall": 0.8451,
+     "f1": 0.01
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 552,
+     "tp_call": 552,
+     "fp": 617,
+     "fn": 145,
+     "precision": 0.4722,
+     "recall": 0.792,
+     "f1": 0.5916
+    },
+    "raw_best": 0.0457,
+    "pon_best": 0.6038,
+    "ceiling": 0.901,
+    "threshold": 0.1426326036453247,
+    "truth_pon_tagged": 61
+   },
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_PacBio_SNV_linear_7fc7396_s2",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_PacBio_SNV_linear_7fc7396_s2/vcf_chr1/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 598,
+     "tp_call": 598,
+     "fp": 120267,
+     "fn": 99,
+     "precision": 0.0049,
+     "recall": 0.858,
+     "f1": 0.0098
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 561,
+     "tp_call": 561,
+     "fp": 651,
+     "fn": 136,
+     "precision": 0.4629,
+     "recall": 0.8049,
+     "f1": 0.5877
+    },
+    "raw_best": 0.0387,
+    "pon_best": 0.6023,
+    "ceiling": 0.8766,
+    "threshold": 0.06853145360946655,
+    "truth_pon_tagged": 61
+   }
+  ]
+ },
+ {
+  "kind": "SNV",
+  "platform": "PacBio",
+  "graph": "v2.1 d46",
+  "model": "7fc7396 recipe (matched to GRCh38-only)",
+  "runs": [
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_PacBio_SNV_d46_7fc7396",
+    "report": "/scratch/jshen/Github/Pansoma/analysis/benchmark_7fc7396_20261012/linear_grch38_7fc7396_20261012/runs/HG008_PacBio_SNV_d46_7fc7396/vcf_chr1.eval_bed.txt",
+    "raw": {
+     "precision": 0.189,
+     "recall": 0.875,
+     "f1": 0.31
+    },
+    "pon": {
+     "precision": 0.473,
+     "recall": 0.839,
+     "f1": 0.605
+    },
+    "raw_best": 0.414,
+    "pon_best": 0.622,
+    "ceiling": 0.889,
+    "threshold": null,
+    "truth_pon_tagged": null
+   },
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_PacBio_SNV_d46_7fc7396_s1",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_PacBio_SNV_d46_7fc7396_s1/vcf_chr1/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 594,
+     "tp_call": 594,
+     "fp": 2173,
+     "fn": 103,
+     "precision": 0.2147,
+     "recall": 0.8522,
+     "f1": 0.343
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 573,
+     "tp_call": 573,
+     "fp": 629,
+     "fn": 124,
+     "precision": 0.4767,
+     "recall": 0.8221,
+     "f1": 0.6035
+    },
+    "raw_best": 0.3982,
+    "pon_best": 0.607,
+    "ceiling": 0.8867,
+    "threshold": 0.4299733638763428,
+    "truth_pon_tagged": 61
+   },
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_PacBio_SNV_d46_7fc7396_s2",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_PacBio_SNV_d46_7fc7396_s2/vcf_chr1/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 590,
+     "tp_call": 590,
+     "fp": 2212,
+     "fn": 107,
+     "precision": 0.2106,
+     "recall": 0.8465,
+     "f1": 0.3372
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 572,
+     "tp_call": 572,
+     "fp": 603,
+     "fn": 125,
+     "precision": 0.4868,
+     "recall": 0.8207,
+     "f1": 0.6111
+    },
+    "raw_best": 0.4098,
+    "pon_best": 0.6172,
+    "ceiling": 0.8924,
+    "threshold": 0.3249663710594177,
+    "truth_pon_tagged": 61
+   }
+  ]
+ },
+ {
+  "kind": "SNV",
+  "platform": "PacBio",
+  "graph": "v1.1 d9",
+  "model": "7fc7396 recipe (matched to GRCh38-only)",
+  "runs": [
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_PacBio_SNV_7fc7396_ddp4_b1024",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_PacBio_SNV_7fc7396_ddp4_b1024/vcf_chr1/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 602,
+     "tp_call": 602,
+     "fp": 5354,
+     "fn": 95,
+     "precision": 0.1011,
+     "recall": 0.8637,
+     "f1": 0.181
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 578,
+     "tp_call": 578,
+     "fp": 628,
+     "fn": 119,
+     "precision": 0.4793,
+     "recall": 0.8293,
+     "f1": 0.6075
+    },
+    "raw_best": 0.296,
+    "pon_best": 0.6306,
+    "ceiling": 0.8867,
+    "threshold": 0.21402233839035034,
+    "truth_pon_tagged": 61
+   },
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_PacBio_SNV_7fc7396_ddp4_b1024_s1",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_PacBio_SNV_7fc7396_ddp4_b1024_s1/vcf_chr1/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 587,
+     "tp_call": 587,
+     "fp": 5317,
+     "fn": 110,
+     "precision": 0.0994,
+     "recall": 0.8422,
+     "f1": 0.1779
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 563,
+     "tp_call": 563,
+     "fp": 707,
+     "fn": 134,
+     "precision": 0.4433,
+     "recall": 0.8077,
+     "f1": 0.5724
+    },
+    "raw_best": 0.2531,
+    "pon_best": 0.6117,
+    "ceiling": 0.878,
+    "threshold": 0.11672163754701614,
+    "truth_pon_tagged": 61
+   },
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_PacBio_SNV_7fc7396_ddp4_b1024_s2",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_PacBio_SNV_7fc7396_ddp4_b1024_s2/vcf_chr1/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 603,
+     "tp_call": 603,
+     "fp": 5784,
+     "fn": 94,
+     "precision": 0.0944,
+     "recall": 0.8651,
+     "f1": 0.1702
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 579,
+     "tp_call": 579,
+     "fp": 669,
+     "fn": 118,
+     "precision": 0.4639,
+     "recall": 0.8307,
+     "f1": 0.5954
+    },
+    "raw_best": 0.2916,
+    "pon_best": 0.6216,
+    "ceiling": 0.8867,
+    "threshold": 0.11431591212749481,
+    "truth_pon_tagged": 61
+   }
+  ]
+ },
+ {
+  "kind": "INDEL",
+  "platform": "PacBio",
+  "graph": "v2.1 d46",
+  "model": "final release model, ppr8 (3 seeds)",
+  "runs": [
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/release_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/release_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 96,
+     "tp_call": 96,
+     "fp": 115,
+     "fn": 491,
+     "precision": 0.455,
+     "recall": 0.1635,
+     "f1": 0.2406
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 94,
+     "tp_call": 94,
+     "fp": 107,
+     "fn": 493,
+     "precision": 0.4677,
+     "recall": 0.1601,
+     "f1": 0.2386
+    },
+    "raw_best": 0.2764,
+    "pon_best": 0.2746,
+    "ceiling": 0.2555,
+    "threshold": 0.6854676604270935,
+    "truth_pon_tagged": 418
+   },
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/release_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/release_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 104,
+     "tp_call": 104,
+     "fp": 136,
+     "fn": 483,
+     "precision": 0.4333,
+     "recall": 0.1772,
+     "f1": 0.2515
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 100,
+     "tp_call": 100,
+     "fp": 123,
+     "fn": 487,
+     "precision": 0.4484,
+     "recall": 0.1704,
+     "f1": 0.2469
+    },
+    "raw_best": 0.2693,
+    "pon_best": 0.2626,
+    "ceiling": 0.2589,
+    "threshold": 0.6684039235115051,
+    "truth_pon_tagged": 418
+   },
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/release_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/release_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 112,
+     "tp_call": 112,
+     "fp": 110,
+     "fn": 475,
+     "precision": 0.5045,
+     "recall": 0.1908,
+     "f1": 0.2769
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 104,
+     "tp_call": 104,
+     "fp": 100,
+     "fn": 483,
+     "precision": 0.5098,
+     "recall": 0.1772,
+     "f1": 0.263
+    },
+    "raw_best": 0.2942,
+    "pon_best": 0.275,
+    "ceiling": 0.2572,
+    "threshold": 0.7070106863975525,
+    "truth_pon_tagged": 418
+   }
+  ]
+ },
+ {
+  "kind": "INDEL",
+  "platform": "PacBio",
+  "graph": "v2.1 d46",
+  "model": "7fc7396 / normbq single-set, recall-0.9 threshold (1 seed)",
+  "runs": [
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_PacBio_INDEL_d46_7fc7396",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_PacBio_INDEL_d46_7fc7396/vcf_chr1_pon71cb51a/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 253,
+     "tp_call": 253,
+     "fp": 10034,
+     "fn": 334,
+     "precision": 0.0246,
+     "recall": 0.431,
+     "f1": 0.0465
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 150,
+     "tp_call": 150,
+     "fp": 2326,
+     "fn": 437,
+     "precision": 0.0606,
+     "recall": 0.2555,
+     "f1": 0.0979
+    },
+    "raw_best": 0.1587,
+    "pon_best": 0.2749,
+    "ceiling": 0.2572,
+    "threshold": 0.026991212740540504,
+    "truth_pon_tagged": 418
+   }
+  ]
+ },
+ {
+  "kind": "INDEL",
+  "platform": "PacBio",
+  "graph": "v1.1 d9",
+  "model": "7fc7396 / normbq single-set, recall-0.9 threshold (1 seed)",
+  "runs": [
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_PacBio_INDEL_7fc7396",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_PacBio_INDEL_7fc7396/vcf_chr1_pon71cb51a/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 253,
+     "tp_call": 253,
+     "fp": 11506,
+     "fn": 334,
+     "precision": 0.0215,
+     "recall": 0.431,
+     "f1": 0.041
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 150,
+     "tp_call": 150,
+     "fp": 2528,
+     "fn": 437,
+     "precision": 0.056,
+     "recall": 0.2555,
+     "f1": 0.0919
+    },
+    "raw_best": 0.1503,
+    "pon_best": 0.2629,
+    "ceiling": 0.2572,
+    "threshold": 0.03972123563289642,
+    "truth_pon_tagged": 418
+   }
+  ]
+ },
+ {
+  "kind": "INDEL",
+  "platform": "PacBio",
+  "graph": "GRCh38-only",
+  "model": "7fc7396 single-set, recall-0.9 threshold (1 seed)",
+  "runs": [
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_PacBio_INDEL_linear_7fc7396",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_PacBio_INDEL_linear_7fc7396/vcf_chr1_pon71cb51a/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 443,
+     "tp_call": 443,
+     "fp": 36368,
+     "fn": 144,
+     "precision": 0.012,
+     "recall": 0.7547,
+     "f1": 0.0237
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 150,
+     "tp_call": 150,
+     "fp": 1521,
+     "fn": 437,
+     "precision": 0.0898,
+     "recall": 0.2555,
+     "f1": 0.1329
+    },
+    "raw_best": 0.0555,
+    "pon_best": 0.1764,
+    "ceiling": 0.2964,
+    "threshold": 0.036697905510663986,
+    "truth_pon_tagged": 418
+   }
+  ]
+ },
+ {
+  "kind": "SNV",
+  "platform": "ONT",
+  "graph": "v2.1 d46",
+  "model": "final (--norm dataset, 3 seeds)",
+  "runs": [
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_ONT_SNV_d46_normbq",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_ONT_SNV_d46_normbq/vcf_chr1/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 627,
+     "tp_call": 627,
+     "fp": 3039,
+     "fn": 70,
+     "precision": 0.171,
+     "recall": 0.8996,
+     "f1": 0.2874
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 599,
+     "tp_call": 599,
+     "fp": 784,
+     "fn": 98,
+     "precision": 0.4331,
+     "recall": 0.8594,
+     "f1": 0.576
+    },
+    "raw_best": 0.3977,
+    "pon_best": 0.6011,
+    "ceiling": 0.8996,
+    "threshold": 0.2210763841867447,
+    "truth_pon_tagged": 61
+   },
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_ONT_SNV_d46_normbq_s1",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_ONT_SNV_d46_normbq_s1/vcf_chr1/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 617,
+     "tp_call": 617,
+     "fp": 2607,
+     "fn": 80,
+     "precision": 0.1914,
+     "recall": 0.8852,
+     "f1": 0.3147
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 591,
+     "tp_call": 591,
+     "fp": 665,
+     "fn": 106,
+     "precision": 0.4705,
+     "recall": 0.8479,
+     "f1": 0.6052
+    },
+    "raw_best": 0.3996,
+    "pon_best": 0.6126,
+    "ceiling": 0.8967,
+    "threshold": 0.4091297388076782,
+    "truth_pon_tagged": 61
+   },
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_ONT_SNV_d46_normbq_s2",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_ONT_SNV_d46_normbq_s2/vcf_chr1/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 592,
+     "tp_call": 592,
+     "fp": 2244,
+     "fn": 105,
+     "precision": 0.2087,
+     "recall": 0.8494,
+     "f1": 0.3351
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 574,
+     "tp_call": 574,
+     "fp": 620,
+     "fn": 123,
+     "precision": 0.4807,
+     "recall": 0.8235,
+     "f1": 0.6071
+    },
+    "raw_best": 0.4047,
+    "pon_best": 0.611,
+    "ceiling": 0.8996,
+    "threshold": 0.31078261137008667,
+    "truth_pon_tagged": 61
+   }
+  ]
+ },
+ {
+  "kind": "SNV",
+  "platform": "ONT",
+  "graph": "v1.1 d9",
+  "model": "final (--norm dataset, 3 seeds)",
+  "runs": [
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_ONT_SNV_d9_normbq",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_ONT_SNV_d9_normbq/vcf_chr1/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 589,
+     "tp_call": 589,
+     "fp": 5457,
+     "fn": 108,
+     "precision": 0.0974,
+     "recall": 0.8451,
+     "f1": 0.1747
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 567,
+     "tp_call": 567,
+     "fp": 633,
+     "fn": 130,
+     "precision": 0.4725,
+     "recall": 0.8135,
+     "f1": 0.5978
+    },
+    "raw_best": 0.281,
+    "pon_best": 0.6176,
+    "ceiling": 0.8953,
+    "threshold": 0.32172754406929016,
+    "truth_pon_tagged": 61
+   },
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_ONT_SNV_d9_normbq_s1",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_ONT_SNV_d9_normbq_s1/vcf_chr1/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 597,
+     "tp_call": 597,
+     "fp": 5648,
+     "fn": 100,
+     "precision": 0.0956,
+     "recall": 0.8565,
+     "f1": 0.172
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 571,
+     "tp_call": 571,
+     "fp": 717,
+     "fn": 126,
+     "precision": 0.4433,
+     "recall": 0.8192,
+     "f1": 0.5753
+    },
+    "raw_best": 0.2863,
+    "pon_best": 0.6035,
+    "ceiling": 0.8924,
+    "threshold": 0.09103333204984665,
+    "truth_pon_tagged": 61
+   },
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_ONT_SNV_d9_normbq_s2",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_ONT_SNV_d9_normbq_s2/vcf_chr1/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 601,
+     "tp_call": 601,
+     "fp": 6077,
+     "fn": 96,
+     "precision": 0.09,
+     "recall": 0.8623,
+     "f1": 0.163
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 579,
+     "tp_call": 579,
+     "fp": 717,
+     "fn": 118,
+     "precision": 0.4468,
+     "recall": 0.8307,
+     "f1": 0.581
+    },
+    "raw_best": 0.2513,
+    "pon_best": 0.6057,
+    "ceiling": 0.8924,
+    "threshold": 0.09116603434085846,
+    "truth_pon_tagged": 61
+   }
+  ]
+ },
+ {
+  "kind": "SNV",
+  "platform": "ONT",
+  "graph": "GRCh38-only",
+  "model": "7fc7396 recipe (--norm train, 3 seeds; no --norm dataset run exists)",
+  "runs": [
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_ONT_SNV_linear_7fc7396",
+    "report": "/scratch/jshen/Github/Pansoma/analysis/benchmark_7fc7396_20261012/linear_grch38_7fc7396_20261012/runs/HG008_ONT_SNV_linear_7fc7396/vcf_chr1.eval_bed.txt",
+    "raw": {
+     "precision": 0.004,
+     "recall": 0.892,
+     "f1": 0.008
+    },
+    "pon": {
+     "precision": 0.394,
+     "recall": 0.842,
+     "f1": 0.537
+    },
+    "raw_best": 0.042,
+    "pon_best": 0.57,
+    "ceiling": 0.874,
+    "threshold": null,
+    "truth_pon_tagged": null
+   },
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_ONT_SNV_linear_7fc7396_s1",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_ONT_SNV_linear_7fc7396_s1/vcf_chr1/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 608,
+     "tp_call": 608,
+     "fp": 147378,
+     "fn": 89,
+     "precision": 0.0041,
+     "recall": 0.8723,
+     "f1": 0.0082
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 576,
+     "tp_call": 576,
+     "fp": 990,
+     "fn": 121,
+     "precision": 0.3678,
+     "recall": 0.8264,
+     "f1": 0.5091
+    },
+    "raw_best": 0.0425,
+    "pon_best": 0.5678,
+    "ceiling": 0.8809,
+    "threshold": 0.050122421234846115,
+    "truth_pon_tagged": 61
+   },
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_ONT_SNV_linear_7fc7396_s2",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_ONT_SNV_linear_7fc7396_s2/vcf_chr1/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 582,
+     "tp_call": 582,
+     "fp": 121348,
+     "fn": 115,
+     "precision": 0.0048,
+     "recall": 0.835,
+     "f1": 0.0095
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 544,
+     "tp_call": 544,
+     "fp": 837,
+     "fn": 153,
+     "precision": 0.3939,
+     "recall": 0.7805,
+     "f1": 0.5236
+    },
+    "raw_best": 0.0339,
+    "pon_best": 0.5493,
+    "ceiling": 0.901,
+    "threshold": 0.1448981910943985,
+    "truth_pon_tagged": 61
+   }
+  ]
+ },
+ {
+  "kind": "SNV",
+  "platform": "ONT",
+  "graph": "v2.1 d46",
+  "model": "7fc7396 recipe (matched to GRCh38-only)",
+  "runs": [
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_ONT_SNV_d46_7fc7396",
+    "report": "/scratch/jshen/Github/Pansoma/analysis/benchmark_7fc7396_20261012/linear_grch38_7fc7396_20261012/runs/HG008_ONT_SNV_d46_7fc7396/vcf_chr1.eval_bed.txt",
+    "raw": {
+     "precision": 0.171,
+     "recall": 0.9,
+     "f1": 0.287
+    },
+    "pon": {
+     "precision": 0.432,
+     "recall": 0.859,
+     "f1": 0.575
+    },
+    "raw_best": 0.404,
+    "pon_best": 0.604,
+    "ceiling": 0.9,
+    "threshold": null,
+    "truth_pon_tagged": null
+   },
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_ONT_SNV_d46_7fc7396_s1",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_ONT_SNV_d46_7fc7396_s1/vcf_chr1/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 596,
+     "tp_call": 596,
+     "fp": 2305,
+     "fn": 101,
+     "precision": 0.2054,
+     "recall": 0.8551,
+     "f1": 0.3313
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 574,
+     "tp_call": 574,
+     "fp": 656,
+     "fn": 123,
+     "precision": 0.4667,
+     "recall": 0.8235,
+     "f1": 0.5957
+    },
+    "raw_best": 0.4163,
+    "pon_best": 0.6164,
+    "ceiling": 0.8996,
+    "threshold": 0.4819248616695404,
+    "truth_pon_tagged": 61
+   },
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_ONT_SNV_d46_7fc7396_s2",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_ONT_SNV_d46_7fc7396_s2/vcf_chr1/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 583,
+     "tp_call": 583,
+     "fp": 2251,
+     "fn": 114,
+     "precision": 0.2057,
+     "recall": 0.8364,
+     "f1": 0.3302
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 564,
+     "tp_call": 564,
+     "fp": 627,
+     "fn": 133,
+     "precision": 0.4736,
+     "recall": 0.8092,
+     "f1": 0.5975
+    },
+    "raw_best": 0.4109,
+    "pon_best": 0.6105,
+    "ceiling": 0.901,
+    "threshold": 0.5919870734214783,
+    "truth_pon_tagged": 61
+   }
+  ]
+ },
+ {
+  "kind": "SNV",
+  "platform": "ONT",
+  "graph": "v1.1 d9",
+  "model": "7fc7396 recipe (matched to GRCh38-only)",
+  "runs": [
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_ONT_SNV_7fc7396_ddp4_b1024",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_ONT_SNV_7fc7396_ddp4_b1024/vcf_chr1/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 594,
+     "tp_call": 594,
+     "fp": 5503,
+     "fn": 103,
+     "precision": 0.0974,
+     "recall": 0.8522,
+     "f1": 0.1749
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 572,
+     "tp_call": 572,
+     "fp": 637,
+     "fn": 125,
+     "precision": 0.4731,
+     "recall": 0.8207,
+     "f1": 0.6002
+    },
+    "raw_best": 0.2814,
+    "pon_best": 0.6161,
+    "ceiling": 0.8953,
+    "threshold": 0.32770755887031555,
+    "truth_pon_tagged": 61
+   },
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_ONT_SNV_7fc7396_ddp4_b1024_s1",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_ONT_SNV_7fc7396_ddp4_b1024_s1/vcf_chr1/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 595,
+     "tp_call": 595,
+     "fp": 5477,
+     "fn": 102,
+     "precision": 0.098,
+     "recall": 0.8537,
+     "f1": 0.1758
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 569,
+     "tp_call": 569,
+     "fp": 692,
+     "fn": 128,
+     "precision": 0.4512,
+     "recall": 0.8164,
+     "f1": 0.5812
+    },
+    "raw_best": 0.2881,
+    "pon_best": 0.6058,
+    "ceiling": 0.891,
+    "threshold": 0.11604047566652298,
+    "truth_pon_tagged": 61
+   },
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_ONT_SNV_7fc7396_ddp4_b1024_s2",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_ONT_SNV_7fc7396_ddp4_b1024_s2/vcf_chr1/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 595,
+     "tp_call": 595,
+     "fp": 5940,
+     "fn": 102,
+     "precision": 0.091,
+     "recall": 0.8537,
+     "f1": 0.1645
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 573,
+     "tp_call": 573,
+     "fp": 708,
+     "fn": 124,
+     "precision": 0.4473,
+     "recall": 0.8221,
+     "f1": 0.5794
+    },
+    "raw_best": 0.2483,
+    "pon_best": 0.5974,
+    "ceiling": 0.8953,
+    "threshold": 0.2449430376291275,
+    "truth_pon_tagged": 61
+   }
+  ]
+ },
+ {
+  "kind": "INDEL",
+  "platform": "ONT",
+  "graph": "v2.1 d46",
+  "model": "final release model, ppr8 (3 seeds)",
+  "runs": [
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/release_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/release_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 97,
+     "tp_call": 97,
+     "fp": 546,
+     "fn": 490,
+     "precision": 0.1509,
+     "recall": 0.1652,
+     "f1": 0.1577
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 88,
+     "tp_call": 88,
+     "fp": 371,
+     "fn": 499,
+     "precision": 0.1917,
+     "recall": 0.1499,
+     "f1": 0.1683
+    },
+    "raw_best": 0.1854,
+    "pon_best": 0.1869,
+    "ceiling": 0.2368,
+    "threshold": 0.3256518840789795,
+    "truth_pon_tagged": 418
+   },
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/release_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/release_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 104,
+     "tp_call": 104,
+     "fp": 676,
+     "fn": 483,
+     "precision": 0.1333,
+     "recall": 0.1772,
+     "f1": 0.1522
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 90,
+     "tp_call": 90,
+     "fp": 335,
+     "fn": 497,
+     "precision": 0.2118,
+     "recall": 0.1533,
+     "f1": 0.1779
+    },
+    "raw_best": 0.1863,
+    "pon_best": 0.1937,
+    "ceiling": 0.23,
+    "threshold": 0.24007463455200195,
+    "truth_pon_tagged": 418
+   },
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/release_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/release_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 108,
+     "tp_call": 108,
+     "fp": 971,
+     "fn": 479,
+     "precision": 0.1001,
+     "recall": 0.184,
+     "f1": 0.1297
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 95,
+     "tp_call": 95,
+     "fp": 526,
+     "fn": 492,
+     "precision": 0.153,
+     "recall": 0.1618,
+     "f1": 0.1573
+    },
+    "raw_best": 0.1798,
+    "pon_best": 0.182,
+    "ceiling": 0.2351,
+    "threshold": 0.2895215153694153,
+    "truth_pon_tagged": 418
+   }
+  ]
+ },
+ {
+  "kind": "INDEL",
+  "platform": "ONT",
+  "graph": "v2.1 d46",
+  "model": "7fc7396 / normbq single-set, recall-0.9 threshold (1 seed)",
+  "runs": [
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_ONT_INDEL_d46_7fc7396",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_ONT_INDEL_d46_7fc7396/vcf_chr1_pon71cb51a/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 226,
+     "tp_call": 227,
+     "fp": 41084,
+     "fn": 361,
+     "precision": 0.0055,
+     "recall": 0.385,
+     "f1": 0.0108
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 139,
+     "tp_call": 139,
+     "fp": 18182,
+     "fn": 448,
+     "precision": 0.0076,
+     "recall": 0.2368,
+     "f1": 0.0147
+    },
+    "raw_best": 0.1043,
+    "pon_best": 0.1589,
+    "ceiling": 0.2368,
+    "threshold": 0.013545623049139977,
+    "truth_pon_tagged": 418
+   }
+  ]
+ },
+ {
+  "kind": "INDEL",
+  "platform": "ONT",
+  "graph": "v1.1 d9",
+  "model": "7fc7396 / normbq single-set, recall-0.9 threshold (1 seed)",
+  "runs": [
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_ONT_INDEL_7fc7396",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_ONT_INDEL_7fc7396/vcf_chr1_pon71cb51a/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 235,
+     "tp_call": 237,
+     "fp": 40815,
+     "fn": 352,
+     "precision": 0.0058,
+     "recall": 0.4003,
+     "f1": 0.0114
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 134,
+     "tp_call": 134,
+     "fp": 17038,
+     "fn": 453,
+     "precision": 0.0078,
+     "recall": 0.2283,
+     "f1": 0.0151
+    },
+    "raw_best": 0.0899,
+    "pon_best": 0.1435,
+    "ceiling": 0.2385,
+    "threshold": 0.01780148223042488,
+    "truth_pon_tagged": 418
+   }
+  ]
+ },
+ {
+  "kind": "INDEL",
+  "platform": "ONT",
+  "graph": "GRCh38-only",
+  "model": "7fc7396 single-set, recall-0.9 threshold (1 seed)",
+  "runs": [
+   {
+    "run": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_ONT_INDEL_linear_7fc7396",
+    "report": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_ONT_INDEL_linear_7fc7396/vcf_chr1_pon71cb51a/eval_bed/report.json",
+    "raw": {
+     "threshold": null,
+     "tp_baseline": 316,
+     "tp_call": 316,
+     "fp": 65729,
+     "fn": 271,
+     "precision": 0.0048,
+     "recall": 0.5383,
+     "f1": 0.0095
+    },
+    "pon": {
+     "threshold": null,
+     "tp_baseline": 138,
+     "tp_call": 138,
+     "fp": 11366,
+     "fn": 449,
+     "precision": 0.012,
+     "recall": 0.2351,
+     "f1": 0.0228
+    },
+    "raw_best": 0.0298,
+    "pon_best": 0.0838,
+    "ceiling": 0.2351,
+    "threshold": 0.008446893654763699,
+    "truth_pon_tagged": 418
+   }
+  ]
+ }
+]

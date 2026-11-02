@@ -1,0 +1,66 @@
+{
+ "HG008 germline SNV": {
+  "n": 3737022,
+  "carriers_ge46": 3263667,
+  "share_ge46": 0.8733,
+  "chm13_carrier_below46": 29896,
+  "share_chm13_below46": 0.008,
+  "any_carrier": 3636828
+ },
+ "HG008 germline INDEL": {
+  "n": 964490,
+  "carriers_ge46": 750735,
+  "share_ge46": 0.7784,
+  "chm13_carrier_below46": 9388,
+  "share_chm13_below46": 0.0097,
+  "any_carrier": 887952
+ },
+ "HG008 somatic SNV": {
+  "n": 8543,
+  "carriers_ge46": 143,
+  "share_ge46": 0.0167,
+  "chm13_carrier_below46": 4,
+  "share_chm13_below46": 0.0005,
+  "any_carrier": 476
+ },
+ "HG008 somatic INDEL": {
+  "n": 7933,
+  "carriers_ge46": 1522,
+  "share_ge46": 0.1919,
+  "chm13_carrier_below46": 106,
+  "share_chm13_below46": 0.0134,
+  "any_carrier": 5694
+ },
+ "COLO829 germline SNV": {
+  "n": 3729123,
+  "carriers_ge46": 3270210,
+  "share_ge46": 0.8769,
+  "chm13_carrier_below46": 26494,
+  "share_chm13_below46": 0.0071,
+  "any_carrier": 3630758
+ },
+ "COLO829 germline INDEL": {
+  "n": 977293,
+  "carriers_ge46": 754006,
+  "share_ge46": 0.7715,
+  "chm13_carrier_below46": 8887,
+  "share_chm13_below46": 0.0091,
+  "any_carrier": 898049
+ },
+ "COLO829 somatic SNV": {
+  "n": 42035,
+  "carriers_ge46": 63,
+  "share_ge46": 0.0015,
+  "chm13_carrier_below46": 4,
+  "share_chm13_below46": 0.0001,
+  "any_carrier": 560
+ },
+ "COLO829 somatic INDEL": {
+  "n": 1912,
+  "carriers_ge46": 340,
+  "share_ge46": 0.1778,
+  "chm13_carrier_below46": 23,
+  "share_chm13_below46": 0.012,
+  "any_carrier": 1135
+ }
+}

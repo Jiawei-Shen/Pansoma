@@ -1,0 +1,553 @@
+{
+ "HG008T_Illumina_d46.SNV": {
+  "offref_by_reason_train": {
+   "off_reference_no_truth_match": 87593,
+   "not_on_unique_grch38_node": 41333,
+   "outside_confident_region": 23658,
+   "residual_partial_somatic_truth": 461
+  },
+  "offref_total_train": 153045,
+  "all_tensors_train": 2419102,
+  "offref_used_snvrecipe_train": {},
+  "offref_outside_conf_in_somatic_bed_train": 9916,
+  "offref_eval_label_train": {
+   "0": 87593,
+   "-1": 64991,
+   "1": 461
+  },
+  "offref_step4_zero_train": 0,
+  "offref_no_truth_match_train": 87593,
+  "offref_partial_somatic_train": 461,
+  "non_eval_train": 1707034,
+  "offref_by_reason_val": {
+   "off_reference_no_truth_match": 4059,
+   "outside_confident_region": 710,
+   "residual_partial_somatic_truth": 27,
+   "not_on_unique_grch38_node": 482
+  },
+  "offref_total_val": 5278,
+  "all_tensors_val": 101243,
+  "offref_used_snvrecipe_val": {},
+  "offref_outside_conf_in_somatic_bed_val": 160,
+  "offref_eval_label_val": {
+   "0": 4059,
+   "-1": 1192,
+   "1": 27
+  },
+  "offref_step4_zero_val": 0,
+  "offref_no_truth_match_val": 4059,
+  "offref_partial_somatic_val": 27,
+  "non_eval_val": 80578
+ },
+ "HG008T_Illumina_d46.INDEL": {
+  "offref_by_reason_train": {
+   "off_reference_no_truth_match": 17075,
+   "outside_confident_region": 3075,
+   "residual_partial_somatic_truth": 840,
+   "truth_matches_non_representative_allele": 119,
+   "not_on_unique_grch38_node": 2628
+  },
+  "offref_total_train": 23737,
+  "all_tensors_train": 121936,
+  "offref_used_snvrecipe_train": {
+   "0": 119
+  },
+  "offref_outside_conf_in_somatic_bed_train": 618,
+  "offref_eval_label_train": {
+   "0": 17075,
+   "-1": 5822,
+   "1": 840
+  },
+  "offref_step4_zero_train": 119,
+  "offref_no_truth_match_train": 17075,
+  "offref_partial_somatic_train": 840,
+  "non_eval_train": 37475,
+  "offref_by_reason_val": {
+   "off_reference_no_truth_match": 838,
+   "residual_partial_somatic_truth": 44,
+   "outside_confident_region": 141,
+   "truth_matches_non_representative_allele": 5,
+   "not_on_unique_grch38_node": 40
+  },
+  "offref_total_val": 1068,
+  "all_tensors_val": 5271,
+  "offref_used_snvrecipe_val": {
+   "0": 5
+  },
+  "offref_outside_conf_in_somatic_bed_val": 22,
+  "offref_eval_label_val": {
+   "0": 838,
+   "1": 44,
+   "-1": 186
+  },
+  "offref_step4_zero_val": 5,
+  "offref_no_truth_match_val": 838,
+  "offref_partial_somatic_val": 44,
+  "non_eval_val": 1767,
+  "step4_detail_chr2_22_all_blocks": {
+   "site mate in germline": 122,
+   "A1 multi-node DEL (@)": 124,
+   "total": 124,
+   "site mate in somatic": 2
+  }
+ },
+ "HG008T_PacBio_d46.SNV": {
+  "offref_by_reason_train": {
+   "off_reference_no_truth_match": 33357,
+   "outside_confident_region": 24854,
+   "not_on_unique_grch38_node": 75999,
+   "residual_partial_somatic_truth": 235
+  },
+  "offref_total_train": 134445,
+  "all_tensors_train": 1131350,
+  "offref_used_snvrecipe_train": {},
+  "offref_outside_conf_in_somatic_bed_train": 7954,
+  "offref_eval_label_train": {
+   "0": 33357,
+   "-1": 100853,
+   "1": 235
+  },
+  "offref_step4_zero_train": 0,
+  "offref_no_truth_match_train": 33357,
+  "offref_partial_somatic_train": 235,
+  "non_eval_train": 104878,
+  "offref_by_reason_val": {
+   "off_reference_no_truth_match": 1784,
+   "outside_confident_region": 746,
+   "residual_partial_somatic_truth": 8,
+   "not_on_unique_grch38_node": 1070
+  },
+  "offref_total_val": 3608,
+  "all_tensors_val": 22737,
+  "offref_used_snvrecipe_val": {},
+  "offref_outside_conf_in_somatic_bed_val": 198,
+  "offref_eval_label_val": {
+   "0": 1784,
+   "-1": 1816,
+   "1": 8
+  },
+  "offref_step4_zero_val": 0,
+  "offref_no_truth_match_val": 1784,
+  "offref_partial_somatic_val": 8,
+  "non_eval_val": 4509
+ },
+ "HG008T_PacBio_d46.INDEL": {
+  "offref_by_reason_train": {
+   "off_reference_no_truth_match": 109118,
+   "outside_confident_region": 14271,
+   "not_on_unique_grch38_node": 14777,
+   "residual_partial_somatic_truth": 1372,
+   "truth_matches_non_representative_allele": 83
+  },
+  "offref_total_train": 139621,
+  "all_tensors_train": 1722276,
+  "offref_used_snvrecipe_train": {
+   "0": 83
+  },
+  "offref_outside_conf_in_somatic_bed_train": 3010,
+  "offref_eval_label_train": {
+   "0": 109118,
+   "-1": 29131,
+   "1": 1372
+  },
+  "offref_step4_zero_train": 83,
+  "offref_no_truth_match_train": 109118,
+  "offref_partial_somatic_train": 1372,
+  "non_eval_train": 1437742,
+  "offref_by_reason_val": {
+   "off_reference_no_truth_match": 5205,
+   "outside_confident_region": 676,
+   "residual_partial_somatic_truth": 76,
+   "truth_matches_non_representative_allele": 4,
+   "not_on_unique_grch38_node": 304
+  },
+  "offref_total_val": 6265,
+  "all_tensors_val": 81101,
+  "offref_used_snvrecipe_val": {
+   "0": 4
+  },
+  "offref_outside_conf_in_somatic_bed_val": 132,
+  "offref_eval_label_val": {
+   "0": 5205,
+   "-1": 984,
+   "1": 76
+  },
+  "offref_step4_zero_val": 4,
+  "offref_no_truth_match_val": 5205,
+  "offref_partial_somatic_val": 76,
+  "non_eval_val": 70488,
+  "step4_detail_chr2_22_all_blocks": {
+   "site mate in germline": 84,
+   "A1 multi-node DEL (@)": 87,
+   "total": 87,
+   "site mate in somatic": 3
+  }
+ },
+ "HG008T_ONT_d46.SNV": {
+  "offref_by_reason_train": {
+   "off_reference_no_truth_match": 34074,
+   "not_on_unique_grch38_node": 76625,
+   "outside_confident_region": 25673,
+   "residual_partial_somatic_truth": 225
+  },
+  "offref_total_train": 136597,
+  "all_tensors_train": 1423520,
+  "offref_used_snvrecipe_train": {},
+  "offref_outside_conf_in_somatic_bed_train": 8780,
+  "offref_eval_label_train": {
+   "0": 34074,
+   "-1": 102298,
+   "1": 225
+  },
+  "offref_step4_zero_train": 0,
+  "offref_no_truth_match_train": 34074,
+  "offref_partial_somatic_train": 225,
+  "non_eval_train": 217530,
+  "offref_by_reason_val": {
+   "off_reference_no_truth_match": 1748,
+   "outside_confident_region": 749,
+   "residual_partial_somatic_truth": 9,
+   "not_on_unique_grch38_node": 1167
+  },
+  "offref_total_val": 3673,
+  "all_tensors_val": 32294,
+  "offref_used_snvrecipe_val": {},
+  "offref_outside_conf_in_somatic_bed_val": 143,
+  "offref_eval_label_val": {
+   "0": 1748,
+   "-1": 1916,
+   "1": 9
+  },
+  "offref_step4_zero_val": 0,
+  "offref_no_truth_match_val": 1748,
+  "offref_partial_somatic_val": 9,
+  "non_eval_val": 9488
+ },
+ "HG008T_ONT_d46.INDEL": {
+  "offref_by_reason_train": {
+   "off_reference_no_truth_match": 158453,
+   "outside_confident_region": 18487,
+   "not_on_unique_grch38_node": 15691,
+   "residual_partial_somatic_truth": 1248,
+   "truth_matches_non_representative_allele": 332
+  },
+  "offref_total_train": 194211,
+  "all_tensors_train": 2190414,
+  "offref_used_snvrecipe_train": {
+   "0": 332
+  },
+  "offref_outside_conf_in_somatic_bed_train": 4050,
+  "offref_eval_label_train": {
+   "0": 158453,
+   "-1": 34510,
+   "1": 1248
+  },
+  "offref_step4_zero_train": 332,
+  "offref_no_truth_match_train": 158453,
+  "offref_partial_somatic_train": 1248,
+  "non_eval_train": 1867032,
+  "offref_by_reason_val": {
+   "off_reference_no_truth_match": 7504,
+   "outside_confident_region": 924,
+   "residual_partial_somatic_truth": 65,
+   "truth_matches_non_representative_allele": 13,
+   "not_on_unique_grch38_node": 549
+  },
+  "offref_total_val": 9055,
+  "all_tensors_val": 105364,
+  "offref_used_snvrecipe_val": {
+   "0": 13
+  },
+  "offref_outside_conf_in_somatic_bed_val": 112,
+  "offref_eval_label_val": {
+   "0": 7504,
+   "-1": 1486,
+   "1": 65
+  },
+  "offref_step4_zero_val": 13,
+  "offref_no_truth_match_val": 7504,
+  "offref_partial_somatic_val": 65,
+  "non_eval_val": 91378,
+  "step4_detail_chr2_22_all_blocks": {
+   "site mate in germline": 343,
+   "A1 multi-node DEL (@)": 345,
+   "total": 345,
+   "site mate in somatic": 1,
+   "site mate in somatic+germline": 1
+  }
+ },
+ "COLO829T_Illumina_d46.SNV": {
+  "offref_by_reason_train": {
+   "off_reference_no_truth_match": 44556,
+   "outside_confident_region": 13807,
+   "not_on_unique_grch38_node": 28862,
+   "residual_partial_somatic_truth": 97
+  },
+  "offref_total_train": 87322,
+  "all_tensors_train": 1443311,
+  "offref_used_snvrecipe_train": {},
+  "offref_outside_conf_in_somatic_bed_train": 13807,
+  "offref_eval_label_train": {
+   "0": 44556,
+   "-1": 42669,
+   "1": 97
+  },
+  "offref_step4_zero_train": 0,
+  "offref_no_truth_match_train": 44556,
+  "offref_partial_somatic_train": 97,
+  "non_eval_train": 848290,
+  "offref_by_reason_val": {
+   "off_reference_no_truth_match": 1899,
+   "outside_confident_region": 279,
+   "not_on_unique_grch38_node": 198,
+   "residual_partial_somatic_truth": 4
+  },
+  "offref_total_val": 2380,
+  "all_tensors_val": 57232,
+  "offref_used_snvrecipe_val": {},
+  "offref_outside_conf_in_somatic_bed_val": 279,
+  "offref_eval_label_val": {
+   "0": 1899,
+   "-1": 477,
+   "1": 4
+  },
+  "offref_step4_zero_val": 0,
+  "offref_no_truth_match_val": 1899,
+  "offref_partial_somatic_val": 4,
+  "non_eval_val": 40055
+ },
+ "COLO829T_Illumina_d46.INDEL": {
+  "offref_by_reason_train": {
+   "off_reference_no_truth_match": 18949,
+   "not_on_unique_grch38_node": 2479,
+   "outside_confident_region": 1360,
+   "residual_partial_somatic_truth": 94,
+   "truth_matches_non_representative_allele": 101
+  },
+  "offref_total_train": 22983,
+  "all_tensors_train": 120444,
+  "offref_used_snvrecipe_train": {
+   "0": 101
+  },
+  "offref_outside_conf_in_somatic_bed_train": 1360,
+  "offref_eval_label_train": {
+   "0": 18949,
+   "-1": 3940,
+   "1": 94
+  },
+  "offref_step4_zero_train": 101,
+  "offref_no_truth_match_train": 18949,
+  "offref_partial_somatic_train": 94,
+  "non_eval_train": 42220,
+  "offref_by_reason_val": {
+   "off_reference_no_truth_match": 909,
+   "outside_confident_region": 36,
+   "truth_matches_non_representative_allele": 5,
+   "not_on_unique_grch38_node": 25,
+   "residual_partial_somatic_truth": 6
+  },
+  "offref_total_val": 981,
+  "all_tensors_val": 5146,
+  "offref_used_snvrecipe_val": {
+   "0": 5
+  },
+  "offref_outside_conf_in_somatic_bed_val": 36,
+  "offref_eval_label_val": {
+   "0": 909,
+   "-1": 66,
+   "1": 6
+  },
+  "offref_step4_zero_val": 5,
+  "offref_no_truth_match_val": 909,
+  "offref_partial_somatic_val": 6,
+  "non_eval_val": 1928,
+  "step4_detail_chr2_22_all_blocks": {
+   "site mate in germline": 106,
+   "A1 multi-node DEL (@)": 106,
+   "total": 106
+  }
+ },
+ "COLO829T_fiberseq_d46.SNV": {
+  "offref_by_reason_train": {
+   "off_reference_no_truth_match": 53346,
+   "not_on_unique_grch38_node": 89127,
+   "outside_confident_region": 28735,
+   "residual_partial_somatic_truth": 71
+  },
+  "offref_total_train": 171279,
+  "all_tensors_train": 2138303,
+  "offref_used_snvrecipe_train": {},
+  "offref_outside_conf_in_somatic_bed_train": 28735,
+  "offref_eval_label_train": {
+   "0": 53346,
+   "-1": 117862,
+   "1": 71
+  },
+  "offref_step4_zero_train": 0,
+  "offref_no_truth_match_train": 53346,
+  "offref_partial_somatic_train": 71,
+  "non_eval_train": 205844,
+  "offref_by_reason_val": {
+   "outside_confident_region": 685,
+   "not_on_unique_grch38_node": 936,
+   "off_reference_no_truth_match": 2546,
+   "residual_partial_somatic_truth": 3
+  },
+  "offref_total_val": 4170,
+  "all_tensors_val": 27816,
+  "offref_used_snvrecipe_val": {},
+  "offref_outside_conf_in_somatic_bed_val": 685,
+  "offref_eval_label_val": {
+   "-1": 1621,
+   "0": 2546,
+   "1": 3
+  },
+  "offref_step4_zero_val": 0,
+  "offref_no_truth_match_val": 2546,
+  "offref_partial_somatic_val": 3,
+  "non_eval_val": 8016
+ },
+ "COLO829T_fiberseq_d46.INDEL": {
+  "offref_by_reason_train": {
+   "off_reference_no_truth_match": 158621,
+   "not_on_unique_grch38_node": 21989,
+   "outside_confident_region": 9270,
+   "residual_partial_somatic_truth": 209,
+   "truth_matches_non_representative_allele": 90
+  },
+  "offref_total_train": 190179,
+  "all_tensors_train": 1670780,
+  "offref_used_snvrecipe_train": {
+   "0": 90
+  },
+  "offref_outside_conf_in_somatic_bed_train": 9270,
+  "offref_eval_label_train": {
+   "0": 158621,
+   "-1": 31349,
+   "1": 209
+  },
+  "offref_step4_zero_train": 90,
+  "offref_no_truth_match_train": 158621,
+  "offref_partial_somatic_train": 209,
+  "non_eval_train": 1308473,
+  "offref_by_reason_val": {
+   "off_reference_no_truth_match": 7729,
+   "outside_confident_region": 378,
+   "not_on_unique_grch38_node": 363,
+   "residual_partial_somatic_truth": 11,
+   "truth_matches_non_representative_allele": 10
+  },
+  "offref_total_val": 8491,
+  "all_tensors_val": 73339,
+  "offref_used_snvrecipe_val": {
+   "0": 10
+  },
+  "offref_outside_conf_in_somatic_bed_val": 378,
+  "offref_eval_label_val": {
+   "0": 7729,
+   "-1": 751,
+   "1": 11
+  },
+  "offref_step4_zero_val": 10,
+  "offref_no_truth_match_val": 7729,
+  "offref_partial_somatic_val": 11,
+  "non_eval_val": 63255,
+  "step4_detail_chr2_22_all_blocks": {
+   "site mate in germline": 100,
+   "A1 multi-node DEL (@)": 100,
+   "total": 100
+  }
+ },
+ "COLO829T_ONT_d46.SNV": {
+  "offref_by_reason_train": {
+   "off_reference_no_truth_match": 68331,
+   "outside_confident_region": 28930,
+   "not_on_unique_grch38_node": 81893,
+   "residual_partial_somatic_truth": 66
+  },
+  "offref_total_train": 179220,
+  "all_tensors_train": 1987252,
+  "offref_used_snvrecipe_train": {},
+  "offref_outside_conf_in_somatic_bed_train": 28930,
+  "offref_eval_label_train": {
+   "0": 68331,
+   "-1": 110823,
+   "1": 66
+  },
+  "offref_step4_zero_train": 0,
+  "offref_no_truth_match_train": 68331,
+  "offref_partial_somatic_train": 66,
+  "non_eval_train": 544550,
+  "offref_by_reason_val": {
+   "outside_confident_region": 798,
+   "not_on_unique_grch38_node": 2310,
+   "off_reference_no_truth_match": 3519,
+   "residual_partial_somatic_truth": 4
+  },
+  "offref_total_val": 6631,
+  "all_tensors_val": 54422,
+  "offref_used_snvrecipe_val": {},
+  "offref_outside_conf_in_somatic_bed_val": 798,
+  "offref_eval_label_val": {
+   "-1": 3108,
+   "0": 3519,
+   "1": 4
+  },
+  "offref_step4_zero_val": 0,
+  "offref_no_truth_match_val": 3519,
+  "offref_partial_somatic_val": 4,
+  "non_eval_val": 29549
+ },
+ "COLO829T_ONT_d46.INDEL": {
+  "offref_by_reason_train": {
+   "off_reference_no_truth_match": 246976,
+   "outside_confident_region": 12924,
+   "not_on_unique_grch38_node": 23451,
+   "truth_matches_non_representative_allele": 717,
+   "residual_partial_somatic_truth": 231
+  },
+  "offref_total_train": 284299,
+  "all_tensors_train": 3897064,
+  "offref_used_snvrecipe_train": {
+   "0": 717
+  },
+  "offref_outside_conf_in_somatic_bed_train": 12924,
+  "offref_eval_label_train": {
+   "0": 246976,
+   "-1": 37092,
+   "1": 231
+  },
+  "offref_step4_zero_train": 717,
+  "offref_no_truth_match_train": 246976,
+  "offref_partial_somatic_train": 231,
+  "non_eval_train": 3535835,
+  "offref_by_reason_val": {
+   "off_reference_no_truth_match": 12117,
+   "outside_confident_region": 480,
+   "not_on_unique_grch38_node": 758,
+   "residual_partial_somatic_truth": 12,
+   "truth_matches_non_representative_allele": 39
+  },
+  "offref_total_val": 13406,
+  "all_tensors_val": 186837,
+  "offref_used_snvrecipe_val": {
+   "0": 39
+  },
+  "offref_outside_conf_in_somatic_bed_val": 480,
+  "offref_eval_label_val": {
+   "0": 12117,
+   "-1": 1277,
+   "1": 12
+  },
+  "offref_step4_zero_val": 39,
+  "offref_no_truth_match_val": 12117,
+  "offref_partial_somatic_val": 12,
+  "non_eval_val": 173128,
+  "step4_detail_chr2_22_all_blocks": {
+   "site mate in germline": 754,
+   "A1 multi-node DEL (@)": 756,
+   "total": 756,
+   "site mate in somatic": 2
+  }
+ }
+}

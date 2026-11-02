@@ -1,0 +1,7089 @@
+{
+ "sets": {
+  "HG008T_Illumina|linear|0": {
+   "blocks": 3975,
+   "val_blocks": 221,
+   "val_bp_tile": 141098636,
+   "val_bp_bins": 135920000,
+   "bins_with_tensors": 247212,
+   "bins_mixed": 243,
+   "onref_tensors": 5340780,
+   "onref_val_tensors": 292524,
+   "val_bp_hull": 138628421,
+   "span_bp": 2560044456,
+   "tensors": 5854337,
+   "npz": "HG008T_Illumina_linear.tensors.SNV.df0b6f07d683.npz"
+  },
+  "HG008T_Illumina|linear|1": {
+   "blocks": 3975,
+   "val_blocks": 229,
+   "val_bp_tile": 153408083,
+   "val_bp_bins": 142500000,
+   "bins_with_tensors": 247212,
+   "bins_mixed": 277,
+   "onref_tensors": 5340780,
+   "onref_val_tensors": 305254,
+   "val_bp_hull": 144585478,
+   "span_bp": 2560044456,
+   "tensors": 5854337,
+   "npz": "HG008T_Illumina_linear.tensors.SNV.df0b6f07d683.npz"
+  },
+  "HG008T_Illumina|linear|2": {
+   "blocks": 3975,
+   "val_blocks": 183,
+   "val_bp_tile": 117069082,
+   "val_bp_bins": 113470000,
+   "bins_with_tensors": 247212,
+   "bins_mixed": 208,
+   "onref_tensors": 5340780,
+   "onref_val_tensors": 246638,
+   "val_bp_hull": 115466360,
+   "span_bp": 2560044456,
+   "tensors": 5854337,
+   "npz": "HG008T_Illumina_linear.tensors.SNV.df0b6f07d683.npz"
+  },
+  "HG008T_Illumina|d9|0": {
+   "blocks": 2669,
+   "val_blocks": 150,
+   "val_bp_tile": 144505976,
+   "val_bp_bins": 131170000,
+   "bins_with_tensors": 227132,
+   "bins_mixed": 147,
+   "onref_tensors": 2424834,
+   "onref_val_tensors": 129575,
+   "val_bp_hull": 707575305,
+   "span_bp": 2560324278,
+   "tensors": 2851868,
+   "npz": "HG008T_Illumina.tensors.SNV.0062217f8edf.npz"
+  },
+  "HG008T_Illumina|d9|1": {
+   "blocks": 2669,
+   "val_blocks": 130,
+   "val_bp_tile": 126650287,
+   "val_bp_bins": 111680000,
+   "bins_with_tensors": 227132,
+   "bins_mixed": 124,
+   "onref_tensors": 2424834,
+   "onref_val_tensors": 122751,
+   "val_bp_hull": 469395889,
+   "span_bp": 2560324278,
+   "tensors": 2851868,
+   "npz": "HG008T_Illumina.tensors.SNV.0062217f8edf.npz"
+  },
+  "HG008T_Illumina|d9|2": {
+   "blocks": 2669,
+   "val_blocks": 154,
+   "val_bp_tile": 157782380,
+   "val_bp_bins": 139560000,
+   "bins_with_tensors": 227132,
+   "bins_mixed": 126,
+   "onref_tensors": 2424834,
+   "onref_val_tensors": 155080,
+   "val_bp_hull": 442184163,
+   "span_bp": 2560324278,
+   "tensors": 2851868,
+   "npz": "HG008T_Illumina.tensors.SNV.0062217f8edf.npz"
+  },
+  "HG008T_Illumina|d46|0": {
+   "blocks": 6206,
+   "val_blocks": 296,
+   "val_bp_tile": 116181330,
+   "val_bp_bins": 104060000,
+   "bins_with_tensors": 225780,
+   "bins_mixed": 245,
+   "onref_tensors": 2362022,
+   "onref_val_tensors": 95965,
+   "val_bp_hull": 669588559,
+   "span_bp": 2559845053,
+   "tensors": 2794337,
+   "npz": "HG008T_Illumina_d46.tensors.SNV.91645eef0a6a.npz"
+  },
+  "HG008T_Illumina|d46|1": {
+   "blocks": 6206,
+   "val_blocks": 288,
+   "val_bp_tile": 116337832,
+   "val_bp_bins": 103800000,
+   "bins_with_tensors": 225780,
+   "bins_mixed": 233,
+   "onref_tensors": 2362022,
+   "onref_val_tensors": 111702,
+   "val_bp_hull": 296012112,
+   "span_bp": 2559845053,
+   "tensors": 2794337,
+   "npz": "HG008T_Illumina_d46.tensors.SNV.91645eef0a6a.npz"
+  },
+  "HG008T_Illumina|d46|2": {
+   "blocks": 6206,
+   "val_blocks": 287,
+   "val_bp_tile": 122139176,
+   "val_bp_bins": 106940000,
+   "bins_with_tensors": 225780,
+   "bins_mixed": 226,
+   "onref_tensors": 2362022,
+   "onref_val_tensors": 127655,
+   "val_bp_hull": 653123470,
+   "span_bp": 2559845053,
+   "tensors": 2794337,
+   "npz": "HG008T_Illumina_d46.tensors.SNV.91645eef0a6a.npz"
+  },
+  "HG008T_PacBio|linear|0": {
+   "blocks": 3966,
+   "val_blocks": 220,
+   "val_bp_tile": 140834832,
+   "val_bp_bins": 124330000,
+   "bins_with_tensors": 226285,
+   "bins_mixed": 200,
+   "onref_tensors": 3675346,
+   "onref_val_tensors": 188767,
+   "val_bp_hull": 136767633,
+   "span_bp": 2559565591,
+   "tensors": 3977546,
+   "npz": "HG008T_PacBio_linear.tensors.SNV.bdf4b4d4fd76.npz"
+  },
+  "HG008T_PacBio|linear|1": {
+   "blocks": 3966,
+   "val_blocks": 229,
+   "val_bp_tile": 153360398,
+   "val_bp_bins": 129680000,
+   "bins_with_tensors": 226285,
+   "bins_mixed": 240,
+   "onref_tensors": 3675346,
+   "onref_val_tensors": 223103,
+   "val_bp_hull": 143262379,
+   "span_bp": 2559565591,
+   "tensors": 3977546,
+   "npz": "HG008T_PacBio_linear.tensors.SNV.bdf4b4d4fd76.npz"
+  },
+  "HG008T_PacBio|linear|2": {
+   "blocks": 3966,
+   "val_blocks": 183,
+   "val_bp_tile": 117176983,
+   "val_bp_bins": 104090000,
+   "bins_with_tensors": 226285,
+   "bins_mixed": 183,
+   "onref_tensors": 3675346,
+   "onref_val_tensors": 165498,
+   "val_bp_hull": 113295525,
+   "span_bp": 2559565591,
+   "tensors": 3977546,
+   "npz": "HG008T_PacBio_linear.tensors.SNV.bdf4b4d4fd76.npz"
+  },
+  "HG008T_PacBio|d9|0": {
+   "blocks": 2664,
+   "val_blocks": 150,
+   "val_bp_tile": 143398426,
+   "val_bp_bins": 72750000,
+   "bins_with_tensors": 132808,
+   "bins_mixed": 54,
+   "onref_tensors": 935506,
+   "onref_val_tensors": 25952,
+   "val_bp_hull": 614305587,
+   "span_bp": 2559816172,
+   "tensors": 1100923,
+   "npz": "HG008T_PacBio.tensors.SNV.63ee02d2a0bc.npz"
+  },
+  "HG008T_PacBio|d9|1": {
+   "blocks": 2664,
+   "val_blocks": 130,
+   "val_bp_tile": 126017061,
+   "val_bp_bins": 64530000,
+   "bins_with_tensors": 132808,
+   "bins_mixed": 41,
+   "onref_tensors": 935506,
+   "onref_val_tensors": 37038,
+   "val_bp_hull": 460027711,
+   "span_bp": 2559816172,
+   "tensors": 1100923,
+   "npz": "HG008T_PacBio.tensors.SNV.63ee02d2a0bc.npz"
+  },
+  "HG008T_PacBio|d9|2": {
+   "blocks": 2664,
+   "val_blocks": 153,
+   "val_bp_tile": 156361292,
+   "val_bp_bins": 81820000,
+   "bins_with_tensors": 132808,
+   "bins_mixed": 42,
+   "onref_tensors": 935506,
+   "onref_val_tensors": 108030,
+   "val_bp_hull": 439659417,
+   "span_bp": 2559816172,
+   "tensors": 1100923,
+   "npz": "HG008T_PacBio.tensors.SNV.63ee02d2a0bc.npz"
+  },
+  "HG008T_PacBio|d46|0": {
+   "blocks": 6114,
+   "val_blocks": 291,
+   "val_bp_tile": 115681438,
+   "val_bp_bins": 58590000,
+   "bins_with_tensors": 125068,
+   "bins_mixed": 79,
+   "onref_tensors": 1016034,
+   "onref_val_tensors": 19129,
+   "val_bp_hull": 663853840,
+   "span_bp": 2559139110,
+   "tensors": 1294697,
+   "npz": "HG008T_PacBio_d46.tensors.SNV.98441ebf0fb7.npz"
+  },
+  "HG008T_PacBio|d46|1": {
+   "blocks": 6114,
+   "val_blocks": 283,
+   "val_bp_tile": 115189573,
+   "val_bp_bins": 57390000,
+   "bins_with_tensors": 125068,
+   "bins_mixed": 93,
+   "onref_tensors": 1016034,
+   "onref_val_tensors": 70944,
+   "val_bp_hull": 279716377,
+   "span_bp": 2559139110,
+   "tensors": 1294697,
+   "npz": "HG008T_PacBio_d46.tensors.SNV.98441ebf0fb7.npz"
+  },
+  "HG008T_PacBio|d46|2": {
+   "blocks": 6114,
+   "val_blocks": 284,
+   "val_bp_tile": 121312590,
+   "val_bp_bins": 60680000,
+   "bins_with_tensors": 125068,
+   "bins_mixed": 83,
+   "onref_tensors": 1016034,
+   "onref_val_tensors": 186412,
+   "val_bp_hull": 495816943,
+   "span_bp": 2559139110,
+   "tensors": 1294697,
+   "npz": "HG008T_PacBio_d46.tensors.SNV.98441ebf0fb7.npz"
+  },
+  "HG008T_ONT|linear|0": {
+   "blocks": 3970,
+   "val_blocks": 221,
+   "val_bp_tile": 141779478,
+   "val_bp_bins": 129990000,
+   "bins_with_tensors": 235400,
+   "bins_mixed": 214,
+   "onref_tensors": 4574698,
+   "onref_val_tensors": 215352,
+   "val_bp_hull": 137946399,
+   "span_bp": 2560006769,
+   "tensors": 5182542,
+   "npz": "HG008T_ONT_linear.tensors.SNV.21cc6b8fc0f9.npz"
+  },
+  "HG008T_ONT|linear|1": {
+   "blocks": 3970,
+   "val_blocks": 229,
+   "val_bp_tile": 153431314,
+   "val_bp_bins": 135260000,
+   "bins_with_tensors": 235400,
+   "bins_mixed": 254,
+   "onref_tensors": 4574698,
+   "onref_val_tensors": 290402,
+   "val_bp_hull": 144066667,
+   "span_bp": 2560006769,
+   "tensors": 5182542,
+   "npz": "HG008T_ONT_linear.tensors.SNV.21cc6b8fc0f9.npz"
+  },
+  "HG008T_ONT|linear|2": {
+   "blocks": 3970,
+   "val_blocks": 183,
+   "val_bp_tile": 116842733,
+   "val_bp_bins": 107850000,
+   "bins_with_tensors": 235400,
+   "bins_mixed": 187,
+   "onref_tensors": 4574698,
+   "onref_val_tensors": 178550,
+   "val_bp_hull": 114405737,
+   "span_bp": 2560006769,
+   "tensors": 5182542,
+   "npz": "HG008T_ONT_linear.tensors.SNV.21cc6b8fc0f9.npz"
+  },
+  "HG008T_ONT|d9|0": {
+   "blocks": 2668,
+   "val_blocks": 150,
+   "val_bp_tile": 143548238,
+   "val_bp_bins": 93490000,
+   "bins_with_tensors": 166749,
+   "bins_mixed": 85,
+   "onref_tensors": 1633738,
+   "onref_val_tensors": 51550,
+   "val_bp_hull": 621091536,
+   "span_bp": 2560407140,
+   "tensors": 2093336,
+   "npz": "HG008T_ONT.tensors.SNV.91cf0ad9502b.npz"
+  },
+  "HG008T_ONT|d9|1": {
+   "blocks": 2668,
+   "val_blocks": 130,
+   "val_bp_tile": 127153383,
+   "val_bp_bins": 81810000,
+   "bins_with_tensors": 166749,
+   "bins_mixed": 65,
+   "onref_tensors": 1633738,
+   "onref_val_tensors": 96753,
+   "val_bp_hull": 468684275,
+   "span_bp": 2560407140,
+   "tensors": 2093336,
+   "npz": "HG008T_ONT.tensors.SNV.91cf0ad9502b.npz"
+  },
+  "HG008T_ONT|d9|2": {
+   "blocks": 2668,
+   "val_blocks": 154,
+   "val_bp_tile": 156501656,
+   "val_bp_bins": 103870000,
+   "bins_with_tensors": 166749,
+   "bins_mixed": 57,
+   "onref_tensors": 1633738,
+   "onref_val_tensors": 285892,
+   "val_bp_hull": 441007971,
+   "span_bp": 2560407140,
+   "tensors": 2093336,
+   "npz": "HG008T_ONT.tensors.SNV.91cf0ad9502b.npz"
+  },
+  "HG008T_ONT|d46|0": {
+   "blocks": 6222,
+   "val_blocks": 296,
+   "val_bp_tile": 116706691,
+   "val_bp_bins": 75730000,
+   "bins_with_tensors": 162524,
+   "bins_mixed": 136,
+   "onref_tensors": 1315544,
+   "onref_val_tensors": 28621,
+   "val_bp_hull": 666982798,
+   "span_bp": 2559712852,
+   "tensors": 1710957,
+   "npz": "HG008T_ONT_d46.tensors.SNV.4da62ace82a9.npz"
+  },
+  "HG008T_ONT|d46|1": {
+   "blocks": 6222,
+   "val_blocks": 289,
+   "val_bp_tile": 116634290,
+   "val_bp_bins": 74610000,
+   "bins_with_tensors": 162524,
+   "bins_mixed": 133,
+   "onref_tensors": 1315544,
+   "onref_val_tensors": 79072,
+   "val_bp_hull": 287337690,
+   "span_bp": 2559712852,
+   "tensors": 1710957,
+   "npz": "HG008T_ONT_d46.tensors.SNV.4da62ace82a9.npz"
+  },
+  "HG008T_ONT|d46|2": {
+   "blocks": 6222,
+   "val_blocks": 289,
+   "val_bp_tile": 122899204,
+   "val_bp_bins": 76730000,
+   "bins_with_tensors": 162524,
+   "bins_mixed": 123,
+   "onref_tensors": 1315544,
+   "onref_val_tensors": 85016,
+   "val_bp_hull": 516045733,
+   "span_bp": 2559712852,
+   "tensors": 1710957,
+   "npz": "HG008T_ONT_d46.tensors.SNV.4da62ace82a9.npz"
+  },
+  "COLO829T_Illumina|linear|0": {
+   "blocks": 3975,
+   "val_blocks": 221,
+   "val_bp_tile": 141115053,
+   "val_bp_bins": 135430000,
+   "bins_with_tensors": 247394,
+   "bins_mixed": 244,
+   "onref_tensors": 4635249,
+   "onref_val_tensors": 248385,
+   "val_bp_hull": 138600029,
+   "span_bp": 2560009085,
+   "tensors": 5007009,
+   "npz": "COLO829T_Illumina_linear.tensors.SNV.ecb5c1be7fbe.npz"
+  },
+  "COLO829T_Illumina|linear|1": {
+   "blocks": 3975,
+   "val_blocks": 229,
+   "val_bp_tile": 153471721,
+   "val_bp_bins": 142860000,
+   "bins_with_tensors": 247394,
+   "bins_mixed": 272,
+   "onref_tensors": 4635249,
+   "onref_val_tensors": 268503,
+   "val_bp_hull": 144669965,
+   "span_bp": 2560009085,
+   "tensors": 5007009,
+   "npz": "COLO829T_Illumina_linear.tensors.SNV.ecb5c1be7fbe.npz"
+  },
+  "COLO829T_Illumina|linear|2": {
+   "blocks": 3975,
+   "val_blocks": 183,
+   "val_bp_tile": 117077082,
+   "val_bp_bins": 113800000,
+   "bins_with_tensors": 247394,
+   "bins_mixed": 220,
+   "onref_tensors": 4635249,
+   "onref_val_tensors": 213873,
+   "val_bp_hull": 115487731,
+   "span_bp": 2560009085,
+   "tensors": 5007009,
+   "npz": "COLO829T_Illumina_linear.tensors.SNV.ecb5c1be7fbe.npz"
+  },
+  "COLO829T_Illumina|d9|0": {
+   "blocks": 2669,
+   "val_blocks": 150,
+   "val_bp_tile": 144202184,
+   "val_bp_bins": 137540000,
+   "bins_with_tensors": 236592,
+   "bins_mixed": 171,
+   "onref_tensors": 2177526,
+   "onref_val_tensors": 118079,
+   "val_bp_hull": 695997847,
+   "span_bp": 2560031804,
+   "tensors": 2505600,
+   "npz": "COLO829T_Illumina.tensors.SNV.0428e5b605a2.npz"
+  },
+  "COLO829T_Illumina|d9|1": {
+   "blocks": 2669,
+   "val_blocks": 130,
+   "val_bp_tile": 126089212,
+   "val_bp_bins": 116230000,
+   "bins_with_tensors": 236592,
+   "bins_mixed": 139,
+   "onref_tensors": 2177526,
+   "onref_val_tensors": 107926,
+   "val_bp_hull": 465722552,
+   "span_bp": 2560031804,
+   "tensors": 2505600,
+   "npz": "COLO829T_Illumina.tensors.SNV.0428e5b605a2.npz"
+  },
+  "COLO829T_Illumina|d9|2": {
+   "blocks": 2669,
+   "val_blocks": 154,
+   "val_bp_tile": 155639299,
+   "val_bp_bins": 144950000,
+   "bins_with_tensors": 236592,
+   "bins_mixed": 150,
+   "onref_tensors": 2177526,
+   "onref_val_tensors": 136205,
+   "val_bp_hull": 442359017,
+   "span_bp": 2560031804,
+   "tensors": 2505600,
+   "npz": "COLO829T_Illumina.tensors.SNV.0428e5b605a2.npz"
+  },
+  "COLO829T_Illumina|d46|0": {
+   "blocks": 6210,
+   "val_blocks": 296,
+   "val_bp_tile": 116638749,
+   "val_bp_bins": 103240000,
+   "bins_with_tensors": 222696,
+   "bins_mixed": 235,
+   "onref_tensors": 1410841,
+   "onref_val_tensors": 54852,
+   "val_bp_hull": 685263194,
+   "span_bp": 2559535205,
+   "tensors": 1654891,
+   "npz": "COLO829T_Illumina_d46.tensors.SNV.d651e40b0e9a.npz"
+  },
+  "COLO829T_Illumina|d46|1": {
+   "blocks": 6210,
+   "val_blocks": 288,
+   "val_bp_tile": 116488052,
+   "val_bp_bins": 102280000,
+   "bins_with_tensors": 222696,
+   "bins_mixed": 222,
+   "onref_tensors": 1410841,
+   "onref_val_tensors": 69823,
+   "val_bp_hull": 308820138,
+   "span_bp": 2559535205,
+   "tensors": 1654891,
+   "npz": "COLO829T_Illumina_d46.tensors.SNV.d651e40b0e9a.npz"
+  },
+  "COLO829T_Illumina|d46|2": {
+   "blocks": 6210,
+   "val_blocks": 287,
+   "val_bp_tile": 123254957,
+   "val_bp_bins": 105100000,
+   "bins_with_tensors": 222696,
+   "bins_mixed": 225,
+   "onref_tensors": 1410841,
+   "onref_val_tensors": 78042,
+   "val_bp_hull": 562184132,
+   "span_bp": 2559535205,
+   "tensors": 1654891,
+   "npz": "COLO829T_Illumina_d46.tensors.SNV.d651e40b0e9a.npz"
+  },
+  "COLO829T_fiberseq|linear|0": {
+   "blocks": 3966,
+   "val_blocks": 220,
+   "val_bp_tile": 141198004,
+   "val_bp_bins": 126850000,
+   "bins_with_tensors": 232740,
+   "bins_mixed": 210,
+   "onref_tensors": 4249242,
+   "onref_val_tensors": 202276,
+   "val_bp_hull": 136916528,
+   "span_bp": 2559664674,
+   "tensors": 4525734,
+   "npz": "COLO829T_fiberseq_linear.tensors.SNV.03675fba739d.npz"
+  },
+  "COLO829T_fiberseq|linear|1": {
+   "blocks": 3966,
+   "val_blocks": 229,
+   "val_bp_tile": 153420963,
+   "val_bp_bins": 133260000,
+   "bins_with_tensors": 232740,
+   "bins_mixed": 249,
+   "onref_tensors": 4249242,
+   "onref_val_tensors": 261465,
+   "val_bp_hull": 143332003,
+   "span_bp": 2559664674,
+   "tensors": 4525734,
+   "npz": "COLO829T_fiberseq_linear.tensors.SNV.03675fba739d.npz"
+  },
+  "COLO829T_fiberseq|linear|2": {
+   "blocks": 3966,
+   "val_blocks": 183,
+   "val_bp_tile": 117002057,
+   "val_bp_bins": 106850000,
+   "bins_with_tensors": 232740,
+   "bins_mixed": 196,
+   "onref_tensors": 4249242,
+   "onref_val_tensors": 183403,
+   "val_bp_hull": 114081198,
+   "span_bp": 2559664674,
+   "tensors": 4525734,
+   "npz": "COLO829T_fiberseq_linear.tensors.SNV.03675fba739d.npz"
+  },
+  "COLO829T_fiberseq|d9|0": {
+   "blocks": 2667,
+   "val_blocks": 150,
+   "val_bp_tile": 143414024,
+   "val_bp_bins": 87460000,
+   "bins_with_tensors": 154526,
+   "bins_mixed": 68,
+   "onref_tensors": 1365752,
+   "onref_val_tensors": 43055,
+   "val_bp_hull": 618007822,
+   "span_bp": 2560289366,
+   "tensors": 1576803,
+   "npz": "COLO829T_fiberseq.tensors.SNV.3b5c36659e1e.npz"
+  },
+  "COLO829T_fiberseq|d9|1": {
+   "blocks": 2667,
+   "val_blocks": 130,
+   "val_bp_tile": 128180082,
+   "val_bp_bins": 74480000,
+   "bins_with_tensors": 154526,
+   "bins_mixed": 55,
+   "onref_tensors": 1365752,
+   "onref_val_tensors": 52190,
+   "val_bp_hull": 457839942,
+   "span_bp": 2560289366,
+   "tensors": 1576803,
+   "npz": "COLO829T_fiberseq.tensors.SNV.3b5c36659e1e.npz"
+  },
+  "COLO829T_fiberseq|d9|2": {
+   "blocks": 2667,
+   "val_blocks": 154,
+   "val_bp_tile": 156624185,
+   "val_bp_bins": 92990000,
+   "bins_with_tensors": 154526,
+   "bins_mixed": 57,
+   "onref_tensors": 1365752,
+   "onref_val_tensors": 183922,
+   "val_bp_hull": 433959027,
+   "span_bp": 2560289366,
+   "tensors": 1576803,
+   "npz": "COLO829T_fiberseq.tensors.SNV.3b5c36659e1e.npz"
+  },
+  "COLO829T_fiberseq|d46|0": {
+   "blocks": 6151,
+   "val_blocks": 293,
+   "val_bp_tile": 116101365,
+   "val_bp_bins": 68090000,
+   "bins_with_tensors": 147287,
+   "bins_mixed": 126,
+   "onref_tensors": 1990670,
+   "onref_val_tensors": 23646,
+   "val_bp_hull": 658293972,
+   "span_bp": 2559313143,
+   "tensors": 2407332,
+   "npz": "COLO829T_fiberseq_d46.tensors.SNV.038636730ce3.npz"
+  },
+  "COLO829T_fiberseq|d46|1": {
+   "blocks": 6151,
+   "val_blocks": 284,
+   "val_bp_tile": 116002522,
+   "val_bp_bins": 68340000,
+   "bins_with_tensors": 147287,
+   "bins_mixed": 116,
+   "onref_tensors": 1990670,
+   "onref_val_tensors": 139399,
+   "val_bp_hull": 273446402,
+   "span_bp": 2559313143,
+   "tensors": 2407332,
+   "npz": "COLO829T_fiberseq_d46.tensors.SNV.038636730ce3.npz"
+  },
+  "COLO829T_fiberseq|d46|2": {
+   "blocks": 6151,
+   "val_blocks": 285,
+   "val_bp_tile": 122712178,
+   "val_bp_bins": 70390000,
+   "bins_with_tensors": 147287,
+   "bins_mixed": 118,
+   "onref_tensors": 1990670,
+   "onref_val_tensors": 314659,
+   "val_bp_hull": 514409904,
+   "span_bp": 2559313143,
+   "tensors": 2407332,
+   "npz": "COLO829T_fiberseq_d46.tensors.SNV.038636730ce3.npz"
+  },
+  "COLO829T_ONT|linear|0": {
+   "blocks": 3974,
+   "val_blocks": 221,
+   "val_bp_tile": 141552395,
+   "val_bp_bins": 132620000,
+   "bins_with_tensors": 242233,
+   "bins_mixed": 228,
+   "onref_tensors": 5149078,
+   "onref_val_tensors": 241590,
+   "val_bp_hull": 138324968,
+   "span_bp": 2559936053,
+   "tensors": 5690176,
+   "npz": "COLO829T_ONT_linear.tensors.SNV.f772e110510c.npz"
+  },
+  "COLO829T_ONT|linear|1": {
+   "blocks": 3974,
+   "val_blocks": 229,
+   "val_bp_tile": 153492527,
+   "val_bp_bins": 139420000,
+   "bins_with_tensors": 242233,
+   "bins_mixed": 266,
+   "onref_tensors": 5149078,
+   "onref_val_tensors": 328464,
+   "val_bp_hull": 144503621,
+   "span_bp": 2559936053,
+   "tensors": 5690176,
+   "npz": "COLO829T_ONT_linear.tensors.SNV.f772e110510c.npz"
+  },
+  "COLO829T_ONT|linear|2": {
+   "blocks": 3974,
+   "val_blocks": 183,
+   "val_bp_tile": 116967522,
+   "val_bp_bins": 111190000,
+   "bins_with_tensors": 242233,
+   "bins_mixed": 207,
+   "onref_tensors": 5149078,
+   "onref_val_tensors": 197264,
+   "val_bp_hull": 115157933,
+   "span_bp": 2559936053,
+   "tensors": 5690176,
+   "npz": "COLO829T_ONT_linear.tensors.SNV.f772e110510c.npz"
+  },
+  "COLO829T_ONT|d9|0": {
+   "blocks": 2669,
+   "val_blocks": 150,
+   "val_bp_tile": 142694531,
+   "val_bp_bins": 112260000,
+   "bins_with_tensors": 197030,
+   "bins_mixed": 111,
+   "onref_tensors": 1989394,
+   "onref_val_tensors": 70571,
+   "val_bp_hull": 620090769,
+   "span_bp": 2560538344,
+   "tensors": 2464433,
+   "npz": "COLO829T_ONT.tensors.SNV.d910a5c87a69.npz"
+  },
+  "COLO829T_ONT|d9|1": {
+   "blocks": 2669,
+   "val_blocks": 130,
+   "val_bp_tile": 127168494,
+   "val_bp_bins": 96340000,
+   "bins_with_tensors": 197030,
+   "bins_mixed": 95,
+   "onref_tensors": 1989394,
+   "onref_val_tensors": 104683,
+   "val_bp_hull": 458942853,
+   "span_bp": 2560538344,
+   "tensors": 2464433,
+   "npz": "COLO829T_ONT.tensors.SNV.d910a5c87a69.npz"
+  },
+  "COLO829T_ONT|d9|2": {
+   "blocks": 2669,
+   "val_blocks": 154,
+   "val_bp_tile": 156842902,
+   "val_bp_bins": 120840000,
+   "bins_with_tensors": 197030,
+   "bins_mixed": 94,
+   "onref_tensors": 1989394,
+   "onref_val_tensors": 348064,
+   "val_bp_hull": 434882276,
+   "span_bp": 2560538344,
+   "tensors": 2464433,
+   "npz": "COLO829T_ONT.tensors.SNV.d910a5c87a69.npz"
+  },
+  "COLO829T_ONT|d46|0": {
+   "blocks": 6238,
+   "val_blocks": 296,
+   "val_bp_tile": 116553843,
+   "val_bp_bins": 90750000,
+   "bins_with_tensors": 195414,
+   "bins_mixed": 211,
+   "onref_tensors": 1855823,
+   "onref_val_tensors": 47791,
+   "val_bp_hull": 777272934,
+   "span_bp": 2560008043,
+   "tensors": 2348867,
+   "npz": "COLO829T_ONT_d46.tensors.SNV.46029440f280.npz"
+  },
+  "COLO829T_ONT|d46|1": {
+   "blocks": 6238,
+   "val_blocks": 289,
+   "val_bp_tile": 116573538,
+   "val_bp_bins": 90030000,
+   "bins_with_tensors": 195414,
+   "bins_mixed": 207,
+   "onref_tensors": 1855823,
+   "onref_val_tensors": 101464,
+   "val_bp_hull": 350749590,
+   "span_bp": 2560008043,
+   "tensors": 2348867,
+   "npz": "COLO829T_ONT_d46.tensors.SNV.46029440f280.npz"
+  },
+  "COLO829T_ONT|d46|2": {
+   "blocks": 6238,
+   "val_blocks": 289,
+   "val_bp_tile": 123186247,
+   "val_bp_bins": 92090000,
+   "bins_with_tensors": 195414,
+   "bins_mixed": 185,
+   "onref_tensors": 1855823,
+   "onref_val_tensors": 111290,
+   "val_bp_hull": 727899985,
+   "span_bp": 2560008043,
+   "tensors": 2348867,
+   "npz": "COLO829T_ONT_d46.tensors.SNV.46029440f280.npz"
+  }
+ },
+ "pairs": [
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "linear",
+    0
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d9",
+    0
+   ],
+   "a_bp": 141115053,
+   "b_bp": 144202184,
+   "inter_bp": 5287491,
+   "jaccard": 0.018881890497447366,
+   "frac_a_in_b": 0.03746936196806729,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "linear",
+    0
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d9",
+    0
+   ],
+   "a_bp": 138600029,
+   "b_bp": 695997847,
+   "inter_bp": 29636266,
+   "jaccard": 0.03681699304889832,
+   "frac_a_in_b": 0.2138258282759811,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "linear",
+    0
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d9",
+    0
+   ],
+   "a_bp": 135430000,
+   "b_bp": 137540000,
+   "inter_bp": 5210000,
+   "jaccard": 0.01945772333432925,
+   "frac_a_in_b": 0.03847005833271801,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "linear",
+    0
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d46",
+    0
+   ],
+   "a_bp": 141115053,
+   "b_bp": 116638749,
+   "inter_bp": 5804994,
+   "jaccard": 0.023040370962977525,
+   "frac_a_in_b": 0.041136603619459366,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "linear",
+    0
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d46",
+    0
+   ],
+   "a_bp": 138600029,
+   "b_bp": 685263194,
+   "inter_bp": 36721052,
+   "jaccard": 0.04665110491202484,
+   "frac_a_in_b": 0.26494259968733486,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "linear",
+    0
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d46",
+    0
+   ],
+   "a_bp": 135430000,
+   "b_bp": 103240000,
+   "inter_bp": 5070000,
+   "jaccard": 0.02170376712328767,
+   "frac_a_in_b": 0.03743631396293288,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "d9",
+    0
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d46",
+    0
+   ],
+   "a_bp": 144202184,
+   "b_bp": 116638749,
+   "inter_bp": 4775530,
+   "jaccard": 0.018649649441318708,
+   "frac_a_in_b": 0.03311690480360547,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "d9",
+    0
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d46",
+    0
+   ],
+   "a_bp": 695997847,
+   "b_bp": 685263194,
+   "inter_bp": 278973422,
+   "jaccard": 0.253085870866522,
+   "frac_a_in_b": 0.400825122092655,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "d9",
+    0
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d46",
+    0
+   ],
+   "a_bp": 137540000,
+   "b_bp": 103240000,
+   "inter_bp": 4370000,
+   "jaccard": 0.018484835666849966,
+   "frac_a_in_b": 0.03177257525083612,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "linear",
+    1
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d9",
+    1
+   ],
+   "a_bp": 153471721,
+   "b_bp": 126089212,
+   "inter_bp": 7475765,
+   "jaccard": 0.02747582698076361,
+   "frac_a_in_b": 0.048711026052806174,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "linear",
+    1
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d9",
+    1
+   ],
+   "a_bp": 144669965,
+   "b_bp": 465722552,
+   "inter_bp": 26137894,
+   "jaccard": 0.044737162481981764,
+   "frac_a_in_b": 0.18067256738466758,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "linear",
+    1
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d9",
+    1
+   ],
+   "a_bp": 142860000,
+   "b_bp": 116230000,
+   "inter_bp": 7060000,
+   "jaccard": 0.028012538189898028,
+   "frac_a_in_b": 0.049419011619767604,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "linear",
+    1
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d46",
+    1
+   ],
+   "a_bp": 153471721,
+   "b_bp": 116488052,
+   "inter_bp": 8720101,
+   "jaccard": 0.03337969663351897,
+   "frac_a_in_b": 0.05681894321104277,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "linear",
+    1
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d46",
+    1
+   ],
+   "a_bp": 144669965,
+   "b_bp": 308820138,
+   "inter_bp": 17232765,
+   "jaccard": 0.03950137567657372,
+   "frac_a_in_b": 0.11911777956122406,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "linear",
+    1
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d46",
+    1
+   ],
+   "a_bp": 142860000,
+   "b_bp": 102280000,
+   "inter_bp": 7740000,
+   "jaccard": 0.03260320134793597,
+   "frac_a_in_b": 0.054178916421671566,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "d9",
+    1
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d46",
+    1
+   ],
+   "a_bp": 126089212,
+   "b_bp": 116488052,
+   "inter_bp": 5825585,
+   "jaccard": 0.02460630912780137,
+   "frac_a_in_b": 0.0462020890415272,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "d9",
+    1
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d46",
+    1
+   ],
+   "a_bp": 465722552,
+   "b_bp": 308820138,
+   "inter_bp": 78872817,
+   "jaccard": 0.11337678985561014,
+   "frac_a_in_b": 0.16935580349564003,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "d9",
+    1
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d46",
+    1
+   ],
+   "a_bp": 116230000,
+   "b_bp": 102280000,
+   "inter_bp": 4790000,
+   "jaccard": 0.02241250233950964,
+   "frac_a_in_b": 0.041211391207089394,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "linear",
+    2
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d9",
+    2
+   ],
+   "a_bp": 117077082,
+   "b_bp": 155639299,
+   "inter_bp": 5218387,
+   "jaccard": 0.01950813507782791,
+   "frac_a_in_b": 0.04457223318907111,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "linear",
+    2
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d9",
+    2
+   ],
+   "a_bp": 115487731,
+   "b_bp": 442359017,
+   "inter_bp": 17051467,
+   "jaccard": 0.031530354644496245,
+   "frac_a_in_b": 0.14764743278227538,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "linear",
+    2
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d9",
+    2
+   ],
+   "a_bp": 113800000,
+   "b_bp": 144950000,
+   "inter_bp": 4760000,
+   "jaccard": 0.018740895310839008,
+   "frac_a_in_b": 0.041827768014059755,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "linear",
+    2
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d46",
+    2
+   ],
+   "a_bp": 117077082,
+   "b_bp": 123254957,
+   "inter_bp": 6552045,
+   "jaccard": 0.028026542767384963,
+   "frac_a_in_b": 0.05596351470392814,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "linear",
+    2
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d46",
+    2
+   ],
+   "a_bp": 115487731,
+   "b_bp": 562184132,
+   "inter_bp": 27611005,
+   "jaccard": 0.04247449244205994,
+   "frac_a_in_b": 0.239081716827565,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "linear",
+    2
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d46",
+    2
+   ],
+   "a_bp": 113800000,
+   "b_bp": 105100000,
+   "inter_bp": 5780000,
+   "jaccard": 0.02712087087087087,
+   "frac_a_in_b": 0.0507908611599297,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "d9",
+    2
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d46",
+    2
+   ],
+   "a_bp": 155639299,
+   "b_bp": 123254957,
+   "inter_bp": 3981826,
+   "jaccard": 0.014483979498489756,
+   "frac_a_in_b": 0.025583679864813576,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "d9",
+    2
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d46",
+    2
+   ],
+   "a_bp": 442359017,
+   "b_bp": 562184132,
+   "inter_bp": 92747358,
+   "jaccard": 0.10171944081720377,
+   "frac_a_in_b": 0.20966534971751238,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "d9",
+    2
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d46",
+    2
+   ],
+   "a_bp": 144950000,
+   "b_bp": 105100000,
+   "inter_bp": 3420000,
+   "jaccard": 0.013866926164700158,
+   "frac_a_in_b": 0.023594342876854087,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "linear",
+    0
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "linear",
+    1
+   ],
+   "a_bp": 141115053,
+   "b_bp": 153471721,
+   "inter_bp": 9604095,
+   "jaccard": 0.03370062711776248,
+   "frac_a_in_b": 0.06805861455474917,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "linear",
+    0
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "linear",
+    1
+   ],
+   "a_bp": 138600029,
+   "b_bp": 144669965,
+   "inter_bp": 9544318,
+   "jaccard": 0.03486818679004742,
+   "frac_a_in_b": 0.06886230882390364,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "linear",
+    0
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "linear",
+    1
+   ],
+   "a_bp": 135430000,
+   "b_bp": 142860000,
+   "inter_bp": 9360000,
+   "jaccard": 0.034804595991521955,
+   "frac_a_in_b": 0.06911319500849147,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "linear",
+    0
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "linear",
+    2
+   ],
+   "a_bp": 141115053,
+   "b_bp": 117077082,
+   "inter_bp": 6415633,
+   "jaccard": 0.025481460537568355,
+   "frac_a_in_b": 0.04546384573161022,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "linear",
+    0
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "linear",
+    2
+   ],
+   "a_bp": 138600029,
+   "b_bp": 115487731,
+   "inter_bp": 6360183,
+   "jaccard": 0.02567410167661713,
+   "frac_a_in_b": 0.04588875663222264,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "linear",
+    0
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "linear",
+    2
+   ],
+   "a_bp": 135430000,
+   "b_bp": 113800000,
+   "inter_bp": 6290000,
+   "jaccard": 0.025891166543179387,
+   "frac_a_in_b": 0.04644465775677472,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "linear",
+    1
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "linear",
+    2
+   ],
+   "a_bp": 153471721,
+   "b_bp": 117077082,
+   "inter_bp": 10236899,
+   "jaccard": 0.03932551236688738,
+   "frac_a_in_b": 0.06670218417632784,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "linear",
+    1
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "linear",
+    2
+   ],
+   "a_bp": 144669965,
+   "b_bp": 115487731,
+   "inter_bp": 10174794,
+   "jaccard": 0.04070195968842701,
+   "frac_a_in_b": 0.07033107390328047,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "linear",
+    1
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "linear",
+    2
+   ],
+   "a_bp": 142860000,
+   "b_bp": 113800000,
+   "inter_bp": 10100000,
+   "jaccard": 0.04096365996106424,
+   "frac_a_in_b": 0.07069858602827943,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "d9",
+    0
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d9",
+    1
+   ],
+   "a_bp": 144202184,
+   "b_bp": 126089212,
+   "inter_bp": 7680047,
+   "jaccard": 0.029244916601071952,
+   "frac_a_in_b": 0.053258881294058626,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "d9",
+    0
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d9",
+    1
+   ],
+   "a_bp": 695997847,
+   "b_bp": 465722552,
+   "inter_bp": 160348717,
+   "jaccard": 0.16012907083585773,
+   "frac_a_in_b": 0.23038680032008776,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "d9",
+    0
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d9",
+    1
+   ],
+   "a_bp": 137540000,
+   "b_bp": 116230000,
+   "inter_bp": 7380000,
+   "jaccard": 0.029952514306587116,
+   "frac_a_in_b": 0.05365711792932965,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "d9",
+    0
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d9",
+    2
+   ],
+   "a_bp": 144202184,
+   "b_bp": 155639299,
+   "inter_bp": 13344941,
+   "jaccard": 0.04657976290687655,
+   "frac_a_in_b": 0.09254326550283039,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "d9",
+    0
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d9",
+    2
+   ],
+   "a_bp": 695997847,
+   "b_bp": 442359017,
+   "inter_bp": 112584821,
+   "jaccard": 0.10975618000928497,
+   "frac_a_in_b": 0.161760300675183,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "d9",
+    0
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d9",
+    2
+   ],
+   "a_bp": 137540000,
+   "b_bp": 144950000,
+   "inter_bp": 12860000,
+   "jaccard": 0.047694989429959575,
+   "frac_a_in_b": 0.09350007270612186,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "d9",
+    1
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d9",
+    2
+   ],
+   "a_bp": 126089212,
+   "b_bp": 155639299,
+   "inter_bp": 8361378,
+   "jaccard": 0.030586625057080288,
+   "frac_a_in_b": 0.06631319101272518,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "d9",
+    1
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d9",
+    2
+   ],
+   "a_bp": 465722552,
+   "b_bp": 442359017,
+   "inter_bp": 92157375,
+   "jaccard": 0.11294845241468597,
+   "frac_a_in_b": 0.19788042173229353,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "d9",
+    1
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d9",
+    2
+   ],
+   "a_bp": 116230000,
+   "b_bp": 144950000,
+   "inter_bp": 7080000,
+   "jaccard": 0.027863046044864226,
+   "frac_a_in_b": 0.06091370558375635,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "d46",
+    0
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d46",
+    1
+   ],
+   "a_bp": 116638749,
+   "b_bp": 116488052,
+   "inter_bp": 4976787,
+   "jaccard": 0.021813660725876614,
+   "frac_a_in_b": 0.042668384586326456,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "d46",
+    0
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d46",
+    1
+   ],
+   "a_bp": 685263194,
+   "b_bp": 308820138,
+   "inter_bp": 134486469,
+   "jaccard": 0.15645295462182254,
+   "frac_a_in_b": 0.19625520555828949,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "d46",
+    0
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d46",
+    1
+   ],
+   "a_bp": 103240000,
+   "b_bp": 102280000,
+   "inter_bp": 4490000,
+   "jaccard": 0.02233497487937124,
+   "frac_a_in_b": 0.04349089500193724,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "d46",
+    0
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d46",
+    2
+   ],
+   "a_bp": 116638749,
+   "b_bp": 123254957,
+   "inter_bp": 4063755,
+   "jaccard": 0.01723171710280345,
+   "frac_a_in_b": 0.03484052285231557,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "d46",
+    0
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d46",
+    2
+   ],
+   "a_bp": 685263194,
+   "b_bp": 562184132,
+   "inter_bp": 190510182,
+   "jaccard": 0.18024740930100192,
+   "frac_a_in_b": 0.2780102355825636,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "d46",
+    0
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d46",
+    2
+   ],
+   "a_bp": 103240000,
+   "b_bp": 105100000,
+   "inter_bp": 3890000,
+   "jaccard": 0.019026656884323794,
+   "frac_a_in_b": 0.03767919411080976,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "d46",
+    1
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d46",
+    2
+   ],
+   "a_bp": 116488052,
+   "b_bp": 123254957,
+   "inter_bp": 5886659,
+   "jaccard": 0.02517211527503957,
+   "frac_a_in_b": 0.05053444451109887,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "d46",
+    1
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d46",
+    2
+   ],
+   "a_bp": 308820138,
+   "b_bp": 562184132,
+   "inter_bp": 80006686,
+   "jaccard": 0.10114656178267165,
+   "frac_a_in_b": 0.25907211400831637,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_Illumina",
+    "d46",
+    1
+   ],
+   "b": [
+    "COLO829T_Illumina",
+    "d46",
+    2
+   ],
+   "a_bp": 102280000,
+   "b_bp": 105100000,
+   "inter_bp": 4140000,
+   "jaccard": 0.020370005904349536,
+   "frac_a_in_b": 0.04047712162690653,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "linear",
+    0
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d9",
+    0
+   ],
+   "a_bp": 141552395,
+   "b_bp": 142694531,
+   "inter_bp": 5387019,
+   "jaccard": 0.01931801189333395,
+   "frac_a_in_b": 0.03805671391148133,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "linear",
+    0
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d9",
+    0
+   ],
+   "a_bp": 138324968,
+   "b_bp": 620090769,
+   "inter_bp": 28915457,
+   "jaccard": 0.03963734873412249,
+   "frac_a_in_b": 0.2090400411298125,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "linear",
+    0
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d9",
+    0
+   ],
+   "a_bp": 132620000,
+   "b_bp": 112260000,
+   "inter_bp": 3750000,
+   "jaccard": 0.015551777049724215,
+   "frac_a_in_b": 0.028276278087769568,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "linear",
+    0
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d46",
+    0
+   ],
+   "a_bp": 141552395,
+   "b_bp": 116553843,
+   "inter_bp": 5880761,
+   "jaccard": 0.023315491638459664,
+   "frac_a_in_b": 0.04154476510270278,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "linear",
+    0
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d46",
+    0
+   ],
+   "a_bp": 138324968,
+   "b_bp": 777272934,
+   "inter_bp": 46126669,
+   "jaccard": 0.053051403254419115,
+   "frac_a_in_b": 0.3334659654502866,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "linear",
+    0
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d46",
+    0
+   ],
+   "a_bp": 132620000,
+   "b_bp": 90750000,
+   "inter_bp": 4400000,
+   "jaccard": 0.02009407681417546,
+   "frac_a_in_b": 0.033177499622982956,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "d9",
+    0
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d46",
+    0
+   ],
+   "a_bp": 142694531,
+   "b_bp": 116553843,
+   "inter_bp": 4781499,
+   "jaccard": 0.01879026101137918,
+   "frac_a_in_b": 0.03350863530992649,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "d9",
+    0
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d46",
+    0
+   ],
+   "a_bp": 620090769,
+   "b_bp": 777272934,
+   "inter_bp": 195858259,
+   "jaccard": 0.1630107129169196,
+   "frac_a_in_b": 0.31585417618110034,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "d9",
+    0
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d46",
+    0
+   ],
+   "a_bp": 112260000,
+   "b_bp": 90750000,
+   "inter_bp": 3620000,
+   "jaccard": 0.018155373890365614,
+   "frac_a_in_b": 0.03224657046142883,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "linear",
+    1
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d9",
+    1
+   ],
+   "a_bp": 153492527,
+   "b_bp": 127168494,
+   "inter_bp": 7496482,
+   "jaccard": 0.02744310087774607,
+   "frac_a_in_b": 0.048839393985610775,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "linear",
+    1
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d9",
+    1
+   ],
+   "a_bp": 144503621,
+   "b_bp": 458942853,
+   "inter_bp": 26072918,
+   "jaccard": 0.04515779728574892,
+   "frac_a_in_b": 0.18043089729910644,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "linear",
+    1
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d9",
+    1
+   ],
+   "a_bp": 139420000,
+   "b_bp": 96340000,
+   "inter_bp": 5980000,
+   "jaccard": 0.026024893376272958,
+   "frac_a_in_b": 0.042891981064409695,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "linear",
+    1
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d46",
+    1
+   ],
+   "a_bp": 153492527,
+   "b_bp": 116573538,
+   "inter_bp": 8841360,
+   "jaccard": 0.033845803366875274,
+   "frac_a_in_b": 0.05760124074314055,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "linear",
+    1
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d46",
+    1
+   ],
+   "a_bp": 144503621,
+   "b_bp": 350749590,
+   "inter_bp": 18896090,
+   "jaccard": 0.039667907053288286,
+   "frac_a_in_b": 0.13076551209744425,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "linear",
+    1
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d46",
+    1
+   ],
+   "a_bp": 139420000,
+   "b_bp": 90030000,
+   "inter_bp": 6790000,
+   "jaccard": 0.030494924997754424,
+   "frac_a_in_b": 0.04870176445273275,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "d9",
+    1
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d46",
+    1
+   ],
+   "a_bp": 127168494,
+   "b_bp": 116573538,
+   "inter_bp": 5906019,
+   "jaccard": 0.024832315869674455,
+   "frac_a_in_b": 0.04644247025525049,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "d9",
+    1
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d46",
+    1
+   ],
+   "a_bp": 458942853,
+   "b_bp": 350749590,
+   "inter_bp": 56572483,
+   "jaccard": 0.0751174925705063,
+   "frac_a_in_b": 0.12326694408726309,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "d9",
+    1
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d46",
+    1
+   ],
+   "a_bp": 96340000,
+   "b_bp": 90030000,
+   "inter_bp": 4240000,
+   "jaccard": 0.02328007467193763,
+   "frac_a_in_b": 0.04401079510068508,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "linear",
+    2
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d9",
+    2
+   ],
+   "a_bp": 116967522,
+   "b_bp": 156842902,
+   "inter_bp": 5227039,
+   "jaccard": 0.01946151285568167,
+   "frac_a_in_b": 0.044687951925663605,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "linear",
+    2
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d9",
+    2
+   ],
+   "a_bp": 115157933,
+   "b_bp": 434882276,
+   "inter_bp": 15779121,
+   "jaccard": 0.029534475473534768,
+   "frac_a_in_b": 0.13702157193113218,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "linear",
+    2
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d9",
+    2
+   ],
+   "a_bp": 111190000,
+   "b_bp": 120840000,
+   "inter_bp": 4310000,
+   "jaccard": 0.018926752151765328,
+   "frac_a_in_b": 0.03876247864016548,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "linear",
+    2
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d46",
+    2
+   ],
+   "a_bp": 116967522,
+   "b_bp": 123186247,
+   "inter_bp": 6560677,
+   "jaccard": 0.02808592045179144,
+   "frac_a_in_b": 0.056089732327577226,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "linear",
+    2
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d46",
+    2
+   ],
+   "a_bp": 115157933,
+   "b_bp": 727899985,
+   "inter_bp": 34641885,
+   "jaccard": 0.042851556112074286,
+   "frac_a_in_b": 0.30082065644578737,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "linear",
+    2
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d46",
+    2
+   ],
+   "a_bp": 111190000,
+   "b_bp": 92090000,
+   "inter_bp": 4600000,
+   "jaccard": 0.023152808536339844,
+   "frac_a_in_b": 0.041370626854933,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "d9",
+    2
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d46",
+    2
+   ],
+   "a_bp": 156842902,
+   "b_bp": 123186247,
+   "inter_bp": 4008159,
+   "jaccard": 0.014521210868782117,
+   "frac_a_in_b": 0.025555246357275383,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "d9",
+    2
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d46",
+    2
+   ],
+   "a_bp": 434882276,
+   "b_bp": 727899985,
+   "inter_bp": 107811849,
+   "jaccard": 0.10219419215332458,
+   "frac_a_in_b": 0.2479104230037648,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "d9",
+    2
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d46",
+    2
+   ],
+   "a_bp": 120840000,
+   "b_bp": 92090000,
+   "inter_bp": 2800000,
+   "jaccard": 0.013325084471517631,
+   "frac_a_in_b": 0.023171135385633895,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "linear",
+    0
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "linear",
+    1
+   ],
+   "a_bp": 141552395,
+   "b_bp": 153492527,
+   "inter_bp": 9604381,
+   "jaccard": 0.03364757145692209,
+   "frac_a_in_b": 0.0678503602853205,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "linear",
+    0
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "linear",
+    1
+   ],
+   "a_bp": 138324968,
+   "b_bp": 144503621,
+   "inter_bp": 9518611,
+   "jaccard": 0.03482716243897982,
+   "frac_a_in_b": 0.06881339744824666,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "linear",
+    0
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "linear",
+    1
+   ],
+   "a_bp": 132620000,
+   "b_bp": 139420000,
+   "inter_bp": 9120000,
+   "jaccard": 0.03468735737106344,
+   "frac_a_in_b": 0.06876790830945559,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "linear",
+    0
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "linear",
+    2
+   ],
+   "a_bp": 141552395,
+   "b_bp": 116967522,
+   "inter_bp": 6410441,
+   "jaccard": 0.025427211629284414,
+   "frac_a_in_b": 0.045286701083369164,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "linear",
+    0
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "linear",
+    2
+   ],
+   "a_bp": 138324968,
+   "b_bp": 115157933,
+   "inter_bp": 6367299,
+   "jaccard": 0.025766479123402335,
+   "frac_a_in_b": 0.04603145109710056,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "linear",
+    0
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "linear",
+    2
+   ],
+   "a_bp": 132620000,
+   "b_bp": 111190000,
+   "inter_bp": 6180000,
+   "jaccard": 0.026006817321045324,
+   "frac_a_in_b": 0.04659930628864425,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "linear",
+    1
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "linear",
+    2
+   ],
+   "a_bp": 153492527,
+   "b_bp": 116967522,
+   "inter_bp": 10239937,
+   "jaccard": 0.03935105907571049,
+   "frac_a_in_b": 0.06671293515155953,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "linear",
+    1
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "linear",
+    2
+   ],
+   "a_bp": 144503621,
+   "b_bp": 115157933,
+   "inter_bp": 10183732,
+   "jaccard": 0.040820189619901366,
+   "frac_a_in_b": 0.07047388798651627,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "linear",
+    1
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "linear",
+    2
+   ],
+   "a_bp": 139420000,
+   "b_bp": 111190000,
+   "inter_bp": 9860000,
+   "jaccard": 0.04095534787123572,
+   "frac_a_in_b": 0.07072156075168555,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "d9",
+    0
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d9",
+    1
+   ],
+   "a_bp": 142694531,
+   "b_bp": 127168494,
+   "inter_bp": 7698326,
+   "jaccard": 0.029364464511677065,
+   "frac_a_in_b": 0.053949692017278505,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "d9",
+    0
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d9",
+    1
+   ],
+   "a_bp": 620090769,
+   "b_bp": 458942853,
+   "inter_bp": 163999957,
+   "jaccard": 0.1792283314516084,
+   "frac_a_in_b": 0.2644773397683009,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "d9",
+    0
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d9",
+    1
+   ],
+   "a_bp": 112260000,
+   "b_bp": 96340000,
+   "inter_bp": 5820000,
+   "jaccard": 0.028701055330900484,
+   "frac_a_in_b": 0.0518439337252806,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "d9",
+    0
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d9",
+    2
+   ],
+   "a_bp": 142694531,
+   "b_bp": 156842902,
+   "inter_bp": 13264410,
+   "jaccard": 0.046334823522648165,
+   "frac_a_in_b": 0.0929566810097298,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "d9",
+    0
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d9",
+    2
+   ],
+   "a_bp": 620090769,
+   "b_bp": 434882276,
+   "inter_bp": 102642582,
+   "jaccard": 0.10778042495528152,
+   "frac_a_in_b": 0.16552831800016685,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "d9",
+    0
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d9",
+    2
+   ],
+   "a_bp": 112260000,
+   "b_bp": 120840000,
+   "inter_bp": 9950000,
+   "jaccard": 0.044588841586376875,
+   "frac_a_in_b": 0.08863352930696597,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "d9",
+    1
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d9",
+    2
+   ],
+   "a_bp": 127168494,
+   "b_bp": 156842902,
+   "inter_bp": 8350624,
+   "jaccard": 0.03029311693286559,
+   "frac_a_in_b": 0.06566582442975223,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "d9",
+    1
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d9",
+    2
+   ],
+   "a_bp": 458942853,
+   "b_bp": 434882276,
+   "inter_bp": 81641444,
+   "jaccard": 0.1005209111039949,
+   "frac_a_in_b": 0.17789021763021115,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "d9",
+    1
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d9",
+    2
+   ],
+   "a_bp": 96340000,
+   "b_bp": 120840000,
+   "inter_bp": 5650000,
+   "jaccard": 0.026710159315463528,
+   "frac_a_in_b": 0.05864646045256384,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "d46",
+    0
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d46",
+    1
+   ],
+   "a_bp": 116553843,
+   "b_bp": 116573538,
+   "inter_bp": 4816745,
+   "jaccard": 0.02109733074371533,
+   "frac_a_in_b": 0.04132635077506625,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "d46",
+    0
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d46",
+    1
+   ],
+   "a_bp": 777272934,
+   "b_bp": 350749590,
+   "inter_bp": 127007093,
+   "jaccard": 0.12687825688473328,
+   "frac_a_in_b": 0.1634008949036684,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "d46",
+    0
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d46",
+    1
+   ],
+   "a_bp": 90750000,
+   "b_bp": 90030000,
+   "inter_bp": 3960000,
+   "jaccard": 0.022395656599932135,
+   "frac_a_in_b": 0.04363636363636364,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "d46",
+    0
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d46",
+    2
+   ],
+   "a_bp": 116553843,
+   "b_bp": 123186247,
+   "inter_bp": 4147567,
+   "jaccard": 0.017604832900405758,
+   "frac_a_in_b": 0.035584987103342444,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "d46",
+    0
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d46",
+    2
+   ],
+   "a_bp": 777272934,
+   "b_bp": 727899985,
+   "inter_bp": 188283065,
+   "jaccard": 0.14297556050576118,
+   "frac_a_in_b": 0.24223545779608993,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "d46",
+    0
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d46",
+    2
+   ],
+   "a_bp": 90750000,
+   "b_bp": 92090000,
+   "inter_bp": 3380000,
+   "jaccard": 0.018834280619636688,
+   "frac_a_in_b": 0.03724517906336088,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "d46",
+    1
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d46",
+    2
+   ],
+   "a_bp": 116573538,
+   "b_bp": 123186247,
+   "inter_bp": 6292558,
+   "jaccard": 0.026952639481172234,
+   "frac_a_in_b": 0.053979300173595146,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "d46",
+    1
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d46",
+    2
+   ],
+   "a_bp": 350749590,
+   "b_bp": 727899985,
+   "inter_bp": 135601625,
+   "jaccard": 0.1437908061832911,
+   "frac_a_in_b": 0.38660522739313824,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_ONT",
+    "d46",
+    1
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d46",
+    2
+   ],
+   "a_bp": 90030000,
+   "b_bp": 92090000,
+   "inter_bp": 4260000,
+   "jaccard": 0.023951422467108963,
+   "frac_a_in_b": 0.047317560813062313,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "linear",
+    0
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d9",
+    0
+   ],
+   "a_bp": 141198004,
+   "b_bp": 143414024,
+   "inter_bp": 5390991,
+   "jaccard": 0.01930725226838836,
+   "frac_a_in_b": 0.03818036266291696,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "linear",
+    0
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d9",
+    0
+   ],
+   "a_bp": 136916528,
+   "b_bp": 618007822,
+   "inter_bp": 28681379,
+   "jaccard": 0.03949281458863166,
+   "frac_a_in_b": 0.2094807648058385,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "linear",
+    0
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d9",
+    0
+   ],
+   "a_bp": 126850000,
+   "b_bp": 87460000,
+   "inter_bp": 2890000,
+   "jaccard": 0.01366947308674676,
+   "frac_a_in_b": 0.02278281434765471,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "linear",
+    0
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d46",
+    0
+   ],
+   "a_bp": 141198004,
+   "b_bp": 116101365,
+   "inter_bp": 5922859,
+   "jaccard": 0.02356170431358125,
+   "frac_a_in_b": 0.04194718644889626,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "linear",
+    0
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d46",
+    0
+   ],
+   "a_bp": 136916528,
+   "b_bp": 658293972,
+   "inter_bp": 34607153,
+   "jaccard": 0.04549960651172365,
+   "frac_a_in_b": 0.2527609595826152,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "linear",
+    0
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d46",
+    0
+   ],
+   "a_bp": 126850000,
+   "b_bp": 68090000,
+   "inter_bp": 3620000,
+   "jaccard": 0.018921179176249216,
+   "frac_a_in_b": 0.028537642885297594,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "d9",
+    0
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d46",
+    0
+   ],
+   "a_bp": 143414024,
+   "b_bp": 116101365,
+   "inter_bp": 4832286,
+   "jaccard": 0.018973720451332807,
+   "frac_a_in_b": 0.033694654575761714,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "d9",
+    0
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d46",
+    0
+   ],
+   "a_bp": 618007822,
+   "b_bp": 658293972,
+   "inter_bp": 191860478,
+   "jaccard": 0.17692103313407878,
+   "frac_a_in_b": 0.31044991854488213,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "d9",
+    0
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d46",
+    0
+   ],
+   "a_bp": 87460000,
+   "b_bp": 68090000,
+   "inter_bp": 3150000,
+   "jaccard": 0.02066929133858268,
+   "frac_a_in_b": 0.03601646466956323,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "linear",
+    1
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d9",
+    1
+   ],
+   "a_bp": 153420963,
+   "b_bp": 128180082,
+   "inter_bp": 8289850,
+   "jaccard": 0.03033117615251728,
+   "frac_a_in_b": 0.05403335918312545,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "linear",
+    1
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d9",
+    1
+   ],
+   "a_bp": 143332003,
+   "b_bp": 457839942,
+   "inter_bp": 25256995,
+   "jaccard": 0.04385542518040207,
+   "frac_a_in_b": 0.17621322852789548,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "linear",
+    1
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d9",
+    1
+   ],
+   "a_bp": 133260000,
+   "b_bp": 74480000,
+   "inter_bp": 4260000,
+   "jaccard": 0.020935718498132496,
+   "frac_a_in_b": 0.031967582170193604,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "linear",
+    1
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d46",
+    1
+   ],
+   "a_bp": 153420963,
+   "b_bp": 116002522,
+   "inter_bp": 8647062,
+   "jaccard": 0.03315891022862907,
+   "frac_a_in_b": 0.05636167203565265,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "linear",
+    1
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d46",
+    1
+   ],
+   "a_bp": 143332003,
+   "b_bp": 273446402,
+   "inter_bp": 15764645,
+   "jaccard": 0.03931198021733718,
+   "frac_a_in_b": 0.10998691618088949,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "linear",
+    1
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d46",
+    1
+   ],
+   "a_bp": 133260000,
+   "b_bp": 68340000,
+   "inter_bp": 5590000,
+   "jaccard": 0.028518953114637008,
+   "frac_a_in_b": 0.041948071439291613,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "d9",
+    1
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d46",
+    1
+   ],
+   "a_bp": 128180082,
+   "b_bp": 116002522,
+   "inter_bp": 5900329,
+   "jaccard": 0.024761929942124315,
+   "frac_a_in_b": 0.04603155894376788,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "d9",
+    1
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d46",
+    1
+   ],
+   "a_bp": 457839942,
+   "b_bp": 273446402,
+   "inter_bp": 42708104,
+   "jaccard": 0.06202360388269022,
+   "frac_a_in_b": 0.09328173468971827,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "d9",
+    1
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d46",
+    1
+   ],
+   "a_bp": 74480000,
+   "b_bp": 68340000,
+   "inter_bp": 3230000,
+   "jaccard": 0.023139193351959308,
+   "frac_a_in_b": 0.04336734693877551,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "linear",
+    2
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d9",
+    2
+   ],
+   "a_bp": 117002057,
+   "b_bp": 156624185,
+   "inter_bp": 5446357,
+   "jaccard": 0.02030859622450804,
+   "frac_a_in_b": 0.046549241437695406,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "linear",
+    2
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d9",
+    2
+   ],
+   "a_bp": 114081198,
+   "b_bp": 433959027,
+   "inter_bp": 15543696,
+   "jaccard": 0.02919022970758181,
+   "frac_a_in_b": 0.1362511638420908,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "linear",
+    2
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d9",
+    2
+   ],
+   "a_bp": 106850000,
+   "b_bp": 92990000,
+   "inter_bp": 3170000,
+   "jaccard": 0.016118370875069916,
+   "frac_a_in_b": 0.02966775854000936,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "linear",
+    2
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d46",
+    2
+   ],
+   "a_bp": 117002057,
+   "b_bp": 122712178,
+   "inter_bp": 6452406,
+   "jaccard": 0.02766164540362924,
+   "frac_a_in_b": 0.05514779966646227,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "linear",
+    2
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d46",
+    2
+   ],
+   "a_bp": 114081198,
+   "b_bp": 514409904,
+   "inter_bp": 25491993,
+   "jaccard": 0.042275341073513925,
+   "frac_a_in_b": 0.2234548150519948,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "linear",
+    2
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d46",
+    2
+   ],
+   "a_bp": 106850000,
+   "b_bp": 70390000,
+   "inter_bp": 3260000,
+   "jaccard": 0.018737785952408322,
+   "frac_a_in_b": 0.03051006083294338,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "d9",
+    2
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d46",
+    2
+   ],
+   "a_bp": 156624185,
+   "b_bp": 122712178,
+   "inter_bp": 3920108,
+   "jaccard": 0.014233393740685349,
+   "frac_a_in_b": 0.025028752743390174,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "d9",
+    2
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d46",
+    2
+   ],
+   "a_bp": 433959027,
+   "b_bp": 514409904,
+   "inter_bp": 96822615,
+   "jaccard": 0.1137021124755826,
+   "frac_a_in_b": 0.22311464671986186,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "d9",
+    2
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d46",
+    2
+   ],
+   "a_bp": 92990000,
+   "b_bp": 70390000,
+   "inter_bp": 2050000,
+   "jaccard": 0.012706874108969193,
+   "frac_a_in_b": 0.022045381223787505,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "linear",
+    0
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "linear",
+    1
+   ],
+   "a_bp": 141198004,
+   "b_bp": 153420963,
+   "inter_bp": 9583916,
+   "jaccard": 0.03362364020276229,
+   "frac_a_in_b": 0.0678757186964201,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "linear",
+    0
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "linear",
+    1
+   ],
+   "a_bp": 136916528,
+   "b_bp": 143332003,
+   "inter_bp": 9488732,
+   "jaccard": 0.0350448332250387,
+   "frac_a_in_b": 0.06930304279991675,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "linear",
+    0
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "linear",
+    1
+   ],
+   "a_bp": 126850000,
+   "b_bp": 133260000,
+   "inter_bp": 8970000,
+   "jaccard": 0.035717129887712036,
+   "frac_a_in_b": 0.07071344107213244,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "linear",
+    0
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "linear",
+    2
+   ],
+   "a_bp": 141198004,
+   "b_bp": 117002057,
+   "inter_bp": 6426168,
+   "jaccard": 0.025523567687774522,
+   "frac_a_in_b": 0.04551174816890471,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "linear",
+    0
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "linear",
+    2
+   ],
+   "a_bp": 136916528,
+   "b_bp": 114081198,
+   "inter_bp": 6356594,
+   "jaccard": 0.025983341182381384,
+   "frac_a_in_b": 0.04642678347788661,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "linear",
+    0
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "linear",
+    2
+   ],
+   "a_bp": 126850000,
+   "b_bp": 106850000,
+   "inter_bp": 5940000,
+   "jaccard": 0.026080084299262382,
+   "frac_a_in_b": 0.04682696097753252,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "linear",
+    1
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "linear",
+    2
+   ],
+   "a_bp": 153420963,
+   "b_bp": 117002057,
+   "inter_bp": 10210169,
+   "jaccard": 0.03923775847642513,
+   "frac_a_in_b": 0.06655002550075247,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "linear",
+    1
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "linear",
+    2
+   ],
+   "a_bp": 143332003,
+   "b_bp": 114081198,
+   "inter_bp": 10132528,
+   "jaccard": 0.04097581859945844,
+   "frac_a_in_b": 0.0706927119409613,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "linear",
+    1
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "linear",
+    2
+   ],
+   "a_bp": 133260000,
+   "b_bp": 106850000,
+   "inter_bp": 9600000,
+   "jaccard": 0.04164678321981693,
+   "frac_a_in_b": 0.07203962179198559,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "d9",
+    0
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d9",
+    1
+   ],
+   "a_bp": 143414024,
+   "b_bp": 128180082,
+   "inter_bp": 7682032,
+   "jaccard": 0.029108300668350625,
+   "frac_a_in_b": 0.05356541700552242,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "d9",
+    0
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d9",
+    1
+   ],
+   "a_bp": 618007822,
+   "b_bp": 457839942,
+   "inter_bp": 163293858,
+   "jaccard": 0.17894160216328087,
+   "frac_a_in_b": 0.26422619938943104,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "d9",
+    0
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d9",
+    1
+   ],
+   "a_bp": 87460000,
+   "b_bp": 74480000,
+   "inter_bp": 4580000,
+   "jaccard": 0.029105236400610066,
+   "frac_a_in_b": 0.05236679624971415,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "d9",
+    0
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d9",
+    2
+   ],
+   "a_bp": 143414024,
+   "b_bp": 156624185,
+   "inter_bp": 13306261,
+   "jaccard": 0.046406621560008375,
+   "frac_a_in_b": 0.09278214660513256,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "d9",
+    0
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d9",
+    2
+   ],
+   "a_bp": 618007822,
+   "b_bp": 433959027,
+   "inter_bp": 102196354,
+   "jaccard": 0.10760110420149449,
+   "frac_a_in_b": 0.16536417560100072,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "d9",
+    0
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d9",
+    2
+   ],
+   "a_bp": 87460000,
+   "b_bp": 92990000,
+   "inter_bp": 7500000,
+   "jaccard": 0.04336513443191674,
+   "frac_a_in_b": 0.08575348730848388,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "d9",
+    1
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d9",
+    2
+   ],
+   "a_bp": 128180082,
+   "b_bp": 156624185,
+   "inter_bp": 8346444,
+   "jaccard": 0.030190659498899403,
+   "frac_a_in_b": 0.06511498408933769,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "d9",
+    1
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d9",
+    2
+   ],
+   "a_bp": 457839942,
+   "b_bp": 433959027,
+   "inter_bp": 81193025,
+   "jaccard": 0.10016337235247315,
+   "frac_a_in_b": 0.17733932222103943,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "d9",
+    1
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d9",
+    2
+   ],
+   "a_bp": 74480000,
+   "b_bp": 92990000,
+   "inter_bp": 4430000,
+   "jaccard": 0.02717124631992149,
+   "frac_a_in_b": 0.05947905477980666,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "d46",
+    0
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d46",
+    1
+   ],
+   "a_bp": 116101365,
+   "b_bp": 116002522,
+   "inter_bp": 4838780,
+   "jaccard": 0.02129134588179434,
+   "frac_a_in_b": 0.04167720164185839,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "d46",
+    0
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d46",
+    1
+   ],
+   "a_bp": 658293972,
+   "b_bp": 273446402,
+   "inter_bp": 108305227,
+   "jaccard": 0.13152854525895044,
+   "frac_a_in_b": 0.1645241056529073,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "d46",
+    0
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d46",
+    1
+   ],
+   "a_bp": 68090000,
+   "b_bp": 68340000,
+   "inter_bp": 3020000,
+   "jaccard": 0.022636983734352748,
+   "frac_a_in_b": 0.04435306212365986,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "d46",
+    0
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d46",
+    2
+   ],
+   "a_bp": 116101365,
+   "b_bp": 122712178,
+   "inter_bp": 4164302,
+   "jaccard": 0.01774692294870879,
+   "frac_a_in_b": 0.03586781257911998,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "d46",
+    0
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d46",
+    2
+   ],
+   "a_bp": 658293972,
+   "b_bp": 514409904,
+   "inter_bp": 170511309,
+   "jaccard": 0.17013826944497784,
+   "frac_a_in_b": 0.25902000664226044,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "d46",
+    0
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d46",
+    2
+   ],
+   "a_bp": 68090000,
+   "b_bp": 70390000,
+   "inter_bp": 2630000,
+   "jaccard": 0.01935958778064041,
+   "frac_a_in_b": 0.03862534880305478,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "d46",
+    1
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d46",
+    2
+   ],
+   "a_bp": 116002522,
+   "b_bp": 122712178,
+   "inter_bp": 5914912,
+   "jaccard": 0.025407720732116817,
+   "frac_a_in_b": 0.050989512107331596,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "d46",
+    1
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d46",
+    2
+   ],
+   "a_bp": 273446402,
+   "b_bp": 514409904,
+   "inter_bp": 65565178,
+   "jaccard": 0.09077389359820573,
+   "frac_a_in_b": 0.23977341636405952,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "COLO829T_fiberseq",
+    "d46",
+    1
+   ],
+   "b": [
+    "COLO829T_fiberseq",
+    "d46",
+    2
+   ],
+   "a_bp": 68340000,
+   "b_bp": 70390000,
+   "inter_bp": 3180000,
+   "jaccard": 0.023459977867945406,
+   "frac_a_in_b": 0.046532045654082525,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "linear",
+    0
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d9",
+    0
+   ],
+   "a_bp": 141098636,
+   "b_bp": 144505976,
+   "inter_bp": 5565126,
+   "jaccard": 0.019872647530855703,
+   "frac_a_in_b": 0.03944138765451992,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "linear",
+    0
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d9",
+    0
+   ],
+   "a_bp": 138628421,
+   "b_bp": 707575305,
+   "inter_bp": 31533041,
+   "jaccard": 0.03870648788596094,
+   "frac_a_in_b": 0.2274644749794849,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "linear",
+    0
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d9",
+    0
+   ],
+   "a_bp": 135920000,
+   "b_bp": 131170000,
+   "inter_bp": 5120000,
+   "jaccard": 0.01954422262091079,
+   "frac_a_in_b": 0.03766921718658034,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "linear",
+    0
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d46",
+    0
+   ],
+   "a_bp": 141098636,
+   "b_bp": 116181330,
+   "inter_bp": 5971987,
+   "jaccard": 0.02376361874288122,
+   "frac_a_in_b": 0.04232490950514929,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "linear",
+    0
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d46",
+    0
+   ],
+   "a_bp": 138628421,
+   "b_bp": 669588559,
+   "inter_bp": 36075865,
+   "jaccard": 0.04672185472211255,
+   "frac_a_in_b": 0.2602342632179299,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "linear",
+    0
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d46",
+    0
+   ],
+   "a_bp": 135920000,
+   "b_bp": 104060000,
+   "inter_bp": 5200000,
+   "jaccard": 0.0221483942414175,
+   "frac_a_in_b": 0.03825779870512066,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "d9",
+    0
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d46",
+    0
+   ],
+   "a_bp": 144505976,
+   "b_bp": 116181330,
+   "inter_bp": 4784180,
+   "jaccard": 0.018695277680976823,
+   "frac_a_in_b": 0.03310714291843543,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "d9",
+    0
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d46",
+    0
+   ],
+   "a_bp": 707575305,
+   "b_bp": 669588559,
+   "inter_bp": 280292874,
+   "jaccard": 0.25553859711432425,
+   "frac_a_in_b": 0.39613150998818425,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "d9",
+    0
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d46",
+    0
+   ],
+   "a_bp": 131170000,
+   "b_bp": 104060000,
+   "inter_bp": 4210000,
+   "jaccard": 0.01822353043026578,
+   "frac_a_in_b": 0.032095753602195624,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "linear",
+    1
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d9",
+    1
+   ],
+   "a_bp": 153408083,
+   "b_bp": 126650287,
+   "inter_bp": 7501775,
+   "jaccard": 0.027523733190165513,
+   "frac_a_in_b": 0.04890078054100969,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "linear",
+    1
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d9",
+    1
+   ],
+   "a_bp": 144585478,
+   "b_bp": 469395889,
+   "inter_bp": 26764867,
+   "jaccard": 0.04557921482110942,
+   "frac_a_in_b": 0.18511448985215515,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "linear",
+    1
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d9",
+    1
+   ],
+   "a_bp": 142500000,
+   "b_bp": 111680000,
+   "inter_bp": 6790000,
+   "jaccard": 0.02744654189740895,
+   "frac_a_in_b": 0.047649122807017545,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "linear",
+    1
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d46",
+    1
+   ],
+   "a_bp": 153408083,
+   "b_bp": 116337832,
+   "inter_bp": 8753928,
+   "jaccard": 0.03354098376974309,
+   "frac_a_in_b": 0.057063016686024294,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "linear",
+    1
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d46",
+    1
+   ],
+   "a_bp": 144585478,
+   "b_bp": 296012112,
+   "inter_bp": 16591298,
+   "jaccard": 0.039129839139273905,
+   "frac_a_in_b": 0.11475079122399831,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "linear",
+    1
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d46",
+    1
+   ],
+   "a_bp": 142500000,
+   "b_bp": 103800000,
+   "inter_bp": 7610000,
+   "jaccard": 0.03188235787004064,
+   "frac_a_in_b": 0.05340350877192983,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "d9",
+    1
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d46",
+    1
+   ],
+   "a_bp": 126650287,
+   "b_bp": 116337832,
+   "inter_bp": 5850928,
+   "jaccard": 0.024673177477251975,
+   "frac_a_in_b": 0.04619751078811215,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "d9",
+    1
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d46",
+    1
+   ],
+   "a_bp": 469395889,
+   "b_bp": 296012112,
+   "inter_bp": 64400438,
+   "jaccard": 0.09186839258109403,
+   "frac_a_in_b": 0.1371985556524548,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "d9",
+    1
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d46",
+    1
+   ],
+   "a_bp": 111680000,
+   "b_bp": 103800000,
+   "inter_bp": 4670000,
+   "jaccard": 0.02215264930506143,
+   "frac_a_in_b": 0.04181590257879656,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "linear",
+    2
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d9",
+    2
+   ],
+   "a_bp": 117069082,
+   "b_bp": 157782380,
+   "inter_bp": 5480684,
+   "jaccard": 0.02034624557530884,
+   "frac_a_in_b": 0.04681581085602089,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "linear",
+    2
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d9",
+    2
+   ],
+   "a_bp": 115466360,
+   "b_bp": 442184163,
+   "inter_bp": 17070691,
+   "jaccard": 0.031578482935338215,
+   "frac_a_in_b": 0.14784125004027146,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "linear",
+    2
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d9",
+    2
+   ],
+   "a_bp": 113470000,
+   "b_bp": 139560000,
+   "inter_bp": 4580000,
+   "jaccard": 0.01843429261420809,
+   "frac_a_in_b": 0.0403630915660527,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "linear",
+    2
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d46",
+    2
+   ],
+   "a_bp": 117069082,
+   "b_bp": 122139176,
+   "inter_bp": 6503417,
+   "jaccard": 0.02794706363672082,
+   "frac_a_in_b": 0.055551960337401465,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "linear",
+    2
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d46",
+    2
+   ],
+   "a_bp": 115466360,
+   "b_bp": 653123470,
+   "inter_bp": 31085004,
+   "jaccard": 0.04214888215524708,
+   "frac_a_in_b": 0.26921264340540396,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "linear",
+    2
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d46",
+    2
+   ],
+   "a_bp": 113470000,
+   "b_bp": 106940000,
+   "inter_bp": 5720000,
+   "jaccard": 0.026643066747403233,
+   "frac_a_in_b": 0.05040979994712259,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "d9",
+    2
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d46",
+    2
+   ],
+   "a_bp": 157782380,
+   "b_bp": 122139176,
+   "inter_bp": 4001928,
+   "jaccard": 0.014503962726421188,
+   "frac_a_in_b": 0.02536359256337748,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "d9",
+    2
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d46",
+    2
+   ],
+   "a_bp": 442184163,
+   "b_bp": 653123470,
+   "inter_bp": 100845446,
+   "jaccard": 0.10140701910871147,
+   "frac_a_in_b": 0.22806209366661556,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "d9",
+    2
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d46",
+    2
+   ],
+   "a_bp": 139560000,
+   "b_bp": 106940000,
+   "inter_bp": 3690000,
+   "jaccard": 0.015197067666076355,
+   "frac_a_in_b": 0.0264402407566638,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "linear",
+    0
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "linear",
+    1
+   ],
+   "a_bp": 141098636,
+   "b_bp": 153408083,
+   "inter_bp": 9596362,
+   "jaccard": 0.03368203985648721,
+   "frac_a_in_b": 0.06801172762577237,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "linear",
+    0
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "linear",
+    1
+   ],
+   "a_bp": 138628421,
+   "b_bp": 144585478,
+   "inter_bp": 9553638,
+   "jaccard": 0.03491057841240603,
+   "frac_a_in_b": 0.0689154354574954,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "linear",
+    0
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "linear",
+    1
+   ],
+   "a_bp": 135920000,
+   "b_bp": 142500000,
+   "inter_bp": 9350000,
+   "jaccard": 0.034749321737837735,
+   "frac_a_in_b": 0.06879046497939964,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "linear",
+    0
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "linear",
+    2
+   ],
+   "a_bp": 141098636,
+   "b_bp": 117069082,
+   "inter_bp": 6399880,
+   "jaccard": 0.02541976787360743,
+   "frac_a_in_b": 0.04535749020281103,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "linear",
+    0
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "linear",
+    2
+   ],
+   "a_bp": 138628421,
+   "b_bp": 115466360,
+   "inter_bp": 6372213,
+   "jaccard": 0.025723183202266818,
+   "frac_a_in_b": 0.04596613705929753,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "linear",
+    0
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "linear",
+    2
+   ],
+   "a_bp": 135920000,
+   "b_bp": 113470000,
+   "inter_bp": 6330000,
+   "jaccard": 0.026042952357442608,
+   "frac_a_in_b": 0.04657151265450265,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "linear",
+    1
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "linear",
+    2
+   ],
+   "a_bp": 153408083,
+   "b_bp": 117069082,
+   "inter_bp": 10218643,
+   "jaccard": 0.03926343284159586,
+   "frac_a_in_b": 0.0666108512678566,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "linear",
+    1
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "linear",
+    2
+   ],
+   "a_bp": 144585478,
+   "b_bp": 115466360,
+   "inter_bp": 10141217,
+   "jaccard": 0.04057937577610997,
+   "frac_a_in_b": 0.07013994171669163,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "linear",
+    1
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "linear",
+    2
+   ],
+   "a_bp": 142500000,
+   "b_bp": 113470000,
+   "inter_bp": 10030000,
+   "jaccard": 0.040782304627144834,
+   "frac_a_in_b": 0.0703859649122807,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "d9",
+    0
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d9",
+    1
+   ],
+   "a_bp": 144505976,
+   "b_bp": 126650287,
+   "inter_bp": 7732207,
+   "jaccard": 0.02935269890461333,
+   "frac_a_in_b": 0.05350787015202749,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "d9",
+    0
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d9",
+    1
+   ],
+   "a_bp": 707575305,
+   "b_bp": 469395889,
+   "inter_bp": 168124223,
+   "jaccard": 0.16664987637654313,
+   "frac_a_in_b": 0.23760612024185893,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "d9",
+    0
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d9",
+    1
+   ],
+   "a_bp": 131170000,
+   "b_bp": 111680000,
+   "inter_bp": 7100000,
+   "jaccard": 0.03011664899257688,
+   "frac_a_in_b": 0.054128230540519934,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "d9",
+    0
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d9",
+    2
+   ],
+   "a_bp": 144505976,
+   "b_bp": 157782380,
+   "inter_bp": 14553811,
+   "jaccard": 0.050580687139947,
+   "frac_a_in_b": 0.1007142500459635,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "d9",
+    0
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d9",
+    2
+   ],
+   "a_bp": 707575305,
+   "b_bp": 442184163,
+   "inter_bp": 112587344,
+   "jaccard": 0.1085522271518358,
+   "frac_a_in_b": 0.1591171189899003,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "d9",
+    0
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d9",
+    2
+   ],
+   "a_bp": 131170000,
+   "b_bp": 139560000,
+   "inter_bp": 12290000,
+   "jaccard": 0.0475545581179384,
+   "frac_a_in_b": 0.09369520469619577,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "d9",
+    1
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d9",
+    2
+   ],
+   "a_bp": 126650287,
+   "b_bp": 157782380,
+   "inter_bp": 8352899,
+   "jaccard": 0.030255382567548377,
+   "frac_a_in_b": 0.06595246799559167,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "d9",
+    1
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d9",
+    2
+   ],
+   "a_bp": 469395889,
+   "b_bp": 442184163,
+   "inter_bp": 91942757,
+   "jaccard": 0.11217493098578439,
+   "frac_a_in_b": 0.1958746532609705,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "d9",
+    1
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d9",
+    2
+   ],
+   "a_bp": 111680000,
+   "b_bp": 139560000,
+   "inter_bp": 6900000,
+   "jaccard": 0.028239338626504053,
+   "frac_a_in_b": 0.061783667621776506,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "d46",
+    0
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d46",
+    1
+   ],
+   "a_bp": 116181330,
+   "b_bp": 116337832,
+   "inter_bp": 4794080,
+   "jaccard": 0.021052050823281734,
+   "frac_a_in_b": 0.04126377275935815,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "d46",
+    0
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d46",
+    1
+   ],
+   "a_bp": 669588559,
+   "b_bp": 296012112,
+   "inter_bp": 118020262,
+   "jaccard": 0.13924373516283103,
+   "frac_a_in_b": 0.17625788316374144,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "d46",
+    0
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d46",
+    1
+   ],
+   "a_bp": 104060000,
+   "b_bp": 103800000,
+   "inter_bp": 4470000,
+   "jaccard": 0.02197748168543193,
+   "frac_a_in_b": 0.04295598693061695,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "d46",
+    0
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d46",
+    2
+   ],
+   "a_bp": 116181330,
+   "b_bp": 122139176,
+   "inter_bp": 4062098,
+   "jaccard": 0.017340244197339545,
+   "frac_a_in_b": 0.0349634317321036,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "d46",
+    0
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d46",
+    2
+   ],
+   "a_bp": 669588559,
+   "b_bp": 653123470,
+   "inter_bp": 181943039,
+   "jaccard": 0.1594915715582346,
+   "frac_a_in_b": 0.2717236376794186,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "d46",
+    0
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d46",
+    2
+   ],
+   "a_bp": 104060000,
+   "b_bp": 106940000,
+   "inter_bp": 3960000,
+   "jaccard": 0.019126738794435858,
+   "frac_a_in_b": 0.03805496828752643,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "d46",
+    1
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d46",
+    2
+   ],
+   "a_bp": 116337832,
+   "b_bp": 122139176,
+   "inter_bp": 5883714,
+   "jaccard": 0.025296146328277203,
+   "frac_a_in_b": 0.050574382372881074,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "d46",
+    1
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d46",
+    2
+   ],
+   "a_bp": 296012112,
+   "b_bp": 653123470,
+   "inter_bp": 71424983,
+   "jaccard": 0.0813764617647052,
+   "frac_a_in_b": 0.24129074488681734,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "d46",
+    1
+   ],
+   "b": [
+    "HG008T_Illumina",
+    "d46",
+    2
+   ],
+   "a_bp": 103800000,
+   "b_bp": 106940000,
+   "inter_bp": 4130000,
+   "jaccard": 0.019989351919074586,
+   "frac_a_in_b": 0.03978805394990366,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "linear",
+    0
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d9",
+    0
+   ],
+   "a_bp": 141779478,
+   "b_bp": 143548238,
+   "inter_bp": 5276406,
+   "jaccard": 0.01884085455625971,
+   "frac_a_in_b": 0.03721558348522062,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "linear",
+    0
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d9",
+    0
+   ],
+   "a_bp": 137946399,
+   "b_bp": 621091536,
+   "inter_bp": 28728255,
+   "jaccard": 0.0393370864261309,
+   "frac_a_in_b": 0.20825665046899847,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "linear",
+    0
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d9",
+    0
+   ],
+   "a_bp": 129990000,
+   "b_bp": 93490000,
+   "inter_bp": 3520000,
+   "jaccard": 0.016002909619930897,
+   "frac_a_in_b": 0.02707900607739057,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "linear",
+    0
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d46",
+    0
+   ],
+   "a_bp": 141779478,
+   "b_bp": 116706691,
+   "inter_bp": 5911104,
+   "jaccard": 0.023403355354971404,
+   "frac_a_in_b": 0.04169223983177594,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "linear",
+    0
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d46",
+    0
+   ],
+   "a_bp": 137946399,
+   "b_bp": 666982798,
+   "inter_bp": 35872676,
+   "jaccard": 0.04664504496152631,
+   "frac_a_in_b": 0.26004793354555056,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "linear",
+    0
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d46",
+    0
+   ],
+   "a_bp": 129990000,
+   "b_bp": 75730000,
+   "inter_bp": 4060000,
+   "jaccard": 0.02013289695527125,
+   "frac_a_in_b": 0.031233171782444804,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "d9",
+    0
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d46",
+    0
+   ],
+   "a_bp": 143548238,
+   "b_bp": 116706691,
+   "inter_bp": 4845524,
+   "jaccard": 0.01897159581887754,
+   "frac_a_in_b": 0.03375537079040984,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "d9",
+    0
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d46",
+    0
+   ],
+   "a_bp": 621091536,
+   "b_bp": 666982798,
+   "inter_bp": 193554093,
+   "jaccard": 0.1768392084034561,
+   "frac_a_in_b": 0.3116353738235454,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "d9",
+    0
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d46",
+    0
+   ],
+   "a_bp": 93490000,
+   "b_bp": 75730000,
+   "inter_bp": 2980000,
+   "jaccard": 0.017925890279114533,
+   "frac_a_in_b": 0.03187506685206974,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "linear",
+    1
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d9",
+    1
+   ],
+   "a_bp": 153431314,
+   "b_bp": 127153383,
+   "inter_bp": 7545610,
+   "jaccard": 0.027635640314018484,
+   "frac_a_in_b": 0.04917907435766339,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "linear",
+    1
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d9",
+    1
+   ],
+   "a_bp": 144066667,
+   "b_bp": 468684275,
+   "inter_bp": 26541496,
+   "jaccard": 0.04527647273701557,
+   "frac_a_in_b": 0.1842306520494432,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "linear",
+    1
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d9",
+    1
+   ],
+   "a_bp": 135260000,
+   "b_bp": 81810000,
+   "inter_bp": 5410000,
+   "jaccard": 0.025559860153075688,
+   "frac_a_in_b": 0.039997042732515156,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "linear",
+    1
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d46",
+    1
+   ],
+   "a_bp": 153431314,
+   "b_bp": 116634290,
+   "inter_bp": 8743460,
+   "jaccard": 0.033458549919137354,
+   "frac_a_in_b": 0.05698615081925193,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "linear",
+    1
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d46",
+    1
+   ],
+   "a_bp": 144066667,
+   "b_bp": 287337690,
+   "inter_bp": 15693934,
+   "jaccard": 0.03775208205448339,
+   "frac_a_in_b": 0.10893521955359736,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "linear",
+    1
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d46",
+    1
+   ],
+   "a_bp": 135260000,
+   "b_bp": 74610000,
+   "inter_bp": 5550000,
+   "jaccard": 0.02716327329678935,
+   "frac_a_in_b": 0.041032086352210555,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "d9",
+    1
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d46",
+    1
+   ],
+   "a_bp": 127153383,
+   "b_bp": 116634290,
+   "inter_bp": 5917448,
+   "jaccard": 0.024876791536225268,
+   "frac_a_in_b": 0.046537873081992635,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "d9",
+    1
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d46",
+    1
+   ],
+   "a_bp": 468684275,
+   "b_bp": 287337690,
+   "inter_bp": 59235296,
+   "jaccard": 0.08501209715308145,
+   "frac_a_in_b": 0.12638635251844113,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "d9",
+    1
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d46",
+    1
+   ],
+   "a_bp": 81810000,
+   "b_bp": 74610000,
+   "inter_bp": 3270000,
+   "jaccard": 0.021351616062683643,
+   "frac_a_in_b": 0.03997066373303997,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "linear",
+    2
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d9",
+    2
+   ],
+   "a_bp": 116842733,
+   "b_bp": 156501656,
+   "inter_bp": 5206751,
+   "jaccard": 0.019418202676940118,
+   "frac_a_in_b": 0.044562043922748706,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "linear",
+    2
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d9",
+    2
+   ],
+   "a_bp": 114405737,
+   "b_bp": 441007971,
+   "inter_bp": 16928266,
+   "jaccard": 0.031436812733741465,
+   "frac_a_in_b": 0.14796693281211937,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "linear",
+    2
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d9",
+    2
+   ],
+   "a_bp": 107850000,
+   "b_bp": 103870000,
+   "inter_bp": 3640000,
+   "jaccard": 0.017493271818531334,
+   "frac_a_in_b": 0.033750579508576725,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "linear",
+    2
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d46",
+    2
+   ],
+   "a_bp": 116842733,
+   "b_bp": 122899204,
+   "inter_bp": 6176683,
+   "jaccard": 0.02644521346484182,
+   "frac_a_in_b": 0.052863219144317686,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "linear",
+    2
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d46",
+    2
+   ],
+   "a_bp": 114405737,
+   "b_bp": 516045733,
+   "inter_bp": 25381534,
+   "jaccard": 0.04194809969867681,
+   "frac_a_in_b": 0.2218554302045185,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "linear",
+    2
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d46",
+    2
+   ],
+   "a_bp": 107850000,
+   "b_bp": 76730000,
+   "inter_bp": 3610000,
+   "jaccard": 0.019948057689119742,
+   "frac_a_in_b": 0.0334724153917478,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "d9",
+    2
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d46",
+    2
+   ],
+   "a_bp": 156501656,
+   "b_bp": 122899204,
+   "inter_bp": 3965091,
+   "jaccard": 0.014395701089933603,
+   "frac_a_in_b": 0.02533577663868298,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "d9",
+    2
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d46",
+    2
+   ],
+   "a_bp": 441007971,
+   "b_bp": 516045733,
+   "inter_bp": 97396244,
+   "jaccard": 0.11329657280005458,
+   "frac_a_in_b": 0.22084916918655875,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "d9",
+    2
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d46",
+    2
+   ],
+   "a_bp": 103870000,
+   "b_bp": 76730000,
+   "inter_bp": 2750000,
+   "jaccard": 0.015462468372223785,
+   "frac_a_in_b": 0.026475401944738616,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "linear",
+    0
+   ],
+   "b": [
+    "HG008T_ONT",
+    "linear",
+    1
+   ],
+   "a_bp": 141779478,
+   "b_bp": 153431314,
+   "inter_bp": 9612280,
+   "jaccard": 0.03365661793083852,
+   "frac_a_in_b": 0.06779740012867025,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "linear",
+    0
+   ],
+   "b": [
+    "HG008T_ONT",
+    "linear",
+    1
+   ],
+   "a_bp": 137946399,
+   "b_bp": 144066667,
+   "inter_bp": 9551486,
+   "jaccard": 0.035056267382726033,
+   "frac_a_in_b": 0.06924056060354283,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "linear",
+    0
+   ],
+   "b": [
+    "HG008T_ONT",
+    "linear",
+    1
+   ],
+   "a_bp": 129990000,
+   "b_bp": 135260000,
+   "inter_bp": 9010000,
+   "jaccard": 0.035162347798938495,
+   "frac_a_in_b": 0.06931302407877529,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "linear",
+    0
+   ],
+   "b": [
+    "HG008T_ONT",
+    "linear",
+    2
+   ],
+   "a_bp": 141779478,
+   "b_bp": 116842733,
+   "inter_bp": 6410666,
+   "jaccard": 0.025417813447041054,
+   "frac_a_in_b": 0.04521575400355191,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "linear",
+    0
+   ],
+   "b": [
+    "HG008T_ONT",
+    "linear",
+    2
+   ],
+   "a_bp": 137946399,
+   "b_bp": 114405737,
+   "inter_bp": 6363041,
+   "jaccard": 0.025867166997789067,
+   "frac_a_in_b": 0.04612690904675228,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "linear",
+    0
+   ],
+   "b": [
+    "HG008T_ONT",
+    "linear",
+    2
+   ],
+   "a_bp": 129990000,
+   "b_bp": 107850000,
+   "inter_bp": 6070000,
+   "jaccard": 0.026189757086767053,
+   "frac_a_in_b": 0.04669589968459112,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "linear",
+    1
+   ],
+   "b": [
+    "HG008T_ONT",
+    "linear",
+    2
+   ],
+   "a_bp": 153431314,
+   "b_bp": 116842733,
+   "inter_bp": 10235319,
+   "jaccard": 0.03936074860356954,
+   "frac_a_in_b": 0.0667094528043995,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "linear",
+    1
+   ],
+   "b": [
+    "HG008T_ONT",
+    "linear",
+    2
+   ],
+   "a_bp": 144066667,
+   "b_bp": 114405737,
+   "inter_bp": 10190043,
+   "jaccard": 0.04104215442030536,
+   "frac_a_in_b": 0.07073144129863156,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "linear",
+    1
+   ],
+   "b": [
+    "HG008T_ONT",
+    "linear",
+    2
+   ],
+   "a_bp": 135260000,
+   "b_bp": 107850000,
+   "inter_bp": 9630000,
+   "jaccard": 0.04124550282679459,
+   "frac_a_in_b": 0.0711962146976194,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "d9",
+    0
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d9",
+    1
+   ],
+   "a_bp": 143548238,
+   "b_bp": 127153383,
+   "inter_bp": 7726508,
+   "jaccard": 0.029381137674423206,
+   "frac_a_in_b": 0.05382516781571363,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "d9",
+    0
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d9",
+    1
+   ],
+   "a_bp": 621091536,
+   "b_bp": 468684275,
+   "inter_bp": 167870241,
+   "jaccard": 0.18209049436592514,
+   "frac_a_in_b": 0.2702826093576004,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "d9",
+    0
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d9",
+    1
+   ],
+   "a_bp": 93490000,
+   "b_bp": 81810000,
+   "inter_bp": 4900000,
+   "jaccard": 0.028755868544600938,
+   "frac_a_in_b": 0.05241202267622205,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "d9",
+    0
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d9",
+    2
+   ],
+   "a_bp": 143548238,
+   "b_bp": 156501656,
+   "inter_bp": 13411562,
+   "jaccard": 0.04678914333062753,
+   "frac_a_in_b": 0.09342895591654703,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "d9",
+    0
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d9",
+    2
+   ],
+   "a_bp": 621091536,
+   "b_bp": 441007971,
+   "inter_bp": 103340936,
+   "jaccard": 0.10778619260969298,
+   "frac_a_in_b": 0.16638599950265623,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "d9",
+    0
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d9",
+    2
+   ],
+   "a_bp": 93490000,
+   "b_bp": 103870000,
+   "inter_bp": 8480000,
+   "jaccard": 0.04489623041084286,
+   "frac_a_in_b": 0.0907048882233394,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "d9",
+    1
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d9",
+    2
+   ],
+   "a_bp": 127153383,
+   "b_bp": 156501656,
+   "inter_bp": 8270215,
+   "jaccard": 0.030031484233132615,
+   "frac_a_in_b": 0.0650412502198231,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "d9",
+    1
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d9",
+    2
+   ],
+   "a_bp": 468684275,
+   "b_bp": 441007971,
+   "inter_bp": 91819890,
+   "jaccard": 0.11226677283612702,
+   "frac_a_in_b": 0.19590990118027748,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "d9",
+    1
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d9",
+    2
+   ],
+   "a_bp": 81810000,
+   "b_bp": 103870000,
+   "inter_bp": 4820000,
+   "jaccard": 0.026650447860223376,
+   "frac_a_in_b": 0.05891700281139225,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "d46",
+    0
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d46",
+    1
+   ],
+   "a_bp": 116706691,
+   "b_bp": 116634290,
+   "inter_bp": 4788892,
+   "jaccard": 0.02095317536126305,
+   "frac_a_in_b": 0.04103356850379727,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "d46",
+    0
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d46",
+    1
+   ],
+   "a_bp": 666982798,
+   "b_bp": 287337690,
+   "inter_bp": 117357073,
+   "jaccard": 0.14021768562010564,
+   "frac_a_in_b": 0.17595217350717943,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "d46",
+    0
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d46",
+    1
+   ],
+   "a_bp": 75730000,
+   "b_bp": 74610000,
+   "inter_bp": 3050000,
+   "jaccard": 0.02070744789191391,
+   "frac_a_in_b": 0.04027465997623135,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "d46",
+    0
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d46",
+    2
+   ],
+   "a_bp": 116706691,
+   "b_bp": 122899204,
+   "inter_bp": 4070889,
+   "jaccard": 0.017283583740414367,
+   "frac_a_in_b": 0.03488136768439438,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "d46",
+    0
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d46",
+    2
+   ],
+   "a_bp": 666982798,
+   "b_bp": 516045733,
+   "inter_bp": 170694854,
+   "jaccard": 0.16861520848130393,
+   "frac_a_in_b": 0.2559209240655709,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "d46",
+    0
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d46",
+    2
+   ],
+   "a_bp": 75730000,
+   "b_bp": 76730000,
+   "inter_bp": 2990000,
+   "jaccard": 0.020004014183448184,
+   "frac_a_in_b": 0.03948237158325631,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "d46",
+    1
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d46",
+    2
+   ],
+   "a_bp": 116634290,
+   "b_bp": 122899204,
+   "inter_bp": 5952367,
+   "jaccard": 0.025483081944373015,
+   "frac_a_in_b": 0.05103445136074477,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "d46",
+    1
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d46",
+    2
+   ],
+   "a_bp": 287337690,
+   "b_bp": 516045733,
+   "inter_bp": 66390638,
+   "jaccard": 0.09008315868383976,
+   "frac_a_in_b": 0.23105440153012993,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_ONT",
+    "d46",
+    1
+   ],
+   "b": [
+    "HG008T_ONT",
+    "d46",
+    2
+   ],
+   "a_bp": 74610000,
+   "b_bp": 76730000,
+   "inter_bp": 3320000,
+   "jaccard": 0.022429401432238885,
+   "frac_a_in_b": 0.044498056560782734,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "linear",
+    0
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d9",
+    0
+   ],
+   "a_bp": 140834832,
+   "b_bp": 143398426,
+   "inter_bp": 5370839,
+   "jaccard": 0.019259816432991638,
+   "frac_a_in_b": 0.038135729092927804,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "linear",
+    0
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d9",
+    0
+   ],
+   "a_bp": 136767633,
+   "b_bp": 614305587,
+   "inter_bp": 27920459,
+   "jaccard": 0.03860935130966056,
+   "frac_a_in_b": 0.20414522345356376,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "linear",
+    0
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d9",
+    0
+   ],
+   "a_bp": 124330000,
+   "b_bp": 72750000,
+   "inter_bp": 2760000,
+   "jaccard": 0.014203375874845615,
+   "frac_a_in_b": 0.022198986568004505,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "linear",
+    0
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d46",
+    0
+   ],
+   "a_bp": 140834832,
+   "b_bp": 115681438,
+   "inter_bp": 5869423,
+   "jaccard": 0.023417102869041875,
+   "frac_a_in_b": 0.04167593284025077,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "linear",
+    0
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d46",
+    0
+   ],
+   "a_bp": 136767633,
+   "b_bp": 663853840,
+   "inter_bp": 35075889,
+   "jaccard": 0.045818158621890766,
+   "frac_a_in_b": 0.2564633768283465,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "linear",
+    0
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d46",
+    0
+   ],
+   "a_bp": 124330000,
+   "b_bp": 58590000,
+   "inter_bp": 3350000,
+   "jaccard": 0.01865567745169015,
+   "frac_a_in_b": 0.026944422102469234,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "d9",
+    0
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d46",
+    0
+   ],
+   "a_bp": 143398426,
+   "b_bp": 115681438,
+   "inter_bp": 4982582,
+   "jaccard": 0.019608954337417904,
+   "frac_a_in_b": 0.034746420438394494,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "d9",
+    0
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d46",
+    0
+   ],
+   "a_bp": 614305587,
+   "b_bp": 663853840,
+   "inter_bp": 192140984,
+   "jaccard": 0.17692239504628743,
+   "frac_a_in_b": 0.31277752972805045,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "d9",
+    0
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d46",
+    0
+   ],
+   "a_bp": 72750000,
+   "b_bp": 58590000,
+   "inter_bp": 2380000,
+   "jaccard": 0.018455334987593053,
+   "frac_a_in_b": 0.032714776632302406,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "linear",
+    1
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d9",
+    1
+   ],
+   "a_bp": 153360398,
+   "b_bp": 126017061,
+   "inter_bp": 8054152,
+   "jaccard": 0.029684703791407054,
+   "frac_a_in_b": 0.05251780841100843,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "linear",
+    1
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d9",
+    1
+   ],
+   "a_bp": 143262379,
+   "b_bp": 460027711,
+   "inter_bp": 25339504,
+   "jaccard": 0.04384372057717751,
+   "frac_a_in_b": 0.1768747955804922,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "linear",
+    1
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d9",
+    1
+   ],
+   "a_bp": 129680000,
+   "b_bp": 64530000,
+   "inter_bp": 4070000,
+   "jaccard": 0.021405280319764384,
+   "frac_a_in_b": 0.031384947563232575,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "linear",
+    1
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d46",
+    1
+   ],
+   "a_bp": 153360398,
+   "b_bp": 115189573,
+   "inter_bp": 8717782,
+   "jaccard": 0.03355158586606065,
+   "frac_a_in_b": 0.056845066351484036,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "linear",
+    1
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d46",
+    1
+   ],
+   "a_bp": 143262379,
+   "b_bp": 279716377,
+   "inter_bp": 15352555,
+   "jaccard": 0.03766331742742906,
+   "frac_a_in_b": 0.10716389820666038,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "linear",
+    1
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d46",
+    1
+   ],
+   "a_bp": 129680000,
+   "b_bp": 57390000,
+   "inter_bp": 4160000,
+   "jaccard": 0.022743425728500355,
+   "frac_a_in_b": 0.032078963602714373,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "d9",
+    1
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d46",
+    1
+   ],
+   "a_bp": 126017061,
+   "b_bp": 115189573,
+   "inter_bp": 5824624,
+   "jaccard": 0.02474540853823111,
+   "frac_a_in_b": 0.04622091607103898,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "d9",
+    1
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d46",
+    1
+   ],
+   "a_bp": 460027711,
+   "b_bp": 279716377,
+   "inter_bp": 57856161,
+   "jaccard": 0.08484702354907656,
+   "frac_a_in_b": 0.1257666866942283,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "d9",
+    1
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d46",
+    1
+   ],
+   "a_bp": 64530000,
+   "b_bp": 57390000,
+   "inter_bp": 2510000,
+   "jaccard": 0.021020015074114395,
+   "frac_a_in_b": 0.038896637222997056,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "linear",
+    2
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d9",
+    2
+   ],
+   "a_bp": 117176983,
+   "b_bp": 156361292,
+   "inter_bp": 5493816,
+   "jaccard": 0.020495913329064565,
+   "frac_a_in_b": 0.046884770876888,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "linear",
+    2
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d9",
+    2
+   ],
+   "a_bp": 113295525,
+   "b_bp": 439659417,
+   "inter_bp": 16293508,
+   "jaccard": 0.030360869940954244,
+   "frac_a_in_b": 0.14381422390690188,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "linear",
+    2
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d9",
+    2
+   ],
+   "a_bp": 104090000,
+   "b_bp": 81820000,
+   "inter_bp": 2760000,
+   "jaccard": 0.01506961506961507,
+   "frac_a_in_b": 0.02651551541934864,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "linear",
+    2
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d46",
+    2
+   ],
+   "a_bp": 117176983,
+   "b_bp": 121312590,
+   "inter_bp": 6232232,
+   "jaccard": 0.0268333047005821,
+   "frac_a_in_b": 0.05318648629142465,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "linear",
+    2
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d46",
+    2
+   ],
+   "a_bp": 113295525,
+   "b_bp": 495816943,
+   "inter_bp": 24192018,
+   "jaccard": 0.04135950110822762,
+   "frac_a_in_b": 0.2135302166612494,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "linear",
+    2
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d46",
+    2
+   ],
+   "a_bp": 104090000,
+   "b_bp": 60680000,
+   "inter_bp": 2610000,
+   "jaccard": 0.016095214602861372,
+   "frac_a_in_b": 0.02507445479873187,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "d9",
+    2
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d46",
+    2
+   ],
+   "a_bp": 156361292,
+   "b_bp": 121312590,
+   "inter_bp": 4031924,
+   "jaccard": 0.014734304744303869,
+   "frac_a_in_b": 0.02578594707442044,
+   "kind": "graphs, same seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "d9",
+    2
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d46",
+    2
+   ],
+   "a_bp": 439659417,
+   "b_bp": 495816943,
+   "inter_bp": 92416603,
+   "jaccard": 0.1096204654921039,
+   "frac_a_in_b": 0.2102004402193892,
+   "kind": "graphs, same seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "d9",
+    2
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d46",
+    2
+   ],
+   "a_bp": 81820000,
+   "b_bp": 60680000,
+   "inter_bp": 2280000,
+   "jaccard": 0.016260162601626018,
+   "frac_a_in_b": 0.027866047421168418,
+   "kind": "graphs, same seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "linear",
+    0
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "linear",
+    1
+   ],
+   "a_bp": 140834832,
+   "b_bp": 153360398,
+   "inter_bp": 9614048,
+   "jaccard": 0.0337831473340356,
+   "frac_a_in_b": 0.06826470315241331,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "linear",
+    0
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "linear",
+    1
+   ],
+   "a_bp": 136767633,
+   "b_bp": 143262379,
+   "inter_bp": 9545143,
+   "jaccard": 0.03528900908686319,
+   "frac_a_in_b": 0.06979094973443022,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "linear",
+    0
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "linear",
+    1
+   ],
+   "a_bp": 124330000,
+   "b_bp": 129680000,
+   "inter_bp": 8780000,
+   "jaccard": 0.0358031235982547,
+   "frac_a_in_b": 0.07061851524169549,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "linear",
+    0
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "linear",
+    2
+   ],
+   "a_bp": 140834832,
+   "b_bp": 117176983,
+   "inter_bp": 6386810,
+   "jaccard": 0.025382254835921415,
+   "frac_a_in_b": 0.04534964759286254,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "linear",
+    0
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "linear",
+    2
+   ],
+   "a_bp": 136767633,
+   "b_bp": 113295525,
+   "inter_bp": 6330088,
+   "jaccard": 0.025971395674784716,
+   "frac_a_in_b": 0.046283523821751014,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "linear",
+    0
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "linear",
+    2
+   ],
+   "a_bp": 124330000,
+   "b_bp": 104090000,
+   "inter_bp": 5830000,
+   "jaccard": 0.02619165281459185,
+   "frac_a_in_b": 0.04689133756937183,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "linear",
+    1
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "linear",
+    2
+   ],
+   "a_bp": 153360398,
+   "b_bp": 117176983,
+   "inter_bp": 10219052,
+   "jaccard": 0.03925598339254859,
+   "frac_a_in_b": 0.06663422978336297,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "linear",
+    1
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "linear",
+    2
+   ],
+   "a_bp": 143262379,
+   "b_bp": 113295525,
+   "inter_bp": 10136755,
+   "jaccard": 0.04113589698423166,
+   "frac_a_in_b": 0.07075657315449159,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "linear",
+    1
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "linear",
+    2
+   ],
+   "a_bp": 129680000,
+   "b_bp": 104090000,
+   "inter_bp": 9390000,
+   "jaccard": 0.04184864961226491,
+   "frac_a_in_b": 0.07240900678593461,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "d9",
+    0
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d9",
+    1
+   ],
+   "a_bp": 143398426,
+   "b_bp": 126017061,
+   "inter_bp": 7753987,
+   "jaccard": 0.029633656460732665,
+   "frac_a_in_b": 0.05407302727297718,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "d9",
+    0
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d9",
+    1
+   ],
+   "a_bp": 614305587,
+   "b_bp": 460027711,
+   "inter_bp": 166305068,
+   "jaccard": 0.1831496670538536,
+   "frac_a_in_b": 0.27072042240761846,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "d9",
+    0
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d9",
+    1
+   ],
+   "a_bp": 72750000,
+   "b_bp": 64530000,
+   "inter_bp": 3920000,
+   "jaccard": 0.029394121175764846,
+   "frac_a_in_b": 0.05388316151202749,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "d9",
+    0
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d9",
+    2
+   ],
+   "a_bp": 143398426,
+   "b_bp": 156361292,
+   "inter_bp": 13474282,
+   "jaccard": 0.0470659010401074,
+   "frac_a_in_b": 0.09396394629882479,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "d9",
+    0
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d9",
+    2
+   ],
+   "a_bp": 614305587,
+   "b_bp": 439659417,
+   "inter_bp": 102971022,
+   "jaccard": 0.10827725931918673,
+   "frac_a_in_b": 0.16762182239439732,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "d9",
+    0
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d9",
+    2
+   ],
+   "a_bp": 72750000,
+   "b_bp": 81820000,
+   "inter_bp": 6770000,
+   "jaccard": 0.04580514208389716,
+   "frac_a_in_b": 0.09305841924398625,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "d9",
+    1
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d9",
+    2
+   ],
+   "a_bp": 126017061,
+   "b_bp": 156361292,
+   "inter_bp": 8148255,
+   "jaccard": 0.029713204565897065,
+   "frac_a_in_b": 0.06465993521305817,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "d9",
+    1
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d9",
+    2
+   ],
+   "a_bp": 460027711,
+   "b_bp": 439659417,
+   "inter_bp": 90645247,
+   "jaccard": 0.11204024059664223,
+   "frac_a_in_b": 0.19704301465439328,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "d9",
+    1
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d9",
+    2
+   ],
+   "a_bp": 64530000,
+   "b_bp": 81820000,
+   "inter_bp": 3950000,
+   "jaccard": 0.02773876404494382,
+   "frac_a_in_b": 0.06121183945451728,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "d46",
+    0
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d46",
+    1
+   ],
+   "a_bp": 115681438,
+   "b_bp": 115189573,
+   "inter_bp": 4824681,
+   "jaccard": 0.021343770544737444,
+   "frac_a_in_b": 0.04170661329434719,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "d46",
+    0
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d46",
+    1
+   ],
+   "a_bp": 663853840,
+   "b_bp": 279716377,
+   "inter_bp": 115928658,
+   "jaccard": 0.1400710932641796,
+   "frac_a_in_b": 0.17462979200361334,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "d46",
+    0
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d46",
+    1
+   ],
+   "a_bp": 58590000,
+   "b_bp": 57390000,
+   "inter_bp": 2090000,
+   "jaccard": 0.018351040477653877,
+   "frac_a_in_b": 0.03567161631677761,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "d46",
+    0
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d46",
+    2
+   ],
+   "a_bp": 115681438,
+   "b_bp": 121312590,
+   "inter_bp": 4036719,
+   "jaccard": 0.017328149167451106,
+   "frac_a_in_b": 0.034895131576770336,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "d46",
+    0
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d46",
+    2
+   ],
+   "a_bp": 663853840,
+   "b_bp": 495816943,
+   "inter_bp": 168794840,
+   "jaccard": 0.1703491150354833,
+   "frac_a_in_b": 0.2542650653342609,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "d46",
+    0
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d46",
+    2
+   ],
+   "a_bp": 58590000,
+   "b_bp": 60680000,
+   "inter_bp": 2330000,
+   "jaccard": 0.019924747733880623,
+   "frac_a_in_b": 0.0397678784775559,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "d46",
+    1
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d46",
+    2
+   ],
+   "a_bp": 115189573,
+   "b_bp": 121312590,
+   "inter_bp": 5906434,
+   "jaccard": 0.02561380484197953,
+   "frac_a_in_b": 0.05127576955250976,
+   "kind": "seeds, same graph",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "d46",
+    1
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d46",
+    2
+   ],
+   "a_bp": 279716377,
+   "b_bp": 495816943,
+   "inter_bp": 64112025,
+   "jaccard": 0.0901182259381201,
+   "frac_a_in_b": 0.2292036872764157,
+   "kind": "seeds, same graph",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_PacBio",
+    "d46",
+    1
+   ],
+   "b": [
+    "HG008T_PacBio",
+    "d46",
+    2
+   ],
+   "a_bp": 57390000,
+   "b_bp": 60680000,
+   "inter_bp": 2580000,
+   "jaccard": 0.022339596501861632,
+   "frac_a_in_b": 0.04495556717198118,
+   "kind": "seeds, same graph",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "linear",
+    0
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "linear",
+    0
+   ],
+   "a_bp": 141098636,
+   "b_bp": 141552395,
+   "inter_bp": 140683602,
+   "jaccard": 0.9909568905414213,
+   "frac_a_in_b": 0.9970585541308847,
+   "kind": "datasets, same graph+seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "linear",
+    0
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "linear",
+    0
+   ],
+   "a_bp": 138628421,
+   "b_bp": 138324968,
+   "inter_bp": 137868447,
+   "jaccard": 0.9912535822893035,
+   "frac_a_in_b": 0.9945179062524271,
+   "kind": "datasets, same graph+seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "linear",
+    0
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "linear",
+    0
+   ],
+   "a_bp": 135920000,
+   "b_bp": 132620000,
+   "inter_bp": 130270000,
+   "jaccard": 0.9421421855789398,
+   "frac_a_in_b": 0.9584314302530901,
+   "kind": "datasets, same graph+seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "d9",
+    0
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d9",
+    0
+   ],
+   "a_bp": 144505976,
+   "b_bp": 142694531,
+   "inter_bp": 141955549,
+   "jaccard": 0.9773526802906302,
+   "frac_a_in_b": 0.9823507160700399,
+   "kind": "datasets, same graph+seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "d9",
+    0
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d9",
+    0
+   ],
+   "a_bp": 707575305,
+   "b_bp": 620090769,
+   "inter_bp": 619177014,
+   "jaccard": 0.8739401198375597,
+   "frac_a_in_b": 0.8750687165375282,
+   "kind": "datasets, same graph+seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "d9",
+    0
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d9",
+    0
+   ],
+   "a_bp": 131170000,
+   "b_bp": 112260000,
+   "inter_bp": 101820000,
+   "jaccard": 0.7190170185721347,
+   "frac_a_in_b": 0.7762445681177098,
+   "kind": "datasets, same graph+seed",
+   "def": "bins"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "d46",
+    0
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d46",
+    0
+   ],
+   "a_bp": 116181330,
+   "b_bp": 116553843,
+   "inter_bp": 114692423,
+   "jaccard": 0.9716176808825616,
+   "frac_a_in_b": 0.9871846276850161,
+   "kind": "datasets, same graph+seed",
+   "def": "tile"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "d46",
+    0
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d46",
+    0
+   ],
+   "a_bp": 669588559,
+   "b_bp": 777272934,
+   "inter_bp": 668458466,
+   "jaccard": 0.8587562519846161,
+   "frac_a_in_b": 0.9983122576023584,
+   "kind": "datasets, same graph+seed",
+   "def": "hull"
+  },
+  {
+   "a": [
+    "HG008T_Illumina",
+    "d46",
+    0
+   ],
+   "b": [
+    "COLO829T_ONT",
+    "d46",
+    0
+   ],
+   "a_bp": 104060000,
+   "b_bp": 90750000,
+   "inter_bp": 81150000,
+   "jaccard": 0.7139714939292627,
+   "frac_a_in_b": 0.7798385546799923,
+   "kind": "datasets, same graph+seed",
+   "def": "bins"
+  }
+ ]
+}

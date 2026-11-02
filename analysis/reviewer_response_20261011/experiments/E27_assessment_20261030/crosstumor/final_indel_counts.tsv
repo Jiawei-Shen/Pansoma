@@ -1,0 +1,135 @@
+run	protocol	platform	seed	set	train	train_non	train_somatic	train_germline	val	val_non	val_somatic	val_germline	left_out_train	left_out_val	val_offref_as_non	val_truth_alleles	val_truth_with_tensor	best_epoch
+unseen_s0_Illumina_INDEL	unseen	Illumina	0	HCC1395T_Illumina_d46	70759	23024	1142	46593										
+unseen_s0_Illumina_INDEL	unseen	Illumina	0	HCC1954T_Illumina_d46	229997	128189	1823	99985										
+unseen_s0_Illumina_INDEL	unseen	Illumina	0	H1437T_Illumina_d46	223062	128188	2376	92498										
+unseen_s0_Illumina_INDEL	unseen	Illumina	0	H2009T_Illumina_d46	221400	130949	4378	86073										
+unseen_s0_Illumina_INDEL	unseen	Illumina	0	ALL	745218	410350	9719	325149	40115	26009	439	13667	773	40	7066	660	422	3
+unseen_s1_Illumina_INDEL	unseen	Illumina	1	HCC1395T_Illumina_d46	70404	22862	1146	46396										
+unseen_s1_Illumina_INDEL	unseen	Illumina	1	HCC1954T_Illumina_d46	229240	127677	1826	99737										
+unseen_s1_Illumina_INDEL	unseen	Illumina	1	H1437T_Illumina_d46	222564	127635	2368	92561										
+unseen_s1_Illumina_INDEL	unseen	Illumina	1	H2009T_Illumina_d46	220603	130608	4396	85599										
+unseen_s1_Illumina_INDEL	unseen	Illumina	1	ALL	742811	408782	9736	324293	42052	27758	431	13863	768	46	7247	594	402	5
+unseen_s2_Illumina_INDEL	unseen	Illumina	2	HCC1395T_Illumina_d46	70354	22854	1133	46367										
+unseen_s2_Illumina_INDEL	unseen	Illumina	2	HCC1954T_Illumina_d46	229121	127777	1817	99527										
+unseen_s2_Illumina_INDEL	unseen	Illumina	2	H1437T_Illumina_d46	222877	128058	2392	92427										
+unseen_s2_Illumina_INDEL	unseen	Illumina	2	H2009T_Illumina_d46	221045	130810	4375	85860										
+unseen_s2_Illumina_INDEL	unseen	Illumina	2	ALL	743397	409499	9717	324181	41493	27296	445	13752	787	27	7504	716	426	6
+unseen_s0_PacBio_INDEL	unseen	PacBio	0	HCC1395T_PacBio_d46	1264864	1128765	1171	134928										
+unseen_s0_PacBio_INDEL	unseen	PacBio	0	HCC1954T_PacBio_d46	1697108	1516376	1870	178862										
+unseen_s0_PacBio_INDEL	unseen	PacBio	0	H1437T_PacBio_d46	1444597	1272932	2415	169250										
+unseen_s0_PacBio_INDEL	unseen	PacBio	0	H2009T_PacBio_d46	1455936	1295729	4461	155746										
+unseen_s0_PacBio_INDEL	unseen	PacBio	0	ALL	5862505	5213802	9917	638786	298423	270063	443	27917	1211	59	18626	656	435	4
+unseen_s1_PacBio_INDEL	unseen	PacBio	1	HCC1395T_PacBio_d46	1264689	1128890	1178	134621										
+unseen_s1_PacBio_INDEL	unseen	PacBio	1	HCC1954T_PacBio_d46	1695614	1515335	1874	178405										
+unseen_s1_PacBio_INDEL	unseen	PacBio	1	H1437T_PacBio_d46	1444597	1273295	2402	168900										
+unseen_s1_PacBio_INDEL	unseen	PacBio	1	H2009T_PacBio_d46	1455644	1296101	4476	155067										
+unseen_s1_PacBio_INDEL	unseen	PacBio	1	ALL	5860544	5213621	9930	636993	299232	270921	445	27866	1211	59	19304	594	426	8
+unseen_s2_PacBio_INDEL	unseen	PacBio	2	HCC1395T_PacBio_d46	1262000	1126360	1168	134472										
+unseen_s2_PacBio_INDEL	unseen	PacBio	2	HCC1954T_PacBio_d46	1694541	1514368	1864	178309										
+unseen_s2_PacBio_INDEL	unseen	PacBio	2	H1437T_PacBio_d46	1444783	1273346	2430	169007										
+unseen_s2_PacBio_INDEL	unseen	PacBio	2	H2009T_PacBio_d46	1455952	1296258	4452	155242										
+unseen_s2_PacBio_INDEL	unseen	PacBio	2	HCC1395T_PacBio_d46	1262000	1126360	1168	134472										
+unseen_s2_PacBio_INDEL	unseen	PacBio	2	HCC1954T_PacBio_d46	1694541	1514368	1864	178309										
+unseen_s2_PacBio_INDEL	unseen	PacBio	2	H1437T_PacBio_d46	1444783	1273346	2430	169007										
+unseen_s2_PacBio_INDEL	unseen	PacBio	2	H2009T_PacBio_d46	1455952	1296258	4452	155242										
+unseen_s2_PacBio_INDEL	unseen	PacBio	2	ALL	5857276	5210332	9914	637030	302539	274245	457	27837	1208	62	19344	715	449	9
+unseen_s0_ONT_INDEL	unseen	ONT	0	HCC1395T_ONT_d46	2933823	2752568	1055	180200										
+unseen_s0_ONT_INDEL	unseen	ONT	0	HCC1954T_ONT_d46	2825243	2599789	1869	223585										
+unseen_s0_ONT_INDEL	unseen	ONT	0	H1437T_ONT_d46	2864167	2642577	2416	219174										
+unseen_s0_ONT_INDEL	unseen	ONT	0	H2009T_ONT_d46	2669692	2460980	4525	204187										
+unseen_s0_ONT_INDEL	unseen	ONT	0	ALL	11292925	10455914	9865	827146	582276	545857	440	35979	1676	98	33696	655	432	12
+unseen_s1_ONT_INDEL	unseen	ONT	1	HCC1395T_ONT_d46	2937965	2757091	1059	179815										
+unseen_s1_ONT_INDEL	unseen	ONT	1	HCC1954T_ONT_d46	2826252	2601394	1874	222984										
+unseen_s1_ONT_INDEL	unseen	ONT	1	H1437T_ONT_d46	2865735	2644442	2407	218886										
+unseen_s1_ONT_INDEL	unseen	ONT	1	H2009T_ONT_d46	2670779	2462961	4542	203276										
+unseen_s1_ONT_INDEL	unseen	ONT	1	ALL	11300731	10465888	9882	824961	572458	535972	437	36049	1688	86	33792	603	423	6
+unseen_s2_ONT_INDEL	unseen	ONT	2	HCC1395T_ONT_d46	2932256	2751389	1049	179818										
+unseen_s2_ONT_INDEL	unseen	ONT	2	HCC1954T_ONT_d46	2825781	2600912	1862	223007										
+unseen_s2_ONT_INDEL	unseen	ONT	2	H1437T_ONT_d46	2865514	2644103	2434	218977										
+unseen_s2_ONT_INDEL	unseen	ONT	2	H2009T_ONT_d46	2670069	2461793	4510	203766										
+unseen_s2_ONT_INDEL	unseen	ONT	2	HCC1395T_ONT_d46	2932256	2751389	1049	179818										
+unseen_s2_ONT_INDEL	unseen	ONT	2	HCC1954T_ONT_d46	2825781	2600912	1862	223007										
+unseen_s2_ONT_INDEL	unseen	ONT	2	H1437T_ONT_d46	2865514	2644103	2434	218977										
+unseen_s2_ONT_INDEL	unseen	ONT	2	H2009T_ONT_d46	2670069	2461793	4510	203766										
+unseen_s2_ONT_INDEL	unseen	ONT	2	ALL	11293620	10458197	9855	825568	579999	544017	462	35520	1691	83	34157	714	453	8
+release_s0_Illumina_INDEL	release	Illumina	0	HCC1395T_Illumina_d46	70759	23024	1142	46593										
+release_s0_Illumina_INDEL	release	Illumina	0	HCC1954T_Illumina_d46	229997	128189	1823	99985										
+release_s0_Illumina_INDEL	release	Illumina	0	H1437T_Illumina_d46	223062	128188	2376	92498										
+release_s0_Illumina_INDEL	release	Illumina	0	H2009T_Illumina_d46	221400	130949	4378	86073										
+release_s0_Illumina_INDEL	release	Illumina	0	HG008T_Illumina_d46	81706	23063	3383	55260										
+release_s0_Illumina_INDEL	release	Illumina	0	COLO829T_Illumina_d46	98843	36685	1048	61110										
+release_s0_Illumina_INDEL	release	Illumina	0	ALL	925767	470098	14150	441519	49841	29942	653	19246	2463	133	8813	1112	626	2
+release_s1_Illumina_INDEL	release	Illumina	1	HCC1395T_Illumina_d46	70404	22862	1146	46396										
+release_s1_Illumina_INDEL	release	Illumina	1	HCC1954T_Illumina_d46	229240	127677	1826	99737										
+release_s1_Illumina_INDEL	release	Illumina	1	H1437T_Illumina_d46	222564	127635	2368	92561										
+release_s1_Illumina_INDEL	release	Illumina	1	H2009T_Illumina_d46	220603	130608	4396	85599										
+release_s1_Illumina_INDEL	release	Illumina	1	HG008T_Illumina_d46	81645	22759	3404	55482										
+release_s1_Illumina_INDEL	release	Illumina	1	COLO829T_Illumina_d46	98197	35941	1051	61205										
+release_s1_Illumina_INDEL	release	Illumina	1	ALL	922653	467482	14191	440980	52372	32665	623	19084	2459	138	8927	1006	581	1
+release_s2_Illumina_INDEL	release	Illumina	2	HCC1395T_Illumina_d46	70354	22854	1133	46367										
+release_s2_Illumina_INDEL	release	Illumina	2	HCC1954T_Illumina_d46	229121	127777	1817	99527										
+release_s2_Illumina_INDEL	release	Illumina	2	H1437T_Illumina_d46	222877	128058	2392	92427										
+release_s2_Illumina_INDEL	release	Illumina	2	H2009T_Illumina_d46	221045	130810	4375	85860										
+release_s2_Illumina_INDEL	release	Illumina	2	HG008T_Illumina_d46	81296	22797	3385	55114										
+release_s2_Illumina_INDEL	release	Illumina	2	COLO829T_Illumina_d46	97704	35681	1055	60968										
+release_s2_Illumina_INDEL	release	Illumina	2	ALL	922397	467977	14157	440263	52719	32561	648	19510	2492	105	9314	1113	620	4
+release_s0_PacBio_INDEL	release	PacBio	0	HCC1395T_PacBio_d46	1264864	1128765	1171	134928										
+release_s0_PacBio_INDEL	release	PacBio	0	HCC1954T_PacBio_d46	1697108	1516376	1870	178862										
+release_s0_PacBio_INDEL	release	PacBio	0	H1437T_PacBio_d46	1444597	1272932	2415	169250										
+release_s0_PacBio_INDEL	release	PacBio	0	H2009T_PacBio_d46	1455936	1295729	4461	155746										
+release_s0_PacBio_INDEL	release	PacBio	0	HG008T_PacBio_d46	1507831	1341181	3761	162889										
+release_s0_PacBio_INDEL	release	PacBio	0	COLO829T_fiberseq_d46	1489821	1307875	1141	180805										
+release_s0_PacBio_INDEL	release	PacBio	0	ALL	8860157	7862858	14819	982480	449980	405393	682	43905	3870	207	31560	1108	669	7
+release_s1_PacBio_INDEL	release	PacBio	1	HCC1395T_PacBio_d46	1264689	1128890	1178	134621										
+release_s1_PacBio_INDEL	release	PacBio	1	HCC1954T_PacBio_d46	1695614	1515335	1874	178405										
+release_s1_PacBio_INDEL	release	PacBio	1	H1437T_PacBio_d46	1444597	1273295	2402	168900										
+release_s1_PacBio_INDEL	release	PacBio	1	H2009T_PacBio_d46	1455644	1296101	4476	155067										
+release_s1_PacBio_INDEL	release	PacBio	1	HG008T_PacBio_d46	1509501	1342707	3782	163012										
+release_s1_PacBio_INDEL	release	PacBio	1	COLO829T_fiberseq_d46	1479598	1297975	1142	180481										
+release_s1_PacBio_INDEL	release	PacBio	1	ALL	8849643	7854303	14854	980486	459514	415083	664	43767	3872	205	32686	999	640	6
+release_s2_PacBio_INDEL	release	PacBio	2	HCC1395T_PacBio_d46	1262000	1126360	1168	134472										
+release_s2_PacBio_INDEL	release	PacBio	2	HCC1954T_PacBio_d46	1694541	1514368	1864	178309										
+release_s2_PacBio_INDEL	release	PacBio	2	H1437T_PacBio_d46	1444783	1273346	2430	169007										
+release_s2_PacBio_INDEL	release	PacBio	2	H2009T_PacBio_d46	1455952	1296258	4452	155242										
+release_s2_PacBio_INDEL	release	PacBio	2	HG008T_PacBio_d46	1508668	1342322	3767	162579										
+release_s2_PacBio_INDEL	release	PacBio	2	COLO829T_fiberseq_d46	1460573	1279117	1149	180307										
+release_s2_PacBio_INDEL	release	PacBio	2	HCC1395T_PacBio_d46	1262000	1126360	1168	134472										
+release_s2_PacBio_INDEL	release	PacBio	2	HCC1954T_PacBio_d46	1694541	1514368	1864	178309										
+release_s2_PacBio_INDEL	release	PacBio	2	H1437T_PacBio_d46	1444783	1273346	2430	169007										
+release_s2_PacBio_INDEL	release	PacBio	2	H2009T_PacBio_d46	1455952	1296258	4452	155242										
+release_s2_PacBio_INDEL	release	PacBio	2	HG008T_PacBio_d46	1508668	1342322	3767	162579										
+release_s2_PacBio_INDEL	release	PacBio	2	COLO829T_fiberseq_d46	1460573	1279117	1149	180307										
+release_s2_PacBio_INDEL	release	PacBio	2	ALL	8826517	7831771	14830	979916	482557	437500	680	44377	3888	189	32576	1113	663	8
+release_s0_ONT_INDEL	release	ONT	0	HCC1395T_ONT_d46	2933823	2752568	1055	180200										
+release_s0_ONT_INDEL	release	ONT	0	HCC1954T_ONT_d46	2825243	2599789	1869	223585										
+release_s0_ONT_INDEL	release	ONT	0	H1437T_ONT_d46	2864167	2642577	2416	219174										
+release_s0_ONT_INDEL	release	ONT	0	H2009T_ONT_d46	2669692	2460980	4525	204187										
+release_s0_ONT_INDEL	release	ONT	0	HG008T_ONT_d46	1907672	1728382	3249	176041										
+release_s0_ONT_INDEL	release	ONT	0	COLO829T_ONT_d46	3626122	3412675	1018	212429										
+release_s0_ONT_INDEL	release	ONT	0	ALL	16826719	15596971	14132	1215616	868291	813478	649	54164	4659	257	53317	1105	636	5
+release_s1_ONT_INDEL	release	ONT	1	HCC1395T_ONT_d46	2937965	2757091	1059	179815										
+release_s1_ONT_INDEL	release	ONT	1	HCC1954T_ONT_d46	2826252	2601394	1874	222984										
+release_s1_ONT_INDEL	release	ONT	1	H1437T_ONT_d46	2865735	2644442	2407	218886										
+release_s1_ONT_INDEL	release	ONT	1	H2009T_ONT_d46	2670779	2462961	4542	203276										
+release_s1_ONT_INDEL	release	ONT	1	HG008T_ONT_d46	1909606	1730078	3270	176258										
+release_s1_ONT_INDEL	release	ONT	1	COLO829T_ONT_d46	3624371	3410996	1027	212348										
+release_s1_ONT_INDEL	release	ONT	1	ALL	16834708	15606962	14179	1213567	858330	803935	620	53775	4669	247	53774	1010	601	6
+release_s2_ONT_INDEL	release	ONT	2	HCC1395T_ONT_d46	2932256	2751389	1049	179818										
+release_s2_ONT_INDEL	release	ONT	2	HCC1954T_ONT_d46	2825781	2600912	1862	223007										
+release_s2_ONT_INDEL	release	ONT	2	H1437T_ONT_d46	2865514	2644103	2434	218977										
+release_s2_ONT_INDEL	release	ONT	2	H2009T_ONT_d46	2670069	2461793	4510	203766										
+release_s2_ONT_INDEL	release	ONT	2	HG008T_ONT_d46	1908462	1729428	3259	175775										
+release_s2_ONT_INDEL	release	ONT	2	COLO829T_ONT_d46	3624360	3411185	1027	212148										
+release_s2_ONT_INDEL	release	ONT	2	HCC1395T_ONT_d46	2932256	2751389	1049	179818										
+release_s2_ONT_INDEL	release	ONT	2	HCC1954T_ONT_d46	2825781	2600912	1862	223007										
+release_s2_ONT_INDEL	release	ONT	2	H1437T_ONT_d46	2865514	2644103	2434	218977										
+release_s2_ONT_INDEL	release	ONT	2	H2009T_ONT_d46	2670069	2461793	4510	203766										
+release_s2_ONT_INDEL	release	ONT	2	HG008T_ONT_d46	1908462	1729428	3259	175775										
+release_s2_ONT_INDEL	release	ONT	2	COLO829T_ONT_d46	3624360	3411185	1027	212148										
+release_s2_ONT_INDEL	release	ONT	2	HCC1395T_ONT_d46	2932256	2751389	1049	179818										
+release_s2_ONT_INDEL	release	ONT	2	HCC1954T_ONT_d46	2825781	2600912	1862	223007										
+release_s2_ONT_INDEL	release	ONT	2	H1437T_ONT_d46	2865514	2644103	2434	218977										
+release_s2_ONT_INDEL	release	ONT	2	H2009T_ONT_d46	2670069	2461793	4510	203766										
+release_s2_ONT_INDEL	release	ONT	2	HG008T_ONT_d46	1908462	1729428	3259	175775										
+release_s2_ONT_INDEL	release	ONT	2	COLO829T_ONT_d46	3624360	3411185	1027	212148										
+release_s2_ONT_INDEL	release	ONT	2	ALL	16826442	15598810	14141	1213491	867230	812565	650	54015	4711	206	54260	1112	634	5

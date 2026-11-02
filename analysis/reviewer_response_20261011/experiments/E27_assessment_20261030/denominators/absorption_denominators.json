@@ -1,0 +1,2342 @@
+{
+ "chr1-22 all records|HG008T|SNV": {
+  "n": 8690,
+  "tagged": 910,
+  "untagged": 7780,
+  "d46|strict": {
+   "Illumina": {
+    "n": 109,
+    "tagged": 109,
+    "untagged": 0
+   },
+   "PacBio": {
+    "n": 124,
+    "tagged": 124,
+    "untagged": 0
+   },
+   "ONT": {
+    "n": 121,
+    "tagged": 121,
+    "untagged": 0
+   },
+   "union": {
+    "n": 140,
+    "tagged": 140,
+    "untagged": 0
+   },
+   "all3": {
+    "n": 91,
+    "tagged": 91,
+    "untagged": 0
+   }
+  },
+  "d46|arm-only": {
+   "Illumina": {
+    "n": 111,
+    "tagged": 111,
+    "untagged": 0
+   },
+   "PacBio": {
+    "n": 128,
+    "tagged": 128,
+    "untagged": 0
+   },
+   "ONT": {
+    "n": 131,
+    "tagged": 131,
+    "untagged": 0
+   },
+   "union": {
+    "n": 141,
+    "tagged": 141,
+    "untagged": 0
+   },
+   "all3": {
+    "n": 100,
+    "tagged": 100,
+    "untagged": 0
+   }
+  },
+  "d46|spelled": {
+   "n": 153,
+   "tagged": 153,
+   "untagged": 0
+  },
+  "d9|strict": {
+   "Illumina": {
+    "n": 140,
+    "tagged": 140,
+    "untagged": 0
+   },
+   "PacBio": {
+    "n": 165,
+    "tagged": 165,
+    "untagged": 0
+   },
+   "ONT": {
+    "n": 153,
+    "tagged": 153,
+    "untagged": 0
+   },
+   "union": {
+    "n": 184,
+    "tagged": 184,
+    "untagged": 0
+   },
+   "all3": {
+    "n": 113,
+    "tagged": 113,
+    "untagged": 0
+   }
+  },
+  "d9|arm-only": {
+   "Illumina": {
+    "n": 146,
+    "tagged": 146,
+    "untagged": 0
+   },
+   "PacBio": {
+    "n": 175,
+    "tagged": 174,
+    "untagged": 1
+   },
+   "ONT": {
+    "n": 168,
+    "tagged": 167,
+    "untagged": 1
+   },
+   "union": {
+    "n": 188,
+    "tagged": 187,
+    "untagged": 1
+   },
+   "all3": {
+    "n": 131,
+    "tagged": 131,
+    "untagged": 0
+   }
+  },
+  "d9|spelled": {
+   "n": 215,
+   "tagged": 214,
+   "untagged": 1
+  },
+  "d46|broad|Illumina": {
+   "lost": 263,
+   "lost_tagged": 226,
+   "lost_untagged": 37,
+   "gained": 16,
+   "gained_untagged": 7,
+   "net_untagged": 30,
+   "strict_absorbed_in_lost_untagged": 0,
+   "I1": 2,
+   "I2": 10,
+   "e5c_missing": 0
+  },
+  "d46|broad|PacBio": {
+   "lost": 316,
+   "lost_tagged": 281,
+   "lost_untagged": 35,
+   "gained": 15,
+   "gained_untagged": 7,
+   "net_untagged": 28,
+   "strict_absorbed_in_lost_untagged": 0,
+   "I1": 1,
+   "I2": 3,
+   "e5c_missing": 0
+  },
+  "d46|broad|ONT": {
+   "lost": 290,
+   "lost_tagged": 269,
+   "lost_untagged": 21,
+   "gained": 10,
+   "gained_untagged": 3,
+   "net_untagged": 18,
+   "strict_absorbed_in_lost_untagged": 0,
+   "I1": 1,
+   "I2": 2,
+   "e5c_missing": 0
+  },
+  "d9|broad|Illumina": {
+   "lost": 296,
+   "lost_tagged": 259,
+   "lost_untagged": 37,
+   "gained": 14,
+   "gained_untagged": 6,
+   "net_untagged": 31,
+   "strict_absorbed_in_lost_untagged": 0,
+   "I1": null,
+   "I2": null,
+   "e5c_missing": null
+  },
+  "d9|broad|PacBio": {
+   "lost": 336,
+   "lost_tagged": 303,
+   "lost_untagged": 33,
+   "gained": 16,
+   "gained_untagged": 6,
+   "net_untagged": 27,
+   "strict_absorbed_in_lost_untagged": 0,
+   "I1": null,
+   "I2": null,
+   "e5c_missing": null
+  },
+  "d9|broad|ONT": {
+   "lost": 318,
+   "lost_tagged": 287,
+   "lost_untagged": 31,
+   "gained": 18,
+   "gained_untagged": 7,
+   "net_untagged": 24,
+   "strict_absorbed_in_lost_untagged": 0,
+   "I1": null,
+   "I2": null,
+   "e5c_missing": null
+  }
+ },
+ "chr1-22 all records|HG008T|INDEL": {
+  "n": 8496,
+  "tagged": 5326,
+  "untagged": 3170,
+  "d46|strict": {
+   "Illumina": {
+    "n": 1301,
+    "tagged": 1263,
+    "untagged": 38
+   },
+   "PacBio": {
+    "n": 839,
+    "tagged": 808,
+    "untagged": 31
+   },
+   "ONT": {
+    "n": 472,
+    "tagged": 453,
+    "untagged": 19
+   },
+   "union": {
+    "n": 1467,
+    "tagged": 1418,
+    "untagged": 49
+   },
+   "all3": {
+    "n": 345,
+    "tagged": 333,
+    "untagged": 12
+   }
+  },
+  "d46|arm-only": {
+   "Illumina": {
+    "n": 1576,
+    "tagged": 1518,
+    "untagged": 58
+   },
+   "PacBio": {
+    "n": 998,
+    "tagged": 957,
+    "untagged": 41
+   },
+   "ONT": {
+    "n": 833,
+    "tagged": 797,
+    "untagged": 36
+   },
+   "union": {
+    "n": 1608,
+    "tagged": 1547,
+    "untagged": 61
+   },
+   "all3": {
+    "n": 779,
+    "tagged": 746,
+    "untagged": 33
+   }
+  },
+  "d46|spelled": {
+   "n": 1809,
+   "tagged": 1743,
+   "untagged": 66
+  },
+  "d9|strict": {
+   "Illumina": {
+    "n": 1613,
+    "tagged": 1578,
+    "untagged": 35
+   },
+   "PacBio": {
+    "n": 935,
+    "tagged": 905,
+    "untagged": 30
+   },
+   "ONT": {
+    "n": 441,
+    "tagged": 425,
+    "untagged": 16
+   },
+   "union": {
+    "n": 1818,
+    "tagged": 1763,
+    "untagged": 55
+   },
+   "all3": {
+    "n": 315,
+    "tagged": 309,
+    "untagged": 6
+   }
+  },
+  "d9|arm-only": {
+   "Illumina": {
+    "n": 1978,
+    "tagged": 1904,
+    "untagged": 74
+   },
+   "PacBio": {
+    "n": 1136,
+    "tagged": 1091,
+    "untagged": 45
+   },
+   "ONT": {
+    "n": 801,
+    "tagged": 762,
+    "untagged": 39
+   },
+   "union": {
+    "n": 2039,
+    "tagged": 1959,
+    "untagged": 80
+   },
+   "all3": {
+    "n": 724,
+    "tagged": 695,
+    "untagged": 29
+   }
+  },
+  "d9|spelled": {
+   "n": 2319,
+   "tagged": 2224,
+   "untagged": 95
+  },
+  "d46|broad|Illumina": {
+   "lost": 3528,
+   "lost_tagged": 3013,
+   "lost_untagged": 515,
+   "gained": 38,
+   "gained_untagged": 21,
+   "net_untagged": 494,
+   "strict_absorbed_in_lost_untagged": 38,
+   "I1": 44,
+   "I2": 414,
+   "e5c_missing": 0
+  },
+  "d46|broad|PacBio": {
+   "lost": 3577,
+   "lost_tagged": 2974,
+   "lost_untagged": 603,
+   "gained": 20,
+   "gained_untagged": 8,
+   "net_untagged": 595,
+   "strict_absorbed_in_lost_untagged": 31,
+   "I1": 58,
+   "I2": 483,
+   "e5c_missing": 0
+  },
+  "d46|broad|ONT": {
+   "lost": 2494,
+   "lost_tagged": 2139,
+   "lost_untagged": 355,
+   "gained": 213,
+   "gained_untagged": 59,
+   "net_untagged": 296,
+   "strict_absorbed_in_lost_untagged": 19,
+   "I1": 32,
+   "I2": 290,
+   "e5c_missing": 0
+  },
+  "d9|broad|Illumina": {
+   "lost": 3804,
+   "lost_tagged": 3271,
+   "lost_untagged": 533,
+   "gained": 23,
+   "gained_untagged": 10,
+   "net_untagged": 523,
+   "strict_absorbed_in_lost_untagged": 35,
+   "I1": null,
+   "I2": null,
+   "e5c_missing": null
+  },
+  "d9|broad|PacBio": {
+   "lost": 3754,
+   "lost_tagged": 3133,
+   "lost_untagged": 621,
+   "gained": 19,
+   "gained_untagged": 7,
+   "net_untagged": 614,
+   "strict_absorbed_in_lost_untagged": 30,
+   "I1": null,
+   "I2": null,
+   "e5c_missing": null
+  },
+  "d9|broad|ONT": {
+   "lost": 2643,
+   "lost_tagged": 2261,
+   "lost_untagged": 382,
+   "gained": 244,
+   "gained_untagged": 57,
+   "net_untagged": 325,
+   "strict_absorbed_in_lost_untagged": 16,
+   "I1": null,
+   "I2": null,
+   "e5c_missing": null
+  }
+ },
+ "chr1-22 all records|COLO829T|SNV": {
+  "n": 42035,
+  "tagged": 1442,
+  "untagged": 40593,
+  "d46|strict": {
+   "Illumina": {
+    "n": 45,
+    "tagged": 45,
+    "untagged": 0
+   },
+   "fiberseq": {
+    "n": 49,
+    "tagged": 49,
+    "untagged": 0
+   },
+   "ONT": {
+    "n": 45,
+    "tagged": 45,
+    "untagged": 0
+   },
+   "union": {
+    "n": 54,
+    "tagged": 54,
+    "untagged": 0
+   },
+   "all3": {
+    "n": 35,
+    "tagged": 35,
+    "untagged": 0
+   }
+  },
+  "d46|arm-only": {
+   "Illumina": {
+    "n": 48,
+    "tagged": 48,
+    "untagged": 0
+   },
+   "fiberseq": {
+    "n": 55,
+    "tagged": 55,
+    "untagged": 0
+   },
+   "ONT": {
+    "n": 54,
+    "tagged": 54,
+    "untagged": 0
+   },
+   "union": {
+    "n": 57,
+    "tagged": 57,
+    "untagged": 0
+   },
+   "all3": {
+    "n": 44,
+    "tagged": 44,
+    "untagged": 0
+   }
+  },
+  "d46|spelled": {
+   "n": 70,
+   "tagged": 69,
+   "untagged": 1
+  },
+  "d9|strict": {
+   "Illumina": {
+    "n": 55,
+    "tagged": 54,
+    "untagged": 1
+   },
+   "fiberseq": {
+    "n": 56,
+    "tagged": 56,
+    "untagged": 0
+   },
+   "ONT": {
+    "n": 50,
+    "tagged": 50,
+    "untagged": 0
+   },
+   "union": {
+    "n": 64,
+    "tagged": 63,
+    "untagged": 1
+   },
+   "all3": {
+    "n": 41,
+    "tagged": 41,
+    "untagged": 0
+   }
+  },
+  "d9|arm-only": {
+   "Illumina": {
+    "n": 56,
+    "tagged": 55,
+    "untagged": 1
+   },
+   "fiberseq": {
+    "n": 63,
+    "tagged": 62,
+    "untagged": 1
+   },
+   "ONT": {
+    "n": 61,
+    "tagged": 60,
+    "untagged": 1
+   },
+   "union": {
+    "n": 66,
+    "tagged": 65,
+    "untagged": 1
+   },
+   "all3": {
+    "n": 52,
+    "tagged": 51,
+    "untagged": 1
+   }
+  },
+  "d9|spelled": {
+   "n": 83,
+   "tagged": 79,
+   "untagged": 4
+  },
+  "d46|broad|Illumina": {
+   "lost": 398,
+   "lost_tagged": 93,
+   "lost_untagged": 305,
+   "gained": 37,
+   "gained_untagged": 32,
+   "net_untagged": 273,
+   "strict_absorbed_in_lost_untagged": 0,
+   "I1": 16,
+   "I2": 14,
+   "e5c_missing": 0
+  },
+  "d46|broad|fiberseq": {
+   "lost": 281,
+   "lost_tagged": 72,
+   "lost_untagged": 209,
+   "gained": 71,
+   "gained_untagged": 64,
+   "net_untagged": 145,
+   "strict_absorbed_in_lost_untagged": 0,
+   "I1": 27,
+   "I2": 3,
+   "e5c_missing": 0
+  },
+  "d46|broad|ONT": {
+   "lost": 220,
+   "lost_tagged": 68,
+   "lost_untagged": 152,
+   "gained": 70,
+   "gained_untagged": 62,
+   "net_untagged": 90,
+   "strict_absorbed_in_lost_untagged": 0,
+   "I1": 70,
+   "I2": 5,
+   "e5c_missing": 0
+  },
+  "d9|broad|Illumina": {
+   "lost": 395,
+   "lost_tagged": 98,
+   "lost_untagged": 297,
+   "gained": 37,
+   "gained_untagged": 34,
+   "net_untagged": 263,
+   "strict_absorbed_in_lost_untagged": 1,
+   "I1": null,
+   "I2": null,
+   "e5c_missing": null
+  },
+  "d9|broad|fiberseq": {
+   "lost": 244,
+   "lost_tagged": 72,
+   "lost_untagged": 172,
+   "gained": 54,
+   "gained_untagged": 50,
+   "net_untagged": 122,
+   "strict_absorbed_in_lost_untagged": 0,
+   "I1": null,
+   "I2": null,
+   "e5c_missing": null
+  },
+  "d9|broad|ONT": {
+   "lost": 203,
+   "lost_tagged": 69,
+   "lost_untagged": 134,
+   "gained": 62,
+   "gained_untagged": 57,
+   "net_untagged": 77,
+   "strict_absorbed_in_lost_untagged": 0,
+   "I1": null,
+   "I2": null,
+   "e5c_missing": null
+  }
+ },
+ "chr1-22 all records|COLO829T|INDEL": {
+  "n": 1912,
+  "tagged": 1005,
+  "untagged": 907,
+  "d46|strict": {
+   "Illumina": {
+    "n": 315,
+    "tagged": 310,
+    "untagged": 5
+   },
+   "fiberseq": {
+    "n": 198,
+    "tagged": 194,
+    "untagged": 4
+   },
+   "ONT": {
+    "n": 128,
+    "tagged": 126,
+    "untagged": 2
+   },
+   "union": {
+    "n": 347,
+    "tagged": 341,
+    "untagged": 6
+   },
+   "all3": {
+    "n": 99,
+    "tagged": 97,
+    "untagged": 2
+   }
+  },
+  "d46|arm-only": {
+   "Illumina": {
+    "n": 363,
+    "tagged": 357,
+    "untagged": 6
+   },
+   "fiberseq": {
+    "n": 220,
+    "tagged": 216,
+    "untagged": 4
+   },
+   "ONT": {
+    "n": 172,
+    "tagged": 169,
+    "untagged": 3
+   },
+   "union": {
+    "n": 365,
+    "tagged": 359,
+    "untagged": 6
+   },
+   "all3": {
+    "n": 168,
+    "tagged": 165,
+    "untagged": 3
+   }
+  },
+  "d46|spelled": {
+   "n": 398,
+   "tagged": 390,
+   "untagged": 8
+  },
+  "d9|strict": {
+   "Illumina": {
+    "n": 354,
+    "tagged": 350,
+    "untagged": 4
+   },
+   "fiberseq": {
+    "n": 183,
+    "tagged": 181,
+    "untagged": 2
+   },
+   "ONT": {
+    "n": 115,
+    "tagged": 114,
+    "untagged": 1
+   },
+   "union": {
+    "n": 382,
+    "tagged": 377,
+    "untagged": 5
+   },
+   "all3": {
+    "n": 89,
+    "tagged": 89,
+    "untagged": 0
+   }
+  },
+  "d9|arm-only": {
+   "Illumina": {
+    "n": 400,
+    "tagged": 395,
+    "untagged": 5
+   },
+   "fiberseq": {
+    "n": 203,
+    "tagged": 201,
+    "untagged": 2
+   },
+   "ONT": {
+    "n": 149,
+    "tagged": 147,
+    "untagged": 2
+   },
+   "union": {
+    "n": 402,
+    "tagged": 397,
+    "untagged": 5
+   },
+   "all3": {
+    "n": 140,
+    "tagged": 139,
+    "untagged": 1
+   }
+  },
+  "d9|spelled": {
+   "n": 457,
+   "tagged": 449,
+   "untagged": 8
+  },
+  "d46|broad|Illumina": {
+   "lost": 612,
+   "lost_tagged": 494,
+   "lost_untagged": 118,
+   "gained": 8,
+   "gained_untagged": 4,
+   "net_untagged": 114,
+   "strict_absorbed_in_lost_untagged": 5,
+   "I1": 11,
+   "I2": 67,
+   "e5c_missing": 0
+  },
+  "d46|broad|fiberseq": {
+   "lost": 567,
+   "lost_tagged": 434,
+   "lost_untagged": 133,
+   "gained": 1,
+   "gained_untagged": 1,
+   "net_untagged": 132,
+   "strict_absorbed_in_lost_untagged": 4,
+   "I1": 11,
+   "I2": 66,
+   "e5c_missing": 0
+  },
+  "d46|broad|ONT": {
+   "lost": 457,
+   "lost_tagged": 347,
+   "lost_untagged": 110,
+   "gained": 20,
+   "gained_untagged": 7,
+   "net_untagged": 103,
+   "strict_absorbed_in_lost_untagged": 2,
+   "I1": 11,
+   "I2": 55,
+   "e5c_missing": 0
+  },
+  "d9|broad|Illumina": {
+   "lost": 672,
+   "lost_tagged": 544,
+   "lost_untagged": 128,
+   "gained": 3,
+   "gained_untagged": 2,
+   "net_untagged": 126,
+   "strict_absorbed_in_lost_untagged": 4,
+   "I1": null,
+   "I2": null,
+   "e5c_missing": null
+  },
+  "d9|broad|fiberseq": {
+   "lost": 620,
+   "lost_tagged": 489,
+   "lost_untagged": 131,
+   "gained": 3,
+   "gained_untagged": 1,
+   "net_untagged": 130,
+   "strict_absorbed_in_lost_untagged": 2,
+   "I1": null,
+   "I2": null,
+   "e5c_missing": null
+  },
+  "d9|broad|ONT": {
+   "lost": 494,
+   "lost_tagged": 389,
+   "lost_untagged": 105,
+   "gained": 18,
+   "gained_untagged": 9,
+   "net_untagged": 96,
+   "strict_absorbed_in_lost_untagged": 1,
+   "I1": null,
+   "I2": null,
+   "e5c_missing": null
+  }
+ },
+ "chr1-22 in BED|HG008T|SNV": {
+  "n": 8543,
+  "tagged": 876,
+  "untagged": 7667,
+  "d46|strict": {
+   "Illumina": {
+    "n": 100,
+    "tagged": 100,
+    "untagged": 0
+   },
+   "PacBio": {
+    "n": 114,
+    "tagged": 114,
+    "untagged": 0
+   },
+   "ONT": {
+    "n": 113,
+    "tagged": 113,
+    "untagged": 0
+   },
+   "union": {
+    "n": 130,
+    "tagged": 130,
+    "untagged": 0
+   },
+   "all3": {
+    "n": 83,
+    "tagged": 83,
+    "untagged": 0
+   }
+  },
+  "d46|arm-only": {
+   "Illumina": {
+    "n": 102,
+    "tagged": 102,
+    "untagged": 0
+   },
+   "PacBio": {
+    "n": 118,
+    "tagged": 118,
+    "untagged": 0
+   },
+   "ONT": {
+    "n": 123,
+    "tagged": 123,
+    "untagged": 0
+   },
+   "union": {
+    "n": 131,
+    "tagged": 131,
+    "untagged": 0
+   },
+   "all3": {
+    "n": 92,
+    "tagged": 92,
+    "untagged": 0
+   }
+  },
+  "d46|spelled": {
+   "n": 142,
+   "tagged": 142,
+   "untagged": 0
+  },
+  "d9|strict": {
+   "Illumina": {
+    "n": 132,
+    "tagged": 132,
+    "untagged": 0
+   },
+   "PacBio": {
+    "n": 156,
+    "tagged": 156,
+    "untagged": 0
+   },
+   "ONT": {
+    "n": 144,
+    "tagged": 144,
+    "untagged": 0
+   },
+   "union": {
+    "n": 175,
+    "tagged": 175,
+    "untagged": 0
+   },
+   "all3": {
+    "n": 105,
+    "tagged": 105,
+    "untagged": 0
+   }
+  },
+  "d9|arm-only": {
+   "Illumina": {
+    "n": 137,
+    "tagged": 137,
+    "untagged": 0
+   },
+   "PacBio": {
+    "n": 166,
+    "tagged": 165,
+    "untagged": 1
+   },
+   "ONT": {
+    "n": 159,
+    "tagged": 158,
+    "untagged": 1
+   },
+   "union": {
+    "n": 179,
+    "tagged": 178,
+    "untagged": 1
+   },
+   "all3": {
+    "n": 122,
+    "tagged": 122,
+    "untagged": 0
+   }
+  },
+  "d9|spelled": {
+   "n": 203,
+   "tagged": 202,
+   "untagged": 1
+  },
+  "d46|broad|Illumina": {
+   "lost": 250,
+   "lost_tagged": 214,
+   "lost_untagged": 36,
+   "gained": 16,
+   "gained_untagged": 7,
+   "net_untagged": 29,
+   "strict_absorbed_in_lost_untagged": 0,
+   "I1": 2,
+   "I2": 10,
+   "e5c_missing": 0
+  },
+  "d46|broad|PacBio": {
+   "lost": 297,
+   "lost_tagged": 264,
+   "lost_untagged": 33,
+   "gained": 14,
+   "gained_untagged": 7,
+   "net_untagged": 26,
+   "strict_absorbed_in_lost_untagged": 0,
+   "I1": 1,
+   "I2": 3,
+   "e5c_missing": 0
+  },
+  "d46|broad|ONT": {
+   "lost": 272,
+   "lost_tagged": 253,
+   "lost_untagged": 19,
+   "gained": 9,
+   "gained_untagged": 3,
+   "net_untagged": 16,
+   "strict_absorbed_in_lost_untagged": 0,
+   "I1": 1,
+   "I2": 2,
+   "e5c_missing": 0
+  },
+  "d9|broad|Illumina": {
+   "lost": 283,
+   "lost_tagged": 248,
+   "lost_untagged": 35,
+   "gained": 14,
+   "gained_untagged": 6,
+   "net_untagged": 29,
+   "strict_absorbed_in_lost_untagged": 0,
+   "I1": null,
+   "I2": null,
+   "e5c_missing": null
+  },
+  "d9|broad|PacBio": {
+   "lost": 316,
+   "lost_tagged": 286,
+   "lost_untagged": 30,
+   "gained": 15,
+   "gained_untagged": 6,
+   "net_untagged": 24,
+   "strict_absorbed_in_lost_untagged": 0,
+   "I1": null,
+   "I2": null,
+   "e5c_missing": null
+  },
+  "d9|broad|ONT": {
+   "lost": 298,
+   "lost_tagged": 269,
+   "lost_untagged": 29,
+   "gained": 17,
+   "gained_untagged": 7,
+   "net_untagged": 22,
+   "strict_absorbed_in_lost_untagged": 0,
+   "I1": null,
+   "I2": null,
+   "e5c_missing": null
+  }
+ },
+ "chr1-22 in BED|HG008T|INDEL": {
+  "n": 7982,
+  "tagged": 4946,
+  "untagged": 3036,
+  "d46|strict": {
+   "Illumina": {
+    "n": 1210,
+    "tagged": 1175,
+    "untagged": 35
+   },
+   "PacBio": {
+    "n": 782,
+    "tagged": 753,
+    "untagged": 29
+   },
+   "ONT": {
+    "n": 441,
+    "tagged": 423,
+    "untagged": 18
+   },
+   "union": {
+    "n": 1360,
+    "tagged": 1314,
+    "untagged": 46
+   },
+   "all3": {
+    "n": 326,
+    "tagged": 315,
+    "untagged": 11
+   }
+  },
+  "d46|arm-only": {
+   "Illumina": {
+    "n": 1458,
+    "tagged": 1405,
+    "untagged": 53
+   },
+   "PacBio": {
+    "n": 931,
+    "tagged": 892,
+    "untagged": 39
+   },
+   "ONT": {
+    "n": 777,
+    "tagged": 743,
+    "untagged": 34
+   },
+   "union": {
+    "n": 1490,
+    "tagged": 1434,
+    "untagged": 56
+   },
+   "all3": {
+    "n": 726,
+    "tagged": 695,
+    "untagged": 31
+   }
+  },
+  "d46|spelled": {
+   "n": 1672,
+   "tagged": 1611,
+   "untagged": 61
+  },
+  "d9|strict": {
+   "Illumina": {
+    "n": 1508,
+    "tagged": 1475,
+    "untagged": 33
+   },
+   "PacBio": {
+    "n": 884,
+    "tagged": 856,
+    "untagged": 28
+   },
+   "ONT": {
+    "n": 415,
+    "tagged": 399,
+    "untagged": 16
+   },
+   "union": {
+    "n": 1696,
+    "tagged": 1645,
+    "untagged": 51
+   },
+   "all3": {
+    "n": 298,
+    "tagged": 292,
+    "untagged": 6
+   }
+  },
+  "d9|arm-only": {
+   "Illumina": {
+    "n": 1838,
+    "tagged": 1770,
+    "untagged": 68
+   },
+   "PacBio": {
+    "n": 1069,
+    "tagged": 1027,
+    "untagged": 42
+   },
+   "ONT": {
+    "n": 750,
+    "tagged": 714,
+    "untagged": 36
+   },
+   "union": {
+    "n": 1897,
+    "tagged": 1823,
+    "untagged": 74
+   },
+   "all3": {
+    "n": 678,
+    "tagged": 652,
+    "untagged": 26
+   }
+  },
+  "d9|spelled": {
+   "n": 2149,
+   "tagged": 2060,
+   "untagged": 89
+  },
+  "d46|broad|Illumina": {
+   "lost": 3284,
+   "lost_tagged": 2792,
+   "lost_untagged": 492,
+   "gained": 35,
+   "gained_untagged": 18,
+   "net_untagged": 474,
+   "strict_absorbed_in_lost_untagged": 35,
+   "I1": 40,
+   "I2": 396,
+   "e5c_missing": 0
+  },
+  "d46|broad|PacBio": {
+   "lost": 3337,
+   "lost_tagged": 2767,
+   "lost_untagged": 570,
+   "gained": 18,
+   "gained_untagged": 7,
+   "net_untagged": 563,
+   "strict_absorbed_in_lost_untagged": 29,
+   "I1": 53,
+   "I2": 457,
+   "e5c_missing": 0
+  },
+  "d46|broad|ONT": {
+   "lost": 2326,
+   "lost_tagged": 1984,
+   "lost_untagged": 342,
+   "gained": 195,
+   "gained_untagged": 50,
+   "net_untagged": 292,
+   "strict_absorbed_in_lost_untagged": 18,
+   "I1": 30,
+   "I2": 281,
+   "e5c_missing": 0
+  },
+  "d9|broad|Illumina": {
+   "lost": 3537,
+   "lost_tagged": 3027,
+   "lost_untagged": 510,
+   "gained": 23,
+   "gained_untagged": 10,
+   "net_untagged": 500,
+   "strict_absorbed_in_lost_untagged": 33,
+   "I1": null,
+   "I2": null,
+   "e5c_missing": null
+  },
+  "d9|broad|PacBio": {
+   "lost": 3494,
+   "lost_tagged": 2907,
+   "lost_untagged": 587,
+   "gained": 18,
+   "gained_untagged": 6,
+   "net_untagged": 581,
+   "strict_absorbed_in_lost_untagged": 28,
+   "I1": null,
+   "I2": null,
+   "e5c_missing": null
+  },
+  "d9|broad|ONT": {
+   "lost": 2463,
+   "lost_tagged": 2098,
+   "lost_untagged": 365,
+   "gained": 222,
+   "gained_untagged": 49,
+   "net_untagged": 316,
+   "strict_absorbed_in_lost_untagged": 16,
+   "I1": null,
+   "I2": null,
+   "e5c_missing": null
+  }
+ },
+ "chr1-22 in BED|COLO829T|SNV": {
+  "n": 42035,
+  "tagged": 1442,
+  "untagged": 40593,
+  "d46|strict": {
+   "Illumina": {
+    "n": 45,
+    "tagged": 45,
+    "untagged": 0
+   },
+   "fiberseq": {
+    "n": 49,
+    "tagged": 49,
+    "untagged": 0
+   },
+   "ONT": {
+    "n": 45,
+    "tagged": 45,
+    "untagged": 0
+   },
+   "union": {
+    "n": 54,
+    "tagged": 54,
+    "untagged": 0
+   },
+   "all3": {
+    "n": 35,
+    "tagged": 35,
+    "untagged": 0
+   }
+  },
+  "d46|arm-only": {
+   "Illumina": {
+    "n": 48,
+    "tagged": 48,
+    "untagged": 0
+   },
+   "fiberseq": {
+    "n": 55,
+    "tagged": 55,
+    "untagged": 0
+   },
+   "ONT": {
+    "n": 54,
+    "tagged": 54,
+    "untagged": 0
+   },
+   "union": {
+    "n": 57,
+    "tagged": 57,
+    "untagged": 0
+   },
+   "all3": {
+    "n": 44,
+    "tagged": 44,
+    "untagged": 0
+   }
+  },
+  "d46|spelled": {
+   "n": 70,
+   "tagged": 69,
+   "untagged": 1
+  },
+  "d9|strict": {
+   "Illumina": {
+    "n": 55,
+    "tagged": 54,
+    "untagged": 1
+   },
+   "fiberseq": {
+    "n": 56,
+    "tagged": 56,
+    "untagged": 0
+   },
+   "ONT": {
+    "n": 50,
+    "tagged": 50,
+    "untagged": 0
+   },
+   "union": {
+    "n": 64,
+    "tagged": 63,
+    "untagged": 1
+   },
+   "all3": {
+    "n": 41,
+    "tagged": 41,
+    "untagged": 0
+   }
+  },
+  "d9|arm-only": {
+   "Illumina": {
+    "n": 56,
+    "tagged": 55,
+    "untagged": 1
+   },
+   "fiberseq": {
+    "n": 63,
+    "tagged": 62,
+    "untagged": 1
+   },
+   "ONT": {
+    "n": 61,
+    "tagged": 60,
+    "untagged": 1
+   },
+   "union": {
+    "n": 66,
+    "tagged": 65,
+    "untagged": 1
+   },
+   "all3": {
+    "n": 52,
+    "tagged": 51,
+    "untagged": 1
+   }
+  },
+  "d9|spelled": {
+   "n": 83,
+   "tagged": 79,
+   "untagged": 4
+  },
+  "d46|broad|Illumina": {
+   "lost": 398,
+   "lost_tagged": 93,
+   "lost_untagged": 305,
+   "gained": 37,
+   "gained_untagged": 32,
+   "net_untagged": 273,
+   "strict_absorbed_in_lost_untagged": 0,
+   "I1": 16,
+   "I2": 14,
+   "e5c_missing": 0
+  },
+  "d46|broad|fiberseq": {
+   "lost": 281,
+   "lost_tagged": 72,
+   "lost_untagged": 209,
+   "gained": 71,
+   "gained_untagged": 64,
+   "net_untagged": 145,
+   "strict_absorbed_in_lost_untagged": 0,
+   "I1": 27,
+   "I2": 3,
+   "e5c_missing": 0
+  },
+  "d46|broad|ONT": {
+   "lost": 220,
+   "lost_tagged": 68,
+   "lost_untagged": 152,
+   "gained": 70,
+   "gained_untagged": 62,
+   "net_untagged": 90,
+   "strict_absorbed_in_lost_untagged": 0,
+   "I1": 70,
+   "I2": 5,
+   "e5c_missing": 0
+  },
+  "d9|broad|Illumina": {
+   "lost": 395,
+   "lost_tagged": 98,
+   "lost_untagged": 297,
+   "gained": 37,
+   "gained_untagged": 34,
+   "net_untagged": 263,
+   "strict_absorbed_in_lost_untagged": 1,
+   "I1": null,
+   "I2": null,
+   "e5c_missing": null
+  },
+  "d9|broad|fiberseq": {
+   "lost": 244,
+   "lost_tagged": 72,
+   "lost_untagged": 172,
+   "gained": 54,
+   "gained_untagged": 50,
+   "net_untagged": 122,
+   "strict_absorbed_in_lost_untagged": 0,
+   "I1": null,
+   "I2": null,
+   "e5c_missing": null
+  },
+  "d9|broad|ONT": {
+   "lost": 203,
+   "lost_tagged": 69,
+   "lost_untagged": 134,
+   "gained": 62,
+   "gained_untagged": 57,
+   "net_untagged": 77,
+   "strict_absorbed_in_lost_untagged": 0,
+   "I1": null,
+   "I2": null,
+   "e5c_missing": null
+  }
+ },
+ "chr1-22 in BED|COLO829T|INDEL": {
+  "n": 1912,
+  "tagged": 1005,
+  "untagged": 907,
+  "d46|strict": {
+   "Illumina": {
+    "n": 315,
+    "tagged": 310,
+    "untagged": 5
+   },
+   "fiberseq": {
+    "n": 198,
+    "tagged": 194,
+    "untagged": 4
+   },
+   "ONT": {
+    "n": 128,
+    "tagged": 126,
+    "untagged": 2
+   },
+   "union": {
+    "n": 347,
+    "tagged": 341,
+    "untagged": 6
+   },
+   "all3": {
+    "n": 99,
+    "tagged": 97,
+    "untagged": 2
+   }
+  },
+  "d46|arm-only": {
+   "Illumina": {
+    "n": 363,
+    "tagged": 357,
+    "untagged": 6
+   },
+   "fiberseq": {
+    "n": 220,
+    "tagged": 216,
+    "untagged": 4
+   },
+   "ONT": {
+    "n": 172,
+    "tagged": 169,
+    "untagged": 3
+   },
+   "union": {
+    "n": 365,
+    "tagged": 359,
+    "untagged": 6
+   },
+   "all3": {
+    "n": 168,
+    "tagged": 165,
+    "untagged": 3
+   }
+  },
+  "d46|spelled": {
+   "n": 398,
+   "tagged": 390,
+   "untagged": 8
+  },
+  "d9|strict": {
+   "Illumina": {
+    "n": 354,
+    "tagged": 350,
+    "untagged": 4
+   },
+   "fiberseq": {
+    "n": 183,
+    "tagged": 181,
+    "untagged": 2
+   },
+   "ONT": {
+    "n": 115,
+    "tagged": 114,
+    "untagged": 1
+   },
+   "union": {
+    "n": 382,
+    "tagged": 377,
+    "untagged": 5
+   },
+   "all3": {
+    "n": 89,
+    "tagged": 89,
+    "untagged": 0
+   }
+  },
+  "d9|arm-only": {
+   "Illumina": {
+    "n": 400,
+    "tagged": 395,
+    "untagged": 5
+   },
+   "fiberseq": {
+    "n": 203,
+    "tagged": 201,
+    "untagged": 2
+   },
+   "ONT": {
+    "n": 149,
+    "tagged": 147,
+    "untagged": 2
+   },
+   "union": {
+    "n": 402,
+    "tagged": 397,
+    "untagged": 5
+   },
+   "all3": {
+    "n": 140,
+    "tagged": 139,
+    "untagged": 1
+   }
+  },
+  "d9|spelled": {
+   "n": 457,
+   "tagged": 449,
+   "untagged": 8
+  },
+  "d46|broad|Illumina": {
+   "lost": 612,
+   "lost_tagged": 494,
+   "lost_untagged": 118,
+   "gained": 8,
+   "gained_untagged": 4,
+   "net_untagged": 114,
+   "strict_absorbed_in_lost_untagged": 5,
+   "I1": 11,
+   "I2": 67,
+   "e5c_missing": 0
+  },
+  "d46|broad|fiberseq": {
+   "lost": 567,
+   "lost_tagged": 434,
+   "lost_untagged": 133,
+   "gained": 1,
+   "gained_untagged": 1,
+   "net_untagged": 132,
+   "strict_absorbed_in_lost_untagged": 4,
+   "I1": 11,
+   "I2": 66,
+   "e5c_missing": 0
+  },
+  "d46|broad|ONT": {
+   "lost": 457,
+   "lost_tagged": 347,
+   "lost_untagged": 110,
+   "gained": 20,
+   "gained_untagged": 7,
+   "net_untagged": 103,
+   "strict_absorbed_in_lost_untagged": 2,
+   "I1": 11,
+   "I2": 55,
+   "e5c_missing": 0
+  },
+  "d9|broad|Illumina": {
+   "lost": 672,
+   "lost_tagged": 544,
+   "lost_untagged": 128,
+   "gained": 3,
+   "gained_untagged": 2,
+   "net_untagged": 126,
+   "strict_absorbed_in_lost_untagged": 4,
+   "I1": null,
+   "I2": null,
+   "e5c_missing": null
+  },
+  "d9|broad|fiberseq": {
+   "lost": 620,
+   "lost_tagged": 489,
+   "lost_untagged": 131,
+   "gained": 3,
+   "gained_untagged": 1,
+   "net_untagged": 130,
+   "strict_absorbed_in_lost_untagged": 2,
+   "I1": null,
+   "I2": null,
+   "e5c_missing": null
+  },
+  "d9|broad|ONT": {
+   "lost": 494,
+   "lost_tagged": 389,
+   "lost_untagged": 105,
+   "gained": 18,
+   "gained_untagged": 9,
+   "net_untagged": 96,
+   "strict_absorbed_in_lost_untagged": 1,
+   "I1": null,
+   "I2": null,
+   "e5c_missing": null
+  }
+ },
+ "chr1 in BED|HG008T|SNV": {
+  "n": 697,
+  "tagged": 60,
+  "untagged": 637,
+  "d46|strict": {
+   "Illumina": {
+    "n": 10,
+    "tagged": 10,
+    "untagged": 0
+   },
+   "PacBio": {
+    "n": 10,
+    "tagged": 10,
+    "untagged": 0
+   },
+   "ONT": {
+    "n": 7,
+    "tagged": 7,
+    "untagged": 0
+   },
+   "union": {
+    "n": 11,
+    "tagged": 11,
+    "untagged": 0
+   },
+   "all3": {
+    "n": 6,
+    "tagged": 6,
+    "untagged": 0
+   }
+  },
+  "d46|arm-only": {
+   "Illumina": {
+    "n": 10,
+    "tagged": 10,
+    "untagged": 0
+   },
+   "PacBio": {
+    "n": 10,
+    "tagged": 10,
+    "untagged": 0
+   },
+   "ONT": {
+    "n": 10,
+    "tagged": 10,
+    "untagged": 0
+   },
+   "union": {
+    "n": 11,
+    "tagged": 11,
+    "untagged": 0
+   },
+   "all3": {
+    "n": 9,
+    "tagged": 9,
+    "untagged": 0
+   }
+  },
+  "d46|spelled": {
+   "n": 12,
+   "tagged": 12,
+   "untagged": 0
+  },
+  "d9|strict": {
+   "Illumina": {
+    "n": 11,
+    "tagged": 11,
+    "untagged": 0
+   },
+   "PacBio": {
+    "n": 11,
+    "tagged": 11,
+    "untagged": 0
+   },
+   "ONT": {
+    "n": 8,
+    "tagged": 8,
+    "untagged": 0
+   },
+   "union": {
+    "n": 12,
+    "tagged": 12,
+    "untagged": 0
+   },
+   "all3": {
+    "n": 7,
+    "tagged": 7,
+    "untagged": 0
+   }
+  },
+  "d9|arm-only": {
+   "Illumina": {
+    "n": 11,
+    "tagged": 11,
+    "untagged": 0
+   },
+   "PacBio": {
+    "n": 12,
+    "tagged": 12,
+    "untagged": 0
+   },
+   "ONT": {
+    "n": 12,
+    "tagged": 12,
+    "untagged": 0
+   },
+   "union": {
+    "n": 12,
+    "tagged": 12,
+    "untagged": 0
+   },
+   "all3": {
+    "n": 11,
+    "tagged": 11,
+    "untagged": 0
+   }
+  },
+  "d9|spelled": {
+   "n": 14,
+   "tagged": 14,
+   "untagged": 0
+  },
+  "d46|broad|Illumina": {
+   "lost": 20,
+   "lost_tagged": 16,
+   "lost_untagged": 4,
+   "gained": 2,
+   "gained_untagged": 2,
+   "net_untagged": 2,
+   "strict_absorbed_in_lost_untagged": 0,
+   "I1": 0,
+   "I2": 1,
+   "e5c_missing": 0
+  },
+  "d46|broad|PacBio": {
+   "lost": 24,
+   "lost_tagged": 15,
+   "lost_untagged": 9,
+   "gained": 3,
+   "gained_untagged": 1,
+   "net_untagged": 8,
+   "strict_absorbed_in_lost_untagged": 0,
+   "I1": 0,
+   "I2": 0,
+   "e5c_missing": 0
+  },
+  "d46|broad|ONT": {
+   "lost": 18,
+   "lost_tagged": 14,
+   "lost_untagged": 4,
+   "gained": 3,
+   "gained_untagged": 1,
+   "net_untagged": 3,
+   "strict_absorbed_in_lost_untagged": 0,
+   "I1": 0,
+   "I2": 0,
+   "e5c_missing": 0
+  },
+  "d9|broad|Illumina": {
+   "lost": 25,
+   "lost_tagged": 19,
+   "lost_untagged": 6,
+   "gained": 1,
+   "gained_untagged": 1,
+   "net_untagged": 5,
+   "strict_absorbed_in_lost_untagged": 0,
+   "I1": null,
+   "I2": null,
+   "e5c_missing": null
+  },
+  "d9|broad|PacBio": {
+   "lost": 27,
+   "lost_tagged": 18,
+   "lost_untagged": 9,
+   "gained": 3,
+   "gained_untagged": 1,
+   "net_untagged": 8,
+   "strict_absorbed_in_lost_untagged": 0,
+   "I1": null,
+   "I2": null,
+   "e5c_missing": null
+  },
+  "d9|broad|ONT": {
+   "lost": 21,
+   "lost_tagged": 14,
+   "lost_untagged": 7,
+   "gained": 4,
+   "gained_untagged": 1,
+   "net_untagged": 6,
+   "strict_absorbed_in_lost_untagged": 0,
+   "I1": null,
+   "I2": null,
+   "e5c_missing": null
+  }
+ },
+ "chr1 in BED|HG008T|INDEL": {
+  "n": 588,
+  "tagged": 384,
+  "untagged": 204,
+  "d46|strict": {
+   "Illumina": {
+    "n": 93,
+    "tagged": 91,
+    "untagged": 2
+   },
+   "PacBio": {
+    "n": 66,
+    "tagged": 64,
+    "untagged": 2
+   },
+   "ONT": {
+    "n": 39,
+    "tagged": 37,
+    "untagged": 2
+   },
+   "union": {
+    "n": 107,
+    "tagged": 104,
+    "untagged": 3
+   },
+   "all3": {
+    "n": 26,
+    "tagged": 25,
+    "untagged": 1
+   }
+  },
+  "d46|arm-only": {
+   "Illumina": {
+    "n": 108,
+    "tagged": 104,
+    "untagged": 4
+   },
+   "PacBio": {
+    "n": 78,
+    "tagged": 75,
+    "untagged": 3
+   },
+   "ONT": {
+    "n": 64,
+    "tagged": 62,
+    "untagged": 2
+   },
+   "union": {
+    "n": 112,
+    "tagged": 108,
+    "untagged": 4
+   },
+   "all3": {
+    "n": 60,
+    "tagged": 58,
+    "untagged": 2
+   }
+  },
+  "d46|spelled": {
+   "n": 133,
+   "tagged": 128,
+   "untagged": 5
+  },
+  "d9|strict": {
+   "Illumina": {
+    "n": 114,
+    "tagged": 114,
+    "untagged": 0
+   },
+   "PacBio": {
+    "n": 64,
+    "tagged": 63,
+    "untagged": 1
+   },
+   "ONT": {
+    "n": 38,
+    "tagged": 37,
+    "untagged": 1
+   },
+   "union": {
+    "n": 124,
+    "tagged": 123,
+    "untagged": 1
+   },
+   "all3": {
+    "n": 28,
+    "tagged": 28,
+    "untagged": 0
+   }
+  },
+  "d9|arm-only": {
+   "Illumina": {
+    "n": 137,
+    "tagged": 133,
+    "untagged": 4
+   },
+   "PacBio": {
+    "n": 81,
+    "tagged": 78,
+    "untagged": 3
+   },
+   "ONT": {
+    "n": 57,
+    "tagged": 55,
+    "untagged": 2
+   },
+   "union": {
+    "n": 141,
+    "tagged": 137,
+    "untagged": 4
+   },
+   "all3": {
+    "n": 53,
+    "tagged": 51,
+    "untagged": 2
+   }
+  },
+  "d9|spelled": {
+   "n": 162,
+   "tagged": 157,
+   "untagged": 5
+  },
+  "d46|broad|Illumina": {
+   "lost": 250,
+   "lost_tagged": 220,
+   "lost_untagged": 30,
+   "gained": 4,
+   "gained_untagged": 2,
+   "net_untagged": 28,
+   "strict_absorbed_in_lost_untagged": 2,
+   "I1": 1,
+   "I2": 23,
+   "e5c_missing": 0
+  },
+  "d46|broad|PacBio": {
+   "lost": 267,
+   "lost_tagged": 228,
+   "lost_untagged": 39,
+   "gained": 1,
+   "gained_untagged": 0,
+   "net_untagged": 39,
+   "strict_absorbed_in_lost_untagged": 2,
+   "I1": 4,
+   "I2": 27,
+   "e5c_missing": 0
+  },
+  "d46|broad|ONT": {
+   "lost": 204,
+   "lost_tagged": 173,
+   "lost_untagged": 31,
+   "gained": 9,
+   "gained_untagged": 1,
+   "net_untagged": 30,
+   "strict_absorbed_in_lost_untagged": 2,
+   "I1": 3,
+   "I2": 23,
+   "e5c_missing": 0
+  },
+  "d9|broad|Illumina": {
+   "lost": 271,
+   "lost_tagged": 240,
+   "lost_untagged": 31,
+   "gained": 3,
+   "gained_untagged": 2,
+   "net_untagged": 29,
+   "strict_absorbed_in_lost_untagged": 0,
+   "I1": null,
+   "I2": null,
+   "e5c_missing": null
+  },
+  "d9|broad|PacBio": {
+   "lost": 275,
+   "lost_tagged": 237,
+   "lost_untagged": 38,
+   "gained": 1,
+   "gained_untagged": 0,
+   "net_untagged": 38,
+   "strict_absorbed_in_lost_untagged": 1,
+   "I1": null,
+   "I2": null,
+   "e5c_missing": null
+  },
+  "d9|broad|ONT": {
+   "lost": 210,
+   "lost_tagged": 182,
+   "lost_untagged": 28,
+   "gained": 13,
+   "gained_untagged": 1,
+   "net_untagged": 27,
+   "strict_absorbed_in_lost_untagged": 1,
+   "I1": null,
+   "I2": null,
+   "e5c_missing": null
+  }
+ },
+ "chr1 in BED|COLO829T|SNV": {
+  "n": 2443,
+  "tagged": 84,
+  "untagged": 2359,
+  "d46|strict": {
+   "Illumina": {
+    "n": 3,
+    "tagged": 3,
+    "untagged": 0
+   },
+   "fiberseq": {
+    "n": 3,
+    "tagged": 3,
+    "untagged": 0
+   },
+   "ONT": {
+    "n": 2,
+    "tagged": 2,
+    "untagged": 0
+   },
+   "union": {
+    "n": 3,
+    "tagged": 3,
+    "untagged": 0
+   },
+   "all3": {
+    "n": 2,
+    "tagged": 2,
+    "untagged": 0
+   }
+  },
+  "d46|arm-only": {
+   "Illumina": {
+    "n": 3,
+    "tagged": 3,
+    "untagged": 0
+   },
+   "fiberseq": {
+    "n": 3,
+    "tagged": 3,
+    "untagged": 0
+   },
+   "ONT": {
+    "n": 3,
+    "tagged": 3,
+    "untagged": 0
+   },
+   "union": {
+    "n": 3,
+    "tagged": 3,
+    "untagged": 0
+   },
+   "all3": {
+    "n": 3,
+    "tagged": 3,
+    "untagged": 0
+   }
+  },
+  "d46|spelled": {
+   "n": 5,
+   "tagged": 5,
+   "untagged": 0
+  },
+  "d9|strict": {
+   "Illumina": {
+    "n": 3,
+    "tagged": 3,
+    "untagged": 0
+   },
+   "fiberseq": {
+    "n": 3,
+    "tagged": 3,
+    "untagged": 0
+   },
+   "ONT": {
+    "n": 2,
+    "tagged": 2,
+    "untagged": 0
+   },
+   "union": {
+    "n": 3,
+    "tagged": 3,
+    "untagged": 0
+   },
+   "all3": {
+    "n": 2,
+    "tagged": 2,
+    "untagged": 0
+   }
+  },
+  "d9|arm-only": {
+   "Illumina": {
+    "n": 3,
+    "tagged": 3,
+    "untagged": 0
+   },
+   "fiberseq": {
+    "n": 4,
+    "tagged": 4,
+    "untagged": 0
+   },
+   "ONT": {
+    "n": 4,
+    "tagged": 4,
+    "untagged": 0
+   },
+   "union": {
+    "n": 4,
+    "tagged": 4,
+    "untagged": 0
+   },
+   "all3": {
+    "n": 3,
+    "tagged": 3,
+    "untagged": 0
+   }
+  },
+  "d9|spelled": {
+   "n": 5,
+   "tagged": 5,
+   "untagged": 0
+  },
+  "d46|broad|Illumina": {
+   "lost": 33,
+   "lost_tagged": 12,
+   "lost_untagged": 21,
+   "gained": 0,
+   "gained_untagged": 0,
+   "net_untagged": 21,
+   "strict_absorbed_in_lost_untagged": 0,
+   "I1": 1,
+   "I2": 1,
+   "e5c_missing": 0
+  },
+  "d46|broad|fiberseq": {
+   "lost": 13,
+   "lost_tagged": 4,
+   "lost_untagged": 9,
+   "gained": 4,
+   "gained_untagged": 3,
+   "net_untagged": 6,
+   "strict_absorbed_in_lost_untagged": 0,
+   "I1": 0,
+   "I2": 0,
+   "e5c_missing": 0
+  },
+  "d46|broad|ONT": {
+   "lost": 13,
+   "lost_tagged": 4,
+   "lost_untagged": 9,
+   "gained": 5,
+   "gained_untagged": 4,
+   "net_untagged": 5,
+   "strict_absorbed_in_lost_untagged": 0,
+   "I1": 5,
+   "I2": 0,
+   "e5c_missing": 0
+  },
+  "d9|broad|Illumina": {
+   "lost": 29,
+   "lost_tagged": 11,
+   "lost_untagged": 18,
+   "gained": 1,
+   "gained_untagged": 1,
+   "net_untagged": 17,
+   "strict_absorbed_in_lost_untagged": 0,
+   "I1": null,
+   "I2": null,
+   "e5c_missing": null
+  },
+  "d9|broad|fiberseq": {
+   "lost": 12,
+   "lost_tagged": 3,
+   "lost_untagged": 9,
+   "gained": 2,
+   "gained_untagged": 2,
+   "net_untagged": 7,
+   "strict_absorbed_in_lost_untagged": 0,
+   "I1": null,
+   "I2": null,
+   "e5c_missing": null
+  },
+  "d9|broad|ONT": {
+   "lost": 12,
+   "lost_tagged": 3,
+   "lost_untagged": 9,
+   "gained": 1,
+   "gained_untagged": 1,
+   "net_untagged": 8,
+   "strict_absorbed_in_lost_untagged": 0,
+   "I1": null,
+   "I2": null,
+   "e5c_missing": null
+  }
+ },
+ "chr1 in BED|COLO829T|INDEL": {
+  "n": 131,
+  "tagged": 81,
+  "untagged": 50,
+  "d46|strict": {
+   "Illumina": {
+    "n": 23,
+    "tagged": 22,
+    "untagged": 1
+   },
+   "fiberseq": {
+    "n": 21,
+    "tagged": 20,
+    "untagged": 1
+   },
+   "ONT": {
+    "n": 18,
+    "tagged": 17,
+    "untagged": 1
+   },
+   "union": {
+    "n": 31,
+    "tagged": 30,
+    "untagged": 1
+   },
+   "all3": {
+    "n": 11,
+    "tagged": 10,
+    "untagged": 1
+   }
+  },
+  "d46|arm-only": {
+   "Illumina": {
+    "n": 34,
+    "tagged": 33,
+    "untagged": 1
+   },
+   "fiberseq": {
+    "n": 26,
+    "tagged": 25,
+    "untagged": 1
+   },
+   "ONT": {
+    "n": 21,
+    "tagged": 20,
+    "untagged": 1
+   },
+   "union": {
+    "n": 34,
+    "tagged": 33,
+    "untagged": 1
+   },
+   "all3": {
+    "n": 21,
+    "tagged": 20,
+    "untagged": 1
+   }
+  },
+  "d46|spelled": {
+   "n": 35,
+   "tagged": 34,
+   "untagged": 1
+  },
+  "d9|strict": {
+   "Illumina": {
+    "n": 26,
+    "tagged": 25,
+    "untagged": 1
+   },
+   "fiberseq": {
+    "n": 21,
+    "tagged": 20,
+    "untagged": 1
+   },
+   "ONT": {
+    "n": 16,
+    "tagged": 16,
+    "untagged": 0
+   },
+   "union": {
+    "n": 35,
+    "tagged": 34,
+    "untagged": 1
+   },
+   "all3": {
+    "n": 9,
+    "tagged": 9,
+    "untagged": 0
+   }
+  },
+  "d9|arm-only": {
+   "Illumina": {
+    "n": 37,
+    "tagged": 36,
+    "untagged": 1
+   },
+   "fiberseq": {
+    "n": 26,
+    "tagged": 25,
+    "untagged": 1
+   },
+   "ONT": {
+    "n": 17,
+    "tagged": 17,
+    "untagged": 0
+   },
+   "union": {
+    "n": 37,
+    "tagged": 36,
+    "untagged": 1
+   },
+   "all3": {
+    "n": 16,
+    "tagged": 16,
+    "untagged": 0
+   }
+  },
+  "d9|spelled": {
+   "n": 39,
+   "tagged": 38,
+   "untagged": 1
+  },
+  "d46|broad|Illumina": {
+   "lost": 52,
+   "lost_tagged": 41,
+   "lost_untagged": 11,
+   "gained": 0,
+   "gained_untagged": 0,
+   "net_untagged": 11,
+   "strict_absorbed_in_lost_untagged": 1,
+   "I1": 1,
+   "I2": 7,
+   "e5c_missing": 0
+  },
+  "d46|broad|fiberseq": {
+   "lost": 53,
+   "lost_tagged": 42,
+   "lost_untagged": 11,
+   "gained": 0,
+   "gained_untagged": 0,
+   "net_untagged": 11,
+   "strict_absorbed_in_lost_untagged": 1,
+   "I1": 2,
+   "I2": 3,
+   "e5c_missing": 0
+  },
+  "d46|broad|ONT": {
+   "lost": 55,
+   "lost_tagged": 45,
+   "lost_untagged": 10,
+   "gained": 1,
+   "gained_untagged": 0,
+   "net_untagged": 10,
+   "strict_absorbed_in_lost_untagged": 1,
+   "I1": 2,
+   "I2": 3,
+   "e5c_missing": 0
+  },
+  "d9|broad|Illumina": {
+   "lost": 56,
+   "lost_tagged": 45,
+   "lost_untagged": 11,
+   "gained": 0,
+   "gained_untagged": 0,
+   "net_untagged": 11,
+   "strict_absorbed_in_lost_untagged": 1,
+   "I1": null,
+   "I2": null,
+   "e5c_missing": null
+  },
+  "d9|broad|fiberseq": {
+   "lost": 58,
+   "lost_tagged": 46,
+   "lost_untagged": 12,
+   "gained": 0,
+   "gained_untagged": 0,
+   "net_untagged": 12,
+   "strict_absorbed_in_lost_untagged": 1,
+   "I1": null,
+   "I2": null,
+   "e5c_missing": null
+  },
+  "d9|broad|ONT": {
+   "lost": 56,
+   "lost_tagged": 46,
+   "lost_untagged": 10,
+   "gained": 0,
+   "gained_untagged": 0,
+   "net_untagged": 10,
+   "strict_absorbed_in_lost_untagged": 0,
+   "I1": null,
+   "I2": null,
+   "e5c_missing": null
+  }
+ }
+}

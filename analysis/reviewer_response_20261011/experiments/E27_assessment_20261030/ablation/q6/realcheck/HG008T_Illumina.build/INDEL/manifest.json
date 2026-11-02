@@ -1,0 +1,179 @@
+{
+  "status": "complete",
+  "tensor_format": "indexed-gam-candidate",
+  "tensor_storage": "int8-count-haplotypes100",
+  "shape": [
+    8,
+    200,
+    101
+  ],
+  "dtype": "int8",
+  "channels": [
+    "read_base",
+    "base_quality",
+    "site_allele",
+    "mapping_quality",
+    "alignment_operation",
+    "row_graph_reference_base",
+    "node_distinct_gbwt_path_count",
+    "strand"
+  ],
+  "encodings": {
+    "bases": {
+      "A": 1,
+      "C": 2,
+      "G": 3,
+      "T": 4,
+      "N": 5,
+      "-": 6
+    },
+    "padding": 0,
+    "quality_without_read_base": -1,
+    "missing_quality": -1,
+    "base_quality": "clip(raw quality, -1, 127)",
+    "mapping_quality": "clip(raw MAPQ, -1, 127)",
+    "operations": {
+      "M": 1,
+      "X": 2,
+      "I": 3,
+      "D": 4,
+      "C": 5,
+      "G": 6
+    },
+    "site_allele": "per row: the site allele the record carries (A1..Ak or REF) spelled over the site layout columns (bases encoding, gaps = 6); 0 for OTHER records, outside the site and without evidence",
+    "node_distinct_gbwt_path_count": "relative to H = 90 haplotype paths (--haplotypes, references included): count == H -> 100; H-49 <= count < H -> 100 - (H - count); 1 <= count <= H-50 -> count if H <= 100, else 1 + round(49 * sqrt((count - 1) / (H - 51))) (half up); count > H -> min(127, 100 + ceil(log2(count - H + 1))); 0 = no evidence; insertion and gap columns use the anchor node",
+    "strand": {
+      "forward": 1,
+      "reverse": 2,
+      "definition": "anchor mapping orientation relative to the candidate node's forward strand; one value per row"
+    }
+  },
+  "row_selection": "site-allele-blocks-uniform-similarity",
+  "row_order": "site-allele blocks A1..Ak, REF, OTHER (each by record hash), uniform ordered sampling, then average-linkage similarity order of window events inside each block (identical rows: strand, hash)",
+  "window_encoding": "site-layout-columns",
+  "parameters": {
+    "haplotypes": 90,
+    "min_mapq": 10,
+    "min_af": 0.08,
+    "min_variants": 3,
+    "min_allele_bq": 10.0,
+    "max_indel_len": 50,
+    "rows": 200,
+    "width": 101,
+    "max_node_reads": 800,
+    "early_af_filter": true,
+    "variant_type": "indel"
+  },
+  "arguments": {
+    "command": "build",
+    "gam": "/scratch/jshen/data/HG008_GIAB/vg_giraffe_GAM/Liss_lab_BCM_Illumina-WGS_20240313/HG008-T_p23_BCM_IlluminaWGS_20240313.sorted.gam",
+    "output": "/scratch/jshen/Github/Pansoma/tmp/assessment_20261030/ablation/q6/realcheck/HG008T_Illumina.build/INDEL",
+    "nodes": "/scratch/jshen/Github/Pansoma/tmp/assessment_20261030/ablation/q6/realcheck/HG008T_Illumina.nodes.txt",
+    "index": null,
+    "graph_index": "/scratch/jshen/data/pansoma_v2_tensors/graph_index/hprc-v1.1-mc-grch38.d9.graph_index.sqlite",
+    "haplotypes": 90,
+    "snv_min_af": 0.08,
+    "indel_min_af": 0.08,
+    "snv_output": "/scratch/jshen/Github/Pansoma/tmp/assessment_20261030/ablation/q6/realcheck/HG008T_Illumina.build/SNV",
+    "indel_output": "/scratch/jshen/Github/Pansoma/tmp/assessment_20261030/ablation/q6/realcheck/HG008T_Illumina.build/INDEL",
+    "debug_rows": true,
+    "rows": 200,
+    "width": 101,
+    "gam_cache_mb": 1024,
+    "batch_nodes": "auto",
+    "max_node_span": 10000,
+    "max_batch_alignments": 200000,
+    "shard_size": 2048,
+    "min_mapq": 10,
+    "min_af": 0.08,
+    "min_variants": 3,
+    "min_allele_bq": 10.0,
+    "max_indel_len": 50,
+    "max_node_reads": 800,
+    "chromosomes": "all",
+    "chr_index": "/scratch/jshen/data/pansoma_v2_tensors/graph_index/hprc-v1.1-mc-grch38.d9.chr_node_ranges.tsv",
+    "early_af_filter": true,
+    "decoder": "auto"
+  },
+  "gai_version": 1,
+  "graph_index": {
+    "path": "/scratch/jshen/data/pansoma_v2_tensors/graph_index/hprc-v1.1-mc-grch38.d9.graph_index.sqlite",
+    "count_algorithm": "one-forward-sequence-per-logical-path-last-seen-token-v1",
+    "count_definition": "distinct logical GBWT paths, either orientation, including reference paths; revisits count once",
+    "logical_paths": 44624788,
+    "metric": "distinct-gbwt-paths-v1",
+    "nodes": 60118570,
+    "path_visits": 4296025276,
+    "schema": "gbz-all-nodes-v1",
+    "source": {
+      "mtime_ns": 1688700156000000000,
+      "path": "/scratch/jshen/data/AF-Filtered_VG_Indexes/hprc-v1.1-mc-grch38.d9.gbz",
+      "sha256": "d6fd0ad2f46c0355f0dc61813d27448e9b6c802ddcef6a4a29fbcf2322467415",
+      "size": 4419285240
+    },
+    "status": "complete",
+    "timing": {
+      "gbz_load_seconds": 38.512033326,
+      "path_count_seconds": 2668.407978249,
+      "sqlite_write_seconds": 358.594025372,
+      "source_hash_seconds": 15.146593105047941,
+      "validation_seconds": 2000.5345218591392,
+      "total_build_seconds": 5083.20312416181
+    }
+  },
+  "sample_unit": "site",
+  "site_definition": "one tensor per (node, start, SNV|INDEL) after indel left-normalization; INS and DEL at one start share an INDEL site; every allele is filtered on its own; passing alleles are listed in alleles[] by ALT count (ties: candidate order) as A1, A2, ...; every record covering any passing allele is a row, labeled with the allele it carries (or REF/OTHER), and channel 2 spells that allele over the site layout (longest insertion's slots + longest deletion's span); top-level counts/AF are A1's (the representative)",
+  "read_cap": {
+    "max_node_reads": 800,
+    "rule": "records on a target node ordered by SHA-256 of the serialized GAM record; the first N are used for the prefilters, support counting and rows of every candidate on that node; applied while reading the GAM (records no node keeps are not decoded)"
+  },
+  "decoder": {
+    "requested": "auto",
+    "used": "native",
+    "module": "_fastdecode.cpython-311-x86_64-linux-gnu.so",
+    "source_sha256": "13f74adf5b4232551cf49caccb8163261402b72f92f7c59da57d03e92259ecb3",
+    "self_test_records": 300,
+    "native_record_fallbacks": 0
+  },
+  "nodes": 1933,
+  "chromosome_selection": {
+    "selection": "all",
+    "nodes_in": 1933,
+    "nodes_kept": 1933
+  },
+  "shards": 1,
+  "tensors": 832,
+  "filtered_candidates": 9468,
+  "early_rejected": 9249,
+  "early_af_rejected": 219,
+  "unsupported_events": 10719,
+  "debug_rows": true,
+  "timing": {
+    "gam_fetch_seconds": 397.53808084875345,
+    "graph_index_seconds": 2.3186300471425056,
+    "decode_edits_seconds": 19.380909353494644,
+    "candidate_tensors_and_shard_writes_seconds": 220.31558952853084,
+    "total_wall_seconds": 669.8754595331848
+  },
+  "shared_output": "/scratch/jshen/Github/Pansoma/tmp/assessment_20261030/ablation/q6/realcheck/HG008T_Illumina.build/shared",
+  "gam_group_cache": {
+    "group_hits": 16292,
+    "group_misses": 16199,
+    "indexed_records": 16199000,
+    "peak_accounted_bytes": 1073741760,
+    "limit_bytes": 1073741824,
+    "mode": "auto",
+    "record_index": null,
+    "reason": null,
+    "record_fetches": 0,
+    "fallback_fetches": 0,
+    "selected_records": 0,
+    "record_bytes_read": 0,
+    "preads": 0
+  },
+  "graph_index_performance": {
+    "queries": 115,
+    "nodes_read": 28123,
+    "query_seconds": 2.3052623718976974
+  }
+}

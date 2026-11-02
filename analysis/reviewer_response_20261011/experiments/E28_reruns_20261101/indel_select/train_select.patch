@@ -1,0 +1,57 @@
+--- ../../indel_gap_20261020/code_final/machine_learning/pansoma_net_v2/train.py	2026-10-23 13:19:11.000000000 -0500
++++ code/machine_learning/pansoma_net_v2/train.py	2026-11-01 19:07:40.000000000 -0600
+@@ -632,6 +632,19 @@
+     train_parts, train_set, val_set, counts = prep.train_parts, prep.train_set, prep.val_set, prep.counts
+     path_count, haplotypes, reads_path_count = prep.path_count, prep.haplotypes, prep.reads_path_count
+     cache, held = prep.cache, prep.held
++    # rerun 2026-11-01 (R1.8 checkpoint-selection sensitivity): mark the validation samples that are off-path
++    # candidates without a truth match (data.EVAL_AS_NON, scored as non); each epoch also logs the selection score
++    # with them left out (val.excl_offpath). Training is unchanged.
++    base = prep.val_set.dataset if prep.val_keep is not None else prep.val_set
++    offpath = np.zeros(len(base), bool)
++    for p, (index, _) in enumerate(prep.val_parts):
++        vocabulary = list(index.meta["reasons"])
++        if "off_reference_no_truth_match" in vocabulary:
++            sel = base.part == p
++            offpath[sel] = index.arrays["reason"][base.position[sel]] == vocabulary.index("off_reference_no_truth_match")
++    if prep.val_keep is not None:
++        offpath = offpath[prep.val_keep]
++    run.log(f"rerun 2026-11-01: {int(offpath.sum()):,} validation samples are off-path without a truth match")
+ 
+     model = PansomaNetV2(len(CLASSES), args.depths, args.dims, args.front, args.drop_path,
+                          scalars=len(SCALARS) if args.scalars else 0, block=args.block, drop_planes=args.drop_planes,
+@@ -759,6 +772,7 @@
+                     f"{best.get('select', 'f1')}, this run selects by {args.best_by}: best epoch chosen afresh")
+             best = {"score": -1.0, "loss": math.inf, "epoch": None, "threshold": None}
+     amp = args.amp == "bf16" and run.device.type == "cuda"
++    best_alt = -1.0  # rerun 2026-11-01: best selection score without the off-path validation negatives
+     n_params = sum(p.numel() for p in model.parameters())
+     run.log(f"model {model.config}, {n_params / 1e6:.1f} M parameters, input planes {len(PLANES)}; "
+             f"device {run.device} x {run.world}, amp {amp}, compile {args.compile and run.device.type == 'cuda'}, "
+@@ -824,7 +838,12 @@
+                       f"lr {scheduler.get_last_lr()[0]:.2e} {seen * run.world / (time.time() - t0):.0f} tensors/s",
+                       flush=True)
+         train_time = time.time() - t0
+-        val = evaluate(net, val_loader, criterion, run, amp, prep.val_truth, prep.val_pon)
++        order, vlabels, vprobs = validation_predictions(net, val_loader, run, amp)
++        val = validation_report(order, vlabels, vprobs, criterion, prep.val_truth, prep.val_pon)
++        keep = ~offpath[order]
++        alt = validation_report(order[keep], vlabels[keep], vprobs[keep], criterion, prep.val_truth, prep.val_pon)
++        val["excl_offpath"] = dict(removed=int((~keep).sum()), f1=alt["thresholded"]["somatic"]["f1"],
++                                   postpon_f1=(alt.get("postpon") or {}).get("f1"), threshold=alt["threshold"])
+         threshold = val["threshold"]
+         score = val["postpon"]["f1"] if args.best_by == "postpon" else val["thresholded"]["somatic"]["f1"]
+         improved = score > best["score"] or (score == best["score"] and val["loss"] < best["loss"])
+@@ -843,6 +862,12 @@
+         save("last.pth", epoch + 1, val, threshold)
+         if improved:
+             save("best.pth", epoch + 1, val, threshold)
++        # rerun 2026-11-01: the checkpoint the selection without the off-path negatives would keep
++        alt_score = val["excl_offpath"]["postpon_f1"] if args.best_by == "postpon" else val["excl_offpath"]["f1"]
++        if alt_score is not None and alt_score > best_alt:
++            best_alt = alt_score
++            save("best_excl_offpath.pth", epoch + 1, val, threshold)
++            run.log(f"rerun 2026-11-01: best without off-path negatives: epoch {epoch + 1} ({alt_score:.4f})")
+     run.log(f"done; best epoch {best['epoch']} ({best.get('select', 'f1')} {best['score']:.4f}, "
+             f"somatic threshold {best['threshold']}) -> {run.out / 'best.pth'}")
+     if run.ddp:
