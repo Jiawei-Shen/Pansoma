@@ -1,0 +1,146 @@
+{
+ "HG008T|Illumina|linear": {
+  "germline_alleles": 5061892,
+  "germline_cand": 3832002,
+  "germline_snv_alleles": 4038902,
+  "germline_snv_cand": 3143124,
+  "somatic_snv_alleles": 8690,
+  "somatic_snv_cand": 8552
+ },
+ "HG008T|Illumina|d9": {
+  "germline_alleles": 5061892,
+  "germline_cand": 389473,
+  "germline_snv_alleles": 4038902,
+  "germline_snv_cand": 332965,
+  "somatic_snv_alleles": 8690,
+  "somatic_snv_cand": 8273
+ },
+ "HG008T|Illumina|d46": {
+  "germline_alleles": 5061892,
+  "germline_cand": 363126,
+  "germline_snv_alleles": 4038902,
+  "germline_snv_cand": 308500,
+  "somatic_snv_alleles": 8690,
+  "somatic_snv_cand": 8307
+ },
+ "HG008T|PacBio HiFi|linear": {
+  "germline_alleles": 5061892,
+  "germline_cand": 3944126,
+  "germline_snv_alleles": 4038902,
+  "germline_snv_cand": 3202230,
+  "somatic_snv_alleles": 8690,
+  "somatic_snv_cand": 8545
+ },
+ "HG008T|PacBio HiFi|d9": {
+  "germline_alleles": 5061892,
+  "germline_cand": 535138,
+  "germline_snv_alleles": 4038902,
+  "germline_snv_cand": 385190,
+  "somatic_snv_alleles": 8690,
+  "somatic_snv_cand": 8231
+ },
+ "HG008T|PacBio HiFi|d46": {
+  "germline_alleles": 5061892,
+  "germline_cand": 477689,
+  "germline_snv_alleles": 4038902,
+  "germline_snv_cand": 329855,
+  "somatic_snv_alleles": 8690,
+  "somatic_snv_cand": 8249
+ },
+ "HG008T|ONT|linear": {
+  "germline_alleles": 5061892,
+  "germline_cand": 3921144,
+  "germline_snv_alleles": 4038902,
+  "germline_snv_cand": 3283855,
+  "somatic_snv_alleles": 8690,
+  "somatic_snv_cand": 8567
+ },
+ "HG008T|ONT|d9": {
+  "germline_alleles": 5061892,
+  "germline_cand": 585985,
+  "germline_snv_alleles": 4038902,
+  "germline_snv_cand": 424808,
+  "somatic_snv_alleles": 8690,
+  "somatic_snv_cand": 8268
+ },
+ "HG008T|ONT|d46": {
+  "germline_alleles": 5061892,
+  "germline_cand": 541470,
+  "germline_snv_alleles": 4038902,
+  "germline_snv_cand": 392480,
+  "somatic_snv_alleles": 8690,
+  "somatic_snv_cand": 8290
+ },
+ "COLO829T|Illumina|linear": {
+  "germline_alleles": 5062184,
+  "germline_cand": 4005187,
+  "germline_snv_alleles": 4026337,
+  "germline_snv_cand": 3287827,
+  "somatic_snv_alleles": 42035,
+  "somatic_snv_cand": 38222
+ },
+ "COLO829T|Illumina|d9": {
+  "germline_alleles": 5062184,
+  "germline_cand": 414143,
+  "germline_snv_alleles": 4026337,
+  "germline_snv_cand": 353968,
+  "somatic_snv_alleles": 42035,
+  "somatic_snv_cand": 37864
+ },
+ "COLO829T|Illumina|d46": {
+  "germline_alleles": 5062184,
+  "germline_cand": 384191,
+  "germline_snv_alleles": 4026337,
+  "germline_snv_cand": 326064,
+  "somatic_snv_alleles": 42035,
+  "somatic_snv_cand": 37861
+ },
+ "COLO829T|Fiber-seq|linear": {
+  "germline_alleles": 5062184,
+  "germline_cand": 4162510,
+  "germline_snv_alleles": 4026337,
+  "germline_snv_cand": 3380307,
+  "somatic_snv_alleles": 42035,
+  "somatic_snv_cand": 37945
+ },
+ "COLO829T|Fiber-seq|d9": {
+  "germline_alleles": 5062184,
+  "germline_cand": 592644,
+  "germline_snv_alleles": 4026337,
+  "germline_snv_cand": 431405,
+  "somatic_snv_alleles": 42035,
+  "somatic_snv_cand": 37756
+ },
+ "COLO829T|Fiber-seq|d46": {
+  "germline_alleles": 5062184,
+  "germline_cand": 546880,
+  "germline_snv_alleles": 4026337,
+  "germline_snv_cand": 386165,
+  "somatic_snv_alleles": 42035,
+  "somatic_snv_cand": 37736
+ },
+ "COLO829T|ONT|linear": {
+  "germline_alleles": 5062184,
+  "germline_cand": 4131874,
+  "germline_snv_alleles": 4026337,
+  "germline_snv_cand": 3477282,
+  "somatic_snv_alleles": 42035,
+  "somatic_snv_cand": 37665
+ },
+ "COLO829T|ONT|d9": {
+  "germline_alleles": 5062184,
+  "germline_cand": 664537,
+  "germline_snv_alleles": 4026337,
+  "germline_snv_cand": 478553,
+  "somatic_snv_alleles": 42035,
+  "somatic_snv_cand": 37523
+ },
+ "COLO829T|ONT|d46": {
+  "germline_alleles": 5062184,
+  "germline_cand": 625217,
+  "germline_snv_alleles": 4026337,
+  "germline_snv_cand": 447733,
+  "somatic_snv_alleles": 42035,
+  "somatic_snv_cand": 37514
+ }
+}

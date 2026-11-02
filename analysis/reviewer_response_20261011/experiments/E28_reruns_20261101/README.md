@@ -1,6 +1,6 @@
 # E28: reruns of 2026-11-01 (masked retraining, INDEL checkpoint selection, shared validation split)
 
-> **Status (2026-11-02 13:30).** (1) done; (2) five of nine reruns done and scored, two running, two waiting for an H100;
+> **Status (2026-11-02 12:06).** (1) done; (2) five of nine reruns done and scored, two running, two waiting for an H100;
 > (3) waiting for an H100 (`jobs.tsv`). Results go to
 > `/scratch/jshen/data/pansoma_net_v2_runs/{offnode_retrain_20261101,selcheck_20261101,sharedsplit_20261101}/`; the
 > tables are made by `results/collect_*.py` (they write next to themselves).

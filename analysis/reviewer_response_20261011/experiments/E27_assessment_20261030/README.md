@@ -20,4 +20,5 @@ MISSING. They contain the draft text of that day; where the letter changed later
 | `crosstumor/` | R2.4, R1.7, R3.10 | Dilution recall by expected VAF, E15b precision by allele fraction, compact E17a strata, final INDEL model counts and P / R / F1. |
 | `main_bootstrap/` | R3.9 | Pairs for the paired bootstrap of the main comparisons. |
 | `misc/` | R3.2, R3.7 | False positives and germline alleles split by graph representation (`r32_*`; the ">= 46 of 463 haplotypes" proxy), HG008-T tumor-assembly support (`r37_*`). |
+| `v3/candidates/` | R1.2, R3.1 | `candidate_retention.py`: matched-normal germline alleles and somatic truth SNVs that become a candidate on the GRCh38-only, HPRC v1.1 and v2.1 graphs (chr1-22, all truth records; `truth_recall.json` of each tensor set; Supplementary Table R1.2). |
 | `v3/labels/` | R1.8, R1.5, R3.2 | Off-path validation negatives (`offref_label_counts`, `offref_val_effect`: share of validation negatives, their false positives at the selected checkpoints), exact-germline / partial-somatic conflicts, the HapMap conditional mask breakdown (1,701 SNVs / 6,482 INDELs), the CHM13 exception of the proxy, the rtg region rule. |
