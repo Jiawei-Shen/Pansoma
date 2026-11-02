@@ -26,12 +26,42 @@ Pansoma/
 │   └── use_vg.sh                    put vg v1.77.0 first on PATH on this cluster
 ├── ris/                             job scripts and notes for pansoma_net_v2 on WashU RIS compute1 (LSF)
 ├── tests/                           tests of scripts/visualize_tensor.py
+├── conda/                           conda environments (CPU, GPU) and their lock files
+├── example/                         the minimal example: run, check, expected output (data outside git)
 ├── analysis/                        dated analysis records (<topic>_<date>/: notes, scripts, tables), the label rules
 │                                    (truth_labels.md) and a step-by-step guide (tensor_generation_and_training.md)
 └── figures/
 ```
 
 Large files (FASTQ, GAM/GAI, GBZ/GFA, VCF, BAM, `.npy` shards) stay outside git.
+
+## Installation
+
+```bash
+conda env create -p ./pansoma-env -f conda/pansoma-cpu.yml   # or conda/pansoma-gpu.yml: PyTorch CUDA 12.8, NVIDIA driver >= 570
+conda activate ./pansoma-env
+python -m indexed_gam_pipeline_v4.native compile             # the C++ GAM decoder, once per checkout and Python version
+```
+
+The environment files need the libmamba solver (conda >= 23.10, or mamba / micromamba). `conda/*.conda-lock.txt` and
+`conda/*.pip-lock.txt` list the versions with which the tests (section Tests) and the minimal example passed in fresh
+environments. Read alignment and graph preparation (Workflow, sections 1 and 2) also need vg v1.77.0.
+
+## Minimal example
+
+`example/run_example.sh` runs a sorted GAM of HG008-T Illumina reads over GRCh38 chr1:242.5-243.0 Mb (chr1 is held
+out from the models' training) through target-node discovery, tensors, the SNV and INDEL models, the GRCh38 VCF and
+the PoN filter, and `example/check_example.py` compares the result with `example/expected/`:
+
+```bash
+bash example/run_example.sh DATA OUT 4                     # DATA: the example data directory, OUT: a new directory
+python example/check_example.py OUT example/expected       # prints "OK: matches the expected output"
+```
+
+The example data (about 345 MB: the GAM and its index, the graph index and GRCh38 path cut to the window, GRCh38 chr1,
+the PoN and truth VCFs cut to the window, the two models) are not in git; `example/data_SHA256SUMS.txt` lists their
+checksums, and `example/make_example.py` is how they were cut from the genome-wide inputs (paths of the authors'
+cluster). In a fresh CPU environment the example takes about 3 min with 4 threads (peak memory about 5.5 GB).
 
 ## Workflow
 

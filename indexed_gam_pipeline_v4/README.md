@@ -326,7 +326,8 @@ discovery counters). `compile [--cxx CXX]` (default `$CXX`, else `g++`) builds
 `_fastdecode<EXT_SUFFIX>` into the package (C++17 + pybind11, `-O3`, no `-march` or fast-math;
 libstdc++/libgcc linked statically when the toolchain allows, else dynamically) in a temporary
 directory, compares it with the Python decoder on 5,000 synthetic records in a fresh interpreter,
-only then moves it into place, and prints its build info. `check` says whether the builder will use
+only then moves it into place, and prints its build info. A static build that fails this self-test
+(e.g. next to a conda-forge libstdc++) is replaced by a dynamic one. `check` says whether the builder will use
 it and why not.
 
 The builder (`--decoder auto`) uses it only if it imports, was compiled from the `fastdecode.cpp`

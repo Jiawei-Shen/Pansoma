@@ -1,0 +1,33 @@
+# Pansoma (indexed_gam_pipeline_v4 + machine_learning/pansoma_net_v2): CPU-only environment (inference and the tests; training needs the GPU file).
+# The Python packages are the versions of the environment the published tensors and models were made with
+# (Python 3.11.3, SQLite 3.41.2; numpy, scipy, protobuf, pysam, torch, timm from PyPI wheels), plus a C++17
+# compiler for the native GAM decoder, bcftools / htslib and rtg-tools.
+#   conda env create -p ./pansoma-env -f pansoma-cpu.yml     (libmamba solver: conda >= 23.10, or mamba / micromamba;
+#                                                             conda 22.11-23.9: CONDA_SOLVER=libmamba)
+name: pansoma
+channels:
+  - conda-forge
+  - bioconda
+  - nodefaults
+dependencies:
+  - python=3.11.3
+  - libsqlite=3.41.2      # the golden tests compare the bytes of the SQLite files they write
+  - pip
+  - cxx-compiler=2.0.0    # g++ for `python -m indexed_gam_pipeline_v4.native compile`
+  - bcftools=1.25         # pansoma_net_v2.site_features (INDEL recipe)
+  - htslib=1.25           # bgzip / tabix
+  - rtg-tools=3.13        # pansoma_net_v2.vcfeval (rtg vcfeval)
+  - pip:
+      - --index-url https://download.pytorch.org/whl/cpu
+      - --extra-index-url https://pypi.org/simple
+      - numpy==2.3.2
+      - scipy==1.16.1
+      - protobuf==5.29.3
+      - pysam==0.23.0
+      - zstandard==0.19.0
+      - pybind11==3.0.1
+      - torch==2.8.0
+      - torchvision==0.23.0
+      - timm==1.0.19
+      - matplotlib==3.10.5  # scripts/visualize_tensor.py
+      - pillow==11.3.0

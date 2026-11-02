@@ -374,7 +374,8 @@ sys.exit(problem)
 def compile_decoder(cxx=None, self_test_cases=5000):
     """Compile fastdecode.cpp into this package as _fastdecode<EXT_SUFFIX>, after a self-test.
 
-    libstdc++ and libgcc are linked statically when the toolchain allows it, else dynamically.
+    libstdc++ and libgcc are linked statically when the toolchain allows it and that build passes the
+    self-test, else dynamically.
     The module is compiled into a temporary directory, checked against the Python decoder on
     `self_test_cases` synthetic records in a fresh interpreter, and only then moved into place.
     Returns (path, build info); no file besides the module is written.
@@ -390,19 +391,23 @@ def compile_decoder(cxx=None, self_test_cases=5000):
     with tempfile.TemporaryDirectory(prefix=".fastdecode-build-", dir=HERE) as temp:
         target = Path(temp) / output.name
         errors = []
+        snippet = SELF_TEST_SNIPPET.format(package=__package__)
+        # each attempt must also pass the self-test: a static runtime can compile and still fail to load next to
+        # the environment's libstdc++ (conda-forge), and the next attempt then builds with the dynamic one
         for extra in attempts:
             result = subprocess.run([cxx, *flags, *includes, str(SOURCE), *extra, "-o", str(target)],
                                     capture_output=True, text=True)
-            if result.returncode == 0:
+            if result.returncode:
+                errors.append(f"compiling with {extra or 'a dynamic runtime'} failed:\n" + result.stderr[-3000:])
+                continue
+            check = subprocess.run([sys.executable, "-c", snippet, temp, str(self_test_cases)],
+                                   capture_output=True, text=True, cwd=HERE.parent)
+            if check.returncode == 0:
                 break
-            errors.append(result.stderr[-3000:])
+            errors.append(f"the decoder built with {extra or 'a dynamic runtime'} failed its self-test "
+                          f"(exit {check.returncode}): {check.stdout}{check.stderr[-3000:]}")
         else:
-            raise RuntimeError("compiling the native decoder failed:\n" + "\n".join(errors))
-        snippet = SELF_TEST_SNIPPET.format(package=__package__)
-        check = subprocess.run([sys.executable, "-c", snippet, temp, str(self_test_cases)],
-                               capture_output=True, text=True, cwd=HERE.parent)
-        if check.returncode:
-            raise RuntimeError(f"the compiled native decoder failed its self-test: {check.stdout}{check.stderr}")
+            raise RuntimeError("building the native decoder failed:\n" + "\n".join(errors))
         os.replace(target, output)
     info = dict(source_sha256=digest, compiler=cxx, flags=flags + extra, static_runtime=bool(extra),
                 python=sys.version.split()[0], platform=sysconfig.get_platform(), pybind11=pybind11.__version__,

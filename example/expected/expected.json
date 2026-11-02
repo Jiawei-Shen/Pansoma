@@ -1,0 +1,915 @@
+{
+ "SNV": {
+  "tensors": {
+   "count": 448,
+   "shards": {
+    "chr1_shard_00000_data.npy": "57d32d7a3b55cd43ad3c02665e976c46bcfd540dfccc6608f4777979394fa945"
+   },
+   "candidate_ids_sha256": "e7b0f26695ed3334226569e0ee279ff50c834c20d67c78f80573193622262e78"
+  },
+  "calls": {
+   "threshold": 0.25649169087409973,
+   "records": [
+    {
+     "chrom": "chr1",
+     "pos": 242499658,
+     "id": "3129586:0:SNP:G>A",
+     "ref": "G",
+     "alt": "A",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.01079
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242525253,
+     "id": "3130144:273:SNP:C>T",
+     "ref": "C",
+     "alt": "T",
+     "filter": "PASS",
+     "p_somatic": 0.65943
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242528270,
+     "id": "3130225:126:SNP:G>C",
+     "ref": "G",
+     "alt": "C",
+     "filter": "PASS",
+     "p_somatic": 0.83121
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242529195,
+     "id": "3130238:65:SNP:G>T",
+     "ref": "G",
+     "alt": "T",
+     "filter": "PASS",
+     "p_somatic": 0.66549
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242529453,
+     "id": "3130240:147:SNP:G>A",
+     "ref": "G",
+     "alt": "A",
+     "filter": "PASS",
+     "p_somatic": 0.69146
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242529626,
+     "id": "3130246:82:SNP:G>A",
+     "ref": "G",
+     "alt": "A",
+     "filter": "PASS",
+     "p_somatic": 0.60258
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242529670,
+     "id": "3130246:126:SNP:G>A",
+     "ref": "G",
+     "alt": "A",
+     "filter": "PASS",
+     "p_somatic": 0.71634
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242529704,
+     "id": "3130248:12:SNP:G>T",
+     "ref": "G",
+     "alt": "T",
+     "filter": "PASS",
+     "p_somatic": 0.63388
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242529795,
+     "id": "3130256:7:SNP:C>T",
+     "ref": "C",
+     "alt": "T",
+     "filter": "LowQual",
+     "p_somatic": 0.0236
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242531138,
+     "id": "3130299:88:SNP:G>A",
+     "ref": "G",
+     "alt": "A",
+     "filter": "PASS",
+     "p_somatic": 0.71862
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242532253,
+     "id": "3130309:45:SNP:G>C",
+     "ref": "G",
+     "alt": "C",
+     "filter": "PASS",
+     "p_somatic": 0.73761
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242532768,
+     "id": "3130323:198:SNP:G>A",
+     "ref": "G",
+     "alt": "A",
+     "filter": "PASS",
+     "p_somatic": 0.73911
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242532787,
+     "id": "3130323:217:SNP:G>T",
+     "ref": "G",
+     "alt": "T",
+     "filter": "PASS",
+     "p_somatic": 0.80839
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242543831,
+     "id": "3130480:62:SNP:C>T",
+     "ref": "C",
+     "alt": "T",
+     "filter": "PanelOfNormals",
+     "p_somatic": 0.63281
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242555881,
+     "id": "3130773:0:SNP:T>C",
+     "ref": "T",
+     "alt": "C",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.07181
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242562247,
+     "id": "3130902:38:SNP:A>T",
+     "ref": "A",
+     "alt": "T",
+     "filter": "PanelOfNormals",
+     "p_somatic": 0.68779
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242572361,
+     "id": "3131058:0:SNP:C>T",
+     "ref": "C",
+     "alt": "T",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.01378
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242586554,
+     "id": "3131218:0:SNP:C>T",
+     "ref": "C",
+     "alt": "T",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.01078
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242586944,
+     "id": "3131226:244:SNP:G>A",
+     "ref": "G",
+     "alt": "A",
+     "filter": "PanelOfNormals",
+     "p_somatic": 0.51927
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242589418,
+     "id": "3131261:0:SNP:G>A",
+     "ref": "G",
+     "alt": "A",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.01282
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242602536,
+     "id": "3131505:0:SNP:A>G",
+     "ref": "A",
+     "alt": "G",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.01522
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242606013,
+     "id": "3131567:0:SNP:A>T",
+     "ref": "A",
+     "alt": "T",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.01206
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242632982,
+     "id": "3132003:62:SNP:T>C",
+     "ref": "T",
+     "alt": "C",
+     "filter": "PanelOfNormals",
+     "p_somatic": 0.28924
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242644428,
+     "id": "3132253:0:SNP:C>T",
+     "ref": "C",
+     "alt": "T",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.0116
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242646901,
+     "id": "3132345:0:SNP:A>G",
+     "ref": "A",
+     "alt": "G",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.01978
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242658715,
+     "id": "3132676:0:SNP:G>A",
+     "ref": "G",
+     "alt": "A",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.01058
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242664531,
+     "id": "3132782:284:SNP:G>T",
+     "ref": "G",
+     "alt": "T",
+     "filter": "PASS",
+     "p_somatic": 0.6872
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242679781,
+     "id": "3133105:101:SNP:G>A",
+     "ref": "G",
+     "alt": "A",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.23966
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242680268,
+     "id": "3133114:8:SNP:G>A",
+     "ref": "G",
+     "alt": "A",
+     "filter": "PASS",
+     "p_somatic": 0.48866
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242681019,
+     "id": "3133152:97:SNP:A>C",
+     "ref": "A",
+     "alt": "C",
+     "filter": "PanelOfNormals",
+     "p_somatic": 0.28064
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242684282,
+     "id": "3133252:0:SNP:A>C",
+     "ref": "A",
+     "alt": "C",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.03635
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242684364,
+     "id": "3133306:0:SNP:T>C",
+     "ref": "T",
+     "alt": "C",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.01013
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242692619,
+     "id": "3133539:0:SNP:G>T",
+     "ref": "G",
+     "alt": "T",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.02677
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242700429,
+     "id": "3133801:0:SNP:A>G",
+     "ref": "A",
+     "alt": "G",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.0474
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242706752,
+     "id": "3133914:0:SNP:C>T",
+     "ref": "C",
+     "alt": "T",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.01249
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242710580,
+     "id": "3134019:105:SNP:A>G",
+     "ref": "A",
+     "alt": "G",
+     "filter": "PanelOfNormals",
+     "p_somatic": 0.37946
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242721205,
+     "id": "3134269:0:SNP:G>A",
+     "ref": "G",
+     "alt": "A",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.06024
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242721206,
+     "id": "3134269:1:SNP:A>G",
+     "ref": "A",
+     "alt": "G",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.11818
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242721210,
+     "id": "3134271:0:SNP:G>A",
+     "ref": "G",
+     "alt": "A",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.01613
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242726941,
+     "id": "3134369:0:SNP:A>C",
+     "ref": "A",
+     "alt": "C",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.03027
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242730723,
+     "id": "3134434:39:SNP:T>C",
+     "ref": "T",
+     "alt": "C",
+     "filter": "PanelOfNormals",
+     "p_somatic": 0.39212
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242738038,
+     "id": "3134540:461:SNP:A>G",
+     "ref": "A",
+     "alt": "G",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.15958
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242750836,
+     "id": "3134846:0:SNP:C>A",
+     "ref": "C",
+     "alt": "A",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.01353
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242756035,
+     "id": "3135000:9:SNP:A>G",
+     "ref": "A",
+     "alt": "G",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.0508
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242773577,
+     "id": "3135374:57:SNP:A>T",
+     "ref": "A",
+     "alt": "T",
+     "filter": "PanelOfNormals",
+     "p_somatic": 0.67786
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242795082,
+     "id": "3135751:106:SNP:G>A",
+     "ref": "G",
+     "alt": "A",
+     "filter": "PanelOfNormals",
+     "p_somatic": 0.31282
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242795253,
+     "id": "3135755:0:SNP:C>T",
+     "ref": "C",
+     "alt": "T",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.01334
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242805096,
+     "id": "3136061:15:SNP:A>G",
+     "ref": "A",
+     "alt": "G",
+     "filter": "PanelOfNormals",
+     "p_somatic": 0.56565
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242809087,
+     "id": "3136201:205:SNP:A>G",
+     "ref": "A",
+     "alt": "G",
+     "filter": "PanelOfNormals",
+     "p_somatic": 0.37611
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242831705,
+     "id": "3136688:0:SNP:G>T",
+     "ref": "G",
+     "alt": "T",
+     "filter": "LowQual",
+     "p_somatic": 0.01969
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242831804,
+     "id": "3136720:0:SNP:G>A",
+     "ref": "G",
+     "alt": "A",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.03111
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242833614,
+     "id": "3136792:98:SNP:C>G",
+     "ref": "C",
+     "alt": "G",
+     "filter": "PanelOfNormals",
+     "p_somatic": 0.55185
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242859623,
+     "id": "3137304:247:SNP:C>T",
+     "ref": "C",
+     "alt": "T",
+     "filter": "PanelOfNormals",
+     "p_somatic": 0.50818
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242860546,
+     "id": "3137372:0:SNP:T>A",
+     "ref": "T",
+     "alt": "A",
+     "filter": "LowQual",
+     "p_somatic": 0.09757
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242860549,
+     "id": "3137377:0:SNP:A>T",
+     "ref": "A",
+     "alt": "T",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.01729
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242865397,
+     "id": "3137489:0:SNP:T>A",
+     "ref": "T",
+     "alt": "A",
+     "filter": "PanelOfNormals",
+     "p_somatic": 0.82416
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242889141,
+     "id": "3137908:13:SNP:C>T",
+     "ref": "C",
+     "alt": "T",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.18703
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242903585,
+     "id": "3138311:0:SNP:T>A",
+     "ref": "T",
+     "alt": "A",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.02277
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242905339,
+     "id": "3138402:2:SNP:C>A",
+     "ref": "C",
+     "alt": "A",
+     "filter": "LowQual",
+     "p_somatic": 0.0108
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242917589,
+     "id": "3138872:0:SNP:A>T",
+     "ref": "A",
+     "alt": "T",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.01542
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242956847,
+     "id": "3140616:0:SNP:T>C",
+     "ref": "T",
+     "alt": "C",
+     "filter": "PanelOfNormals",
+     "p_somatic": 0.46988
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242956877,
+     "id": "3140628:9:SNP:C>T",
+     "ref": "C",
+     "alt": "T",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.16164
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242970734,
+     "id": "3141011:186:SNP:T>C",
+     "ref": "T",
+     "alt": "C",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.09335
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242976517,
+     "id": "3141222:92:SNP:C>T",
+     "ref": "C",
+     "alt": "T",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.19708
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242982824,
+     "id": "3141392:1:SNP:T>G",
+     "ref": "T",
+     "alt": "G",
+     "filter": "LowQual",
+     "p_somatic": 0.1978
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242997122,
+     "id": "3141871:60:SNP:C>T",
+     "ref": "C",
+     "alt": "T",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.17114
+    }
+   ],
+   "filters": {
+    "LowQual": 5,
+    "LowQual;PanelOfNormals": 33,
+    "PASS": 13,
+    "PanelOfNormals": 15
+   }
+  }
+ },
+ "INDEL": {
+  "tensors": {
+   "count": 47,
+   "shards": {
+    "chr1_shard_00000_data.npy": "d51eefc354687510d4638e559da69f6a0e4ae6e77881771cea8220cd9b30ccd5"
+   },
+   "candidate_ids_sha256": "d2c651d76716edb290e0cd7de2c31547fa3805db0d07144a54cc205d3d26d037"
+  },
+  "calls": {
+   "threshold": 0.12075485289096832,
+   "records": [
+    {
+     "chrom": "chr1",
+     "pos": 242501789,
+     "id": "3129669:464:INS:>TT",
+     "ref": "A",
+     "alt": "ATT",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.02484
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242501790,
+     "id": "3129672:0:INS:>TA",
+     "ref": "T",
+     "alt": "TTA",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.03086
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242516270,
+     "id": "3129993:1:DEL:TATATATATACATATTC>@3129994+3129996+3129997",
+     "ref": "ATATATATATACATATTC",
+     "alt": "A",
+     "filter": "LowQual",
+     "p_somatic": 0.03811
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242516276,
+     "id": "3129994:0:DEL:TATACATATTC>@3129996+3129997",
+     "ref": "ATATACATATTC",
+     "alt": "A",
+     "filter": "LowQual",
+     "p_somatic": 0.06143
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242555877,
+     "id": "3130774:0:DEL:TTTTTTTTTTTTTTTT>@3130775+3130776+3130777+3130778+3130779+3130780+3130781+3130782+3130783+3130784+3130785",
+     "ref": "CTTTTTTTTTTTTTTTT",
+     "alt": "C",
+     "filter": "LowQual",
+     "p_somatic": 0.02028
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242569212,
+     "id": "3131017:253:DEL:T>",
+     "ref": "CT",
+     "alt": "C",
+     "filter": "PanelOfNormals",
+     "p_somatic": 0.3665
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242587045,
+     "id": "3131226:346:INS:>T",
+     "ref": "G",
+     "alt": "GT",
+     "filter": "PanelOfNormals",
+     "p_somatic": 0.30448
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242612809,
+     "id": "3131671:0:DEL:T>",
+     "ref": "CT",
+     "alt": "C",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.03201
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242625235,
+     "id": "3131900:0:DEL:T>",
+     "ref": "CT",
+     "alt": "C",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.11035
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242634273,
+     "id": "3132033:29:INS:>A",
+     "ref": "C",
+     "alt": "CA",
+     "filter": "PanelOfNormals",
+     "p_somatic": 0.48637
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242649800,
+     "id": "3132408:0:DEL:A>",
+     "ref": "CA",
+     "alt": "C",
+     "filter": "PanelOfNormals",
+     "p_somatic": 0.26382
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242662628,
+     "id": "3132745:50:DEL:AAAAA>",
+     "ref": "CAAAAA",
+     "alt": "C",
+     "filter": "LowQual",
+     "p_somatic": 0.03501
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242669842,
+     "id": "3132852:275:DEL:GTGT>@3132853",
+     "ref": "AGTGT",
+     "alt": "A",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.08364
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242681117,
+     "id": "3133154:93:DEL:GTGT>@3133155+3133156",
+     "ref": "GGTGT",
+     "alt": "G",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.02452
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242684282,
+     "id": "3133254:0:INS:>ATAT",
+     "ref": "A",
+     "alt": "AATAT",
+     "filter": "LowQual",
+     "p_somatic": 0.0151
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242688791,
+     "id": "3133392:31:DEL:AT>",
+     "ref": "CAT",
+     "alt": "C",
+     "filter": "PanelOfNormals",
+     "p_somatic": 0.15199
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242721190,
+     "id": "3134267:0:INS:>A",
+     "ref": "G",
+     "alt": "GA",
+     "filter": "PanelOfNormals",
+     "p_somatic": 0.12541
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242721887,
+     "id": "3134291:0:INS:>CA",
+     "ref": "G",
+     "alt": "GCA",
+     "filter": "PanelOfNormals",
+     "p_somatic": 0.16464
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242750920,
+     "id": "3134856:10:INS:>A",
+     "ref": "C",
+     "alt": "CA",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.08229
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242756021,
+     "id": "3134997:0:DEL:TATATATATATATA>@3134998+3134999+3135000",
+     "ref": "GTATATATATATATA",
+     "alt": "G",
+     "filter": "PanelOfNormals",
+     "p_somatic": 0.20714
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242760124,
+     "id": "3135065:71:DEL:A>",
+     "ref": "GA",
+     "alt": "G",
+     "filter": "PASS",
+     "p_somatic": 0.48674
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242795319,
+     "id": "3135757:66:INS:>TGTGTGTGTGTGTGTG",
+     "ref": "T",
+     "alt": "TTGTGTGTGTGTGTGTG",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.02704
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242807925,
+     "id": "3136157:85:INS:>AAAA",
+     "ref": "T",
+     "alt": "TAAAA",
+     "filter": "LowQual",
+     "p_somatic": 0.07706
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242860505,
+     "id": "3137335:0:DEL:TATATATATATA>@3137336",
+     "ref": "CTATATATATATA",
+     "alt": "C",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.01075
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242889888,
+     "id": "3137954:62:INS:>A",
+     "ref": "C",
+     "alt": "CA",
+     "filter": "PanelOfNormals",
+     "p_somatic": 0.16043
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242922838,
+     "id": "3138985:136:INS:>AC",
+     "ref": "A",
+     "alt": "AAC",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.06957
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242938015,
+     "id": "3139476:0:INS:>T",
+     "ref": "C",
+     "alt": "CT",
+     "filter": "PanelOfNormals",
+     "p_somatic": 0.40428
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242946311,
+     "id": "3139752:0:DEL:C>",
+     "ref": "AC",
+     "alt": "A",
+     "filter": "PanelOfNormals",
+     "p_somatic": 0.13741
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242964213,
+     "id": "3140806:0:DEL:TT>@3140807",
+     "ref": "CTT",
+     "alt": "C",
+     "filter": "PanelOfNormals",
+     "p_somatic": 0.21846
+    },
+    {
+     "chrom": "chr1",
+     "pos": 242988029,
+     "id": "3141569:266:DEL:TTAG>@3141570",
+     "ref": "TTTAG",
+     "alt": "T",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.02137
+    },
+    {
+     "chrom": "chr1",
+     "pos": 243000808,
+     "id": "3141960:0:INS:>TG",
+     "ref": "T",
+     "alt": "TTG",
+     "filter": "LowQual;PanelOfNormals",
+     "p_somatic": 0.0617
+    }
+   ],
+   "filters": {
+    "LowQual": 6,
+    "LowQual;PanelOfNormals": 12,
+    "PASS": 1,
+    "PanelOfNormals": 12
+   }
+  }
+ }
+}
