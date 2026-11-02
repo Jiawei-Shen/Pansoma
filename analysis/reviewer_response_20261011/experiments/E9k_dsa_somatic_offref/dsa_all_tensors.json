@@ -1,0 +1,126 @@
+{
+ "lifts, same base, in the SMaHT GRCh38 truth": {
+  "snvs": 35150,
+  "COLO829T_Illumina": 34924,
+  "COLO829T_fiberseq": 34906,
+  "COLO829T_ONT": 34983,
+  "COLO829T_Illumina_d46": 34926,
+  "COLO829T_fiberseq_d46": 34897,
+  "COLO829T_ONT_d46": 34995,
+  "any_d9": 35053,
+  "any_d46": 35071,
+  "any": 35091
+ },
+ "lifts, same base, not in the truth": {
+  "snvs": 4160,
+  "COLO829T_Illumina": 1216,
+  "COLO829T_fiberseq": 1229,
+  "COLO829T_ONT": 1405,
+  "COLO829T_Illumina_d46": 1210,
+  "COLO829T_fiberseq_d46": 1229,
+  "COLO829T_ONT_d46": 1401,
+  "any_d9": 1500,
+  "any_d46": 1520,
+  "any": 1574
+ },
+ "lifts, on a germline allele": {
+  "snvs": 148,
+  "COLO829T_Illumina": 39,
+  "COLO829T_fiberseq": 31,
+  "COLO829T_ONT": 32,
+  "COLO829T_Illumina_d46": 33,
+  "COLO829T_fiberseq_d46": 28,
+  "COLO829T_ONT_d46": 29,
+  "any_d9": 41,
+  "any_d46": 35,
+  "any": 42
+ },
+ "no GRCh38 position in the chain (DSA only)": {
+  "snvs": 5352,
+  "COLO829T_Illumina": 392,
+  "COLO829T_fiberseq": 280,
+  "COLO829T_ONT": 275,
+  "COLO829T_Illumina_d46": 392,
+  "COLO829T_fiberseq_d46": 322,
+  "COLO829T_ONT_d46": 287,
+  "any_d9": 428,
+  "any_d46": 467,
+  "any": 516
+ },
+ "all": {
+  "snvs": 44810,
+  "COLO829T_Illumina": 36571,
+  "COLO829T_fiberseq": 36446,
+  "COLO829T_ONT": 36695,
+  "COLO829T_Illumina_d46": 36561,
+  "COLO829T_fiberseq_d46": 36476,
+  "COLO829T_ONT_d46": 36712,
+  "any_d9": 37022,
+  "any_d46": 37093,
+  "any": 37223
+ },
+ "labels|COLO829T_Illumina": {
+  "somatic|representative_allele_is_somatic_truth": 35033,
+  "non|confident_no_truth_allele": 778,
+  "somatic|residual_partial_somatic_truth": 108,
+  "non|near_truth_allele_mismatch": 154,
+  "ignore|outside_confident_region": 321,
+  "ignore|not_on_unique_grch38_node": 34,
+  "ignore|off_reference_no_truth_match": 122,
+  "germline|representative_allele_is_germline_truth": 20,
+  "somatic|allele_partial_somatic_truth": 1
+ },
+ "labels|COLO829T_fiberseq": {
+  "somatic|representative_allele_is_somatic_truth": 34996,
+  "non|confident_no_truth_allele": 819,
+  "somatic|residual_partial_somatic_truth": 104,
+  "non|near_truth_allele_mismatch": 166,
+  "ignore|outside_confident_region": 198,
+  "ignore|not_on_unique_grch38_node": 33,
+  "ignore|off_reference_no_truth_match": 116,
+  "germline|representative_allele_is_germline_truth": 14
+ },
+ "labels|COLO829T_ONT": {
+  "somatic|representative_allele_is_somatic_truth": 35076,
+  "non|confident_no_truth_allele": 884,
+  "somatic|residual_partial_somatic_truth": 96,
+  "non|near_truth_allele_mismatch": 174,
+  "ignore|outside_confident_region": 302,
+  "ignore|not_on_unique_grch38_node": 33,
+  "ignore|off_reference_no_truth_match": 115,
+  "germline|representative_allele_is_germline_truth": 14,
+  "somatic|allele_partial_somatic_truth": 1
+ },
+ "labels|COLO829T_Illumina_d46": {
+  "somatic|representative_allele_is_somatic_truth": 35031,
+  "non|confident_no_truth_allele": 774,
+  "somatic|residual_partial_somatic_truth": 105,
+  "non|near_truth_allele_mismatch": 149,
+  "ignore|outside_confident_region": 305,
+  "ignore|not_on_unique_grch38_node": 61,
+  "ignore|off_reference_no_truth_match": 117,
+  "germline|representative_allele_is_germline_truth": 18,
+  "somatic|allele_partial_somatic_truth": 1
+ },
+ "labels|COLO829T_fiberseq_d46": {
+  "somatic|representative_allele_is_somatic_truth": 34977,
+  "non|confident_no_truth_allele": 815,
+  "somatic|residual_partial_somatic_truth": 101,
+  "non|near_truth_allele_mismatch": 164,
+  "ignore|outside_confident_region": 221,
+  "ignore|not_on_unique_grch38_node": 70,
+  "ignore|off_reference_no_truth_match": 114,
+  "germline|representative_allele_is_germline_truth": 14
+ },
+ "labels|COLO829T_ONT_d46": {
+  "somatic|representative_allele_is_somatic_truth": 35080,
+  "non|confident_no_truth_allele": 890,
+  "somatic|residual_partial_somatic_truth": 95,
+  "non|near_truth_allele_mismatch": 171,
+  "ignore|outside_confident_region": 289,
+  "ignore|not_on_unique_grch38_node": 63,
+  "ignore|off_reference_no_truth_match": 110,
+  "germline|representative_allele_is_germline_truth": 13,
+  "somatic|allele_partial_somatic_truth": 1
+ }
+}

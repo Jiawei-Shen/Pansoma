@@ -1,0 +1,409 @@
+{
+ "median_depth": {
+  "fiberseq": 188,
+  "illumina": 121
+ },
+ "lifted_not_in_truth": 4160,
+ "lifted_xy": 1664,
+ "lifted_xy_in_truth": 1557,
+ "fiberseq|lifts, same base, in the SMaHT truth (chr1-22; random 2,000; control)|ALT >= 3 reads and >= 8% at MAPQ >= 10": {
+  "snvs": 1993,
+  "depth_2x": 16,
+  "tensor": 1988
+ },
+ "fiberseq|lifts, same base, in the SMaHT truth (chr1-22; random 2,000; control)|ALT >= 3 reads but < 8% at MAPQ >= 10": {
+  "snvs": 5,
+  "depth_2x": 1,
+  "tensor": 0
+ },
+ "fiberseq|lifts, same base, in the SMaHT truth (chr1-22; random 2,000; control)|ALT 1-2 reads at MAPQ >= 10": {
+  "snvs": 1,
+  "depth_2x": 0,
+  "tensor": 0
+ },
+ "fiberseq|lifts, same base, in the SMaHT truth (chr1-22; random 2,000; control)|ALT only in reads with MAPQ < 10": {
+  "snvs": 1,
+  "depth_2x": 0,
+  "tensor": 0
+ },
+ "fiberseq|lifts, same base, not in the truth: chr1-22|ALT >= 3 reads and >= 8% at MAPQ >= 10": {
+  "snvs": 1308,
+  "depth_2x": 36,
+  "tensor": 1119
+ },
+ "fiberseq|lifts, same base, not in the truth: chr1-22|ALT >= 3 reads but < 8% at MAPQ >= 10": {
+  "snvs": 88,
+  "depth_2x": 20,
+  "tensor": 45
+ },
+ "fiberseq|lifts, same base, not in the truth: chr1-22|ALT 1-2 reads at MAPQ >= 10": {
+  "snvs": 88,
+  "depth_2x": 1,
+  "tensor": 37
+ },
+ "fiberseq|lifts, same base, not in the truth: chr1-22|ALT only in reads with MAPQ < 10": {
+  "snvs": 217,
+  "depth_2x": 0,
+  "tensor": 22
+ },
+ "fiberseq|lifts, same base, not in the truth: chr1-22|no ALT read": {
+  "snvs": 528,
+  "depth_2x": 3,
+  "tensor": 62
+ },
+ "fiberseq|lifts, same base, not in the truth: chr1-22|no reads": {
+  "snvs": 26,
+  "depth_2x": 0,
+  "tensor": 1
+ },
+ "fiberseq|lifts, same base, not in the truth: chrX / chrY (outside the chr1-22 tensor sets)|ALT >= 3 reads and >= 8% at MAPQ >= 10": {
+  "snvs": 1609,
+  "depth_2x": 0,
+  "tensor": 0
+ },
+ "fiberseq|lifts, same base, not in the truth: chrX / chrY (outside the chr1-22 tensor sets)|ALT >= 3 reads but < 8% at MAPQ >= 10": {
+  "snvs": 1,
+  "depth_2x": 0,
+  "tensor": 0
+ },
+ "fiberseq|lifts, same base, not in the truth: chrX / chrY (outside the chr1-22 tensor sets)|ALT 1-2 reads at MAPQ >= 10": {
+  "snvs": 4,
+  "depth_2x": 0,
+  "tensor": 0
+ },
+ "fiberseq|lifts, same base, not in the truth: chrX / chrY (outside the chr1-22 tensor sets)|ALT only in reads with MAPQ < 10": {
+  "snvs": 9,
+  "depth_2x": 0,
+  "tensor": 0
+ },
+ "fiberseq|lifts, same base, not in the truth: chrX / chrY (outside the chr1-22 tensor sets)|no ALT read": {
+  "snvs": 38,
+  "depth_2x": 0,
+  "tensor": 1
+ },
+ "fiberseq|lifts, same base, not in the truth: chrX / chrY (outside the chr1-22 tensor sets)|no reads": {
+  "snvs": 3,
+  "depth_2x": 0,
+  "tensor": 0
+ },
+ "fiberseq|lifts, same base, not in the truth: other GRCh38 contigs (outside the tensor sets)|ALT >= 3 reads and >= 8% at MAPQ >= 10": {
+  "snvs": 166,
+  "depth_2x": 54,
+  "tensor": 6
+ },
+ "fiberseq|lifts, same base, not in the truth: other GRCh38 contigs (outside the tensor sets)|ALT >= 3 reads but < 8% at MAPQ >= 10": {
+  "snvs": 28,
+  "depth_2x": 26,
+  "tensor": 1
+ },
+ "fiberseq|lifts, same base, not in the truth: other GRCh38 contigs (outside the tensor sets)|ALT 1-2 reads at MAPQ >= 10": {
+  "snvs": 5,
+  "depth_2x": 0,
+  "tensor": 1
+ },
+ "fiberseq|lifts, same base, not in the truth: other GRCh38 contigs (outside the tensor sets)|ALT only in reads with MAPQ < 10": {
+  "snvs": 12,
+  "depth_2x": 1,
+  "tensor": 0
+ },
+ "fiberseq|lifts, same base, not in the truth: other GRCh38 contigs (outside the tensor sets)|no ALT read": {
+  "snvs": 25,
+  "depth_2x": 0,
+  "tensor": 1
+ },
+ "fiberseq|lifts, same base, not in the truth: other GRCh38 contigs (outside the tensor sets)|no reads": {
+  "snvs": 5,
+  "depth_2x": 0,
+  "tensor": 0
+ },
+ "fiberseq|lifts, on a germline allele: ALT = the GRCh38 base (reads with it are reference reads)|ALT >= 3 reads and >= 8% at MAPQ >= 10": {
+  "snvs": 99,
+  "depth_2x": 9,
+  "tensor": 11
+ },
+ "fiberseq|lifts, on a germline allele: ALT = the GRCh38 base (reads with it are reference reads)|ALT 1-2 reads at MAPQ >= 10": {
+  "snvs": 1,
+  "depth_2x": 0,
+  "tensor": 0
+ },
+ "fiberseq|lifts, on a germline allele: ALT = the GRCh38 base (reads with it are reference reads)|ALT only in reads with MAPQ < 10": {
+  "snvs": 14,
+  "depth_2x": 0,
+  "tensor": 0
+ },
+ "fiberseq|lifts, on a germline allele: ALT = the GRCh38 base (reads with it are reference reads)|no ALT read": {
+  "snvs": 1,
+  "depth_2x": 0,
+  "tensor": 0
+ },
+ "fiberseq|lifts, on a germline allele: ALT another base|ALT >= 3 reads and >= 8% at MAPQ >= 10": {
+  "snvs": 22,
+  "depth_2x": 1,
+  "tensor": 20
+ },
+ "fiberseq|lifts, on a germline allele: ALT another base|ALT >= 3 reads but < 8% at MAPQ >= 10": {
+  "snvs": 2,
+  "depth_2x": 1,
+  "tensor": 1
+ },
+ "fiberseq|lifts, on a germline allele: ALT another base|no ALT read": {
+  "snvs": 9,
+  "depth_2x": 0,
+  "tensor": 1
+ },
+ "fiberseq|DSA only, class A on d9, node on chr1-22 (GRCh38 position of the graph node)|ALT >= 3 reads and >= 8% at MAPQ >= 10": {
+  "snvs": 173,
+  "depth_2x": 82,
+  "tensor": 125
+ },
+ "fiberseq|DSA only, class A on d9, node on chr1-22 (GRCh38 position of the graph node)|ALT >= 3 reads but < 8% at MAPQ >= 10": {
+  "snvs": 571,
+  "depth_2x": 538,
+  "tensor": 32
+ },
+ "fiberseq|DSA only, class A on d9, node on chr1-22 (GRCh38 position of the graph node)|ALT 1-2 reads at MAPQ >= 10": {
+  "snvs": 82,
+  "depth_2x": 33,
+  "tensor": 4
+ },
+ "fiberseq|DSA only, class A on d9, node on chr1-22 (GRCh38 position of the graph node)|ALT only in reads with MAPQ < 10": {
+  "snvs": 182,
+  "depth_2x": 11,
+  "tensor": 16
+ },
+ "fiberseq|DSA only, class A on d9, node on chr1-22 (GRCh38 position of the graph node)|no ALT read": {
+  "snvs": 440,
+  "depth_2x": 29,
+  "tensor": 15
+ },
+ "fiberseq|DSA only, class A on d9, node on chr1-22 (GRCh38 position of the graph node)|no reads": {
+  "snvs": 19,
+  "depth_2x": 0,
+  "tensor": 1
+ },
+ "fiberseq|DSA only, class A on d9, node elsewhere|ALT >= 3 reads and >= 8% at MAPQ >= 10": {
+  "snvs": 58,
+  "depth_2x": 43,
+  "tensor": 1
+ },
+ "fiberseq|DSA only, class A on d9, node elsewhere|ALT >= 3 reads but < 8% at MAPQ >= 10": {
+  "snvs": 424,
+  "depth_2x": 413,
+  "tensor": 0
+ },
+ "fiberseq|DSA only, class A on d9, node elsewhere|ALT 1-2 reads at MAPQ >= 10": {
+  "snvs": 20,
+  "depth_2x": 18,
+  "tensor": 0
+ },
+ "fiberseq|DSA only, class A on d9, node elsewhere|ALT only in reads with MAPQ < 10": {
+  "snvs": 4,
+  "depth_2x": 1,
+  "tensor": 1
+ },
+ "fiberseq|DSA only, class A on d9, node elsewhere|no ALT read": {
+  "snvs": 61,
+  "depth_2x": 28,
+  "tensor": 2
+ },
+ "fiberseq|DSA only, class A on d9, node elsewhere|no reads": {
+  "snvs": 13,
+  "depth_2x": 0,
+  "tensor": 0
+ },
+ "illumina|lifts, same base, in the SMaHT truth (chr1-22; random 2,000; control)|ALT >= 3 reads and >= 8% at MAPQ >= 10": {
+  "snvs": 1995,
+  "depth_2x": 25,
+  "tensor": 1992
+ },
+ "illumina|lifts, same base, in the SMaHT truth (chr1-22; random 2,000; control)|ALT >= 3 reads but < 8% at MAPQ >= 10": {
+  "snvs": 5,
+  "depth_2x": 1,
+  "tensor": 0
+ },
+ "illumina|lifts, same base, not in the truth: chr1-22|ALT >= 3 reads and >= 8% at MAPQ >= 10": {
+  "snvs": 1073,
+  "depth_2x": 32,
+  "tensor": 989
+ },
+ "illumina|lifts, same base, not in the truth: chr1-22|ALT >= 3 reads but < 8% at MAPQ >= 10": {
+  "snvs": 58,
+  "depth_2x": 17,
+  "tensor": 30
+ },
+ "illumina|lifts, same base, not in the truth: chr1-22|ALT 1-2 reads at MAPQ >= 10": {
+  "snvs": 112,
+  "depth_2x": 6,
+  "tensor": 47
+ },
+ "illumina|lifts, same base, not in the truth: chr1-22|ALT only in reads with MAPQ < 10": {
+  "snvs": 410,
+  "depth_2x": 3,
+  "tensor": 69
+ },
+ "illumina|lifts, same base, not in the truth: chr1-22|no ALT read": {
+  "snvs": 587,
+  "depth_2x": 16,
+  "tensor": 104
+ },
+ "illumina|lifts, same base, not in the truth: chr1-22|no reads": {
+  "snvs": 15,
+  "depth_2x": 0,
+  "tensor": 4
+ },
+ "illumina|lifts, same base, not in the truth: chrX / chrY (outside the chr1-22 tensor sets)|ALT >= 3 reads and >= 8% at MAPQ >= 10": {
+  "snvs": 1586,
+  "depth_2x": 0,
+  "tensor": 0
+ },
+ "illumina|lifts, same base, not in the truth: chrX / chrY (outside the chr1-22 tensor sets)|ALT 1-2 reads at MAPQ >= 10": {
+  "snvs": 4,
+  "depth_2x": 0,
+  "tensor": 0
+ },
+ "illumina|lifts, same base, not in the truth: chrX / chrY (outside the chr1-22 tensor sets)|ALT only in reads with MAPQ < 10": {
+  "snvs": 32,
+  "depth_2x": 0,
+  "tensor": 0
+ },
+ "illumina|lifts, same base, not in the truth: chrX / chrY (outside the chr1-22 tensor sets)|no ALT read": {
+  "snvs": 38,
+  "depth_2x": 0,
+  "tensor": 1
+ },
+ "illumina|lifts, same base, not in the truth: chrX / chrY (outside the chr1-22 tensor sets)|no reads": {
+  "snvs": 4,
+  "depth_2x": 0,
+  "tensor": 0
+ },
+ "illumina|lifts, same base, not in the truth: other GRCh38 contigs (outside the tensor sets)|ALT >= 3 reads and >= 8% at MAPQ >= 10": {
+  "snvs": 142,
+  "depth_2x": 51,
+  "tensor": 7
+ },
+ "illumina|lifts, same base, not in the truth: other GRCh38 contigs (outside the tensor sets)|ALT >= 3 reads but < 8% at MAPQ >= 10": {
+  "snvs": 16,
+  "depth_2x": 13,
+  "tensor": 0
+ },
+ "illumina|lifts, same base, not in the truth: other GRCh38 contigs (outside the tensor sets)|ALT 1-2 reads at MAPQ >= 10": {
+  "snvs": 11,
+  "depth_2x": 3,
+  "tensor": 1
+ },
+ "illumina|lifts, same base, not in the truth: other GRCh38 contigs (outside the tensor sets)|ALT only in reads with MAPQ < 10": {
+  "snvs": 49,
+  "depth_2x": 1,
+  "tensor": 3
+ },
+ "illumina|lifts, same base, not in the truth: other GRCh38 contigs (outside the tensor sets)|no ALT read": {
+  "snvs": 23,
+  "depth_2x": 1,
+  "tensor": 0
+ },
+ "illumina|lifts, on a germline allele: ALT = the GRCh38 base (reads with it are reference reads)|ALT >= 3 reads and >= 8% at MAPQ >= 10": {
+  "snvs": 96,
+  "depth_2x": 9,
+  "tensor": 18
+ },
+ "illumina|lifts, on a germline allele: ALT = the GRCh38 base (reads with it are reference reads)|ALT 1-2 reads at MAPQ >= 10": {
+  "snvs": 3,
+  "depth_2x": 0,
+  "tensor": 0
+ },
+ "illumina|lifts, on a germline allele: ALT = the GRCh38 base (reads with it are reference reads)|ALT only in reads with MAPQ < 10": {
+  "snvs": 13,
+  "depth_2x": 0,
+  "tensor": 0
+ },
+ "illumina|lifts, on a germline allele: ALT = the GRCh38 base (reads with it are reference reads)|no reads": {
+  "snvs": 3,
+  "depth_2x": 0,
+  "tensor": 0
+ },
+ "illumina|lifts, on a germline allele: ALT another base|ALT >= 3 reads and >= 8% at MAPQ >= 10": {
+  "snvs": 20,
+  "depth_2x": 0,
+  "tensor": 20
+ },
+ "illumina|lifts, on a germline allele: ALT another base|ALT 1-2 reads at MAPQ >= 10": {
+  "snvs": 1,
+  "depth_2x": 0,
+  "tensor": 0
+ },
+ "illumina|lifts, on a germline allele: ALT another base|ALT only in reads with MAPQ < 10": {
+  "snvs": 3,
+  "depth_2x": 0,
+  "tensor": 1
+ },
+ "illumina|lifts, on a germline allele: ALT another base|no ALT read": {
+  "snvs": 6,
+  "depth_2x": 0,
+  "tensor": 0
+ },
+ "illumina|lifts, on a germline allele: ALT another base|no reads": {
+  "snvs": 3,
+  "depth_2x": 0,
+  "tensor": 1
+ },
+ "illumina|DSA only, class A on d9, node on chr1-22 (GRCh38 position of the graph node)|ALT >= 3 reads and >= 8% at MAPQ >= 10": {
+  "snvs": 263,
+  "depth_2x": 124,
+  "tensor": 225
+ },
+ "illumina|DSA only, class A on d9, node on chr1-22 (GRCh38 position of the graph node)|ALT >= 3 reads but < 8% at MAPQ >= 10": {
+  "snvs": 1035,
+  "depth_2x": 1008,
+  "tensor": 32
+ },
+ "illumina|DSA only, class A on d9, node on chr1-22 (GRCh38 position of the graph node)|ALT 1-2 reads at MAPQ >= 10": {
+  "snvs": 85,
+  "depth_2x": 44,
+  "tensor": 10
+ },
+ "illumina|DSA only, class A on d9, node on chr1-22 (GRCh38 position of the graph node)|ALT only in reads with MAPQ < 10": {
+  "snvs": 45,
+  "depth_2x": 18,
+  "tensor": 3
+ },
+ "illumina|DSA only, class A on d9, node on chr1-22 (GRCh38 position of the graph node)|no ALT read": {
+  "snvs": 38,
+  "depth_2x": 4,
+  "tensor": 9
+ },
+ "illumina|DSA only, class A on d9, node on chr1-22 (GRCh38 position of the graph node)|no reads": {
+  "snvs": 1,
+  "depth_2x": 0,
+  "tensor": 0
+ },
+ "illumina|DSA only, class A on d9, node elsewhere|ALT >= 3 reads and >= 8% at MAPQ >= 10": {
+  "snvs": 67,
+  "depth_2x": 50,
+  "tensor": 1
+ },
+ "illumina|DSA only, class A on d9, node elsewhere|ALT >= 3 reads but < 8% at MAPQ >= 10": {
+  "snvs": 492,
+  "depth_2x": 486,
+  "tensor": 2
+ },
+ "illumina|DSA only, class A on d9, node elsewhere|ALT 1-2 reads at MAPQ >= 10": {
+  "snvs": 7,
+  "depth_2x": 7,
+  "tensor": 0
+ },
+ "illumina|DSA only, class A on d9, node elsewhere|ALT only in reads with MAPQ < 10": {
+  "snvs": 6,
+  "depth_2x": 2,
+  "tensor": 0
+ },
+ "illumina|DSA only, class A on d9, node elsewhere|no ALT read": {
+  "snvs": 7,
+  "depth_2x": 3,
+  "tensor": 0
+ },
+ "illumina|DSA only, class A on d9, node elsewhere|no reads": {
+  "snvs": 1,
+  "depth_2x": 0,
+  "tensor": 0
+ }
+}

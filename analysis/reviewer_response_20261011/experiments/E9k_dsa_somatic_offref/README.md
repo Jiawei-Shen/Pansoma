@@ -6,7 +6,7 @@ somatic SNV set called on the COLO829BL donor-specific assembly (DSA),
 aligned to the DSA, per its header, so not independent of the Fiber-seq data; 44,810 PASS SNVs; contigs
 `haplotype1-*` = SMaHT verkko 2.1 hapX, `haplotype2-*` = hapY, `/scratch/qfu/COLO829BL_DSA/`).
 
-**Status (2026-10-29): parts 1-4 done; used in R3.3 point 5 (rescue-off calls, part 3).**
+**Status (2026-10-29): parts 1-5b done; used in R3.3 point 5 (rescue-off calls, part 3).**
 
 ## Method
 
@@ -110,6 +110,58 @@ GRCh38 nodes rarely have a tensor (4-13% per set; why not checked); B events hav
 cases. The off-reference tensors are labelled ignore (no GRCh38 truth to match), so they are neither trained nor scored;
 the DSA VCF could label them somatic (126-155 per set). Of the 148 SNVs on a germline allele, 48 (d9) / 42 (d46) are
 A or B; their tensors are mostly ignore or germline (`dsa_only_labels.md`).
+
+## Part 5: tensors on the HPRC graphs for all 44,810 DSA somatic SNVs (`dsa_all_tensors.py`, `dsa_all_tensors.md` / `.json`)
+
+Part 4's steps on every SNV (windows of all 44,810, giraffe to d9 / d46, `s3_classify.py`; jobs 461133 / 461134 / 461135).
+A set has the SNV when the representative allele A1 of one of its tensors is the SNV: by the candidate key of the window's
+A / B edit, or by the SNV's GRCh38 lift (the labels' `grch38` position and ALT); the two agree for about 35,500 per set.
+
+| DSA class | SNVs | per set (6 sets) | any v1.1 set | any v2.1 set | any of the six |
+|---|---:|---|---:|---:|---:|
+| lifts, same base, in the SMaHT GRCh38 truth | 35,150 | 99.3-99.6% | 99.7% | 99.8% | 35,091 (99.8%) |
+| lifts, same base, not in the truth | 4,160 | 29.1-33.8% | 36.1% | 36.5% | 1,574 (37.8%) |
+| lifts, on a germline allele | 148 | 18.9-26.4% | 27.7% | 23.6% | 42 (28.4%) |
+| no GRCh38 position in the chain | 5,352 | 5.1-7.3% | 8.0% | 8.7% | 516 (9.6%) |
+| all | 44,810 | 81.3-81.9% | 82.6% | 82.8% | 37,223 (83.1%) |
+
+- The 59 truth SNVs without a tensor in any set: 35 are class C on both graphs (the somatic allele is a graph path, so no
+  candidate; graph_absorbed_somatic_colo829t_20261005), 13 A, 10 D.
+- The 4,160 lifted SNVs not in the SMaHT truth: their tensors are labelled non in 894-1,038 cases per set (somatic
+  105-123, ignore 154-252, germline 8-11), i.e. trained and scored as negatives.
+- DSA-only SNVs of class D (2,992 / 3,055) have no key and no lift, so this method cannot find their tensors (0 by
+  construction, not shown to be absent); for the lifted ones the GRCh38 lookup does (e.g. 301-411 of the ~430 truth SNVs of
+  class D have a tensor).
+- "Not in the truth" is against the truth's chr1-22 SNVs (as part 2; the tensor sets are chr1-22): 1,664 of the 4,160
+  lift to chrX / chrY (1,557 of them are in the SMaHT truth's chrX / chrY part) and 241 to other GRCh38 contigs, so 1,905
+  cannot have a tensor in these sets (part 5b).
+
+## Part 5b: why many have no tensor: ALT reads in the COLO829T GRCh38 BAMs (`dsa_all_tensors.py pileup`, `dsa_all_pileup.md` / `.json`)
+
+Reads at each SNV's GRCh38 position (the lift; for the DSA-only SNVs of class A on d9, the GRCh38 position of the graph
+node, part 4b) in the BAMs of the reads the tensor sets were built from (Fiber-seq B004, Illumina A001); job 461357
+(461142 timed out: a fetch per site re-read the long reads, 757 GB in 2 h; Fiber-seq is now read once per chromosome).
+"ALT supported" = ALT in >= 3 reads and >= 8% of reads at MAPQ >= 10 (the builder's min_mapq and SNV AF). Fiber-seq /
+Illumina; tensor = A1 is the SNV in the v1.1 or v2.1 set of that platform.
+
+| SNVs | n | ALT supported | tensor, ALT supported | tensor, all | why no tensor (main) |
+|---|---:|---:|---:|---:|---|
+| lifts, in the truth (random 2,000, control) | 2,000 | 99.7% / 99.8% | 100% / 100% | 99% / 100% | - |
+| lifts, not in the truth, chrX / chrY | 1,664 | 96.7% / 95.3% | 0 | 0 | outside the chr1-22 tensor sets (1,557 are SMaHT truth on chrX / chrY) |
+| lifts, not in the truth, other GRCh38 contigs | 241 | 68.9% / 58.9% | 4% / 5% | 4% / 5% | outside the tensor sets |
+| lifts, not in the truth, chr1-22 | 2,255 | 58.0% / 47.6% | 86% / 92% | 57% / 55% | no ALT read 23.4% / 26.0% (376 in both); ALT only at MAPQ < 10 9.6% / 18.2%; graph class D 1,023 |
+| germline allele, ALT = the GRCh38 base | 115 | (reference reads) | - | 10% / 16% | the mutation turns the germline allele back to the GRCh38 base: no variant on the GRCh38 path (d9 class C 48, D 42) |
+| germline allele, another ALT | 33 | 66.7% / 60.6% | 91% / 100% | 67% / 67% | no ALT read 9 / 6 |
+| DSA only, class A on d9, node on chr1-22 | 1,467 | 11.8% / 17.9% | 72% / 86% | 13% / 19% | ALT >= 3 reads but < 8%: 38.9% / 70.6% (below); Fiber-seq no ALT read at the node 30.0% |
+| DSA only, class A on d9, node elsewhere | 580 | 10.0% / 11.6% | 2% / 1% | 1% / 1% | node on chrUn / random / chrX / chrY, outside the tensor sets |
+
+- The DSA-only nodes on chr1-22 sit in collapsed repeat copies (part 4: 90% TRF): median depth 305 / 4,968 against 188 /
+  121 at the truth controls (82% of the Illumina sites >= 2x), median ALT fraction 0.3% / 0.8%. The ALT is in the reads
+  but diluted by the reads of the other copies, below the builder's 8%.
+- So where the SNV is on chr1-22 and our reads support it, 86-92% of the lifted non-truth SNVs and 72-86% of the DSA-only
+  ones have a tensor. The low rates of part 5 come from SNVs outside chr1-22 (1,905 lifts, 580 DSA-only nodes), DSA calls
+  without ALT reads in these BAMs, ALT diluted in collapsed repeats, reversions to the GRCh38 base, and windows Giraffe
+  does not place uniquely (class D: 2,992 DSA-only, 1,023 chr1-22 lifts).
 
 ## Caveats
 

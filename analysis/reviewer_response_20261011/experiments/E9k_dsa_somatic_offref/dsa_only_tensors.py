@@ -45,14 +45,14 @@ LABEL_BED = "/scratch/qfu/COLO829BL_DSA/dipcall_hg38/dipcall_hg38.dip.bed"  # la
 AUTOSOMES = {f"chr{i}" for i in range(1, 23)}
 
 
-def windows():
+def windows(classes=("dsa_only", "grch38_diff_ref")):
     DATA.mkdir(parents=True, exist_ok=True)
     fas = {k: pysam.FastaFile(v[1]) for k, v in HAPS.items()}
     n = 0
     with gzip.open(HERE / "dsa_snvs.tsv.gz", "rt") as fh, open(DATA / "events.tsv", "w") as ev, open(DATA / "windows.fq", "w") as fq:
         ev.write("event\tchrom\tgrch38_pos\tref\talt\thap\thow\tcontig\tpos0\tgrch38_records\n")
         for r in csv.DictReader(fh, delimiter="\t"):
-            if r["cls"] not in ("dsa_only", "grch38_diff_ref"):
+            if r["cls"] not in classes:
                 continue
             pref = r["contig"].split("-")[0]
             hap, fa = HAPS[pref][0], fas[pref]
