@@ -1,0 +1,6 @@
+clairs_to	HCC1395T_Illumina	SNV	HCC1395T_Illumina_d46	chr1	/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/calls/clairs_to/HCC1395T_Illumina/snv.vcf.gz,/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/calls/clairs_to/HCC1395T_Illumina/indel.vcf.gz
+clairs_to	HCC1395T_PacBio	SNV	HCC1395T_PacBio_d46	chr1	/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/calls/clairs_to/HCC1395T_PacBio/snv.vcf.gz,/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/calls/clairs_to/HCC1395T_PacBio/indel.vcf.gz
+clairs_to	HCC1395T_ONT	SNV	HCC1395T_ONT_d46	chr1	/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/calls/clairs_to/HCC1395T_ONT/snv.vcf.gz,/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/calls/clairs_to/HCC1395T_ONT/indel.vcf.gz
+deepsomatic	HCC1395T_Illumina	SNV	HCC1395T_Illumina_d46	chr1	/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/calls/deepsomatic/HCC1395T_Illumina/output.vcf.gz
+deepsomatic	HCC1395T_PacBio	SNV	HCC1395T_PacBio_d46	chr1	/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/calls/deepsomatic/HCC1395T_PacBio/output.vcf.gz
+deepsomatic	HCC1395T_ONT	SNV	HCC1395T_ONT_d46	chr1	/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/calls/deepsomatic/HCC1395T_ONT/output.vcf.gz

@@ -1,0 +1,266 @@
+{
+ "Illumina|Pansoma six-tumor": {
+  "native": {
+   "threshold": null,
+   "tp_baseline": 2827,
+   "tp_call": 2827,
+   "fp": 388,
+   "fn": 613,
+   "precision": 0.8793,
+   "recall": 0.8218,
+   "f1": 0.8496
+  },
+  "minaf": {
+   "threshold": null,
+   "tp_baseline": 2720,
+   "tp_call": 2720,
+   "fp": 384,
+   "fn": 720,
+   "precision": 0.8763,
+   "recall": 0.7907,
+   "f1": 0.8313
+  }
+ },
+ "Illumina|Pansoma four-line": {
+  "native": {
+   "threshold": null,
+   "tp_baseline": 2806,
+   "tp_call": 2806,
+   "fp": 394,
+   "fn": 634,
+   "precision": 0.8769,
+   "recall": 0.8157,
+   "f1": 0.8452
+  },
+  "minaf": {
+   "threshold": null,
+   "tp_baseline": 2700,
+   "tp_call": 2700,
+   "fp": 389,
+   "fn": 740,
+   "precision": 0.8741,
+   "recall": 0.7849,
+   "f1": 0.8271
+  }
+ },
+ "Illumina|DeepSomatic-TO": {
+  "native": {
+   "threshold": null,
+   "tp_baseline": 3190,
+   "tp_call": 3190,
+   "fp": 893,
+   "fn": 250,
+   "precision": 0.7813,
+   "recall": 0.9273,
+   "f1": 0.8481
+  },
+  "minaf": {
+   "threshold": null,
+   "tp_baseline": 2944,
+   "tp_call": 2944,
+   "fp": 679,
+   "fn": 496,
+   "precision": 0.8126,
+   "recall": 0.8558,
+   "f1": 0.8336
+  }
+ },
+ "Illumina|ClairS-TO": {
+  "native": {
+   "threshold": null,
+   "tp_baseline": 2956,
+   "tp_call": 2956,
+   "fp": 711,
+   "fn": 484,
+   "precision": 0.8061,
+   "recall": 0.8593,
+   "f1": 0.8319
+  },
+  "minaf": {
+   "threshold": null,
+   "tp_baseline": 2838,
+   "tp_call": 2838,
+   "fp": 702,
+   "fn": 602,
+   "precision": 0.8017,
+   "recall": 0.825,
+   "f1": 0.8132
+  }
+ },
+ "PacBio|Pansoma six-tumor": {
+  "native": {
+   "threshold": null,
+   "tp_baseline": 2782,
+   "tp_call": 2782,
+   "fp": 519,
+   "fn": 658,
+   "precision": 0.8428,
+   "recall": 0.8087,
+   "f1": 0.8254
+  },
+  "minaf": {
+   "threshold": null,
+   "tp_baseline": 2686,
+   "tp_call": 2686,
+   "fp": 508,
+   "fn": 754,
+   "precision": 0.841,
+   "recall": 0.7808,
+   "f1": 0.8098
+  }
+ },
+ "PacBio|Pansoma four-line": {
+  "native": {
+   "threshold": null,
+   "tp_baseline": 2708,
+   "tp_call": 2708,
+   "fp": 454,
+   "fn": 732,
+   "precision": 0.8564,
+   "recall": 0.7872,
+   "f1": 0.8204
+  },
+  "minaf": {
+   "threshold": null,
+   "tp_baseline": 2608,
+   "tp_call": 2608,
+   "fp": 443,
+   "fn": 832,
+   "precision": 0.8548,
+   "recall": 0.7581,
+   "f1": 0.8036
+  }
+ },
+ "PacBio|DeepSomatic-TO": {
+  "native": {
+   "threshold": null,
+   "tp_baseline": 3190,
+   "tp_call": 3190,
+   "fp": 975,
+   "fn": 250,
+   "precision": 0.7659,
+   "recall": 0.9273,
+   "f1": 0.8389
+  },
+  "minaf": {
+   "threshold": null,
+   "tp_baseline": 2816,
+   "tp_call": 2816,
+   "fp": 620,
+   "fn": 624,
+   "precision": 0.8196,
+   "recall": 0.8186,
+   "f1": 0.8191
+  }
+ },
+ "PacBio|ClairS-TO": {
+  "native": {
+   "threshold": null,
+   "tp_baseline": 2829,
+   "tp_call": 2829,
+   "fp": 683,
+   "fn": 611,
+   "precision": 0.8055,
+   "recall": 0.8224,
+   "f1": 0.8139
+  },
+  "minaf": {
+   "threshold": null,
+   "tp_baseline": 2750,
+   "tp_call": 2750,
+   "fp": 673,
+   "fn": 690,
+   "precision": 0.8034,
+   "recall": 0.7994,
+   "f1": 0.8014
+  }
+ },
+ "ONT|Pansoma six-tumor": {
+  "native": {
+   "threshold": null,
+   "tp_baseline": 2397,
+   "tp_call": 2397,
+   "fp": 727,
+   "fn": 1043,
+   "precision": 0.7673,
+   "recall": 0.6968,
+   "f1": 0.7303
+  },
+  "minaf": {
+   "threshold": null,
+   "tp_baseline": 2376,
+   "tp_call": 2376,
+   "fp": 701,
+   "fn": 1064,
+   "precision": 0.7722,
+   "recall": 0.6907,
+   "f1": 0.7292
+  }
+ },
+ "ONT|Pansoma four-line": {
+  "native": {
+   "threshold": null,
+   "tp_baseline": 2297,
+   "tp_call": 2297,
+   "fp": 1239,
+   "fn": 1143,
+   "precision": 0.6496,
+   "recall": 0.6677,
+   "f1": 0.6585
+  },
+  "minaf": {
+   "threshold": null,
+   "tp_baseline": 2277,
+   "tp_call": 2277,
+   "fp": 1158,
+   "fn": 1163,
+   "precision": 0.6629,
+   "recall": 0.6619,
+   "f1": 0.6624
+  }
+ },
+ "ONT|DeepSomatic-TO": {
+  "native": {
+   "threshold": null,
+   "tp_baseline": 2634,
+   "tp_call": 2634,
+   "fp": 854,
+   "fn": 806,
+   "precision": 0.7552,
+   "recall": 0.7657,
+   "f1": 0.7604
+  },
+  "minaf": {
+   "threshold": null,
+   "tp_baseline": 2507,
+   "tp_call": 2507,
+   "fp": 700,
+   "fn": 933,
+   "precision": 0.7817,
+   "recall": 0.7288,
+   "f1": 0.7543
+  }
+ },
+ "ONT|ClairS-TO": {
+  "native": {
+   "threshold": null,
+   "tp_baseline": 2512,
+   "tp_call": 2512,
+   "fp": 662,
+   "fn": 928,
+   "precision": 0.7914,
+   "recall": 0.7302,
+   "f1": 0.7596
+  },
+  "minaf": {
+   "threshold": null,
+   "tp_baseline": 2492,
+   "tp_call": 2492,
+   "fp": 654,
+   "fn": 948,
+   "precision": 0.7921,
+   "recall": 0.7244,
+   "f1": 0.7568
+  }
+ }
+}
