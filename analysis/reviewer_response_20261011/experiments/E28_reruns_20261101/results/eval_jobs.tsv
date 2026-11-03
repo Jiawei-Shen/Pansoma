@@ -26,3 +26,7 @@
 465668	465669	release_s2_Illumina_INDEL	excl	HCC1395T_Illumina_d46	chr20
 465670	465671	release_s2_Illumina_INDEL	excl	HG008T_Illumina_d46	chr1
 465672	465673	release_s2_Illumina_INDEL	excl	COLO829T_Illumina_d46	chr1
+466557	466558	release_s1_ONT_INDEL	excl	HCC1395T_ONT_d46	chr1
+466559	466560	release_s1_ONT_INDEL	excl	HCC1395T_ONT_d46	chr20
+466561	466562	release_s1_ONT_INDEL	excl	HG008T_ONT_d46	chr1
+466563	466564	release_s1_ONT_INDEL	excl	COLO829T_ONT_d46	chr1

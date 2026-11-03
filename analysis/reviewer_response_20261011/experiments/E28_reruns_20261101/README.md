@@ -1,6 +1,6 @@
 # E28: reruns of 2026-11-01 (masked retraining, INDEL checkpoint selection, shared validation split)
 
-> **Status (2026-11-02 12:06).** (1) done; (2) five of nine reruns done and scored, two running, two waiting for an H100;
+> **Status (2026-11-02 21:00).** (1) done; (2) seven of nine reruns done and scored, PacBio and ONT seed 2 running;
 > (3) waiting for an H100 (`jobs.tsv`). Results go to
 > `/scratch/jshen/data/pansoma_net_v2_runs/{offnode_retrain_20261101,selcheck_20261101,sharedsplit_20261101}/`; the
 > tables are made by `results/collect_*.py` (they write next to themselves).
@@ -55,14 +55,15 @@ models of Table R3.1 (HG008 Illumina +0.028, HG008 ONT +0.018, COLO829 ONT +0.01
 
 `results/select.md` (all reruns: reproduction of the original per-epoch metrics, epoch kept by each selection) and
 `results/select_eval.md` (test F1 of both checkpoints where they differ; `indel_select/predict_ckpt.sh`,
-`submit_eval.sh`, jobs in `results/eval_jobs.tsv`). Five of nine done (Illumina seeds 0-2, PacBio seeds 0-1):
+`submit_eval.sh`, jobs in `results/eval_jobs.tsv`). Seven of nine done (Illumina seeds 0-2, PacBio seeds 0-1, ONT seeds 0-1):
 
-- Reproduction: only Illumina seed 0 is bit-identical to the original; the others differ from epoch 1 on (train loss
-  up to 4e-4) on the same GPU type (H100 NVL 24gb MIG slice), so comparisons are within one rerun. With the original
-  rule, 4 of 5 keep the reported epoch (PacBio seed 0: 6 instead of 7), and their test results are within 0.011 F1 of
-  the reported ones.
-- Without the off-path negatives, selection keeps a later epoch in 4 of 5 (2->3, 1->6, 4->6, 6->8; PacBio seed 0
-  same). Test F1 after the PoN (ppr8): higher in 10 of 12 chr1 sets (up to +0.142) and in 4 of 4 HCC1395T chr20
-  (+0.046 to +0.171), lower in two COLO829T sets (-0.009, -0.031); HG008T recall higher in all four. The
-  off-path validation negatives make the selection favour earlier, more conservative checkpoints.
-- Letter: ver3 R1.8 and Supplementary Table R1.8 (with a [待补] for the four ONT / PacBio seed-2 reruns).
+- Reproduction: Illumina seed 0 and ONT seeds 0-1 are bit-identical to the original; Illumina seeds 1-2 and PacBio
+  seeds 0-1 differ from epoch 1 on (train loss up to 4e-4) on the same GPU type (H100 NVL 24gb MIG slice), so
+  comparisons are within one rerun. With the original rule, 6 of 7 keep the reported epoch (PacBio seed 0: 6 instead of
+  7), and their test results are within 0.011 F1 of the reported ones.
+- Without the off-path negatives, selection keeps a later epoch in 5 of 7 (2->3, 1->6, 4->6, 6->8, ONT seed 1 6->7;
+  PacBio seed 0 and ONT seed 0 same). Test F1 after the PoN (ppr8): higher in 12 of 15 chr1 sets (up to +0.142) and
+  in 4 of 5 HCC1395T chr20 (+0.046 to +0.171; ONT seed 1 -0.012), lower in two COLO829T sets (-0.009, -0.031) and
+  HG008T ONT seed 1 (-0.001); HG008T recall higher in 4 of 5 (ONT seed 1 0.153 -> 0.145). The off-path validation
+  negatives make the selection favour earlier, more conservative checkpoints.
+- Letter: ver3 R1.8 and Supplementary Table R1.8 (with a [待补] for the PacBio and ONT seed-2 reruns).

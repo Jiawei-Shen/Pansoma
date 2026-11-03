@@ -12,6 +12,10 @@
 | release_s1_PacBio_INDEL (6 / 8) | chr1 HG008T_PacBio_d46 | 0.450 / 0.169 / 0.245 (99 TP, 121 FP) | 0.449 / 0.186 / 0.263 (109 TP, 134 FP) | +0.017 |
 | release_s1_PacBio_INDEL (6 / 8) | chr1 COLO829T_fiberseq_d46 | 0.309 / 0.130 / 0.183 (17 TP, 38 FP) | 0.224 / 0.115 / 0.151 (15 TP, 52 FP) | -0.031 |
 | release_s1_PacBio_INDEL (6 / 8) | chr20 HCC1395T_PacBio_d46 | 0.398 / 0.786 / 0.528 (33 TP, 50 FP) | 0.460 / 0.809 / 0.586 (34 TP, 40 FP) | +0.058 |
+| release_s1_ONT_INDEL (bit-identical rerun) (6 / 7) | chr1 HCC1395T_ONT_d46 | 0.198 / 0.632 / 0.302 (84 TP, 340 FP) | 0.220 / 0.647 / 0.328 (86 TP, 305 FP) | +0.027 |
+| release_s1_ONT_INDEL (bit-identical rerun) (6 / 7) | chr1 HG008T_ONT_d46 | 0.212 / 0.153 / 0.178 (90 TP, 335 FP) | 0.228 / 0.145 / 0.177 (85 TP, 288 FP) | -0.001 |
+| release_s1_ONT_INDEL (bit-identical rerun) (6 / 7) | chr1 COLO829T_ONT_d46 | 0.060 / 0.160 / 0.088 (21 TP, 326 FP) | 0.073 / 0.137 / 0.096 (18 TP, 227 FP) | +0.008 |
+| release_s1_ONT_INDEL (bit-identical rerun) (6 / 7) | chr20 HCC1395T_ONT_d46 | 0.201 / 0.762 / 0.318 (32 TP, 127 FP) | 0.192 / 0.762 / 0.306 (32 TP, 135 FP) | -0.012 |
 | release_s2_Illumina_INDEL (4 / 6) | chr1 HCC1395T_Illumina_d46 | 0.603 / 0.729 / 0.660 (97 TP, 64 FP) | 0.628 / 0.699 / 0.662 (93 TP, 55 FP) | +0.002 |
 | release_s2_Illumina_INDEL (4 / 6) | chr1 HG008T_Illumina_d46 | 0.463 / 0.148 / 0.225 (87 TP, 101 FP) | 0.452 / 0.184 / 0.262 (108 TP, 131 FP) | +0.037 |
 | release_s2_Illumina_INDEL (4 / 6) | chr1 COLO829T_Illumina_d46 | 0.354 / 0.130 / 0.190 (17 TP, 31 FP) | 0.265 / 0.137 / 0.181 (18 TP, 50 FP) | -0.009 |

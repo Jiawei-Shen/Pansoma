@@ -159,18 +159,18 @@
  },
  "release_s0_ONT_INDEL": {
   "epochs_orig": 12,
-  "epochs_rerun": 2,
+  "epochs_rerun": 12,
   "max_dloss": 0.0,
   "max_dsel": 0.0,
   "first_diff_epoch": null,
-  "complete": false,
+  "complete": true,
   "removed": 53317,
-  "sel_epoch": 2,
-  "sel_score": 0.4966101694915255,
-  "sel_score_excl": 0.49914821124361153,
-  "excl_epoch": 2,
-  "excl_score": 0.49914821124361153,
-  "excl_score_with": 0.4966101694915255,
+  "sel_epoch": 5,
+  "sel_score": 0.5335438042620363,
+  "sel_score_excl": 0.5399408284023669,
+  "excl_epoch": 5,
+  "excl_score": 0.5399408284023669,
+  "excl_score_with": 0.5335438042620363,
   "per_epoch": [
    {
     "epoch": 1,
@@ -181,6 +181,56 @@
     "epoch": 2,
     "with_": 0.4966101694915255,
     "excl": 0.49914821124361153
+   },
+   {
+    "epoch": 3,
+    "with_": 0.4975530179445351,
+    "excl": 0.5003802281368821
+   },
+   {
+    "epoch": 4,
+    "with_": 0.5259686727122835,
+    "excl": 0.5272727272727272
+   },
+   {
+    "epoch": 5,
+    "with_": 0.5335438042620363,
+    "excl": 0.5399408284023669
+   },
+   {
+    "epoch": 6,
+    "with_": 0.5176085176085177,
+    "excl": 0.5210222588623249
+   },
+   {
+    "epoch": 7,
+    "with_": 0.5126984126984128,
+    "excl": 0.5209677419354839
+   },
+   {
+    "epoch": 8,
+    "with_": 0.5102817974105103,
+    "excl": 0.5274390243902439
+   },
+   {
+    "epoch": 9,
+    "with_": 0.48,
+    "excl": 0.48809523809523814
+   },
+   {
+    "epoch": 10,
+    "with_": 0.48304383788254757,
+    "excl": 0.49958506224066385
+   },
+   {
+    "epoch": 11,
+    "with_": 0.477181745396317,
+    "excl": 0.49296939619520264
+   },
+   {
+    "epoch": 12,
+    "with_": 0.4860759493670886,
+    "excl": 0.5011459129106188
    }
   ],
   "orig_sel_epoch": 5,
@@ -346,23 +396,78 @@
  },
  "release_s1_ONT_INDEL": {
   "epochs_orig": 12,
-  "epochs_rerun": 1,
+  "epochs_rerun": 12,
   "max_dloss": 0.0,
   "max_dsel": 0.0,
   "first_diff_epoch": null,
-  "complete": false,
+  "complete": true,
   "removed": 53774,
-  "sel_epoch": 1,
-  "sel_score": 0.3842364532019704,
-  "sel_score_excl": 0.3842364532019704,
-  "excl_epoch": 1,
-  "excl_score": 0.3842364532019704,
-  "excl_score_with": 0.3842364532019704,
+  "sel_epoch": 6,
+  "sel_score": 0.543273350471294,
+  "sel_score_excl": 0.5456110154905335,
+  "excl_epoch": 7,
+  "excl_score": 0.5462962962962964,
+  "excl_score_with": 0.5397987191216834,
   "per_epoch": [
    {
     "epoch": 1,
     "with_": 0.3842364532019704,
     "excl": 0.3842364532019704
+   },
+   {
+    "epoch": 2,
+    "with_": 0.4805914972273568,
+    "excl": 0.4810360777058279
+   },
+   {
+    "epoch": 3,
+    "with_": 0.5364485981308411,
+    "excl": 0.5373406193078325
+   },
+   {
+    "epoch": 4,
+    "with_": 0.5376930063578566,
+    "excl": 0.5386715195632392
+   },
+   {
+    "epoch": 5,
+    "with_": 0.5354896675651393,
+    "excl": 0.5368043087971274
+   },
+   {
+    "epoch": 6,
+    "with_": 0.543273350471294,
+    "excl": 0.5456110154905335
+   },
+   {
+    "epoch": 7,
+    "with_": 0.5397987191216834,
+    "excl": 0.5462962962962964
+   },
+   {
+    "epoch": 8,
+    "with_": 0.5218181818181817,
+    "excl": 0.5324675324675324
+   },
+   {
+    "epoch": 9,
+    "with_": 0.5020990764063811,
+    "excl": 0.5254833040421792
+   },
+   {
+    "epoch": 10,
+    "with_": 0.5032894736842106,
+    "excl": 0.5182049110922946
+   },
+   {
+    "epoch": 11,
+    "with_": 0.5127768313458261,
+    "excl": 0.5280701754385965
+   },
+   {
+    "epoch": 12,
+    "with_": 0.5122985581000848,
+    "excl": 0.5279720279720279
    }
   ],
   "orig_sel_epoch": 6,
@@ -449,7 +554,25 @@
  },
  "release_s2_PacBio_INDEL": {
   "epochs_orig": 12,
-  "epochs_rerun": 0,
+  "epochs_rerun": 1,
+  "max_dloss": 6.042726172128532e-05,
+  "max_dsel": 0.005886478113623805,
+  "first_diff_epoch": 1,
+  "complete": false,
+  "removed": 32576,
+  "sel_epoch": 1,
+  "sel_score": 0.49490994518402504,
+  "sel_score_excl": 0.5068163592622293,
+  "excl_epoch": 1,
+  "excl_score": 0.5068163592622293,
+  "excl_score_with": 0.49490994518402504,
+  "per_epoch": [
+   {
+    "epoch": 1,
+    "with_": 0.49490994518402504,
+    "excl": 0.5068163592622293
+   }
+  ],
   "orig_sel_epoch": 8,
   "orig_sel_score": 0.5666666666666667
  },
