@@ -109,7 +109,8 @@ class LoadTest(unittest.TestCase):
 
     def test_pon_rule_and_script(self):
         current = hashlib.sha256(site_features.PON_SCRIPT.read_bytes()).hexdigest()
-        self.rewrite(meta=np.array(json.dumps(dict(pon_rule=site_features.pon_rule(), pon_script_sha256=current))))
+        self.rewrite(meta=np.array(json.dumps(dict(pon_rule=site_features.pon_rule(kind=self.index.kind),
+                                                   pon_script_sha256=current))))
         data = site_features.load(self.dir, self.index)
         self.assertEqual(site_features.pon_check(data), [])
         self.rewrite(meta=np.array(json.dumps(dict(pon_script_sha256="1" * 64))))  # no rule recorded: sha256 only
@@ -733,6 +734,59 @@ class BuilderTest(unittest.TestCase):
         self.assertEqual(out["pon_tag_colors"].tolist(), [0, 0, -1, 0])  # 0.001 < 0.01
         # the largest INDEL AF at the left-aligned POS: a's position also holds the colors INS (0.3); d's two records
         np.testing.assert_allclose(out["popaf_pos"], [0.3, 0.5, -1, 0.004], rtol=1e-6)
+
+
+class SnvBuilderTest(unittest.TestCase):
+    """site_features.build_chrom_snv: the SNV rule of the PoN script over four databases (a stand-in for bcftools)."""
+
+    SEQ = BuilderTest.SEQ  # pos0 2 T, 4 C, 5 G
+
+    def setUp(self):
+        import pysam
+        self.tmp = tempfile.TemporaryDirectory()
+        t = self.t = Path(self.tmp.name)
+        (t / "ref.fa").write_text(">chr1\n" + self.SEQ + "\n")
+        pysam.faidx(str(t / "ref.fa"))
+        g = lambda pos0, ref, alt: dict(chrom="chr1", pos0=pos0, ref=ref, alt=alt)  # noqa: E731
+        rows = [("a", g(4, "C", "G")), ("b", g(5, "G", "A")), ("c", None), ("d", g(2, "T", "C"))]
+        (t / "SNV").mkdir()
+        (t / "SNV" / "chr1_variant_summary.ndjson").write_text("".join(
+            json.dumps(dict(candidate_id=c, node_id=1, grch38=gr)) + "\n" for c, gr in rows))
+        # bcftools query output per database: a below the AF floor in gnomAD but above it in CoLoRSdb, b tagged by
+        # gnomAD only (another ALT with AF 0.2 at its POS), d's dbSNP record somatic (SAO 2) and its CoLoRSdb record
+        # an INDEL (REF of two bases); the 1000G record has another ALT
+        (t / "gnomad.vcf.gz.txt").write_text("5\tC\tG\t0.00005\n6\tG\tA,T\t0.001,0.2\n")
+        (t / "colors.vcf.gz.txt").write_text("5\tC\tG,T\t0.0002,0.01\n3\tTC\tT\t0.5\n")
+        (t / "dbsnp.vcf.gz.txt").write_text("3\tT\tC\t2\n5\tC\tG\t0\n")
+        (t / "g1000.vcf.gz.txt").write_text("6\tG\tC\n")
+        fake = t / "bcftools"
+        fake.write_text('#!/bin/sh\nfor last; do :; done\ncat "$last.txt"\n')
+        fake.chmod(0o755)
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def test_build_chrom_snv(self):
+        t = self.t
+        out = site_features.build_chrom_snv(str(t / "SNV"), "chr1", "chr1_variant_summary.ndjson", str(t / "ref.fa"),
+                                            {db: str(t / f"{db}.vcf.gz") for db in site_features.SNV_DBS},
+                                            str(t / "bcftools"))
+        self.assertEqual(out["candidates"], ["a", "b", "c", "d"])
+        self.assertEqual(out["vcf_pos"].tolist(), [5, 6, -1, 3])
+        self.assertEqual([x.decode() for x in out["vcf_ref"]], ["C", "G", "", "T"])
+        self.assertEqual(out["hp_len"].tolist(), [0, 0, 0, 0])
+        np.testing.assert_allclose(out["popaf_gnomad"], [0.00005, 0.001, -1, 0], rtol=1e-6)
+        np.testing.assert_allclose(out["popaf_colors"], [0.0002, 0, -1, 0], rtol=1e-6)
+        self.assertEqual(out["pon_tag_gnomad"].tolist(), [0, 1, -1, 0])
+        self.assertEqual(out["pon_tag_colors"].tolist(), [1, 0, -1, 0])
+        self.assertEqual(out["pon_tag_dbsnp"].tolist(), [1, 0, -1, 0])  # d: SAO 2 does not match
+        self.assertEqual(out["pon_tag_g1000"].tolist(), [0, 0, -1, 0])
+        np.testing.assert_allclose(out["popaf_pos"], [0.01, 0.2, -1, 0], rtol=1e-6)
+
+    def test_snv_pon_rule(self):
+        rule = site_features.pon_rule(kind="SNV")
+        self.assertEqual(rule["snv_min_af"], site_features.pon_module().SNV_MIN_AF)
+        self.assertNotEqual(rule, site_features.pon_rule())
 
 
 class GraphVcfArgsTest(unittest.TestCase):

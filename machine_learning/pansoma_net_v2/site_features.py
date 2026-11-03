@@ -6,6 +6,8 @@ arrays aligned with the KindIndex order of that kind directory (manifest chromos
     python -m pansoma_net_v2.site_features build --tensors <set>/tensors --fasta GRCh38.fa \\
         --gnomad af-only-gnomad.hg38.vcf.gz --colors CoLoRSdb.GRCh38.v1.1.0.deepvariant.glnexus.vcf.gz --out DIR \\
         [--kind INDEL] [--cache-dir R/index_cache] [--workers 8] [--bcftools bcftools]
+    python -m pansoma_net_v2.site_features build --kind SNV --tensors <set>/tensors --fasta GRCh38.fa \\
+        --gnomad ... --colors ... --dbsnp Homo_sapiens_assembly38.dbsnp138.vcf.gz --g1000 1000g_pon.hg38.vcf.gz --out DIR
 
 File contents (`build`):
 - 'chroms' (str, the manifest's chromosomes in order), 'chrom_counts' (int64, tensors per chromosome) and
@@ -38,7 +40,15 @@ Per tensor with a GRCh38 allele (the summary's grch38, the projection linear_vcf
   then prefix down to an empty allele), left-aligned with Genome.left_align and padded with Genome.vcf_allele;
 - popaf_pos: the largest normalised AF of any pure INDEL allele of either database at the allele's left-aligned POS.
 Database records come from `bcftools query -r <chrom> -e 'TYPE="snp"'` (records with only SNV ALTs cannot hold an
-INDEL ALT). The features are built for INDEL sets.
+INDEL ALT). This is the INDEL build (--kind INDEL, the default).
+
+SNV sets (--kind SNV, with --dbsnp and --g1000): the same arrays and the same model input, with the SNV rule of
+scripts/filter_panel_of_normals.py. The VCF allele is linear_vcf's (POS = pos0 + 1, no left-alignment); hp_len is 0. popaf_<db> = rawaf_<db> = the largest AF of a gnomAD / CoLoRSdb record with that POS,
+REF and ALT (no normalisation, as record_matches); popaf_pos = the largest AF of any single-base ALT of either
+database at the POS. pon_tag_gnomad / pon_tag_colors: that AF >= SNV_MIN_AF (1e-4); pon_tag_dbsnp: a dbSNP record of
+the allele whose INFO SAO is not 2 (somatic); pon_tag_g1000: any 1000G PoN record of the allele; pon_tag = any of
+the four, which is the PoN script's PanelOfNormals tag of the allele. Records are read with bcftools query -r <chrom>
+-T <the chromosome's tensor positions> (only records at a tensor's POS can match).
 
 The model input (`transform`, train --site-features) is a fixed map to [0, 1], not z-scored (a z-score of a rare
 0/1 flag fitted on training data can blow up on another set):
@@ -121,9 +131,11 @@ def pon_module():
     return module
 
 
-def pon_rule(module=None):
-    """The constants of the PoN script's INDEL rule, as the builder records them."""
+def pon_rule(module=None, kind="INDEL"):
+    """The constants of the PoN script's rule for kind (INDEL or SNV), as the builder records them."""
     m = module or pon_module()
+    if kind == "SNV":
+        return dict(snv_min_af=m.SNV_MIN_AF, snv_rules=[dict(r) for r in m.PON_RULES["SNV"]])
     return dict(indel_min_af=m.INDEL_MIN_AF, indel_min_af_homopolymer=m.INDEL_MIN_AF_HOMOPOLYMER,
                 indel_homopolymer=m.INDEL_HOMOPOLYMER, indel_rules=list(m.PON_RULES["INDEL"]))
 
@@ -180,9 +192,9 @@ def load(directory, index):
         raise ValueError(f"{path}: candidates_sha1 {_text(data['candidates_sha1'])[:12]} is not that of the "
                          f"index's candidate ids ({want[:12]}): stale features or another tensor order")
     rule = file_meta(data).get("pon_rule")
-    if rule is not None and rule != pon_rule():
+    if rule is not None and rule != pon_rule(kind=index.kind):
         raise ValueError(f"{path}: PoN tags of the rule {rule}, scripts/filter_panel_of_normals.py now has "
-                         f"{pon_rule()}: stale features")
+                         f"{pon_rule(kind=index.kind)}: stale features")
     off = index.arrays["off_reference"]
     no_allele = (data["pon_tag"] == -1) | (data["popaf_exact"] < 0)
     has_allele = (data["pon_tag"] != -1) | (data["popaf_exact"] >= 0)
@@ -421,6 +433,120 @@ def build_chrom(kind_dir, chrom, summary, fasta_path, dbs, bcftools):
     return out
 
 
+SNV_DBS = ("gnomad", "colors", "dbsnp", "g1000")
+
+
+def _read_snv_tensors(summary, chrom, genome):
+    """Per summary line of an SNV kind directory: (candidate id, (POS, REF, ALT) or None); off-reference tensors
+    (grch38 null) get None."""
+    rows = []
+    with open(summary, "rb") as f:
+        for line in f:
+            cid = _CANDIDATE.search(line).group(1).decode()
+            g = json.loads(_GRCH38.search(line).group(1))
+            if g is None:
+                rows.append((cid, None))
+                continue
+            if g["chrom"] != chrom:
+                raise ValueError(f"{summary} {cid}: grch38 chromosome {g['chrom']}")
+            ref, alt = (g["ref"] or "").upper(), (g["alt"] or "").upper()
+            if len(ref) != 1 or len(alt) != 1 or ref == alt:
+                raise ValueError(f"{summary} {cid}: not a single-base substitution: {g}")
+            pos0 = int(g["pos0"])
+            if genome.get(chrom, pos0, pos0 + 1) != ref:  # linear_vcf stops on this
+                raise ValueError(f"{summary} {cid}: REF {ref} differs from the FASTA")
+            rows.append((cid, genome.vcf_allele(chrom, pos0, ref, alt, "SNP")))
+    return rows
+
+
+def _stream_snv_db(db, path, chrom, targets, alleles, raw, tag, posmax, bcftools, min_af):
+    """One pass over a database's records of chrom at the tensors' positions (bcftools -T targets): per allele the
+    largest AF (gnomad / colors) and the PoN tag of filter_panel_of_normals.record_matches under the SNV rule;
+    per POS the largest AF of any single-base ALT (gnomad / colors)."""
+    field = {"gnomad": r"\t%AF", "colors": r"\t%AF", "dbsnp": r"\t%INFO/SAO", "g1000": ""}[db]
+    cmd = [bcftools, "query", "-r", chrom, "-T", str(targets), "-f", rf"%POS\t%REF\t%ALT{field}\n", str(path)]
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, text=True, bufsize=1 << 20)
+    for line in proc.stdout:
+        x = line.rstrip("\n").split("\t")
+        pos, ref, alts = int(x[0]), x[1].upper(), x[2].upper().split(",")
+        if len(ref) != 1:  # record_matches needs REF equal to the allele's one base
+            continue
+        if db in ("gnomad", "colors"):
+            afs = x[3].split(",")
+            if len(afs) != len(alts):
+                if afs != ["."]:
+                    raise ValueError(f"{path} {chrom}:{pos}: {len(alts)} ALTs, AF {afs}")
+                afs = ["."] * len(alts)
+        for k, alt in enumerate(alts):
+            if len(alt) != 1 or alt == ref or alt in ("*", "."):
+                continue
+            idx = alleles.get((pos, ref, alt))
+            if db in ("gnomad", "colors"):
+                af = None if afs[k] == "." else float(np.float32(afs[k]))  # pysam reads Type=Float as float32
+                if af is None:
+                    continue
+                if af > posmax.get(pos, 0.0):
+                    posmax[pos] = af
+                if idx is not None:
+                    raw[idx] = max(raw[idx], af)
+                    if af >= min_af * (1 - 1e-6):  # record_matches' comparison
+                        tag[idx] = 1
+            elif idx is not None:
+                if db == "dbsnp" and x[3] == "2":  # non_somatic: SAO == 2 does not match
+                    continue
+                tag[idx] = 1
+    if proc.wait() != 0:
+        raise RuntimeError(f"{' '.join(cmd)} failed")
+
+
+def build_chrom_snv(kind_dir, chrom, summary, fasta_path, dbs, bcftools):
+    """The per-tensor arrays of one chromosome of an SNV kind directory (dict of numpy arrays, plus the ids)."""
+    import pysam
+    import tempfile
+    pon = pon_module()
+    with pysam.FastaFile(str(fasta_path)) as f:
+        seq = f.fetch(chrom).upper()
+    genome = _MemGenome(chrom, seq)
+    rows = _read_snv_tensors(Path(kind_dir) / summary, chrom, genome)
+    alleles = {}
+    for r in rows:
+        if r[1] is not None:
+            alleles.setdefault(r[1], len(alleles))
+    raw = {db: np.zeros(len(alleles)) for db in ("gnomad", "colors")}
+    tag = {db: np.zeros(len(alleles), np.int8) for db in SNV_DBS}
+    posmax = {}
+    with tempfile.NamedTemporaryFile("w", suffix=f".{chrom}.targets.tsv", delete=False) as t:
+        for p in sorted({k[0] for k in alleles}):
+            t.write(f"{chrom}\t{p}\n")
+        targets = t.name
+    try:
+        for db in SNV_DBS:
+            _stream_snv_db(db, dbs[db], chrom, targets, alleles, raw.get(db), tag[db], posmax if db in raw else {},
+                           bcftools, pon.SNV_MIN_AF)
+    finally:
+        Path(targets).unlink()
+    idx = np.array([alleles[r[1]] if r[1] is not None else -1 for r in rows], np.int64)
+    on = idx >= 0
+    out = dict(candidates=[r[0] for r in rows],
+               vcf_pos=np.array([r[1][0] if r[1] else -1 for r in rows], np.int64),
+               vcf_ref=np.array([r[1][1] if r[1] else "" for r in rows], dtype="S"),
+               vcf_alt=np.array([r[1][2] if r[1] else "" for r in rows], dtype="S"),
+               hp_len=np.zeros(len(rows), np.int16))
+    for db in SNV_DBS:
+        if db in raw:
+            a = np.full(len(rows), -1.0)
+            a[on] = raw[db][idx[on]]
+            out[f"popaf_{db}"] = a.astype(np.float32)
+            out[f"rawaf_{db}"] = a.astype(np.float32)
+        t = np.full(len(rows), -1, np.int8)
+        t[on] = tag[db][idx[on]]
+        out[f"pon_tag_{db}"] = t
+    pp = np.full(len(rows), -1.0)
+    pp[on] = [posmax.get(int(p), 0.0) for p in out["vcf_pos"][on]]
+    out["popaf_pos"] = pp.astype(np.float32)
+    return out
+
+
 def build(tensors, kind, fasta, dbs, out_dir, cache_dir=None, workers=1, bcftools="bcftools", log=print):
     """Build <out_dir>/<SET>.<KIND>.npz for the kind directory <tensors>/<KIND> (module docstring); returns its
     path. The KindIndex (from cache_dir, built there if missing) fixes the order and is checked against the summaries."""
@@ -430,7 +556,8 @@ def build(tensors, kind, fasta, dbs, out_dir, cache_dir=None, workers=1, bcftool
     chroms = list(manifest["chromosomes"])
     t0 = time.time()
     with ProcessPoolExecutor(max_workers=max(1, workers)) as pool:
-        futures = {c: pool.submit(build_chrom, str(kind_dir), c, manifest["chromosomes"][c]["summary"], str(fasta),
+        fn = build_chrom_snv if kind == "SNV" else build_chrom
+        futures = {c: pool.submit(fn, str(kind_dir), c, manifest["chromosomes"][c]["summary"], str(fasta),
                                   {k: str(v) for k, v in dbs.items()}, bcftools) for c in chroms}
         parts = []
         for c in chroms:
@@ -449,7 +576,8 @@ def build(tensors, kind, fasta, dbs, out_dir, cache_dir=None, workers=1, bcftool
     if not np.array_equal(cat["vcf_pos"] < 0, index.arrays["off_reference"]):
         raise ValueError(f"{kind_dir}: off-reference tensors differ from the KindIndex")
     pon = pon_module()
-    popaf_exact = np.max([cat[f"popaf_{db}"] for db in dbs], 0)
+    af_dbs = ("gnomad", "colors") if kind == "SNV" else tuple(dbs)
+    popaf_exact = np.max([cat[f"popaf_{db}"] for db in af_dbs], 0)
     pon_tag = np.max([cat[f"pon_tag_{db}"] for db in dbs], 0)
     name = Path(tensors).parent.name if Path(tensors).name == "tensors" else Path(tensors).name
     arrays = dict(chroms=np.array(chroms, dtype="U"), chrom_counts=counts,
@@ -459,10 +587,11 @@ def build(tensors, kind, fasta, dbs, out_dir, cache_dir=None, workers=1, bcftool
                   vcf_ref=cat["vcf_ref"], vcf_alt=cat["vcf_alt"],
                   meta=np.array(json.dumps(dict(
                       set=name, kind=kind, kind_dir=str(kind_dir.resolve()), tensors=int(len(index)),
-                      pon_rule=pon_rule(pon), pon_script_sha256=hashlib.sha256(PON_SCRIPT.read_bytes()).hexdigest(),
+                      pon_rule=pon_rule(pon, kind), pon_script_sha256=hashlib.sha256(PON_SCRIPT.read_bytes()).hexdigest(),
                       dbs={k: str(v) for k, v in dbs.items()}, fasta=str(fasta),
                       created=time.strftime("%Y-%m-%dT%H:%M:%S")))),
-                  **{f"{a}_{db}": cat[f"{a}_{db}"] for db in dbs for a in ("popaf", "rawaf", "pon_tag")})
+                  **{f"{a}_{db}": cat[f"{a}_{db}"] for db in dbs for a in ("popaf", "rawaf", "pon_tag")
+                     if f"{a}_{db}" in cat})
     out = Path(out_dir) / f"{name}.{kind}.npz"
     out.parent.mkdir(parents=True, exist_ok=True)
     tmp = out.with_name(out.name[:-len(".npz")] + ".tmp.npz")
@@ -479,16 +608,23 @@ def main(argv=None):
     sub = p.add_subparsers(dest="command", required=True)
     b = sub.add_parser("build", help="build <out>/<SET>.<KIND>.npz of one tensor set")
     b.add_argument("--tensors", required=True, help="the set's tensors directory (holding <KIND>/)")
-    b.add_argument("--kind", default="INDEL", choices=["INDEL"])
+    b.add_argument("--kind", default="INDEL", choices=["INDEL", "SNV"])
     b.add_argument("--fasta", required=True, help="the GRCh38 FASTA of the set's labels / linear_vcf")
     b.add_argument("--gnomad", required=True, help="gnomAD af-only VCF (the PoN script's PoN1)")
     b.add_argument("--colors", required=True, help="CoLoRSdb VCF (the PoN script's PoN4)")
+    b.add_argument("--dbsnp", help="dbSNP VCF (the PoN script's PoN2; --kind SNV)")
+    b.add_argument("--g1000", help="1000G PoN VCF (the PoN script's PoN3; --kind SNV)")
     b.add_argument("--out", required=True, help="output directory")
     b.add_argument("--cache-dir", help="KindIndex cache directory (as train / predict --cache-dir)")
     b.add_argument("--workers", type=int, default=1, help="chromosomes built in parallel")
     b.add_argument("--bcftools", default="bcftools")
     args = p.parse_args(argv)
-    build(args.tensors, args.kind, args.fasta, {"gnomad": args.gnomad, "colors": args.colors}, args.out,
+    dbs = {"gnomad": args.gnomad, "colors": args.colors}
+    if args.kind == "SNV":
+        if not (args.dbsnp and args.g1000):
+            p.error("--kind SNV needs --dbsnp and --g1000 (the SNV PoN rule uses all four databases)")
+        dbs.update(dbsnp=args.dbsnp, g1000=args.g1000)
+    build(args.tensors, args.kind, args.fasta, dbs, args.out,
           cache_dir=args.cache_dir, workers=args.workers, bcftools=args.bcftools,
           log=lambda m: print(time.strftime("%H:%M:%S"), m, flush=True))
 
