@@ -1,0 +1,11 @@
+467896	sitef	HCC1395T_PacBio_d46
+467897	sitef	HCC1954T_PacBio_d46
+467898	sitef	H1437T_PacBio_d46
+467899	sitef	H2009T_PacBio_d46
+467900	sitef	HG008T_PacBio_d46
+467901	sitef	COLO829T_fiberseq_d46
+467902	train	multicancer6_PacBio_SNV_sitef_ppr9
+467903	vcf	multicancer6_PacBio_SNV_sitef_ppr9	HCC1395T_PacBio_d46	chr1
+467904	vcf	multicancer6_PacBio_SNV_sitef_ppr9	HG008T_PacBio_d46	chr1
+467905	vcf	multicancer6_PacBio_SNV_sitef_ppr9	COLO829T_fiberseq_d46	chr1
+467906	vcf	multicancer6_PacBio_SNV_sitef_ppr9	HCC1395T_PacBio_d46	chr20

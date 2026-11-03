@@ -1,0 +1,20 @@
+== HCC1395T_PacBio_d46
+  AF [0.08, 0.4): all: 15,609 somatic of 96,159 (16.23%) | not in population: 15,300 somatic of 34,267 (44.65%) | population: 304 somatic of 61,887 (0.49%)
+  AF [0.4, 0.6): all: 6,983 somatic of 68,194 (10.24%) | not in population: 6,813 somatic of 9,969 (68.34%) | population: 169 somatic of 58,224 (0.29%)
+  AF [0.6, 0.85): all: 2,385 somatic of 38,594 (6.18%) | not in population: 2,290 somatic of 4,676 (48.97%) | population: 92 somatic of 33,915 (0.27%)
+  AF [0.85, 1.01): all: 5,472 somatic of 132,006 (4.15%) | not in population: 5,320 somatic of 10,140 (52.47%) | population: 129 somatic of 121,843 (0.11%)
+== HG008T_PacBio_d46
+  AF [0.08, 0.4): all: 1,021 somatic of 78,414 (1.30%) | not in population: 751 somatic of 29,666 (2.53%) | population: 176 somatic of 48,654 (0.36%)
+  AF [0.4, 0.6): all: 3,733 somatic of 125,163 (2.98%) | not in population: 3,444 somatic of 11,983 (28.74%) | population: 256 somatic of 113,147 (0.23%)
+  AF [0.6, 0.85): all: 611 somatic of 28,188 (2.17%) | not in population: 504 somatic of 2,872 (17.55%) | population: 70 somatic of 25,279 (0.28%)
+  AF [0.85, 1.01): all: 2,480 somatic of 117,850 (2.10%) | not in population: 2,259 somatic of 7,179 (31.47%) | population: 146 somatic of 110,596 (0.13%)
+== COLO829T_fiberseq_d46
+  AF [0.08, 0.4): all: 9,684 somatic of 167,446 (5.78%) | not in population: 9,345 somatic of 74,213 (12.59%) | population: 315 somatic of 93,209 (0.34%)
+  AF [0.4, 0.6): all: 13,599 somatic of 142,316 (9.56%) | not in population: 13,150 somatic of 25,726 (51.12%) | population: 443 somatic of 116,584 (0.38%)
+  AF [0.6, 0.85): all: 5,529 somatic of 71,748 (7.71%) | not in population: 5,304 somatic of 12,517 (42.37%) | population: 217 somatic of 59,223 (0.37%)
+  AF [0.85, 1.01): all: 6,084 somatic of 112,643 (5.40%) | not in population: 5,839 somatic of 13,064 (44.70%) | population: 211 somatic of 99,545 (0.21%)
+== H1437T_PacBio_d46
+  AF [0.08, 0.4): all: 21,858 somatic of 146,304 (14.94%) | not in population: 17,618 somatic of 47,638 (36.98%) | population: 4,223 somatic of 98,649 (4.28%)
+  AF [0.4, 0.6): all: 10,484 somatic of 80,097 (13.09%) | not in population: 9,747 somatic of 15,061 (64.72%) | population: 734 somatic of 65,033 (1.13%)
+  AF [0.6, 0.85): all: 9,778 somatic of 90,419 (10.81%) | not in population: 9,601 somatic of 14,568 (65.90%) | population: 171 somatic of 75,845 (0.23%)
+  AF [0.85, 1.01): all: 9,617 somatic of 118,029 (8.15%) | not in population: 9,418 somatic of 15,047 (62.59%) | population: 158 somatic of 102,941 (0.15%)

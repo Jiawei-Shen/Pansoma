@@ -4,7 +4,7 @@ without and with an allele-fraction floor of 0.1 on its own calls (Pansoma: grap
 fraction; ClairS-TO FORMAT AF, DeepSomatic FORMAT VAF -> LowAF). Full truth in both. Writes tables.md, summary.json."""
 import json
 from pathlib import Path
-HERE = Path(__file__).resolve().parent  
+HERE = Path(__file__).resolve().parent
 R = Path("/scratch/jshen/data/pansoma_net_v2_runs")
 E8 = Path("/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators")
 def pans(run, s, suf):
