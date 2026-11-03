@@ -1,0 +1,5 @@
+set    records    TP     FP    FN      P      R     F1 | best F1      (p      P      R    TP     FP   FN) |  P@R0.5  P@R0.8  P@R0.9 P@R0.95 | ceiling
+raw        792    41    751    90  0.052  0.313  0.089 |   0.175  0.6230  0.308  0.122    16     36   115 |       -       -       -       - |   0.427
+pon        468    32    436    99  0.068  0.244  0.107 |   0.176  0.6230  0.314  0.122    16     35   115 |       -       -       -       - |   0.260
+PoN tags 81 of 131 truth records of the chromosomes (PoN1_gnomAD 16, PoN2_dbSNP 0, PoN3_1000G 0, PoN4_CoLoRSdb 78): after the PoN any caller's recall <= 0.382
+266 PASS calls without a GRCh38 position are not evaluated; precision at the threshold with them as false calls: raw 0.039 pon 0.044 (pon: if the PoN kept them all)

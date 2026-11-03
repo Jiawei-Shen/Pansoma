@@ -1,0 +1,1394 @@
+{
+ "INDEL/COLO829T_Illumina": {
+  "clairs_to": {
+   "p": 0.1056,
+   "r": 0.145,
+   "f1": 0.1222,
+   "tp": 19,
+   "fp": 161,
+   "best": 0.1478,
+   "ceiling": 0.3817
+  },
+  "deepsomatic": {
+   "p": 0.1983,
+   "r": 0.1832,
+   "f1": 0.1905,
+   "tp": 24,
+   "fp": 97,
+   "best": 0.1995,
+   "ceiling": 0.3359
+  },
+  "pansoma": {
+   "p": 0.3265,
+   "r": 0.1221,
+   "f1": 0.1778,
+   "tp": 16,
+   "fp": 33,
+   "best": 0.191,
+   "ceiling": 0.2595
+  },
+  "pansoma_postpon": {
+   "p": 0.0,
+   "r": 0.0,
+   "f1": 0.0,
+   "tp": 0,
+   "fp": 1,
+   "best": 0.191,
+   "ceiling": 0.2595
+  },
+  "pansoma_run": "COLO829_Illumina_INDEL_joint_ppr8",
+  "p100_model": {
+   "p": 0.14126666666666668,
+   "r": 0.20353333333333334,
+   "f1": 0.1634,
+   "seeds": [
+    0.209,
+    0.1379,
+    0.1433
+   ],
+   "runs": [
+    "COLO829_Illumina_INDEL_d9_ppr8",
+    "COLO829_Illumina_INDEL_d9_ppr8_s1",
+    "COLO829_Illumina_INDEL_d9_ppr8_s2"
+   ]
+  },
+  "p100_model_postpon": {
+   "p": 0.2559333333333333,
+   "r": 0.11196666666666666,
+   "f1": 0.14463333333333334,
+   "seeds": [
+    0.1625,
+    0.1435,
+    0.1279
+   ],
+   "runs": [
+    "COLO829_Illumina_INDEL_d9_ppr8",
+    "COLO829_Illumina_INDEL_d9_ppr8_s1",
+    "COLO829_Illumina_INDEL_d9_ppr8_s2"
+   ]
+  }
+ },
+ "INDEL/COLO829T_Illumina_P75": {
+  "clairs_to": {
+   "p": 0.1461,
+   "r": 0.0992,
+   "f1": 0.1182,
+   "tp": 13,
+   "fp": 76,
+   "best": 0.1327,
+   "ceiling": 0.2137
+  },
+  "deepsomatic": {
+   "p": 0.1422,
+   "r": 0.2214,
+   "f1": 0.1731,
+   "tp": 29,
+   "fp": 175,
+   "best": 0.1649,
+   "ceiling": 0.3359
+  },
+  "pansoma": {
+   "p": 0.375,
+   "r": 0.2519,
+   "f1": 0.3014,
+   "tp": 33,
+   "fp": 55,
+   "best": 0.3404,
+   "ceiling": 0.2748
+  },
+  "pansoma_postpon": {
+   "p": 0.875,
+   "r": 0.1069,
+   "f1": 0.1905,
+   "tp": 14,
+   "fp": 2,
+   "best": 0.3404,
+   "ceiling": 0.2748
+  },
+  "pansoma_run": "COLO829_Illumina_INDEL_joint_ppr8",
+  "p100_model": {
+   "p": 0.10533333333333333,
+   "r": 0.1883,
+   "f1": 0.1337,
+   "seeds": [
+    0.163,
+    0.1121,
+    0.126
+   ],
+   "runs": [
+    "COLO829_Illumina_INDEL_d9_ppr8",
+    "COLO829_Illumina_INDEL_d9_ppr8_s1",
+    "COLO829_Illumina_INDEL_d9_ppr8_s2"
+   ]
+  },
+  "p100_model_postpon": {
+   "p": 0.2205,
+   "r": 0.12976666666666667,
+   "f1": 0.15713333333333332,
+   "seeds": [
+    0.1798,
+    0.1481,
+    0.1435
+   ],
+   "runs": [
+    "COLO829_Illumina_INDEL_d9_ppr8",
+    "COLO829_Illumina_INDEL_d9_ppr8_s1",
+    "COLO829_Illumina_INDEL_d9_ppr8_s2"
+   ]
+  }
+ },
+ "INDEL/COLO829T_Illumina_P50": {
+  "clairs_to": {
+   "p": 0.1207,
+   "r": 0.1069,
+   "f1": 0.1134,
+   "tp": 14,
+   "fp": 102,
+   "best": 0.0904,
+   "ceiling": 0.1985
+  },
+  "deepsomatic": {
+   "p": 0.1045,
+   "r": 0.2137,
+   "f1": 0.1404,
+   "tp": 28,
+   "fp": 240,
+   "best": 0.1452,
+   "ceiling": 0.3053
+  },
+  "pansoma": {
+   "p": 0.3523,
+   "r": 0.2366,
+   "f1": 0.2831,
+   "tp": 31,
+   "fp": 57,
+   "best": 0.339,
+   "ceiling": 0.2519
+  },
+  "pansoma_postpon": {
+   "p": 0.8438,
+   "r": 0.2061,
+   "f1": 0.3313,
+   "tp": 27,
+   "fp": 5,
+   "best": 0.339,
+   "ceiling": 0.2519
+  },
+  "pansoma_run": "COLO829_Illumina_INDEL_joint_ppr8",
+  "p100_model": {
+   "p": 0.06773333333333333,
+   "r": 0.18573333333333333,
+   "f1": 0.09896666666666666,
+   "seeds": [
+    0.1208,
+    0.0844,
+    0.0917
+   ],
+   "runs": [
+    "COLO829_Illumina_INDEL_d9_ppr8",
+    "COLO829_Illumina_INDEL_d9_ppr8_s1",
+    "COLO829_Illumina_INDEL_d9_ppr8_s2"
+   ]
+  },
+  "p100_model_postpon": {
+   "p": 0.11366666666666665,
+   "r": 0.12723333333333334,
+   "f1": 0.11986666666666666,
+   "seeds": [
+    0.1445,
+    0.1185,
+    0.0966
+   ],
+   "runs": [
+    "COLO829_Illumina_INDEL_d9_ppr8",
+    "COLO829_Illumina_INDEL_d9_ppr8_s1",
+    "COLO829_Illumina_INDEL_d9_ppr8_s2"
+   ]
+  }
+ },
+ "INDEL/COLO829T_Illumina_P25": {
+  "clairs_to": {
+   "p": 0.0531,
+   "r": 0.0458,
+   "f1": 0.0492,
+   "tp": 6,
+   "fp": 107,
+   "best": 0.0216,
+   "ceiling": 0.0687
+  },
+  "deepsomatic": {
+   "p": 0.0769,
+   "r": 0.1603,
+   "f1": 0.104,
+   "tp": 21,
+   "fp": 252,
+   "best": 0.0925,
+   "ceiling": 0.1908
+  },
+  "pansoma": {
+   "p": 0.2969,
+   "r": 0.145,
+   "f1": 0.1949,
+   "tp": 19,
+   "fp": 45,
+   "best": 0.2452,
+   "ceiling": 0.1527
+  },
+  "pansoma_postpon": {
+   "p": 0.8571,
+   "r": 0.1374,
+   "f1": 0.2368,
+   "tp": 18,
+   "fp": 3,
+   "best": 0.2452,
+   "ceiling": 0.1527
+  },
+  "pansoma_run": "COLO829_Illumina_INDEL_joint_ppr8",
+  "p100_model": {
+   "p": 0.035866666666666665,
+   "r": 0.1094,
+   "f1": 0.05383333333333334,
+   "seeds": [
+    0.0669,
+    0.0422,
+    0.0524
+   ],
+   "runs": [
+    "COLO829_Illumina_INDEL_d9_ppr8",
+    "COLO829_Illumina_INDEL_d9_ppr8_s1",
+    "COLO829_Illumina_INDEL_d9_ppr8_s2"
+   ]
+  },
+  "p100_model_postpon": {
+   "p": 0.04033333333333333,
+   "r": 0.05853333333333333,
+   "f1": 0.04766666666666667,
+   "seeds": [
+    0.0719,
+    0.0356,
+    0.0355
+   ],
+   "runs": [
+    "COLO829_Illumina_INDEL_d9_ppr8",
+    "COLO829_Illumina_INDEL_d9_ppr8_s1",
+    "COLO829_Illumina_INDEL_d9_ppr8_s2"
+   ]
+  }
+ },
+ "INDEL/COLO829T_fiberseq": {
+  "clairs_to": {
+   "p": 0.3043,
+   "r": 0.1069,
+   "f1": 0.1582,
+   "tp": 14,
+   "fp": 32,
+   "best": 0.1687,
+   "ceiling": 0.1603
+  },
+  "deepsomatic": {
+   "p": 0.3143,
+   "r": 0.084,
+   "f1": 0.1325,
+   "tp": 11,
+   "fp": 24,
+   "best": 0.1742,
+   "ceiling": 0.2748
+  },
+  "pansoma": {
+   "p": 0.0304,
+   "r": 0.2595,
+   "f1": 0.0545,
+   "tp": 34,
+   "fp": 1083,
+   "best": 0.1716,
+   "ceiling": 0.2748
+  },
+  "pansoma_postpon": {
+   "p": 0.2143,
+   "r": 0.0687,
+   "f1": 0.104,
+   "tp": 9,
+   "fp": 33,
+   "best": 0.1716,
+   "ceiling": 0.2748
+  },
+  "pansoma_run": "COLO829_fiberseq_INDEL_joint_ppr8",
+  "p100_model": {
+   "p": 0.07756666666666667,
+   "r": 0.2341,
+   "f1": 0.11056666666666666,
+   "seeds": [
+    0.0706,
+    0.1068,
+    0.1543
+   ],
+   "runs": [
+    "COLO829_fiberseq_INDEL_d9_ppr8",
+    "COLO829_fiberseq_INDEL_d9_ppr8_s1",
+    "COLO829_fiberseq_INDEL_d9_ppr8_s2"
+   ]
+  },
+  "p100_model_postpon": {
+   "p": 0.28400000000000003,
+   "r": 0.07886666666666667,
+   "f1": 0.11870000000000001,
+   "seeds": [
+    0.1531,
+    0.1176,
+    0.0854
+   ],
+   "runs": [
+    "COLO829_fiberseq_INDEL_d9_ppr8",
+    "COLO829_fiberseq_INDEL_d9_ppr8_s1",
+    "COLO829_fiberseq_INDEL_d9_ppr8_s2"
+   ]
+  }
+ },
+ "INDEL/COLO829T_fiberseq_P75": {
+  "clairs_to": {
+   "p": 0.2692,
+   "r": 0.1069,
+   "f1": 0.153,
+   "tp": 14,
+   "fp": 38,
+   "best": 0.1581,
+   "ceiling": 0.145
+  },
+  "deepsomatic": {
+   "p": 0.1818,
+   "r": 0.0916,
+   "f1": 0.1218,
+   "tp": 12,
+   "fp": 54,
+   "best": 0.1407,
+   "ceiling": 0.2748
+  },
+  "pansoma": {
+   "p": 0.0216,
+   "r": 0.2443,
+   "f1": 0.0398,
+   "tp": 32,
+   "fp": 1447,
+   "best": 0.1533,
+   "ceiling": 0.2595
+  },
+  "pansoma_postpon": {
+   "p": 0.1639,
+   "r": 0.0763,
+   "f1": 0.1042,
+   "tp": 10,
+   "fp": 51,
+   "best": 0.1533,
+   "ceiling": 0.2595
+  },
+  "pansoma_run": "COLO829_fiberseq_INDEL_joint_ppr8",
+  "p100_model": {
+   "p": 0.0726,
+   "r": 0.1933666666666667,
+   "f1": 0.09820000000000001,
+   "seeds": [
+    0.0685,
+    0.0936,
+    0.1325
+   ],
+   "runs": [
+    "COLO829_fiberseq_INDEL_d9_ppr8",
+    "COLO829_fiberseq_INDEL_d9_ppr8_s1",
+    "COLO829_fiberseq_INDEL_d9_ppr8_s2"
+   ]
+  },
+  "p100_model_postpon": {
+   "p": 0.21003333333333332,
+   "r": 0.0509,
+   "f1": 0.08166666666666667,
+   "seeds": [
+    0.0581,
+    0.0988,
+    0.0881
+   ],
+   "runs": [
+    "COLO829_fiberseq_INDEL_d9_ppr8",
+    "COLO829_fiberseq_INDEL_d9_ppr8_s1",
+    "COLO829_fiberseq_INDEL_d9_ppr8_s2"
+   ]
+  }
+ },
+ "INDEL/COLO829T_fiberseq_P50": {
+  "clairs_to": {
+   "p": 0.1618,
+   "r": 0.084,
+   "f1": 0.1106,
+   "tp": 11,
+   "fp": 57,
+   "best": 0.1008,
+   "ceiling": 0.1069
+  },
+  "deepsomatic": {
+   "p": 0.1441,
+   "r": 0.1221,
+   "f1": 0.1322,
+   "tp": 16,
+   "fp": 95,
+   "best": 0.1408,
+   "ceiling": 0.229
+  },
+  "pansoma": {
+   "p": 0.0152,
+   "r": 0.2214,
+   "f1": 0.0285,
+   "tp": 29,
+   "fp": 1873,
+   "best": 0.1243,
+   "ceiling": 0.2595
+  },
+  "pansoma_postpon": {
+   "p": 0.1023,
+   "r": 0.0687,
+   "f1": 0.0822,
+   "tp": 9,
+   "fp": 79,
+   "best": 0.1243,
+   "ceiling": 0.2595
+  },
+  "pansoma_run": "COLO829_fiberseq_INDEL_joint_ppr8",
+  "p100_model": {
+   "p": 0.0469,
+   "r": 0.14756666666666665,
+   "f1": 0.06526666666666667,
+   "seeds": [
+    0.0516,
+    0.0642,
+    0.08
+   ],
+   "runs": [
+    "COLO829_fiberseq_INDEL_d9_ppr8",
+    "COLO829_fiberseq_INDEL_d9_ppr8_s1",
+    "COLO829_fiberseq_INDEL_d9_ppr8_s2"
+   ]
+  },
+  "p100_model_postpon": {
+   "p": 0.12526666666666667,
+   "r": 0.04073333333333334,
+   "f1": 0.06046666666666667,
+   "seeds": [
+    0.0355,
+    0.0842,
+    0.0617
+   ],
+   "runs": [
+    "COLO829_fiberseq_INDEL_d9_ppr8",
+    "COLO829_fiberseq_INDEL_d9_ppr8_s1",
+    "COLO829_fiberseq_INDEL_d9_ppr8_s2"
+   ]
+  }
+ },
+ "INDEL/COLO829T_fiberseq_P25": {
+  "clairs_to": {
+   "p": 0.0366,
+   "r": 0.0229,
+   "f1": 0.0282,
+   "tp": 3,
+   "fp": 79,
+   "best": 0.019,
+   "ceiling": 0.0229
+  },
+  "deepsomatic": {
+   "p": 0.0672,
+   "r": 0.0687,
+   "f1": 0.0679,
+   "tp": 9,
+   "fp": 125,
+   "best": 0.0753,
+   "ceiling": 0.0916
+  },
+  "pansoma": {
+   "p": 0.0102,
+   "r": 0.1908,
+   "f1": 0.0193,
+   "tp": 25,
+   "fp": 2432,
+   "best": 0.1158,
+   "ceiling": 0.2443
+  },
+  "pansoma_postpon": {
+   "p": 0.1408,
+   "r": 0.0763,
+   "f1": 0.099,
+   "tp": 10,
+   "fp": 61,
+   "best": 0.1158,
+   "ceiling": 0.2443
+  },
+  "pansoma_run": "COLO829_fiberseq_INDEL_joint_ppr8",
+  "p100_model": {
+   "p": 0.014433333333333333,
+   "r": 0.055966666666666665,
+   "f1": 0.0212,
+   "seeds": [
+    0.0192,
+    0.02,
+    0.0244
+   ],
+   "runs": [
+    "COLO829_fiberseq_INDEL_d9_ppr8",
+    "COLO829_fiberseq_INDEL_d9_ppr8_s1",
+    "COLO829_fiberseq_INDEL_d9_ppr8_s2"
+   ]
+  },
+  "p100_model_postpon": {
+   "p": 0.0349,
+   "r": 0.015266666666666666,
+   "f1": 0.02036666666666667,
+   "seeds": [
+    0.012,
+    0.0262,
+    0.0229
+   ],
+   "runs": [
+    "COLO829_fiberseq_INDEL_d9_ppr8",
+    "COLO829_fiberseq_INDEL_d9_ppr8_s1",
+    "COLO829_fiberseq_INDEL_d9_ppr8_s2"
+   ]
+  }
+ },
+ "INDEL/COLO829T_ONT": {
+  "clairs_to": {
+   "p": 0.1188,
+   "r": 0.0916,
+   "f1": 0.1034,
+   "tp": 12,
+   "fp": 89,
+   "best": 0.1168,
+   "ceiling": 0.1527
+  },
+  "deepsomatic": {
+   "p": 0.0317,
+   "r": 0.0153,
+   "f1": 0.0206,
+   "tp": 2,
+   "fp": 61,
+   "best": 0.0912,
+   "ceiling": 0.1374
+  },
+  "pansoma": {
+   "p": 0.0015,
+   "r": 0.2366,
+   "f1": 0.003,
+   "tp": 31,
+   "fp": 20361,
+   "best": 0.135,
+   "ceiling": 0.2519
+  },
+  "pansoma_postpon": {
+   "p": 0.2558,
+   "r": 0.084,
+   "f1": 0.1264,
+   "tp": 11,
+   "fp": 32,
+   "best": 0.135,
+   "ceiling": 0.2519
+  },
+  "pansoma_run": "COLO829_ONT_INDEL_joint_ppr8",
+  "p100_model": {
+   "p": 0.005366666666666666,
+   "r": 0.21120000000000003,
+   "f1": 0.010433333333333334,
+   "seeds": [
+    0.0066,
+    0.0075,
+    0.0172
+   ],
+   "runs": [
+    "COLO829_ONT_INDEL_d9_ppr8",
+    "COLO829_ONT_INDEL_d9_ppr8_s1",
+    "COLO829_ONT_INDEL_d9_ppr8_s2"
+   ]
+  },
+  "p100_model_postpon": {
+   "p": 0.22116666666666665,
+   "r": 0.07886666666666667,
+   "f1": 0.11243333333333333,
+   "seeds": [
+    0.0897,
+    0.11,
+    0.1376
+   ],
+   "runs": [
+    "COLO829_ONT_INDEL_d9_ppr8",
+    "COLO829_ONT_INDEL_d9_ppr8_s1",
+    "COLO829_ONT_INDEL_d9_ppr8_s2"
+   ]
+  }
+ },
+ "INDEL/COLO829T_ONT_P75": {
+  "clairs_to": {
+   "p": 0.1831,
+   "r": 0.0992,
+   "f1": 0.1287,
+   "tp": 13,
+   "fp": 58,
+   "best": 0.129,
+   "ceiling": 0.145
+  },
+  "deepsomatic": {
+   "p": 0.0455,
+   "r": 0.0229,
+   "f1": 0.0305,
+   "tp": 3,
+   "fp": 63,
+   "best": 0.0621,
+   "ceiling": 0.0916
+  },
+  "pansoma": {
+   "p": 0.0015,
+   "r": 0.229,
+   "f1": 0.0029,
+   "tp": 30,
+   "fp": 20629,
+   "best": 0.1364,
+   "ceiling": 0.2443
+  },
+  "pansoma_postpon": {
+   "p": 0.2308,
+   "r": 0.0687,
+   "f1": 0.1059,
+   "tp": 9,
+   "fp": 30,
+   "best": 0.1364,
+   "ceiling": 0.2443
+  },
+  "pansoma_run": "COLO829_ONT_INDEL_joint_ppr8",
+  "p100_model": {
+   "p": 0.004833333333333333,
+   "r": 0.20099999999999998,
+   "f1": 0.0094,
+   "seeds": [
+    0.0063,
+    0.0064,
+    0.0155
+   ],
+   "runs": [
+    "COLO829_ONT_INDEL_d9_ppr8",
+    "COLO829_ONT_INDEL_d9_ppr8_s1",
+    "COLO829_ONT_INDEL_d9_ppr8_s2"
+   ]
+  },
+  "p100_model_postpon": {
+   "p": 0.2111333333333333,
+   "r": 0.0687,
+   "f1": 0.0997,
+   "seeds": [
+    0.0784,
+    0.1313,
+    0.0894
+   ],
+   "runs": [
+    "COLO829_ONT_INDEL_d9_ppr8",
+    "COLO829_ONT_INDEL_d9_ppr8_s1",
+    "COLO829_ONT_INDEL_d9_ppr8_s2"
+   ]
+  }
+ },
+ "INDEL/COLO829T_ONT_P50": {
+  "clairs_to": {
+   "p": 0.1096,
+   "r": 0.0611,
+   "f1": 0.0784,
+   "tp": 8,
+   "fp": 65,
+   "best": 0.0769,
+   "ceiling": 0.084
+  },
+  "deepsomatic": {
+   "p": 0.0779,
+   "r": 0.0458,
+   "f1": 0.0577,
+   "tp": 6,
+   "fp": 71,
+   "best": 0.0442,
+   "ceiling": 0.0687
+  },
+  "pansoma": {
+   "p": 0.0012,
+   "r": 0.1985,
+   "f1": 0.0025,
+   "tp": 26,
+   "fp": 20911,
+   "best": 0.086,
+   "ceiling": 0.229
+  },
+  "pansoma_postpon": {
+   "p": 0.1154,
+   "r": 0.0458,
+   "f1": 0.0656,
+   "tp": 6,
+   "fp": 46,
+   "best": 0.086,
+   "ceiling": 0.229
+  },
+  "pansoma_run": "COLO829_ONT_INDEL_joint_ppr8",
+  "p100_model": {
+   "p": 0.0031999999999999997,
+   "r": 0.14246666666666666,
+   "f1": 0.006166666666666667,
+   "seeds": [
+    0.0045,
+    0.0049,
+    0.0091
+   ],
+   "runs": [
+    "COLO829_ONT_INDEL_d9_ppr8",
+    "COLO829_ONT_INDEL_d9_ppr8_s1",
+    "COLO829_ONT_INDEL_d9_ppr8_s2"
+   ]
+  },
+  "p100_model_postpon": {
+   "p": 0.05546666666666667,
+   "r": 0.025433333333333332,
+   "f1": 0.034166666666666665,
+   "seeds": [
+    0.0124,
+    0.0478,
+    0.0423
+   ],
+   "runs": [
+    "COLO829_ONT_INDEL_d9_ppr8",
+    "COLO829_ONT_INDEL_d9_ppr8_s1",
+    "COLO829_ONT_INDEL_d9_ppr8_s2"
+   ]
+  }
+ },
+ "INDEL/COLO829T_ONT_P25": {
+  "clairs_to": {
+   "p": 0.0145,
+   "r": 0.0076,
+   "f1": 0.01,
+   "tp": 1,
+   "fp": 68,
+   "best": 0.0129,
+   "ceiling": 0.0076
+  },
+  "deepsomatic": {
+   "p": 0.0405,
+   "r": 0.0229,
+   "f1": 0.0293,
+   "tp": 3,
+   "fp": 71,
+   "best": 0.0355,
+   "ceiling": 0.0229
+  },
+  "pansoma": {
+   "p": 0.0008,
+   "r": 0.1374,
+   "f1": 0.0017,
+   "tp": 18,
+   "fp": 21461,
+   "best": 0.0392,
+   "ceiling": 0.1603
+  },
+  "pansoma_postpon": {
+   "p": 0.0333,
+   "r": 0.0153,
+   "f1": 0.0209,
+   "tp": 2,
+   "fp": 58,
+   "best": 0.0392,
+   "ceiling": 0.1603
+  },
+  "pansoma_run": "COLO829_ONT_INDEL_joint_ppr8",
+  "p100_model": {
+   "p": 0.0014666666666666665,
+   "r": 0.06866666666666667,
+   "f1": 0.0028333333333333335,
+   "seeds": [
+    0.0023,
+    0.0021,
+    0.0041
+   ],
+   "runs": [
+    "COLO829_ONT_INDEL_d9_ppr8",
+    "COLO829_ONT_INDEL_d9_ppr8_s1",
+    "COLO829_ONT_INDEL_d9_ppr8_s2"
+   ]
+  },
+  "p100_model_postpon": {
+   "p": 0.012966666666666666,
+   "r": 0.007633333333333333,
+   "f1": 0.0095,
+   "seeds": [
+    0.0,
+    0.018,
+    0.0105
+   ],
+   "runs": [
+    "COLO829_ONT_INDEL_d9_ppr8",
+    "COLO829_ONT_INDEL_d9_ppr8_s1",
+    "COLO829_ONT_INDEL_d9_ppr8_s2"
+   ]
+  }
+ },
+ "SNV/COLO829T_Illumina": {
+  "clairs_to": {
+   "p": 0.4307,
+   "r": 0.7642,
+   "f1": 0.5509,
+   "tp": 1867,
+   "fp": 2468,
+   "best": 0.7186,
+   "ceiling": 0.7888
+  },
+  "deepsomatic": {
+   "p": 0.4267,
+   "r": 0.8346,
+   "f1": 0.5647,
+   "tp": 2039,
+   "fp": 2740,
+   "best": 0.771,
+   "ceiling": 0.8494
+  },
+  "pansoma": {
+   "p": 0.9309,
+   "r": 0.5297,
+   "f1": 0.6752,
+   "tp": 1294,
+   "fp": 96,
+   "best": 0.7845,
+   "ceiling": 0.7916
+  },
+  "pansoma_postpon": null,
+  "pansoma_run": "COLO829_Illumina_SNV_joint_7fc7396_gpu4",
+  "p100_model": {
+   "p": 0.7733666666666666,
+   "r": 0.7084333333333334,
+   "f1": 0.7388,
+   "seeds": [
+    0.7734,
+    0.7052,
+    0.7378
+   ],
+   "runs": [
+    "COLO829_Illumina_SNV_d9_normbq_sweep_e06",
+    "COLO829_Illumina_SNV_d9_normbq_s1_sweep_e05",
+    "COLO829_Illumina_SNV_d9_normbq_s2_sweep_e06"
+   ]
+  },
+  "p100_model_postpon": null
+ },
+ "SNV/COLO829T_Illumina_P75": {
+  "clairs_to": {
+   "p": 0.589,
+   "r": 0.7519,
+   "f1": 0.6606,
+   "tp": 1837,
+   "fp": 1282,
+   "best": 0.6897,
+   "ceiling": 0.7749
+  },
+  "deepsomatic": {
+   "p": 0.3603,
+   "r": 0.8146,
+   "f1": 0.4996,
+   "tp": 1990,
+   "fp": 3533,
+   "best": 0.6848,
+   "ceiling": 0.8166
+  },
+  "pansoma": {
+   "p": 0.9679,
+   "r": 0.7417,
+   "f1": 0.8399,
+   "tp": 1812,
+   "fp": 60,
+   "best": 0.8405,
+   "ceiling": 0.7659
+  },
+  "pansoma_postpon": null,
+  "pansoma_run": "COLO829_Illumina_SNV_joint_7fc7396_gpu4",
+  "p100_model": {
+   "p": 0.6196,
+   "r": 0.6980333333333334,
+   "f1": 0.6560333333333334,
+   "seeds": [
+    0.6836,
+    0.6273,
+    0.6572
+   ],
+   "runs": [
+    "COLO829_Illumina_SNV_d9_normbq_sweep_e06",
+    "COLO829_Illumina_SNV_d9_normbq_s1_sweep_e05",
+    "COLO829_Illumina_SNV_d9_normbq_s2_sweep_e06"
+   ]
+  },
+  "p100_model_postpon": null
+ },
+ "SNV/COLO829T_Illumina_P50": {
+  "clairs_to": {
+   "p": 0.5422,
+   "r": 0.6865,
+   "f1": 0.6059,
+   "tp": 1677,
+   "fp": 1416,
+   "best": 0.6281,
+   "ceiling": 0.7057
+  },
+  "deepsomatic": {
+   "p": 0.3464,
+   "r": 0.7786,
+   "f1": 0.4795,
+   "tp": 1902,
+   "fp": 3589,
+   "best": 0.6565,
+   "ceiling": 0.7786
+  },
+  "pansoma": {
+   "p": 0.9655,
+   "r": 0.7327,
+   "f1": 0.8331,
+   "tp": 1790,
+   "fp": 64,
+   "best": 0.834,
+   "ceiling": 0.7376
+  },
+  "pansoma_postpon": null,
+  "pansoma_run": "COLO829_Illumina_SNV_joint_7fc7396_gpu4",
+  "p100_model": {
+   "p": 0.6028,
+   "r": 0.6853333333333333,
+   "f1": 0.6405666666666666,
+   "seeds": [
+    0.6723,
+    0.6058,
+    0.6436
+   ],
+   "runs": [
+    "COLO829_Illumina_SNV_d9_normbq_sweep_e06",
+    "COLO829_Illumina_SNV_d9_normbq_s1_sweep_e05",
+    "COLO829_Illumina_SNV_d9_normbq_s2_sweep_e06"
+   ]
+  },
+  "p100_model_postpon": null
+ },
+ "SNV/COLO829T_Illumina_P25": {
+  "clairs_to": {
+   "p": 0.493,
+   "r": 0.6222,
+   "f1": 0.5501,
+   "tp": 1520,
+   "fp": 1563,
+   "best": 0.5599,
+   "ceiling": 0.6381
+  },
+  "deepsomatic": {
+   "p": 0.3257,
+   "r": 0.7257,
+   "f1": 0.4497,
+   "tp": 1773,
+   "fp": 3670,
+   "best": 0.6425,
+   "ceiling": 0.7257
+  },
+  "pansoma": {
+   "p": 0.9672,
+   "r": 0.6885,
+   "f1": 0.8044,
+   "tp": 1682,
+   "fp": 57,
+   "best": 0.8055,
+   "ceiling": 0.6922
+  },
+  "pansoma_postpon": null,
+  "pansoma_run": "COLO829_Illumina_SNV_joint_7fc7396_gpu4",
+  "p100_model": {
+   "p": 0.6155333333333334,
+   "r": 0.6623,
+   "f1": 0.6366333333333333,
+   "seeds": [
+    0.6707,
+    0.5947,
+    0.6445
+   ],
+   "runs": [
+    "COLO829_Illumina_SNV_d9_normbq_sweep_e06",
+    "COLO829_Illumina_SNV_d9_normbq_s1_sweep_e05",
+    "COLO829_Illumina_SNV_d9_normbq_s2_sweep_e06"
+   ]
+  },
+  "p100_model_postpon": null
+ },
+ "SNV/COLO829T_fiberseq": {
+  "clairs_to": {
+   "p": 0.7793,
+   "r": 0.7446,
+   "f1": 0.7616,
+   "tp": 1819,
+   "fp": 515,
+   "best": 0.76,
+   "ceiling": 0.8035
+  },
+  "deepsomatic": {
+   "p": 0.7323,
+   "r": 0.5555,
+   "f1": 0.6318,
+   "tp": 1357,
+   "fp": 496,
+   "best": 0.7918,
+   "ceiling": 0.894
+  },
+  "pansoma": {
+   "p": 0.8811,
+   "r": 0.6979,
+   "f1": 0.7789,
+   "tp": 1705,
+   "fp": 230,
+   "best": 0.7896,
+   "ceiling": 0.7949
+  },
+  "pansoma_postpon": null,
+  "pansoma_run": "COLO829_fiberseq_SNV_joint_7fc7396_gpu4",
+  "p100_model": {
+   "p": 0.8392666666666667,
+   "r": 0.7130666666666666,
+   "f1": 0.7706,
+   "seeds": [
+    0.7581,
+    0.7829,
+    0.7708
+   ],
+   "runs": [
+    "COLO829_fiberseq_SNV_d9_normbq",
+    "COLO829_fiberseq_SNV_d9_normbq_s1",
+    "COLO829_fiberseq_SNV_d9_normbq_s2"
+   ]
+  },
+  "p100_model_postpon": null
+ },
+ "SNV/COLO829T_fiberseq_P75": {
+  "clairs_to": {
+   "p": 0.6514,
+   "r": 0.7282,
+   "f1": 0.6877,
+   "tp": 1779,
+   "fp": 952,
+   "best": 0.6907,
+   "ceiling": 0.7753
+  },
+  "deepsomatic": {
+   "p": 0.6038,
+   "r": 0.8346,
+   "f1": 0.7007,
+   "tp": 2039,
+   "fp": 1338,
+   "best": 0.7268,
+   "ceiling": 0.8743
+  },
+  "pansoma": {
+   "p": 0.7413,
+   "r": 0.6394,
+   "f1": 0.6866,
+   "tp": 1562,
+   "fp": 545,
+   "best": 0.7033,
+   "ceiling": 0.7671
+  },
+  "pansoma_postpon": null,
+  "pansoma_run": "COLO829_fiberseq_SNV_joint_7fc7396_gpu4",
+  "p100_model": {
+   "p": 0.6939000000000001,
+   "r": 0.6928666666666666,
+   "f1": 0.6932333333333333,
+   "seeds": [
+    0.6894,
+    0.6959,
+    0.6944
+   ],
+   "runs": [
+    "COLO829_fiberseq_SNV_d9_normbq",
+    "COLO829_fiberseq_SNV_d9_normbq_s1",
+    "COLO829_fiberseq_SNV_d9_normbq_s2"
+   ]
+  },
+  "p100_model_postpon": null
+ },
+ "SNV/COLO829T_fiberseq_P50": {
+  "clairs_to": {
+   "p": 0.61,
+   "r": 0.7159,
+   "f1": 0.6588,
+   "tp": 1749,
+   "fp": 1118,
+   "best": 0.6592,
+   "ceiling": 0.7429
+  },
+  "deepsomatic": {
+   "p": 0.5677,
+   "r": 0.8354,
+   "f1": 0.6761,
+   "tp": 2041,
+   "fp": 1554,
+   "best": 0.6838,
+   "ceiling": 0.8412
+  },
+  "pansoma": {
+   "p": 0.715,
+   "r": 0.6214,
+   "f1": 0.6649,
+   "tp": 1518,
+   "fp": 605,
+   "best": 0.6714,
+   "ceiling": 0.7397
+  },
+  "pansoma_postpon": null,
+  "pansoma_run": "COLO829_fiberseq_SNV_joint_7fc7396_gpu4",
+  "p100_model": {
+   "p": 0.6667666666666667,
+   "r": 0.6906666666666667,
+   "f1": 0.6785,
+   "seeds": [
+    0.6724,
+    0.6786,
+    0.6845
+   ],
+   "runs": [
+    "COLO829_fiberseq_SNV_d9_normbq",
+    "COLO829_fiberseq_SNV_d9_normbq_s1",
+    "COLO829_fiberseq_SNV_d9_normbq_s2"
+   ]
+  },
+  "p100_model_postpon": null
+ },
+ "SNV/COLO829T_fiberseq_P25": {
+  "clairs_to": {
+   "p": 0.5813,
+   "r": 0.65,
+   "f1": 0.6137,
+   "tp": 1588,
+   "fp": 1144,
+   "best": 0.615,
+   "ceiling": 0.6721
+  },
+  "deepsomatic": {
+   "p": 0.5176,
+   "r": 0.7835,
+   "f1": 0.6234,
+   "tp": 1914,
+   "fp": 1784,
+   "best": 0.6383,
+   "ceiling": 0.7851
+  },
+  "pansoma": {
+   "p": 0.7864,
+   "r": 0.6631,
+   "f1": 0.7195,
+   "tp": 1620,
+   "fp": 440,
+   "best": 0.7292,
+   "ceiling": 0.6881
+  },
+  "pansoma_postpon": null,
+  "pansoma_run": "COLO829_fiberseq_SNV_joint_7fc7396_gpu4",
+  "p100_model": {
+   "p": 0.6889,
+   "r": 0.6618666666666667,
+   "f1": 0.6751,
+   "seeds": [
+    0.677,
+    0.6725,
+    0.6758
+   ],
+   "runs": [
+    "COLO829_fiberseq_SNV_d9_normbq",
+    "COLO829_fiberseq_SNV_d9_normbq_s1",
+    "COLO829_fiberseq_SNV_d9_normbq_s2"
+   ]
+  },
+  "p100_model_postpon": null
+ },
+ "SNV/COLO829T_ONT": {
+  "clairs_to": {
+   "p": 0.7488,
+   "r": 0.6844,
+   "f1": 0.7151,
+   "tp": 1672,
+   "fp": 561,
+   "best": 0.7165,
+   "ceiling": 0.7712
+  },
+  "deepsomatic": {
+   "p": 0.5822,
+   "r": 0.6946,
+   "f1": 0.6334,
+   "tp": 1697,
+   "fp": 1218,
+   "best": 0.6967,
+   "ceiling": 0.8097
+  },
+  "pansoma": {
+   "p": 0.7234,
+   "r": 0.6369,
+   "f1": 0.6774,
+   "tp": 1556,
+   "fp": 595,
+   "best": 0.6813,
+   "ceiling": 0.7822
+  },
+  "pansoma_postpon": null,
+  "pansoma_run": "COLO829_ONT_SNV_joint_7fc7396_gpu4",
+  "p100_model": {
+   "p": 0.8150333333333334,
+   "r": 0.6894666666666667,
+   "f1": 0.7468,
+   "seeds": [
+    0.7438,
+    0.7517,
+    0.7449
+   ],
+   "runs": [
+    "COLO829_ONT_SNV_d9_normbq",
+    "COLO829_ONT_SNV_d9_normbq_s1",
+    "COLO829_ONT_SNV_d9_normbq_s2"
+   ]
+  },
+  "p100_model_postpon": null
+ },
+ "SNV/COLO829T_ONT_P75": {
+  "clairs_to": {
+   "p": 0.6496,
+   "r": 0.6799,
+   "f1": 0.6644,
+   "tp": 1661,
+   "fp": 896,
+   "best": 0.666,
+   "ceiling": 0.747
+  },
+  "deepsomatic": {
+   "p": 0.526,
+   "r": 0.7564,
+   "f1": 0.6206,
+   "tp": 1848,
+   "fp": 1665,
+   "best": 0.6686,
+   "ceiling": 0.7843
+  },
+  "pansoma": {
+   "p": 0.6593,
+   "r": 0.648,
+   "f1": 0.6536,
+   "tp": 1583,
+   "fp": 818,
+   "best": 0.6648,
+   "ceiling": 0.7589
+  },
+  "pansoma_postpon": null,
+  "pansoma_run": "COLO829_ONT_SNV_joint_7fc7396_gpu4",
+  "p100_model": {
+   "p": 0.6970999999999999,
+   "r": 0.681,
+   "f1": 0.6888,
+   "seeds": [
+    0.6826,
+    0.6963,
+    0.6875
+   ],
+   "runs": [
+    "COLO829_ONT_SNV_d9_normbq",
+    "COLO829_ONT_SNV_d9_normbq_s1",
+    "COLO829_ONT_SNV_d9_normbq_s2"
+   ]
+  },
+  "p100_model_postpon": null
+ },
+ "SNV/COLO829T_ONT_P50": {
+  "clairs_to": {
+   "p": 0.6007,
+   "r": 0.6631,
+   "f1": 0.6304,
+   "tp": 1620,
+   "fp": 1077,
+   "best": 0.6331,
+   "ceiling": 0.7081
+  },
+  "deepsomatic": {
+   "p": 0.5129,
+   "r": 0.7483,
+   "f1": 0.6086,
+   "tp": 1828,
+   "fp": 1736,
+   "best": 0.6409,
+   "ceiling": 0.7503
+  },
+  "pansoma": {
+   "p": 0.635,
+   "r": 0.6431,
+   "f1": 0.639,
+   "tp": 1571,
+   "fp": 903,
+   "best": 0.6536,
+   "ceiling": 0.7262
+  },
+  "pansoma_postpon": null,
+  "pansoma_run": "COLO829_ONT_SNV_joint_7fc7396_gpu4",
+  "p100_model": {
+   "p": 0.6616333333333334,
+   "r": 0.6675999999999999,
+   "f1": 0.6645666666666666,
+   "seeds": [
+    0.656,
+    0.671,
+    0.6667
+   ],
+   "runs": [
+    "COLO829_ONT_SNV_d9_normbq",
+    "COLO829_ONT_SNV_d9_normbq_s1",
+    "COLO829_ONT_SNV_d9_normbq_s2"
+   ]
+  },
+  "p100_model_postpon": null
+ },
+ "SNV/COLO829T_ONT_P25": {
+  "clairs_to": {
+   "p": 0.5571,
+   "r": 0.5727,
+   "f1": 0.5648,
+   "tp": 1399,
+   "fp": 1112,
+   "best": 0.5774,
+   "ceiling": 0.6156
+  },
+  "deepsomatic": {
+   "p": 0.493,
+   "r": 0.6799,
+   "f1": 0.5716,
+   "tp": 1661,
+   "fp": 1708,
+   "best": 0.5863,
+   "ceiling": 0.6803
+  },
+  "pansoma": {
+   "p": 0.6697,
+   "r": 0.6615,
+   "f1": 0.6656,
+   "tp": 1616,
+   "fp": 797,
+   "best": 0.7113,
+   "ceiling": 0.6893
+  },
+  "pansoma_postpon": null,
+  "pansoma_run": "COLO829_ONT_SNV_joint_7fc7396_gpu4",
+  "p100_model": {
+   "p": 0.6634,
+   "r": 0.6318666666666667,
+   "f1": 0.6472,
+   "seeds": [
+    0.6439,
+    0.6494,
+    0.6483
+   ],
+   "runs": [
+    "COLO829_ONT_SNV_d9_normbq",
+    "COLO829_ONT_SNV_d9_normbq_s1",
+    "COLO829_ONT_SNV_d9_normbq_s2"
+   ]
+  },
+  "p100_model_postpon": null
+ }
+}
