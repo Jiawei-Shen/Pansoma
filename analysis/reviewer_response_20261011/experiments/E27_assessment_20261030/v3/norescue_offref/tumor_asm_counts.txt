@@ -1,0 +1,13 @@
+run | unplaced PASS | ALT in tumor asm | in tumor asm, not in normal asm | exclusive tumor-only (not population)
+COLO829_Illumina_SNV_7fc7396_ddp4_b1024 | 53 | 52 | 3 | 3
+COLO829_Illumina_SNV_d46_7fc7396 | 18 | 18 | 4 | 4
+COLO829_ONT_SNV_7fc7396_ddp4_b1024 | 152 | 152 | 10 | 4
+COLO829_ONT_SNV_d46_7fc7396 | 98 | 94 | 4 | 4
+COLO829_fiberseq_SNV_7fc7396_ddp4_b1024 | 35 | 34 | 4 | 2
+COLO829_fiberseq_SNV_d46_7fc7396 | 78 | 76 | 4 | 1
+HG008_Illumina_SNV_7fc7396_ddp4_b1024 | 12 | 12 | 0 | 0
+HG008_Illumina_SNV_d46_7fc7396 | 29 | 28 | 3 | 2
+HG008_ONT_SNV_7fc7396 | 26 | 26 | 0 | 0
+HG008_ONT_SNV_d46_7fc7396 | 162 | 161 | 3 | 3
+HG008_PacBio_SNV_7fc7396 | 9 | 9 | 0 | 0
+HG008_PacBio_SNV_d46_7fc7396 | 6 | 6 | 1 | 1
