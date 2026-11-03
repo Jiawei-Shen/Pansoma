@@ -1,29 +1,33 @@
 #!/bin/bash
 # A run's chr1 predictions -> graph VCF -> GRCh38 VCF -> PoN + rtg vcfeval against the truth VCF of the
 # set's labels, inside the benchmark BED (eval_bed) and on the whole chromosome (eval_nobed), into <run>/vcf_chr1/.
-# PASS is graph_vcf's default (the checkpoint's validation recall-0.9 threshold); THRESHOLD (a number, or
-# "predict" for predict's own call) overrides it.
-# --set SET (a joint_run.sh run): the predictions <run>/test_chr1_<SET>/ of that set, into <run>/vcf_chr1_<SET>/.
+# PASS is graph_vcf's default, the checkpoint's call rule (SNV: the validation recall-0.9 threshold; the INDEL recipe of
+# 9919d4a: the post-PoN validation recall 0.8 of the callable positives); THRESHOLD (a number, "predict" for predict's
+# own call, or a rule: postpon, postpon-recall, recall) overrides it. SUFFIX is appended to the output directory
+# (e.g. "postpon _postpon" -> <run>/vcf_chr1_postpon/), so another threshold does not replace the default's calls.
+# --set SET (a joint_run.sh run, or another set predicted by predict_set.sh): the predictions <run>/test_chr1_<SET>/ of
+# that set, into <run>/vcf_chr1_<SET>/.
 # The graph index and GRCh38 reference path are those the set was built and labelled with (manifest.json graph_index,
 # labels.manifest.json reference_path), by name in Dataset/pansoma_v2_tensors/graph_index/ (HPRC v1.1 d9, HPRC v2.1 d46
 # or the GRCh38-only graph).
-# Usage: vcf.sh [--set SET] RUN KIND [THRESHOLD]. A CPU job:
+# Usage: vcf.sh [--set SET] RUN KIND [THRESHOLD [SUFFIX]]. A CPU job:
 #   ris/submit.sh -g 0 -n 4 -m 32 pnv2_vcf vcf.sh HG008_Illumina_SNV_recipe SNV
 #   ris/submit.sh -g 0 -n 4 -m 32 pnv2_vcf vcf.sh HG008_Illumina_SNV_test SNV predict
 #   ris/submit.sh -g 0 -n 4 -m 32 pnv2_vcf vcf.sh --set COLO829T_Illumina_P50 COLO829_Illumina_SNV_joint SNV
+#   ris/submit.sh -g 0 -n 4 -m 32 pnv2_vcf vcf.sh HG008_Illumina_INDEL_d46_ppr8 INDEL postpon _postpon
 set -euo pipefail
 source "$(dirname "$0")/env.sh"
 SET=""; if [ "${1:-}" = --set ]; then SET=$2; shift 2; fi
-RUN=$1 KIND=$2 THRESHOLD=${3:-}
+RUN=$1 KIND=$2 THRESHOLD=${3:-} SUFFIX=${4:-}
 D=$PANSOMA_RUNS/$RUN
 G=$PANSOMA_DATA/pansoma_v2_tensors/graph_index
 FASTA=$PANSOMA_DATA/REF/GCA_000001405.15_GRCh38_no_alt_analysis_set.fa
 SDF=$PANSOMA_DATA/REF/GCA_000001405.15_GRCh38_no_alt_analysis_set.sdf
 PON=$PANSOMA_DATA/panel_of_normal_VCFs
 if [ -n "$SET" ]; then
-  T=$PANSOMA_DATA/pansoma_v2_tensors/$SET/tensors PRED=$D/test_chr1_$SET O=$D/vcf_chr1_$SET
+  T=$PANSOMA_DATA/pansoma_v2_tensors/$SET/tensors PRED=$D/test_chr1_$SET O=$D/vcf_chr1_$SET$SUFFIX
 else
-  T=$(python -c "import json, sys; print(json.load(open(sys.argv[1]))['tensors'][0])" "$D/args.json") PRED=$D/test_chr1 O=$D/vcf_chr1
+  T=$(python -c "import json, sys; print(json.load(open(sys.argv[1]))['tensors'][0])" "$D/args.json") PRED=$D/test_chr1 O=$D/vcf_chr1$SUFFIX
 fi
 P=$(ls "$PRED"/*."$KIND".predictions.ndjson.gz)
 read -r GI RP < <(python -c "import json, os, sys; print(os.path.basename(json.load(open(sys.argv[1]))['graph_index']['path']),

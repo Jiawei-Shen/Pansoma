@@ -1,0 +1,628 @@
+{
+ "COLO829_Illumina/d46/all": {
+  "n": 941,
+  "context": {
+   "none": 197,
+   "STR": 77,
+   "HP>=7": 619,
+   "HP4-6": 45,
+   "VNTR": 3
+  },
+  "type": {
+   "DEL": 557,
+   "INS": 384
+  }
+ },
+ "COLO829_Illumina/d46/shared": {
+  "n": 176,
+  "context": {
+   "none": 46,
+   "HP>=7": 110,
+   "HP4-6": 13,
+   "STR": 6,
+   "VNTR": 1
+  },
+  "type": {
+   "DEL": 95,
+   "INS": 81
+  }
+ },
+ "COLO829_Illumina/d46/other cand.": {
+  "n": 369,
+  "context": {
+   "none": 78,
+   "HP>=7": 263,
+   "HP4-6": 11,
+   "VNTR": 2,
+   "STR": 15
+  },
+  "type": {
+   "DEL": 214,
+   "INS": 155
+  }
+ },
+ "COLO829_Illumina/d46/own only": {
+  "n": 396,
+  "context": {
+   "STR": 56,
+   "HP>=7": 246,
+   "none": 73,
+   "HP4-6": 21
+  },
+  "type": {
+   "DEL": 248,
+   "INS": 148
+  }
+ },
+ "COLO829_Illumina/d46/own only: PoN removed": {
+  "n": 103,
+  "context": {
+   "HP>=7": 80,
+   "none": 14,
+   "STR": 9
+  },
+  "type": {}
+ },
+ "COLO829_Illumina/d46/own only: no candidate": {
+  "n": 293,
+  "context": {
+   "STR": 47,
+   "HP>=7": 166,
+   "none": 59,
+   "HP4-6": 21
+  },
+  "type": {}
+ },
+ "COLO829_Illumina/linear/all": {
+  "n": 439,
+  "context": {
+   "none": 148,
+   "STR": 93,
+   "HP>=7": 163,
+   "HP4-6": 31,
+   "VNTR": 4
+  },
+  "type": {
+   "DEL": 281,
+   "INS": 158
+  }
+ },
+ "COLO829_Illumina/linear/shared": {
+  "n": 176,
+  "context": {
+   "none": 45,
+   "HP>=7": 110,
+   "HP4-6": 13,
+   "STR": 7,
+   "VNTR": 1
+  },
+  "type": {
+   "DEL": 95,
+   "INS": 81
+  }
+ },
+ "COLO829_Illumina/linear/other cand.": {
+  "n": 31,
+  "context": {
+   "HP>=7": 14,
+   "none": 10,
+   "STR": 4,
+   "HP4-6": 3
+  },
+  "type": {
+   "INS": 16,
+   "DEL": 15
+  }
+ },
+ "COLO829_Illumina/linear/own only": {
+  "n": 232,
+  "context": {
+   "none": 93,
+   "STR": 82,
+   "HP4-6": 15,
+   "VNTR": 3,
+   "HP>=7": 39
+  },
+  "type": {
+   "DEL": 171,
+   "INS": 61
+  }
+ },
+ "COLO829_Illumina/linear/own only: PoN removed": {
+  "n": 12,
+  "context": {
+   "STR": 9,
+   "none": 2,
+   "HP>=7": 1
+  },
+  "type": {}
+ },
+ "COLO829_Illumina/linear/own only: no candidate": {
+  "n": 220,
+  "context": {
+   "none": 91,
+   "STR": 73,
+   "HP4-6": 15,
+   "VNTR": 3,
+   "HP>=7": 38
+  },
+  "type": {}
+ },
+ "COLO829_Illumina/truth": {
+  "n": 131,
+  "context": {
+   "none": 28,
+   "HP>=7": 70,
+   "HP4-6": 6,
+   "STR": 27
+  }
+ },
+ "COLO829_fiberseq/d46/all": {
+  "n": 777,
+  "context": {
+   "HP>=7": 516,
+   "none": 163,
+   "HP4-6": 31,
+   "STR": 64,
+   "VNTR": 3
+  },
+  "type": {
+   "DEL": 435,
+   "INS": 342
+  }
+ },
+ "COLO829_fiberseq/d46/shared": {
+  "n": 139,
+  "context": {
+   "none": 50,
+   "HP>=7": 74,
+   "HP4-6": 12,
+   "STR": 2,
+   "VNTR": 1
+  },
+  "type": {
+   "DEL": 77,
+   "INS": 62
+  }
+ },
+ "COLO829_fiberseq/d46/other cand.": {
+  "n": 338,
+  "context": {
+   "HP>=7": 262,
+   "none": 49,
+   "HP4-6": 8,
+   "STR": 17,
+   "VNTR": 2
+  },
+  "type": {
+   "INS": 142,
+   "DEL": 196
+  }
+ },
+ "COLO829_fiberseq/d46/own only": {
+  "n": 300,
+  "context": {
+   "HP>=7": 180,
+   "none": 64,
+   "STR": 45,
+   "HP4-6": 11
+  },
+  "type": {
+   "INS": 138,
+   "DEL": 162
+  }
+ },
+ "COLO829_fiberseq/d46/own only: PoN removed": {
+  "n": 100,
+  "context": {
+   "HP>=7": 57,
+   "none": 23,
+   "STR": 17,
+   "HP4-6": 3
+  },
+  "type": {}
+ },
+ "COLO829_fiberseq/d46/own only: no candidate": {
+  "n": 200,
+  "context": {
+   "HP>=7": 123,
+   "STR": 28,
+   "none": 41,
+   "HP4-6": 8
+  },
+  "type": {}
+ },
+ "COLO829_fiberseq/linear/all": {
+  "n": 435,
+  "context": {
+   "none": 188,
+   "STR": 95,
+   "HP>=7": 121,
+   "HP4-6": 24,
+   "VNTR": 7
+  },
+  "type": {
+   "DEL": 228,
+   "INS": 207
+  }
+ },
+ "COLO829_fiberseq/linear/shared": {
+  "n": 139,
+  "context": {
+   "none": 50,
+   "HP>=7": 74,
+   "HP4-6": 12,
+   "STR": 2,
+   "VNTR": 1
+  },
+  "type": {
+   "DEL": 77,
+   "INS": 62
+  }
+ },
+ "COLO829_fiberseq/linear/other cand.": {
+  "n": 25,
+  "context": {
+   "HP>=7": 19,
+   "STR": 2,
+   "none": 2,
+   "HP4-6": 2
+  },
+  "type": {
+   "DEL": 17,
+   "INS": 8
+  }
+ },
+ "COLO829_fiberseq/linear/own only": {
+  "n": 271,
+  "context": {
+   "none": 136,
+   "STR": 91,
+   "HP4-6": 10,
+   "HP>=7": 28,
+   "VNTR": 6
+  },
+  "type": {
+   "DEL": 134,
+   "INS": 137
+  }
+ },
+ "COLO829_fiberseq/linear/own only: PoN removed": {
+  "n": 8,
+  "context": {
+   "STR": 5,
+   "none": 2,
+   "HP>=7": 1
+  },
+  "type": {}
+ },
+ "COLO829_fiberseq/linear/own only: no candidate": {
+  "n": 263,
+  "context": {
+   "none": 134,
+   "STR": 86,
+   "HP4-6": 10,
+   "HP>=7": 27,
+   "VNTR": 6
+  },
+  "type": {}
+ },
+ "COLO829_fiberseq/truth": {
+  "n": 131,
+  "context": {
+   "none": 28,
+   "HP>=7": 70,
+   "HP4-6": 6,
+   "STR": 27
+  }
+ },
+ "HG008_Illumina/d46/all": {
+  "n": 709,
+  "context": {
+   "HP>=7": 571,
+   "HP4-6": 37,
+   "none": 90,
+   "STR": 11
+  },
+  "type": {
+   "INS": 342,
+   "DEL": 367
+  }
+ },
+ "HG008_Illumina/d46/shared": {
+  "n": 321,
+  "context": {
+   "HP>=7": 262,
+   "none": 41,
+   "HP4-6": 17,
+   "STR": 1
+  },
+  "type": {
+   "INS": 178,
+   "DEL": 143
+  }
+ },
+ "HG008_Illumina/d46/other cand.": {
+  "n": 114,
+  "context": {
+   "HP>=7": 80,
+   "none": 26,
+   "HP4-6": 6,
+   "STR": 2
+  },
+  "type": {
+   "INS": 63,
+   "DEL": 51
+  }
+ },
+ "HG008_Illumina/d46/own only": {
+  "n": 274,
+  "context": {
+   "HP4-6": 14,
+   "HP>=7": 229,
+   "none": 23,
+   "STR": 8
+  },
+  "type": {
+   "INS": 101,
+   "DEL": 173
+  }
+ },
+ "HG008_Illumina/d46/own only: PoN removed": {
+  "n": 192,
+  "context": {
+   "HP4-6": 9,
+   "HP>=7": 170,
+   "none": 9,
+   "STR": 4
+  },
+  "type": {}
+ },
+ "HG008_Illumina/d46/own only: no candidate": {
+  "n": 82,
+  "context": {
+   "HP4-6": 5,
+   "HP>=7": 59,
+   "none": 14,
+   "STR": 4
+  },
+  "type": {}
+ },
+ "HG008_Illumina/linear/all": {
+  "n": 769,
+  "context": {
+   "STR": 57,
+   "none": 147,
+   "HP>=7": 535,
+   "HP4-6": 29,
+   "VNTR": 1
+  },
+  "type": {
+   "INS": 406,
+   "DEL": 363
+  }
+ },
+ "HG008_Illumina/linear/shared": {
+  "n": 321,
+  "context": {
+   "HP>=7": 262,
+   "none": 41,
+   "HP4-6": 17,
+   "STR": 1
+  },
+  "type": {
+   "INS": 178,
+   "DEL": 143
+  }
+ },
+ "HG008_Illumina/linear/other cand.": {
+  "n": 144,
+  "context": {
+   "HP>=7": 104,
+   "STR": 12,
+   "HP4-6": 4,
+   "none": 24
+  },
+  "type": {
+   "INS": 49,
+   "DEL": 95
+  }
+ },
+ "HG008_Illumina/linear/own only": {
+  "n": 304,
+  "context": {
+   "STR": 44,
+   "none": 82,
+   "HP4-6": 8,
+   "HP>=7": 169,
+   "VNTR": 1
+  },
+  "type": {
+   "DEL": 125,
+   "INS": 179
+  }
+ },
+ "HG008_Illumina/linear/own only: PoN removed": {
+  "n": 31,
+  "context": {
+   "HP>=7": 26,
+   "STR": 3,
+   "none": 2
+  },
+  "type": {}
+ },
+ "HG008_Illumina/linear/own only: no candidate": {
+  "n": 273,
+  "context": {
+   "STR": 41,
+   "none": 80,
+   "HP4-6": 8,
+   "HP>=7": 143,
+   "VNTR": 1
+  },
+  "type": {}
+ },
+ "HG008_Illumina/truth": {
+  "n": 587,
+  "context": {
+   "none": 80,
+   "HP4-6": 7,
+   "HP>=7": 435,
+   "STR": 65
+  }
+ },
+ "HG008_PacBio/d46/all": {
+  "n": 552,
+  "context": {
+   "none": 97,
+   "HP4-6": 26,
+   "HP>=7": 420,
+   "STR": 8,
+   "VNTR": 1
+  },
+  "type": {
+   "INS": 305,
+   "DEL": 247
+  }
+ },
+ "HG008_PacBio/d46/shared": {
+  "n": 314,
+  "context": {
+   "HP>=7": 248,
+   "none": 49,
+   "HP4-6": 12,
+   "STR": 5
+  },
+  "type": {
+   "INS": 189,
+   "DEL": 125
+  }
+ },
+ "HG008_PacBio/d46/other cand.": {
+  "n": 98,
+  "context": {
+   "HP>=7": 61,
+   "none": 29,
+   "HP4-6": 6,
+   "STR": 2
+  },
+  "type": {
+   "DEL": 55,
+   "INS": 43
+  }
+ },
+ "HG008_PacBio/d46/own only": {
+  "n": 140,
+  "context": {
+   "none": 19,
+   "HP4-6": 8,
+   "HP>=7": 111,
+   "STR": 1,
+   "VNTR": 1
+  },
+  "type": {
+   "DEL": 67,
+   "INS": 73
+  }
+ },
+ "HG008_PacBio/d46/own only: PoN removed": {
+  "n": 81,
+  "context": {
+   "HP4-6": 4,
+   "HP>=7": 69,
+   "none": 7,
+   "STR": 1
+  },
+  "type": {}
+ },
+ "HG008_PacBio/d46/own only: no candidate": {
+  "n": 59,
+  "context": {
+   "none": 12,
+   "HP>=7": 42,
+   "VNTR": 1,
+   "HP4-6": 4
+  },
+  "type": {}
+ },
+ "HG008_PacBio/linear/all": {
+  "n": 1103,
+  "context": {
+   "none": 227,
+   "HP>=7": 728,
+   "STR": 131,
+   "HP4-6": 17
+  },
+  "type": {
+   "INS": 652,
+   "DEL": 451
+  }
+ },
+ "HG008_PacBio/linear/shared": {
+  "n": 314,
+  "context": {
+   "HP>=7": 248,
+   "none": 49,
+   "HP4-6": 12,
+   "STR": 5
+  },
+  "type": {
+   "INS": 189,
+   "DEL": 125
+  }
+ },
+ "HG008_PacBio/linear/other cand.": {
+  "n": 325,
+  "context": {
+   "HP>=7": 228,
+   "none": 65,
+   "STR": 29,
+   "HP4-6": 3
+  },
+  "type": {
+   "INS": 168,
+   "DEL": 157
+  }
+ },
+ "HG008_PacBio/linear/own only": {
+  "n": 464,
+  "context": {
+   "none": 113,
+   "HP>=7": 252,
+   "STR": 97,
+   "HP4-6": 2
+  },
+  "type": {
+   "INS": 295,
+   "DEL": 169
+  }
+ },
+ "HG008_PacBio/linear/own only: PoN removed": {
+  "n": 109,
+  "context": {
+   "none": 8,
+   "HP>=7": 88,
+   "STR": 13
+  },
+  "type": {}
+ },
+ "HG008_PacBio/linear/own only: no candidate": {
+  "n": 355,
+  "context": {
+   "none": 105,
+   "HP>=7": 164,
+   "STR": 84,
+   "HP4-6": 2
+  },
+  "type": {}
+ },
+ "HG008_PacBio/truth": {
+  "n": 587,
+  "context": {
+   "none": 80,
+   "HP4-6": 7,
+   "HP>=7": 435,
+   "STR": 65
+  }
+ }
+}

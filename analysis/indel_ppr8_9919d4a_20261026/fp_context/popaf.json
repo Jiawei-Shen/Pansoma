@@ -1,0 +1,146 @@
+{
+ "COLO829_Illumina/d46/shared": {
+  "n": 176,
+  "no population signal": 77,
+  "other allele here": 40,
+  "same allele, missed": 59
+ },
+ "COLO829_Illumina/d46/other cand.": {
+  "n": 369,
+  "other allele here": 122,
+  "same allele, missed": 104,
+  "no population signal": 143
+ },
+ "COLO829_Illumina/d46/own only: PoN removed": {
+  "n": 103,
+  "no population signal": 19,
+  "other allele here": 79,
+  "same allele, missed": 5
+ },
+ "COLO829_Illumina/d46/own only: no candidate": {
+  "n": 293,
+  "other allele here": 166,
+  "same allele, missed": 30,
+  "no population signal": 97
+ },
+ "COLO829_Illumina/linear/own only": {
+  "n": 232,
+  "no population signal": 144,
+  "other allele here": 76,
+  "same allele, missed": 12
+ },
+ "COLO829_Illumina/linear/other": {
+  "n": 207,
+  "no population signal": 91,
+  "other allele here": 50,
+  "same allele, missed": 66
+ },
+ "COLO829_fiberseq/d46/shared": {
+  "n": 139,
+  "no population signal": 76,
+  "same allele, missed": 37,
+  "other allele here": 26
+ },
+ "COLO829_fiberseq/d46/other cand.": {
+  "n": 338,
+  "same allele, missed": 107,
+  "no population signal": 125,
+  "other allele here": 106
+ },
+ "COLO829_fiberseq/d46/own only: PoN removed": {
+  "n": 100,
+  "no population signal": 28,
+  "other allele here": 67,
+  "same allele, missed": 5
+ },
+ "COLO829_fiberseq/d46/own only: no candidate": {
+  "n": 200,
+  "other allele here": 142,
+  "same allele, missed": 19,
+  "no population signal": 39
+ },
+ "COLO829_fiberseq/linear/own only": {
+  "n": 271,
+  "no population signal": 201,
+  "same allele, missed": 4,
+  "other allele here": 66
+ },
+ "COLO829_fiberseq/linear/other": {
+  "n": 164,
+  "no population signal": 86,
+  "same allele, missed": 41,
+  "other allele here": 37
+ },
+ "HG008_Illumina/d46/shared": {
+  "n": 321,
+  "no population signal": 133,
+  "same allele, missed": 139,
+  "other allele here": 49
+ },
+ "HG008_Illumina/d46/other cand.": {
+  "n": 114,
+  "same allele, missed": 29,
+  "other allele here": 21,
+  "no population signal": 64
+ },
+ "HG008_Illumina/d46/own only: PoN removed": {
+  "n": 192,
+  "other allele here": 156,
+  "same allele, missed": 16,
+  "no population signal": 20
+ },
+ "HG008_Illumina/d46/own only: no candidate": {
+  "n": 82,
+  "other allele here": 41,
+  "no population signal": 31,
+  "same allele, missed": 10
+ },
+ "HG008_Illumina/linear/own only": {
+  "n": 304,
+  "no population signal": 94,
+  "other allele here": 193,
+  "same allele, missed": 17
+ },
+ "HG008_Illumina/linear/other": {
+  "n": 465,
+  "other allele here": 126,
+  "no population signal": 182,
+  "same allele, missed": 157
+ },
+ "HG008_PacBio/d46/shared": {
+  "n": 314,
+  "no population signal": 137,
+  "same allele, missed": 137,
+  "other allele here": 40
+ },
+ "HG008_PacBio/d46/other cand.": {
+  "n": 98,
+  "same allele, missed": 25,
+  "no population signal": 50,
+  "other allele here": 23
+ },
+ "HG008_PacBio/d46/own only: PoN removed": {
+  "n": 81,
+  "other allele here": 61,
+  "same allele, missed": 6,
+  "no population signal": 14
+ },
+ "HG008_PacBio/d46/own only: no candidate": {
+  "n": 59,
+  "no population signal": 31,
+  "other allele here": 26,
+  "same allele, missed": 2
+ },
+ "HG008_PacBio/linear/own only": {
+  "n": 464,
+  "other allele here": 333,
+  "same allele, missed": 42,
+  "no population signal": 89
+ },
+ "HG008_PacBio/linear/other": {
+  "n": 639,
+  "other allele here": 273,
+  "no population signal": 207,
+  "same allele, missed": 159
+ }
+}
