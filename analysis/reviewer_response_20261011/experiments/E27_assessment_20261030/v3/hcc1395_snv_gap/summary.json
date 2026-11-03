@@ -1,0 +1,104 @@
+{
+ "Illumina": {
+  "truth": 3440,
+  "status": {
+   "tensor_representative": 3148,
+   "filtered:min_af": 244,
+   "no_candidate": 23,
+   "filtered:min_variants": 25
+  },
+  "deepsomatic": {
+   "recall": 0.9273255813953488,
+   "pansoma_recall": 0.8218023255813953,
+   "both": 2799,
+   "comparator_only": 391,
+   "pansoma_only": 28,
+   "comparator_only_status": {
+    "filtered:min_af": 141,
+    "tensor_representative": 241,
+    "no_candidate": 9
+   }
+  },
+  "clairs_to": {
+   "recall": 0.8593023255813953,
+   "pansoma_recall": 0.8218023255813953,
+   "both": 2655,
+   "comparator_only": 301,
+   "pansoma_only": 172,
+   "comparator_only_status": {
+    "filtered:min_af": 55,
+    "tensor_representative": 241,
+    "no_candidate": 5
+   }
+  }
+ },
+ "PacBio": {
+  "truth": 3440,
+  "status": {
+   "tensor_representative": 3024,
+   "filtered:min_variants": 143,
+   "filtered:min_af": 204,
+   "no_candidate": 69
+  },
+  "deepsomatic": {
+   "recall": 0.9273255813953488,
+   "pansoma_recall": 0.8087209302325581,
+   "both": 2740,
+   "comparator_only": 450,
+   "pansoma_only": 42,
+   "comparator_only_status": {
+    "filtered:min_af": 201,
+    "tensor_representative": 167,
+    "filtered:min_variants": 71,
+    "no_candidate": 11
+   }
+  },
+  "clairs_to": {
+   "recall": 0.8223837209302326,
+   "pansoma_recall": 0.8087209302325581,
+   "both": 2636,
+   "comparator_only": 193,
+   "pansoma_only": 146,
+   "comparator_only_status": {
+    "tensor_representative": 159,
+    "filtered:min_af": 27,
+    "filtered:min_variants": 3,
+    "no_candidate": 4
+   }
+  }
+ },
+ "ONT": {
+  "truth": 3440,
+  "status": {
+   "tensor_representative": 2652,
+   "filtered:min_variants": 356,
+   "no_candidate": 205,
+   "filtered:min_af": 227
+  },
+  "deepsomatic": {
+   "recall": 0.7656976744186047,
+   "pansoma_recall": 0.6968023255813953,
+   "both": 2344,
+   "comparator_only": 290,
+   "pansoma_only": 53,
+   "comparator_only_status": {
+    "tensor_representative": 179,
+    "filtered:min_variants": 9,
+    "filtered:min_af": 101,
+    "no_candidate": 1
+   }
+  },
+  "clairs_to": {
+   "recall": 0.7302325581395349,
+   "pansoma_recall": 0.6968023255813953,
+   "both": 2331,
+   "comparator_only": 181,
+   "pansoma_only": 66,
+   "comparator_only_status": {
+    "tensor_representative": 167,
+    "filtered:min_af": 13,
+    "no_candidate": 1
+   }
+  }
+ }
+}
