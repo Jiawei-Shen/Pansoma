@@ -1,0 +1,11 @@
+2026-11-02 pull ClairS-TO v0.4.1 SIF: 466590 (maotai; 466589 cancelled before start: removed the rm -rf of a variable path)
+2026-11-02 ClairS-TO no-PoN HG008T_Illumina (0.4.2, meow): 466593
+2026-11-02 ClairS-TO no-PoN HG008T_PacBio (0.4.2, miao): 466595
+2026-11-02 ClairS-TO no-PoN HG008T_ONT (0.4.2, guinness): 466596
+2026-11-02 ClairS-TO no-PoN HCC1395T_Illumina (0.4.2, meow): 466597
+2026-11-02 ClairS-TO no-PoN HCC1395T_PacBio (0.4.2, miao): 466598
+2026-11-02 ClairS-TO no-PoN HCC1395T_ONT (0.4.2, guinness): 466599
+2026-11-02 ClairS-TO no-PoN COLO829T_Illumina (0.4.1, maotai, after the 0.4.1 pull 466590): 466612
+2026-11-02 ClairS-TO no-PoN COLO829T_fiberseq (0.4.1, maotai, after the 0.4.1 pull 466590): 466613
+2026-11-02 ClairS-TO no-PoN COLO829T_ONT (0.4.1, meow, after the 0.4.1 pull 466590): 466614
+2026-11-02 cleanup maotai:/tmp/jshen_singularity_466590 (literal path): 466879

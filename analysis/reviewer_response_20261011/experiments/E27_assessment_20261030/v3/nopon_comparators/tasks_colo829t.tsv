@@ -1,0 +1,12 @@
+clairs_to	COLO829T_Illumina	SNV	COLO829T_Illumina	chr1	/scratch/jshen/Pansoma_testing_results/VCF_results/clairs-to_COLO829T_WGS/snv.vcf.gz,/scratch/jshen/Pansoma_testing_results/VCF_results/clairs-to_COLO829T_WGS/indel.vcf.gz
+clairs_to	COLO829T_fiberseq	SNV	COLO829T_fiberseq	chr1	/scratch/jshen/Pansoma_testing_results/VCF_results/clairs-to_COLO829T_Pacbio/snv.vcf.gz,/scratch/jshen/Pansoma_testing_results/VCF_results/clairs-to_COLO829T_Pacbio/indel.vcf.gz
+clairs_to	COLO829T_ONT	SNV	COLO829T_ONT	chr1	/scratch/jshen/Pansoma_testing_results/VCF_results/clairs-to_COLO829T_ONT/snv.vcf.gz,/scratch/jshen/Pansoma_testing_results/VCF_results/clairs-to_COLO829T_ONT/indel.vcf.gz
+deepsomatic	COLO829T_Illumina	SNV	COLO829T_Illumina	chr1	/scratch/jshen/Pansoma_testing_results/VCF_results/deepsomatic_COLO829T_WGS/COLO829T_WGS.chr1.vcf.gz
+deepsomatic	COLO829T_fiberseq	SNV	COLO829T_fiberseq	chr1	/scratch/jshen/Pansoma_testing_results/VCF_results/deepsomatic_COLO829T_Pacbio/COLO829T_Pacbio.chr1.vcf.gz
+deepsomatic	COLO829T_ONT	SNV	COLO829T_ONT	chr1	/scratch/jshen/Pansoma_testing_results/VCF_results/deepsomatic_COLO829T_ONT/COLO829T_ONT.chr1.vcf.gz
+clairs_to	COLO829T_Illumina	INDEL	COLO829T_Illumina	chr1	/scratch/jshen/Pansoma_testing_results/VCF_results/clairs-to_COLO829T_WGS/snv.vcf.gz,/scratch/jshen/Pansoma_testing_results/VCF_results/clairs-to_COLO829T_WGS/indel.vcf.gz
+clairs_to	COLO829T_fiberseq	INDEL	COLO829T_fiberseq	chr1	/scratch/jshen/Pansoma_testing_results/VCF_results/clairs-to_COLO829T_Pacbio/snv.vcf.gz,/scratch/jshen/Pansoma_testing_results/VCF_results/clairs-to_COLO829T_Pacbio/indel.vcf.gz
+clairs_to	COLO829T_ONT	INDEL	COLO829T_ONT	chr1	/scratch/jshen/Pansoma_testing_results/VCF_results/clairs-to_COLO829T_ONT/snv.vcf.gz,/scratch/jshen/Pansoma_testing_results/VCF_results/clairs-to_COLO829T_ONT/indel.vcf.gz
+deepsomatic	COLO829T_Illumina	INDEL	COLO829T_Illumina	chr1	/scratch/jshen/Pansoma_testing_results/VCF_results/deepsomatic_COLO829T_WGS/COLO829T_WGS.chr1.vcf.gz
+deepsomatic	COLO829T_fiberseq	INDEL	COLO829T_fiberseq	chr1	/scratch/jshen/Pansoma_testing_results/VCF_results/deepsomatic_COLO829T_Pacbio/COLO829T_Pacbio.chr1.vcf.gz
+deepsomatic	COLO829T_ONT	INDEL	COLO829T_ONT	chr1	/scratch/jshen/Pansoma_testing_results/VCF_results/deepsomatic_COLO829T_ONT/COLO829T_ONT.chr1.vcf.gz
