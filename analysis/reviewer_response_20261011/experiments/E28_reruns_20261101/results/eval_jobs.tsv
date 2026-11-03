@@ -30,3 +30,7 @@
 466559	466560	release_s1_ONT_INDEL	excl	HCC1395T_ONT_d46	chr20
 466561	466562	release_s1_ONT_INDEL	excl	HG008T_ONT_d46	chr1
 466563	466564	release_s1_ONT_INDEL	excl	COLO829T_ONT_d46	chr1
+467676	467677	release_s2_PacBio_INDEL	best	HCC1395T_PacBio_d46	chr1
+467678	467679	release_s2_PacBio_INDEL	best	HCC1395T_PacBio_d46	chr20
+467680	467681	release_s2_PacBio_INDEL	best	HG008T_PacBio_d46	chr1
+467682	467683	release_s2_PacBio_INDEL	best	COLO829T_fiberseq_d46	chr1

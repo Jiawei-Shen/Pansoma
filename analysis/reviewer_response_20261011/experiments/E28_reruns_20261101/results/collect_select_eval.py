@@ -31,3 +31,17 @@ for x in rows:
 (HERE / "select_eval.md").write_text("\n".join(L) + "\n")
 (HERE / "select_eval.json").write_text(json.dumps(rows, indent=1))
 print("\n".join(L))
+
+# Reproduction: reruns that are not bit-identical but keep the reported epoch under the original rule; test F1 of the
+# rerun's best.pth (vcf_ppr8_best_*) against the reported model's (vcf_ppr8_* of the release run). -> select_repro.md
+L = ["| run (epoch) | test | reported F1 | rerun F1 | Δ F1 |", "|---|---|---|---|---|"]
+for run, r in sel.items():
+    if not r.get("complete") or (r["max_dloss"] == 0 and r["max_dsel"] == 0) or r["sel_epoch"] != r["orig_sel_epoch"]:
+        continue
+    p = run.split("_")[2]; co = "COLO829T_fiberseq" if p == "PacBio" else f"COLO829T_{p}"
+    for s, c in ((f"HCC1395T_{p}_d46", "chr1"), (f"HG008T_{p}_d46", "chr1"), (f"{co}_d46", "chr1"), (f"HCC1395T_{p}_d46", "chr20")):
+        a = rep(R / run / f"vcf_ppr8_{c}_{s}"); b = rep(R / "selcheck_20261101" / run / f"vcf_ppr8_best_{c}_{s}")
+        d = "-" if not (a and b) else f"{b['F1'] - a['F1']:+.3f}"
+        L.append(f"| {run} ({r['sel_epoch']}) | {c} {s} | {a['F1'] if a else '-'} | {b['F1'] if b else '-'} | {d} |")
+(HERE / "select_repro.md").write_text("\n".join(L) + "\n")
+print("\n".join(L))
