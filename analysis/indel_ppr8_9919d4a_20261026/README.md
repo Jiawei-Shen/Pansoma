@@ -78,9 +78,15 @@ PASS F1, mean [min-max] of seeds 0-2 (post-PoN best, mean); earlier = the seed-0
   chr1 best F1 also rises, most on GRCh38-only (HG008T Illumina 0.183 -> 0.283, PacBio 0.177 -> 0.261, COLO829T
   Illumina 0.068 -> 0.184, fiberseq 0.109 -> 0.224).
 - Recall at PASS is 0.17-0.29 in every run, below the PoN ceiling; precision decides F1.
-- ONT: PASS stays near zero. The post-PoN recall-0.8 threshold is very low on ONT (p >= 0.007-0.14), and PASS calls
-  1,800-17,800 false INDELs on chr1. The post-PoN best-F1 threshold reaches 0.14-0.17 (HG008T) and 0.08-0.11
-  (COLO829T), near the chr1 best (0.15-0.18 / 0.11-0.14).
+- ONT: PASS of these single-set models stays near zero. Their post-PoN recall-0.8 threshold is very low on ONT
+  (p >= 0.007-0.14), and PASS calls 1,800-17,800 false INDELs on chr1. The post-PoN best-F1 threshold reaches 0.14-0.17
+  (HG008T) and 0.08-0.11 (COLO829T), near the chr1 best (0.15-0.18 / 0.11-0.14).
+  Correction (2026-11-02): this is a property of the single-set models, not of the ppr8 call rule as such. The final
+  INDEL models of the pipeline (one model per platform on chr2-22 of every tumor, "release", d46, three seeds;
+  `../reviewer_response_20261011/experiments/E8_comparators/latest_models.md`) reach ONT PASS F1 0.168 (HG008T,
+  P 0.185 / R 0.155) and 0.090 (COLO829T, P 0.064 / R 0.160) with the same rule, against 0.030 / 0.006 here. Their
+  PASS is stricter on every set (recall 0.12-0.17 against 0.20-0.23 here, higher precision). Why the single-set ONT
+  threshold falls so low (one tumor's training data and validation) is not established.
 - Graph vs GRCh38-only, three-seed means: HG008T PacBio is the one set where the graphs win clearly (d46 / d9 +0.029 /
   +0.028 PASS; every graph seed above every GRCh38-only seed). HG008T Illumina: no graph advantage (d46 - GRCh38-only
   -0.008). COLO829T Illumina and fiberseq: GRCh38-only is better (d46 -0.042 / -0.051, d9 -0.009 / -0.068). d46 - d9:
@@ -139,7 +145,8 @@ Per-set models on Illumina, PacBio and fiberseq (three-seed means): post-PoN bes
 loses most on the graph references (HG008T Illumina d46 / d9 -0.035 / -0.034, COLO829T Illumina d46 -0.052,
 fiberseq d46 -0.052) and gains a little on GRCh38-only (+0.004 to +0.019). The post-PoN best-F1 threshold rests on few
 validation positives (somatic validation tensors without a PoN tag: HG008T 94-107, COLO829T 36-39 per d46 set) and is
-noisy. On ONT, and on the fiberseq / ONT purity models, the post-PoN best is far better (PASS precision 0.001-0.05).
+noisy. On ONT, and on the fiberseq / ONT purity models, the post-PoN best is far better (PASS precision 0.001-0.05);
+for ONT this holds for these single-set models, not for the multi-tumor release models (see the ONT correction above).
 
 ### Throughput
 
