@@ -1,0 +1,23 @@
+truth_id	chrom	vcf_pos	vcf_ref	vcf_alt	alt_len_haps	pf_class	outcome	r37_outcome
+1166	chr1	146661847	T	TG	hapX	none	tumor carries only normal haplotype sequences	tumor carries only normal haplotype sequences
+2190	chr1	222346508	C	CTGG	hapX,hapY	none	tumor carries only normal haplotype sequences	tumor carries only normal haplotype sequences
+2561	chr1	248440485	TTAA	T	hapX	none	tumor carries only normal haplotype sequences	tumor carries only normal haplotype sequences
+2565	chr1	248494386	AC	A	hapX	none	tumor carries the truth allele (not in normal)	
+11008	chr4	16339487	C	CTATA	hapX	complex	tumor carries only normal haplotype sequences	tumor carries only normal haplotype sequences
+11351	chr4	32788927	C	CAAA	hapY	STR2-6>=3copies	one tumor hap = normal hap, other hap novel non-truth sequence	one tumor hap = normal hap, other hap novel non-truth sequence
+13098	chr4	115935824	T	TAC	hapX	STR2-6>=3copies	tumor carries the truth allele (not in normal)	
+13579	chr4	136518525	G	GT	hapY	HP>=7	one tumor hap = normal hap, other hap novel non-truth sequence	one tumor hap = normal hap, other hap novel non-truth sequence
+14592	chr4	181082422	TATAGAGAGAG	T	hapX,hapY	complex	tumor carries only normal haplotype sequences	tumor carries only normal haplotype sequences
+15132	chr5	23628786	TTTC	T	hapX	STR2-6>=3copies	tumor carries the truth allele (not in normal)	tumor carries the truth allele (not in normal)
+23117	chr8	9818220	T	TA	hapX	complex	one tumor hap = normal hap, other hap novel non-truth sequence	
+24082	chr8	54633737	CTA	C	hapX	STR2-6>=3copies	tumor carries the truth allele (not in normal)	tumor carries the truth allele (not in normal)
+27786	chr9	130221399	TATATATATATATATAG	T	hapY	STR2-6>=3copies	tumor carries only normal haplotype sequences	tumor carries only normal haplotype sequences
+27926	chr10	5334834	A	AAAAC	hapX	STR2-6>=3copies	tumor carries only normal haplotype sequences	
+29389	chr10	133428931	ATAT	A	hapX	none	tumor carries only normal haplotype sequences	tumor carries only normal haplotype sequences
+29579	chr11	18267403	T	TGTCA	hapX	none	tumor carries only normal haplotype sequences	tumor carries only normal haplotype sequences
+35691	chr14	62818108	GC	G	hapY	HP>=7	tumor carries the truth allele (not in normal)	tumor carries the truth allele (not in normal)
+36311	chr15	28321786	AGGGAG	A	hapX	STR2-6>=3copies	tumor carries only normal haplotype sequences	tumor carries only normal haplotype sequences
+36369	chr15	37101303	CGTGT	C	hapX	complex	novel non-truth sequence only	novel non-truth sequence only
+38059	chr16	74180986	GAAAGAAAGGAAA	G	hapX	complex	tumor carries the truth allele (not in normal)	tumor carries the truth allele (not in normal)
+39235	chr17	75956963	CTCTCTCTCTATATATATATATA	C	hapY	complex	tumor carries only normal haplotype sequences	tumor carries only normal haplotype sequences
+40058	chr18	61210291	C	CAT	hapX	STR2-6>=3copies	tumor carries the truth allele (not in normal)	tumor carries the truth allele (not in normal)
