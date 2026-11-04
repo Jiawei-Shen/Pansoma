@@ -1,4 +1,4 @@
-# usage: python compare.py   -- the evaluation of README.md (fixed before results): SNVs after the PoN in the benchmark BED.
+# python compare.py [PLAT] -- the evaluation of README.md (fixed before results): SNVs after the PoN in the benchmark BED.
 # Models: the AF 0.05 model, the control (floor 0.08, same negative sampling), sitef_ppr9 (floor 0.08, every negative),
 # normfix (no site features), DeepSomatic-TO and ClairS-TO (E8). Site-feature models at rule 1 (their PASS: post-PoN
 # validation callable recall 0.9) and rule 2 (the same at 0.95, the best epoch's validation threshold, from the
@@ -6,10 +6,14 @@
 import glob, gzip, json, os, sys
 R = "/scratch/jshen/data/pansoma_net_v2_runs"
 E8 = "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score"
-AF05, CTRL = sys.argv[1:3] if len(sys.argv) > 2 else ("multicancer6_PacBio_SNV_sitef_af05_pnf25", "multicancer6_PacBio_SNV_sitef_pnf25")
-SITEF = [("AF 0.05 + sampling", AF05), ("0.08 + sampling (control)", CTRL), ("0.08, all negatives (ppr9)", "multicancer6_PacBio_SNV_sitef_ppr9")]
-TESTS = [("HCC1395T chr20", "HCC1395T_PacBio", "chr20"), ("HCC1395T chr1", "HCC1395T_PacBio", "chr1"),
-         ("HG008T chr1", "HG008T_PacBio", "chr1"), ("COLO829T chr1", "COLO829T_fiberseq", "chr1")]
+# usage: python compare.py [PLAT [AF05_RUN CONTROL_RUN]]   (PLAT PacBio (default) | Illumina | ONT)
+PLAT = sys.argv[1] if len(sys.argv) > 1 else "PacBio"
+AF05, CTRL = sys.argv[2:4] if len(sys.argv) > 3 else (f"multicancer6_{PLAT}_SNV_sitef_af05_pnf25", f"multicancer6_{PLAT}_SNV_sitef_pnf25")
+SITEF = [("AF 0.05 + sampling", AF05), ("0.08 + sampling (control)", CTRL), ("0.08, all negatives (ppr9)", f"multicancer6_{PLAT}_SNV_sitef_ppr9")]
+NORMFIX = f"multicancer6_{PLAT}_SNV"
+CO = "COLO829T_fiberseq" if PLAT == "PacBio" else f"COLO829T_{PLAT}"
+TESTS = [("HCC1395T chr20", f"HCC1395T_{PLAT}", "chr20"), ("HCC1395T chr1", f"HCC1395T_{PLAT}", "chr1"),
+         (f"HG008T chr1", f"HG008T_{PLAT}", "chr1"), ("COLO829T chr1", CO, "chr1")]
 ps = lambda info: float(info.split("P_SOMATIC=")[1].split(";")[0])
 
 def recs(f, chrom):
@@ -29,7 +33,7 @@ def cutoffs(run):
 
 def at(run, s, chrom, cut):
     """P, R, F1 and the true calls (keys) at p_somatic >= cut, or at PASS (cut None, report.json)."""
-    E = f"{R}/{run}/vcf_{chrom}_{s}_d46{'_normfix' if run == 'multicancer6_PacBio_SNV' else ''}/eval_bed"
+    E = f"{R}/{run}/vcf_{chrom}_{s}_d46{'_normfix' if run == NORMFIX else ''}/eval_bed"
     if not os.path.exists(f"{E}/report.json"): return None
     a = json.load(open(f"{E}/report.json"))["pon"]["at_threshold"]; n = a["tp_baseline"] + a["fn"]
     if cut is None:
@@ -53,17 +57,17 @@ for name, run in SITEF:
     print(f"{name} ({run}): best epoch {ep}, rule 1 p >= {c1:.3f}, rule 2 p >= {c2:.3f}")
     cols += [(f"{name}, rule 1", lambda s, ch, run=run: at(run, s, ch, None)),
              (f"{name}, rule 2", lambda s, ch, run=run, c2=c2: at(run, s, ch, c2))]
-cols += [("normfix", lambda s, ch: at("multicancer6_PacBio_SNV", s, ch, None)),
+cols += [("normfix", lambda s, ch: at(NORMFIX, s, ch, None)),
          ("DeepSomatic-TO", lambda s, ch: comparator("deepsomatic", s, ch)), ("ClairS-TO", lambda s, ch: comparator("clairs_to", s, ch))]
 fmt = lambda r: "-" if r is None else f"{r[2]:.3f} ({r[0]:.3f} / {r[1]:.3f})"
 res = {(t, c): f(s, ch) for t, s, ch in TESTS for c, f in cols}
-print("\n## PacBio HiFi SNV F1 (P / R) after the PoN, benchmark BED\n")
+print(f"\n## {PLAT} SNV F1 (P / R) after the PoN, benchmark BED\n")
 print("| model | " + " | ".join(t for t, _, _ in TESTS) + " |"); print("|---" * (len(TESTS) + 1) + "|")
 for c, _ in cols: print(f"| {c} | " + " | ".join(fmt(res[(t, c)]) for t, _, _ in TESTS) + " |")
 
 BINS = [(0.05, 0.08), (0.08, 0.25), (0.25, 0.4), (0.4, 0.6), (0.6, 0.85), (0.85, 1.01)]
 for t, s, chrom in TESTS[:2]:
-    base = f"{R}/{AF05}/vcf_{chrom}_{s}_d46/eval_bed"; old = f"{R}/multicancer6_PacBio_SNV/vcf_{chrom}_{s}_d46_normfix/eval_bed"
+    base = f"{R}/{AF05}/vcf_{chrom}_{s}_d46/eval_bed"; old = f"{R}/{NORMFIX}/vcf_{chrom}_{s}_d46_normfix/eval_bed"
     if not os.path.exists(base): continue
     af = {}
     for f in [f"{old}/{s}_d46.SNV.linear.pon.vcf.gz"] + glob.glob(f"{base}/*.SNV.linear.pon.vcf.gz"):

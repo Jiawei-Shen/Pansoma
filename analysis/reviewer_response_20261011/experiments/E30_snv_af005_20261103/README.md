@@ -95,3 +95,16 @@ SNV F1 (P / R) after the PoN, benchmark BED. Rule 1 = the PASS of the checkpoint
 
 One run per model (seed 0). Rule 2 is post hoc for PacBio HiFi (registered in E29 after its PacBio results; the
 Illumina site-feature model is its test, E29).
+
+## Illumina and ONT (user 2026-11-04 13:20: test them too); registered 2026-11-04 13:30, before any of their results
+
+The PacBio HiFi design on the other two platforms. Sets `<SET>_snvaf05` for HCC1395T / HCC1954T / H1437T / H2009T
+Illumina_d46 and ONT_d46 (`make_prepare.py`, `submit_set.sh`; Illumina on maotai / meow / miao / tequila, each ONT
+build after the Illumina one on the same node); HG008T and COLO829T unchanged. ONT site features of the six old sets
+(tmp/snv_sitefeat_20261103/build_sitef.sh). Models (`train.sh DATA F RUN SEED PLAT`, `--pon-negative-fraction 0.25`):
+multicancer6_<PLAT>_SNV_sitef_pnf25 (control, floor 0.08) and multicancer6_<PLAT>_SNV_sitef_af05_pnf25 (floor 0.05 on the
+four CASTLE sets). Evaluation as for PacBio HiFi (`compare.py PLAT`): both rules, HCC1395T chr20 first, chr1 of the
+three tumors, recall by read AF; normfix, DeepSomatic-TO, ClairS-TO; Illumina also sitef_ppr9 (E29).
+Expectation from the counts (chr1, AF 0.05-0.08: Illumina 290,746 candidates for 144 BED truths, ONT 199,177 for 114,
+against PacBio HiFi 8,123 for 167): at most +0.042 / +0.033 recall, and a precision cost; the test is whether the
+models call the band without losing precision. One seed; a difference below the seed range is not an effect.

@@ -16,3 +16,18 @@ vcf HCC1395T_PacBio_d46 chr20 469179
 2026-11-04 12:46:47	INDEL	deleted /scratch/jshen/data/pansoma_v2_tensors/HCC1954T_PacBio_d46_snvaf05/tensors/INDEL (unused duplicate of the old set's INDEL tensors, same --indel-min-af 0.08)
 2026-11-04 12:46:48	INDEL	deleted /scratch/jshen/data/pansoma_v2_tensors/H1437T_PacBio_d46_snvaf05/tensors/INDEL (unused duplicate of the old set's INDEL tensors, same --indel-min-af 0.08)
 2026-11-04 12:46:49	INDEL	deleted /scratch/jshen/data/pansoma_v2_tensors/H2009T_PacBio_d46_snvaf05/tensors/INDEL (unused duplicate of the old set's INDEL tensors, same --indel-min-af 0.08)
+2026-11-04 13:14:42	multicancer6_PacBio_SNV_sitef_af05_pnf25_seed1	train 470381 (data af05, F 0.25, seed 1) vcf_HCC1395T_PacBio_d46_chr1 470382 vcf_HG008T_PacBio_d46_chr1 470383 vcf_COLO829T_fiberseq_d46_chr1 470384 vcf_HCC1395T_PacBio_d46_chr20 470385
+2026-11-04 13:14:42	multicancer6_PacBio_SNV_sitef_pnf25_seed1	train 470386 (data af08, F 0.25, seed 1) vcf_HCC1395T_PacBio_d46_chr1 470387 vcf_HG008T_PacBio_d46_chr1 470388 vcf_COLO829T_fiberseq_d46_chr1 470389 vcf_HCC1395T_PacBio_d46_chr20 470390
+2026-11-04 13:14:51	seed 1 reruns of af05_pnf25 and pnf25 (user 'resume' 11-04 13:14; GPUs idle): 470381-470390
+2026-11-04 13:23:01	HCC1395T_Illumina_d46	prepare 470391 run 470392 (-p general -w maotai -c 48 --mem=250G) fallback 470393 finalize 470394 sitef 470395
+2026-11-04 13:23:01	HCC1395T_ONT_d46	prepare 470396 run 470397 (-p general -w maotai -c 40 --mem=340G) fallback 470398 finalize 470399 sitef 470400
+2026-11-04 13:23:01	HCC1954T_Illumina_d46	prepare 470401 run 470402 (-p general -w meow -c 48 --mem=250G) fallback 470403 finalize 470404 sitef 470405
+2026-11-04 13:23:01	HCC1954T_ONT_d46	prepare 470406 run 470407 (-p general -w meow -c 40 --mem=260G) fallback 470408 finalize 470409 sitef 470410
+2026-11-04 13:23:01	H1437T_Illumina_d46	prepare 470411 run 470412 (-p general -w miao -c 48 --mem=250G) fallback 470413 finalize 470414 sitef 470415
+2026-11-04 13:23:01	H1437T_ONT_d46	prepare 470416 run 470417 (-p general -w miao -c 40 --mem=260G) fallback 470418 finalize 470419 sitef 470420
+2026-11-04 13:23:01	H2009T_Illumina_d46	prepare 470421 run 470422 (-p gpu -w tequila -c 48 --mem=250G) fallback 470423 finalize 470424 sitef 470425
+2026-11-04 13:23:01	H2009T_ONT_d46	prepare 470426 run 470427 (-p gpu -w tequila -c 40 --mem=300G) fallback 470428 finalize 470429 sitef 470430
+2026-11-04 13:23:46	multicancer6_Illumina_SNV_sitef_pnf25	train 470437 (plat Illumina, data af08, F 0.25, seed 0, mem 40G) vcf_HCC1395T_Illumina_d46_chr1 470438 vcf_HG008T_Illumina_d46_chr1 470439 vcf_COLO829T_Illumina_d46_chr1 470440 vcf_HCC1395T_Illumina_d46_chr20 470441
+2026-11-04 13:23:46	multicancer6_ONT_SNV_sitef_pnf25	train 470442 (plat ONT, data af08, F 0.25, seed 0, mem 40G, after 470431:470432:470433:470434:470435:470436) vcf_HCC1395T_ONT_d46_chr1 470443 vcf_HG008T_ONT_d46_chr1 470444 vcf_COLO829T_ONT_d46_chr1 470445 vcf_HCC1395T_ONT_d46_chr20 470446
+2026-11-04 13:23:47	multicancer6_Illumina_SNV_sitef_af05_pnf25	train 470447 (plat Illumina, data af05, F 0.25, seed 0, mem 64G, after 470395:470405:470415:470425) vcf_HCC1395T_Illumina_d46_chr1 470448 vcf_HG008T_Illumina_d46_chr1 470449 vcf_COLO829T_Illumina_d46_chr1 470450 vcf_HCC1395T_Illumina_d46_chr20 470451
+2026-11-04 13:23:47	multicancer6_ONT_SNV_sitef_af05_pnf25	train 470452 (plat ONT, data af05, F 0.25, seed 0, mem 56G, after 470400:470410:470420:470430) vcf_HCC1395T_ONT_d46_chr1 470453 vcf_HG008T_ONT_d46_chr1 470454 vcf_COLO829T_ONT_d46_chr1 470455 vcf_HCC1395T_ONT_d46_chr20 470456
