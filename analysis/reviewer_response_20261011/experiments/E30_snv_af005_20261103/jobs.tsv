@@ -1,0 +1,18 @@
+2026-11-03 22:14:10	HCC1395T_PacBio_d46	prepare 469145 run 469146 (-p general -w yuengling -c 48 --mem=125G) fallback 469147 finalize 469148 sitef 469149
+2026-11-03 22:14:10	HCC1954T_PacBio_d46	prepare 469150 run 469151 (-p general -w miao -c 48 --mem=175G) fallback 469152 finalize 469153 sitef 469154
+2026-11-03 22:14:10	H1437T_PacBio_d46	prepare 469155 run 469156 (-p general -w meow -c 48 --mem=140G) fallback 469157 finalize 469158 sitef 469159
+2026-11-03 22:14:10	H2009T_PacBio_d46	prepare 469160 run 469161 (-p general -w maotai -c 48 --mem=152G) fallback 469162 finalize 469163 sitef 469164
+2026-11-03 22:14:10	HG008T_PacBio_d46	prepare 469165 run 469166 (-p gpu -w tequila -c 48 --mem=300G) fallback 469167 finalize 469168 sitef 469169
+2026-11-03 22:14:10	COLO829T_fiberseq_d46	prepare 469170 run 469171 (-p general -w yuengling -c 30 --mem=300G) fallback 469172 finalize 469173 sitef 469174
+vcf HCC1395T_PacBio_d46 chr1 469176
+vcf HG008T_PacBio_d46 chr1 469177
+vcf COLO829T_fiberseq_d46 chr1 469178
+vcf HCC1395T_PacBio_d46 chr20 469179
+2026-11-03 22:14:45	train 469175
+2026-11-03 23:51:08	multicancer6_PacBio_SNV_sitef_pnf25	train 469367 (data af08, F 0.25) vcf_HCC1395T_PacBio_d46_chr1 469368 vcf_HG008T_PacBio_d46_chr1 469369 vcf_COLO829T_fiberseq_d46_chr1 469370 vcf_HCC1395T_PacBio_d46_chr20 469371
+2026-11-03 23:51:08	multicancer6_PacBio_SNV_sitef_af05_pnf25	train 469372 (data af05, F 0.25, after 469149:469154:469159:469164) vcf_HCC1395T_PacBio_d46_chr1 469373 vcf_HG008T_PacBio_d46_chr1 469374 vcf_COLO829T_fiberseq_d46_chr1 469375 vcf_HCC1395T_PacBio_d46_chr20 469376
+# 2026-11-03 23:3x user: only the four CASTLE tumors at 0.05; HG008T and COLO829T stay as they are -> cancelled the HG008T / COLO829T chains (469165-469174 after their prepare) and the six-set train / vcf jobs (469175-469179)
+2026-11-04 12:46:46	INDEL	deleted /scratch/jshen/data/pansoma_v2_tensors/HCC1395T_PacBio_d46_snvaf05/tensors/INDEL (unused duplicate of the old set's INDEL tensors, same --indel-min-af 0.08)
+2026-11-04 12:46:47	INDEL	deleted /scratch/jshen/data/pansoma_v2_tensors/HCC1954T_PacBio_d46_snvaf05/tensors/INDEL (unused duplicate of the old set's INDEL tensors, same --indel-min-af 0.08)
+2026-11-04 12:46:48	INDEL	deleted /scratch/jshen/data/pansoma_v2_tensors/H1437T_PacBio_d46_snvaf05/tensors/INDEL (unused duplicate of the old set's INDEL tensors, same --indel-min-af 0.08)
+2026-11-04 12:46:49	INDEL	deleted /scratch/jshen/data/pansoma_v2_tensors/H2009T_PacBio_d46_snvaf05/tensors/INDEL (unused duplicate of the old set's INDEL tensors, same --indel-min-af 0.08)

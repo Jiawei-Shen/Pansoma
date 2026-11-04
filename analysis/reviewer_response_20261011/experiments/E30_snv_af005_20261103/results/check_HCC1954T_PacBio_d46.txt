@@ -1,0 +1,4 @@
+HCC1954T_PacBio_d46 chr22: old sites 24,074, new 26,579 (+2,505 = +10.4%); missing 0; same alleles 24,053: tensor differs 0 of 24,053 compared, label differs 0; gained an allele 21; new alleles 2,526, AF range 0.0500-0.0798, outside [0.05, 0.08) 0; labels of added sites {-1: 2055, 0: 180, 1: 3, 2: 267} (-1 ignored, 0 non, 1 somatic, 2 germline)
+HCC1954T_PacBio_d46 chr1: old sites 126,095, new 134,114 (+8,019 = +6.4%); missing 0; same alleles 125,262: tensor differs 0 of 30,000 compared, label differs 0; gained an allele 833; new alleles 9,056, AF range 0.0500-0.0799, outside [0.05, 0.08) 0; labels of added sites {-1: 6620, 0: 1077, 1: 31, 2: 291} (-1 ignored, 0 non, 1 somatic, 2 germline)
+OK
+680.23s 246316KB
