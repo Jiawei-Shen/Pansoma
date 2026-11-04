@@ -1,0 +1,55 @@
+# R3.1 shared validation split (chr20-22), 18 SNV models, Tue Nov  3 13:56:54 CST 2026, repo ed26471; SLOTS=16 MEM=192 VAL_WORKERS=3 as the 7fc7396 / normbq 4-GPU SNV runs
+== HG008_Illumina_SNV_linear_valchr20-22 HG008T_Illumina_linear
+Job <670012> is submitted to queue <epigenome>.
+Job <670013> is submitted to queue <general>.
+== HG008_Illumina_SNV_d9_valchr20-22 HG008T_Illumina
+Job <670014> is submitted to queue <epigenome>.
+Job <670015> is submitted to queue <general>.
+== HG008_Illumina_SNV_d46_valchr20-22 HG008T_Illumina_d46
+Job <670016> is submitted to queue <epigenome>.
+Job <670017> is submitted to queue <general>.
+== HG008_PacBio_SNV_linear_valchr20-22 HG008T_PacBio_linear
+Job <670018> is submitted to queue <epigenome>.
+Job <670019> is submitted to queue <general>.
+== HG008_PacBio_SNV_d9_valchr20-22 HG008T_PacBio
+Job <670020> is submitted to queue <epigenome>.
+Job <670023> is submitted to queue <general>.
+== HG008_PacBio_SNV_d46_valchr20-22 HG008T_PacBio_d46
+Job <670025> is submitted to queue <epigenome>.
+Job <670027> is submitted to queue <general>.
+== HG008_ONT_SNV_linear_valchr20-22 HG008T_ONT_linear
+Job <670030> is submitted to queue <epigenome>.
+Job <670032> is submitted to queue <general>.
+== HG008_ONT_SNV_d9_valchr20-22 HG008T_ONT
+Job <670033> is submitted to queue <epigenome>.
+Job <670034> is submitted to queue <general>.
+== HG008_ONT_SNV_d46_valchr20-22 HG008T_ONT_d46
+Job <670035> is submitted to queue <epigenome>.
+Job <670036> is submitted to queue <general>.
+== COLO829_Illumina_SNV_linear_valchr20-22 COLO829T_Illumina_linear
+Job <670037> is submitted to queue <epigenome>.
+Job <670038> is submitted to queue <general>.
+== COLO829_Illumina_SNV_d9_valchr20-22 COLO829T_Illumina
+Job <670039> is submitted to queue <epigenome>.
+Job <670040> is submitted to queue <general>.
+== COLO829_Illumina_SNV_d46_valchr20-22 COLO829T_Illumina_d46
+Job <670041> is submitted to queue <epigenome>.
+Job <670042> is submitted to queue <general>.
+== COLO829_fiberseq_SNV_linear_valchr20-22 COLO829T_fiberseq_linear
+Job <670043> is submitted to queue <epigenome>.
+Job <670044> is submitted to queue <general>.
+== COLO829_fiberseq_SNV_d9_valchr20-22 COLO829T_fiberseq
+Job <670045> is submitted to queue <epigenome>.
+Job <670046> is submitted to queue <general>.
+== COLO829_fiberseq_SNV_d46_valchr20-22 COLO829T_fiberseq_d46
+Job <670047> is submitted to queue <epigenome>.
+Job <670048> is submitted to queue <general>.
+== COLO829_ONT_SNV_linear_valchr20-22 COLO829T_ONT_linear
+Job <670049> is submitted to queue <epigenome>.
+Job <670050> is submitted to queue <general>.
+== COLO829_ONT_SNV_d9_valchr20-22 COLO829T_ONT
+Job <670051> is submitted to queue <epigenome>.
+Job <670052> is submitted to queue <general>.
+== COLO829_ONT_SNV_d46_valchr20-22 COLO829T_ONT_d46
+Job <670053> is submitted to queue <epigenome>.
+Job <670054> is submitted to queue <general>.
