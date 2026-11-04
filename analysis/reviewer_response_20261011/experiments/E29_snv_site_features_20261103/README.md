@@ -93,3 +93,22 @@ HCC1395T chr1 0.884 vs 0.849, chr20 0.826 vs 0.792, HG008T 0.542 vs 0.504. Test-
 0.847 vs 0.831 (chr1), 0.817 vs 0.799 (chr20), 0.673 vs 0.638 (HG008T), 0.796 vs 0.791 (COLO829T), the HCC1395T
 optima at p ~0.79, near the post-PoN validation best-F1 cutoff (0.795) rather than the recall-0.9 one (0.875).
 Truth SNVs without a tensor in the VCF (chr1 433 of 3,440, chr20 151) stay missed, as expected.
+
+## Second PASS rule, registered 2026-11-03 21:57 before any Illumina or ONT test result
+
+The Illumina model (multicancer6_Illumina_SNV_sitef_ppr9, job 467959) was at epoch 7 of 20 and had no test predictions.
+
+- Rule 2: PASS = p_somatic >= the best epoch's post-PoN validation threshold at callable recall 0.95
+  (val `somatic_at_recall_postpon_callable["0.95"]`; same checkpoint, no retraining). Rule 1 (ppr9, recall 0.9)
+  stays the pre-specified result.
+- Why: on PacBio HiFi the recall-0.9 cutoff (0.875) lies above the validation best-F1 cutoff (0.795), where the
+  callable validation recall is already 0.967, and the HCC1395T test optimum is at p ~0.79. Chosen after the
+  PacBio test results, so its PacBio numbers below are not evidence; Illumina (and ONT, if run) is the test.
+- Evaluation: items 1-3 above for both rules (`compare.py` for rule 1; `at_cutoffs.py`, from the vcfeval curve of
+  the same VCF, for rule 2), against the same models and comparators, with the same seed-range caveat.
+
+PacBio HiFi under rule 2 (p >= 0.825; post hoc), F1 (P / R): HCC1395T chr20 0.813 (0.832 / 0.795), chr1 0.845
+(0.872 / 0.820), HG008T 0.645 (0.549 / 0.780), COLO829T 0.792 (0.859 / 0.734); against normfix +0.025 / +0.020 /
++0.020 / +0.018, against rule 1 +0.019 / +0.017 / -0.014 / +0.015 (HG008T loses precision: private germline).
+HCC1395T chr1 recall at AF >= 0.85 0.908 (normfix 0.801, DeepSomatic-TO 0.888, ClairS-TO 0.944), AF 0.6-0.85 0.874
+(0.836). The validation best-F1 cutoff (0.795) gives within 0.005 F1 of rule 2 on all four tests.
