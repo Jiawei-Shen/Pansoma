@@ -33,7 +33,7 @@ Illumina and ONT not rebuilt (the band is almost all errors there).
 
 `make_prepare.py`: the old run's config (GAM, the old discovery's node list and stats, haplotypes 464, task count,
 processes, every builder parameter, chromosome index, merge, reference path) and the truth of the set's current SNV
-labels, with `--snv-min-af 0.05` (INDEL 0.08). Code: git archive of 09d99a3 + the native decoder. `check_config.py` at
+labels, with `--snv-min-af 0.05` (INDEL 0.08). Code: git archive of 0136760 + the native decoder. `check_config.py` at
 the end of prepare: no difference but the SNV floor, the (old) node list path and the QUAL >= 10 germline truth of the
 current labels. Chains `submit_set.sh` (prepare -> run -> finalize -> SNV site features), `jobs.tsv`; runs 1.5-2.3 h on
 48 processes, finalize ~1.5 h. The unused new INDEL tensors were deleted.
