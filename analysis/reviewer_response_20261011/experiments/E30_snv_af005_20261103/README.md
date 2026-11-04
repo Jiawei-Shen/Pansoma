@@ -117,3 +117,6 @@ F 1.0, the E29 site-feature recipe; ONT's site-feature result and the reference 
 multicancer4_<PLAT>_SNV_sitef_ppr9 / _sitef_pnf25 / _sitef_af05_pnf25 (the four CASTLE sets only, HG008T and COLO829T
 held out entirely as in multicancer4_<PLAT>_SNV; `train.sh ... TUMORS 4`), queued afterany the five six-tumor
 trainings. Evaluation unchanged (`compare.py PLAT [4]`; multicancer4 against multicancer4_<PLAT>_SNV normfix).
+
+Note (user 2026-11-04 13:45): the user had meant sampling only the AF 0.05-0.08 negatives (train --non-fraction F
+--keep-non-af 0.08, against sitef_ppr9); having seen the PoN-tagged sampling results he kept it for every queued run.
