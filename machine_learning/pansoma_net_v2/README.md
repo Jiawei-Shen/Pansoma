@@ -153,6 +153,13 @@ Options kept for older checkpoints and experiments (no recipe uses them):
 - `--non-fraction F` < 1: each epoch takes every somatic and germline tensor and a fresh random fraction F of the non
   tensors. `--keep-non-af A` with it takes the non tensors with AF ≥ A every epoch; the sampled non tensors then get
   loss weight 1/F, so each epoch's loss stays an unbiased estimate of the loss over all non tensors, whatever their AF.
+- `--pon-negative-fraction F` < 1 (needs `--site-features`; not with `--non-fraction` < 1 or `--keep-non-af`): each
+  epoch takes every somatic tensor and every non / germline tensor the PoN rule does not tag, and a fresh random
+  fraction F of the PoN-tagged non / germline tensors (site features `pon_tag` 1), which get loss weight 1/F; the
+  class weights use all tensors, so each epoch's loss (self-normalised, as with `--keep-non-af`) estimates the loss
+  over all tensors. The tagged tensors are the ones the PoN removes from the calls (`--best-by postpon`, the post-PoN
+  call rule); on the PacBio six-tumor training sets they are about 73 % of the tensors, almost all germline. The
+  validation keeps every tensor.
 - `--exclude-candidates FILE` (candidate ids, first column) takes those tensors out before the model, as if never
   built: -1 in training and validation; `predict` leaves them out of the test by default (their truth alleles are
   misses) and `graph_vcf` writes no record for them. The INDEL recipe does not use it (below).
@@ -584,10 +591,10 @@ $P -m pansoma_net_v2.chunks --tensors $T --kinds SNV INDEL --index-cache <runs>/
     --cache <runs>/index_cache/chunks          # HG008 Illumina: 148 SNV shards, ~440 GB -> ~15 GB, ~15 min
 ```
 
-Each epoch `chunks.ChunkLoader` takes the epoch's tensors from the `EpochSampler` (so `--non-fraction` and
-`--keep-non-af` are unchanged), groups them by chunk, reads the chunks in a random order with a thread pool, and
-draws the batches from a shuffled pool of 32 chunks at a time, i.e. from ~32 random places of the genome. With
-DDP the chunks are dealt to the ranks by load and every rank yields the same number of tensors.
+Each epoch `chunks.ChunkLoader` takes the epoch's tensors from the `EpochSampler` (so `--non-fraction`,
+`--keep-non-af` and `--pon-negative-fraction` are unchanged), groups them by chunk, reads the chunks in a random
+order with a thread pool, and draws the batches from a shuffled pool of 32 chunks at a time, i.e. from ~32 random
+places of the genome. With DDP the chunks are dealt to the ranks by load and every rank yields the same number of tensors.
 
 ## Model
 

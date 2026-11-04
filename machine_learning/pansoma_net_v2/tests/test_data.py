@@ -204,6 +204,26 @@ class SamplerTest(unittest.TestCase):
             self.assertAlmostEqual(len(low) / 0.25, 100)                  # with weight 1/0.25 they stand for all 100
         self.assertEqual(s.epoch_size(), 55)
 
+    def test_a_sample_mask_names_the_sampled_tensors(self):
+        """train --pon-negative-fraction: the masked (PoN-tagged non / germline) tensors are sampled afresh each epoch,
+        every other tensor, non included, is taken every epoch."""
+        labels = np.array([0] * 40 + [2] * 40 + [0] * 10 + [1] * 10)
+        sample = np.array([True] * 80 + [False] * 20)
+        s = EpochSampler(100, seed=2, labels=labels, non_fraction=0.25, sample=sample)
+        picks = []
+        for epoch in range(3):
+            s.set_epoch(epoch)
+            got = set(s)
+            self.assertTrue(set(range(80, 100)) <= got)                   # untagged non and somatic: always
+            picks.append(frozenset(i for i in got if i < 80))
+            self.assertEqual(len(picks[-1]), 20)                          # 25 % of the 80 tagged
+        self.assertEqual(s.epoch_size(), 40)
+        self.assertGreater(len(set(picks)), 1)                            # a fresh subset each epoch
+        self.assertEqual(len(sample), 100)
+        self.assertTrue(sample[:80].all())                                # the caller's mask is not changed
+        full = EpochSampler(100, seed=2, labels=labels, non_fraction=1.0, sample=sample)
+        self.assertEqual(full.epoch_size(), 100)
+
 
     def test_evaluation_slices_are_disjoint_and_complete(self):
         parts = [list(EpochSampler(10, shuffle=False, rank=r, world=3)) for r in range(3)]
