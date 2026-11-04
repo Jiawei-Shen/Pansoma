@@ -66,3 +66,30 @@ benchmark regions, PASS at each model's own rule:
 3. HCC1395T recall by read AF (the targeted effect; `recall_by_af.py`).
 The change is one run against one run (seed 0); differences smaller than the seed range of comparable models
 (0.01-0.08 F1) are not taken as an effect.
+
+## Results: PacBio HiFi (2026-11-03; `compare.py`, `results/results_PacBio.md`)
+
+Training: best epoch 6 by post-PoN validation F1 (0.872; epochs 6-20 all 0.866-0.872); PASS = p_somatic >= 0.875
+(post-PoN validation recall 0.9 of the callable positives). The normfix model's PASS is p >= 0.622.
+
+SNV F1 (P / R) after the PoN, benchmark BED, PASS at each caller's own rule:
+
+| test | site features (ppr9) | normfix | DeepSomatic-TO | ClairS-TO |
+|---|---|---|---|---|
+| HCC1395T chr20 | 0.794 (0.847 / 0.747) | 0.788 (0.804 / 0.773) | 0.835 (0.740 / 0.957) | 0.795 (0.778 / 0.812) |
+| HCC1395T chr1 | 0.828 (0.895 / 0.769) | 0.825 (0.843 / 0.809) | 0.839 (0.766 / 0.927) | 0.814 (0.805 / 0.822) |
+| HG008T chr1 | 0.659 (0.614 / 0.710) | 0.625 (0.586 / 0.670) | 0.557 (0.425 / 0.806) | 0.591 (0.455 / 0.844) |
+| COLO829T chr1 | 0.777 (0.879 / 0.697) | 0.774 (0.880 / 0.691) | 0.632 (0.732 / 0.555) | 0.762 (0.779 / 0.745) |
+
+By the pre-specified rule there is no effect: F1 changes by +0.003 to +0.034, inside the seed range. On HCC1395T the
+model gains precision and loses recall (chr1 0.809 -> 0.769, chr20 0.773 -> 0.747), at every read-AF bin at PASS
+(AF >= 0.85: chr1 0.801 -> 0.789, 251 truths; chr20 7 truths).
+
+Diagnostic after the results (`matched_recall.py`; not pre-specified, HCC1395T chr1 was used in the diagnosis): the
+ranking is better but the PASS rule is stricter. At the cutoff where the new model's recall equals normfix's PASS
+recall (chr1 p >= 0.840, chr20 p >= 0.859), precision is 0.879 vs 0.843 (chr1) and 0.842 vs 0.804 (chr20), and chr1
+recall at AF >= 0.85 is 0.884 vs 0.801 (AF 0.25-0.6: 0.935-0.937 vs 0.952). Precision at recall 0.8 (vcfeval curve):
+HCC1395T chr1 0.884 vs 0.849, chr20 0.826 vs 0.792, HG008T 0.542 vs 0.504. Test-tuned best F1 (reference only):
+0.847 vs 0.831 (chr1), 0.817 vs 0.799 (chr20), 0.673 vs 0.638 (HG008T), 0.796 vs 0.791 (COLO829T), the HCC1395T
+optima at p ~0.79, near the post-PoN validation best-F1 cutoff (0.795) rather than the recall-0.9 one (0.875).
+Truth SNVs without a tensor in the VCF (chr1 433 of 3,440, chr20 151) stay missed, as expected.
