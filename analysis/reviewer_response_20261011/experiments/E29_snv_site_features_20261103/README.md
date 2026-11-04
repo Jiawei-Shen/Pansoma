@@ -112,3 +112,29 @@ PacBio HiFi under rule 2 (p >= 0.825; post hoc), F1 (P / R): HCC1395T chr20 0.81
 +0.020 / +0.018, against rule 1 +0.019 / +0.017 / -0.014 / +0.015 (HG008T loses precision: private germline).
 HCC1395T chr1 recall at AF >= 0.85 0.908 (normfix 0.801, DeepSomatic-TO 0.888, ClairS-TO 0.944), AF 0.6-0.85 0.874
 (0.836). The validation best-F1 cutoff (0.795) gives within 0.005 F1 of rule 2 on all four tests.
+
+## Results: Illumina (2026-11-04; `results/results_Illumina.md`)
+
+Training: best epoch 12 by post-PoN validation F1 (0.878). Validation cutoffs: rule 1 (recall 0.9) p >= 0.867, rule 2
+(recall 0.95) p >= 0.777, best F1 p >= 0.765; the normfix model's PASS is p >= 0.735.
+
+SNV F1 (P / R) after the PoN, benchmark BED (rule 1 from vcfeval at PASS, rule 2 from the vcfeval curve of the same
+VCF, which gives rule 1 within 0.001):
+
+| test | rule 1 (ppr9) | rule 2 (recall 0.95) | normfix | DeepSomatic-TO | ClairS-TO |
+|---|---|---|---|---|---|
+| HCC1395T chr20 | 0.821 (0.862 / 0.783) | 0.830 (0.831 / 0.829) | 0.809 (0.839 / 0.781) | 0.845 (0.769 / 0.937) | 0.730 (0.649 / 0.835) |
+| HCC1395T chr1 | 0.852 (0.901 / 0.807) | 0.864 (0.878 / 0.851) | 0.850 (0.879 / 0.822) | 0.848 (0.781 / 0.927) | 0.832 (0.806 / 0.859) |
+| HG008T chr1 | 0.644 (0.604 / 0.690) | 0.652 (0.557 / 0.786) | 0.601 (0.592 / 0.611) | 0.529 (0.376 / 0.889) | 0.552 (0.410 / 0.845) |
+| COLO829T chr1 | 0.732 (0.839 / 0.650) | 0.760 (0.814 / 0.713) | 0.755 (0.880 / 0.661) | 0.565 (0.427 / 0.835) | 0.551 (0.431 / 0.764) |
+
+Rule 1 (pre-specified): F1 against normfix +0.012 / +0.002 / +0.043 / -0.023, no effect. Rule 2 (registered before
+this result, so this is its test): +0.021 / +0.014 / +0.051 / +0.005, the same direction on all four tests as on
+PacBio HiFi (+0.025 / +0.020 / +0.020 / +0.018), each inside the seed range; HCC1395T chr20 stays below
+DeepSomatic-TO (0.830 vs 0.845).
+
+HCC1395T recall by read AF, rule 2 against normfix: chr20 (held out of the diagnosis) AF 0.4-0.6 0.905 vs 0.811
+(433 truths), 0.6-0.85 0.867 vs 0.796 (98), >= 0.85 6 of 9 vs 4 of 9; chr1 AF 0.6-0.85 0.912 vs 0.819, >= 0.85 0.847
+vs 0.645 (DeepSomatic-TO 0.930, ClairS-TO 0.971). The lowest bin falls (AF 0.08-0.25: chr20 0.952 vs 0.965, chr1
+0.956 vs 0.979). At matched recall the precision gain is smaller than on PacBio HiFi (chr20 0.864 vs 0.839, chr1
+0.892 vs 0.879).
