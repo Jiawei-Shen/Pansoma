@@ -6,11 +6,12 @@
 import glob, gzip, json, os, sys
 R = "/scratch/jshen/data/pansoma_net_v2_runs"
 E8 = "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score"
-# usage: python compare.py [PLAT [AF05_RUN CONTROL_RUN]]   (PLAT PacBio (default) | Illumina | ONT)
+# usage: python compare.py [PLAT [TUMORS]]   (PLAT PacBio (default) | Illumina | ONT; TUMORS 6 (default) | 4: multicancer4)
 PLAT = sys.argv[1] if len(sys.argv) > 1 else "PacBio"
-AF05, CTRL = sys.argv[2:4] if len(sys.argv) > 3 else (f"multicancer6_{PLAT}_SNV_sitef_af05_pnf25", f"multicancer6_{PLAT}_SNV_sitef_pnf25")
-SITEF = [("AF 0.05 + sampling", AF05), ("0.08 + sampling (control)", CTRL), ("0.08, all negatives (ppr9)", f"multicancer6_{PLAT}_SNV_sitef_ppr9")]
-NORMFIX = f"multicancer6_{PLAT}_SNV"
+M = sys.argv[2] if len(sys.argv) > 2 else "6"
+AF05, CTRL = f"multicancer{M}_{PLAT}_SNV_sitef_af05_pnf25", f"multicancer{M}_{PLAT}_SNV_sitef_pnf25"
+SITEF = [("AF 0.05 + sampling", AF05), ("0.08 + sampling (control)", CTRL), ("0.08, all negatives (ppr9)", f"multicancer{M}_{PLAT}_SNV_sitef_ppr9")]
+NORMFIX = f"multicancer{M}_{PLAT}_SNV"
 CO = "COLO829T_fiberseq" if PLAT == "PacBio" else f"COLO829T_{PLAT}"
 TESTS = [("HCC1395T chr20", f"HCC1395T_{PLAT}", "chr20"), ("HCC1395T chr1", f"HCC1395T_{PLAT}", "chr1"),
          (f"HG008T chr1", f"HG008T_{PLAT}", "chr1"), ("COLO829T chr1", CO, "chr1")]
@@ -61,7 +62,7 @@ cols += [("normfix", lambda s, ch: at(NORMFIX, s, ch, None)),
          ("DeepSomatic-TO", lambda s, ch: comparator("deepsomatic", s, ch)), ("ClairS-TO", lambda s, ch: comparator("clairs_to", s, ch))]
 fmt = lambda r: "-" if r is None else f"{r[2]:.3f} ({r[0]:.3f} / {r[1]:.3f})"
 res = {(t, c): f(s, ch) for t, s, ch in TESTS for c, f in cols}
-print(f"\n## {PLAT} SNV F1 (P / R) after the PoN, benchmark BED\n")
+print(f"\n## {PLAT} multicancer{M} SNV F1 (P / R) after the PoN, benchmark BED\n")
 print("| model | " + " | ".join(t for t, _, _ in TESTS) + " |"); print("|---" * (len(TESTS) + 1) + "|")
 for c, _ in cols: print(f"| {c} | " + " | ".join(fmt(res[(t, c)]) for t, _, _ in TESTS) + " |")
 

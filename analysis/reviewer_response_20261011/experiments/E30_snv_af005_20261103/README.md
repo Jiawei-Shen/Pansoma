@@ -108,3 +108,12 @@ three tumors, recall by read AF; normfix, DeepSomatic-TO, ClairS-TO; Illumina al
 Expectation from the counts (chr1, AF 0.05-0.08: Illumina 290,746 candidates for 144 BED truths, ONT 199,177 for 114,
 against PacBio HiFi 8,123 for 167): at most +0.042 / +0.033 recall, and a precision cost; the test is whether the
 models call the band without losing precision. One seed; a difference below the seed range is not an effect.
+
+## Every cell, and the four-tumor models (user 2026-11-04 13:27); registered before any of their results
+
+User: fill every platform x step cell; stop the seed-1 reruns (cancelled after 13 min, no result); train the
+four-tumor (multicancer4) versions after the six-tumor ones. Added: multicancer6_ONT_SNV_sitef_ppr9 (every negative,
+F 1.0, the E29 site-feature recipe; ONT's site-feature result and the reference for its sampling), and per platform
+multicancer4_<PLAT>_SNV_sitef_ppr9 / _sitef_pnf25 / _sitef_af05_pnf25 (the four CASTLE sets only, HG008T and COLO829T
+held out entirely as in multicancer4_<PLAT>_SNV; `train.sh ... TUMORS 4`), queued afterany the five six-tumor
+trainings. Evaluation unchanged (`compare.py PLAT [4]`; multicancer4 against multicancer4_<PLAT>_SNV normfix).
