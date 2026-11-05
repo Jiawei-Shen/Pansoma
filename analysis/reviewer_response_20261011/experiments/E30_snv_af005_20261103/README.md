@@ -120,3 +120,16 @@ trainings. Evaluation unchanged (`compare.py PLAT [4]`; multicancer4 against mul
 
 Note (user 2026-11-04 13:45): the user had meant sampling only the AF 0.05-0.08 negatives (train --non-fraction F
 --keep-non-af 0.08, against sitef_ppr9); having seen the PoN-tagged sampling results he kept it for every queued run.
+
+## AF 0.05 models with random sampling of all negatives (user 2026-11-05 14:30); registered before their results
+
+The user had meant random sampling of all negatives. Decision: only the AF 0.05 models use it, at 30%: train
+`--negative-fraction 0.3` (repository 629418f; each epoch every somatic tensor and a fresh random 30% of all non /
+germline tensors, loss weight 1/0.3, class weights from all tensors, validation unchanged). Reason: on Illumina and ONT
+the 0.05-0.08 band adds millions of labelled non that the PoN does not tag (HCC1395T: Illumina non 1.34 M -> 3.83 M,
+ONT 0.36 M -> 1.73 M; 86-88% of the new tensors untagged), so PoN-tagged sampling barely shortens those runs.
+Runs (`train.sh ... MODE all`, code_ml2/): multicancer6_<PLAT>_SNV_sitef_af05_rnf30 and multicancer4_<PLAT>_SNV_sitef_af05_rnf30
+for PacBio, ONT and Illumina (PacBio m6 rerun so that the three platforms match; its PoN-sampled af05_pnf25 result
+stays). Cancelled before any result: the PoN-sampled af05 runs of ONT m6 (12 min in), Illumina m6, and the three m4.
+The other models are unchanged (ppr9 every negative; pnf25 PoN-tagged sampling). Comparisons: af05_rnf30 against
+sitef_ppr9 (floor 0.08, every negative) and against the pnf25 control; both rules; `compare.py PLAT [4]`.

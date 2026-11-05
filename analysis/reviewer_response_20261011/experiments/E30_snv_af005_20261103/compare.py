@@ -9,8 +9,10 @@ E8 = "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score"
 # usage: python compare.py [PLAT [TUMORS]]   (PLAT PacBio (default) | Illumina | ONT; TUMORS 6 (default) | 4: multicancer4)
 PLAT = sys.argv[1] if len(sys.argv) > 1 else "PacBio"
 M = sys.argv[2] if len(sys.argv) > 2 else "6"
-AF05, CTRL = f"multicancer{M}_{PLAT}_SNV_sitef_af05_pnf25", f"multicancer{M}_{PLAT}_SNV_sitef_pnf25"
-SITEF = [("AF 0.05 + sampling", AF05), ("0.08 + sampling (control)", CTRL), ("0.08, all negatives (ppr9)", f"multicancer{M}_{PLAT}_SNV_sitef_ppr9")]
+RNF, AF05, CTRL = (f"multicancer{M}_{PLAT}_SNV_sitef_af05_rnf30", f"multicancer{M}_{PLAT}_SNV_sitef_af05_pnf25",
+                   f"multicancer{M}_{PLAT}_SNV_sitef_pnf25")
+SITEF = [("AF 0.05 + random 30% of the negatives", RNF), ("AF 0.05 + PoN-tagged sampling", AF05),
+         ("0.08 + PoN-tagged sampling (control)", CTRL), ("0.08, all negatives (ppr9)", f"multicancer{M}_{PLAT}_SNV_sitef_ppr9")]
 NORMFIX = f"multicancer{M}_{PLAT}_SNV"
 CO = "COLO829T_fiberseq" if PLAT == "PacBio" else f"COLO829T_{PLAT}"
 TESTS = [("HCC1395T chr20", f"HCC1395T_{PLAT}", "chr20"), ("HCC1395T chr1", f"HCC1395T_{PLAT}", "chr1"),
@@ -54,7 +56,7 @@ def comparator(c, s, chrom):
 cols = []
 for name, run in SITEF:
     try: ep, c1, c2 = cutoffs(run)
-    except FileNotFoundError: continue
+    except (FileNotFoundError, AssertionError): continue  # not trained, or still training
     print(f"{name} ({run}): best epoch {ep}, rule 1 p >= {c1:.3f}, rule 2 p >= {c2:.3f}")
     cols += [(f"{name}, rule 1", lambda s, ch, run=run: at(run, s, ch, None)),
              (f"{name}, rule 2", lambda s, ch, run=run, c2=c2: at(run, s, ch, c2))]
@@ -68,8 +70,9 @@ for c, _ in cols: print(f"| {c} | " + " | ".join(fmt(res[(t, c)]) for t, _, _ in
 
 BINS = [(0.05, 0.08), (0.08, 0.25), (0.25, 0.4), (0.4, 0.6), (0.6, 0.85), (0.85, 1.01)]
 for t, s, chrom in TESTS[:2]:
-    base = f"{R}/{AF05}/vcf_{chrom}_{s}_d46/eval_bed"; old = f"{R}/{NORMFIX}/vcf_{chrom}_{s}_d46_normfix/eval_bed"
-    if not os.path.exists(base): continue
+    base = next((b for b in (f"{R}/{r}/vcf_{chrom}_{s}_d46/eval_bed" for r in (RNF, AF05)) if os.path.exists(b)), "")
+    old = f"{R}/{NORMFIX}/vcf_{chrom}_{s}_d46_normfix/eval_bed"
+    if not base: continue
     af = {}
     for f in [f"{old}/{s}_d46.SNV.linear.pon.vcf.gz"] + glob.glob(f"{base}/*.SNV.linear.pon.vcf.gz"):
         for k, x in recs(f, chrom).items(): af[k] = float(dict(zip(x[8].split(":"), x[9].split(":")))["AF"])
