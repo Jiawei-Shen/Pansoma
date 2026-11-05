@@ -5,6 +5,8 @@ Per read (primary record only):
   graph view (GAF from the GAM): mapped, MAPQ, perfect (whole read aligned, no mismatch / indel: cs has only ':'),
       mismatches, off-reference nodes (node not on the GRCh38 path of that graph, from the pipeline's grch38_path index)
   GRCh38 view (vg surject BAM): placed, chrom, start, end (CHM13 for the chm13 control arm)
+  linref arm (GRCh38 linear reference, bwa mem / minimap2 BAM, no graph): the graph-view fields come from the same BAM
+      record (MAPQ; perfect = no clip, no I/D in the CIGAR and NM = 0; mismatches = NM - I/D bases; no off-ref nodes)
   correct50 = placed on the true chromosome with start or end within 50 bp of the true GRCh38 interval
   overlap   = placed on the true chromosome and overlapping the true interval (+-50 bp)
 
@@ -93,7 +95,8 @@ def parse_gaf(path, n_rows, n_pairs, paired, chrom_arr):
                 g_clip=clip, g_nodes=nodes, g_offref_nodes=offref_nodes), dup
 
 
-def parse_bam(path, n_rows, n_pairs, paired):
+def parse_bam(path, n_rows, n_pairs, paired, linear_view=False):
+    """primary records; with linear_view also the graph-view fields (g_*) of a linear-aligner BAM"""
     placed = np.zeros(n_rows, bool)
     chrom = np.full(n_rows, -1, np.int16)
     start = np.full(n_rows, -1, np.int64)
@@ -101,6 +104,11 @@ def parse_bam(path, n_rows, n_pairs, paired):
     bmapq = np.full(n_rows, -1, np.int16)
     nm = np.full(n_rows, -1, np.int32)
     seen = np.zeros(n_rows, bool)
+    perfect = np.zeros(n_rows, bool)
+    mism = np.full(n_rows, -1, np.int32)
+    indel = np.full(n_rows, -1, np.int32)
+    clip = np.full(n_rows, -1, np.int32)
+    dup = 0
     names = {}
     with pysam.AlignmentFile(path, "rb", check_sq=False) as bam:
         for i, ref in enumerate(bam.references):
@@ -116,6 +124,9 @@ def parse_bam(path, n_rows, n_pairs, paired):
                 r = (mate - 1) * n_pairs + int(base[1:])
             else:
                 r = int(qn[1:])
+            if seen[r]:
+                dup += 1
+                continue
             seen[r] = True
             if rec.is_unmapped:
                 continue
@@ -126,7 +137,20 @@ def parse_bam(path, n_rows, n_pairs, paired):
             bmapq[r] = rec.mapping_quality
             if rec.has_tag("NM"):
                 nm[r] = rec.get_tag("NM")
-    return dict(b_seen=seen, b_placed=placed, b_chrom=chrom, b_start=start, b_end=end, b_mapq=bmapq, b_nm=nm)
+            if linear_view:
+                ops = rec.get_cigar_stats()[0]  # M I D N S H P = X
+                ind = int(ops[1] + ops[2])
+                clp = int(ops[4] + ops[5])
+                indel[r] = ind
+                clip[r] = clp
+                mism[r] = int(nm[r]) - ind
+                perfect[r] = (ind == 0 and clp == 0 and nm[r] == 0)
+    out = dict(b_seen=seen, b_placed=placed, b_chrom=chrom, b_start=start, b_end=end, b_mapq=bmapq, b_nm=nm)
+    if linear_view:
+        out.update(g_seen=seen.copy(), g_mapped=placed.copy(), g_mapq=bmapq.copy(), g_perfect=perfect, g_mism=mism,
+                   g_indel=indel, g_clip=clip, g_nodes=np.zeros(n_rows, np.int32),
+                   g_offref_nodes=np.zeros(n_rows, np.int32))
+    return out, dup
 
 
 def rate(num, den):
@@ -165,9 +189,9 @@ def summarize(mask, R, T):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--arm", required=True, choices=list(GRCH38_PATH) + ["chm13"])
+    ap.add_argument("--arm", required=True, choices=list(GRCH38_PATH) + ["chm13", "linref"])
     ap.add_argument("--platform", required=True, choices=["illumina", "hifi", "ont"])
-    ap.add_argument("--base", default="/scratch/jshen/data/reviewer_experiments_20261013/E11b_simulated_alignment")
+    ap.add_argument("--base", default=C.BASE)
     ap.add_argument("--out", required=True)
     a = ap.parse_args()
     T = dict(np.load(f"{a.base}/sim/{a.platform}/truth.npz"))
@@ -186,14 +210,22 @@ def main():
         T["chrom"], T["ref_start"], T["ref_end"] = Z["chrom"], Z["ref_start"], Z["ref_end"]
         valid = Z["ok"].astype(bool)
         chrom_arr = None
+    elif a.arm == "linref":
+        chrom_arr = None
     else:
         chrom_arr = np.load(f"{GRCH38_PATH[a.arm]}/chrom.npy")
     log("truth", n_rows, "valid", int(valid.sum()), "chrom index", None if chrom_arr is None else len(chrom_arr))
     adir = f"{a.base}/aln/{a.arm}"
-    G, dup = parse_gaf(f"{adir}/{a.platform}.gaf.gz", n_rows, n_pairs, paired, chrom_arr)
-    log("gaf parsed; duplicate records skipped", dup)
-    B = parse_bam(f"{adir}/{a.platform}.bam", n_rows, n_pairs, paired)
-    log("bam parsed")
+    if a.arm == "linref":
+        # no graph: the BAM gives both views
+        B, dup = parse_bam(f"{adir}/{a.platform}.bam", n_rows, n_pairs, paired, linear_view=True)
+        G = {k: v for k, v in B.items() if k.startswith("g_")}
+        log("bam parsed (linear reference); duplicate primary records skipped", dup)
+    else:
+        G, dup = parse_gaf(f"{adir}/{a.platform}.gaf.gz", n_rows, n_pairs, paired, chrom_arr)
+        log("gaf parsed; duplicate records skipped", dup)
+        B, bdup = parse_bam(f"{adir}/{a.platform}.bam", n_rows, n_pairs, paired)
+        log("bam parsed; duplicate primary records skipped", bdup)
     R = {**G, **B}
     same = R["b_placed"] & (R["b_chrom"] == T["chrom"])
     d = np.minimum(np.abs(R["b_start"] - T["ref_start"]), np.abs(R["b_end"] - T["ref_end"]))
@@ -240,7 +272,7 @@ def main():
     else:
         strata["str_fraction_of_read"] = {"<1%": strf < 0.01, "1-5%": (strf >= 0.01) & (strf < 0.05),
                                           ">=5%": strf >= 0.05}
-    if a.arm not in ("linear", "chm13"):
+    if a.arm not in ("linear", "chm13", "linref"):
         strata["graph_alignment_uses_offref_node"] = {"yes": G["g_offref_nodes"] > 0,
                                                       "no": G["g_mapped"] & (G["g_offref_nodes"] == 0)}
     res["strata"] = {k: {s: summarize(m & valid, R, T) for s, m in v.items()} for k, v in strata.items()}

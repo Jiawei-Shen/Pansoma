@@ -5,9 +5,39 @@ import os
 
 import numpy as np
 
-DIPCALL = "/scratch/jshen/data/HG008_GIAB/dipcall_HG008N_GRCh38/HG008N_GRCh38_dipcall"
-HAP_FASTA = {1: "/scratch/jshen/data/HG008_GIAB/HG008N_curatedv6_250714_polished6.2_hap1.fasta",
-             2: "/scratch/jshen/data/HG008_GIAB/HG008N_curatedv6_250714_polished6.2_hap2.fasta.gz"}
+# Simulated sample, chosen with the environment variable E11B_SAMPLE (default HG008N, the original E11b run).
+#   dipcall    : prefix of the dipcall hap -> GRCh38 outputs (.hap{1,2}.paf.gz / .bed / .var.gz)
+#   chm13      : prefix of the hap -> CHM13 dipcall outputs (CHM13-only control truth)
+#   hap_fasta  : haplotype FASTAs in dipcall's hap1 / hap2 order
+#   base       : data directory (sim/, aln/, eval/, chm13_truth/)
+#   contig_rule: "name" = contig must be named chrN_hapK (curated HG008-N); "majority" = the chromosome with most of the
+#                contig's primary aligned bases must be chrN (verkko contigs carry no chromosome name)
+_Q = "/scratch/qfu/COLO829BL_DSA"
+SAMPLES = {
+    "HG008N": dict(
+        label="HG008-N v6.2",
+        dipcall="/scratch/jshen/data/HG008_GIAB/dipcall_HG008N_GRCh38/HG008N_GRCh38_dipcall",
+        chm13="/scratch/jshen/data/reviewer_experiments_20261013/E11b_simulated_alignment/chm13_truth/HG008N_CHM13_dipcall",
+        hap_fasta={1: "/scratch/jshen/data/HG008_GIAB/HG008N_curatedv6_250714_polished6.2_hap1.fasta",
+                   2: "/scratch/jshen/data/HG008_GIAB/HG008N_curatedv6_250714_polished6.2_hap2.fasta.gz"},
+        base="/scratch/jshen/data/reviewer_experiments_20261013/E11b_simulated_alignment",
+        results="results", contig_rule="name"),
+    # COLO829BL verkko 2.1 diploid assembly (SMaHT); dipcall run by qfu with hap1 = hapY file, hap2 = hapX file
+    # (minimap2 2.20 -c --paf-no-hit -xasm5 --cs, as for HG008-N; GRCh38 no-alt analysis set / chm13v2.0.fa)
+    "COLO829BL": dict(
+        label="COLO829BL verkko 2.1",
+        dipcall=f"{_Q}/dipcall_hg38/dipcall_hg38",
+        chm13=f"{_Q}/dipcall_chm13/dipcall_chm13",
+        hap_fasta={1: f"{_Q}/SMHTCOLO829BL-X-X-M45-XX-uwsc-SMASFK4V33V8-verkko_2.1_hapY.fa",
+                   2: f"{_Q}/SMHTCOLO829BL-X-X-M45-XX-uwsc-SMASFTH1B2J6-verkko_2.1_hapX.fa"},
+        base="/scratch/jshen/data/reviewer_experiments_20261013/E11b_simulated_alignment_COLO829BL",
+        results="results_colo829bl", contig_rule="majority"),
+}
+SAMPLE = os.environ.get("E11B_SAMPLE", "HG008N")
+CFG = SAMPLES[SAMPLE]
+DIPCALL = CFG["dipcall"]
+HAP_FASTA = CFG["hap_fasta"]
+BASE = CFG["base"]
 SMAHT = {1: "/scratch/qfu/reference/hg38_DAC_stratification/SMaHT_difficult_v2.bed",
          2: "/scratch/qfu/reference/hg38_DAC_stratification/SMaHT_extreme_v2.bed"}  # easy (0) = the rest
 CHROMS = ["chr1", "chr20"]

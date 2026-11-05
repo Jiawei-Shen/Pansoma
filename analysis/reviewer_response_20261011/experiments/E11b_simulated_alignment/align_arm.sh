@@ -2,6 +2,9 @@
 # E11b step 3: align the simulated reads to one reference arm with vg giraffe, convert the GAM to GAF (graph-space
 # view) and surject it to GRCh38 (BAM). Usage: align_arm.sh ARM PLATFORM[,PLATFORM...]
 #   ARM: linear (GRCh38-only graph, vg 1.66) | d9 (HPRC v1.1 d9, vg 1.65) | d46 (HPRC v2.1 d46, vg 1.77)
+#        | chm13 (CHM13-only graph control) | linref (GRCh38 linear reference, no graph: bwa mem 0.7.17 for Illumina,
+#        minimap2 2.28 -x map-hifi / map-ont for long reads, as the comparators' BAMs: bwa-mem / pbmm2 / minimap2)
+#   E11B_BASE: data directory of the simulated sample (default: the HG008-N run; COLO829BL: ..._COLO829BL)
 #   PLATFORM: illumina (paired, short-read minimizers) | hifi (-b hifi) | ont (-b r10), long-read minimizers
 # Indexes and vg versions are those of the production GAMs (memory notes graph-ablation-gams / hprc-v2-graph):
 # the linear and d9 minimizer files are format v10 (vg <= 1.66), the d46 ones v11 (vg 1.77 rebuild).
@@ -9,9 +12,32 @@ set -euo pipefail
 ARM=$1
 PLATFORMS=$2
 THREADS=${SLURM_CPUS_PER_TASK:-16}
-SIM=/scratch/jshen/data/reviewer_experiments_20261013/E11b_simulated_alignment/sim
-OUT=/scratch/jshen/data/reviewer_experiments_20261013/E11b_simulated_alignment/aln/${ARM}
+BASE=${E11B_BASE:-/scratch/jshen/data/reviewer_experiments_20261013/E11b_simulated_alignment}
+SIM=${BASE}/sim
+OUT=${BASE}/aln/${ARM}
 mkdir -p "${OUT}"
+
+if [[ ${ARM} == linref ]]; then
+    BWA=/opt/apps/bwa/0.7.17/bwa; MM2=/opt/apps/minimap2/2.28/minimap2; SAMTOOLS=/opt/apps/samtools/1.18/bin/samtools
+    REF=/scratch/jshen/data/HapMap/GCA_000001405.15_GRCh38_no_alt_analysis_set.fasta   # bwa index next to it
+    echo "[INFO] host $(hostname) job ${SLURM_JOB_ID:-} arm linref: bwa $(${BWA} 2>&1 | grep Version), minimap2 $(${MM2} --version)"
+    for PLAT in ${PLATFORMS//,/ }; do
+        case "${PLAT}" in
+            illumina) CMD=("${BWA}" mem -t "${THREADS}" -K 100000000 -Y "${REF}" "${SIM}/illumina/sim_R1.fq.gz" "${SIM}/illumina/sim_R2.fq.gz") ;;
+            hifi)     CMD=("${MM2}" -ax map-hifi -t "${THREADS}" "${REF}" "${SIM}/hifi/sim.fq.gz") ;;
+            ont)      CMD=("${MM2}" -ax map-ont -t "${THREADS}" "${REF}" "${SIM}/ont/sim.fq.gz") ;;
+            *) echo "unknown platform ${PLAT}" >&2; exit 2 ;;
+        esac
+        if [[ ! -s ${OUT}/${PLAT}.bam ]]; then
+            echo "[INFO] $(date +%T) ${CMD[*]} | samtools view -b > ${OUT}/${PLAT}.bam"
+            /usr/bin/time -v "${CMD[@]}" 2> "${OUT}/${PLAT}.align.log" | "${SAMTOOLS}" view -b -o "${OUT}/${PLAT}.bam.tmp" -
+            mv "${OUT}/${PLAT}.bam.tmp" "${OUT}/${PLAT}.bam"
+        fi
+        grep -E "Maximum resident|Elapsed" "${OUT}/${PLAT}.align.log" || true
+    done
+    echo "[INFO] $(date +%T) done"
+    exit 0
+fi
 
 case "${ARM}" in
     linear) VG=/scratch/wzhang/bin/vg_v1.66.0; P=/scratch/jshen/data/Linear_Reference_VG_Indexes/hg38_linear

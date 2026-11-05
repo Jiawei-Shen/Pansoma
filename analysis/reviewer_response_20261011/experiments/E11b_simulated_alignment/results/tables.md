@@ -1,11 +1,12 @@
 # E11b tables (simulated reads from the HG008-N v6.2 assembly, chr1 + chr20 one-to-one segments)
 
-correct = surjected primary alignment on the true chromosome with start or end within 50 bp of the true GRCh38 interval; wrong = placed on GRCh38 but not correct; perfect = graph alignment (GAF) covers the whole read with no mismatch / indel; MAPQ = giraffe's graph MAPQ.
+correct = surjected primary alignment on the true chromosome with start or end within 50 bp of the true GRCh38 interval; wrong = placed on GRCh38 but not correct; perfect = graph alignment (GAF) covers the whole read with no mismatch / indel; MAPQ = giraffe's graph MAPQ. GRCh38 linear reference arm: BAM primary record; perfect = no clip, no I/D, NM 0; MAPQ = the aligner's MAPQ.
 
 ## illumina: overall
 
 | arm | reads | unmapped | graph-mapped, not surjected | correct (50 bp) | wrong | wrong / placed | perfect | perfect but wrong | wrong at MAPQ>=30 | wrong at MAPQ 60 | MAPQ 0 | uses off-ref node |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
+| GRCh38 linear reference (bwa mem / minimap2) | 5,000,000 | 945 (0.019%) | 0 | 98.708% | 63,668 | 1.274% | 63.72% | 35,080 (1.101% of perfect) | 5,850 (0.120%) | 1,660 (0.035%) | 1.38% | 0 (0.00%) |
 | GRCh38-only graph (H 17) | 5,000,000 | 3,404 (0.068%) | 0 | 98.698% | 61,705 | 1.235% | 63.69% | 33,847 (1.063% of perfect) | 4,538 (0.093%) | 2,408 (0.050%) | 0.84% | 0 (0.00%) |
 | HPRC v1.1 d9 | 5,000,000 | 1,500 (0.030%) | 17,436 | 98.642% | 48,959 | 0.983% | 72.94% | 33,204 (0.910% of perfect) | 904 (0.019%) | 344 (0.007%) | 1.07% | 619,803 (12.40%) |
 | HPRC v2.1 d46 | 5,000,000 | 1,553 (0.031%) | 19,340 | 98.659% | 46,144 | 0.927% | 73.06% | 32,025 (0.877% of perfect) | 631 (0.013%) | 294 (0.006%) | 1.07% | 622,386 (12.45%) |
@@ -15,6 +16,7 @@ Error-free reads only (no simulated sequencing error; any graph mismatch is then
 
 | arm | reads | perfect | perfect but wrong | wrong / placed | wrong at MAPQ>=30 |
 |---|---|---|---|---|---|
+| GRCh38 linear reference (bwa mem / minimap2) | 3,702,448 | 86.05% | 34,975 (1.098%) | 1.272% | 4,304 |
 | GRCh38-only graph (H 17) | 3,702,448 | 86.00% | 33,682 (1.058%) | 1.224% | 3,348 |
 | HPRC v1.1 d9 | 3,702,448 | 98.48% | 32,983 (0.905%) | 0.967% | 659 |
 | HPRC v2.1 d46 | 3,702,448 | 98.64% | 31,800 (0.871%) | 0.917% | 464 |
@@ -22,33 +24,37 @@ Error-free reads only (no simulated sequencing error; any graph mismatch is then
 
 ## illumina: MAPQ calibration (reads placed on GRCh38; error rate = wrong / placed in the bin; expected = mean 10^(-MAPQ/10))
 
-| MAPQ | GRCh38-only graph (H 17): placed / wrong / rate / expected | HPRC v1.1 d9: placed / wrong / rate / expected | HPRC v2.1 d46: placed / wrong / rate / expected | CHM13-only graph (control; CHM13 truth): placed / wrong / rate / expected |
-|---|---|---|---|---|
-| 0 | 41,978 / 29,500 / 7.03e-01 / 1.00e+00 | 45,494 / 27,828 / 6.12e-01 / 1.00e+00 | 44,253 / 26,433 / 5.97e-01 / 1.00e+00 | 41,091 / 28,537 / 6.94e-01 / 1.00e+00 |
-| 1-9 | 43,093 / 21,024 / 4.88e-01 / 7.71e-01 | 49,532 / 18,353 / 3.71e-01 / 7.78e-01 | 46,648 / 17,938 / 3.85e-01 / 7.78e-01 | 37,091 / 17,429 / 4.70e-01 / 7.71e-01 |
-| 10-19 | 28,286 / 5,335 / 1.89e-01 / 3.96e-02 | 27,169 / 1,511 / 5.56e-02 / 3.99e-02 | 27,301 / 908 / 3.33e-02 / 4.01e-02 | 27,747 / 4,310 / 1.55e-01 / 3.93e-02 |
-| 20-29 | 10,165 / 1,308 / 1.29e-01 / 3.09e-03 | 10,156 / 363 / 3.57e-02 / 2.65e-03 | 10,220 / 234 / 2.29e-02 / 2.63e-03 | 9,830 / 949 / 9.65e-02 / 3.05e-03 |
-| 30-39 | 17,540 / 1,030 / 5.87e-02 / 8.21e-04 | 16,416 / 254 / 1.55e-02 / 8.38e-04 | 16,238 / 149 / 9.18e-03 / 8.38e-04 | 17,028 / 879 / 5.16e-02 / 8.25e-04 |
-| 40-49 | 16,423 / 794 / 4.83e-02 / 3.80e-05 | 16,206 / 222 / 1.37e-02 / 3.90e-05 | 16,175 / 144 / 8.90e-03 / 3.90e-05 | 15,929 / 626 / 3.93e-02 / 3.80e-05 |
-| 50-59 | 7,390 / 306 / 4.14e-02 / 4.00e-06 | 7,109 / 84 / 1.18e-02 / 4.00e-06 | 7,312 / 44 / 6.02e-03 / 4.00e-06 | 7,498 / 288 / 3.84e-02 / 4.00e-06 |
-| 60 | 4,831,721 / 2,408 / 4.98e-04 / 1.00e-06 | 4,808,982 / 344 / 7.20e-05 / 1.00e-06 | 4,810,960 / 294 / 6.10e-05 / 1.00e-06 | 4,829,923 / 2,781 / 5.76e-04 / 1.00e-06 |
+| MAPQ | GRCh38 linear reference (bwa mem / minimap2): placed / wrong / rate / expected | GRCh38-only graph (H 17): placed / wrong / rate / expected | HPRC v1.1 d9: placed / wrong / rate / expected | HPRC v2.1 d46: placed / wrong / rate / expected | CHM13-only graph (control; CHM13 truth): placed / wrong / rate / expected |
+|---|---|---|---|---|---|
+| 0 | 68,833 / 46,597 / 6.77e-01 / 1.00e+00 | 41,978 / 29,500 / 7.03e-01 / 1.00e+00 | 45,494 / 27,828 / 6.12e-01 / 1.00e+00 | 44,253 / 26,433 / 5.97e-01 / 1.00e+00 | 41,091 / 28,537 / 6.94e-01 / 1.00e+00 |
+| 1-9 | 6,053 / 3,011 / 4.97e-01 / 3.53e-01 | 43,093 / 21,024 / 4.88e-01 / 7.71e-01 | 49,532 / 18,353 / 3.71e-01 / 7.78e-01 | 46,648 / 17,938 / 3.85e-01 / 7.78e-01 | 37,091 / 17,429 / 4.70e-01 / 7.71e-01 |
+| 10-19 | 6,278 / 2,460 / 3.92e-01 / 3.78e-02 | 28,286 / 5,335 / 1.89e-01 / 3.96e-02 | 27,169 / 1,511 / 5.56e-02 / 3.99e-02 | 27,301 / 908 / 3.33e-02 / 4.01e-02 | 27,747 / 4,310 / 1.55e-01 / 3.93e-02 |
+| 20-29 | 29,869 / 5,750 / 1.93e-01 / 3.40e-03 | 10,165 / 1,308 / 1.29e-01 / 3.09e-03 | 10,156 / 363 / 3.57e-02 / 2.65e-03 | 10,220 / 234 / 2.29e-02 / 2.63e-03 | 9,830 / 949 / 9.65e-02 / 3.05e-03 |
+| 30-39 | 6,350 / 975 / 1.54e-01 / 4.39e-04 | 17,540 / 1,030 / 5.87e-02 / 8.21e-04 | 16,416 / 254 / 1.55e-02 / 8.38e-04 | 16,238 / 149 / 9.18e-03 / 8.38e-04 | 17,028 / 879 / 5.16e-02 / 8.25e-04 |
+| 40-49 | 68,258 / 2,718 / 3.98e-02 / 6.30e-05 | 16,423 / 794 / 4.83e-02 / 3.80e-05 | 16,206 / 222 / 1.37e-02 / 3.90e-05 | 16,175 / 144 / 8.90e-03 / 3.90e-05 | 15,929 / 626 / 3.93e-02 / 3.80e-05 |
+| 50-59 | 13,639 / 497 / 3.64e-02 / 4.00e-06 | 7,390 / 306 / 4.14e-02 / 4.00e-06 | 7,109 / 84 / 1.18e-02 / 4.00e-06 | 7,312 / 44 / 6.02e-03 / 4.00e-06 | 7,498 / 288 / 3.84e-02 / 4.00e-06 |
+| 60 | 4,799,775 / 1,660 / 3.46e-04 / 1.00e-06 | 4,831,721 / 2,408 / 4.98e-04 / 1.00e-06 | 4,808,982 / 344 / 7.20e-05 / 1.00e-06 | 4,810,960 / 294 / 6.10e-05 / 1.00e-06 | 4,829,923 / 2,781 / 5.76e-04 / 1.00e-06 |
 
-## illumina: by hg008n variants in read
+## illumina: by HG008N variants in read
 
 | stratum | arm | reads | unmapped | correct (50 bp) | wrong / placed | perfect | perfect but wrong | wrong at MAPQ>=30 | MAPQ 0 |
 |---|---|---|---|---|---|---|---|---|---|
+| 0 | GRCh38 linear reference (bwa mem / minimap2) | 4,279,026 | 0.000% | 99.197% | 0.802% | 74.00% | 24,512 | 802 (0.019%) | 1.18% |
 | 0 | GRCh38-only graph (H 17) | 4,279,026 | 0.025% | 99.177% | 0.799% | 73.97% | 23,739 | 466 (0.011%) | 0.63% |
 | 0 | HPRC v1.1 d9 | 4,279,026 | 0.027% | 99.022% | 0.827% | 74.02% | 25,367 | 98 (0.002%) | 0.89% |
 | 0 | HPRC v2.1 d46 | 4,279,026 | 0.026% | 99.028% | 0.804% | 74.02% | 24,839 | 68 (0.002%) | 0.88% |
 | 0 | CHM13-only graph (control; CHM13 truth) | 4,271,288 | 0.043% | 99.090% | 0.868% | 69.35% | 23,298 | 2,631 (0.063%) | 0.66% |
+| 1 | GRCh38 linear reference (bwa mem / minimap2) | 600,460 | 0.151% | 96.196% | 3.658% | 2.90% | 8,330 | 3,186 (0.554%) | 2.41% |
 | 1 | GRCh38-only graph (H 17) | 600,460 | 0.370% | 96.212% | 3.430% | 2.84% | 7,974 | 2,669 (0.466%) | 1.92% |
 | 1 | HPRC v1.1 d9 | 600,460 | 0.052% | 96.475% | 1.622% | 67.04% | 5,698 | 389 (0.068%) | 2.09% |
 | 1 | HPRC v2.1 d46 | 600,460 | 0.065% | 96.561% | 1.388% | 67.78% | 5,200 | 236 (0.042%) | 2.10% |
 | 1 | CHM13-only graph (control; CHM13 truth) | 597,788 | 0.092% | 97.526% | 2.383% | 38.89% | 6,863 | 1,166 (0.202%) | 1.72% |
+| 2-3 | GRCh38 linear reference (bwa mem / minimap2) | 112,202 | 0.026% | 95.244% | 4.731% | 1.48% | 1,637 | 1,163 (1.092%) | 2.66% |
 | 2-3 | GRCh38-only graph (H 17) | 112,202 | 0.088% | 95.400% | 4.516% | 1.42% | 1,574 | 849 (0.803%) | 2.41% |
 | 2-3 | HPRC v1.1 d9 | 112,202 | 0.038% | 96.930% | 2.514% | 64.44% | 1,525 | 203 (0.193%) | 2.09% |
 | 2-3 | HPRC v2.1 d46 | 112,202 | 0.039% | 97.002% | 2.226% | 65.53% | 1,403 | 129 (0.122%) | 2.07% |
 | 2-3 | CHM13-only graph (control; CHM13 truth) | 111,578 | 0.097% | 96.886% | 3.020% | 32.34% | 1,026 | 494 (0.463%) | 1.82% |
+| >=4 | GRCh38 linear reference (bwa mem / minimap2) | 8,312 | 0.000% | 74.892% | 25.108% | 7.29% | 601 | 699 (10.586%) | 10.03% |
 | >=4 | GRCh38-only graph (H 17) | 8,312 | 0.217% | 76.239% | 23.595% | 6.80% | 560 | 554 (8.421%) | 8.49% |
 | >=4 | HPRC v1.1 d9 | 8,312 | 0.072% | 82.736% | 15.713% | 59.44% | 614 | 214 (3.311%) | 8.41% |
 | >=4 | HPRC v2.1 d46 | 8,312 | 0.120% | 82.868% | 14.371% | 60.64% | 583 | 198 (3.062%) | 8.24% |
@@ -58,35 +64,42 @@ Error-free reads only (no simulated sequencing error; any graph mismatch is then
 
 | stratum | arm | reads | unmapped | correct (50 bp) | wrong / placed | perfect | perfect but wrong | wrong at MAPQ>=30 | MAPQ 0 |
 |---|---|---|---|---|---|---|---|---|---|
+| read spans an SV (>=50 bp) of its haplotype | GRCh38 linear reference (bwa mem / minimap2) | 18,851 | 4.965% | 24.381% | 74.346% | 24.49% | 4,352 | 2,403 (42.351%) | 40.25% |
 | read spans an SV (>=50 bp) of its haplotype | GRCh38-only graph (H 17) | 18,851 | 11.262% | 25.139% | 71.670% | 23.50% | 4,173 | 2,350 (38.525%) | 33.31% |
 | read spans an SV (>=50 bp) of its haplotype | HPRC v1.1 d9 | 18,851 | 0.833% | 21.240% | 51.015% | 62.74% | 2,431 | 316 (9.909%) | 34.74% |
 | read spans an SV (>=50 bp) of its haplotype | HPRC v2.1 d46 | 18,851 | 1.358% | 21.686% | 46.047% | 64.29% | 2,203 | 239 (7.626%) | 36.26% |
 | read spans an SV (>=50 bp) of its haplotype | CHM13-only graph (control; CHM13 truth) | 17,410 | 1.683% | 53.969% | 45.107% | 49.41% | 4,074 | 789 (9.244%) | 32.66% |
+| >=10 read bases absent from GRCh38 | GRCh38 linear reference (bwa mem / minimap2) | 28,075 | 3.366% | 46.198% | 52.193% | 18.06% | 4,442 | 2,595 (18.489%) | 28.45% |
 | >=10 read bases absent from GRCh38 | GRCh38-only graph (H 17) | 28,075 | 7.783% | 47.316% | 48.691% | 17.37% | 4,256 | 2,512 (17.123%) | 23.37% |
 | >=10 read bases absent from GRCh38 | HPRC v1.1 d9 | 28,075 | 0.609% | 45.817% | 25.354% | 59.73% | 2,520 | 338 (3.083%) | 24.56% |
 | >=10 read bases absent from GRCh38 | HPRC v2.1 d46 | 28,075 | 0.994% | 46.169% | 21.916% | 60.99% | 2,271 | 247 (2.230%) | 25.66% |
 | >=10 read bases absent from GRCh38 | CHM13-only graph (control; CHM13 truth) | 26,469 | 1.141% | 68.427% | 30.783% | 41.96% | 4,139 | 874 (5.093%) | 22.21% |
+| neither | GRCh38 linear reference (bwa mem / minimap2) | 4,970,368 | 0.000% | 99.007% | 0.993% | 64.00% | 30,599 | 3,192 (0.066%) | 1.22% |
 | neither | GRCh38-only graph (H 17) | 4,970,368 | 0.024% | 98.992% | 0.984% | 63.97% | 29,551 | 1,968 (0.040%) | 0.71% |
 | neither | HPRC v1.1 d9 | 4,970,368 | 0.027% | 98.942% | 0.897% | 73.02% | 30,631 | 548 (0.011%) | 0.94% |
 | neither | HPRC v2.1 d46 | 4,970,368 | 0.026% | 98.958% | 0.855% | 73.13% | 29,696 | 364 (0.007%) | 0.92% |
 | neither | CHM13-only graph (control; CHM13 truth) | 4,960,628 | 0.044% | 98.996% | 0.960% | 64.94% | 27,330 | 3,665 (0.075%) | 0.71% |
 
-## illumina: by distance to nearest hg008n variant
+## illumina: by distance to nearest HG008N variant
 
 | stratum | arm | reads | unmapped | correct (50 bp) | wrong / placed | perfect | perfect but wrong | wrong at MAPQ>=30 | MAPQ 0 |
 |---|---|---|---|---|---|---|---|---|---|
+| inside read | GRCh38 linear reference (bwa mem / minimap2) | 720,974 | 0.130% | 95.802% | 4.073% | 2.73% | 10,568 | 5,048 (0.734%) | 2.54% |
 | inside read | GRCh38-only graph (H 17) | 720,974 | 0.325% | 95.856% | 3.832% | 2.67% | 10,108 | 4,072 (0.595%) | 2.07% |
 | inside read | HPRC v1.1 d9 | 720,974 | 0.050% | 96.388% | 1.925% | 66.54% | 7,837 | 806 (0.119%) | 2.16% |
 | inside read | HPRC v2.1 d46 | 720,974 | 0.062% | 96.472% | 1.668% | 67.34% | 7,186 | 563 (0.083%) | 2.17% |
 | inside read | CHM13-only graph (control; CHM13 truth) | 717,353 | 0.095% | 97.292% | 2.616% | 37.78% | 8,196 | 1,943 (0.282%) | 1.79% |
+| 1-50 bp | GRCh38 linear reference (bwa mem / minimap2) | 366,880 | 0.002% | 98.761% | 1.237% | 73.67% | 2,930 | 296 (0.083%) | 1.40% |
 | 1-50 bp | GRCh38-only graph (H 17) | 366,880 | 0.059% | 98.727% | 1.215% | 73.62% | 2,803 | 220 (0.062%) | 0.94% |
 | 1-50 bp | HPRC v1.1 d9 | 366,880 | 0.044% | 98.688% | 1.075% | 73.98% | 2,745 | 44 (0.012%) | 1.31% |
 | 1-50 bp | HPRC v2.1 d46 | 366,880 | 0.045% | 98.710% | 0.998% | 73.99% | 2,585 | 30 (0.008%) | 1.24% |
 | 1-50 bp | CHM13-only graph (control; CHM13 truth) | 366,033 | 0.065% | 98.795% | 1.141% | 69.97% | 2,532 | 263 (0.074%) | 0.91% |
+| 51-500 bp | GRCh38 linear reference (bwa mem / minimap2) | 1,709,231 | 0.000% | 99.159% | 0.841% | 74.04% | 10,225 | 502 (0.030%) | 1.10% |
 | 51-500 bp | GRCh38-only graph (H 17) | 1,709,231 | 0.025% | 99.136% | 0.840% | 74.01% | 9,857 | 241 (0.014%) | 0.67% |
 | 51-500 bp | HPRC v1.1 d9 | 1,709,231 | 0.028% | 99.046% | 0.799% | 74.04% | 9,779 | 50 (0.003%) | 0.92% |
 | 51-500 bp | HPRC v2.1 d46 | 1,709,231 | 0.027% | 99.060% | 0.759% | 74.05% | 9,386 | 30 (0.002%) | 0.91% |
 | 51-500 bp | CHM13-only graph (control; CHM13 truth) | 1,705,945 | 0.044% | 99.107% | 0.849% | 70.19% | 9,325 | 781 (0.047%) | 0.68% |
+| >500 bp | GRCh38 linear reference (bwa mem / minimap2) | 2,202,915 | 0.000% | 99.300% | 0.700% | 74.02% | 11,357 | 4 (0.000%) | 1.21% |
 | >500 bp | GRCh38-only graph (H 17) | 2,202,915 | 0.019% | 99.284% | 0.697% | 74.00% | 11,079 | 5 (0.000%) | 0.55% |
 | >500 bp | HPRC v1.1 d9 | 2,202,915 | 0.023% | 99.059% | 0.807% | 74.01% | 12,843 | 4 (0.000%) | 0.80% |
 | >500 bp | HPRC v2.1 d46 | 2,202,915 | 0.022% | 99.056% | 0.807% | 74.01% | 12,868 | 8 (0.000%) | 0.79% |
@@ -96,14 +109,17 @@ Error-free reads only (no simulated sequencing error; any graph mismatch is then
 
 | stratum | arm | reads | unmapped | correct (50 bp) | wrong / placed | perfect | perfect but wrong | wrong at MAPQ>=30 | MAPQ 0 |
 |---|---|---|---|---|---|---|---|---|---|
+| easy | GRCh38 linear reference (bwa mem / minimap2) | 4,021,943 | 0.001% | 99.996% | 0.002% | 64.91% | 19 | 33 (0.001%) | 0.00% |
 | easy | GRCh38-only graph (H 17) | 4,021,943 | 0.004% | 99.994% | 0.002% | 64.90% | 17 | 25 (0.001%) | 0.00% |
 | easy | HPRC v1.1 d9 | 4,021,943 | 0.001% | 99.982% | 0.003% | 73.22% | 71 | 19 (0.001%) | 0.03% |
 | easy | HPRC v2.1 d46 | 4,021,943 | 0.001% | 99.979% | 0.002% | 73.30% | 43 | 12 (0.000%) | 0.03% |
 | easy | CHM13-only graph (control; CHM13 truth) | 4,019,118 | 0.018% | 99.970% | 0.012% | 65.88% | 22 | 211 (0.005%) | 0.00% |
+| difficult | GRCh38 linear reference (bwa mem / minimap2) | 577,525 | 0.112% | 99.425% | 0.463% | 58.55% | 449 | 377 (0.066%) | 0.27% |
 | difficult | GRCh38-only graph (H 17) | 577,525 | 0.239% | 99.423% | 0.339% | 58.53% | 326 | 341 (0.059%) | 0.21% |
 | difficult | HPRC v1.1 d9 | 577,525 | 0.015% | 99.405% | 0.081% | 72.24% | 215 | 51 (0.009%) | 0.17% |
 | difficult | HPRC v2.1 d46 | 577,525 | 0.037% | 99.395% | 0.083% | 72.36% | 228 | 57 (0.010%) | 0.18% |
 | difficult | CHM13-only graph (control; CHM13 truth) | 576,035 | 0.061% | 99.675% | 0.264% | 60.13% | 285 | 287 (0.050%) | 0.17% |
+| extreme | GRCh38 linear reference (bwa mem / minimap2) | 400,532 | 0.060% | 84.733% | 15.217% | 59.33% | 34,612 | 5,440 (1.864%) | 16.79% |
 | extreme | GRCh38-only graph (H 17) | 400,532 | 0.463% | 84.639% | 14.967% | 58.92% | 33,504 | 4,172 (1.502%) | 10.15% |
 | extreme | HPRC v1.1 d9 | 400,532 | 0.346% | 84.086% | 12.561% | 71.17% | 32,918 | 834 (0.317%) | 12.81% |
 | extreme | HPRC v2.1 d46 | 400,532 | 0.329% | 84.349% | 11.893% | 71.59% | 31,754 | 562 (0.213%) | 12.70% |
@@ -113,14 +129,17 @@ Error-free reads only (no simulated sequencing error; any graph mismatch is then
 
 | stratum | arm | reads | unmapped | correct (50 bp) | wrong / placed | perfect | perfect but wrong | wrong at MAPQ>=30 | MAPQ 0 |
 |---|---|---|---|---|---|---|---|---|---|
+| 0 | GRCh38 linear reference (bwa mem / minimap2) | 4,493,817 | 0.019% | 98.736% | 1.245% | 64.97% | 32,544 | 4,323 (0.098%) | 1.40% |
 | 0 | GRCh38-only graph (H 17) | 4,493,817 | 0.064% | 98.719% | 1.218% | 64.93% | 31,333 | 3,211 (0.073%) | 0.86% |
 | 0 | HPRC v1.1 d9 | 4,493,817 | 0.032% | 98.660% | 1.007% | 73.16% | 30,683 | 764 (0.017%) | 1.08% |
 | 0 | HPRC v2.1 d46 | 4,493,817 | 0.033% | 98.677% | 0.950% | 73.27% | 29,592 | 544 (0.013%) | 1.06% |
 | 0 | CHM13-only graph (control; CHM13 truth) | 4,484,089 | 0.053% | 98.821% | 1.126% | 65.94% | 28,889 | 3,976 (0.091%) | 0.84% |
+| (0, 0.5) | GRCh38 linear reference (bwa mem / minimap2) | 500,964 | 0.016% | 98.585% | 1.400% | 53.01% | 2,518 | 1,371 (0.279%) | 1.13% |
 | (0, 0.5) | GRCh38-only graph (H 17) | 500,964 | 0.100% | 98.603% | 1.298% | 53.00% | 2,501 | 1,158 (0.236%) | 0.64% |
 | (0, 0.5) | HPRC v1.1 d9 | 500,964 | 0.005% | 98.592% | 0.754% | 71.17% | 2,493 | 120 (0.025%) | 1.01% |
 | (0, 0.5) | HPRC v2.1 d46 | 500,964 | 0.008% | 98.606% | 0.707% | 71.38% | 2,396 | 54 (0.011%) | 1.05% |
 | (0, 0.5) | CHM13-only graph (control; CHM13 truth) | 499,631 | 0.024% | 98.949% | 1.027% | 55.08% | 2,586 | 535 (0.109%) | 0.66% |
+| >=0.5 | GRCh38 linear reference (bwa mem / minimap2) | 5,219 | 0.000% | 86.089% | 13.911% | 17.30% | 18 | 156 (3.491%) | 5.17% |
 | >=0.5 | GRCh38-only graph (H 17) | 5,219 | 0.613% | 89.251% | 10.199% | 17.07% | 13 | 169 (3.597%) | 3.56% |
 | >=0.5 | HPRC v1.1 d9 | 5,219 | 0.326% | 88.139% | 2.315% | 53.38% | 28 | 20 (0.521%) | 4.39% |
 | >=0.5 | HPRC v2.1 d46 | 5,219 | 0.709% | 88.159% | 2.480% | 54.90% | 37 | 33 (0.857%) | 5.31% |
@@ -130,10 +149,12 @@ Error-free reads only (no simulated sequencing error; any graph mismatch is then
 
 | stratum | arm | reads | unmapped | correct (50 bp) | wrong / placed | perfect | perfect but wrong | wrong at MAPQ>=30 | MAPQ 0 |
 |---|---|---|---|---|---|---|---|---|---|
+| yes | GRCh38 linear reference (bwa mem / minimap2) | 838,028 | 0.015% | 99.102% | 0.884% | 58.51% | 3,606 | 841 (0.102%) | 0.97% |
 | yes | GRCh38-only graph (H 17) | 838,028 | 0.065% | 99.084% | 0.852% | 58.48% | 3,507 | 475 (0.058%) | 0.57% |
 | yes | HPRC v1.1 d9 | 838,028 | 0.022% | 99.079% | 0.691% | 72.28% | 3,871 | 99 (0.012%) | 0.70% |
 | yes | HPRC v2.1 d46 | 838,028 | 0.026% | 99.105% | 0.647% | 72.45% | 3,678 | 52 (0.006%) | 0.69% |
 | yes | CHM13-only graph (control; CHM13 truth) | 836,529 | 0.047% | 99.155% | 0.798% | 60.05% | 3,326 | 689 (0.084%) | 0.55% |
+| no | GRCh38 linear reference (bwa mem / minimap2) | 4,161,972 | 0.020% | 98.628% | 1.352% | 64.78% | 31,474 | 5,009 (0.123%) | 1.46% |
 | no | GRCh38-only graph (H 17) | 4,161,972 | 0.069% | 98.620% | 1.312% | 64.74% | 30,340 | 4,063 (0.100%) | 0.89% |
 | no | HPRC v1.1 d9 | 4,161,972 | 0.032% | 98.554% | 1.042% | 73.07% | 29,333 | 805 (0.020%) | 1.15% |
 | no | HPRC v2.1 d46 | 4,161,972 | 0.032% | 98.570% | 0.983% | 73.18% | 28,347 | 579 (0.014%) | 1.14% |
@@ -152,6 +173,7 @@ Error-free reads only (no simulated sequencing error; any graph mismatch is then
 
 | arm | unmapped | correct (50 bp) | wrong / placed | perfect | perfect but wrong | wrong at MAPQ>=30 | MAPQ 0 |
 |---|---|---|---|---|---|---|---|
+| GRCh38 linear reference (bwa mem / minimap2) | 0.017% | 98.758% | 1.226% | 63.74% | 33,980 | 5,555 | 1.34% |
 | GRCh38-only graph (H 17) | 0.064% | 98.749% | 1.188% | 63.71% | 32,724 | 4,240 | 0.82% |
 | HPRC v1.1 d9 | 0.030% | 98.713% | 0.950% | 72.95% | 32,180 | 823 | 1.03% |
 | HPRC v2.1 d46 | 0.029% | 98.732% | 0.896% | 73.07% | 31,012 | 567 | 1.02% |
@@ -161,6 +183,9 @@ Error-free reads only (no simulated sequencing error; any graph mismatch is then
 
 | A vs B | correct in both | correct only in A | correct only in B | wrong/unplaced in both | confident wrong only in A | confident wrong only in B |
 |---|---|---|---|---|---|---|
+| linref vs linear | 4,921,350 | 14,037 | 13,541 | 51,072 | 2,376 | 1,064 |
+| linref vs d9 | 4,912,062 | 23,325 | 20,043 | 44,570 | 5,234 | 288 |
+| linref vs d46 | 4,912,208 | 23,179 | 20,755 | 43,858 | 5,431 | 212 |
 | linear vs d9 | 4,915,989 | 18,902 | 16,116 | 48,993 | 3,906 | 272 |
 | linear vs d46 | 4,915,522 | 19,369 | 17,441 | 47,668 | 4,093 | 186 |
 | d9 vs d46 | 4,918,494 | 13,611 | 14,469 | 53,426 | 490 | 217 |
@@ -169,6 +194,7 @@ Error-free reads only (no simulated sequencing error; any graph mismatch is then
 
 | arm | reads | unmapped | graph-mapped, not surjected | correct (50 bp) | wrong | wrong / placed | perfect | perfect but wrong | wrong at MAPQ>=30 | wrong at MAPQ 60 | MAPQ 0 | uses off-ref node |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
+| GRCh38 linear reference (bwa mem / minimap2) | 40,000 | 0 (0.000%) | 0 | 99.457% | 217 | 0.542% | 0.00% | 0 (n/a of perfect) | 60 (0.151%) | 25 (0.063%) | 0.02% | 0 (0.00%) |
 | GRCh38-only graph (H 17) | 40,000 | 20 (0.050%) | 0 | 99.455% | 198 | 0.495% | 0.00% | 0 (n/a of perfect) | 13 (0.033%) | 1 (0.003%) | 0.01% | 0 (0.00%) |
 | HPRC v1.1 d9 | 40,000 | 8 (0.020%) | 40 | 99.552% | 131 | 0.328% | 0.00% | 0 (n/a of perfect) | 6 (0.015%) | 2 (0.005%) | 0.04% | 36,664 (91.66%) |
 | HPRC v2.1 d46 | 40,000 | 0 (0.000%) | 51 | 99.490% | 153 | 0.383% | 0.00% | 0 (n/a of perfect) | 3 (0.008%) | 0 (0.000%) | 0.00% | 36,672 (91.68%) |
@@ -176,33 +202,37 @@ Error-free reads only (no simulated sequencing error; any graph mismatch is then
 
 ## hifi: MAPQ calibration (reads placed on GRCh38; error rate = wrong / placed in the bin; expected = mean 10^(-MAPQ/10))
 
-| MAPQ | GRCh38-only graph (H 17): placed / wrong / rate / expected | HPRC v1.1 d9: placed / wrong / rate / expected | HPRC v2.1 d46: placed / wrong / rate / expected | CHM13-only graph (control; CHM13 truth): placed / wrong / rate / expected |
-|---|---|---|---|---|
-| 0 | 3 / 3 / 1.00e+00 / 1.00e+00 | 7 / 3 / 4.29e-01 / 1.00e+00 | 0 / 0 / n/a / n/a | 11 / 10 / 9.09e-01 / 1.00e+00 |
-| 1-9 | 612 / 167 / 2.73e-01 / 4.47e-01 | 707 / 110 / 1.56e-01 / 4.46e-01 | 775 / 146 / 1.88e-01 / 4.10e-01 | 604 / 130 / 2.15e-01 / 4.49e-01 |
-| 10-19 | 35 / 9 / 2.57e-01 / 5.32e-02 | 46 / 10 / 2.17e-01 / 5.22e-02 | 172 / 4 / 2.33e-02 / 5.24e-02 | 36 / 7 / 1.94e-01 / 4.60e-02 |
-| 20-29 | 50 / 6 / 1.20e-01 / 3.74e-03 | 45 / 2 / 4.44e-02 / 4.07e-03 | 243 / 0 / 0.00e+00 / 3.54e-03 | 35 / 4 / 1.14e-01 / 3.08e-03 |
-| 30-39 | 145 / 5 / 3.45e-02 / 3.55e-04 | 125 / 2 / 1.60e-02 / 3.40e-04 | 719 / 0 / 0.00e+00 / 3.49e-04 | 133 / 4 / 3.01e-02 / 3.64e-04 |
-| 40-49 | 474 / 7 / 1.48e-02 / 3.40e-05 | 409 / 1 / 2.45e-03 / 3.30e-05 | 1,971 / 1 / 5.07e-04 / 3.70e-05 | 450 / 3 / 6.67e-03 / 3.40e-05 |
-| 50-59 | 1,515 / 0 / 0.00e+00 / 4.00e-06 | 1,387 / 1 / 7.21e-04 / 4.00e-06 | 4,766 / 2 / 4.20e-04 / 4.00e-06 | 1,479 / 0 / 0.00e+00 / 4.00e-06 |
-| 60 | 37,146 / 1 / 2.70e-05 / 1.00e-06 | 37,226 / 2 / 5.40e-05 / 1.00e-06 | 31,303 / 0 / 0.00e+00 / 1.00e-06 | 36,992 / 6 / 1.62e-04 / 1.00e-06 |
+| MAPQ | GRCh38 linear reference (bwa mem / minimap2): placed / wrong / rate / expected | GRCh38-only graph (H 17): placed / wrong / rate / expected | HPRC v1.1 d9: placed / wrong / rate / expected | HPRC v2.1 d46: placed / wrong / rate / expected | CHM13-only graph (control; CHM13 truth): placed / wrong / rate / expected |
+|---|---|---|---|---|---|
+| 0 | 9 / 5 / 5.56e-01 / 1.00e+00 | 3 / 3 / 1.00e+00 / 1.00e+00 | 7 / 3 / 4.29e-01 / 1.00e+00 | 0 / 0 / n/a / n/a | 11 / 10 / 9.09e-01 / 1.00e+00 |
+| 1-9 | 188 / 110 / 5.85e-01 / 5.60e-01 | 612 / 167 / 2.73e-01 / 4.47e-01 | 707 / 110 / 1.56e-01 / 4.46e-01 | 775 / 146 / 1.88e-01 / 4.10e-01 | 604 / 130 / 2.15e-01 / 4.49e-01 |
+| 10-19 | 44 / 24 / 5.45e-01 / 4.66e-02 | 35 / 9 / 2.57e-01 / 5.32e-02 | 46 / 10 / 2.17e-01 / 5.22e-02 | 172 / 4 / 2.33e-02 / 5.24e-02 | 36 / 7 / 1.94e-01 / 4.60e-02 |
+| 20-29 | 35 / 18 / 5.14e-01 / 4.76e-03 | 50 / 6 / 1.20e-01 / 3.74e-03 | 45 / 2 / 4.44e-02 / 4.07e-03 | 243 / 0 / 0.00e+00 / 3.54e-03 | 35 / 4 / 1.14e-01 / 3.08e-03 |
+| 30-39 | 32 / 22 / 6.88e-01 / 4.68e-04 | 145 / 5 / 3.45e-02 / 3.55e-04 | 125 / 2 / 1.60e-02 / 3.40e-04 | 719 / 0 / 0.00e+00 / 3.49e-04 | 133 / 4 / 3.01e-02 / 3.64e-04 |
+| 40-49 | 27 / 8 / 2.96e-01 / 4.60e-05 | 474 / 7 / 1.48e-02 / 3.40e-05 | 409 / 1 / 2.45e-03 / 3.30e-05 | 1,971 / 1 / 5.07e-04 / 3.70e-05 | 450 / 3 / 6.67e-03 / 3.40e-05 |
+| 50-59 | 31 / 5 / 1.61e-01 / 4.00e-06 | 1,515 / 0 / 0.00e+00 / 4.00e-06 | 1,387 / 1 / 7.21e-04 / 4.00e-06 | 4,766 / 2 / 4.20e-04 / 4.00e-06 | 1,479 / 0 / 0.00e+00 / 4.00e-06 |
+| 60 | 39,634 / 25 / 6.31e-04 / 1.00e-06 | 37,146 / 1 / 2.70e-05 / 1.00e-06 | 37,226 / 2 / 5.40e-05 / 1.00e-06 | 31,303 / 0 / 0.00e+00 / 1.00e-06 | 36,992 / 6 / 1.62e-04 / 1.00e-06 |
 
-## hifi: by hg008n variants in read
+## hifi: by HG008N variants in read
 
 | stratum | arm | reads | unmapped | correct (50 bp) | wrong / placed | perfect | perfect but wrong | wrong at MAPQ>=30 | MAPQ 0 |
 |---|---|---|---|---|---|---|---|---|---|
+| 0 | GRCh38 linear reference (bwa mem / minimap2) | 1,633 | 0.000% | 99.939% | 0.061% | 0.00% | 0 | 1 (0.061%) | 0.00% |
 | 0 | GRCh38-only graph (H 17) | 1,633 | 0.000% | 99.939% | 0.061% | 0.00% | 0 | 0 (0.000%) | 0.00% |
 | 0 | HPRC v1.1 d9 | 1,633 | 0.000% | 99.755% | 0.184% | 0.00% | 0 | 0 (0.000%) | 0.06% |
 | 0 | HPRC v2.1 d46 | 1,633 | 0.000% | 99.755% | 0.245% | 0.00% | 0 | 0 (0.000%) | 0.00% |
 | 0 | CHM13-only graph (control; CHM13 truth) | 1,627 | 0.000% | 100.000% | 0.000% | 0.00% | 0 | 0 (0.000%) | 0.00% |
+| 1 | GRCh38 linear reference (bwa mem / minimap2) | 2,478 | 0.000% | 98.588% | 1.412% | 0.00% | 0 | 15 (0.613%) | 0.00% |
 | 1 | GRCh38-only graph (H 17) | 2,478 | 0.161% | 98.588% | 1.253% | 0.00% | 0 | 4 (0.167%) | 0.00% |
 | 1 | HPRC v1.1 d9 | 2,478 | 0.000% | 98.426% | 0.813% | 0.00% | 0 | 0 (0.000%) | 0.32% |
 | 1 | HPRC v2.1 d46 | 2,478 | 0.000% | 98.547% | 0.772% | 0.00% | 0 | 0 (0.000%) | 0.00% |
 | 1 | CHM13-only graph (control; CHM13 truth) | 2,466 | 0.000% | 98.946% | 1.054% | 0.00% | 0 | 3 (0.126%) | 0.12% |
+| 2-3 | GRCh38 linear reference (bwa mem / minimap2) | 4,099 | 0.000% | 99.561% | 0.439% | 0.00% | 0 | 4 (0.098%) | 0.05% |
 | 2-3 | GRCh38-only graph (H 17) | 4,099 | 0.073% | 99.537% | 0.391% | 0.00% | 0 | 0 (0.000%) | 0.00% |
 | 2-3 | HPRC v1.1 d9 | 4,099 | 0.000% | 99.659% | 0.342% | 0.00% | 0 | 1 (0.025%) | 0.00% |
 | 2-3 | HPRC v2.1 d46 | 4,099 | 0.000% | 99.537% | 0.391% | 0.00% | 0 | 0 (0.000%) | 0.00% |
 | 2-3 | CHM13-only graph (control; CHM13 truth) | 4,084 | 0.025% | 99.559% | 0.416% | 0.00% | 0 | 1 (0.025%) | 0.00% |
+| >=4 | GRCh38 linear reference (bwa mem / minimap2) | 31,790 | 0.000% | 99.487% | 0.513% | 0.00% | 0 | 40 (0.127%) | 0.02% |
 | >=4 | GRCh38-only graph (H 17) | 31,790 | 0.041% | 99.487% | 0.472% | 0.00% | 0 | 9 (0.029%) | 0.01% |
 | >=4 | HPRC v1.1 d9 | 31,790 | 0.025% | 99.616% | 0.296% | 0.00% | 0 | 5 (0.016%) | 0.03% |
 | >=4 | HPRC v2.1 d46 | 31,790 | 0.000% | 99.544% | 0.359% | 0.00% | 0 | 3 (0.010%) | 0.00% |
@@ -212,35 +242,42 @@ Error-free reads only (no simulated sequencing error; any graph mismatch is then
 
 | stratum | arm | reads | unmapped | correct (50 bp) | wrong / placed | perfect | perfect but wrong | wrong at MAPQ>=30 | MAPQ 0 |
 |---|---|---|---|---|---|---|---|---|---|
+| read spans an SV (>=50 bp) of its haplotype | GRCh38 linear reference (bwa mem / minimap2) | 2,892 | 0.000% | 96.853% | 3.147% | 0.00% | 0 | 37 (1.309%) | 0.07% |
 | read spans an SV (>=50 bp) of its haplotype | GRCh38-only graph (H 17) | 2,892 | 0.553% | 96.853% | 2.608% | 0.00% | 0 | 10 (0.362%) | 0.03% |
 | read spans an SV (>=50 bp) of its haplotype | HPRC v1.1 d9 | 2,892 | 0.138% | 97.545% | 1.467% | 0.00% | 0 | 6 (0.217%) | 0.28% |
 | read spans an SV (>=50 bp) of its haplotype | HPRC v2.1 d46 | 2,892 | 0.000% | 97.545% | 1.605% | 0.00% | 0 | 3 (0.111%) | 0.00% |
 | read spans an SV (>=50 bp) of its haplotype | CHM13-only graph (control; CHM13 truth) | 2,760 | 0.036% | 97.862% | 2.102% | 0.00% | 0 | 7 (0.264%) | 0.22% |
+| >=10 read bases absent from GRCh38 | GRCh38 linear reference (bwa mem / minimap2) | 10,466 | 0.000% | 98.662% | 1.338% | 0.00% | 0 | 54 (0.522%) | 0.01% |
 | >=10 read bases absent from GRCh38 | GRCh38-only graph (H 17) | 10,466 | 0.143% | 98.643% | 1.215% | 0.00% | 0 | 11 (0.108%) | 0.03% |
 | >=10 read bases absent from GRCh38 | HPRC v1.1 d9 | 10,466 | 0.029% | 99.025% | 0.614% | 0.00% | 0 | 6 (0.059%) | 0.12% |
 | >=10 read bases absent from GRCh38 | HPRC v2.1 d46 | 10,466 | 0.000% | 99.025% | 0.614% | 0.00% | 0 | 3 (0.030%) | 0.00% |
 | >=10 read bases absent from GRCh38 | CHM13-only graph (control; CHM13 truth) | 10,291 | 0.019% | 99.116% | 0.865% | 0.00% | 0 | 6 (0.060%) | 0.07% |
+| neither | GRCh38 linear reference (bwa mem / minimap2) | 28,963 | 0.000% | 99.748% | 0.252% | 0.00% | 0 | 6 (0.021%) | 0.02% |
 | neither | GRCh38-only graph (H 17) | 28,963 | 0.014% | 99.748% | 0.238% | 0.00% | 0 | 0 (0.000%) | 0.00% |
 | neither | HPRC v1.1 d9 | 28,963 | 0.014% | 99.745% | 0.225% | 0.00% | 0 | 0 (0.000%) | 0.02% |
 | neither | HPRC v2.1 d46 | 28,963 | 0.000% | 99.658% | 0.297% | 0.00% | 0 | 0 (0.000%) | 0.00% |
 | neither | CHM13-only graph (control; CHM13 truth) | 28,883 | 0.003% | 99.754% | 0.242% | 0.00% | 0 | 6 (0.021%) | 0.01% |
 
-## hifi: by distance to nearest hg008n variant
+## hifi: by distance to nearest HG008N variant
 
 | stratum | arm | reads | unmapped | correct (50 bp) | wrong / placed | perfect | perfect but wrong | wrong at MAPQ>=30 | MAPQ 0 |
 |---|---|---|---|---|---|---|---|---|---|
+| inside read | GRCh38 linear reference (bwa mem / minimap2) | 38,367 | 0.000% | 99.437% | 0.563% | 0.00% | 0 | 59 (0.155%) | 0.02% |
 | inside read | GRCh38-only graph (H 17) | 38,367 | 0.052% | 99.434% | 0.514% | 0.00% | 0 | 13 (0.034%) | 0.01% |
 | inside read | HPRC v1.1 d9 | 38,367 | 0.021% | 99.544% | 0.334% | 0.00% | 0 | 6 (0.016%) | 0.04% |
 | inside read | HPRC v2.1 d46 | 38,367 | 0.000% | 99.479% | 0.389% | 0.00% | 0 | 3 (0.008%) | 0.00% |
 | inside read | CHM13-only graph (control; CHM13 truth) | 38,116 | 0.008% | 99.562% | 0.430% | 0.00% | 0 | 13 (0.035%) | 0.03% |
+| 1-50 bp | GRCh38 linear reference (bwa mem / minimap2) | 26 | 0.000% | 96.154% | 3.846% | 0.00% | 0 | 1 (3.846%) | 0.00% |
 | 1-50 bp | GRCh38-only graph (H 17) | 26 | 0.000% | 96.154% | 3.846% | 0.00% | 0 | 0 (0.000%) | 0.00% |
 | 1-50 bp | HPRC v1.1 d9 | 26 | 0.000% | 100.000% | 0.000% | 0.00% | 0 | 0 (0.000%) | 0.00% |
 | 1-50 bp | HPRC v2.1 d46 | 26 | 0.000% | 100.000% | 0.000% | 0.00% | 0 | 0 (0.000%) | 0.00% |
 | 1-50 bp | CHM13-only graph (control; CHM13 truth) | 25 | 0.000% | 100.000% | 0.000% | 0.00% | 0 | 0 (0.000%) | 0.00% |
+| 51-500 bp | GRCh38 linear reference (bwa mem / minimap2) | 183 | 0.000% | 100.000% | 0.000% | 0.00% | 0 | 0 (0.000%) | 0.00% |
 | 51-500 bp | GRCh38-only graph (H 17) | 183 | 0.000% | 100.000% | 0.000% | 0.00% | 0 | 0 (0.000%) | 0.00% |
 | 51-500 bp | HPRC v1.1 d9 | 183 | 0.000% | 100.000% | 0.000% | 0.00% | 0 | 0 (0.000%) | 0.00% |
 | 51-500 bp | HPRC v2.1 d46 | 183 | 0.000% | 99.454% | 0.546% | 0.00% | 0 | 0 (0.000%) | 0.00% |
 | 51-500 bp | CHM13-only graph (control; CHM13 truth) | 182 | 0.000% | 100.000% | 0.000% | 0.00% | 0 | 0 (0.000%) | 0.00% |
+| >500 bp | GRCh38 linear reference (bwa mem / minimap2) | 1,424 | 0.000% | 100.000% | 0.000% | 0.00% | 0 | 0 (0.000%) | 0.00% |
 | >500 bp | GRCh38-only graph (H 17) | 1,424 | 0.000% | 100.000% | 0.000% | 0.00% | 0 | 0 (0.000%) | 0.00% |
 | >500 bp | HPRC v1.1 d9 | 1,424 | 0.000% | 99.719% | 0.211% | 0.00% | 0 | 0 (0.000%) | 0.07% |
 | >500 bp | HPRC v2.1 d46 | 1,424 | 0.000% | 99.789% | 0.211% | 0.00% | 0 | 0 (0.000%) | 0.00% |
@@ -250,14 +287,17 @@ Error-free reads only (no simulated sequencing error; any graph mismatch is then
 
 | stratum | arm | reads | unmapped | correct (50 bp) | wrong / placed | perfect | perfect but wrong | wrong at MAPQ>=30 | MAPQ 0 |
 |---|---|---|---|---|---|---|---|---|---|
+| easy | GRCh38 linear reference (bwa mem / minimap2) | 37,644 | 0.000% | 99.995% | 0.005% | 0.00% | 0 | 1 (0.003%) | 0.00% |
 | easy | GRCh38-only graph (H 17) | 37,644 | 0.003% | 99.997% | 0.000% | 0.00% | 0 | 0 (0.000%) | 0.00% |
 | easy | HPRC v1.1 d9 | 37,644 | 0.000% | 99.997% | 0.003% | 0.00% | 0 | 1 (0.003%) | 0.00% |
 | easy | HPRC v2.1 d46 | 37,644 | 0.000% | 100.000% | 0.000% | 0.00% | 0 | 0 (0.000%) | 0.00% |
 | easy | CHM13-only graph (control; CHM13 truth) | 37,451 | 0.005% | 99.992% | 0.003% | 0.00% | 0 | 0 (0.000%) | 0.00% |
+| difficult | GRCh38 linear reference (bwa mem / minimap2) | 698 | 0.000% | 100.000% | 0.000% | 0.00% | 0 | 0 (0.000%) | 0.00% |
 | difficult | GRCh38-only graph (H 17) | 698 | 0.143% | 99.857% | 0.000% | 0.00% | 0 | 0 (0.000%) | 0.00% |
 | difficult | HPRC v1.1 d9 | 698 | 0.000% | 100.000% | 0.000% | 0.00% | 0 | 0 (0.000%) | 0.00% |
 | difficult | HPRC v2.1 d46 | 698 | 0.000% | 100.000% | 0.000% | 0.00% | 0 | 0 (0.000%) | 0.00% |
 | difficult | CHM13-only graph (control; CHM13 truth) | 687 | 0.000% | 99.854% | 0.146% | 0.00% | 0 | 1 (0.147%) | 0.00% |
+| extreme | GRCh38 linear reference (bwa mem / minimap2) | 1,658 | 0.000% | 87.033% | 12.967% | 0.00% | 0 | 59 (4.266%) | 0.54% |
 | extreme | GRCh38-only graph (H 17) | 1,658 | 1.086% | 86.972% | 12.073% | 0.00% | 0 | 13 (1.339%) | 0.18% |
 | extreme | HPRC v1.1 d9 | 1,658 | 0.483% | 89.264% | 8.075% | 0.00% | 0 | 5 (0.602%) | 1.09% |
 | extreme | HPRC v2.1 d46 | 1,658 | 0.000% | 87.696% | 9.521% | 0.00% | 0 | 3 (0.491%) | 0.00% |
@@ -267,14 +307,17 @@ Error-free reads only (no simulated sequencing error; any graph mismatch is then
 
 | stratum | arm | reads | unmapped | correct (50 bp) | wrong / placed | perfect | perfect but wrong | wrong at MAPQ>=30 | MAPQ 0 |
 |---|---|---|---|---|---|---|---|---|---|
+| <1% | GRCh38 linear reference (bwa mem / minimap2) | 16,440 | 0.000% | 99.574% | 0.426% | 0.00% | 0 | 18 (0.110%) | 0.02% |
 | <1% | GRCh38-only graph (H 17) | 16,440 | 0.073% | 99.562% | 0.365% | 0.00% | 0 | 5 (0.031%) | 0.00% |
 | <1% | HPRC v1.1 d9 | 16,440 | 0.049% | 99.586% | 0.347% | 0.00% | 0 | 4 (0.025%) | 0.02% |
 | <1% | HPRC v2.1 d46 | 16,440 | 0.000% | 99.568% | 0.390% | 0.00% | 0 | 3 (0.019%) | 0.00% |
 | <1% | CHM13-only graph (control; CHM13 truth) | 16,369 | 0.012% | 99.652% | 0.336% | 0.00% | 0 | 7 (0.043%) | 0.04% |
+| 1-5% | GRCh38 linear reference (bwa mem / minimap2) | 23,454 | 0.000% | 99.437% | 0.563% | 0.00% | 0 | 28 (0.120%) | 0.03% |
 | 1-5% | GRCh38-only graph (H 17) | 23,454 | 0.004% | 99.446% | 0.550% | 0.00% | 0 | 6 (0.026%) | 0.01% |
 | 1-5% | HPRC v1.1 d9 | 23,454 | 0.000% | 99.557% | 0.299% | 0.00% | 0 | 0 (0.000%) | 0.06% |
 | 1-5% | HPRC v2.1 d46 | 23,454 | 0.000% | 99.454% | 0.380% | 0.00% | 0 | 0 (0.000%) | 0.00% |
 | 1-5% | CHM13-only graph (control; CHM13 truth) | 23,285 | 0.004% | 99.540% | 0.455% | 0.00% | 0 | 6 (0.026%) | 0.02% |
+| >=5% | GRCh38 linear reference (bwa mem / minimap2) | 106 | 0.000% | 85.849% | 14.151% | 0.00% | 0 | 14 (13.725%) | 0.00% |
 | >=5% | GRCh38-only graph (H 17) | 106 | 6.604% | 84.906% | 9.091% | 0.00% | 0 | 2 (2.469%) | 0.00% |
 | >=5% | HPRC v1.1 d9 | 106 | 0.000% | 93.396% | 3.884% | 0.00% | 0 | 2 (2.247%) | 0.00% |
 | >=5% | HPRC v2.1 d46 | 106 | 0.000% | 95.283% | 0.000% | 0.00% | 0 | 0 (0.000%) | 0.00% |
@@ -293,6 +336,7 @@ Error-free reads only (no simulated sequencing error; any graph mismatch is then
 
 | arm | unmapped | correct (50 bp) | wrong / placed | perfect | perfect but wrong | wrong at MAPQ>=30 | MAPQ 0 |
 |---|---|---|---|---|---|---|---|
+| GRCh38 linear reference (bwa mem / minimap2) | 0.000% | 99.487% | 0.513% | 0.00% | 0 | 57 | 0.02% |
 | GRCh38-only graph (H 17) | 0.040% | 99.487% | 0.473% | 0.00% | 0 | 11 | 0.01% |
 | HPRC v1.1 d9 | 0.018% | 99.580% | 0.310% | 0.00% | 0 | 3 | 0.04% |
 | HPRC v2.1 d46 | 0.000% | 99.532% | 0.355% | 0.00% | 0 | 1 | 0.00% |
@@ -302,6 +346,9 @@ Error-free reads only (no simulated sequencing error; any graph mismatch is then
 
 | A vs B | correct in both | correct only in A | correct only in B | wrong/unplaced in both | confident wrong only in A | confident wrong only in B |
 |---|---|---|---|---|---|---|
+| linref vs linear | 39,767 | 16 | 15 | 202 | 54 | 7 |
+| linref vs d9 | 39,721 | 62 | 100 | 117 | 58 | 4 |
+| linref vs d46 | 39,707 | 76 | 89 | 128 | 60 | 3 |
 | linear vs d9 | 39,721 | 61 | 100 | 118 | 11 | 4 |
 | linear vs d46 | 39,710 | 72 | 86 | 132 | 12 | 2 |
 | d9 vs d46 | 39,736 | 85 | 60 | 119 | 4 | 1 |
@@ -310,6 +357,7 @@ Error-free reads only (no simulated sequencing error; any graph mismatch is then
 
 | arm | reads | unmapped | graph-mapped, not surjected | correct (50 bp) | wrong | wrong / placed | perfect | perfect but wrong | wrong at MAPQ>=30 | wrong at MAPQ 60 | MAPQ 0 | uses off-ref node |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
+| GRCh38 linear reference (bwa mem / minimap2) | 40,000 | 0 (0.000%) | 0 | 99.445% | 222 | 0.555% | 0.85% | 1 (0.295% of perfect) | 47 (0.118%) | 25 (0.063%) | 0.02% | 0 (0.00%) |
 | GRCh38-only graph (H 17) | 40,000 | 282 (0.705%) | 0 | 98.528% | 307 | 0.773% | 0.85% | 1 (0.295% of perfect) | 170 (0.433%) | 158 (0.405%) | 0.00% | 0 (0.00%) |
 | HPRC v1.1 d9 | 40,000 | 234 (0.585%) | 46 | 98.690% | 244 | 0.614% | 7.94% | 1 (0.032% of perfect) | 131 (0.335%) | 125 (0.321%) | 0.07% | 37,387 (93.47%) |
 | HPRC v2.1 d46 | 40,000 | 218 (0.545%) | 66 | 97.817% | 589 | 1.483% | 8.62% | 2 (0.058% of perfect) | 299 (0.764%) | 181 (0.466%) | 0.00% | 37,349 (93.37%) |
@@ -317,33 +365,37 @@ Error-free reads only (no simulated sequencing error; any graph mismatch is then
 
 ## ont: MAPQ calibration (reads placed on GRCh38; error rate = wrong / placed in the bin; expected = mean 10^(-MAPQ/10))
 
-| MAPQ | GRCh38-only graph (H 17): placed / wrong / rate / expected | HPRC v1.1 d9: placed / wrong / rate / expected | HPRC v2.1 d46: placed / wrong / rate / expected | CHM13-only graph (control; CHM13 truth): placed / wrong / rate / expected |
-|---|---|---|---|---|
-| 0 | 1 / 1 / 1.00e+00 / 1.00e+00 | 9 / 7 / 7.78e-01 / 1.00e+00 | 0 / 0 / n/a / n/a | 4 / 4 / 1.00e+00 / 1.00e+00 |
-| 1-9 | 259 / 112 / 4.32e-01 / 4.12e-01 | 336 / 96 / 2.86e-01 / 4.22e-01 | 329 / 173 / 5.26e-01 / 4.07e-01 | 239 / 100 / 4.18e-01 / 3.78e-01 |
-| 10-19 | 110 / 17 / 1.55e-01 / 4.08e-02 | 86 / 7 / 8.14e-02 / 4.08e-02 | 133 / 63 / 4.74e-01 / 4.21e-02 | 115 / 14 / 1.22e-01 / 4.85e-02 |
-| 20-29 | 127 / 7 / 5.51e-02 / 4.15e-03 | 173 / 3 / 1.73e-02 / 4.00e-03 | 128 / 54 / 4.22e-01 / 4.54e-03 | 137 / 5 / 3.65e-02 / 4.21e-03 |
-| 30-39 | 112 / 2 / 1.79e-02 / 4.85e-04 | 90 / 1 / 1.11e-02 / 4.70e-04 | 88 / 46 / 5.23e-01 / 4.65e-04 | 118 / 2 / 1.69e-02 / 5.09e-04 |
-| 40-49 | 64 / 4 / 6.25e-02 / 5.00e-05 | 53 / 2 / 3.77e-02 / 4.30e-05 | 88 / 40 / 4.55e-01 / 4.20e-05 | 58 / 3 / 5.17e-02 / 5.00e-05 |
-| 50-59 | 46 / 6 / 1.30e-01 / 4.00e-06 | 43 / 3 / 6.98e-02 / 4.00e-06 | 67 / 32 / 4.78e-01 / 5.00e-06 | 38 / 4 / 1.05e-01 / 4.00e-06 |
-| 60 | 38,999 / 158 / 4.05e-03 / 1.00e-06 | 38,930 / 125 / 3.21e-03 / 1.00e-06 | 38,883 / 181 / 4.66e-03 / 1.00e-06 | 38,770 / 137 / 3.53e-03 / 1.00e-06 |
+| MAPQ | GRCh38 linear reference (bwa mem / minimap2): placed / wrong / rate / expected | GRCh38-only graph (H 17): placed / wrong / rate / expected | HPRC v1.1 d9: placed / wrong / rate / expected | HPRC v2.1 d46: placed / wrong / rate / expected | CHM13-only graph (control; CHM13 truth): placed / wrong / rate / expected |
+|---|---|---|---|---|---|
+| 0 | 7 / 4 / 5.71e-01 / 1.00e+00 | 1 / 1 / 1.00e+00 / 1.00e+00 | 9 / 7 / 7.78e-01 / 1.00e+00 | 0 / 0 / n/a / n/a | 4 / 4 / 1.00e+00 / 1.00e+00 |
+| 1-9 | 193 / 117 / 6.06e-01 / 5.81e-01 | 259 / 112 / 4.32e-01 / 4.12e-01 | 336 / 96 / 2.86e-01 / 4.22e-01 | 329 / 173 / 5.26e-01 / 4.07e-01 | 239 / 100 / 4.18e-01 / 3.78e-01 |
+| 10-19 | 50 / 31 / 6.20e-01 / 5.61e-02 | 110 / 17 / 1.55e-01 / 4.08e-02 | 86 / 7 / 8.14e-02 / 4.08e-02 | 133 / 63 / 4.74e-01 / 4.21e-02 | 115 / 14 / 1.22e-01 / 4.85e-02 |
+| 20-29 | 44 / 23 / 5.23e-01 / 4.92e-03 | 127 / 7 / 5.51e-02 / 4.15e-03 | 173 / 3 / 1.73e-02 / 4.00e-03 | 128 / 54 / 4.22e-01 / 4.54e-03 | 137 / 5 / 3.65e-02 / 4.21e-03 |
+| 30-39 | 38 / 12 / 3.16e-01 / 4.16e-04 | 112 / 2 / 1.79e-02 / 4.85e-04 | 90 / 1 / 1.11e-02 / 4.70e-04 | 88 / 46 / 5.23e-01 / 4.65e-04 | 118 / 2 / 1.69e-02 / 5.09e-04 |
+| 40-49 | 38 / 5 / 1.32e-01 / 3.80e-05 | 64 / 4 / 6.25e-02 / 5.00e-05 | 53 / 2 / 3.77e-02 / 4.30e-05 | 88 / 40 / 4.55e-01 / 4.20e-05 | 58 / 3 / 5.17e-02 / 5.00e-05 |
+| 50-59 | 32 / 5 / 1.56e-01 / 4.00e-06 | 46 / 6 / 1.30e-01 / 4.00e-06 | 43 / 3 / 6.98e-02 / 4.00e-06 | 67 / 32 / 4.78e-01 / 5.00e-06 | 38 / 4 / 1.05e-01 / 4.00e-06 |
+| 60 | 39,598 / 25 / 6.31e-04 / 1.00e-06 | 38,999 / 158 / 4.05e-03 / 1.00e-06 | 38,930 / 125 / 3.21e-03 / 1.00e-06 | 38,883 / 181 / 4.66e-03 / 1.00e-06 | 38,770 / 137 / 3.53e-03 / 1.00e-06 |
 
-## ont: by hg008n variants in read
+## ont: by HG008N variants in read
 
 | stratum | arm | reads | unmapped | correct (50 bp) | wrong / placed | perfect | perfect but wrong | wrong at MAPQ>=30 | MAPQ 0 |
 |---|---|---|---|---|---|---|---|---|---|
+| 0 | GRCh38 linear reference (bwa mem / minimap2) | 1,754 | 0.000% | 99.886% | 0.114% | 19.27% | 0 | 1 (0.057%) | 0.00% |
 | 0 | GRCh38-only graph (H 17) | 1,754 | 0.684% | 99.088% | 0.230% | 19.27% | 0 | 4 (0.232%) | 0.00% |
 | 0 | HPRC v1.1 d9 | 1,754 | 0.570% | 98.860% | 0.459% | 19.21% | 0 | 5 (0.291%) | 0.06% |
 | 0 | HPRC v2.1 d46 | 1,754 | 0.570% | 98.233% | 1.204% | 19.27% | 0 | 15 (0.870%) | 0.00% |
 | 0 | CHM13-only graph (control; CHM13 truth) | 1,749 | 0.743% | 98.971% | 0.288% | 4.40% | 0 | 4 (0.233%) | 0.00% |
+| 1 | GRCh38 linear reference (bwa mem / minimap2) | 2,514 | 0.000% | 98.568% | 1.432% | 0.00% | 0 | 8 (0.323%) | 0.00% |
 | 1 | GRCh38-only graph (H 17) | 2,514 | 0.716% | 97.733% | 1.562% | 0.00% | 0 | 25 (1.019%) | 0.04% |
 | 1 | HPRC v1.1 d9 | 2,514 | 0.517% | 97.772% | 0.807% | 11.69% | 0 | 8 (0.330%) | 0.64% |
 | 1 | HPRC v2.1 d46 | 2,514 | 0.477% | 96.619% | 2.135% | 12.05% | 0 | 23 (0.946%) | 0.00% |
 | 1 | CHM13-only graph (control; CHM13 truth) | 2,504 | 0.679% | 98.123% | 1.206% | 2.20% | 0 | 9 (0.370%) | 0.08% |
+| 2-3 | GRCh38 linear reference (bwa mem / minimap2) | 4,097 | 0.000% | 99.561% | 0.439% | 0.02% | 1 | 1 (0.025%) | 0.07% |
 | 2-3 | GRCh38-only graph (H 17) | 4,097 | 0.683% | 98.706% | 0.614% | 0.02% | 1 | 11 (0.275%) | 0.00% |
 | 2-3 | HPRC v1.1 d9 | 4,097 | 0.537% | 98.828% | 0.638% | 9.10% | 1 | 9 (0.226%) | 0.02% |
 | 2-3 | HPRC v2.1 d46 | 4,097 | 0.513% | 97.779% | 1.621% | 9.62% | 2 | 31 (0.778%) | 0.00% |
 | 2-3 | CHM13-only graph (control; CHM13 truth) | 4,084 | 0.661% | 98.678% | 0.665% | 1.47% | 0 | 13 (0.326%) | 0.00% |
+| >=4 | GRCh38 linear reference (bwa mem / minimap2) | 31,635 | 0.000% | 99.475% | 0.525% | 0.00% | 0 | 37 (0.118%) | 0.01% |
 | >=4 | GRCh38-only graph (H 17) | 31,635 | 0.708% | 98.536% | 0.761% | 0.00% | 0 | 130 (0.419%) | 0.00% |
 | >=4 | HPRC v1.1 d9 | 31,635 | 0.597% | 98.736% | 0.605% | 6.87% | 0 | 109 (0.352%) | 0.03% |
 | >=4 | HPRC v2.1 d46 | 31,635 | 0.553% | 97.895% | 1.429% | 7.63% | 0 | 230 (0.742%) | 0.00% |
@@ -353,35 +405,42 @@ Error-free reads only (no simulated sequencing error; any graph mismatch is then
 
 | stratum | arm | reads | unmapped | correct (50 bp) | wrong / placed | perfect | perfect but wrong | wrong at MAPQ>=30 | MAPQ 0 |
 |---|---|---|---|---|---|---|---|---|---|
+| read spans an SV (>=50 bp) of its haplotype | GRCh38 linear reference (bwa mem / minimap2) | 2,874 | 0.000% | 96.799% | 3.201% | 0.00% | 0 | 29 (1.035%) | 0.03% |
 | read spans an SV (>=50 bp) of its haplotype | GRCh38-only graph (H 17) | 2,874 | 1.079% | 95.442% | 3.517% | 0.00% | 0 | 66 (2.366%) | 0.03% |
 | read spans an SV (>=50 bp) of its haplotype | HPRC v1.1 d9 | 2,874 | 0.731% | 96.277% | 2.053% | 4.87% | 0 | 35 (1.267%) | 0.66% |
 | read spans an SV (>=50 bp) of its haplotype | HPRC v2.1 d46 | 2,874 | 0.522% | 96.033% | 2.439% | 5.46% | 0 | 28 (1.019%) | 0.00% |
 | read spans an SV (>=50 bp) of its haplotype | CHM13-only graph (control; CHM13 truth) | 2,743 | 0.620% | 96.610% | 2.788% | 0.80% | 0 | 41 (1.539%) | 0.11% |
+| >=10 read bases absent from GRCh38 | GRCh38 linear reference (bwa mem / minimap2) | 10,467 | 0.000% | 98.643% | 1.357% | 0.00% | 0 | 42 (0.406%) | 0.00% |
 | >=10 read bases absent from GRCh38 | GRCh38-only graph (H 17) | 10,467 | 0.697% | 97.707% | 1.607% | 0.00% | 0 | 94 (0.917%) | 0.01% |
 | >=10 read bases absent from GRCh38 | HPRC v1.1 d9 | 10,467 | 0.525% | 98.175% | 0.935% | 4.83% | 0 | 51 (0.499%) | 0.22% |
 | >=10 read bases absent from GRCh38 | HPRC v2.1 d46 | 10,467 | 0.459% | 97.487% | 1.658% | 5.54% | 0 | 78 (0.765%) | 0.00% |
 | >=10 read bases absent from GRCh38 | CHM13-only graph (control; CHM13 truth) | 10,291 | 0.544% | 98.212% | 1.251% | 0.67% | 0 | 61 (0.605%) | 0.04% |
+| neither | GRCh38 linear reference (bwa mem / minimap2) | 28,972 | 0.000% | 99.731% | 0.269% | 1.17% | 1 | 4 (0.014%) | 0.02% |
 | neither | GRCh38-only graph (H 17) | 28,972 | 0.715% | 98.830% | 0.459% | 1.17% | 1 | 71 (0.250%) | 0.00% |
 | neither | HPRC v1.1 d9 | 28,972 | 0.611% | 98.882% | 0.486% | 9.08% | 1 | 73 (0.258%) | 0.02% |
 | neither | HPRC v2.1 d46 | 28,972 | 0.580% | 97.936% | 1.414% | 9.76% | 2 | 213 (0.751%) | 0.00% |
 | neither | CHM13-only graph (control; CHM13 truth) | 28,894 | 0.716% | 98.823% | 0.464% | 1.68% | 0 | 79 (0.279%) | 0.00% |
 
-## ont: by distance to nearest hg008n variant
+## ont: by distance to nearest HG008N variant
 
 | stratum | arm | reads | unmapped | correct (50 bp) | wrong / placed | perfect | perfect but wrong | wrong at MAPQ>=30 | MAPQ 0 |
 |---|---|---|---|---|---|---|---|---|---|
+| inside read | GRCh38 linear reference (bwa mem / minimap2) | 38,246 | 0.000% | 99.425% | 0.575% | 0.00% | 1 | 46 (0.121%) | 0.02% |
 | inside read | GRCh38-only graph (H 17) | 38,246 | 0.706% | 98.502% | 0.798% | 0.00% | 1 | 166 (0.443%) | 0.00% |
 | inside read | HPRC v1.1 d9 | 38,246 | 0.586% | 98.682% | 0.621% | 7.42% | 1 | 126 (0.337%) | 0.07% |
 | inside read | HPRC v2.1 d46 | 38,246 | 0.544% | 97.799% | 1.496% | 8.14% | 2 | 284 (0.759%) | 0.00% |
 | inside read | CHM13-only graph (control; CHM13 truth) | 37,995 | 0.663% | 98.642% | 0.700% | 1.28% | 0 | 142 (0.381%) | 0.01% |
+| 1-50 bp | GRCh38 linear reference (bwa mem / minimap2) | 29 | 0.000% | 93.103% | 6.897% | 13.79% | 0 | 1 (3.571%) | 0.00% |
 | 1-50 bp | GRCh38-only graph (H 17) | 29 | 3.448% | 93.103% | 3.571% | 13.79% | 0 | 1 (3.571%) | 0.00% |
 | 1-50 bp | HPRC v1.1 d9 | 29 | 0.000% | 100.000% | 0.000% | 13.79% | 0 | 0 (0.000%) | 0.00% |
 | 1-50 bp | HPRC v2.1 d46 | 29 | 0.000% | 100.000% | 0.000% | 13.79% | 0 | 0 (0.000%) | 0.00% |
 | 1-50 bp | CHM13-only graph (control; CHM13 truth) | 28 | 3.571% | 96.429% | 0.000% | 10.71% | 0 | 0 (0.000%) | 0.00% |
+| 51-500 bp | GRCh38 linear reference (bwa mem / minimap2) | 196 | 0.000% | 100.000% | 0.000% | 19.90% | 0 | 0 (0.000%) | 0.00% |
 | 51-500 bp | GRCh38-only graph (H 17) | 196 | 0.510% | 99.490% | 0.000% | 19.90% | 0 | 0 (0.000%) | 0.00% |
 | 51-500 bp | HPRC v1.1 d9 | 196 | 0.510% | 98.980% | 0.513% | 19.90% | 0 | 0 (0.000%) | 0.00% |
 | 51-500 bp | HPRC v2.1 d46 | 196 | 0.510% | 97.959% | 1.538% | 19.90% | 0 | 3 (1.571%) | 0.00% |
 | 51-500 bp | CHM13-only graph (control; CHM13 truth) | 196 | 0.510% | 98.980% | 0.513% | 5.61% | 0 | 0 (0.000%) | 0.00% |
+| >500 bp | GRCh38 linear reference (bwa mem / minimap2) | 1,529 | 0.000% | 100.000% | 0.000% | 19.29% | 0 | 0 (0.000%) | 0.00% |
 | >500 bp | GRCh38-only graph (H 17) | 1,529 | 0.654% | 99.150% | 0.198% | 19.29% | 0 | 3 (0.199%) | 0.00% |
 | >500 bp | HPRC v1.1 d9 | 1,529 | 0.589% | 98.823% | 0.461% | 19.23% | 0 | 5 (0.333%) | 0.07% |
 | >500 bp | HPRC v2.1 d46 | 1,529 | 0.589% | 98.234% | 1.184% | 19.29% | 0 | 12 (0.797%) | 0.00% |
@@ -391,14 +450,17 @@ Error-free reads only (no simulated sequencing error; any graph mismatch is then
 
 | stratum | arm | reads | unmapped | correct (50 bp) | wrong / placed | perfect | perfect but wrong | wrong at MAPQ>=30 | MAPQ 0 |
 |---|---|---|---|---|---|---|---|---|---|
+| easy | GRCh38 linear reference (bwa mem / minimap2) | 37,633 | 0.000% | 99.995% | 0.005% | 0.86% | 0 | 1 (0.003%) | 0.00% |
 | easy | GRCh38-only graph (H 17) | 37,633 | 0.680% | 99.086% | 0.235% | 0.86% | 0 | 88 (0.235%) | 0.00% |
 | easy | HPRC v1.1 d9 | 37,633 | 0.569% | 99.184% | 0.248% | 8.16% | 0 | 93 (0.249%) | 0.00% |
 | easy | HPRC v2.1 d46 | 37,633 | 0.542% | 99.208% | 0.251% | 8.85% | 0 | 94 (0.251%) | 0.00% |
 | easy | CHM13-only graph (control; CHM13 truth) | 37,440 | 0.660% | 99.103% | 0.239% | 1.47% | 0 | 89 (0.239%) | 0.00% |
+| difficult | GRCh38 linear reference (bwa mem / minimap2) | 678 | 0.000% | 100.000% | 0.000% | 0.44% | 0 | 0 (0.000%) | 0.00% |
 | difficult | GRCh38-only graph (H 17) | 678 | 1.327% | 98.230% | 0.448% | 0.44% | 0 | 3 (0.448%) | 0.00% |
 | difficult | HPRC v1.1 d9 | 678 | 1.032% | 98.525% | 0.447% | 6.19% | 0 | 3 (0.447%) | 0.00% |
 | difficult | HPRC v2.1 d46 | 678 | 1.032% | 97.935% | 0.747% | 6.78% | 0 | 5 (0.749%) | 0.00% |
 | difficult | CHM13-only graph (control; CHM13 truth) | 667 | 1.349% | 98.051% | 0.608% | 1.05% | 0 | 4 (0.608%) | 0.00% |
+| extreme | GRCh38 linear reference (bwa mem / minimap2) | 1,689 | 0.000% | 86.975% | 13.026% | 0.71% | 1 | 46 (3.295%) | 0.41% |
 | extreme | GRCh38-only graph (H 17) | 1,689 | 1.006% | 86.205% | 12.919% | 0.71% | 1 | 79 (6.718%) | 0.06% |
 | extreme | HPRC v1.1 d9 | 1,689 | 0.770% | 87.744% | 9.080% | 3.79% | 1 | 35 (3.401%) | 1.72% |
 | extreme | HPRC v2.1 d46 | 1,689 | 0.414% | 66.785% | 30.284% | 4.26% | 2 | 200 (19.324%) | 0.00% |
@@ -408,14 +470,17 @@ Error-free reads only (no simulated sequencing error; any graph mismatch is then
 
 | stratum | arm | reads | unmapped | correct (50 bp) | wrong / placed | perfect | perfect but wrong | wrong at MAPQ>=30 | MAPQ 0 |
 |---|---|---|---|---|---|---|---|---|---|
+| <1% | GRCh38 linear reference (bwa mem / minimap2) | 16,495 | 0.000% | 99.545% | 0.455% | 1.09% | 1 | 15 (0.091%) | 0.03% |
 | <1% | GRCh38-only graph (H 17) | 16,495 | 0.721% | 98.636% | 0.647% | 1.09% | 1 | 65 (0.401%) | 0.00% |
 | <1% | HPRC v1.1 d9 | 16,495 | 0.618% | 98.751% | 0.610% | 8.99% | 0 | 66 (0.408%) | 0.02% |
 | <1% | HPRC v2.1 d46 | 16,495 | 0.552% | 97.915% | 1.464% | 9.54% | 1 | 136 (0.840%) | 0.00% |
 | <1% | CHM13-only graph (control; CHM13 truth) | 16,427 | 0.706% | 98.667% | 0.632% | 1.87% | 0 | 65 (0.402%) | 0.00% |
+| 1-5% | GRCh38 linear reference (bwa mem / minimap2) | 23,384 | 0.000% | 99.436% | 0.565% | 0.68% | 0 | 27 (0.116%) | 0.01% |
 | 1-5% | GRCh38-only graph (H 17) | 23,384 | 0.671% | 98.525% | 0.809% | 0.68% | 0 | 97 (0.424%) | 0.00% |
 | 1-5% | HPRC v1.1 d9 | 23,384 | 0.556% | 98.683% | 0.599% | 7.23% | 1 | 62 (0.272%) | 0.11% |
 | 1-5% | HPRC v2.1 d46 | 23,384 | 0.539% | 97.776% | 1.491% | 8.00% | 1 | 163 (0.714%) | 0.00% |
 | 1-5% | CHM13-only graph (control; CHM13 truth) | 23,216 | 0.637% | 98.665% | 0.702% | 1.10% | 0 | 77 (0.339%) | 0.02% |
+| >=5% | GRCh38 linear reference (bwa mem / minimap2) | 121 | 0.000% | 87.603% | 12.397% | 0.00% | 0 | 5 (4.587%) | 0.00% |
 | >=5% | GRCh38-only graph (H 17) | 121 | 4.959% | 84.297% | 11.304% | 0.00% | 0 | 8 (7.407%) | 0.00% |
 | >=5% | HPRC v1.1 d9 | 121 | 1.653% | 91.736% | 4.310% | 2.48% | 0 | 3 (2.655%) | 0.00% |
 | >=5% | HPRC v2.1 d46 | 121 | 0.826% | 92.562% | 2.609% | 4.13% | 0 | 0 (0.000%) | 0.00% |
@@ -434,6 +499,7 @@ Error-free reads only (no simulated sequencing error; any graph mismatch is then
 
 | arm | unmapped | correct (50 bp) | wrong / placed | perfect | perfect but wrong | wrong at MAPQ>=30 | MAPQ 0 |
 |---|---|---|---|---|---|---|---|
+| GRCh38 linear reference (bwa mem / minimap2) | 0.000% | 99.477% | 0.523% | 0.85% | 1 | 45 | 0.02% |
 | GRCh38-only graph (H 17) | 0.687% | 98.568% | 0.750% | 0.85% | 1 | 164 | 0.00% |
 | HPRC v1.1 d9 | 0.574% | 98.727% | 0.595% | 7.96% | 1 | 127 | 0.07% |
 | HPRC v2.1 d46 | 0.541% | 97.856% | 1.452% | 8.65% | 2 | 294 | 0.00% |
@@ -443,6 +509,9 @@ Error-free reads only (no simulated sequencing error; any graph mismatch is then
 
 | A vs B | correct in both | correct only in A | correct only in B | wrong/unplaced in both | confident wrong only in A | confident wrong only in B |
 |---|---|---|---|---|---|---|
+| linref vs linear | 39,390 | 388 | 21 | 201 | 26 | 149 |
+| linref vs d9 | 39,386 | 392 | 90 | 132 | 40 | 124 |
+| linref vs d46 | 39,054 | 724 | 73 | 149 | 44 | 296 |
 | linear vs d9 | 39,341 | 70 | 135 | 454 | 63 | 24 |
 | linear vs d46 | 38,997 | 414 | 130 | 459 | 78 | 207 |
 | d9 vs d46 | 39,058 | 418 | 69 | 455 | 29 | 197 |
