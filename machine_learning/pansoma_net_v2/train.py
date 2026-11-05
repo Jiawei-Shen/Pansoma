@@ -132,6 +132,11 @@ def parse_args(argv=None):
                         "which weigh 1/fraction in the loss; the class weights use all tensors, so the expected loss is "
                         "that of all tensors. The PoN removes the calls of tagged tensors (--best-by postpon). Needs "
                         "--site-features, not with --non-fraction < 1 or --keep-non-af; the validation keeps every tensor")
+    p.add_argument("--negative-fraction", type=float, default=1.0,
+                   help="each epoch: every somatic tensor and a fresh random fraction of all non / germline tensors, "
+                        "which weigh 1/fraction in the loss; the class weights use all tensors, so the expected loss is "
+                        "that of all tensors. Not with --non-fraction < 1, --keep-non-af or --pon-negative-fraction < 1; "
+                        "the validation keeps every tensor")
     p.add_argument("--depths", type=int, nargs=4, default=[3, 3, 27, 3])
     p.add_argument("--dims", type=int, nargs=4, default=[192, 384, 768, 1536])
     p.add_argument("--front", type=int, nargs="+", default=[64, 64], help="widths of the 1x1 layers before the stem")
@@ -259,8 +264,10 @@ def class_weights(spec, counts):
 
 def epoch_class_weights(args, counts):
     """(class weights of the loss, importance) for the training class counts: the weights follow one epoch's classes;
-    with --keep-non-af or --pon-negative-fraction (importance) the importance weights restore all tensors."""
-    importance = (args.keep_non_af is not None and args.non_fraction < 1.0) or args.pon_negative_fraction < 1.0
+    with --keep-non-af, --pon-negative-fraction or --negative-fraction (importance) the importance weights restore all
+    tensors."""
+    importance = ((args.keep_non_af is not None and args.non_fraction < 1.0) or args.pon_negative_fraction < 1.0
+                  or args.negative_fraction < 1.0)
     epoch_counts = counts.astype(np.float64) * np.array([1.0 if importance else args.non_fraction, 1.0, 1.0])
     return class_weights(args.class_weights, epoch_counts), importance
 
@@ -273,8 +280,10 @@ def pon_sampled(labels, scalars):
 
 def importance_weights(args, y, scalars):
     """Per-sample loss weights undoing the epoch's sampling (None without importance sampling): a sampled tensor stands
-    for 1 / fraction of them. --pon-negative-fraction: the PoN-tagged non / germline tensors; --keep-non-af with
-    --non-fraction: the non tensors below that AF."""
+    for 1 / fraction of them. --negative-fraction: every non / germline tensor; --pon-negative-fraction: the PoN-tagged
+    non / germline tensors; --keep-non-af with --non-fraction: the non tensors below that AF."""
+    if args.negative_fraction < 1.0:
+        return torch.where((y == 0) | (y == 2), 1.0 / args.negative_fraction, 1.0)
     if args.pon_negative_fraction < 1.0:
         return torch.where(pon_sampled(y, scalars), 1.0 / args.pon_negative_fraction, 1.0)
     if args.keep_non_af is not None and args.non_fraction < 1.0:
@@ -661,6 +670,12 @@ def main(argv=None):
         raise SystemExit("--pon-negative-fraction needs the PoN tags of --site-features")
     if args.pon_negative_fraction < 1.0 and (args.non_fraction < 1.0 or args.keep_non_af is not None):
         raise SystemExit("--pon-negative-fraction and --non-fraction < 1 / --keep-non-af do not combine")
+    if not 0.0 < args.negative_fraction <= 1.0:
+        raise SystemExit("--negative-fraction must be in (0, 1]")
+    if args.negative_fraction < 1.0 and (args.non_fraction < 1.0 or args.keep_non_af is not None
+                                         or args.pon_negative_fraction < 1.0):
+        raise SystemExit("--negative-fraction and --non-fraction < 1 / --keep-non-af / --pon-negative-fraction < 1 "
+                         "do not combine")
     run = Run(args)
     if run.main:
         (run.out / "args.json").write_text(json.dumps(vars(args), indent=2) + "\n")
@@ -747,12 +762,20 @@ def main(argv=None):
     criterion = nn.CrossEntropyLoss(weight=weights, ignore_index=-1)
     per_sample = nn.CrossEntropyLoss(weight=weights, ignore_index=-1, reduction="none")
     keep_af = train_set.scalars[:, AF] >= args.keep_non_af if args.keep_non_af is not None else None
-    sample = (pon_sampled(train_set.label, train_set.scalars).numpy() if args.pon_negative_fraction < 1.0 else None)
+    sample, fraction = None, args.non_fraction
+    if args.negative_fraction < 1.0:
+        sample, fraction = np.isin(train_set.label, (0, 2)), args.negative_fraction
+    elif args.pon_negative_fraction < 1.0:
+        sample, fraction = pon_sampled(train_set.label, train_set.scalars).numpy(), args.pon_negative_fraction
     # rank 0 of 1: ChunkLoader splits the epoch over the ranks itself
     train_sampler = EpochSampler(len(train_set), args.epoch_samples, True, 0, 1, args.seed, labels=train_set.label,
-                                 non_fraction=args.non_fraction if sample is None else args.pon_negative_fraction,
+                                 non_fraction=fraction,
                                  keep=keep_af, sample=sample)
-    if sample is not None:
+    if sample is not None and args.negative_fraction < 1.0:
+        run.log(f"non / germline tensors: {int(sample.sum()):,} of {len(train_set):,}; each epoch a fresh "
+                f"{args.negative_fraction} of them with importance weight {1 / args.negative_fraction:.2f}; somatic "
+                f"tensors every epoch")
+    elif sample is not None:
         run.log(f"PoN-tagged non / germline tensors: {int(sample.sum()):,} of {len(train_set):,} (" + ", ".join(
                 f"{c} {int((sample & (train_set.label == k)).sum()):,}" for k, c in enumerate(CLASSES) if c != "somatic")
                 + f"); each epoch a fresh {args.pon_negative_fraction} of them with importance weight "
@@ -763,7 +786,7 @@ def main(argv=None):
                 f"{args.non_fraction} with importance weight {1 / args.non_fraction:.2f}")
     run.log(f"class weights {dict(zip(CLASSES, [round(w, 4) for w in weights.tolist()]))}; each epoch "
             f"{train_sampler.epoch_size():,} tensors (non fraction {args.non_fraction}, PoN-tagged negative fraction "
-            f"{args.pon_negative_fraction})")
+            f"{args.pon_negative_fraction}, negative fraction {args.negative_fraction})")
     val_sampler = EpochSampler(len(val_set), None, False, run.rank, run.world)
     chunk_cache = None
     if args.use_chunk_cache:

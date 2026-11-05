@@ -576,6 +576,41 @@ class TrainPredictTest(unittest.TestCase):
                           "--kinds", "SNV", "--num-workers", "0", "--amp", "off"])
             self.assertTrue((tmp / "p" / "sample.tensors.SNV.metrics.json").exists())
 
+    def test_negative_fraction_run(self):
+        """--negative-fraction: each epoch every somatic tensor and a fresh fraction of all non / germline tensors,
+        weighted 1/fraction; refused with the other sampling options."""
+        import re
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            root = tmp / "sample" / "tensors"
+            make_tensor_set(root, SPEC, shard_size=8)
+            for extra, msg in ((["--negative-fraction", "0"], "must be in"),
+                               (["--negative-fraction", "0.5", "--non-fraction", "0.5"], "do not combine"),
+                               (["--negative-fraction", "0.5", "--non-fraction", "0.5", "--keep-non-af", "0.5"],
+                                "do not combine")):
+                with self.assertRaisesRegex(SystemExit, msg):
+                    train.main(["--tensors", str(root), "--output", str(tmp / "bad"), "--epochs", "1", "--kinds", "SNV"]
+                               + extra + SMALL_ARGS)
+            out = tmp / "nf"
+            train.main(["--tensors", str(root), "--output", str(out), "--epochs", "2", "--kinds", "SNV",
+                        "--negative-fraction", "0.5"] + SMALL_ARGS)
+            log = (out / "train.log").read_text()
+            neg, total = (int(v.replace(",", "")) for v in
+                          re.search(r"non / germline tensors: ([\d,]+) of ([\d,]+); each epoch", log).groups())
+            epoch = int(re.search(r"each epoch ([\d,]+) tensors", log).group(1).replace(",", ""))
+            self.assertGreater(neg, 0)
+            self.assertEqual(epoch, total - neg + round(0.5 * neg))
+            self.assertIn("importance weight 2.00", log)
+            ckpt = torch.load(out / "best.pth", weights_only=False)
+            self.assertEqual(ckpt["args"]["negative_fraction"], 0.5)
+            args = train.parse_args(["--tensors", "x", "--output", "y", "--negative-fraction", "0.3"])
+            y = torch.tensor([0, 1, 2, 1])
+            w = train.importance_weights(args, y, torch.zeros(4, len(SCALARS)))
+            self.assertTrue(torch.allclose(w, torch.tensor([1 / 0.3, 1.0, 1 / 0.3, 1.0])))
+            counts = np.array([100, 10, 300])
+            self.assertTrue(torch.equal(train.epoch_class_weights(args, counts)[0],
+                                        train.class_weights(args.class_weights, counts.astype(np.float64))))
+
     def test_ignore_reasons_run(self):
         """--ignore-reasons leaves those tensors out of training and validation, and predict (by default the
         checkpoint's reasons) out of the test, with label, reason and truth ids kept in the records."""
