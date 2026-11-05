@@ -569,6 +569,16 @@ class TrainPredictTest(unittest.TestCase):
                         "--non-fraction", "0.5", "--keep-non-af", "0.5"] + SMALL_ARGS)
             log = (tmp / "run_keep" / "train.log").read_text()
             self.assertIn("importance weight 2.00", log)
+            # --no-importance-weights: the sampled non weigh 1, the class weights are unchanged
+            train.main(["--tensors", str(root), "--output", str(tmp / "run_keep_w1"), "--epochs", "1", "--kinds", "SNV",
+                        "--non-fraction", "0.5", "--keep-non-af", "0.5", "--no-importance-weights"] + SMALL_ARGS)
+            log1 = (tmp / "run_keep_w1" / "train.log").read_text()
+            self.assertIn("loss weight 1 (--no-importance-weights)", log1)
+            cw = lambda text: text.split("class weights ")[1].split(";")[0]
+            self.assertEqual(cw(log1), cw(log))
+            a1 = train.parse_args(["--tensors", "x", "--output", "y", "--non-fraction", "0.5", "--keep-non-af", "0.5",
+                                   "--no-importance-weights"])
+            self.assertIsNone(train.importance_weights(a1, torch.tensor([0, 1, 2]), torch.zeros(3, len(SCALARS))))
             self.assertTrue((tmp / "run_keep" / "best.pth").exists())
             self.assertEqual(ckpt["scalars"], list(SCALARS))
             self.assertIn("scalar_mean", ckpt["model_state_dict"])

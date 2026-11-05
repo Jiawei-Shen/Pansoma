@@ -160,6 +160,8 @@ Options kept for older checkpoints and experiments (no recipe uses them):
   over all tensors. The tagged tensors are the ones the PoN removes from the calls (`--best-by postpon`, the post-PoN
   call rule); on the PacBio six-tumor training sets they are about 73 % of the tensors, almost all germline. The
   validation keeps every tensor.
+- `--no-importance-weights` (with `--keep-non-af`, `--pon-negative-fraction` or `--negative-fraction`): the sampled
+  tensors weigh 1 in the loss instead of 1/F; the class weights still use all tensors.
 - `--negative-fraction F` < 1 (not with `--non-fraction` < 1, `--keep-non-af` or `--pon-negative-fraction` < 1):
   each epoch takes every somatic tensor and a fresh random fraction F of all non / germline tensors, which get loss
   weight 1/F; the class weights use all tensors, so each epoch's loss (self-normalised) estimates the loss over all

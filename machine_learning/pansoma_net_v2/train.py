@@ -132,6 +132,9 @@ def parse_args(argv=None):
                         "which weigh 1/fraction in the loss; the class weights use all tensors, so the expected loss is "
                         "that of all tensors. The PoN removes the calls of tagged tensors (--best-by postpon). Needs "
                         "--site-features, not with --non-fraction < 1 or --keep-non-af; the validation keeps every tensor")
+    p.add_argument("--no-importance-weights", action="store_true",
+                   help="with --keep-non-af, --pon-negative-fraction or --negative-fraction: the sampled tensors weigh 1 "
+                        "in the loss instead of 1/fraction (the class weights still use all tensors)")
     p.add_argument("--negative-fraction", type=float, default=1.0,
                    help="each epoch: every somatic tensor and a fresh random fraction of all non / germline tensors, "
                         "which weigh 1/fraction in the loss; the class weights use all tensors, so the expected loss is "
@@ -282,6 +285,8 @@ def importance_weights(args, y, scalars):
     """Per-sample loss weights undoing the epoch's sampling (None without importance sampling): a sampled tensor stands
     for 1 / fraction of them. --negative-fraction: every non / germline tensor; --pon-negative-fraction: the PoN-tagged
     non / germline tensors; --keep-non-af with --non-fraction: the non tensors below that AF."""
+    if getattr(args, "no_importance_weights", False):
+        return None
     if args.negative_fraction < 1.0:
         return torch.where((y == 0) | (y == 2), 1.0 / args.negative_fraction, 1.0)
     if args.pon_negative_fraction < 1.0:
@@ -773,17 +778,21 @@ def main(argv=None):
                                  keep=keep_af, sample=sample)
     if sample is not None and args.negative_fraction < 1.0:
         run.log(f"non / germline tensors: {int(sample.sum()):,} of {len(train_set):,}; each epoch a fresh "
-                f"{args.negative_fraction} of them with importance weight {1 / args.negative_fraction:.2f}; somatic "
-                f"tensors every epoch")
+                f"{args.negative_fraction} of them with " + ("loss weight 1 (--no-importance-weights)"
+                if args.no_importance_weights else f"importance weight {1 / args.negative_fraction:.2f}")
+                + "; somatic tensors every epoch")
     elif sample is not None:
         run.log(f"PoN-tagged non / germline tensors: {int(sample.sum()):,} of {len(train_set):,} (" + ", ".join(
                 f"{c} {int((sample & (train_set.label == k)).sum()):,}" for k, c in enumerate(CLASSES) if c != "somatic")
-                + f"); each epoch a fresh {args.pon_negative_fraction} of them with importance weight "
-                f"{1 / args.pon_negative_fraction:.2f}; somatic and untagged tensors every epoch")
+                + f"); each epoch a fresh {args.pon_negative_fraction} of them with "
+                + ("loss weight 1 (--no-importance-weights)" if args.no_importance_weights
+                   else f"importance weight {1 / args.pon_negative_fraction:.2f}")
+                + "; somatic and untagged tensors every epoch")
     elif importance:
         n_keep = int((keep_af & (train_set.label == 0)).sum())
         run.log(f"non tensors with AF >= {args.keep_non_af}: {n_keep:,} taken every epoch; the others sampled at "
-                f"{args.non_fraction} with importance weight {1 / args.non_fraction:.2f}")
+                f"{args.non_fraction} with " + ("loss weight 1 (--no-importance-weights)" if args.no_importance_weights
+                                                 else f"importance weight {1 / args.non_fraction:.2f}"))
     run.log(f"class weights {dict(zip(CLASSES, [round(w, 4) for w in weights.tolist()]))}; each epoch "
             f"{train_sampler.epoch_size():,} tensors (non fraction {args.non_fraction}, PoN-tagged negative fraction "
             f"{args.pon_negative_fraction}, negative fraction {args.negative_fraction})")
