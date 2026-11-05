@@ -7,7 +7,9 @@
 #        Illumina | ONT; COLO829T = COLO829T_fiberseq_d46 for PacBio, COLO829T_<PLAT>_d46 otherwise; TUMORS 6 (default) |
 #        4: the four CASTLE sets only (multicancer4: HG008T and COLO829T held out entirely, as multicancer4_<PLAT>_SNV);
 #        F 1.0 = every negative, the E29 site-feature recipe; MODE pon (default): --pon-negative-fraction F, code_ml/ (96e2d6c);
-#        MODE all: --negative-fraction F (a fresh F of all non / germline tensors each epoch), code_ml2/ (629418f))
+#        MODE all: --negative-fraction F (a fresh F of all non / germline tensors each epoch), code_ml2/ (629418f);
+#        MODE lowaf: --non-fraction F --keep-non-af KEEP (non tensors with AF >= KEEP every epoch, the lower-AF non a
+#        fresh F with loss weight 1/F, germline and somatic every epoch; KEEP default 0.100001 = AF <= 0.1 sampled))
 #   DATA af05: HCC1395T / HCC1954T / H1437T / H2009T <PLAT>_d46_snvaf05 (SNV AF floor 0.05) + HG008T_<PLAT>_d46 and
 #              COLO829T as they are (user 2026-11-03), site features /scratch/jshen/data/snv_af05_20261103
 #   DATA af08: the six <PLAT>_d46 sets of multicancer6_<PLAT>_SNV (floor 0.08), site features of tmp/snv_sitefeat_20261103
@@ -19,7 +21,8 @@
 #SBATCH -t 3-00:00:00
 set -euo pipefail
 DATA=$1 F=$2 OUT=/scratch/jshen/data/pansoma_net_v2_runs/$3 SEED=${4:-0} PLAT=${5:-PacBio} TUMORS=${6:-6} MODE=${7:-pon}
-case $MODE in pon) CODE=code_ml; SAMPLING="--pon-negative-fraction $F";; all) CODE=code_ml2; SAMPLING="--negative-fraction $F";; *) echo "MODE pon | all"; exit 1;; esac
+case $MODE in pon) CODE=code_ml; SAMPLING="--pon-negative-fraction $F";; all) CODE=code_ml2; SAMPLING="--negative-fraction $F";;
+  lowaf) CODE=code_ml2; SAMPLING="--non-fraction $F --keep-non-af ${KEEP:-0.100001}";; *) echo "MODE pon | all | lowaf"; exit 1;; esac
 CO=COLO829T_${PLAT}_d46; [ $PLAT = PacBio ] && CO=COLO829T_fiberseq_d46; HG=HG008T_${PLAT}_d46
 D=/scratch/jshen/data/pansoma_v2_tensors; R=/scratch/jshen/data/pansoma_net_v2_runs; P=/wanglab/jshen/anaconda3/bin/python
 if [ $DATA = af05 ]; then

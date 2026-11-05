@@ -133,3 +133,14 @@ for PacBio, ONT and Illumina (PacBio m6 rerun so that the three platforms match;
 stays). Cancelled before any result: the PoN-sampled af05 runs of ONT m6 (12 min in), Illumina m6, and the three m4.
 The other models are unchanged (ppr9 every negative; pnf25 PoN-tagged sampling). Comparisons: af05_rnf30 against
 sitef_ppr9 (floor 0.08, every negative) and against the pnf25 control; both rules; `compare.py PLAT [4]`.
+
+## AF 0.05 models: low-AF non sampling instead (user 2026-11-05 14:45); registered before any of their results
+
+Replaces the random-30% plan above (its six runs cancelled before any result). As the 2026-09-29 keephard run
+(HG008T Illumina: non with AF < 0.15 sampled 25%, best chr1 F1 0.623 against 0.618 with every non), with the boundary
+at 0.1: each epoch every non tensor with AF > 0.1, every germline and somatic tensor, and a fresh 25% of the non
+tensors with AF <= 0.1 with loss weight 4 (`--non-fraction 0.25 --keep-non-af 0.100001`; class weights from all
+tensors; validation unchanged; code_ml2 = 629418f; `train.sh ... MODE lowaf`). Runs multicancer6_<PLAT>_SNV_sitef_af05_lnf25
+and multicancer4_<PLAT>_SNV_sitef_af05_lnf25, PacBio / ONT / Illumina. Comparisons as registered (`compare.py`):
+against sitef_ppr9 (floor 0.08, every negative; note that the comparison also includes the sampling of the
+floor-0.08 non at AF 0.08-0.1) and the pnf25 control.
