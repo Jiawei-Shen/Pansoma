@@ -9,9 +9,9 @@ E8 = "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score"
 # usage: python compare.py [PLAT [TUMORS]]   (PLAT PacBio (default) | Illumina | ONT; TUMORS 6 (default) | 4: multicancer4)
 PLAT = sys.argv[1] if len(sys.argv) > 1 else "PacBio"
 M = sys.argv[2] if len(sys.argv) > 2 else "6"
-RNF, AF05, CTRL = (f"multicancer{M}_{PLAT}_SNV_sitef_af05_lnf25", f"multicancer{M}_{PLAT}_SNV_sitef_af05_pnf25",
+RNF, AF05, CTRL = (f"multicancer{M}_{PLAT}_SNV_sitef_af05_lnf25w1", f"multicancer{M}_{PLAT}_SNV_sitef_af05_pnf25",
                    f"multicancer{M}_{PLAT}_SNV_sitef_pnf25")
-SITEF = [("AF 0.05 + non at AF <= 0.1 sampled 25%", RNF), ("AF 0.05 + PoN-tagged sampling", AF05),
+SITEF = [("AF 0.05 + non at AF <= 0.1 sampled 25%, weight 1", RNF), ("AF 0.05 + PoN-tagged sampling", AF05),
          ("0.08 + PoN-tagged sampling (control)", CTRL), ("0.08, all negatives (ppr9)", f"multicancer{M}_{PLAT}_SNV_sitef_ppr9")]
 NORMFIX = f"multicancer{M}_{PLAT}_SNV"
 CO = "COLO829T_fiberseq" if PLAT == "PacBio" else f"COLO829T_{PLAT}"

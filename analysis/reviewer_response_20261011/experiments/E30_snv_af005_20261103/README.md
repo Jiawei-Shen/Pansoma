@@ -144,3 +144,10 @@ tensors; validation unchanged; code_ml2 = 629418f; `train.sh ... MODE lowaf`). R
 and multicancer4_<PLAT>_SNV_sitef_af05_lnf25, PacBio / ONT / Illumina. Comparisons as registered (`compare.py`):
 against sitef_ppr9 (floor 0.08, every negative; note that the comparison also includes the sampling of the
 floor-0.08 non at AF 0.08-0.1) and the pnf25 control.
+
+## AF 0.05 models: the sampled non weigh 1 (user 2026-11-05 15:00); registered before any of their results
+
+User: the loss stays as it is, no factor 4. `--no-importance-weights` (repository 1497adb, code_ml3): the AF <= 0.1 non
+sampled 25% per epoch weigh 1 in the loss; class weights from all training tensors (as without sampling). Runs
+multicancer6_<PLAT>_SNV_sitef_af05_lnf25w1 and multicancer4_<PLAT>_SNV_sitef_af05_lnf25w1 (`train.sh ... MODE lowaf1`);
+the weight-4 lnf25 runs were cancelled before any result. Comparisons unchanged.
