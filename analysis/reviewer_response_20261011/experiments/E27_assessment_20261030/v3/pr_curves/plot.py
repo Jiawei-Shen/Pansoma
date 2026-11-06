@@ -5,6 +5,8 @@ fig_pr_{SNV,INDEL}_{pon,raw}.png/.pdf: precision-recall curves on chr1 (benchmar
   thick line = seed 0, thin = seeds 1-2. 'pon' = after our population filter (main protocol), 'raw' = before it.
 fig_threshold_{SNV,INDEL}_{pon,raw}.png/.pdf: F1 against the p_somatic threshold (Pansoma only; the comparators' QUAL is
   on another scale).
+F1_threshold_curve_v2/fig_threshold_{SNV,INDEL}_{pon,raw}.png/.pdf: the same for the four-line and six-tumor models only
+  (seed 0), with vertical lines at p_somatic 0.5 and at each model's PASS threshold.
 summary.md: per panel and model, three-seed mean (or the single run) of F1 at PASS, F1 at p_somatic 0.5, best F1 on
   the curve (test-tuned upper bound), and the PASS threshold range.
 Run: python plot.py   (login node, a minute)
@@ -196,6 +198,47 @@ def threshold_figure(panels, kind, stage, out):
     plt.close(fig)
 
 
+def threshold_figure_v2(panels, kind, stage, out):
+    """F1 against the p_somatic threshold, four-line and six-tumor models only (seed 0), with vertical lines at
+    p_somatic 0.5 and at each model's PASS threshold (one model per platform, so the same line in every tumor)."""
+    keep = [x for x in SERIES if x[0][0] in ("four-line", "six-tumor")]
+    fig, axes = plt.subplots(3, 3, figsize=(7.4, 8.0), sharex=True, sharey=True)
+    ymax = 0
+    for i, tumor in enumerate(TUMORS):
+        for j, p in enumerate(PLATFORMS):
+            ax = axes[i, j]
+            ax.axvline(0.5, color=GRID, lw=1.0, zorder=0)
+            for (key, label, color, _) in keep:
+                s = next(s for s in panels[f"{tumor}|{p}|{kind}"] if (s["family"], s["ref"]) == key and s["seed"] == 0)
+                st, t = s[stage], s["threshold"]
+                c = np.array([[x[0], x[3]] for x in st["curve"] if x[0] is not None])
+                ymax = max(ymax, c[:, 1].max())
+                ax.axvline(t, color=color, lw=1.0, ls=(0, (4, 2)), zorder=1)
+                ax.plot(c[:, 0], c[:, 1], color=color, lw=1.5, zorder=3, solid_capstyle="round")
+                ax.plot(t, st["op"]["F1"], marker="o", ms=5.5, color=color, mec=SURFACE, mew=0.8, ls="", zorder=6)
+            ax.set_xlim(0, 1)
+            ax.set_title(f"{tumor} · {plat(tumor, p)}", fontsize=8, color=INK, loc="left", pad=3)
+            for side in ("top", "right"):
+                ax.spines[side].set_visible(False)
+            if i == 2:
+                ax.set_xlabel("p_somatic threshold")
+            if j == 0:
+                ax.set_ylabel("F1 (chr1)")
+    for ax in axes.flat:
+        ax.set_ylim(0, min(1.0, ymax + 0.05))
+    h = [Line2D([], [], color=c, lw=1.6, label=f"{l} (seed 0)") for (_, l, c, _) in keep]
+    h += [Line2D([], [], color=c, lw=1.0, ls=(0, (4, 2)), label=f"{l.split(', ')[1]} PASS threshold") for (_, l, c, _) in keep]
+    h += [Line2D([], [], color=GRID, lw=1.0, label="p_somatic = 0.5"),
+          Line2D([], [], color=MUTED, marker="o", ls="", ms=5.5, mec=SURFACE, mew=0.8, label="F1 at PASS")]
+    fig.legend(handles=h, loc="upper center", ncol=3, frameon=False, fontsize=7, bbox_to_anchor=(0.5, 0.995),
+               handlelength=2.4, columnspacing=1.4)
+    fig.tight_layout(rect=(0, 0, 1, 0.925), h_pad=1.2, w_pad=0.8)
+    out.parent.mkdir(exist_ok=True)
+    for ext in ("png", "pdf"):
+        fig.savefig(out.with_suffix(f".{ext}"), dpi=220)
+    plt.close(fig)
+
+
 def fmt(xs):
     xs = [x for x in xs if x is not None]
     if not xs:
@@ -245,6 +288,7 @@ def main():
         for stage in ("pon", "raw"):
             pr_figure(panels, kind, stage, HERE / f"fig_pr_{kind}_{stage}")
             threshold_figure(panels, kind, stage, HERE / f"fig_threshold_{kind}_{stage}")
+            threshold_figure_v2(panels, kind, stage, HERE / "F1_threshold_curve_v2" / f"fig_threshold_{kind}_{stage}")
     summary(panels)
     print("figures + summary.md written")
 
