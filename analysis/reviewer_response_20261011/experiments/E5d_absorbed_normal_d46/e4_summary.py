@@ -17,6 +17,9 @@ COLO829T (analysis/graph_absorbed_somatic_colo829t_20261005 c3 / c7): hap allele
   INDEL and the 67 SNVs of 2026-10-05); SNVs outside it: COLO829BL dipcall at the site (inside dip.bed, PASS, phased GT
   hapY|hapX). present = a hap allele ALT (both -> ambiguous); unresolved = a hap NA and the other not ALT; absent = both
   resolved, neither ALT; germline_like = a hap has exactly the ALT length with other bases (alt_len_haps) and no hap ALT.
+Both samples (2026-11-05, e5_alt_with_germline.py): a hap whose sequence is GRCh38 + truth + its own other dipcall records
+  inside the array (ALT_plus_germline) carries the ALT; HG008T per source (assembly / dipcall), COLO829T on c3's source
+  (hap*_src). Before this, such haps were 'other' / 'germline_*' and the allele could count as absent.
 On nodes of other HPRC individuals: holds by the AF filter for every set allele (d9 / d46 keep only nodes and edges of
 >= 10 % of the 90 / 464 haplotypes; HG008 and COLO829 are in neither graph); alt_min_paths = the fewest haplotypes on a
 non-GRCh38 node of the ALT path (E5b; empty when the path uses only skip edges).
@@ -80,9 +83,13 @@ def narrow(s, L):
     return 'unresolved'
 
 
+AWG = {(r['sample'], r['truth_id'], r['hap']): r for r in rd(f'{DATA}/alt_with_germline.tsv')}   # e5
+
+
 def hap_call(ar, h, nr):
-    x, y = ar[f'{h}_asm_call'], ar[f'{h}_dip_call']
-    isalt = lambda c: c in ('ALT', 'ALT_plus_flank')  # noqa: E731
+    w = AWG.get(('HG008T', ar['truth_id'], h))
+    x, y = (w['asm_new'], w['dip_new']) if w else (ar[f'{h}_asm_call'], ar[f'{h}_dip_call'])
+    isalt = lambda c: c in ('ALT', 'ALT_plus_flank', 'ALT_plus_germline')  # noqa: E731
     if x != 'NA' and y != 'NA' and isalt(x) != isalt(y):
         return 'unresolved'
     c = x if x != 'NA' else y
@@ -141,6 +148,10 @@ def colo_alleles(sets):
         t = r['truth_id']
         if t in nf:
             al = {h: nf[t][f'{h}_allele'] for h in ('hapX', 'hapY')}
+            for h in al:                                             # e5: ALT plus other germline records, c3's source
+                w = AWG.get(('COLO829T', t, h))
+                if w and (w['asm_new'] if nf[t][f'{h}_src'] == 'asm' else w['dip_new']) == 'ALT_plus_germline':
+                    al[h] = 'ALT'
             alt_len = nf[t]['alt_len_haps']
             src = 'normal_frame'
         else:                                                        # SNVs outside normal_frame: dipcall at the site

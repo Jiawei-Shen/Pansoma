@@ -1,0 +1,273 @@
+{
+ "normal_all": {
+  "reads": 114100,
+  "alt_path": 44003,
+  "alt_path_frac": 0.3856529360210342,
+  "path": {
+   "other": 18317,
+   "alt_like": 25537,
+   "grch38": 51780,
+   "alt": 18466
+  },
+  "ref_reads": 58736,
+  "ref_on_alt_path": 427,
+  "ref_on_alt_frac": 0.007269817488422773,
+  "alt_reads": 44207,
+  "alt_reads_frac": 0.38744084136722173,
+  "alt_on_alt_path": 42753,
+  "alt_on_grch38": 924,
+  "alt_on_alt_frac": 0.9671092813355351,
+  "loci": 1607,
+  "loci_in_output": 1607,
+  "loci_covered": 1601,
+  "median_spanning": 72
+ },
+ "normal_SNV": {
+  "reads": 9805,
+  "alt_path": 2659,
+  "alt_path_frac": 0.27118816930137685,
+  "path": {
+   "other": 2490,
+   "alt_like": 2257,
+   "grch38": 4656,
+   "alt": 402
+  },
+  "ref_reads": 3559,
+  "ref_on_alt_path": 27,
+  "ref_on_alt_frac": 0.007586400674346727,
+  "alt_reads": 2758,
+  "alt_reads_frac": 0.2812850586435492,
+  "alt_on_alt_path": 2384,
+  "alt_on_grch38": 223,
+  "alt_on_alt_frac": 0.864394488759971,
+  "loci": 140,
+  "loci_in_output": 140,
+  "loci_covered": 140,
+  "median_spanning": 71.0
+ },
+ "normal_INDEL": {
+  "reads": 104295,
+  "alt_path": 41344,
+  "alt_path_frac": 0.3964140179299103,
+  "path": {
+   "alt": 18064,
+   "grch38": 47124,
+   "alt_like": 23280,
+   "other": 15827
+  },
+  "ref_reads": 55177,
+  "ref_on_alt_path": 400,
+  "ref_on_alt_frac": 0.007249397393841637,
+  "alt_reads": 41449,
+  "alt_reads_frac": 0.39742077760199435,
+  "alt_on_alt_path": 40369,
+  "alt_on_grch38": 701,
+  "alt_on_alt_frac": 0.9739438828439769,
+  "loci": 1467,
+  "loci_in_output": 1467,
+  "loci_covered": 1461,
+  "median_spanning": 72
+ },
+ "tumor_all": {
+  "reads": 136459,
+  "alt_path": 88716,
+  "alt_path_frac": 0.6501293428795463,
+  "path": {
+   "alt_like": 27630,
+   "other": 13380,
+   "grch38": 34363,
+   "alt": 61086
+  },
+  "ref_reads": 38545,
+  "ref_on_alt_path": 345,
+  "ref_on_alt_frac": 0.0089505772473732,
+  "alt_reads": 89422,
+  "alt_reads_frac": 0.6553030580613958,
+  "alt_on_alt_path": 87320,
+  "alt_on_grch38": 1309,
+  "alt_on_alt_frac": 0.9764934803515913,
+  "loci": 1607,
+  "loci_in_output": 1607,
+  "loci_covered": 1602,
+  "median_spanning": 86
+ },
+ "tumor_SNV": {
+  "reads": 11707,
+  "alt_path": 7086,
+  "alt_path_frac": 0.6052788929700179,
+  "path": {
+   "alt_like": 4647,
+   "other": 2178,
+   "grch38": 2443,
+   "alt": 2439
+  },
+  "ref_reads": 1555,
+  "ref_on_alt_path": 32,
+  "ref_on_alt_frac": 0.020578778135048232,
+  "alt_reads": 7317,
+  "alt_reads_frac": 0.6250106773725121,
+  "alt_on_alt_path": 6741,
+  "alt_on_grch38": 395,
+  "alt_on_alt_frac": 0.9212792127921279,
+  "loci": 140,
+  "loci_in_output": 140,
+  "loci_covered": 140,
+  "median_spanning": 77.5
+ },
+ "tumor_INDEL": {
+  "reads": 124752,
+  "alt_path": 81630,
+  "alt_path_frac": 0.6543382070026933,
+  "path": {
+   "alt": 58647,
+   "grch38": 31920,
+   "alt_like": 22983,
+   "other": 11202
+  },
+  "ref_reads": 36990,
+  "ref_on_alt_path": 313,
+  "ref_on_alt_frac": 0.008461746417950798,
+  "alt_reads": 82105,
+  "alt_reads_frac": 0.6581457611902014,
+  "alt_on_alt_path": 80579,
+  "alt_on_grch38": 914,
+  "alt_on_alt_frac": 0.9814140429937276,
+  "loci": 1467,
+  "loci_in_output": 1467,
+  "loci_covered": 1462,
+  "median_spanning": 86
+ },
+ "per_locus": {
+  "loci_min_span": 1600,
+  "zero_normal_alt_path": 38,
+  "normal_alt_path_ge_0p2": 941,
+  "normal_alt_seq_ge_0p2": 940
+ },
+ "by_e5d_class": {
+  "absent_INDEL": {
+   "loci": 1339,
+   "normal_alt_path_median": 0.2537313432835821,
+   "normal_alt_path_max": 1.0,
+   "zero": 17,
+   "normal_alt_seq_median": 0.25609756097560976,
+   "ref_on_alt": 361,
+   "ref": 52193,
+   "tumor_alt_seq_median": 0.6470588235294118
+  },
+  "absent_SNV": {
+   "loci": 115,
+   "normal_alt_path_median": 0.09803921568627451,
+   "normal_alt_path_max": 1.0,
+   "zero": 20,
+   "normal_alt_seq_median": 0.11267605633802817,
+   "ref_on_alt": 27,
+   "ref": 3174,
+   "tumor_alt_seq_median": 0.5784313725490197
+  },
+  "ambiguous_INDEL": {
+   "loci": 12,
+   "normal_alt_path_median": 0.5118061309030655,
+   "normal_alt_path_max": 0.967741935483871,
+   "zero": 0,
+   "normal_alt_seq_median": 0.4279342723004695,
+   "ref_on_alt": 20,
+   "ref": 355,
+   "tumor_alt_seq_median": 0.7001303780964798
+  },
+  "ambiguous_SNV": {
+   "loci": 14,
+   "normal_alt_path_median": 0.3695392695153975,
+   "normal_alt_path_max": 0.9857142857142858,
+   "zero": 1,
+   "normal_alt_seq_median": 0.4067796610169492,
+   "ref_on_alt": 0,
+   "ref": 113,
+   "tumor_alt_seq_median": 0.9409090909090909
+  },
+  "present_INDEL": {
+   "loci": 109,
+   "normal_alt_path_median": 0.5591397849462365,
+   "normal_alt_path_max": 1.0,
+   "zero": 0,
+   "normal_alt_seq_median": 0.5588235294117647,
+   "ref_on_alt": 19,
+   "ref": 2629,
+   "tumor_alt_seq_median": 0.8818897637795275
+  },
+  "present_SNV": {
+   "loci": 11,
+   "normal_alt_path_median": 0.4461538461538462,
+   "normal_alt_path_max": 0.7123287671232876,
+   "zero": 0,
+   "normal_alt_seq_median": 0.47560975609756095,
+   "ref_on_alt": 0,
+   "ref": 272,
+   "tumor_alt_seq_median": 0.8863636363636364
+  }
+ },
+ "normal_SNV_absent": {
+  "reads": 8073,
+  "alt_path": 1909,
+  "alt_path_frac": 0.23646723646723647,
+  "path": {
+   "other": 2063,
+   "alt_like": 1675,
+   "grch38": 4101,
+   "alt": 234
+  },
+  "ref_reads": 3174,
+  "ref_on_alt_path": 27,
+  "ref_on_alt_frac": 0.008506616257088847,
+  "alt_reads": 1997,
+  "alt_reads_frac": 0.24736776910689953,
+  "alt_on_alt_path": 1684,
+  "alt_on_grch38": 194,
+  "alt_on_alt_frac": 0.8432648973460191
+ },
+ "normal_SNV_ambiguous": {
+  "reads": 942,
+  "alt_path": 379,
+  "alt_path_frac": 0.4023354564755839,
+  "path": {
+   "alt_like": 358,
+   "alt": 21,
+   "other": 334,
+   "grch38": 229
+  },
+  "ref_reads": 113,
+  "ref_on_alt_path": 0,
+  "ref_on_alt_frac": 0.0,
+  "alt_reads": 389,
+  "alt_reads_frac": 0.4129511677282378,
+  "alt_on_alt_path": 359,
+  "alt_on_grch38": 18,
+  "alt_on_alt_frac": 0.922879177377892
+ },
+ "normal_SNV_present": {
+  "reads": 790,
+  "alt_path": 371,
+  "alt_path_frac": 0.46962025316455697,
+  "path": {
+   "alt": 147,
+   "grch38": 326,
+   "alt_like": 224,
+   "other": 93
+  },
+  "ref_reads": 272,
+  "ref_on_alt_path": 0,
+  "ref_on_alt_frac": 0.0,
+  "alt_reads": 372,
+  "alt_reads_frac": 0.4708860759493671,
+  "alt_on_alt_path": 341,
+  "alt_on_grch38": 11,
+  "alt_on_alt_frac": 0.9166666666666666
+ },
+ "realigned_vs_pansoma_gam": {
+  "source": "E5c per_locus.tsv.gz, HG008T_PacBio_d46 alt_reads / spanning",
+  "loci": 1289,
+  "median_abs_diff_alt_read_fraction": 0.0,
+  "within_0p1": 1289,
+  "median_spanning_gam": 87,
+  "median_spanning_realigned": 87
+ }
+}

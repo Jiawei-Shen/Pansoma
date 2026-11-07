@@ -586,7 +586,11 @@ The user asked (2026-11-04) for the same test on COLO829 and for a fifth column,
   --contig-rule majority` keeps a primary alignment to chrN only when chrN holds most of that contig's primary aligned
   bases (HG008-N keeps the `chrN_hapK` name rule). Kept: chr1 one contig per haplotype, chr20 two per haplotype; dropped:
   four contigs whose majority is chr22 / chr14 (GRCh38) and two (chr22 / chr6) on CHM13. Segments: 345, 569,683,734 bases
-  on GRCh38 (HG008-N 358, 570,972,967); CHM13 328, 581,838,518. COLO829 is in neither HPRC graph. Data:
+  on GRCh38 (HG008-N 358, 570,972,967); CHM13 328, 581,838,518. Simulation (jobs 470742-470744, unchanged
+  `simulate.py`, seed 20261013; `sim/<platform>/sim_meta.json`): 2,500,000 Illumina pairs (2 x 150 bp, 0.2 % subs),
+  40,000 HiFi-like reads (mean 15,006 bp, 4,997-26,967) and 40,000 ONT-like reads (pbsim3 ERRHMM-ONT-HQ, accuracy-mean
+  0.98, realised 0.959; mean 14,933 bp, 2,876-29,912), the same numbers and length settings as HG008-N (checked on the
+  FASTQs 2026-11-05). COLO829 is in neither HPRC graph. Data:
   `/scratch/jshen/data/reviewer_experiments_20261013/E11b_simulated_alignment_COLO829BL/`; tables `results_colo829bl/`.
 - **GRCh38 linear reference (`linref`, both samples).** The same reads aligned to the GRCh38 no-alt analysis set without
   any graph: bwa mem 0.7.17 (`-K 100000000 -Y`) for Illumina, minimap2 2.28 `-ax map-hifi` / `-ax map-ont` for the long

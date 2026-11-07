@@ -5,7 +5,9 @@ alternative path"), third paragraph ("The normal at missed sites on graph nodes"
 graph as R1.4 does. The user asked for it on 2026-10-21 ("v2.1的补上").
 
 **Status (2026-10-21): done.** Jobs 450304 (sets), 450312 (minimap2 + s6 parse + s8b), 450314 (tumor reads); `tables.md`,
-`summary.json` written by `e4_summary.py` on the login node.
+`summary.json` written by `e4_summary.py` on the login node. **2026-11-05: step 5 added** (a normal haplotype with the
+truth allele plus other germline differences in the same array now counts as carrying it; section 3 item 5); e4 rerun,
+all numbers below are after it.
 
 ## 1. Question
 
@@ -66,7 +68,7 @@ E5d gives the same quantities on d46, and on d9 with the same set rule.
    old + new rows (expected tumor allele = normal event-hap length + the normal-frame event length; 'seen' at >= max(3,
    15%) of the reads; loci with >= 10 reads and a length-changing event). Controls = the audit's 400 + 400 random
    non-absorbed truths (reused, not redrawn).
-4. **e4 `e4_summary.py`**: the classification and tables.
+4. **e4 `e4_summary.py`**: the classification and tables (uses step 5's calls, below).
    - HG008T, per allele: the s9 hap call (s8b array call; assembly and dipcall disagreeing on ALT -> unresolved; both NA
      -> the s6 minimap2 call, without s9's giraffe walk, which only confirms a 'no'); pattern by the truth INFO event hap;
      patient frame as s9. **present** = a normal hap carries the ALT (other hap only, no event hap, or patient frame; not
@@ -86,6 +88,23 @@ E5d gives the same quantities on d46, and on d9 with the same set rule.
      2,085 / 430 published absent loci; the published ambiguous loci become mostly absent here (264 / 31), because their
      ambiguity came from the dropped graph / read rules.
 
+5. **e5 `e5_alt_with_germline.py`** (2026-11-05, login node, 3 min): s8b (HG008T) and c3 (COLO829T) call a hap ALT only
+   when its whole array equals GRCh38 + truth (s8b also with the hap's dipcall records outside the array). A hap with the
+   truth allele and another germline difference inside the array (an SNV next to the event, a second length change in
+   the STR) was 'other' / 'germline_*', so the allele could count as absent. E20b found it (HG008-N reads carried the ALT
+   at absorbed SNVs where dipcall has the same ALT). Rule: a hap sequence (assembly S; dipcall D) is **ALT_plus_germline**
+   when it equals R with the truth plus the hap's own PASS dipcall records inside [a, b) applied, leaving out a set Y of
+   at most two records (those that spell the truth in dipcall's representation). HG008T: per source, then e4's
+   hap_call (assembly / dipcall disagreeing -> unresolved); COLO829T: on c3's source (`hap*_src`). Check: the recomputed
+   dipcall sequences reproduce every s8b / c3 dipcall REF / ALT call (HG008T 2,331, COLO829T 2,845). Upgraded haps (all
+   loci of both graphs): HG008T 48 (30 SNV, 18 INDEL), COLO829T 20 INDEL (3 of them only in dipcall, not counted, since
+   c3 uses the assembly). Effect, d46: HG008T SNV present 6 -> 11, ambiguous 4 -> 14 (other-hap carriers where the INFO
+   event gives a novel tumor allele), absent 130 -> 115; INDEL present 104 -> 109, absent 1,351 -> 1,346; COLO829T INDEL
+   present 26 -> 34, absent 319 -> 311 (7 of the 22 same-length loci of section 4.4 are now present).
+   Representation limit: a hap whose dipcall records spell the truth only together with a neighbouring germline change
+   in one record (e.g. chr4:45,721,673, truth T>C, normal AT>A + A>C) stays 'other'; there the tumor sequence is indeed in
+   neither normal hap.
+
 ## 4. Results (`tables.md`, `summary.json`)
 
 ### 4.1 The matched normal
@@ -93,14 +112,14 @@ E5d gives the same quantities on d46, and on d9 with the same set rule.
 | sample | graph | set | absorbed | normal carries the ALT | absent from both normal haplotypes | ambiguous |
 |---|---|---|---:|---|---|---|
 | HG008T | v1.1 (d9) | read-level, 2026-10-01 | 2,478 | 110 (4.4%) | 2,085 (84.1%) | 283 (11.4%) |
-| HG008T | v1.1 (d9) | spelled (this rule) | 2,002 | 104 (5.2%) | 1,881 (94.0%) | 17 (0.8%) |
-| HG008T | **v2.1 (d46)** | spelled | **1,607** | **110 (6.8%)** | **1,481 (92.2%)** | 16 (1.0%) |
+| HG008T | v1.1 (d9) | spelled (this rule) | 2,002 | 116 (5.8%) | 1,858 (92.8%) | 28 (1.4%) |
+| HG008T | **v2.1 (d46)** | spelled | **1,607** | **120 (7.5%)** | **1,461 (90.9%)** | 26 (1.6%) |
 | COLO829T | v1.1 (d9) | read-level, 2026-10-05 | 497 | 34 (6.8%) | 430 (86.5%) | 33 (6.6%) |
-| COLO829T | v1.1 (d9) | spelled | 446 | 26 (5.8%) | 419 (93.9%) | 1 (0.2%) |
-| COLO829T | **v2.1 (d46)** | spelled | **401** | **27 (6.7%)** | **371 (92.5%)** | 3 (0.7%) |
+| COLO829T | v1.1 (d9) | spelled | 446 | 31 (7.0%) | 414 (92.8%) | 1 (0.2%) |
+| COLO829T | **v2.1 (d46)** | spelled | **401** | **35 (8.7%)** | **363 (90.5%)** | 3 (0.7%) |
 
-- Per kind, d46: HG008T SNV 6 present / 130 absent / 4 ambiguous, INDEL 104 / 1,351 / 12; COLO829T SNV 1 / 52 / 1,
-  INDEL 26 / 319 / 2.
+- Per kind, d46: HG008T SNV 11 present / 115 absent / 14 ambiguous, INDEL 109 / 1,346 / 12; COLO829T SNV 1 / 52 / 1,
+  INDEL 34 / 311 / 2. Before step 5: HG008T 110 (6.8%) / 1,481 (92.2%) / 16, COLO829T 27 (6.7%) / 371 (92.5%) / 3.
 - PoN-tagged (truth tags of E5b): 97.0% of the d46 sets (HG008T), 98.5% (COLO829T); d9 97.3% / 98.7%.
 - The ALT paths' non-GRCh38 nodes are walked by a median of 138 (HG008T) and 110 (COLO829T) of the 464 d46 haplotypes
   (d9: 27 and 23.5 of 90); 634 / 157 d46 ALT paths use skip edges only.
@@ -110,8 +129,8 @@ E5d gives the same quantities on d46, and on d9 with the same set rule.
 | graph | set | absent INDELs | tumor contig in neither normal hap | tumor contig = GRCh38 + truth | Illumina reads show the expected allele | PacBio reads |
 |---|---|---:|---|---|---|---|
 | v1.1 (d9) | read-level, 2026-10-01 | 1,935 | 1,931 | 1,652 | quoted 96.2%; recomputed from the audit's b4 table 1,804 / 1,890 (95.4%) | 1,885 / 1,945 (96.9%) |
-| v1.1 (d9) | spelled | 1,706 | 1,702 (99.8%) | 1,478 (86.6%) | 1,586 (97.8%) | 1,605 (98.0%) |
-| **v2.1 (d46)** | spelled | **1,351** | **1,347 (99.7%)** | **1,153 (85.3%)** | **1,240 (97.4%)** | 1,260 (97.5%) |
+| v1.1 (d9) | spelled | 1,701 | 1,697 (99.8%) | 1,473 (86.6%) | 1,582 (97.8%) | 1,601 (98.0%) |
+| **v2.1 (d46)** | spelled | **1,346** | **1,342 (99.7%)** | **1,148 (85.3%)** | **1,236 (97.4%)** | 1,256 (97.5%) |
 | random non-absorbed truth INDELs (audit controls) | | | | | 353 / 369 (95.7%) | 372 / 386 (96.4%) |
 
 Read-percentage denominators are the loci with >= 10 reads and a length-changing normal-frame event.
@@ -132,15 +151,18 @@ Not recomputed here; the d46 rows already existed in E5b.
 | graph | set | absorbed INDELs | normal carries the ALT | a normal hap has the ALT length, other bases | up to |
 |---|---|---:|---:|---:|---|
 | v1.1 (d9) | read-level, 2026-10-05 | 430 | 33 | 35 | 68 (15.8%) |
-| v1.1 (d9) | spelled | 382 | 25 | 24 | 49 (12.8%) |
-| **v2.1 (d46)** | spelled | **347** | **26** | **22** | **48 (13.8%)** |
+| v1.1 (d9) | spelled | 382 | 30 | 19 | 49 (12.8%) |
+| **v2.1 (d46)** | spelled | **347** | **34** | **15** | **49 (14.1%)** |
+
+The COLO829T tumor assembly at these loci: E5e (7 of the remaining 15 carry the truth allele, 4 only normal sequences,
+4 unresolved; the 7 now present carry only normal sequences, as a germline allele should).
 
 ## 5. Reading
 
-- On v2.1, as on v1.1, the absorbed alleles are mostly not the patient's: 92.2% (HG008T) and 92.5% (COLO829T) are absent
-  from both normal haplotypes and lie on population nodes; the normal carries the ALT at 6.8% / 6.7%.
+- On v2.1, as on v1.1, the absorbed alleles are mostly not the patient's: 90.9% (HG008T) and 90.5% (COLO829T) are absent
+  from both normal haplotypes and lie on population nodes; the normal carries the ALT at 7.5% / 8.7%.
 - At the HG008T INDELs absent from the normal, the tumor assembly differs from both normal haplotypes at 99.7% and equals
-  the truth allele at 85.3%; tumor reads show the expected allele as often as at random non-absorbed truth INDELs (97.4%
+  the truth allele at 85.3% (1,148 / 1,346); tumor reads show the expected allele as often as at random non-absorbed truth INDELs (97.4%
   vs 95.7%, Illumina). These are real somatic events that the graph hides.
 - The spelled rule gives a cleaner split than the read-level rule (fewer ambiguous loci) because it keeps only exactly
   spelled alleles; the shares absent / present are of the same order on both graphs.
@@ -161,7 +183,7 @@ Not recomputed here; the d46 rows already existed in E5b.
    could not be traced to a file; the R2.3 sentence should use 95.4% or the E5d numbers.
 4. **HG008T normal calls of the 438 new alleles** use the s6 minimap2 call (no s7 giraffe walk) when the array call is NA;
    at the 2,478 old alleles this changes no present / absent call (tables.md §4).
-5. COLO829T has no tumor assembly; its read support was not recomputed (the 2026-10-05 analysis did not have it either).
+5. COLO829T tumor assembly and tumor reads: E5e (2026-11-05).
 
 ## 7. Files
 
@@ -174,4 +196,5 @@ Not recomputed here; the d46 rows already existed in E5b.
 | `e2_s6_assembly_seq.py`, `e2_s8b_array_alleles.py` | copies of the 2026-10-01 s6 / s8b with only the data directory changed |
 | `e3_hg008t_tumor_reads.py` | audit b2 on the new loci + b4 rule on all -> `$DATA/hg008t/{b2_new,b4_all}.tsv` |
 | `e4_summary.py` | classification, `tables.md`, `summary.json`, `$DATA/per_allele.tsv` |
+| `e5_alt_with_germline.py` | ALT plus other germline records per normal hap, both samples -> `$DATA/alt_with_germline.tsv` (read by e4) |
 | `/scratch/jshen/Github/Pansoma/tmp/reviewer_cpu_20261021/E5d/` | Slurm scripts and logs (`e1_sets`, `e2_s6_minimap2`, `e3_tumor_reads`) |
