@@ -151,3 +151,28 @@ User: the loss stays as it is, no factor 4. `--no-importance-weights` (repositor
 sampled 25% per epoch weigh 1 in the loss; class weights from all training tensors (as without sampling). Runs
 multicancer6_<PLAT>_SNV_sitef_af05_lnf25w1 and multicancer4_<PLAT>_SNV_sitef_af05_lnf25w1 (`train.sh ... MODE lowaf1`);
 the weight-4 lnf25 runs were cancelled before any result. Comparisons unchanged.
+
+## Results, all models (2026-11-09; `results/final_<PLAT>_m<6|4>.md` = `compare.py PLAT [4]`)
+
+SNV F1 after the PoN, benchmark BED, rule 2 (rule 1 rows in the files). af05 = the AF 0.05 model as finally run
+(`*_af05_lnf25w1`: non at AF <= 0.1 sampled 25%, weight 1); pnf25 = 0.08 with PoN-tagged sampling; ppr9 = 0.08, every
+negative; normfix = the multicancer model without site features. Columns HCC1395T chr20 / HCC1395T chr1 / HG008T chr1 /
+COLO829T chr1.
+
+| | af05 | pnf25 | ppr9 | normfix | DeepSomatic-TO |
+|---|---|---|---|---|---|
+| PacBio HiFi m6 | 0.839 / 0.868 / 0.644 / 0.776 | 0.812 / 0.843 / 0.643 / 0.774 | 0.813 / 0.845 / 0.645 / 0.792 | 0.788 / 0.825 / 0.625 / 0.774 | 0.835 / 0.839 / 0.557 / 0.632 |
+| Illumina m6 | 0.845 / 0.878 / 0.621 / 0.762 | 0.834 / 0.867 / 0.652 / 0.751 | 0.830 / 0.864 / 0.652 / 0.760 | 0.809 / 0.850 / 0.601 / 0.755 | 0.845 / 0.848 / 0.529 / 0.565 |
+| ONT m6 | 0.666 / 0.683 / 0.638 / 0.667 | 0.690 / 0.712 / 0.657 / 0.744 | 0.669 / 0.658 / 0.658 / 0.717 | 0.721 / 0.730 / 0.590 / 0.737 | 0.752 / 0.760 / 0.457 / 0.633 |
+| PacBio HiFi m4 | 0.812 / 0.862 / 0.626 / 0.610 | 0.803 / 0.832 / 0.635 / 0.618 | 0.801 / 0.837 / 0.641 / 0.609 | 0.775 / 0.820 / 0.614 / 0.595 | as above |
+| Illumina m4 | 0.830 / 0.879 / 0.623 / 0.711 | 0.821 / 0.856 / 0.632 / 0.734 | 0.811 / 0.857 / 0.572 / 0.590 | 0.797 / 0.845 / 0.605 / 0.671 | as above |
+| ONT m4 | 0.580 / 0.550 / 0.591 / 0.506 | 0.595 / 0.500 / 0.611 / 0.497 | 0.536 / 0.469 / 0.606 / 0.416 | 0.690 / 0.658 / 0.587 / 0.380 | as above |
+
+- PacBio HiFi and Illumina: site features + rule 2 beat normfix on HCC1395T in every model; the AF 0.05 floor adds
+  0.01-0.03 F1 on HCC1395T (the 0.05-0.08 truths are called: 0.84-1.00 of them), m6 HCC1395T reaches or passes
+  DeepSomatic-TO; HG008T (truth with almost no low-VAF SNVs) loses 0.01-0.03 with the floor.
+- ONT: site features lower HCC1395T F1 in every model (low / mid-AF ONT errors called somatic: chr1 FP at AF 0.08-0.3
+  288 -> 550 in m6 ppr9, 846 -> 2,427 in m4 ppr9), and the AF 0.05 floor does not help; normfix stays the ONT model.
+- Sampling: PoN-tagged sampling equals every negative on PacBio HiFi (within 0.01) and is not worse on Illumina / ONT
+  (better on the held-out tumors of m4 Illumina: HG008T 0.632 vs 0.572, COLO829T 0.734 vs 0.590).
+One seed per model; rule 2 is post hoc for PacBio HiFi and was registered before the other platforms' results.
