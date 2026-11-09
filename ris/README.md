@@ -27,7 +27,10 @@ to `/storage2/fs1/epigenome/Active/jiawei.s`. There is no `/scratch`, and `/scra
 **Truth paths.** `submit.sh` mounts (`MOUNTS`): `Dataset/HG008_GIAB/{draft_v02_benchmark,dipcall_HG008N_GRCh38}` →
 `/scratch/jshen/data/HG008_GIAB/...`, `Dataset/pansoma_v2_tensors/COLO829T_truth` →
 `/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth`, `Dataset/COLO829BL_DSA/dipcall_hg38` →
-`/scratch/qfu/COLO829BL_DSA/dipcall_hg38` (all sha256-checked against the manifests on 2026-10-01).
+`/scratch/qfu/COLO829BL_DSA/dipcall_hg38` (all sha256-checked against the manifests on 2026-10-01), and
+`Dataset/CASTLE/<line>/truth` → `/scratch/jshen/data/CASTLE/<line>/truth` for the four CASTLE cell lines (HCC1395,
+HCC1954, H1437, H2009; each mounted once its copy exists on storage2). A missing mount stops the index with
+`FileNotFoundError` on the manifest's BED.
 
 **How the paths are read.** Each `labels.manifest.json` names its truth VCFs and BEDs by their old-cluster paths
 (`/scratch/jshen/data/HG008_GIAB/...`), and `data.KindIndex` reads the BEDs from there (the confident region).

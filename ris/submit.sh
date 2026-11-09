@@ -25,6 +25,10 @@ MOUNTS=(  # storage2 copy : old-cluster path in the label manifests
   "$DATA/HG008_GIAB/dipcall_HG008N_GRCh38:/scratch/jshen/data/HG008_GIAB/dipcall_HG008N_GRCh38"
   "$DATA/pansoma_v2_tensors/COLO829T_truth:/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth"
   "$DATA/COLO829BL_DSA/dipcall_hg38:/scratch/qfu/COLO829BL_DSA/dipcall_hg38"
+  "$DATA/CASTLE/HCC1395/truth:/scratch/jshen/data/CASTLE/HCC1395/truth"  # the four CASTLE cell lines (multi-cancer sets)
+  "$DATA/CASTLE/HCC1954/truth:/scratch/jshen/data/CASTLE/HCC1954/truth"
+  "$DATA/CASTLE/H1437/truth:/scratch/jshen/data/CASTLE/H1437/truth"
+  "$DATA/CASTLE/H2009/truth:/scratch/jshen/data/CASTLE/H2009/truth"
 )
 VOLS="/storage2/fs1/epigenome/Active:/storage2/fs1/epigenome/Active"
 for m in "${MOUNTS[@]}"; do
