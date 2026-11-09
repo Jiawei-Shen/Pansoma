@@ -470,16 +470,18 @@ class EpochSampler(Sampler):
     a shuffled order is padded to equal per-rank lengths; shuffle=False (evaluation) gives disjoint slices.
     Training uses rank 0 of 1: ChunkLoader splits the epoch over the ranks itself.
     With labels and non_fraction < 1 each epoch takes every tensor of the other classes and a fresh random
-    non_fraction of the non tensors (label 0); non tensors marked in `keep` are taken every epoch too."""
+    non_fraction of the non tensors (label 0); non tensors marked in `keep` are taken every epoch too. `sample` (a
+    boolean mask) names the sampled tensors instead of the non ones (train --pon-negative-fraction: the PoN-tagged
+    non / germline tensors); the others are taken every epoch."""
 
     def __init__(self, n, num_samples=None, shuffle=True, rank=0, world=1, seed=0, labels=None, non_fraction=1.0,
-                 keep=None):
+                 keep=None, sample=None):
         self.n, self.num_samples, self.shuffle = n, num_samples, shuffle
         self.rank, self.world, self.seed, self.epoch = rank, world, seed, 0
         self.non, self.other, self.keep_non = None, None, None
         if labels is not None and non_fraction < 1.0:
             labels = np.asarray(labels)
-            sampled = labels == 0
+            sampled = labels == 0 if sample is None else np.asarray(sample, bool).copy()
             if keep is not None:
                 sampled &= ~np.asarray(keep, bool)
             self.non, self.other = torch.from_numpy(np.flatnonzero(sampled)), torch.from_numpy(np.flatnonzero(~sampled))

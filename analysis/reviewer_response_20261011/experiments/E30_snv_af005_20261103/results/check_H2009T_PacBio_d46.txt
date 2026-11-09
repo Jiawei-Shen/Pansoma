@@ -1,0 +1,4 @@
+H2009T_PacBio_d46 chr22: old sites 23,579, new 26,038 (+2,459 = +10.4%); missing 0; same alleles 23,541: tensor differs 0 of 23,541 compared, label differs 0; gained an allele 38; new alleles 2,506, AF range 0.0500-0.0796, outside [0.05, 0.08) 0; labels of added sites {-1: 2025, 0: 322, 1: 9, 2: 103} (-1 ignored, 0 non, 1 somatic, 2 germline)
+H2009T_PacBio_d46 chr1: old sites 138,468, new 146,778 (+8,310 = +6.0%); missing 0; same alleles 137,608: tensor differs 0 of 30,000 compared, label differs 0; gained an allele 860; new alleles 9,354, AF range 0.0500-0.0799, outside [0.05, 0.08) 0; labels of added sites {-1: 6281, 0: 1735, 1: 95, 2: 199} (-1 ignored, 0 non, 1 somatic, 2 germline)
+OK
+528.09s 263904KB

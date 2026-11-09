@@ -116,7 +116,8 @@ For a GBZ whose reference is generic paths (a GRCh38-only vg autoindex graph), s
 `run discover` selects the target nodes. `orchestrate prepare` / `run --no-finalize` build a whole genome on one
 Slurm node, and `finalize`, a job of its own, merges the tensors per chromosome and writes the truth labels. The
 commands and the settings used for PacBio HiFi, ONT-UL, Illumina and fiberseq are in
-[indexed_gam_pipeline_v4/README.md](indexed_gam_pipeline_v4/README.md) (sections 1 and 5). The label rules are in
+[indexed_gam_pipeline_v4/README.md](indexed_gam_pipeline_v4/README.md) (sections 1 and 5). AF floors of the build:
+SNV 0.05 for PacBio HiFi, Fiber-seq and Illumina, 0.08 for ONT (`--snv-min-af`); INDEL 0.08 (`--indel-min-af`). The label rules are in
 [tensor_postprocessing/README.md](indexed_gam_pipeline_v4/tensor_postprocessing/README.md) and
 [analysis/truth_labels.md](analysis/truth_labels.md). A step-by-step guide in Chinese, from a GAM to a trained
 model: [analysis/tensor_generation_and_training.md](analysis/tensor_generation_and_training.md).
@@ -131,12 +132,13 @@ python scripts/visualize_tensor.py TENSORS/SNV/chr1_shard_00000_data.npy -i 0 -o
 ### 4. Model
 
 Training and prediction on the merged, labelled sets: [machine_learning/pansoma_net_v2/README.md](machine_learning/pansoma_net_v2/README.md).
-SNVs: one model per sample and platform ("SNV recipe" there). INDELs: one model per platform trained on several tumors
-("INDEL recipe" there): labels that follow the benchmark, five population site features
-(`python -m pansoma_net_v2.site_features build`) and one PASS threshold per model, the post-PoN validation recall 0.8.
-SNVs: one model per sample and platform ("SNV recipe" there). INDELs: one model per platform trained on several tumors
-("INDEL recipe" there): labels that follow the benchmark, five population site features
-(`python -m pansoma_net_v2.site_features build`) and one PASS threshold per model, the post-PoN validation recall 0.8.
+SNVs ("SNV recipe" there), by platform. PacBio HiFi (Fiber-seq included) and Illumina: tensors at SNV AF 0.05, the
+five population site features (`python -m pansoma_net_v2.site_features build --kind SNV`), the non tensors with AF
+<= 0.1 sampled 25 % per epoch, the best epoch by the post-PoN validation F1 and one PASS threshold per model, the
+post-PoN validation recall 0.95. ONT: tensors at SNV AF 0.08, no site features, every negative, PASS at the
+validation recall 0.9. INDELs: one model per platform trained on several tumors ("INDEL recipe" there): labels that
+follow the benchmark, five population site features (`python -m pansoma_net_v2.site_features build`) and one PASS
+threshold per model, the post-PoN validation recall 0.8.
 The same README covers the calls: `pansoma_net_v2.graph_vcf` (predictions → VCF in graph node coordinates),
 `linear_vcf` (→ GRCh38 VCF) and `vcfeval` (the PoN filter below, with the rule of each kind, then `rtg vcfeval`
 against the truth VCF).

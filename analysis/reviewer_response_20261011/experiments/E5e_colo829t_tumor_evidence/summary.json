@@ -1,0 +1,171 @@
+{
+ "counts": {
+  "absent_INDEL": 311,
+  "absent_SNV": 52,
+  "control_INDEL": 400
+ },
+ "asm_absent_INDEL": {
+  "n": 311,
+  "novel_ALT": 226,
+  "novel_any": 258,
+  "verdicts": {
+   "novel_ALT": 226,
+   "novel_other": 32,
+   "no_change_hom": 38,
+   "all_eq_hapX": 10,
+   "all_eq_hapY": 2,
+   "no_change_both": 2,
+   "NA": 1
+  },
+  "r37": {
+   "tumor carries the truth allele (not in normal)": 226,
+   "novel non-truth sequence only": 20,
+   "tumor carries only normal haplotype sequences": 53,
+   "one tumor hap = normal hap, other hap novel non-truth sequence": 11,
+   "no hit": 1
+  },
+  "unique_copies": {
+   "n": 296,
+   "novel_ALT": 213,
+   "novel_any": 243
+  }
+ },
+ "asm_absent_SNV": {
+  "n": 49,
+  "novel_ALT": 34,
+  "novel_any": 41,
+  "verdicts": {
+   "novel_ALT": 34,
+   "no_change_hom": 7,
+   "novel_other": 7,
+   "all_eq_hapX": 1
+  },
+  "r37": {
+   "tumor carries the truth allele (not in normal)": 34,
+   "tumor carries only normal haplotype sequences": 9,
+   "novel non-truth sequence only": 3,
+   "one tumor hap = normal hap, other hap novel non-truth sequence": 3
+  },
+  "unique_copies": {
+   "n": 38,
+   "novel_ALT": 24,
+   "novel_any": 30
+  }
+ },
+ "check22": {
+  "loci": 22,
+  "hit_rows_ref": 51,
+  "hit_rows_here": 51,
+  "hit_rows_identical": true,
+  "outcomes_identical": 22,
+  "by_e5d_class": {
+   "absent: novel non-truth sequence only": 1,
+   "absent: one tumor hap = normal hap, other hap novel non-truth sequence": 3,
+   "absent: tumor carries only normal haplotype sequences": 4,
+   "absent: tumor carries the truth allele (not in normal)": 7,
+   "present: tumor carries only normal haplotype sequences": 7
+  }
+ },
+ "reads": {
+  "absorbed_Illumina": {
+   "loci": 311,
+   "status": {
+    "ok": 289,
+    "lt10_reads": 12,
+    "event_not_length_changing": 10
+   },
+   "ok": 289,
+   "EXP_seen": 282,
+   "strict_ok": 285,
+   "strict_EXP_seen": 278
+  },
+  "control_Illumina": {
+   "loci": 400,
+   "status": {
+    "lt10_reads": 13,
+    "ok": 371,
+    "event_not_length_changing": 16
+   },
+   "ok": 371,
+   "EXP_seen": 365,
+   "strict_ok": 367,
+   "strict_EXP_seen": 361
+  },
+  "absorbed_Fiberseq": {
+   "loci": 311,
+   "status": {
+    "ok": 297,
+    "lt10_reads": 3,
+    "event_not_length_changing": 11
+   },
+   "ok": 297,
+   "EXP_seen": 289,
+   "strict_ok": 291,
+   "strict_EXP_seen": 283
+  },
+  "control_Fiberseq": {
+   "loci": 400,
+   "status": {
+    "ok": 375,
+    "event_not_length_changing": 21,
+    "normal_hap_unresolved": 1,
+    "lt10_reads": 3
+   },
+   "ok": 375,
+   "EXP_seen": 366,
+   "strict_ok": 370,
+   "strict_EXP_seen": 361
+  },
+  "absorbed_ONT": {
+   "loci": 311,
+   "status": {
+    "ok": 297,
+    "lt10_reads": 3,
+    "event_not_length_changing": 11
+   },
+   "ok": 297,
+   "EXP_seen": 237,
+   "strict_ok": 291,
+   "strict_EXP_seen": 231
+  },
+  "control_ONT": {
+   "loci": 400,
+   "status": {
+    "ok": 375,
+    "event_not_length_changing": 22,
+    "normal_hap_unresolved": 1,
+    "lt10_reads": 2
+   },
+   "ok": 375,
+   "EXP_seen": 308,
+   "strict_ok": 370,
+   "strict_EXP_seen": 303
+  }
+ },
+ "hg008t_reads_strict": {
+  "absorbed_Illumina": {
+   "ok": 1269,
+   "EXP_seen": 1236,
+   "strict_ok": 1256,
+   "strict_EXP_seen": 1223
+  },
+  "control_Illumina": {
+   "ok": 369,
+   "EXP_seen": 353,
+   "strict_ok": 367,
+   "strict_EXP_seen": 351
+  },
+  "absorbed_PacBio": {
+   "ok": 1288,
+   "EXP_seen": 1256,
+   "strict_ok": 1275,
+   "strict_EXP_seen": 1243
+  },
+  "control_PacBio": {
+   "ok": 386,
+   "EXP_seen": 372,
+   "strict_ok": 384,
+   "strict_EXP_seen": 370
+  }
+ }
+}

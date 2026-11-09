@@ -1,0 +1,1 @@
+ONT-like reads vs their own templates (minimap2 -c, primary blocks): n=1816, NM/block median 0.0217, q25 0.0084, q75 0.0528, q90 0.0871

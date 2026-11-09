@@ -3,6 +3,7 @@
 
 Needs build_segments.py run on the haplotype -> CHM13 alignments (chm13_paf.sbatch outputs):
   python build_segments.py --dipcall-prefix <D>/chm13_truth/HG008N_CHM13_dipcall --out <D>/chm13_truth
+(COLO829BL: --dipcall-prefix /scratch/qfu/COLO829BL_DSA/dipcall_chm13/dipcall_chm13 --contig-rule majority; collect.sh)
 A read gets a CHM13 truth (ok = 1) when its whole template lies in one CHM13 one-to-one segment of the same haplotype
 contig. Output: <D>/chm13_truth/<platform>.chm13_truth.npz (chrom, ref_start, ref_end, ref_strand, ok; rows = truth.npz).
 """
@@ -18,7 +19,7 @@ import e11b_common as C  # noqa: E402
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--base", default="/scratch/jshen/data/reviewer_experiments_20261013/E11b_simulated_alignment")
+    ap.add_argument("--base", default=C.BASE)
     ap.add_argument("--platform", required=True)
     a = ap.parse_args()
     T = np.load(f"{a.base}/sim/{a.platform}/truth.npz")

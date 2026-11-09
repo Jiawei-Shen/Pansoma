@@ -1,0 +1,48 @@
+COLO829T_fiberseq_d46 min_af-only records: {'af_upper_bound': 1501952}
+
+| AF (upper bound) | chr1 alleles | chr1 sites | other chromosomes alleles | sites |
+|---|---|---|---|---|
+| [0.00, 0.03) | 79,790 | 62,929 | 833,105 | 728,038 |
+| [0.03, 0.04) | 8,682 | 8,534 | 156,511 | 153,896 |
+| [0.04, 0.05) | 6,282 | 6,215 | 124,572 | 123,201 |
+| [0.05, 0.06) | 5,022 | 4,987 | 109,849 | 108,985 |
+| [0.06, 0.07) | 5,023 | 4,987 | 93,837 | 93,291 |
+| [0.07, 0.08) | 3,862 | 3,839 | 75,417 | 74,980 |
+
+truth alleles among them (kind, chr1, in BED, bin): count
+  ('germline', False, False, '[0.00, 0.03)') 77
+  ('germline', False, False, '[0.03, 0.04)') 50
+  ('germline', False, False, '[0.04, 0.05)') 61
+  ('germline', False, False, '[0.05, 0.06)') 64
+  ('germline', False, False, '[0.06, 0.07)') 47
+  ('germline', False, False, '[0.07, 0.08)') 79
+  ('germline', False, True, '[0.00, 0.03)') 943
+  ('germline', False, True, '[0.03, 0.04)') 665
+  ('germline', False, True, '[0.04, 0.05)') 773
+  ('germline', False, True, '[0.05, 0.06)') 1535
+  ('germline', False, True, '[0.06, 0.07)') 1183
+  ('germline', False, True, '[0.07, 0.08)') 981
+  ('germline', True, False, '[0.04, 0.05)') 1
+  ('germline', True, False, '[0.05, 0.06)') 2
+  ('germline', True, False, '[0.06, 0.07)') 1
+  ('germline', True, True, '[0.00, 0.03)') 182
+  ('germline', True, True, '[0.03, 0.04)') 126
+  ('germline', True, True, '[0.04, 0.05)') 93
+  ('germline', True, True, '[0.05, 0.06)') 171
+  ('germline', True, True, '[0.06, 0.07)') 71
+  ('germline', True, True, '[0.07, 0.08)') 41
+  ('somatic', False, True, '[0.00, 0.03)') 930
+  ('somatic', False, True, '[0.03, 0.04)') 479
+  ('somatic', False, True, '[0.04, 0.05)') 410
+  ('somatic', False, True, '[0.05, 0.06)') 393
+  ('somatic', False, True, '[0.06, 0.07)') 381
+  ('somatic', False, True, '[0.07, 0.08)') 356
+  ('somatic', True, True, '[0.00, 0.03)') 114
+  ('somatic', True, True, '[0.03, 0.04)') 62
+  ('somatic', True, True, '[0.04, 0.05)') 45
+  ('somatic', True, True, '[0.05, 0.06)') 44
+  ('somatic', True, True, '[0.06, 0.07)') 29
+  ('somatic', True, True, '[0.07, 0.08)') 27
+
+current SNV tensors (sites): chr1 241213 other chromosomes 2166119
+528.37s 2347176KB

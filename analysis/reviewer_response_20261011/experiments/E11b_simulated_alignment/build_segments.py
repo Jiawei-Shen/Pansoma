@@ -135,6 +135,9 @@ def main():
     ap.add_argument("--min-aln", type=int, default=50000)
     ap.add_argument("--min-mapq", type=int, default=5)
     ap.add_argument("--min-seg", type=int, default=1000)
+    ap.add_argument("--contig-rule", choices=["name", "majority"], default="name",
+                    help="name: contig must be chrN_hapK (curated HG008-N); majority: chrN must hold most of the contig's "
+                         "primary aligned bases over all chromosomes (assemblies without chromosome names, e.g. verkko)")
     ap.add_argument("--out", required=True)
     a = ap.parse_args()
     chroms = a.chroms.split(",")
@@ -150,6 +153,7 @@ def main():
         bed = read_bed(bedp, chroms)
         recs = []
         qcov = {}
+        prim_bases = {}  # contig -> chrom -> primary aligned block bases (all chromosomes; contig rule "majority")
         with gzip.open(paf, "rt") as fh:
             for line in fh:
                 f = line.rstrip("\n").split("\t")
@@ -160,13 +164,25 @@ def main():
                 qname, qs, qe = f[0], int(f[2]), int(f[3])
                 if tp in ("P", "I", "i"):
                     qcov.setdefault(qname, []).append((qs, qe))
+                if tp == "P":
+                    d = prim_bases.setdefault(qname, {})
+                    d[f[5]] = d.get(f[5], 0) + int(f[10])
                 if tp != "P" or f[5] not in chroms:
                     continue
-                if qname != f"{f[5]}_hap{hap}":
+                if a.contig_rule == "name" and qname != f"{f[5]}_hap{hap}":
                     continue
                 if int(f[11]) < a.min_mapq or int(f[10]) < a.min_aln:
                     continue
                 recs.append((qname, int(f[1]), qs, qe, f[4], f[5], int(f[7]), int(f[8]), int(f[11]), tags["cg"]))
+        if a.contig_rule == "majority":
+            major = {q: max(d, key=d.get) for q, d in prim_bases.items()}
+            dropped = sorted({r[0] for r in recs if major[r[0]] != r[5]})
+            recs = [r for r in recs if major[r[0]] == r[5]]
+            meta.setdefault("contigs", {})[f"hap{hap}"] = {
+                "kept": sorted({(r[0], r[5]) for r in recs}),
+                "dropped_not_majority": [(q, major[q]) for q in dropped]}
+            print(f"hap{hap}: contigs kept {meta['contigs'][f'hap{hap}']['kept']}, dropped (majority elsewhere) "
+                  f"{meta['contigs'][f'hap{hap}']['dropped_not_majority']}", file=sys.stderr)
         hap_bases = 0
         for r in recs:
             qname, qlen, qs, qe, strand, chrom, ts, te, mapq, cg = r

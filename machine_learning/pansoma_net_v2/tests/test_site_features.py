@@ -7,6 +7,7 @@ import gzip
 import hashlib
 import io
 import json
+import re
 import tempfile
 import unittest
 from pathlib import Path
@@ -340,6 +341,42 @@ class TrainPredictTest(unittest.TestCase):
             va = va[index.arrays["eval_label"][va] >= 0]
             tags.append(data[kind]["pon_tag"][va])
         return np.concatenate(tags)
+
+    def test_pon_negative_fraction(self):
+        """--pon-negative-fraction: each epoch every somatic and untagged tensor plus a fresh fraction of the PoN-tagged
+        non / germline ones, weighted 1/fraction; the validation keeps every tensor."""
+        feat, data = self.features("features")
+        for extra, msg in ((["--pon-negative-fraction", "0.5"], "needs the PoN tags"),
+                           (["--site-features", str(feat), "--pon-negative-fraction", "0"], "must be in"),
+                           (["--site-features", str(feat), "--pon-negative-fraction", "0.5", "--non-fraction", "0.5"],
+                            "do not combine"),
+                           (["--site-features", str(feat), "--pon-negative-fraction", "0.5", "--keep-non-af", "0.5"],
+                            "do not combine")):
+            with self.assertRaisesRegex(SystemExit, msg):
+                train.main(["--tensors", str(self.root), "--output", str(self.t / "bad"), "--epochs", "1"] + extra
+                           + SMALL_ARGS)
+        out = self.t / "pnf"
+        train.main(["--tensors", str(self.root), "--output", str(out), "--epochs", "2", "--site-features", str(feat),
+                    "--best-by", "postpon", "--pon-negative-fraction", "0.5"] + SMALL_ARGS)
+        log = (out / "train.log").read_text()
+        tagged, total = map(lambda v: int(v.replace(",", "")),
+                            re.search(r"PoN-tagged non / germline tensors: ([\d,]+) of ([\d,]+)", log).groups())
+        epoch = int(re.search(r"each epoch ([\d,]+) tensors", log).group(1).replace(",", ""))
+        self.assertGreater(tagged, 0)
+        self.assertEqual(epoch, total - tagged + round(0.5 * tagged))
+        self.assertIn("importance weight 2.00", log)
+        ckpt = torch.load(out / "best.pth", weights_only=False)
+        self.assertEqual(ckpt["args"]["pon_negative_fraction"], 0.5)
+        tags = self.validation_tags(data)
+        self.assertEqual(ckpt["val"]["postpon"]["tensors"], len(tags))  # every validation tensor
+        # the weights: tagged non / germline 1/F, tagged somatic and untagged 1
+        args = train.parse_args(["--tensors", "x", "--output", "y", "--pon-negative-fraction", "0.25"])
+        scalars = torch.zeros(6, train.PON_INPUT + 3)
+        scalars[:3, train.PON_INPUT] = 1.0
+        y = torch.tensor([0, 1, 2, 0, 1, 2])
+        self.assertEqual(train.importance_weights(args, y, scalars).tolist(), [4.0, 1.0, 4.0, 1.0, 1.0, 1.0])
+        self.assertIsNone(train.importance_weights(train.parse_args(["--tensors", "x", "--output", "y"]), y, scalars))
+        self.assertEqual(train.PON_INPUT, len(SCALARS) + site_features.SITE_FEATURES.index("pon_tag"))
 
     def test_site_features_train_resume_predict(self):
         feat, data = self.features("features")
