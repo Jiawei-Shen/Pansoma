@@ -14,7 +14,7 @@ Job scripts, design notes and results (`results.md`, `results_indel.md`, from `c
 ## Five SNV models trained on RIS
 
 Illumina v1.1 / v2.1 and ONT GRCh38-only / v1.1 / v2.1 run on RIS's epigenome H100s instead of tequila's two H100s.
-The code is the same: origin/develop's `machine_learning/pansoma_net_v2` last changed in 1497adb, the code tequila
+The code is the same: origin/develop's `machine_learning/pansoma_net_v2` Python code last changed in 1497adb, the code tequila
 runs. RIS trains and predicts; the VCFs and vcfeval run on the old cluster, as for the other models.
 
 1. `to_ris.sh` (wangcluster, in tmux): rsync the five sets' SNV tensors (4.4 TB apparent, 613 GB on disk), the HCC1395T

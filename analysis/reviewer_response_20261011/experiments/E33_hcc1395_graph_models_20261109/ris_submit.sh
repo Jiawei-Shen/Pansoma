@@ -7,8 +7,8 @@
 # usage: bash analysis/reviewer_response_20261011/experiments/E33_hcc1395_graph_models_20261109/ris_submit.sh
 set -euo pipefail
 cd "$(dirname "$0")/../../../.."
-c=$(git log -1 --format=%H -- machine_learning/pansoma_net_v2)
-[[ $c == 1497adb* ]] || { echo "machine_learning/pansoma_net_v2 last changed in ${c:0:7}, not 1497adb (the tequila code)"; exit 1; }
+c=$(git log -1 --format=%H -- 'machine_learning/pansoma_net_v2/*.py')
+[[ $c == 1497adb* ]] || { echo "machine_learning/pansoma_net_v2 code last changed in ${c:0:7}, not 1497adb (the tequila code)"; exit 1; }
 grep -q CASTLE/HCC1395 ris/submit.sh || { echo "ris/submit.sh has no HCC1395T truth mount: git pull"; exit 1; }
 A=/storage2/fs1/epigenome/Active/jiawei.s
 T=$A/Dataset/pansoma_v2_tensors RUNS=$A/pansoma_net_v2_runs
