@@ -1,4 +1,7 @@
-# Supplementary Fig. R1.m2, INDEL examples 1–10
+# Supplementary Fig. R1.m2, INDEL examples
+
+Two sets: `fig_R1.m2_INDEL_01`–`10`, where the window spans several nodes and the ALT and REF reads take different
+branches; and `fig_R1.m2_INDEL_span_01`–`08`, where the deleted bases themselves lie on two to six nodes (below).
 
 Ten chr1 somatic truth INDEL tensors whose 101-column window spans several graph nodes, as INDEL companions of the SNV
 example in `../fig_R1.m2_tensor_across_nodes.png`. Each is an exact match to a truth INDEL (label reason
@@ -18,7 +21,8 @@ window; the site starts at column 50.
 | `select_examples.py` → `candidates.tsv` | every exact, PASS, in-BED somatic truth INDEL tensor on chr1 of the twelve HPRC sets (HG008T / COLO829T × Illumina, PacBio HiFi or Fiber-seq, ONT × HPRC v1.1 d9 / v2.1 d46) with >= 5 ALT and REF rows: 1,661 tensors |
 | `choose.py` → `picks.tsv` | the ten examples (rules below) |
 | `annotate.py` → `annotations.md` | caption facts: GRCh38-path nodes under the window and, per branch column, the channel-6 codes of the ALT and REF rows decoded to haplotype counts and matched to nodes |
-| `fig_R1.m2_INDEL_NN.png` | the figures (`scripts/visualize_tensor.py --panel-order 0,5,6,1,2,3,4,7`) |
+| `span_examples.py` → `span_picks.tsv`, `span_nodes.md` | the truth deletions whose allele spans >= 2 nodes, with each allele node's length and haplotype count |
+| `fig_R1.m2_INDEL_NN.png`, `fig_R1.m2_INDEL_span_NN.png` | the figures (`scripts/visualize_tensor.py --panel-order 0,5,6,1,2,3,4,7`) |
 
 Selection (`choose.py`): >= 10 ALT and >= 10 REF rows; the window over >= 3 GRCh38-path nodes; at least one column
 outside the site where >= 80% of ALT rows and >= 80% of REF rows each share one path-count code, the two codes differ by
@@ -100,3 +104,56 @@ haplotypes and at least 86% of REF rows on nodes carried by 405–463.
 68–72, all 11 ALT rows traverse the 5-bp node 11316117 (AAAAG, on the GRCh38 path, 230 of the 464 haplotypes), while
 95% of REF rows are on the node that follows it, 11316118 (all 464 haplotypes, also starting AAAAG): the REF reads
 skip node 11316117.
+
+## Deletions through several nodes (`fig_R1.m2_INDEL_span_01`–`08`)
+
+`span_examples.py`: of the 1,661 truth INDEL tensors, 22 have an allele on two or more nodes (the candidate's node plus
+the summary's allele path); all are deletions, since inserted bases are not graph nodes. Kept: >= 5 ALT and >= 5 REF
+rows and the REF-row test above, which removed three: the 8-bp TA deletion chr1:23,017,177 in PacBio HiFi and ONT v2.1
+(52% and 83% of REF rows carry the ALT sequence) and the 4-bp deletion chr1:75,902,673 GTATA>G in PacBio HiFi v1.1
+(44%). One tensor per truth deletion, the one with the most allele nodes, then the most rows of the smaller allele:
+eight deletions, all HG008T. In each, the ALT rows show the deletion (alignment operation D) over the columns of all
+these nodes, and panels 2 and 3 show the graph bases and path counts of the deleted nodes. Several of the short
+deletions lie in homopolymer runs where the tensor also holds rows of other deletion lengths (A2, A3, ...; mostly ONT).
+
+*Supplementary Fig. R1.m2, INDEL span 1.* HG008T Illumina, HPRC v2.1 (d46). Somatic 8-bp deletion chr1:23,017,177
+TTATATATA>T (candidate 1811743:0) in a TA repeat; 16 ALT, 27 REF and 5 other reads (AF 0.33). The deleted bases lie on
+six nodes, carried by 20, 19, 27, 51, 78 and 77 of the 464 haplotypes (1811743, 1811744, 1811746, 1811747, 1811748,
+1811749; 1, 1, 2, 2, 1 and 1 bp); the path counts rise along the repeat, so few haplotypes carry its full length. The
+window covers 36 GRCh38-path nodes. At this site in PacBio HiFi and ONT, most REF rows carry the ALT sequence (see
+above); in Illumina, fewer than 10% of the REF rows that start at column 0 do.
+
+*Supplementary Fig. R1.m2, INDEL span 2.* HG008T PacBio HiFi, HPRC v2.1 (d46). Somatic 47-bp deletion chr1:5,023,298
+(candidate 1697501:0); 54 ALT, 54 REF and 1 other reads (AF 0.50). The deleted bases lie on four nodes: 1697501 (1 bp,
+455 of the 464 haplotypes), 1697503 (13 bp, 464), 1697504 (1 bp, 462) and the first 32 bp of 1697506 (63 bp, 464).
+All ALT rows skip the four, all REF rows traverse them. The window covers 8 GRCh38-path nodes. On HPRC v1.1 the same
+deletion spans two nodes.
+
+*Supplementary Fig. R1.m2, INDEL span 3.* HG008T ONT, HPRC v1.1 (d9). Somatic 3-bp deletion chr1:224,674,272 GTTT>G
+(candidate 3816171:0) in a T run; 9 ALT reads, 17 with other deletion lengths of the run (A2–A4: 4, 1 and 5 bp; 7, 5
+and 5 reads), 15 REF and 7 other (AF 0.19). The three deleted T's are three single-base nodes (3816171,
+3816172, 3816173), carried by 25, 29 and 33 of the 90 haplotypes. The window covers 19 GRCh38-path nodes.
+
+*Supplementary Fig. R1.m2, INDEL span 4.* HG008T ONT, HPRC v1.1 (d9). Somatic 3-bp deletion chr1:242,964,213 CTTT>C
+(candidate 3140807:0) in a T run; 8 ALT reads, 12 with other deletion lengths (A2, A3: 1 and 2 bp; 7 and 5 reads), 19
+REF and 4 other (AF 0.19). The deleted bases are node 3140807 (1 bp, 48 of the 90
+haplotypes) and the first 2 bp of node 3140808 (TTTT, 52). The window covers 10 GRCh38-path nodes.
+
+*Supplementary Fig. R1.m2, INDEL span 5.* HG008T ONT, HPRC v1.1 (d9). Somatic 2-bp deletion chr1:11,619,716 CTT>C
+(candidate 312358:0); 5 ALT, 43 REF and 5 other reads (AF 0.09). The deleted bases are node 312358 (1 bp, 82 of the 90
+haplotypes) and the first base of node 312359 (71 bp, starting with a T run, 86). The window covers 8 GRCh38-path nodes.
+
+*Supplementary Fig. R1.m2, INDEL span 6.* HG008T ONT, HPRC v1.1 (d9). Somatic 2-bp deletion chr1:166,733,167 TAA>T
+(candidate 1884972:0); 9 ALT reads, 4 with a 1-bp deletion (A2), 29 REF and 7 other (AF 0.18). The deleted bases are node 1884972 (1 bp, 84 of the 90
+haplotypes) and the first base of node 1884973 (25 bp, starting with an A run, 86). The window covers 10 GRCh38-path
+nodes.
+
+*Supplementary Fig. R1.m2, INDEL span 7.* HG008T Illumina, HPRC v1.1 (d9). Somatic 2-bp deletion chr1:217,084,133
+TAA>T (candidate 3673609:0); 64 ALT, 96 REF and 8 other reads (AF 0.38). The deleted bases are node 3673609 (1 bp, 83 of the 90
+haplotypes) and the first base of node 3673610 (AA, 85). The window covers 4 GRCh38-path nodes.
+
+*Supplementary Fig. R1.m2, INDEL span 8.* HG008T ONT, HPRC v1.1 (d9). Somatic 2-bp deletion chr1:74,016,690 CAA>C
+(candidate 1070945:0); 5 ALT reads, 7 with other deletion lengths (A2, A3: 4 and 1 bp; 4 and 3 reads), 17 REF and 3
+other (AF 0.16). The deleted bases are node 1070945 (1 bp, 85 of the 90
+haplotypes) and the first base of node 1070946 (146 bp, starting with an A run, 89). The window covers 6 GRCh38-path
+nodes.
