@@ -275,6 +275,27 @@ class VisualizationTest(unittest.TestCase):
                 self.assertIn("Distinct GBWT\npaths\n"+label,[t.get_text() for ax in fig.axes for t in ax.texts])
                 real_close(fig)
 
+    def test_panel_order_moves_panels_and_keeps_channel_numbers(self):
+        v6,m=v6_example()
+        order=[0,6,1,2,3,4,5,7]
+        real_close=v.plt.close
+        with tempfile.TemporaryDirectory() as d,patch.object(v.plt,"close"):
+            self.assertEqual(v.visualize_tensor(v6,str(Path(d)/"o.png"),"T",False,None,metadata=m,panel_order=order),2)
+            fig=v.plt.gcf()
+            main=[ax for ax in fig.axes if ax.get_subplotspec() is not None and ax.get_subplotspec().colspan.start==0]
+            rows={ax.get_subplotspec().rowspan.start:ax for ax in main}
+            self.assertEqual(sorted(rows),list(range(8)))
+            np.testing.assert_array_equal(np.ma.filled(rows[1].images[0].get_array(),0),v6[6,:2])  # path count second
+            np.testing.assert_array_equal(rows[3].images[0].get_array(),v6[2,:2])                 # site allele third
+            self.assertTrue(rows[1].get_title(loc="left").startswith("2  Node distinct path count"))
+            self.assertTrue(rows[1].get_title(loc="left").endswith("(channel 6)"))
+            self.assertTrue(rows[2].get_title(loc="left").startswith("3  Base qualities"))
+            self.assertEqual(rows[7].get_xlabel(),"Tensor column (candidate-relative context; branches may differ)")
+            self.assertEqual([ax for ax in main if ax.get_xlabel()],[rows[7]])
+            real_close(fig)
+        with self.assertRaisesRegex(ValueError,"permutation"):
+            v.visualize_tensor(v6,"unused.png","T",False,None,metadata=m,panel_order=[0,1,2])
+
     def test_legacy_still_renders_five_channels(self):
         x=np.zeros((5,3,4),dtype=np.int8)
         x[0,:2]=20

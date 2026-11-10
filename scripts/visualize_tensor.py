@@ -407,15 +407,20 @@ def path_count_colorbar(fig, ax, side_ax, values, storage_version, haplotypes=No
 
 
 def visualize_candidate_tensor(tensor, out_path, title, show_all_rows=False,
-                               marker_column=None, metadata=None, hide_marker=False):
+                               marker_column=None, metadata=None, hide_marker=False, panel_order=None):
     configure_style()
     view, region = prepare_candidate_view(tensor, show_all_rows, metadata)
     channels = tensor.shape[0]
     v5 = is_v5(tensor, metadata)
+    # panel_order: channels top to bottom (default 0, 1, ..., C-1); axes stay indexed by channel
+    order = list(range(channels)) if panel_order is None else list(panel_order)
+    if sorted(order) != list(range(channels)):
+        raise ValueError(f"panel order {order} is not a permutation of channels 0..{channels - 1}")
+    position = {channel: i for i, channel in enumerate(order)}
     fig = plt.figure(figsize=(17, {6: 15, 7: 17, 8: 19}[channels]), layout="constrained")
     grid = GridSpec(channels, 2, figure=fig, width_ratios=(1, .21), hspace=.12)
-    axes = [fig.add_subplot(grid[i, 0]) for i in range(channels)]
-    legends = [fig.add_subplot(grid[i, 1]) for i in range(channels)]
+    axes = [fig.add_subplot(grid[position[i], 0]) for i in range(channels)]
+    legends = [fig.add_subplot(grid[position[i], 1]) for i in range(channels)]
     plot_discrete_track(axes[0], legends[0], view[0], V2_BASE_LABELS, V2_BASE_COLORS)
     plot_discrete_track(axes[5], legends[5], view[5], V2_BASE_LABELS, V2_BASE_COLORS)
     if v5:
@@ -467,6 +472,8 @@ def visualize_candidate_tensor(tensor, out_path, title, show_all_rows=False,
               "4  Mapping qualities", "5  Alignment operations", "6  Per-read graph-reference bases",
               "7  Node distinct path count" if v5 else "7  Node walk count",
               "8  Read strand (vs. candidate node forward)"]
+    if panel_order is not None:  # number panels by position; keep the channel number (0-based) in the title
+        titles = [f"{position[c] + 1}  {t.split('  ', 1)[1]} (channel {c})" for c, t in enumerate(titles)]
     for channel, ax in enumerate(axes):
         ax.set_title(titles[channel], loc="left", fontsize=16)
         ax.set_ylabel("Alignment row", fontsize=13)
@@ -482,9 +489,9 @@ def visualize_candidate_tensor(tensor, out_path, title, show_all_rows=False,
                 if channel in (0, 2):
                     ax.text(-1.2, (group["start_row"] + group["end_row"] - 1) / 2, group["allele"], ha="right",
                             va="center", fontsize=11, fontweight="bold", clip_on=False)
-        if channel < channels-1:
+        if position[channel] < channels-1:
             ax.tick_params(labelbottom=False)
-    axes[-1].set_xlabel("Tensor column (candidate-relative context; branches may differ)", fontsize=13)
+    axes[order[-1]].set_xlabel("Tensor column (candidate-relative context; branches may differ)", fontsize=13)
     version = metadata_format(metadata) or {6: V2_VERSION, 7: V3_VERSION, 8: V5_VERSION}[channels]
     caption = version.removeprefix("indexed-gam-") + " | no dedicated reference row"
     if region:
@@ -553,12 +560,13 @@ def visualize_tensor(
     metadata=None,
     tensor_format="auto",
     hide_marker=False,
+    panel_order=None,
 ) -> int:
     resolved = resolve_format(tensor, metadata, tensor_format)
     if resolved in CANDIDATE_VERSIONS:
         metadata = dict(metadata or {}, tensor_format_version="indexed-gam-" + resolved)
         return visualize_candidate_tensor(tensor, out_path, title, show_all_rows,
-                                          marker_column, metadata, hide_marker)
+                                          marker_column, metadata, hide_marker, panel_order)
     if tensor.ndim != 3 or tensor.shape[0] != 5:
         raise ValueError(f"expected a 5-channel (5, H, W) tensor, got shape {tensor.shape}")
 
@@ -666,6 +674,9 @@ def main() -> None:
     parser.add_argument("--manifest-path", help="Format manifest; default: manifest.json beside input")
     parser.add_argument("--shard-index", type=int, help="Metadata shard index for nonstandard filenames")
     parser.add_argument("--title", help="Optional figure title.")
+    parser.add_argument("--panel-order", help="Candidate tensors: channels top to bottom, comma-separated 0-based "
+                        "(e.g. 0,6,1,2,3,4,5,7 puts the path count second); panels are numbered by position and "
+                        "titles keep the channel number. Default: channel order.")
     args = parser.parse_args()
 
     path = os.path.expanduser(args.npy_path)
@@ -731,6 +742,12 @@ def main() -> None:
     else:
         sample_indices = [args.sample_index]
 
+    panel_order = None
+    if args.panel_order:
+        try:
+            panel_order = [int(x) for x in args.panel_order.split(",")]
+        except ValueError:
+            parser.error("--panel-order must be comma-separated integers")
     try:
         manifest, records = load_metadata(path, args.manifest_path, args.summary_path, args.shard_index)
     except (OSError, ValueError) as exc:
@@ -769,6 +786,7 @@ def main() -> None:
             displayed_rows = visualize_tensor(
                 tensor, output, figure_title, args.show_all_rows, marker_column,
                 metadata=metadata, tensor_format=tensor_format, hide_marker=args.marker_column == -1,
+                panel_order=panel_order,
             )
         except ValueError as exc:
             sys.exit(f"Error: {exc}")
