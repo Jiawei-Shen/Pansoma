@@ -277,7 +277,7 @@ class VisualizationTest(unittest.TestCase):
 
     def test_panel_order_moves_panels_and_keeps_channel_numbers(self):
         v6,m=v6_example()
-        order=[0,6,1,2,3,4,5,7]
+        order=[0,5,6,1,2,3,4,7]
         real_close=v.plt.close
         with tempfile.TemporaryDirectory() as d,patch.object(v.plt,"close"):
             self.assertEqual(v.visualize_tensor(v6,str(Path(d)/"o.png"),"T",False,None,metadata=m,panel_order=order),2)
@@ -285,11 +285,12 @@ class VisualizationTest(unittest.TestCase):
             main=[ax for ax in fig.axes if ax.get_subplotspec() is not None and ax.get_subplotspec().colspan.start==0]
             rows={ax.get_subplotspec().rowspan.start:ax for ax in main}
             self.assertEqual(sorted(rows),list(range(8)))
-            np.testing.assert_array_equal(np.ma.filled(rows[1].images[0].get_array(),0),v6[6,:2])  # path count second
-            np.testing.assert_array_equal(rows[3].images[0].get_array(),v6[2,:2])                 # site allele third
-            self.assertTrue(rows[1].get_title(loc="left").startswith("2  Node distinct path count"))
-            self.assertTrue(rows[1].get_title(loc="left").endswith("(channel 6)"))
-            self.assertTrue(rows[2].get_title(loc="left").startswith("3  Base qualities"))
+            np.testing.assert_array_equal(rows[1].images[0].get_array(),v6[5,:2])                 # graph base second
+            np.testing.assert_array_equal(np.ma.filled(rows[2].images[0].get_array(),0),v6[6,:2])  # path count third
+            np.testing.assert_array_equal(rows[4].images[0].get_array(),v6[2,:2])                 # site allele fifth
+            self.assertEqual(rows[1].get_title(loc="left"),"2  Per-read graph-reference bases")
+            self.assertEqual(rows[2].get_title(loc="left"),"3  Node distinct path count")
+            self.assertEqual(rows[3].get_title(loc="left"),"4  Base qualities")
             self.assertEqual(rows[7].get_xlabel(),"Tensor column (candidate-relative context; branches may differ)")
             self.assertEqual([ax for ax in main if ax.get_xlabel()],[rows[7]])
             real_close(fig)

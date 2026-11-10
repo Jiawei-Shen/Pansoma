@@ -5,8 +5,8 @@ example in `../fig_R1.m2_tensor_across_nodes.png`. Each is an exact match to a t
 `representative_allele_is_somatic_truth`, FILTER PASS, inside the benchmark BED). In each, the ALT and REF reads pass
 through different nodes somewhere in the window.
 
-Panels are drawn in the order of channels 0, 6, 1, 2, 3, 4, 5, 7, so the path count (channel 6) is panel 2. Panel
-titles keep the 0-based channel number. Rows are reads, grouped by the allele they carry at the site (A1 = ALT, then
+Panels are drawn in the order of channels 0, 5, 6, 1, 2, 3, 4, 7: read bases, graph-reference bases (channel 5),
+path count (channel 6), then base quality, site allele, mapping quality, alignment operation and strand. Rows are reads, grouped by the allele they carry at the site (A1 = ALT, then
 REF, then OTHER). Columns are the 101 positions of the window; the site starts at column 50.
 
 ## Files
@@ -17,7 +17,7 @@ REF, then OTHER). Columns are the 101 positions of the window; the site starts a
 | `select_examples.py` → `candidates.tsv` | every exact, PASS, in-BED somatic truth INDEL tensor on chr1 of the twelve HPRC sets (HG008T / COLO829T × Illumina, PacBio HiFi or Fiber-seq, ONT × HPRC v1.1 d9 / v2.1 d46) with >= 5 ALT and REF rows: 1,661 tensors |
 | `choose.py` → `picks.tsv` | the ten examples (rules below) |
 | `annotate.py` → `annotations.md` | caption facts: GRCh38-path nodes under the window and, per branch column, the channel-6 codes of the ALT and REF rows decoded to haplotype counts and matched to nodes |
-| `fig_R1.m2_INDEL_NN.png` | the figures (`scripts/visualize_tensor.py --panel-order 0,6,1,2,3,4,5,7`) |
+| `fig_R1.m2_INDEL_NN.png` | the figures (`scripts/visualize_tensor.py --panel-order 0,5,6,1,2,3,4,7`) |
 
 Selection (`choose.py`): >= 10 ALT and >= 10 REF rows; the window over >= 3 GRCh38-path nodes; at least one column
 outside the site where >= 80% of ALT rows and >= 80% of REF rows each share one path-count code, the two codes differ by

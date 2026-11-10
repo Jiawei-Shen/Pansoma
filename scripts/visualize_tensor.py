@@ -472,8 +472,8 @@ def visualize_candidate_tensor(tensor, out_path, title, show_all_rows=False,
               "4  Mapping qualities", "5  Alignment operations", "6  Per-read graph-reference bases",
               "7  Node distinct path count" if v5 else "7  Node walk count",
               "8  Read strand (vs. candidate node forward)"]
-    if panel_order is not None:  # number panels by position; keep the channel number (0-based) in the title
-        titles = [f"{position[c] + 1}  {t.split('  ', 1)[1]} (channel {c})" for c, t in enumerate(titles)]
+    if panel_order is not None:  # number panels by position
+        titles = [f"{position[c] + 1}  {t.split('  ', 1)[1]}" for c, t in enumerate(titles)]
     for channel, ax in enumerate(axes):
         ax.set_title(titles[channel], loc="left", fontsize=16)
         ax.set_ylabel("Alignment row", fontsize=13)
@@ -675,8 +675,8 @@ def main() -> None:
     parser.add_argument("--shard-index", type=int, help="Metadata shard index for nonstandard filenames")
     parser.add_argument("--title", help="Optional figure title.")
     parser.add_argument("--panel-order", help="Candidate tensors: channels top to bottom, comma-separated 0-based "
-                        "(e.g. 0,6,1,2,3,4,5,7 puts the path count second); panels are numbered by position and "
-                        "titles keep the channel number. Default: channel order.")
+                        "(e.g. 0,5,6,1,2,3,4,7 puts the graph base second and the path count third); panels are numbered by "
+                        "position. Default: channel order.")
     args = parser.parse_args()
 
     path = os.path.expanduser(args.npy_path)
