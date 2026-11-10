@@ -1,0 +1,34 @@
+s1_extract HG008T	tsingtao	475138
+s1_extract COLO829T	miao	475139
+s2_queries HG008T yuengling 475608
+s2_map HG008T yuengling 475609 (afterok 475608)
+s2_queries COLO829T yuengling 475610
+s2_map COLO829T yuengling 475611 (afterok 475610)
+s2_map COLO829T 475611 moved to miao
+s2_map 475609 475611: ReqNodeList cleared, ExcNodeList=yuengling,tsingtao, mem 24G, TimeLimit 3h (memory-full nodes)
+s2_map HG008T 475619 (resubmitted; 475609/475611 cancelled before start; exclude yuengling,tsingtao: memory fully allocated)
+s2_map COLO829T 475620 (resubmitted; 475609/475611 cancelled before start; exclude yuengling,tsingtao: memory fully allocated)
+s3_classify HG008T 475624 (afterok 475619)
+s4_loci HG008T 475625 (afterok 475624)
+s3_classify COLO829T 475626 (afterok 475620)
+s4_loci COLO829T 475627 (afterok 475626)
+s4_loci HG008T 475625 cancelled after 1 min (neither pre-gate added); s4_loci COLO829T 475627 held
+s4_loci HG008T 475639 (with neither pre-gate); s4_loci COLO829T 475627 released
+s4_fetch HG008-N HiFi 475642; Illumina 475643 (2 connections in parallel)
+s4_count HG008T T_Illumina 475644 shards 4 
+s4_count HG008T T_PacBio 475645 shards 10 
+s4_count HG008T T_ONT 475646 shards 20 
+s4_count HG008T N_HiFi 475647 shards 6 --dependency=afterok:475642
+s4_count HG008T N_Illumina 475648 shards 4 --dependency=afterok:475643
+time limits lowered: s4_count 6h, s4_fetch 16h (backfill)
+s4_count COLO829T T_Illumina 475667 shards 5
+s4_count COLO829T T_fiberseq 475668 shards 12
+s4_count COLO829T T_ONT 475669 shards 24
+s4_count COLO829T N_Illumina 475670 shards 5
+s4_count COLO829T N_fiberseq 475671 shards 12
+s4_count COLO829T N_ONT 475672 shards 24
+count arrays: exclusion lifted (3G tasks fit yuengling/tsingtao), throttles T_fiberseq 5, T_ONT 7, N_fiberseq 5, N_ONT 7
+s5_tiers HG008T 475756 (afterok 475647)
+fetchN_HiFi 475642 cancelled in its single-threaded sort (parts complete); N_HiFi 475647 and s5 475756 cancelled with it
+fetchN_HiFi rerun 475772 (-c 8, parts reused: cat + threaded sort + index); s4_count HG008T N_HiFi 475773; s5 HG008T 475774
+COLO829T ONT throttles raised: T_ONT 10, N_ONT 11 (nodes free)
