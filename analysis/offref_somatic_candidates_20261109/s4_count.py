@@ -1,8 +1,11 @@
 """s4b: ALT / REF k-mer read counts at the s4a loci in one sample's GRCh38 reads.
 
-usage: s4_count.py TUMOR LABEL BAM[,BAM...] SHARD NSHARDS
+usage: s4_count.py TUMOR LABEL BAM[,BAM...] SHARD NSHARDS [SELECT [TAG]]
 
-Loci of DATA/s4/<TUMOR>/loci.tsv, split into NSHARDS contiguous chunks (sorted by position); this task does chunk SHARD.
+Loci of DATA/s4/<TUMOR>/loci.tsv (SELECT all (default) / cand / germ: only loci with that purpose flag), split into
+NSHARDS contiguous chunks (sorted by position); this task does chunk SHARD. With TAG, loci already in an earlier count
+table of the label (counts/<LABEL>.*.tsv not named <LABEL>.<TAG>.*) are left out first (locus ids are content hashes),
+and the output is counts/<LABEL>.<TAG>.<SHARD>.tsv.
 Window of a locus = [a_start - W, a_end + W), W = longest k-mer + 20 bp.
 Records: primary and supplementary (no secondary, unmapped, QC-fail or duplicate flag) overlapping the window.
 For each record only the part of the read aligned to the window is searched (CIGAR walk; insertions inside the window
@@ -96,8 +99,26 @@ def frag_key(rd):
 
 def main():
     tumor, label, bams, shard, nshards = sys.argv[1], sys.argv[2], sys.argv[3].split(','), int(sys.argv[4]), int(sys.argv[5])
+    select = sys.argv[6] if len(sys.argv) > 6 else 'all'
+    tag = sys.argv[7] if len(sys.argv) > 7 else None
+    if select not in ('all', 'cand', 'germ'):
+        raise SystemExit(f'SELECT {select}')
+    out_dir = f'{DATA}/s4/{tumor}/counts'
+    done = set()
+    if tag:
+        import glob
+        for p in glob.glob(f'{out_dir}/{label}.*.tsv'):
+            if os.path.basename(p).startswith(f'{label}.{tag}.'):
+                continue
+            with open(p) as f:
+                next(f)
+                done.update(line.split('\t', 1)[0] for line in f)
     loci = []
     for r in csv.DictReader(open(f'{DATA}/s4/{tumor}/loci.tsv'), delimiter='\t'):
+        if select != 'all' and r.get(select) != '1':
+            continue
+        if r['locus_id'] in done:
+            continue
         w = max(len(r['alt_k']), len(r['ref_k'])) + EXTRA
         r['ws'], r['we'] = max(0, int(r['a_start']) - w), int(r['a_end']) + w
         r['ss'], r['se'] = int(r['a_start']) - (w - EXTRA), int(r['a_end']) + (w - EXTRA)
@@ -105,9 +126,8 @@ def main():
     lo, hi = len(loci) * shard // nshards, len(loci) * (shard + 1) // nshards
     loci = sorted(loci[lo:hi], key=lambda x: (x['chrom'], x['ws']))
     files = [pysam.AlignmentFile(b, 'rb') for b in bams]
-    out_dir = f'{DATA}/s4/{tumor}/counts'
     os.makedirs(out_dir, exist_ok=True)
-    out = f'{out_dir}/{label}.{shard}.tsv'
+    out = f'{out_dir}/{label}.{tag}.{shard}.tsv' if tag else f'{out_dir}/{label}.{shard}.tsv'
     counts = {}
     n_rec = 0
     for blk in blocks(loci):
@@ -171,7 +191,7 @@ def main():
         for lc in loci:
             w.write(lc['locus_id'] + '\t' + '\t'.join(map(str, counts[lc['locus_id']])) + '\n')
     os.replace(out + '.tmp', out)
-    print(tumor, label, shard, 'loci', len(loci), 'records', n_rec, 'done')
+    print(tumor, label, select, tag, shard, 'loci', len(loci), 'records', n_rec, 'skipped as counted', len(done), 'done')
 
 
 if __name__ == '__main__':

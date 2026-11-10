@@ -32,3 +32,9 @@ s5_tiers HG008T 475756 (afterok 475647)
 fetchN_HiFi 475642 cancelled in its single-threaded sort (parts complete); N_HiFi 475647 and s5 475756 cancelled with it
 fetchN_HiFi rerun 475772 (-c 8, parts reused: cat + threaded sort + index); s4_count HG008T N_HiFi 475773; s5 HG008T 475774
 COLO829T ONT throttles raised: T_ONT 10, N_ONT 11 (nodes free)
+s1_extract COLO829T snvaf05 SNV (new off-ref keys only, base d46) yuengling 475884
+germline read check HG008T: s4_loci 475922 (germ loci added); regions 475923 (regions_germ1{a,b}.bed); fetch Illumina germ1a 475924, germ1b 475925 (2 connections); s4_count N_Illumina germ1 475926 (8 shards)
+s2/s3/s4_loci COLO829T v2 (d46 + snvaf05 new SNV keys): s2q 475928 s2map 475929 s3 475931 s4loci 475932; counts tag snv1: T_Illumina=475933 T_fiberseq=475934 T_ONT=475935 N_Illumina=475936 N_fiberseq=475937 N_ONT=475938
+s5 COLO829T v2 476196 -> s6 dry 476197; s5 HG008T v2 476198 -> s6 dry 476199
+s6 dry COLO829T rerun 476208 (snvaf05 sets: SNV only; their INDEL dirs were deleted by the snv_newpipe session 11-10)
+s6 datasets HG008T 476212, COLO829T 476213 (write <SET>_offref + site-feature links + KindIndex check)

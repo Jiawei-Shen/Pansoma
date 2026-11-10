@@ -8,16 +8,16 @@
 | ctrl_non | INDEL | 0 | 4 | 2 | 2 | 489 | 821 | 0 | 0 |
 | ctrl_somatic | SNV | 1697 | 343 | 169 | 16 | 5 | 99 | 80 | 16 |
 | ctrl_somatic | INDEL | 160 | 673 | 35 | 29 | 17 | 273 | 4 | 31 |
-| offref | SNV | 110 | 182 | 54 | 3151 | 2827 | 40766 | 7 | 12 |
-| offref | INDEL | 1 | 330 | 396 | 1850 | 5377 | 292187 | 0 | 15 |
+| offref | SNV | 110 | 185 | 54 | 3834 | 53487 | 120062 | 7 | 13 |
+| offref | INDEL | 1 | 330 | 396 | 1846 | 31754 | 309724 | 0 | 15 |
 
 ## Off-reference candidates by platform sets with a tensor of the key
 
 | tier | kind | keys | events (anchors within 10 bp merged) | Illumina | ONT | fiberseq | Illumina,ONT | Illumina,fiberseq | ONT,fiberseq | Illumina,ONT,fiberseq |
 |---|---|---|---|---|---|---|---|---|---|---|
-| T1 | SNV | 110 | 108 | 5 | 1 | 3 | 3 | 2 | 19 | 77 |
+| T1 | SNV | 110 | 108 | 4 | 1 | 3 | 3 | 3 | 19 | 77 |
 | T1 | INDEL | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 |
-| T2 | SNV | 182 | 166 | 45 | 19 | 9 | 2 | 9 | 30 | 68 |
+| T2 | SNV | 185 | 168 | 46 | 18 | 11 | 2 | 9 | 31 | 68 |
 | T2 | INDEL | 330 | 314 | 48 | 7 | 29 | 0 | 51 | 55 | 140 |
 | T3_reads_only | SNV | 54 | 52 | 3 | 0 | 8 | 1 | 4 | 27 | 11 |
 | T3_reads_only | INDEL | 396 | 396 | 0 | 9 | 204 | 0 | 1 | 182 | 0 |
@@ -26,21 +26,21 @@
 
 | reason | kind | keys | T1 | T2 | T3_reads_only | asm_only | rejected_normal | other |
 |---|---|---|---|---|---|---|---|---|
-| not_on_unique_grch38_node | SNV | 8427 | 20 | 51 | 3 | 1523 | 96 | 6734 |
-| not_on_unique_grch38_node | INDEL | 13824 | 0 | 4 | 1 | 391 | 89 | 13339 |
-| off_reference_no_truth_match | SNV | 34907 | 66 | 87 | 46 | 557 | 2463 | 31688 |
-| off_reference_no_truth_match | INDEL | 278735 | 1 | 238 | 381 | 1273 | 5070 | 271772 |
-| outside_confident_region | SNV | 3655 | 8 | 8 | 2 | 1064 | 258 | 2315 |
-| outside_confident_region | INDEL | 6553 | 0 | 3 | 13 | 180 | 207 | 6150 |
-| residual_partial_somatic_truth | SNV | 101 | 16 | 36 | 3 | 7 | 10 | 29 |
-| residual_partial_somatic_truth | INDEL | 291 | 0 | 84 | 1 | 6 | 10 | 190 |
-| truth_matches_non_representative_allele | INDEL | 738 | 0 | 1 | 0 | 0 | 1 | 736 |
+| not_on_unique_grch38_node | SNV | 67283 | 20 | 53 | 3 | 1840 | 14008 | 51359 |
+| not_on_unique_grch38_node | INDEL | 22940 | 0 | 4 | 1 | 390 | 1851 | 20694 |
+| off_reference_no_truth_match | SNV | 86828 | 66 | 88 | 46 | 614 | 34822 | 51192 |
+| off_reference_no_truth_match | INDEL | 308943 | 1 | 238 | 381 | 1268 | 28161 | 278894 |
+| outside_confident_region | SNV | 23503 | 8 | 8 | 2 | 1373 | 4639 | 17473 |
+| outside_confident_region | INDEL | 10991 | 0 | 3 | 13 | 180 | 1602 | 9193 |
+| residual_partial_somatic_truth | SNV | 118 | 16 | 36 | 3 | 7 | 18 | 38 |
+| residual_partial_somatic_truth | INDEL | 316 | 0 | 84 | 1 | 8 | 23 | 200 |
+| truth_matches_non_representative_allele | INDEL | 861 | 0 | 1 | 0 | 0 | 117 | 743 |
 
 ## Known off-reference somatic keys
 
 | known | T1 | T2 | T3_reads_only | asm_only | rejected_normal | other |
 |---|---|---|---|---|---|---|
-| dsa_somatic | 32 | 14 | 2 | 32 | 4 | 16 |
+| dsa_somatic | 32 | 14 | 2 | 32 | 4 | 21 |
 | smaht_truth | 7 | 1 | 1 | 2 | 2 | 3 |
 
 ## Funnel (rows): set, kind, group, asm_class, normal_side
@@ -122,6 +122,19 @@
 | COLO829T_Illumina_d46 | SNV | offref | tumor_only | ref_exact | 560 |
 | COLO829T_Illumina_d46 | SNV | offref | tumor_only | site_only | 352 |
 | COLO829T_Illumina_d46 | SNV | offref | tumor_only | site_plus_other | 268 |
+| COLO829T_Illumina_d46_snvaf05 | SNV | offref | neither | no_alignment | 5974 |
+| COLO829T_Illumina_d46_snvaf05 | SNV | offref | neither | no_site_diff | 1694 |
+| COLO829T_Illumina_d46_snvaf05 | SNV | offref | neither | ref_exact | 7898 |
+| COLO829T_Illumina_d46_snvaf05 | SNV | offref | neither | site_only | 411 |
+| COLO829T_Illumina_d46_snvaf05 | SNV | offref | neither | site_plus_other | 9067 |
+| COLO829T_Illumina_d46_snvaf05 | SNV | offref | no_query |  | 2 |
+| COLO829T_Illumina_d46_snvaf05 | SNV | offref | normal |  | 9649 |
+| COLO829T_Illumina_d46_snvaf05 | SNV | offref | short_flank |  | 2716 |
+| COLO829T_Illumina_d46_snvaf05 | SNV | offref | tumor_only | no_alignment | 29 |
+| COLO829T_Illumina_d46_snvaf05 | SNV | offref | tumor_only | no_site_diff | 110 |
+| COLO829T_Illumina_d46_snvaf05 | SNV | offref | tumor_only | ref_exact | 157 |
+| COLO829T_Illumina_d46_snvaf05 | SNV | offref | tumor_only | site_only | 23 |
+| COLO829T_Illumina_d46_snvaf05 | SNV | offref | tumor_only | site_plus_other | 105 |
 | COLO829T_ONT_d46 | INDEL | ctrl_germline | neither | no_alignment | 7 |
 | COLO829T_ONT_d46 | INDEL | ctrl_germline | neither | no_site_diff | 11 |
 | COLO829T_ONT_d46 | INDEL | ctrl_germline | neither | ref_exact | 483 |
@@ -278,3 +291,16 @@
 | COLO829T_fiberseq_d46 | SNV | offref | tumor_only | ref_exact | 966 |
 | COLO829T_fiberseq_d46 | SNV | offref | tumor_only | site_only | 473 |
 | COLO829T_fiberseq_d46 | SNV | offref | tumor_only | site_plus_other | 245 |
+| COLO829T_fiberseq_d46_snvaf05 | SNV | offref | neither | no_alignment | 3203 |
+| COLO829T_fiberseq_d46_snvaf05 | SNV | offref | neither | no_site_diff | 3347 |
+| COLO829T_fiberseq_d46_snvaf05 | SNV | offref | neither | ref_exact | 1121 |
+| COLO829T_fiberseq_d46_snvaf05 | SNV | offref | neither | site_only | 1500 |
+| COLO829T_fiberseq_d46_snvaf05 | SNV | offref | neither | site_plus_other | 3034 |
+| COLO829T_fiberseq_d46_snvaf05 | SNV | offref | no_query |  | 16 |
+| COLO829T_fiberseq_d46_snvaf05 | SNV | offref | normal |  | 34746 |
+| COLO829T_fiberseq_d46_snvaf05 | SNV | offref | short_flank |  | 1645 |
+| COLO829T_fiberseq_d46_snvaf05 | SNV | offref | tumor_only | no_alignment | 10 |
+| COLO829T_fiberseq_d46_snvaf05 | SNV | offref | tumor_only | no_site_diff | 54 |
+| COLO829T_fiberseq_d46_snvaf05 | SNV | offref | tumor_only | ref_exact | 234 |
+| COLO829T_fiberseq_d46_snvaf05 | SNV | offref | tumor_only | site_only | 32 |
+| COLO829T_fiberseq_d46_snvaf05 | SNV | offref | tumor_only | site_plus_other | 68 |

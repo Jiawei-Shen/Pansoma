@@ -9,7 +9,9 @@ Rows of s3 rows.tsv.gz:
     reads-only tier: n_a1 >= 4, n_split 0, not a homopolymer / STR INDEL (only Illumina evidence counts there, so it
     cannot reach two platforms), and the key tumor_only / neither in >= 2 platform sets or AF >= 0.2; the others get the
     locus 'none:gate',
-  - off-reference rows whose key is a known off-reference somatic key (KNOWN below), whatever their class.
+  - off-reference rows whose key is a known off-reference somatic key (KNOWN below), whatever their class,
+  - off-reference rows with asm_class normal and at most two strict-hit loci in the normal (n_alt_loci <= 2: one per
+    haplotype), for the germline read check of the s6 training labels (purpose 'germ'; the rows above: 'cand').
 Rows without a usable query (asm_class no_query / short_flank) get the locus 'none:<asm_class>'.
 Anchor (GRCh38 interval of the site): the s3 anchor_mapped (site of ref_q / alt_q on its primary GRCh38 alignment,
 MAPQ >= 20) when there is no label anchor or it lies within the label anchor +- 1 kb ('mapped'); else the label anchor
@@ -23,8 +25,9 @@ and (2) neither k-mer occurs in GRCh38 within anchor +- 150 bp except over the a
 the part of a read aligned near the anchor). specific = 1 when both hold; else 0 with note grch38_copy (only (1)
 holds) or not_unique (neither).
 Writes DATA/s4/<TUMOR>/loci.tsv (locus_id, chrom, start, end = anchor +- 200 bp fetch region, a_start, a_end, alt_k,
-ref_k, ref_src, fl, fr, specific, note), row_loci.tsv.gz (set, kind, candidate_id, group, known, anchor_src, locus) and
-regions.bed (merged fetch regions, for the remote HG008-N reads).
+ref_k, ref_src, fl, fr, specific, note, cand, germ: 1 when a row of that purpose uses the locus), row_loci.tsv.gz (set,
+kind, candidate_id, group, known, anchor_src, purpose, locus) and regions.bed (merged fetch regions of every locus).
+Locus ids are content hashes (chrom, anchor, k-mers), so counts of an earlier run stay valid for the same loci.
 """
 import csv
 import gzip
@@ -135,16 +138,18 @@ def main():
     for r in csv.DictReader(gzip.open(rows_gz, 'rt'), delimiter='\t'):
         if r['group'] == 'offref' and r['asm_class'] in ('tumor_only', 'neither'):
             keyplat.setdefault(r['candidate_id'], set()).add(platform(r['set']))
-    loci = {}
+    loci, flags = {}, {}
     n = {}
     with gzip.open(f'{out}/row_loci.tsv.gz.tmp', 'wt') as w:
-        w.write('set\tkind\tcandidate_id\tgroup\tknown\tanchor_src\tlocus\n')
+        w.write('set\tkind\tcandidate_id\tgroup\tknown\tanchor_src\tpurpose\tlocus\n')
         for r in csv.DictReader(gzip.open(rows_gz, 'rt'), delimiter='\t'):
             kn = known.get(r['candidate_id'], '') if r['group'] == 'offref' else ''
             sel = (r['group'] != 'offref' or kn or r['asm_class'] == 'tumor_only' or
                    (r['asm_class'] == 'neither' and r['normal_side'] in ('ref_exact', 'site_only')))
-            if not sel:
+            germ = (r['group'] == 'offref' and r['asm_class'] == 'normal' and int(r['n_alt_loci'] or 0) <= 2)
+            if not (sel or germ):
                 continue
+            purpose = 'cand' if sel else 'germ'
             src = ''
             gate = (r['group'] != 'offref' or kn or r['asm_class'] != 'neither' or
                     (int(r['n_a1']) >= 4 and r['n_split'] == '0' and
@@ -172,14 +177,16 @@ def main():
                         rec = (chrom, max(0, s - PAD), e + PAD, s, e, ak, rk, rsrc, fl, fr, spec, note)
                         lid = 'L' + hashlib.sha1(f'{chrom}|{s}|{e}|{ak}|{rk}'.encode()).hexdigest()[:12]
                         loci[lid] = rec
-            key = lid if lid.startswith('none') else 'locus'
+                        flags.setdefault(lid, set()).add(purpose)
+            key = (purpose, lid if lid.startswith('none') else 'locus')
             n[key] = n.get(key, 0) + 1
-            w.write(f'{r["set"]}\t{r["kind"]}\t{r["candidate_id"]}\t{r["group"]}\t{kn}\t{src}\t{lid}\n')
+            w.write(f'{r["set"]}\t{r["kind"]}\t{r["candidate_id"]}\t{r["group"]}\t{kn}\t{src}\t{purpose}\t{lid}\n')
     order = sorted(loci.items(), key=lambda kv: (kv[1][0], kv[1][1], kv[1][2], kv[0]))
     with open(f'{out}/loci.tsv.tmp', 'w') as w:
-        w.write('locus_id\tchrom\tstart\tend\ta_start\ta_end\talt_k\tref_k\tref_src\tfl\tfr\tspecific\tnote\n')
+        w.write('locus_id\tchrom\tstart\tend\ta_start\ta_end\talt_k\tref_k\tref_src\tfl\tfr\tspecific\tnote\tcand\tgerm\n')
         for lid, rec in order:
-            w.write(lid + '\t' + '\t'.join(map(str, rec)) + '\n')
+            fl_ = flags[lid]
+            w.write(lid + '\t' + '\t'.join(map(str, rec)) + f'\t{int("cand" in fl_)}\t{int("germ" in fl_)}\n')
     with open(f'{out}/regions.bed.tmp', 'w') as w:
         cur = None
         for _, (c, s, e, *_r) in order:
@@ -195,7 +202,9 @@ def main():
     os.replace(f'{out}/loci.tsv.tmp', f'{out}/loci.tsv')
     os.replace(f'{out}/regions.bed.tmp', f'{out}/regions.bed')
     spec = sum(1 for v in loci.values() if v[10] == 1)
-    print(tumor, 'rows', n, 'unique loci', len(loci), 'specific', spec)
+    n_c = sum(1 for f in flags.values() if 'cand' in f)
+    print(tumor, 'rows', dict(sorted(n.items())), 'unique loci', len(loci), 'cand', n_c, 'germ only', len(loci) - n_c,
+          'specific', spec)
 
 
 if __name__ == '__main__':

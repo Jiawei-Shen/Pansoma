@@ -3,8 +3,8 @@
 Coordinates are 0-based, half-open. A query is an s1 context: alt_q (A1 read consensus, site [a, b)) or ref_q (the same
 read haplotype with the graph REF at the site, site from ref_site()).
 """
-import glob
 import hashlib
+import os
 
 DATA = '/scratch/jshen/data/pansoma_net_v2_runs/offref_somatic_candidates_20261109'
 TARGETS = '/scratch/jshen/Github/Pansoma/tmp/offref_somatic_candidates_20261109/targets.tsv'
@@ -35,10 +35,19 @@ def ref_site(r):
     return f'{a}-{len(r["ref_q"]) - right}'
 
 
+# s1 tables per tumor: the three d46 sets x SNV / INDEL x chr1-22; COLO829T also the new off-reference SNV keys of the
+# Illumina / Fiber-seq d46_snvaf05 sets (SNV AF floor 0.05; their INDEL tables and their AF >= 0.08 SNV keys are the
+# d46 ones)
+S1_SETS = {'HG008T': [(f'HG008T_{p}_d46', k) for p in ('Illumina', 'PacBio', 'ONT') for k in ('SNV', 'INDEL')],
+           'COLO829T': [(f'COLO829T_{p}_d46', k) for p in ('Illumina', 'fiberseq', 'ONT') for k in ('SNV', 'INDEL')] +
+                       [(f'COLO829T_{p}_d46_snvaf05', 'SNV') for p in ('Illumina', 'fiberseq')]}
+
+
 def s1_files(tumor):
-    files = sorted(glob.glob(f'{DATA}/s1/{tumor}_*_d46.*.chr*.tsv'))
-    if len(files) != 3 * 2 * 22:
-        raise SystemExit(f'{tumor}: {len(files)} s1 tables, expected 132')
+    files = [f'{DATA}/s1/{s}.{k}.chr{c}.tsv' for s, k in S1_SETS[tumor] for c in range(1, 23)]
+    missing = [f for f in files if not os.path.exists(f)]
+    if missing:
+        raise SystemExit(f'{tumor}: {len(missing)} of {len(files)} s1 tables missing, e.g. {missing[0]}')
     return files
 
 

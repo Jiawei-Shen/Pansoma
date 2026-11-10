@@ -8,8 +8,8 @@
 | ctrl_non | INDEL | 0 | 4 | 4 | 0 | 369 | 940 | 0 | 0 |
 | ctrl_somatic | SNV | 1326 | 267 | 0 | 12 | 13 | 38 | 75 | 15 |
 | ctrl_somatic | INDEL | 217 | 1391 | 1 | 52 | 71 | 256 | 11 | 78 |
-| offref | SNV | 23 | 169 | 9 | 2399 | 1962 | 53678 | 1 | 21 |
-| offref | INDEL | 5 | 883 | 88 | 1692 | 1640 | 216319 | 0 | 78 |
+| offref | SNV | 23 | 167 | 9 | 2378 | 39571 | 100629 | 1 | 21 |
+| offref | INDEL | 5 | 882 | 88 | 1692 | 26381 | 229501 | 0 | 78 |
 
 ## Off-reference candidates by platform sets with a tensor of the key
 
@@ -17,8 +17,8 @@
 |---|---|---|---|---|---|---|---|---|---|---|
 | T1 | SNV | 23 | 22 | 6 | 0 | 1 | 0 | 1 | 2 | 13 |
 | T1 | INDEL | 5 | 5 | 1 | 0 | 2 | 0 | 0 | 0 | 2 |
-| T2 | SNV | 169 | 148 | 50 | 5 | 13 | 0 | 24 | 19 | 58 |
-| T2 | INDEL | 883 | 837 | 146 | 19 | 65 | 7 | 223 | 69 | 354 |
+| T2 | SNV | 167 | 146 | 49 | 5 | 12 | 0 | 23 | 19 | 59 |
+| T2 | INDEL | 882 | 836 | 145 | 19 | 65 | 7 | 223 | 69 | 354 |
 | T3_reads_only | SNV | 9 | 9 | 1 | 1 | 2 | 0 | 0 | 4 | 1 |
 | T3_reads_only | INDEL | 88 | 88 | 0 | 16 | 29 | 0 | 0 | 43 | 0 |
 
@@ -26,15 +26,15 @@
 
 | reason | kind | keys | T1 | T2 | T3_reads_only | asm_only | rejected_normal | other |
 |---|---|---|---|---|---|---|---|---|
-| not_on_unique_grch38_node | SNV | 11200 | 1 | 8 | 0 | 2042 | 31 | 9118 |
-| not_on_unique_grch38_node | INDEL | 5487 | 0 | 3 | 1 | 297 | 22 | 5164 |
-| off_reference_no_truth_match | SNV | 40986 | 5 | 22 | 8 | 80 | 1372 | 39499 |
-| off_reference_no_truth_match | INDEL | 198758 | 0 | 52 | 85 | 315 | 613 | 197693 |
-| outside_confident_region | SNV | 5702 | 6 | 36 | 1 | 251 | 493 | 4915 |
-| outside_confident_region | INDEL | 14147 | 0 | 138 | 2 | 958 | 891 | 12158 |
-| residual_partial_somatic_truth | SNV | 352 | 11 | 103 | 0 | 26 | 66 | 146 |
-| residual_partial_somatic_truth | INDEL | 1907 | 4 | 688 | 0 | 121 | 114 | 980 |
-| truth_matches_non_representative_allele | INDEL | 328 | 1 | 2 | 0 | 1 | 0 | 324 |
+| not_on_unique_grch38_node | SNV | 48686 | 1 | 8 | 0 | 2031 | 8347 | 38299 |
+| not_on_unique_grch38_node | INDEL | 13036 | 0 | 3 | 1 | 297 | 1347 | 11388 |
+| off_reference_no_truth_match | SNV | 71281 | 5 | 22 | 8 | 76 | 25264 | 45906 |
+| off_reference_no_truth_match | INDEL | 222137 | 0 | 52 | 85 | 315 | 20890 | 200795 |
+| outside_confident_region | SNV | 22394 | 6 | 36 | 1 | 246 | 5834 | 16271 |
+| outside_confident_region | INDEL | 20848 | 0 | 138 | 2 | 958 | 3779 | 15971 |
+| residual_partial_somatic_truth | SNV | 416 | 11 | 101 | 0 | 25 | 126 | 153 |
+| residual_partial_somatic_truth | INDEL | 2067 | 4 | 687 | 0 | 121 | 244 | 1011 |
+| truth_matches_non_representative_allele | INDEL | 461 | 1 | 2 | 0 | 1 | 121 | 336 |
 
 ## Known off-reference somatic keys
 

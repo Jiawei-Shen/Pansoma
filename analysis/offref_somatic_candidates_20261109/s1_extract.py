@@ -1,6 +1,10 @@
 """s1: read-consensus contexts of every off-reference tensor of one (set, kind, chromosome), plus on-reference controls.
 
-usage: s1_extract.py SET KIND CHROM OUT_DIR
+usage: s1_extract.py SET KIND CHROM OUT_DIR [BASE_SET]
+
+With BASE_SET (e.g. SET = COLO829T_Illumina_d46_snvaf05, BASE_SET = COLO829T_Illumina_d46): only the off-reference
+tensors whose key is not in BASE_SET's table of the same kind and chromosome, and no controls (the base set's rows
+already cover the shared keys and the controls).
 
 Off-reference tensor = a record of tensors/<KIND>/<CHROM>_labels.ndjson with "grch38": null (the candidate node has no
 GRCh38 position). Controls (on-reference, evenly spaced over the chromosome's records):
@@ -104,8 +108,14 @@ def runs(idx, gap=4, maxlen=64):
 
 def main():
     set_name, kind, chrom, out_dir = sys.argv[1:5]
+    base = sys.argv[5] if len(sys.argv) > 5 else None
     tdir = f'{TENSORS}/{set_name}/tensors/{kind}'
     lab_path, sum_path = f'{tdir}/{chrom}_labels.ndjson', f'{tdir}/{chrom}_variant_summary.ndjson'
+    skip = set()
+    if base:
+        with open(f'{TENSORS}/{base}/tensors/{kind}/{chrom}_labels.ndjson') as f:
+            for line in f:
+                skip.add(json.loads(line)['candidate_id'])
     # pass 1: control candidates by line number
     ctrl_lines = {g: [] for g in CTRL}
     n_lines = 0
@@ -118,7 +128,7 @@ def main():
                 if f'"label": {lab},' in line and f'"reason": "{reason}"' in line:
                     ctrl_lines[g].append(i)
     want = {}
-    for g, lines in ctrl_lines.items():
+    for g, lines in ({} if base else ctrl_lines).items():
         k = CTRL[g][2]
         if len(lines) > k:
             lines = [lines[int(j * len(lines) / k)] for j in range(k)]
@@ -132,6 +142,8 @@ def main():
             if not off and i not in want:
                 continue
             lab = json.loads(ll)
+            if off and lab['candidate_id'] in skip:
+                continue
             s = json.loads(sl)
             if lab['candidate_id'] != s['candidate_id']:
                 raise SystemExit(f'line {i}: labels / summary out of step ({lab["candidate_id"]} / {s["candidate_id"]})')

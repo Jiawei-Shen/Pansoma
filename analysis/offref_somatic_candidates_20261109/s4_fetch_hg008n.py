@@ -2,7 +2,10 @@
 refused in E9i), with retries and resume, into DATA/s4/HG008T/normal_<LABEL>.bam (sorted, indexed). Adapted from
 tmp/e9i_hg008t_20261104/fetch_normal.py (unchanged there). The job must export CURL_CA_BUNDLE.
 
-usage: s4_fetch_hg008n.py LABEL      (HiFi | Illumina)
+usage: s4_fetch_hg008n.py LABEL [REGIONS_BED TAG]      (LABEL HiFi | Illumina)
+
+With REGIONS_BED and TAG (e.g. the loci added later, s4_regions.py): those regions, into normal_<LABEL>_<TAG>.bam
+(parts <LABEL>_<TAG>.<k>.bam); s4_count reads it next to normal_<LABEL>.bam and counts each fragment once.
 
 Regions (regions.bed) are fetched in chunks of CHUNK; each finished chunk is written as parts/<LABEL>.<k>.bam (via a .tmp
 name), so a rerun skips finished chunks. Within a chunk a record fetched by two adjacent regions is written once (key:
@@ -34,11 +37,13 @@ TRIES = 8
 
 def main():
     label = sys.argv[1]
+    regions_bed = sys.argv[2] if len(sys.argv) > 3 else None
+    name = f'{label}_{sys.argv[3]}' if len(sys.argv) > 3 else label
     url, bai = SRC[label]
     d = Path(f'{DATA}/s4/HG008T')
     parts = d / 'parts'
     parts.mkdir(exist_ok=True)
-    regions = [line.split() for line in open(d / 'regions.bed')]
+    regions = [line.split() for line in open(regions_bed or d / 'regions.bed')]
     chunks = [regions[i:i + CHUNK] for i in range(0, len(regions), CHUNK)]
 
     def open_remote():
@@ -49,10 +54,10 @@ def main():
     t0 = time.time()
     n_total = 0
     for k, chunk in enumerate(chunks):
-        part = parts / f'{label}.{k:05d}.bam'
+        part = parts / f'{name}.{k:05d}.bam'
         if part.exists():
             continue
-        tmp = parts / f'{label}.{k:05d}.bam.tmp'
+        tmp = parts / f'{name}.{k:05d}.bam.tmp'
         out = pysam.AlignmentFile(str(tmp), 'wb', header=header)
         seen, n = set(), 0
         for c, a, b in chunk:
@@ -84,12 +89,12 @@ def main():
         os.replace(tmp, part)
         n_total += n
         print(f'chunk {k + 1}/{len(chunks)}', n, 'records', f'{time.time() - t0:.0f}s', flush=True)
-    files = sorted(glob.glob(str(parts / f'{label}.*.bam')))
+    files = sorted(glob.glob(str(parts / f'{name}.[0-9]*.bam')))
     if len(files) != len(chunks):
         raise SystemExit(f'{len(files)} parts for {len(chunks)} chunks')
-    merged = d / f'normal_{label}.merged.bam'
+    merged = d / f'normal_{name}.merged.bam'
     pysam.cat('-o', str(merged), *files)
-    final = d / f'normal_{label}.bam'
+    final = d / f'normal_{name}.bam'
     threads = os.environ.get('SLURM_CPUS_PER_TASK', '4')
     pysam.sort('-@', threads, '-m', '1G', '-o', str(final) + '.tmp.bam', str(merged))
     os.replace(str(final) + '.tmp.bam', final)

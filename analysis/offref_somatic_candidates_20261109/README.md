@@ -52,13 +52,15 @@ Lists: `results/<TUMOR>_offref_candidates.tsv` (off-reference keys in T1 / T2 / 
 read counts per sample `alt/ref/span`, label reason, anchor); full tables `results/<TUMOR>_summary.md`; every key with
 its tier in `DATA/s5/<TUMOR>/keys.tsv.gz`.
 
-Off-reference keys (unit = d46 key; events = keys of a tier and kind with anchors within 10 bp merged):
+Off-reference keys (unit = d46 key; events = keys of a tier and kind with anchors within 10 bp merged). Numbers of the
+second s5 run (2026-11-10, with the COLO829T snvaf05 SNV keys and the germline-check rows: 2 HG008T SNV and 1 INDEL T2 keys
+became rejected_normal, 3 COLO829T SNV T2 keys were added):
 
 | tumor | kind | T1 | T2 | T3_reads_only | chr1 T1 | chr1 T2 | T1 events | T2 events |
 |---|---|---|---|---|---|---|---|---|
-| HG008T | SNV | 23 | 169 | 9 | 1 | 21 | 22 | 148 |
-| HG008T | INDEL | 5 | 883 | 88 | 0 | 78 | 5 | 837 |
-| COLO829T | SNV | 110 | 182 | 54 | 7 | 12 | 108 | 166 |
+| HG008T | SNV | 23 | 167 | 9 | 1 | 21 | 22 | 146 |
+| HG008T | INDEL | 5 | 882 | 88 | 0 | 78 | 5 | 836 |
+| COLO829T | SNV | 110 | 185 | 54 | 7 | 13 | 108 | 168 |
 | COLO829T | INDEL | 1 | 330 | 396 | 0 | 15 | 1 | 314 |
 
 T1 SNVs by platform sets with a tensor of the key: HG008T 13 in all three, 3 in two, 6 Illumina only, 1 PacBio only;
@@ -107,3 +109,84 @@ Caveats: the COLO829T tumor assembly is built from the Fiber-seq and ONT reads; 
 errors (GIAB v0.4 polished 14,370 regions); T1 keys whose GRCh38 locus has no Illumina reads rest on the HiFi normal alone
 (e.g. `39191406:47:SNP:G>A`, HiFi normal 0 / 9); the d46 node key is the unit, so one event in two node frames counts
 twice (events column).
+
+## Training datasets (s6, 2026-11-10)
+
+`s6_dataset.py` turns the evidence into training labels and writes `/scratch/jshen/data/pansoma_v2_tensors/<SET>_offref`
+for HG008T_{Illumina,PacBio,ONT}_d46, COLO829T_{Illumina,fiberseq,ONT}_d46 and COLO829T_{Illumina,fiberseq}_d46_snvaf05
+(SNV only: their INDEL directories were deleted 2026-11-10 by the snv_newpipe session; INDEL training uses d46). Before
+s6, the evidence was extended: s1 on the snvaf05 SNV keys absent from d46 (86,845 rows; `s1_extract.py ... BASE_SET`),
+COLO829T s2-s5 rerun with them, and a germline read check: off-reference rows whose A1 context is in the normal
+assembly at <= 2 loci got loci (purpose `germ`) counted in the Illumina normal (HG008-N: 87,868 new loci fetched from
+GIAB; COLO829BL local). Counts of earlier runs are reused (locus ids are content hashes; `s4_count.py ... SELECT TAG`).
+
+Labels (per key, from every platform set of the tumor):
+
+| label | reason | rule |
+|---|---|---|
+| 1 | `offref_somatic_t1` / `offref_somatic_t2` | s5 tier T1 / T2 |
+| 2 | `offref_germline` | A1 context in a normal haplotype at <= 2 loci on the tensor's chromosome (HG008-N contig names; COLO829BL DSA by the SMaHT GRCh38ToDSA chain) and Illumina normal ALT >= 3 reads, fraction >= 0.15 |
+| 0 | `offref_non` / `offref_non_normal_alt` | ALT context in neither assembly, a tensor in one platform only, tumor read support on <= 1 platform (normal_alt: the normal reads carry it too) |
+| -1 | unchanged | everything else (reads-only, unconfirmed tumor_only, normal-assembly hits without read support, multi-copy or other-chromosome hits, ALT in neither assembly on several platforms, ...) |
+
+Scope: only tensors labelled -1 with reason `off_reference_no_truth_match` (anchored in the confident region, no truth
+allele), and not on chr1 (the test chromosome; training never reads it, and the per-tensor chr1 test stays comparable
+with the source sets; `--relabel-test` labels it too). Uncertain keys keep -1 and `off_reference_no_truth_match`, so
+evaluation counts them as non as before. Every off-reference record carries `offref` (proposed label, class, s5 tier,
+platform sets); relabelled ones also `reason_original`. Shards, summaries and manifests are links to the source set;
+site features are linked as `<SET>_offref.<KIND>.npz` in `snv_af05_20261103/site_features` and
+`indel_gap_20261020/site_features`. Train with `--tensors .../<SET>_offref/tensors`; drop a class with e.g.
+`--ignore-reasons offref_somatic_t2 offref_non_normal_alt`.
+
+Relabelled tensors (chr1 excluded) next to the source set's labels (all checked with pansoma_net_v2.data.KindIndex and
+site_features.load):
+
+| set | kind | somatic (t1 / t2) | germline | non (normal_alt) | source non / somatic / germline |
+|---|---|---|---|---|---|
+| HG008T_Illumina_d46_offref | SNV | 24 (4 / 20) | 11,809 | 65,197 (202) | 1,852,495 / 10,221 / 290,341 |
+| HG008T_Illumina_d46_offref | INDEL | 38 (0 / 38) | 11,766 | 824 (0) | 23,240 / 5,560 / 62,975 |
+| HG008T_PacBio_d46_offref | SNV | 21 (5 / 16) | 10,662 | 5,296 (155) | 77,478 / 8,780 / 305,305 |
+| HG008T_PacBio_d46_offref | INDEL | 35 (0 / 35) | 13,402 | 42,314 (233) | 1,522,059 / 6,902 / 186,128 |
+| HG008T_ONT_d46_offref | SNV | 19 (5 / 14) | 10,709 | 8,479 (81) | 206,573 / 8,787 / 340,596 |
+| HG008T_ONT_d46_offref | INDEL | 21 (0 / 21) | 10,078 | 96,070 (22) | 1,967,176 / 6,507 / 201,363 |
+| COLO829T_Illumina_d46_offref | SNV | 112 (53 / 59) | 10,941 | 20,705 (100) | 920,461 / 38,262 / 309,226 |
+| COLO829T_Illumina_d46_offref | INDEL | 170 (0 / 170) | 12,222 | 798 (0) | 26,088 / 1,369 / 67,967 |
+| COLO829T_fiberseq_d46_offref | SNV | 108 (57 / 51) | 14,364 | 6,538 (131) | 162,510 / 37,946 / 351,891 |
+| COLO829T_fiberseq_d46_offref | INDEL | 207 (1 / 206) | 15,418 | 45,000 (832) | 1,321,934 / 1,677 / 204,927 |
+| COLO829T_ONT_d46_offref | SNV | 109 (55 / 54) | 17,610 | 18,378 (216) | 546,170 / 37,743 / 391,974 |
+| COLO829T_ONT_d46_offref | INDEL | 153 (1 / 152) | 12,188 | 142,789 (451) | 3,779,537 / 1,718 / 241,783 |
+| COLO829T_Illumina_d46_snvaf05_offref | SNV | 113 (53 / 60) | 11,488 | 35,892 (100) | 2,386,324 / 39,771 / 312,651 |
+| COLO829T_fiberseq_d46_snvaf05_offref | SNV | 109 (58 / 51) | 15,407 | 8,435 (131) | 217,158 / 39,225 / 356,190 |
+
+Most off-reference somatic keys are not in this scope: next to GRCh38 somatic truth they are already labelled 1
+(residual_partial_somatic_truth, unchanged), and the novel ones lie outside the confident region or have no anchor.
+
+The same rules on the on-reference controls (keys; each control key gets the platforms of every set with a tensor of it,
+as off-reference keys do; `DATA/s6/<TUMOR>/controls.md`):
+
+| tumor | truth | kind | -> somatic | -> germline | -> non | uncertain |
+|---|---|---|---|---|---|---|
+| HG008T | somatic | SNV | 96.2 % | 0.2 % | 0.2 % | 3.4 % |
+| HG008T | somatic | INDEL | 80.9 % | 0.6 % | 5.5 % | 13.0 % |
+| HG008T | germline | SNV | 0 % | 86.5 % | 0.9 % | 12.6 % |
+| HG008T | germline | INDEL | 0.3 % | 51.2 % | 16.9 % | 31.5 % |
+| HG008T | no truth | SNV | 0 % | 3.9 % | 57.3 % | 38.8 % |
+| HG008T | no truth | INDEL | 0.3 % | 13.1 % | 53.0 % | 33.6 % |
+| COLO829T | somatic | SNV | 87.6 % | 0 % | 0.1 % | 12.3 % |
+| COLO829T | somatic | INDEL | 70.2 % | 0.3 % | 5.5 % | 24.0 % |
+| COLO829T | germline | SNV | 0 % | 81.9 % | 0.9 % | 17.1 % |
+| COLO829T | germline | INDEL | 0.1 % | 49.6 % | 14.9 % | 35.4 % |
+| COLO829T | no truth | SNV | 1.2 % | 2.7 % | 46.7 % | 49.4 % |
+| COLO829T | no truth | INDEL | 0.3 % | 10.3 % | 44.4 % | 44.9 % |
+
+- Germline INDEL controls that become non: in the review, the Illumina normal had no ALT at ~93 % of them (fraction
+  < 0.03 at most): the long-read germline INDEL labels are largely homopolymer read errors at germline positions.
+- No-truth INDEL controls that become germline: their A1 context is in the normal assembly and >= 15 % of the Illumina
+  normal reads carry it, so they look like germline variants the on-reference labels call `confident_no_truth_allele`.
+- No-truth COLO829T SNVs that become somatic look clonal (median VAF 0.98, normal absent on three platforms).
+- The snvaf05-only SNV keys (AF 0.05-0.08) have no controls of their own; somatic is 0.1 % (Illumina) and 2.3 %
+  (Fiber-seq) of that band's on-reference non + somatic tensors.
+- A second adversarial review (18 agents) checked the dataset format against data.py / train.py (lossless JSON rewrite,
+  only intended tensors change, caches, links) and led to: site-feature links, the same-chromosome germline rule, the
+  manifest totals / reasons, control platforms, and keeping chr1 unchanged.
+- For RIS training, the `_offref` sets and their site-feature links still have to be copied there.
