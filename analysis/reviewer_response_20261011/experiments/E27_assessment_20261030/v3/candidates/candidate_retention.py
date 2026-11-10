@@ -1,4 +1,4 @@
-"""Candidates per reference (letter Supplementary Table R1.2): for HG008T and COLO829T, three platforms, on the
+"""Candidates per reference (letter Supplementary Table R1.2): for HG008T, COLO829T and HCC1395T, three platforms, on the
 GRCh38-only, HPRC v1.1 (d9) and HPRC v2.1 (d46) graphs, how many matched-normal germline alleles and how many somatic
 truth SNVs become a candidate tensor whose representative allele is the truth allele (truth_recall.json
 status.tensor_representative), chr1-22, all truth records. Writes candidate_retention.md / .json next to this script."""
@@ -7,11 +7,14 @@ from pathlib import Path
 D = Path("/scratch/jshen/data/pansoma_v2_tensors")
 HERE = Path(__file__).resolve().parent
 SETS = [("HG008T", "Illumina", "Illumina"), ("HG008T", "PacBio", "PacBio HiFi"), ("HG008T", "ONT", "ONT"),
-        ("COLO829T", "Illumina", "Illumina"), ("COLO829T", "fiberseq", "Fiber-seq"), ("COLO829T", "ONT", "ONT")]
+        ("COLO829T", "Illumina", "Illumina"), ("COLO829T", "fiberseq", "Fiber-seq"), ("COLO829T", "ONT", "ONT"),
+        ("HCC1395T", "Illumina", "Illumina"), ("HCC1395T", "PacBio", "PacBio HiFi"), ("HCC1395T", "ONT", "ONT")]
 REFS = [("linear", "_linear"), ("d9", ""), ("d46", "_d46")]
+D9_SUFFIX = {"HCC1395T": "_d9"}  # HCC1395T v1.1 sets carry the suffix (tmp/hcc1395_linear_d9_20261104); HG008T / COLO829T d9 = no suffix
 out = {}
 for t, p, label in SETS:
     for ref, suf in REFS:
+        suf = D9_SUFFIX.get(t, suf) if ref == "d9" else suf
         j = json.load(open(D / f"{t}_{p}{suf}" / "tensors" / "truth_recall.json"))
         g, s = j["germline"], j["somatic"]
         gs = g["by_kind"]["SNP"]; ss = s["by_kind"]["SNP"]
