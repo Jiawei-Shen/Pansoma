@@ -3,13 +3,17 @@
 Kept: >= 10 ALT (A1) and >= 10 REF rows, the window over >= 3 GRCh38-path nodes, and at least one strong allele-linked
 branch column: outside the site, >= 80% of ALT rows and >= 80% of REF rows each share one channel-6 code, the two codes
 differ by >= 10, and neither code is the other allele's dominant code within 3 columns (the ALT and REF reads pass
-through different nodes there, not the same nodes shifted by the INDEL). Ranked by: allele itself on >= 2 nodes,
+through different nodes there, not the same nodes shifted by the INDEL). Dropped: tensors where >= 10% of the REF rows
+that start at column 0 carry the ALT reads' sequence (no-gap read bases from column 0, one a prefix of the other, over
+>= site + INDEL length + 10 bases): the same allele aligned another way, e.g. through another branch with the inserted
+bases a few bases away, which the site-allele assignment counts as REF. Ranked by: allele itself on >= 2 nodes,
 number of strong columns, GRCh38-path nodes under the window, ALT rows. One example per truth INDEL; first the best of
 each tensor set, then a second from the sets with more examples, until ten.
 usage: python choose.py candidates.tsv picks.tsv"""
 import csv
 import json
 import sys
+from collections import Counter
 
 import numpy as np
 
@@ -51,6 +55,23 @@ def unshifted(r, groups, cols):
             if a not in dom["REF"][max(c - 3, 0):c + 4] and b not in dom["A1"][max(c - 3, 0):c + 4]]
 
 
+def hidden_alt(r, groups):
+    """Share of the REF rows starting at column 0 whose read bases match the ALT reads' most common sequence."""
+    x = np.asarray(np.load(D / r["set"] / "tensors" / "INDEL" / r["shard_file"], mmap_mode="r")[int(r["index"])][0])
+
+    def seq(row):
+        return None if x[row, 0] == 0 else "".join("-ACGTN"[c] for c in x[row] if 1 <= c <= 5)
+
+    alts = Counter(s for s in (seq(i) for i in range(*groups["A1"])) if s)
+    if not alts:
+        return 0.0
+    alt = max(alts, key=lambda s: (alts[s], len(s)))
+    refs = [s for s in (seq(i) for i in range(*groups["REF"])) if s]
+    need = 50 + int(r["len"]) + 10
+    same = sum(len(s) >= need and (alt.startswith(s) or s.startswith(alt)) for s in refs)
+    return same / len(refs) if refs else 0.0
+
+
 def label(s):
     tumor, platform = s.split("_")[:2]
     return f"{tumor} {PLATFORM[platform]}, HPRC {'v2.1 (d46)' if s.endswith('_d46') else 'v1.1 (d9)'}"
@@ -63,7 +84,12 @@ def main():
     groups = row_groups(rows)
     keep = []
     for r in rows:
-        st = unshifted(r, groups[r["set"], r["candidate_id"]], strong(r["linked_detail"]))
+        gr = groups[r["set"], r["candidate_id"]]
+        st = unshifted(r, gr, strong(r["linked_detail"]))
+        if st and hidden_alt(r, gr) >= 0.1:
+            print(f"dropped {r['set']} {r['candidate_id']}: {hidden_alt(r, gr):.0%} of REF rows carry the ALT sequence",
+                  file=sys.stderr)
+            continue
         if st:
             keep.append((int(r["allele_nodes"]) > 1, len(st), int(r["ref_nodes"]), int(r["alt_rows"]), r, st))
     keep.sort(key=lambda k: k[:4], reverse=True)
@@ -86,7 +112,8 @@ def main():
                                       r["shard_file"], r["index"], r["truth"], r["event"], r["len"], r["af"],
                                       r["alt_rows"], r["ref_rows"], r["node_len"], r["start"], r["allele_nodes"],
                                       r["ref_nodes"], ",".join(f"{c}:{a}/{b}" for c, a, b in st)])), file=out)
-    print(f"{len(rows)} with strong columns, {len(keep)} unshifted, {len(picks)} picked from {len(sets)} sets",
+    print(f"{len(rows)} with strong columns, {len(keep)} unshifted without hidden ALT rows, {len(picks)} picked from "
+          f"{len(sets)} sets",
           file=sys.stderr)
 
 

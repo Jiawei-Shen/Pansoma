@@ -20,7 +20,16 @@
   - cols 50-51 SITE: A1 code 90 = 80 paths (nodes [2543940, 2543943, 2543944]) [100%+, -T] | REF code 90 = 80 paths (nodes [2543940, 2543943, 2543944]) [100%+, -T]
   - cols 52-100: A1 code 99 = 89 paths (nodes [2543945]) [100%+, TTTTTTTTTTTTTCTGGTGGCGTGAGGAGATTGAGGGAGGGAAAACCTC] | REF code 99 = 89 paths (nodes [2543945]) [100%+, TTTTTTTTTTTTTCTGGTGGCGTGAGGAGATTGAGGGAGGGAAAACCTC]
 
-## R1.m2_INDEL_02  HG008T_ONT  2264449:0:DEL:T>  (shard chr1_shard_00003_data.npy index 10131)
+## R1.m2_INDEL_02  HG008T_Illumina  3042010:13:INS:>T  (shard chr1_shard_00000_data.npy index 6957)
+
+- truth chr1:231875647:G>GT; INS ->T; AF 0.515; rows A1 87, REF 78, other 4; H = 90
+- candidate node 3042010 (132 bp, 90 paths), site offset 13-13; allele nodes [3042010]; candidate columns [50, 51]
+- GRCh38-path nodes under the window: 5: 3042016 (163 bp, 90), 3042014 (1 bp, 40), 3042013 (6 bp, 90), 3042011 (1 bp, 2), 3042010 (132 bp, 90)
+- branch columns (any row on a node with fewer than H paths), runs of equal (A1, REF) codes:
+  - cols 29-29 DIFF: A1 code 40 = 40 paths (nodes [3042014]) [100%+, G] | REF code 60 = 50 paths (nodes [3042007, 3042015]) [93%+, A]
+  - cols 36-36: A1 code 98 = 88 paths (nodes [3042012]) [100%+, T] | REF code 98 = 88 paths (nodes [3042012]) [100%+, T]
+
+## R1.m2_INDEL_03  HG008T_ONT  2264449:0:DEL:T>  (shard chr1_shard_00003_data.npy index 10131)
 
 - truth chr1:188508320:GT>G; DEL T>-; AF 0.565; rows A1 26, REF 13, other 7; H = 90
 - candidate node 2264449 (27 bp, 90 paths), site offset 0-1; allele nodes [2264449]; candidate columns [50, 51]
@@ -35,7 +44,7 @@
   - cols 92-92: A1 code 100 = 90 paths (nodes [2264443, 2264445, 2264449, 2264451, 2264454, 2264457]) [100%+, C] | REF code 100 = 90 paths (nodes [2264443, 2264445, 2264449, 2264451, 2264454, 2264457]) [92%+, C]
   - cols 96-96: A1 code 100 = 90 paths (nodes [2264443, 2264445, 2264449, 2264451, 2264454, 2264457]) [100%+, C] | REF code 100 = 90 paths (nodes [2264443, 2264445, 2264449, 2264451, 2264454, 2264457]) [100%+, C]
 
-## R1.m2_INDEL_03  HG008T_PacBio  3693578:0:DEL:A>  (shard chr1_shard_00003_data.npy index 31380)
+## R1.m2_INDEL_04  HG008T_PacBio  3693578:0:DEL:A>  (shard chr1_shard_00003_data.npy index 31380)
 
 - truth chr1:218103815:CA>C; DEL A>-; AF 0.366; rows A1 45, REF 37, other 16; H = 90
 - candidate node 3693578 (13 bp, 88 paths), site offset 0-1; allele nodes [3693578]; candidate columns [50, 53]
@@ -54,7 +63,7 @@
   - cols 87-87: A1 code 80 = 70 paths (nodes [3693584]) [98%+, T] | REF code 80 = 70 paths (nodes [3693584]) [92%+, T]
   - cols 88-100: A1 code 95 = 85 paths (nodes [3693579, 3693583, 3693586]) [98%+, ATATATATATATC] | REF code 95 = 85 paths (nodes [3693579, 3693583, 3693586]) [95%+, ATATATATATATC]
 
-## R1.m2_INDEL_04  HG008T_Illumina_d46  19704905:0:INS:>C  (shard chr1_shard_00000_data.npy index 11589)
+## R1.m2_INDEL_05  HG008T_Illumina_d46  19704905:0:INS:>C  (shard chr1_shard_00000_data.npy index 11589)
 
 - truth chr1:159111805:A>AC; INS ->C; AF 0.133; rows A1 19, REF 123, other 1; H = 464
 - candidate node 19704905 (1 bp, 446 paths), site offset 0-0; allele nodes [19704905]; candidate columns [50, 51]
@@ -74,7 +83,7 @@
   - cols 93-96 DIFF: A1 code 98 = 462 paths (nodes [19704913]) [83%+, ATCT] | REF code 100 = 464 paths (nodes [19704914, 19704916]) [98%+, ATCT]
   - cols 97-100: A1 code 100 = 464 paths (nodes [19704914, 19704916]) [100%+, ATCT] | REF code 100 = 464 paths (nodes [19704914, 19704916]) [98%+, ATCT]
 
-## R1.m2_INDEL_05  HG008T_Illumina_d46  10089773:17:INS:>A  (shard chr1_shard_00000_data.npy index 7439)
+## R1.m2_INDEL_06  HG008T_Illumina_d46  10089773:17:INS:>A  (shard chr1_shard_00000_data.npy index 7439)
 
 - truth chr1:233387578:C>CA; INS ->A; AF 0.493; rows A1 99, REF 101, other 0; H = 464
 - candidate node 10089773 (19 bp, 464 paths), site offset 17-17; allele nodes [10089773]; candidate columns [50, 51]
@@ -87,7 +96,7 @@
   - cols 56-56 DIFF: A1 code 34 = 183-194 paths (nodes [10089778]) [98%+, A] | REF code 41 = 270-283 paths (nodes [10089777]) [85%+, C]
   - cols 57-88: A1 code 100 = 464 paths (nodes [10089765, 10089768, 10089771, 10089773, 10089776, 10089779, 10089782]) [100%+, AAAACTAGCTATTGTTTTTACAACCAAGCAAA] | REF code 100 = 464 paths (nodes [10089765, 10089768, 10089771, 10089773, 10089776, 10089779, 10089782]) [97%+, AAAACTAGCTATTGTTTTTACAACCAAGCAAA]
 
-## R1.m2_INDEL_06  HG008T_ONT_d46  8181742:24:INS:>A  (shard chr1_shard_00004_data.npy index 296)
+## R1.m2_INDEL_07  HG008T_ONT_d46  8181742:24:INS:>A  (shard chr1_shard_00004_data.npy index 296)
 
 - truth chr1:189870594:C>CA; INS ->A; AF 0.304; rows A1 14, REF 29, other 3; H = 464
 - candidate node 8181742 (26 bp, 456 paths), site offset 24-24; allele nodes [8181742]; candidate columns [50, 51]
@@ -102,7 +111,7 @@
   - cols 54-81: A1 code 92 = 456 paths (nodes [8181734, 8181737, 8181742, 8181745, 8181746]) [100%+, AAAAAGCACAAAGACTTCCCTCTTAGGA] | REF code 92 = 456 paths (nodes [8181734, 8181737, 8181742, 8181745, 8181746]) [97%+, AAAAAGCACAAAGACTTCCCTCTTAGGA]
   - cols 82-91: A1 code 100 = 464 paths (nodes [8181747, 8181750]) [79%+, AAAAAAAAAA] | REF code 100 = 464 paths (nodes [8181747, 8181750]) [72%+, AAAAAAAAAA]
 
-## R1.m2_INDEL_07  HG008T_ONT_d46  8237854:0:INS:>TA  (shard chr1_shard_00004_data.npy index 1350)
+## R1.m2_INDEL_08  HG008T_ONT_d46  8237854:0:INS:>TA  (shard chr1_shard_00004_data.npy index 1350)
 
 - truth chr1:191234698:T>TTA; INS ->TA; AF 0.292; rows A1 14, REF 33, other 1; H = 464
 - candidate node 8237854 (1 bp, 414 paths), site offset 0-0; allele nodes [8237854]; candidate columns [50, 52]
@@ -159,7 +168,7 @@
   - cols 98-98 DIFF: A1 code 100 = 464 paths (nodes [8237935, 8237938, 8237941]) [100%+, A] | REF code 35 = 195-205 paths (nodes [8237817, 8237835, 8237837, 8237843]) [79%+, A]
   - cols 99-100 DIFF: A1 code 100 = 464 paths (nodes [8237935, 8237938, 8237941]) [100%+, TA] | REF code 36 = 206-217 paths (nodes [8237825, 8237845, 8237926]) [70%+, TA]
 
-## R1.m2_INDEL_08  HG008T_PacBio_d46  8349226:45:INS:>CA  (shard chr1_shard_00003_data.npy index 6112)
+## R1.m2_INDEL_09  HG008T_PacBio_d46  8349226:45:INS:>CA  (shard chr1_shard_00003_data.npy index 6112)
 
 - truth chr1:194115661:G>GCA; INS ->CA; AF 0.290; rows A1 27, REF 65, other 1; H = 464
 - candidate node 8349226 (47 bp, 429 paths), site offset 45-45; allele nodes [8349226]; candidate columns [50, 52]
@@ -186,7 +195,7 @@
   - cols 90-90 DIFF: A1 code 36 = 206-217 paths (nodes [8349232, 8349242]) [100%+, C] | REF code 100 = 464 paths (nodes [8349244, 8349247]) [92%+, C]
   - cols 91-93: A1 code 100 = 464 paths (nodes [8349244, 8349247]) [100%+, ATA] | REF code 100 = 464 paths (nodes [8349244, 8349247]) [97%+, AAT]
 
-## R1.m2_INDEL_09  HG008T_PacBio_d46  11316111:0:DEL:A>  (shard chr1_shard_00004_data.npy index 15274)
+## R1.m2_INDEL_10  HG008T_PacBio_d46  11316111:0:DEL:A>  (shard chr1_shard_00004_data.npy index 15274)
 
 - truth chr1:240187269:CA>C; DEL A>-; AF 0.208; rows A1 11, REF 42, other 0; H = 464
 - candidate node 11316111 (15 bp, 462 paths), site offset 0-1; allele nodes [11316111]; candidate columns [50, 51]
@@ -206,18 +215,4 @@
   - cols 66-66: A1 code 98 = 462 paths (nodes [11316111, 11316114]) [100%+, A] | REF code 98 = 462 paths (nodes [11316111, 11316114]) [100%+, A]
   - cols 67-67: A1 code 38 = 231-242 paths (nodes [11316115, 11316116]) [100%+, A] | REF code 38 = 231-242 paths (nodes [11316115, 11316116]) [100%+, G]
   - cols 68-72 DIFF: A1 code 37 = 218-230 paths (nodes [11316117]) [100%+, AAAAG] | REF code 100 = 464 paths (nodes [11316118, 11316121]) [95%+, AAAAG]
-
-## R1.m2_INDEL_10  COLO829T_fiberseq  266437:1:INS:>TTGTTGTTGTTGGTTTTTC  (shard chr1_shard_00000_data.npy index 8215)
-
-- truth chr1:9364848:G>GTTGTTGTTGTTGGTTTTTC; INS ->TTGTTGTTGTTGGTTTTTC; AF 0.357; rows A1 30, REF 52, other 2; H = 90
-- candidate node 266437 (2 bp, 90 paths), site offset 1-1; allele nodes [266437]; candidate columns [50, 69]
-- GRCh38-path nodes under the window: 7: 266432 (63 bp, 90), 266433 (3 bp, 74), 266434 (24 bp, 90), 266435 (1 bp, 56), 266437 (2 bp, 90), 266440 (1 bp, 89), 266441 (99 bp, 90)
-- branch columns (any row on a node with fewer than H paths), runs of equal (A1, REF) codes:
-  - cols 13-15: A1 code 100 = 90 paths (nodes [266430, 266432, 266434, 266437, 266441, 266443]) [100%+, GGG] | REF code 100 = 90 paths (nodes [266430, 266432, 266434, 266437, 266441, 266443]) [98%+, GGG]
-  - cols 20-20: A1 code 100 = 90 paths (nodes [266430, 266432, 266434, 266437, 266441, 266443]) [100%+, T] | REF code 100 = 90 paths (nodes [266430, 266432, 266434, 266437, 266441, 266443]) [98%+, T]
-  - cols 21-23: A1 code 84 = 74 paths (nodes [266433]) [100%+, TTG] | REF code 84 = 74 paths (nodes [266433]) [96%+, TTG]
-  - cols 48-48: A1 code 66 = 56 paths (nodes [266435]) [100%+, C] | REF code 66 = 56 paths (nodes [266435]) [98%+, C]
-  - cols 70-70 DIFF: A1 code 99 = 89 paths (nodes [266440]) [100%+, T] | REF code 34 = 34 paths (nodes [266436, 266438, 266444]) [94%+, C]
-  - cols 71-88 DIFF: A1 code 100 = 90 paths (nodes [266430, 266432, 266434, 266437, 266441, 266443]) [100%+, GTTGTTGTTGGTTTTTCT] | REF code 33 = 33 paths (nodes [266439]) [92%+, G----------------T]
-  - cols 89-89 DIFF: A1 code 100 = 90 paths (nodes [266430, 266432, 266434, 266437, 266441, 266443]) [100%+, G] | REF code 99 = 89 paths (nodes [266440]) [92%+, T]
 
