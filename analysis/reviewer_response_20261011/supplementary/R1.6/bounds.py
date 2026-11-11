@@ -6,7 +6,9 @@ outside the BED but whose deleted bases are inside, so somatic.recall.tsv's in_b
   n         truth alleles
   tagged    truth alleles our population filter tags (E5b per_truth.tsv.gz 'pon')
   exact     truth alleles with an exact candidate: a tensor labelled 1 by representative_allele_is_somatic_truth
-            carries the truth id (the E21 index caches)
+            carries the truth id (the E21 index caches). The AF 0.05 SNV sets HCC1395T_{Illumina,PacBio}_d46_snvaf05
+            (the test sets of the latest six-tumor SNV models) have no cache: there exact = somatic.recall.tsv status
+            tensor_representative, which equals the cache count on every SNV set that has both (asserted).
   exact_untagged
 -> bound_any = (n - tagged) / n (any caller after the filter), bound_exact = exact_untagged / n (Pansoma).
 Same inputs and rules as E27 denominators/label_status.py, whose load() is imported; HG008T / COLO829T must reproduce
@@ -31,7 +33,15 @@ sys.path.insert(0, str(DEN))
 import label_status as LS  # noqa: E402
 
 RUNS = Path("/scratch/jshen/data/pansoma_net_v2_runs")
-SETS = [(t, p) for t in ("HG008T", "COLO829T", "HCC1395T") for p in ("Illumina", "fiberseq" if t == "COLO829T" else "PacBio", "ONT")]
+SETS = [(t, p, "_d46", ("SNV", "INDEL")) for t in ("HG008T", "COLO829T", "HCC1395T")
+        for p in ("Illumina", "fiberseq" if t == "COLO829T" else "PacBio", "ONT")]
+SETS += [("HCC1395T", p, "_d46_snvaf05", ("SNV",)) for p in ("Illumina", "PacBio")]
+
+
+def recall_exact(set_name, kind):
+    """Truth ids whose status in the set's somatic.recall.tsv is tensor_representative."""
+    rows = csv.DictReader(open(LS.T / set_name / "tensors" / "somatic.recall.tsv"), delimiter="\t")
+    return {int(r["truth_id"]) for r in rows if r["kind"] in LS.KINDS[kind] and r["status"] == "tensor_representative"}
 
 
 def main():
@@ -42,15 +52,19 @@ def main():
             per_truth[r["sample"]].append(r)
     old = json.loads((DEN / "label_status.json").read_text())
     out = {}
-    for sample, plat in SETS:
-        set_name = f"{sample}_{plat}_d46"
-        for kind in ("SNV", "INDEL"):
-            idx = LS.load(set_name, kind)
-            a, rname = idx.arrays, np.array(idx.meta["reasons"])[idx.arrays["reason"]]
-            exact_ids = set()
-            for p in np.flatnonzero((a["label"] == 1) & (rname == LS.EXACT)).tolist():
-                exact_ids.update(a["truth_ids"][a["truth_ptr"][p]:a["truth_ptr"][p + 1]].tolist())
-            starts, ends = LS.somatic_bed(idx.dir)[1]["chr1"]
+    for sample, plat, suffix, kinds in SETS:
+        set_name = f"{sample}_{plat}{suffix}"
+        for kind in kinds:
+            tdir = (LS.T / set_name / "tensors" / kind).resolve()
+            if suffix == "_d46":
+                idx = LS.load(set_name, kind)
+                a, rname = idx.arrays, np.array(idx.meta["reasons"])[idx.arrays["reason"]]
+                exact_ids = set()
+                for p in np.flatnonzero((a["label"] == 1) & (rname == LS.EXACT)).tolist():
+                    exact_ids.update(a["truth_ids"][a["truth_ptr"][p]:a["truth_ptr"][p + 1]].tolist())
+            else:
+                exact_ids = recall_exact(set_name, kind)
+            starts, ends = LS.somatic_bed(tdir)[1]["chr1"]
             chr1 = [r for r in per_truth[sample] if r["kind"] in LS.KINDS[kind]]
 
             def overlaps(r):
@@ -66,15 +80,22 @@ def main():
                        exact_untagged=exact_untagged, bound_any=(n - tagged) / n, bound_exact=exact_untagged / n,
                        tagged_whole_chr1=sum(bool(pon.get((sample, int(r["truth_id"])))) for r in chr1), n_whole_chr1=len(chr1))
             key = f"{set_name}|{kind}"
+            if kind == "SNV" and suffix == "_d46":  # the recall.tsv rule used for the snvaf05 sets agrees with the cache
+                alt = recall_exact(set_name, kind)
+                assert sum(int(r["truth_id"]) in alt for r in truth) == res["exact"], (key, "recall.tsv exact differs")
             if key in old:
                 c = old[key]["chr1"]
                 assert (n, tagged, exact_untagged) == (c["all"]["n"], c["all"]["_tagged"], c["untagged"]["exact"]), (key, res, c)
             ds = f"{sample}_{plat}"
             rep = json.loads((RUNS / f"release_s0_{'PacBio' if plat == 'fiberseq' else plat}_INDEL" / f"vcf_ppr8_chr1_{ds}_d46"
                               / "eval_bed" / "report.json").read_text()) if kind == "INDEL" else None
-            if kind == "SNV":
+            if kind == "SNV" and suffix == "_d46":
                 rep = json.loads((RUNS / f"multicancer6_{'PacBio' if plat == 'fiberseq' else plat}_SNV" /
                                   f"vcf_chr1_{ds}_d46_normfix" / "eval_bed" / "report.json").read_text())
+            elif kind == "SNV":
+                rep = json.loads((RUNS / f"multicancer6_{plat}_SNV_sitef_af05_lnf25w1" / f"vcf_chr1_{ds}_d46_r095" /
+                                  "eval_bed" / "report.json").read_text())
+                assert rep["pon_vcf"] is None or "snvaf05" in json.dumps(rep), (key, "report is not on the snvaf05 set")
             at = rep["pon"]["at_threshold"]
             res["rtg_truth"] = at["tp_baseline"] + at["fn"]
             res["report_truth_pon_tags"] = rep["truth_pon_tags"]["tagged"]

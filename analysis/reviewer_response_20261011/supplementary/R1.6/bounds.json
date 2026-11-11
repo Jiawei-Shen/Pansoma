@@ -232,5 +232,31 @@
   "rtg_truth": 133,
   "report_truth_pon_tags": 16,
   "report_truth_records": 133
+ },
+ "HCC1395T_Illumina_d46_snvaf05|SNV": {
+  "n": 3440,
+  "tagged": 66,
+  "exact": 3292,
+  "exact_untagged": 3234,
+  "bound_any": 0.9808139534883721,
+  "bound_exact": 0.9401162790697675,
+  "tagged_whole_chr1": 66,
+  "n_whole_chr1": 3440,
+  "rtg_truth": 3440,
+  "report_truth_pon_tags": 66,
+  "report_truth_records": 3440
+ },
+ "HCC1395T_PacBio_d46_snvaf05|SNV": {
+  "n": 3440,
+  "tagged": 66,
+  "exact": 3191,
+  "exact_untagged": 3137,
+  "bound_any": 0.9808139534883721,
+  "bound_exact": 0.9119186046511628,
+  "tagged_whole_chr1": 66,
+  "n_whole_chr1": 3440,
+  "rtg_truth": 3440,
+  "report_truth_pon_tags": 66,
+  "report_truth_records": 3440
  }
 }

@@ -4,7 +4,7 @@ chr1 precision-recall curves after our population filter, benchmark regions, HG0
 platforms, (a) SNVs and (b) INDELs, for the models whose recall R1.6 / Supplementary Table R1.6 report and for both comparators:
 - Pansoma SNV: HPRC v2.1 (d46) `--norm dataset` model, seed 0 only (<S>_<P>_SNV_d46_normbq, RIS copies in
   ris_7fc7396_20261012; PASS = validation recall 0.9 before the filter). Same runs as E8 latest_models.py.
-  HCC1395T has no single-tumor SNV model: its row uses the six-tumor SNV model (see --snv six-tumor), which is trained
+  HCC1395T has no single-tumor SNV model: its row uses the latest six-tumor SNV models (see --snv six-tumor), trained
   on HCC1395T's chr2-22 among others.
 - Pansoma INDEL: the final model (six tumors, HPRC v2.1), seed 0 only (release_s0_<P>_INDEL,
   vcf_ppr8_chr1_<set>_d46; PASS = ppr8).
@@ -16,9 +16,14 @@ denominators/label_status.json for HG008T / COLO829T, i.e. Supplementary Table R
   dotted   = truth that is not a population allele (the bound for any caller after this filter);
   dash-dot = truth with an exact Pansoma candidate that is not a population allele (Pansoma's bound on this platform).
 Writes fig_R1.6.png / .pdf and points.md (the plotted operating points and curve ends, for checking against the table).
---snv six-tumor: the same figure with the six-tumor SNV model in (a) (multicancer6_<P>_SNV, one run per platform, trained
-  on chr2-22 of HCC1395T, HCC1954T, H1437T, H2009T, HG008T and COLO829T; the --norm dataset re-predictions
-  vcf_chr1_<set>_d46_normfix, as in R3.9 / E12b; PASS = its validation threshold, the same in every tumor);
+--snv six-tumor: the same figure with the six-tumor SNV model in (a): the latest six-tumor SNV models (E30, user
+  2026-11-10), one run per platform, trained on chr2-22 of HCC1395T, HCC1954T, H1437T, H2009T, HG008T and COLO829T:
+  PacBio HiFi / Illumina multicancer6_<P>_SNV_sitef_af05_lnf25w1 (site features, AF 0.05 floor on the four CASTLE
+  lines, AF <= 0.1 non sampled 25% at weight 1), PASS = rule 2 (validation callable recall 0.95 after the filter),
+  vcf_chr1_<set>_d46_r095; ONT multicancer6_ONT_SNV (no site features: E30 kept it for ONT), vcf_chr1_<set>_d46_normfix,
+  PASS = validation recall 0.9 before the filter. COLO829T and HG008T are tested on their d46 sets (AF 0.08), whose
+  bounds the lines show; HCC1395T PacBio HiFi / Illumina on its AF 0.05 sets (d46_snvaf05; bounds.json has them).
+  One threshold per platform, the same in every tumor.
   (b) unchanged. Writes fig_R1.6_six_tumor.png / .pdf and points_six_tumor.md.
 Run: /wanglab/jshen/anaconda3/envs/sambcfenv/bin/python make_figure.py [--snv six-tumor]   (login node, < 1 min)
 """
@@ -74,7 +79,9 @@ def point(block):
 
 def pansoma_reports(tumor, p, kind, snv="single"):
     if kind == "SNV" and (snv == "six-tumor" or tumor == "HCC1395T"):
-        fs = [RUNS / f"multicancer6_{p}_SNV" / f"vcf_chr1_{ds(tumor, p)}_d46_normfix" / "eval_bed" / "report.json"]
+        run, vcf = ((f"multicancer6_{p}_SNV", f"vcf_chr1_{ds(tumor, p)}_d46_normfix") if p == "ONT" else
+                    (f"multicancer6_{p}_SNV_sitef_af05_lnf25w1", f"vcf_chr1_{ds(tumor, p)}_d46_r095"))
+        fs = [RUNS / run / vcf / "eval_bed" / "report.json"]
     elif kind == "SNV":
         fs = [RIS / f"{ds(tumor, p, True)}_SNV_d46_normbq{x}" / "vcf_chr1" / "eval_bed" / "report.json" for x in ("",)]  # seed 0 only (user 2026-11-10)
     else:
@@ -90,7 +97,9 @@ def comparator_report(caller, tumor, p, kind):
 
 def bounds(status, tumor, p, kind):
     """(not a population allele, exact candidate and not a population allele) as shares of chr1 truth in the BED."""
-    c = status[f"{ds(tumor, p)}_d46|{kind}"]
+    # the latest six-tumor PacBio HiFi / Illumina SNV models are tested on HCC1395T's AF 0.05 sets (d46_snvaf05)
+    sfx = "_d46_snvaf05" if (kind, tumor) == ("SNV", "HCC1395T") and p != "ONT" else "_d46"
+    c = status[f"{ds(tumor, p)}{sfx}|{kind}"]
     return c["bound_any"], c["bound_exact"]
 
 
@@ -180,9 +189,10 @@ def main():
         fig.savefig(args.outdir / f"fig_R1.6{tag}.{ext}", dpi=220)
     plt.close(fig)
 
-    snv = ("SNV: the six-tumor model (multicancer6, one run per platform, `--norm dataset` re-predictions)" if args.snv == "six-tumor"
-           else "SNV: single-tumor `--norm dataset` HPRC v2.1 model, seed 0 (HCC1395T: the six-tumor model, "
-                "one run per platform; no single-tumor HCC1395T SNV model)")
+    m6 = ("the latest six-tumor model, one run per platform (PacBio HiFi / Illumina `multicancer6_<P>_SNV_sitef_af05_lnf25w1`, "
+          "rule 2 `_r095`; ONT `multicancer6_ONT_SNV` normfix)")
+    snv = (f"SNV: {m6}" if args.snv == "six-tumor"
+           else f"SNV: single-tumor `--norm dataset` HPRC v2.1 model, seed 0 (HCC1395T: {m6}; no single-tumor HCC1395T SNV model)")
     L = [f"# Supplementary Fig. R1.6{' (six-tumor SNV model)' if tag else ''}: plotted points (chr1, benchmark regions, after our population filter)", "",
          f"Generated by `make_figure.py{' --snv six-tumor' if tag else ''}`. Pansoma: {snv}; INDEL: the final six-tumor model at "
          "ppr8, seed 0. Comparators: PASS after the same filter; curve end = highest recall of the "
