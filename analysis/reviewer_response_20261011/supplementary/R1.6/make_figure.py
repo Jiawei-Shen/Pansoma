@@ -1,15 +1,18 @@
 """Supplementary Fig. R1.6 (R1.6: "full precision-recall curves for every caller").
 
-chr1 precision-recall curves after our population filter, benchmark regions, HG008T and COLO829T x three platforms,
-(a) SNVs and (b) INDELs, for the models whose recall R1.6 / Supplementary Table R1.6 report and for both comparators:
+chr1 precision-recall curves after our population filter, benchmark regions, HG008T, COLO829T and HCC1395T x three
+platforms, (a) SNVs and (b) INDELs, for the models whose recall R1.6 / Supplementary Table R1.6 report and for both comparators:
 - Pansoma SNV: HPRC v2.1 (d46) `--norm dataset` models, three per platform (<S>_<P>_SNV_d46_normbq{,_s1,_s2}, RIS copies in
   ris_7fc7396_20261012; PASS = validation recall 0.9 before the filter). Same runs as E8 latest_models.py.
+  HCC1395T has no single-tumor SNV model: its row uses the six-tumor SNV model (see --snv six-tumor), which is trained
+  on HCC1395T's chr2-22 among others.
 - Pansoma INDEL: the final models (six tumors, HPRC v2.1), three per platform (release_s{0,1,2}_<P>_INDEL,
   vcf_ppr8_chr1_<set>_d46; PASS = ppr8).
   Curve = report.json pon.curve_roc (rtg vcfeval --all-records ranked by p_somatic; records down to p_somatic 0.01).
 - DeepSomatic-TO, ClairS-TO (E8 score report.json, eval_bed): curve = all_pon (every record except RefCall / NoCall,
   whatever its FILTER, after our filter, ranked by QUAL); point = pass_pon (the tool's PASS after the same filter).
-Vertical lines (chr1 truth in the benchmark regions, E27 denominators/label_status.json, as in Supplementary Table R1.6):
+Vertical lines (chr1 truth in the benchmark regions; bounds.py -> bounds.json, which reproduces E27
+denominators/label_status.json for HG008T / COLO829T, i.e. Supplementary Table R1.6, and adds HCC1395T):
   dotted   = truth that is not a population allele (the bound for any caller after this filter);
   dash-dot = truth with an exact Pansoma candidate that is not a population allele (Pansoma's bound on this platform).
 Writes fig_R1.6.png / .pdf and points.md (the plotted operating points and curve ends, for checking against the table).
@@ -34,9 +37,9 @@ HERE = Path(__file__).resolve().parent
 RUNS = Path("/scratch/jshen/data/pansoma_net_v2_runs")
 RIS = RUNS / "ris_7fc7396_20261012"
 E8 = Path("/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score")
-LABEL_STATUS = HERE.parents[1] / "experiments" / "E27_assessment_20261030" / "denominators" / "label_status.json"
+BOUNDS = HERE / "bounds.json"
 
-TUMORS = ("HG008T", "COLO829T")
+TUMORS = ("HG008T", "COLO829T", "HCC1395T")
 PLATFORMS = ("Illumina", "PacBio", "ONT")
 KINDS = ("SNV", "INDEL")
 # validated categorical slots 1-3 (dataviz palette, light surface); comparators dashed as a second encoding
@@ -70,7 +73,7 @@ def point(block):
 
 
 def pansoma_reports(tumor, p, kind, snv="single"):
-    if kind == "SNV" and snv == "six-tumor":
+    if kind == "SNV" and (snv == "six-tumor" or tumor == "HCC1395T"):
         fs = [RUNS / f"multicancer6_{p}_SNV" / f"vcf_chr1_{ds(tumor, p)}_d46_normfix" / "eval_bed" / "report.json"]
     elif kind == "SNV":
         fs = [RIS / f"{ds(tumor, p, True)}_SNV_d46_normbq{x}" / "vcf_chr1" / "eval_bed" / "report.json" for x in ("", "_s1", "_s2")]
@@ -87,9 +90,8 @@ def comparator_report(caller, tumor, p, kind):
 
 def bounds(status, tumor, p, kind):
     """(not a population allele, exact candidate and not a population allele) as shares of chr1 truth in the BED."""
-    c = status[f"{ds(tumor, p)}_d46|{kind}"]["chr1"]
-    n = c["all"]["n"]
-    return (n - c["all"]["_tagged"]) / n, c["untagged"]["exact"] / n
+    c = status[f"{ds(tumor, p)}_d46|{kind}"]
+    return c["bound_any"], c["bound_exact"]
 
 
 def span(xs):
@@ -102,7 +104,7 @@ def main():
     ap.add_argument("--outdir", type=Path, default=HERE)
     args = ap.parse_args()
     tag = "" if args.snv == "single" else "_six_tumor"
-    status = json.loads(LABEL_STATUS.read_text())
+    status = json.loads(BOUNDS.read_text())
     data, rows = {}, []
     for kind in KINDS:
         for tumor in TUMORS:
@@ -111,24 +113,26 @@ def main():
                          **{c: comparator_report(c, tumor, p, kind) for c, *_ in CALLERS[1:]},
                          bounds=bounds(status, tumor, p, kind))
                 data[(kind, tumor, p)] = d
-    xmax = {}
+    xmax = {}  # per row: SNV 0-1; INDEL to just past the furthest curve or bound of that tumor
     for kind in KINDS:
-        m = 0
-        for (k, _, _), d in data.items():
-            if k != kind:
-                continue
-            m = max([m, *d["bounds"]] + [curve(b)[:, 0].max() for _, b in d["pansoma"]] +
-                    [curve(d[c][1])[:, 0].max() for c, *_ in CALLERS[1:]])
-        xmax[kind] = 1.0 if kind == "SNV" else min(1.0, np.ceil((m + 0.03) * 10) / 10)
+        for tumor in TUMORS:
+            m = 0
+            for (k, t, _), d in data.items():
+                if (k, t) != (kind, tumor):
+                    continue
+                m = max([m, *d["bounds"]] + [curve(b)[:, 0].max() for _, b in d["pansoma"]] +
+                        [curve(d[c][1])[:, 0].max() for c, *_ in CALLERS[1:]])
+            xmax[(kind, tumor)] = 1.0 if kind == "SNV" else min(1.0, np.ceil((m + 0.03) * 10) / 10)
 
-    fig, axes = plt.subplots(4, 3, figsize=(7.4, 10.6), sharey=True)
+    nt = len(TUMORS)
+    fig, axes = plt.subplots(2 * nt, 3, figsize=(7.4, 2.62 * 2 * nt + 0.7), sharey=True)
     for bi, kind in enumerate(KINDS):
         for ti, tumor in enumerate(TUMORS):
-            i = 2 * bi + ti
+            i = nt * bi + ti
             for j, p in enumerate(PLATFORMS):
                 ax = axes[i, j]
                 d = data[(kind, tumor, p)]
-                X = xmax[kind]
+                X = xmax[(kind, tumor)]
                 b_any, b_exact = d["bounds"]
                 ax.axvline(b_any, color=MUTED, lw=0.9, ls=(0, (1, 1.5)), zorder=1)
                 ax.axvline(b_exact, color=MUTED, lw=0.9, ls=(0, (4, 1.5, 1, 1.5)), zorder=1)
@@ -164,19 +168,21 @@ def main():
     h += [Line2D([], [], color=MUTED, marker="o", ls="", ms=5, mec=SURFACE, mew=0.8, label="PASS (after the filter)"),
           Line2D([], [], color=MUTED, lw=0.9, ls=(0, (4, 1.5, 1, 1.5)), label="exact Pansoma candidate, not a population allele"),
           Line2D([], [], color=MUTED, lw=0.9, ls=(0, (1, 1.5)), label="not a population allele (bound for any caller)")]
-    fig.legend(handles=h, loc="upper center", ncol=3, frameon=False, fontsize=6.8, bbox_to_anchor=(0.5, 0.997),
+    H = fig.get_figheight()
+    fig.legend(handles=h, loc="upper center", ncol=3, frameon=False, fontsize=6.8, bbox_to_anchor=(0.5, 1 - 0.03 / H),
                handlelength=2.6, columnspacing=1.3)
-    fig.tight_layout(rect=(0.02, 0, 1, 0.935), h_pad=1.5, w_pad=0.8)
+    fig.tight_layout(rect=(0.02, 0, 1, 1 - 0.7 / H), h_pad=1.5, w_pad=0.8)
     for bi, kind in enumerate(KINDS):
-        top = axes[2 * bi, 0].get_position().y1
-        fig.text(0.005, top + 0.016, "ab"[bi], fontsize=11, fontweight="bold", color=INK, ha="left", va="bottom")
-        fig.text(0.03, top + 0.017, "SNVs" if kind == "SNV" else "INDELs", fontsize=9, color=INK, ha="left", va="bottom")
+        top = axes[nt * bi, 0].get_position().y1
+        fig.text(0.005, top + 0.17 / H, "ab"[bi], fontsize=11, fontweight="bold", color=INK, ha="left", va="bottom")
+        fig.text(0.03, top + 0.18 / H, "SNVs" if kind == "SNV" else "INDELs", fontsize=9, color=INK, ha="left", va="bottom")
     for ext in ("png", "pdf"):
         fig.savefig(args.outdir / f"fig_R1.6{tag}.{ext}", dpi=220)
     plt.close(fig)
 
     snv = ("SNV: the six-tumor model (multicancer6, one run per platform, `--norm dataset` re-predictions)" if args.snv == "six-tumor"
-           else "SNV: single-tumor `--norm dataset` HPRC v2.1 models, three per platform")
+           else "SNV: single-tumor `--norm dataset` HPRC v2.1 models, three per platform (HCC1395T: the six-tumor model, "
+                "one run per platform; no single-tumor HCC1395T SNV model)")
     L = [f"# Supplementary Fig. R1.6{' (six-tumor SNV model)' if tag else ''}: plotted points (chr1, benchmark regions, after our population filter)", "",
          f"Generated by `make_figure.py{' --snv six-tumor' if tag else ''}`. Pansoma: {snv}; INDEL: the final six-tumor models at "
          "ppr8, three per platform (ranges). Comparators: PASS after the same filter; curve end = highest recall of the "
