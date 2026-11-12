@@ -124,6 +124,12 @@ for s, _ in SETS:
         f = float(E.metrics(R[uid][HP7][0])[2]); ref = float(gbc[(uid, HP7)]["F1"])
         if abs(f - ref) > 1e-6:
             bad.append(("E10b INDEL HP7 F1", uid, f, ref))
+    for arm in ("d9", "d46"):  # INDEL paired cells of E10b (GIAB strata incl. homopolymers >= 7 bp)
+        a, lin_i = pick[(s, "INDEL", arm)], pick[(s, "INDEL", "linear")]
+        for st in [k for k, _ in GIAB_ST] + [HP7]:
+            got = paired(R[a][st], R[lin_i][st]); ref = gbp[(s, "INDEL", arm, st)]
+            if any(abs(g - float(ref[k])) > 1e-6 for g, k in zip(got, ("dF1", "dF1_lo", "dF1_hi"))):
+                bad.append(("E10b INDEL paired", s, arm, st, got))
 assert not bad, bad
 
 # ---- table before population filtering
@@ -163,6 +169,43 @@ for s, lab in SETS:
             b, a = E.metrics(X[uid][st][0]), E.metrics(R[uid][st][0])
             c.append(" / ".join(f3(float(v)) for v in b) + " → " + " / ".join(f3(float(v)) for v in a))
         L.append(f"| {lab} | {'GRCh38-only' if arm == 'linear' else GNAME[arm]} | " + " | ".join(c) + " |")
+# ---- INDEL version (the 7fc7396 INDEL models of the three-reference comparison, those of the published HP >= 7 column)
+cells_indel = {}
+L += ["", "## INDEL before population filtering", "",
+      "The 7fc7396 INDEL models (seed 0; the published table's homopolymer column), same thresholds, strata and blocks. "
+      "SMaHT extreme by the VCF position (anchor base), as the GIAB strata; the same code on pon_calls reproduces the "
+      "published E10b INDEL cells (checked).", "",
+      "chr1 truth INDELs in the benchmark BED per stratum (TP-baseline + FN; SMaHT extreme / GIAB all difficult / "
+      "GIAB not difficult / GIAB homopolymers ≥ 7 bp): " + "; ".join(
+          f"{s.split('_')[0]} " + " / ".join(str(int(X[pick[(s, 'INDEL', 'linear')]][st][0][:2].sum()))
+                                             for st in ("extreme", "alldifficultregions", "notinalldifficultregions", HP7))
+          for s in ("HG008T_Illumina", "COLO829T_Illumina")) + ".", "",
+      "| chr1 INDEL | graph | SMaHT extreme: PASS calls (precision), GRCh38-only → HPRC | SMaHT extreme ΔF1 | "
+      + " | ".join(f"GIAB {n} ΔF1" for _, n in GIAB_ST) + " | GIAB homopolymers ≥ 7 bp ΔF1 |",
+      "|---" * (4 + len(GIAB_ST) + 1) + "|"]
+for s, lab in SETS:
+    lin = pick[(s, "INDEL", "linear")]
+    t0 = X[lin]["extreme"][0]
+    for arm in ("d9", "d46"):
+        a = pick[(s, "INDEL", arm)]
+        t1 = X[a]["extreme"][0]
+        p0, p1 = E.metrics(t0)[0], E.metrics(t1)[0]
+        row = [f"{int(t0[2] + t0[3]):,} ({f3(p0)}) → {int(t1[2] + t1[3]):,} ({f3(p1)})", ci(paired(X[a]["extreme"], X[lin]["extreme"]))]
+        row += [ci(paired(X[a][st], X[lin][st])) for st, _ in GIAB_ST]
+        row.append(ci(paired(X[a][HP7], X[lin][HP7])))
+        cells_indel[f"{s}|{arm}"] = row
+        L.append(f"| {lab} | {GNAME[arm]} | " + " | ".join(row) + " |")
+L += ["", "## Per call set: INDEL P / R / F1 before → after population filtering", "",
+      "| set | graph | SMaHT extreme | GIAB all difficult | GIAB not difficult | GIAB homopolymers ≥ 7 bp |", "|---|---|---|---|---|---|"]
+for s, lab in SETS:
+    for arm in ("linear", "d9", "d46"):
+        uid = pick[(s, "INDEL", arm)]
+        c = []
+        for st in ("extreme", "alldifficultregions", "notinalldifficultregions", HP7):
+            b, a = E.metrics(X[uid][st][0]), E.metrics(R[uid][st][0])
+            c.append(" / ".join(f3(float(v)) for v in b) + " → " + " / ".join(f3(float(v)) for v in a))
+        L.append(f"| {lab} | {'GRCh38-only' if arm == 'linear' else GNAME[arm]} | " + " | ".join(c) + " |")
 (HERE / "tables.md").write_text("\n".join(L) + "\n")
-(HERE / "cells.json").write_text(json.dumps({"uids": {"|".join(k): v for k, v in pick.items()}, "cells": cells}, indent=1) + "\n")
+(HERE / "cells.json").write_text(json.dumps({"uids": {"|".join(k): v for k, v in pick.items()}, "cells": cells,
+                                             "cells_indel": cells_indel}, indent=1) + "\n")
 print("\n".join(L))
