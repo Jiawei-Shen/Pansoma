@@ -1,0 +1,12 @@
+HG008T_PacBio: 281 exact PASS in-BED truth INDEL tensors, 243 with >= 5 ALT and REF rows
+HG008T_PacBio_d46: 283 exact PASS in-BED truth INDEL tensors, 251 with >= 5 ALT and REF rows
+HG008T_ONT: 260 exact PASS in-BED truth INDEL tensors, 199 with >= 5 ALT and REF rows
+HG008T_ONT_d46: 246 exact PASS in-BED truth INDEL tensors, 188 with >= 5 ALT and REF rows
+HG008T_Illumina: 237 exact PASS in-BED truth INDEL tensors, 218 with >= 5 ALT and REF rows
+HG008T_Illumina_d46: 256 exact PASS in-BED truth INDEL tensors, 241 with >= 5 ALT and REF rows
+COLO829T_fiberseq: 63 exact PASS in-BED truth INDEL tensors, 54 with >= 5 ALT and REF rows
+COLO829T_fiberseq_d46: 68 exact PASS in-BED truth INDEL tensors, 57 with >= 5 ALT and REF rows
+COLO829T_ONT: 55 exact PASS in-BED truth INDEL tensors, 50 with >= 5 ALT and REF rows
+COLO829T_ONT_d46: 56 exact PASS in-BED truth INDEL tensors, 52 with >= 5 ALT and REF rows
+COLO829T_Illumina: 57 exact PASS in-BED truth INDEL tensors, 52 with >= 5 ALT and REF rows
+COLO829T_Illumina_d46: 61 exact PASS in-BED truth INDEL tensors, 56 with >= 5 ALT and REF rows

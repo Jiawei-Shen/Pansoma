@@ -1,0 +1,291 @@
+{
+ "cells": {
+  "HG008T|SNV": {
+   "truth": 697,
+   "exact": [
+    0.9555236728837877,
+    0.9497847919655668,
+    0.9555236728837877
+   ],
+   "untagged": [
+    0.8981348637015782,
+    0.8938307030129125,
+    0.9038737446197992
+   ],
+   "raw": [
+    0.8866571018651362,
+    0.8593974175035868,
+    0.8464849354375896,
+    0.8737446197991392,
+    0.8407460545193687,
+    0.8421807747489239,
+    0.8995695839311334,
+    0.8852223816355811,
+    0.8493543758967002
+   ],
+   "pon": [
+    0.8522238163558106,
+    0.830703012912482,
+    0.8134863701578192,
+    0.8378766140602583,
+    0.8134863701578192,
+    0.8134863701578192,
+    0.8593974175035868,
+    0.8479196556671449,
+    0.8235294117647058
+   ],
+   "candidate_sets": [
+    "HG008T_Illumina_d46 (n 697)",
+    "HG008T_PacBio_d46 (n 697)",
+    "HG008T_ONT_d46 (n 697)"
+   ]
+  },
+  "HG008T|INDEL": {
+   "truth": 587,
+   "exact": [
+    0.43197278911564624,
+    0.47959183673469385,
+    0.4166666666666667
+   ],
+   "untagged": [
+    0.2585034013605442,
+    0.2585034013605442,
+    0.2465986394557823
+   ],
+   "raw": [
+    0.11073253833049404,
+    0.151618398637138,
+    0.14821124361158433,
+    0.1635434412265758,
+    0.17717206132879046,
+    0.19080068143100512,
+    0.16524701873935263,
+    0.17717206132879046,
+    0.1839863713798978
+   ],
+   "pon": [
+    0.11073253833049404,
+    0.13798977853492334,
+    0.14821124361158433,
+    0.16013628620102216,
+    0.17035775127768313,
+    0.17717206132879046,
+    0.14991482112436116,
+    0.15332197614991483,
+    0.16183986371379896
+   ],
+   "candidate_sets": [
+    "HG008T_Illumina_d46 (n 588)",
+    "HG008T_PacBio_d46 (n 588)",
+    "HG008T_ONT_d46 (n 588)"
+   ]
+  },
+  "COLO829T|SNV": {
+   "truth": 2443,
+   "exact": [
+    0.8731068358575522,
+    0.8624641833810889,
+    0.8190749079001228
+   ],
+   "untagged": [
+    0.8477282030290626,
+    0.8370855505525993,
+    0.794924273434302
+   ],
+   "raw": [
+    0.7928776094965206,
+    0.8059762586983218,
+    0.8076135898485469,
+    0.7887842816209578,
+    0.7912402783462955,
+    0.7969709373720835,
+    0.7159230454359394,
+    0.7163323782234957,
+    0.7343430208759721
+   ],
+   "pon": [
+    0.7912402783462955,
+    0.7986082685223086,
+    0.8047482603356528,
+    0.7859189521080638,
+    0.7859189521080638,
+    0.7941056078591895,
+    0.7003683995088007,
+    0.700777732296357,
+    0.7179697093737208
+   ],
+   "candidate_sets": [
+    "COLO829T_Illumina_d46_snvaf05 (n 2443)",
+    "COLO829T_fiberseq_d46_snvaf05 (n 2443)",
+    "COLO829T_ONT_d46 (n 2443)"
+   ]
+  },
+  "COLO829T|INDEL": {
+   "truth": 131,
+   "exact": [
+    0.46564885496183206,
+    0.5190839694656488,
+    0.42748091603053434
+   ],
+   "untagged": [
+    0.2748091603053435,
+    0.2824427480916031,
+    0.2595419847328244
+   ],
+   "raw": [
+    0.1297709923664122,
+    0.17557251908396945,
+    0.1297709923664122,
+    0.10687022900763359,
+    0.13740458015267176,
+    0.10687022900763359,
+    0.16030534351145037,
+    0.16793893129770993,
+    0.16793893129770993
+   ],
+   "pon": [
+    0.1297709923664122,
+    0.1450381679389313,
+    0.1297709923664122,
+    0.10687022900763359,
+    0.13740458015267176,
+    0.10687022900763359,
+    0.16030534351145037,
+    0.16030534351145037,
+    0.16030534351145037
+   ],
+   "candidate_sets": [
+    "COLO829T_Illumina_d46 (n 131)",
+    "COLO829T_fiberseq_d46 (n 131)",
+    "COLO829T_ONT_d46 (n 131)"
+   ]
+  },
+  "HCC1395T|SNV": {
+   "truth": 3440,
+   "exact": [
+    0.9569767441860465,
+    0.9276162790697674,
+    0.7709302325581395
+   ],
+   "untagged": [
+    0.9401162790697675,
+    0.9119186046511628,
+    0.7555232558139535
+   ],
+   "raw": [
+    0.8991279069767442,
+    0.8511627906976744,
+    0.8601744186046512,
+    0.6744186046511628,
+    0.7034883720930233
+   ],
+   "pon": [
+    0.8962209302325581,
+    0.8491279069767442,
+    0.8575581395348837,
+    0.6677325581395349,
+    0.6968023255813953
+   ],
+   "candidate_sets": [
+    "HCC1395T_Illumina_d46_snvaf05 (n 3440)",
+    "HCC1395T_PacBio_d46_snvaf05 (n 3440)",
+    "HCC1395T_ONT_d46 (n 3440)"
+   ]
+  },
+  "HCC1395T|INDEL": {
+   "truth": 133,
+   "exact": [
+    0.8629032258064516,
+    0.8467741935483871,
+    0.782258064516129
+   ],
+   "untagged": [
+    0.7741935483870968,
+    0.7661290322580645,
+    0.6774193548387096
+   ],
+   "raw": [
+    0.7443609022556391,
+    0.7593984962406015,
+    0.7293233082706767,
+    0.7142857142857143,
+    0.706766917293233,
+    0.6766917293233082,
+    0.631578947368421,
+    0.6390977443609023,
+    0.6541353383458647
+   ],
+   "pon": [
+    0.7443609022556391,
+    0.7142857142857143,
+    0.7293233082706767,
+    0.6842105263157895,
+    0.6917293233082706,
+    0.6766917293233082,
+    0.6240601503759399,
+    0.631578947368421,
+    0.6466165413533834
+   ],
+   "candidate_sets": [
+    "HCC1395T_Illumina_d46 (n 124)",
+    "HCC1395T_PacBio_d46 (n 124)",
+    "HCC1395T_ONT_d46 (n 124)"
+   ]
+  }
+ },
+ "used": [
+  "HG008T SNV Illumina: HG008_Illumina_SNV_d46_normbq",
+  "HG008T SNV Illumina: HG008_Illumina_SNV_d46_normbq_s1",
+  "HG008T SNV Illumina: HG008_Illumina_SNV_d46_normbq_s2",
+  "HG008T SNV PacBio: HG008_PacBio_SNV_d46_normbq",
+  "HG008T SNV PacBio: HG008_PacBio_SNV_d46_normbq_s1",
+  "HG008T SNV PacBio: HG008_PacBio_SNV_d46_normbq_s2",
+  "HG008T SNV ONT: HG008_ONT_SNV_d46_normbq",
+  "HG008T SNV ONT: HG008_ONT_SNV_d46_normbq_s1",
+  "HG008T SNV ONT: HG008_ONT_SNV_d46_normbq_s2",
+  "HG008T INDEL Illumina: release_s0_Illumina_INDEL (ppr8)",
+  "HG008T INDEL Illumina: release_s1_Illumina_INDEL (ppr8)",
+  "HG008T INDEL Illumina: release_s2_Illumina_INDEL (ppr8)",
+  "HG008T INDEL PacBio: release_s0_PacBio_INDEL (ppr8)",
+  "HG008T INDEL PacBio: release_s1_PacBio_INDEL (ppr8)",
+  "HG008T INDEL PacBio: release_s2_PacBio_INDEL (ppr8)",
+  "HG008T INDEL ONT: release_s0_ONT_INDEL (ppr8)",
+  "HG008T INDEL ONT: release_s1_ONT_INDEL (ppr8)",
+  "HG008T INDEL ONT: release_s2_ONT_INDEL (ppr8)",
+  "COLO829T SNV Illumina: COLO829_Illumina_SNV_d46_newpipe",
+  "COLO829T SNV Illumina: COLO829_Illumina_SNV_d46_newpipe_s1",
+  "COLO829T SNV Illumina: COLO829_Illumina_SNV_d46_newpipe_s2",
+  "COLO829T SNV fiberseq: COLO829_fiberseq_SNV_d46_newpipe",
+  "COLO829T SNV fiberseq: COLO829_fiberseq_SNV_d46_newpipe_s1",
+  "COLO829T SNV fiberseq: COLO829_fiberseq_SNV_d46_newpipe_s2",
+  "COLO829T SNV ONT: COLO829_ONT_SNV_d46_normbq",
+  "COLO829T SNV ONT: COLO829_ONT_SNV_d46_normbq_s1",
+  "COLO829T SNV ONT: COLO829_ONT_SNV_d46_normbq_s2",
+  "COLO829T INDEL Illumina: release_s0_Illumina_INDEL (ppr8)",
+  "COLO829T INDEL Illumina: release_s1_Illumina_INDEL (ppr8)",
+  "COLO829T INDEL Illumina: release_s2_Illumina_INDEL (ppr8)",
+  "COLO829T INDEL fiberseq: release_s0_PacBio_INDEL (ppr8)",
+  "COLO829T INDEL fiberseq: release_s1_PacBio_INDEL (ppr8)",
+  "COLO829T INDEL fiberseq: release_s2_PacBio_INDEL (ppr8)",
+  "COLO829T INDEL ONT: release_s0_ONT_INDEL (ppr8)",
+  "COLO829T INDEL ONT: release_s1_ONT_INDEL (ppr8)",
+  "COLO829T INDEL ONT: release_s2_ONT_INDEL (ppr8)",
+  "HCC1395T SNV Illumina: multicancer4_Illumina_SNV_sitef_af05_lnf25w1 (r095)",
+  "HCC1395T SNV PacBio: multicancer4_PacBio_SNV_sitef_af05_lnf25w1 (r095)",
+  "HCC1395T SNV PacBio: multicancer6_PacBio_SNV_newpipe",
+  "HCC1395T SNV ONT: multicancer4_ONT_SNV (normfix)",
+  "HCC1395T SNV ONT: multicancer6_ONT_SNV (normfix)",
+  "HCC1395T INDEL Illumina: release_s0_Illumina_INDEL (ppr8)",
+  "HCC1395T INDEL Illumina: release_s1_Illumina_INDEL (ppr8)",
+  "HCC1395T INDEL Illumina: release_s2_Illumina_INDEL (ppr8)",
+  "HCC1395T INDEL PacBio: release_s0_PacBio_INDEL (ppr8)",
+  "HCC1395T INDEL PacBio: release_s1_PacBio_INDEL (ppr8)",
+  "HCC1395T INDEL PacBio: release_s2_PacBio_INDEL (ppr8)",
+  "HCC1395T INDEL ONT: release_s0_ONT_INDEL (ppr8)",
+  "HCC1395T INDEL ONT: release_s1_ONT_INDEL (ppr8)",
+  "HCC1395T INDEL ONT: release_s2_ONT_INDEL (ppr8)"
+ ],
+ "pending": [
+  "HCC1395T SNV Illumina: multicancer6_Illumina_SNV_newpipe"
+ ]
+}

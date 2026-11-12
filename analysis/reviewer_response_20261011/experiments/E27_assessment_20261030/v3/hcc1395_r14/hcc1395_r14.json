@@ -1,0 +1,314 @@
+{
+ "HG008T|INDEL": {
+  "n": 8496,
+  "tagged": 5326,
+  "d46|Illumina": {
+   "lost": 3528,
+   "lost_tagged": 3013,
+   "lost_untagged": 515,
+   "gained": 38,
+   "gained_untagged": 21,
+   "net_untagged": 494
+  },
+  "d46|PacBio": {
+   "lost": 3577,
+   "lost_tagged": 2974,
+   "lost_untagged": 603,
+   "gained": 20,
+   "gained_untagged": 8,
+   "net_untagged": 595
+  },
+  "d46|ONT": {
+   "lost": 2494,
+   "lost_tagged": 2139,
+   "lost_untagged": 355,
+   "gained": 213,
+   "gained_untagged": 59,
+   "net_untagged": 296
+  },
+  "d9|Illumina": {
+   "lost": 3804,
+   "lost_tagged": 3271,
+   "lost_untagged": 533,
+   "gained": 23,
+   "gained_untagged": 10,
+   "net_untagged": 523
+  },
+  "d9|PacBio": {
+   "lost": 3754,
+   "lost_tagged": 3133,
+   "lost_untagged": 621,
+   "gained": 19,
+   "gained_untagged": 7,
+   "net_untagged": 614
+  },
+  "d9|ONT": {
+   "lost": 2643,
+   "lost_tagged": 2261,
+   "lost_untagged": 382,
+   "gained": 244,
+   "gained_untagged": 57,
+   "net_untagged": 325
+  }
+ },
+ "HG008T|SNV": {
+  "n": 8690,
+  "tagged": 910,
+  "d46|Illumina": {
+   "lost": 263,
+   "lost_tagged": 226,
+   "lost_untagged": 37,
+   "gained": 16,
+   "gained_untagged": 7,
+   "net_untagged": 30
+  },
+  "d46|PacBio": {
+   "lost": 316,
+   "lost_tagged": 281,
+   "lost_untagged": 35,
+   "gained": 15,
+   "gained_untagged": 7,
+   "net_untagged": 28
+  },
+  "d46|ONT": {
+   "lost": 290,
+   "lost_tagged": 269,
+   "lost_untagged": 21,
+   "gained": 10,
+   "gained_untagged": 3,
+   "net_untagged": 18
+  },
+  "d9|Illumina": {
+   "lost": 296,
+   "lost_tagged": 259,
+   "lost_untagged": 37,
+   "gained": 14,
+   "gained_untagged": 6,
+   "net_untagged": 31
+  },
+  "d9|PacBio": {
+   "lost": 336,
+   "lost_tagged": 303,
+   "lost_untagged": 33,
+   "gained": 16,
+   "gained_untagged": 6,
+   "net_untagged": 27
+  },
+  "d9|ONT": {
+   "lost": 318,
+   "lost_tagged": 287,
+   "lost_untagged": 31,
+   "gained": 18,
+   "gained_untagged": 7,
+   "net_untagged": 24
+  }
+ },
+ "COLO829T|INDEL": {
+  "n": 1912,
+  "tagged": 1005,
+  "d46|Illumina": {
+   "lost": 612,
+   "lost_tagged": 494,
+   "lost_untagged": 118,
+   "gained": 8,
+   "gained_untagged": 4,
+   "net_untagged": 114
+  },
+  "d46|fiberseq": {
+   "lost": 567,
+   "lost_tagged": 434,
+   "lost_untagged": 133,
+   "gained": 1,
+   "gained_untagged": 1,
+   "net_untagged": 132
+  },
+  "d46|ONT": {
+   "lost": 457,
+   "lost_tagged": 347,
+   "lost_untagged": 110,
+   "gained": 20,
+   "gained_untagged": 7,
+   "net_untagged": 103
+  },
+  "d9|Illumina": {
+   "lost": 672,
+   "lost_tagged": 544,
+   "lost_untagged": 128,
+   "gained": 3,
+   "gained_untagged": 2,
+   "net_untagged": 126
+  },
+  "d9|fiberseq": {
+   "lost": 620,
+   "lost_tagged": 489,
+   "lost_untagged": 131,
+   "gained": 3,
+   "gained_untagged": 1,
+   "net_untagged": 130
+  },
+  "d9|ONT": {
+   "lost": 494,
+   "lost_tagged": 389,
+   "lost_untagged": 105,
+   "gained": 18,
+   "gained_untagged": 9,
+   "net_untagged": 96
+  }
+ },
+ "COLO829T|SNV": {
+  "n": 42035,
+  "tagged": 1442,
+  "d46|Illumina": {
+   "lost": 398,
+   "lost_tagged": 93,
+   "lost_untagged": 305,
+   "gained": 37,
+   "gained_untagged": 32,
+   "net_untagged": 273
+  },
+  "d46|fiberseq": {
+   "lost": 281,
+   "lost_tagged": 72,
+   "lost_untagged": 209,
+   "gained": 71,
+   "gained_untagged": 64,
+   "net_untagged": 145
+  },
+  "d46|ONT": {
+   "lost": 220,
+   "lost_tagged": 68,
+   "lost_untagged": 152,
+   "gained": 70,
+   "gained_untagged": 62,
+   "net_untagged": 90
+  },
+  "d9|Illumina": {
+   "lost": 395,
+   "lost_tagged": 98,
+   "lost_untagged": 297,
+   "gained": 37,
+   "gained_untagged": 34,
+   "net_untagged": 263
+  },
+  "d9|fiberseq": {
+   "lost": 244,
+   "lost_tagged": 72,
+   "lost_untagged": 172,
+   "gained": 54,
+   "gained_untagged": 50,
+   "net_untagged": 122
+  },
+  "d9|ONT": {
+   "lost": 203,
+   "lost_tagged": 69,
+   "lost_untagged": 134,
+   "gained": 62,
+   "gained_untagged": 57,
+   "net_untagged": 77
+  }
+ },
+ "HCC1395T|INDEL": {
+  "n": 1625,
+  "tagged": 128,
+  "d46|Illumina": {
+   "lost": 79,
+   "lost_tagged": 51,
+   "lost_untagged": 28,
+   "gained": 6,
+   "gained_untagged": 5,
+   "net_untagged": 23
+  },
+  "d46|PacBio": {
+   "lost": 72,
+   "lost_tagged": 49,
+   "lost_untagged": 23,
+   "gained": 3,
+   "gained_untagged": 3,
+   "net_untagged": 20
+  },
+  "d46|ONT": {
+   "lost": 65,
+   "lost_tagged": 41,
+   "lost_untagged": 24,
+   "gained": 6,
+   "gained_untagged": 6,
+   "net_untagged": 18
+  },
+  "d9|Illumina": {
+   "lost": 89,
+   "lost_tagged": 55,
+   "lost_untagged": 34,
+   "gained": 3,
+   "gained_untagged": 3,
+   "net_untagged": 31
+  },
+  "d9|PacBio": {
+   "lost": 76,
+   "lost_tagged": 52,
+   "lost_untagged": 24,
+   "gained": 3,
+   "gained_untagged": 3,
+   "net_untagged": 21
+  },
+  "d9|ONT": {
+   "lost": 67,
+   "lost_tagged": 40,
+   "lost_untagged": 27,
+   "gained": 6,
+   "gained_untagged": 6,
+   "net_untagged": 21
+  }
+ },
+ "HCC1395T|SNV": {
+  "n": 39447,
+  "tagged": 1102,
+  "d46|Illumina": {
+   "lost": 356,
+   "lost_tagged": 241,
+   "lost_untagged": 115,
+   "gained": 16,
+   "gained_untagged": 16,
+   "net_untagged": 99
+  },
+  "d46|PacBio": {
+   "lost": 314,
+   "lost_tagged": 236,
+   "lost_untagged": 78,
+   "gained": 22,
+   "gained_untagged": 22,
+   "net_untagged": 56
+  },
+  "d46|ONT": {
+   "lost": 301,
+   "lost_tagged": 227,
+   "lost_untagged": 74,
+   "gained": 33,
+   "gained_untagged": 28,
+   "net_untagged": 46
+  },
+  "d9|Illumina": {
+   "lost": 331,
+   "lost_tagged": 205,
+   "lost_untagged": 126,
+   "gained": 32,
+   "gained_untagged": 32,
+   "net_untagged": 94
+  },
+  "d9|PacBio": {
+   "lost": 258,
+   "lost_tagged": 198,
+   "lost_untagged": 60,
+   "gained": 21,
+   "gained_untagged": 21,
+   "net_untagged": 39
+  },
+  "d9|ONT": {
+   "lost": 256,
+   "lost_tagged": 200,
+   "lost_untagged": 56,
+   "gained": 24,
+   "gained_untagged": 22,
+   "net_untagged": 34
+  }
+ }
+}

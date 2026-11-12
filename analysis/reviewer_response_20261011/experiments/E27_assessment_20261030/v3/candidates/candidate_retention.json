@@ -142,5 +142,77 @@
   "germline_snv_cand": 447733,
   "somatic_snv_alleles": 42035,
   "somatic_snv_cand": 37514
+ },
+ "HCC1395T|Illumina|linear": {
+  "germline_alleles": 4828024,
+  "germline_cand": 3682298,
+  "germline_snv_alleles": 3877033,
+  "germline_snv_cand": 3041762,
+  "somatic_snv_alleles": 39447,
+  "somatic_snv_cand": 35600
+ },
+ "HCC1395T|Illumina|d9": {
+  "germline_alleles": 4828024,
+  "germline_cand": 373838,
+  "germline_snv_alleles": 3877033,
+  "germline_snv_cand": 323889,
+  "somatic_snv_alleles": 39447,
+  "somatic_snv_cand": 35307
+ },
+ "HCC1395T|Illumina|d46": {
+  "germline_alleles": 4828024,
+  "germline_cand": 349204,
+  "germline_snv_alleles": 3877033,
+  "germline_snv_cand": 301029,
+  "somatic_snv_alleles": 39447,
+  "somatic_snv_cand": 35266
+ },
+ "HCC1395T|PacBio HiFi|linear": {
+  "germline_alleles": 4828024,
+  "germline_cand": 3777447,
+  "germline_snv_alleles": 3877033,
+  "germline_snv_cand": 3082777,
+  "somatic_snv_alleles": 39447,
+  "somatic_snv_cand": 34658
+ },
+ "HCC1395T|PacBio HiFi|d9": {
+  "germline_alleles": 4828024,
+  "germline_cand": 480541,
+  "germline_snv_alleles": 3877033,
+  "germline_snv_cand": 345677,
+  "somatic_snv_alleles": 39447,
+  "somatic_snv_cand": 34429
+ },
+ "HCC1395T|PacBio HiFi|d46": {
+  "germline_alleles": 4828024,
+  "germline_cand": 437861,
+  "germline_snv_alleles": 3877033,
+  "germline_snv_cand": 308854,
+  "somatic_snv_alleles": 39447,
+  "somatic_snv_cand": 34374
+ },
+ "HCC1395T|ONT|linear": {
+  "germline_alleles": 4828024,
+  "germline_cand": 3697894,
+  "germline_snv_alleles": 3877033,
+  "germline_snv_cand": 3125759,
+  "somatic_snv_alleles": 39447,
+  "somatic_snv_cand": 31130
+ },
+ "HCC1395T|ONT|d9": {
+  "germline_alleles": 4828024,
+  "germline_cand": 550880,
+  "germline_snv_alleles": 3877033,
+  "germline_snv_cand": 383348,
+  "somatic_snv_alleles": 39447,
+  "somatic_snv_cand": 30906
+ },
+ "HCC1395T|ONT|d46": {
+  "germline_alleles": 4828024,
+  "germline_cand": 523983,
+  "germline_snv_alleles": 3877033,
+  "germline_snv_cand": 365969,
+  "somatic_snv_alleles": 39447,
+  "somatic_snv_cand": 30869
  }
 }

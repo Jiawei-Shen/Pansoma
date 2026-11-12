@@ -1,0 +1,38 @@
+{
+ "labels_npy": 1,
+ "labels_ndjson": {
+  "candidate_id": "3130240:147:SNP:G>A",
+  "site_id": "3130240:147:SNV",
+  "chrom": "chr1",
+  "shard_file": "chr1_shard_00000_data.npy",
+  "index_within_shard": 32257,
+  "label": 1,
+  "label_name": "somatic",
+  "reason": "representative_allele_is_somatic_truth",
+  "somatic": [
+   {
+    "truth_id": 1272,
+    "chrom": "chr1",
+    "vcf_pos": 242529453,
+    "vcf_ref": "G",
+    "vcf_alt": "A",
+    "gt": "1/0",
+    "filters": [
+     "PASS"
+    ],
+    "in_bed": true,
+    "matched_candidate_id": "3130240:147:SNP:G>A",
+    "representative": true
+   }
+  ],
+  "germline": [],
+  "grch38": {
+   "chrom": "chr1",
+   "pos0": 242529452,
+   "ref": "G",
+   "alt": "A",
+   "node_reverse": false
+  },
+  "partial": null
+ }
+}

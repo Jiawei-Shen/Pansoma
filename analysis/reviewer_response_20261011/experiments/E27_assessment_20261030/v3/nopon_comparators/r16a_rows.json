@@ -1,0 +1,830 @@
+{
+ "deepsomatic|HG008T_Illumina|SNV": {
+  "nopon": {
+   "recall": 0.9354,
+   "precision": 0.0288,
+   "tp": 652,
+   "baseline": 697,
+   "calls": 22615
+  },
+  "native": {
+   "recall": 0.911,
+   "precision": 0.1673,
+   "tp": 635,
+   "baseline": 697,
+   "calls": 3796
+  },
+  "native_ours": {
+   "recall": 0.8895,
+   "precision": 0.376,
+   "tp": 620,
+   "baseline": 697,
+   "calls": 1649
+  }
+ },
+ "deepsomatic|HG008T_PacBio|SNV": {
+  "nopon": {
+   "recall": 0.8293,
+   "precision": 0.0585,
+   "tp": 578,
+   "baseline": 697,
+   "calls": 9876
+  },
+  "native": {
+   "recall": 0.8164,
+   "precision": 0.2774,
+   "tp": 569,
+   "baseline": 697,
+   "calls": 2051
+  },
+  "native_ours": {
+   "recall": 0.8063,
+   "precision": 0.4254,
+   "tp": 562,
+   "baseline": 697,
+   "calls": 1321
+  }
+ },
+ "deepsomatic|HG008T_ONT|SNV": {
+  "nopon": {
+   "recall": 0.9096,
+   "precision": 0.0471,
+   "tp": 634,
+   "baseline": 697,
+   "calls": 13453
+  },
+  "native": {
+   "recall": 0.891,
+   "precision": 0.1798,
+   "tp": 621,
+   "baseline": 697,
+   "calls": 3454
+  },
+  "native_ours": {
+   "recall": 0.8694,
+   "precision": 0.3101,
+   "tp": 606,
+   "baseline": 697,
+   "calls": 1954
+  }
+ },
+ "deepsomatic|COLO829T_Illumina|SNV": {
+  "nopon": {
+   "recall": 0.8576,
+   "precision": 0.0965,
+   "tp": 2095,
+   "baseline": 2443,
+   "calls": 21703
+  },
+  "native": {
+   "recall": 0.8461,
+   "precision": 0.2604,
+   "tp": 2067,
+   "baseline": 2443,
+   "calls": 7938
+  },
+  "native_ours": {
+   "recall": 0.8346,
+   "precision": 0.4267,
+   "tp": 2039,
+   "baseline": 2443,
+   "calls": 4779
+  }
+ },
+ "deepsomatic|COLO829T_fiberseq|SNV": {
+  "nopon": {
+   "recall": 0.569,
+   "precision": 0.255,
+   "tp": 1390,
+   "baseline": 2443,
+   "calls": 5450
+  },
+  "native": {
+   "recall": 0.5624,
+   "precision": 0.5907,
+   "tp": 1374,
+   "baseline": 2443,
+   "calls": 2326
+  },
+  "native_ours": {
+   "recall": 0.5555,
+   "precision": 0.7323,
+   "tp": 1357,
+   "baseline": 2443,
+   "calls": 1853
+  }
+ },
+ "deepsomatic|COLO829T_ONT|SNV": {
+  "nopon": {
+   "recall": 0.7139,
+   "precision": 0.1525,
+   "tp": 1744,
+   "baseline": 2443,
+   "calls": 11438
+  },
+  "native": {
+   "recall": 0.7045,
+   "precision": 0.4028,
+   "tp": 1721,
+   "baseline": 2443,
+   "calls": 4273
+  },
+  "native_ours": {
+   "recall": 0.6946,
+   "precision": 0.5822,
+   "tp": 1697,
+   "baseline": 2443,
+   "calls": 2915
+  }
+ },
+ "deepsomatic|HCC1395T_Illumina|SNV": {
+  "nopon": {
+   "recall": 0.9436,
+   "precision": 0.1391,
+   "tp": 3246,
+   "baseline": 3440,
+   "calls": 23333
+  },
+  "native": {
+   "recall": 0.9326,
+   "precision": 0.5583,
+   "tp": 3208,
+   "baseline": 3440,
+   "calls": 5746
+  },
+  "native_ours": {
+   "recall": 0.9273,
+   "precision": 0.7813,
+   "tp": 3190,
+   "baseline": 3440,
+   "calls": 4083
+  }
+ },
+ "deepsomatic|HCC1395T_PacBio|SNV": {
+  "nopon": {
+   "recall": 0.9439,
+   "precision": 0.2571,
+   "tp": 3247,
+   "baseline": 3440,
+   "calls": 12627
+  },
+  "native": {
+   "recall": 0.9334,
+   "precision": 0.6673,
+   "tp": 3211,
+   "baseline": 3440,
+   "calls": 4812
+  },
+  "native_ours": {
+   "recall": 0.9273,
+   "precision": 0.7659,
+   "tp": 3190,
+   "baseline": 3440,
+   "calls": 4165
+  }
+ },
+ "deepsomatic|HCC1395T_ONT|SNV": {
+  "nopon": {
+   "recall": 0.7814,
+   "precision": 0.2169,
+   "tp": 2688,
+   "baseline": 3440,
+   "calls": 12393
+  },
+  "native": {
+   "recall": 0.7712,
+   "precision": 0.6362,
+   "tp": 2653,
+   "baseline": 3440,
+   "calls": 4170
+  },
+  "native_ours": {
+   "recall": 0.7657,
+   "precision": 0.7552,
+   "tp": 2634,
+   "baseline": 3440,
+   "calls": 3488
+  }
+ },
+ "deepsomatic|HG008T_Illumina|INDEL": {
+  "nopon": {
+   "recall": 0.2061,
+   "precision": 0.0174,
+   "tp": 121,
+   "baseline": 587,
+   "calls": 6970
+  },
+  "native": {
+   "recall": 0.1738,
+   "precision": 0.0417,
+   "tp": 102,
+   "baseline": 587,
+   "calls": 2445
+  },
+  "native_ours": {
+   "recall": 0.1414,
+   "precision": 0.3934,
+   "tp": 83,
+   "baseline": 587,
+   "calls": 211
+  }
+ },
+ "deepsomatic|HG008T_PacBio|INDEL": {
+  "nopon": {
+   "recall": 0.0375,
+   "precision": 0.0797,
+   "tp": 22,
+   "baseline": 587,
+   "calls": 276
+  },
+  "native": {
+   "recall": 0.0358,
+   "precision": 0.1355,
+   "tp": 21,
+   "baseline": 587,
+   "calls": 155
+  },
+  "native_ours": {
+   "recall": 0.0307,
+   "precision": 0.1978,
+   "tp": 18,
+   "baseline": 587,
+   "calls": 91
+  }
+ },
+ "deepsomatic|HG008T_ONT|INDEL": {
+  "nopon": {
+   "recall": 0.0187,
+   "precision": 0.043,
+   "tp": 11,
+   "baseline": 587,
+   "calls": 256
+  },
+  "native": {
+   "recall": 0.0187,
+   "precision": 0.0738,
+   "tp": 11,
+   "baseline": 587,
+   "calls": 149
+  },
+  "native_ours": {
+   "recall": 0.0187,
+   "precision": 0.1719,
+   "tp": 11,
+   "baseline": 587,
+   "calls": 64
+  }
+ },
+ "deepsomatic|COLO829T_Illumina|INDEL": {
+  "nopon": {
+   "recall": 0.2443,
+   "precision": 0.0099,
+   "tp": 32,
+   "baseline": 131,
+   "calls": 3236
+  },
+  "native": {
+   "recall": 0.2137,
+   "precision": 0.027,
+   "tp": 28,
+   "baseline": 131,
+   "calls": 1036
+  },
+  "native_ours": {
+   "recall": 0.1832,
+   "precision": 0.1983,
+   "tp": 24,
+   "baseline": 131,
+   "calls": 121
+  }
+ },
+ "deepsomatic|COLO829T_fiberseq|INDEL": {
+  "nopon": {
+   "recall": 0.0916,
+   "precision": 0.1237,
+   "tp": 12,
+   "baseline": 131,
+   "calls": 97
+  },
+  "native": {
+   "recall": 0.0916,
+   "precision": 0.2353,
+   "tp": 12,
+   "baseline": 131,
+   "calls": 51
+  },
+  "native_ours": {
+   "recall": 0.084,
+   "precision": 0.3143,
+   "tp": 11,
+   "baseline": 131,
+   "calls": 35
+  }
+ },
+ "deepsomatic|COLO829T_ONT|INDEL": {
+  "nopon": {
+   "recall": 0.0153,
+   "precision": 0.0157,
+   "tp": 2,
+   "baseline": 131,
+   "calls": 127
+  },
+  "native": {
+   "recall": 0.0153,
+   "precision": 0.0244,
+   "tp": 2,
+   "baseline": 131,
+   "calls": 82
+  },
+  "native_ours": {
+   "recall": 0.0153,
+   "precision": 0.0317,
+   "tp": 2,
+   "baseline": 131,
+   "calls": 63
+  }
+ },
+ "deepsomatic|HCC1395T_Illumina|INDEL": {
+  "nopon": {
+   "recall": 0.8346,
+   "precision": 0.0217,
+   "tp": 111,
+   "baseline": 133,
+   "calls": 5116
+  },
+  "native": {
+   "recall": 0.797,
+   "precision": 0.0596,
+   "tp": 106,
+   "baseline": 133,
+   "calls": 1778
+  },
+  "native_ours": {
+   "recall": 0.7669,
+   "precision": 0.5,
+   "tp": 102,
+   "baseline": 133,
+   "calls": 204
+  }
+ },
+ "deepsomatic|HCC1395T_PacBio|INDEL": {
+  "nopon": {
+   "recall": 0.6466,
+   "precision": 0.2713,
+   "tp": 86,
+   "baseline": 133,
+   "calls": 317
+  },
+  "native": {
+   "recall": 0.6316,
+   "precision": 0.4615,
+   "tp": 84,
+   "baseline": 133,
+   "calls": 182
+  },
+  "native_ours": {
+   "recall": 0.6165,
+   "precision": 0.6074,
+   "tp": 82,
+   "baseline": 133,
+   "calls": 135
+  }
+ },
+ "deepsomatic|HCC1395T_ONT|INDEL": {
+  "nopon": {
+   "recall": 0.4812,
+   "precision": 0.249,
+   "tp": 64,
+   "baseline": 133,
+   "calls": 257
+  },
+  "native": {
+   "recall": 0.4812,
+   "precision": 0.3636,
+   "tp": 64,
+   "baseline": 133,
+   "calls": 176
+  },
+  "native_ours": {
+   "recall": 0.4812,
+   "precision": 0.4604,
+   "tp": 64,
+   "baseline": 133,
+   "calls": 139
+  }
+ },
+ "clairs_to|HG008T_Illumina|SNV": {
+  "nopon": {
+   "recall": 0.9024,
+   "precision": 0.0029,
+   "tp": 629,
+   "baseline": 697,
+   "calls": 218401
+  },
+  "native": {
+   "recall": 0.8594,
+   "precision": 0.3282,
+   "tp": 599,
+   "baseline": 697,
+   "calls": 1825
+  },
+  "native_ours": {
+   "recall": 0.8451,
+   "precision": 0.4105,
+   "tp": 589,
+   "baseline": 697,
+   "calls": 1435
+  }
+ },
+ "clairs_to|HG008T_PacBio|SNV": {
+  "nopon": {
+   "recall": 0.8938,
+   "precision": 0.003,
+   "tp": 623,
+   "baseline": 697,
+   "calls": 205707
+  },
+  "native": {
+   "recall": 0.8565,
+   "precision": 0.3594,
+   "tp": 597,
+   "baseline": 697,
+   "calls": 1661
+  },
+  "native_ours": {
+   "recall": 0.8436,
+   "precision": 0.4551,
+   "tp": 588,
+   "baseline": 697,
+   "calls": 1292
+  }
+ },
+ "clairs_to|HG008T_ONT|SNV": {
+  "nopon": {
+   "recall": 0.8838,
+   "precision": 0.003,
+   "tp": 616,
+   "baseline": 697,
+   "calls": 204411
+  },
+  "native": {
+   "recall": 0.8451,
+   "precision": 0.3278,
+   "tp": 589,
+   "baseline": 697,
+   "calls": 1797
+  },
+  "native_ours": {
+   "recall": 0.8307,
+   "precision": 0.4139,
+   "tp": 579,
+   "baseline": 697,
+   "calls": 1399
+  }
+ },
+ "clairs_to|COLO829T_Illumina|SNV": {
+  "nopon": {
+   "recall": 0.7962,
+   "precision": 0.0101,
+   "tp": 1945,
+   "baseline": 2443,
+   "calls": 191989
+  },
+  "native": {
+   "recall": 0.7736,
+   "precision": 0.4023,
+   "tp": 1890,
+   "baseline": 2443,
+   "calls": 4698
+  },
+  "native_ours": {
+   "recall": 0.7642,
+   "precision": 0.4307,
+   "tp": 1867,
+   "baseline": 2443,
+   "calls": 4335
+  }
+ },
+ "clairs_to|COLO829T_fiberseq|SNV": {
+  "nopon": {
+   "recall": 0.7712,
+   "precision": 0.0109,
+   "tp": 1884,
+   "baseline": 2443,
+   "calls": 172599
+  },
+  "native": {
+   "recall": 0.7528,
+   "precision": 0.7043,
+   "tp": 1839,
+   "baseline": 2443,
+   "calls": 2611
+  },
+  "native_ours": {
+   "recall": 0.7446,
+   "precision": 0.7793,
+   "tp": 1819,
+   "baseline": 2443,
+   "calls": 2334
+  }
+ },
+ "clairs_to|COLO829T_ONT|SNV": {
+  "nopon": {
+   "recall": 0.7086,
+   "precision": 0.0101,
+   "tp": 1731,
+   "baseline": 2443,
+   "calls": 170736
+  },
+  "native": {
+   "recall": 0.6922,
+   "precision": 0.6713,
+   "tp": 1691,
+   "baseline": 2443,
+   "calls": 2519
+  },
+  "native_ours": {
+   "recall": 0.6844,
+   "precision": 0.7488,
+   "tp": 1672,
+   "baseline": 2443,
+   "calls": 2233
+  }
+ },
+ "clairs_to|HCC1395T_Illumina|SNV": {
+  "nopon": {
+   "recall": 0.884,
+   "precision": 0.014,
+   "tp": 3041,
+   "baseline": 3440,
+   "calls": 216529
+  },
+  "native": {
+   "recall": 0.864,
+   "precision": 0.7382,
+   "tp": 2972,
+   "baseline": 3440,
+   "calls": 4026
+  },
+  "native_ours": {
+   "recall": 0.8593,
+   "precision": 0.8061,
+   "tp": 2956,
+   "baseline": 3440,
+   "calls": 3667
+  }
+ },
+ "clairs_to|HCC1395T_PacBio|SNV": {
+  "nopon": {
+   "recall": 0.8448,
+   "precision": 0.0144,
+   "tp": 2906,
+   "baseline": 3440,
+   "calls": 202423
+  },
+  "native": {
+   "recall": 0.827,
+   "precision": 0.7361,
+   "tp": 2845,
+   "baseline": 3440,
+   "calls": 3865
+  },
+  "native_ours": {
+   "recall": 0.8224,
+   "precision": 0.8055,
+   "tp": 2829,
+   "baseline": 3440,
+   "calls": 3512
+  }
+ },
+ "clairs_to|HCC1395T_ONT|SNV": {
+  "nopon": {
+   "recall": 0.752,
+   "precision": 0.0128,
+   "tp": 2587,
+   "baseline": 3440,
+   "calls": 202038
+  },
+  "native": {
+   "recall": 0.7349,
+   "precision": 0.717,
+   "tp": 2528,
+   "baseline": 3440,
+   "calls": 3526
+  },
+  "native_ours": {
+   "recall": 0.7302,
+   "precision": 0.7914,
+   "tp": 2512,
+   "baseline": 3440,
+   "calls": 3174
+  }
+ },
+ "clairs_to|HG008T_Illumina|INDEL": {
+  "nopon": {
+   "recall": 0.1005,
+   "precision": 0.0036,
+   "tp": 59,
+   "baseline": 587,
+   "calls": 16438
+  },
+  "native": {
+   "recall": 0.0801,
+   "precision": 0.3241,
+   "tp": 47,
+   "baseline": 587,
+   "calls": 145
+  },
+  "native_ours": {
+   "recall": 0.0801,
+   "precision": 0.379,
+   "tp": 47,
+   "baseline": 587,
+   "calls": 124
+  }
+ },
+ "clairs_to|HG008T_PacBio|INDEL": {
+  "nopon": {
+   "recall": 0.092,
+   "precision": 0.0038,
+   "tp": 54,
+   "baseline": 587,
+   "calls": 14043
+  },
+  "native": {
+   "recall": 0.075,
+   "precision": 0.3697,
+   "tp": 44,
+   "baseline": 587,
+   "calls": 119
+  },
+  "native_ours": {
+   "recall": 0.075,
+   "precision": 0.449,
+   "tp": 44,
+   "baseline": 587,
+   "calls": 98
+  }
+ },
+ "clairs_to|HG008T_ONT|INDEL": {
+  "nopon": {
+   "recall": 0.0869,
+   "precision": 0.0036,
+   "tp": 51,
+   "baseline": 587,
+   "calls": 14014
+  },
+  "native": {
+   "recall": 0.075,
+   "precision": 0.3411,
+   "tp": 44,
+   "baseline": 587,
+   "calls": 129
+  },
+  "native_ours": {
+   "recall": 0.075,
+   "precision": 0.4112,
+   "tp": 44,
+   "baseline": 587,
+   "calls": 107
+  }
+ },
+ "clairs_to|COLO829T_Illumina|INDEL": {
+  "nopon": {
+   "recall": 0.1908,
+   "precision": 0.0017,
+   "tp": 25,
+   "baseline": 131,
+   "calls": 14545
+  },
+  "native": {
+   "recall": 0.145,
+   "precision": 0.0892,
+   "tp": 19,
+   "baseline": 131,
+   "calls": 213
+  },
+  "native_ours": {
+   "recall": 0.145,
+   "precision": 0.1056,
+   "tp": 19,
+   "baseline": 131,
+   "calls": 180
+  }
+ },
+ "clairs_to|COLO829T_fiberseq|INDEL": {
+  "nopon": {
+   "recall": 0.1603,
+   "precision": 0.0019,
+   "tp": 21,
+   "baseline": 131,
+   "calls": 10898
+  },
+  "native": {
+   "recall": 0.1069,
+   "precision": 0.2333,
+   "tp": 14,
+   "baseline": 131,
+   "calls": 60
+  },
+  "native_ours": {
+   "recall": 0.1069,
+   "precision": 0.3043,
+   "tp": 14,
+   "baseline": 131,
+   "calls": 46
+  }
+ },
+ "clairs_to|COLO829T_ONT|INDEL": {
+  "nopon": {
+   "recall": 0.1374,
+   "precision": 0.0018,
+   "tp": 18,
+   "baseline": 131,
+   "calls": 10185
+  },
+  "native": {
+   "recall": 0.0916,
+   "precision": 0.1,
+   "tp": 12,
+   "baseline": 131,
+   "calls": 120
+  },
+  "native_ours": {
+   "recall": 0.0916,
+   "precision": 0.1188,
+   "tp": 12,
+   "baseline": 131,
+   "calls": 101
+  }
+ },
+ "clairs_to|HCC1395T_Illumina|INDEL": {
+  "nopon": {
+   "recall": 0.6992,
+   "precision": 0.006,
+   "tp": 93,
+   "baseline": 133,
+   "calls": 15577
+  },
+  "native": {
+   "recall": 0.6917,
+   "precision": 0.5083,
+   "tp": 92,
+   "baseline": 133,
+   "calls": 181
+  },
+  "native_ours": {
+   "recall": 0.6917,
+   "precision": 0.5974,
+   "tp": 92,
+   "baseline": 133,
+   "calls": 154
+  }
+ },
+ "clairs_to|HCC1395T_PacBio|INDEL": {
+  "nopon": {
+   "recall": 0.5263,
+   "precision": 0.0055,
+   "tp": 70,
+   "baseline": 133,
+   "calls": 12740
+  },
+  "native": {
+   "recall": 0.5188,
+   "precision": 0.5111,
+   "tp": 69,
+   "baseline": 133,
+   "calls": 135
+  },
+  "native_ours": {
+   "recall": 0.5188,
+   "precision": 0.6216,
+   "tp": 69,
+   "baseline": 133,
+   "calls": 111
+  }
+ },
+ "clairs_to|HCC1395T_ONT|INDEL": {
+  "nopon": {
+   "recall": 0.5639,
+   "precision": 0.0061,
+   "tp": 75,
+   "baseline": 133,
+   "calls": 12304
+  },
+  "native": {
+   "recall": 0.5564,
+   "precision": 0.4901,
+   "tp": 74,
+   "baseline": 133,
+   "calls": 151
+  },
+  "native_ours": {
+   "recall": 0.5564,
+   "precision": 0.5827,
+   "tp": 74,
+   "baseline": 133,
+   "calls": 127
+  }
+ }
+}

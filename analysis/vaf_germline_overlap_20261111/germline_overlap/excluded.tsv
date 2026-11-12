@@ -1,0 +1,16 @@
+source	side	reason	count (chr1-22, distinct keys for graphs, records for normals)
+COLO829	normal	COMPLEX / > 50 bp	8
+COLO829	normal	DEL / > 50 bp	10190
+COLO829	normal	INS / > 50 bp	17689
+HCC1395	normal	COMPLEX / > 50 bp	41
+HCC1395	normal	DEL / > 50 bp	1464
+HCC1395	normal	INS / > 50 bp	8398
+HG008	normal	COMPLEX / > 50 bp	9
+HG008	normal	DEL / > 50 bp	9821
+HG008	normal	INS / > 50 bp	17639
+HPRC_v1.1_d9	graph	> 50 bp	46131
+HPRC_v1.1_d9	graph	COMPLEX	1223
+HPRC_v1.1_d9_VCF	graph	> 50 bp	64556
+HPRC_v1.1_d9_VCF	graph	COMPLEX	106088
+HPRC_v2.1_d46	graph	> 50 bp	40328
+HPRC_v2.1_d46	graph	COMPLEX	22554

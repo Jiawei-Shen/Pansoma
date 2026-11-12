@@ -1,0 +1,38 @@
+{
+ "labels_npy": 1,
+ "labels_ndjson": {
+  "candidate_id": "1811743:0:DEL:TATATATA>@1811744+1811746+1811747+1811748+1811749",
+  "site_id": "1811743:0:INDEL",
+  "chrom": "chr1",
+  "shard_file": "chr1_shard_00000_data.npy",
+  "index_within_shard": 271,
+  "label": 1,
+  "label_name": "somatic",
+  "reason": "representative_allele_is_somatic_truth",
+  "somatic": [
+   {
+    "truth_id": 95,
+    "chrom": "chr1",
+    "vcf_pos": 23017177,
+    "vcf_ref": "TTATATATA",
+    "vcf_alt": "T",
+    "gt": "1/0",
+    "filters": [
+     "PASS"
+    ],
+    "in_bed": true,
+    "matched_candidate_id": "1811743:0:DEL:TATATATA>@1811744+1811746+1811747+1811748+1811749",
+    "representative": true
+   }
+  ],
+  "germline": [],
+  "grch38": {
+   "chrom": "chr1",
+   "pos0": 23017177,
+   "ref": "TATATATA",
+   "alt": "",
+   "node_reverse": false
+  },
+  "partial": null
+ }
+}
