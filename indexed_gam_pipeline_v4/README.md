@@ -47,7 +47,7 @@ $PY -m $P.run discover --gam sample.sorted.gam --output discovery/ \
     --graph-index $G/hprc-v1.1-mc-grch38.d9.graph_index.sqlite --processes 48
 
 # (whole genome, one Slurm node) prepare a run root, then submit its tasks; merge + labels are a job of their own
-# AF floors: SNV 0.05 for PacBio HiFi, Fiber-seq and Illumina (the SNV recipe with site features), 0.08 for ONT; INDEL 0.08
+# AF floors: SNV 0.05 for PacBio HiFi, Fiber-seq and Illumina, 0.08 for ONT; INDEL 0.08
 $PY -m $P.orchestrate prepare --root /path/to/run --tensors /path/to/tensors \
     --gam sample.sorted.gam --nodes discovery/target_nodes.txt --node-stats discovery/node_stats.json \
     --graph-index $G/hprc-v1.1-mc-grch38.d9.graph_index.sqlite --haplotypes 90 \
