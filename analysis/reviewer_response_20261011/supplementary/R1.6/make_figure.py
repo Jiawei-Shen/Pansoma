@@ -11,20 +11,21 @@ platforms, (a) SNVs and (b) INDELs, for the models whose recall R1.6 / Supplemen
   Curve = report.json pon.curve_roc (rtg vcfeval --all-records ranked by p_somatic; records down to p_somatic 0.01).
 - DeepSomatic-TO, ClairS-TO (E8 score report.json, eval_bed): curve = all_pon (every record except RefCall / NoCall,
   whatever its FILTER, after our filter, ranked by QUAL); point = pass_pon (the tool's PASS after the same filter).
-Vertical lines (chr1 truth in the benchmark regions; bounds.py -> bounds.json, which reproduces E27
-denominators/label_status.json for HG008T / COLO829T, i.e. Supplementary Table R1.6, and adds HCC1395T):
-  dotted   = truth that is not a population allele (the bound for any caller after this filter);
-  dash-dot = truth with an exact Pansoma candidate that is not a population allele (Pansoma's bound on this platform).
+The figure shows only the curves and the PASS points. The two recall bounds (chr1 truth in the benchmark regions;
+bounds.py -> bounds.json, which reproduces E27 denominators/label_status.json for HG008T / COLO829T, i.e. Supplementary
+Table R1.6, and adds HCC1395T) are not drawn (user 2026-11-12); they stay as the last two columns of points.md:
+  truth that is not a population allele (the bound for any caller after this filter);
+  truth with an exact Pansoma candidate that is not a population allele (Pansoma's bound on this platform).
 Writes fig_R1.6.png / .pdf and points.md (the plotted operating points and curve ends, for checking against the table).
-Size: 6.5 x 8.0 in (the text width of a Letter / A4 Word page with 1-in margins, caption below on the same page; insert
+Size: 6.5 x 7.0 in (the text width of a Letter / A4 Word page with 1-in margins, caption below on the same page; insert
 at 100%), 300 dpi PNG; platform = column header, tumor = row label at the right (--height changes the height).
 --snv six-tumor: the same figure with the six-tumor SNV model in (a): the latest six-tumor SNV models (E30, user
   2026-11-10), one run per platform, trained on chr2-22 of HCC1395T, HCC1954T, H1437T, H2009T, HG008T and COLO829T:
   PacBio HiFi / Illumina multicancer6_<P>_SNV_sitef_af05_lnf25w1 (site features, AF 0.05 floor on the four CASTLE
   lines, AF <= 0.1 non sampled 25% at weight 1), PASS = rule 2 (validation callable recall 0.95 after the filter),
   vcf_chr1_<set>_d46_r095; ONT multicancer6_ONT_SNV (no site features: E30 kept it for ONT), vcf_chr1_<set>_d46_normfix,
-  PASS = validation recall 0.9 before the filter. COLO829T and HG008T are tested on their d46 sets (AF 0.08), whose
-  bounds the lines show; HCC1395T PacBio HiFi / Illumina on its AF 0.05 sets (d46_snvaf05; bounds.json has them).
+  PASS = validation recall 0.9 before the filter. COLO829T and HG008T are tested on their d46 sets (AF 0.08);
+  HCC1395T PacBio HiFi / Illumina on its AF 0.05 sets (d46_snvaf05; bounds.json has them).
   One threshold per platform, the same in every tumor.
   (b) unchanged. Writes fig_R1.6_six_tumor.png / .pdf and points_six_tumor.md.
 Run: /wanglab/jshen/anaconda3/envs/sambcfenv/bin/python make_figure.py [--snv six-tumor]   (login node, < 1 min)
@@ -115,7 +116,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--snv", choices=("single", "six-tumor"), default="single")
     ap.add_argument("--outdir", type=Path, default=HERE)
-    ap.add_argument("--height", type=float, default=8.0, help="figure height in inches (width is 6.5, the Word text width)")
+    ap.add_argument("--height", type=float, default=7.0, help="figure height in inches (width is 6.5, the Word text width)")
     args = ap.parse_args()
     tag = "" if args.snv == "single" else "_six_tumor"
     status = json.loads(BOUNDS.read_text())
@@ -127,23 +128,23 @@ def main():
                          **{c: comparator_report(c, tumor, p, kind) for c, *_ in CALLERS[1:]},
                          bounds=bounds(status, tumor, p, kind))
                 data[(kind, tumor, p)] = d
-    xmax = {}  # per row: SNV 0-1; INDEL to just past the furthest curve or bound of that tumor
+    xmax = {}  # per row: SNV 0-1; INDEL to just past the furthest curve of that tumor
     for kind in KINDS:
         for tumor in TUMORS:
             m = 0
             for (k, t, _), d in data.items():
                 if (k, t) != (kind, tumor):
                     continue
-                m = max([m, *d["bounds"]] + [curve(b)[:, 0].max() for _, b in d["pansoma"]] +
+                m = max([m] + [curve(b)[:, 0].max() for _, b in d["pansoma"]] +
                         [curve(d[c][1])[:, 0].max() for c, *_ in CALLERS[1:]])
             xmax[(kind, tumor)] = 1.0 if kind == "SNV" else min(1.0, np.ceil((m + 0.03) * 10) / 10)
 
-    # Word page layout (Letter / A4 with 1-in margins: text block 6.5 x 9 in). 6.5 in wide at true size; 8.0 in tall
+    # Word page layout (Letter / A4 with 1-in margins: text block 6.5 x 9 in). 6.5 in wide at true size; 7.0 in tall
     # leaves room for the caption on the same page. Facet grid: platform = column header, tumor = row label at the
     # right, axis labels once per block, so no per-panel titles; positions are set in inches (no tight_layout).
     nt = len(TUMORS)
     W, H = 6.5, args.height
-    LEG, HEAD, GAP, FOOT, BLOCK = 0.46, 0.36, 0.29, 0.34, 0.12  # legend, block header, gap between rows, x label, gap between blocks
+    LEG, HEAD, GAP, FOOT, BLOCK = 0.27, 0.36, 0.27, 0.34, 0.12  # legend, block header, gap between rows, x label, gap between blocks
     LEFT, RIGHT, CGAP = 0.50, 0.24, 0.25                        # y label + ticks, row labels, gap between columns
     ph = (H - LEG - BLOCK - 2 * (HEAD + (nt - 1) * GAP + FOOT)) / (2 * nt)
     pw = (W - LEFT - RIGHT - 2 * CGAP) / 3
@@ -162,9 +163,7 @@ def main():
                 ax = fig.add_axes([(LEFT + j * (pw + CGAP)) / W, bottom / H, pw / W, ph / H])
                 d = data[(kind, tumor, p)]
                 X = xmax[(kind, tumor)]
-                b_any, b_exact = d["bounds"]
-                ax.axvline(b_any, color=MUTED, lw=0.7, ls=(0, (1, 1.5)), zorder=1)
-                ax.axvline(b_exact, color=MUTED, lw=0.7, ls=(0, (4, 1.5, 1, 1.5)), zorder=1)
+                b_any, b_exact = d["bounds"]  # points.md only, not drawn
                 key, label, color, ls = CALLERS[0]
                 prs = []
                 for f, blk in d["pansoma"]:
@@ -205,10 +204,8 @@ def main():
             y = bottom - (GAP if ti < nt - 1 else FOOT)
         y -= BLOCK
     h = [Line2D([], [], color=c, lw=1.3, ls="-" if k == "pansoma" else (0, (4, 1.6)), label=l) for (k, l, c, _) in CALLERS]
-    h += [Line2D([], [], color=MUTED, marker="o", ls="", ms=4, mec=SURFACE, mew=0.6, label="PASS (after the filter)"),
-          Line2D([], [], color=MUTED, lw=0.7, ls=(0, (4, 1.5, 1, 1.5)), label="exact Pansoma candidate, not a population allele"),
-          Line2D([], [], color=MUTED, lw=0.7, ls=(0, (1, 1.5)), label="not a population allele (bound for any caller)")]
-    fig.legend(handles=h, loc="upper center", ncol=3, frameon=False, fontsize=6.8, bbox_to_anchor=(0.5, 1 - 0.03 / H),
+    h += [Line2D([], [], color=MUTED, marker="o", ls="", ms=4, mec=SURFACE, mew=0.6, label="PASS (after the filter)")]
+    fig.legend(handles=h, loc="upper center", ncol=4, frameon=False, fontsize=6.8, bbox_to_anchor=(0.5, 1 - 0.03 / H),
                handlelength=2.6, columnspacing=1.6, handletextpad=0.6, labelspacing=0.45)
     for ext in ("png", "pdf"):
         fig.savefig(args.outdir / f"fig_R1.6{tag}.{ext}", dpi=300)
