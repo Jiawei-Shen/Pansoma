@@ -29,6 +29,28 @@ alleles skipped), with its VAF in Illumina and in PacBio reads:
   - `counts/<T>_<Illumina|PacBio>.truth_vaf.tsv` (TYPE, VAF, ...): input of `HG008T_VAF_violin.R` (reads `TYPE`, `VAF`);
   - `summary.md`: n, quartiles and low-VAF shares.
 - IN_BED: the REF span (anchor base included) inside one merged interval of the truth BED.
+- Alleles with no read at POS (DP 0) keep VAF 0, as in the earlier table (HG008T 43 Illumina / 50 PacBio, HCC1395T
+  0 / 8); filter `DP_Ill > 0` / `DP_PB > 0` (or `DP > 0`) to leave them out. `summary.md` counts them apart.
+- HCC1395T PacBio was counted from a copy of the BAM on maotai's local disk (job 476639; the BeeGFS run 476581 was
+  cancelled at 40 %), same script and inputs; the copy was deleted at the end of the job.
+
+Results, chr1-22 (`summary.md`; quartiles over alleles with reads):
+
+| tumor | type | n | Illumina median (Q25-Q75) | PacBio median (Q25-Q75) | Illumina VAF < 0.1 | PacBio VAF < 0.1 |
+|---|---|---|---|---|---|---|
+| HG008T | SNV | 8,690 | 0.536 (0.467-1.000) | 0.544 (0.467-1.000) | 1.0% | 0.8% |
+| HG008T | INDEL | 8,482 | 0.378 (0.227-0.555) | 0.429 (0.318-0.566) | 11.6% | 2.9% |
+| COLO829T | SNV | 42,035 | 0.497 (0.332-0.662) | 0.491 (0.324-0.657) | 10.6% | 10.6% |
+| COLO829T | INDEL | 1,912 | 0.439 (0.321-0.605) | 0.482 (0.382-0.629) | 0.0% | 0.0% |
+| HCC1395T | SNV | 39,447 | 0.341 (0.170-0.565) | 0.348 (0.167-0.569) | 13.7% | 15.2% |
+| HCC1395T | INDEL | 1,625 | 0.256 (0.138-0.419) | 0.341 (0.183-0.512) | 15.6% | 12.9% |
+
+- SNV VAFs agree between the platforms in all three tumors. INDEL VAFs are lower in Illumina reads (HG008T: 11.6 % of
+  INDELs below 0.1 vs 2.9 % in PacBio).
+- HG008T: 30 % of SNVs are at VAF >= 0.95 in both platforms (COLO829T 17 %, HCC1395T 14 %).
+- COLO829T INDEL VAFs in the SMaHT set are all >= 0.20, so none falls below 0.1.
+- HCC1395T Illumina library check on chr1 (3,573 alleles): SRR7890824 vs the WGS_FD_T_1 + 2 reads Pansoma uses,
+  Pearson r 0.984, median VAF 0.352 in both, median DP 53 vs 105.
 
 ## 2. Germline overlap (`germline_overlap/`)
 
@@ -81,4 +103,5 @@ every normal by construction):
 
 ## Jobs
 
-`tmp/vaf_germline_overlap_20261111/` (`count_vaf.sh`, `overlap.sh`, `jobs.txt`, `logs/`).
+`tmp/vaf_germline_overlap_20261111/` (`count_vaf.sh`, `count_vaf_hcc1395t_pacbio_local.sh`, `overlap.sh`, `jobs.txt`, `logs/`;
+git-ignored).
