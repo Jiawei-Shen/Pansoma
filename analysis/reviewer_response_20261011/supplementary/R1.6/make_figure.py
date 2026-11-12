@@ -16,6 +16,8 @@ denominators/label_status.json for HG008T / COLO829T, i.e. Supplementary Table R
   dotted   = truth that is not a population allele (the bound for any caller after this filter);
   dash-dot = truth with an exact Pansoma candidate that is not a population allele (Pansoma's bound on this platform).
 Writes fig_R1.6.png / .pdf and points.md (the plotted operating points and curve ends, for checking against the table).
+Size: 6.5 x 8.0 in (the text width of a Letter / A4 Word page with 1-in margins, caption below on the same page; insert
+at 100%), 300 dpi PNG; platform = column header, tumor = row label at the right (--height changes the height).
 --snv six-tumor: the same figure with the six-tumor SNV model in (a): the latest six-tumor SNV models (E30, user
   2026-11-10), one run per platform, trained on chr2-22 of HCC1395T, HCC1954T, H1437T, H2009T, HG008T and COLO829T:
   PacBio HiFi / Illumina multicancer6_<P>_SNV_sitef_af05_lnf25w1 (site features, AF 0.05 floor on the four CASTLE
@@ -35,7 +37,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 from matplotlib.lines import Line2D  # noqa: E402
-from matplotlib.ticker import MaxNLocator  # noqa: E402
+from matplotlib.ticker import FuncFormatter, MaxNLocator  # noqa: E402
 import numpy as np  # noqa: E402
 
 HERE = Path(__file__).resolve().parent
@@ -51,7 +53,9 @@ KINDS = ("SNV", "INDEL")
 CALLERS = (("pansoma", "Pansoma", "#2a78d6", "-"), ("deepsomatic", "DeepSomatic-TO", "#eb6834", (0, (5, 2))),
            ("clairs_to", "ClairS-TO", "#1baf7a", (0, (5, 2))))
 INK, MUTED, GRID, SURFACE = "#0b0b0b", "#52514e", "#d9d8d4", "#fcfcfb"
-plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 8, "axes.edgecolor": MUTED, "axes.labelcolor": INK,
+plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 7, "xtick.labelsize": 6.5, "ytick.labelsize": 6.5,
+                     "xtick.major.size": 2.5, "ytick.major.size": 2.5, "xtick.minor.size": 1.5, "ytick.minor.size": 1.5,
+                     "xtick.major.pad": 2, "ytick.major.pad": 2, "axes.edgecolor": MUTED, "axes.labelcolor": INK,
                      "xtick.color": MUTED, "ytick.color": MUTED, "axes.linewidth": 0.6, "figure.facecolor": SURFACE,
                      "axes.facecolor": SURFACE, "savefig.facecolor": SURFACE})
 
@@ -111,6 +115,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--snv", choices=("single", "six-tumor"), default="single")
     ap.add_argument("--outdir", type=Path, default=HERE)
+    ap.add_argument("--height", type=float, default=8.0, help="figure height in inches (width is 6.5, the Word text width)")
     args = ap.parse_args()
     tag = "" if args.snv == "single" else "_six_tumor"
     status = json.loads(BOUNDS.read_text())
@@ -133,60 +138,80 @@ def main():
                         [curve(d[c][1])[:, 0].max() for c, *_ in CALLERS[1:]])
             xmax[(kind, tumor)] = 1.0 if kind == "SNV" else min(1.0, np.ceil((m + 0.03) * 10) / 10)
 
+    # Word page layout (Letter / A4 with 1-in margins: text block 6.5 x 9 in). 6.5 in wide at true size; 8.0 in tall
+    # leaves room for the caption on the same page. Facet grid: platform = column header, tumor = row label at the
+    # right, axis labels once per block, so no per-panel titles; positions are set in inches (no tight_layout).
     nt = len(TUMORS)
-    fig, axes = plt.subplots(2 * nt, 3, figsize=(7.4, 2.62 * 2 * nt + 0.7), sharey=True)
+    W, H = 6.5, args.height
+    LEG, HEAD, GAP, FOOT, BLOCK = 0.46, 0.36, 0.29, 0.34, 0.12  # legend, block header, gap between rows, x label, gap between blocks
+    LEFT, RIGHT, CGAP = 0.50, 0.24, 0.25                        # y label + ticks, row labels, gap between columns
+    ph = (H - LEG - BLOCK - 2 * (HEAD + (nt - 1) * GAP + FOOT)) / (2 * nt)
+    pw = (W - LEFT - RIGHT - 2 * CGAP) / 3
+    heads = ("Illumina", "PacBio HiFi (COLO829T: Fiber-seq)", "ONT")
+    fig = plt.figure(figsize=(W, H))
+    y = H - LEG
     for bi, kind in enumerate(KINDS):
+        y -= HEAD
+        fig.text(0.06 / W, (y + 0.19) / H, "ab"[bi], fontsize=10, fontweight="bold", color=INK, ha="left", va="baseline")
+        fig.text(0.23 / W, (y + 0.19) / H, "SNVs" if kind == "SNV" else "INDELs", fontsize=8.5, color=INK, ha="left", va="baseline")
+        for j, head in enumerate(heads):
+            fig.text((LEFT + j * (pw + CGAP) + pw / 2) / W, (y + 0.045) / H, head, fontsize=7.5, color=INK, ha="center", va="bottom")
         for ti, tumor in enumerate(TUMORS):
-            i = nt * bi + ti
+            bottom = y - ph
             for j, p in enumerate(PLATFORMS):
-                ax = axes[i, j]
+                ax = fig.add_axes([(LEFT + j * (pw + CGAP)) / W, bottom / H, pw / W, ph / H])
                 d = data[(kind, tumor, p)]
                 X = xmax[(kind, tumor)]
                 b_any, b_exact = d["bounds"]
-                ax.axvline(b_any, color=MUTED, lw=0.9, ls=(0, (1, 1.5)), zorder=1)
-                ax.axvline(b_exact, color=MUTED, lw=0.9, ls=(0, (4, 1.5, 1, 1.5)), zorder=1)
+                ax.axvline(b_any, color=MUTED, lw=0.7, ls=(0, (1, 1.5)), zorder=1)
+                ax.axvline(b_exact, color=MUTED, lw=0.7, ls=(0, (4, 1.5, 1, 1.5)), zorder=1)
                 key, label, color, ls = CALLERS[0]
                 prs = []
                 for f, blk in d["pansoma"]:
                     c = curve(blk)
-                    ax.plot(c[:, 0], c[:, 1], color=color, lw=1.5, ls=ls, zorder=3, solid_capstyle="round")
+                    ax.plot(c[:, 0], c[:, 1], color=color, lw=1.2, ls=ls, zorder=3, solid_capstyle="round")
                     r, pr = point(blk)
                     prs.append((r, pr, c[:, 0].max()))
                 for r, pr, _ in prs:
-                    ax.plot(r, pr, marker="o", ms=5.2, color=color, mec=SURFACE, mew=0.8, ls="", zorder=6)
+                    ax.plot(r, pr, marker="o", ms=4.0, color=color, mec=SURFACE, mew=0.6, ls="", zorder=6)
                 cells = [span([x[k] for x in prs]) for k in range(3)]
                 for key, label, color, ls in CALLERS[1:]:
                     _, allp, passp = d[key]
                     c = curve(allp)
-                    ax.plot(c[:, 0], c[:, 1], color=color, lw=1.3, ls=ls, zorder=4)
+                    ax.plot(c[:, 0], c[:, 1], color=color, lw=1.05, ls=(0, (4, 1.6)), zorder=4)
                     r, pr = point(passp)
-                    ax.plot(r, pr, marker="o", ms=5.2, color=color, mec=SURFACE, mew=0.8, ls="", zorder=7)
+                    ax.plot(r, pr, marker="o", ms=4.0, color=color, mec=SURFACE, mew=0.6, ls="", zorder=7)
                     cells += [f"{r:.3f}", f"{pr:.3f}", f"{c[:, 0].max():.3f}"]
                 rows.append(f"| {kind} | {tumor} | {plat(tumor, p)} | " + " | ".join(cells) +
                             f" | {b_exact:.3f} | {b_any:.3f} |")
                 ax.set_xlim(0, X)
-                ax.set_ylim(0, 1.02)
+                ax.set_ylim(0, 1.03)
                 ax.xaxis.set_major_locator(MaxNLocator(nbins=4, steps=[1, 2, 2.5, 5, 10]))
-                ax.set_title(f"{tumor} · {plat(tumor, p)}", fontsize=8, color=INK, loc="left", pad=3)
+                ax.xaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:g}"))
+                ax.set_yticks([0, 0.5, 1])
+                ax.set_yticks([0.25, 0.75], minor=True)
+                ax.yaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:g}"))
                 for side in ("top", "right"):
                     ax.spines[side].set_visible(False)
-                ax.set_xlabel("Recall (chr1)", fontsize=7.5)
+                if ti == nt - 1 and j == 1:
+                    ax.set_xlabel("Recall (chr1)", fontsize=7.5, labelpad=3)
                 if j == 0:
-                    ax.set_ylabel("Precision (chr1)", fontsize=7.5)
-    h = [Line2D([], [], color=c, lw=1.6, ls=ls, label=l) for (_, l, c, ls) in CALLERS]
-    h += [Line2D([], [], color=MUTED, marker="o", ls="", ms=5, mec=SURFACE, mew=0.8, label="PASS (after the filter)"),
-          Line2D([], [], color=MUTED, lw=0.9, ls=(0, (4, 1.5, 1, 1.5)), label="exact Pansoma candidate, not a population allele"),
-          Line2D([], [], color=MUTED, lw=0.9, ls=(0, (1, 1.5)), label="not a population allele (bound for any caller)")]
-    H = fig.get_figheight()
+                    if ti == nt // 2:
+                        ax.set_ylabel("Precision (chr1)", fontsize=7.5, labelpad=4)
+                else:
+                    ax.tick_params(labelleft=False)
+            fig.text((W - RIGHT + 0.07) / W, (bottom + ph / 2) / H, tumor, fontsize=7.5, color=INK, rotation=270,
+                     ha="left", va="center")
+            y = bottom - (GAP if ti < nt - 1 else FOOT)
+        y -= BLOCK
+    h = [Line2D([], [], color=c, lw=1.3, ls="-" if k == "pansoma" else (0, (4, 1.6)), label=l) for (k, l, c, _) in CALLERS]
+    h += [Line2D([], [], color=MUTED, marker="o", ls="", ms=4, mec=SURFACE, mew=0.6, label="PASS (after the filter)"),
+          Line2D([], [], color=MUTED, lw=0.7, ls=(0, (4, 1.5, 1, 1.5)), label="exact Pansoma candidate, not a population allele"),
+          Line2D([], [], color=MUTED, lw=0.7, ls=(0, (1, 1.5)), label="not a population allele (bound for any caller)")]
     fig.legend(handles=h, loc="upper center", ncol=3, frameon=False, fontsize=6.8, bbox_to_anchor=(0.5, 1 - 0.03 / H),
-               handlelength=2.6, columnspacing=1.3)
-    fig.tight_layout(rect=(0.02, 0, 1, 1 - 0.7 / H), h_pad=1.5, w_pad=0.8)
-    for bi, kind in enumerate(KINDS):
-        top = axes[nt * bi, 0].get_position().y1
-        fig.text(0.005, top + 0.17 / H, "ab"[bi], fontsize=11, fontweight="bold", color=INK, ha="left", va="bottom")
-        fig.text(0.03, top + 0.18 / H, "SNVs" if kind == "SNV" else "INDELs", fontsize=9, color=INK, ha="left", va="bottom")
+               handlelength=2.6, columnspacing=1.6, handletextpad=0.6, labelspacing=0.45)
     for ext in ("png", "pdf"):
-        fig.savefig(args.outdir / f"fig_R1.6{tag}.{ext}", dpi=220)
+        fig.savefig(args.outdir / f"fig_R1.6{tag}.{ext}", dpi=300)
     plt.close(fig)
 
     m6 = ("the latest six-tumor model, one run per platform (PacBio HiFi / Illumina `multicancer6_<P>_SNV_sitef_af05_lnf25w1`, "
