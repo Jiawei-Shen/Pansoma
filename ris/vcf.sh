@@ -1,12 +1,12 @@
 #!/bin/bash
 # A run's chr1 predictions -> graph VCF -> GRCh38 VCF -> PoN + rtg vcfeval against the truth VCF of the
 # set's labels, inside the benchmark BED (eval_bed) and on the whole chromosome (eval_nobed), into <run>/vcf_chr1/.
-# PASS is graph_vcf's default, the checkpoint's call rule (ONT SNV recipe: the validation recall-0.9 threshold; the
-# PacBio HiFi / Illumina SNV recipe: the post-PoN validation recall 0.95 of the callable positives; the INDEL recipe of
-# 9919d4a: the same at 0.8); THRESHOLD (a number, "predict" for predict's own call, or a rule: postpon, postpon-recall,
-# recall) overrides it; TARGET_RECALL (env) sets the recall of the rule (graph_vcf --target-recall; e.g. 0.95 for the
-# E30 SNV checkpoints, which record 0.9). SUFFIX is appended to the output directory
-# (e.g. "postpon _postpon" -> <run>/vcf_chr1_postpon/), so another threshold does not replace the default's calls.
+# PASS is graph_vcf's default, the checkpoint's call rule (the SNV recipe, every platform: the post-PoN validation
+# recall 0.95 of the callable positives; the INDEL recipe of 9919d4a: the same at 0.8); THRESHOLD (a number,
+# "predict" for predict's own call, or a rule: postpon, postpon-recall, recall) overrides it; TARGET_RECALL (env) sets
+# the recall of the rule (graph_vcf --target-recall; e.g. 0.95 for the E30 SNV checkpoints, which record 0.9).
+# SUFFIX is appended to the output directory (e.g. "postpon _postpon" -> <run>/vcf_chr1_postpon/), so another
+# threshold does not replace the default's calls.
 # --set SET (a joint_run.sh run, or another set predicted by predict_set.sh): the predictions <run>/test_chr1_<SET>/ of
 # that set, into <run>/vcf_chr1_<SET>/.
 # The graph index and GRCh38 reference path are those the set was built and labelled with (manifest.json graph_index,

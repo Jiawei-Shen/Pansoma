@@ -72,13 +72,12 @@ T=/scratch/jshen/data/pansoma_v2_tensors/HG008T_Illumina/tensors
 
 # train on chr2-22 (5 % of their ~1 Mb node blocks validate), chr1 left out; -1 tensors are not used
 # (the recipes: see "SNV recipe" and "INDEL recipe" below)
-# SNV, PacBio HiFi / Fiber-seq / Illumina (sets built at --snv-min-af 0.05; SNV site features in SF)
+# SNV, every platform (sets built at --snv-min-af 0.05, ONT at 0.08; SNV site features in SF)
 $P -m pansoma_net_v2.train --tensors $T --kinds SNV --output runs/HG008_Illumina_SNV \
     --depths 3 3 27 3 --dims 96 192 384 768 --epochs 20 --batch-size 1024 --lr 1e-4 --class-weights pow:0.75 \
     --block v2 --ignore-reasons residual_partial_somatic_truth allele_partial_somatic_truth \
     --non-fraction 0.25 --keep-non-af 0.100001 --no-importance-weights \
     --site-features $SF --best-by postpon --call-recall 0.95
-# SNV, ONT (sets at --snv-min-af 0.08): the same model with --non-fraction 1.0, no site features
 # INDEL: one model per platform on several tumor sets T1 T2 ... (chr1 of each left out), site features in SF
 $P -m pansoma_net_v2.train --tensors $T1 $T2 ... --kinds INDEL --output runs/Illumina_INDEL \
     --test-chroms --set-test-chroms $T1 chr1 --set-test-chroms $T2 chr1 ... \
@@ -123,8 +122,8 @@ Useful `train` options (the recipes, "SNV recipe" and "INDEL recipe" below, set 
   - `--class-weights balanced|sqrt|pow:E|none|w0,w1,w2`: balanced is n / (3 n_c) over one epoch's tensors;
     sqrt is its square root, pow:E its power E. The loss is normalized by the batch's summed weights, so
     scaling all three weights changes nothing.
-  - `--non-fraction 1.0` (the default; the INDEL and ONT SNV recipes): every tensor every epoch (smaller values and
-    the PacBio HiFi / Illumina SNV recipe's sampling of the low-AF non tensors: below).
+  - `--non-fraction 1.0` (the default; the INDEL recipe): every tensor every epoch (smaller values and the SNV
+    recipe's sampling of the low-AF non tensors: below).
 - **Label reasons left out.** `--ignore-reasons R ...` treats the tensors of those label reasons as -1 in training and
   validation; the label files are unchanged. Both recipes leave out
   `residual_partial_somatic_truth allele_partial_somatic_truth`. For SNV: SNV tensors that partially match an INDEL
@@ -319,12 +318,12 @@ p_offref_somatic, p_offref_germline and offref_call. `.metrics.json` adds `offre
 and after, `floor`) and the rule `pipeline`: offref_call on the off-reference tensors, the checkpoint's validation recall-0.9
 threshold on the others.
 
-**SNV recipe** (two versions by platform; both the 50.4 M model `--depths 3 3 27 3 --dims 96 192 384 768`, the
+**SNV recipe** (every platform; the 50.4 M model `--depths 3 3 27 3 --dims 96 192 384 768`, the
 default widths halved, `--class-weights pow:0.75 --batch-size 1024 --lr 1e-4 --epochs 20 --block v2 --ignore-reasons
 residual_partial_somatic_truth allele_partial_somatic_truth`, every plane kept (ch6 included), one whole GPU):
 
-- **PacBio HiFi (Fiber-seq included) and Illumina:**
-  - tensors built at SNV AF 0.05 (`orchestrate prepare --snv-min-af 0.05`; INDEL stays at 0.08);
+- tensors built at SNV AF 0.05 for PacBio HiFi (Fiber-seq included) and Illumina, 0.08 for ONT (`orchestrate prepare
+  --snv-min-af`; INDEL stays at 0.08); the rest of the recipe is the same for every platform:
   - the five site features with the SNV PoN rule (`site_features build --kind SNV --dbsnp ... --g1000 ...` for each
     training and test set; `--site-features DIR`);
   - `--non-fraction 0.25 --keep-non-af 0.100001 --no-importance-weights`: each epoch every non tensor with AF > 0.1,
@@ -335,14 +334,11 @@ residual_partial_somatic_truth allele_partial_somatic_truth`, every plane kept (
     these checkpoints), then the SNV PoN rule.
 
   Six-tumor models (E30, `analysis/reviewer_response_20261011/experiments/E30_snv_af005_20261103`), HCC1395T chr20 /
-  chr1 SNV F1 after the PoN: PacBio HiFi 0.839 / 0.868, Illumina 0.845 / 0.878 (the ONT-style recipe on the same
-  tumors: 0.788 / 0.825 and 0.809 / 0.850). The E30 checkpoints record call recall 0.9; `graph_vcf --target-recall
-  0.95` gives them this PASS.
-- **ONT:** tensors at SNV AF 0.08, no site features, `--non-fraction 1.0` (every negative), the best epoch by the
-  validation somatic F1, calls at the validation recall-0.9 threshold (`graph_vcf`'s default for these checkpoints).
-  With site features or the 0.05 floor the ONT models called low- and mid-AF ONT errors on HCC1395T (E30).
+  chr1 SNV F1 after the PoN: PacBio HiFi 0.839 / 0.868, Illumina 0.845 / 0.878 (every negative, no site features
+  and PASS at the validation recall 0.9 on the same tumors: 0.788 / 0.825 and 0.809 / 0.850). The E30 checkpoints
+  record call recall 0.9; `graph_vcf --target-recall 0.95` gives them this PASS.
 
-Either version: with `predict --offref-site90 10`, off-reference tensors are called by the rescue above. On HG008T
+With `predict --offref-site90 10`, off-reference tensors are called by the rescue above. On HG008T
 PacBio chr1 (12 epochs) the default 199.6 M model at lr 1e-4 overfits after epoch ~7 (validation loss 0.51 -> 2.16)
 and the 50.4 M model does not; with the PoN in the BED both reach P/R/F1 0.473/0.832/0.604 (199.6 M, best epoch 5)
 and 0.493/0.822/0.616 (50.4 M).
@@ -380,9 +376,8 @@ Why:
   validation positive before the PoN admits thousands of false calls. The PoN is a fixed, label-free step of the
   caller, so the threshold is set on the calls it leaves: a recall of 0.8 of the positives it does not tag. One
   threshold serves every tumor, including tumors whose somatic INDELs score lower than those of the training cell
-  lines; the post-PoN best-F1 threshold is stricter. The epoch is chosen by the post-PoN validation F1. The PacBio
-  HiFi / Illumina SNV recipe uses the same rule at recall 0.95 (at 0.9 its threshold was stricter than the post-PoN
-  best-F1 one, E29); ONT SNVs keep the recall-0.9 rule.
+  lines; the post-PoN best-F1 threshold is stricter. The epoch is chosen by the post-PoN validation F1. The SNV
+  recipe uses the same rule at recall 0.95 (at 0.9 its threshold was stricter than the post-PoN best-F1 one, E29).
 
 ## Calls: graph VCF → GRCh38 VCF → PoN → rtg vcfeval
 
@@ -432,10 +427,10 @@ thresholds). vcfeval runs twice there:
   linear scale.
 - FILTER:
   - PASS: p_somatic ≥ the threshold of the checkpoint's call rule (the checkpoint is the one in predict's
-    `.metrics.json`): for the ONT SNV recipe the validation threshold at recall 0.9 (`--target-recall`; the model
-    favours recall and the PoN raises precision), for the PacBio HiFi / Illumina SNV recipe the post-PoN validation
-    threshold at recall 0.95 of the callable positives, for the INDEL recipe the same at recall 0.8 (above, "SNV
-    recipe", "INDEL recipe"); `--target-recall` sets the recall of either rule. `--threshold T` sets the
+    `.metrics.json`): for the SNV recipe the post-PoN validation threshold at recall 0.95 of the callable
+    positives, for the INDEL recipe the same at recall 0.8 (above, "SNV recipe", "INDEL recipe"); checkpoints
+    trained without `--best-by postpon` use the validation threshold at recall 0.9 (rule recall);
+    `--target-recall` sets the recall of either rule. `--threshold T` sets the
     threshold; `--threshold postpon-recall`, `postpon` and `recall` pick a rule; `--threshold predict` keeps
     `predict`'s own call (best-F1 threshold).
     A record with predict's off-reference rescue is called by offref_call instead; its QUAL is from

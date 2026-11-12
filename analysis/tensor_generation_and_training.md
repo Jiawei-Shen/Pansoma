@@ -326,22 +326,21 @@ sbatch -p general -c 4 --mem=8G -t 6:00:00 -J chunks -o $J/chunks-%j.out --wrap 
 
 ### 第 2 步：训练 + 在 chr1 上测试
 
-**SNV**（一个 job 做完训练和 chr1 测试）。PacBio HiFi（含 Fiber-seq）和 Illumina 先给每个训练和测试 set 建 SNV
-site features（`$SF/<set>.SNV.npz`），再用带 site features 的 recipe；ONT 用原来的 recipe（最后一行）：
+**SNV**（一个 job 做完训练和 chr1 测试）。所有平台（PacBio HiFi、Fiber-seq、Illumina、ONT）用同一个 recipe：先给每个训练和
+测试 set 建 SNV site features（`$SF/<set>.SNV.npz`），再训练。平台之间只有建 tensor 时的 SNV AF 阈值不同（ONT 0.08，其它 0.05）：
 
 ```bash
 # SNV site features（每个 set 一次；SNV 的 PoN 规则用四个 PoN VCF）
 $PY -m pansoma_net_v2.site_features build --kind SNV --tensors $T --fasta GRCh38.fasta \
   --gnomad af-only-gnomad.hg38.vcf.gz --colors CoLoRSdb.GRCh38.v1.1.0.deepvariant.glnexus.vcf.gz \
   --dbsnp Homo_sapiens_assembly38.dbsnp138.vcf.gz --g1000 1000g_pon.hg38.vcf.gz --out $SF
-# PacBio HiFi / Illumina
+# 所有平台
 sbatch -p gpu --gres=gpu:h100:1 -c 8 --mem=40G -t 1-00:00:00 -J HG008_Illumina_SNV -o $J/%x-%j.out \
   $JS/run.sh HG008_Illumina_SNV $T SNV \
   --depths 3 3 27 3 --dims 96 192 384 768 --epochs 20 --batch-size 1024 --lr 1e-4 --class-weights pow:0.75 \
   --block v2 --ignore-reasons residual_partial_somatic_truth allele_partial_somatic_truth \
   --non-fraction 0.25 --keep-non-af 0.100001 --no-importance-weights \
   --site-features $SF --best-by postpon --call-recall 0.95
-# ONT：同样的模型，--non-fraction 1.0，不加 site features、--best-by postpon 和 --call-recall
 sbatch --dependency=afterok:<上面的 job id> -J vcf_HG008_Illumina_SNV -o $J/vcf_HG008_Illumina_SNV-%j.out \
   $JS/vcf.sh HG008_Illumina_SNV SNV                                       # chr1 的 VCF、PoN、rtg vcfeval
 ```
@@ -370,15 +369,15 @@ GPU=h100 TAG=mytag $JS/submit_indel.sh HG008T_PacBio COLO829T_ONT
 | `--batch-size` | 1024 | 1024 | 每块 GPU 的 batch 大小 | 64 |
 | `--lr` | 1e-4 | 1e-4 | 学习率 | 1e-4 |
 | `--class-weights` | `pow:0.75` | `sqrt` | loss 的类别权重：balanced 是 n / (3 · n_c)，sqrt 是它的平方根，`pow:E` 是它的 E 次方 | balanced |
-| `--non-fraction` | PacBio HiFi / Illumina 0.25（配 `--keep-non-af 0.100001 --no-importance-weights`）；ONT 1.0 | 1.0 | 1.0：每个 epoch 用全部 tensor。SNV 的 PacBio HiFi / Illumina：AF > 0.1 的 non、全部 germline 和 somatic 每个 epoch 都用，AF ≤ 0.1 的 non 每个 epoch 重新抽 25%，loss 权重 1 | 1.0 |
-| `--site-features` | PacBio HiFi / Illumina：SNV site features；ONT 不用 | INDEL site features | 五个人群 site features（`site_features build`） | 不设 |
-| `--best-by` / `--call-recall` | PacBio HiFi / Illumina：`postpon` / 0.95；ONT 不设 | `postpon` / 0.8（默认） | 按 PoN 之后的验证 F1 选 epoch；PASS = PoN 之后验证集可叫阳性 recall 达到这个值的阈值 | `f1` / 0.8 |
+| `--non-fraction` | 0.25（配 `--keep-non-af 0.100001 --no-importance-weights`） | 1.0 | 1.0：每个 epoch 用全部 tensor。SNV：AF > 0.1 的 non、全部 germline 和 somatic 每个 epoch 都用，AF ≤ 0.1 的 non 每个 epoch 重新抽 25%，loss 权重 1 | 1.0 |
+| `--site-features` | SNV site features | INDEL site features | 五个人群 site features（`site_features build`） | 不设 |
+| `--best-by` / `--call-recall` | `postpon` / 0.95 | `postpon` / 0.8（默认） | 按 PoN 之后的验证 F1 选 epoch；PASS = PoN 之后验证集可叫阳性 recall 达到这个值的阈值 | `f1` / 0.8 |
 | `--block` | v2 | v2 | ConvNeXt block | v2 |
 | `--ignore-reasons` | 两个部分匹配 somatic 的 reason | 同左 | 这些 reason 的 tensor 在训练和 validation 里当 −1 | 不设 |
 
 `--weight-decay 0.05`、`--warmup-epochs 1` 是默认值。出 VCF 时 PASS 用 checkpoint 的 call rule（`graph_vcf` 的默认）：
-SNV 的 PacBio HiFi / Illumina 是 PoN 之后验证集可叫阳性 recall 0.95 的阈值，ONT 是 validation recall 0.9 的阈值，
-INDEL 是 PoN 之后 recall 0.8 的阈值；SNV 的 off-reference tensor 用 `predict` 的 rescue；然后 PoN 和 rtg vcfeval。
+SNV 是 PoN 之后验证集可叫阳性 recall 0.95 的阈值，INDEL 是 PoN 之后 recall 0.8 的阈值；SNV 的 off-reference tensor
+用 `predict` 的 rescue；然后 PoN 和 rtg vcfeval。
 E30 的 SNV checkpoint 记录的是 recall 0.9，出 VCF 时加 `graph_vcf --target-recall 0.95`（RIS 的 `ris/vcf.sh`：环境变量 `TARGET_RECALL=0.95`）。
 
 **其它常用参数**：
