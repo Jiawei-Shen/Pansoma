@@ -42,11 +42,21 @@ Changes from the 2026-09-30 scripts (the classification is unchanged):
 The same picture as on HPRC v1.1 on 2026-09-30 (INDEL I1 + I2 81-92%). Controls: see each set's `controls.tsv` and
 `summary.json` (`control:*`).
 
+### HCC1395T (2026-11-10/11, letter Supplementary Tables R1.6b / R1.6c)
+
+The three HCC1395T d46 sets were classified the same way (`HCC1395T_<P>_d46/`); `r16bc_tables.py` -> `r16bc_tables.md`
+builds both letter tables for all nine sets and asserts that the HG008T / COLO829T cells equal the published ones.
+HCC1395T no candidate: SNV 436 / 824 / 2,481 (Illumina / PacBio HiFi / ONT; ONT mostly S2, fewer than 3 ALT reads, 2,204),
+INDEL 77 / 75 / 130 (I1 + I2 70.1% / 57.3% / 28.5%; ONT I4 80). A second SNV table uses the current SNV pipeline (AF 0.05
+for COLO829T / HCC1395T PacBio HiFi, Fiber-seq, Illumina): the no-candidate truth ids are identical on the AF 0.05 builds,
+so only the tensor / floor rows change. Not added to `classes.md` / Supplementary Fig. 2 (six sets).
+
 ## Jobs
 
 `tmp/reviewer_cpu_20261021/E1.7/` (`tasks.tsv`, `reads_array.sh`, `post_array.sh`, `jobs.txt`, logs): reads 450393
 (tasks 1-3), 450438 (4-18), 450559 (11 and 18 again at 128 GB after OOM at 64 GB; the script resumes from the loci
 already written); post 450563_5, 450573 (COLO829T ONT / Fiber-seq at 128 GB); reports 450587-450589.
+HCC1395T: `tmp/e17_hcc1395t_20261110/` (reads 476432 / 476433, post 476434 / 476441 / 476442; all COMPLETED, max RSS 30 GB).
 
 ## Files
 
@@ -56,3 +66,4 @@ already written); post 450563_5, 450573 (COLO829T ONT / Fiber-seq at 128 GB); re
 | `<set>/reads_part*.jsonl`, `snv_detail.jsonl`, `snv_nodes.json` | raw per-locus records |
 | `<set>/indel_no_candidate.tsv`, `snv_no_candidate.tsv`, `controls.tsv`, `summary.json` | per-set classes |
 | `make_supp_fig2.py`, `classes.md`, `classes.tsv`, `supp_fig2.png` / `.pdf` | the revised Supplementary Fig. 2 and its table |
+| `r16bc_tables.py`, `r16bc_tables.md` | letter Supplementary Tables R1.6b / R1.6c with HCC1395T (+ SNV table on the AF 0.05 builds) |

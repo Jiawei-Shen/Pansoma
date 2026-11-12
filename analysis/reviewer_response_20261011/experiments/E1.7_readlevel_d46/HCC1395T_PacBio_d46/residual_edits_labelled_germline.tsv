@@ -1,0 +1,2 @@
+chrom	vcf_pos	vcf_ref	vcf_alt	kind	final_class	residual_candidate	alt_reads	tensor_label
+chr18	51548277	ATATCTATC	A	DEL	I2_partly_in_graph_residual_edit	89765468:14:DEL:TATC>	9	germline:representative_allele_is_germline_truth
