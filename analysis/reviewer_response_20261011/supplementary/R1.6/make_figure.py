@@ -64,7 +64,7 @@ KINDS = ("SNV", "INDEL")
 # validated categorical slots 1-3 (dataviz palette, light surface); comparators dashed as a second encoding
 CALLERS = (("pansoma", "Pansoma", "#2a78d6", "-"), ("deepsomatic", "DeepSomatic-TO", "#eb6834", (0, (5, 2))),
            ("clairs_to", "ClairS-TO", "#1baf7a", (0, (5, 2))))
-FOUR = "#6250d6"  # the four-cell-line Pansoma model (--four-tumor), solid like the six-tumor one
+FOUR = "#e87ba4"  # the four-cell-line Pansoma model (--four-tumor), solid like the six-tumor one; pink, far from the six-tumor blue (user 2026-11-13)
 INK, MUTED, GRID, SURFACE = "#0b0b0b", "#52514e", "#d9d8d4", "#fcfcfb"
 plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 7, "xtick.labelsize": 6.5, "ytick.labelsize": 6.5,
                      "xtick.major.size": 2.5, "ytick.major.size": 2.5, "xtick.minor.size": 1.5, "ytick.minor.size": 1.5,
