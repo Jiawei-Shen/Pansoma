@@ -47,7 +47,7 @@ RIS = RUNS / "ris_7fc7396_20261012"
 E8 = Path("/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score")
 BOUNDS = HERE / "bounds.json"
 
-TUMORS = ("HG008T", "COLO829T", "HCC1395T")
+TUMORS = ("HCC1395T", "COLO829T", "HG008T")  # row order top to bottom (user 2026-11-13)
 PLATFORMS = ("Illumina", "PacBio", "ONT")
 KINDS = ("SNV", "INDEL")
 # validated categorical slots 1-3 (dataviz palette, light surface); comparators dashed as a second encoding
