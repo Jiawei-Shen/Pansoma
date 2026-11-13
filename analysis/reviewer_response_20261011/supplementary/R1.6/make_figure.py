@@ -19,13 +19,13 @@ Table R1.6, and adds HCC1395T) are not drawn (user 2026-11-12); they stay as the
 Writes fig_R1.6.png / .pdf and points.md (the plotted operating points and curve ends, for checking against the table).
 Size: 6.5 x 7.0 in (the text width of a Letter / A4 Word page with 1-in margins, caption below on the same page; insert
 at 100%), 300 dpi PNG; platform = column header, tumor = row label at the right (--height changes the height).
---snv six-tumor: the same figure with the six-tumor SNV model in (a): the latest six-tumor SNV models (E30, user
-  2026-11-10), one run per platform, trained on chr2-22 of HCC1395T, HCC1954T, H1437T, H2009T, HG008T and COLO829T:
-  PacBio HiFi / Illumina multicancer6_<P>_SNV_sitef_af05_lnf25w1 (site features, AF 0.05 floor on the four CASTLE
-  lines, AF <= 0.1 non sampled 25% at weight 1), PASS = rule 2 (validation callable recall 0.95 after the filter),
-  vcf_chr1_<set>_d46_r095; ONT multicancer6_ONT_SNV (no site features: E30 kept it for ONT), vcf_chr1_<set>_d46_normfix,
-  PASS = validation recall 0.9 before the filter. COLO829T and HG008T are tested on their d46 sets (AF 0.08);
-  HCC1395T PacBio HiFi / Illumina on its AF 0.05 sets (d46_snvaf05; bounds.json has them).
+--snv six-tumor: the same figure with the six-tumor SNV model in (a): the six-tumor SNV models of the current SNV
+  pipeline (user 2026-11-13: R1.6 follows the updated results), one run per platform, trained on chr2-22 of HCC1395T,
+  HCC1954T, H1437T, H2009T, HG008T and COLO829T: snv_newpipe_20261109/multicancer6_<P>_SNV_newpipe, vcf_chr1_<set>_d46
+  (site features, AF <= 0.1 non sampled 25% at weight 1, best epoch by the post-filter validation F1, PASS = rule 2:
+  validation callable recall 0.95 after the filter; AF floor 0.05 on the CASTLE lines and COLO829T for PacBio HiFi /
+  Fiber-seq / Illumina, 0.08 for ONT and HG008T). Test sets: HG008T and every ONT set at AF 0.08 (d46); COLO829T and
+  HCC1395T PacBio HiFi / Fiber-seq / Illumina on their AF 0.05 sets (d46_snvaf05; bounds.json has them).
   One threshold per platform, the same in every tumor.
   (b) unchanged. Writes fig_R1.6_six_tumor.png / .pdf and points_six_tumor.md.
 Run: /wanglab/jshen/anaconda3/envs/sambcfenv/bin/python make_figure.py [--snv six-tumor]   (login node, < 1 min)
@@ -84,9 +84,8 @@ def point(block):
 
 def pansoma_reports(tumor, p, kind, snv="single"):
     if kind == "SNV" and (snv == "six-tumor" or tumor == "HCC1395T"):
-        run, vcf = ((f"multicancer6_{p}_SNV", f"vcf_chr1_{ds(tumor, p)}_d46_normfix") if p == "ONT" else
-                    (f"multicancer6_{p}_SNV_sitef_af05_lnf25w1", f"vcf_chr1_{ds(tumor, p)}_d46_r095"))
-        fs = [RUNS / run / vcf / "eval_bed" / "report.json"]
+        fs = [RUNS / "snv_newpipe_20261109" / f"multicancer6_{p}_SNV_newpipe" / f"vcf_chr1_{ds(tumor, p)}_d46" / "eval_bed" / "report.json"]
+        assert (p == "ONT" or tumor == "HG008T") == ("snvaf05" not in json.loads(fs[0].read_text())["calls"]), fs[0]
     elif kind == "SNV":
         fs = [RIS / f"{ds(tumor, p, True)}_SNV_d46_normbq{x}" / "vcf_chr1" / "eval_bed" / "report.json" for x in ("",)]  # seed 0 only (user 2026-11-10)
     else:
@@ -100,10 +99,11 @@ def comparator_report(caller, tumor, p, kind):
     return f, e["all_pon"], e["pass_pon"]
 
 
-def bounds(status, tumor, p, kind):
+def bounds(status, tumor, p, kind, snv="single"):
     """(not a population allele, exact candidate and not a population allele) as shares of chr1 truth in the BED."""
-    # the latest six-tumor PacBio HiFi / Illumina SNV models are tested on HCC1395T's AF 0.05 sets (d46_snvaf05)
-    sfx = "_d46_snvaf05" if (kind, tumor) == ("SNV", "HCC1395T") and p != "ONT" else "_d46"
+    # the six-tumor PacBio HiFi / Illumina SNV models are tested on the AF 0.05 sets of COLO829T and HCC1395T (d46_snvaf05)
+    six = kind == "SNV" and (snv == "six-tumor" or tumor == "HCC1395T")
+    sfx = "_d46_snvaf05" if six and p != "ONT" and tumor != "HG008T" else "_d46"
     c = status[f"{ds(tumor, p)}{sfx}|{kind}"]
     return c["bound_any"], c["bound_exact"]
 
@@ -126,7 +126,7 @@ def main():
             for p in PLATFORMS:
                 d = dict(pansoma=pansoma_reports(tumor, p, kind, args.snv),
                          **{c: comparator_report(c, tumor, p, kind) for c, *_ in CALLERS[1:]},
-                         bounds=bounds(status, tumor, p, kind))
+                         bounds=bounds(status, tumor, p, kind, args.snv))
                 data[(kind, tumor, p)] = d
     xmax = {}  # per row: SNV 0-1; INDEL to just past the furthest curve of that tumor
     for kind in KINDS:
@@ -211,8 +211,8 @@ def main():
         fig.savefig(args.outdir / f"fig_R1.6{tag}.{ext}", dpi=300)
     plt.close(fig)
 
-    m6 = ("the latest six-tumor model, one run per platform (PacBio HiFi / Illumina `multicancer6_<P>_SNV_sitef_af05_lnf25w1`, "
-          "rule 2 `_r095`; ONT `multicancer6_ONT_SNV` normfix)")
+    m6 = ("the six-tumor model of the current SNV pipeline, one run per platform (`snv_newpipe_20261109/multicancer6_<P>_SNV_newpipe`, "
+          "rule 2; COLO829T / HCC1395T PacBio HiFi / Fiber-seq / Illumina on their AF 0.05 sets)")
     snv = (f"SNV: {m6}" if args.snv == "six-tumor"
            else f"SNV: single-tumor `--norm dataset` HPRC v2.1 model, seed 0 (HCC1395T: {m6}; no single-tumor HCC1395T SNV model)")
     L = [f"# Supplementary Fig. R1.6{' (six-tumor SNV model)' if tag else ''}: plotted points (chr1, benchmark regions, after our population filter)", "",

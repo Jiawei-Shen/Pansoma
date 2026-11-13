@@ -233,6 +233,32 @@
   "report_truth_pon_tags": 16,
   "report_truth_records": 133
  },
+ "COLO829T_Illumina_d46_snvaf05|SNV": {
+  "n": 2443,
+  "tagged": 84,
+  "exact": 2133,
+  "exact_untagged": 2071,
+  "bound_any": 0.9656160458452722,
+  "bound_exact": 0.8477282030290626,
+  "tagged_whole_chr1": 84,
+  "n_whole_chr1": 2443,
+  "rtg_truth": 2443,
+  "report_truth_pon_tags": 84,
+  "report_truth_records": 2443
+ },
+ "COLO829T_fiberseq_d46_snvaf05|SNV": {
+  "n": 2443,
+  "tagged": 84,
+  "exact": 2107,
+  "exact_untagged": 2045,
+  "bound_any": 0.9656160458452722,
+  "bound_exact": 0.8370855505525993,
+  "tagged_whole_chr1": 84,
+  "n_whole_chr1": 2443,
+  "rtg_truth": 2443,
+  "report_truth_pon_tags": 84,
+  "report_truth_records": 2443
+ },
  "HCC1395T_Illumina_d46_snvaf05|SNV": {
   "n": 3440,
   "tagged": 66,

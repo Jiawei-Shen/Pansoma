@@ -6,8 +6,8 @@ outside the BED but whose deleted bases are inside, so somatic.recall.tsv's in_b
   n         truth alleles
   tagged    truth alleles our population filter tags (E5b per_truth.tsv.gz 'pon')
   exact     truth alleles with an exact candidate: a tensor labelled 1 by representative_allele_is_somatic_truth
-            carries the truth id (the E21 index caches). The AF 0.05 SNV sets HCC1395T_{Illumina,PacBio}_d46_snvaf05
-            (the test sets of the latest six-tumor SNV models) have no cache: there exact = somatic.recall.tsv status
+            carries the truth id (the E21 index caches). The AF 0.05 SNV sets {HCC1395T,COLO829T}_<P>_d46_snvaf05
+            (the six-tumor SNV models' test sets for PacBio HiFi / Fiber-seq / Illumina) have no cache: there exact = somatic.recall.tsv status
             tensor_representative, which equals the cache count on every SNV set that has both (asserted).
   exact_untagged
 -> bound_any = (n - tagged) / n (any caller after the filter), bound_exact = exact_untagged / n (Pansoma).
@@ -35,7 +35,8 @@ import label_status as LS  # noqa: E402
 RUNS = Path("/scratch/jshen/data/pansoma_net_v2_runs")
 SETS = [(t, p, "_d46", ("SNV", "INDEL")) for t in ("HG008T", "COLO829T", "HCC1395T")
         for p in ("Illumina", "fiberseq" if t == "COLO829T" else "PacBio", "ONT")]
-SETS += [("HCC1395T", p, "_d46_snvaf05", ("SNV",)) for p in ("Illumina", "PacBio")]
+SETS += [(t, p, "_d46_snvaf05", ("SNV",)) for t in ("COLO829T", "HCC1395T")
+         for p in ("Illumina", "fiberseq" if t == "COLO829T" else "PacBio")]
 
 
 def recall_exact(set_name, kind):
@@ -93,8 +94,8 @@ def main():
                 rep = json.loads((RUNS / f"multicancer6_{'PacBio' if plat == 'fiberseq' else plat}_SNV" /
                                   f"vcf_chr1_{ds}_d46_normfix" / "eval_bed" / "report.json").read_text())
             elif kind == "SNV":
-                rep = json.loads((RUNS / f"multicancer6_{plat}_SNV_sitef_af05_lnf25w1" / f"vcf_chr1_{ds}_d46_r095" /
-                                  "eval_bed" / "report.json").read_text())
+                rep = json.loads((RUNS / "snv_newpipe_20261109" / f"multicancer6_{'PacBio' if plat == 'fiberseq' else plat}_SNV_newpipe"
+                                  / f"vcf_chr1_{ds}_d46" / "eval_bed" / "report.json").read_text())
                 assert rep["pon_vcf"] is None or "snvaf05" in json.dumps(rep), (key, "report is not on the snvaf05 set")
             at = rep["pon"]["at_threshold"]
             res["rtg_truth"] = at["tp_baseline"] + at["fn"]
