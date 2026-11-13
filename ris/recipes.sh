@@ -10,6 +10,9 @@
 #   sampled 25% per epoch at loss weight 1, best epoch by the post-PoN validation F1, PASS at the post-PoN validation
 #   recall 0.95 of the callable positives (E30: analysis/reviewer_response_20261011/experiments/E30_snv_af005_20261103).
 #   Only the build's SNV AF floor differs: 0.05 for PacBio HiFi / Fiber-seq / Illumina, 0.08 for ONT.
+# NOSITEF=1 (the GRCh38-only models, SNV and INDEL): --site-features-pon-only, i.e. the feature files give only the PoN
+#   tags (post-PoN epoch selection and call rule) and the population features are not a model input; the rest of the
+#   recipe is unchanged.
 # The site-feature recipes read the files of every training and predicted set from SITE_FEATURES (site_features.sh,
 # KIND=SNV for SNV; env.sh's default).
 SF_DIR="${SITE_FEATURES:-${PANSOMA_RUNS:-/storage2/fs1/epigenome/Active/jiawei.s/pansoma_net_v2_runs}/site_features}"
@@ -30,3 +33,4 @@ case ${KIND:-SNV} in
          if [ "$plat" = ONT ]; then RECIPE+=(--call-rule postpon); fi;;
   *) echo "KIND must be SNV or INDEL, not ${KIND}" >&2; exit 2;;
 esac
+if [ "${NOSITEF:-0}" = 1 ]; then RECIPE+=(--site-features-pon-only); fi

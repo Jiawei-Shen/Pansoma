@@ -200,6 +200,12 @@ recipe).
   `--site-features DIR`) for every predicted set and stops before any output when one is missing or stale, and warns
   (stderr, `.metrics.json` `feature_files` / `feature_file_warnings`) when a training set's file has changed or a file
   was built with another version of the PoN script.
+- `--site-features DIR --site-features-pon-only` reads only the PoN tags of the files: the post-PoN validation,
+  `--best-by postpon` and the call rule work as with the features, but the five numbers are not a model input. The
+  checkpoint records no `site_features` (`feature_files` lists the files under `pon_tags`), so `predict` reads no
+  feature file. The GRCh38-only models train this way (SNV and INDEL): a model that sees the population AF of each
+  site can use it instead of the reads, and a comparison of graphs should not give that input to the linear arm;
+  everything else is the recipe (`NOSITEF=1` with `ris/recipes.sh`).
 - With site features each validation also reports the post-PoN result (`metrics.postpon_report`, `val.postpon`): the
   PoN-tagged tensors are never called, so their positives are misses, the others are called at p_somatic ≥ t. The
   checkpoint's `val` gets `somatic_threshold_postpon` (best per-tensor F1) and, as a report, `somatic_at_recall_postpon`
@@ -710,7 +716,8 @@ cd machine_learning && $P -m unittest discover -s pansoma_net_v2/tests -t .
   dataset's extra scalars, the model's site-feature input and round trip, `postpon_report` (no tags = the plain
   threshold, tagged tensors never called, truth level, targets over the callable positives), `evaluate`'s alignment
   of the tags (also with a shuffled sampler), train / resume / predict with `--site-features` (feature files' sha256
-  recorded, predict's warning on a changed file), `--best-by postpon` and the call rule, `--non-reasons` /
+  recorded, predict's warning on a changed file), `--best-by postpon` and the call rule, `--site-features-pon-only`
+  (no model input, no recorded site features, predict without a feature file, resume), `--non-reasons` /
   `--non-reasons-in-bed` (train and predict, inside the benchmark only), the builder on a small FASTA and two
   database VCFs (exact, normalised and position AFs, the PoN tag against `filter_panel_of_normals`, off-reference
   tensors), predict on an unlabelled set (same probabilities as its labelled copy, no test labels) and `graph_vcf

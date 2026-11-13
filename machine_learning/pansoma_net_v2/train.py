@@ -21,6 +21,9 @@ the same files. With site features the validation also reports the post-PoN soma
 (metrics.postpon_report: tensors the PoN rule tags are never called): val somatic_threshold_postpon, val.postpon and
 the report-only keys somatic_at_recall_postpon, somatic_at_recall_postpon_callable and truth_threshold_postpon. The
 checkpoint records the sha256 of every feature file read (feature_files), so predict can warn when one has changed.
+With --site-features-pon-only the files give only the PoN tags (the post-PoN validation, --best-by postpon, the call
+rule): the features are not a model input, the checkpoint records no site features (feature_files has the files
+under "pon_tags") and predict reads none (the GRCh38-only models, which get no population features as input).
 The best epoch has the highest pre-PoN per-tensor somatic F1 (--best-by f1, the default) or, with --best-by postpon,
 the highest post-PoN per-tensor somatic F1 (needs --site-features). The checkpoint records its call rule
 (call_rule), the PASS threshold graph_vcf applies by default: with --best-by postpon "postpon-recall" at call_recall
@@ -87,6 +90,11 @@ def parse_args(argv=None):
                         "of the position, PoN tag, homopolymer length; site_features.py) to the head as extra scalars; "
                         "a set without its file, or with a stale one, is an error; the checkpoint records DIR and the "
                         "transform, and their PoN tags also give the post-PoN validation thresholds")
+    p.add_argument("--site-features-pon-only", action="store_true",
+                   help="with --site-features: read only the PoN tags of the feature files (post-PoN validation, "
+                        "--best-by postpon, --call-recall); the features are NOT a model input and the checkpoint "
+                        "records no site features, so predict reads none (the GRCh38-only models: no population "
+                        "features as a model input, everything else as the recipe)")
     p.add_argument("--best-by", choices=["f1", "postpon"], default="f1",
                    help="best epoch (best.pth): highest validation somatic F1 (f1), or highest validation post-PoN "
                         "somatic F1, PoN-tagged tensors never called (postpon; needs --site-features); postpon also "
@@ -528,7 +536,8 @@ def prepare_data(args, log, refresh_index=True, barrier=None):
     and the validation samples' PoN tags. log: the log function; refresh_index: build / refresh the index cache first
     (with --rebuild-index: rebuild it), train's rank 0; barrier: called after that (DDP).
     Returns a SimpleNamespace: cache, everything ([(KindIndex, positions)] of every set x kind), reads_path_count,
-    path_count, haplotypes, site_record, feature_files ({"site_features": {<SET>.<KIND>: sha256}} or None),
+    path_count, haplotypes, site_record (None with --site-features-pon-only), feature_files ({"site_features":
+    {<SET>.<KIND>: sha256}}, {"pon_tags": ...} with --site-features-pon-only, or None),
     train_chroms, val_chroms, test_chroms, held (--set-test-chroms), train_parts, val_parts, train_set, val_set (a
     Subset with --val-samples), val_keep, val_truth, val_pon, counts (training class counts)."""
     cache = args.cache_dir or str(Path(args.output) / "index_cache")
@@ -565,13 +574,15 @@ def prepare_data(args, log, refresh_index=True, barrier=None):
     files, loaded = {}, {}  # <SET>.<KIND> -> sha256 of the file read / its arrays' record
     for index, _ in everything:  # before any TensorDataset: they read index.arrays["site_features"]
         if args.site_features:
-            data = attach_features(index, args.site_features, True)
+            data = attach_features(index, args.site_features, not args.site_features_pon_only)
             files[sitef.key(index)], loaded[sitef.key(index)] = data["sha256"], data
-            log(sitef.describe(index, data) + " (model input)")
+            log(sitef.describe(index, data) + (" (PoN tags only, not a model input)" if args.site_features_pon_only
+                                               else " (model input)"))
             for w in sitef.pon_check(data):
                 log(f"warning: {w}")
-    site_record = sitef.record(args.site_features, loaded) if args.site_features else None
-    feature_files = {"site_features": files} if files else None
+    model_input = bool(args.site_features) and not args.site_features_pon_only
+    site_record = sitef.record(args.site_features, loaded) if model_input else None
+    feature_files = {"site_features" if model_input else "pon_tags": files} if files else None
     available = sorted({c for index, _ in everything for c in index.meta["chroms"]})
     train_chroms, val_chroms, test_chroms, missing = split_chroms(args, available)
     log(f"train {train_chroms}\nval {val_chroms}\ntest (left out) {test_chroms}"
@@ -672,6 +683,8 @@ def prepare_data(args, log, refresh_index=True, barrier=None):
 
 def main(argv=None):
     args = parse_args(argv)
+    if args.site_features_pon_only and not args.site_features:
+        raise SystemExit("--site-features-pon-only needs --site-features")
     if args.best_by == "postpon" and not args.site_features:
         raise SystemExit("--best-by postpon needs the PoN tags of --site-features")
     if args.call_rule == "postpon" and args.best_by != "postpon":
@@ -699,7 +712,8 @@ def main(argv=None):
 
     model = PansomaNetV2(len(CLASSES), args.depths, args.dims, args.front, args.drop_path,
                          scalars=len(SCALARS) if args.scalars else 0, block=args.block, drop_planes=args.drop_planes,
-                         norm=args.norm, site_features=len(sitef.SITE_FEATURES) if args.site_features else 0)
+                         norm=args.norm,
+                         site_features=len(sitef.SITE_FEATURES) if args.site_features and not args.site_features_pon_only else 0)
     checkpoint = torch.load(args.resume, map_location="cpu", weights_only=False) if args.resume else None
     if checkpoint is not None:
         if full_config(checkpoint["config"]) != model.config:

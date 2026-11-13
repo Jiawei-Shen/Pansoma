@@ -565,6 +565,30 @@ class TrainPredictTest(unittest.TestCase):
         with self.assertRaisesRegex(SystemExit, "--call-rule postpon needs --best-by postpon"):
             train.main(["--tensors", str(self.root), "--output", str(self.t / "rpf"), "--epochs", "1", "--site-features",
                         str(feat), "--call-rule", "postpon"] + SMALL_ARGS)
+        # --site-features-pon-only: the PoN tags select the epoch and the call rule, the features are not a model input
+        po = self.t / "ponly"
+        train.main(["--tensors", str(self.root), "--output", str(po), "--epochs", "1", "--site-features", str(feat),
+                    "--site-features-pon-only", "--best-by", "postpon"] + SMALL_ARGS)
+        cpo = torch.load(po / "best.pth", weights_only=False)
+        self.assertIsNone(cpo["site_features"])
+        self.assertEqual(cpo["config"].get("site_features", 0), 0)
+        self.assertEqual(list(cpo["feature_files"]), ["pon_tags"])
+        self.assertEqual(cpo["feature_files"]["pon_tags"], ckpt["feature_files"]["site_features"])
+        self.assertEqual((cpo["best"]["select"], cpo["call_rule"], cpo["call_recall"]), ("postpon", "postpon-recall", 0.8))
+        self.assertIn("somatic_threshold_postpon", cpo["val"])
+        predict.main(["--checkpoint", str(po / "best.pth"), "--tensors", str(self.root), "--output",
+                      str(self.t / "ponly_pred"), "--chroms", "chr1", "--num-workers", "0", "--amp", "off", "--kinds",
+                      "INDEL"])  # reads no feature file
+        report = json.loads((self.t / "ponly_pred" / "sample.tensors.INDEL.metrics.json").read_text())
+        self.assertIsNone(report["site_features"])
+        train.main(["--tensors", str(self.root), "--output", str(po), "--epochs", "2", "--site-features", str(feat),
+                    "--site-features-pon-only", "--best-by", "postpon", "--resume", str(po / "last.pth")] + SMALL_ARGS)
+        with self.assertRaisesRegex(SystemExit, "--resume model config"):  # the same run with the features as input
+            train.main(["--tensors", str(self.root), "--output", str(po), "--epochs", "3", "--site-features", str(feat),
+                        "--best-by", "postpon", "--resume", str(po / "last.pth")] + SMALL_ARGS)
+        with self.assertRaisesRegex(SystemExit, "--site-features-pon-only needs --site-features"):
+            train.main(["--tensors", str(self.root), "--output", str(self.t / "pof"), "--epochs", "1",
+                        "--site-features-pon-only"] + SMALL_ARGS)
         # resumed with the default --best-by f1: post-PoN scores are not compared with F1 ones
         train.main(["--tensors", str(self.root), "--output", str(out), "--epochs", "4", "--site-features", str(feat),
                     "--resume", str(out / "last.pth")] + SMALL_ARGS)
