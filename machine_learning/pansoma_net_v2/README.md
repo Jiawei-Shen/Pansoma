@@ -211,8 +211,9 @@ recipe).
   validation recall of the callable positives (those the PoN does not tag) reaches 0.8,
   `somatic_at_recall_postpon_callable["0.8"]`. `graph_vcf` calls with it by default (`--threshold postpon-recall`
   explicitly); `--threshold postpon` gives the post-PoN best-F1 threshold. A checkpoint trained with `--best-by
-  postpon` that records no call rule counts as postpon-recall at 0.8. Other checkpoints keep call rule `recall`, the
-  validation recall-0.9 threshold. `best.select` records the selection; `--resume` with another selection starts the
+  postpon` that records no call rule counts as postpon-recall at 0.8. `--call-rule postpon` (the ONT INDEL recipe)
+  records the post-PoN best-F1 threshold as the call rule instead (`call_rule` postpon, no `call_recall`). Other
+  checkpoints keep call rule `recall`, the validation recall-0.9 threshold. `best.select` records the selection; `--resume` with another selection starts the
   best epoch afresh. The stored `somatic_threshold` stays the pre-PoN best-F1 one.
 - `predict` with site features writes `pon_tag` in each record and adds the rules after the PoN `pipeline_pon`,
   `threshold_t_pon`, `val_postpon_recall` (the call rule above), `val_postpon` and `val_postpon_truth` (tagged
@@ -351,11 +352,13 @@ and every candidate kept (no `--exclude-candidates`), and:
 - labels that follow the benchmark: `--non-reasons repeat_indel_without_truth --non-reasons-in-bed
   outside_confident_region` (above, "Labels inside the benchmark");
 - the five site features: `--site-features DIR` (`site_features build` for each training and test set);
-- `--best-by postpon`: the epoch with the best post-PoN validation somatic F1; the PASS threshold is the post-PoN
-  validation recall 0.8 of the callable positives (call rule postpon-recall, `graph_vcf`'s default for these
-  checkpoints; no off-reference rescue for INDELs), then the INDEL PoN rule (gnomAD / CoLoRSdb exact allele: AF ≥
+- `--best-by postpon`: the epoch with the best post-PoN validation somatic F1; the PASS threshold is, for PacBio HiFi /
+  Fiber-seq and Illumina, the post-PoN validation recall 0.8 of the callable positives (call rule postpon-recall,
+  "ppr8") and, for ONT, the post-PoN validation best-F1 threshold (`--call-rule postpon`, call rule postpon, "pp";
+  `ris/recipes.sh` adds it for ONT sets); `graph_vcf`'s default for these checkpoints; no off-reference rescue for
+  INDELs; then the INDEL PoN rule (gnomAD / CoLoRSdb exact allele: AF ≥
   0.01 in homopolymers of ≥ 8 bases, else AF ≥ 0.0001; below). One threshold per model, stored in the checkpoint and
-  applied unchanged to every sample. No post-filter. The post-PoN best-F1 threshold (`--threshold postpon`) is
+  applied unchanged to every sample. No post-filter. The other rule (`--threshold postpon` or `postpon-recall`) is
   reported beside it.
 - Training data: chr2-22 of each training tumor of the platform (`--test-chroms --set-test-chroms <set> chr1 ...`:
   chr1 of every tumor left out of training and validation), validation on 5 % of the node blocks.
@@ -376,7 +379,10 @@ Why:
   validation positive before the PoN admits thousands of false calls. The PoN is a fixed, label-free step of the
   caller, so the threshold is set on the calls it leaves: a recall of 0.8 of the positives it does not tag. One
   threshold serves every tumor, including tumors whose somatic INDELs score lower than those of the training cell
-  lines; the post-PoN best-F1 threshold is stricter. The epoch is chosen by the post-PoN validation F1. The SNV
+  lines; the post-PoN best-F1 threshold is stricter. On ONT the recall-0.8 threshold falls to 0.24-0.33 (ONT somatic
+  INDELs and homopolymer errors overlap in score) and lets in hundreds of false calls per sample (six-tumor model,
+  HCC1395T chr1: F1 0.304 against 0.564 at the best-F1 threshold, three-seed means), so ONT calls at the post-PoN
+  best-F1 threshold. The epoch is chosen by the post-PoN validation F1. The SNV
   recipe uses the same rule at recall 0.95 (at 0.9 its threshold was stricter than the post-PoN best-F1 one, E29).
 
 ## Calls: graph VCF → GRCh38 VCF → PoN → rtg vcfeval
@@ -428,7 +434,8 @@ thresholds). vcfeval runs twice there:
 - FILTER:
   - PASS: p_somatic ≥ the threshold of the checkpoint's call rule (the checkpoint is the one in predict's
     `.metrics.json`): for the SNV recipe the post-PoN validation threshold at recall 0.95 of the callable
-    positives, for the INDEL recipe the same at recall 0.8 (above, "SNV recipe", "INDEL recipe"); checkpoints
+    positives, for the INDEL recipe the same at recall 0.8 (ONT: the post-PoN best-F1 threshold, call rule postpon;
+    above, "SNV recipe", "INDEL recipe"); checkpoints
     trained without `--best-by postpon` use the validation threshold at recall 0.9 (rule recall);
     `--target-recall` sets the recall of either rule. `--threshold T` sets the
     threshold; `--threshold postpon-recall`, `postpon` and `recall` pick a rule; `--threshold predict` keeps

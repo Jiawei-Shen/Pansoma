@@ -40,6 +40,8 @@ A record is the site's representative allele A1, the allele the model scores. Th
       the post-PoN validation recall of the callable positives (those the PoN does not tag) reaches the
       checkpoint's call_recall (0.8; --target-recall overrides it when given), val
       somatic_at_recall_postpon_callable. The PoN itself is applied later, by vcfeval.
+    - postpon (the ONT INDEL recipe, train --call-rule postpon): the post-PoN validation best-F1 threshold, val
+      somatic_threshold_postpon.
     --threshold T sets the threshold; --threshold postpon-recall / recall take those rules; --threshold postpon
     takes the post-PoN validation best-F1 threshold, val somatic_threshold_postpon (a checkpoint without the
     post-PoN keys is an error). --threshold predict keeps predict's own call (`pred`, made with the checkpoint's

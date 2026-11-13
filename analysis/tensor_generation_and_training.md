@@ -372,11 +372,14 @@ GPU=h100 TAG=mytag $JS/submit_indel.sh HG008T_PacBio COLO829T_ONT
 | `--non-fraction` | 0.25（配 `--keep-non-af 0.100001 --no-importance-weights`） | 1.0 | 1.0：每个 epoch 用全部 tensor。SNV：AF > 0.1 的 non、全部 germline 和 somatic 每个 epoch 都用，AF ≤ 0.1 的 non 每个 epoch 重新抽 25%，loss 权重 1 | 1.0 |
 | `--site-features` | SNV site features | INDEL site features | 五个人群 site features（`site_features build`） | 不设 |
 | `--best-by` / `--call-recall` | `postpon` / 0.95 | `postpon` / 0.8（默认） | 按 PoN 之后的验证 F1 选 epoch；PASS = PoN 之后验证集可叫阳性 recall 达到这个值的阈值 | `f1` / 0.8 |
+| `--call-rule` | 不设（postpon-recall） | ONT：`postpon`；其他平台不设 | checkpoint 记录的 PASS 规则：`postpon-recall` 是上面 recall 的阈值，`postpon` 是 PoN 之后验证集 F1 最高的阈值（"pp"） | `postpon-recall` |
 | `--block` | v2 | v2 | ConvNeXt block | v2 |
 | `--ignore-reasons` | 两个部分匹配 somatic 的 reason | 同左 | 这些 reason 的 tensor 在训练和 validation 里当 −1 | 不设 |
 
 `--weight-decay 0.05`、`--warmup-epochs 1` 是默认值。出 VCF 时 PASS 用 checkpoint 的 call rule（`graph_vcf` 的默认）：
-SNV 是 PoN 之后验证集可叫阳性 recall 0.95 的阈值，INDEL 是 PoN 之后 recall 0.8 的阈值；SNV 的 off-reference tensor
+SNV 是 PoN 之后验证集可叫阳性 recall 0.95 的阈值，INDEL 是 PoN 之后 recall 0.8 的阈值（ONT 的 INDEL 是 PoN 之后验证集
+F1 最高的阈值：recall 0.8 的阈值在 ONT 上太低，放进大量 homopolymer 错误；`ris/recipes.sh` 对 ONT 的 set 自动加
+`--call-rule postpon`，之前训练的 ONT INDEL checkpoint 出 VCF 时用 `graph_vcf --threshold postpon`）；SNV 的 off-reference tensor
 用 `predict` 的 rescue；然后 PoN 和 rtg vcfeval。
 E30 的 SNV checkpoint 记录的是 recall 0.9，出 VCF 时加 `graph_vcf --target-recall 0.95`（RIS 的 `ris/vcf.sh`：环境变量 `TARGET_RECALL=0.95`）。
 

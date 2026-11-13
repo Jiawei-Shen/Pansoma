@@ -25,9 +25,10 @@ The best epoch has the highest pre-PoN per-tensor somatic F1 (--best-by f1, the 
 the highest post-PoN per-tensor somatic F1 (needs --site-features). The checkpoint records its call rule
 (call_rule), the PASS threshold graph_vcf applies by default: with --best-by postpon "postpon-recall" at call_recall
 (--call-recall, 0.8 by default): the threshold at which the post-PoN validation recall of the callable positives (those
-the PoN does not tag) reaches it, val somatic_at_recall_postpon_callable; else "recall" (val somatic_at_recall at
-graph_vcf's --target-recall, 0.9 by default). The post-PoN best-F1 threshold (somatic_threshold_postpon) stays
-available as graph_vcf --threshold postpon.
+the PoN does not tag) reaches it, val somatic_at_recall_postpon_callable; or, with --call-rule postpon (the ONT INDEL
+recipe), "postpon": the post-PoN validation best-F1 threshold (somatic_threshold_postpon); without --best-by postpon
+"recall" (val somatic_at_recall at graph_vcf's --target-recall, 0.9 by default). graph_vcf --threshold overrides the
+recorded rule (postpon, postpon-recall, recall or a number).
 
 --non-reasons R [R ...] trains and validates the tensors whose label reason is R (e.g. repeat_indel_without_truth,
 -1 in the label files) as non where they lie inside the benchmark (the confident region or the somatic truth BED);
@@ -94,6 +95,10 @@ def parse_args(argv=None):
     p.add_argument("--call-recall", type=float, default=0.8, choices=metrics.RECALLS,
                    help="with --best-by postpon: the call rule's post-PoN validation recall of the callable positives "
                         "(call_rule postpon-recall, call_recall)")
+    p.add_argument("--call-rule", choices=["postpon-recall", "postpon"], default="postpon-recall",
+                   help="with --best-by postpon: the call rule the checkpoint records (graph_vcf's default PASS): "
+                        "postpon-recall (the post-PoN validation threshold at --call-recall of the callable positives) "
+                        "or postpon (the post-PoN validation best-F1 threshold; the ONT INDEL recipe)")
     p.add_argument("--epochs", type=int, default=30)
     p.add_argument("--epoch-samples", type=int, help="training tensors per epoch (a fresh random subset each epoch)")
     p.add_argument("--val-samples", type=int, help="fixed random subset of the validation tensors")
@@ -669,6 +674,8 @@ def main(argv=None):
     args = parse_args(argv)
     if args.best_by == "postpon" and not args.site_features:
         raise SystemExit("--best-by postpon needs the PoN tags of --site-features")
+    if args.call_rule == "postpon" and args.best_by != "postpon":
+        raise SystemExit("--call-rule postpon needs --best-by postpon")
     if not 0.0 < args.pon_negative_fraction <= 1.0:
         raise SystemExit("--pon-negative-fraction must be in (0, 1]")
     if args.pon_negative_fraction < 1.0 and not args.site_features:
@@ -842,7 +849,8 @@ def main(argv=None):
             f"channels_last {args.channels_last and run.device.type == 'cuda'}; {steps_per_epoch} steps per epoch")
 
     # graph_vcf's default PASS threshold
-    call_rule, call_recall = ("postpon-recall", args.call_recall) if args.best_by == "postpon" else ("recall", None)
+    call_rule, call_recall = (("postpon", None) if args.call_rule == "postpon" else ("postpon-recall", args.call_recall)) \
+        if args.best_by == "postpon" else ("recall", None)
 
     def save(path, epoch, val, threshold):
         if run.main:

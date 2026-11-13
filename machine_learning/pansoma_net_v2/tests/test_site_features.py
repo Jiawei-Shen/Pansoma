@@ -556,6 +556,15 @@ class TrainPredictTest(unittest.TestCase):
                     str(feat), "--best-by", "postpon", "--call-recall", "0.5"] + SMALL_ARGS)
         c5 = torch.load(self.t / "r5" / "best.pth", weights_only=False)
         self.assertEqual((c5["call_rule"], c5["call_recall"]), ("postpon-recall", 0.5))
+        # --call-rule postpon (the ONT INDEL recipe): graph_vcf's default PASS is the post-PoN best-F1 threshold
+        train.main(["--tensors", str(self.root), "--output", str(self.t / "rpp"), "--epochs", "1", "--site-features",
+                    str(feat), "--best-by", "postpon", "--call-rule", "postpon"] + SMALL_ARGS)
+        cpp = torch.load(self.t / "rpp" / "best.pth", weights_only=False)
+        self.assertEqual((cpp["call_rule"], cpp["call_recall"]), ("postpon", None))
+        self.assertEqual(graph_vcf.read_checkpoint(self.t / "rpp" / "best.pth")["call_rule"], "postpon")
+        with self.assertRaisesRegex(SystemExit, "--call-rule postpon needs --best-by postpon"):
+            train.main(["--tensors", str(self.root), "--output", str(self.t / "rpf"), "--epochs", "1", "--site-features",
+                        str(feat), "--call-rule", "postpon"] + SMALL_ARGS)
         # resumed with the default --best-by f1: post-PoN scores are not compared with F1 ones
         train.main(["--tensors", str(self.root), "--output", str(out), "--epochs", "4", "--site-features", str(feat),
                     "--resume", str(out / "last.pth")] + SMALL_ARGS)
