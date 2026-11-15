@@ -6,9 +6,12 @@ PASS threshold) on the latest model of every cell (user 2026-11-13). Every numbe
   six-tumor   snv_newpipe_20261109/multicancer6_<P>_SNV_newpipe, all three platforms (current SNV pipeline; ONT since
               job 477091, 2026-11-13).
   four-line   Illumina / PacBio HiFi: multicancer4_<P>_SNV_sitef_af05_lnf25w1 with the rule-2 VCFs (vcf_*_r095; COLO829T
-              on the AF 0.05 test set) = the current pipeline. ONT: multicancer4_ONT_SNV normfix (OLD recipe; the
-              current-pipeline retrain snv_newpipe_20261109/multicancer4_ONT_SNV_newpipe, job 477096, is used once its
-              VCFs exist).
+              on the AF 0.05 test set) = the current pipeline. ONT: multicancer4_ONT_SNV normfix, the ORIGINAL recipe
+              (user 2026-11-14: "ONT用旧的normfix"). The current-pipeline retrain
+              snv_newpipe_20261109/multicancer4_ONT_SNV_newpipe (job 477096, done 2026-11-14) is NOT used: its chr1 F1
+              is below the original model's on all three tumors (HCC1395T 0.443 vs 0.658, HG008T 0.548 vs 0.587,
+              COLO829T 0.365 vs 0.380; with the site features as an input it calls germline-looking sites that no
+              population file has, in regions the four cell lines' labels do not cover).
   COLO829T    Illumina / Fiber-seq: snv_newpipe_20261109/COLO829_<P>_SNV_d46_newpipe seed 0 (current pipeline) on its own
   model       chr1, and on HG008T / HCC1395T chr1 once the cross-tumor VCFs vcf_chr1_<set> exist (else the OLD normbq
               model's cross-tumor prediction). ONT: COLO829_ONT_SNV_d46_newpipe (job 481060, submitted 2026-11-13) once
@@ -68,10 +71,7 @@ def single(model, tumor, p):
 
 
 def four(tumor, p):
-    if p == "ONT":
-        d = NP / "multicancer4_ONT_SNV_newpipe" / f"vcf_chr1_{ds(tumor, p)}_d46"
-        if (d / "eval_bed" / "report.json").exists():
-            return rep(d), True
+    if p == "ONT":  # the original-recipe model, not multicancer4_ONT_SNV_newpipe (user 2026-11-14, see the docstring)
         return rep(R / "multicancer4_ONT_SNV" / f"vcf_chr1_{ds(tumor, p)}_d46_normfix"), False
     sfx = "_snvaf05_r095" if tumor == "COLO829T" else "_r095"
     return rep(R / f"multicancer4_{p}_SNV_sitef_af05_lnf25w1" / f"vcf_chr1_{ds(tumor, p)}_d46{sfx}"), True
