@@ -46,6 +46,13 @@ at 100%), 300 dpi PNG; platform = column header, tumor = row label at the right 
   the site features as an input it calls germline-looking sites that no population file has, in regions the four cell
   lines' labels do not cover. INDEL: unseen_s0_<P>_INDEL, the four-cell-line model of the final recipe.
   Writes fig_R1.6_four_six_tumor.png / .pdf and points_four_six_tumor.md.
+--snv six-tumor --graphs (user 2026-11-17: "在R1.6 图再加一组 GRCh38 and v1.1的相关数据"): the six-tumor figure plus the
+  six-tumor model of the same recipe and held-out chromosomes on GRCh38-only and HPRC v1.1
+  (m4m6_graphs_20261110/multicancer6_<P>_<KIND>_{linear_nositef,d9}, seed 0; SNV vcf_chr1_<tumor> at rule 2 on the
+  GRCh38-only / v1.1 versions of the same test sets; INDEL vcf_{ppr8,pp}_chr1_<tumor>). The GRCh38-only models get no
+  population site features as an input (user 2026-11-12). Pansoma's three references are an ordinal blue ramp
+  (GRCh38-only light, v1.1 middle, v2.1 dark); a cell whose model or VCF job has not finished says "pending" and is picked
+  up when the script is run again. Writes fig_R1.6_six_tumor_graphs.png / .pdf and points_six_tumor_graphs.md.
 INDEL PASS point: ppr8 for Illumina / PacBio HiFi / Fiber-seq, pp (post-filter validation best F1) for ONT (user
   2026-11-13, six-tumor and four-cell-line models; vcf_pp_chr1_<set>_d46). The curve is the same for both rules.
 Run: /wanglab/jshen/anaconda3/envs/sambcfenv/bin/python make_figure.py [--snv six-tumor [--four-tumor]]   (login node, < 1 min)
@@ -74,6 +81,11 @@ KINDS = ("SNV", "INDEL")
 CALLERS = (("pansoma", "Pansoma", "#2a78d6", "-"), ("deepsomatic", "DeepSomatic-TO", "#eb6834", (0, (5, 2))),
            ("clairs_to", "ClairS-TO", "#1baf7a", (0, (5, 2))))
 FOUR = "#e87ba4"  # the four-cell-line Pansoma model (--four-tumor), solid like the six-tumor one; pink, far from the six-tumor blue (user 2026-11-13)
+# --graphs: the six-tumor model on three references as an ordinal blue ramp (dataviz sequential blue, steps 250 / 400 / 600,
+# validated --ordinal on the light surface): the more haplotypes in the graph, the darker the line
+GRAPH_RUNS = RUNS / "m4m6_graphs_20261110"
+GRAPHS = (("linear_nositef", "GRCh38-only", "#86b6ef"), ("d9", "HPRC v1.1", "#3987e5"))
+V21 = "#184f95"
 INK, MUTED, GRID, SURFACE = "#0b0b0b", "#52514e", "#d9d8d4", "#fcfcfb"
 plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 7, "xtick.labelsize": 6.5, "ytick.labelsize": 6.5,
                      "xtick.major.size": 2.5, "ytick.major.size": 2.5, "xtick.minor.size": 1.5, "ytick.minor.size": 1.5,
@@ -138,6 +150,19 @@ def four_report(tumor, p, kind):
     return f, r["pon"], cur
 
 
+def graph_report(tumor, p, kind, g):
+    """The six-tumor model of the same recipe on GRCh38-only (linear_nositef) or HPRC v1.1 (d9): (file, pon block), or
+    None while the model or its VCF job has not finished."""
+    vd = f"vcf_chr1_{tumor}" if kind == "SNV" else f"vcf_{indel_rule(p)}_chr1_{tumor}"
+    f = GRAPH_RUNS / f"multicancer6_{p}_{kind}_{g}" / vd / "eval_bed" / "report.json"
+    if not f.exists():
+        return None
+    r = json.loads(f.read_text())
+    if kind == "SNV" and p != "ONT":  # same test sets as the v2.1 six-tumor model (AF 0.05 except HG008T)
+        assert (tumor == "HG008T") == ("snvaf05" not in r["calls"]), f
+    return f, r["pon"]
+
+
 def comparator_report(caller, tumor, p, kind):
     f = E8 / caller / ds(tumor, p) / kind / "report.json"
     e = json.loads(f.read_text())["eval_bed"]
@@ -162,11 +187,13 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--snv", choices=("single", "six-tumor"), default="single")
     ap.add_argument("--four-tumor", action="store_true", help="with --snv six-tumor: add the four-cell-line model's curve and PASS point")
+    ap.add_argument("--graphs", action="store_true", help="with --snv six-tumor: add the six-tumor model on GRCh38-only and HPRC v1.1")
     ap.add_argument("--outdir", type=Path, default=HERE)
     ap.add_argument("--height", type=float, default=7.0, help="figure height in inches (width is 6.5, the Word text width)")
     args = ap.parse_args()
     assert not args.four_tumor or args.snv == "six-tumor", "--four-tumor needs --snv six-tumor"
-    tag = "" if args.snv == "single" else "_four_six_tumor" if args.four_tumor else "_six_tumor"
+    assert not args.graphs or (args.snv == "six-tumor" and not args.four_tumor), "--graphs needs --snv six-tumor, without --four-tumor"
+    tag = "" if args.snv == "single" else "_four_six_tumor" if args.four_tumor else "_six_tumor_graphs" if args.graphs else "_six_tumor"
     status = json.loads(BOUNDS.read_text())
     data, rows = {}, []
     for kind in KINDS:
@@ -175,10 +202,14 @@ def main():
                 d = dict(pansoma=pansoma_reports(tumor, p, kind, args.snv),
                          **{c: comparator_report(c, tumor, p, kind) for c, *_ in CALLERS[1:]},
                          bounds=bounds(status, tumor, p, kind, args.snv))
+                n = lambda b: b["at_threshold"]["tp_baseline"] + b["at_threshold"]["fn"]
                 if args.four_tumor:
                     d["four"] = four_report(tumor, p, kind)
-                    n = lambda b: b["at_threshold"]["tp_baseline"] + b["at_threshold"]["fn"]
                     assert n(d["four"][1]) == n(d["pansoma"][0][1]), (kind, tumor, p)  # same truth
+                if args.graphs:
+                    d["graphs"] = {g: graph_report(tumor, p, kind, g) for g, *_ in GRAPHS}
+                    for x in d["graphs"].values():
+                        assert x is None or n(x[1]) == n(d["pansoma"][0][1]), (kind, tumor, p)  # same truth
                 data[(kind, tumor, p)] = d
     xmax = {}  # per row: SNV 0-1; INDEL to just past the furthest curve of that tumor
     for kind in KINDS:
@@ -188,6 +219,7 @@ def main():
                 if (k, t) != (kind, tumor):
                     continue
                 m = max([m] + [curve(b)[:, 0].max() for _, b in d["pansoma"]] + ([curve(d["four"][1])[:, 0].max()] if "four" in d else []) +
+                        [curve(x[1])[:, 0].max() for x in d.get("graphs", {}).values() if x] +
                         [curve(d[c][1])[:, 0].max() for c, *_ in CALLERS[1:]])
             xmax[(kind, tumor)] = 1.0 if kind == "SNV" else min(1.0, np.ceil((m + 0.03) * 10) / 10)
 
@@ -217,6 +249,23 @@ def main():
                 X = xmax[(kind, tumor)]
                 b_any, b_exact = d["bounds"]  # points.md only, not drawn
                 key, label, color, ls = CALLERS[0]
+                gcells, pending = [], []
+                if args.graphs:
+                    color = V21
+                    for gi, (g, glabel, gcolor) in enumerate(GRAPHS):
+                        x = d["graphs"][g]
+                        if x is None:
+                            pending.append(glabel)
+                            gcells += ["pending"] * 3
+                            continue
+                        c = curve(x[1])
+                        ax.plot(c[:, 0], c[:, 1], color=gcolor, lw=1.05, ls="-", zorder=2.2 + 0.3 * gi, solid_capstyle="round")
+                        r, pr = point(x[1])
+                        ax.plot(r, pr, marker="o", ms=4.0, color=gcolor, mec=SURFACE, mew=0.6, ls="", zorder=5.2 + 0.3 * gi)
+                        gcells += [f"{r:.3f}", f"{pr:.3f}", f"{c[:, 0].max():.3f}"]
+                    if pending:
+                        ax.text(0.04, 0.04, "pending: " + ", ".join(pending), transform=ax.transAxes, fontsize=5.3,
+                                color=MUTED, ha="left", va="bottom", zorder=8)
                 prs = []
                 for f, blk in d["pansoma"]:
                     c = curve(blk)
@@ -235,6 +284,7 @@ def main():
                     r, pr = point(blk)
                     ax.plot(r, pr, marker="o", ms=4.0, color=FOUR, mec=SURFACE, mew=0.6, ls="", zorder=5.5)
                     cells += [f"{r:.3f}", f"{pr:.3f}", f"{c[:, 0].max():.3f}" + ("" if cur else " †")]
+                cells += gcells
                 for key, label, color, ls in CALLERS[1:]:
                     _, allp, passp = d[key]
                     c = curve(allp)
@@ -268,9 +318,16 @@ def main():
     if args.four_tumor:
         h[0].set_label("Pansoma, six tumors")
         h.insert(1, Line2D([], [], color=FOUR, lw=1.3, ls="-", label="Pansoma, four cell lines"))
+    if args.graphs:  # lightest to darkest: GRCh38-only, HPRC v1.1, HPRC v2.1
+        h[0].set_label("Pansoma, HPRC v2.1")
+        h[0].set_color(V21)
+        for gi, (_, glabel, gcolor) in enumerate(GRAPHS):
+            h.insert(gi, Line2D([], [], color=gcolor, lw=1.3, ls="-", label=f"Pansoma, {glabel}"))
     h += [Line2D([], [], color=MUTED, marker="o", ls="", ms=4, mec=SURFACE, mew=0.6, label="PASS (after the filter)")]
-    fig.legend(handles=h, loc="upper center", ncol=len(h), frameon=False, fontsize=6.8, bbox_to_anchor=(0.5, 1 - 0.03 / H),
-               handlelength=2.6 if len(h) == 4 else 2.0, columnspacing=1.6 if len(h) == 4 else 1.1, handletextpad=0.6, labelspacing=0.45)
+    big = len(h) > 5
+    fig.legend(handles=h, loc="upper center", ncol=len(h), frameon=False, fontsize=6.2 if big else 6.8, bbox_to_anchor=(0.5, 1 - 0.03 / H),
+               handlelength=2.6 if len(h) == 4 else 1.7 if big else 2.0, columnspacing=1.6 if len(h) == 4 else 0.8 if big else 1.1,
+               handletextpad=0.5 if big else 0.6, labelspacing=0.45)
     for ext in ("png", "pdf"):
         fig.savefig(args.outdir / f"fig_R1.6{tag}.{ext}", dpi=300)
     plt.close(fig)
@@ -282,19 +339,29 @@ def main():
                 "(`snv_newpipe_20261109/COLO829_<P>_SNV_d46_newpipe`, rule 2; PacBio Fiber-seq / Illumina on the AF 0.05 set). "
                 "HG008T: the original-recipe `--norm dataset` model (`HG008_<P>_SNV_d46_normbq`; not retrained, user 2026-11-09; "
                 f"marked †). HCC1395T: {m6} (no single-tumor HCC1395T SNV model)")
-    title = {"": "", "_six_tumor": " (six-tumor SNV model)", "_four_six_tumor": " (six-tumor and four-cell-line models)"}[tag]
-    cmd = {"": "", "_six_tumor": " --snv six-tumor", "_four_six_tumor": " --snv six-tumor --four-tumor"}[tag]
+    title = {"": "", "_six_tumor": " (six-tumor SNV model)", "_four_six_tumor": " (six-tumor and four-cell-line models)",
+             "_six_tumor_graphs": " (six-tumor model on GRCh38-only, HPRC v1.1 and HPRC v2.1)"}[tag]
+    cmd = {"": "", "_six_tumor": " --snv six-tumor", "_four_six_tumor": " --snv six-tumor --four-tumor",
+           "_six_tumor_graphs": " --snv six-tumor --graphs"}[tag]
     four = ("" if not args.four_tumor else " Four-cell-line model (HCC1395T, HCC1954T, H1437T, H2009T; HG008T and COLO829T unseen): SNV "
             "`multicancer4_<P>_SNV_sitef_af05_lnf25w1` at rule 2 (`_r095`; current SNV pipeline), ONT the original-recipe "
             "`multicancer4_ONT_SNV` normfix (marked †; user 2026-11-14, the current-pipeline retrain is not used); INDEL `unseen_s0_<P>_INDEL`.")
+    if args.graphs:
+        four = (" Other references: the six-tumor model of the same recipe and the same held-out chromosomes trained and tested on "
+                "GRCh38-only and on HPRC v1.1 (`m4m6_graphs_20261110/multicancer6_<P>_<KIND>_{linear_nositef,d9}`, seed 0; SNV "
+                "`vcf_chr1_<tumor>`, rule 2, on the GRCh38-only / v1.1 versions of the same test sets; INDEL `vcf_{ppr8,pp}_chr1_<tumor>`). "
+                "The GRCh38-only models get no population site features as an input (user 2026-11-12; the filter tags are still "
+                "used for epoch selection and the PASS threshold). \"pending\": that model or its VCF job has not finished.")
     L = [f"# Supplementary Fig. R1.6{title}: plotted points (chr1, benchmark regions, after our population filter)", "",
          f"Generated by `make_figure.py{cmd}`. Pansoma: {snv}; INDEL: the final six-tumor model, seed 0, PASS at "
          f"ppr8 (ONT: pp, the post-filter validation best-F1 threshold).{four} Comparators: PASS after the same filter; curve end = highest recall of the "
          "QUAL-ranked curve over every record except RefCall / NoCall after the filter.", "",
          "| kind | tumor | platform | Pansoma PASS R | Pansoma PASS P | Pansoma curve end R | " +
-         ("four-cell-line PASS R | P | curve end R | " if args.four_tumor else "") + "DeepSomatic-TO PASS R | P | "
+         ("four-cell-line PASS R | P | curve end R | " if args.four_tumor else "") +
+         ("GRCh38-only PASS R | P | curve end R | HPRC v1.1 PASS R | P | curve end R | " if args.graphs else "") + "DeepSomatic-TO PASS R | P | "
          "curve end R | ClairS-TO PASS R | P | curve end R | exact candidate, not population | not population (any caller) |",
-         "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|" + ("---|---|---|" if args.four_tumor else "")] + rows
+         "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|" + ("---|---|---|" if args.four_tumor else "") +
+         ("---|---|---|---|---|---|" if args.graphs else "")] + rows
     (args.outdir / f"points{tag}.md").write_text("\n".join(L) + "\n")
     print(f"fig_R1.6{tag}.png/.pdf and points{tag}.md written to {args.outdir}")
 
