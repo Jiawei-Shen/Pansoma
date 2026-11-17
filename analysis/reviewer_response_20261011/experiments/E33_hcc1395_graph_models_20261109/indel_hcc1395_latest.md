@@ -45,14 +45,14 @@ rtg vcfeval in the SEQC2 BED, chr1 truth 133 INDELs. PASS = ppr8 for Illumina / 
 
 | model | PASS after filter P / R / **F1** | TP / FP / FN | PASS before filter P / R / F1 | best F1 on curve (P / R) | curve end R | truth with exact tensor | somatic AP (tensors) | epoch |
 |---|---|---|---|---|---|---|---|---|
-| Pansoma four lines, GRCh38-only | still training | | | | | | | |
-| Pansoma four lines, HPRC v1.1 | still training | | | | | | | |
+| Pansoma four lines, GRCh38-only | 0.271 / 0.466 / **0.343** | 62 / 167 / 71 | 0.019 / 0.474 / 0.037 (3220 FP) | 0.390 (0.388 / 0.391) | 0.699 | 92 / 124 | 0.034 | 5 |
+| Pansoma four lines, HPRC v1.1 | 0.473 / 0.587 / **0.523** | 78 / 87 / 55 | 0.467 / 0.587 / 0.520 (89 FP) | 0.552 (0.548 / 0.556) | 0.684 | 91 / 124 | 0.434 | 5 |
 | Pansoma four lines, HPRC v2.1, seed 0 | 0.558 / 0.541 / **0.550** | 72 / 57 / 61 | 0.525 / 0.541 / 0.533 (65 FP) | 0.561 (0.565 / 0.556) | 0.647 | 91 / 124 | 0.426 | 12 |
 | Pansoma four lines, HPRC v2.1, seed 1 | 0.455 / 0.534 / **0.491** | 71 / 85 / 62 | 0.452 / 0.534 / 0.490 (86 FP) | 0.496 (0.470 / 0.526) | 0.669 | 91 / 124 | 0.387 | 6 |
 | Pansoma four lines, HPRC v2.1, seed 2 | 0.626 / 0.579 / **0.602** | 77 / 46 / 56 | 0.616 / 0.579 / 0.597 (48 FP) | 0.602 (0.626 / 0.579) | 0.654 | 91 / 124 | 0.507 | 8 |
 | Pansoma four lines, HPRC v2.1, best seed (seed 2) / mean of 3 | F1 **0.602** / 0.547 | | | | | | | |
-| Pansoma six tumors, GRCh38-only | still training | | | | | | | |
-| Pansoma six tumors, HPRC v1.1 | still training | | | | | | | |
+| Pansoma six tumors, GRCh38-only | 0.294 / 0.526 / **0.377** | 70 / 168 / 63 | 0.019 / 0.534 / 0.036 (3713 FP) | 0.418 (0.384 / 0.459) | 0.692 | 92 / 124 | 0.066 | 5 |
+| Pansoma six tumors, HPRC v1.1 | 0.594 / 0.549 / **0.570** | 73 / 50 / 60 | 0.570 / 0.549 / 0.559 (55 FP) | 0.576 (0.615 / 0.541) | 0.677 | 91 / 124 | 0.392 | 7 |
 | Pansoma six tumors, HPRC v2.1, seed 0 | 0.491 / 0.602 / **0.540** | 80 / 83 / 53 | 0.482 / 0.602 / 0.535 (86 FP) | 0.589 (0.591 / 0.587) | 0.677 | 91 / 124 | 0.456 | 5 |
 | Pansoma six tumors, HPRC v2.1, seed 1 | 0.534 / 0.594 / **0.562** | 79 / 69 / 54 | 0.527 / 0.594 / 0.558 (71 FP) | 0.576 (0.597 / 0.556) | 0.669 | 91 / 124 | 0.473 | 6 |
 | Pansoma six tumors, HPRC v2.1, seed 2 | 0.585 / 0.594 / **0.590** | 79 / 56 / 54 | 0.568 / 0.594 / 0.581 (60 FP) | 0.599 (0.576 / 0.624) | 0.677 | 91 / 124 | 0.488 | 5 |
