@@ -2,8 +2,13 @@
 
 chr1 precision-recall curves after our population filter, benchmark regions, HG008T, COLO829T and HCC1395T x three
 platforms, (a) SNVs and (b) INDELs, for the models whose recall R1.6 / Supplementary Table R1.6 report and for both comparators:
-- Pansoma SNV: HPRC v2.1 (d46) `--norm dataset` model, seed 0 only (<S>_<P>_SNV_d46_normbq, RIS copies in
-  ris_7fc7396_20261012; PASS = validation recall 0.9 before the filter). Same runs as E8 latest_models.py.
+- Pansoma SNV: the single-tumor HPRC v2.1 (d46) model of each tumor and platform, seed 0 only.
+  COLO829T (2026-11-17): the current SNV pipeline, snv_newpipe_20261109/COLO829_<P>_SNV_d46_newpipe
+  (vcf_chr1_COLO829T_<P>_d46; PacBio = fiberseq; rule 2; Illumina / Fiber-seq on the AF 0.05 set d46_snvaf05, ONT at
+  AF 0.08), the same runs as the COLO829T model column of Supplementary Table R1.7b.
+  HG008T: not retrained on the current SNV pipeline (user 2026-11-09): the original-recipe `--norm dataset` model
+  (HG008_<P>_SNV_d46_normbq, RIS copies in ris_7fc7396_20261012; PASS = validation recall 0.9 before the filter; same
+  runs as E8 latest_models.py), marked with a dagger in points.md.
   HCC1395T has no single-tumor SNV model: its row uses the latest six-tumor SNV models (see --snv six-tumor), trained
   on HCC1395T's chr2-22 among others.
 - Pansoma INDEL: the final model (six tumors, HPRC v2.1), seed 0 only (release_s0_<P>_INDEL,
@@ -102,7 +107,11 @@ def pansoma_reports(tumor, p, kind, snv="single"):
     if kind == "SNV" and (snv == "six-tumor" or tumor == "HCC1395T"):
         fs = [RUNS / "snv_newpipe_20261109" / f"multicancer6_{p}_SNV_newpipe" / f"vcf_chr1_{ds(tumor, p)}_d46" / "eval_bed" / "report.json"]
         assert (p == "ONT" or tumor == "HG008T") == ("snvaf05" not in json.loads(fs[0].read_text())["calls"]), fs[0]
-    elif kind == "SNV":
+    elif kind == "SNV" and tumor == "COLO829T":  # single-tumor model of the current SNV pipeline, seed 0 (2026-11-17)
+        mp = "fiberseq" if p == "PacBio" else p
+        fs = [RUNS / "snv_newpipe_20261109" / f"COLO829_{mp}_SNV_d46_newpipe" / f"vcf_chr1_{ds(tumor, p)}_d46" / "eval_bed" / "report.json"]
+        assert (p == "ONT") == ("snvaf05" not in json.loads(fs[0].read_text())["calls"]), fs[0]
+    elif kind == "SNV":  # HG008T: not retrained on the current SNV pipeline (user 2026-11-09)
         fs = [RIS / f"{ds(tumor, p, True)}_SNV_d46_normbq{x}" / "vcf_chr1" / "eval_bed" / "report.json" for x in ("",)]  # seed 0 only (user 2026-11-10)
     else:
         fs = [RUNS / f"release_s{s}_{p}_INDEL" / f"vcf_{indel_rule(p)}_chr1_{ds(tumor, p)}_d46" / "eval_bed" / "report.json" for s in (0,)]  # seed 0 only
@@ -137,9 +146,10 @@ def comparator_report(caller, tumor, p, kind):
 
 def bounds(status, tumor, p, kind, snv="single"):
     """(not a population allele, exact candidate and not a population allele) as shares of chr1 truth in the BED."""
-    # the six-tumor PacBio HiFi / Illumina SNV models are tested on the AF 0.05 sets of COLO829T and HCC1395T (d46_snvaf05)
-    six = kind == "SNV" and (snv == "six-tumor" or tumor == "HCC1395T")
-    sfx = "_d46_snvaf05" if six and p != "ONT" and tumor != "HG008T" else "_d46"
+    # the current-pipeline SNV models (six-tumor; single-tumor COLO829T) are tested on the AF 0.05 PacBio HiFi / Fiber-seq /
+    # Illumina sets of COLO829T and HCC1395T (d46_snvaf05)
+    af05 = kind == "SNV" and (snv == "six-tumor" or tumor in ("HCC1395T", "COLO829T"))
+    sfx = "_d46_snvaf05" if af05 and p != "ONT" and tumor != "HG008T" else "_d46"
     c = status[f"{ds(tumor, p)}{sfx}|{kind}"]
     return c["bound_any"], c["bound_exact"]
 
@@ -216,6 +226,8 @@ def main():
                 for r, pr, _ in prs:
                     ax.plot(r, pr, marker="o", ms=4.0, color=color, mec=SURFACE, mew=0.6, ls="", zorder=6)
                 cells = [span([x[k] for x in prs]) for k in range(3)]
+                if args.snv == "single" and kind == "SNV" and tumor == "HG008T":
+                    cells[2] += " †"  # original-recipe model, not on the current SNV pipeline
                 if "four" in d:
                     _, blk, cur = d["four"]
                     c = curve(blk)
@@ -266,7 +278,10 @@ def main():
     m6 = ("the six-tumor model of the current SNV pipeline, one run per platform (`snv_newpipe_20261109/multicancer6_<P>_SNV_newpipe`, "
           "rule 2; COLO829T / HCC1395T PacBio HiFi / Fiber-seq / Illumina on their AF 0.05 sets)")
     snv = (f"SNV: {m6}" if args.snv == "six-tumor"
-           else f"SNV: single-tumor `--norm dataset` HPRC v2.1 model, seed 0 (HCC1395T: {m6}; no single-tumor HCC1395T SNV model)")
+           else "SNV: single-tumor HPRC v2.1 models, seed 0. COLO829T: the current SNV pipeline "
+                "(`snv_newpipe_20261109/COLO829_<P>_SNV_d46_newpipe`, rule 2; PacBio Fiber-seq / Illumina on the AF 0.05 set). "
+                "HG008T: the original-recipe `--norm dataset` model (`HG008_<P>_SNV_d46_normbq`; not retrained, user 2026-11-09; "
+                f"marked †). HCC1395T: {m6} (no single-tumor HCC1395T SNV model)")
     title = {"": "", "_six_tumor": " (six-tumor SNV model)", "_four_six_tumor": " (six-tumor and four-cell-line models)"}[tag]
     cmd = {"": "", "_six_tumor": " --snv six-tumor", "_four_six_tumor": " --snv six-tumor --four-tumor"}[tag]
     four = ("" if not args.four_tumor else " Four-cell-line model (HCC1395T, HCC1954T, H1437T, H2009T; HG008T and COLO829T unseen): SNV "
