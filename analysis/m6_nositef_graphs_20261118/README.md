@@ -1,0 +1,47 @@
+# Six-tumor models without the population site features as a model input, HPRC v1.1 and v2.1 (2026-11-18)
+
+User 2026-11-18: run the latest pipeline, but without site features, for the six-tumor model on HPRC v2.1 and v1.1,
+test and inference on HCC1395T, COLO829T and HG008T, three platforms, SNV and INDEL.
+
+The GRCh38-only six-tumor models (`m4m6_graphs_20261110/multicancer6_<P>_<KIND>_linear_nositef`, old cluster) never had
+the population site features as a model input; the v1.1 / v2.1 six-tumor models do. These 12 models give v1.1 and v2.1
+the same treatment, so the three references differ in the graph only.
+
+- Pipeline: repository b7fa8cf (pansoma_net_v2 code last changed in 1798490), `ris/recipes.sh` with `NOSITEF=1`: the
+  SNV / INDEL recipe plus `--site-features-pon-only` (the feature files give only the PoN tags for the post-PoN epoch
+  selection and the call rule; the five features are not fed to the head; predict reads no feature file).
+- Design = the other six-tumor models: HCC1395T chr1 + chr20, HG008T chr1 and COLO829T chr1 left out of training and
+  validation, HCC1954T / H1437T / H2009T train on every chromosome, 5 % of the node blocks validate, seed 0, one H100,
+  batch 1024 (not DDP: the models they are compared with trained on one GPU).
+- Sets = those of the six-tumor models with the features: SNV Illumina / PacBio HiFi on the AF 0.05 builds of the four
+  CASTLE lines and COLO829T (`_snvaf05`; HG008T at 0.08), SNV ONT and every INDEL model on the AF 0.08 sets.
+- Test: chr1 of the three test tumors (HCC1395T also chr20) predicted with `best.pth` (`test_<chrom>_<SET>/`), then
+  `ris/vcf.sh --set` per tumor (`vcf_chr1_<SET>/`: graph VCF, GRCh38 VCF, population filter, rtg vcfeval in the
+  benchmark BED and without it) at the checkpoint's call rule (SNV rule 2; INDEL ppr8, ONT pp).
+- Runs: `$PANSOMA_RUNS/m6_nositef_graphs_20261118/multicancer6_<P>_<KIND>_{d9,d46}_nositef`.
+
+Files: `submit.sh` (login node; submits every model whose sets are on storage2, skips the others and the ones that
+exist), `train_predict.sh` (the GPU job), `to_ris.sh` (old cluster: copies the missing sets), `ready.py` (is a copied
+set complete), `collect.py` -> `results.md` (the 18 SNV call sets and the comparison with the figure's six-tumor models).
+
+## Status
+
+| model | state | LSF jobs (train; VCF HCC1395T, HG008T, COLO829T) |
+|---|---|---|
+| SNV v1.1 Illumina | done (best epoch 9) | 929947; 929948, 929949, 929950 |
+| SNV v1.1 PacBio HiFi | done (best epoch 14) | 929951; 929952, 929953, 929954 |
+| SNV v1.1 ONT | done (best epoch 9) | 929955; 929956, 929957, 929958 |
+| SNV v2.1 Illumina | done (best epoch 8) | 932784; 932785, 932786, 932787 |
+| SNV v2.1 PacBio HiFi | done (best epoch 14) | 932788; 932789, 932790, 932791 |
+| SNV v2.1 ONT | done (best epoch 10) | 932792; 932793, 932794, 932795 |
+| INDEL v1.1, v2.1 (6 models) | not submitted: no INDEL tensors of the four CASTLE lines on storage2 (`<line>_<P>_d9`, `<line>_<P>_d46`) | |
+
+The 18 v1.1 SNV sets were checked before submission: every shard of each manifest is on storage2 with the manifest's
+size, label manifests and site-feature files present. The v2.1 SNV sets missing on 2026-11-18 morning
+(`{HCC1954T,H1437T,H2009T}_{Illumina,PacBio}_d46_snvaf05`, `{HCC1954T,H1437T,H2009T}_ONT_d46`, eight SNV site-feature
+files that were links to /scratch) were copied from the old cluster by the user on 2026-11-18 (12:30-14:30) and passed
+the same check (`ready.py`) before their models were submitted; the v2.1 GPU jobs ask for 5 slots (`SLOTS=5`).
+
+SNV v1.1 submitted 2026-11-18 12:05, v2.1 14:36; all six trainings, 18 chr1 VCF / vcfeval jobs and the HCC1395T chr20
+predictions done by 2026-11-23 (results.md). The INDEL models were not submitted: the CASTLE lines' INDEL sets were
+not copied to storage2.
