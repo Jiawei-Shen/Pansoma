@@ -1,0 +1,8 @@
+OK   FP allele keys == FP records in both arms and class sums == total: 36 of 36 cell x stage
+OK   truth (TP + FN) equal in the two arms and equal to report.json baseline; FP == report.json fp: 36 of 36 cell x stage
+OK   one truth count per tumor x kind over platforms, arms and stages: {('HG008T', 'SNV'): 697, ('COLO829T', 'SNV'): 2443, ('HCC1395T', 'SNV'): 3440, ('HG008T', 'INDEL'): 587, ('COLO829T', 'INDEL'): 131, ('HCC1395T', 'INDEL'): 133}
+OK   before-filter FP count (exact) and F1 (within 0.001) of both arms equal to latest_results_20261123.md section 4: 36 of 36
+OK   after-filter truth count and P / R / F1 of both arms equal to latest_results_20261123.md sections 2a / 2b (within rounding): 18 of 18 rows
+OK   independent recount HCC1395T Illumina SNV, raw (records; (n, candidate on v2.1) per class; 0 non-single-base FP records): recount {'records': 77905, 'in_graph': (66643, 75), 'not_in_graph': (10718, 9298), 'non_germline': (544, 288)} vs fp_decomp.json {'records': 77905, 'in_graph': (66643, 75), 'not_in_graph': (10718, 9298), 'non_germline': (544, 288)}
+OK   independent recount HCC1395T Illumina SNV, pon (records; (n, candidate on v2.1) per class; 0 non-single-base FP records): recount {'records': 663, 'in_graph': (0, 0), 'not_in_graph': (425, 424), 'non_germline': (238, 233)} vs fp_decomp.json {'records': 663, 'in_graph': (0, 0), 'not_in_graph': (425, 424), 'non_germline': (238, 233)}
+ALL CHECKS PASSED

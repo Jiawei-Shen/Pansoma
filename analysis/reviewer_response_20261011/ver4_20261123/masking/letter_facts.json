@@ -1,0 +1,51 @@
+{
+ "sentence": "We evaluated this change by masking this context at inference in the six-tumor models, which reduced SNV recall in all nine comparisons (by 0.204–0.344) and F1 in all nine (by 0.057–0.243) (Response Figure 1.2).",
+ "caption_tail": "Recall is higher with the full tensor in all nine comparisons, precision in five of nine and F1 in all nine. Six-tumor models, seed 0; PASS at the threshold that recalls 95% of the validation somatic variants after population filtering.",
+ "n_recall_lower": 9,
+ "n_precision_lower": 5,
+ "n_f1_lower": 9,
+ "delta_recall": [
+  0.2296,
+  0.2037,
+  0.3443,
+  0.2321,
+  0.2419,
+  0.2612,
+  0.2122,
+  0.2622,
+  0.2093
+ ],
+ "delta_precision": [
+  0.0701,
+  -0.0354,
+  -0.0122,
+  0.067,
+  -0.0206,
+  0.2128,
+  0.0136,
+  -0.0129,
+  0.1391
+ ],
+ "delta_f1": [
+  0.1316,
+  0.0574,
+  0.222,
+  0.1632,
+  0.1578,
+  0.2429,
+  0.1203,
+  0.1538,
+  0.1827
+ ],
+ "datasets": [
+  "HG008T Illumina",
+  "HG008T PacBio HiFi",
+  "HG008T ONT",
+  "COLO829T Illumina",
+  "COLO829T Fiber-seq",
+  "COLO829T ONT",
+  "HCC1395T Illumina",
+  "HCC1395T PacBio HiFi",
+  "HCC1395T ONT"
+ ]
+}

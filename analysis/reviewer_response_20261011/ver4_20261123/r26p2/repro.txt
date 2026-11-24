@@ -1,0 +1,13 @@
+E1.1 HG008_PacBio_SNV_d46_7fc7396 (HG008T_PacBio_d46): this code {'G': 20730, 'C': 2528, 'K': 618, 'FPt': 642} | E1.1 summary.json {'G': 20730, 'C': 2528, 'K': 618, 'FPt': 642} | IDENTICAL; PoN tag (site-feature file vs E1.1 pon_tags.json) differs on 0 of 27,501 test tensors
+E1.1 HG008_ONT_SNV_d46_7fc7396 (HG008T_ONT_d46): this code {'G': 21250, 'C': 2810, 'K': 672, 'FPt': 771} | E1.1 summary.json {'G': 21250, 'C': 2810, 'K': 672, 'FPt': 771} | IDENTICAL; PoN tag (site-feature file vs E1.1 pon_tags.json) differs on 0 of 40,252 test tensors
+E1.1 HG008_PacBio_SNV_7fc7396 (HG008T_PacBio): this code {'G': 23381, 'C': 4951, 'K': 571, 'FPt': 583} | E1.1 summary.json {'G': 23381, 'C': 4951, 'K': 571, 'FPt': 583} | IDENTICAL; PoN tag (site-feature file vs E1.1 pon_tags.json) differs on 0 of 32,880 test tensors
+E1.1 HG008_ONT_SNV_7fc7396 (HG008T_ONT): this code {'G': 24052, 'C': 5147, 'K': 618, 'FPt': 658} | E1.1 summary.json {'G': 24052, 'C': 5147, 'K': 618, 'FPt': 658} | IDENTICAL; PoN tag (site-feature file vs E1.1 pon_tags.json) differs on 0 of 44,116 test tensors
+E4b HG008_Illumina_SNV_linear_7fc7396__vcf_chr1 (linear): this code 642 / 1089 | E4b summary.json 642 / 1089 | IDENTICAL
+E4b HG008_Illumina_SNV_7fc7396_ddp4_b1024__vcf_chr1 (d9): this code 609 / 702 | E4b summary.json 609 / 702 | IDENTICAL
+E4b HG008_Illumina_SNV_d46_7fc7396__vcf_chr1 (d46): this code 655 / 792 | E4b summary.json 655 / 792 | IDENTICAL
+E4b HG008_PacBio_SNV_linear_7fc7396__vcf_chr1 (linear): this code 816 / 969 | E4b summary.json 816 / 969 | IDENTICAL
+E4b HG008_PacBio_SNV_7fc7396__vcf_chr1 (d9): this code 571 / 583 | E4b summary.json 571 / 583 | IDENTICAL
+E4b HG008_PacBio_SNV_d46_7fc7396__vcf_chr1 (d46): this code 619 / 650 | E4b summary.json 619 / 650 | IDENTICAL
+E4b HG008_ONT_SNV_linear_7fc7396__vcf_chr1 (linear): this code 707 / 904 | E4b summary.json 707 / 904 | IDENTICAL
+E4b HG008_ONT_SNV_7fc7396__vcf_chr1 (d9): this code 618 / 660 | E4b summary.json 618 / 660 | IDENTICAL
+E4b HG008_ONT_SNV_d46_7fc7396__vcf_chr1 (d46): this code 674 / 788 | E4b summary.json 674 / 788 | IDENTICAL

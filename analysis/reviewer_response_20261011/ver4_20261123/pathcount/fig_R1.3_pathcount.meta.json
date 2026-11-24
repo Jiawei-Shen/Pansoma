@@ -1,0 +1,25 @@
+{
+ "png": "/scratch/jshen/Github/Pansoma/analysis/reviewer_response_20261011/ver4_20261123/pathcount/fig_R1.3_pathcount.png",
+ "width_px": 4251,
+ "height_px": 1104,
+ "dpi": 300,
+ "xlim_all_panels": [
+  0.575,
+  0.925
+ ],
+ "colour_scale": [
+  -0.15,
+  0.15
+ ],
+ "geometry_px": {
+  "label_right": 827.625,
+  "panel_x0": 850.625,
+  "panel_width": 572.34375,
+  "rows_y": [
+   495,
+   604,
+   790,
+   899
+  ]
+ }
+}

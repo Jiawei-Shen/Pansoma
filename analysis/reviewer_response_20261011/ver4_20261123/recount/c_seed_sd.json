@@ -1,0 +1,777 @@
+{
+ "INDEL_ver4": {
+  "six-tumor + four-tumor, HG008T + COLO829T (12)": {
+   "n": 12,
+   "min": 0.0037527767497325627,
+   "max": 0.026679642676267865,
+   "median": 0.01105903347830333
+  },
+  "six-tumor, HG008T + COLO829T (6)": {
+   "n": 6,
+   "min": 0.0037527767497325627,
+   "max": 0.026679642676267865,
+   "median": 0.013932889776882208
+  },
+  "four-tumor, HG008T + COLO829T (6)": {
+   "n": 6,
+   "min": 0.007901898506055367,
+   "max": 0.01915367675756625,
+   "median": 0.00938931271793051
+  },
+  "six-tumor + four-tumor, three tumors (18)": {
+   "n": 18,
+   "min": 0.003701801363300467,
+   "max": 0.0641478240732555,
+   "median": 0.014136698611144253
+  },
+  "six-tumor, three tumors (9)": {
+   "n": 9,
+   "min": 0.0037527767497325627,
+   "max": 0.0641478240732555,
+   "median": 0.020664542901630646
+  },
+  "four-tumor, three tumors (9)": {
+   "n": 9,
+   "min": 0.003701801363300467,
+   "max": 0.055179978252985935,
+   "median": 0.009712020043911218
+  },
+  "six-tumor, HCC1395T (3)": {
+   "n": 3,
+   "min": 0.024601287229194614,
+   "max": 0.0641478240732555,
+   "median": 0.030053119638400263
+  },
+  "four-tumor, HCC1395T (3)": {
+   "n": 3,
+   "min": 0.003701801363300467,
+   "max": 0.055179978252985935,
+   "median": 0.028830365935936388
+  }
+ },
+ "INDEL_ver3": {
+  "six-tumor + four-tumor, HG008T + COLO829T (12)": {
+   "n": 12,
+   "min": 0.0034501207708330143,
+   "max": 0.026679642676267865,
+   "median": 0.014136698611144253
+  },
+  "six-tumor, HG008T + COLO829T (6)": {
+   "n": 6,
+   "min": 0.010307925753192705,
+   "max": 0.026679642676267865,
+   "median": 0.016442070404461814
+  },
+  "four-tumor, HG008T + COLO829T (6)": {
+   "n": 6,
+   "min": 0.0034501207708330143,
+   "max": 0.01915367675756625,
+   "median": 0.011262842312565375
+  },
+  "six-tumor + four-tumor, three tumors (18)": {
+   "n": 18,
+   "min": 0.0034501207708330143,
+   "max": 0.0641478240732555,
+   "median": 0.016465644180641385
+  },
+  "six-tumor, three tumors (9)": {
+   "n": 9,
+   "min": 0.010307925753192705,
+   "max": 0.0641478240732555,
+   "median": 0.020664542901630646
+  },
+  "four-tumor, three tumors (9)": {
+   "n": 9,
+   "min": 0.0034501207708330143,
+   "max": 0.04272391992003231,
+   "median": 0.01281366458121953
+  },
+  "six-tumor, HCC1395T (3)": {
+   "n": 3,
+   "min": 0.030053119638400263,
+   "max": 0.0641478240732555,
+   "median": 0.0353513790395792
+  },
+  "four-tumor, HCC1395T (3)": {
+   "n": 3,
+   "min": 0.003701801363300467,
+   "max": 0.04272391992003231,
+   "median": 0.028830365935936388
+  }
+ },
+ "reproduces_letter_ver3_indel_sd": true,
+ "check_latest_results_indel_cells": 18,
+ "SNV_COLO829T_single_tumor": {
+  "n": 4,
+  "min": 0.0025632011235952566,
+  "max": 0.04785572066117067,
+  "median": 0.017866745156796985
+ },
+ "SNV_COLO829T_single_tumor_v21": {
+  "n": 2,
+  "min": 0.0025632011235952566,
+  "max": 0.04785572066117067,
+  "median": 0.025209460892382962
+ },
+ "SNV_COLO829T_single_tumor_v11": {
+  "n": 2,
+  "min": 0.0032924155266308873,
+  "max": 0.032441074786963085,
+  "median": 0.017866745156796985
+ },
+ "six_tumor_SNV_seed_runs_with_chr1_vcf": {
+  "multicancer6_Illumina_SNV_newpipe": 3,
+  "multicancer6_Illumina_SNV_newpipe_ep10": 3,
+  "multicancer6_Illumina_SNV_newpipe_ep12": 3,
+  "multicancer6_ONT_SNV_newpipe": 3,
+  "multicancer6_ONT_SNV_newpipe_s1": 0,
+  "multicancer6_PacBio_SNV_newpipe": 3,
+  "multicancer6_PacBio_SNV_newpipe_s1": 0
+ },
+ "six_tumor_INDEL_beats_both_comparators": {
+  "HG008T + COLO829T (6), seed 0": 4,
+  "HG008T + COLO829T (6), seed mean": 4,
+  "three tumors (9), seed 0": 4,
+  "three tumors (9), seed mean": 4
+ },
+ "INDEL_cells": {
+  "ver4|release|HG008T|Illumina": {
+   "f1": [
+    0.1711,
+    0.2022,
+    0.2242
+   ],
+   "mean": 0.19916666666666666,
+   "sd": 0.026679642676267865,
+   "truth": 587,
+   "rule": "ppr8",
+   "calls": [
+    "p_somatic >= 0.19937816262245178 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.38437458872795105 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.5997829437255859 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))"
+   ]
+  },
+  "ver4|release|HG008T|PacBio": {
+   "f1": [
+    0.2386,
+    0.2469,
+    0.263
+   ],
+   "mean": 0.2495,
+   "sd": 0.01240604691269544,
+   "truth": 587,
+   "rule": "ppr8",
+   "calls": [
+    "p_somatic >= 0.6684039235115051 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.6854676604270935 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.7070106863975525 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))"
+   ]
+  },
+  "ver4|release|HG008T|ONT": {
+   "f1": [
+    0.1388,
+    0.1311,
+    0.1371
+   ],
+   "mean": 0.13566666666666666,
+   "sd": 0.004045161719058137,
+   "truth": 587,
+   "rule": "pp",
+   "calls": [
+    "p_somatic >= 0.7489863634109497 (validation post-PoN best F1 (val.somatic_threshold_postpon))",
+    "p_somatic >= 0.7716135382652283 (validation post-PoN best F1 (val.somatic_threshold_postpon))",
+    "p_somatic >= 0.8755925297737122 (validation post-PoN best F1 (val.somatic_threshold_postpon))"
+   ]
+  },
+  "ver4|release|COLO829T|Illumina": {
+   "f1": [
+    0.1735,
+    0.159,
+    0.1899
+   ],
+   "mean": 0.17413333333333333,
+   "sd": 0.015459732641068976,
+   "truth": 131,
+   "rule": "ppr8",
+   "calls": [
+    "p_somatic >= 0.19937816262245178 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.38437458872795105 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.5997829437255859 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))"
+   ]
+  },
+  "ver4|release|COLO829T|PacBio": {
+   "f1": [
+    0.1637,
+    0.1935,
+    0.1538
+   ],
+   "mean": 0.17033333333333334,
+   "sd": 0.020664542901630646,
+   "truth": 131,
+   "rule": "ppr8",
+   "calls": [
+    "p_somatic >= 0.6684039235115051 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.6854676604270935 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.7070106863975525 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))"
+   ]
+  },
+  "ver4|release|COLO829T|ONT": {
+   "f1": [
+    0.1176,
+    0.1111,
+    0.1111
+   ],
+   "mean": 0.11326666666666667,
+   "sd": 0.0037527767497325627,
+   "truth": 131,
+   "rule": "pp",
+   "calls": [
+    "p_somatic >= 0.7489863634109497 (validation post-PoN best F1 (val.somatic_threshold_postpon))",
+    "p_somatic >= 0.7716135382652283 (validation post-PoN best F1 (val.somatic_threshold_postpon))",
+    "p_somatic >= 0.8755925297737122 (validation post-PoN best F1 (val.somatic_threshold_postpon))"
+   ]
+  },
+  "ver4|release|HCC1395T|Illumina": {
+   "f1": [
+    0.6168,
+    0.5337,
+    0.6599
+   ],
+   "mean": 0.6034666666666667,
+   "sd": 0.0641478240732555,
+   "truth": 133,
+   "rule": "ppr8",
+   "calls": [
+    "p_somatic >= 0.19937816262245178 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.38437458872795105 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.5997829437255859 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))"
+   ]
+  },
+  "ver4|release|HCC1395T|PacBio": {
+   "f1": [
+    0.5928,
+    0.5935,
+    0.6452
+   ],
+   "mean": 0.6105,
+   "sd": 0.030053119638400263,
+   "truth": 133,
+   "rule": "ppr8",
+   "calls": [
+    "p_somatic >= 0.6684039235115051 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.6854676604270935 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.7070106863975525 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))"
+   ]
+  },
+  "ver4|release|HCC1395T|ONT": {
+   "f1": [
+    0.5405,
+    0.5623,
+    0.5896
+   ],
+   "mean": 0.5641333333333334,
+   "sd": 0.024601287229194614,
+   "truth": 133,
+   "rule": "pp",
+   "calls": [
+    "p_somatic >= 0.7489863634109497 (validation post-PoN best F1 (val.somatic_threshold_postpon))",
+    "p_somatic >= 0.7716135382652283 (validation post-PoN best F1 (val.somatic_threshold_postpon))",
+    "p_somatic >= 0.8755925297737122 (validation post-PoN best F1 (val.somatic_threshold_postpon))"
+   ]
+  },
+  "ver4|unseen|HG008T|Illumina": {
+   "f1": [
+    0.1374,
+    0.1131,
+    0.1182
+   ],
+   "mean": 0.1229,
+   "sd": 0.01281366458121953,
+   "truth": 587,
+   "rule": "ppr8",
+   "calls": [
+    "p_somatic >= 0.6276426315307617 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.6669604182243347 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.7244706749916077 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))"
+   ]
+  },
+  "ver4|unseen|HG008T|PacBio": {
+   "f1": [
+    0.1351,
+    0.1399,
+    0.1538
+   ],
+   "mean": 0.14293333333333333,
+   "sd": 0.009712020043911218,
+   "truth": 587,
+   "rule": "ppr8",
+   "calls": [
+    "p_somatic >= 0.7924565076828003 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.8279844522476196 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.8322527408599854 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))"
+   ]
+  },
+  "ver4|unseen|HG008T|ONT": {
+   "f1": [
+    0.108,
+    0.0958,
+    0.1106
+   ],
+   "mean": 0.1048,
+   "sd": 0.007901898506055367,
+   "truth": 587,
+   "rule": "pp",
+   "calls": [
+    "p_somatic >= 0.7655274271965027 (validation post-PoN best F1 (val.somatic_threshold_postpon))",
+    "p_somatic >= 0.8435131311416626 (validation post-PoN best F1 (val.somatic_threshold_postpon))",
+    "p_somatic >= 0.8454605340957642 (validation post-PoN best F1 (val.somatic_threshold_postpon))"
+   ]
+  },
+  "ver4|unseen|COLO829T|Illumina": {
+   "f1": [
+    0.1786,
+    0.1635,
+    0.1625
+   ],
+   "mean": 0.16820000000000002,
+   "sd": 0.009020532135079395,
+   "truth": 131,
+   "rule": "ppr8",
+   "calls": [
+    "p_somatic >= 0.6276426315307617 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.6669604182243347 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.7244706749916077 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))"
+   ]
+  },
+  "ver4|unseen|COLO829T|PacBio": {
+   "f1": [
+    0.1531,
+    0.1148,
+    0.1333
+   ],
+   "mean": 0.13373333333333334,
+   "sd": 0.01915367675756625,
+   "truth": 131,
+   "rule": "ppr8",
+   "calls": [
+    "p_somatic >= 0.7924565076828003 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.8279844522476196 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.8322527408599854 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))"
+   ]
+  },
+  "ver4|unseen|COLO829T|ONT": {
+   "f1": [
+    0.0769,
+    0.0614,
+    0.0773
+   ],
+   "mean": 0.07186666666666666,
+   "sd": 0.009066605391949803,
+   "truth": 131,
+   "rule": "pp",
+   "calls": [
+    "p_somatic >= 0.7655274271965027 (validation post-PoN best F1 (val.somatic_threshold_postpon))",
+    "p_somatic >= 0.8435131311416626 (validation post-PoN best F1 (val.somatic_threshold_postpon))",
+    "p_somatic >= 0.8454605340957642 (validation post-PoN best F1 (val.somatic_threshold_postpon))"
+   ]
+  },
+  "ver4|unseen|HCC1395T|Illumina": {
+   "f1": [
+    0.6566,
+    0.7099,
+    0.7023
+   ],
+   "mean": 0.6896,
+   "sd": 0.028830365935936388,
+   "truth": 133,
+   "rule": "ppr8",
+   "calls": [
+    "p_somatic >= 0.6276426315307617 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.6669604182243347 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.7244706749916077 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))"
+   ]
+  },
+  "ver4|unseen|HCC1395T|PacBio": {
+   "f1": [
+    0.6335,
+    0.6374,
+    0.63
+   ],
+   "mean": 0.6336333333333333,
+   "sd": 0.003701801363300467,
+   "truth": 133,
+   "rule": "ppr8",
+   "calls": [
+    "p_somatic >= 0.7924565076828003 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.8279844522476196 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.8322527408599854 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))"
+   ]
+  },
+  "ver4|unseen|HCC1395T|ONT": {
+   "f1": [
+    0.5496,
+    0.4913,
+    0.6016
+   ],
+   "mean": 0.5475,
+   "sd": 0.055179978252985935,
+   "truth": 133,
+   "rule": "pp",
+   "calls": [
+    "p_somatic >= 0.7655274271965027 (validation post-PoN best F1 (val.somatic_threshold_postpon))",
+    "p_somatic >= 0.8435131311416626 (validation post-PoN best F1 (val.somatic_threshold_postpon))",
+    "p_somatic >= 0.8454605340957642 (validation post-PoN best F1 (val.somatic_threshold_postpon))"
+   ]
+  },
+  "ver3|release|HG008T|Illumina": {
+   "f1": [
+    0.1711,
+    0.2022,
+    0.2242
+   ],
+   "mean": 0.19916666666666666,
+   "sd": 0.026679642676267865,
+   "truth": 587,
+   "rule": "ppr8",
+   "calls": [
+    "p_somatic >= 0.19937816262245178 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.38437458872795105 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.5997829437255859 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))"
+   ]
+  },
+  "ver3|release|HG008T|PacBio": {
+   "f1": [
+    0.2386,
+    0.2469,
+    0.263
+   ],
+   "mean": 0.2495,
+   "sd": 0.01240604691269544,
+   "truth": 587,
+   "rule": "ppr8",
+   "calls": [
+    "p_somatic >= 0.6684039235115051 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.6854676604270935 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.7070106863975525 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))"
+   ]
+  },
+  "ver3|release|HG008T|ONT": {
+   "f1": [
+    0.1683,
+    0.1779,
+    0.1573
+   ],
+   "mean": 0.16783333333333333,
+   "sd": 0.010307925753192705,
+   "truth": 587,
+   "rule": "ppr8",
+   "calls": [
+    "p_somatic >= 0.24007463455200195 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.2895215153694153 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.3256518840789795 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))"
+   ]
+  },
+  "ver3|release|COLO829T|Illumina": {
+   "f1": [
+    0.1735,
+    0.159,
+    0.1899
+   ],
+   "mean": 0.17413333333333333,
+   "sd": 0.015459732641068976,
+   "truth": 131,
+   "rule": "ppr8",
+   "calls": [
+    "p_somatic >= 0.19937816262245178 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.38437458872795105 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.5997829437255859 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))"
+   ]
+  },
+  "ver3|release|COLO829T|PacBio": {
+   "f1": [
+    0.1637,
+    0.1935,
+    0.1538
+   ],
+   "mean": 0.17033333333333334,
+   "sd": 0.020664542901630646,
+   "truth": 131,
+   "rule": "ppr8",
+   "calls": [
+    "p_somatic >= 0.6684039235115051 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.6854676604270935 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.7070106863975525 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))"
+   ]
+  },
+  "ver3|release|COLO829T|ONT": {
+   "f1": [
+    0.1088,
+    0.0879,
+    0.0742
+   ],
+   "mean": 0.0903,
+   "sd": 0.01742440816785465,
+   "truth": 131,
+   "rule": "ppr8",
+   "calls": [
+    "p_somatic >= 0.24007463455200195 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.2895215153694153 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.3256518840789795 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))"
+   ]
+  },
+  "ver3|release|HCC1395T|Illumina": {
+   "f1": [
+    0.6168,
+    0.5337,
+    0.6599
+   ],
+   "mean": 0.6034666666666667,
+   "sd": 0.0641478240732555,
+   "truth": 133,
+   "rule": "ppr8",
+   "calls": [
+    "p_somatic >= 0.19937816262245178 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.38437458872795105 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.5997829437255859 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))"
+   ]
+  },
+  "ver3|release|HCC1395T|PacBio": {
+   "f1": [
+    0.5928,
+    0.5935,
+    0.6452
+   ],
+   "mean": 0.6105,
+   "sd": 0.030053119638400263,
+   "truth": 133,
+   "rule": "ppr8",
+   "calls": [
+    "p_somatic >= 0.6684039235115051 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.6854676604270935 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.7070106863975525 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))"
+   ]
+  },
+  "ver3|release|HCC1395T|ONT": {
+   "f1": [
+    0.3402,
+    0.3016,
+    0.2696
+   ],
+   "mean": 0.3038,
+   "sd": 0.0353513790395792,
+   "truth": 133,
+   "rule": "ppr8",
+   "calls": [
+    "p_somatic >= 0.24007463455200195 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.2895215153694153 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.3256518840789795 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))"
+   ]
+  },
+  "ver3|unseen|HG008T|Illumina": {
+   "f1": [
+    0.1374,
+    0.1131,
+    0.1182
+   ],
+   "mean": 0.1229,
+   "sd": 0.01281366458121953,
+   "truth": 587,
+   "rule": "ppr8",
+   "calls": [
+    "p_somatic >= 0.6276426315307617 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.6669604182243347 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.7244706749916077 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))"
+   ]
+  },
+  "ver3|unseen|HG008T|PacBio": {
+   "f1": [
+    0.1351,
+    0.1399,
+    0.1538
+   ],
+   "mean": 0.14293333333333333,
+   "sd": 0.009712020043911218,
+   "truth": 587,
+   "rule": "ppr8",
+   "calls": [
+    "p_somatic >= 0.7924565076828003 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.8279844522476196 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.8322527408599854 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))"
+   ]
+  },
+  "ver3|unseen|HG008T|ONT": {
+   "f1": [
+    0.1392,
+    0.1427,
+    0.1461
+   ],
+   "mean": 0.14266666666666666,
+   "sd": 0.0034501207708330143,
+   "truth": 587,
+   "rule": "ppr8",
+   "calls": [
+    "p_somatic >= 0.3217044472694397 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.5580074191093445 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.676965594291687 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))"
+   ]
+  },
+  "ver3|unseen|COLO829T|Illumina": {
+   "f1": [
+    0.1786,
+    0.1635,
+    0.1625
+   ],
+   "mean": 0.16820000000000002,
+   "sd": 0.009020532135079395,
+   "truth": 131,
+   "rule": "ppr8",
+   "calls": [
+    "p_somatic >= 0.6276426315307617 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.6669604182243347 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.7244706749916077 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))"
+   ]
+  },
+  "ver3|unseen|COLO829T|PacBio": {
+   "f1": [
+    0.1531,
+    0.1148,
+    0.1333
+   ],
+   "mean": 0.13373333333333334,
+   "sd": 0.01915367675756625,
+   "truth": 131,
+   "rule": "ppr8",
+   "calls": [
+    "p_somatic >= 0.7924565076828003 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.8279844522476196 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.8322527408599854 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))"
+   ]
+  },
+  "ver3|unseen|COLO829T|ONT": {
+   "f1": [
+    0.069,
+    0.0543,
+    0.0853
+   ],
+   "mean": 0.06953333333333334,
+   "sd": 0.01550688019342812,
+   "truth": 131,
+   "rule": "ppr8",
+   "calls": [
+    "p_somatic >= 0.3217044472694397 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.5580074191093445 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.676965594291687 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))"
+   ]
+  },
+  "ver3|unseen|HCC1395T|Illumina": {
+   "f1": [
+    0.6566,
+    0.7099,
+    0.7023
+   ],
+   "mean": 0.6896,
+   "sd": 0.028830365935936388,
+   "truth": 133,
+   "rule": "ppr8",
+   "calls": [
+    "p_somatic >= 0.6276426315307617 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.6669604182243347 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.7244706749916077 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))"
+   ]
+  },
+  "ver3|unseen|HCC1395T|PacBio": {
+   "f1": [
+    0.6335,
+    0.6374,
+    0.63
+   ],
+   "mean": 0.6336333333333333,
+   "sd": 0.003701801363300467,
+   "truth": 133,
+   "rule": "ppr8",
+   "calls": [
+    "p_somatic >= 0.7924565076828003 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.8279844522476196 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.8322527408599854 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))"
+   ]
+  },
+  "ver3|unseen|HCC1395T|ONT": {
+   "f1": [
+    0.503,
+    0.429,
+    0.503
+   ],
+   "mean": 0.47833333333333333,
+   "sd": 0.04272391992003231,
+   "truth": 133,
+   "rule": "ppr8",
+   "calls": [
+    "p_somatic >= 0.3217044472694397 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.5580074191093445 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "p_somatic >= 0.676965594291687 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))"
+   ]
+  }
+ },
+ "SNV_cells": {
+  "Illumina|d46": {
+   "f1": [
+    0.7968,
+    0.7254,
+    0.8163
+   ],
+   "mean": 0.7795,
+   "sd": 0.04785572066117067,
+   "truth": 2443,
+   "vcf": [
+    "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d46_newpipe/vcf_chr1_COLO829T_Illumina_d46",
+    "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d46_newpipe_s1/vcf_chr1_COLO829T_Illumina_d46",
+    "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d46_newpipe_s2/vcf_chr1_COLO829T_Illumina_d46"
+   ]
+  },
+  "Illumina|d9": {
+   "f1": [
+    0.7736,
+    0.7138,
+    0.7219
+   ],
+   "mean": 0.7364333333333333,
+   "sd": 0.032441074786963085,
+   "truth": 2443,
+   "vcf": [
+    "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d9_newpipe/vcf_chr1_COLO829T_Illumina",
+    "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d9_newpipe_s1/vcf_chr1_COLO829T_Illumina",
+    "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d9_newpipe_s2/vcf_chr1_COLO829T_Illumina"
+   ]
+  },
+  "fiberseq|d46": {
+   "f1": [
+    0.8175,
+    0.8196,
+    0.8226
+   ],
+   "mean": 0.8199,
+   "sd": 0.0025632011235952566,
+   "truth": 2443,
+   "vcf": [
+    "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d46_newpipe/vcf_chr1_COLO829T_fiberseq_d46",
+    "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d46_newpipe_s1/vcf_chr1_COLO829T_fiberseq_d46",
+    "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d46_newpipe_s2/vcf_chr1_COLO829T_fiberseq_d46"
+   ]
+  },
+  "fiberseq|d9": {
+   "f1": [
+    0.8187,
+    0.8189,
+    0.8245
+   ],
+   "mean": 0.8207,
+   "sd": 0.0032924155266308873,
+   "truth": 2443,
+   "vcf": [
+    "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d9_newpipe/vcf_chr1_COLO829T_fiberseq",
+    "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d9_newpipe_s1/vcf_chr1_COLO829T_fiberseq",
+    "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d9_newpipe_s2/vcf_chr1_COLO829T_fiberseq"
+   ]
+  }
+ }
+}

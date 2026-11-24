@@ -1,0 +1,1085 @@
+{
+ "rows": [
+  {
+   "platform": "Illumina",
+   "platform_name": "Illumina",
+   "graph": "d46",
+   "graph_name": "HPRC v2.1",
+   "label": "COLO829T Illumina, HPRC v2.1",
+   "models": {
+    "with_s0": {
+     "pon": {
+      "tp_baseline": 1933,
+      "tp_call": 1933,
+      "fp": 476,
+      "fn": 510,
+      "truth": 2443,
+      "precision": 0.8024076380240763,
+      "recall": 0.7912402783462955,
+      "f1": 0.7967848309975267,
+      "report_precision": 0.8024,
+      "report_recall": 0.7912,
+      "report_f1": 0.7968
+     },
+     "raw": {
+      "tp_baseline": 1937,
+      "tp_call": 1937,
+      "fp": 480,
+      "fn": 506,
+      "truth": 2443,
+      "precision": 0.8014067025237899,
+      "recall": 0.7928776094965206,
+      "f1": 0.797119341563786,
+      "report_precision": 0.8014,
+      "report_recall": 0.7929,
+      "report_f1": 0.7971
+     },
+     "meta": {
+      "report": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d46_newpipe/vcf_chr1_COLO829T_Illumina_d46/eval_bed/report.json",
+      "calls": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d46_newpipe/vcf_chr1_COLO829T_Illumina_d46/COLO829T_Illumina_d46_snvaf05.SNV.linear.vcf.gz",
+      "truth": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/COLO829T_somatic_snv_indel.vcf.gz",
+      "bed": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/SMaHT_v2_easy_difficult_extreme.union.bed",
+      "kind": "SNV",
+      "chromosomes": [
+       "chr1"
+      ],
+      "truth_records": 2443,
+      "truth_in_bed": 2443,
+      "pon_files": [
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/af-only-gnomad.hg38.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/Homo_sapiens_assembly38.dbsnp138.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/1000g_pon.hg38.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/CoLoRSdb.GRCh38.v1.1.0.deepvariant.glnexus.vcf.gz"
+      ],
+      "threshold": 0.7777388691902161,
+      "call_rule": "p_somatic >= 0.7777388691902161 (validation post-PoN recall 0.95 of the callable positives (val.somatic_at_recall_postpon_callable))",
+      "checkpoint": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d46_newpipe/best.pth",
+      "tensors": [
+       "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_Illumina_d46_snvaf05/tensors"
+      ],
+      "run": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d46_newpipe"
+     }
+    },
+    "with_s1": {
+     "pon": {
+      "tp_baseline": 1951,
+      "tp_call": 1951,
+      "fp": 985,
+      "fn": 492,
+      "truth": 2443,
+      "precision": 0.6645095367847411,
+      "recall": 0.7986082685223086,
+      "f1": 0.7254136456590444,
+      "report_precision": 0.6645,
+      "report_recall": 0.7986,
+      "report_f1": 0.7254
+     },
+     "raw": {
+      "tp_baseline": 1969,
+      "tp_call": 1969,
+      "fp": 1001,
+      "fn": 474,
+      "truth": 2443,
+      "precision": 0.662962962962963,
+      "recall": 0.8059762586983218,
+      "f1": 0.7275078514686866,
+      "report_precision": 0.663,
+      "report_recall": 0.806,
+      "report_f1": 0.7275
+     },
+     "meta": {
+      "report": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d46_newpipe_s1/vcf_chr1_COLO829T_Illumina_d46/eval_bed/report.json",
+      "calls": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d46_newpipe_s1/vcf_chr1_COLO829T_Illumina_d46/COLO829T_Illumina_d46_snvaf05.SNV.linear.vcf.gz",
+      "truth": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/COLO829T_somatic_snv_indel.vcf.gz",
+      "bed": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/SMaHT_v2_easy_difficult_extreme.union.bed",
+      "kind": "SNV",
+      "chromosomes": [
+       "chr1"
+      ],
+      "truth_records": 2443,
+      "truth_in_bed": 2443,
+      "pon_files": [
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/af-only-gnomad.hg38.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/Homo_sapiens_assembly38.dbsnp138.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/1000g_pon.hg38.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/CoLoRSdb.GRCh38.v1.1.0.deepvariant.glnexus.vcf.gz"
+      ],
+      "threshold": 0.8181583881378174,
+      "call_rule": "p_somatic >= 0.8181583881378174 (validation post-PoN recall 0.95 of the callable positives (val.somatic_at_recall_postpon_callable))",
+      "checkpoint": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d46_newpipe_s1/best.pth",
+      "tensors": [
+       "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_Illumina_d46_snvaf05/tensors"
+      ],
+      "run": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d46_newpipe_s1"
+     }
+    },
+    "with_s2": {
+     "pon": {
+      "tp_baseline": 1966,
+      "tp_call": 1966,
+      "fp": 408,
+      "fn": 477,
+      "truth": 2443,
+      "precision": 0.8281381634372368,
+      "recall": 0.8047482603356528,
+      "f1": 0.8162756902636495,
+      "report_precision": 0.8281,
+      "report_recall": 0.8047,
+      "report_f1": 0.8163
+     },
+     "raw": {
+      "tp_baseline": 1973,
+      "tp_call": 1973,
+      "fp": 413,
+      "fn": 470,
+      "truth": 2443,
+      "precision": 0.8269069572506287,
+      "recall": 0.8076135898485469,
+      "f1": 0.8171464071236282,
+      "report_precision": 0.8269,
+      "report_recall": 0.8076,
+      "report_f1": 0.8171
+     },
+     "meta": {
+      "report": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d46_newpipe_s2/vcf_chr1_COLO829T_Illumina_d46/eval_bed/report.json",
+      "calls": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d46_newpipe_s2/vcf_chr1_COLO829T_Illumina_d46/COLO829T_Illumina_d46_snvaf05.SNV.linear.vcf.gz",
+      "truth": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/COLO829T_somatic_snv_indel.vcf.gz",
+      "bed": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/SMaHT_v2_easy_difficult_extreme.union.bed",
+      "kind": "SNV",
+      "chromosomes": [
+       "chr1"
+      ],
+      "truth_records": 2443,
+      "truth_in_bed": 2443,
+      "pon_files": [
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/af-only-gnomad.hg38.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/Homo_sapiens_assembly38.dbsnp138.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/1000g_pon.hg38.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/CoLoRSdb.GRCh38.v1.1.0.deepvariant.glnexus.vcf.gz"
+      ],
+      "threshold": 0.7710661292076111,
+      "call_rule": "p_somatic >= 0.7710661292076111 (validation post-PoN recall 0.95 of the callable positives (val.somatic_at_recall_postpon_callable))",
+      "checkpoint": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d46_newpipe_s2/best.pth",
+      "tensors": [
+       "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_Illumina_d46_snvaf05/tensors"
+      ],
+      "run": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d46_newpipe_s2"
+     }
+    },
+    "without_s0": {
+     "pon": {
+      "tp_baseline": 1936,
+      "tp_call": 1936,
+      "fp": 886,
+      "fn": 507,
+      "truth": 2443,
+      "precision": 0.6860382707299787,
+      "recall": 0.7924682767089644,
+      "f1": 0.7354226020892687,
+      "report_precision": 0.686,
+      "report_recall": 0.7925,
+      "report_f1": 0.7354
+     },
+     "raw": {
+      "tp_baseline": 1942,
+      "tp_call": 1942,
+      "fp": 897,
+      "fn": 501,
+      "truth": 2443,
+      "precision": 0.68404367735118,
+      "recall": 0.794924273434302,
+      "f1": 0.7353275274517227,
+      "report_precision": 0.684,
+      "report_recall": 0.7949,
+      "report_f1": 0.7353
+     },
+     "meta": {
+      "report": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_nopc_d46_newpipe/vcf_chr1_COLO829T_Illumina_d46/eval_bed/report.json",
+      "calls": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_nopc_d46_newpipe/vcf_chr1_COLO829T_Illumina_d46/COLO829T_Illumina_d46_snvaf05.SNV.linear.vcf.gz",
+      "truth": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/COLO829T_somatic_snv_indel.vcf.gz",
+      "bed": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/SMaHT_v2_easy_difficult_extreme.union.bed",
+      "kind": "SNV",
+      "chromosomes": [
+       "chr1"
+      ],
+      "truth_records": 2443,
+      "truth_in_bed": 2443,
+      "pon_files": [
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/af-only-gnomad.hg38.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/Homo_sapiens_assembly38.dbsnp138.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/1000g_pon.hg38.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/CoLoRSdb.GRCh38.v1.1.0.deepvariant.glnexus.vcf.gz"
+      ],
+      "threshold": 0.7552109360694885,
+      "call_rule": "p_somatic >= 0.7552109360694885 (validation post-PoN recall 0.95 of the callable positives (val.somatic_at_recall_postpon_callable))",
+      "checkpoint": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_nopc_d46_newpipe/best.pth",
+      "tensors": [
+       "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_Illumina_d46_snvaf05/tensors"
+      ],
+      "run": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_nopc_d46_newpipe"
+     }
+    }
+   },
+   "delta": {
+    "P": 0.11636936729409764,
+    "R": -0.0012279983626688473,
+    "F1": 0.06136222890825804,
+    "F1 pre": 0.06179181411206336
+   },
+   "seed_range": {
+    "P": [
+     0.6645095367847411,
+     0.8281381634372368
+    ],
+    "R": [
+     0.7912402783462955,
+     0.8047482603356528
+    ],
+    "F1": [
+     0.7254136456590444,
+     0.8162756902636495
+    ],
+    "F1 pre": [
+     0.7275078514686866,
+     0.8171464071236282
+    ]
+   },
+   "seed_mean": {
+    "P": 0.7650184460820181,
+    "R": 0.7981989357347524,
+    "F1": 0.7794913889734069,
+    "F1 pre": 0.7805912000520335
+   },
+   "without_vs_range": {
+    "P": "inside",
+    "R": "inside",
+    "F1": "inside",
+    "F1 pre": "inside"
+   },
+   "delta_mean": {
+    "P": 0.07898017535203938,
+    "R": 0.005730659025788065,
+    "F1": 0.04406878688413818,
+    "F1 pre": 0.045263672600310834
+   }
+  },
+  {
+   "platform": "Illumina",
+   "platform_name": "Illumina",
+   "graph": "d9",
+   "graph_name": "HPRC v1.1",
+   "label": "COLO829T Illumina, HPRC v1.1",
+   "models": {
+    "with_s0": {
+     "pon": {
+      "tp_baseline": 1955,
+      "tp_call": 1955,
+      "fp": 656,
+      "fn": 488,
+      "truth": 2443,
+      "precision": 0.7487552661815396,
+      "recall": 0.8002455996725337,
+      "f1": 0.773644637910566,
+      "report_precision": 0.7488,
+      "report_recall": 0.8002,
+      "report_f1": 0.7736
+     },
+     "raw": {
+      "tp_baseline": 1961,
+      "tp_call": 1961,
+      "fp": 661,
+      "fn": 482,
+      "truth": 2443,
+      "precision": 0.7479023646071701,
+      "recall": 0.8027015963978714,
+      "f1": 0.7743336623889436,
+      "report_precision": 0.7479,
+      "report_recall": 0.8027,
+      "report_f1": 0.7743
+     },
+     "meta": {
+      "report": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d9_newpipe/vcf_chr1_COLO829T_Illumina/eval_bed/report.json",
+      "calls": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d9_newpipe/vcf_chr1_COLO829T_Illumina/COLO829T_Illumina_snvaf05.SNV.linear.vcf.gz",
+      "truth": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/COLO829T_somatic_snv_indel.vcf.gz",
+      "bed": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/SMaHT_v2_easy_difficult_extreme.union.bed",
+      "kind": "SNV",
+      "chromosomes": [
+       "chr1"
+      ],
+      "truth_records": 2443,
+      "truth_in_bed": 2443,
+      "pon_files": [
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/af-only-gnomad.hg38.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/Homo_sapiens_assembly38.dbsnp138.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/1000g_pon.hg38.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/CoLoRSdb.GRCh38.v1.1.0.deepvariant.glnexus.vcf.gz"
+      ],
+      "threshold": 0.6947360038757324,
+      "call_rule": "p_somatic >= 0.6947360038757324 (validation post-PoN recall 0.95 of the callable positives (val.somatic_at_recall_postpon_callable))",
+      "checkpoint": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d9_newpipe/best.pth",
+      "tensors": [
+       "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_Illumina_snvaf05/tensors"
+      ],
+      "run": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d9_newpipe"
+     }
+    },
+    "with_s1": {
+     "pon": {
+      "tp_baseline": 1939,
+      "tp_call": 1939,
+      "fp": 1051,
+      "fn": 504,
+      "truth": 2443,
+      "precision": 0.6484949832775919,
+      "recall": 0.7936962750716332,
+      "f1": 0.7137861218479661,
+      "report_precision": 0.6485,
+      "report_recall": 0.7937,
+      "report_f1": 0.7138
+     },
+     "raw": {
+      "tp_baseline": 1956,
+      "tp_call": 1956,
+      "fp": 1064,
+      "fn": 487,
+      "truth": 2443,
+      "precision": 0.6476821192052981,
+      "recall": 0.80065493246009,
+      "f1": 0.7160900604063701,
+      "report_precision": 0.6477,
+      "report_recall": 0.8007,
+      "report_f1": 0.7161
+     },
+     "meta": {
+      "report": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d9_newpipe_s1/vcf_chr1_COLO829T_Illumina/eval_bed/report.json",
+      "calls": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d9_newpipe_s1/vcf_chr1_COLO829T_Illumina/COLO829T_Illumina_snvaf05.SNV.linear.vcf.gz",
+      "truth": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/COLO829T_somatic_snv_indel.vcf.gz",
+      "bed": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/SMaHT_v2_easy_difficult_extreme.union.bed",
+      "kind": "SNV",
+      "chromosomes": [
+       "chr1"
+      ],
+      "truth_records": 2443,
+      "truth_in_bed": 2443,
+      "pon_files": [
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/af-only-gnomad.hg38.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/Homo_sapiens_assembly38.dbsnp138.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/1000g_pon.hg38.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/CoLoRSdb.GRCh38.v1.1.0.deepvariant.glnexus.vcf.gz"
+      ],
+      "threshold": 0.7043161392211914,
+      "call_rule": "p_somatic >= 0.7043161392211914 (validation post-PoN recall 0.95 of the callable positives (val.somatic_at_recall_postpon_callable))",
+      "checkpoint": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d9_newpipe_s1/best.pth",
+      "tensors": [
+       "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_Illumina_snvaf05/tensors"
+      ],
+      "run": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d9_newpipe_s1"
+     }
+    },
+    "with_s2": {
+     "pon": {
+      "tp_baseline": 1888,
+      "tp_call": 1888,
+      "fp": 900,
+      "fn": 555,
+      "truth": 2443,
+      "precision": 0.6771879483500718,
+      "recall": 0.7728203029062628,
+      "f1": 0.7218505065952973,
+      "report_precision": 0.6772,
+      "report_recall": 0.7728,
+      "report_f1": 0.7219
+     },
+     "raw": {
+      "tp_baseline": 1892,
+      "tp_call": 1892,
+      "fp": 901,
+      "fn": 551,
+      "truth": 2443,
+      "precision": 0.6774078052273541,
+      "recall": 0.7744576340564879,
+      "f1": 0.7226890756302522,
+      "report_precision": 0.6774,
+      "report_recall": 0.7745,
+      "report_f1": 0.7227
+     },
+     "meta": {
+      "report": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d9_newpipe_s2/vcf_chr1_COLO829T_Illumina/eval_bed/report.json",
+      "calls": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d9_newpipe_s2/vcf_chr1_COLO829T_Illumina/COLO829T_Illumina_snvaf05.SNV.linear.vcf.gz",
+      "truth": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/COLO829T_somatic_snv_indel.vcf.gz",
+      "bed": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/SMaHT_v2_easy_difficult_extreme.union.bed",
+      "kind": "SNV",
+      "chromosomes": [
+       "chr1"
+      ],
+      "truth_records": 2443,
+      "truth_in_bed": 2443,
+      "pon_files": [
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/af-only-gnomad.hg38.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/Homo_sapiens_assembly38.dbsnp138.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/1000g_pon.hg38.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/CoLoRSdb.GRCh38.v1.1.0.deepvariant.glnexus.vcf.gz"
+      ],
+      "threshold": 0.8726442456245422,
+      "call_rule": "p_somatic >= 0.8726442456245422 (validation post-PoN recall 0.95 of the callable positives (val.somatic_at_recall_postpon_callable))",
+      "checkpoint": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d9_newpipe_s2/best.pth",
+      "tensors": [
+       "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_Illumina_snvaf05/tensors"
+      ],
+      "run": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d9_newpipe_s2"
+     }
+    },
+    "without_s0": {
+     "pon": {
+      "tp_baseline": 1958,
+      "tp_call": 1958,
+      "fp": 1240,
+      "fn": 485,
+      "truth": 2443,
+      "precision": 0.6122576610381488,
+      "recall": 0.8014735980352026,
+      "f1": 0.6942031554688884,
+      "report_precision": 0.6123,
+      "report_recall": 0.8015,
+      "report_f1": 0.6942
+     },
+     "raw": {
+      "tp_baseline": 1968,
+      "tp_call": 1968,
+      "fp": 1272,
+      "fn": 475,
+      "truth": 2443,
+      "precision": 0.6074074074074074,
+      "recall": 0.8055669259107655,
+      "f1": 0.6925919408762978,
+      "report_precision": 0.6074,
+      "report_recall": 0.8056,
+      "report_f1": 0.6926
+     },
+     "meta": {
+      "report": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_nopc_d9_newpipe/vcf_chr1_COLO829T_Illumina/eval_bed/report.json",
+      "calls": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_nopc_d9_newpipe/vcf_chr1_COLO829T_Illumina/COLO829T_Illumina_snvaf05.SNV.linear.vcf.gz",
+      "truth": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/COLO829T_somatic_snv_indel.vcf.gz",
+      "bed": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/SMaHT_v2_easy_difficult_extreme.union.bed",
+      "kind": "SNV",
+      "chromosomes": [
+       "chr1"
+      ],
+      "truth_records": 2443,
+      "truth_in_bed": 2443,
+      "pon_files": [
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/af-only-gnomad.hg38.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/Homo_sapiens_assembly38.dbsnp138.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/1000g_pon.hg38.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/CoLoRSdb.GRCh38.v1.1.0.deepvariant.glnexus.vcf.gz"
+      ],
+      "threshold": 0.6310135126113892,
+      "call_rule": "p_somatic >= 0.6310135126113892 (validation post-PoN recall 0.95 of the callable positives (val.somatic_at_recall_postpon_callable))",
+      "checkpoint": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_nopc_d9_newpipe/best.pth",
+      "tensors": [
+       "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_Illumina_snvaf05/tensors"
+      ],
+      "run": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_nopc_d9_newpipe"
+     }
+    }
+   },
+   "delta": {
+    "P": 0.13649760514339082,
+    "R": -0.0012279983626688473,
+    "F1": 0.07944148244167759,
+    "F1 pre": 0.0817417215126458
+   },
+   "seed_range": {
+    "P": [
+     0.6484949832775919,
+     0.7487552661815396
+    ],
+    "R": [
+     0.7728203029062628,
+     0.8002455996725337
+    ],
+    "F1": [
+     0.7137861218479661,
+     0.773644637910566
+    ],
+    "F1 pre": [
+     0.7160900604063701,
+     0.7743336623889436
+    ]
+   },
+   "seed_mean": {
+    "P": 0.6914793992697345,
+    "R": 0.7889207258834766,
+    "F1": 0.7364270887846098,
+    "F1 pre": 0.7377042661418552
+   },
+   "without_vs_range": {
+    "P": "below",
+    "R": "above",
+    "F1": "below",
+    "F1 pre": "below"
+   },
+   "delta_mean": {
+    "P": 0.07922173823158563,
+    "R": -0.012552872151725958,
+    "F1": 0.042223933315721385,
+    "F1 pre": 0.04511232526555742
+   }
+  },
+  {
+   "platform": "fiberseq",
+   "platform_name": "Fiber-seq",
+   "graph": "d46",
+   "graph_name": "HPRC v2.1",
+   "label": "COLO829T Fiber-seq, HPRC v2.1",
+   "models": {
+    "with_s0": {
+     "pon": {
+      "tp_baseline": 1920,
+      "tp_call": 1920,
+      "fp": 334,
+      "fn": 523,
+      "truth": 2443,
+      "precision": 0.8518189884649512,
+      "recall": 0.7859189521080638,
+      "f1": 0.8175431126250798,
+      "report_precision": 0.8518,
+      "report_recall": 0.7859,
+      "report_f1": 0.8175
+     },
+     "raw": {
+      "tp_baseline": 1927,
+      "tp_call": 1927,
+      "fp": 336,
+      "fn": 516,
+      "truth": 2443,
+      "precision": 0.8515245249668582,
+      "recall": 0.7887842816209578,
+      "f1": 0.8189545261368466,
+      "report_precision": 0.8515,
+      "report_recall": 0.7888,
+      "report_f1": 0.819
+     },
+     "meta": {
+      "report": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d46_newpipe/vcf_chr1_COLO829T_fiberseq_d46/eval_bed/report.json",
+      "calls": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d46_newpipe/vcf_chr1_COLO829T_fiberseq_d46/COLO829T_fiberseq_d46_snvaf05.SNV.linear.vcf.gz",
+      "truth": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/COLO829T_somatic_snv_indel.vcf.gz",
+      "bed": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/SMaHT_v2_easy_difficult_extreme.union.bed",
+      "kind": "SNV",
+      "chromosomes": [
+       "chr1"
+      ],
+      "truth_records": 2443,
+      "truth_in_bed": 2443,
+      "pon_files": [
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/af-only-gnomad.hg38.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/Homo_sapiens_assembly38.dbsnp138.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/1000g_pon.hg38.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/CoLoRSdb.GRCh38.v1.1.0.deepvariant.glnexus.vcf.gz"
+      ],
+      "threshold": 0.7280402779579163,
+      "call_rule": "p_somatic >= 0.7280402779579163 (validation post-PoN recall 0.95 of the callable positives (val.somatic_at_recall_postpon_callable))",
+      "checkpoint": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d46_newpipe/best.pth",
+      "tensors": [
+       "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_fiberseq_d46_snvaf05/tensors"
+      ],
+      "run": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d46_newpipe"
+     }
+    },
+    "with_s1": {
+     "pon": {
+      "tp_baseline": 1920,
+      "tp_call": 1920,
+      "fp": 322,
+      "fn": 523,
+      "truth": 2443,
+      "precision": 0.856378233719893,
+      "recall": 0.7859189521080638,
+      "f1": 0.8196371398078975,
+      "report_precision": 0.8564,
+      "report_recall": 0.7859,
+      "report_f1": 0.8196
+     },
+     "raw": {
+      "tp_baseline": 1933,
+      "tp_call": 1933,
+      "fp": 339,
+      "fn": 510,
+      "truth": 2443,
+      "precision": 0.8507922535211268,
+      "recall": 0.7912402783462955,
+      "f1": 0.8199363732767762,
+      "report_precision": 0.8508,
+      "report_recall": 0.7912,
+      "report_f1": 0.8199
+     },
+     "meta": {
+      "report": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d46_newpipe_s1/vcf_chr1_COLO829T_fiberseq_d46/eval_bed/report.json",
+      "calls": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d46_newpipe_s1/vcf_chr1_COLO829T_fiberseq_d46/COLO829T_fiberseq_d46_snvaf05.SNV.linear.vcf.gz",
+      "truth": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/COLO829T_somatic_snv_indel.vcf.gz",
+      "bed": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/SMaHT_v2_easy_difficult_extreme.union.bed",
+      "kind": "SNV",
+      "chromosomes": [
+       "chr1"
+      ],
+      "truth_records": 2443,
+      "truth_in_bed": 2443,
+      "pon_files": [
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/af-only-gnomad.hg38.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/Homo_sapiens_assembly38.dbsnp138.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/1000g_pon.hg38.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/CoLoRSdb.GRCh38.v1.1.0.deepvariant.glnexus.vcf.gz"
+      ],
+      "threshold": 0.7558659911155701,
+      "call_rule": "p_somatic >= 0.7558659911155701 (validation post-PoN recall 0.95 of the callable positives (val.somatic_at_recall_postpon_callable))",
+      "checkpoint": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d46_newpipe_s1/best.pth",
+      "tensors": [
+       "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_fiberseq_d46_snvaf05/tensors"
+      ],
+      "run": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d46_newpipe_s1"
+     }
+    },
+    "with_s2": {
+     "pon": {
+      "tp_baseline": 1940,
+      "tp_call": 1940,
+      "fp": 334,
+      "fn": 503,
+      "truth": 2443,
+      "precision": 0.8531222515391381,
+      "recall": 0.7941056078591895,
+      "f1": 0.822556709773161,
+      "report_precision": 0.8531,
+      "report_recall": 0.7941,
+      "report_f1": 0.8226
+     },
+     "raw": {
+      "tp_baseline": 1947,
+      "tp_call": 1947,
+      "fp": 340,
+      "fn": 496,
+      "truth": 2443,
+      "precision": 0.8513336248360297,
+      "recall": 0.7969709373720835,
+      "f1": 0.8232558139534883,
+      "report_precision": 0.8513,
+      "report_recall": 0.797,
+      "report_f1": 0.8233
+     },
+     "meta": {
+      "report": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d46_newpipe_s2/vcf_chr1_COLO829T_fiberseq_d46/eval_bed/report.json",
+      "calls": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d46_newpipe_s2/vcf_chr1_COLO829T_fiberseq_d46/COLO829T_fiberseq_d46_snvaf05.SNV.linear.vcf.gz",
+      "truth": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/COLO829T_somatic_snv_indel.vcf.gz",
+      "bed": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/SMaHT_v2_easy_difficult_extreme.union.bed",
+      "kind": "SNV",
+      "chromosomes": [
+       "chr1"
+      ],
+      "truth_records": 2443,
+      "truth_in_bed": 2443,
+      "pon_files": [
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/af-only-gnomad.hg38.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/Homo_sapiens_assembly38.dbsnp138.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/1000g_pon.hg38.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/CoLoRSdb.GRCh38.v1.1.0.deepvariant.glnexus.vcf.gz"
+      ],
+      "threshold": 0.7951422929763794,
+      "call_rule": "p_somatic >= 0.7951422929763794 (validation post-PoN recall 0.95 of the callable positives (val.somatic_at_recall_postpon_callable))",
+      "checkpoint": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d46_newpipe_s2/best.pth",
+      "tensors": [
+       "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_fiberseq_d46_snvaf05/tensors"
+      ],
+      "run": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d46_newpipe_s2"
+     }
+    },
+    "without_s0": {
+     "pon": {
+      "tp_baseline": 1899,
+      "tp_call": 1899,
+      "fp": 311,
+      "fn": 544,
+      "truth": 2443,
+      "precision": 0.8592760180995475,
+      "recall": 0.7773229635693819,
+      "f1": 0.816247582205029,
+      "report_precision": 0.8593,
+      "report_recall": 0.7773,
+      "report_f1": 0.8162
+     },
+     "raw": {
+      "tp_baseline": 1901,
+      "tp_call": 1901,
+      "fp": 312,
+      "fn": 542,
+      "truth": 2443,
+      "precision": 0.8590149118843199,
+      "recall": 0.7781416291444945,
+      "f1": 0.8165807560137458,
+      "report_precision": 0.859,
+      "report_recall": 0.7781,
+      "report_f1": 0.8166
+     },
+     "meta": {
+      "report": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_nopc_d46_newpipe/vcf_chr1_COLO829T_fiberseq_d46/eval_bed/report.json",
+      "calls": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_nopc_d46_newpipe/vcf_chr1_COLO829T_fiberseq_d46/COLO829T_fiberseq_d46_snvaf05.SNV.linear.vcf.gz",
+      "truth": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/COLO829T_somatic_snv_indel.vcf.gz",
+      "bed": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/SMaHT_v2_easy_difficult_extreme.union.bed",
+      "kind": "SNV",
+      "chromosomes": [
+       "chr1"
+      ],
+      "truth_records": 2443,
+      "truth_in_bed": 2443,
+      "pon_files": [
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/af-only-gnomad.hg38.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/Homo_sapiens_assembly38.dbsnp138.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/1000g_pon.hg38.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/CoLoRSdb.GRCh38.v1.1.0.deepvariant.glnexus.vcf.gz"
+      ],
+      "threshold": 0.8479196429252625,
+      "call_rule": "p_somatic >= 0.8479196429252625 (validation post-PoN recall 0.95 of the callable positives (val.somatic_at_recall_postpon_callable))",
+      "checkpoint": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_nopc_d46_newpipe/best.pth",
+      "tensors": [
+       "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_fiberseq_d46_snvaf05/tensors"
+      ],
+      "run": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_nopc_d46_newpipe"
+     }
+    }
+   },
+   "delta": {
+    "P": -0.007457029634596268,
+    "R": 0.008595988538681931,
+    "F1": 0.0012955304200508166,
+    "F1 pre": 0.0023737701231008046
+   },
+   "seed_range": {
+    "P": [
+     0.8518189884649512,
+     0.856378233719893
+    ],
+    "R": [
+     0.7859189521080638,
+     0.7941056078591895
+    ],
+    "F1": [
+     0.8175431126250798,
+     0.822556709773161
+    ],
+    "F1 pre": [
+     0.8189545261368466,
+     0.8232558139534883
+    ]
+   },
+   "seed_mean": {
+    "P": 0.853773157907994,
+    "R": 0.788647837358439,
+    "F1": 0.8199123207353795,
+    "F1 pre": 0.8207155711223703
+   },
+   "without_vs_range": {
+    "P": "above",
+    "R": "below",
+    "F1": "below",
+    "F1 pre": "below"
+   },
+   "delta_mean": {
+    "P": -0.005502860191553438,
+    "R": 0.01132487378905711,
+    "F1": 0.003664738530350431,
+    "F1 pre": 0.004134815108624457
+   }
+  },
+  {
+   "platform": "fiberseq",
+   "platform_name": "Fiber-seq",
+   "graph": "d9",
+   "graph_name": "HPRC v1.1",
+   "label": "COLO829T Fiber-seq, HPRC v1.1",
+   "models": {
+    "with_s0": {
+     "pon": {
+      "tp_baseline": 1926,
+      "tp_call": 1926,
+      "fp": 336,
+      "fn": 517,
+      "truth": 2443,
+      "precision": 0.8514588859416445,
+      "recall": 0.7883749488334015,
+      "f1": 0.8187035069075451,
+      "report_precision": 0.8515,
+      "report_recall": 0.7884,
+      "report_f1": 0.8187
+     },
+     "raw": {
+      "tp_baseline": 1935,
+      "tp_call": 1935,
+      "fp": 341,
+      "fn": 508,
+      "truth": 2443,
+      "precision": 0.8501757469244289,
+      "recall": 0.7920589439214081,
+      "f1": 0.8200890019071837,
+      "report_precision": 0.8502,
+      "report_recall": 0.7921,
+      "report_f1": 0.8201
+     },
+     "meta": {
+      "report": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d9_newpipe/vcf_chr1_COLO829T_fiberseq/eval_bed/report.json",
+      "calls": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d9_newpipe/vcf_chr1_COLO829T_fiberseq/COLO829T_fiberseq_snvaf05.SNV.linear.vcf.gz",
+      "truth": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/COLO829T_somatic_snv_indel.vcf.gz",
+      "bed": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/SMaHT_v2_easy_difficult_extreme.union.bed",
+      "kind": "SNV",
+      "chromosomes": [
+       "chr1"
+      ],
+      "truth_records": 2443,
+      "truth_in_bed": 2443,
+      "pon_files": [
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/af-only-gnomad.hg38.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/Homo_sapiens_assembly38.dbsnp138.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/1000g_pon.hg38.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/CoLoRSdb.GRCh38.v1.1.0.deepvariant.glnexus.vcf.gz"
+      ],
+      "threshold": 0.7993069887161255,
+      "call_rule": "p_somatic >= 0.7993069887161255 (validation post-PoN recall 0.95 of the callable positives (val.somatic_at_recall_postpon_callable))",
+      "checkpoint": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d9_newpipe/best.pth",
+      "tensors": [
+       "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_fiberseq_snvaf05/tensors"
+      ],
+      "run": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d9_newpipe"
+     }
+    },
+    "with_s1": {
+     "pon": {
+      "tp_baseline": 1915,
+      "tp_call": 1915,
+      "fp": 319,
+      "fn": 528,
+      "truth": 2443,
+      "precision": 0.8572068039391226,
+      "recall": 0.7838722881702824,
+      "f1": 0.8189010049176824,
+      "report_precision": 0.8572,
+      "report_recall": 0.7839,
+      "report_f1": 0.8189
+     },
+     "raw": {
+      "tp_baseline": 1922,
+      "tp_call": 1922,
+      "fp": 321,
+      "fn": 521,
+      "truth": 2443,
+      "precision": 0.8568880962995987,
+      "recall": 0.7867376176831764,
+      "f1": 0.8203158344003414,
+      "report_precision": 0.8569,
+      "report_recall": 0.7867,
+      "report_f1": 0.8203
+     },
+     "meta": {
+      "report": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d9_newpipe_s1/vcf_chr1_COLO829T_fiberseq/eval_bed/report.json",
+      "calls": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d9_newpipe_s1/vcf_chr1_COLO829T_fiberseq/COLO829T_fiberseq_snvaf05.SNV.linear.vcf.gz",
+      "truth": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/COLO829T_somatic_snv_indel.vcf.gz",
+      "bed": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/SMaHT_v2_easy_difficult_extreme.union.bed",
+      "kind": "SNV",
+      "chromosomes": [
+       "chr1"
+      ],
+      "truth_records": 2443,
+      "truth_in_bed": 2443,
+      "pon_files": [
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/af-only-gnomad.hg38.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/Homo_sapiens_assembly38.dbsnp138.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/1000g_pon.hg38.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/CoLoRSdb.GRCh38.v1.1.0.deepvariant.glnexus.vcf.gz"
+      ],
+      "threshold": 0.7869214415550232,
+      "call_rule": "p_somatic >= 0.7869214415550232 (validation post-PoN recall 0.95 of the callable positives (val.somatic_at_recall_postpon_callable))",
+      "checkpoint": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d9_newpipe_s1/best.pth",
+      "tensors": [
+       "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_fiberseq_snvaf05/tensors"
+      ],
+      "run": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d9_newpipe_s1"
+     }
+    },
+    "with_s2": {
+     "pon": {
+      "tp_baseline": 1910,
+      "tp_call": 1910,
+      "fp": 280,
+      "fn": 533,
+      "truth": 2443,
+      "precision": 0.8721461187214612,
+      "recall": 0.781825624232501,
+      "f1": 0.8245197496222749,
+      "report_precision": 0.8721,
+      "report_recall": 0.7818,
+      "report_f1": 0.8245
+     },
+     "raw": {
+      "tp_baseline": 1916,
+      "tp_call": 1916,
+      "fp": 281,
+      "fn": 527,
+      "truth": 2443,
+      "precision": 0.8720983158852982,
+      "recall": 0.7842816209578387,
+      "f1": 0.8258620689655172,
+      "report_precision": 0.8721,
+      "report_recall": 0.7843,
+      "report_f1": 0.8259
+     },
+     "meta": {
+      "report": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d9_newpipe_s2/vcf_chr1_COLO829T_fiberseq/eval_bed/report.json",
+      "calls": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d9_newpipe_s2/vcf_chr1_COLO829T_fiberseq/COLO829T_fiberseq_snvaf05.SNV.linear.vcf.gz",
+      "truth": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/COLO829T_somatic_snv_indel.vcf.gz",
+      "bed": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/SMaHT_v2_easy_difficult_extreme.union.bed",
+      "kind": "SNV",
+      "chromosomes": [
+       "chr1"
+      ],
+      "truth_records": 2443,
+      "truth_in_bed": 2443,
+      "pon_files": [
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/af-only-gnomad.hg38.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/Homo_sapiens_assembly38.dbsnp138.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/1000g_pon.hg38.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/CoLoRSdb.GRCh38.v1.1.0.deepvariant.glnexus.vcf.gz"
+      ],
+      "threshold": 0.8351613879203796,
+      "call_rule": "p_somatic >= 0.8351613879203796 (validation post-PoN recall 0.95 of the callable positives (val.somatic_at_recall_postpon_callable))",
+      "checkpoint": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d9_newpipe_s2/best.pth",
+      "tensors": [
+       "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_fiberseq_snvaf05/tensors"
+      ],
+      "run": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d9_newpipe_s2"
+     }
+    },
+    "without_s0": {
+     "pon": {
+      "tp_baseline": 1940,
+      "tp_call": 1940,
+      "fp": 428,
+      "fn": 503,
+      "truth": 2443,
+      "precision": 0.8192567567567568,
+      "recall": 0.7941056078591895,
+      "f1": 0.8064851382249012,
+      "report_precision": 0.8193,
+      "report_recall": 0.7941,
+      "report_f1": 0.8065
+     },
+     "raw": {
+      "tp_baseline": 1946,
+      "tp_call": 1946,
+      "fp": 430,
+      "fn": 497,
+      "truth": 2443,
+      "precision": 0.819023569023569,
+      "recall": 0.7965616045845272,
+      "f1": 0.807636439095248,
+      "report_precision": 0.819,
+      "report_recall": 0.7966,
+      "report_f1": 0.8076
+     },
+     "meta": {
+      "report": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_nopc_d9_newpipe/vcf_chr1_COLO829T_fiberseq/eval_bed/report.json",
+      "calls": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_nopc_d9_newpipe/vcf_chr1_COLO829T_fiberseq/COLO829T_fiberseq_snvaf05.SNV.linear.vcf.gz",
+      "truth": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/COLO829T_somatic_snv_indel.vcf.gz",
+      "bed": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/SMaHT_v2_easy_difficult_extreme.union.bed",
+      "kind": "SNV",
+      "chromosomes": [
+       "chr1"
+      ],
+      "truth_records": 2443,
+      "truth_in_bed": 2443,
+      "pon_files": [
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/af-only-gnomad.hg38.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/Homo_sapiens_assembly38.dbsnp138.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/1000g_pon.hg38.vcf.gz",
+       "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/CoLoRSdb.GRCh38.v1.1.0.deepvariant.glnexus.vcf.gz"
+      ],
+      "threshold": 0.7848255634307861,
+      "call_rule": "p_somatic >= 0.7848255634307861 (validation post-PoN recall 0.95 of the callable positives (val.somatic_at_recall_postpon_callable))",
+      "checkpoint": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_nopc_d9_newpipe/best.pth",
+      "tensors": [
+       "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_fiberseq_snvaf05/tensors"
+      ],
+      "run": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_nopc_d9_newpipe"
+     }
+    }
+   },
+   "delta": {
+    "P": 0.03220212918488774,
+    "R": -0.005730659025787954,
+    "F1": 0.01221836868264392,
+    "F1 pre": 0.012452562811935741
+   },
+   "seed_range": {
+    "P": [
+     0.8514588859416445,
+     0.8721461187214612
+    ],
+    "R": [
+     0.781825624232501,
+     0.7883749488334015
+    ],
+    "F1": [
+     0.8187035069075451,
+     0.8245197496222749
+    ],
+    "F1 pre": [
+     0.8200890019071837,
+     0.8258620689655172
+    ]
+   },
+   "seed_mean": {
+    "P": 0.8602706028674095,
+    "R": 0.784690953745395,
+    "F1": 0.8207080871491675,
+    "F1 pre": 0.8220889684243474
+   },
+   "without_vs_range": {
+    "P": "below",
+    "R": "above",
+    "F1": "below",
+    "F1 pre": "below"
+   },
+   "delta_mean": {
+    "P": 0.04101384611065273,
+    "R": -0.009414654113794496,
+    "F1": 0.014222948924266343,
+    "F1 pre": 0.014452529329099462
+   }
+  }
+ ],
+ "checks": [
+  "truth SNVs (TP + FN = baseline = truth_records) = 2443 in all 16 reports, both stages",
+  "P / R / F1 from the counts equal the 4-decimal values of every report (32 blocks)",
+  "truth VCF, BED, kind SNV, chr1, four population resources identical in all 16 reports",
+  "args.json: with-seeds differ from seed 0 only in output / seed; the without model only in output / drop_planes = [path_count]",
+  "PASS rule identical: p_somatic >= <thr> (validation post-PoN recall 0.95 of the callable positives (val.somatic_at_recall_postpon_callable))"
+ ],
+ "metrics": [
+  [
+   "precision",
+   "pon",
+   "P"
+  ],
+  [
+   "recall",
+   "pon",
+   "R"
+  ],
+  [
+   "f1",
+   "pon",
+   "F1"
+  ],
+  [
+   "f1",
+   "raw",
+   "F1 pre"
+  ]
+ ]
+}

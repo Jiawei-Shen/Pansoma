@@ -1,0 +1,7324 @@
+{
+ "runs": [
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "source": "m6np",
+   "set": "COLO829T_Illumina_d46_snvaf05",
+   "platform": "Illumina",
+   "purity": "P100",
+   "rtype": "in-sample",
+   "model": "COLO829T_Illumina",
+   "graph": "d46",
+   "kind": "SNV",
+   "sample": "COLO829T",
+   "unplaced_pass": 110,
+   "processed": 110,
+   "with_context": 110,
+   "categories": {
+    "population": 35,
+    "germline": 68,
+    "tumor_only": 6,
+    "unsupported": 1
+   },
+   "pop_ingraph": 10,
+   "pop_hprc": 29,
+   "multi_copy": 62,
+   "tumor_only_multi_copy": 5,
+   "eval_nobed": {
+    "tp": 1848,
+    "fp": 536,
+    "unplaced_pass": 110,
+    "recall": 0.7564,
+    "placed_only": [
+     0.7752,
+     0.7657
+    ],
+    "all_unplaced_fp": [
+     0.741,
+     0.7486
+    ],
+    "after_graph_pon": [
+     0.7515,
+     0.754
+    ],
+    "after_graph_pon_tumor_only_tp": [
+     0.754,
+     0.7552
+    ],
+    "remaining_unplaced_after_graph_pon": 75.0,
+    "unplaced_share_of_pass": 0.0441,
+    "unplaced_share_after_graph_pon": 0.0305
+   },
+   "eval_bed": {
+    "tp": 1848,
+    "fp": 536,
+    "unplaced_pass": 110.0,
+    "recall": 0.7564,
+    "placed_only": [
+     0.7752,
+     0.7657
+    ],
+    "all_unplaced_fp": [
+     0.741,
+     0.7486
+    ],
+    "after_graph_pon": [
+     0.7515,
+     0.754
+    ],
+    "after_graph_pon_tumor_only_tp": [
+     0.754,
+     0.7552
+    ],
+    "remaining_unplaced_after_graph_pon": 75.0,
+    "unplaced_share_of_pass": 0.0441,
+    "unplaced_share_after_graph_pon": 0.0305
+   }
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "source": "m6np",
+   "set": "COLO829T_ONT_d46",
+   "platform": "ONT",
+   "purity": "P100",
+   "rtype": "in-sample",
+   "model": "COLO829T_ONT",
+   "graph": "d46",
+   "kind": "SNV",
+   "sample": "COLO829T",
+   "unplaced_pass": 111,
+   "processed": 111,
+   "with_context": 111,
+   "categories": {
+    "tumor_only": 12,
+    "germline": 49,
+    "unsupported": 1,
+    "population": 49
+   },
+   "pop_ingraph": 33,
+   "pop_hprc": 37,
+   "multi_copy": 60,
+   "tumor_only_multi_copy": 10,
+   "eval_nobed": {
+    "tp": 1729,
+    "fp": 467,
+    "unplaced_pass": 111,
+    "recall": 0.7077,
+    "placed_only": [
+     0.7873,
+     0.7454
+    ],
+    "all_unplaced_fp": [
+     0.7495,
+     0.728
+    ],
+    "after_graph_pon": [
+     0.7657,
+     0.7356
+    ],
+    "after_graph_pon_tumor_only_tp": [
+     0.771,
+     0.738
+    ],
+    "remaining_unplaced_after_graph_pon": 62.0,
+    "unplaced_share_of_pass": 0.0481,
+    "unplaced_share_after_graph_pon": 0.0275
+   },
+   "eval_bed": {
+    "tp": 1729,
+    "fp": 467,
+    "unplaced_pass": 111.0,
+    "recall": 0.7077,
+    "placed_only": [
+     0.7873,
+     0.7454
+    ],
+    "all_unplaced_fp": [
+     0.7495,
+     0.728
+    ],
+    "after_graph_pon": [
+     0.7657,
+     0.7356
+    ],
+    "after_graph_pon_tumor_only_tp": [
+     0.771,
+     0.738
+    ],
+    "remaining_unplaced_after_graph_pon": 62.0,
+    "unplaced_share_of_pass": 0.0481,
+    "unplaced_share_after_graph_pon": 0.0275
+   }
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "source": "m6np",
+   "set": "COLO829T_fiberseq_d46_snvaf05",
+   "platform": "fiberseq",
+   "purity": "P100",
+   "rtype": "in-sample",
+   "model": "COLO829T_fiberseq",
+   "graph": "d46",
+   "kind": "SNV",
+   "sample": "COLO829T",
+   "unplaced_pass": 79,
+   "processed": 79,
+   "with_context": 79,
+   "categories": {
+    "germline": 34,
+    "population": 41,
+    "tumor_only": 4
+   },
+   "pop_ingraph": 21,
+   "pop_hprc": 36,
+   "multi_copy": 51,
+   "tumor_only_multi_copy": 1,
+   "eval_nobed": {
+    "tp": 1830,
+    "fp": 287,
+    "unplaced_pass": 79,
+    "recall": 0.7491,
+    "placed_only": [
+     0.8644,
+     0.8026
+    ],
+    "all_unplaced_fp": [
+     0.8333,
+     0.789
+    ],
+    "after_graph_pon": [
+     0.8492,
+     0.796
+    ],
+    "after_graph_pon_tumor_only_tp": [
+     0.851,
+     0.7968
+    ],
+    "remaining_unplaced_after_graph_pon": 38.0,
+    "unplaced_share_of_pass": 0.036,
+    "unplaced_share_after_graph_pon": 0.0176
+   },
+   "eval_bed": {
+    "tp": 1830,
+    "fp": 287,
+    "unplaced_pass": 79.0,
+    "recall": 0.7491,
+    "placed_only": [
+     0.8644,
+     0.8026
+    ],
+    "all_unplaced_fp": [
+     0.8333,
+     0.789
+    ],
+    "after_graph_pon": [
+     0.8492,
+     0.796
+    ],
+    "after_graph_pon_tumor_only_tp": [
+     0.851,
+     0.7968
+    ],
+    "remaining_unplaced_after_graph_pon": 38.0,
+    "unplaced_share_of_pass": 0.036,
+    "unplaced_share_after_graph_pon": 0.0176
+   }
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "source": "m6np",
+   "set": "HCC1395T_Illumina_d46_snvaf05",
+   "platform": "Illumina",
+   "purity": "P100",
+   "rtype": "in-sample",
+   "model": "HCC1395T_Illumina",
+   "graph": "d46",
+   "kind": "SNV",
+   "sample": "HCC1395T",
+   "unplaced_pass": 76,
+   "processed": 76,
+   "with_context": 76,
+   "categories": {
+    "population": 42,
+    "germline": 30,
+    "tumor_only": 4
+   },
+   "pop_ingraph": 11,
+   "pop_hprc": 39,
+   "multi_copy": 32,
+   "tumor_only_multi_copy": 1,
+   "eval_nobed": {
+    "tp": 3113,
+    "fp": 971,
+    "unplaced_pass": 76,
+    "recall": 0.9049,
+    "placed_only": [
+     0.7622,
+     0.8275
+    ],
+    "all_unplaced_fp": [
+     0.7483,
+     0.8192
+    ],
+    "after_graph_pon": [
+     0.7559,
+     0.8238
+    ],
+    "after_graph_pon_tumor_only_tp": [
+     0.7569,
+     0.8243
+    ],
+    "remaining_unplaced_after_graph_pon": 34.0,
+    "unplaced_share_of_pass": 0.0183,
+    "unplaced_share_after_graph_pon": 0.0083
+   },
+   "eval_bed": {
+    "tp": 3113,
+    "fp": 495,
+    "unplaced_pass": 55.0,
+    "recall": 0.9049,
+    "placed_only": [
+     0.8628,
+     0.8834
+    ],
+    "all_unplaced_fp": [
+     0.8498,
+     0.8765
+    ],
+    "after_graph_pon": [
+     0.8571,
+     0.8804
+    ],
+    "after_graph_pon_tumor_only_tp": [
+     0.8582,
+     0.881
+    ],
+    "remaining_unplaced_after_graph_pon": 24.0,
+    "unplaced_share_of_pass": 0.015,
+    "unplaced_share_after_graph_pon": 0.0066
+   }
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "source": "m6np",
+   "set": "HCC1395T_ONT_d46",
+   "platform": "ONT",
+   "purity": "P100",
+   "rtype": "in-sample",
+   "model": "HCC1395T_ONT",
+   "graph": "d46",
+   "kind": "SNV",
+   "sample": "HCC1395T",
+   "unplaced_pass": 143,
+   "processed": 143,
+   "with_context": 143,
+   "categories": {
+    "population": 84,
+    "germline": 58,
+    "tumor_only": 1
+   },
+   "pop_ingraph": 14,
+   "pop_hprc": 80,
+   "multi_copy": 66,
+   "tumor_only_multi_copy": 0,
+   "eval_nobed": {
+    "tp": 2326,
+    "fp": 1220,
+    "unplaced_pass": 143,
+    "recall": 0.6762,
+    "placed_only": [
+     0.656,
+     0.6659
+    ],
+    "all_unplaced_fp": [
+     0.6305,
+     0.6525
+    ],
+    "after_graph_pon": [
+     0.6452,
+     0.6603
+    ],
+    "after_graph_pon_tumor_only_tp": [
+     0.6455,
+     0.6605
+    ],
+    "remaining_unplaced_after_graph_pon": 59.0,
+    "unplaced_share_of_pass": 0.0388,
+    "unplaced_share_after_graph_pon": 0.0164
+   },
+   "eval_bed": {
+    "tp": 2326,
+    "fp": 733,
+    "unplaced_pass": 114.0,
+    "recall": 0.6762,
+    "placed_only": [
+     0.7604,
+     0.7158
+    ],
+    "all_unplaced_fp": [
+     0.7331,
+     0.7035
+    ],
+    "after_graph_pon": [
+     0.7474,
+     0.71
+    ],
+    "after_graph_pon_tumor_only_tp": [
+     0.7478,
+     0.7102
+    ],
+    "remaining_unplaced_after_graph_pon": 53.0,
+    "unplaced_share_of_pass": 0.0359,
+    "unplaced_share_after_graph_pon": 0.017
+   }
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "source": "m6np",
+   "set": "HCC1395T_PacBio_d46_snvaf05",
+   "platform": "PacBio",
+   "purity": "P100",
+   "rtype": "in-sample",
+   "model": "HCC1395T_PacBio",
+   "graph": "d46",
+   "kind": "SNV",
+   "sample": "HCC1395T",
+   "unplaced_pass": 106,
+   "processed": 106,
+   "with_context": 106,
+   "categories": {
+    "germline": 31,
+    "population": 72,
+    "tumor_only": 3
+   },
+   "pop_ingraph": 27,
+   "pop_hprc": 68,
+   "multi_copy": 81,
+   "tumor_only_multi_copy": 2,
+   "eval_nobed": {
+    "tp": 2950,
+    "fp": 783,
+    "unplaced_pass": 106,
+    "recall": 0.8576,
+    "placed_only": [
+     0.7902,
+     0.8225
+    ],
+    "all_unplaced_fp": [
+     0.7684,
+     0.8106
+    ],
+    "after_graph_pon": [
+     0.7831,
+     0.8186
+    ],
+    "after_graph_pon_tumor_only_tp": [
+     0.7839,
+     0.8191
+    ],
+    "remaining_unplaced_after_graph_pon": 34.0,
+    "unplaced_share_of_pass": 0.0276,
+    "unplaced_share_after_graph_pon": 0.009
+   },
+   "eval_bed": {
+    "tp": 2950,
+    "fp": 413,
+    "unplaced_pass": 32.0,
+    "recall": 0.8576,
+    "placed_only": [
+     0.8772,
+     0.8673
+    ],
+    "all_unplaced_fp": [
+     0.8689,
+     0.8632
+    ],
+    "after_graph_pon": [
+     0.8736,
+     0.8655
+    ],
+    "after_graph_pon_tumor_only_tp": [
+     0.8739,
+     0.8656
+    ],
+    "remaining_unplaced_after_graph_pon": 14.0,
+    "unplaced_share_of_pass": 0.0094,
+    "unplaced_share_after_graph_pon": 0.0041
+   }
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "source": "m6np",
+   "set": "HG008T_Illumina_d46",
+   "platform": "Illumina",
+   "purity": "P100",
+   "rtype": "in-sample",
+   "model": "HG008T_Illumina",
+   "graph": "d46",
+   "kind": "SNV",
+   "sample": "HG008T",
+   "unplaced_pass": 77,
+   "processed": 77,
+   "with_context": 77,
+   "categories": {
+    "population": 43,
+    "germline": 31,
+    "tumor_only": 2,
+    "unverifiable": 1
+   },
+   "pop_ingraph": 7,
+   "pop_hprc": 41,
+   "multi_copy": 37,
+   "tumor_only_multi_copy": 1,
+   "eval_nobed": {
+    "tp": 544,
+    "fp": 644,
+    "unplaced_pass": 77,
+    "recall": 0.7749,
+    "placed_only": [
+     0.4579,
+     0.5757
+    ],
+    "all_unplaced_fp": [
+     0.43,
+     0.5531
+    ],
+    "after_graph_pon": [
+     0.4452,
+     0.5655
+    ],
+    "after_graph_pon_tumor_only_tp": [
+     0.4468,
+     0.5668
+    ],
+    "remaining_unplaced_after_graph_pon": 34.0,
+    "unplaced_share_of_pass": 0.0609,
+    "unplaced_share_after_graph_pon": 0.0278
+   },
+   "eval_bed": {
+    "tp": 541,
+    "fp": 460,
+    "unplaced_pass": 56.0,
+    "recall": 0.7762,
+    "placed_only": [
+     0.5405,
+     0.6372
+    ],
+    "all_unplaced_fp": [
+     0.5118,
+     0.6169
+    ],
+    "after_graph_pon": [
+     0.5294,
+     0.6294
+    ],
+    "after_graph_pon_tumor_only_tp": [
+     0.5303,
+     0.6301
+    ],
+    "remaining_unplaced_after_graph_pon": 21.0,
+    "unplaced_share_of_pass": 0.053,
+    "unplaced_share_after_graph_pon": 0.0205
+   }
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "source": "m6np",
+   "set": "HG008T_ONT_d46",
+   "platform": "ONT",
+   "purity": "P100",
+   "rtype": "in-sample",
+   "model": "HG008T_ONT",
+   "graph": "d46",
+   "kind": "SNV",
+   "sample": "HG008T",
+   "unplaced_pass": 90,
+   "processed": 90,
+   "with_context": 90,
+   "categories": {
+    "population": 32,
+    "germline": 58
+   },
+   "pop_ingraph": 17,
+   "pop_hprc": 29,
+   "multi_copy": 78,
+   "tumor_only_multi_copy": 0,
+   "eval_nobed": {
+    "tp": 460,
+    "fp": 318,
+    "unplaced_pass": 90,
+    "recall": 0.6553,
+    "placed_only": [
+     0.5913,
+     0.6216
+    ],
+    "all_unplaced_fp": [
+     0.53,
+     0.586
+    ],
+    "after_graph_pon": [
+     0.5502,
+     0.5982
+    ],
+    "after_graph_pon_tumor_only_tp": [
+     0.5502,
+     0.5982
+    ],
+    "remaining_unplaced_after_graph_pon": 58.0,
+    "unplaced_share_of_pass": 0.1037,
+    "unplaced_share_after_graph_pon": 0.0694
+   },
+   "eval_bed": {
+    "tp": 457,
+    "fp": 273,
+    "unplaced_pass": 63.0,
+    "recall": 0.6557,
+    "placed_only": [
+     0.626,
+     0.6405
+    ],
+    "all_unplaced_fp": [
+     0.5763,
+     0.6134
+    ],
+    "after_graph_pon": [
+     0.5866,
+     0.6192
+    ],
+    "after_graph_pon_tumor_only_tp": [
+     0.5866,
+     0.6192
+    ],
+    "remaining_unplaced_after_graph_pon": 49.0,
+    "unplaced_share_of_pass": 0.0794,
+    "unplaced_share_after_graph_pon": 0.0629
+   }
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "source": "m6np",
+   "set": "HG008T_PacBio_d46",
+   "platform": "PacBio",
+   "purity": "P100",
+   "rtype": "in-sample",
+   "model": "HG008T_PacBio",
+   "graph": "d46",
+   "kind": "SNV",
+   "sample": "HG008T",
+   "unplaced_pass": 143,
+   "processed": 143,
+   "with_context": 143,
+   "categories": {
+    "germline": 38,
+    "population": 105
+   },
+   "pop_ingraph": 34,
+   "pop_hprc": 102,
+   "multi_copy": 83,
+   "tumor_only_multi_copy": 0,
+   "eval_nobed": {
+    "tp": 571,
+    "fp": 541,
+    "unplaced_pass": 143,
+    "recall": 0.8134,
+    "placed_only": [
+     0.5135,
+     0.6295
+    ],
+    "all_unplaced_fp": [
+     0.455,
+     0.5835
+    ],
+    "after_graph_pon": [
+     0.4965,
+     0.6166
+    ],
+    "after_graph_pon_tumor_only_tp": [
+     0.4965,
+     0.6166
+    ],
+    "remaining_unplaced_after_graph_pon": 38.0,
+    "unplaced_share_of_pass": 0.1139,
+    "unplaced_share_after_graph_pon": 0.033
+   },
+   "eval_bed": {
+    "tp": 567,
+    "fp": 479,
+    "unplaced_pass": 136.0,
+    "recall": 0.8135,
+    "placed_only": [
+     0.5421,
+     0.6506
+    ],
+    "all_unplaced_fp": [
+     0.4797,
+     0.6035
+    ],
+    "after_graph_pon": [
+     0.524,
+     0.6374
+    ],
+    "after_graph_pon_tumor_only_tp": [
+     0.524,
+     0.6374
+    ],
+    "remaining_unplaced_after_graph_pon": 36.0,
+    "unplaced_share_of_pass": 0.1151,
+    "unplaced_share_after_graph_pon": 0.0333
+   }
+  }
+ ],
+ "gold": [],
+ "controls": [
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "n": 150,
+   "pop": 0,
+   "asm": {
+    "tumor_only": 128,
+    "unsupported": 20,
+    "germline": 2
+   }
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "n": 150,
+   "pop": 2,
+   "asm": {
+    "germline": 120,
+    "tumor_only": 15,
+    "unsupported": 15
+   }
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "n": 22,
+   "pop": 2,
+   "asm": {
+    "germline": 13,
+    "unsupported": 3,
+    "tumor_only": 6
+   }
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "n": 110,
+   "pop": 35,
+   "asm": {
+    "germline": 98,
+    "tumor_only": 8,
+    "unsupported": 3,
+    "unverifiable": 1
+   }
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "gold",
+   "n": 1,
+   "pop": 1,
+   "asm": {
+    "unverifiable": 1
+   }
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "n": 150,
+   "pop": 0,
+   "asm": {
+    "tumor_only": 129,
+    "unsupported": 18,
+    "germline": 3
+   }
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "n": 150,
+   "pop": 7,
+   "asm": {
+    "germline": 121,
+    "unsupported": 20,
+    "tumor_only": 8,
+    "unverifiable": 1
+   }
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_pon",
+   "n": 12,
+   "pop": 1,
+   "asm": {
+    "unsupported": 2,
+    "tumor_only": 2,
+    "germline": 8
+   }
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "n": 111,
+   "pop": 49,
+   "asm": {
+    "tumor_only": 15,
+    "germline": 94,
+    "unsupported": 2
+   }
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "gold",
+   "n": 2,
+   "pop": 2,
+   "asm": {
+    "germline": 1,
+    "unverifiable": 1
+   }
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_tp",
+   "n": 150,
+   "pop": 0,
+   "asm": {
+    "unsupported": 30,
+    "tumor_only": 120
+   }
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_fp",
+   "n": 150,
+   "pop": 9,
+   "asm": {
+    "germline": 111,
+    "unsupported": 15,
+    "tumor_only": 24
+   }
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_pon",
+   "n": 6,
+   "pop": 0,
+   "asm": {
+    "germline": 3,
+    "tumor_only": 3
+   }
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "unplaced_pass",
+   "n": 79,
+   "pop": 41,
+   "asm": {
+    "germline": 73,
+    "tumor_only": 5,
+    "unverifiable": 1
+   }
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "gold",
+   "n": 2,
+   "pop": 2,
+   "asm": {
+    "germline": 1,
+    "unverifiable": 1
+   }
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "n": 150,
+   "pop": 0,
+   "asm": {
+    "unsupported": 39,
+    "tumor_only": 111
+   }
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "n": 150,
+   "pop": 1,
+   "asm": {
+    "germline": 101,
+    "unsupported": 31,
+    "tumor_only": 18
+   }
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "n": 26,
+   "pop": 5,
+   "asm": {
+    "unsupported": 6,
+    "germline": 9,
+    "tumor_only": 11
+   }
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "n": 76,
+   "pop": 42,
+   "asm": {
+    "germline": 71,
+    "tumor_only": 5
+   }
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "gold",
+   "n": 2,
+   "pop": 2,
+   "asm": {
+    "germline": 2
+   }
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "n": 150,
+   "pop": 0,
+   "asm": {
+    "tumor_only": 130,
+    "unsupported": 19,
+    "unverifiable": 1
+   }
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "n": 150,
+   "pop": 5,
+   "asm": {
+    "germline": 116,
+    "tumor_only": 22,
+    "unsupported": 12
+   }
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_pon",
+   "n": 55,
+   "pop": 2,
+   "asm": {
+    "germline": 48,
+    "unverifiable": 1,
+    "tumor_only": 5,
+    "unsupported": 1
+   }
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "n": 143,
+   "pop": 84,
+   "asm": {
+    "germline": 130,
+    "tumor_only": 1,
+    "unverifiable": 3,
+    "unsupported": 9
+   }
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "gold",
+   "n": 4,
+   "pop": 4,
+   "asm": {
+    "germline": 1,
+    "unsupported": 1,
+    "unverifiable": 2
+   }
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_tp",
+   "n": 150,
+   "pop": 0,
+   "asm": {
+    "tumor_only": 111,
+    "unsupported": 39
+   }
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_fp",
+   "n": 150,
+   "pop": 0,
+   "asm": {
+    "tumor_only": 32,
+    "germline": 83,
+    "unsupported": 35
+   }
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_pon",
+   "n": 17,
+   "pop": 4,
+   "asm": {
+    "tumor_only": 11,
+    "germline": 4,
+    "unsupported": 2
+   }
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "unplaced_pass",
+   "n": 106,
+   "pop": 72,
+   "asm": {
+    "germline": 102,
+    "tumor_only": 3,
+    "unsupported": 1
+   }
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "gold",
+   "n": 3,
+   "pop": 3,
+   "asm": {
+    "unsupported": 1,
+    "unverifiable": 2
+   }
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "n": 150,
+   "pop": 0,
+   "asm": {
+    "germline": 2,
+    "tumor_only": 147,
+    "unverifiable": 1
+   }
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "n": 150,
+   "pop": 2,
+   "asm": {
+    "germline": 137,
+    "unsupported": 12,
+    "tumor_only": 1
+   }
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "n": 13,
+   "pop": 3,
+   "asm": {
+    "germline": 11,
+    "tumor_only": 1,
+    "unsupported": 1
+   }
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "n": 77,
+   "pop": 43,
+   "asm": {
+    "germline": 71,
+    "tumor_only": 3,
+    "unverifiable": 2,
+    "unsupported": 1
+   }
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "gold",
+   "n": 12,
+   "pop": 9,
+   "asm": {
+    "germline": 1,
+    "tumor_only": 11
+   }
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "n": 150,
+   "pop": 1,
+   "asm": {
+    "tumor_only": 149,
+    "germline": 1
+   }
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "n": 150,
+   "pop": 14,
+   "asm": {
+    "germline": 131,
+    "unsupported": 15,
+    "tumor_only": 4
+   }
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "n": 90,
+   "pop": 32,
+   "asm": {
+    "germline": 90
+   }
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "gold",
+   "n": 9,
+   "pop": 7,
+   "asm": {
+    "germline": 1,
+    "tumor_only": 8
+   }
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_tp",
+   "n": 150,
+   "pop": 0,
+   "asm": {
+    "tumor_only": 148,
+    "germline": 2
+   }
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_fp",
+   "n": 150,
+   "pop": 2,
+   "asm": {
+    "germline": 138,
+    "unsupported": 12
+   }
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_pon",
+   "n": 5,
+   "pop": 0,
+   "asm": {
+    "germline": 2,
+    "tumor_only": 2,
+    "unsupported": 1
+   }
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "unplaced_pass",
+   "n": 143,
+   "pop": 105,
+   "asm": {
+    "germline": 127,
+    "unsupported": 15,
+    "unverifiable": 1
+   }
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "gold",
+   "n": 11,
+   "pop": 9,
+   "asm": {
+    "germline": 2,
+    "tumor_only": 9
+   }
+  }
+ ],
+ "grid": [
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 6
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 6
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 6
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 6
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 22,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 22,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 22,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 22,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 22,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 22,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 22,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 22,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 22,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 22,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 22,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 22,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 22,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 22,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 22,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 22,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 110,
+   "tagged": 48
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 110,
+   "tagged": 46
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 110,
+   "tagged": 45
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 110,
+   "tagged": 42
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 110,
+   "tagged": 33
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 110,
+   "tagged": 30
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 110,
+   "tagged": 27
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 110,
+   "tagged": 23
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 110,
+   "tagged": 30
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 110,
+   "tagged": 26
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 110,
+   "tagged": 23
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 110,
+   "tagged": 18
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 110,
+   "tagged": 35
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 110,
+   "tagged": 32
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 110,
+   "tagged": 29
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 110,
+   "tagged": 24
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 1,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 1,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 1,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 1,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 1,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 1,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 1,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 1,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 1,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 1,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 1,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 1,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 1,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 1,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 1,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 1,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 10
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 9
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 7
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 7
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 7
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 6
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 5
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 7
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 6
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 12,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 12,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 12,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 12,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 12,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 12,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 12,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 12,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 12,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 12,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 12,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 12,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 12,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 12,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 12,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 12,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 111,
+   "tagged": 62
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 111,
+   "tagged": 59
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 111,
+   "tagged": 59
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 111,
+   "tagged": 58
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 111,
+   "tagged": 49
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 111,
+   "tagged": 45
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 111,
+   "tagged": 44
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 111,
+   "tagged": 43
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 111,
+   "tagged": 45
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 111,
+   "tagged": 41
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 111,
+   "tagged": 40
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 111,
+   "tagged": 39
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 111,
+   "tagged": 49
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 111,
+   "tagged": 45
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 111,
+   "tagged": 44
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 111,
+   "tagged": 42
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 2,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 2,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 11
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 9
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 9
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 8
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 9
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 8
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 9
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 8
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 6,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 6,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 6,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 6,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 6,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 6,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 6,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 6,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 6,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 6,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 6,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 6,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 6,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 6,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 6,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 6,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 79,
+   "tagged": 48
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 79,
+   "tagged": 48
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 79,
+   "tagged": 47
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 79,
+   "tagged": 43
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 79,
+   "tagged": 41
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 79,
+   "tagged": 39
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 79,
+   "tagged": 38
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 79,
+   "tagged": 33
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 79,
+   "tagged": 41
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 79,
+   "tagged": 39
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 79,
+   "tagged": 38
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 79,
+   "tagged": 33
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 79,
+   "tagged": 41
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 79,
+   "tagged": 39
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 79,
+   "tagged": 38
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 79,
+   "tagged": 33
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 2,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 2,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 26,
+   "tagged": 5
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 26,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 26,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 26,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 26,
+   "tagged": 5
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 26,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 26,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 26,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 26,
+   "tagged": 5
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 26,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 26,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 26,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 26,
+   "tagged": 5
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 26,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 26,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 26,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 76,
+   "tagged": 50
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 76,
+   "tagged": 45
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 76,
+   "tagged": 43
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 76,
+   "tagged": 42
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 76,
+   "tagged": 41
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 76,
+   "tagged": 36
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 76,
+   "tagged": 34
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 76,
+   "tagged": 33
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 76,
+   "tagged": 36
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 76,
+   "tagged": 31
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 76,
+   "tagged": 29
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 76,
+   "tagged": 27
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 76,
+   "tagged": 42
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 76,
+   "tagged": 37
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 76,
+   "tagged": 35
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 76,
+   "tagged": 33
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 9
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 8
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 7
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 7
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 5
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 5
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 5
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 55,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 55,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 55,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 55,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 55,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 55,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 55,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 55,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 55,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 55,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 55,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 55,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 55,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 55,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 55,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 55,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 143,
+   "tagged": 99
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 143,
+   "tagged": 91
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 143,
+   "tagged": 88
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 143,
+   "tagged": 85
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 143,
+   "tagged": 84
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 143,
+   "tagged": 76
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 143,
+   "tagged": 73
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 143,
+   "tagged": 70
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 143,
+   "tagged": 81
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 143,
+   "tagged": 73
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 143,
+   "tagged": 70
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 143,
+   "tagged": 67
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 143,
+   "tagged": 84
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 143,
+   "tagged": 76
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 143,
+   "tagged": 73
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 143,
+   "tagged": 70
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 4,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 4,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 4,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 4,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 4,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 4,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 4,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 4,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 4,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 4,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 4,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 4,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 4,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 4,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 4,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 4,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 17,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 17,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 17,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 17,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 17,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 17,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 17,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 17,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 17,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 17,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 17,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 17,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 17,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 17,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 17,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 17,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 106,
+   "tagged": 76
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 106,
+   "tagged": 56
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 106,
+   "tagged": 52
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 106,
+   "tagged": 49
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 106,
+   "tagged": 72
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 106,
+   "tagged": 51
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 106,
+   "tagged": 48
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 106,
+   "tagged": 45
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 106,
+   "tagged": 70
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 106,
+   "tagged": 49
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 106,
+   "tagged": 45
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 106,
+   "tagged": 42
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 106,
+   "tagged": 72
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 106,
+   "tagged": 51
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 106,
+   "tagged": 48
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 106,
+   "tagged": 45
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 3,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 3,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 3,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 3,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 3,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 3,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 3,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 3,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 3,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 3,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 3,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 3,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 3,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 3,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 3,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 3,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 5
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 13,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 13,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 13,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 13,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 13,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 13,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 13,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 13,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 13,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 13,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 13,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 13,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 13,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 13,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 13,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 13,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 77,
+   "tagged": 50
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 77,
+   "tagged": 48
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 77,
+   "tagged": 45
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 77,
+   "tagged": 42
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 77,
+   "tagged": 43
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 77,
+   "tagged": 39
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 77,
+   "tagged": 35
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 77,
+   "tagged": 32
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 77,
+   "tagged": 42
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 77,
+   "tagged": 37
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 77,
+   "tagged": 33
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 77,
+   "tagged": 30
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 77,
+   "tagged": 43
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 77,
+   "tagged": 38
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 77,
+   "tagged": 34
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 77,
+   "tagged": 31
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 12,
+   "tagged": 10
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 12,
+   "tagged": 10
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 12,
+   "tagged": 10
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 12,
+   "tagged": 10
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 12,
+   "tagged": 10
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 12,
+   "tagged": 10
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 12,
+   "tagged": 10
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 12,
+   "tagged": 10
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 12,
+   "tagged": 9
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 12,
+   "tagged": 9
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 12,
+   "tagged": 9
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 12,
+   "tagged": 8
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 12,
+   "tagged": 9
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 12,
+   "tagged": 9
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 12,
+   "tagged": 8
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 12,
+   "tagged": 7
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 15
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 13
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 9
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 9
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 14
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 10
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 6
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 6
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 13
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 8
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 14
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 9
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 5
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 5
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 90,
+   "tagged": 42
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 90,
+   "tagged": 41
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 90,
+   "tagged": 38
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 90,
+   "tagged": 37
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 90,
+   "tagged": 33
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 90,
+   "tagged": 31
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 90,
+   "tagged": 29
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 90,
+   "tagged": 28
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 90,
+   "tagged": 28
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 90,
+   "tagged": 26
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 90,
+   "tagged": 24
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 90,
+   "tagged": 23
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 90,
+   "tagged": 32
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 90,
+   "tagged": 30
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 90,
+   "tagged": 28
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 90,
+   "tagged": 27
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 9,
+   "tagged": 8
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 9,
+   "tagged": 8
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 9,
+   "tagged": 8
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 9,
+   "tagged": 8
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 9,
+   "tagged": 8
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 9,
+   "tagged": 8
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 9,
+   "tagged": 8
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 9,
+   "tagged": 8
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 9,
+   "tagged": 7
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 9,
+   "tagged": 7
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 9,
+   "tagged": 7
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 9,
+   "tagged": 7
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 9,
+   "tagged": 7
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 9,
+   "tagged": 7
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 9,
+   "tagged": 6
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 9,
+   "tagged": 5
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 4
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 3
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 1
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 5,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 5,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 5,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 5,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 5,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 5,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 5,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 5,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 5,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 5,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 5,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 5,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 5,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 5,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 5,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 5,
+   "tagged": 0
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 143,
+   "tagged": 110
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 143,
+   "tagged": 94
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 143,
+   "tagged": 93
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 143,
+   "tagged": 93
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 143,
+   "tagged": 105
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 143,
+   "tagged": 87
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 143,
+   "tagged": 85
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 143,
+   "tagged": 83
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 143,
+   "tagged": 103
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 143,
+   "tagged": 84
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 143,
+   "tagged": 83
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 143,
+   "tagged": 81
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 143,
+   "tagged": 105
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 143,
+   "tagged": 87
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 143,
+   "tagged": 85
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 143,
+   "tagged": 83
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 11,
+   "tagged": 10
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 11,
+   "tagged": 10
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 11,
+   "tagged": 10
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 11,
+   "tagged": 10
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 11,
+   "tagged": 10
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 11,
+   "tagged": 10
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 11,
+   "tagged": 10
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 11,
+   "tagged": 10
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 11,
+   "tagged": 9
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 11,
+   "tagged": 9
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 11,
+   "tagged": 9
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 11,
+   "tagged": 8
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 11,
+   "tagged": 9
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 11,
+   "tagged": 9
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 11,
+   "tagged": 7
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 11,
+   "tagged": 6
+  }
+ ],
+ "strata": [
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "stratum": "homopolymer>=7",
+   "n": 4,
+   "categories": {
+    "population": 3,
+    "germline": 1
+   }
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "stratum": "STR",
+   "n": 13,
+   "categories": {
+    "population": 6,
+    "germline": 7
+   }
+  },
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "stratum": "other",
+   "n": 93,
+   "categories": {
+    "population": 26,
+    "germline": 60,
+    "tumor_only": 6,
+    "unsupported": 1
+   }
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "stratum": "homopolymer>=7",
+   "n": 2,
+   "categories": {
+    "population": 1,
+    "germline": 1
+   }
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "stratum": "STR",
+   "n": 13,
+   "categories": {
+    "tumor_only": 3,
+    "population": 10
+   }
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "stratum": "other",
+   "n": 96,
+   "categories": {
+    "tumor_only": 9,
+    "germline": 48,
+    "unsupported": 1,
+    "population": 38
+   }
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "stratum": "homopolymer>=7",
+   "n": 1,
+   "categories": {
+    "germline": 1
+   }
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "stratum": "STR",
+   "n": 5,
+   "categories": {
+    "tumor_only": 1,
+    "germline": 1,
+    "population": 3
+   }
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "stratum": "other",
+   "n": 73,
+   "categories": {
+    "germline": 32,
+    "population": 38,
+    "tumor_only": 3
+   }
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "stratum": "homopolymer>=7",
+   "n": 3,
+   "categories": {
+    "population": 3
+   }
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "stratum": "STR",
+   "n": 13,
+   "categories": {
+    "population": 9,
+    "germline": 4
+   }
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "stratum": "other",
+   "n": 60,
+   "categories": {
+    "population": 30,
+    "germline": 26,
+    "tumor_only": 4
+   }
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "stratum": "homopolymer>=7",
+   "n": 0,
+   "categories": {}
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "stratum": "STR",
+   "n": 17,
+   "categories": {
+    "germline": 11,
+    "population": 6
+   }
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "stratum": "other",
+   "n": 126,
+   "categories": {
+    "population": 78,
+    "germline": 47,
+    "tumor_only": 1
+   }
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "stratum": "homopolymer>=7",
+   "n": 0,
+   "categories": {}
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "stratum": "STR",
+   "n": 6,
+   "categories": {
+    "germline": 4,
+    "population": 2
+   }
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "stratum": "other",
+   "n": 100,
+   "categories": {
+    "germline": 27,
+    "population": 70,
+    "tumor_only": 3
+   }
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "stratum": "homopolymer>=7",
+   "n": 7,
+   "categories": {
+    "population": 5,
+    "germline": 2
+   }
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "stratum": "STR",
+   "n": 11,
+   "categories": {
+    "population": 6,
+    "germline": 4,
+    "tumor_only": 1
+   }
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "stratum": "other",
+   "n": 59,
+   "categories": {
+    "population": 32,
+    "germline": 25,
+    "tumor_only": 1,
+    "unverifiable": 1
+   }
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "stratum": "homopolymer>=7",
+   "n": 0,
+   "categories": {}
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "stratum": "STR",
+   "n": 14,
+   "categories": {
+    "population": 7,
+    "germline": 7
+   }
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "stratum": "other",
+   "n": 76,
+   "categories": {
+    "germline": 51,
+    "population": 25
+   }
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "stratum": "homopolymer>=7",
+   "n": 0,
+   "categories": {}
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "stratum": "STR",
+   "n": 7,
+   "categories": {
+    "germline": 2,
+    "population": 5
+   }
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "stratum": "other",
+   "n": 136,
+   "categories": {
+    "germline": 36,
+    "population": 100
+   }
+  }
+ ],
+ "cross_platform": [
+  {
+   "group": "m6np/d46/COLO829T/SNV",
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "platforms": 3,
+   "unplaced_pass": 110,
+   "in_another": 17,
+   "by_category": {
+    "population": {
+     "0": 31,
+     "1": 4
+    },
+    "germline": {
+     "1": 7,
+     "2": 3,
+     "0": 58
+    },
+    "tumor_only": {
+     "1": 1,
+     "2": 2,
+     "0": 3
+    },
+    "unsupported": {
+     "0": 1
+    }
+   }
+  },
+  {
+   "group": "m6np/d46/COLO829T/SNV",
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "platforms": 3,
+   "unplaced_pass": 111,
+   "in_another": 30,
+   "by_category": {
+    "tumor_only": {
+     "0": 8,
+     "1": 2,
+     "2": 2
+    },
+    "germline": {
+     "0": 32,
+     "1": 14,
+     "2": 3
+    },
+    "unsupported": {
+     "0": 1
+    },
+    "population": {
+     "0": 40,
+     "1": 9
+    }
+   }
+  },
+  {
+   "group": "m6np/d46/COLO829T/SNV",
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "platforms": 3,
+   "unplaced_pass": 79,
+   "in_another": 18,
+   "by_category": {
+    "germline": {
+     "0": 24,
+     "1": 7,
+     "2": 3
+    },
+    "population": {
+     "0": 36,
+     "1": 5
+    },
+    "tumor_only": {
+     "2": 2,
+     "0": 1,
+     "1": 1
+    }
+   }
+  },
+  {
+   "group": "m6np/d46/HCC1395T/SNV",
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "platforms": 3,
+   "unplaced_pass": 76,
+   "in_another": 16,
+   "by_category": {
+    "population": {
+     "0": 34,
+     "1": 4,
+     "2": 4
+    },
+    "germline": {
+     "0": 23,
+     "1": 5,
+     "2": 2
+    },
+    "tumor_only": {
+     "0": 3,
+     "2": 1
+    }
+   }
+  },
+  {
+   "group": "m6np/d46/HCC1395T/SNV",
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "platforms": 3,
+   "unplaced_pass": 143,
+   "in_another": 33,
+   "by_category": {
+    "population": {
+     "0": 67,
+     "1": 13,
+     "2": 4
+    },
+    "germline": {
+     "0": 43,
+     "1": 13,
+     "2": 2
+    },
+    "tumor_only": {
+     "2": 1
+    }
+   }
+  },
+  {
+   "group": "m6np/d46/HCC1395T/SNV",
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "platforms": 3,
+   "unplaced_pass": 106,
+   "in_another": 26,
+   "by_category": {
+    "germline": {
+     "0": 21,
+     "1": 8,
+     "2": 2
+    },
+    "population": {
+     "0": 57,
+     "2": 4,
+     "1": 11
+    },
+    "tumor_only": {
+     "2": 1,
+     "0": 2
+    }
+   }
+  },
+  {
+   "group": "m6np/d46/HG008T/SNV",
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "platforms": 3,
+   "unplaced_pass": 77,
+   "in_another": 7,
+   "by_category": {
+    "population": {
+     "0": 43
+    },
+    "germline": {
+     "2": 3,
+     "0": 24,
+     "1": 4
+    },
+    "tumor_only": {
+     "0": 2
+    },
+    "unverifiable": {
+     "0": 1
+    }
+   }
+  },
+  {
+   "group": "m6np/d46/HG008T/SNV",
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "platforms": 3,
+   "unplaced_pass": 90,
+   "in_another": 22,
+   "by_category": {
+    "population": {
+     "0": 29,
+     "1": 3
+    },
+    "germline": {
+     "0": 39,
+     "1": 16,
+     "2": 3
+    }
+   }
+  },
+  {
+   "group": "m6np/d46/HG008T/SNV",
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "platforms": 3,
+   "unplaced_pass": 143,
+   "in_another": 22,
+   "by_category": {
+    "germline": {
+     "0": 19,
+     "1": 16,
+     "2": 3
+    },
+    "population": {
+     "1": 3,
+     "0": 102
+    }
+   }
+  }
+ ],
+ "gold_in_runs": [
+  {
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "gold_with_tensor": 1,
+   "pass_unplaced": 0,
+   "pass_and_tagged": 0,
+   "tagged": 1,
+   "asm": {
+    "unverifiable": 1
+   }
+  },
+  {
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "gold_with_tensor": 2,
+   "pass_unplaced": 0,
+   "pass_and_tagged": 0,
+   "tagged": 2,
+   "asm": {
+    "germline": 1,
+    "unverifiable": 1
+   }
+  },
+  {
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "gold_with_tensor": 2,
+   "pass_unplaced": 0,
+   "pass_and_tagged": 0,
+   "tagged": 2,
+   "asm": {
+    "germline": 1,
+    "unverifiable": 1
+   }
+  },
+  {
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "gold_with_tensor": 2,
+   "pass_unplaced": 0,
+   "pass_and_tagged": 0,
+   "tagged": 2,
+   "asm": {
+    "germline": 2
+   }
+  },
+  {
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "gold_with_tensor": 4,
+   "pass_unplaced": 0,
+   "pass_and_tagged": 0,
+   "tagged": 4,
+   "asm": {
+    "germline": 1,
+    "unsupported": 1,
+    "unverifiable": 2
+   }
+  },
+  {
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "gold_with_tensor": 3,
+   "pass_unplaced": 0,
+   "pass_and_tagged": 0,
+   "tagged": 3,
+   "asm": {
+    "unsupported": 1,
+    "unverifiable": 2
+   }
+  },
+  {
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "gold_with_tensor": 12,
+   "pass_unplaced": 1,
+   "pass_and_tagged": 0,
+   "tagged": 9,
+   "asm": {
+    "germline": 1,
+    "tumor_only": 11
+   }
+  },
+  {
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "gold_with_tensor": 9,
+   "pass_unplaced": 0,
+   "pass_and_tagged": 0,
+   "tagged": 7,
+   "asm": {
+    "germline": 1,
+    "tumor_only": 8
+   }
+  },
+  {
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "gold_with_tensor": 11,
+   "pass_unplaced": 1,
+   "pass_and_tagged": 1,
+   "tagged": 9,
+   "asm": {
+    "germline": 2,
+    "tumor_only": 9
+   }
+  }
+ ]
+}

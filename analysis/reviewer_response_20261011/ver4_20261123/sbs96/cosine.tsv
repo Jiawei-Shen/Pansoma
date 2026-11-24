@@ -1,0 +1,34 @@
+use	tumor	platform	spectrum	n	cosine_to_truth	cosine_to_normal_germline	uv_type_ct_share
+Response Figure 3.2	HG008T	Illumina	Pansoma	1001	0.975	0.651	0.275
+Response Figure 3.2	HG008T	Illumina	DeepSomatic-TO	1649	0.921	0.815	0.216
+Response Figure 3.2	HG008T	Illumina	ClairS-TO	1435	0.912	0.821	0.248
+Response Figure 3.2	HG008T	PacBio HiFi	Pansoma	1046	0.974	0.674	0.272
+Response Figure 3.2	HG008T	PacBio HiFi	DeepSomatic-TO	1321	0.943	0.763	0.245
+Response Figure 3.2	HG008T	PacBio HiFi	ClairS-TO	1292	0.918	0.827	0.236
+Response Figure 3.2	HG008T	ONT	Pansoma	730	0.973	0.518	0.321
+Response Figure 3.2	HG008T	ONT	DeepSomatic-TO	1954	0.878	0.858	0.236
+Response Figure 3.2	HG008T	ONT	ClairS-TO	1399	0.899	0.847	0.238
+Response Figure 3.2	COLO829T	Illumina	Pansoma	2384	0.994	0.439	0.531
+Response Figure 3.2	COLO829T	Illumina	DeepSomatic-TO	4779	0.913	0.596	0.336
+Response Figure 3.2	COLO829T	Illumina	ClairS-TO	4335	0.913	0.620	0.414
+Response Figure 3.2	COLO829T	Fiber-seq	Pansoma	2117	0.997	0.400	0.623
+Response Figure 3.2	COLO829T	Fiber-seq	DeepSomatic-TO	1853	0.982	0.457	0.477
+Response Figure 3.2	COLO829T	Fiber-seq	ClairS-TO	2334	0.995	0.490	0.539
+Response Figure 3.2	COLO829T	ONT	Pansoma	2196	0.996	0.421	0.590
+Response Figure 3.2	COLO829T	ONT	DeepSomatic-TO	2915	0.984	0.549	0.463
+Response Figure 3.2	COLO829T	ONT	ClairS-TO	2233	0.993	0.494	0.546
+Response Figure 3.2	HCC1395T	Illumina	Pansoma	3608	0.998	0.537	0.234
+Response Figure 3.2	HCC1395T	Illumina	DeepSomatic-TO	4083	0.993	0.597	0.220
+Response Figure 3.2	HCC1395T	Illumina	ClairS-TO	3667	0.993	0.595	0.247
+Response Figure 3.2	HCC1395T	PacBio HiFi	Pansoma	3363	0.997	0.509	0.236
+Response Figure 3.2	HCC1395T	PacBio HiFi	DeepSomatic-TO	4165	0.994	0.592	0.227
+Response Figure 3.2	HCC1395T	PacBio HiFi	ClairS-TO	3512	0.994	0.589	0.233
+Response Figure 3.2	HCC1395T	ONT	Pansoma	3059	0.995	0.527	0.243
+Response Figure 3.2	HCC1395T	ONT	DeepSomatic-TO	3488	0.994	0.576	0.239
+Response Figure 3.2	HCC1395T	ONT	ClairS-TO	3174	0.993	0.575	0.238
+reference	HG008T	-	matched-normal germline	296786	0.585	1.000	0.158
+reference	HG008T	-	chr1 somatic truth	697	1.000	0.585	0.288
+reference	COLO829T	-	matched-normal germline	298057	0.428	1.000	0.158
+reference	COLO829T	-	chr1 somatic truth	2443	1.000	0.428	0.585
+reference	HCC1395T	-	matched-normal germline	273569	0.524	1.000	0.159
+reference	HCC1395T	-	chr1 somatic truth	3440	1.000	0.524	0.246

@@ -1,0 +1,15 @@
+HG008T Illumina     truth in BED   697  reports today: with 0.429 / 0.852 / 0.570 / 0.295  without 0.398 / 0.783 / 0.528 / 0.074  | letter table: with 0.429 / 0.852 / 0.570 / 0.295  without 0.398 / 0.783 / 0.528 / 0.074  same
+HG008T PacBio       truth in BED   697  reports today: with 0.472 / 0.835 / 0.603 / 0.312  without 0.466 / 0.819 / 0.594 / 0.073  | letter table: with 0.473 / 0.839 / 0.605 / 0.312  without 0.466 / 0.819 / 0.594 / 0.073  DIFFERENT
+HG008T ONT          truth in BED   697  reports today: with 0.432 / 0.859 / 0.575 / 0.287  without 0.447 / 0.841 / 0.584 / 0.067  | letter table: with 0.432 / 0.859 / 0.575 / 0.287  without 0.447 / 0.841 / 0.584 / 0.067  same
+COLO829T Illumina   truth in BED  2443  reports today: with 0.867 / 0.714 / 0.783 / 0.684  without 0.362 / 0.678 / 0.472 / 0.264  | letter table: with 0.867 / 0.715 / 0.783 / 0.684  without 0.362 / 0.678 / 0.472 / 0.264  DIFFERENT
+COLO829T Fiber-seq  truth in BED  2443  reports today: with 0.866 / 0.707 / 0.779 / 0.683  without 0.883 / 0.685 / 0.772 / 0.422  | letter table: with 0.866 / 0.707 / 0.779 / 0.683  without 0.883 / 0.685 / 0.771 / 0.422  DIFFERENT
+COLO829T ONT        truth in BED  2443  reports today: with 0.787 / 0.692 / 0.736 / 0.626  without 0.703 / 0.649 / 0.675 / 0.371  | letter table: with 0.788 / 0.692 / 0.737 / 0.626  without 0.703 / 0.649 / 0.675 / 0.371  DIFFERENT
+letter Table R1.1 (v2.1 columns) -> panel b of the image: 24 of 24 deltas reproduced
+pathcount_data.load() on today's October reports -> letter Table R1.1: 41 of 48 values equal at 3 decimals; rows with a different value: ['HG008T PacBio', 'COLO829T Illumina', 'COLO829T Fiber-seq', 'COLO829T ONT']
+redraw /scratch/jshen/Github/Pansoma/analysis/reviewer_response_20261011/ver4_20261123/pathcount/check_october_redraw.png (4251, 1322) {'label_right': np.float64(549.75), 'panel_x0': np.float64(572.75), 'panel_width': np.float64(641.8125), 'rows_y': [495, 604, 713, 899, 1008, 1117]}
+same size as the original: 4251 x 1322
+heat cells: largest RGB channel difference to the original over 24 cells = 10
+pixels of exact colour blue #0072b2: original 21502, redraw 21482
+pixels of exact colour orange #d55e00: original 13033, redraw 13841
+pixels of exact colour connector #9e9e9e: original 18311, redraw 18461
+pixels of exact colour guide #e6e6e6: original 28683, redraw 32619

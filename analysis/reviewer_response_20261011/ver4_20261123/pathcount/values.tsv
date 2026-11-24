@@ -1,0 +1,51 @@
+tumor	platform	graph	model	seed	stage	truth	TP_baseline	TP_call	FP	FN	precision	recall	F1	report_json
+COLO829T	Illumina	HPRC v2.1	with_channel	0	after_population_filter	2443	1933	1933	476	510	0.802408	0.791240	0.796785	/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d46_newpipe/vcf_chr1_COLO829T_Illumina_d46/eval_bed/report.json
+COLO829T	Illumina	HPRC v2.1	with_channel	0	before_population_filter	2443	1937	1937	480	506	0.801407	0.792878	0.797119	/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d46_newpipe/vcf_chr1_COLO829T_Illumina_d46/eval_bed/report.json
+COLO829T	Illumina	HPRC v2.1	with_channel	1	after_population_filter	2443	1951	1951	985	492	0.664510	0.798608	0.725414	/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d46_newpipe_s1/vcf_chr1_COLO829T_Illumina_d46/eval_bed/report.json
+COLO829T	Illumina	HPRC v2.1	with_channel	1	before_population_filter	2443	1969	1969	1001	474	0.662963	0.805976	0.727508	/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d46_newpipe_s1/vcf_chr1_COLO829T_Illumina_d46/eval_bed/report.json
+COLO829T	Illumina	HPRC v2.1	with_channel	2	after_population_filter	2443	1966	1966	408	477	0.828138	0.804748	0.816276	/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d46_newpipe_s2/vcf_chr1_COLO829T_Illumina_d46/eval_bed/report.json
+COLO829T	Illumina	HPRC v2.1	with_channel	2	before_population_filter	2443	1973	1973	413	470	0.826907	0.807614	0.817146	/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d46_newpipe_s2/vcf_chr1_COLO829T_Illumina_d46/eval_bed/report.json
+COLO829T	Illumina	HPRC v2.1	without_channel	0	after_population_filter	2443	1936	1936	886	507	0.686038	0.792468	0.735423	/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_nopc_d46_newpipe/vcf_chr1_COLO829T_Illumina_d46/eval_bed/report.json
+COLO829T	Illumina	HPRC v2.1	without_channel	0	before_population_filter	2443	1942	1942	897	501	0.684044	0.794924	0.735328	/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_nopc_d46_newpipe/vcf_chr1_COLO829T_Illumina_d46/eval_bed/report.json
+COLO829T	Illumina	HPRC v1.1	with_channel	0	after_population_filter	2443	1955	1955	656	488	0.748755	0.800246	0.773645	/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d9_newpipe/vcf_chr1_COLO829T_Illumina/eval_bed/report.json
+COLO829T	Illumina	HPRC v1.1	with_channel	0	before_population_filter	2443	1961	1961	661	482	0.747902	0.802702	0.774334	/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d9_newpipe/vcf_chr1_COLO829T_Illumina/eval_bed/report.json
+COLO829T	Illumina	HPRC v1.1	with_channel	1	after_population_filter	2443	1939	1939	1051	504	0.648495	0.793696	0.713786	/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d9_newpipe_s1/vcf_chr1_COLO829T_Illumina/eval_bed/report.json
+COLO829T	Illumina	HPRC v1.1	with_channel	1	before_population_filter	2443	1956	1956	1064	487	0.647682	0.800655	0.716090	/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d9_newpipe_s1/vcf_chr1_COLO829T_Illumina/eval_bed/report.json
+COLO829T	Illumina	HPRC v1.1	with_channel	2	after_population_filter	2443	1888	1888	900	555	0.677188	0.772820	0.721851	/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d9_newpipe_s2/vcf_chr1_COLO829T_Illumina/eval_bed/report.json
+COLO829T	Illumina	HPRC v1.1	with_channel	2	before_population_filter	2443	1892	1892	901	551	0.677408	0.774458	0.722689	/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_d9_newpipe_s2/vcf_chr1_COLO829T_Illumina/eval_bed/report.json
+COLO829T	Illumina	HPRC v1.1	without_channel	0	after_population_filter	2443	1958	1958	1240	485	0.612258	0.801474	0.694203	/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_nopc_d9_newpipe/vcf_chr1_COLO829T_Illumina/eval_bed/report.json
+COLO829T	Illumina	HPRC v1.1	without_channel	0	before_population_filter	2443	1968	1968	1272	475	0.607407	0.805567	0.692592	/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_Illumina_SNV_nopc_d9_newpipe/vcf_chr1_COLO829T_Illumina/eval_bed/report.json
+COLO829T	Fiber-seq	HPRC v2.1	with_channel	0	after_population_filter	2443	1920	1920	334	523	0.851819	0.785919	0.817543	/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d46_newpipe/vcf_chr1_COLO829T_fiberseq_d46/eval_bed/report.json
+COLO829T	Fiber-seq	HPRC v2.1	with_channel	0	before_population_filter	2443	1927	1927	336	516	0.851525	0.788784	0.818955	/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d46_newpipe/vcf_chr1_COLO829T_fiberseq_d46/eval_bed/report.json
+COLO829T	Fiber-seq	HPRC v2.1	with_channel	1	after_population_filter	2443	1920	1920	322	523	0.856378	0.785919	0.819637	/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d46_newpipe_s1/vcf_chr1_COLO829T_fiberseq_d46/eval_bed/report.json
+COLO829T	Fiber-seq	HPRC v2.1	with_channel	1	before_population_filter	2443	1933	1933	339	510	0.850792	0.791240	0.819936	/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d46_newpipe_s1/vcf_chr1_COLO829T_fiberseq_d46/eval_bed/report.json
+COLO829T	Fiber-seq	HPRC v2.1	with_channel	2	after_population_filter	2443	1940	1940	334	503	0.853122	0.794106	0.822557	/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d46_newpipe_s2/vcf_chr1_COLO829T_fiberseq_d46/eval_bed/report.json
+COLO829T	Fiber-seq	HPRC v2.1	with_channel	2	before_population_filter	2443	1947	1947	340	496	0.851334	0.796971	0.823256	/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d46_newpipe_s2/vcf_chr1_COLO829T_fiberseq_d46/eval_bed/report.json
+COLO829T	Fiber-seq	HPRC v2.1	without_channel	0	after_population_filter	2443	1899	1899	311	544	0.859276	0.777323	0.816248	/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_nopc_d46_newpipe/vcf_chr1_COLO829T_fiberseq_d46/eval_bed/report.json
+COLO829T	Fiber-seq	HPRC v2.1	without_channel	0	before_population_filter	2443	1901	1901	312	542	0.859015	0.778142	0.816581	/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_nopc_d46_newpipe/vcf_chr1_COLO829T_fiberseq_d46/eval_bed/report.json
+COLO829T	Fiber-seq	HPRC v1.1	with_channel	0	after_population_filter	2443	1926	1926	336	517	0.851459	0.788375	0.818704	/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d9_newpipe/vcf_chr1_COLO829T_fiberseq/eval_bed/report.json
+COLO829T	Fiber-seq	HPRC v1.1	with_channel	0	before_population_filter	2443	1935	1935	341	508	0.850176	0.792059	0.820089	/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d9_newpipe/vcf_chr1_COLO829T_fiberseq/eval_bed/report.json
+COLO829T	Fiber-seq	HPRC v1.1	with_channel	1	after_population_filter	2443	1915	1915	319	528	0.857207	0.783872	0.818901	/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d9_newpipe_s1/vcf_chr1_COLO829T_fiberseq/eval_bed/report.json
+COLO829T	Fiber-seq	HPRC v1.1	with_channel	1	before_population_filter	2443	1922	1922	321	521	0.856888	0.786738	0.820316	/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d9_newpipe_s1/vcf_chr1_COLO829T_fiberseq/eval_bed/report.json
+COLO829T	Fiber-seq	HPRC v1.1	with_channel	2	after_population_filter	2443	1910	1910	280	533	0.872146	0.781826	0.824520	/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d9_newpipe_s2/vcf_chr1_COLO829T_fiberseq/eval_bed/report.json
+COLO829T	Fiber-seq	HPRC v1.1	with_channel	2	before_population_filter	2443	1916	1916	281	527	0.872098	0.784282	0.825862	/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_d9_newpipe_s2/vcf_chr1_COLO829T_fiberseq/eval_bed/report.json
+COLO829T	Fiber-seq	HPRC v1.1	without_channel	0	after_population_filter	2443	1940	1940	428	503	0.819257	0.794106	0.806485	/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_nopc_d9_newpipe/vcf_chr1_COLO829T_fiberseq/eval_bed/report.json
+COLO829T	Fiber-seq	HPRC v1.1	without_channel	0	before_population_filter	2443	1946	1946	430	497	0.819024	0.796562	0.807636	/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/COLO829_fiberseq_SNV_nopc_d9_newpipe/vcf_chr1_COLO829T_fiberseq/eval_bed/report.json
+# deltas (with seed 0 - without) and seed range of the three with-channel seeds
+#tumor	platform	graph	metric	delta_seed0_minus_without	with_min_of_3_seeds	with_max_of_3_seeds	with_mean_of_3_seeds	delta_mean3_minus_without	without_vs_seed_range
+#COLO829T	Illumina	HPRC v2.1	P	+0.116369	0.664510	0.828138	0.765018	+0.078980	inside
+#COLO829T	Illumina	HPRC v2.1	R	-0.001228	0.791240	0.804748	0.798199	+0.005731	inside
+#COLO829T	Illumina	HPRC v2.1	F1	+0.061362	0.725414	0.816276	0.779491	+0.044069	inside
+#COLO829T	Illumina	HPRC v2.1	F1_pre	+0.061792	0.727508	0.817146	0.780591	+0.045264	inside
+#COLO829T	Illumina	HPRC v1.1	P	+0.136498	0.648495	0.748755	0.691479	+0.079222	below
+#COLO829T	Illumina	HPRC v1.1	R	-0.001228	0.772820	0.800246	0.788921	-0.012553	above
+#COLO829T	Illumina	HPRC v1.1	F1	+0.079441	0.713786	0.773645	0.736427	+0.042224	below
+#COLO829T	Illumina	HPRC v1.1	F1_pre	+0.081742	0.716090	0.774334	0.737704	+0.045112	below
+#COLO829T	Fiber-seq	HPRC v2.1	P	-0.007457	0.851819	0.856378	0.853773	-0.005503	above
+#COLO829T	Fiber-seq	HPRC v2.1	R	+0.008596	0.785919	0.794106	0.788648	+0.011325	below
+#COLO829T	Fiber-seq	HPRC v2.1	F1	+0.001296	0.817543	0.822557	0.819912	+0.003665	below
+#COLO829T	Fiber-seq	HPRC v2.1	F1_pre	+0.002374	0.818955	0.823256	0.820716	+0.004135	below
+#COLO829T	Fiber-seq	HPRC v1.1	P	+0.032202	0.851459	0.872146	0.860271	+0.041014	below
+#COLO829T	Fiber-seq	HPRC v1.1	R	-0.005731	0.781826	0.788375	0.784691	-0.009415	above
+#COLO829T	Fiber-seq	HPRC v1.1	F1	+0.012218	0.818704	0.824520	0.820708	+0.014223	below
+#COLO829T	Fiber-seq	HPRC v1.1	F1_pre	+0.012453	0.820089	0.825862	0.822089	+0.014453	below

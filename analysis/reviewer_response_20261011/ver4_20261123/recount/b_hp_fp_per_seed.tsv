@@ -1,0 +1,19 @@
+rules	platform	seed	rule	uid	truth	tp	fn	fp	fp_hp7	share_fp_hp7	fp_HP>=7	fp_HP4-6	fp_STR	fp_VNTR	fp_none	fp_complex
+letter ver3 (E17a final_models: ppr8 on all platforms)	Illumina	0	ppr8	release_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	587	65	522	108	32	0.2963	32	16	6	0	54	0
+letter ver3 (E17a final_models: ppr8 on all platforms)	Illumina	1	ppr8	release_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	587	81	506	133	63	0.4737	63	11	12	0	47	0
+letter ver3 (E17a final_models: ppr8 on all platforms)	Illumina	2	ppr8	release_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	587	87	500	102	57	0.5588	57	12	2	0	31	0
+letter ver3 (E17a final_models: ppr8 on all platforms)	PacBio	0	ppr8	release_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	587	94	493	107	59	0.5514	59	9	4	0	35	0
+letter ver3 (E17a final_models: ppr8 on all platforms)	PacBio	1	ppr8	release_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	587	100	487	123	71	0.5772	71	11	4	0	37	0
+letter ver3 (E17a final_models: ppr8 on all platforms)	PacBio	2	ppr8	release_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	587	104	483	100	71	0.7100	71	5	1	0	23	0
+letter ver3 (E17a final_models: ppr8 on all platforms)	ONT	0	ppr8	release_s0_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	587	88	499	371	258	0.6954	258	18	16	1	78	0
+letter ver3 (E17a final_models: ppr8 on all platforms)	ONT	1	ppr8	release_s1_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	587	90	497	335	229	0.6836	229	17	18	1	70	0
+letter ver3 (E17a final_models: ppr8 on all platforms)	ONT	2	ppr8	release_s2_ONT_INDEL/vcf_ppr8_chr1_HG008T_ONT_d46	587	95	492	526	372	0.7072	372	22	30	3	99	0
+ver4 (ppr8 Illumina / PacBio HiFi, pp ONT)	Illumina	0	ppr8	release_s0_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	587	65	522	108	32	0.2963	32	16	6	0	54	0
+ver4 (ppr8 Illumina / PacBio HiFi, pp ONT)	Illumina	1	ppr8	release_s1_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	587	81	506	133	63	0.4737	63	11	12	0	47	0
+ver4 (ppr8 Illumina / PacBio HiFi, pp ONT)	Illumina	2	ppr8	release_s2_Illumina_INDEL/vcf_ppr8_chr1_HG008T_Illumina_d46	587	87	500	102	57	0.5588	57	12	2	0	31	0
+ver4 (ppr8 Illumina / PacBio HiFi, pp ONT)	PacBio	0	ppr8	release_s0_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	587	94	493	107	59	0.5514	59	9	4	0	35	0
+ver4 (ppr8 Illumina / PacBio HiFi, pp ONT)	PacBio	1	ppr8	release_s1_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	587	100	487	123	71	0.5772	71	11	4	0	37	0
+ver4 (ppr8 Illumina / PacBio HiFi, pp ONT)	PacBio	2	ppr8	release_s2_PacBio_INDEL/vcf_ppr8_chr1_HG008T_PacBio_d46	587	104	483	100	71	0.7100	71	5	1	0	23	0
+ver4 (ppr8 Illumina / PacBio HiFi, pp ONT)	ONT	0	pp	release_s0_ONT_INDEL/vcf_pp_chr1_HG008T_ONT_d46	587	47	540	43	17	0.3953	17	2	1	0	23	0
+ver4 (ppr8 Illumina / PacBio HiFi, pp ONT)	ONT	1	pp	release_s1_ONT_INDEL/vcf_pp_chr1_HG008T_ONT_d46	587	44	543	40	13	0.3250	13	2	1	0	24	0
+ver4 (ppr8 Illumina / PacBio HiFi, pp ONT)	ONT	2	pp	release_s2_ONT_INDEL/vcf_pp_chr1_HG008T_ONT_d46	587	46	541	38	12	0.3158	12	6	2	0	18	0

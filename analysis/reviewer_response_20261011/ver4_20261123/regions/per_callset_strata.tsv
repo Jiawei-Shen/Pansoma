@@ -1,0 +1,757 @@
+kind	dataset	reference	filter	stratum	truth	tp_baseline	fn	tp_call	fp	calls	precision	recall	f1
+SNV	HG008T_Illumina	GRCh38-only	before	extreme	91	27	64	27	3632	3659	0.007	0.297	0.014
+SNV	HG008T_Illumina	GRCh38-only	before	notinalldifficultregions	517	309	208	309	21512	21821	0.014	0.598	0.028
+SNV	HG008T_Illumina	GRCh38-only	before	alldifficultregions	180	72	108	72	6666	6738	0.011	0.400	0.021
+SNV	HG008T_Illumina	GRCh38-only	before	alllowmapandsegdupregions	67	25	42	25	2749	2774	0.009	0.373	0.018
+SNV	HG008T_Illumina	GRCh38-only	before	AllTandemRepeatsandHomopolymers_slop5	87	31	56	31	3132	3163	0.010	0.356	0.019
+SNV	HG008T_Illumina	GRCh38-only	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	42	15	27	15	1673	1688	0.009	0.357	0.017
+SNV	HG008T_Illumina	GRCh38-only	before	all	697	381	316	381	28178	28559	0.013	0.547	0.026
+SNV	HG008T_Illumina	GRCh38-only	after	extreme	91	21	70	21	350	371	0.057	0.231	0.091
+SNV	HG008T_Illumina	GRCh38-only	after	notinalldifficultregions	517	305	212	305	139	444	0.687	0.590	0.635
+SNV	HG008T_Illumina	GRCh38-only	after	alldifficultregions	180	65	115	65	378	443	0.147	0.361	0.209
+SNV	HG008T_Illumina	GRCh38-only	after	alllowmapandsegdupregions	67	22	45	22	337	359	0.061	0.328	0.103
+SNV	HG008T_Illumina	GRCh38-only	after	AllTandemRepeatsandHomopolymers_slop5	87	26	61	26	268	294	0.088	0.299	0.136
+SNV	HG008T_Illumina	GRCh38-only	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	42	12	30	12	19	31	0.387	0.286	0.329
+SNV	HG008T_Illumina	GRCh38-only	after	all	697	370	327	370	517	887	0.417	0.531	0.467
+SNV	HG008T_Illumina	HPRC v1.1	before	extreme	91	35	56	35	128	163	0.215	0.385	0.276
+SNV	HG008T_Illumina	HPRC v1.1	before	notinalldifficultregions	517	440	77	440	331	771	0.571	0.851	0.683
+SNV	HG008T_Illumina	HPRC v1.1	before	alldifficultregions	180	110	70	110	167	277	0.397	0.611	0.481
+SNV	HG008T_Illumina	HPRC v1.1	before	alllowmapandsegdupregions	67	39	28	39	105	144	0.271	0.582	0.370
+SNV	HG008T_Illumina	HPRC v1.1	before	AllTandemRepeatsandHomopolymers_slop5	87	35	52	35	80	115	0.304	0.402	0.347
+SNV	HG008T_Illumina	HPRC v1.1	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	42	14	28	14	28	42	0.333	0.333	0.333
+SNV	HG008T_Illumina	HPRC v1.1	before	all	697	550	147	550	498	1048	0.525	0.789	0.630
+SNV	HG008T_Illumina	HPRC v1.1	after	extreme	91	35	56	35	121	156	0.224	0.385	0.283
+SNV	HG008T_Illumina	HPRC v1.1	after	notinalldifficultregions	517	439	78	439	322	761	0.577	0.849	0.687
+SNV	HG008T_Illumina	HPRC v1.1	after	alldifficultregions	180	109	71	109	156	265	0.411	0.606	0.490
+SNV	HG008T_Illumina	HPRC v1.1	after	alllowmapandsegdupregions	67	39	28	39	100	139	0.281	0.582	0.379
+SNV	HG008T_Illumina	HPRC v1.1	after	AllTandemRepeatsandHomopolymers_slop5	87	34	53	34	74	108	0.315	0.391	0.349
+SNV	HG008T_Illumina	HPRC v1.1	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	42	14	28	14	25	39	0.359	0.333	0.346
+SNV	HG008T_Illumina	HPRC v1.1	after	all	697	548	149	548	478	1026	0.534	0.786	0.636
+SNV	HG008T_Illumina	HPRC v2.1	before	extreme	91	33	58	33	125	158	0.209	0.363	0.265
+SNV	HG008T_Illumina	HPRC v2.1	before	notinalldifficultregions	517	440	77	440	307	747	0.589	0.851	0.696
+SNV	HG008T_Illumina	HPRC v2.1	before	alldifficultregions	180	102	78	102	161	263	0.388	0.567	0.460
+SNV	HG008T_Illumina	HPRC v2.1	before	alllowmapandsegdupregions	67	35	32	35	103	138	0.254	0.522	0.341
+SNV	HG008T_Illumina	HPRC v2.1	before	AllTandemRepeatsandHomopolymers_slop5	87	34	53	34	74	108	0.315	0.391	0.349
+SNV	HG008T_Illumina	HPRC v2.1	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	42	13	29	13	20	33	0.394	0.310	0.347
+SNV	HG008T_Illumina	HPRC v2.1	before	all	697	542	155	542	468	1010	0.537	0.778	0.635
+SNV	HG008T_Illumina	HPRC v2.1	after	extreme	91	33	58	33	121	154	0.214	0.363	0.269
+SNV	HG008T_Illumina	HPRC v2.1	after	notinalldifficultregions	517	439	78	439	303	742	0.592	0.849	0.697
+SNV	HG008T_Illumina	HPRC v2.1	after	alldifficultregions	180	102	78	102	157	259	0.394	0.567	0.465
+SNV	HG008T_Illumina	HPRC v2.1	after	alllowmapandsegdupregions	67	35	32	35	101	136	0.257	0.522	0.345
+SNV	HG008T_Illumina	HPRC v2.1	after	AllTandemRepeatsandHomopolymers_slop5	87	34	53	34	71	105	0.324	0.391	0.354
+SNV	HG008T_Illumina	HPRC v2.1	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	42	13	29	13	19	32	0.406	0.310	0.351
+SNV	HG008T_Illumina	HPRC v2.1	after	all	697	541	156	541	460	1001	0.540	0.776	0.637
+SNV	HG008T_PacBio	GRCh38-only	before	extreme	91	43	48	43	10595	10638	0.004	0.473	0.008
+SNV	HG008T_PacBio	GRCh38-only	before	notinalldifficultregions	517	435	82	435	66102	66537	0.007	0.841	0.013
+SNV	HG008T_PacBio	GRCh38-only	before	alldifficultregions	180	113	67	113	18751	18864	0.006	0.628	0.012
+SNV	HG008T_PacBio	GRCh38-only	before	alllowmapandsegdupregions	67	42	25	42	8338	8380	0.005	0.627	0.010
+SNV	HG008T_PacBio	GRCh38-only	before	AllTandemRepeatsandHomopolymers_slop5	87	45	42	45	7699	7744	0.006	0.517	0.011
+SNV	HG008T_PacBio	GRCh38-only	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	42	22	20	22	3859	3881	0.006	0.524	0.011
+SNV	HG008T_PacBio	GRCh38-only	before	all	697	548	149	548	84853	85401	0.006	0.786	0.013
+SNV	HG008T_PacBio	GRCh38-only	after	extreme	91	36	55	36	302	338	0.107	0.396	0.168
+SNV	HG008T_PacBio	GRCh38-only	after	notinalldifficultregions	517	426	91	426	333	759	0.561	0.824	0.668
+SNV	HG008T_PacBio	GRCh38-only	after	alldifficultregions	180	102	78	102	347	449	0.227	0.567	0.324
+SNV	HG008T_PacBio	GRCh38-only	after	alllowmapandsegdupregions	67	38	29	38	287	325	0.117	0.567	0.194
+SNV	HG008T_PacBio	GRCh38-only	after	AllTandemRepeatsandHomopolymers_slop5	87	36	51	36	229	265	0.136	0.414	0.205
+SNV	HG008T_PacBio	GRCh38-only	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	42	14	28	14	20	34	0.412	0.333	0.368
+SNV	HG008T_PacBio	GRCh38-only	after	all	697	528	169	528	680	1208	0.437	0.758	0.554
+SNV	HG008T_PacBio	HPRC v1.1	before	extreme	91	33	58	33	55	88	0.375	0.363	0.369
+SNV	HG008T_PacBio	HPRC v1.1	before	notinalldifficultregions	517	468	49	468	378	846	0.553	0.905	0.687
+SNV	HG008T_PacBio	HPRC v1.1	before	alldifficultregions	180	107	73	107	93	200	0.535	0.594	0.563
+SNV	HG008T_PacBio	HPRC v1.1	before	alllowmapandsegdupregions	67	36	31	36	46	82	0.439	0.537	0.483
+SNV	HG008T_PacBio	HPRC v1.1	before	AllTandemRepeatsandHomopolymers_slop5	87	31	56	31	27	58	0.534	0.356	0.428
+SNV	HG008T_PacBio	HPRC v1.1	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	42	12	30	12	13	25	0.480	0.286	0.358
+SNV	HG008T_PacBio	HPRC v1.1	before	all	697	575	122	575	471	1046	0.550	0.825	0.660
+SNV	HG008T_PacBio	HPRC v1.1	after	extreme	91	33	58	33	55	88	0.375	0.363	0.369
+SNV	HG008T_PacBio	HPRC v1.1	after	notinalldifficultregions	517	467	50	467	377	844	0.553	0.903	0.686
+SNV	HG008T_PacBio	HPRC v1.1	after	alldifficultregions	180	107	73	107	93	200	0.535	0.594	0.563
+SNV	HG008T_PacBio	HPRC v1.1	after	alllowmapandsegdupregions	67	36	31	36	46	82	0.439	0.537	0.483
+SNV	HG008T_PacBio	HPRC v1.1	after	AllTandemRepeatsandHomopolymers_slop5	87	31	56	31	27	58	0.534	0.356	0.428
+SNV	HG008T_PacBio	HPRC v1.1	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	42	12	30	12	13	25	0.480	0.286	0.358
+SNV	HG008T_PacBio	HPRC v1.1	after	all	697	574	123	574	470	1044	0.550	0.824	0.659
+SNV	HG008T_PacBio	HPRC v2.1	before	extreme	91	34	57	34	86	120	0.283	0.374	0.322
+SNV	HG008T_PacBio	HPRC v2.1	before	notinalldifficultregions	517	459	58	459	348	807	0.569	0.888	0.693
+SNV	HG008T_PacBio	HPRC v2.1	before	alldifficultregions	180	110	70	110	133	243	0.453	0.611	0.520
+SNV	HG008T_PacBio	HPRC v2.1	before	alllowmapandsegdupregions	67	36	31	36	77	113	0.319	0.537	0.400
+SNV	HG008T_PacBio	HPRC v2.1	before	AllTandemRepeatsandHomopolymers_slop5	87	38	49	38	48	86	0.442	0.437	0.439
+SNV	HG008T_PacBio	HPRC v2.1	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	42	16	26	16	20	36	0.444	0.381	0.410
+SNV	HG008T_PacBio	HPRC v2.1	before	all	697	569	128	569	481	1050	0.542	0.816	0.651
+SNV	HG008T_PacBio	HPRC v2.1	after	extreme	91	34	57	34	86	120	0.283	0.374	0.322
+SNV	HG008T_PacBio	HPRC v2.1	after	notinalldifficultregions	517	457	60	457	346	803	0.569	0.884	0.692
+SNV	HG008T_PacBio	HPRC v2.1	after	alldifficultregions	180	110	70	110	133	243	0.453	0.611	0.520
+SNV	HG008T_PacBio	HPRC v2.1	after	alllowmapandsegdupregions	67	36	31	36	77	113	0.319	0.537	0.400
+SNV	HG008T_PacBio	HPRC v2.1	after	AllTandemRepeatsandHomopolymers_slop5	87	38	49	38	48	86	0.442	0.437	0.439
+SNV	HG008T_PacBio	HPRC v2.1	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	42	16	26	16	20	36	0.444	0.381	0.410
+SNV	HG008T_PacBio	HPRC v2.1	after	all	697	567	130	567	479	1046	0.542	0.813	0.651
+SNV	HG008T_ONT	GRCh38-only	before	extreme	91	37	54	37	6447	6484	0.006	0.407	0.011
+SNV	HG008T_ONT	GRCh38-only	before	notinalldifficultregions	517	366	151	366	38523	38889	0.009	0.708	0.019
+SNV	HG008T_ONT	GRCh38-only	before	alldifficultregions	180	96	84	96	11880	11976	0.008	0.533	0.016
+SNV	HG008T_ONT	GRCh38-only	before	alllowmapandsegdupregions	67	33	34	33	4720	4753	0.007	0.493	0.014
+SNV	HG008T_ONT	GRCh38-only	before	AllTandemRepeatsandHomopolymers_slop5	87	40	47	40	5415	5455	0.007	0.460	0.014
+SNV	HG008T_ONT	GRCh38-only	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	42	21	21	21	3067	3088	0.007	0.500	0.013
+SNV	HG008T_ONT	GRCh38-only	before	all	697	462	235	462	50403	50865	0.009	0.663	0.018
+SNV	HG008T_ONT	GRCh38-only	after	extreme	91	29	62	29	154	183	0.158	0.319	0.212
+SNV	HG008T_ONT	GRCh38-only	after	notinalldifficultregions	517	360	157	360	236	596	0.604	0.696	0.647
+SNV	HG008T_ONT	GRCh38-only	after	alldifficultregions	180	84	96	84	193	277	0.303	0.467	0.368
+SNV	HG008T_ONT	GRCh38-only	after	alllowmapandsegdupregions	67	31	36	31	146	177	0.175	0.463	0.254
+SNV	HG008T_ONT	GRCh38-only	after	AllTandemRepeatsandHomopolymers_slop5	87	30	57	30	89	119	0.252	0.345	0.291
+SNV	HG008T_ONT	GRCh38-only	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	42	13	29	13	20	33	0.394	0.310	0.347
+SNV	HG008T_ONT	GRCh38-only	after	all	697	444	253	444	429	873	0.509	0.637	0.566
+SNV	HG008T_ONT	HPRC v1.1	before	extreme	91	32	59	32	95	127	0.252	0.352	0.294
+SNV	HG008T_ONT	HPRC v1.1	before	notinalldifficultregions	517	409	108	409	230	639	0.640	0.791	0.708
+SNV	HG008T_ONT	HPRC v1.1	before	alldifficultregions	180	93	87	93	129	222	0.419	0.517	0.463
+SNV	HG008T_ONT	HPRC v1.1	before	alllowmapandsegdupregions	67	35	32	35	89	124	0.282	0.522	0.366
+SNV	HG008T_ONT	HPRC v1.1	before	AllTandemRepeatsandHomopolymers_slop5	87	28	59	28	45	73	0.384	0.322	0.350
+SNV	HG008T_ONT	HPRC v1.1	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	42	10	32	10	10	20	0.500	0.238	0.323
+SNV	HG008T_ONT	HPRC v1.1	before	all	697	502	195	502	359	861	0.583	0.720	0.644
+SNV	HG008T_ONT	HPRC v1.1	after	extreme	91	32	59	32	95	127	0.252	0.352	0.294
+SNV	HG008T_ONT	HPRC v1.1	after	notinalldifficultregions	517	409	108	409	230	639	0.640	0.791	0.708
+SNV	HG008T_ONT	HPRC v1.1	after	alldifficultregions	180	93	87	93	129	222	0.419	0.517	0.463
+SNV	HG008T_ONT	HPRC v1.1	after	alllowmapandsegdupregions	67	35	32	35	89	124	0.282	0.522	0.366
+SNV	HG008T_ONT	HPRC v1.1	after	AllTandemRepeatsandHomopolymers_slop5	87	28	59	28	45	73	0.384	0.322	0.350
+SNV	HG008T_ONT	HPRC v1.1	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	42	10	32	10	10	20	0.500	0.238	0.323
+SNV	HG008T_ONT	HPRC v1.1	after	all	697	502	195	502	359	861	0.583	0.720	0.644
+SNV	HG008T_ONT	HPRC v2.1	before	extreme	91	32	59	32	77	109	0.294	0.352	0.320
+SNV	HG008T_ONT	HPRC v2.1	before	notinalldifficultregions	517	368	149	368	166	534	0.689	0.712	0.700
+SNV	HG008T_ONT	HPRC v2.1	before	alldifficultregions	180	89	91	89	107	196	0.454	0.494	0.473
+SNV	HG008T_ONT	HPRC v2.1	before	alllowmapandsegdupregions	67	32	35	32	66	98	0.327	0.478	0.388
+SNV	HG008T_ONT	HPRC v2.1	before	AllTandemRepeatsandHomopolymers_slop5	87	30	57	30	39	69	0.435	0.345	0.385
+SNV	HG008T_ONT	HPRC v2.1	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	42	10	32	10	13	23	0.435	0.238	0.308
+SNV	HG008T_ONT	HPRC v2.1	before	all	697	457	240	457	273	730	0.626	0.656	0.641
+SNV	HG008T_ONT	HPRC v2.1	after	extreme	91	32	59	32	77	109	0.294	0.352	0.320
+SNV	HG008T_ONT	HPRC v2.1	after	notinalldifficultregions	517	368	149	368	166	534	0.689	0.712	0.700
+SNV	HG008T_ONT	HPRC v2.1	after	alldifficultregions	180	89	91	89	107	196	0.454	0.494	0.473
+SNV	HG008T_ONT	HPRC v2.1	after	alllowmapandsegdupregions	67	32	35	32	66	98	0.327	0.478	0.388
+SNV	HG008T_ONT	HPRC v2.1	after	AllTandemRepeatsandHomopolymers_slop5	87	30	57	30	39	69	0.435	0.345	0.385
+SNV	HG008T_ONT	HPRC v2.1	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	42	10	32	10	13	23	0.435	0.238	0.308
+SNV	HG008T_ONT	HPRC v2.1	after	all	697	457	240	457	273	730	0.626	0.656	0.641
+SNV	COLO829T_Illumina	GRCh38-only	before	extreme	234	135	99	135	5138	5273	0.026	0.577	0.049
+SNV	COLO829T_Illumina	GRCh38-only	before	notinalldifficultregions	2000	1288	712	1288	21889	23177	0.056	0.644	0.102
+SNV	COLO829T_Illumina	GRCh38-only	before	alldifficultregions	443	266	177	266	7641	7907	0.034	0.600	0.064
+SNV	COLO829T_Illumina	GRCh38-only	before	alllowmapandsegdupregions	176	96	80	96	4519	4615	0.021	0.545	0.040
+SNV	COLO829T_Illumina	GRCh38-only	before	AllTandemRepeatsandHomopolymers_slop5	166	96	70	96	3926	4022	0.024	0.578	0.046
+SNV	COLO829T_Illumina	GRCh38-only	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	70	43	27	43	1080	1123	0.038	0.614	0.072
+SNV	COLO829T_Illumina	GRCh38-only	before	all	2443	1554	889	1554	29530	31084	0.050	0.636	0.093
+SNV	COLO829T_Illumina	GRCh38-only	after	extreme	234	129	105	129	1269	1398	0.092	0.551	0.158
+SNV	COLO829T_Illumina	GRCh38-only	after	notinalldifficultregions	2000	1254	746	1254	174	1428	0.878	0.627	0.732
+SNV	COLO829T_Illumina	GRCh38-only	after	alldifficultregions	443	255	188	255	1306	1561	0.163	0.576	0.254
+SNV	COLO829T_Illumina	GRCh38-only	after	alllowmapandsegdupregions	176	93	83	93	1231	1324	0.070	0.528	0.124
+SNV	COLO829T_Illumina	GRCh38-only	after	AllTandemRepeatsandHomopolymers_slop5	166	90	76	90	1211	1301	0.069	0.542	0.123
+SNV	COLO829T_Illumina	GRCh38-only	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	70	38	32	38	28	66	0.576	0.543	0.559
+SNV	COLO829T_Illumina	GRCh38-only	after	all	2443	1509	934	1509	1480	2989	0.505	0.618	0.556
+SNV	COLO829T_Illumina	HPRC v1.1	before	extreme	234	143	91	143	316	459	0.312	0.611	0.413
+SNV	COLO829T_Illumina	HPRC v1.1	before	notinalldifficultregions	2000	1553	447	1553	268	1821	0.853	0.776	0.813
+SNV	COLO829T_Illumina	HPRC v1.1	before	alldifficultregions	443	301	142	301	369	670	0.449	0.679	0.541
+SNV	COLO829T_Illumina	HPRC v1.1	before	alllowmapandsegdupregions	176	104	72	104	300	404	0.257	0.591	0.359
+SNV	COLO829T_Illumina	HPRC v1.1	before	AllTandemRepeatsandHomopolymers_slop5	166	108	58	108	263	371	0.291	0.651	0.402
+SNV	COLO829T_Illumina	HPRC v1.1	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	70	50	20	50	32	82	0.610	0.714	0.658
+SNV	COLO829T_Illumina	HPRC v1.1	before	all	2443	1854	589	1854	637	2491	0.744	0.759	0.752
+SNV	COLO829T_Illumina	HPRC v1.1	after	extreme	234	143	91	143	309	452	0.316	0.611	0.417
+SNV	COLO829T_Illumina	HPRC v1.1	after	notinalldifficultregions	2000	1546	454	1546	265	1811	0.854	0.773	0.811
+SNV	COLO829T_Illumina	HPRC v1.1	after	alldifficultregions	443	300	143	300	360	660	0.455	0.677	0.544
+SNV	COLO829T_Illumina	HPRC v1.1	after	alllowmapandsegdupregions	176	104	72	104	293	397	0.262	0.591	0.363
+SNV	COLO829T_Illumina	HPRC v1.1	after	AllTandemRepeatsandHomopolymers_slop5	166	107	59	107	257	364	0.294	0.645	0.404
+SNV	COLO829T_Illumina	HPRC v1.1	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	70	49	21	49	30	79	0.620	0.700	0.658
+SNV	COLO829T_Illumina	HPRC v1.1	after	all	2443	1846	597	1846	625	2471	0.747	0.756	0.751
+SNV	COLO829T_Illumina	HPRC v2.1	before	extreme	234	147	87	147	252	399	0.368	0.628	0.464
+SNV	COLO829T_Illumina	HPRC v2.1	before	notinalldifficultregions	2000	1555	445	1555	249	1804	0.862	0.777	0.818
+SNV	COLO829T_Illumina	HPRC v2.1	before	alldifficultregions	443	301	142	301	301	602	0.500	0.679	0.576
+SNV	COLO829T_Illumina	HPRC v2.1	before	alllowmapandsegdupregions	176	106	70	106	240	346	0.306	0.602	0.406
+SNV	COLO829T_Illumina	HPRC v2.1	before	AllTandemRepeatsandHomopolymers_slop5	166	107	59	107	223	330	0.324	0.645	0.431
+SNV	COLO829T_Illumina	HPRC v2.1	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	70	46	24	46	29	75	0.613	0.657	0.634
+SNV	COLO829T_Illumina	HPRC v2.1	before	all	2443	1856	587	1856	550	2406	0.771	0.760	0.766
+SNV	COLO829T_Illumina	HPRC v2.1	after	extreme	234	147	87	147	246	393	0.374	0.628	0.469
+SNV	COLO829T_Illumina	HPRC v2.1	after	notinalldifficultregions	2000	1550	450	1550	242	1792	0.865	0.775	0.818
+SNV	COLO829T_Illumina	HPRC v2.1	after	alldifficultregions	443	298	145	298	294	592	0.503	0.673	0.576
+SNV	COLO829T_Illumina	HPRC v2.1	after	alllowmapandsegdupregions	176	106	70	106	235	341	0.311	0.602	0.410
+SNV	COLO829T_Illumina	HPRC v2.1	after	AllTandemRepeatsandHomopolymers_slop5	166	105	61	105	216	321	0.327	0.633	0.431
+SNV	COLO829T_Illumina	HPRC v2.1	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	70	44	26	44	27	71	0.620	0.629	0.624
+SNV	COLO829T_Illumina	HPRC v2.1	after	all	2443	1848	595	1848	536	2384	0.775	0.756	0.766
+SNV	COLO829T_fiberseq	GRCh38-only	before	extreme	234	142	92	142	10161	10303	0.014	0.607	0.027
+SNV	COLO829T_fiberseq	GRCh38-only	before	notinalldifficultregions	2000	1501	499	1501	25545	27046	0.055	0.750	0.103
+SNV	COLO829T_fiberseq	GRCh38-only	before	alldifficultregions	443	283	160	283	13132	13415	0.021	0.639	0.041
+SNV	COLO829T_fiberseq	GRCh38-only	before	alllowmapandsegdupregions	176	102	74	102	9581	9683	0.011	0.580	0.021
+SNV	COLO829T_fiberseq	GRCh38-only	before	AllTandemRepeatsandHomopolymers_slop5	166	98	68	98	6390	6488	0.015	0.590	0.029
+SNV	COLO829T_fiberseq	GRCh38-only	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	70	42	28	42	1044	1086	0.039	0.600	0.073
+SNV	COLO829T_fiberseq	GRCh38-only	before	all	2443	1784	659	1784	38677	40461	0.044	0.730	0.083
+SNV	COLO829T_fiberseq	GRCh38-only	after	extreme	234	134	100	134	2465	2599	0.052	0.573	0.095
+SNV	COLO829T_fiberseq	GRCh38-only	after	notinalldifficultregions	2000	1463	537	1463	140	1603	0.913	0.732	0.812
+SNV	COLO829T_fiberseq	GRCh38-only	after	alldifficultregions	443	269	174	269	2497	2766	0.097	0.607	0.168
+SNV	COLO829T_fiberseq	GRCh38-only	after	alllowmapandsegdupregions	176	96	80	96	2463	2559	0.038	0.545	0.070
+SNV	COLO829T_fiberseq	GRCh38-only	after	AllTandemRepeatsandHomopolymers_slop5	166	91	75	91	2052	2143	0.042	0.548	0.079
+SNV	COLO829T_fiberseq	GRCh38-only	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	70	38	32	38	16	54	0.704	0.543	0.613
+SNV	COLO829T_fiberseq	GRCh38-only	after	all	2443	1732	711	1732	2637	4369	0.396	0.709	0.509
+SNV	COLO829T_fiberseq	HPRC v1.1	before	extreme	234	141	93	141	53	194	0.727	0.603	0.659
+SNV	COLO829T_fiberseq	HPRC v1.1	before	notinalldifficultregions	2000	1664	336	1664	304	1968	0.846	0.832	0.839
+SNV	COLO829T_fiberseq	HPRC v1.1	before	alldifficultregions	443	295	148	295	109	404	0.730	0.666	0.697
+SNV	COLO829T_fiberseq	HPRC v1.1	before	alllowmapandsegdupregions	176	109	67	109	46	155	0.703	0.619	0.659
+SNV	COLO829T_fiberseq	HPRC v1.1	before	AllTandemRepeatsandHomopolymers_slop5	166	95	71	95	48	143	0.664	0.572	0.615
+SNV	COLO829T_fiberseq	HPRC v1.1	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	70	45	25	45	25	70	0.643	0.643	0.643
+SNV	COLO829T_fiberseq	HPRC v1.1	before	all	2443	1959	484	1959	413	2372	0.826	0.802	0.814
+SNV	COLO829T_fiberseq	HPRC v1.1	after	extreme	234	141	93	141	53	194	0.727	0.603	0.659
+SNV	COLO829T_fiberseq	HPRC v1.1	after	notinalldifficultregions	2000	1662	338	1662	303	1965	0.846	0.831	0.838
+SNV	COLO829T_fiberseq	HPRC v1.1	after	alldifficultregions	443	295	148	295	108	403	0.732	0.666	0.697
+SNV	COLO829T_fiberseq	HPRC v1.1	after	alllowmapandsegdupregions	176	109	67	109	46	155	0.703	0.619	0.659
+SNV	COLO829T_fiberseq	HPRC v1.1	after	AllTandemRepeatsandHomopolymers_slop5	166	95	71	95	47	142	0.669	0.572	0.617
+SNV	COLO829T_fiberseq	HPRC v1.1	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	70	45	25	45	24	69	0.652	0.643	0.647
+SNV	COLO829T_fiberseq	HPRC v1.1	after	all	2443	1957	486	1957	411	2368	0.826	0.801	0.814
+SNV	COLO829T_fiberseq	HPRC v2.1	before	extreme	234	134	100	134	86	220	0.609	0.573	0.590
+SNV	COLO829T_fiberseq	HPRC v2.1	before	notinalldifficultregions	2000	1562	438	1562	169	1731	0.902	0.781	0.837
+SNV	COLO829T_fiberseq	HPRC v2.1	before	alldifficultregions	443	270	173	270	122	392	0.689	0.609	0.647
+SNV	COLO829T_fiberseq	HPRC v2.1	before	alllowmapandsegdupregions	176	99	77	99	86	185	0.535	0.562	0.548
+SNV	COLO829T_fiberseq	HPRC v2.1	before	AllTandemRepeatsandHomopolymers_slop5	166	89	77	89	57	146	0.610	0.536	0.571
+SNV	COLO829T_fiberseq	HPRC v2.1	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	70	37	33	37	16	53	0.698	0.529	0.602
+SNV	COLO829T_fiberseq	HPRC v2.1	before	all	2443	1832	611	1832	291	2123	0.863	0.750	0.802
+SNV	COLO829T_fiberseq	HPRC v2.1	after	extreme	234	134	100	134	85	219	0.612	0.573	0.592
+SNV	COLO829T_fiberseq	HPRC v2.1	after	notinalldifficultregions	2000	1560	440	1560	168	1728	0.903	0.780	0.837
+SNV	COLO829T_fiberseq	HPRC v2.1	after	alldifficultregions	443	270	173	270	119	389	0.694	0.609	0.649
+SNV	COLO829T_fiberseq	HPRC v2.1	after	alllowmapandsegdupregions	176	99	77	99	85	184	0.538	0.562	0.550
+SNV	COLO829T_fiberseq	HPRC v2.1	after	AllTandemRepeatsandHomopolymers_slop5	166	89	77	89	55	144	0.618	0.536	0.574
+SNV	COLO829T_fiberseq	HPRC v2.1	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	70	37	33	37	15	52	0.712	0.529	0.607
+SNV	COLO829T_fiberseq	HPRC v2.1	after	all	2443	1830	613	1830	287	2117	0.864	0.749	0.803
+SNV	COLO829T_ONT	GRCh38-only	before	extreme	234	120	114	120	5214	5334	0.022	0.513	0.043
+SNV	COLO829T_ONT	GRCh38-only	before	notinalldifficultregions	2000	1154	846	1154	22388	23542	0.049	0.577	0.090
+SNV	COLO829T_ONT	GRCh38-only	before	alldifficultregions	443	232	211	232	7740	7972	0.029	0.524	0.055
+SNV	COLO829T_ONT	GRCh38-only	before	alllowmapandsegdupregions	176	82	94	82	4580	4662	0.018	0.466	0.034
+SNV	COLO829T_ONT	GRCh38-only	before	AllTandemRepeatsandHomopolymers_slop5	166	82	84	82	2779	2861	0.029	0.494	0.054
+SNV	COLO829T_ONT	GRCh38-only	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	70	33	37	33	1054	1087	0.030	0.471	0.057
+SNV	COLO829T_ONT	GRCh38-only	before	all	2443	1386	1057	1386	30128	31514	0.044	0.567	0.082
+SNV	COLO829T_ONT	GRCh38-only	after	extreme	234	112	122	112	395	507	0.221	0.479	0.302
+SNV	COLO829T_ONT	GRCh38-only	after	notinalldifficultregions	2000	1126	874	1126	171	1297	0.868	0.563	0.683
+SNV	COLO829T_ONT	GRCh38-only	after	alldifficultregions	443	223	220	223	431	654	0.341	0.503	0.407
+SNV	COLO829T_ONT	GRCh38-only	after	alllowmapandsegdupregions	176	77	99	77	397	474	0.162	0.438	0.237
+SNV	COLO829T_ONT	GRCh38-only	after	AllTandemRepeatsandHomopolymers_slop5	166	78	88	78	223	301	0.259	0.470	0.334
+SNV	COLO829T_ONT	GRCh38-only	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	70	31	39	31	20	51	0.608	0.443	0.512
+SNV	COLO829T_ONT	GRCh38-only	after	all	2443	1349	1094	1349	602	1951	0.691	0.552	0.614
+SNV	COLO829T_ONT	HPRC v1.1	before	extreme	234	134	100	134	286	420	0.319	0.573	0.410
+SNV	COLO829T_ONT	HPRC v1.1	before	notinalldifficultregions	2000	1505	495	1505	263	1768	0.851	0.752	0.799
+SNV	COLO829T_ONT	HPRC v1.1	before	alldifficultregions	443	273	170	273	338	611	0.447	0.616	0.518
+SNV	COLO829T_ONT	HPRC v1.1	before	alllowmapandsegdupregions	176	101	75	101	287	388	0.260	0.574	0.358
+SNV	COLO829T_ONT	HPRC v1.1	before	AllTandemRepeatsandHomopolymers_slop5	166	90	76	90	178	268	0.336	0.542	0.415
+SNV	COLO829T_ONT	HPRC v1.1	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	70	39	31	39	17	56	0.696	0.557	0.619
+SNV	COLO829T_ONT	HPRC v1.1	before	all	2443	1778	665	1778	601	2379	0.747	0.728	0.737
+SNV	COLO829T_ONT	HPRC v1.1	after	extreme	234	134	100	134	286	420	0.319	0.573	0.410
+SNV	COLO829T_ONT	HPRC v1.1	after	notinalldifficultregions	2000	1504	496	1504	263	1767	0.851	0.752	0.799
+SNV	COLO829T_ONT	HPRC v1.1	after	alldifficultregions	443	273	170	273	336	609	0.448	0.616	0.519
+SNV	COLO829T_ONT	HPRC v1.1	after	alllowmapandsegdupregions	176	101	75	101	287	388	0.260	0.574	0.358
+SNV	COLO829T_ONT	HPRC v1.1	after	AllTandemRepeatsandHomopolymers_slop5	166	90	76	90	176	266	0.338	0.542	0.417
+SNV	COLO829T_ONT	HPRC v1.1	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	70	39	31	39	15	54	0.722	0.557	0.629
+SNV	COLO829T_ONT	HPRC v1.1	after	all	2443	1777	666	1777	599	2376	0.748	0.727	0.737
+SNV	COLO829T_ONT	HPRC v2.1	before	extreme	234	133	101	133	169	302	0.440	0.568	0.496
+SNV	COLO829T_ONT	HPRC v2.1	before	notinalldifficultregions	2000	1459	541	1459	254	1713	0.852	0.730	0.786
+SNV	COLO829T_ONT	HPRC v2.1	before	alldifficultregions	443	272	171	272	223	495	0.549	0.614	0.580
+SNV	COLO829T_ONT	HPRC v2.1	before	alllowmapandsegdupregions	176	97	79	97	170	267	0.363	0.551	0.438
+SNV	COLO829T_ONT	HPRC v2.1	before	AllTandemRepeatsandHomopolymers_slop5	166	93	73	93	66	159	0.585	0.560	0.572
+SNV	COLO829T_ONT	HPRC v2.1	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	70	39	31	39	24	63	0.619	0.557	0.586
+SNV	COLO829T_ONT	HPRC v2.1	before	all	2443	1731	712	1731	477	2208	0.784	0.709	0.744
+SNV	COLO829T_ONT	HPRC v2.1	after	extreme	234	133	101	133	160	293	0.454	0.568	0.505
+SNV	COLO829T_ONT	HPRC v2.1	after	notinalldifficultregions	2000	1457	543	1457	254	1711	0.852	0.729	0.785
+SNV	COLO829T_ONT	HPRC v2.1	after	alldifficultregions	443	272	171	272	213	485	0.561	0.614	0.586
+SNV	COLO829T_ONT	HPRC v2.1	after	alllowmapandsegdupregions	176	97	79	97	162	259	0.375	0.551	0.446
+SNV	COLO829T_ONT	HPRC v2.1	after	AllTandemRepeatsandHomopolymers_slop5	166	93	73	93	64	157	0.592	0.560	0.576
+SNV	COLO829T_ONT	HPRC v2.1	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	70	39	31	39	23	62	0.629	0.557	0.591
+SNV	COLO829T_ONT	HPRC v2.1	after	all	2443	1729	714	1729	467	2196	0.787	0.708	0.745
+SNV	HCC1395T_Illumina	GRCh38-only	before	extreme	169	142	27	142	4638	4780	0.030	0.840	0.057
+SNV	HCC1395T_Illumina	GRCh38-only	before	notinalldifficultregions	2946	2692	254	2692	65688	68380	0.039	0.914	0.075
+SNV	HCC1395T_Illumina	GRCh38-only	before	alldifficultregions	494	435	59	435	12217	12652	0.034	0.881	0.066
+SNV	HCC1395T_Illumina	GRCh38-only	before	alllowmapandsegdupregions	143	119	24	119	3487	3606	0.033	0.832	0.063
+SNV	HCC1395T_Illumina	GRCh38-only	before	AllTandemRepeatsandHomopolymers_slop5	185	161	24	161	5061	5222	0.031	0.870	0.060
+SNV	HCC1395T_Illumina	GRCh38-only	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	92	77	15	77	2659	2736	0.028	0.837	0.054
+SNV	HCC1395T_Illumina	GRCh38-only	before	all	3440	3127	313	3127	77905	81032	0.039	0.909	0.074
+SNV	HCC1395T_Illumina	GRCh38-only	after	extreme	169	141	28	141	61	202	0.698	0.834	0.760
+SNV	HCC1395T_Illumina	GRCh38-only	after	notinalldifficultregions	2946	2645	301	2645	545	3190	0.829	0.898	0.862
+SNV	HCC1395T_Illumina	GRCh38-only	after	alldifficultregions	494	429	65	429	118	547	0.784	0.868	0.824
+SNV	HCC1395T_Illumina	GRCh38-only	after	alllowmapandsegdupregions	143	117	26	117	45	162	0.722	0.818	0.767
+SNV	HCC1395T_Illumina	GRCh38-only	after	AllTandemRepeatsandHomopolymers_slop5	185	158	27	158	49	207	0.763	0.854	0.806
+SNV	HCC1395T_Illumina	GRCh38-only	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	92	76	16	76	10	86	0.884	0.826	0.854
+SNV	HCC1395T_Illumina	GRCh38-only	after	all	3440	3074	366	3074	663	3737	0.823	0.894	0.857
+SNV	HCC1395T_Illumina	HPRC v1.1	before	extreme	169	142	27	142	49	191	0.743	0.840	0.789
+SNV	HCC1395T_Illumina	HPRC v1.1	before	notinalldifficultregions	2946	2693	253	2693	436	3129	0.861	0.914	0.887
+SNV	HCC1395T_Illumina	HPRC v1.1	before	alldifficultregions	494	432	62	432	111	543	0.796	0.874	0.833
+SNV	HCC1395T_Illumina	HPRC v1.1	before	alllowmapandsegdupregions	143	121	22	121	36	157	0.771	0.846	0.807
+SNV	HCC1395T_Illumina	HPRC v1.1	before	AllTandemRepeatsandHomopolymers_slop5	185	157	28	157	52	209	0.751	0.849	0.797
+SNV	HCC1395T_Illumina	HPRC v1.1	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	92	78	14	78	21	99	0.788	0.848	0.817
+SNV	HCC1395T_Illumina	HPRC v1.1	before	all	3440	3125	315	3125	547	3672	0.851	0.908	0.879
+SNV	HCC1395T_Illumina	HPRC v1.1	after	extreme	169	142	27	142	44	186	0.763	0.840	0.800
+SNV	HCC1395T_Illumina	HPRC v1.1	after	notinalldifficultregions	2946	2681	265	2681	426	3107	0.863	0.910	0.886
+SNV	HCC1395T_Illumina	HPRC v1.1	after	alldifficultregions	494	432	62	432	104	536	0.806	0.874	0.839
+SNV	HCC1395T_Illumina	HPRC v1.1	after	alllowmapandsegdupregions	143	121	22	121	34	155	0.781	0.846	0.812
+SNV	HCC1395T_Illumina	HPRC v1.1	after	AllTandemRepeatsandHomopolymers_slop5	185	157	28	157	48	205	0.766	0.849	0.805
+SNV	HCC1395T_Illumina	HPRC v1.1	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	92	78	14	78	19	97	0.804	0.848	0.825
+SNV	HCC1395T_Illumina	HPRC v1.1	after	all	3440	3113	327	3113	530	3643	0.855	0.905	0.879
+SNV	HCC1395T_Illumina	HPRC v2.1	before	extreme	169	136	33	136	45	181	0.751	0.805	0.777
+SNV	HCC1395T_Illumina	HPRC v2.1	before	notinalldifficultregions	2946	2694	252	2694	399	3093	0.871	0.914	0.892
+SNV	HCC1395T_Illumina	HPRC v2.1	before	alldifficultregions	494	430	64	430	103	533	0.807	0.870	0.837
+SNV	HCC1395T_Illumina	HPRC v2.1	before	alllowmapandsegdupregions	143	121	22	121	31	152	0.796	0.846	0.820
+SNV	HCC1395T_Illumina	HPRC v2.1	before	AllTandemRepeatsandHomopolymers_slop5	185	151	34	151	51	202	0.748	0.816	0.780
+SNV	HCC1395T_Illumina	HPRC v2.1	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	92	75	17	75	16	91	0.824	0.815	0.820
+SNV	HCC1395T_Illumina	HPRC v2.1	before	all	3440	3124	316	3124	502	3626	0.862	0.908	0.884
+SNV	HCC1395T_Illumina	HPRC v2.1	after	extreme	169	136	33	136	44	180	0.756	0.805	0.779
+SNV	HCC1395T_Illumina	HPRC v2.1	after	notinalldifficultregions	2946	2683	263	2683	396	3079	0.871	0.911	0.891
+SNV	HCC1395T_Illumina	HPRC v2.1	after	alldifficultregions	494	430	64	430	99	529	0.813	0.870	0.841
+SNV	HCC1395T_Illumina	HPRC v2.1	after	alllowmapandsegdupregions	143	121	22	121	31	152	0.796	0.846	0.820
+SNV	HCC1395T_Illumina	HPRC v2.1	after	AllTandemRepeatsandHomopolymers_slop5	185	151	34	151	47	198	0.763	0.816	0.789
+SNV	HCC1395T_Illumina	HPRC v2.1	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	92	75	17	75	14	89	0.843	0.815	0.829
+SNV	HCC1395T_Illumina	HPRC v2.1	after	all	3440	3113	327	3113	495	3608	0.863	0.905	0.883
+SNV	HCC1395T_PacBio	GRCh38-only	before	extreme	169	142	27	142	7380	7522	0.019	0.840	0.037
+SNV	HCC1395T_PacBio	GRCh38-only	before	notinalldifficultregions	2946	2635	311	2635	70842	73477	0.036	0.894	0.069
+SNV	HCC1395T_PacBio	GRCh38-only	before	alldifficultregions	494	428	66	428	15505	15933	0.027	0.866	0.052
+SNV	HCC1395T_PacBio	GRCh38-only	before	alllowmapandsegdupregions	143	124	19	124	5786	5910	0.021	0.867	0.041
+SNV	HCC1395T_PacBio	GRCh38-only	before	AllTandemRepeatsandHomopolymers_slop5	185	157	28	157	6044	6201	0.025	0.849	0.049
+SNV	HCC1395T_PacBio	GRCh38-only	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	92	78	14	78	3132	3210	0.024	0.848	0.047
+SNV	HCC1395T_PacBio	GRCh38-only	before	all	3440	3063	377	3063	86347	89410	0.034	0.890	0.066
+SNV	HCC1395T_PacBio	GRCh38-only	after	extreme	169	141	28	141	111	252	0.560	0.834	0.670
+SNV	HCC1395T_PacBio	GRCh38-only	after	notinalldifficultregions	2946	2589	357	2589	450	3039	0.852	0.879	0.865
+SNV	HCC1395T_PacBio	GRCh38-only	after	alldifficultregions	494	421	73	421	177	598	0.704	0.852	0.771
+SNV	HCC1395T_PacBio	GRCh38-only	after	alllowmapandsegdupregions	143	122	21	122	104	226	0.540	0.853	0.661
+SNV	HCC1395T_PacBio	GRCh38-only	after	AllTandemRepeatsandHomopolymers_slop5	185	153	32	153	48	201	0.761	0.827	0.793
+SNV	HCC1395T_PacBio	GRCh38-only	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	92	77	15	77	21	98	0.786	0.837	0.811
+SNV	HCC1395T_PacBio	GRCh38-only	after	all	3440	3010	430	3010	627	3637	0.828	0.875	0.851
+SNV	HCC1395T_PacBio	HPRC v1.1	before	extreme	169	119	50	119	23	142	0.838	0.704	0.765
+SNV	HCC1395T_PacBio	HPRC v1.1	before	notinalldifficultregions	2946	2536	410	2536	388	2924	0.867	0.861	0.864
+SNV	HCC1395T_PacBio	HPRC v1.1	before	alldifficultregions	494	368	126	368	81	449	0.820	0.745	0.780
+SNV	HCC1395T_PacBio	HPRC v1.1	before	alllowmapandsegdupregions	143	103	40	103	23	126	0.817	0.720	0.766
+SNV	HCC1395T_PacBio	HPRC v1.1	before	AllTandemRepeatsandHomopolymers_slop5	185	126	59	126	29	155	0.813	0.681	0.741
+SNV	HCC1395T_PacBio	HPRC v1.1	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	92	64	28	64	12	76	0.842	0.696	0.762
+SNV	HCC1395T_PacBio	HPRC v1.1	before	all	3440	2904	536	2904	469	3373	0.861	0.844	0.852
+SNV	HCC1395T_PacBio	HPRC v1.1	after	extreme	169	119	50	119	22	141	0.844	0.704	0.768
+SNV	HCC1395T_PacBio	HPRC v1.1	after	notinalldifficultregions	2946	2532	414	2532	388	2920	0.867	0.859	0.863
+SNV	HCC1395T_PacBio	HPRC v1.1	after	alldifficultregions	494	368	126	368	80	448	0.821	0.745	0.781
+SNV	HCC1395T_PacBio	HPRC v1.1	after	alllowmapandsegdupregions	143	103	40	103	23	126	0.817	0.720	0.766
+SNV	HCC1395T_PacBio	HPRC v1.1	after	AllTandemRepeatsandHomopolymers_slop5	185	126	59	126	28	154	0.818	0.681	0.743
+SNV	HCC1395T_PacBio	HPRC v1.1	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	92	64	28	64	12	76	0.842	0.696	0.762
+SNV	HCC1395T_PacBio	HPRC v1.1	after	all	3440	2900	540	2900	468	3368	0.861	0.843	0.852
+SNV	HCC1395T_PacBio	HPRC v2.1	before	extreme	169	129	40	129	22	151	0.854	0.763	0.806
+SNV	HCC1395T_PacBio	HPRC v2.1	before	notinalldifficultregions	2946	2567	379	2567	348	2915	0.881	0.871	0.876
+SNV	HCC1395T_PacBio	HPRC v2.1	before	alldifficultregions	494	392	102	392	68	460	0.852	0.794	0.822
+SNV	HCC1395T_PacBio	HPRC v2.1	before	alllowmapandsegdupregions	143	105	38	105	21	126	0.833	0.734	0.781
+SNV	HCC1395T_PacBio	HPRC v2.1	before	AllTandemRepeatsandHomopolymers_slop5	185	142	43	142	24	166	0.855	0.768	0.809
+SNV	HCC1395T_PacBio	HPRC v2.1	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	92	72	20	72	10	82	0.878	0.783	0.828
+SNV	HCC1395T_PacBio	HPRC v2.1	before	all	3440	2959	481	2959	416	3375	0.877	0.860	0.868
+SNV	HCC1395T_PacBio	HPRC v2.1	after	extreme	169	129	40	129	21	150	0.860	0.763	0.809
+SNV	HCC1395T_PacBio	HPRC v2.1	after	notinalldifficultregions	2946	2558	388	2558	347	2905	0.881	0.868	0.874
+SNV	HCC1395T_PacBio	HPRC v2.1	after	alldifficultregions	494	392	102	392	66	458	0.856	0.794	0.824
+SNV	HCC1395T_PacBio	HPRC v2.1	after	alllowmapandsegdupregions	143	105	38	105	21	126	0.833	0.734	0.781
+SNV	HCC1395T_PacBio	HPRC v2.1	after	AllTandemRepeatsandHomopolymers_slop5	185	142	43	142	22	164	0.866	0.768	0.814
+SNV	HCC1395T_PacBio	HPRC v2.1	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	92	72	20	72	8	80	0.900	0.783	0.837
+SNV	HCC1395T_PacBio	HPRC v2.1	after	all	3440	2950	490	2950	413	3363	0.877	0.858	0.867
+SNV	HCC1395T_ONT	GRCh38-only	before	extreme	169	126	43	126	9080	9206	0.014	0.746	0.027
+SNV	HCC1395T_ONT	GRCh38-only	before	notinalldifficultregions	2946	2193	753	2193	95145	97338	0.023	0.744	0.044
+SNV	HCC1395T_ONT	GRCh38-only	before	alldifficultregions	494	352	142	352	20435	20787	0.017	0.713	0.033
+SNV	HCC1395T_ONT	GRCh38-only	before	alllowmapandsegdupregions	143	108	35	108	7203	7311	0.015	0.755	0.029
+SNV	HCC1395T_ONT	GRCh38-only	before	AllTandemRepeatsandHomopolymers_slop5	185	117	68	117	7874	7991	0.015	0.632	0.029
+SNV	HCC1395T_ONT	GRCh38-only	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	92	56	36	56	4161	4217	0.013	0.609	0.026
+SNV	HCC1395T_ONT	GRCh38-only	before	all	3440	2545	895	2545	115580	118125	0.022	0.740	0.042
+SNV	HCC1395T_ONT	GRCh38-only	after	extreme	169	123	46	123	102	225	0.547	0.728	0.624
+SNV	HCC1395T_ONT	GRCh38-only	after	notinalldifficultregions	2946	2153	793	2153	442	2595	0.830	0.731	0.777
+SNV	HCC1395T_ONT	GRCh38-only	after	alldifficultregions	494	345	149	345	168	513	0.673	0.698	0.685
+SNV	HCC1395T_ONT	GRCh38-only	after	alllowmapandsegdupregions	143	105	38	105	95	200	0.525	0.734	0.612
+SNV	HCC1395T_ONT	GRCh38-only	after	AllTandemRepeatsandHomopolymers_slop5	185	114	71	114	50	164	0.695	0.616	0.653
+SNV	HCC1395T_ONT	GRCh38-only	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	92	56	36	56	19	75	0.747	0.609	0.671
+SNV	HCC1395T_ONT	GRCh38-only	after	all	3440	2498	942	2498	610	3108	0.804	0.726	0.763
+SNV	HCC1395T_ONT	HPRC v1.1	before	extreme	169	103	66	103	39	142	0.725	0.609	0.662
+SNV	HCC1395T_ONT	HPRC v1.1	before	notinalldifficultregions	2946	2062	884	2062	323	2385	0.865	0.700	0.774
+SNV	HCC1395T_ONT	HPRC v1.1	before	alldifficultregions	494	311	183	311	95	406	0.766	0.630	0.691
+SNV	HCC1395T_ONT	HPRC v1.1	before	alllowmapandsegdupregions	143	87	56	87	34	121	0.719	0.608	0.659
+SNV	HCC1395T_ONT	HPRC v1.1	before	AllTandemRepeatsandHomopolymers_slop5	185	105	80	105	43	148	0.709	0.568	0.631
+SNV	HCC1395T_ONT	HPRC v1.1	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	92	51	41	51	20	71	0.718	0.554	0.626
+SNV	HCC1395T_ONT	HPRC v1.1	before	all	3440	2373	1067	2373	418	2791	0.850	0.690	0.762
+SNV	HCC1395T_ONT	HPRC v1.1	after	extreme	169	103	66	103	35	138	0.746	0.609	0.671
+SNV	HCC1395T_ONT	HPRC v1.1	after	notinalldifficultregions	2946	2057	889	2057	323	2380	0.864	0.698	0.772
+SNV	HCC1395T_ONT	HPRC v1.1	after	alldifficultregions	494	311	183	311	90	401	0.776	0.630	0.695
+SNV	HCC1395T_ONT	HPRC v1.1	after	alllowmapandsegdupregions	143	87	56	87	32	119	0.731	0.608	0.664
+SNV	HCC1395T_ONT	HPRC v1.1	after	AllTandemRepeatsandHomopolymers_slop5	185	105	80	105	40	145	0.724	0.568	0.636
+SNV	HCC1395T_ONT	HPRC v1.1	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	92	51	41	51	19	70	0.729	0.554	0.630
+SNV	HCC1395T_ONT	HPRC v1.1	after	all	3440	2368	1072	2368	413	2781	0.851	0.688	0.761
+SNV	HCC1395T_ONT	HPRC v2.1	before	extreme	169	112	57	112	389	501	0.224	0.663	0.334
+SNV	HCC1395T_ONT	HPRC v2.1	before	notinalldifficultregions	2946	2014	932	2014	300	2314	0.870	0.684	0.766
+SNV	HCC1395T_ONT	HPRC v2.1	before	alldifficultregions	494	317	177	317	480	797	0.398	0.642	0.491
+SNV	HCC1395T_ONT	HPRC v2.1	before	alllowmapandsegdupregions	143	95	48	95	419	514	0.185	0.664	0.289
+SNV	HCC1395T_ONT	HPRC v2.1	before	AllTandemRepeatsandHomopolymers_slop5	185	109	76	109	56	165	0.661	0.589	0.623
+SNV	HCC1395T_ONT	HPRC v2.1	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	92	52	40	52	26	78	0.667	0.565	0.612
+SNV	HCC1395T_ONT	HPRC v2.1	before	all	3440	2331	1109	2331	780	3111	0.749	0.678	0.712
+SNV	HCC1395T_ONT	HPRC v2.1	after	extreme	169	112	57	112	347	459	0.244	0.663	0.357
+SNV	HCC1395T_ONT	HPRC v2.1	after	notinalldifficultregions	2946	2009	937	2009	299	2308	0.870	0.682	0.765
+SNV	HCC1395T_ONT	HPRC v2.1	after	alldifficultregions	494	317	177	317	434	751	0.422	0.642	0.509
+SNV	HCC1395T_ONT	HPRC v2.1	after	alllowmapandsegdupregions	143	95	48	95	376	471	0.202	0.664	0.309
+SNV	HCC1395T_ONT	HPRC v2.1	after	AllTandemRepeatsandHomopolymers_slop5	185	109	76	109	49	158	0.690	0.589	0.636
+SNV	HCC1395T_ONT	HPRC v2.1	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	92	52	40	52	22	74	0.703	0.565	0.627
+SNV	HCC1395T_ONT	HPRC v2.1	after	all	3440	2326	1114	2326	733	3059	0.760	0.676	0.716
+INDEL	HG008T_Illumina	GRCh38-only	before	extreme	166	47	119	47	2421	2468	0.019	0.283	0.036
+INDEL	HG008T_Illumina	GRCh38-only	before	notinalldifficultregions	35	20	15	20	2793	2813	0.007	0.571	0.014
+INDEL	HG008T_Illumina	GRCh38-only	before	alldifficultregions	552	241	311	241	13223	13464	0.018	0.437	0.034
+INDEL	HG008T_Illumina	GRCh38-only	before	alllowmapandsegdupregions	41	9	32	9	532	541	0.017	0.220	0.031
+INDEL	HG008T_Illumina	GRCh38-only	before	AllTandemRepeatsandHomopolymers_slop5	547	238	309	238	12799	13037	0.018	0.435	0.035
+INDEL	HG008T_Illumina	GRCh38-only	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	465	232	233	232	12215	12447	0.019	0.499	0.036
+INDEL	HG008T_Illumina	GRCh38-only	before	all	587	261	326	261	16016	16277	0.016	0.445	0.031
+INDEL	HG008T_Illumina	GRCh38-only	after	extreme	166	15	151	15	38	53	0.283	0.090	0.137
+INDEL	HG008T_Illumina	GRCh38-only	after	notinalldifficultregions	35	20	15	20	40	60	0.333	0.571	0.421
+INDEL	HG008T_Illumina	GRCh38-only	after	alldifficultregions	552	88	464	88	150	238	0.370	0.159	0.223
+INDEL	HG008T_Illumina	GRCh38-only	after	alllowmapandsegdupregions	41	2	39	2	13	15	0.133	0.049	0.071
+INDEL	HG008T_Illumina	GRCh38-only	after	AllTandemRepeatsandHomopolymers_slop5	547	86	461	86	143	229	0.376	0.157	0.222
+INDEL	HG008T_Illumina	GRCh38-only	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	465	85	380	85	139	224	0.379	0.183	0.247
+INDEL	HG008T_Illumina	GRCh38-only	after	all	587	108	479	108	190	298	0.362	0.184	0.244
+INDEL	HG008T_Illumina	HPRC v1.1	before	extreme	166	7	159	7	21	28	0.250	0.042	0.072
+INDEL	HG008T_Illumina	HPRC v1.1	before	notinalldifficultregions	35	33	2	33	43	76	0.434	0.943	0.595
+INDEL	HG008T_Illumina	HPRC v1.1	before	alldifficultregions	552	42	510	42	64	106	0.396	0.076	0.128
+INDEL	HG008T_Illumina	HPRC v1.1	before	alllowmapandsegdupregions	41	2	39	2	4	6	0.333	0.049	0.085
+INDEL	HG008T_Illumina	HPRC v1.1	before	AllTandemRepeatsandHomopolymers_slop5	547	39	508	39	55	94	0.415	0.071	0.122
+INDEL	HG008T_Illumina	HPRC v1.1	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	465	36	429	36	47	83	0.434	0.077	0.131
+INDEL	HG008T_Illumina	HPRC v1.1	before	all	587	75	512	75	107	182	0.412	0.128	0.195
+INDEL	HG008T_Illumina	HPRC v1.1	after	extreme	166	7	159	7	21	28	0.250	0.042	0.072
+INDEL	HG008T_Illumina	HPRC v1.1	after	notinalldifficultregions	35	33	2	33	41	74	0.446	0.943	0.606
+INDEL	HG008T_Illumina	HPRC v1.1	after	alldifficultregions	552	42	510	42	64	106	0.396	0.076	0.128
+INDEL	HG008T_Illumina	HPRC v1.1	after	alllowmapandsegdupregions	41	2	39	2	4	6	0.333	0.049	0.085
+INDEL	HG008T_Illumina	HPRC v1.1	after	AllTandemRepeatsandHomopolymers_slop5	547	39	508	39	55	94	0.415	0.071	0.122
+INDEL	HG008T_Illumina	HPRC v1.1	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	465	36	429	36	47	83	0.434	0.077	0.131
+INDEL	HG008T_Illumina	HPRC v1.1	after	all	587	75	512	75	105	180	0.417	0.128	0.196
+INDEL	HG008T_Illumina	HPRC v2.1	before	extreme	166	6	160	6	19	25	0.240	0.036	0.063
+INDEL	HG008T_Illumina	HPRC v2.1	before	notinalldifficultregions	35	30	5	30	51	81	0.370	0.857	0.517
+INDEL	HG008T_Illumina	HPRC v2.1	before	alldifficultregions	552	35	517	35	58	93	0.376	0.063	0.109
+INDEL	HG008T_Illumina	HPRC v2.1	before	alllowmapandsegdupregions	41	2	39	2	6	8	0.250	0.049	0.082
+INDEL	HG008T_Illumina	HPRC v2.1	before	AllTandemRepeatsandHomopolymers_slop5	547	31	516	31	48	79	0.392	0.057	0.099
+INDEL	HG008T_Illumina	HPRC v2.1	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	465	27	438	27	37	64	0.422	0.058	0.102
+INDEL	HG008T_Illumina	HPRC v2.1	before	all	587	65	522	65	109	174	0.374	0.111	0.171
+INDEL	HG008T_Illumina	HPRC v2.1	after	extreme	166	6	160	6	18	24	0.250	0.036	0.063
+INDEL	HG008T_Illumina	HPRC v2.1	after	notinalldifficultregions	35	30	5	30	51	81	0.370	0.857	0.517
+INDEL	HG008T_Illumina	HPRC v2.1	after	alldifficultregions	552	35	517	35	57	92	0.380	0.063	0.109
+INDEL	HG008T_Illumina	HPRC v2.1	after	alllowmapandsegdupregions	41	2	39	2	6	8	0.250	0.049	0.082
+INDEL	HG008T_Illumina	HPRC v2.1	after	AllTandemRepeatsandHomopolymers_slop5	547	31	516	31	47	78	0.397	0.057	0.099
+INDEL	HG008T_Illumina	HPRC v2.1	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	465	27	438	27	37	64	0.422	0.058	0.102
+INDEL	HG008T_Illumina	HPRC v2.1	after	all	587	65	522	65	108	173	0.376	0.111	0.171
+INDEL	HG008T_PacBio	GRCh38-only	before	extreme	166	57	109	57	3598	3655	0.016	0.343	0.030
+INDEL	HG008T_PacBio	GRCh38-only	before	notinalldifficultregions	35	23	12	23	3885	3908	0.006	0.657	0.012
+INDEL	HG008T_PacBio	GRCh38-only	before	alldifficultregions	552	256	296	256	14705	14961	0.017	0.464	0.033
+INDEL	HG008T_PacBio	GRCh38-only	before	alllowmapandsegdupregions	41	15	26	15	826	841	0.018	0.366	0.034
+INDEL	HG008T_PacBio	GRCh38-only	before	AllTandemRepeatsandHomopolymers_slop5	547	251	296	251	14079	14330	0.018	0.459	0.034
+INDEL	HG008T_PacBio	GRCh38-only	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	465	236	229	236	12134	12370	0.019	0.508	0.037
+INDEL	HG008T_PacBio	GRCh38-only	before	all	587	279	308	279	18590	18869	0.015	0.475	0.029
+INDEL	HG008T_PacBio	GRCh38-only	after	extreme	166	22	144	22	152	174	0.126	0.133	0.129
+INDEL	HG008T_PacBio	GRCh38-only	after	notinalldifficultregions	35	23	12	23	80	103	0.223	0.657	0.333
+INDEL	HG008T_PacBio	GRCh38-only	after	alldifficultregions	552	97	455	97	461	558	0.174	0.176	0.175
+INDEL	HG008T_PacBio	GRCh38-only	after	alllowmapandsegdupregions	41	6	35	6	40	46	0.130	0.146	0.138
+INDEL	HG008T_PacBio	GRCh38-only	after	AllTandemRepeatsandHomopolymers_slop5	547	93	454	93	450	543	0.171	0.170	0.171
+INDEL	HG008T_PacBio	GRCh38-only	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	465	89	376	89	389	478	0.186	0.191	0.189
+INDEL	HG008T_PacBio	GRCh38-only	after	all	587	120	467	120	541	661	0.182	0.204	0.192
+INDEL	HG008T_PacBio	HPRC v1.1	before	extreme	166	16	150	16	37	53	0.302	0.096	0.146
+INDEL	HG008T_PacBio	HPRC v1.1	before	notinalldifficultregions	35	32	3	32	33	65	0.492	0.914	0.640
+INDEL	HG008T_PacBio	HPRC v1.1	before	alldifficultregions	552	79	473	79	135	214	0.369	0.143	0.206
+INDEL	HG008T_PacBio	HPRC v1.1	before	alllowmapandsegdupregions	41	3	38	3	17	20	0.150	0.073	0.098
+INDEL	HG008T_PacBio	HPRC v1.1	before	AllTandemRepeatsandHomopolymers_slop5	547	75	472	75	126	201	0.373	0.137	0.201
+INDEL	HG008T_PacBio	HPRC v1.1	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	465	70	395	70	119	189	0.370	0.151	0.214
+INDEL	HG008T_PacBio	HPRC v1.1	before	all	587	111	476	111	168	279	0.398	0.189	0.256
+INDEL	HG008T_PacBio	HPRC v1.1	after	extreme	166	13	153	13	31	44	0.295	0.078	0.124
+INDEL	HG008T_PacBio	HPRC v1.1	after	notinalldifficultregions	35	32	3	32	32	64	0.500	0.914	0.646
+INDEL	HG008T_PacBio	HPRC v1.1	after	alldifficultregions	552	73	479	73	109	182	0.401	0.132	0.199
+INDEL	HG008T_PacBio	HPRC v1.1	after	alllowmapandsegdupregions	41	2	39	2	13	15	0.133	0.049	0.071
+INDEL	HG008T_PacBio	HPRC v1.1	after	AllTandemRepeatsandHomopolymers_slop5	547	69	478	69	100	169	0.408	0.126	0.193
+INDEL	HG008T_PacBio	HPRC v1.1	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	465	64	401	64	93	157	0.408	0.138	0.206
+INDEL	HG008T_PacBio	HPRC v1.1	after	all	587	105	482	105	141	246	0.427	0.179	0.252
+INDEL	HG008T_PacBio	HPRC v2.1	before	extreme	166	9	157	9	21	30	0.300	0.054	0.092
+INDEL	HG008T_PacBio	HPRC v2.1	before	notinalldifficultregions	35	32	3	32	33	65	0.492	0.914	0.640
+INDEL	HG008T_PacBio	HPRC v2.1	before	alldifficultregions	552	64	488	64	82	146	0.438	0.116	0.183
+INDEL	HG008T_PacBio	HPRC v2.1	before	alllowmapandsegdupregions	41	3	38	3	8	11	0.273	0.073	0.115
+INDEL	HG008T_PacBio	HPRC v2.1	before	AllTandemRepeatsandHomopolymers_slop5	547	60	487	60	75	135	0.444	0.110	0.176
+INDEL	HG008T_PacBio	HPRC v2.1	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	465	56	409	56	68	124	0.452	0.120	0.190
+INDEL	HG008T_PacBio	HPRC v2.1	before	all	587	96	491	96	115	211	0.455	0.164	0.241
+INDEL	HG008T_PacBio	HPRC v2.1	after	extreme	166	8	158	8	17	25	0.320	0.048	0.084
+INDEL	HG008T_PacBio	HPRC v2.1	after	notinalldifficultregions	35	32	3	32	32	64	0.500	0.914	0.646
+INDEL	HG008T_PacBio	HPRC v2.1	after	alldifficultregions	552	62	490	62	75	137	0.453	0.112	0.180
+INDEL	HG008T_PacBio	HPRC v2.1	after	alllowmapandsegdupregions	41	2	39	2	8	10	0.200	0.049	0.078
+INDEL	HG008T_PacBio	HPRC v2.1	after	AllTandemRepeatsandHomopolymers_slop5	547	58	489	58	68	126	0.460	0.106	0.172
+INDEL	HG008T_PacBio	HPRC v2.1	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	465	54	411	54	63	117	0.462	0.116	0.186
+INDEL	HG008T_PacBio	HPRC v2.1	after	all	587	94	493	94	107	201	0.468	0.160	0.239
+INDEL	HG008T_ONT	GRCh38-only	before	extreme	166	6	160	6	683	689	0.009	0.036	0.014
+INDEL	HG008T_ONT	GRCh38-only	before	notinalldifficultregions	35	10	25	10	506	516	0.019	0.286	0.036
+INDEL	HG008T_ONT	GRCh38-only	before	alldifficultregions	552	47	505	47	3136	3183	0.015	0.085	0.025
+INDEL	HG008T_ONT	GRCh38-only	before	alllowmapandsegdupregions	41	1	40	1	218	219	0.005	0.024	0.008
+INDEL	HG008T_ONT	GRCh38-only	before	AllTandemRepeatsandHomopolymers_slop5	547	47	500	47	3025	3072	0.015	0.086	0.026
+INDEL	HG008T_ONT	GRCh38-only	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	465	39	426	39	2661	2700	0.014	0.084	0.025
+INDEL	HG008T_ONT	GRCh38-only	before	all	587	57	530	57	3642	3699	0.015	0.097	0.027
+INDEL	HG008T_ONT	GRCh38-only	after	extreme	166	3	163	3	61	64	0.047	0.018	0.026
+INDEL	HG008T_ONT	GRCh38-only	after	notinalldifficultregions	35	10	25	10	12	22	0.455	0.286	0.351
+INDEL	HG008T_ONT	GRCh38-only	after	alldifficultregions	552	24	528	24	222	246	0.098	0.043	0.060
+INDEL	HG008T_ONT	GRCh38-only	after	alllowmapandsegdupregions	41	0	41	0	23	23	0.000	0.000	0.000
+INDEL	HG008T_ONT	GRCh38-only	after	AllTandemRepeatsandHomopolymers_slop5	547	24	523	24	216	240	0.100	0.044	0.061
+INDEL	HG008T_ONT	GRCh38-only	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	465	23	442	23	207	230	0.100	0.049	0.066
+INDEL	HG008T_ONT	GRCh38-only	after	all	587	34	553	34	234	268	0.127	0.058	0.080
+INDEL	HG008T_ONT	HPRC v1.1	before	extreme	166	4	162	4	9	13	0.308	0.024	0.045
+INDEL	HG008T_ONT	HPRC v1.1	before	notinalldifficultregions	35	24	11	24	16	40	0.600	0.686	0.640
+INDEL	HG008T_ONT	HPRC v1.1	before	alldifficultregions	552	19	533	19	31	50	0.380	0.034	0.063
+INDEL	HG008T_ONT	HPRC v1.1	before	alllowmapandsegdupregions	41	2	39	2	4	6	0.333	0.049	0.085
+INDEL	HG008T_ONT	HPRC v1.1	before	AllTandemRepeatsandHomopolymers_slop5	547	15	532	15	28	43	0.349	0.027	0.051
+INDEL	HG008T_ONT	HPRC v1.1	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	465	13	452	13	26	39	0.333	0.028	0.052
+INDEL	HG008T_ONT	HPRC v1.1	before	all	587	43	544	43	47	90	0.478	0.073	0.127
+INDEL	HG008T_ONT	HPRC v1.1	after	extreme	166	4	162	4	7	11	0.364	0.024	0.045
+INDEL	HG008T_ONT	HPRC v1.1	after	notinalldifficultregions	35	24	11	24	16	40	0.600	0.686	0.640
+INDEL	HG008T_ONT	HPRC v1.1	after	alldifficultregions	552	19	533	19	27	46	0.413	0.034	0.064
+INDEL	HG008T_ONT	HPRC v1.1	after	alllowmapandsegdupregions	41	2	39	2	3	5	0.400	0.049	0.087
+INDEL	HG008T_ONT	HPRC v1.1	after	AllTandemRepeatsandHomopolymers_slop5	547	15	532	15	25	40	0.375	0.027	0.051
+INDEL	HG008T_ONT	HPRC v1.1	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	465	13	452	13	23	36	0.361	0.028	0.052
+INDEL	HG008T_ONT	HPRC v1.1	after	all	587	43	544	43	43	86	0.500	0.073	0.128
+INDEL	HG008T_ONT	HPRC v2.1	before	extreme	166	6	160	6	6	12	0.500	0.036	0.067
+INDEL	HG008T_ONT	HPRC v2.1	before	notinalldifficultregions	35	26	9	26	18	44	0.591	0.743	0.658
+INDEL	HG008T_ONT	HPRC v2.1	before	alldifficultregions	552	21	531	21	25	46	0.457	0.038	0.070
+INDEL	HG008T_ONT	HPRC v2.1	before	alllowmapandsegdupregions	41	2	39	2	4	6	0.333	0.049	0.085
+INDEL	HG008T_ONT	HPRC v2.1	before	AllTandemRepeatsandHomopolymers_slop5	547	18	529	18	19	37	0.486	0.033	0.062
+INDEL	HG008T_ONT	HPRC v2.1	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	465	16	449	16	18	34	0.471	0.034	0.064
+INDEL	HG008T_ONT	HPRC v2.1	before	all	587	47	540	47	43	90	0.522	0.080	0.139
+INDEL	HG008T_ONT	HPRC v2.1	after	extreme	166	6	160	6	6	12	0.500	0.036	0.067
+INDEL	HG008T_ONT	HPRC v2.1	after	notinalldifficultregions	35	26	9	26	18	44	0.591	0.743	0.658
+INDEL	HG008T_ONT	HPRC v2.1	after	alldifficultregions	552	21	531	21	25	46	0.457	0.038	0.070
+INDEL	HG008T_ONT	HPRC v2.1	after	alllowmapandsegdupregions	41	2	39	2	4	6	0.333	0.049	0.085
+INDEL	HG008T_ONT	HPRC v2.1	after	AllTandemRepeatsandHomopolymers_slop5	547	18	529	18	19	37	0.486	0.033	0.062
+INDEL	HG008T_ONT	HPRC v2.1	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	465	16	449	16	18	34	0.471	0.034	0.064
+INDEL	HG008T_ONT	HPRC v2.1	after	all	587	47	540	47	43	90	0.522	0.080	0.139
+INDEL	COLO829T_Illumina	GRCh38-only	before	extreme	52	8	44	8	883	891	0.009	0.154	0.017
+INDEL	COLO829T_Illumina	GRCh38-only	before	notinalldifficultregions	7	6	1	6	1277	1283	0.005	0.857	0.009
+INDEL	COLO829T_Illumina	GRCh38-only	before	alldifficultregions	124	33	91	33	4700	4733	0.007	0.266	0.014
+INDEL	COLO829T_Illumina	GRCh38-only	before	alllowmapandsegdupregions	29	4	25	4	256	260	0.015	0.138	0.028
+INDEL	COLO829T_Illumina	GRCh38-only	before	AllTandemRepeatsandHomopolymers_slop5	108	30	78	30	4509	4539	0.007	0.278	0.013
+INDEL	COLO829T_Illumina	GRCh38-only	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	75	26	49	26	4246	4272	0.006	0.347	0.012
+INDEL	COLO829T_Illumina	GRCh38-only	before	all	131	39	92	39	5977	6016	0.006	0.298	0.013
+INDEL	COLO829T_Illumina	GRCh38-only	after	extreme	52	3	49	3	27	30	0.100	0.058	0.073
+INDEL	COLO829T_Illumina	GRCh38-only	after	notinalldifficultregions	7	6	1	6	12	18	0.333	0.857	0.480
+INDEL	COLO829T_Illumina	GRCh38-only	after	alldifficultregions	124	12	112	12	67	79	0.152	0.097	0.118
+INDEL	COLO829T_Illumina	GRCh38-only	after	alllowmapandsegdupregions	29	3	26	3	16	19	0.158	0.103	0.125
+INDEL	COLO829T_Illumina	GRCh38-only	after	AllTandemRepeatsandHomopolymers_slop5	108	9	99	9	65	74	0.122	0.083	0.099
+INDEL	COLO829T_Illumina	GRCh38-only	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	75	7	68	7	53	60	0.117	0.093	0.104
+INDEL	COLO829T_Illumina	GRCh38-only	after	all	131	18	113	18	79	97	0.186	0.137	0.158
+INDEL	COLO829T_Illumina	HPRC v1.1	before	extreme	52	3	49	3	8	11	0.273	0.058	0.095
+INDEL	COLO829T_Illumina	HPRC v1.1	before	notinalldifficultregions	7	7	0	7	18	25	0.280	1.000	0.438
+INDEL	COLO829T_Illumina	HPRC v1.1	before	alldifficultregions	124	11	113	11	24	35	0.314	0.089	0.138
+INDEL	COLO829T_Illumina	HPRC v1.1	before	alllowmapandsegdupregions	29	3	26	3	1	4	0.750	0.103	0.182
+INDEL	COLO829T_Illumina	HPRC v1.1	before	AllTandemRepeatsandHomopolymers_slop5	108	8	100	8	19	27	0.296	0.074	0.119
+INDEL	COLO829T_Illumina	HPRC v1.1	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	75	5	70	5	10	15	0.333	0.067	0.111
+INDEL	COLO829T_Illumina	HPRC v1.1	before	all	131	18	113	18	42	60	0.300	0.137	0.188
+INDEL	COLO829T_Illumina	HPRC v1.1	after	extreme	52	3	49	3	8	11	0.273	0.058	0.095
+INDEL	COLO829T_Illumina	HPRC v1.1	after	notinalldifficultregions	7	7	0	7	18	25	0.280	1.000	0.438
+INDEL	COLO829T_Illumina	HPRC v1.1	after	alldifficultregions	124	11	113	11	23	34	0.324	0.089	0.139
+INDEL	COLO829T_Illumina	HPRC v1.1	after	alllowmapandsegdupregions	29	3	26	3	1	4	0.750	0.103	0.182
+INDEL	COLO829T_Illumina	HPRC v1.1	after	AllTandemRepeatsandHomopolymers_slop5	108	8	100	8	18	26	0.308	0.074	0.119
+INDEL	COLO829T_Illumina	HPRC v1.1	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	75	5	70	5	10	15	0.333	0.067	0.111
+INDEL	COLO829T_Illumina	HPRC v1.1	after	all	131	18	113	18	41	59	0.305	0.137	0.189
+INDEL	COLO829T_Illumina	HPRC v2.1	before	extreme	52	3	49	3	9	12	0.250	0.058	0.094
+INDEL	COLO829T_Illumina	HPRC v2.1	before	notinalldifficultregions	7	6	1	6	24	30	0.200	0.857	0.324
+INDEL	COLO829T_Illumina	HPRC v2.1	before	alldifficultregions	124	11	113	11	25	36	0.306	0.089	0.137
+INDEL	COLO829T_Illumina	HPRC v2.1	before	alllowmapandsegdupregions	29	4	25	4	5	9	0.444	0.138	0.211
+INDEL	COLO829T_Illumina	HPRC v2.1	before	AllTandemRepeatsandHomopolymers_slop5	108	6	102	6	18	24	0.250	0.056	0.091
+INDEL	COLO829T_Illumina	HPRC v2.1	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	75	4	71	4	9	13	0.308	0.053	0.091
+INDEL	COLO829T_Illumina	HPRC v2.1	before	all	131	17	114	17	49	66	0.258	0.130	0.173
+INDEL	COLO829T_Illumina	HPRC v2.1	after	extreme	52	3	49	3	9	12	0.250	0.058	0.094
+INDEL	COLO829T_Illumina	HPRC v2.1	after	notinalldifficultregions	7	6	1	6	24	30	0.200	0.857	0.324
+INDEL	COLO829T_Illumina	HPRC v2.1	after	alldifficultregions	124	11	113	11	24	35	0.314	0.089	0.138
+INDEL	COLO829T_Illumina	HPRC v2.1	after	alllowmapandsegdupregions	29	4	25	4	5	9	0.444	0.138	0.211
+INDEL	COLO829T_Illumina	HPRC v2.1	after	AllTandemRepeatsandHomopolymers_slop5	108	6	102	6	17	23	0.261	0.056	0.092
+INDEL	COLO829T_Illumina	HPRC v2.1	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	75	4	71	4	9	13	0.308	0.053	0.091
+INDEL	COLO829T_Illumina	HPRC v2.1	after	all	131	17	114	17	48	65	0.262	0.130	0.173
+INDEL	COLO829T_fiberseq	GRCh38-only	before	extreme	52	7	45	7	670	677	0.010	0.135	0.019
+INDEL	COLO829T_fiberseq	GRCh38-only	before	notinalldifficultregions	7	4	3	4	132	136	0.029	0.571	0.056
+INDEL	COLO829T_fiberseq	GRCh38-only	before	alldifficultregions	124	22	102	22	1632	1654	0.013	0.177	0.025
+INDEL	COLO829T_fiberseq	GRCh38-only	before	alllowmapandsegdupregions	29	4	25	4	123	127	0.031	0.138	0.051
+INDEL	COLO829T_fiberseq	GRCh38-only	before	AllTandemRepeatsandHomopolymers_slop5	108	20	88	20	1585	1605	0.012	0.185	0.023
+INDEL	COLO829T_fiberseq	GRCh38-only	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	75	17	58	17	1255	1272	0.013	0.227	0.025
+INDEL	COLO829T_fiberseq	GRCh38-only	before	all	131	26	105	26	1764	1790	0.015	0.198	0.027
+INDEL	COLO829T_fiberseq	GRCh38-only	after	extreme	52	3	49	3	131	134	0.022	0.058	0.032
+INDEL	COLO829T_fiberseq	GRCh38-only	after	notinalldifficultregions	7	4	3	4	7	11	0.364	0.571	0.444
+INDEL	COLO829T_fiberseq	GRCh38-only	after	alldifficultregions	124	10	114	10	267	277	0.036	0.081	0.050
+INDEL	COLO829T_fiberseq	GRCh38-only	after	alllowmapandsegdupregions	29	2	27	2	20	22	0.091	0.069	0.078
+INDEL	COLO829T_fiberseq	GRCh38-only	after	AllTandemRepeatsandHomopolymers_slop5	108	8	100	8	263	271	0.030	0.074	0.042
+INDEL	COLO829T_fiberseq	GRCh38-only	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	75	8	67	8	227	235	0.034	0.107	0.052
+INDEL	COLO829T_fiberseq	GRCh38-only	after	all	131	14	117	14	274	288	0.049	0.107	0.067
+INDEL	COLO829T_fiberseq	HPRC v1.1	before	extreme	52	4	48	4	25	29	0.138	0.077	0.099
+INDEL	COLO829T_fiberseq	HPRC v1.1	before	notinalldifficultregions	7	5	2	5	15	20	0.250	0.714	0.370
+INDEL	COLO829T_fiberseq	HPRC v1.1	before	alldifficultregions	124	10	114	10	47	57	0.175	0.081	0.110
+INDEL	COLO829T_fiberseq	HPRC v1.1	before	alllowmapandsegdupregions	29	4	25	4	10	14	0.286	0.138	0.186
+INDEL	COLO829T_fiberseq	HPRC v1.1	before	AllTandemRepeatsandHomopolymers_slop5	108	6	102	6	41	47	0.128	0.056	0.077
+INDEL	COLO829T_fiberseq	HPRC v1.1	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	75	3	72	3	29	32	0.094	0.040	0.056
+INDEL	COLO829T_fiberseq	HPRC v1.1	before	all	131	15	116	15	62	77	0.195	0.115	0.144
+INDEL	COLO829T_fiberseq	HPRC v1.1	after	extreme	52	4	48	4	24	28	0.143	0.077	0.100
+INDEL	COLO829T_fiberseq	HPRC v1.1	after	notinalldifficultregions	7	5	2	5	14	19	0.263	0.714	0.385
+INDEL	COLO829T_fiberseq	HPRC v1.1	after	alldifficultregions	124	9	115	9	44	53	0.170	0.073	0.102
+INDEL	COLO829T_fiberseq	HPRC v1.1	after	alllowmapandsegdupregions	29	4	25	4	10	14	0.286	0.138	0.186
+INDEL	COLO829T_fiberseq	HPRC v1.1	after	AllTandemRepeatsandHomopolymers_slop5	108	5	103	5	38	43	0.116	0.046	0.066
+INDEL	COLO829T_fiberseq	HPRC v1.1	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	75	2	73	2	26	28	0.071	0.027	0.039
+INDEL	COLO829T_fiberseq	HPRC v1.1	after	all	131	14	117	14	58	72	0.194	0.107	0.138
+INDEL	COLO829T_fiberseq	HPRC v2.1	before	extreme	52	4	48	4	7	11	0.364	0.077	0.127
+INDEL	COLO829T_fiberseq	HPRC v2.1	before	notinalldifficultregions	7	6	1	6	11	17	0.353	0.857	0.500
+INDEL	COLO829T_fiberseq	HPRC v2.1	before	alldifficultregions	124	8	116	8	16	24	0.333	0.065	0.108
+INDEL	COLO829T_fiberseq	HPRC v2.1	before	alllowmapandsegdupregions	29	5	24	5	1	6	0.833	0.172	0.286
+INDEL	COLO829T_fiberseq	HPRC v2.1	before	AllTandemRepeatsandHomopolymers_slop5	108	3	105	3	14	17	0.176	0.028	0.048
+INDEL	COLO829T_fiberseq	HPRC v2.1	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	75	1	74	1	9	10	0.100	0.013	0.024
+INDEL	COLO829T_fiberseq	HPRC v2.1	before	all	131	14	117	14	27	41	0.341	0.107	0.163
+INDEL	COLO829T_fiberseq	HPRC v2.1	after	extreme	52	4	48	4	6	10	0.400	0.077	0.129
+INDEL	COLO829T_fiberseq	HPRC v2.1	after	notinalldifficultregions	7	6	1	6	11	17	0.353	0.857	0.500
+INDEL	COLO829T_fiberseq	HPRC v2.1	after	alldifficultregions	124	8	116	8	15	23	0.348	0.065	0.109
+INDEL	COLO829T_fiberseq	HPRC v2.1	after	alllowmapandsegdupregions	29	5	24	5	1	6	0.833	0.172	0.286
+INDEL	COLO829T_fiberseq	HPRC v2.1	after	AllTandemRepeatsandHomopolymers_slop5	108	3	105	3	13	16	0.188	0.028	0.048
+INDEL	COLO829T_fiberseq	HPRC v2.1	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	75	1	74	1	8	9	0.111	0.013	0.024
+INDEL	COLO829T_fiberseq	HPRC v2.1	after	all	131	14	117	14	26	40	0.350	0.107	0.164
+INDEL	COLO829T_ONT	GRCh38-only	before	extreme	52	0	52	0	54	54	0.000	0.000	0.000
+INDEL	COLO829T_ONT	GRCh38-only	before	notinalldifficultregions	7	1	6	1	50	51	0.020	0.143	0.034
+INDEL	COLO829T_ONT	GRCh38-only	before	alldifficultregions	124	0	124	0	130	130	0.000	0.000	0.000
+INDEL	COLO829T_ONT	GRCh38-only	before	alllowmapandsegdupregions	29	0	29	0	41	41	0.000	0.000	0.000
+INDEL	COLO829T_ONT	GRCh38-only	before	AllTandemRepeatsandHomopolymers_slop5	108	0	108	0	96	96	0.000	0.000	0.000
+INDEL	COLO829T_ONT	GRCh38-only	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	75	0	75	0	70	70	0.000	0.000	0.000
+INDEL	COLO829T_ONT	GRCh38-only	before	all	131	1	130	1	180	181	0.006	0.008	0.006
+INDEL	COLO829T_ONT	GRCh38-only	after	extreme	52	0	52	0	17	17	0.000	0.000	0.000
+INDEL	COLO829T_ONT	GRCh38-only	after	notinalldifficultregions	7	1	6	1	16	17	0.059	0.143	0.083
+INDEL	COLO829T_ONT	GRCh38-only	after	alldifficultregions	124	0	124	0	39	39	0.000	0.000	0.000
+INDEL	COLO829T_ONT	GRCh38-only	after	alllowmapandsegdupregions	29	0	29	0	15	15	0.000	0.000	0.000
+INDEL	COLO829T_ONT	GRCh38-only	after	AllTandemRepeatsandHomopolymers_slop5	108	0	108	0	31	31	0.000	0.000	0.000
+INDEL	COLO829T_ONT	GRCh38-only	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	75	0	75	0	25	25	0.000	0.000	0.000
+INDEL	COLO829T_ONT	GRCh38-only	after	all	131	1	130	1	55	56	0.018	0.008	0.011
+INDEL	COLO829T_ONT	HPRC v1.1	before	extreme	52	1	51	1	12	13	0.077	0.019	0.031
+INDEL	COLO829T_ONT	HPRC v1.1	before	notinalldifficultregions	7	2	5	2	17	19	0.105	0.286	0.154
+INDEL	COLO829T_ONT	HPRC v1.1	before	alldifficultregions	124	5	119	5	13	18	0.278	0.040	0.070
+INDEL	COLO829T_ONT	HPRC v1.1	before	alllowmapandsegdupregions	29	2	27	2	8	10	0.200	0.069	0.103
+INDEL	COLO829T_ONT	HPRC v1.1	before	AllTandemRepeatsandHomopolymers_slop5	108	4	104	4	6	10	0.400	0.037	0.068
+INDEL	COLO829T_ONT	HPRC v1.1	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	75	2	73	2	4	6	0.333	0.027	0.049
+INDEL	COLO829T_ONT	HPRC v1.1	before	all	131	7	124	7	30	37	0.189	0.053	0.083
+INDEL	COLO829T_ONT	HPRC v1.1	after	extreme	52	1	51	1	11	12	0.083	0.019	0.031
+INDEL	COLO829T_ONT	HPRC v1.1	after	notinalldifficultregions	7	2	5	2	17	19	0.105	0.286	0.154
+INDEL	COLO829T_ONT	HPRC v1.1	after	alldifficultregions	124	5	119	5	12	17	0.294	0.040	0.071
+INDEL	COLO829T_ONT	HPRC v1.1	after	alllowmapandsegdupregions	29	2	27	2	7	9	0.222	0.069	0.105
+INDEL	COLO829T_ONT	HPRC v1.1	after	AllTandemRepeatsandHomopolymers_slop5	108	4	104	4	5	9	0.444	0.037	0.068
+INDEL	COLO829T_ONT	HPRC v1.1	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	75	2	73	2	3	5	0.400	0.027	0.050
+INDEL	COLO829T_ONT	HPRC v1.1	after	all	131	7	124	7	29	36	0.194	0.053	0.084
+INDEL	COLO829T_ONT	HPRC v2.1	before	extreme	52	1	51	1	17	18	0.056	0.019	0.029
+INDEL	COLO829T_ONT	HPRC v2.1	before	notinalldifficultregions	7	5	2	5	19	24	0.208	0.714	0.323
+INDEL	COLO829T_ONT	HPRC v2.1	before	alldifficultregions	124	6	118	6	27	33	0.182	0.048	0.076
+INDEL	COLO829T_ONT	HPRC v2.1	before	alllowmapandsegdupregions	29	2	27	2	17	19	0.105	0.069	0.083
+INDEL	COLO829T_ONT	HPRC v2.1	before	AllTandemRepeatsandHomopolymers_slop5	108	4	104	4	9	13	0.308	0.037	0.066
+INDEL	COLO829T_ONT	HPRC v2.1	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	75	2	73	2	3	5	0.400	0.027	0.050
+INDEL	COLO829T_ONT	HPRC v2.1	before	all	131	11	120	11	46	57	0.193	0.084	0.117
+INDEL	COLO829T_ONT	HPRC v2.1	after	extreme	52	1	51	1	17	18	0.056	0.019	0.029
+INDEL	COLO829T_ONT	HPRC v2.1	after	notinalldifficultregions	7	5	2	5	19	24	0.208	0.714	0.323
+INDEL	COLO829T_ONT	HPRC v2.1	after	alldifficultregions	124	6	118	6	26	32	0.188	0.048	0.077
+INDEL	COLO829T_ONT	HPRC v2.1	after	alllowmapandsegdupregions	29	2	27	2	16	18	0.111	0.069	0.085
+INDEL	COLO829T_ONT	HPRC v2.1	after	AllTandemRepeatsandHomopolymers_slop5	108	4	104	4	9	13	0.308	0.037	0.066
+INDEL	COLO829T_ONT	HPRC v2.1	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	75	2	73	2	3	5	0.400	0.027	0.050
+INDEL	COLO829T_ONT	HPRC v2.1	after	all	131	11	120	11	45	56	0.196	0.084	0.118
+INDEL	HCC1395T_Illumina	GRCh38-only	before	extreme	4	1	3	1	664	665	0.002	0.250	0.003
+INDEL	HCC1395T_Illumina	GRCh38-only	before	notinalldifficultregions	94	77	17	77	3351	3428	0.022	0.819	0.044
+INDEL	HCC1395T_Illumina	GRCh38-only	before	alldifficultregions	39	22	17	22	3243	3265	0.007	0.564	0.013
+INDEL	HCC1395T_Illumina	GRCh38-only	before	alllowmapandsegdupregions	5	3	2	3	263	266	0.011	0.600	0.022
+INDEL	HCC1395T_Illumina	GRCh38-only	before	AllTandemRepeatsandHomopolymers_slop5	31	16	15	16	2805	2821	0.006	0.516	0.011
+INDEL	HCC1395T_Illumina	GRCh38-only	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	26	13	13	13	2263	2276	0.006	0.500	0.011
+INDEL	HCC1395T_Illumina	GRCh38-only	before	all	133	99	34	99	6594	6693	0.015	0.744	0.029
+INDEL	HCC1395T_Illumina	GRCh38-only	after	extreme	4	1	3	1	11	12	0.083	0.250	0.125
+INDEL	HCC1395T_Illumina	GRCh38-only	after	notinalldifficultregions	94	77	17	77	52	129	0.597	0.819	0.691
+INDEL	HCC1395T_Illumina	GRCh38-only	after	alldifficultregions	39	16	23	16	40	56	0.286	0.410	0.337
+INDEL	HCC1395T_Illumina	GRCh38-only	after	alllowmapandsegdupregions	5	3	2	3	8	11	0.273	0.600	0.375
+INDEL	HCC1395T_Illumina	GRCh38-only	after	AllTandemRepeatsandHomopolymers_slop5	31	10	21	10	30	40	0.250	0.323	0.282
+INDEL	HCC1395T_Illumina	GRCh38-only	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	26	8	18	8	25	33	0.242	0.308	0.271
+INDEL	HCC1395T_Illumina	GRCh38-only	after	all	133	93	40	93	92	185	0.503	0.699	0.585
+INDEL	HCC1395T_Illumina	HPRC v1.1	before	extreme	4	3	1	3	15	18	0.167	0.750	0.273
+INDEL	HCC1395T_Illumina	HPRC v1.1	before	notinalldifficultregions	94	79	15	79	58	137	0.577	0.840	0.684
+INDEL	HCC1395T_Illumina	HPRC v1.1	before	alldifficultregions	39	18	21	18	53	71	0.254	0.462	0.327
+INDEL	HCC1395T_Illumina	HPRC v1.1	before	alllowmapandsegdupregions	5	4	1	4	4	8	0.500	0.800	0.615
+INDEL	HCC1395T_Illumina	HPRC v1.1	before	AllTandemRepeatsandHomopolymers_slop5	31	11	20	11	45	56	0.196	0.355	0.253
+INDEL	HCC1395T_Illumina	HPRC v1.1	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	26	8	18	8	32	40	0.200	0.308	0.242
+INDEL	HCC1395T_Illumina	HPRC v1.1	before	all	133	97	36	97	111	208	0.466	0.729	0.569
+INDEL	HCC1395T_Illumina	HPRC v1.1	after	extreme	4	3	1	3	13	16	0.188	0.750	0.300
+INDEL	HCC1395T_Illumina	HPRC v1.1	after	notinalldifficultregions	94	79	15	79	45	124	0.637	0.840	0.725
+INDEL	HCC1395T_Illumina	HPRC v1.1	after	alldifficultregions	39	17	22	17	46	63	0.270	0.436	0.333
+INDEL	HCC1395T_Illumina	HPRC v1.1	after	alllowmapandsegdupregions	5	4	1	4	3	7	0.571	0.800	0.667
+INDEL	HCC1395T_Illumina	HPRC v1.1	after	AllTandemRepeatsandHomopolymers_slop5	31	10	21	10	38	48	0.208	0.323	0.253
+INDEL	HCC1395T_Illumina	HPRC v1.1	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	26	8	18	8	26	34	0.235	0.308	0.267
+INDEL	HCC1395T_Illumina	HPRC v1.1	after	all	133	96	37	96	91	187	0.513	0.722	0.600
+INDEL	HCC1395T_Illumina	HPRC v2.1	before	extreme	4	2	2	2	17	19	0.105	0.500	0.174
+INDEL	HCC1395T_Illumina	HPRC v2.1	before	notinalldifficultregions	94	82	12	82	49	131	0.626	0.872	0.729
+INDEL	HCC1395T_Illumina	HPRC v2.1	before	alldifficultregions	39	17	22	17	43	60	0.283	0.436	0.343
+INDEL	HCC1395T_Illumina	HPRC v2.1	before	alllowmapandsegdupregions	5	3	2	3	8	11	0.273	0.600	0.375
+INDEL	HCC1395T_Illumina	HPRC v2.1	before	AllTandemRepeatsandHomopolymers_slop5	31	11	20	11	34	45	0.244	0.355	0.289
+INDEL	HCC1395T_Illumina	HPRC v2.1	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	26	9	17	9	21	30	0.300	0.346	0.321
+INDEL	HCC1395T_Illumina	HPRC v2.1	before	all	133	99	34	99	92	191	0.518	0.744	0.611
+INDEL	HCC1395T_Illumina	HPRC v2.1	after	extreme	4	2	2	2	17	19	0.105	0.500	0.174
+INDEL	HCC1395T_Illumina	HPRC v2.1	after	notinalldifficultregions	94	82	12	82	47	129	0.636	0.872	0.735
+INDEL	HCC1395T_Illumina	HPRC v2.1	after	alldifficultregions	39	17	22	17	42	59	0.288	0.436	0.347
+INDEL	HCC1395T_Illumina	HPRC v2.1	after	alllowmapandsegdupregions	5	3	2	3	8	11	0.273	0.600	0.375
+INDEL	HCC1395T_Illumina	HPRC v2.1	after	AllTandemRepeatsandHomopolymers_slop5	31	11	20	11	33	44	0.250	0.355	0.293
+INDEL	HCC1395T_Illumina	HPRC v2.1	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	26	9	17	9	20	29	0.310	0.346	0.327
+INDEL	HCC1395T_Illumina	HPRC v2.1	after	all	133	99	34	99	89	188	0.527	0.744	0.617
+INDEL	HCC1395T_PacBio	GRCh38-only	before	extreme	4	2	2	2	1683	1685	0.001	0.500	0.002
+INDEL	HCC1395T_PacBio	GRCh38-only	before	notinalldifficultregions	94	78	16	78	3855	3933	0.020	0.830	0.039
+INDEL	HCC1395T_PacBio	GRCh38-only	before	alldifficultregions	39	28	11	28	6352	6380	0.004	0.718	0.009
+INDEL	HCC1395T_PacBio	GRCh38-only	before	alllowmapandsegdupregions	5	3	2	3	495	498	0.006	0.600	0.012
+INDEL	HCC1395T_PacBio	GRCh38-only	before	AllTandemRepeatsandHomopolymers_slop5	31	22	9	22	5784	5806	0.004	0.710	0.008
+INDEL	HCC1395T_PacBio	GRCh38-only	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	26	19	7	19	4314	4333	0.004	0.731	0.009
+INDEL	HCC1395T_PacBio	GRCh38-only	before	all	133	106	27	106	10207	10313	0.010	0.797	0.020
+INDEL	HCC1395T_PacBio	GRCh38-only	after	extreme	4	1	3	1	33	34	0.029	0.250	0.053
+INDEL	HCC1395T_PacBio	GRCh38-only	after	notinalldifficultregions	94	78	16	78	84	162	0.481	0.830	0.609
+INDEL	HCC1395T_PacBio	GRCh38-only	after	alldifficultregions	39	15	24	15	114	129	0.116	0.385	0.179
+INDEL	HCC1395T_PacBio	GRCh38-only	after	alllowmapandsegdupregions	5	3	2	3	15	18	0.167	0.600	0.261
+INDEL	HCC1395T_PacBio	GRCh38-only	after	AllTandemRepeatsandHomopolymers_slop5	31	9	22	9	101	110	0.082	0.290	0.128
+INDEL	HCC1395T_PacBio	GRCh38-only	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	26	9	17	9	82	91	0.099	0.346	0.154
+INDEL	HCC1395T_PacBio	GRCh38-only	after	all	133	93	40	93	198	291	0.320	0.699	0.439
+INDEL	HCC1395T_PacBio	HPRC v1.1	before	extreme	4	3	1	3	13	16	0.188	0.750	0.300
+INDEL	HCC1395T_PacBio	HPRC v1.1	before	notinalldifficultregions	94	78	16	78	55	133	0.586	0.830	0.687
+INDEL	HCC1395T_PacBio	HPRC v1.1	before	alldifficultregions	39	17	22	17	37	54	0.315	0.436	0.366
+INDEL	HCC1395T_PacBio	HPRC v1.1	before	alllowmapandsegdupregions	5	4	1	4	5	9	0.444	0.800	0.571
+INDEL	HCC1395T_PacBio	HPRC v1.1	before	AllTandemRepeatsandHomopolymers_slop5	31	10	21	10	30	40	0.250	0.323	0.282
+INDEL	HCC1395T_PacBio	HPRC v1.1	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	26	9	17	9	25	34	0.265	0.346	0.300
+INDEL	HCC1395T_PacBio	HPRC v1.1	before	all	133	95	38	95	92	187	0.508	0.714	0.594
+INDEL	HCC1395T_PacBio	HPRC v1.1	after	extreme	4	3	1	3	11	14	0.214	0.750	0.333
+INDEL	HCC1395T_PacBio	HPRC v1.1	after	notinalldifficultregions	94	78	16	78	52	130	0.600	0.830	0.696
+INDEL	HCC1395T_PacBio	HPRC v1.1	after	alldifficultregions	39	16	23	16	31	47	0.340	0.410	0.372
+INDEL	HCC1395T_PacBio	HPRC v1.1	after	alllowmapandsegdupregions	5	4	1	4	5	9	0.444	0.800	0.571
+INDEL	HCC1395T_PacBio	HPRC v1.1	after	AllTandemRepeatsandHomopolymers_slop5	31	9	22	9	24	33	0.273	0.290	0.281
+INDEL	HCC1395T_PacBio	HPRC v1.1	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	26	8	18	8	20	28	0.286	0.308	0.296
+INDEL	HCC1395T_PacBio	HPRC v1.1	after	all	133	94	39	94	83	177	0.531	0.707	0.606
+INDEL	HCC1395T_PacBio	HPRC v2.1	before	extreme	4	3	1	3	16	19	0.158	0.750	0.261
+INDEL	HCC1395T_PacBio	HPRC v2.1	before	notinalldifficultregions	94	75	19	75	78	153	0.490	0.798	0.607
+INDEL	HCC1395T_PacBio	HPRC v2.1	before	alldifficultregions	39	20	19	20	48	68	0.294	0.513	0.374
+INDEL	HCC1395T_PacBio	HPRC v2.1	before	alllowmapandsegdupregions	5	4	1	4	7	11	0.364	0.800	0.500
+INDEL	HCC1395T_PacBio	HPRC v2.1	before	AllTandemRepeatsandHomopolymers_slop5	31	13	18	13	36	49	0.265	0.419	0.325
+INDEL	HCC1395T_PacBio	HPRC v2.1	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	26	12	14	12	25	37	0.324	0.462	0.381
+INDEL	HCC1395T_PacBio	HPRC v2.1	before	all	133	95	38	95	126	221	0.430	0.714	0.537
+INDEL	HCC1395T_PacBio	HPRC v2.1	after	extreme	4	3	1	3	13	16	0.188	0.750	0.300
+INDEL	HCC1395T_PacBio	HPRC v2.1	after	notinalldifficultregions	94	75	19	75	52	127	0.591	0.798	0.679
+INDEL	HCC1395T_PacBio	HPRC v2.1	after	alldifficultregions	39	16	23	16	31	47	0.340	0.410	0.372
+INDEL	HCC1395T_PacBio	HPRC v2.1	after	alllowmapandsegdupregions	5	4	1	4	5	9	0.444	0.800	0.571
+INDEL	HCC1395T_PacBio	HPRC v2.1	after	AllTandemRepeatsandHomopolymers_slop5	31	9	22	9	23	32	0.281	0.290	0.286
+INDEL	HCC1395T_PacBio	HPRC v2.1	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	26	9	17	9	17	26	0.346	0.346	0.346
+INDEL	HCC1395T_PacBio	HPRC v2.1	after	all	133	91	42	91	83	174	0.523	0.684	0.593
+INDEL	HCC1395T_ONT	GRCh38-only	before	extreme	4	1	3	1	471	472	0.002	0.250	0.004
+INDEL	HCC1395T_ONT	GRCh38-only	before	notinalldifficultregions	94	62	32	62	2056	2118	0.029	0.660	0.056
+INDEL	HCC1395T_ONT	GRCh38-only	before	alldifficultregions	39	9	30	9	1657	1666	0.005	0.231	0.011
+INDEL	HCC1395T_ONT	GRCh38-only	before	alllowmapandsegdupregions	5	3	2	3	219	222	0.014	0.600	0.026
+INDEL	HCC1395T_ONT	GRCh38-only	before	AllTandemRepeatsandHomopolymers_slop5	31	5	26	5	1342	1347	0.004	0.161	0.007
+INDEL	HCC1395T_ONT	GRCh38-only	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	26	5	21	5	919	924	0.005	0.192	0.011
+INDEL	HCC1395T_ONT	GRCh38-only	before	all	133	71	62	71	3713	3784	0.019	0.534	0.036
+INDEL	HCC1395T_ONT	GRCh38-only	after	extreme	4	1	3	1	27	28	0.036	0.250	0.062
+INDEL	HCC1395T_ONT	GRCh38-only	after	notinalldifficultregions	94	62	32	62	67	129	0.481	0.660	0.556
+INDEL	HCC1395T_ONT	GRCh38-only	after	alldifficultregions	39	8	31	8	101	109	0.073	0.205	0.108
+INDEL	HCC1395T_ONT	GRCh38-only	after	alllowmapandsegdupregions	5	3	2	3	16	19	0.158	0.600	0.250
+INDEL	HCC1395T_ONT	GRCh38-only	after	AllTandemRepeatsandHomopolymers_slop5	31	4	27	4	88	92	0.043	0.129	0.065
+INDEL	HCC1395T_ONT	GRCh38-only	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	26	4	22	4	84	88	0.045	0.154	0.070
+INDEL	HCC1395T_ONT	GRCh38-only	after	all	133	70	63	70	168	238	0.294	0.526	0.377
+INDEL	HCC1395T_ONT	HPRC v1.1	before	extreme	4	1	3	1	10	11	0.091	0.250	0.133
+INDEL	HCC1395T_ONT	HPRC v1.1	before	notinalldifficultregions	94	61	33	61	39	100	0.610	0.649	0.629
+INDEL	HCC1395T_ONT	HPRC v1.1	before	alldifficultregions	39	12	27	12	16	28	0.429	0.308	0.358
+INDEL	HCC1395T_ONT	HPRC v1.1	before	alllowmapandsegdupregions	5	3	2	3	5	8	0.375	0.600	0.462
+INDEL	HCC1395T_ONT	HPRC v1.1	before	AllTandemRepeatsandHomopolymers_slop5	31	6	25	6	9	15	0.400	0.194	0.261
+INDEL	HCC1395T_ONT	HPRC v1.1	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	26	6	20	6	8	14	0.429	0.231	0.300
+INDEL	HCC1395T_ONT	HPRC v1.1	before	all	133	73	60	73	55	128	0.570	0.549	0.559
+INDEL	HCC1395T_ONT	HPRC v1.1	after	extreme	4	1	3	1	10	11	0.091	0.250	0.133
+INDEL	HCC1395T_ONT	HPRC v1.1	after	notinalldifficultregions	94	61	33	61	37	98	0.622	0.649	0.635
+INDEL	HCC1395T_ONT	HPRC v1.1	after	alldifficultregions	39	12	27	12	13	25	0.480	0.308	0.375
+INDEL	HCC1395T_ONT	HPRC v1.1	after	alllowmapandsegdupregions	5	3	2	3	5	8	0.375	0.600	0.462
+INDEL	HCC1395T_ONT	HPRC v1.1	after	AllTandemRepeatsandHomopolymers_slop5	31	6	25	6	7	13	0.462	0.194	0.273
+INDEL	HCC1395T_ONT	HPRC v1.1	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	26	6	20	6	6	12	0.500	0.231	0.316
+INDEL	HCC1395T_ONT	HPRC v1.1	after	all	133	73	60	73	50	123	0.593	0.549	0.570
+INDEL	HCC1395T_ONT	HPRC v2.1	before	extreme	4	2	2	2	16	18	0.111	0.500	0.182
+INDEL	HCC1395T_ONT	HPRC v2.1	before	notinalldifficultregions	94	67	27	67	52	119	0.563	0.713	0.629
+INDEL	HCC1395T_ONT	HPRC v2.1	before	alldifficultregions	39	13	26	13	34	47	0.277	0.333	0.302
+INDEL	HCC1395T_ONT	HPRC v2.1	before	alllowmapandsegdupregions	5	4	1	4	16	20	0.200	0.800	0.320
+INDEL	HCC1395T_ONT	HPRC v2.1	before	AllTandemRepeatsandHomopolymers_slop5	31	6	25	6	16	22	0.273	0.194	0.226
+INDEL	HCC1395T_ONT	HPRC v2.1	before	AllHomopolymers_ge7bp_imperfectge11bp_slop5	26	6	20	6	10	16	0.375	0.231	0.286
+INDEL	HCC1395T_ONT	HPRC v2.1	before	all	133	80	53	80	86	166	0.482	0.602	0.535
+INDEL	HCC1395T_ONT	HPRC v2.1	after	extreme	4	2	2	2	16	18	0.111	0.500	0.182
+INDEL	HCC1395T_ONT	HPRC v2.1	after	notinalldifficultregions	94	67	27	67	50	117	0.573	0.713	0.635
+INDEL	HCC1395T_ONT	HPRC v2.1	after	alldifficultregions	39	13	26	13	33	46	0.283	0.333	0.306
+INDEL	HCC1395T_ONT	HPRC v2.1	after	alllowmapandsegdupregions	5	4	1	4	16	20	0.200	0.800	0.320
+INDEL	HCC1395T_ONT	HPRC v2.1	after	AllTandemRepeatsandHomopolymers_slop5	31	6	25	6	16	22	0.273	0.194	0.226
+INDEL	HCC1395T_ONT	HPRC v2.1	after	AllHomopolymers_ge7bp_imperfectge11bp_slop5	26	6	20	6	10	16	0.375	0.231	0.286
+INDEL	HCC1395T_ONT	HPRC v2.1	after	all	133	80	53	80	83	163	0.491	0.602	0.541

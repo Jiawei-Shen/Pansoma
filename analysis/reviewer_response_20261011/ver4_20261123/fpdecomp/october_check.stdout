@@ -1,0 +1,115 @@
+HG008T Illumina SNV all|all n: old 121139 new 121139 OK
+HG008T Illumina SNV all|all d46_tensor: old 14832 new 14832 OK
+HG008T Illumina SNV all|all linear_raw_fp: old 121139 new 121139 OK
+HG008T Illumina SNV all|all d46_raw_fp_all: old 2870 new 2870 OK
+HG008T Illumina SNV germline|ge46 n: old 101866 new 101866 OK
+HG008T Illumina SNV germline|ge46 d46_tensor: old 322 new 322 OK
+HG008T Illumina SNV germline|ge46 linear_raw_fp: old 121139 new 121139 OK
+HG008T Illumina SNV germline|ge46 d46_raw_fp_all: old 2870 new 2870 OK
+HG008T Illumina INDEL all|all n: old 39930 new 39930 OK
+HG008T Illumina INDEL all|all d46_tensor: old 2989 new 2989 OK
+HG008T Illumina INDEL all|all linear_raw_fp: old 39930 new 39930 OK
+HG008T Illumina INDEL all|all d46_raw_fp_all: old 2867 new 2867 OK
+HG008T Illumina INDEL germline|ge46 n: old 31450 new 31450 OK
+HG008T Illumina INDEL germline|ge46 d46_tensor: old 87 new 87 OK
+HG008T Illumina INDEL germline|ge46 linear_raw_fp: old 39930 new 39930 OK
+HG008T Illumina INDEL germline|ge46 d46_raw_fp_all: old 2867 new 2867 OK
+compared 162 numbers of 2 cell(s) with /scratch/jshen/Github/Pansoma/tmp/r32_prepon_20261104/r32_prepon.tsv: 162 equal, 0 different; classes only in the new output: []
+# False-positive decomposition, six-tumor current models (ver4, 2026-11-23)
+
+chr1, benchmark regions, PASS calls, seed 0. GRCh38-only = six-tumor model without population site features as a model input (m4m6_graphs_20261110/multicancer6_<P>_<KIND>_linear_nositef); HPRC v2.1 = six-tumor current model (SNV snv_newpipe_20261109/multicancer6_<P>_SNV_newpipe, INDEL release_s0_<P>_INDEL). Share = % of the GRCh38-graph FP alleles; candidates retained = % of the alleles of that class with a tensor in the v2.1 test set of the same reads. In the HPRC v2.1 graph = carried by >= 46 of 463 HPRC v2.1 haplotypes.
+
+## Response Table 3.8 (= 2.6), SNV, FP before population filtering
+
+| Dataset | GRCh38-graph FP before population filtering | Matched-normal germline in HPRC v2.1 graph (share; candidates retained on HPRC v2.1) | Matched-normal germline not in HPRC v2.1 graph (share; candidates retained on HPRC v2.1) | Non-germline FP (% of GRCh38-graph FP) | HPRC v2.1 FP before population filtering |
+|---|---|---|---|---|---|
+| HG008T Illumina | 121,139 | 84%; 0.3% | 13%; 85% | 3% | 2,870 |
+
+## Response Table 3.9, INDEL, FP before population filtering
+
+| Dataset | GRCh38-graph FP before population filtering | Matched-normal germline in HPRC v2.1 graph (share; candidates retained on HPRC v2.1) | Matched-normal germline not in HPRC v2.1 graph (share; candidates retained on HPRC v2.1) | Non-germline FP (% of GRCh38-graph FP) | HPRC v2.1 FP before population filtering |
+|---|---|---|---|---|---|
+| HG008T Illumina | 39,930 | 79%; 0.3% | 16%; 44% | 5% | 2,867 |
+
+## Second pair: SNV, FP after population filtering
+
+| Dataset | GRCh38-graph FP after population filtering | Matched-normal germline in HPRC v2.1 graph (share; candidates retained on HPRC v2.1) | Matched-normal germline not in HPRC v2.1 graph (share; candidates retained on HPRC v2.1) | Non-germline FP (% of GRCh38-graph FP) | HPRC v2.1 FP after population filtering |
+|---|---|---|---|---|---|
+| HG008T Illumina | 1,089 | 2%; 5.9% | 57%; 93% | 41% | 792 |
+
+## Second pair: INDEL, FP after population filtering
+
+| Dataset | GRCh38-graph FP after population filtering | Matched-normal germline in HPRC v2.1 graph (share; candidates retained on HPRC v2.1) | Matched-normal germline not in HPRC v2.1 graph (share; candidates retained on HPRC v2.1) | Non-germline FP (% of GRCh38-graph FP) | HPRC v2.1 FP after population filtering |
+|---|---|---|---|---|---|
+| HG008T Illumina | 1,348 | 5%; 0% | 26%; 56% | 69% | 385 |
+
+## Counts behind the four tables
+
+n = GRCh38-only FP alleles of the class; candidate on v2.1 = of them, alleles with a tensor in the v2.1 set; FP on v2.1 = of them, alleles that are also a PASS false positive of the v2.1 model at the same stage.
+
+### SNV, FP before population filtering
+
+| Dataset | truth (TP + FN) | GRCh38-only FP records (allele keys) | germline, >= 46 haplotypes: n; candidate on v2.1; FP on v2.1 | germline, < 46 haplotypes: n; candidate on v2.1; FP on v2.1 | not germline: n; candidate on v2.1; FP on v2.1 | HPRC v2.1 FP records (allele keys) | v2.1 FP that are also GRCh38-only FP |
+|---|---|---|---|---|---|---|---|
+| HG008T Illumina | 697 | 121,139 (121,139) | 101,866; 322; 5 | 16,200; 13,797; 2,057 | 3,073; 713; 71 | 2,870 (2,870) | 2,133 |
+
+### INDEL, FP before population filtering
+
+| Dataset | truth (TP + FN) | GRCh38-only FP records (allele keys) | germline, >= 46 haplotypes: n; candidate on v2.1; FP on v2.1 | germline, < 46 haplotypes: n; candidate on v2.1; FP on v2.1 | not germline: n; candidate on v2.1; FP on v2.1 | HPRC v2.1 FP records (allele keys) | v2.1 FP that are also GRCh38-only FP |
+|---|---|---|---|---|---|---|---|
+| HG008T Illumina | 587 | 39,930 (39,930) | 31,450; 87; 40 | 6,316; 2,804; 1,887 | 2,164; 98; 26 | 2,867 (2,867) | 1,953 |
+
+### SNV, FP after population filtering
+
+| Dataset | truth (TP + FN) | GRCh38-only FP records (allele keys) | germline, >= 46 haplotypes: n; candidate on v2.1; FP on v2.1 | germline, < 46 haplotypes: n; candidate on v2.1; FP on v2.1 | not germline: n; candidate on v2.1; FP on v2.1 | HPRC v2.1 FP records (allele keys) | v2.1 FP that are also GRCh38-only FP |
+|---|---|---|---|---|---|---|---|
+| HG008T Illumina | 697 | 1,089 (1,089) | 17; 1; 0 | 625; 584; 516 | 447; 229; 11 | 792 (792) | 527 |
+
+### INDEL, FP after population filtering
+
+| Dataset | truth (TP + FN) | GRCh38-only FP records (allele keys) | germline, >= 46 haplotypes: n; candidate on v2.1; FP on v2.1 | germline, < 46 haplotypes: n; candidate on v2.1; FP on v2.1 | not germline: n; candidate on v2.1; FP on v2.1 | HPRC v2.1 FP records (allele keys) | v2.1 FP that are also GRCh38-only FP |
+|---|---|---|---|---|---|---|---|
+| HG008T Illumina | 587 | 1,348 (1,348) | 73; 0; 0 | 346; 193; 146 | 929; 54; 13 | 385 (385) | 159 |
+
+## Sets and PASS rules
+
+| Dataset | kind | GRCh38-only set | PASS rule (GRCh38-only) | HPRC v2.1 set | PASS rule (v2.1) |
+|---|---|---|---|---|---|
+| HG008T Illumina | SNV | HG008T_Illumina_linear | vcf_chr1: p_somatic >= 0.06399419158697128 (validation recall 0.9) | HG008T_Illumina_d46 | vcf_chr1: p_somatic >= 0.32374927401542664 (validation recall 0.9); off-reference tensors rescored by predict --offref-site90: offref_call (argmax) |
+| HG008T Illumina | INDEL | HG008T_Illumina_linear | vcf_chr1: p_somatic >= 0.04801846295595169 (validation recall 0.9) | HG008T_Illumina_d46 | vcf_chr1: p_somatic >= 0.10646037012338638 (validation recall 0.9) |
+# Ranges for the R3.2 / R2.5 sentences, recomputed on the ver4 tables
+
+Range = min-max over the rows of the group, from the unrounded values, in the cell format of the tables. "smallest class n" = the smallest denominator among the rows of the range.
+
+### FP before population filtering
+
+| quantity (sentence it replaces) | HG008T + COLO829T (six rows) | all nine rows | HCC1395T (three rows) |
+|---|---|---|---|
+| SNV: graph-represented germline, share of GRCh38-graph FP (R3.2 / Table 3.8 caption "71-86%"; R2.5 "over 70%") | 84% (smallest class n 121,139) | 84% (smallest class n 121,139) | - |
+| SNV: graph-represented germline alleles that keep a candidate on v2.1 ("0.2-0.6%") | 0.3% (smallest class n 101,866) | 0.3% (smallest class n 101,866) | - |
+| SNV: graph-absent germline alleles that keep a candidate on v2.1 ("83-88%") | 85% (smallest class n 16,200) | 85% (smallest class n 16,200) | - |
+| SNV: graph-absent germline, share of GRCh38-graph FP | 13% (smallest class n 121,139) | 13% (smallest class n 121,139) | - |
+| SNV: non-germline, share of GRCh38-graph FP | 3% (smallest class n 121,139) | 3% (smallest class n 121,139) | - |
+| INDEL: graph-represented germline alleles that keep a candidate on v2.1, Illumina ("0.1-0.3%") | 0.3% (smallest class n 31,450) | 0.3% (smallest class n 31,450) | - |
+| INDEL: graph-represented germline alleles that keep a candidate on v2.1, long reads ("15-22%") | - | - | - |
+| INDEL: graph-represented germline, share of GRCh38-graph FP | 79% (smallest class n 39,930) | 79% (smallest class n 39,930) | - |
+| INDEL: graph-absent germline alleles that keep a candidate on v2.1 | 44% (smallest class n 6,316) | 44% (smallest class n 6,316) | - |
+| INDEL: non-germline, share of GRCh38-graph FP, ONT ("43-57%") | - | - | - |
+| INDEL: non-germline, share of GRCh38-graph FP, Illumina + PacBio HiFi / Fiber-seq | 5% (smallest class n 39,930) | 5% (smallest class n 39,930) | - |
+
+### FP after population filtering
+
+| quantity (sentence it replaces) | HG008T + COLO829T (six rows) | all nine rows | HCC1395T (three rows) |
+|---|---|---|---|
+| SNV: graph-represented germline, share of GRCh38-graph FP (R3.2 / Table 3.8 caption "71-86%"; R2.5 "over 70%") | 2% (smallest class n 1,089) | 2% (smallest class n 1,089) | - |
+| SNV: graph-represented germline alleles that keep a candidate on v2.1 ("0.2-0.6%") | 5.9% (smallest class n 17) | 5.9% (smallest class n 17) | - |
+| SNV: graph-absent germline alleles that keep a candidate on v2.1 ("83-88%") | 93% (smallest class n 625) | 93% (smallest class n 625) | - |
+| SNV: graph-absent germline, share of GRCh38-graph FP | 57% (smallest class n 1,089) | 57% (smallest class n 1,089) | - |
+| SNV: non-germline, share of GRCh38-graph FP | 41% (smallest class n 1,089) | 41% (smallest class n 1,089) | - |
+| INDEL: graph-represented germline alleles that keep a candidate on v2.1, Illumina ("0.1-0.3%") | 0% (smallest class n 73) | 0% (smallest class n 73) | - |
+| INDEL: graph-represented germline alleles that keep a candidate on v2.1, long reads ("15-22%") | - | - | - |
+| INDEL: graph-represented germline, share of GRCh38-graph FP | 5% (smallest class n 1,348) | 5% (smallest class n 1,348) | - |
+| INDEL: graph-absent germline alleles that keep a candidate on v2.1 | 56% (smallest class n 346) | 56% (smallest class n 346) | - |
+| INDEL: non-germline, share of GRCh38-graph FP, ONT ("43-57%") | - | - | - |
+| INDEL: non-germline, share of GRCh38-graph FP, Illumina + PacBio HiFi / Fiber-seq | 69% (smallest class n 1,348) | 69% (smallest class n 1,348) | - |
+

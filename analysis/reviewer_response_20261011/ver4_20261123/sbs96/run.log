@@ -1,0 +1,37 @@
+Cosine similarity of SBS96 spectra to the chr1 somatic truth (chr1, benchmark regions; PASS SNV calls after the population filter, TP + FP; Pansoma = six-tumor model on HPRC v2.1, seed 0).
+
+| Tumor | Platform | chr1 truth SNVs | Pansoma, n | Pansoma, cosine to truth | DeepSomatic-TO, n | DeepSomatic-TO, cosine to truth | ClairS-TO, n | ClairS-TO, cosine to truth | Truth vs matched-normal germline, cosine |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| HG008T | Illumina | 697 | 1,001 | 0.975 | 1,649 | 0.921 | 1,435 | 0.912 | 0.585 |
+| HG008T | PacBio HiFi | 697 | 1,046 | 0.974 | 1,321 | 0.943 | 1,292 | 0.918 | 0.585 |
+| HG008T | ONT | 697 | 730 | 0.973 | 1,954 | 0.878 | 1,399 | 0.899 | 0.585 |
+| COLO829T | Illumina | 2,443 | 2,384 | 0.994 | 4,779 | 0.913 | 4,335 | 0.913 | 0.428 |
+| COLO829T | Fiber-seq | 2,443 | 2,117 | 0.997 | 1,853 | 0.982 | 2,334 | 0.995 | 0.428 |
+| COLO829T | ONT | 2,443 | 2,196 | 0.996 | 2,915 | 0.984 | 2,233 | 0.993 | 0.428 |
+| HCC1395T | Illumina | 3,440 | 3,608 | 0.998 | 4,083 | 0.993 | 3,667 | 0.993 | 0.524 |
+| HCC1395T | PacBio HiFi | 3,440 | 3,363 | 0.997 | 4,165 | 0.994 | 3,512 | 0.994 | 0.524 |
+| HCC1395T | ONT | 3,440 | 3,059 | 0.995 | 3,488 | 0.994 | 3,174 | 0.993 | 0.524 |
+
+Cosine similarity of the same call sets to the matched normal's germline spectrum (chr1, same regions) and the share of T>C substitutions.
+
+| Tumor | Platform | Germline SNVs | Pansoma, cosine to germline | DeepSomatic-TO, cosine to germline | ClairS-TO, cosine to germline | T>C share: truth | germline | Pansoma | DeepSomatic-TO | ClairS-TO |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| HG008T | Illumina | 296,786 | 0.651 | 0.815 | 0.821 | 0.089 | 0.329 | 0.115 | 0.178 | 0.166 |
+| HG008T | PacBio HiFi | 296,786 | 0.674 | 0.763 | 0.827 | 0.089 | 0.329 | 0.121 | 0.160 | 0.186 |
+| HG008T | ONT | 296,786 | 0.518 | 0.858 | 0.847 | 0.089 | 0.329 | 0.045 | 0.207 | 0.199 |
+| COLO829T | Illumina | 298,057 | 0.439 | 0.596 | 0.620 | 0.075 | 0.327 | 0.072 | 0.125 | 0.073 |
+| COLO829T | Fiber-seq | 298,057 | 0.400 | 0.457 | 0.490 | 0.075 | 0.327 | 0.034 | 0.108 | 0.109 |
+| COLO829T | ONT | 298,057 | 0.421 | 0.549 | 0.494 | 0.075 | 0.327 | 0.060 | 0.144 | 0.111 |
+| HCC1395T | Illumina | 273,569 | 0.537 | 0.597 | 0.595 | 0.114 | 0.332 | 0.124 | 0.145 | 0.127 |
+| HCC1395T | PacBio HiFi | 273,569 | 0.509 | 0.592 | 0.589 | 0.114 | 0.332 | 0.111 | 0.137 | 0.137 |
+| HCC1395T | ONT | 273,569 | 0.527 | 0.576 | 0.575 | 0.114 | 0.332 | 0.120 | 0.134 | 0.131 |
+
+CHECK OK: truth n = TP + FN of report.json and truth spectrum identical across platforms and callers: 27 call sets (9 Pansoma + 18 comparator), all equal
+CHECK OK: n of every call set = tp_call + fp of its report.json (Pansoma pon.at_threshold; comparators eval_bed.pass_pon.at_threshold), no record skipped: 27 call sets, all equal
+CHECK OK: HG008T / COLO829T: comparator spectra (96 counts), n, cosine to truth, cosine to germline and UV share equal supplementary/R3.5/sbs96.tsv and cosine.tsv in 12 of 12 comparator rows; truth and germline spectra and the truth-germline cosine also equal
+CHECK OK: germline HG008T: recounted from /scratch/jshen/data/HG008_GIAB/dipcall_HG008N_GRCh38/HG008N_GRCh38_dipcall.dip.vcf.gz in /scratch/jshen/data/HG008_GIAB/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_all.bed (chr1, FILTER PASS / . / GAP1 / GAP2, single-base ALT in the genotype): 296,786 SNVs, 96 counts equal the E18 row
+CHECK OK: germline COLO829T: recounted from /scratch/qfu/COLO829BL_DSA/dipcall_hg38/dipcall_hg38.dip.vcf.gz in /scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/SMaHT_v2_easy_difficult_extreme.union.bed (chr1, FILTER PASS / . / GAP1 / GAP2, single-base ALT in the genotype): 298,057 SNVs, 96 counts equal the E18 row
+CHECK OK: germline HCC1395T: recounted from /scratch/jshen/data/CASTLE/HCC1395/truth/HCC1395BL_germline_DeepVariant_hybrid_QUAL10.vcf.gz in /scratch/jshen/data/CASTLE/HCC1395/truth/SEQC2_High-Confidence_Regions_v1.2.bed (chr1, FILTER PASS / . / GAP1 / GAP2, single-base ALT in the genotype): 273,569 SNVs, 96 counts equal the E18 row
+wrote /scratch/jshen/Github/Pansoma/analysis/reviewer_response_20261011/ver4_20261123/sbs96/fig_3.2_HG008T.png 3000 x 1800 px
+wrote /scratch/jshen/Github/Pansoma/analysis/reviewer_response_20261011/ver4_20261123/sbs96/fig_3.2_COLO829T.png 3000 x 1800 px
+wrote /scratch/jshen/Github/Pansoma/analysis/reviewer_response_20261011/ver4_20261123/sbs96/fig_3.2_HCC1395T.png 3000 x 1800 px

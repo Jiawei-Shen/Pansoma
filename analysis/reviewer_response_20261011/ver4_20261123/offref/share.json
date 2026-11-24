@@ -1,0 +1,200 @@
+{
+ "rows": [
+  {
+   "tumor": "HG008T",
+   "platform": "Illumina",
+   "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_Illumina_SNV_newpipe/vcf_chr1_HG008T_Illumina_d46",
+   "unplaced_pass": 77,
+   "tp_call": 544,
+   "fp": 644,
+   "placed_pass_records_pon": 1188,
+   "placed_pass_records_raw": 1201,
+   "raw_tp_call": 545,
+   "raw_fp": 656,
+   "share_rtg": 0.06086956521739131,
+   "share_records": 0.06086956521739131,
+   "share_raw_records": 0.06025039123630673,
+   "truth_nobed": 702
+  },
+  {
+   "tumor": "HG008T",
+   "platform": "PacBio HiFi",
+   "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_PacBio_SNV_newpipe/vcf_chr1_HG008T_PacBio_d46",
+   "unplaced_pass": 143,
+   "tp_call": 571,
+   "fp": 541,
+   "placed_pass_records_pon": 1112,
+   "placed_pass_records_raw": 1117,
+   "raw_tp_call": 573,
+   "raw_fp": 544,
+   "share_rtg": 0.11394422310756971,
+   "share_records": 0.11394422310756971,
+   "share_raw_records": 0.11349206349206349,
+   "truth_nobed": 702
+  },
+  {
+   "tumor": "HG008T",
+   "platform": "ONT",
+   "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_ONT_SNV_newpipe/vcf_chr1_HG008T_ONT_d46",
+   "unplaced_pass": 90,
+   "tp_call": 460,
+   "fp": 318,
+   "placed_pass_records_pon": 778,
+   "placed_pass_records_raw": 778,
+   "raw_tp_call": 460,
+   "raw_fp": 318,
+   "share_rtg": 0.10368663594470046,
+   "share_records": 0.10368663594470046,
+   "share_raw_records": 0.10368663594470046,
+   "truth_nobed": 702
+  },
+  {
+   "tumor": "COLO829T",
+   "platform": "Illumina",
+   "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_Illumina_SNV_newpipe/vcf_chr1_COLO829T_Illumina_d46",
+   "unplaced_pass": 110,
+   "tp_call": 1848,
+   "fp": 536,
+   "placed_pass_records_pon": 2384,
+   "placed_pass_records_raw": 2406,
+   "raw_tp_call": 1856,
+   "raw_fp": 550,
+   "share_rtg": 0.044105854049719326,
+   "share_records": 0.044105854049719326,
+   "share_raw_records": 0.04372019077901431,
+   "truth_nobed": 2443
+  },
+  {
+   "tumor": "COLO829T",
+   "platform": "Fiber-seq",
+   "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_PacBio_SNV_newpipe/vcf_chr1_COLO829T_fiberseq_d46",
+   "unplaced_pass": 79,
+   "tp_call": 1830,
+   "fp": 287,
+   "placed_pass_records_pon": 2117,
+   "placed_pass_records_raw": 2123,
+   "raw_tp_call": 1832,
+   "raw_fp": 291,
+   "share_rtg": 0.03597449908925319,
+   "share_records": 0.03597449908925319,
+   "share_raw_records": 0.035876475930971846,
+   "truth_nobed": 2443
+  },
+  {
+   "tumor": "COLO829T",
+   "platform": "ONT",
+   "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_ONT_SNV_newpipe/vcf_chr1_COLO829T_ONT_d46",
+   "unplaced_pass": 111,
+   "tp_call": 1729,
+   "fp": 467,
+   "placed_pass_records_pon": 2196,
+   "placed_pass_records_raw": 2208,
+   "raw_tp_call": 1731,
+   "raw_fp": 477,
+   "share_rtg": 0.04811443433029909,
+   "share_records": 0.04811443433029909,
+   "share_raw_records": 0.047865459249676584,
+   "truth_nobed": 2443
+  },
+  {
+   "tumor": "HCC1395T",
+   "platform": "Illumina",
+   "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_Illumina_SNV_newpipe/vcf_chr1_HCC1395T_Illumina_d46",
+   "unplaced_pass": 76,
+   "tp_call": 3113,
+   "fp": 971,
+   "placed_pass_records_pon": 4084,
+   "placed_pass_records_raw": 4110,
+   "raw_tp_call": 3124,
+   "raw_fp": 986,
+   "share_rtg": 0.01826923076923077,
+   "share_records": 0.01826923076923077,
+   "share_raw_records": 0.018155757286192068,
+   "truth_nobed": 3440
+  },
+  {
+   "tumor": "HCC1395T",
+   "platform": "PacBio HiFi",
+   "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_PacBio_SNV_newpipe/vcf_chr1_HCC1395T_PacBio_d46",
+   "unplaced_pass": 106,
+   "tp_call": 2950,
+   "fp": 783,
+   "placed_pass_records_pon": 3733,
+   "placed_pass_records_raw": 3750,
+   "raw_tp_call": 2959,
+   "raw_fp": 791,
+   "share_rtg": 0.027611357124251105,
+   "share_records": 0.027611357124251105,
+   "share_raw_records": 0.027489626556016597,
+   "truth_nobed": 3440
+  },
+  {
+   "tumor": "HCC1395T",
+   "platform": "ONT",
+   "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_ONT_SNV_newpipe/vcf_chr1_HCC1395T_ONT_d46",
+   "unplaced_pass": 143,
+   "tp_call": 2326,
+   "fp": 1220,
+   "placed_pass_records_pon": 3546,
+   "placed_pass_records_raw": 3601,
+   "raw_tp_call": 2331,
+   "raw_fp": 1270,
+   "share_rtg": 0.03876389265383573,
+   "share_records": 0.03876389265383573,
+   "share_raw_records": 0.03819444444444445,
+   "truth_nobed": 3440
+  }
+ ],
+ "ranges": {
+  "HG008T / COLO829T": {
+   "share_rtg": [
+    0.03597449908925319,
+    0.11394422310756971
+   ],
+   "share_records": [
+    0.03597449908925319,
+    0.11394422310756971
+   ]
+  },
+  "HCC1395T": {
+   "share_rtg": [
+    0.01826923076923077,
+    0.03876389265383573
+   ],
+   "share_records": [
+    0.01826923076923077,
+    0.03876389265383573
+   ]
+  },
+  "all nine": {
+   "share_rtg": [
+    0.01826923076923077,
+    0.11394422310756971
+   ],
+   "share_records": [
+    0.01826923076923077,
+    0.11394422310756971
+   ]
+  },
+  "HG008T": {
+   "share_rtg": [
+    0.06086956521739131,
+    0.11394422310756971
+   ],
+   "share_records": [
+    0.06086956521739131,
+    0.11394422310756971
+   ]
+  },
+  "COLO829T": {
+   "share_rtg": [
+    0.03597449908925319,
+    0.04811443433029909
+   ],
+   "share_records": [
+    0.03597449908925319,
+    0.04811443433029909
+   ]
+  }
+ }
+}

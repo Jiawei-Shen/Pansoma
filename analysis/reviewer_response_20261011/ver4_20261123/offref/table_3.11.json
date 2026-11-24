@@ -1,0 +1,154 @@
+{
+ "rows": [
+  {
+   "tumor": "HG008T",
+   "platform": "Illumina",
+   "name": "m6np__HG008T_Illumina__vcf_chr1",
+   "calls": 77,
+   "chm13_allele": 50,
+   "chm13_anchor_interval": 23,
+   "chm13_none": 4,
+   "chm13_vcf_only": 50,
+   "grch38_class_i": 9,
+   "grch38_or_chm13": 53
+  },
+  {
+   "tumor": "HG008T",
+   "platform": "PacBio HiFi",
+   "name": "m6np__HG008T_PacBio__vcf_chr1",
+   "calls": 143,
+   "chm13_allele": 113,
+   "chm13_anchor_interval": 30,
+   "chm13_none": 0,
+   "chm13_vcf_only": 113,
+   "grch38_class_i": 9,
+   "grch38_or_chm13": 115
+  },
+  {
+   "tumor": "HG008T",
+   "platform": "ONT",
+   "name": "m6np__HG008T_ONT__vcf_chr1",
+   "calls": 90,
+   "chm13_allele": 83,
+   "chm13_anchor_interval": 6,
+   "chm13_none": 1,
+   "chm13_vcf_only": 83,
+   "grch38_class_i": 4,
+   "grch38_or_chm13": 85
+  },
+  {
+   "tumor": "COLO829T",
+   "platform": "Illumina",
+   "name": "m6np__COLO829T_Illumina__vcf_chr1",
+   "calls": 110,
+   "chm13_allele": 53,
+   "chm13_anchor_interval": 20,
+   "chm13_none": 37,
+   "chm13_vcf_only": 53,
+   "grch38_class_i": 7,
+   "grch38_or_chm13": 56
+  },
+  {
+   "tumor": "COLO829T",
+   "platform": "Fiber-seq",
+   "name": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "calls": 79,
+   "chm13_allele": 46,
+   "chm13_anchor_interval": 14,
+   "chm13_none": 19,
+   "chm13_vcf_only": 46,
+   "grch38_class_i": 6,
+   "grch38_or_chm13": 47
+  },
+  {
+   "tumor": "COLO829T",
+   "platform": "ONT",
+   "name": "m6np__COLO829T_ONT__vcf_chr1",
+   "calls": 111,
+   "chm13_allele": 76,
+   "chm13_anchor_interval": 30,
+   "chm13_none": 5,
+   "chm13_vcf_only": 76,
+   "grch38_class_i": 8,
+   "grch38_or_chm13": 80
+  },
+  {
+   "tumor": "HCC1395T",
+   "platform": "Illumina",
+   "name": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "calls": 76,
+   "chm13_allele": 54,
+   "chm13_anchor_interval": 15,
+   "chm13_none": 7,
+   "chm13_vcf_only": 54,
+   "grch38_class_i": 5,
+   "grch38_or_chm13": 55
+  },
+  {
+   "tumor": "HCC1395T",
+   "platform": "PacBio HiFi",
+   "name": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "calls": 106,
+   "chm13_allele": 95,
+   "chm13_anchor_interval": 10,
+   "chm13_none": 1,
+   "chm13_vcf_only": 95,
+   "grch38_class_i": 8,
+   "grch38_or_chm13": 98
+  },
+  {
+   "tumor": "HCC1395T",
+   "platform": "ONT",
+   "name": "m6np__HCC1395T_ONT__vcf_chr1",
+   "calls": 143,
+   "chm13_allele": 120,
+   "chm13_anchor_interval": 23,
+   "chm13_none": 0,
+   "chm13_vcf_only": 120,
+   "grch38_class_i": 4,
+   "grch38_or_chm13": 120
+  }
+ ],
+ "totals": {
+  "all": {
+   "calls": 935,
+   "chm13_allele": 690,
+   "chm13_anchor_interval": 171,
+   "chm13_none": 74,
+   "grch38_class_i": 60,
+   "grch38_or_chm13": 709
+  },
+  "excluding HCC1395T": {
+   "calls": 610,
+   "chm13_allele": 421,
+   "chm13_anchor_interval": 123,
+   "chm13_none": 66,
+   "grch38_class_i": 43,
+   "grch38_or_chm13": 436
+  },
+  "HG008T": {
+   "calls": 310,
+   "chm13_allele": 246,
+   "chm13_anchor_interval": 59,
+   "chm13_none": 5,
+   "grch38_class_i": 22,
+   "grch38_or_chm13": 253
+  },
+  "COLO829T": {
+   "calls": 300,
+   "chm13_allele": 175,
+   "chm13_anchor_interval": 64,
+   "chm13_none": 61,
+   "grch38_class_i": 21,
+   "grch38_or_chm13": 183
+  },
+  "HCC1395T": {
+   "calls": 325,
+   "chm13_allele": 269,
+   "chm13_anchor_interval": 48,
+   "chm13_none": 8,
+   "grch38_class_i": 17,
+   "grch38_or_chm13": 273
+  }
+ }
+}

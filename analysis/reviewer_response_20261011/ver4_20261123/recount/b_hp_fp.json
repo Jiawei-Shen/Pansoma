@@ -1,0 +1,441 @@
+{
+ "truth": {
+  "fasta": "/scratch/jshen/data/HapMap/GCA_000001405.15_GRCh38_no_alt_analysis_set.fasta",
+  "panels": [
+   "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/af-only-gnomad.hg38.vcf.gz",
+   "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/CoLoRSdb.GRCh38.v1.1.0.deepvariant.glnexus.vcf.gz"
+  ],
+  "chr1_truth": 635,
+  "multi_alt_records": 1,
+  "multi_alt_in_bed": 1,
+  "chr1_tagged": 418,
+  "in_bed": 587,
+  "in_bed_tagged": 384,
+  "in_bed_context": {
+   "none": 80,
+   "HP>=7": 435,
+   "STR": 65,
+   "HP4-6": 7
+  },
+  "in_bed_tagged_context": {
+   "HP>=7": 294,
+   "STR": 57,
+   "none": 33
+  },
+  "in_bed_tagged_by_panel": {
+   "gnomAD": 50,
+   "CoLoRSdb": 376
+  },
+  "in_bed_filter_hp_ge8": 418,
+  "in_bed_tagged_filter_hp_ge8": 286,
+  "in_bed_tagged_filter_hp_ge7": 286,
+  "in_bed_tagged_floor_001": 286,
+  "in_bed_tagged_floor_1e4": 98,
+  "report_truth_pon_tags": {
+   "records": 635,
+   "tagged": 418,
+   "tagged_pass": 418,
+   "PoN1_gnomAD": 54,
+   "PoN2_dbSNP": 0,
+   "PoN3_1000G": 0,
+   "PoN4_CoLoRSdb": 410
+  },
+  "recall_bound": 0.3458262350936968
+ },
+ "fp_hp7": {
+  "letter ver3 (E17a final_models: ppr8 on all platforms)": {
+   "Illumina": {
+    "rule": "ppr8",
+    "fp_hp7": [
+     32,
+     63,
+     57
+    ],
+    "fp": [
+     108,
+     133,
+     102
+    ],
+    "share": [
+     0.2962962962962963,
+     0.47368421052631576,
+     0.5588235294117647
+    ],
+    "share_seed_mean": 0.44293467874479225,
+    "share_pooled": 0.44314868804664725,
+    "tp": [
+     65,
+     81,
+     87
+    ],
+    "calls": [
+     173,
+     214,
+     189
+    ],
+    "precision_hp7_pooled": 0.4432234432234432,
+    "call": [
+     "p_somatic >= 0.38437458872795105 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+     "p_somatic >= 0.19937816262245178 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+     "p_somatic >= 0.5997829437255859 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))"
+    ],
+    "fp_by_context": [
+     {
+      "HP>=7": 32,
+      "HP4-6": 16,
+      "STR": 6,
+      "VNTR": 0,
+      "none": 54,
+      "complex": 0
+     },
+     {
+      "HP>=7": 63,
+      "HP4-6": 11,
+      "STR": 12,
+      "VNTR": 0,
+      "none": 47,
+      "complex": 0
+     },
+     {
+      "HP>=7": 57,
+      "HP4-6": 12,
+      "STR": 2,
+      "VNTR": 0,
+      "none": 31,
+      "complex": 0
+     }
+    ]
+   },
+   "PacBio": {
+    "rule": "ppr8",
+    "fp_hp7": [
+     59,
+     71,
+     71
+    ],
+    "fp": [
+     107,
+     123,
+     100
+    ],
+    "share": [
+     0.5514018691588785,
+     0.5772357723577236,
+     0.71
+    ],
+    "share_seed_mean": 0.6128792138388673,
+    "share_pooled": 0.6090909090909091,
+    "tp": [
+     94,
+     100,
+     104
+    ],
+    "calls": [
+     201,
+     223,
+     204
+    ],
+    "precision_hp7_pooled": 0.4625668449197861,
+    "call": [
+     "p_somatic >= 0.6854676604270935 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+     "p_somatic >= 0.6684039235115051 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+     "p_somatic >= 0.7070106863975525 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))"
+    ],
+    "fp_by_context": [
+     {
+      "HP>=7": 59,
+      "HP4-6": 9,
+      "STR": 4,
+      "VNTR": 0,
+      "none": 35,
+      "complex": 0
+     },
+     {
+      "HP>=7": 71,
+      "HP4-6": 11,
+      "STR": 4,
+      "VNTR": 0,
+      "none": 37,
+      "complex": 0
+     },
+     {
+      "HP>=7": 71,
+      "HP4-6": 5,
+      "STR": 1,
+      "VNTR": 0,
+      "none": 23,
+      "complex": 0
+     }
+    ]
+   },
+   "ONT": {
+    "rule": "ppr8",
+    "fp_hp7": [
+     258,
+     229,
+     372
+    ],
+    "fp": [
+     371,
+     335,
+     526
+    ],
+    "share": [
+     0.6954177897574124,
+     0.6835820895522388,
+     0.7072243346007605
+    ],
+    "share_seed_mean": 0.6954080713034706,
+    "share_pooled": 0.6972402597402597,
+    "tp": [
+     88,
+     90,
+     95
+    ],
+    "calls": [
+     459,
+     425,
+     621
+    ],
+    "precision_hp7_pooled": 0.14442231075697212,
+    "call": [
+     "p_somatic >= 0.3256518840789795 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+     "p_somatic >= 0.24007463455200195 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+     "p_somatic >= 0.2895215153694153 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))"
+    ],
+    "fp_by_context": [
+     {
+      "HP>=7": 258,
+      "HP4-6": 18,
+      "STR": 16,
+      "VNTR": 1,
+      "none": 78,
+      "complex": 0
+     },
+     {
+      "HP>=7": 229,
+      "HP4-6": 17,
+      "STR": 18,
+      "VNTR": 1,
+      "none": 70,
+      "complex": 0
+     },
+     {
+      "HP>=7": 372,
+      "HP4-6": 22,
+      "STR": 30,
+      "VNTR": 3,
+      "none": 99,
+      "complex": 0
+     }
+    ]
+   }
+  },
+  "ver4 (ppr8 Illumina / PacBio HiFi, pp ONT)": {
+   "Illumina": {
+    "rule": "ppr8",
+    "fp_hp7": [
+     32,
+     63,
+     57
+    ],
+    "fp": [
+     108,
+     133,
+     102
+    ],
+    "share": [
+     0.2962962962962963,
+     0.47368421052631576,
+     0.5588235294117647
+    ],
+    "share_seed_mean": 0.44293467874479225,
+    "share_pooled": 0.44314868804664725,
+    "tp": [
+     65,
+     81,
+     87
+    ],
+    "calls": [
+     173,
+     214,
+     189
+    ],
+    "precision_hp7_pooled": 0.4432234432234432,
+    "call": [
+     "p_somatic >= 0.38437458872795105 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+     "p_somatic >= 0.19937816262245178 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+     "p_somatic >= 0.5997829437255859 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))"
+    ],
+    "fp_by_context": [
+     {
+      "HP>=7": 32,
+      "HP4-6": 16,
+      "STR": 6,
+      "VNTR": 0,
+      "none": 54,
+      "complex": 0
+     },
+     {
+      "HP>=7": 63,
+      "HP4-6": 11,
+      "STR": 12,
+      "VNTR": 0,
+      "none": 47,
+      "complex": 0
+     },
+     {
+      "HP>=7": 57,
+      "HP4-6": 12,
+      "STR": 2,
+      "VNTR": 0,
+      "none": 31,
+      "complex": 0
+     }
+    ]
+   },
+   "PacBio": {
+    "rule": "ppr8",
+    "fp_hp7": [
+     59,
+     71,
+     71
+    ],
+    "fp": [
+     107,
+     123,
+     100
+    ],
+    "share": [
+     0.5514018691588785,
+     0.5772357723577236,
+     0.71
+    ],
+    "share_seed_mean": 0.6128792138388673,
+    "share_pooled": 0.6090909090909091,
+    "tp": [
+     94,
+     100,
+     104
+    ],
+    "calls": [
+     201,
+     223,
+     204
+    ],
+    "precision_hp7_pooled": 0.4625668449197861,
+    "call": [
+     "p_somatic >= 0.6854676604270935 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+     "p_somatic >= 0.6684039235115051 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))",
+     "p_somatic >= 0.7070106863975525 (validation post-PoN recall 0.8 of the callable positives (val.somatic_at_recall_postpon_callable))"
+    ],
+    "fp_by_context": [
+     {
+      "HP>=7": 59,
+      "HP4-6": 9,
+      "STR": 4,
+      "VNTR": 0,
+      "none": 35,
+      "complex": 0
+     },
+     {
+      "HP>=7": 71,
+      "HP4-6": 11,
+      "STR": 4,
+      "VNTR": 0,
+      "none": 37,
+      "complex": 0
+     },
+     {
+      "HP>=7": 71,
+      "HP4-6": 5,
+      "STR": 1,
+      "VNTR": 0,
+      "none": 23,
+      "complex": 0
+     }
+    ]
+   },
+   "ONT": {
+    "rule": "pp",
+    "fp_hp7": [
+     17,
+     13,
+     12
+    ],
+    "fp": [
+     43,
+     40,
+     38
+    ],
+    "share": [
+     0.3953488372093023,
+     0.325,
+     0.3157894736842105
+    ],
+    "share_seed_mean": 0.3453794369645043,
+    "share_pooled": 0.34710743801652894,
+    "tp": [
+     47,
+     44,
+     46
+    ],
+    "calls": [
+     90,
+     84,
+     84
+    ],
+    "precision_hp7_pooled": 0.46835443037974683,
+    "call": [
+     "p_somatic >= 0.7489863634109497 (validation post-PoN best F1 (val.somatic_threshold_postpon))",
+     "p_somatic >= 0.7716135382652283 (validation post-PoN best F1 (val.somatic_threshold_postpon))",
+     "p_somatic >= 0.8755925297737122 (validation post-PoN best F1 (val.somatic_threshold_postpon))"
+    ],
+    "fp_by_context": [
+     {
+      "HP>=7": 17,
+      "HP4-6": 2,
+      "STR": 1,
+      "VNTR": 0,
+      "none": 23,
+      "complex": 0
+     },
+     {
+      "HP>=7": 13,
+      "HP4-6": 2,
+      "STR": 1,
+      "VNTR": 0,
+      "none": 24,
+      "complex": 0
+     },
+     {
+      "HP>=7": 12,
+      "HP4-6": 6,
+      "STR": 2,
+      "VNTR": 0,
+      "none": 18,
+      "complex": 0
+     }
+    ]
+   }
+  }
+ },
+ "check_old_per_seed_rows": 9,
+ "check_old_pooled_md": {
+  "Illumina": "0.443",
+  "PacBio": "0.609",
+  "ONT": "0.697"
+ },
+ "ver4_range_seed_mean": [
+  0.3453794369645043,
+  0.6128792138388673
+ ],
+ "ver4_range_pooled": [
+  0.34710743801652894,
+  0.6090909090909091
+ ],
+ "ver4_range_per_seed": [
+  0.2962962962962963,
+  0.71
+ ]
+}

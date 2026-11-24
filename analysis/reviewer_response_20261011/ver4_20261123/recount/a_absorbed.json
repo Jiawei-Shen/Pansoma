@@ -1,0 +1,225 @@
+{
+ "check_code_equals_per_allele_tsv": true,
+ "HG008T_d46_all_final": {
+  "n": 1607,
+  "present": 120,
+  "absent": 1461,
+  "ambiguous": 26
+ },
+ "HG008T_d46_all_before_step5": {
+  "n": 1607,
+  "present": 110,
+  "absent": 1481,
+  "ambiguous": 16
+ },
+ "HG008T_d46_SNV_final": {
+  "n": 140,
+  "present": 11,
+  "absent": 115,
+  "ambiguous": 14
+ },
+ "HG008T_d46_SNV_before_step5": {
+  "n": 140,
+  "present": 6,
+  "absent": 130,
+  "ambiguous": 4
+ },
+ "HG008T_d46_INDEL_final": {
+  "n": 1467,
+  "present": 109,
+  "absent": 1346,
+  "ambiguous": 12
+ },
+ "HG008T_d46_INDEL_before_step5": {
+  "n": 1467,
+  "present": 104,
+  "absent": 1351,
+  "ambiguous": 12
+ },
+ "COLO829T_d46_all_final": {
+  "n": 401,
+  "present": 35,
+  "absent": 363,
+  "ambiguous": 3
+ },
+ "COLO829T_d46_all_before_step5": {
+  "n": 401,
+  "present": 27,
+  "absent": 371,
+  "ambiguous": 3
+ },
+ "COLO829T_d46_SNV_final": {
+  "n": 54,
+  "present": 1,
+  "absent": 52,
+  "ambiguous": 1
+ },
+ "COLO829T_d46_SNV_before_step5": {
+  "n": 54,
+  "present": 1,
+  "absent": 52,
+  "ambiguous": 1
+ },
+ "COLO829T_d46_INDEL_final": {
+  "n": 347,
+  "present": 34,
+  "absent": 311,
+  "ambiguous": 2
+ },
+ "COLO829T_d46_INDEL_before_step5": {
+  "n": 347,
+  "present": 26,
+  "absent": 319,
+  "ambiguous": 2
+ },
+ "HG008T_tumor_final": {
+  "absent_INDEL": 1346,
+  "novel_ALT": 1148,
+  "novel_any": 1342
+ },
+ "HG008T_tumor_before_step5": {
+  "absent_INDEL": 1351,
+  "novel_ALT": 1153,
+  "novel_any": 1347
+ },
+ "COLO829T_INDEL_changed_by_step5": {
+  "1166": "absent->present",
+  "2190": "absent->present",
+  "2510": "absent->present",
+  "2561": "absent->present",
+  "27926": "absent->present",
+  "29389": "absent->present",
+  "29579": "absent->present",
+  "36311": "absent->present"
+ },
+ "COLO829T_same_length_before_step5": 22,
+ "COLO829T_same_length_final": 15,
+ "old22_by_final_category_and_tumor_asm": {
+  "absent: novel non-truth sequence only": 1,
+  "absent: one tumor hap = normal hap, other hap novel non-truth sequence": 3,
+  "absent: tumor carries only normal haplotype sequences": 4,
+  "absent: tumor carries the truth allele (not in normal)": 7,
+  "present: tumor carries only normal haplotype sequences": 7
+ },
+ "old22_final_category": {
+  "present": 7,
+  "absent": 15
+ },
+ "same_length_final_category": {
+  "absent": 15
+ },
+ "same_length_final_tumor_asm": {
+  "tumor carries the truth allele (not in normal)": 7,
+  "tumor carries only normal haplotype sequences": 4,
+  "one tumor hap = normal hap, other hap novel non-truth sequence": 3,
+  "novel non-truth sequence only": 1
+ },
+ "same_length_before_tumor_asm": {
+  "tumor carries only normal haplotype sequences": 11,
+  "tumor carries the truth allele (not in normal)": 7,
+  "one tumor hap = normal hap, other hap novel non-truth sequence": 3,
+  "novel non-truth sequence only": 1
+ },
+ "germline_like_final": {
+  "present": 34,
+  "normal_only": 4,
+  "unresolved": 4,
+  "lo": 38,
+  "hi": 42,
+  "of": 347
+ },
+ "germline_like_before_step5": {
+  "present": 26,
+  "normal_only": 11,
+  "unresolved": 4,
+  "lo": 37,
+  "hi": 41,
+  "of": 347
+ },
+ "upper_bound_E5d_table": {
+  "final": 49,
+  "before": 48,
+  "of": 347
+ },
+ "moved_to_present_tumor_asm": {
+  "1166": {
+   "verdict": "all_eq_hapX",
+   "r37": "tumor carries only normal haplotype sequences",
+   "was_same_length": true
+  },
+  "2190": {
+   "verdict": "all_eq_hapX",
+   "r37": "tumor carries only normal haplotype sequences",
+   "was_same_length": true
+  },
+  "2510": {
+   "verdict": "novel_other",
+   "r37": "novel non-truth sequence only",
+   "was_same_length": false
+  },
+  "2561": {
+   "verdict": "novel_other",
+   "r37": "tumor carries only normal haplotype sequences",
+   "was_same_length": true
+  },
+  "27926": {
+   "verdict": "all_eq_hapX",
+   "r37": "tumor carries only normal haplotype sequences",
+   "was_same_length": true
+  },
+  "29389": {
+   "verdict": "all_eq_hapX",
+   "r37": "tumor carries only normal haplotype sequences",
+   "was_same_length": true
+  },
+  "29579": {
+   "verdict": "no_change_both",
+   "r37": "tumor carries only normal haplotype sequences",
+   "was_same_length": true
+  },
+  "36311": {
+   "verdict": "no_change_both",
+   "r37": "tumor carries only normal haplotype sequences",
+   "was_same_length": true
+  }
+ },
+ "COLO829T_tumor_final": {
+  "absent_INDEL": 311,
+  "novel_ALT": 226,
+  "novel_any": 258,
+  "verdicts": {
+   "novel_ALT": 226,
+   "novel_other": 32,
+   "no_change_hom": 38,
+   "all_eq_hapX": 10,
+   "all_eq_hapY": 2,
+   "no_change_both": 2,
+   "NA": 1
+  },
+  "r37": {
+   "tumor carries the truth allele (not in normal)": 226,
+   "novel non-truth sequence only": 20,
+   "tumor carries only normal haplotype sequences": 53,
+   "one tumor hap = normal hap, other hap novel non-truth sequence": 11,
+   "no hit": 1
+  }
+ },
+ "COLO829T_tumor_before_step5": {
+  "absent_INDEL": 319,
+  "novel_ALT": 226,
+  "novel_any": 260
+ },
+ "reproduces_letter_ver3": {
+  "colo_present_26": true,
+  "colo_snv_present_1": true,
+  "same_length_22": true,
+  "truth_7": true,
+  "normal_only_11": true,
+  "unresolved_4": true,
+  "range_37_41": true,
+  "hg008t_1153_of_1351": true,
+  "colo_226_of_319": true,
+  "hg008t_present_110": true,
+  "colo_present_27": true
+ }
+}

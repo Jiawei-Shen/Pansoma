@@ -1,0 +1,318 @@
+[
+ {
+  "tumor": "HG008T",
+  "platform": "Illumina",
+  "dataset": "HG008T Illumina",
+  "kind": "SNV",
+  "lin_dir": "/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/HG008_Illumina_SNV_linear_7fc7396/vcf_chr1",
+  "d46_dir": "/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/HG008_Illumina_SNV_d46_7fc7396/vcf_chr1",
+  "lin_set": "HG008T_Illumina_linear",
+  "d46_set": "HG008T_Illumina_d46",
+  "germline_vcf": "/scratch/jshen/data/HG008_GIAB/dipcall_HG008N_GRCh38/HG008N_GRCh38_dipcall.dip.vcf.gz",
+  "d46_tensors_chr1": 260400,
+  "report": {
+   "lin_raw": {
+    "tp": 583,
+    "fn": 114,
+    "fp": 121139,
+    "truth": 697,
+    "precision": 0.0048,
+    "recall": 0.8364,
+    "f1": 0.0095
+   },
+   "d46_raw": {
+    "tp": 618,
+    "fn": 79,
+    "fp": 2870,
+    "truth": 697,
+    "precision": 0.1772,
+    "recall": 0.8867,
+    "f1": 0.2953
+   },
+   "lin_pon": {
+    "tp": 548,
+    "fn": 149,
+    "fp": 1089,
+    "truth": 697,
+    "precision": 0.3348,
+    "recall": 0.7862,
+    "f1": 0.4696
+   },
+   "d46_pon": {
+    "tp": 594,
+    "fn": 103,
+    "fp": 792,
+    "truth": 697,
+    "precision": 0.4286,
+    "recall": 0.8522,
+    "f1": 0.5703
+   },
+   "lin_call_rule": "p_somatic >= 0.06399419158697128 (validation recall 0.9)",
+   "lin_threshold": 0.06399419158697128,
+   "lin_checkpoint": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_Illumina_SNV_linear_7fc7396/best.pth",
+   "d46_call_rule": "p_somatic >= 0.32374927401542664 (validation recall 0.9); off-reference tensors rescored by predict --offref-site90: offref_call (argmax)",
+   "d46_threshold": 0.32374927401542664,
+   "d46_checkpoint": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_Illumina_SNV_d46_7fc7396/best.pth",
+   "truth_vcf": "/scratch/jshen/data/HG008_GIAB/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_tumorvariants.vcf.gz",
+   "truth_bed": "/scratch/jshen/data/HG008_GIAB/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_all.bed"
+  },
+  "stages": {
+   "raw": {
+    "lin_fp_records": 121139,
+    "lin_fp_keys": 121139,
+    "d46_fp_records": 2870,
+    "d46_fp_keys": 2870,
+    "truth": 697,
+    "germline_in_graph": {
+     "n": 101866,
+     "pon_removes": 101849,
+     "d46_tensor": 322,
+     "d46_raw_fp": 5,
+     "d46_pon_fp": 0
+    },
+    "germline_not_in_graph": {
+     "n": 16200,
+     "pon_removes": 15575,
+     "d46_tensor": 13797,
+     "d46_raw_fp": 2057,
+     "d46_pon_fp": 516
+    },
+    "germline_all": {
+     "n": 118066,
+     "pon_removes": 117424,
+     "d46_tensor": 14119,
+     "d46_raw_fp": 2062,
+     "d46_pon_fp": 516
+    },
+    "non_germline": {
+     "n": 3073,
+     "pon_removes": 2626,
+     "d46_tensor": 713,
+     "d46_raw_fp": 71,
+     "d46_pon_fp": 11
+    },
+    "non_germline_in_graph": {
+     "n": 836,
+     "pon_removes": 823,
+     "d46_tensor": 40,
+     "d46_raw_fp": 2,
+     "d46_pon_fp": 0
+    },
+    "all": {
+     "n": 121139,
+     "pon_removes": 120050,
+     "d46_tensor": 14832,
+     "d46_raw_fp": 2133,
+     "d46_pon_fp": 527
+    }
+   },
+   "pon": {
+    "lin_fp_records": 1089,
+    "lin_fp_keys": 1089,
+    "d46_fp_records": 792,
+    "d46_fp_keys": 792,
+    "truth": 697,
+    "germline_in_graph": {
+     "n": 17,
+     "pon_removes": 0,
+     "d46_tensor": 1,
+     "d46_raw_fp": 0,
+     "d46_pon_fp": 0
+    },
+    "germline_not_in_graph": {
+     "n": 625,
+     "pon_removes": 0,
+     "d46_tensor": 584,
+     "d46_raw_fp": 516,
+     "d46_pon_fp": 516
+    },
+    "germline_all": {
+     "n": 642,
+     "pon_removes": 0,
+     "d46_tensor": 585,
+     "d46_raw_fp": 516,
+     "d46_pon_fp": 516
+    },
+    "non_germline": {
+     "n": 447,
+     "pon_removes": 0,
+     "d46_tensor": 229,
+     "d46_raw_fp": 11,
+     "d46_pon_fp": 11
+    },
+    "non_germline_in_graph": {
+     "n": 13,
+     "pon_removes": 0,
+     "d46_tensor": 4,
+     "d46_raw_fp": 0,
+     "d46_pon_fp": 0
+    },
+    "all": {
+     "n": 1089,
+     "pon_removes": 0,
+     "d46_tensor": 814,
+     "d46_raw_fp": 527,
+     "d46_pon_fp": 527
+    }
+   }
+  }
+ },
+ {
+  "tumor": "HG008T",
+  "platform": "Illumina",
+  "dataset": "HG008T Illumina",
+  "kind": "INDEL",
+  "lin_dir": "/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/HG008_Illumina_INDEL_linear_7fc7396/vcf_chr1",
+  "d46_dir": "/scratch/jshen/data/pansoma_net_v2_runs/reviewer_cpu_20261013/HG008_Illumina_INDEL_d46_7fc7396/vcf_chr1",
+  "lin_set": "HG008T_Illumina_linear",
+  "d46_set": "HG008T_Illumina_d46",
+  "germline_vcf": "/scratch/jshen/data/HG008_GIAB/dipcall_HG008N_GRCh38/HG008N_GRCh38_dipcall.dip.vcf.gz",
+  "d46_tensors_chr1": 9534,
+  "report": {
+   "lin_raw": {
+    "tp": 433,
+    "fn": 154,
+    "fp": 39930,
+    "truth": 587,
+    "precision": 0.0107,
+    "recall": 0.7376,
+    "f1": 0.0211
+   },
+   "d46_raw": {
+    "tp": 219,
+    "fn": 368,
+    "fp": 2867,
+    "truth": 587,
+    "precision": 0.071,
+    "recall": 0.3731,
+    "f1": 0.1192
+   },
+   "lin_pon": {
+    "tp": 152,
+    "fn": 435,
+    "fp": 1348,
+    "truth": 587,
+    "precision": 0.1013,
+    "recall": 0.2589,
+    "f1": 0.1457
+   },
+   "d46_pon": {
+    "tp": 141,
+    "fn": 446,
+    "fp": 385,
+    "truth": 587,
+    "precision": 0.2681,
+    "recall": 0.2402,
+    "f1": 0.2534
+   },
+   "lin_call_rule": "p_somatic >= 0.04801846295595169 (validation recall 0.9)",
+   "lin_threshold": 0.04801846295595169,
+   "lin_checkpoint": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_Illumina_INDEL_linear_7fc7396/best.pth",
+   "d46_call_rule": "p_somatic >= 0.10646037012338638 (validation recall 0.9)",
+   "d46_threshold": 0.10646037012338638,
+   "d46_checkpoint": "/scratch/jshen/data/pansoma_net_v2_runs/ris_7fc7396_20261012/HG008_Illumina_INDEL_d46_7fc7396/best.pth",
+   "truth_vcf": "/scratch/jshen/data/HG008_GIAB/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_tumorvariants.vcf.gz",
+   "truth_bed": "/scratch/jshen/data/HG008_GIAB/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_all.bed"
+  },
+  "stages": {
+   "raw": {
+    "lin_fp_records": 39930,
+    "lin_fp_keys": 39930,
+    "d46_fp_records": 2867,
+    "d46_fp_keys": 2867,
+    "truth": 587,
+    "germline_in_graph": {
+     "n": 31450,
+     "pon_removes": 31377,
+     "d46_tensor": 87,
+     "d46_raw_fp": 40,
+     "d46_pon_fp": 0
+    },
+    "germline_not_in_graph": {
+     "n": 6316,
+     "pon_removes": 5970,
+     "d46_tensor": 2804,
+     "d46_raw_fp": 1887,
+     "d46_pon_fp": 146
+    },
+    "germline_all": {
+     "n": 37766,
+     "pon_removes": 37347,
+     "d46_tensor": 2891,
+     "d46_raw_fp": 1927,
+     "d46_pon_fp": 146
+    },
+    "non_germline": {
+     "n": 2164,
+     "pon_removes": 1235,
+     "d46_tensor": 98,
+     "d46_raw_fp": 26,
+     "d46_pon_fp": 13
+    },
+    "non_germline_in_graph": {
+     "n": 466,
+     "pon_removes": 383,
+     "d46_tensor": 2,
+     "d46_raw_fp": 0,
+     "d46_pon_fp": 0
+    },
+    "all": {
+     "n": 39930,
+     "pon_removes": 38582,
+     "d46_tensor": 2989,
+     "d46_raw_fp": 1953,
+     "d46_pon_fp": 159
+    }
+   },
+   "pon": {
+    "lin_fp_records": 1348,
+    "lin_fp_keys": 1348,
+    "d46_fp_records": 385,
+    "d46_fp_keys": 385,
+    "truth": 587,
+    "germline_in_graph": {
+     "n": 73,
+     "pon_removes": 0,
+     "d46_tensor": 0,
+     "d46_raw_fp": 0,
+     "d46_pon_fp": 0
+    },
+    "germline_not_in_graph": {
+     "n": 346,
+     "pon_removes": 0,
+     "d46_tensor": 193,
+     "d46_raw_fp": 146,
+     "d46_pon_fp": 146
+    },
+    "germline_all": {
+     "n": 419,
+     "pon_removes": 0,
+     "d46_tensor": 193,
+     "d46_raw_fp": 146,
+     "d46_pon_fp": 146
+    },
+    "non_germline": {
+     "n": 929,
+     "pon_removes": 0,
+     "d46_tensor": 54,
+     "d46_raw_fp": 13,
+     "d46_pon_fp": 13
+    },
+    "non_germline_in_graph": {
+     "n": 83,
+     "pon_removes": 0,
+     "d46_tensor": 0,
+     "d46_raw_fp": 0,
+     "d46_pon_fp": 0
+    },
+    "all": {
+     "n": 1348,
+     "pon_removes": 0,
+     "d46_tensor": 247,
+     "d46_raw_fp": 159,
+     "d46_pon_fp": 159
+    }
+   }
+  }
+ }
+]

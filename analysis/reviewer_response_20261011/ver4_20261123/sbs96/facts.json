@@ -1,0 +1,895 @@
+{
+ "per_dataset": {
+  "HG008T_Illumina": {
+   "truth_n": 697,
+   "n": {
+    "Pansoma": 1001,
+    "DeepSomatic-TO": 1649,
+    "ClairS-TO": 1435
+   },
+   "cosine_to_truth": {
+    "Pansoma": "0.975",
+    "DeepSomatic-TO": "0.921",
+    "ClairS-TO": "0.912"
+   },
+   "cosine_to_germline": {
+    "Pansoma": "0.651",
+    "DeepSomatic-TO": "0.815",
+    "ClairS-TO": "0.821"
+   },
+   "uv_share": {
+    "Pansoma": "0.275",
+    "DeepSomatic-TO": "0.216",
+    "ClairS-TO": "0.248"
+   },
+   "TtoC_share": {
+    "Pansoma": "0.115",
+    "DeepSomatic-TO": "0.178",
+    "ClairS-TO": "0.166"
+   },
+   "closest_to_truth_unrounded": "Pansoma",
+   "pansoma_minus_best_comparator_cosine_to_truth": "+0.0540",
+   "pansoma_closest_or_tied_at_3_decimals": true,
+   "farthest_from_germline_unrounded": "Pansoma",
+   "pansoma_minus_lowest_comparator_cosine_to_germline": "-0.1643"
+  },
+  "HG008T_PacBio": {
+   "truth_n": 697,
+   "n": {
+    "Pansoma": 1046,
+    "DeepSomatic-TO": 1321,
+    "ClairS-TO": 1292
+   },
+   "cosine_to_truth": {
+    "Pansoma": "0.974",
+    "DeepSomatic-TO": "0.943",
+    "ClairS-TO": "0.918"
+   },
+   "cosine_to_germline": {
+    "Pansoma": "0.674",
+    "DeepSomatic-TO": "0.763",
+    "ClairS-TO": "0.827"
+   },
+   "uv_share": {
+    "Pansoma": "0.272",
+    "DeepSomatic-TO": "0.245",
+    "ClairS-TO": "0.236"
+   },
+   "TtoC_share": {
+    "Pansoma": "0.121",
+    "DeepSomatic-TO": "0.160",
+    "ClairS-TO": "0.186"
+   },
+   "closest_to_truth_unrounded": "Pansoma",
+   "pansoma_minus_best_comparator_cosine_to_truth": "+0.0313",
+   "pansoma_closest_or_tied_at_3_decimals": true,
+   "farthest_from_germline_unrounded": "Pansoma",
+   "pansoma_minus_lowest_comparator_cosine_to_germline": "-0.0896"
+  },
+  "HG008T_ONT": {
+   "truth_n": 697,
+   "n": {
+    "Pansoma": 730,
+    "DeepSomatic-TO": 1954,
+    "ClairS-TO": 1399
+   },
+   "cosine_to_truth": {
+    "Pansoma": "0.973",
+    "DeepSomatic-TO": "0.878",
+    "ClairS-TO": "0.899"
+   },
+   "cosine_to_germline": {
+    "Pansoma": "0.518",
+    "DeepSomatic-TO": "0.858",
+    "ClairS-TO": "0.847"
+   },
+   "uv_share": {
+    "Pansoma": "0.321",
+    "DeepSomatic-TO": "0.236",
+    "ClairS-TO": "0.238"
+   },
+   "TtoC_share": {
+    "Pansoma": "0.045",
+    "DeepSomatic-TO": "0.207",
+    "ClairS-TO": "0.199"
+   },
+   "closest_to_truth_unrounded": "Pansoma",
+   "pansoma_minus_best_comparator_cosine_to_truth": "+0.0741",
+   "pansoma_closest_or_tied_at_3_decimals": true,
+   "farthest_from_germline_unrounded": "Pansoma",
+   "pansoma_minus_lowest_comparator_cosine_to_germline": "-0.3285"
+  },
+  "COLO829T_Illumina": {
+   "truth_n": 2443,
+   "n": {
+    "Pansoma": 2384,
+    "DeepSomatic-TO": 4779,
+    "ClairS-TO": 4335
+   },
+   "cosine_to_truth": {
+    "Pansoma": "0.994",
+    "DeepSomatic-TO": "0.913",
+    "ClairS-TO": "0.913"
+   },
+   "cosine_to_germline": {
+    "Pansoma": "0.439",
+    "DeepSomatic-TO": "0.596",
+    "ClairS-TO": "0.620"
+   },
+   "uv_share": {
+    "Pansoma": "0.531",
+    "DeepSomatic-TO": "0.336",
+    "ClairS-TO": "0.414"
+   },
+   "TtoC_share": {
+    "Pansoma": "0.072",
+    "DeepSomatic-TO": "0.125",
+    "ClairS-TO": "0.073"
+   },
+   "closest_to_truth_unrounded": "Pansoma",
+   "pansoma_minus_best_comparator_cosine_to_truth": "+0.0807",
+   "pansoma_closest_or_tied_at_3_decimals": true,
+   "farthest_from_germline_unrounded": "Pansoma",
+   "pansoma_minus_lowest_comparator_cosine_to_germline": "-0.1565"
+  },
+  "COLO829T_fiberseq": {
+   "truth_n": 2443,
+   "n": {
+    "Pansoma": 2117,
+    "DeepSomatic-TO": 1853,
+    "ClairS-TO": 2334
+   },
+   "cosine_to_truth": {
+    "Pansoma": "0.997",
+    "DeepSomatic-TO": "0.982",
+    "ClairS-TO": "0.995"
+   },
+   "cosine_to_germline": {
+    "Pansoma": "0.400",
+    "DeepSomatic-TO": "0.457",
+    "ClairS-TO": "0.490"
+   },
+   "uv_share": {
+    "Pansoma": "0.623",
+    "DeepSomatic-TO": "0.477",
+    "ClairS-TO": "0.539"
+   },
+   "TtoC_share": {
+    "Pansoma": "0.034",
+    "DeepSomatic-TO": "0.108",
+    "ClairS-TO": "0.109"
+   },
+   "closest_to_truth_unrounded": "Pansoma",
+   "pansoma_minus_best_comparator_cosine_to_truth": "+0.0017",
+   "pansoma_closest_or_tied_at_3_decimals": true,
+   "farthest_from_germline_unrounded": "Pansoma",
+   "pansoma_minus_lowest_comparator_cosine_to_germline": "-0.0567"
+  },
+  "COLO829T_ONT": {
+   "truth_n": 2443,
+   "n": {
+    "Pansoma": 2196,
+    "DeepSomatic-TO": 2915,
+    "ClairS-TO": 2233
+   },
+   "cosine_to_truth": {
+    "Pansoma": "0.996",
+    "DeepSomatic-TO": "0.984",
+    "ClairS-TO": "0.993"
+   },
+   "cosine_to_germline": {
+    "Pansoma": "0.421",
+    "DeepSomatic-TO": "0.549",
+    "ClairS-TO": "0.494"
+   },
+   "uv_share": {
+    "Pansoma": "0.590",
+    "DeepSomatic-TO": "0.463",
+    "ClairS-TO": "0.546"
+   },
+   "TtoC_share": {
+    "Pansoma": "0.060",
+    "DeepSomatic-TO": "0.144",
+    "ClairS-TO": "0.111"
+   },
+   "closest_to_truth_unrounded": "Pansoma",
+   "pansoma_minus_best_comparator_cosine_to_truth": "+0.0023",
+   "pansoma_closest_or_tied_at_3_decimals": true,
+   "farthest_from_germline_unrounded": "Pansoma",
+   "pansoma_minus_lowest_comparator_cosine_to_germline": "-0.0736"
+  },
+  "HCC1395T_Illumina": {
+   "truth_n": 3440,
+   "n": {
+    "Pansoma": 3608,
+    "DeepSomatic-TO": 4083,
+    "ClairS-TO": 3667
+   },
+   "cosine_to_truth": {
+    "Pansoma": "0.998",
+    "DeepSomatic-TO": "0.993",
+    "ClairS-TO": "0.993"
+   },
+   "cosine_to_germline": {
+    "Pansoma": "0.537",
+    "DeepSomatic-TO": "0.597",
+    "ClairS-TO": "0.595"
+   },
+   "uv_share": {
+    "Pansoma": "0.234",
+    "DeepSomatic-TO": "0.220",
+    "ClairS-TO": "0.247"
+   },
+   "TtoC_share": {
+    "Pansoma": "0.124",
+    "DeepSomatic-TO": "0.145",
+    "ClairS-TO": "0.127"
+   },
+   "closest_to_truth_unrounded": "Pansoma",
+   "pansoma_minus_best_comparator_cosine_to_truth": "+0.0049",
+   "pansoma_closest_or_tied_at_3_decimals": true,
+   "farthest_from_germline_unrounded": "Pansoma",
+   "pansoma_minus_lowest_comparator_cosine_to_germline": "-0.0581"
+  },
+  "HCC1395T_PacBio": {
+   "truth_n": 3440,
+   "n": {
+    "Pansoma": 3363,
+    "DeepSomatic-TO": 4165,
+    "ClairS-TO": 3512
+   },
+   "cosine_to_truth": {
+    "Pansoma": "0.997",
+    "DeepSomatic-TO": "0.994",
+    "ClairS-TO": "0.994"
+   },
+   "cosine_to_germline": {
+    "Pansoma": "0.509",
+    "DeepSomatic-TO": "0.592",
+    "ClairS-TO": "0.589"
+   },
+   "uv_share": {
+    "Pansoma": "0.236",
+    "DeepSomatic-TO": "0.227",
+    "ClairS-TO": "0.233"
+   },
+   "TtoC_share": {
+    "Pansoma": "0.111",
+    "DeepSomatic-TO": "0.137",
+    "ClairS-TO": "0.137"
+   },
+   "closest_to_truth_unrounded": "Pansoma",
+   "pansoma_minus_best_comparator_cosine_to_truth": "+0.0030",
+   "pansoma_closest_or_tied_at_3_decimals": true,
+   "farthest_from_germline_unrounded": "Pansoma",
+   "pansoma_minus_lowest_comparator_cosine_to_germline": "-0.0795"
+  },
+  "HCC1395T_ONT": {
+   "truth_n": 3440,
+   "n": {
+    "Pansoma": 3059,
+    "DeepSomatic-TO": 3488,
+    "ClairS-TO": 3174
+   },
+   "cosine_to_truth": {
+    "Pansoma": "0.995",
+    "DeepSomatic-TO": "0.994",
+    "ClairS-TO": "0.993"
+   },
+   "cosine_to_germline": {
+    "Pansoma": "0.527",
+    "DeepSomatic-TO": "0.576",
+    "ClairS-TO": "0.575"
+   },
+   "uv_share": {
+    "Pansoma": "0.243",
+    "DeepSomatic-TO": "0.239",
+    "ClairS-TO": "0.238"
+   },
+   "TtoC_share": {
+    "Pansoma": "0.120",
+    "DeepSomatic-TO": "0.134",
+    "ClairS-TO": "0.131"
+   },
+   "closest_to_truth_unrounded": "Pansoma",
+   "pansoma_minus_best_comparator_cosine_to_truth": "+0.0014",
+   "pansoma_closest_or_tied_at_3_decimals": true,
+   "farthest_from_germline_unrounded": "Pansoma",
+   "pansoma_minus_lowest_comparator_cosine_to_germline": "-0.0477"
+  }
+ },
+ "per_tumor": {
+  "HG008T": {
+   "truth_n": 697,
+   "germline_n": 296786,
+   "cosine_truth_germline": "0.585",
+   "truth_uv_share": "0.288",
+   "germline_uv_share": "0.158",
+   "truth_TtoC_share": "0.089",
+   "germline_TtoC_share": "0.329",
+   "Pansoma": {
+    "cosine_to_truth": "0.975 / 0.974 / 0.973",
+    "cosine_to_truth_range": "0.973-0.975",
+    "cosine_to_germline": "0.651 / 0.674 / 0.518",
+    "cosine_to_germline_range": "0.518-0.674",
+    "n": "1,001 / 1,046 / 730"
+   },
+   "DeepSomatic-TO": {
+    "cosine_to_truth": "0.921 / 0.943 / 0.878",
+    "cosine_to_truth_range": "0.878-0.943",
+    "cosine_to_germline": "0.815 / 0.763 / 0.858",
+    "cosine_to_germline_range": "0.763-0.858",
+    "n": "1,649 / 1,321 / 1,954"
+   },
+   "ClairS-TO": {
+    "cosine_to_truth": "0.912 / 0.918 / 0.899",
+    "cosine_to_truth_range": "0.899-0.918",
+    "cosine_to_germline": "0.821 / 0.827 / 0.847",
+    "cosine_to_germline_range": "0.821-0.847",
+    "n": "1,435 / 1,292 / 1,399"
+   }
+  },
+  "COLO829T": {
+   "truth_n": 2443,
+   "germline_n": 298057,
+   "cosine_truth_germline": "0.428",
+   "truth_uv_share": "0.585",
+   "germline_uv_share": "0.158",
+   "truth_TtoC_share": "0.075",
+   "germline_TtoC_share": "0.327",
+   "Pansoma": {
+    "cosine_to_truth": "0.994 / 0.997 / 0.996",
+    "cosine_to_truth_range": "0.994-0.997",
+    "cosine_to_germline": "0.439 / 0.400 / 0.421",
+    "cosine_to_germline_range": "0.400-0.439",
+    "n": "2,384 / 2,117 / 2,196"
+   },
+   "DeepSomatic-TO": {
+    "cosine_to_truth": "0.913 / 0.982 / 0.984",
+    "cosine_to_truth_range": "0.913-0.984",
+    "cosine_to_germline": "0.596 / 0.457 / 0.549",
+    "cosine_to_germline_range": "0.457-0.596",
+    "n": "4,779 / 1,853 / 2,915"
+   },
+   "ClairS-TO": {
+    "cosine_to_truth": "0.913 / 0.995 / 0.993",
+    "cosine_to_truth_range": "0.913-0.995",
+    "cosine_to_germline": "0.620 / 0.490 / 0.494",
+    "cosine_to_germline_range": "0.490-0.620",
+    "n": "4,335 / 2,334 / 2,233"
+   }
+  },
+  "HCC1395T": {
+   "truth_n": 3440,
+   "germline_n": 273569,
+   "cosine_truth_germline": "0.524",
+   "truth_uv_share": "0.246",
+   "germline_uv_share": "0.159",
+   "truth_TtoC_share": "0.114",
+   "germline_TtoC_share": "0.332",
+   "Pansoma": {
+    "cosine_to_truth": "0.998 / 0.997 / 0.995",
+    "cosine_to_truth_range": "0.995-0.998",
+    "cosine_to_germline": "0.537 / 0.509 / 0.527",
+    "cosine_to_germline_range": "0.509-0.537",
+    "n": "3,608 / 3,363 / 3,059"
+   },
+   "DeepSomatic-TO": {
+    "cosine_to_truth": "0.993 / 0.994 / 0.994",
+    "cosine_to_truth_range": "0.993-0.994",
+    "cosine_to_germline": "0.597 / 0.592 / 0.576",
+    "cosine_to_germline_range": "0.576-0.597",
+    "n": "4,083 / 4,165 / 3,488"
+   },
+   "ClairS-TO": {
+    "cosine_to_truth": "0.993 / 0.994 / 0.993",
+    "cosine_to_truth_range": "0.993-0.994",
+    "cosine_to_germline": "0.595 / 0.589 / 0.575",
+    "cosine_to_germline_range": "0.575-0.595",
+    "n": "3,667 / 3,512 / 3,174"
+   }
+  }
+ },
+ "pansoma_closest_to_truth_unrounded": "9 of 9",
+ "pansoma_closest_or_tied_at_3_decimals": "9 of 9",
+ "not_pansoma_closest_to_truth": [],
+ "pansoma_farthest_from_germline_unrounded": "9 of 9",
+ "not_pansoma_farthest_from_germline": [],
+ "checks": [
+  "truth n = TP + FN of report.json and truth spectrum identical across platforms and callers: 27 call sets (9 Pansoma + 18 comparator), all equal",
+  "n of every call set = tp_call + fp of its report.json (Pansoma pon.at_threshold; comparators eval_bed.pass_pon.at_threshold), no record skipped: 27 call sets, all equal",
+  "HG008T / COLO829T: comparator spectra (96 counts), n, cosine to truth, cosine to germline and UV share equal supplementary/R3.5/sbs96.tsv and cosine.tsv in 12 of 12 comparator rows; truth and germline spectra and the truth-germline cosine also equal",
+  "germline HG008T: recounted from /scratch/jshen/data/HG008_GIAB/dipcall_HG008N_GRCh38/HG008N_GRCh38_dipcall.dip.vcf.gz in /scratch/jshen/data/HG008_GIAB/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_all.bed (chr1, FILTER PASS / . / GAP1 / GAP2, single-base ALT in the genotype): 296,786 SNVs, 96 counts equal the E18 row",
+  "germline COLO829T: recounted from /scratch/qfu/COLO829BL_DSA/dipcall_hg38/dipcall_hg38.dip.vcf.gz in /scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/SMaHT_v2_easy_difficult_extreme.union.bed (chr1, FILTER PASS / . / GAP1 / GAP2, single-base ALT in the genotype): 298,057 SNVs, 96 counts equal the E18 row",
+  "germline HCC1395T: recounted from /scratch/jshen/data/CASTLE/HCC1395/truth/HCC1395BL_germline_DeepVariant_hybrid_QUAL10.vcf.gz in /scratch/jshen/data/CASTLE/HCC1395/truth/SEQC2_High-Confidence_Regions_v1.2.bed (chr1, FILTER PASS / . / GAP1 / GAP2, single-base ALT in the genotype): 273,569 SNVs, 96 counts equal the E18 row"
+ ],
+ "provenance": {
+  "HG008T_Illumina": {
+   "tumor": "HG008T",
+   "platform": "Illumina",
+   "pansoma": {
+    "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_Illumina_SNV_newpipe/vcf_chr1_HG008T_Illumina_d46",
+    "model": "multicancer6_Illumina_SNV_newpipe",
+    "checkpoint": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_Illumina_SNV_newpipe/best.pth",
+    "call_rule": "p_somatic >= 0.7630133032798767 (validation post-PoN recall 0.95 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "threshold": 0.7630133032798767,
+    "calls": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_Illumina_SNV_newpipe/vcf_chr1_HG008T_Illumina_d46/HG008T_Illumina_d46.SNV.linear.vcf.gz",
+    "tp_call": 541,
+    "fp": 460,
+    "tp_baseline": 541,
+    "fn": 156,
+    "precision": 0.5405,
+    "recall": 0.7762,
+    "f1": 0.6372,
+    "pon_files": [
+     "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/af-only-gnomad.hg38.vcf.gz",
+     "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/Homo_sapiens_assembly38.dbsnp138.vcf.gz",
+     "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/1000g_pon.hg38.vcf.gz",
+     "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/CoLoRSdb.GRCh38.v1.1.0.deepvariant.glnexus.vcf.gz"
+    ]
+   },
+   "truth": "/scratch/jshen/data/HG008_GIAB/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_tumorvariants.vcf.gz",
+   "bed": "/scratch/jshen/data/HG008_GIAB/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_all.bed",
+   "truth_n": 697,
+   "DeepSomatic-TO": {
+    "score_dir": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/deepsomatic/HG008T_Illumina/SNV",
+    "input_vcfs": [
+     "/scratch/jshen/Pansoma_testing_results_V2/HG008_GIAB/AF_HPRC/deepsomatic_HG008T_WGS_Chr1/HG008T_WGS.vcf.gz"
+    ],
+    "version": "1.9.0",
+    "tp_call": 620,
+    "fp": 1029,
+    "precision": 0.376,
+    "recall": 0.8895,
+    "f1": 0.5286
+   },
+   "ClairS-TO": {
+    "score_dir": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/clairs_to/HG008T_Illumina/SNV",
+    "input_vcfs": [
+     "/scratch/jshen/Pansoma_testing_results_V2/HG008_GIAB/AF_HPRC/clairs-to_HG008T_WGS_Chr1/snv.vcf.gz",
+     "/scratch/jshen/Pansoma_testing_results_V2/HG008_GIAB/AF_HPRC/clairs-to_HG008T_WGS_Chr1/indel.vcf.gz"
+    ],
+    "version": "0.4.2",
+    "tp_call": 589,
+    "fp": 846,
+    "precision": 0.4105,
+    "recall": 0.8451,
+    "f1": 0.5525
+   },
+   "germline_vcf": "/scratch/jshen/data/HG008_GIAB/dipcall_HG008N_GRCh38/HG008N_GRCh38_dipcall.dip.vcf.gz"
+  },
+  "HG008T_PacBio": {
+   "tumor": "HG008T",
+   "platform": "PacBio HiFi",
+   "pansoma": {
+    "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_PacBio_SNV_newpipe/vcf_chr1_HG008T_PacBio_d46",
+    "model": "multicancer6_PacBio_SNV_newpipe",
+    "checkpoint": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_PacBio_SNV_newpipe/best.pth",
+    "call_rule": "p_somatic >= 0.8157289028167725 (validation post-PoN recall 0.95 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "threshold": 0.8157289028167725,
+    "calls": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_PacBio_SNV_newpipe/vcf_chr1_HG008T_PacBio_d46/HG008T_PacBio_d46.SNV.linear.vcf.gz",
+    "tp_call": 567,
+    "fp": 479,
+    "tp_baseline": 567,
+    "fn": 130,
+    "precision": 0.5421,
+    "recall": 0.8135,
+    "f1": 0.6506,
+    "pon_files": [
+     "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/af-only-gnomad.hg38.vcf.gz",
+     "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/Homo_sapiens_assembly38.dbsnp138.vcf.gz",
+     "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/1000g_pon.hg38.vcf.gz",
+     "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/CoLoRSdb.GRCh38.v1.1.0.deepvariant.glnexus.vcf.gz"
+    ]
+   },
+   "truth": "/scratch/jshen/data/HG008_GIAB/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_tumorvariants.vcf.gz",
+   "bed": "/scratch/jshen/data/HG008_GIAB/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_all.bed",
+   "truth_n": 697,
+   "DeepSomatic-TO": {
+    "score_dir": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/deepsomatic/HG008T_PacBio/SNV",
+    "input_vcfs": [
+     "/scratch/jshen/Pansoma_testing_results_V2/HG008_GIAB/AF_HPRC/deepsomatic_HG008T_PacBio_Chr1/HG008T_PacBio.vcf.gz"
+    ],
+    "version": "1.9.0",
+    "tp_call": 562,
+    "fp": 759,
+    "precision": 0.4254,
+    "recall": 0.8063,
+    "f1": 0.557
+   },
+   "ClairS-TO": {
+    "score_dir": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/clairs_to/HG008T_PacBio/SNV",
+    "input_vcfs": [
+     "/scratch/jshen/Pansoma_testing_results_V2/HG008_GIAB/AF_HPRC/clairs-to_HG008_PacBio_Chr1/snv.vcf.gz",
+     "/scratch/jshen/Pansoma_testing_results_V2/HG008_GIAB/AF_HPRC/clairs-to_HG008_PacBio_Chr1/indel.vcf.gz"
+    ],
+    "version": "0.4.2",
+    "tp_call": 588,
+    "fp": 704,
+    "precision": 0.4551,
+    "recall": 0.8436,
+    "f1": 0.5913
+   },
+   "germline_vcf": "/scratch/jshen/data/HG008_GIAB/dipcall_HG008N_GRCh38/HG008N_GRCh38_dipcall.dip.vcf.gz"
+  },
+  "HG008T_ONT": {
+   "tumor": "HG008T",
+   "platform": "ONT",
+   "pansoma": {
+    "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_ONT_SNV_newpipe/vcf_chr1_HG008T_ONT_d46",
+    "model": "multicancer6_ONT_SNV_newpipe",
+    "checkpoint": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_ONT_SNV_newpipe/best.pth",
+    "call_rule": "p_somatic >= 0.8221198916435242 (validation post-PoN recall 0.95 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "threshold": 0.8221198916435242,
+    "calls": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_ONT_SNV_newpipe/vcf_chr1_HG008T_ONT_d46/HG008T_ONT_d46.SNV.linear.vcf.gz",
+    "tp_call": 457,
+    "fp": 273,
+    "tp_baseline": 457,
+    "fn": 240,
+    "precision": 0.626,
+    "recall": 0.6557,
+    "f1": 0.6405,
+    "pon_files": [
+     "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/af-only-gnomad.hg38.vcf.gz",
+     "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/Homo_sapiens_assembly38.dbsnp138.vcf.gz",
+     "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/1000g_pon.hg38.vcf.gz",
+     "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/CoLoRSdb.GRCh38.v1.1.0.deepvariant.glnexus.vcf.gz"
+    ]
+   },
+   "truth": "/scratch/jshen/data/HG008_GIAB/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_tumorvariants.vcf.gz",
+   "bed": "/scratch/jshen/data/HG008_GIAB/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_all.bed",
+   "truth_n": 697,
+   "DeepSomatic-TO": {
+    "score_dir": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/deepsomatic/HG008T_ONT/SNV",
+    "input_vcfs": [
+     "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/calls/deepsomatic/HG008T_ONT/output.vcf.gz"
+    ],
+    "version": "1.9.0",
+    "tp_call": 606,
+    "fp": 1348,
+    "precision": 0.3101,
+    "recall": 0.8694,
+    "f1": 0.4572
+   },
+   "ClairS-TO": {
+    "score_dir": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/clairs_to/HG008T_ONT/SNV",
+    "input_vcfs": [
+     "/scratch/jshen/Pansoma_testing_results_V2/HG008_GIAB/AF_HPRC/clairs-to_HG008_ONT_Chr1/snv.vcf.gz",
+     "/scratch/jshen/Pansoma_testing_results_V2/HG008_GIAB/AF_HPRC/clairs-to_HG008_ONT_Chr1/indel.vcf.gz"
+    ],
+    "version": "0.4.2",
+    "tp_call": 579,
+    "fp": 820,
+    "precision": 0.4139,
+    "recall": 0.8307,
+    "f1": 0.5525
+   },
+   "germline_vcf": "/scratch/jshen/data/HG008_GIAB/dipcall_HG008N_GRCh38/HG008N_GRCh38_dipcall.dip.vcf.gz"
+  },
+  "COLO829T_Illumina": {
+   "tumor": "COLO829T",
+   "platform": "Illumina",
+   "pansoma": {
+    "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_Illumina_SNV_newpipe/vcf_chr1_COLO829T_Illumina_d46",
+    "model": "multicancer6_Illumina_SNV_newpipe",
+    "checkpoint": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_Illumina_SNV_newpipe/best.pth",
+    "call_rule": "p_somatic >= 0.7630133032798767 (validation post-PoN recall 0.95 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "threshold": 0.7630133032798767,
+    "calls": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_Illumina_SNV_newpipe/vcf_chr1_COLO829T_Illumina_d46/COLO829T_Illumina_d46_snvaf05.SNV.linear.vcf.gz",
+    "tp_call": 1848,
+    "fp": 536,
+    "tp_baseline": 1848,
+    "fn": 595,
+    "precision": 0.7752,
+    "recall": 0.7564,
+    "f1": 0.7657,
+    "pon_files": [
+     "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/af-only-gnomad.hg38.vcf.gz",
+     "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/Homo_sapiens_assembly38.dbsnp138.vcf.gz",
+     "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/1000g_pon.hg38.vcf.gz",
+     "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/CoLoRSdb.GRCh38.v1.1.0.deepvariant.glnexus.vcf.gz"
+    ]
+   },
+   "truth": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/COLO829T_somatic_snv_indel.vcf.gz",
+   "bed": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/SMaHT_v2_easy_difficult_extreme.union.bed",
+   "truth_n": 2443,
+   "DeepSomatic-TO": {
+    "score_dir": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/deepsomatic/COLO829T_Illumina/SNV",
+    "input_vcfs": [
+     "/scratch/jshen/Pansoma_testing_results/VCF_results/deepsomatic_COLO829T_WGS/COLO829T_WGS.chr1.vcf.gz"
+    ],
+    "version": "1.9.0",
+    "tp_call": 2039,
+    "fp": 2740,
+    "precision": 0.4267,
+    "recall": 0.8346,
+    "f1": 0.5647
+   },
+   "ClairS-TO": {
+    "score_dir": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/clairs_to/COLO829T_Illumina/SNV",
+    "input_vcfs": [
+     "/scratch/jshen/Pansoma_testing_results/VCF_results/clairs-to_COLO829T_WGS/snv.vcf.gz",
+     "/scratch/jshen/Pansoma_testing_results/VCF_results/clairs-to_COLO829T_WGS/indel.vcf.gz"
+    ],
+    "version": "0.4.1",
+    "tp_call": 1867,
+    "fp": 2468,
+    "precision": 0.4307,
+    "recall": 0.7642,
+    "f1": 0.5509
+   },
+   "germline_vcf": "/scratch/qfu/COLO829BL_DSA/dipcall_hg38/dipcall_hg38.dip.vcf.gz"
+  },
+  "COLO829T_fiberseq": {
+   "tumor": "COLO829T",
+   "platform": "Fiber-seq",
+   "pansoma": {
+    "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_PacBio_SNV_newpipe/vcf_chr1_COLO829T_fiberseq_d46",
+    "model": "multicancer6_PacBio_SNV_newpipe",
+    "checkpoint": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_PacBio_SNV_newpipe/best.pth",
+    "call_rule": "p_somatic >= 0.8157289028167725 (validation post-PoN recall 0.95 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "threshold": 0.8157289028167725,
+    "calls": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_PacBio_SNV_newpipe/vcf_chr1_COLO829T_fiberseq_d46/COLO829T_fiberseq_d46_snvaf05.SNV.linear.vcf.gz",
+    "tp_call": 1830,
+    "fp": 287,
+    "tp_baseline": 1830,
+    "fn": 613,
+    "precision": 0.8644,
+    "recall": 0.7491,
+    "f1": 0.8026,
+    "pon_files": [
+     "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/af-only-gnomad.hg38.vcf.gz",
+     "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/Homo_sapiens_assembly38.dbsnp138.vcf.gz",
+     "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/1000g_pon.hg38.vcf.gz",
+     "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/CoLoRSdb.GRCh38.v1.1.0.deepvariant.glnexus.vcf.gz"
+    ]
+   },
+   "truth": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/COLO829T_somatic_snv_indel.vcf.gz",
+   "bed": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/SMaHT_v2_easy_difficult_extreme.union.bed",
+   "truth_n": 2443,
+   "DeepSomatic-TO": {
+    "score_dir": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/deepsomatic/COLO829T_fiberseq/SNV",
+    "input_vcfs": [
+     "/scratch/jshen/Pansoma_testing_results/VCF_results/deepsomatic_COLO829T_Pacbio/COLO829T_Pacbio.chr1.vcf.gz"
+    ],
+    "version": "1.9.0",
+    "tp_call": 1357,
+    "fp": 496,
+    "precision": 0.7323,
+    "recall": 0.5555,
+    "f1": 0.6318
+   },
+   "ClairS-TO": {
+    "score_dir": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/clairs_to/COLO829T_fiberseq/SNV",
+    "input_vcfs": [
+     "/scratch/jshen/Pansoma_testing_results/VCF_results/clairs-to_COLO829T_Pacbio/snv.vcf.gz",
+     "/scratch/jshen/Pansoma_testing_results/VCF_results/clairs-to_COLO829T_Pacbio/indel.vcf.gz"
+    ],
+    "version": "0.4.1",
+    "tp_call": 1819,
+    "fp": 515,
+    "precision": 0.7793,
+    "recall": 0.7446,
+    "f1": 0.7616
+   },
+   "germline_vcf": "/scratch/qfu/COLO829BL_DSA/dipcall_hg38/dipcall_hg38.dip.vcf.gz"
+  },
+  "COLO829T_ONT": {
+   "tumor": "COLO829T",
+   "platform": "ONT",
+   "pansoma": {
+    "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_ONT_SNV_newpipe/vcf_chr1_COLO829T_ONT_d46",
+    "model": "multicancer6_ONT_SNV_newpipe",
+    "checkpoint": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_ONT_SNV_newpipe/best.pth",
+    "call_rule": "p_somatic >= 0.8221198916435242 (validation post-PoN recall 0.95 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "threshold": 0.8221198916435242,
+    "calls": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_ONT_SNV_newpipe/vcf_chr1_COLO829T_ONT_d46/COLO829T_ONT_d46.SNV.linear.vcf.gz",
+    "tp_call": 1729,
+    "fp": 467,
+    "tp_baseline": 1729,
+    "fn": 714,
+    "precision": 0.7873,
+    "recall": 0.7077,
+    "f1": 0.7454,
+    "pon_files": [
+     "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/af-only-gnomad.hg38.vcf.gz",
+     "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/Homo_sapiens_assembly38.dbsnp138.vcf.gz",
+     "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/1000g_pon.hg38.vcf.gz",
+     "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/CoLoRSdb.GRCh38.v1.1.0.deepvariant.glnexus.vcf.gz"
+    ]
+   },
+   "truth": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/COLO829T_somatic_snv_indel.vcf.gz",
+   "bed": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/SMaHT_v2_easy_difficult_extreme.union.bed",
+   "truth_n": 2443,
+   "DeepSomatic-TO": {
+    "score_dir": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/deepsomatic/COLO829T_ONT/SNV",
+    "input_vcfs": [
+     "/scratch/jshen/Pansoma_testing_results/VCF_results/deepsomatic_COLO829T_ONT/COLO829T_ONT.chr1.vcf.gz"
+    ],
+    "version": "1.9.0",
+    "tp_call": 1697,
+    "fp": 1218,
+    "precision": 0.5822,
+    "recall": 0.6946,
+    "f1": 0.6334
+   },
+   "ClairS-TO": {
+    "score_dir": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/clairs_to/COLO829T_ONT/SNV",
+    "input_vcfs": [
+     "/scratch/jshen/Pansoma_testing_results/VCF_results/clairs-to_COLO829T_ONT/snv.vcf.gz",
+     "/scratch/jshen/Pansoma_testing_results/VCF_results/clairs-to_COLO829T_ONT/indel.vcf.gz"
+    ],
+    "version": "0.4.1",
+    "tp_call": 1672,
+    "fp": 561,
+    "precision": 0.7488,
+    "recall": 0.6844,
+    "f1": 0.7151
+   },
+   "germline_vcf": "/scratch/qfu/COLO829BL_DSA/dipcall_hg38/dipcall_hg38.dip.vcf.gz"
+  },
+  "HCC1395T_Illumina": {
+   "tumor": "HCC1395T",
+   "platform": "Illumina",
+   "pansoma": {
+    "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_Illumina_SNV_newpipe/vcf_chr1_HCC1395T_Illumina_d46",
+    "model": "multicancer6_Illumina_SNV_newpipe",
+    "checkpoint": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_Illumina_SNV_newpipe/best.pth",
+    "call_rule": "p_somatic >= 0.7630133032798767 (validation post-PoN recall 0.95 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "threshold": 0.7630133032798767,
+    "calls": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_Illumina_SNV_newpipe/vcf_chr1_HCC1395T_Illumina_d46/HCC1395T_Illumina_d46_snvaf05.SNV.linear.vcf.gz",
+    "tp_call": 3113,
+    "fp": 495,
+    "tp_baseline": 3113,
+    "fn": 327,
+    "precision": 0.8628,
+    "recall": 0.9049,
+    "f1": 0.8834,
+    "pon_files": [
+     "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/af-only-gnomad.hg38.vcf.gz",
+     "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/Homo_sapiens_assembly38.dbsnp138.vcf.gz",
+     "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/1000g_pon.hg38.vcf.gz",
+     "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/CoLoRSdb.GRCh38.v1.1.0.deepvariant.glnexus.vcf.gz"
+    ]
+   },
+   "truth": "/scratch/jshen/data/CASTLE/HCC1395/truth/HCC1395_somatic_SEQC2_v1.2.1.vcf.gz",
+   "bed": "/scratch/jshen/data/CASTLE/HCC1395/truth/SEQC2_High-Confidence_Regions_v1.2.bed",
+   "truth_n": 3440,
+   "DeepSomatic-TO": {
+    "score_dir": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/deepsomatic/HCC1395T_Illumina/SNV",
+    "input_vcfs": [
+     "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/calls/deepsomatic/HCC1395T_Illumina/output.vcf.gz"
+    ],
+    "version": "1.9.0",
+    "tp_call": 3190,
+    "fp": 893,
+    "precision": 0.7813,
+    "recall": 0.9273,
+    "f1": 0.8481
+   },
+   "ClairS-TO": {
+    "score_dir": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/clairs_to/HCC1395T_Illumina/SNV",
+    "input_vcfs": [
+     "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/calls/clairs_to/HCC1395T_Illumina/snv.vcf.gz",
+     "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/calls/clairs_to/HCC1395T_Illumina/indel.vcf.gz"
+    ],
+    "version": "0.4.2",
+    "tp_call": 2956,
+    "fp": 711,
+    "precision": 0.8061,
+    "recall": 0.8593,
+    "f1": 0.8319
+   },
+   "germline_vcf": "/scratch/jshen/data/CASTLE/HCC1395/truth/HCC1395BL_germline_DeepVariant_hybrid_QUAL10.vcf.gz"
+  },
+  "HCC1395T_PacBio": {
+   "tumor": "HCC1395T",
+   "platform": "PacBio HiFi",
+   "pansoma": {
+    "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_PacBio_SNV_newpipe/vcf_chr1_HCC1395T_PacBio_d46",
+    "model": "multicancer6_PacBio_SNV_newpipe",
+    "checkpoint": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_PacBio_SNV_newpipe/best.pth",
+    "call_rule": "p_somatic >= 0.8157289028167725 (validation post-PoN recall 0.95 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "threshold": 0.8157289028167725,
+    "calls": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_PacBio_SNV_newpipe/vcf_chr1_HCC1395T_PacBio_d46/HCC1395T_PacBio_d46_snvaf05.SNV.linear.vcf.gz",
+    "tp_call": 2950,
+    "fp": 413,
+    "tp_baseline": 2950,
+    "fn": 490,
+    "precision": 0.8772,
+    "recall": 0.8576,
+    "f1": 0.8673,
+    "pon_files": [
+     "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/af-only-gnomad.hg38.vcf.gz",
+     "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/Homo_sapiens_assembly38.dbsnp138.vcf.gz",
+     "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/1000g_pon.hg38.vcf.gz",
+     "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/CoLoRSdb.GRCh38.v1.1.0.deepvariant.glnexus.vcf.gz"
+    ]
+   },
+   "truth": "/scratch/jshen/data/CASTLE/HCC1395/truth/HCC1395_somatic_SEQC2_v1.2.1.vcf.gz",
+   "bed": "/scratch/jshen/data/CASTLE/HCC1395/truth/SEQC2_High-Confidence_Regions_v1.2.bed",
+   "truth_n": 3440,
+   "DeepSomatic-TO": {
+    "score_dir": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/deepsomatic/HCC1395T_PacBio/SNV",
+    "input_vcfs": [
+     "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/calls/deepsomatic/HCC1395T_PacBio/output.vcf.gz"
+    ],
+    "version": "1.9.0",
+    "tp_call": 3190,
+    "fp": 975,
+    "precision": 0.7659,
+    "recall": 0.9273,
+    "f1": 0.8389
+   },
+   "ClairS-TO": {
+    "score_dir": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/clairs_to/HCC1395T_PacBio/SNV",
+    "input_vcfs": [
+     "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/calls/clairs_to/HCC1395T_PacBio/snv.vcf.gz",
+     "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/calls/clairs_to/HCC1395T_PacBio/indel.vcf.gz"
+    ],
+    "version": "0.4.2",
+    "tp_call": 2829,
+    "fp": 683,
+    "precision": 0.8055,
+    "recall": 0.8224,
+    "f1": 0.8139
+   },
+   "germline_vcf": "/scratch/jshen/data/CASTLE/HCC1395/truth/HCC1395BL_germline_DeepVariant_hybrid_QUAL10.vcf.gz"
+  },
+  "HCC1395T_ONT": {
+   "tumor": "HCC1395T",
+   "platform": "ONT",
+   "pansoma": {
+    "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_ONT_SNV_newpipe/vcf_chr1_HCC1395T_ONT_d46",
+    "model": "multicancer6_ONT_SNV_newpipe",
+    "checkpoint": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_ONT_SNV_newpipe/best.pth",
+    "call_rule": "p_somatic >= 0.8221198916435242 (validation post-PoN recall 0.95 of the callable positives (val.somatic_at_recall_postpon_callable))",
+    "threshold": 0.8221198916435242,
+    "calls": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_ONT_SNV_newpipe/vcf_chr1_HCC1395T_ONT_d46/HCC1395T_ONT_d46.SNV.linear.vcf.gz",
+    "tp_call": 2326,
+    "fp": 733,
+    "tp_baseline": 2326,
+    "fn": 1114,
+    "precision": 0.7604,
+    "recall": 0.6762,
+    "f1": 0.7158,
+    "pon_files": [
+     "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/af-only-gnomad.hg38.vcf.gz",
+     "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/Homo_sapiens_assembly38.dbsnp138.vcf.gz",
+     "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/1000g_pon.hg38.vcf.gz",
+     "/scratch/jshen/data/Pansoma/panel_of_normal_VCFs/CoLoRSdb.GRCh38.v1.1.0.deepvariant.glnexus.vcf.gz"
+    ]
+   },
+   "truth": "/scratch/jshen/data/CASTLE/HCC1395/truth/HCC1395_somatic_SEQC2_v1.2.1.vcf.gz",
+   "bed": "/scratch/jshen/data/CASTLE/HCC1395/truth/SEQC2_High-Confidence_Regions_v1.2.bed",
+   "truth_n": 3440,
+   "DeepSomatic-TO": {
+    "score_dir": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/deepsomatic/HCC1395T_ONT/SNV",
+    "input_vcfs": [
+     "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/calls/deepsomatic/HCC1395T_ONT/output.vcf.gz"
+    ],
+    "version": "1.9.0",
+    "tp_call": 2634,
+    "fp": 854,
+    "precision": 0.7552,
+    "recall": 0.7657,
+    "f1": 0.7604
+   },
+   "ClairS-TO": {
+    "score_dir": "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/score/clairs_to/HCC1395T_ONT/SNV",
+    "input_vcfs": [
+     "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/calls/clairs_to/HCC1395T_ONT/snv.vcf.gz",
+     "/scratch/jshen/data/reviewer_experiments_20261013/E8_comparators/calls/clairs_to/HCC1395T_ONT/indel.vcf.gz"
+    ],
+    "version": "0.4.2",
+    "tp_call": 2512,
+    "fp": 662,
+    "precision": 0.7914,
+    "recall": 0.7302,
+    "f1": 0.7596
+   },
+   "germline_vcf": "/scratch/jshen/data/CASTLE/HCC1395/truth/HCC1395BL_germline_DeepVariant_hybrid_QUAL10.vcf.gz"
+  }
+ },
+ "germline_source": "/scratch/jshen/Github/Pansoma/analysis/reviewer_response_20261011/experiments/E18_sbs96/sbs96.tsv"
+}

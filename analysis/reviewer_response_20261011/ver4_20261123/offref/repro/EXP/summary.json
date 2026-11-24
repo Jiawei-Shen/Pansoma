@@ -1,0 +1,817 @@
+{
+ "runs": [
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "source": "mc6",
+   "set": "HCC1395T_Illumina_d46",
+   "platform": "Illumina",
+   "purity": "P100",
+   "rtype": "in-sample",
+   "model": "HCC1395T_Illumina",
+   "graph": "d46",
+   "kind": "SNV",
+   "sample": "HCC1395T",
+   "unplaced_pass": 13,
+   "processed": 13,
+   "with_context": 13,
+   "categories": {
+    "germline": 7,
+    "tumor_only": 3,
+    "population": 3
+   },
+   "pop_ingraph": 2,
+   "pop_hprc": 3,
+   "multi_copy": 5,
+   "tumor_only_multi_copy": 1,
+   "eval_nobed": {
+    "tp": 2827,
+    "fp": 530,
+    "unplaced_pass": 13,
+    "recall": 0.8218,
+    "placed_only": [
+     0.8421,
+     0.8318
+    ],
+    "all_unplaced_fp": [
+     0.8389,
+     0.8302
+    ],
+    "after_graph_pon": [
+     0.8396,
+     0.8306
+    ],
+    "after_graph_pon_tumor_only_tp": [
+     0.8405,
+     0.8311
+    ],
+    "remaining_unplaced_after_graph_pon": 10.0,
+    "unplaced_share_of_pass": 0.0039,
+    "unplaced_share_after_graph_pon": 0.003
+   },
+   "eval_bed": {
+    "tp": 2827,
+    "fp": 388,
+    "unplaced_pass": 7.0,
+    "recall": 0.8218,
+    "placed_only": [
+     0.8793,
+     0.8496
+    ],
+    "all_unplaced_fp": [
+     0.8774,
+     0.8487
+    ],
+    "after_graph_pon": [
+     0.8777,
+     0.8488
+    ],
+    "after_graph_pon_tumor_only_tp": [
+     0.8786,
+     0.8493
+    ],
+    "remaining_unplaced_after_graph_pon": 6.0,
+    "unplaced_share_of_pass": 0.0022,
+    "unplaced_share_after_graph_pon": 0.0019
+   }
+  }
+ ],
+ "gold": [],
+ "controls": [
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_tp",
+   "n": 150,
+   "pop": 0,
+   "asm": {
+    "tumor_only": 114,
+    "unsupported": 36
+   }
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_fp",
+   "n": 150,
+   "pop": 0,
+   "asm": {
+    "tumor_only": 13,
+    "germline": 126,
+    "unsupported": 11
+   }
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_pon",
+   "n": 150,
+   "pop": 3,
+   "asm": {
+    "germline": 146,
+    "tumor_only": 3,
+    "unsupported": 1
+   }
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "unplaced_pass",
+   "n": 13,
+   "pop": 3,
+   "asm": {
+    "germline": 9,
+    "tumor_only": 3,
+    "unsupported": 1
+   }
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "gold",
+   "n": 2,
+   "pop": 2,
+   "asm": {
+    "germline": 2
+   }
+  }
+ ],
+ "grid": [
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_tp",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_fp",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 5
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 2
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 3
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 3
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 150,
+   "tagged": 3
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "ctrl_pon",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 150,
+   "tagged": 0
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 13,
+   "tagged": 6
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 13,
+   "tagged": 4
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 13,
+   "tagged": 4
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 13,
+   "tagged": 4
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 13,
+   "tagged": 3
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 13,
+   "tagged": 2
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 13,
+   "tagged": 2
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 13,
+   "tagged": 2
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 13,
+   "tagged": 1
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 13,
+   "tagged": 0
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 13,
+   "tagged": 0
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 13,
+   "tagged": 0
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 13,
+   "tagged": 3
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 13,
+   "tagged": 2
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 13,
+   "tagged": 2
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "unplaced_pass",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 13,
+   "tagged": 2
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 1,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 2,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 5,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "gold",
+   "flank": "5",
+   "min_ac": 9,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 1,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 2,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 5,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "gold",
+   "flank": "10",
+   "min_ac": 9,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 1,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 2,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 5,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "gold",
+   "flank": "15",
+   "min_ac": 9,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 1,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 2,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 5,
+   "n": 2,
+   "tagged": 2
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "group": "gold",
+   "flank": "A",
+   "min_ac": 9,
+   "n": 2,
+   "tagged": 2
+  }
+ ],
+ "strata": [
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "stratum": "homopolymer>=7",
+   "n": 1,
+   "categories": {
+    "germline": 1
+   }
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "stratum": "STR",
+   "n": 3,
+   "categories": {
+    "germline": 2,
+    "population": 1
+   }
+  },
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "stratum": "other",
+   "n": 9,
+   "categories": {
+    "germline": 4,
+    "tumor_only": 3,
+    "population": 2
+   }
+  }
+ ],
+ "cross_platform": [],
+ "gold_in_runs": [
+  {
+   "name": "mc6__HCC1395T_Illumina__norescue__vcf_chr1",
+   "gold_with_tensor": 2,
+   "pass_unplaced": 0,
+   "pass_and_tagged": 0,
+   "tagged": 2,
+   "asm": {
+    "germline": 2
+   }
+  }
+ ]
+}

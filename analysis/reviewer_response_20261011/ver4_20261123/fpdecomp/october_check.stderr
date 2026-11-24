@@ -1,0 +1,5 @@
+germline: loading /scratch/jshen/data/HG008_GIAB/dipcall_HG008N_GRCh38/HG008N_GRCh38_dipcall.dip.vcf.gz
+germline: 379135 records, 387341 allele keys
+HG008T Illumina SNV HG008T_Illumina_linear HG008T_Illumina_d46 GRCh38-only FP raw / pon 121139 1089 v2.1 FP raw / pon 2870 792 v2.1 tensors 260400 of them GRCh38-only FP alleles 14832
+HG008T Illumina INDEL HG008T_Illumina_linear HG008T_Illumina_d46 GRCh38-only FP raw / pon 39930 1348 v2.1 FP raw / pon 2867 385 v2.1 tensors 9534 of them GRCh38-only FP alleles 2989
+v2.1 carrier keys found 154169 of 161069

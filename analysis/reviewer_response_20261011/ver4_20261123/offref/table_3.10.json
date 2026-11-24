@@ -1,0 +1,542 @@
+{
+ "rows": [
+  {
+   "tumor": "HG008T",
+   "platform": "Illumina",
+   "run": "m6np__HG008T_Illumina__vcf_chr1",
+   "calls": 77,
+   "normal": 71,
+   "tumor_only": 3,
+   "neither": 3,
+   "neither_detail": {
+    "unverifiable": 2,
+    "unsupported": 1
+   },
+   "alt_normal_reads": 64,
+   "somatic_reads": 2,
+   "other_reads": 11,
+   "other_reads_status": {
+    "low normal coverage": 7,
+    "absent from normal; tumor ALT < 2": 3,
+    "no k-mer": 1
+   },
+   "both": 1,
+   "all_three_platforms": 3
+  },
+  {
+   "tumor": "HG008T",
+   "platform": "PacBio HiFi",
+   "run": "m6np__HG008T_PacBio__vcf_chr1",
+   "calls": 143,
+   "normal": 127,
+   "tumor_only": 0,
+   "neither": 16,
+   "neither_detail": {
+    "unsupported": 15,
+    "unverifiable": 1
+   },
+   "alt_normal_reads": 136,
+   "somatic_reads": 1,
+   "other_reads": 6,
+   "other_reads_status": {
+    "low normal coverage": 4,
+    "absent from normal; tumor ALT < 2": 2
+   },
+   "both": 0,
+   "all_three_platforms": 3
+  },
+  {
+   "tumor": "HG008T",
+   "platform": "ONT",
+   "run": "m6np__HG008T_ONT__vcf_chr1",
+   "calls": 90,
+   "normal": 90,
+   "tumor_only": 0,
+   "neither": 0,
+   "neither_detail": {},
+   "alt_normal_reads": 82,
+   "somatic_reads": 0,
+   "other_reads": 8,
+   "other_reads_status": {
+    "low normal coverage": 5,
+    "one normal read": 1,
+    "absent from normal; tumor ALT < 2": 2
+   },
+   "both": 0,
+   "all_three_platforms": 3
+  },
+  {
+   "tumor": "COLO829T",
+   "platform": "Illumina",
+   "run": "m6np__COLO829T_Illumina__vcf_chr1",
+   "calls": 110,
+   "normal": 98,
+   "tumor_only": 8,
+   "neither": 4,
+   "neither_detail": {
+    "unsupported": 3,
+    "unverifiable": 1
+   },
+   "alt_normal_reads": 81,
+   "somatic_reads": 6,
+   "other_reads": 23,
+   "other_reads_status": {
+    "absent from normal; tumor ALT < 2": 5,
+    "no k-mer": 2,
+    "one normal read": 13,
+    "low normal coverage": 3
+   },
+   "both": 4,
+   "all_three_platforms": 5
+  },
+  {
+   "tumor": "COLO829T",
+   "platform": "Fiber-seq",
+   "run": "m6np__COLO829T_fiberseq__vcf_chr1",
+   "calls": 79,
+   "normal": 73,
+   "tumor_only": 5,
+   "neither": 1,
+   "neither_detail": {
+    "unverifiable": 1
+   },
+   "alt_normal_reads": 63,
+   "somatic_reads": 7,
+   "other_reads": 9,
+   "other_reads_status": {
+    "one normal read": 8,
+    "absent from normal; tumor ALT < 2": 1
+   },
+   "both": 5,
+   "all_three_platforms": 5
+  },
+  {
+   "tumor": "COLO829T",
+   "platform": "ONT",
+   "run": "m6np__COLO829T_ONT__vcf_chr1",
+   "calls": 111,
+   "normal": 94,
+   "tumor_only": 15,
+   "neither": 2,
+   "neither_detail": {
+    "unsupported": 2
+   },
+   "alt_normal_reads": 98,
+   "somatic_reads": 12,
+   "other_reads": 1,
+   "other_reads_status": {
+    "one normal read": 1
+   },
+   "both": 11,
+   "all_three_platforms": 5
+  },
+  {
+   "tumor": "HCC1395T",
+   "platform": "Illumina",
+   "run": "m6np__HCC1395T_Illumina__vcf_chr1",
+   "calls": 76,
+   "normal": 71,
+   "tumor_only": 5,
+   "neither": 0,
+   "neither_detail": {},
+   "alt_normal_reads": 55,
+   "somatic_reads": 3,
+   "other_reads": 18,
+   "other_reads_status": {
+    "no k-mer": 2,
+    "low normal coverage": 12,
+    "absent from normal; tumor ALT < 2": 4
+   },
+   "both": 3,
+   "all_three_platforms": 7
+  },
+  {
+   "tumor": "HCC1395T",
+   "platform": "PacBio HiFi",
+   "run": "m6np__HCC1395T_PacBio__vcf_chr1",
+   "calls": 106,
+   "normal": 102,
+   "tumor_only": 3,
+   "neither": 1,
+   "neither_detail": {
+    "unsupported": 1
+   },
+   "alt_normal_reads": 97,
+   "somatic_reads": 2,
+   "other_reads": 7,
+   "other_reads_status": {
+    "low normal coverage": 6,
+    "one normal read": 1
+   },
+   "both": 2,
+   "all_three_platforms": 7
+  },
+  {
+   "tumor": "HCC1395T",
+   "platform": "ONT",
+   "run": "m6np__HCC1395T_ONT__vcf_chr1",
+   "calls": 143,
+   "normal": 130,
+   "tumor_only": 1,
+   "neither": 12,
+   "neither_detail": {
+    "unverifiable": 3,
+    "unsupported": 9
+   },
+   "alt_normal_reads": 139,
+   "somatic_reads": 1,
+   "other_reads": 3,
+   "other_reads_status": {
+    "low normal coverage": 3
+   },
+   "both": 1,
+   "all_three_platforms": 7
+  }
+ ],
+ "totals": {
+  "all": {
+   "calls": 935,
+   "normal": 856,
+   "tumor_only": 40,
+   "neither": 39,
+   "alt_normal_reads": 815,
+   "somatic_reads": 34,
+   "other_reads": 86,
+   "both": 27
+  },
+  "HG008T": {
+   "calls": 310,
+   "normal": 288,
+   "tumor_only": 3,
+   "neither": 19,
+   "alt_normal_reads": 282,
+   "somatic_reads": 3,
+   "other_reads": 25,
+   "both": 1
+  },
+  "COLO829T": {
+   "calls": 300,
+   "normal": 265,
+   "tumor_only": 28,
+   "neither": 7,
+   "alt_normal_reads": 242,
+   "somatic_reads": 25,
+   "other_reads": 33,
+   "both": 20
+  },
+  "HCC1395T": {
+   "calls": 325,
+   "normal": 303,
+   "tumor_only": 9,
+   "neither": 13,
+   "alt_normal_reads": 291,
+   "somatic_reads": 6,
+   "other_reads": 28,
+   "both": 6
+  }
+ },
+ "cross_platform": {
+  "HG008T": {
+   "n": 3,
+   "keys": [
+    {
+     "key": "1280181:0:SNP:C>T",
+     "assembly": "normal",
+     "reads": {
+      "Illumina": "alt_normal",
+      "PacBio HiFi": "alt_normal",
+      "ONT": "alt_normal"
+     }
+    },
+    {
+     "key": "1519960:39:SNP:C>A",
+     "assembly": "normal",
+     "reads": {
+      "Illumina": "alt_normal",
+      "PacBio HiFi": "alt_normal",
+      "ONT": "alt_normal"
+     }
+    },
+    {
+     "key": "5736980:22:SNP:C>T",
+     "assembly": "normal",
+     "reads": {
+      "Illumina": "other",
+      "PacBio HiFi": "other",
+      "ONT": "other"
+     }
+    }
+   ],
+   "in_two_or_more": 24,
+   "union": 283
+  },
+  "COLO829T": {
+   "n": 5,
+   "keys": [
+    {
+     "key": "10588020:0:SNP:G>A",
+     "assembly": "normal",
+     "reads": {
+      "Illumina": "alt_normal",
+      "Fiber-seq": "alt_normal",
+      "ONT": "alt_normal"
+     }
+    },
+    {
+     "key": "10793319:10:SNP:G>A",
+     "assembly": "tumor",
+     "reads": {
+      "Illumina": "somatic",
+      "Fiber-seq": "somatic",
+      "ONT": "somatic"
+     }
+    },
+    {
+     "key": "1249536:1:SNP:C>A",
+     "assembly": "normal",
+     "reads": {
+      "Illumina": "alt_normal",
+      "Fiber-seq": "alt_normal",
+      "ONT": "alt_normal"
+     }
+    },
+    {
+     "key": "12743663:20:SNP:C>A",
+     "assembly": "normal",
+     "reads": {
+      "Illumina": "alt_normal",
+      "Fiber-seq": "alt_normal",
+      "ONT": "alt_normal"
+     }
+    },
+    {
+     "key": "1801552:3:SNP:G>T",
+     "assembly": "tumor",
+     "reads": {
+      "Illumina": "somatic",
+      "Fiber-seq": "somatic",
+      "ONT": "somatic"
+     }
+    }
+   ],
+   "in_two_or_more": 30,
+   "union": 265
+  },
+  "HCC1395T": {
+   "n": 7,
+   "keys": [
+    {
+     "key": "11567240:0:SNP:G>A",
+     "assembly": "normal",
+     "reads": {
+      "Illumina": "alt_normal",
+      "PacBio HiFi": "alt_normal",
+      "ONT": "alt_normal"
+     }
+    },
+    {
+     "key": "12744951:9:SNP:C>A",
+     "assembly": "normal",
+     "reads": {
+      "Illumina": "alt_normal",
+      "PacBio HiFi": "alt_normal",
+      "ONT": "alt_normal"
+     }
+    },
+    {
+     "key": "1519960:39:SNP:C>A",
+     "assembly": "normal",
+     "reads": {
+      "Illumina": "alt_normal",
+      "PacBio HiFi": "alt_normal",
+      "ONT": "alt_normal"
+     }
+    },
+    {
+     "key": "19532684:0:SNP:C>T",
+     "assembly": "normal",
+     "reads": {
+      "Illumina": "alt_normal",
+      "PacBio HiFi": "alt_normal",
+      "ONT": "alt_normal"
+     }
+    },
+    {
+     "key": "4379492:231:SNP:G>A",
+     "assembly": "tumor",
+     "reads": {
+      "Illumina": "somatic",
+      "PacBio HiFi": "somatic",
+      "ONT": "somatic"
+     }
+    },
+    {
+     "key": "6556831:0:SNP:C>G",
+     "assembly": "normal",
+     "reads": {
+      "Illumina": "other",
+      "PacBio HiFi": "other",
+      "ONT": "other"
+     }
+    },
+    {
+     "key": "6557052:124:SNP:T>C",
+     "assembly": "normal",
+     "reads": {
+      "Illumina": "other",
+      "PacBio HiFi": "other",
+      "ONT": "other"
+     }
+    }
+   ],
+   "in_two_or_more": 34,
+   "union": 284
+  }
+ },
+ "controls": [
+  {
+   "tumor": "HG008T",
+   "platform": "Illumina",
+   "ctrl_tp": 150,
+   "ctrl_tp_tumor_only": 147,
+   "ctrl_tp_normal": 2,
+   "ctrl_tp_reads": 150,
+   "ctrl_tp_somatic_reads": 150,
+   "ctrl_tp_alt_normal_reads": 0,
+   "ctrl_fp": 150,
+   "ctrl_fp_normal": 137,
+   "ctrl_fp_tumor_only": 1,
+   "ctrl_fp_reads": 150,
+   "ctrl_fp_alt_normal_reads": 122,
+   "ctrl_fp_somatic_reads": 9
+  },
+  {
+   "tumor": "HG008T",
+   "platform": "PacBio HiFi",
+   "ctrl_tp": 150,
+   "ctrl_tp_tumor_only": 148,
+   "ctrl_tp_normal": 2,
+   "ctrl_tp_reads": 150,
+   "ctrl_tp_somatic_reads": 150,
+   "ctrl_tp_alt_normal_reads": 0,
+   "ctrl_fp": 150,
+   "ctrl_fp_normal": 138,
+   "ctrl_fp_tumor_only": 0,
+   "ctrl_fp_reads": 150,
+   "ctrl_fp_alt_normal_reads": 137,
+   "ctrl_fp_somatic_reads": 11
+  },
+  {
+   "tumor": "HG008T",
+   "platform": "ONT",
+   "ctrl_tp": 150,
+   "ctrl_tp_tumor_only": 149,
+   "ctrl_tp_normal": 1,
+   "ctrl_tp_reads": 150,
+   "ctrl_tp_somatic_reads": 150,
+   "ctrl_tp_alt_normal_reads": 0,
+   "ctrl_fp": 150,
+   "ctrl_fp_normal": 131,
+   "ctrl_fp_tumor_only": 4,
+   "ctrl_fp_reads": 150,
+   "ctrl_fp_alt_normal_reads": 127,
+   "ctrl_fp_somatic_reads": 16
+  },
+  {
+   "tumor": "COLO829T",
+   "platform": "Illumina",
+   "ctrl_tp": 150,
+   "ctrl_tp_tumor_only": 128,
+   "ctrl_tp_normal": 2,
+   "ctrl_tp_reads": 150,
+   "ctrl_tp_somatic_reads": 133,
+   "ctrl_tp_alt_normal_reads": 3,
+   "ctrl_fp": 150,
+   "ctrl_fp_normal": 120,
+   "ctrl_fp_tumor_only": 15,
+   "ctrl_fp_reads": 150,
+   "ctrl_fp_alt_normal_reads": 114,
+   "ctrl_fp_somatic_reads": 21
+  },
+  {
+   "tumor": "COLO829T",
+   "platform": "Fiber-seq",
+   "ctrl_tp": 150,
+   "ctrl_tp_tumor_only": 120,
+   "ctrl_tp_normal": 0,
+   "ctrl_tp_reads": 150,
+   "ctrl_tp_somatic_reads": 130,
+   "ctrl_tp_alt_normal_reads": 7,
+   "ctrl_fp": 150,
+   "ctrl_fp_normal": 111,
+   "ctrl_fp_tumor_only": 24,
+   "ctrl_fp_reads": 150,
+   "ctrl_fp_alt_normal_reads": 109,
+   "ctrl_fp_somatic_reads": 31
+  },
+  {
+   "tumor": "COLO829T",
+   "platform": "ONT",
+   "ctrl_tp": 150,
+   "ctrl_tp_tumor_only": 129,
+   "ctrl_tp_normal": 3,
+   "ctrl_tp_reads": 150,
+   "ctrl_tp_somatic_reads": 138,
+   "ctrl_tp_alt_normal_reads": 3,
+   "ctrl_fp": 150,
+   "ctrl_fp_normal": 121,
+   "ctrl_fp_tumor_only": 8,
+   "ctrl_fp_reads": 150,
+   "ctrl_fp_alt_normal_reads": 97,
+   "ctrl_fp_somatic_reads": 26
+  },
+  {
+   "tumor": "HCC1395T",
+   "platform": "Illumina",
+   "ctrl_tp": 150,
+   "ctrl_tp_tumor_only": 111,
+   "ctrl_tp_normal": 0,
+   "ctrl_tp_reads": 150,
+   "ctrl_tp_somatic_reads": 150,
+   "ctrl_tp_alt_normal_reads": 0,
+   "ctrl_fp": 150,
+   "ctrl_fp_normal": 101,
+   "ctrl_fp_tumor_only": 18,
+   "ctrl_fp_reads": 150,
+   "ctrl_fp_alt_normal_reads": 85,
+   "ctrl_fp_somatic_reads": 33
+  },
+  {
+   "tumor": "HCC1395T",
+   "platform": "PacBio HiFi",
+   "ctrl_tp": 150,
+   "ctrl_tp_tumor_only": 111,
+   "ctrl_tp_normal": 0,
+   "ctrl_tp_reads": 150,
+   "ctrl_tp_somatic_reads": 149,
+   "ctrl_tp_alt_normal_reads": 1,
+   "ctrl_fp": 150,
+   "ctrl_fp_normal": 83,
+   "ctrl_fp_tumor_only": 32,
+   "ctrl_fp_reads": 150,
+   "ctrl_fp_alt_normal_reads": 80,
+   "ctrl_fp_somatic_reads": 70
+  },
+  {
+   "tumor": "HCC1395T",
+   "platform": "ONT",
+   "ctrl_tp": 150,
+   "ctrl_tp_tumor_only": 130,
+   "ctrl_tp_normal": 0,
+   "ctrl_tp_reads": 150,
+   "ctrl_tp_somatic_reads": 150,
+   "ctrl_tp_alt_normal_reads": 0,
+   "ctrl_fp": 150,
+   "ctrl_fp_normal": 116,
+   "ctrl_fp_tumor_only": 22,
+   "ctrl_fp_reads": 150,
+   "ctrl_fp_alt_normal_reads": 50,
+   "ctrl_fp_somatic_reads": 35
+  }
+ ]
+}

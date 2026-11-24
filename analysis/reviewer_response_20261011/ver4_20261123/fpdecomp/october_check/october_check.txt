@@ -1,0 +1,17 @@
+HG008T Illumina SNV all|all n: old 121139 new 121139 OK
+HG008T Illumina SNV all|all d46_tensor: old 14832 new 14832 OK
+HG008T Illumina SNV all|all linear_raw_fp: old 121139 new 121139 OK
+HG008T Illumina SNV all|all d46_raw_fp_all: old 2870 new 2870 OK
+HG008T Illumina SNV germline|ge46 n: old 101866 new 101866 OK
+HG008T Illumina SNV germline|ge46 d46_tensor: old 322 new 322 OK
+HG008T Illumina SNV germline|ge46 linear_raw_fp: old 121139 new 121139 OK
+HG008T Illumina SNV germline|ge46 d46_raw_fp_all: old 2870 new 2870 OK
+HG008T Illumina INDEL all|all n: old 39930 new 39930 OK
+HG008T Illumina INDEL all|all d46_tensor: old 2989 new 2989 OK
+HG008T Illumina INDEL all|all linear_raw_fp: old 39930 new 39930 OK
+HG008T Illumina INDEL all|all d46_raw_fp_all: old 2867 new 2867 OK
+HG008T Illumina INDEL germline|ge46 n: old 31450 new 31450 OK
+HG008T Illumina INDEL germline|ge46 d46_tensor: old 87 new 87 OK
+HG008T Illumina INDEL germline|ge46 linear_raw_fp: old 39930 new 39930 OK
+HG008T Illumina INDEL germline|ge46 d46_raw_fp_all: old 2867 new 2867 OK
+compared 162 numbers of 2 cell(s) with /scratch/jshen/Github/Pansoma/tmp/r32_prepon_20261104/r32_prepon.tsv: 162 equal, 0 different; classes only in the new output: []

@@ -1,0 +1,138 @@
+marked 20 empty elements of ver3
+Response Table 1.1: 9 data rows, 29 cells changed
+Response Table 2.9: 9 data rows, 29 cells changed
+Response Table 3.3: 9 data rows, 29 cells changed
+Response Table 1.2: 9 data rows, 29 cells changed
+Response Table 2.10: 9 data rows, 29 cells changed
+Response Table 3.4: 9 data rows, 29 cells changed
+text [^Response Table 1\.1\. ]: /Pansoma before our population filter \(it has none/ -> 'Pansoma: the six-tumor models trained and tested on each reference (ch'
+text [^Response Table 2\.9\. ]: /Pansoma before our population filter \(it has none/ -> 'Pansoma: the six-tumor models trained and tested on each reference (ch'
+text [^Response Table 3\.3\. ]: /Pansoma before our population filter \(it has none/ -> 'Pansoma: the six-tumor models trained and tested on each reference (ch'
+text [^Response Table 3\.3\. ]: /After filtering: Response Table 3\.1 \(single-tumo/ -> 'After filtering: Response Table 3.1.'
+text [^Response Table 1\.2\. ]: /Pansoma: HG008T and COLO829T, single-tumor models / -> 'Pansoma: the six-tumor INDEL models trained and tested on each referen'
+text [^Response Table 2\.10\. ]: /Pansoma: HG008T and COLO829T, single-tumor models / -> 'Pansoma: the six-tumor INDEL models trained and tested on each referen'
+text [^Response Table 3\.4\. ]: /Pansoma: HG008T and COLO829T, single-tumor models / -> 'Pansoma: the six-tumor INDEL models trained and tested on each referen'
+text [^Response Table 3\.4\. ]: /After filtering: R3\.1 \(point 3, single-tumor mod/ -> ''
+Response Table 1.7: 8 data rows, 24 cells changed
+Response Table 2.3: 8 data rows, 24 cells changed
+Response Table 3.6: 8 data rows, 24 cells changed
+Response Table 2.7: 9 data rows, 42 cells changed
+Response Table 2.8: 12 data rows, 31 cells changed
+text [^Response Table 2\.7\. ]: /Single-tumor models trained on chr2–22 of HG008T o/ -> 'Six-tumor models trained on each reference (chr1 of HG008T not in trai'
+text [^Response Table 2\.8\. ]: /calculated before rounding\./ -> 'calculated before rounding. Six-tumor INDEL models after population fi'
+text [^Benefit near clustered germline variants\.]: /On HG008T, the HPRC graphs give the largest SNV F1/ -> 'On HG008T, the HPRC graphs give larger SNV F1 gains where germline var'
+Response Table 3.1: header cell 6 -> 'ΔF1, HPRC − GRCh38-only [95% interval]'
+Response Table 3.1: 45 data rows, 275 cells changed
+text [^Response Table 3\.1\. ]: /Per-seed chr1 SNV results of the three-reference c/ -> 'chr1 SNV results of the three-reference comparison (six-tumor models).'
+text [^Precision, recall and F1 in benchmark region]: /at validation-selected checkpoints and PASS thresh/ -> 'at validation-selected checkpoints and PASS thresholds (Response Table'
+text [^Models and training\. Models are those of th]: /Models are those of the three-reference comparison/ -> 'Six-tumor models (HCC1395T, HCC1954T, H1437T, H2009T, HG008T and COLO8'
+paragraph removed [^Exploratory, not used in any comparison: COLO829T]
+text [^Reproducibility\. Three SNV models retrained]: /Three SNV models retrained with the same seed/ -> 'Three models of the earlier single-tumor pipeline retrained with the s'
+text [^Reproducibility\. Three models of the earlie]: /of 30 checkpoints on a second cluster/ -> 'of 30 checkpoints of the earlier single-tumor models on a second clust'
+Response Table 3.2: 22 data rows, 65 cells changed
+text [^Response Table 3\.2\. ]: /Per-seed chr1 INDEL results of the final models\./ -> 'Per-seed chr1 results of the final INDEL models and of the single-tumo'
+text [^Precision, recall and F1 in benchmark region]: /Precision, recall and F1 in benchmark regions afte/ -> 'Precision, recall and F1 in benchmark regions after population filteri'
+text [^Models and training\. All models use HPRC v2]: /All models use HPRC v2\.1\./ -> 'The INDEL models use HPRC v2.1.'
+text [^Models and training\. The INDEL models use H]: /AF ≥ 1e-4 elsewhere\./ -> 'AF ≥ 1e-4 elsewhere. The last four rows are SNV models of the current '
+text [Response Table 3.17 / Tensors]: /SNV models also take population site features of t/ -> 'SNV and INDEL models on the HPRC graphs also take per-candidate popula'
+text [Response Table 3.17 / Labels and splits]: /The six-tumor models train on chr2–22 of HG008T an/ -> 'The six-tumor SNV models train on chr2–22 of HG008T and COLO829T, chr2'
+Response Table 3.17: Checkpoint, Tensors and Labels rows rewritten, Calling row added
+Response Table 1.5: 18 data rows, 135 cells changed
+text [^Response Table 1\.5\. SNV calling by region]: /\(no filtered by the four resource VCFs\)/ -> '(not filtered by the four resource VCFs)'
+text [^Response Table 1\.5\. SNV calling by region]: /SMaHT extreme regions: PASS calls and precision on/ -> 'Six-tumor models trained and tested on each reference (chr1 of the thr'
+text [^Response Table 1\.5\. SNV calling by region]: /from the earlier INDEL models of the three-referen/ -> 'from the six-tumor INDEL models on each reference (one run each), befo'
+Response Table 2.5: 18 data rows, 135 cells changed
+text [^Response Table 2\.5\. SNV calling by region]: /\(no filtered by the four resource VCFs\)/ -> '(not filtered by the four resource VCFs)'
+text [^Response Table 2\.5\. SNV calling by region]: /SMaHT extreme regions: PASS calls and precision on/ -> 'Six-tumor models trained and tested on each reference (chr1 of the thr'
+text [^Response Table 2\.5\. SNV calling by region]: /from the earlier INDEL models of the three-referen/ -> 'from the six-tumor INDEL models on each reference (one run each), befo'
+Response Table 3.15: 18 data rows, 135 cells changed
+text [^Response Table 3\.15\. SNV calling by region]: /\(no filtered by the four resource VCFs\)/ -> '(not filtered by the four resource VCFs)'
+text [^Response Table 3\.15\. SNV calling by region]: /SMaHT extreme regions: PASS calls and precision on/ -> 'Six-tumor models trained and tested on each reference (chr1 of the thr'
+text [^Response Table 3\.15\. SNV calling by region]: /from the earlier INDEL models of the three-referen/ -> 'from the six-tumor INDEL models on each reference (one run each), befo'
+text [^Response: We thank the reviewer for this com]: /using the same sequencing reads and analysis pipel/ -> 'using the same sequencing reads and analysis pipeline across the GRCh3'
+text [^Calling in difficult regions\.]: /in all twelve dataset–graph comparisons/ -> 'in all eighteen dataset–graph comparisons'
+text [^Calling in difficult regions\.]: /INDELs showed a different pattern: in >=7bp homopo/ -> 'For INDELs in homopolymers of at least 7 bp, F1 before filtering was h'
+text [^Fewer false calls in difficult regions\.]: /On COLO829T, the GRCh38-only graph's excess false / -> 'In SMaHT extreme regions, before population filtering, HPRC v2.1 reduc'
+Response Table 2.6: 9 data rows, 47 cells changed
+Response Table 3.8: 9 data rows, 47 cells changed
+Response Table 3.9: 9 data rows, 48 cells changed
+Response Table 2.6: header cell 2 -> 'Matched-normal germline\nin HPRC v2.1 graph\n(share; candidates retained on HPRC v2.1)'
+Response Table 2.6: header cell 3 -> 'Matched-normal germline\nnot in HPRC v2.1 graph\n(share; candidates retained on HPRC v2.1)'
+Response Table 3.8: header cell 0 -> 'Dataset'
+Response Table 3.8: header cell 1 -> 'GRCh38-graph\nFP before population filtering'
+Response Table 3.8: header cell 2 -> 'Matched-normal germline\nin HPRC v2.1 graph\n(share; candidates retained on HPRC v2.1)'
+Response Table 3.8: header cell 3 -> 'Matched-normal germline\nnot in HPRC v2.1 graph\n(share; candidates retained on HPRC v2.1)'
+Response Table 3.8: header cell 4 -> 'Non-germline FP\n(% of GRCh38-\ngraph FP)'
+Response Table 3.8: header cell 5 -> 'HPRC v2.1\nFP before population filtering'
+Response Table 3.9: header cell 0 -> 'Dataset'
+Response Table 3.9: header cell 1 -> 'GRCh38-graph\nFP before population filtering'
+Response Table 3.9: header cell 2 -> 'Matched-normal germline\nin HPRC v2.1 graph\n(share; candidates retained on HPRC v2.1)'
+Response Table 3.9: header cell 3 -> 'Matched-normal germline\nnot in HPRC v2.1 graph\n(share; candidates retained on HPRC v2.1)'
+Response Table 3.9: header cell 4 -> 'Non-germline FP\n(% of GRCh38-\ngraph FP)'
+Response Table 3.9: header cell 5 -> 'HPRC v2.1\nFP before population filtering'
+text [^Response Table 2\.6\. SNV false positives]: /Graph-represented germline alleles account for 71–/ -> 'Six-tumor models: the GRCh38-graph models take no population site feat'
+text [^Response Table 3\.8\. SNV false positives]: /Graph-represented germline alleles account for 71–/ -> 'Six-tumor models: the GRCh38-graph models take no population site feat'
+text [^Response Table 3\.9\. INDEL false positives]: /Graph-represented germline INDEL candidate retenti/ -> 'Six-tumor INDEL models (HPRC v2.1: seed 0); the GRCh38-graph models ta'
+text [^The false positives of the GRCh38-only Panso]: /we trained Pansoma using the same pipeline on the / -> 'we trained Pansoma on the GRCh38-only graph (which contains only the G'
+text [^Graph representation and precision\.]: /accounted for 71–86% of SNV false positives/ -> 'accounted for 71–87% of SNV false positives'
+text [^Graph representation and precision\.]: /only 0\.2–0\.6% of these alleles retained tensors,/ -> 'only 0.1–0.7% of these alleles retained tensors, whereas 83–90% of gra'
+text [^Graph representation and precision\.]: /tensor retention was 0\.1–0\.3% on Illumina and 15/ -> 'tensor retention was at most 0.2% on Illumina; on long reads it was 15'
+Response Table 3.10: 9 data rows, 69 cells changed
+Response Table 3.11: 9 rows and 2 total rows rewritten
+text [^Response\. We thank the reviewer for suggest]: /\(HPRC v1\.1 and v2\.1; HCC1395T: v2\.1 only; Resp/ -> '(HPRC v2.1, six-tumor models; Response Table 3.10)'
+text [^In the default output, 34 calls from the HPR]: /34 calls from the HPRC v2\.1 model in chr1 were su/ -> '40 of the 935 calls from the HPRC v2.1 models in chr1 were supported b'
+text [^Response Table 3\.10\. Validation of graph-c]: /HCC1395T uses six-tumor models\. Of 541 calls, 34 / -> 'All nine call sets are from the six-tumor models. Of 935 calls, 40 (4.'
+text [^Response Table 3\.10\. Validation of graph-c]: /Every call was evaluated\./ -> 'Every call was evaluated against the assemblies; 5 calls had no usable'
+text [^Response Table 3\.10\. Validation of graph-c]: /neither \(matches neither assembly or cannot be al/ -> 'neither (the ALT context is found in no assembly)'
+text [^Response\. We thank the reviewer for these i]: /396 of 541 v2\.1 calls \(73\.2%\)/ -> '690 of 935 v2.1 calls (73.8%)'
+text [^We also evaluated off-reference calls using ]: /0\.5–10\.1% for HG008T/COLO829T and 0\.4–2\.2% for/ -> '3.6–11.4% for HG008T/COLO829T and 1.8–3.9% for HCC1395T'
+text [^Response Table 3\.11\. CHM13 representation]: /HCC1395T uses six-tumor models\. Overall, 396 of 5/ -> 'All nine call sets are from the six-tumor models. Overall, 690 of 935 '
+text [^ONT graph-coordinate calls\.]: /We admit that the ONT produced the most graph-coor/ -> 'We admit that the graph-coordinate PASS calls, which are most numerous'
+Fig 1.2: [(1, (5943600, 1849120), (5943600, 2456576))]
+Fig 1.3: [(2, (5943600, 1849120), (5943600, 1543574))]
+Fig 3.3: [(12, (5943600, 3566160), (5943600, 3566160))]
+Fig 3.2 a: [(11, (5943600, 3566160), (5943600, 3566160))]
+Fig 3.2 b: [(12, (5943600, 3566160), (5943600, 3566160))]
+Fig 3.2 c: [(13, (5943600, 3566160), (5943600, 3566160))]
+text [^We evaluated this change by masking this con]: /We evaluated this change.*$/ -> 'We evaluated this change by masking this context at inference in the s'
+text [^Response Figure 1\.2 Evaluation of path-foll]: /This evaluation is done by single tumor model resp/ -> 'This evaluation uses the six-tumor models on HPRC v2.1 (HG008T, COLO82'
+text [^Response Figure 1\.2 Evaluation of path-foll]: /The main improvement is on the recall\./ -> 'Recall is higher with the full tensor in all nine comparisons, precisi'
+text [^Response Figure 1\.3 Effect of the haplotype]: /The evaluation was performed separately using sing/ -> 'The evaluation uses the single-tumor COLO829T SNV models of the curren'
+text [^Response Figure 1\.3 Effect of the haplotype]: /Blue circles indicate models trained with the hapl/ -> 'Blue circles indicate the model trained with the haplotype-count chann'
+text [^Response Figure 1\.3 Effect of the haplotype]: /calculated as the value obtained with the haplotyp/ -> 'calculated as the value obtained with the haplotype-count channel (see'
+text [^Haplotype-count channel\. We added a new ref]: /Removing channel 6 reduced SNV F1 before populatio/ -> 'Removing the haplotype-count channel reduced SNV F1 in all four compar'
+text [^Response Figure 1\.1\. The eight channels re]: /TITATATA>T/ -> 'TTATATATA>T'
+text [^Response Figure 3\.2\. Revised Figure 4a]: /\(HG008-N or COLO829BL, Dipcall\), and PASS SNV ca/ -> '(HG008-N and COLO829BL, Dipcall; HCC1395BL, DeepVariant), and PASS SNV'
+text [^Response Figure 3\.2\. Revised Figure 4a]: /shown separately for each sequencing platform\./ -> 'shown separately for each sequencing platform. From top to bottom: HG0'
+text [^Response Figure 3\.3\. SBS96 spectra of Pans]: /; 7 of 6,025 calls without a usable context were e/ -> '; all 935 calls of the default output (Response Table 3.10; six-tumor '
+text [^The HPRC graphs reduced matched-normal germl]: /the benefit is especially evident before populatio/ -> 'the benefit is especially evident before population filtering (Respons'
+text [^Somatic loss and germline suppression]: /0\.2–0\.7% of truth SNVs and 3\.5–7\.0% of truth I/ -> '0.1–0.7% of truth SNVs and 1.1–7.0% of truth INDELs'
+text [^Somatic loss and germline suppression]: /the HPRC graphs v2\.1 reduced matched-normal germl/ -> 'the HPRC graphs v2.1 reduced matched-normal germline candidates by 85–'
+text [^Response: We agree that sensitivity is essen]: /sensitivity below VAF 0\.08/ -> 'sensitivity below the candidate allele-fraction floor (0.05–0.08)'
+text [^We trained four-tumor models using HCC1395 a]: /Four-tumor models achieve HG008T SNV F1 comparable/ -> 'Four-tumor models achieve SNV F1 above both comparators (DeepSomatic-T'
+text [^Phased normal assemblies \(HG008N, COLO829BL]: /carries 110 HG008T alleles \(6\.8%\) and 27 COLO82/ -> 'carries 120 HG008T alleles (7.5%) and 35 COLO829T alleles (8.7%); abou'
+text [^Phased normal assemblies \(HG008N, COLO829BL]: /At 1,153 of the 1,351 HG008T INDEL loci/ -> 'At 1,148 of the 1,346 HG008T INDEL loci'
+text [^Phased normal assemblies \(HG008N, COLO829BL]: /347 are INDELs; 26 are carried by the normal/ -> '347 are INDELs; 34 are carried by the normal'
+text [^Phased normal assemblies \(HG008N, COLO829BL]: /At 22 further INDELs/ -> 'At 15 further INDELs'
+text [^Phased normal assemblies \(HG008N, COLO829BL]: /At these 22 sites, the tumor hifiasm assembly carr/ -> 'At these 15 sites, the tumor hifiasm assembly carries the truth allele'
+text [^Response: We agree and have withdrawn the in]: /Only 6\.8% and 6\.7%, respectively, are carried by/ -> 'Only 7.5% and 8.7%, respectively, are carried by the matched normal, w'
+text [^Response: We agree and have withdrawn the in]: /Of the 1,351 HG008T and 319 COLO829T INDEL loci ab/ -> 'Of the 1,346 HG008T and 311 COLO829T INDEL loci absent from the normal'
+text [^How are true low-VAF SNVs handled\?]: /an observed allele fraction of at least 0\.05 \(lo/ -> 'an observed allele fraction of at least 0.05 (0.08 for ONT and for HG0'
+text [^Germline variants absent from the graph\.]: /On HG008T chr1, the model rejects 79–88% of these / -> 'On HG008T chr1, the six-tumor models on HPRC v1.1 and v2.1, which take'
+text [^Performance without population filtering \(R]: /On HG008T, single-tumor SNV F1 is 0\.31–0\.33 on H/ -> 'Before filtering, the six-tumor models reach SNV F1 0.635–0.651 on HG0'
+text [^Performance without population filtering \(R]: /Because Pansoma’s SNV calls are compared across re/ -> 'These values involve no post-calling filter. The HPRC models, however,'
+text [^Performance without population filtering \(R]: / The release six-tumor model reaches SNV F1 0\.44–/ -> ''
+text [^Performance without population filtering \(R]: /INDELs show no consistent difference between refer/ -> 'INDELs show the same pattern before filtering (Response Table 2.10); t'
+text [^Response: We thank the reviewer and agree th]: /For HG008T and COLO829T, each across three sequenc/ -> 'For HG008T, COLO829T and HCC1395T, each across three sequencing platfo'
+text [^Response: We thank the reviewer and agree th]: /and was constant on the GRCh38-only graph\. Models/ -> 'and was constant on the GRCh38-only graph, and that the GRCh38-only mo'
+text [^Response: We thank the reviewer and agree th]: /SNV results after population filtering are reporte/ -> 'SNV results after population filtering are reported in Response Table '
+text [^Response: We thank the reviewer and agree th]: /After the same population filter, both HPRC graphs/ -> 'After the same population filter, both HPRC graphs outperform GRCh38-o'
+text [^Improvement before population filtering\.]: /Both HPRC graphs also outperform GRCh38-only befor/ -> 'Before filtering, both HPRC graphs are above GRCh38-only on all nine d'
+text [^Germline candidate reduction\.]: / The advantage also persists after removing the ha/ -> ''
+text [^Candidate composition\. On HPRC v2\.1]: /other short repetitive regions \(Response Table 3\/ -> 'other short repetitive regions (Response Table 3.6)'
+text [^Candidate composition\. On HPRC v2\.1]: /found substantial overlap \(Response Table 3\.6\)/ -> 'found substantial overlap (Response Table 3.7)'
+text [^We expanded the training set by adding HCC13]: /an allele fraction of at least 0\.08,/ -> 'an allele fraction of at least 0.05 to 0.08 (Response Table 3.17),'
+text [^Training seeds\.]: /SNV reference models and final INDEL models were t/ -> 'The final INDEL models (six-tumor and four-tumor) and the single-tumor'
+text [^SNVs and INDELs are reported separately thro]: /in three of the six HG008T and COLO829T tumor–plat/ -> 'in four of the six HG008T and COLO829T tumor–platform settings (mean I'
+text [^A new Supplementary Table stratifies INDEL c]: /errors in long homopolymers \(44–70% of HG008T fal/ -> 'errors in long homopolymers (35–61% of HG008T false calls)'
+cleanup: 44 empty runs and 23 empty insertion wrappers removed; keep-with-next restored; 3876 paraIds unique

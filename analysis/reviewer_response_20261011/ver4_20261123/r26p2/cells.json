@@ -1,0 +1,2276 @@
+{
+ "generated": "2026-11-23 16:33",
+ "script": "/scratch/jshen/Github/Pansoma/analysis/reviewer_response_20261011/ver4_20261123/r26p2/r26p2.py",
+ "cells": [
+  {
+   "graph": "d46",
+   "reference": "HPRC v2.1",
+   "tumor": "HG008T",
+   "platform": "Illumina",
+   "set": "HG008T_Illumina_d46",
+   "run": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_Illumina_SNV_newpipe",
+   "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_Illumina_SNV_newpipe/vcf_chr1_HG008T_Illumina_d46",
+   "predictions": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_Illumina_SNV_newpipe/test_chr1/HG008T_Illumina_d46.tensors.SNV.predictions.ndjson.gz",
+   "threshold": 0.7630133032798767,
+   "epoch": 12,
+   "site_features_input": true,
+   "candidate_ref_alt_equals_grch38": 1.0,
+   "test_tensors": 185402,
+   "somatic": 665,
+   "non": 164462,
+   "G": 20275,
+   "G_offref": 0,
+   "G_tag": 19475,
+   "G_untag_onref": 800,
+   "C": 398,
+   "C_tag": 6,
+   "C_offref": 0,
+   "K": 392,
+   "non_called": 77,
+   "non_called_after": 34,
+   "somatic_called": 541,
+   "somatic_called_after": 540,
+   "FPt": 426,
+   "raw": {
+    "truth": 697,
+    "tp": 542,
+    "fp": 468,
+    "fn": 155,
+    "precision": 0.5366,
+    "recall": 0.7776,
+    "f1": 0.635,
+    "fp_germline_same": 399
+   },
+   "pon": {
+    "truth": 697,
+    "tp": 541,
+    "fp": 460,
+    "fn": 156,
+    "precision": 0.5405,
+    "recall": 0.7762,
+    "f1": 0.6372,
+    "fp_germline_same": 393
+   },
+   "unplaced_pass": 77,
+   "germline_vcf": "/scratch/jshen/data/HG008_GIAB/dipcall_HG008N_GRCh38/HG008N_GRCh38_dipcall.dip.vcf.gz",
+   "truth_vcf": "/scratch/jshen/data/HG008_GIAB/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_tumorvariants.vcf.gz",
+   "truth_bed": "/scratch/jshen/data/HG008_GIAB/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_all.bed"
+  },
+  {
+   "graph": "d46",
+   "reference": "HPRC v2.1",
+   "tumor": "HG008T",
+   "platform": "PacBio HiFi",
+   "set": "HG008T_PacBio_d46",
+   "run": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_PacBio_SNV_newpipe",
+   "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_PacBio_SNV_newpipe/vcf_chr1_HG008T_PacBio_d46",
+   "predictions": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_PacBio_SNV_newpipe/test_chr1/HG008T_PacBio_d46.tensors.SNV.predictions.ndjson.gz",
+   "threshold": 0.8157289028167725,
+   "epoch": 11,
+   "site_features_input": true,
+   "candidate_ref_alt_equals_grch38": 1.0,
+   "test_tensors": 27501,
+   "somatic": 661,
+   "non": 6110,
+   "G": 20730,
+   "G_offref": 0,
+   "G_tag": 19947,
+   "G_untag_onref": 783,
+   "C": 455,
+   "C_tag": 2,
+   "C_offref": 0,
+   "K": 453,
+   "non_called": 81,
+   "non_called_after": 16,
+   "somatic_called": 568,
+   "somatic_called_after": 566,
+   "FPt": 469,
+   "raw": {
+    "truth": 697,
+    "tp": 569,
+    "fp": 481,
+    "fn": 128,
+    "precision": 0.5419,
+    "recall": 0.8164,
+    "f1": 0.6514,
+    "fp_germline_same": 456
+   },
+   "pon": {
+    "truth": 697,
+    "tp": 567,
+    "fp": 479,
+    "fn": 130,
+    "precision": 0.5421,
+    "recall": 0.8135,
+    "f1": 0.6506,
+    "fp_germline_same": 454
+   },
+   "unplaced_pass": 143,
+   "germline_vcf": "/scratch/jshen/data/HG008_GIAB/dipcall_HG008N_GRCh38/HG008N_GRCh38_dipcall.dip.vcf.gz",
+   "truth_vcf": "/scratch/jshen/data/HG008_GIAB/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_tumorvariants.vcf.gz",
+   "truth_bed": "/scratch/jshen/data/HG008_GIAB/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_all.bed"
+  },
+  {
+   "graph": "d46",
+   "reference": "HPRC v2.1",
+   "tumor": "HG008T",
+   "platform": "ONT",
+   "set": "HG008T_ONT_d46",
+   "run": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_ONT_SNV_newpipe",
+   "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_ONT_SNV_newpipe/vcf_chr1_HG008T_ONT_d46",
+   "predictions": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_ONT_SNV_newpipe/test_chr1/HG008T_ONT_d46.tensors.SNV.predictions.ndjson.gz",
+   "threshold": 0.8221198916435242,
+   "epoch": 8,
+   "site_features_input": true,
+   "candidate_ref_alt_equals_grch38": 1.0,
+   "test_tensors": 40252,
+   "somatic": 665,
+   "non": 18337,
+   "G": 21250,
+   "G_offref": 0,
+   "G_tag": 20411,
+   "G_untag_onref": 839,
+   "C": 237,
+   "C_tag": 0,
+   "C_offref": 0,
+   "K": 237,
+   "non_called": 42,
+   "non_called_after": 31,
+   "somatic_called": 457,
+   "somatic_called_after": 457,
+   "FPt": 268,
+   "raw": {
+    "truth": 697,
+    "tp": 457,
+    "fp": 273,
+    "fn": 240,
+    "precision": 0.626,
+    "recall": 0.6557,
+    "f1": 0.6405,
+    "fp_germline_same": 237
+   },
+   "pon": {
+    "truth": 697,
+    "tp": 457,
+    "fp": 273,
+    "fn": 240,
+    "precision": 0.626,
+    "recall": 0.6557,
+    "f1": 0.6405,
+    "fp_germline_same": 237
+   },
+   "unplaced_pass": 90,
+   "germline_vcf": "/scratch/jshen/data/HG008_GIAB/dipcall_HG008N_GRCh38/HG008N_GRCh38_dipcall.dip.vcf.gz",
+   "truth_vcf": "/scratch/jshen/data/HG008_GIAB/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_tumorvariants.vcf.gz",
+   "truth_bed": "/scratch/jshen/data/HG008_GIAB/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_all.bed"
+  },
+  {
+   "graph": "d46",
+   "reference": "HPRC v2.1",
+   "tumor": "COLO829T",
+   "platform": "Illumina",
+   "set": "COLO829T_Illumina_d46_snvaf05",
+   "run": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_Illumina_SNV_newpipe",
+   "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_Illumina_SNV_newpipe/vcf_chr1_COLO829T_Illumina_d46",
+   "predictions": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_Illumina_SNV_newpipe/test_chr1/COLO829T_Illumina_d46_snvaf05.tensors.SNV.predictions.ndjson.gz",
+   "threshold": 0.7630133032798767,
+   "epoch": 12,
+   "site_features_input": true,
+   "candidate_ref_alt_equals_grch38": 1.0,
+   "test_tensors": 231709,
+   "somatic": 2119,
+   "non": 214193,
+   "G": 15397,
+   "G_offref": 0,
+   "G_tag": 14882,
+   "G_untag_onref": 515,
+   "C": 224,
+   "C_tag": 6,
+   "C_offref": 0,
+   "K": 218,
+   "non_called": 152,
+   "non_called_after": 126,
+   "somatic_called": 1846,
+   "somatic_called_after": 1838,
+   "FPt": 344,
+   "raw": {
+    "truth": 2443,
+    "tp": 1856,
+    "fp": 550,
+    "fn": 587,
+    "precision": 0.7714,
+    "recall": 0.7597,
+    "f1": 0.7655,
+    "fp_germline_same": 226
+   },
+   "pon": {
+    "truth": 2443,
+    "tp": 1848,
+    "fp": 536,
+    "fn": 595,
+    "precision": 0.7752,
+    "recall": 0.7564,
+    "f1": 0.7657,
+    "fp_germline_same": 220
+   },
+   "unplaced_pass": 110,
+   "germline_vcf": "/scratch/qfu/COLO829BL_DSA/dipcall_hg38/dipcall_hg38.dip.vcf.gz",
+   "truth_vcf": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/COLO829T_somatic_snv_indel.vcf.gz",
+   "truth_bed": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/SMaHT_v2_easy_difficult_extreme.union.bed"
+  },
+  {
+   "graph": "d46",
+   "reference": "HPRC v2.1",
+   "tumor": "COLO829T",
+   "platform": "Fiber-seq",
+   "set": "COLO829T_fiberseq_d46_snvaf05",
+   "run": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_PacBio_SNV_newpipe",
+   "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_PacBio_SNV_newpipe/vcf_chr1_COLO829T_fiberseq_d46",
+   "predictions": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_PacBio_SNV_newpipe/test_chr1/COLO829T_fiberseq_d46_snvaf05.tensors.SNV.predictions.ndjson.gz",
+   "threshold": 0.8157289028167725,
+   "epoch": 11,
+   "site_features_input": true,
+   "candidate_ref_alt_equals_grch38": 1.0,
+   "test_tensors": 28861,
+   "somatic": 2095,
+   "non": 9913,
+   "G": 16853,
+   "G_offref": 0,
+   "G_tag": 16351,
+   "G_untag_onref": 502,
+   "C": 162,
+   "C_tag": 2,
+   "C_offref": 0,
+   "K": 160,
+   "non_called": 105,
+   "non_called_after": 88,
+   "somatic_called": 1827,
+   "somatic_called_after": 1825,
+   "FPt": 248,
+   "raw": {
+    "truth": 2443,
+    "tp": 1832,
+    "fp": 291,
+    "fn": 611,
+    "precision": 0.8629,
+    "recall": 0.7499,
+    "f1": 0.8025,
+    "fp_germline_same": 163
+   },
+   "pon": {
+    "truth": 2443,
+    "tp": 1830,
+    "fp": 287,
+    "fn": 613,
+    "precision": 0.8644,
+    "recall": 0.7491,
+    "f1": 0.8026,
+    "fp_germline_same": 161
+   },
+   "unplaced_pass": 79,
+   "germline_vcf": "/scratch/qfu/COLO829BL_DSA/dipcall_hg38/dipcall_hg38.dip.vcf.gz",
+   "truth_vcf": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/COLO829T_somatic_snv_indel.vcf.gz",
+   "truth_bed": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/SMaHT_v2_easy_difficult_extreme.union.bed"
+  },
+  {
+   "graph": "d46",
+   "reference": "HPRC v2.1",
+   "tumor": "COLO829T",
+   "platform": "ONT",
+   "set": "COLO829T_ONT_d46",
+   "run": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_ONT_SNV_newpipe",
+   "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_ONT_SNV_newpipe/vcf_chr1_COLO829T_ONT_d46",
+   "predictions": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_ONT_SNV_newpipe/test_chr1/COLO829T_ONT_d46.tensors.SNV.predictions.ndjson.gz",
+   "threshold": 0.8221198916435242,
+   "epoch": 8,
+   "site_features_input": true,
+   "candidate_ref_alt_equals_grch38": 1.0,
+   "test_tensors": 69771,
+   "somatic": 1983,
+   "non": 49233,
+   "G": 18555,
+   "G_offref": 0,
+   "G_tag": 17949,
+   "G_untag_onref": 606,
+   "C": 222,
+   "C_tag": 0,
+   "C_offref": 0,
+   "K": 222,
+   "non_called": 252,
+   "non_called_after": 212,
+   "somatic_called": 1721,
+   "somatic_called_after": 1719,
+   "FPt": 434,
+   "raw": {
+    "truth": 2443,
+    "tp": 1731,
+    "fp": 477,
+    "fn": 712,
+    "precision": 0.784,
+    "recall": 0.7086,
+    "f1": 0.7444,
+    "fp_germline_same": 225
+   },
+   "pon": {
+    "truth": 2443,
+    "tp": 1729,
+    "fp": 467,
+    "fn": 714,
+    "precision": 0.7873,
+    "recall": 0.7077,
+    "f1": 0.7454,
+    "fp_germline_same": 225
+   },
+   "unplaced_pass": 111,
+   "germline_vcf": "/scratch/qfu/COLO829BL_DSA/dipcall_hg38/dipcall_hg38.dip.vcf.gz",
+   "truth_vcf": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/COLO829T_somatic_snv_indel.vcf.gz",
+   "truth_bed": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/SMaHT_v2_easy_difficult_extreme.union.bed"
+  },
+  {
+   "graph": "d46",
+   "reference": "HPRC v2.1",
+   "tumor": "HCC1395T",
+   "platform": "Illumina",
+   "set": "HCC1395T_Illumina_d46_snvaf05",
+   "run": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_Illumina_SNV_newpipe",
+   "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_Illumina_SNV_newpipe/vcf_chr1_HCC1395T_Illumina_d46",
+   "predictions": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_Illumina_SNV_newpipe/test_chr1/HCC1395T_Illumina_d46_snvaf05.tensors.SNV.predictions.ndjson.gz",
+   "threshold": 0.7630133032798767,
+   "epoch": 12,
+   "site_features_input": true,
+   "candidate_ref_alt_equals_grch38": 1.0,
+   "test_tensors": 374818,
+   "somatic": 2987,
+   "non": 355221,
+   "G": 16610,
+   "G_offref": 0,
+   "G_tag": 15955,
+   "G_untag_onref": 655,
+   "C": 368,
+   "C_tag": 4,
+   "C_offref": 0,
+   "K": 364,
+   "non_called": 123,
+   "non_called_after": 98,
+   "somatic_called": 2839,
+   "somatic_called_after": 2829,
+   "FPt": 462,
+   "raw": {
+    "truth": 3440,
+    "tp": 3124,
+    "fp": 502,
+    "fn": 316,
+    "precision": 0.8616,
+    "recall": 0.9081,
+    "f1": 0.8842,
+    "fp_germline_same": 387
+   },
+   "pon": {
+    "truth": 3440,
+    "tp": 3113,
+    "fp": 495,
+    "fn": 327,
+    "precision": 0.8628,
+    "recall": 0.9049,
+    "f1": 0.8834,
+    "fp_germline_same": 383
+   },
+   "unplaced_pass": 76,
+   "germline_vcf": "/scratch/jshen/data/CASTLE/HCC1395/truth/HCC1395BL_germline_DeepVariant_hybrid_QUAL10.vcf.gz",
+   "truth_vcf": "/scratch/jshen/data/CASTLE/HCC1395/truth/HCC1395_somatic_SEQC2_v1.2.1.vcf.gz",
+   "truth_bed": "/scratch/jshen/data/CASTLE/HCC1395/truth/SEQC2_High-Confidence_Regions_v1.2.bed"
+  },
+  {
+   "graph": "d46",
+   "reference": "HPRC v2.1",
+   "tumor": "HCC1395T",
+   "platform": "PacBio HiFi",
+   "set": "HCC1395T_PacBio_d46_snvaf05",
+   "run": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_PacBio_SNV_newpipe",
+   "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_PacBio_SNV_newpipe/vcf_chr1_HCC1395T_PacBio_d46",
+   "predictions": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_PacBio_SNV_newpipe/test_chr1/HCC1395T_PacBio_d46_snvaf05.tensors.SNV.predictions.ndjson.gz",
+   "threshold": 0.8157289028167725,
+   "epoch": 11,
+   "site_features_input": true,
+   "candidate_ref_alt_equals_grch38": 1.0,
+   "test_tensors": 24243,
+   "somatic": 3017,
+   "non": 4505,
+   "G": 16721,
+   "G_offref": 0,
+   "G_tag": 16076,
+   "G_untag_onref": 645,
+   "C": 312,
+   "C_tag": 1,
+   "C_offref": 0,
+   "K": 311,
+   "non_called": 35,
+   "non_called_after": 18,
+   "somatic_called": 2807,
+   "somatic_called_after": 2798,
+   "FPt": 329,
+   "raw": {
+    "truth": 3440,
+    "tp": 2959,
+    "fp": 416,
+    "fn": 481,
+    "precision": 0.8767,
+    "recall": 0.8602,
+    "f1": 0.8684,
+    "fp_germline_same": 329
+   },
+   "pon": {
+    "truth": 3440,
+    "tp": 2950,
+    "fp": 413,
+    "fn": 490,
+    "precision": 0.8772,
+    "recall": 0.8576,
+    "f1": 0.8673,
+    "fp_germline_same": 328
+   },
+   "unplaced_pass": 106,
+   "germline_vcf": "/scratch/jshen/data/CASTLE/HCC1395/truth/HCC1395BL_germline_DeepVariant_hybrid_QUAL10.vcf.gz",
+   "truth_vcf": "/scratch/jshen/data/CASTLE/HCC1395/truth/HCC1395_somatic_SEQC2_v1.2.1.vcf.gz",
+   "truth_bed": "/scratch/jshen/data/CASTLE/HCC1395/truth/SEQC2_High-Confidence_Regions_v1.2.bed"
+  },
+  {
+   "graph": "d46",
+   "reference": "HPRC v2.1",
+   "tumor": "HCC1395T",
+   "platform": "ONT",
+   "set": "HCC1395T_ONT_d46",
+   "run": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_ONT_SNV_newpipe",
+   "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_ONT_SNV_newpipe/vcf_chr1_HCC1395T_ONT_d46",
+   "predictions": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_ONT_SNV_newpipe/test_chr1/HCC1395T_ONT_d46.tensors.SNV.predictions.ndjson.gz",
+   "threshold": 0.8221198916435242,
+   "epoch": 8,
+   "site_features_input": true,
+   "candidate_ref_alt_equals_grch38": 1.0,
+   "test_tensors": 51840,
+   "somatic": 2526,
+   "non": 31371,
+   "G": 17943,
+   "G_offref": 0,
+   "G_tag": 17292,
+   "G_untag_onref": 651,
+   "C": 331,
+   "C_tag": 1,
+   "C_offref": 0,
+   "K": 330,
+   "non_called": 74,
+   "non_called_after": 20,
+   "somatic_called": 2229,
+   "somatic_called_after": 2224,
+   "FPt": 350,
+   "raw": {
+    "truth": 3440,
+    "tp": 2331,
+    "fp": 780,
+    "fn": 1109,
+    "precision": 0.7493,
+    "recall": 0.6776,
+    "f1": 0.7116,
+    "fp_germline_same": 354
+   },
+   "pon": {
+    "truth": 3440,
+    "tp": 2326,
+    "fp": 733,
+    "fn": 1114,
+    "precision": 0.7604,
+    "recall": 0.6762,
+    "f1": 0.7158,
+    "fp_germline_same": 353
+   },
+   "unplaced_pass": 143,
+   "germline_vcf": "/scratch/jshen/data/CASTLE/HCC1395/truth/HCC1395BL_germline_DeepVariant_hybrid_QUAL10.vcf.gz",
+   "truth_vcf": "/scratch/jshen/data/CASTLE/HCC1395/truth/HCC1395_somatic_SEQC2_v1.2.1.vcf.gz",
+   "truth_bed": "/scratch/jshen/data/CASTLE/HCC1395/truth/SEQC2_High-Confidence_Regions_v1.2.bed"
+  },
+  {
+   "graph": "d9",
+   "reference": "HPRC v1.1",
+   "tumor": "HG008T",
+   "platform": "Illumina",
+   "set": "HG008T_Illumina",
+   "run": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_Illumina_SNV_d9",
+   "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_Illumina_SNV_d9/vcf_chr1_HG008T",
+   "predictions": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_Illumina_SNV_d9/test_chr1/HG008T_Illumina.tensors.SNV.predictions.ndjson.gz",
+   "threshold": 0.6782487034797668,
+   "epoch": 14,
+   "site_features_input": true,
+   "candidate_ref_alt_equals_grch38": 1.0,
+   "test_tensors": 190697,
+   "somatic": 659,
+   "non": 167276,
+   "G": 22762,
+   "G_offref": 0,
+   "G_tag": 21962,
+   "G_untag_onref": 800,
+   "C": 428,
+   "C_tag": 15,
+   "C_offref": 0,
+   "K": 413,
+   "non_called": 162,
+   "non_called_after": 34,
+   "somatic_called": 549,
+   "somatic_called_after": 547,
+   "FPt": 447,
+   "raw": {
+    "truth": 697,
+    "tp": 550,
+    "fp": 498,
+    "fn": 147,
+    "precision": 0.5248,
+    "recall": 0.7891,
+    "f1": 0.6304,
+    "fp_germline_same": 429
+   },
+   "pon": {
+    "truth": 697,
+    "tp": 548,
+    "fp": 478,
+    "fn": 149,
+    "precision": 0.5341,
+    "recall": 0.7862,
+    "f1": 0.6361,
+    "fp_germline_same": 414
+   },
+   "unplaced_pass": 158,
+   "germline_vcf": "/scratch/jshen/data/HG008_GIAB/dipcall_HG008N_GRCh38/HG008N_GRCh38_dipcall.dip.vcf.gz",
+   "truth_vcf": "/scratch/jshen/data/HG008_GIAB/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_tumorvariants.vcf.gz",
+   "truth_bed": "/scratch/jshen/data/HG008_GIAB/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_all.bed"
+  },
+  {
+   "graph": "d9",
+   "reference": "HPRC v1.1",
+   "tumor": "HG008T",
+   "platform": "PacBio HiFi",
+   "set": "HG008T_PacBio",
+   "run": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_PacBio_SNV_d9",
+   "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_PacBio_SNV_d9/vcf_chr1_HG008T",
+   "predictions": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_PacBio_SNV_d9/test_chr1/HG008T_PacBio.tensors.SNV.predictions.ndjson.gz",
+   "threshold": 0.9408966302871704,
+   "epoch": 4,
+   "site_features_input": true,
+   "candidate_ref_alt_equals_grch38": 1.0,
+   "test_tensors": 32880,
+   "somatic": 658,
+   "non": 8841,
+   "G": 23381,
+   "G_offref": 0,
+   "G_tag": 22594,
+   "G_untag_onref": 787,
+   "C": 460,
+   "C_tag": 1,
+   "C_offref": 0,
+   "K": 459,
+   "non_called": 70,
+   "non_called_after": 9,
+   "somatic_called": 574,
+   "somatic_called_after": 573,
+   "FPt": 468,
+   "raw": {
+    "truth": 697,
+    "tp": 575,
+    "fp": 471,
+    "fn": 122,
+    "precision": 0.5497,
+    "recall": 0.825,
+    "f1": 0.6598,
+    "fp_germline_same": 461
+   },
+   "pon": {
+    "truth": 697,
+    "tp": 574,
+    "fp": 470,
+    "fn": 123,
+    "precision": 0.5498,
+    "recall": 0.8235,
+    "f1": 0.6594,
+    "fp_germline_same": 460
+   },
+   "unplaced_pass": 65,
+   "germline_vcf": "/scratch/jshen/data/HG008_GIAB/dipcall_HG008N_GRCh38/HG008N_GRCh38_dipcall.dip.vcf.gz",
+   "truth_vcf": "/scratch/jshen/data/HG008_GIAB/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_tumorvariants.vcf.gz",
+   "truth_bed": "/scratch/jshen/data/HG008_GIAB/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_all.bed"
+  },
+  {
+   "graph": "d9",
+   "reference": "HPRC v1.1",
+   "tumor": "HG008T",
+   "platform": "ONT",
+   "set": "HG008T_ONT",
+   "run": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_ONT_SNV_d9",
+   "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_ONT_SNV_d9/vcf_chr1_HG008T",
+   "predictions": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_ONT_SNV_d9/test_chr1/HG008T_ONT.tensors.SNV.predictions.ndjson.gz",
+   "threshold": 0.8028301000595093,
+   "epoch": 7,
+   "site_features_input": true,
+   "candidate_ref_alt_equals_grch38": 1.0,
+   "test_tensors": 44116,
+   "somatic": 663,
+   "non": 19401,
+   "G": 24052,
+   "G_offref": 0,
+   "G_tag": 23213,
+   "G_untag_onref": 839,
+   "C": 304,
+   "C_tag": 0,
+   "C_offref": 0,
+   "K": 304,
+   "non_called": 60,
+   "non_called_after": 51,
+   "somatic_called": 501,
+   "somatic_called_after": 501,
+   "FPt": 355,
+   "raw": {
+    "truth": 697,
+    "tp": 502,
+    "fp": 359,
+    "fn": 195,
+    "precision": 0.583,
+    "recall": 0.7202,
+    "f1": 0.6444,
+    "fp_germline_same": 305
+   },
+   "pon": {
+    "truth": 697,
+    "tp": 502,
+    "fp": 359,
+    "fn": 195,
+    "precision": 0.583,
+    "recall": 0.7202,
+    "f1": 0.6444,
+    "fp_germline_same": 305
+   },
+   "unplaced_pass": 52,
+   "germline_vcf": "/scratch/jshen/data/HG008_GIAB/dipcall_HG008N_GRCh38/HG008N_GRCh38_dipcall.dip.vcf.gz",
+   "truth_vcf": "/scratch/jshen/data/HG008_GIAB/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_tumorvariants.vcf.gz",
+   "truth_bed": "/scratch/jshen/data/HG008_GIAB/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_all.bed"
+  },
+  {
+   "graph": "d9",
+   "reference": "HPRC v1.1",
+   "tumor": "COLO829T",
+   "platform": "Illumina",
+   "set": "COLO829T_Illumina_snvaf05",
+   "run": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_Illumina_SNV_d9",
+   "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_Illumina_SNV_d9/vcf_chr1_COLO829T",
+   "predictions": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_Illumina_SNV_d9/test_chr1/COLO829T_Illumina_snvaf05.tensors.SNV.predictions.ndjson.gz",
+   "threshold": 0.6782487034797668,
+   "epoch": 14,
+   "site_features_input": true,
+   "candidate_ref_alt_equals_grch38": 1.0,
+   "test_tensors": 237044,
+   "somatic": 2121,
+   "non": 217331,
+   "G": 17592,
+   "G_offref": 0,
+   "G_tag": 17077,
+   "G_untag_onref": 515,
+   "C": 244,
+   "C_tag": 5,
+   "C_offref": 0,
+   "K": 239,
+   "non_called": 221,
+   "non_called_after": 151,
+   "somatic_called": 1845,
+   "somatic_called_after": 1837,
+   "FPt": 390,
+   "raw": {
+    "truth": 2443,
+    "tp": 1854,
+    "fp": 637,
+    "fn": 589,
+    "precision": 0.7443,
+    "recall": 0.7589,
+    "f1": 0.7515,
+    "fp_germline_same": 247
+   },
+   "pon": {
+    "truth": 2443,
+    "tp": 1846,
+    "fp": 625,
+    "fn": 597,
+    "precision": 0.7471,
+    "recall": 0.7556,
+    "f1": 0.7513,
+    "fp_germline_same": 242
+   },
+   "unplaced_pass": 107,
+   "germline_vcf": "/scratch/qfu/COLO829BL_DSA/dipcall_hg38/dipcall_hg38.dip.vcf.gz",
+   "truth_vcf": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/COLO829T_somatic_snv_indel.vcf.gz",
+   "truth_bed": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/SMaHT_v2_easy_difficult_extreme.union.bed"
+  },
+  {
+   "graph": "d9",
+   "reference": "HPRC v1.1",
+   "tumor": "COLO829T",
+   "platform": "Fiber-seq",
+   "set": "COLO829T_fiberseq_snvaf05",
+   "run": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_PacBio_SNV_d9",
+   "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_PacBio_SNV_d9/vcf_chr1_COLO829T",
+   "predictions": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_PacBio_SNV_d9/test_chr1/COLO829T_fiberseq_snvaf05.tensors.SNV.predictions.ndjson.gz",
+   "threshold": 0.9408966302871704,
+   "epoch": 4,
+   "site_features_input": true,
+   "candidate_ref_alt_equals_grch38": 1.0,
+   "test_tensors": 36563,
+   "somatic": 2094,
+   "non": 14937,
+   "G": 19532,
+   "G_offref": 0,
+   "G_tag": 18992,
+   "G_untag_onref": 540,
+   "C": 317,
+   "C_tag": 1,
+   "C_offref": 0,
+   "K": 316,
+   "non_called": 122,
+   "non_called_after": 84,
+   "somatic_called": 1950,
+   "somatic_called_after": 1948,
+   "FPt": 400,
+   "raw": {
+    "truth": 2443,
+    "tp": 1959,
+    "fp": 413,
+    "fn": 484,
+    "precision": 0.8259,
+    "recall": 0.8019,
+    "f1": 0.8137,
+    "fp_germline_same": 317
+   },
+   "pon": {
+    "truth": 2443,
+    "tp": 1957,
+    "fp": 411,
+    "fn": 486,
+    "precision": 0.8264,
+    "recall": 0.8011,
+    "f1": 0.8136,
+    "fp_germline_same": 316
+   },
+   "unplaced_pass": 45,
+   "germline_vcf": "/scratch/qfu/COLO829BL_DSA/dipcall_hg38/dipcall_hg38.dip.vcf.gz",
+   "truth_vcf": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/COLO829T_somatic_snv_indel.vcf.gz",
+   "truth_bed": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/SMaHT_v2_easy_difficult_extreme.union.bed"
+  },
+  {
+   "graph": "d9",
+   "reference": "HPRC v1.1",
+   "tumor": "COLO829T",
+   "platform": "ONT",
+   "set": "COLO829T_ONT",
+   "run": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_ONT_SNV_d9",
+   "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_ONT_SNV_d9/vcf_chr1_COLO829T",
+   "predictions": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_ONT_SNV_d9/test_chr1/COLO829T_ONT.tensors.SNV.predictions.ndjson.gz",
+   "threshold": 0.8028301000595093,
+   "epoch": 7,
+   "site_features_input": true,
+   "candidate_ref_alt_equals_grch38": 1.0,
+   "test_tensors": 61531,
+   "somatic": 1984,
+   "non": 38429,
+   "G": 21118,
+   "G_offref": 0,
+   "G_tag": 20554,
+   "G_untag_onref": 564,
+   "C": 240,
+   "C_tag": 0,
+   "C_offref": 0,
+   "K": 240,
+   "non_called": 225,
+   "non_called_after": 187,
+   "somatic_called": 1768,
+   "somatic_called_after": 1767,
+   "FPt": 427,
+   "raw": {
+    "truth": 2443,
+    "tp": 1778,
+    "fp": 601,
+    "fn": 665,
+    "precision": 0.7474,
+    "recall": 0.7278,
+    "f1": 0.7375,
+    "fp_germline_same": 246
+   },
+   "pon": {
+    "truth": 2443,
+    "tp": 1777,
+    "fp": 599,
+    "fn": 666,
+    "precision": 0.7479,
+    "recall": 0.7274,
+    "f1": 0.7375,
+    "fp_germline_same": 246
+   },
+   "unplaced_pass": 138,
+   "germline_vcf": "/scratch/qfu/COLO829BL_DSA/dipcall_hg38/dipcall_hg38.dip.vcf.gz",
+   "truth_vcf": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/COLO829T_somatic_snv_indel.vcf.gz",
+   "truth_bed": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/SMaHT_v2_easy_difficult_extreme.union.bed"
+  },
+  {
+   "graph": "d9",
+   "reference": "HPRC v1.1",
+   "tumor": "HCC1395T",
+   "platform": "Illumina",
+   "set": "HCC1395T_Illumina_d9_snvaf05",
+   "run": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_Illumina_SNV_d9",
+   "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_Illumina_SNV_d9/vcf_chr1_HCC1395T",
+   "predictions": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_Illumina_SNV_d9/test_chr1/HCC1395T_Illumina_d9_snvaf05.tensors.SNV.predictions.ndjson.gz",
+   "threshold": 0.6782487034797668,
+   "epoch": 14,
+   "site_features_input": true,
+   "candidate_ref_alt_equals_grch38": 1.0,
+   "test_tensors": 380013,
+   "somatic": 2986,
+   "non": 358455,
+   "G": 18572,
+   "G_offref": 0,
+   "G_tag": 17917,
+   "G_untag_onref": 655,
+   "C": 406,
+   "C_tag": 11,
+   "C_offref": 0,
+   "K": 395,
+   "non_called": 170,
+   "non_called_after": 97,
+   "somatic_called": 2835,
+   "somatic_called_after": 2824,
+   "FPt": 492,
+   "raw": {
+    "truth": 3440,
+    "tp": 3125,
+    "fp": 547,
+    "fn": 315,
+    "precision": 0.851,
+    "recall": 0.9084,
+    "f1": 0.8788,
+    "fp_germline_same": 431
+   },
+   "pon": {
+    "truth": 3440,
+    "tp": 3113,
+    "fp": 530,
+    "fn": 327,
+    "precision": 0.8545,
+    "recall": 0.9049,
+    "f1": 0.879,
+    "fp_germline_same": 419
+   },
+   "unplaced_pass": 133,
+   "germline_vcf": "/scratch/jshen/data/CASTLE/HCC1395/truth/HCC1395BL_germline_DeepVariant_hybrid_QUAL10.vcf.gz",
+   "truth_vcf": "/scratch/jshen/data/CASTLE/HCC1395/truth/HCC1395_somatic_SEQC2_v1.2.1.vcf.gz",
+   "truth_bed": "/scratch/jshen/data/CASTLE/HCC1395/truth/SEQC2_High-Confidence_Regions_v1.2.bed"
+  },
+  {
+   "graph": "d9",
+   "reference": "HPRC v1.1",
+   "tumor": "HCC1395T",
+   "platform": "PacBio HiFi",
+   "set": "HCC1395T_PacBio_d9_snvaf05",
+   "run": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_PacBio_SNV_d9",
+   "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_PacBio_SNV_d9/vcf_chr1_HCC1395T",
+   "predictions": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_PacBio_SNV_d9/test_chr1/HCC1395T_PacBio_d9_snvaf05.tensors.SNV.predictions.ndjson.gz",
+   "threshold": 0.9408966302871704,
+   "epoch": 4,
+   "site_features_input": true,
+   "candidate_ref_alt_equals_grch38": 1.0,
+   "test_tensors": 26754,
+   "somatic": 3016,
+   "non": 4840,
+   "G": 18898,
+   "G_offref": 0,
+   "G_tag": 18252,
+   "G_untag_onref": 646,
+   "C": 383,
+   "C_tag": 0,
+   "C_offref": 0,
+   "K": 383,
+   "non_called": 23,
+   "non_called_after": 14,
+   "somatic_called": 2768,
+   "somatic_called_after": 2764,
+   "FPt": 397,
+   "raw": {
+    "truth": 3440,
+    "tp": 2904,
+    "fp": 469,
+    "fn": 536,
+    "precision": 0.861,
+    "recall": 0.8442,
+    "f1": 0.8525,
+    "fp_germline_same": 399
+   },
+   "pon": {
+    "truth": 3440,
+    "tp": 2900,
+    "fp": 468,
+    "fn": 540,
+    "precision": 0.861,
+    "recall": 0.843,
+    "f1": 0.8519,
+    "fp_germline_same": 399
+   },
+   "unplaced_pass": 27,
+   "germline_vcf": "/scratch/jshen/data/CASTLE/HCC1395/truth/HCC1395BL_germline_DeepVariant_hybrid_QUAL10.vcf.gz",
+   "truth_vcf": "/scratch/jshen/data/CASTLE/HCC1395/truth/HCC1395_somatic_SEQC2_v1.2.1.vcf.gz",
+   "truth_bed": "/scratch/jshen/data/CASTLE/HCC1395/truth/SEQC2_High-Confidence_Regions_v1.2.bed"
+  },
+  {
+   "graph": "d9",
+   "reference": "HPRC v1.1",
+   "tumor": "HCC1395T",
+   "platform": "ONT",
+   "set": "HCC1395T_ONT_d9",
+   "run": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_ONT_SNV_d9",
+   "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_ONT_SNV_d9/vcf_chr1_HCC1395T",
+   "predictions": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_ONT_SNV_d9/test_chr1/HCC1395T_ONT_d9.tensors.SNV.predictions.ndjson.gz",
+   "threshold": 0.8028301000595093,
+   "epoch": 7,
+   "site_features_input": true,
+   "candidate_ref_alt_equals_grch38": 1.0,
+   "test_tensors": 54509,
+   "somatic": 2527,
+   "non": 31694,
+   "G": 20288,
+   "G_offref": 0,
+   "G_tag": 19638,
+   "G_untag_onref": 650,
+   "C": 357,
+   "C_tag": 0,
+   "C_offref": 0,
+   "K": 357,
+   "non_called": 101,
+   "non_called_after": 18,
+   "somatic_called": 2279,
+   "somatic_called_after": 2274,
+   "FPt": 375,
+   "raw": {
+    "truth": 3440,
+    "tp": 2373,
+    "fp": 418,
+    "fn": 1067,
+    "precision": 0.8502,
+    "recall": 0.6898,
+    "f1": 0.7617,
+    "fp_germline_same": 374
+   },
+   "pon": {
+    "truth": 3440,
+    "tp": 2368,
+    "fp": 413,
+    "fn": 1072,
+    "precision": 0.8515,
+    "recall": 0.6884,
+    "f1": 0.7613,
+    "fp_germline_same": 374
+   },
+   "unplaced_pass": 169,
+   "germline_vcf": "/scratch/jshen/data/CASTLE/HCC1395/truth/HCC1395BL_germline_DeepVariant_hybrid_QUAL10.vcf.gz",
+   "truth_vcf": "/scratch/jshen/data/CASTLE/HCC1395/truth/HCC1395_somatic_SEQC2_v1.2.1.vcf.gz",
+   "truth_bed": "/scratch/jshen/data/CASTLE/HCC1395/truth/SEQC2_High-Confidence_Regions_v1.2.bed"
+  },
+  {
+   "graph": "linear_nositef",
+   "reference": "GRCh38-only",
+   "tumor": "HG008T",
+   "platform": "Illumina",
+   "set": "HG008T_Illumina_linear",
+   "run": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_Illumina_SNV_linear_nositef",
+   "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_Illumina_SNV_linear_nositef/vcf_chr1_HG008T",
+   "predictions": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_Illumina_SNV_linear_nositef/test_chr1/HG008T_Illumina_linear.tensors.SNV.predictions.ndjson.gz",
+   "threshold": 0.09534827619791031,
+   "epoch": 8,
+   "site_features_input": false,
+   "candidate_ref_alt_equals_grch38": 1.0,
+   "test_tensors": 414453,
+   "somatic": 683,
+   "non": 174820,
+   "G": 238950,
+   "G_offref": 0,
+   "G_tag": 237975,
+   "G_untag_onref": 975,
+   "C": 27251,
+   "C_tag": 27048,
+   "C_offref": 0,
+   "K": 203,
+   "non_called": 421,
+   "non_called_after": 85,
+   "somatic_called": 381,
+   "somatic_called_after": 370,
+   "FPt": 288,
+   "raw": {
+    "truth": 697,
+    "tp": 381,
+    "fp": 28178,
+    "fn": 316,
+    "precision": 0.0133,
+    "recall": 0.5466,
+    "f1": 0.026,
+    "fp_germline_same": 27313
+   },
+   "pon": {
+    "truth": 697,
+    "tp": 370,
+    "fp": 517,
+    "fn": 327,
+    "precision": 0.4171,
+    "recall": 0.5308,
+    "f1": 0.4672,
+    "fp_germline_same": 209
+   },
+   "unplaced_pass": 0,
+   "germline_vcf": "/scratch/jshen/data/HG008_GIAB/dipcall_HG008N_GRCh38/HG008N_GRCh38_dipcall.dip.vcf.gz",
+   "truth_vcf": "/scratch/jshen/data/HG008_GIAB/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_tumorvariants.vcf.gz",
+   "truth_bed": "/scratch/jshen/data/HG008_GIAB/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_all.bed"
+  },
+  {
+   "graph": "linear_nositef",
+   "reference": "GRCh38-only",
+   "tumor": "HG008T",
+   "platform": "PacBio HiFi",
+   "set": "HG008T_PacBio_linear",
+   "run": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_PacBio_SNV_linear_nositef",
+   "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_PacBio_SNV_linear_nositef/vcf_chr1_HG008T",
+   "predictions": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_PacBio_SNV_linear_nositef/test_chr1/HG008T_PacBio_linear.tensors.SNV.predictions.ndjson.gz",
+   "threshold": 0.08754626661539078,
+   "epoch": 7,
+   "site_features_input": false,
+   "candidate_ref_alt_equals_grch38": 1.0,
+   "test_tensors": 251303,
+   "somatic": 682,
+   "non": 10621,
+   "G": 240000,
+   "G_offref": 0,
+   "G_tag": 239070,
+   "G_untag_onref": 930,
+   "C": 83369,
+   "C_tag": 82902,
+   "C_offref": 0,
+   "K": 467,
+   "non_called": 583,
+   "non_called_after": 33,
+   "somatic_called": 547,
+   "somatic_called_after": 527,
+   "FPt": 500,
+   "raw": {
+    "truth": 697,
+    "tp": 548,
+    "fp": 84853,
+    "fn": 149,
+    "precision": 0.0064,
+    "recall": 0.7862,
+    "f1": 0.0127,
+    "fp_germline_same": 83557
+   },
+   "pon": {
+    "truth": 697,
+    "tp": 528,
+    "fp": 680,
+    "fn": 169,
+    "precision": 0.4371,
+    "recall": 0.7575,
+    "f1": 0.5543,
+    "fp_germline_same": 471
+   },
+   "unplaced_pass": 0,
+   "germline_vcf": "/scratch/jshen/data/HG008_GIAB/dipcall_HG008N_GRCh38/HG008N_GRCh38_dipcall.dip.vcf.gz",
+   "truth_vcf": "/scratch/jshen/data/HG008_GIAB/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_tumorvariants.vcf.gz",
+   "truth_bed": "/scratch/jshen/data/HG008_GIAB/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_all.bed"
+  },
+  {
+   "graph": "linear_nositef",
+   "reference": "GRCh38-only",
+   "tumor": "HG008T",
+   "platform": "ONT",
+   "set": "HG008T_ONT_linear",
+   "run": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_ONT_SNV_linear_nositef",
+   "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_ONT_SNV_linear_nositef/vcf_chr1_HG008T",
+   "predictions": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_ONT_SNV_linear_nositef/test_chr1/HG008T_ONT_linear.tensors.SNV.predictions.ndjson.gz",
+   "threshold": 0.05439719185233116,
+   "epoch": 8,
+   "site_features_input": false,
+   "candidate_ref_alt_equals_grch38": 1.0,
+   "test_tensors": 268258,
+   "somatic": 680,
+   "non": 24909,
+   "G": 242669,
+   "G_offref": 0,
+   "G_tag": 241586,
+   "G_untag_onref": 1083,
+   "C": 49544,
+   "C_tag": 49206,
+   "C_offref": 0,
+   "K": 338,
+   "non_called": 386,
+   "non_called_after": 42,
+   "somatic_called": 462,
+   "somatic_called_after": 444,
+   "FPt": 380,
+   "raw": {
+    "truth": 697,
+    "tp": 462,
+    "fp": 50403,
+    "fn": 235,
+    "precision": 0.0091,
+    "recall": 0.6628,
+    "f1": 0.0179,
+    "fp_germline_same": 49664
+   },
+   "pon": {
+    "truth": 697,
+    "tp": 444,
+    "fp": 429,
+    "fn": 253,
+    "precision": 0.5086,
+    "recall": 0.637,
+    "f1": 0.5656,
+    "fp_germline_same": 343
+   },
+   "unplaced_pass": 0,
+   "germline_vcf": "/scratch/jshen/data/HG008_GIAB/dipcall_HG008N_GRCh38/HG008N_GRCh38_dipcall.dip.vcf.gz",
+   "truth_vcf": "/scratch/jshen/data/HG008_GIAB/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_tumorvariants.vcf.gz",
+   "truth_bed": "/scratch/jshen/data/HG008_GIAB/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_all.bed"
+  },
+  {
+   "graph": "linear_nositef",
+   "reference": "GRCh38-only",
+   "tumor": "COLO829T",
+   "platform": "Illumina",
+   "set": "COLO829T_Illumina_linear_snvaf05",
+   "run": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_Illumina_SNV_linear_nositef",
+   "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_Illumina_SNV_linear_nositef/vcf_chr1_COLO829T",
+   "predictions": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_Illumina_SNV_linear_nositef/test_chr1/COLO829T_Illumina_linear_snvaf05.tensors.SNV.predictions.ndjson.gz",
+   "threshold": 0.09534827619791031,
+   "epoch": 8,
+   "site_features_input": false,
+   "candidate_ref_alt_equals_grch38": 1.0,
+   "test_tensors": 461188,
+   "somatic": 2142,
+   "non": 258039,
+   "G": 201007,
+   "G_offref": 0,
+   "G_tag": 200379,
+   "G_untag_onref": 628,
+   "C": 26349,
+   "C_tag": 26244,
+   "C_offref": 0,
+   "K": 105,
+   "non_called": 646,
+   "non_called_after": 192,
+   "somatic_called": 1546,
+   "somatic_called_after": 1501,
+   "FPt": 297,
+   "raw": {
+    "truth": 2443,
+    "tp": 1554,
+    "fp": 29530,
+    "fn": 889,
+    "precision": 0.05,
+    "recall": 0.6361,
+    "f1": 0.0927,
+    "fp_germline_same": 26548
+   },
+   "pon": {
+    "truth": 2443,
+    "tp": 1509,
+    "fp": 1480,
+    "fn": 934,
+    "precision": 0.5049,
+    "recall": 0.6177,
+    "f1": 0.5556,
+    "fp_germline_same": 107
+   },
+   "unplaced_pass": 0,
+   "germline_vcf": "/scratch/qfu/COLO829BL_DSA/dipcall_hg38/dipcall_hg38.dip.vcf.gz",
+   "truth_vcf": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/COLO829T_somatic_snv_indel.vcf.gz",
+   "truth_bed": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/SMaHT_v2_easy_difficult_extreme.union.bed"
+  },
+  {
+   "graph": "linear_nositef",
+   "reference": "GRCh38-only",
+   "tumor": "COLO829T",
+   "platform": "Fiber-seq",
+   "set": "COLO829T_fiberseq_linear_snvaf05",
+   "run": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_PacBio_SNV_linear_nositef",
+   "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_PacBio_SNV_linear_nositef/vcf_chr1_COLO829T",
+   "predictions": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_PacBio_SNV_linear_nositef/test_chr1/COLO829T_fiberseq_linear_snvaf05.tensors.SNV.predictions.ndjson.gz",
+   "threshold": 0.08754626661539078,
+   "epoch": 7,
+   "site_features_input": false,
+   "candidate_ref_alt_equals_grch38": 1.0,
+   "test_tensors": 225921,
+   "somatic": 2102,
+   "non": 21639,
+   "G": 202180,
+   "G_offref": 0,
+   "G_tag": 201487,
+   "G_untag_onref": 693,
+   "C": 31597,
+   "C_tag": 31458,
+   "C_offref": 0,
+   "K": 139,
+   "non_called": 1502,
+   "non_called_after": 375,
+   "somatic_called": 1774,
+   "somatic_called_after": 1722,
+   "FPt": 514,
+   "raw": {
+    "truth": 2443,
+    "tp": 1784,
+    "fp": 38677,
+    "fn": 659,
+    "precision": 0.0441,
+    "recall": 0.7302,
+    "f1": 0.0832,
+    "fp_germline_same": 32202
+   },
+   "pon": {
+    "truth": 2443,
+    "tp": 1732,
+    "fp": 2637,
+    "fn": 711,
+    "precision": 0.3964,
+    "recall": 0.709,
+    "f1": 0.5085,
+    "fp_germline_same": 174
+   },
+   "unplaced_pass": 0,
+   "germline_vcf": "/scratch/qfu/COLO829BL_DSA/dipcall_hg38/dipcall_hg38.dip.vcf.gz",
+   "truth_vcf": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/COLO829T_somatic_snv_indel.vcf.gz",
+   "truth_bed": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/SMaHT_v2_easy_difficult_extreme.union.bed"
+  },
+  {
+   "graph": "linear_nositef",
+   "reference": "GRCh38-only",
+   "tumor": "COLO829T",
+   "platform": "ONT",
+   "set": "COLO829T_ONT_linear",
+   "run": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_ONT_SNV_linear_nositef",
+   "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_ONT_SNV_linear_nositef/vcf_chr1_COLO829T",
+   "predictions": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_ONT_SNV_linear_nositef/test_chr1/COLO829T_ONT_linear.tensors.SNV.predictions.ndjson.gz",
+   "threshold": 0.05439719185233116,
+   "epoch": 8,
+   "site_features_input": false,
+   "candidate_ref_alt_equals_grch38": 1.0,
+   "test_tensors": 252892,
+   "somatic": 1991,
+   "non": 43299,
+   "G": 207602,
+   "G_offref": 0,
+   "G_tag": 206873,
+   "G_untag_onref": 729,
+   "C": 27560,
+   "C_tag": 27439,
+   "C_offref": 0,
+   "K": 121,
+   "non_called": 735,
+   "non_called_after": 194,
+   "somatic_called": 1378,
+   "somatic_called_after": 1341,
+   "FPt": 315,
+   "raw": {
+    "truth": 2443,
+    "tp": 1386,
+    "fp": 30128,
+    "fn": 1057,
+    "precision": 0.044,
+    "recall": 0.5673,
+    "f1": 0.0816,
+    "fp_germline_same": 27852
+   },
+   "pon": {
+    "truth": 2443,
+    "tp": 1349,
+    "fp": 602,
+    "fn": 1094,
+    "precision": 0.6914,
+    "recall": 0.5522,
+    "f1": 0.614,
+    "fp_germline_same": 127
+   },
+   "unplaced_pass": 0,
+   "germline_vcf": "/scratch/qfu/COLO829BL_DSA/dipcall_hg38/dipcall_hg38.dip.vcf.gz",
+   "truth_vcf": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/COLO829T_somatic_snv_indel.vcf.gz",
+   "truth_bed": "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/SMaHT_v2_easy_difficult_extreme.union.bed"
+  },
+  {
+   "graph": "linear_nositef",
+   "reference": "GRCh38-only",
+   "tumor": "HCC1395T",
+   "platform": "Illumina",
+   "set": "HCC1395T_Illumina_linear_snvaf05",
+   "run": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_Illumina_SNV_linear_nositef",
+   "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_Illumina_SNV_linear_nositef/vcf_chr1_HCC1395T",
+   "predictions": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_Illumina_SNV_linear_nositef/test_chr1/HCC1395T_Illumina_linear_snvaf05.tensors.SNV.predictions.ndjson.gz",
+   "threshold": 0.09534827619791031,
+   "epoch": 8,
+   "site_features_input": false,
+   "candidate_ref_alt_equals_grch38": 1.0,
+   "test_tensors": 597710,
+   "somatic": 2994,
+   "non": 377661,
+   "G": 217055,
+   "G_offref": 0,
+   "G_tag": 216394,
+   "G_untag_onref": 661,
+   "C": 74190,
+   "C_tag": 73790,
+   "C_offref": 0,
+   "K": 400,
+   "non_called": 312,
+   "non_called_after": 225,
+   "somatic_called": 2831,
+   "somatic_called_after": 2784,
+   "FPt": 625,
+   "raw": {
+    "truth": 3440,
+    "tp": 3127,
+    "fp": 77905,
+    "fn": 313,
+    "precision": 0.0386,
+    "recall": 0.909,
+    "f1": 0.074,
+    "fp_germline_same": 77361
+   },
+   "pon": {
+    "truth": 3440,
+    "tp": 3074,
+    "fp": 663,
+    "fn": 366,
+    "precision": 0.8226,
+    "recall": 0.8936,
+    "f1": 0.8566,
+    "fp_germline_same": 425
+   },
+   "unplaced_pass": 0,
+   "germline_vcf": "/scratch/jshen/data/CASTLE/HCC1395/truth/HCC1395BL_germline_DeepVariant_hybrid_QUAL10.vcf.gz",
+   "truth_vcf": "/scratch/jshen/data/CASTLE/HCC1395/truth/HCC1395_somatic_SEQC2_v1.2.1.vcf.gz",
+   "truth_bed": "/scratch/jshen/data/CASTLE/HCC1395/truth/SEQC2_High-Confidence_Regions_v1.2.bed"
+  },
+  {
+   "graph": "linear_nositef",
+   "reference": "GRCh38-only",
+   "tumor": "HCC1395T",
+   "platform": "PacBio HiFi",
+   "set": "HCC1395T_PacBio_linear_snvaf05",
+   "run": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_PacBio_SNV_linear_nositef",
+   "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_PacBio_SNV_linear_nositef/vcf_chr1_HCC1395T",
+   "predictions": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_PacBio_SNV_linear_nositef/test_chr1/HCC1395T_PacBio_linear_snvaf05.tensors.SNV.predictions.ndjson.gz",
+   "threshold": 0.08754626661539078,
+   "epoch": 7,
+   "site_features_input": false,
+   "candidate_ref_alt_equals_grch38": 1.0,
+   "test_tensors": 227209,
+   "somatic": 3022,
+   "non": 7343,
+   "G": 216844,
+   "G_offref": 0,
+   "G_tag": 216194,
+   "G_untag_onref": 650,
+   "C": 80755,
+   "C_tag": 80326,
+   "C_offref": 0,
+   "K": 429,
+   "non_called": 104,
+   "non_called_after": 25,
+   "somatic_called": 2886,
+   "somatic_called_after": 2836,
+   "FPt": 454,
+   "raw": {
+    "truth": 3440,
+    "tp": 3063,
+    "fp": 86347,
+    "fn": 377,
+    "precision": 0.0343,
+    "recall": 0.8904,
+    "f1": 0.066,
+    "fp_germline_same": 85521
+   },
+   "pon": {
+    "truth": 3440,
+    "tp": 3010,
+    "fp": 627,
+    "fn": 430,
+    "precision": 0.8276,
+    "recall": 0.875,
+    "f1": 0.8506,
+    "fp_germline_same": 456
+   },
+   "unplaced_pass": 0,
+   "germline_vcf": "/scratch/jshen/data/CASTLE/HCC1395/truth/HCC1395BL_germline_DeepVariant_hybrid_QUAL10.vcf.gz",
+   "truth_vcf": "/scratch/jshen/data/CASTLE/HCC1395/truth/HCC1395_somatic_SEQC2_v1.2.1.vcf.gz",
+   "truth_bed": "/scratch/jshen/data/CASTLE/HCC1395/truth/SEQC2_High-Confidence_Regions_v1.2.bed"
+  },
+  {
+   "graph": "linear_nositef",
+   "reference": "GRCh38-only",
+   "tumor": "HCC1395T",
+   "platform": "ONT",
+   "set": "HCC1395T_ONT_linear",
+   "run": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_ONT_SNV_linear_nositef",
+   "vcf_dir": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_ONT_SNV_linear_nositef/vcf_chr1_HCC1395T",
+   "predictions": "/scratch/jshen/data/pansoma_net_v2_runs/m4m6_graphs_20261110/multicancer6_ONT_SNV_linear_nositef/test_chr1/HCC1395T_ONT_linear.tensors.SNV.predictions.ndjson.gz",
+   "threshold": 0.05439719185233116,
+   "epoch": 8,
+   "site_features_input": false,
+   "candidate_ref_alt_equals_grch38": 1.0,
+   "test_tensors": 251647,
+   "somatic": 2532,
+   "non": 32345,
+   "G": 216770,
+   "G_offref": 0,
+   "G_tag": 216120,
+   "G_untag_onref": 650,
+   "C": 108445,
+   "C_tag": 107957,
+   "C_offref": 0,
+   "K": 488,
+   "non_called": 209,
+   "non_called_after": 22,
+   "somatic_called": 2428,
+   "somatic_called_after": 2384,
+   "FPt": 510,
+   "raw": {
+    "truth": 3440,
+    "tp": 2545,
+    "fp": 115580,
+    "fn": 895,
+    "precision": 0.0215,
+    "recall": 0.7398,
+    "f1": 0.0419,
+    "fp_germline_same": 114526
+   },
+   "pon": {
+    "truth": 3440,
+    "tp": 2498,
+    "fp": 610,
+    "fn": 942,
+    "precision": 0.8037,
+    "recall": 0.7262,
+    "f1": 0.763,
+    "fp_germline_same": 517
+   },
+   "unplaced_pass": 0,
+   "germline_vcf": "/scratch/jshen/data/CASTLE/HCC1395/truth/HCC1395BL_germline_DeepVariant_hybrid_QUAL10.vcf.gz",
+   "truth_vcf": "/scratch/jshen/data/CASTLE/HCC1395/truth/HCC1395_somatic_SEQC2_v1.2.1.vcf.gz",
+   "truth_bed": "/scratch/jshen/data/CASTLE/HCC1395/truth/SEQC2_High-Confidence_Regions_v1.2.bed"
+  }
+ ],
+ "ranges": {
+  "d46|HG008T": {
+   "rejects": [
+    0.978051133622769,
+    0.9888470588235294
+   ],
+   "tagged": [
+    0.9605176470588235,
+    0.9622286541244573
+   ],
+   "called": [
+    0.011152941176470588,
+    0.021948866377231067
+   ],
+   "removes": [
+    0.0,
+    0.01507537688442211
+   ],
+   "remain": [
+    0.011152941176470588,
+    0.021852387843704777
+   ],
+   "untag_called": [
+    0.2824791418355185,
+    0.578544061302682
+   ],
+   "tag_called": [
+    0.0,
+    0.0003080872913992298
+   ],
+   "share_rtg": [
+    0.8543478260869565,
+    0.9478079331941545
+   ],
+   "share_tensor": [
+    0.8843283582089553,
+    0.9658848614072495
+   ],
+   "share_rtg_raw": [
+    0.8525641025641025,
+    0.9480249480249481
+   ],
+   "removes_rtg": [
+    0.0,
+    0.015037593984962405
+   ]
+  },
+  "d46|COLO829T": {
+   "rejects": [
+    0.9854517113723452,
+    0.9903874681065685
+   ],
+   "tagged": [
+    0.9665519256998116,
+    0.9702130184536878
+   ],
+   "called": [
+    0.009612531893431437,
+    0.014548288627654738
+   ],
+   "removes": [
+    0.0,
+    0.026785714285714284
+   ],
+   "remain": [
+    0.009493858660179197,
+    0.014158602325128273
+   ],
+   "untag_called": [
+    0.3187250996015936,
+    0.42330097087378643
+   ],
+   "tag_called": [
+    0.0,
+    0.00040317161671818305
+   ],
+   "share_rtg": [
+    0.41044776119402987,
+    0.5609756097560976
+   ],
+   "share_tensor": [
+    0.511520737327189,
+    0.6451612903225806
+   ],
+   "share_rtg_raw": [
+    0.4109090909090909,
+    0.5601374570446735
+   ],
+   "removes_rtg": [
+    0.0,
+    0.02654867256637168
+   ]
+  },
+  "d46|HCC1395T": {
+   "rejects": [
+    0.9778446718844069,
+    0.981552694644151
+   ],
+   "tagged": [
+    0.9605659241420831,
+    0.9637184417321518
+   ],
+   "called": [
+    0.018447305355849077,
+    0.022155328115593016
+   ],
+   "removes": [
+    0.0030211480362537764,
+    0.010869565217391304
+   ],
+   "remain": [
+    0.01839157331549908,
+    0.021914509331727876
+   ],
+   "untag_called": [
+    0.4821705426356589,
+    0.5557251908396946
+   ],
+   "tag_called": [
+    5.783021050196623e-05,
+    0.00025070510811657786
+   ],
+   "share_rtg": [
+    0.4815825375170532,
+    0.7941888619854721
+   ],
+   "share_tensor": [
+    0.7878787878787878,
+    0.9452887537993921
+   ],
+   "share_rtg_raw": [
+    0.45384615384615384,
+    0.7908653846153846
+   ],
+   "removes_rtg": [
+    0.002824858757062147,
+    0.0103359173126615
+   ]
+  },
+  "d46|all nine": {
+   "rejects": [
+    0.9778446718844069,
+    0.9903874681065685
+   ],
+   "tagged": [
+    0.9605176470588235,
+    0.9702130184536878
+   ],
+   "called": [
+    0.009612531893431437,
+    0.022155328115593016
+   ],
+   "removes": [
+    0.0,
+    0.026785714285714284
+   ],
+   "remain": [
+    0.009493858660179197,
+    0.021914509331727876
+   ],
+   "untag_called": [
+    0.2824791418355185,
+    0.578544061302682
+   ],
+   "tag_called": [
+    0.0,
+    0.00040317161671818305
+   ],
+   "share_rtg": [
+    0.41044776119402987,
+    0.9478079331941545
+   ],
+   "share_tensor": [
+    0.511520737327189,
+    0.9658848614072495
+   ],
+   "share_rtg_raw": [
+    0.4109090909090909,
+    0.9480249480249481
+   ],
+   "removes_rtg": [
+    0.0,
+    0.02654867256637168
+   ]
+  },
+  "d9|HG008T": {
+   "rejects": [
+    0.9803259056498866,
+    0.9873607184433727
+   ],
+   "tagged": [
+    0.9648537035409893,
+    0.9663401907531757
+   ],
+   "called": [
+    0.012639281556627307,
+    0.01967409435011334
+   ],
+   "removes": [
+    0.0,
+    0.035046728971962614
+   ],
+   "remain": [
+    0.012639281556627307,
+    0.019631324579787005
+   ],
+   "untag_called": [
+    0.36233611442193087,
+    0.5832274459974587
+   ],
+   "tag_called": [
+    0.0,
+    0.0006829979054730899
+   ],
+   "share_rtg": [
+    0.8495821727019499,
+    0.9787234042553191
+   ],
+   "share_tensor": [
+    0.856338028169014,
+    0.9807692307692307
+   ],
+   "share_rtg_raw": [
+    0.8495821727019499,
+    0.9787685774946921
+   ],
+   "removes_rtg": [
+    0.0,
+    0.03496503496503497
+   ]
+  },
+  "d9|COLO829T": {
+   "rejects": [
+    0.9837702232234282,
+    0.988635287432522
+   ],
+   "tagged": [
+    0.9707253296953161,
+    0.9732929254664268
+   ],
+   "called": [
+    0.01136471256747798,
+    0.01622977677657178
+   ],
+   "removes": [
+    0.0,
+    0.020491803278688523
+   ],
+   "remain": [
+    0.01136471256747798,
+    0.016178578742576284
+   ],
+   "untag_called": [
+    0.425531914893617,
+    0.5851851851851851
+   ],
+   "tag_called": [
+    0.0,
+    0.0002927914739122797
+   ],
+   "share_rtg": [
+    0.3872,
+    0.7688564476885644
+   ],
+   "share_tensor": [
+    0.5620608899297423,
+    0.79
+   ],
+   "share_rtg_raw": [
+    0.3877551020408163,
+    0.7675544794188862
+   ],
+   "removes_rtg": [
+    0.0,
+    0.020242914979757085
+   ]
+  },
+  "d9|HCC1395T": {
+   "rejects": [
+    0.9781391341804867,
+    0.9824033911671924
+   ],
+   "tagged": [
+    0.9647318544044798,
+    0.967961356466877
+   ],
+   "called": [
+    0.017596608832807573,
+    0.021860865819513246
+   ],
+   "removes": [
+    0.0,
+    0.027093596059113302
+   ],
+   "remain": [
+    0.017596608832807573,
+    0.021268576351496878
+   ],
+   "untag_called": [
+    0.5492307692307692,
+    0.6030534351145038
+   ],
+   "tag_called": [
+    0.0,
+    0.0006139420661941173
+   ],
+   "share_rtg": [
+    0.7905660377358491,
+    0.9055690072639225
+   ],
+   "share_tensor": [
+    0.8028455284552846,
+    0.964735516372796
+   ],
+   "share_rtg_raw": [
+    0.7879341864716636,
+    0.8947368421052632
+   ],
+   "removes_rtg": [
+    0.0,
+    0.027842227378190254
+   ]
+  },
+  "d9|all nine": {
+   "rejects": [
+    0.9781391341804867,
+    0.988635287432522
+   ],
+   "tagged": [
+    0.9647318544044798,
+    0.9732929254664268
+   ],
+   "called": [
+    0.01136471256747798,
+    0.021860865819513246
+   ],
+   "removes": [
+    0.0,
+    0.035046728971962614
+   ],
+   "remain": [
+    0.01136471256747798,
+    0.021268576351496878
+   ],
+   "untag_called": [
+    0.36233611442193087,
+    0.6030534351145038
+   ],
+   "tag_called": [
+    0.0,
+    0.0006829979054730899
+   ],
+   "share_rtg": [
+    0.3872,
+    0.9787234042553191
+   ],
+   "share_tensor": [
+    0.5620608899297423,
+    0.9807692307692307
+   ],
+   "share_rtg_raw": [
+    0.3877551020408163,
+    0.9787685774946921
+   ],
+   "removes_rtg": [
+    0.0,
+    0.03496503496503497
+   ]
+  },
+  "linear_nositef|HG008T": {
+   "rejects": [
+    0.6526291666666667,
+    0.8859552207574807
+   ],
+   "tagged": [
+    0.9955371308242915,
+    0.996125
+   ],
+   "called": [
+    0.11404477924251935,
+    0.34737083333333335
+   ],
+   "removes": [
+    0.9925507320832263,
+    0.994398397485876
+   ],
+   "remain": [
+    0.0008495501150868383,
+    0.0019458333333333333
+   ],
+   "untag_called": [
+    0.2082051282051282,
+    0.5021505376344086
+   ],
+   "tag_called": [
+    0.11365899779388591,
+    0.34676872882419374
+   ],
+   "share_rtg": [
+    0.40425531914893614,
+    0.7995337995337995
+   ],
+   "share_tensor": [
+    0.7048611111111112,
+    0.934
+   ],
+   "share_rtg_raw": [
+    0.9693022925686706,
+    0.9853381743150209
+   ],
+   "removes_rtg": [
+    0.9923479661699557,
+    0.9943631293607956
+   ]
+  },
+  "linear_nositef|COLO829T": {
+   "rejects": [
+    0.8437184686912652,
+    0.8689150129099982
+   ],
+   "tagged": [
+    0.996488473136097,
+    0.9968757306959459
+   ],
+   "called": [
+    0.13108498709000185,
+    0.1562815313087348
+   ],
+   "removes": [
+    0.9956008481817894,
+    0.9960150290333599
+   ],
+   "remain": [
+    0.0005223698677160497,
+    0.0006875061826095559
+   ],
+   "untag_called": [
+    0.16598079561042525,
+    0.20057720057720058
+   ],
+   "tag_called": [
+    0.13097180842303835,
+    0.1561291795500454
+   ],
+   "share_rtg": [
+    0.06598407281001138,
+    0.21096345514950166
+   ],
+   "share_tensor": [
+    0.2704280155642023,
+    0.38412698412698415
+   ],
+   "share_rtg_raw": [
+    0.8325878429040515,
+    0.9244556558682953
+   ],
+   "removes_rtg": [
+    0.9945966089062791,
+    0.9959695645623022
+   ]
+  },
+  "linear_nositef|HCC1395T": {
+   "rejects": [
+    0.49972320893112515,
+    0.6581972311165373
+   ],
+   "tagged": [
+    0.9969546889037341,
+    0.997002453376621
+   ],
+   "called": [
+    0.3418027688834627,
+    0.5002767910688748
+   ],
+   "removes": [
+    0.9946084377948511,
+    0.9955000230531605
+   ],
+   "remain": [
+    0.0018428508903273364,
+    0.0022512340268487337
+   ],
+   "untag_called": [
+    0.6051437216338881,
+    0.7507692307692307
+   ],
+   "tag_called": [
+    0.3409983640951228,
+    0.49952341291874885
+   ],
+   "share_rtg": [
+    0.6410256410256411,
+    0.8475409836065574
+   ],
+   "share_tensor": [
+    0.64,
+    0.9568627450980393
+   ],
+   "share_rtg_raw": [
+    0.9904339467497423,
+    0.993017136255696
+   ],
+   "removes_rtg": [
+    0.9945062757720299,
+    0.9954857412290659
+   ]
+  },
+  "linear_nositef|all nine": {
+   "rejects": [
+    0.49972320893112515,
+    0.8859552207574807
+   ],
+   "tagged": [
+    0.9955371308242915,
+    0.997002453376621
+   ],
+   "called": [
+    0.11404477924251935,
+    0.5002767910688748
+   ],
+   "removes": [
+    0.9925507320832263,
+    0.9960150290333599
+   ],
+   "remain": [
+    0.0005223698677160497,
+    0.0022512340268487337
+   ],
+   "untag_called": [
+    0.16598079561042525,
+    0.7507692307692307
+   ],
+   "tag_called": [
+    0.11365899779388591,
+    0.49952341291874885
+   ],
+   "share_rtg": [
+    0.06598407281001138,
+    0.8475409836065574
+   ],
+   "share_tensor": [
+    0.2704280155642023,
+    0.9568627450980393
+   ],
+   "share_rtg_raw": [
+    0.8325878429040515,
+    0.993017136255696
+   ],
+   "removes_rtg": [
+    0.9923479661699557,
+    0.9959695645623022
+   ]
+  },
+  "d9+d46|HG008T": {
+   "rejects": [
+    0.978051133622769,
+    0.9888470588235294
+   ],
+   "tagged": [
+    0.9605176470588235,
+    0.9663401907531757
+   ],
+   "called": [
+    0.011152941176470588,
+    0.021948866377231067
+   ],
+   "removes": [
+    0.0,
+    0.035046728971962614
+   ],
+   "remain": [
+    0.011152941176470588,
+    0.021852387843704777
+   ],
+   "untag_called": [
+    0.2824791418355185,
+    0.5832274459974587
+   ],
+   "tag_called": [
+    0.0,
+    0.0006829979054730899
+   ],
+   "share_rtg": [
+    0.8495821727019499,
+    0.9787234042553191
+   ],
+   "share_tensor": [
+    0.856338028169014,
+    0.9807692307692307
+   ],
+   "share_rtg_raw": [
+    0.8495821727019499,
+    0.9787685774946921
+   ],
+   "removes_rtg": [
+    0.0,
+    0.03496503496503497
+   ]
+  },
+  "d9+d46|all nine": {
+   "rejects": [
+    0.9778446718844069,
+    0.9903874681065685
+   ],
+   "tagged": [
+    0.9605176470588235,
+    0.9732929254664268
+   ],
+   "called": [
+    0.009612531893431437,
+    0.022155328115593016
+   ],
+   "removes": [
+    0.0,
+    0.035046728971962614
+   ],
+   "remain": [
+    0.009493858660179197,
+    0.021914509331727876
+   ],
+   "untag_called": [
+    0.2824791418355185,
+    0.6030534351145038
+   ],
+   "tag_called": [
+    0.0,
+    0.0006829979054730899
+   ],
+   "share_rtg": [
+    0.3872,
+    0.9787234042553191
+   ],
+   "share_tensor": [
+    0.511520737327189,
+    0.9807692307692307
+   ],
+   "share_rtg_raw": [
+    0.3877551020408163,
+    0.9787685774946921
+   ],
+   "removes_rtg": [
+    0.0,
+    0.03496503496503497
+   ]
+  }
+ },
+ "october_single_tumor": [
+  {
+   "graph": "d9",
+   "reference": "HPRC v1.1",
+   "tumor": "HG008T",
+   "platform": "Illumina",
+   "run": "HG008_Illumina_SNV_7fc7396_ddp4_b1024",
+   "G": 22762,
+   "C": 4864,
+   "K": 609,
+   "FPt": 688,
+   "sampled": true,
+   "pon": {
+    "fp": 702,
+    "fp_germline_same": 609
+   }
+  },
+  {
+   "graph": "d9",
+   "reference": "HPRC v1.1",
+   "tumor": "HG008T",
+   "platform": "PacBio HiFi",
+   "run": "HG008_PacBio_SNV_7fc7396",
+   "G": 23381,
+   "C": 4951,
+   "K": 571,
+   "FPt": 583,
+   "sampled": false,
+   "pon": {
+    "fp": 583,
+    "fp_germline_same": 571
+   }
+  },
+  {
+   "graph": "d9",
+   "reference": "HPRC v1.1",
+   "tumor": "HG008T",
+   "platform": "ONT",
+   "run": "HG008_ONT_SNV_7fc7396",
+   "G": 24052,
+   "C": 5147,
+   "K": 618,
+   "FPt": 658,
+   "sampled": false,
+   "pon": {
+    "fp": 660,
+    "fp_germline_same": 618
+   }
+  },
+  {
+   "graph": "d46",
+   "reference": "HPRC v2.1",
+   "tumor": "HG008T",
+   "platform": "Illumina",
+   "run": "HG008_Illumina_SNV_d46_7fc7396",
+   "G": 20275,
+   "C": 2542,
+   "K": 654,
+   "FPt": 826,
+   "sampled": true,
+   "pon": {
+    "fp": 792,
+    "fp_germline_same": 655
+   }
+  },
+  {
+   "graph": "d46",
+   "reference": "HPRC v2.1",
+   "tumor": "HG008T",
+   "platform": "PacBio HiFi",
+   "run": "HG008_PacBio_SNV_d46_7fc7396",
+   "G": 20730,
+   "C": 2528,
+   "K": 618,
+   "FPt": 642,
+   "sampled": false,
+   "pon": {
+    "fp": 650,
+    "fp_germline_same": 619
+   }
+  },
+  {
+   "graph": "d46",
+   "reference": "HPRC v2.1",
+   "tumor": "HG008T",
+   "platform": "ONT",
+   "run": "HG008_ONT_SNV_d46_7fc7396",
+   "G": 21250,
+   "C": 2810,
+   "K": 672,
+   "FPt": 771,
+   "sampled": false,
+   "pon": {
+    "fp": 788,
+    "fp_germline_same": 674
+   }
+  }
+ ],
+ "october_ranges": {
+  "d9": {
+   "rejects": [
+    0.7860053218027607,
+    0.7882468671143236
+   ],
+   "removes": [
+    0.8747944078947368,
+    0.8846697636841042
+   ],
+   "remain": [
+    0.02442153885633634,
+    0.026755118179421843
+   ],
+   "share_rtg": [
+    0.8675213675213675,
+    0.9794168096054888
+   ],
+   "share_tensor": [
+    0.8851744186046512,
+    0.9794168096054888
+   ]
+  },
+  "d46": {
+   "rejects": [
+    0.867764705882353,
+    0.878051133622769
+   ],
+   "removes": [
+    0.7427222659323367,
+    0.7608540925266903
+   ],
+   "remain": [
+    0.029811866859623733,
+    0.032256473489519114
+   ],
+   "share_rtg": [
+    0.827020202020202,
+    0.9523076923076923
+   ],
+   "share_tensor": [
+    0.7917675544794189,
+    0.9626168224299065
+   ]
+  },
+  "d9+d46": {
+   "rejects": [
+    0.7860053218027607,
+    0.878051133622769
+   ],
+   "removes": [
+    0.7427222659323367,
+    0.8846697636841042
+   ],
+   "remain": [
+    0.02442153885633634,
+    0.032256473489519114
+   ],
+   "share_rtg": [
+    0.827020202020202,
+    0.9794168096054888
+   ],
+   "share_tensor": [
+    0.7917675544794189,
+    0.9794168096054888
+   ]
+  }
+ }
+}
