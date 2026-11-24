@@ -104,4 +104,16 @@ if has D; then
     done
   done
 fi
+# E. INDEL (user 2026-11-13): the existing joint INDEL models COLO829_<P>_INDEL_joint_ppr8 (the current INDEL recipe's
+#    training; analysis/indel_ppr8_9919d4a_20261026 step C) scored at fixed PASS thresholds, fiberseq p >= 0.502 and
+#    ONT p >= 0.5, into vcf_chr1_<SET>_t0502 / _t05 (beside ppr8 = vcf_chr1_<SET> and pp = vcf_chr1_<SET>_postpon)
+if has E; then
+  for pt in fiberseq:0.502:_t0502 ONT:0.5:_t05; do
+    IFS=: read -r P t suffix <<< "$pt"
+    run=COLO829_${P}_INDEL_joint_ppr8
+    for s in $(sets_of $P | tr ',' ' '); do
+      ris/submit.sh -g 0 -n 4 -m 32 pnv2_vcf_${run}_${s}$suffix vcf.sh --set $s $run INDEL $t $suffix
+    done
+  done
+fi
 bjobs -w

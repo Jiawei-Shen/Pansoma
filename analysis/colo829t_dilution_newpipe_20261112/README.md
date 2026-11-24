@@ -41,7 +41,14 @@ recipe: no site features, every negative, PASS at validation recall 0.9) was kil
 An ONT site-feature run under another name (771257-771260, 771262-771265) was submitted and killed before it started.
 
 INDEL is not rerun: `COLO829_<P>_INDEL_joint_ppr8` (`../indel_ppr8_9919d4a_20261026`, step C) already ran the current
-INDEL recipe on these sets (the same `args.json` options as `ris/recipes.sh` gives today).
+INDEL recipe on these sets (the same `args.json` options as `ris/recipes.sh` gives today). Checked again 2026-11-13
+(the user), after f580b47 made the ONT INDEL recipe PASS at the post-PoN validation best-F1 threshold ("pp", `train
+--call-rule postpon`) instead of the recall-0.8 rule ("ppr8"): no commit since those runs (2026-10-26 / 27) changes
+INDEL training, prediction or scoring otherwise. Illumina and fiberseq: the runs are the current recipe. ONT: the
+training options are the same and only the recorded PASS rule differs; the calls at the new rule exist already as
+`COLO829_ONT_INDEL_joint_ppr8/vcf_chr1_<SET>_postpon` (`vcf.sh ... INDEL postpon _postpon`, what `ris/vcf.sh` prescribes
+for ONT INDEL checkpoints trained before f580b47; p >= 0.516: chr1 F1 0.126 / 0.106 / 0.066 / 0.021 at P100 / P75 /
+P50 / P25, against 0.003 / 0.003 / 0.003 / 0.002 at ppr8's 0.018 with 20,361-21,461 false calls). Nothing was retrained.
 
 ## 10 epochs (the user, 2026-11-12: enough for these dilution models; the recipes keep `--epochs 20`)
 
