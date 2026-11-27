@@ -11,6 +11,8 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 RUNS = Path("/storage2/fs1/epigenome/Active/jiawei.s/pansoma_net_v2_runs/m6_nositef_graphs_20261118")
+if not RUNS.exists():  # the lab cluster: the copy of the runs pulled from RIS (checkpoints, predictions, VCF reports)
+    RUNS = Path("/scratch/jshen/data/pansoma_net_v2_runs/m6_nositef_graphs_20261118")
 POINTS = HERE.parent / "reviewer_response_20261011/supplementary/R1.6/points_six_tumor_graphs.md"
 TUMORS = ("HCC1395T", "COLO829T", "HG008T")
 PLATFORMS = ("Illumina", "PacBio", "ONT")

@@ -29,12 +29,12 @@ With site features = the population site features are a model input (`multicance
 
 | tumor | platform | GRCh38-only | v1.1 with site features | v1.1 nositef | v2.1 with site features | v2.1 nositef |
 |---|---|---|---|---|---|---|
-| HCC1395T | Illumina | pending | 0.879 | 0.864 | 0.884 | 0.859 |
+| HCC1395T | Illumina | 0.857 | 0.879 | 0.864 | 0.884 | 0.859 |
 | HCC1395T | PacBio HiFi | 0.851 | 0.852 | 0.852 | 0.867 | 0.851 |
-| HCC1395T | ONT | pending | pending | 0.759 | 0.716 | 0.684 |
-| COLO829T | Illumina | pending | 0.751 | 0.759 | 0.765 | 0.789 |
+| HCC1395T | ONT | 0.763 | 0.761 | 0.759 | 0.716 | 0.684 |
+| COLO829T | Illumina | 0.556 | 0.751 | 0.759 | 0.765 | 0.789 |
 | COLO829T | Fiber-seq | 0.508 | 0.813 | 0.804 | 0.802 | 0.801 |
-| COLO829T | ONT | pending | pending | 0.738 | 0.745 | 0.741 |
-| HG008T | Illumina | pending | 0.636 | 0.601 | 0.637 | 0.626 |
+| COLO829T | ONT | 0.614 | 0.737 | 0.738 | 0.745 | 0.741 |
+| HG008T | Illumina | 0.467 | 0.636 | 0.601 | 0.637 | 0.626 |
 | HG008T | PacBio HiFi | 0.554 | 0.660 | 0.625 | 0.651 | 0.621 |
-| HG008T | ONT | pending | pending | 0.603 | 0.641 | 0.620 |
+| HG008T | ONT | 0.566 | 0.644 | 0.603 | 0.641 | 0.620 |
