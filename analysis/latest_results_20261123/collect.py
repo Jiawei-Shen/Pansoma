@@ -225,3 +225,38 @@ for p in ("Illumina", "fiberseq", "ONT"):
     for c, cn in (("deepsomatic", "DeepSomatic-TO"), ("clairs_to", "ClairS-TO")):
         a = json.loads((E8 / c / f"COLO829T_{p}" / "SNV" / "report.json").read_text())["eval_bed"]["pass_pon"]["at_threshold"]
         print(f"| {'Fiber-seq' if p == 'fiberseq' else p} | {cn} | {prf(a)} | | | |")
+
+# ---------------------------------------------------------------- 7. six-tumor SNV seeds, 8. path-count (RIS, pulled 2026-11-26)
+def ris_set(tumor, p):
+    """The test set name of the RIS six-tumor v2.1 SNV runs (vcf_chr1_<SET>)."""
+    return f"{ds(tumor, p)}_d46" + ("_snvaf05" if p != "ONT" and tumor != "HG008T" else "")
+
+
+SEED0 = R / "snv_newpipe_20261109"
+print("\n## 7. Six-tumor SNV models on HPRC v2.1, three seeds, chr1 after the population filter\n")
+print("Seed 0 = the model of section 1a; seeds 1 and 2 = `m6_seeds_20261123/multicancer6_<P>_SNV_newpipe_s<SEED>` (trained and "
+      "tested on RIS, only `--seed` changed).\n")
+print("| tumor | platform | chr1 seed 0 | chr1 seed 1 | chr1 seed 2 | chr1 F1 mean | chr1 F1 SD |")
+print("|---|---|---|---|---|---|---|")
+for tumor in ("HCC1395T", "COLO829T", "HG008T"):
+    for p in ("Illumina", "PacBio", "ONT"):
+        cells = [rep(SEED0 / f"multicancer6_{p}_SNV_newpipe" / f"vcf_chr1_{ds(tumor, p)}_d46")]
+        cells += [rep(R / "m6_seeds_20261123" / f"multicancer6_{p}_SNV_newpipe_s{s}" / f"vcf_chr1_{ris_set(tumor, p)}") for s in (1, 2)]
+        assert len({truth(c) for c in cells if c}) <= 1, (tumor, p)
+        f1 = [c["f1"] for c in cells if c]
+        ms = (f"{statistics.mean(f1):.3f}", f"{statistics.stdev(f1):.3f}") if len(f1) > 1 else ("-", "-")
+        print(f"| {tumor} | {pname(tumor, p)} | " + " | ".join(prf(c) for c in cells) + f" | {ms[0]} | {ms[1]} |")
+
+print("\n## 8. Six-tumor SNV models on HPRC v2.1 with and without the path-count channel, chr1 after the population filter\n")
+print("With = the model of section 1a (seed 0); without = `m6_nopathcount_20261124/multicancer6_<P>_SNV_newpipe_nopc` "
+      "(RIS, seed 0, `--drop-planes path_count`, otherwise the same recipe).\n")
+print("| tumor | platform | chr1 truth | with path-count, chr1 | chr1 TP / FP | without path-count, chr1 | chr1 TP / FP | chr1 F1 change |")
+print("|---|---|---|---|---|---|---|---|")
+for tumor in ("HCC1395T", "COLO829T", "HG008T"):
+    for p in ("Illumina", "PacBio", "ONT"):
+        w = rep(SEED0 / f"multicancer6_{p}_SNV_newpipe" / f"vcf_chr1_{ds(tumor, p)}_d46")
+        n = rep(R / "m6_nopathcount_20261124" / f"multicancer6_{p}_SNV_newpipe_nopc" / f"vcf_chr1_{ris_set(tumor, p)}")
+        assert w is None or n is None or truth(w) == truth(n), (tumor, p)
+        tf = lambda a: "-" if a is None else f"{a['tp_baseline']:,} / {a['fp']:,}"
+        d = "-" if None in (w, n) else f"{n['f1'] - w['f1']:+.3f}"
+        print(f"| {tumor} | {pname(tumor, p)} | {truth(w) if w else '-'} | {prf(w)} | {tf(w)} | {prf(n)} | {tf(n)} | {d} |")

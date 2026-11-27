@@ -176,3 +176,35 @@ Illumina / Fiber-seq on the AF 0.05 sets, ONT at AF 0.08. "no path count" = the 
 | ONT | HPRC v2.1 | 0.761 / 0.747 / 0.754 | - | - | - |
 | ONT | DeepSomatic-TO | 0.582 / 0.695 / 0.633 | | | |
 | ONT | ClairS-TO | 0.749 / 0.684 / 0.715 | | | |
+
+## 7. Six-tumor SNV models on HPRC v2.1, three seeds, chr1 after the population filter
+
+Seed 0 = the model of section 1a; seeds 1 and 2 = `m6_seeds_20261123/multicancer6_<P>_SNV_newpipe_s<SEED>` (trained and tested on RIS, only `--seed` changed).
+
+| tumor | platform | chr1 seed 0 | chr1 seed 1 | chr1 seed 2 | chr1 F1 mean | chr1 F1 SD |
+|---|---|---|---|---|---|---|
+| HCC1395T | Illumina | 0.863 / 0.905 / 0.883 | 0.874 / 0.897 / 0.885 | 0.870 / 0.891 / 0.880 | 0.883 | 0.003 |
+| HCC1395T | PacBio HiFi | 0.877 / 0.858 / 0.867 | 0.873 / 0.856 / 0.864 | 0.870 / 0.863 / 0.866 | 0.866 | 0.002 |
+| HCC1395T | ONT | 0.760 / 0.676 / 0.716 | 0.767 / 0.684 / 0.723 | 0.612 / 0.674 / 0.641 | 0.693 | 0.045 |
+| COLO829T | Illumina | 0.775 / 0.756 / 0.766 | 0.840 / 0.718 / 0.774 | 0.836 / 0.747 / 0.789 | 0.776 | 0.012 |
+| COLO829T | Fiber-seq | 0.864 / 0.749 / 0.803 | 0.845 / 0.770 / 0.806 | 0.841 / 0.772 / 0.805 | 0.804 | 0.002 |
+| COLO829T | ONT | 0.787 / 0.708 / 0.745 | 0.790 / 0.723 / 0.755 | 0.754 / 0.726 / 0.740 | 0.747 | 0.008 |
+| HG008T | Illumina | 0.540 / 0.776 / 0.637 | 0.576 / 0.783 / 0.664 | 0.567 / 0.782 / 0.657 | 0.653 | 0.014 |
+| HG008T | PacBio HiFi | 0.542 / 0.814 / 0.651 | 0.536 / 0.829 / 0.651 | 0.533 / 0.799 / 0.640 | 0.647 | 0.006 |
+| HG008T | ONT | 0.626 / 0.656 / 0.640 | 0.617 / 0.736 / 0.671 | 0.609 / 0.730 / 0.664 | 0.659 | 0.016 |
+
+## 8. Six-tumor SNV models on HPRC v2.1 with and without the path-count channel, chr1 after the population filter
+
+With = the model of section 1a (seed 0); without = `m6_nopathcount_20261124/multicancer6_<P>_SNV_newpipe_nopc` (RIS, seed 0, `--drop-planes path_count`, otherwise the same recipe).
+
+| tumor | platform | chr1 truth | with path-count, chr1 | chr1 TP / FP | without path-count, chr1 | chr1 TP / FP | chr1 F1 change |
+|---|---|---|---|---|---|---|---|
+| HCC1395T | Illumina | 3440 | 0.863 / 0.905 / 0.883 | 3,113 / 495 | 0.854 / 0.899 / 0.876 | 3,092 / 530 | -0.008 |
+| HCC1395T | PacBio HiFi | 3440 | 0.877 / 0.858 / 0.867 | 2,950 / 413 | 0.876 / 0.852 / 0.864 | 2,929 / 413 | -0.003 |
+| HCC1395T | ONT | 3440 | 0.760 / 0.676 / 0.716 | 2,326 / 733 | 0.635 / 0.683 / 0.658 | 2,350 / 1,353 | -0.058 |
+| COLO829T | Illumina | 2443 | 0.775 / 0.756 / 0.766 | 1,848 / 536 | 0.673 / 0.734 / 0.702 | 1,794 / 871 | -0.063 |
+| COLO829T | Fiber-seq | 2443 | 0.864 / 0.749 / 0.803 | 1,830 / 287 | 0.831 / 0.749 / 0.788 | 1,829 / 372 | -0.015 |
+| COLO829T | ONT | 2443 | 0.787 / 0.708 / 0.745 | 1,729 / 467 | 0.768 / 0.717 / 0.742 | 1,751 / 529 | -0.004 |
+| HG008T | Illumina | 697 | 0.540 / 0.776 / 0.637 | 541 / 460 | 0.501 / 0.765 / 0.605 | 533 / 531 | -0.032 |
+| HG008T | PacBio HiFi | 697 | 0.542 / 0.814 / 0.651 | 567 / 479 | 0.531 / 0.806 / 0.640 | 562 / 497 | -0.010 |
+| HG008T | ONT | 697 | 0.626 / 0.656 / 0.640 | 457 / 273 | 0.574 / 0.658 / 0.613 | 459 / 341 | -0.027 |
