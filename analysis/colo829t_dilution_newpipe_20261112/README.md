@@ -170,3 +170,27 @@ Illumina at -0.10 (p >= 0.817; `vcf_chr1_<SET>_tm010`, jobs 774218-774221), TP /
 0.588 / 0.733 / 0.653; P75 1,864 / 1,031, 0.644 / 0.763 / 0.698; P50 1,800 / 1,086, 0.624 / 0.737 / 0.675; P25 1,684 /
 1,165, 0.591 / 0.689 / 0.636. Between the call rule and -0.10 the false calls more than double in every purity
 (+584 to +732) while only P100 gains truth (+219; dilutions +2 to +14).
+
+## INDEL at fixed PASS thresholds (step E, user 2026-11-13; scored 2026-11-26)
+
+The eight `vcf.sh` jobs of step E (832641-832648, 2026-11-13) pended until 2026-11-26 on the epigenome queue, where a
+CPU job cannot start (exec-419 carries the exclusive `gpuhost` resource; LSF: "Job's resource requirements not
+satisfied"). They were killed and resubmitted to general (`submit.sh E`; jobs 72957-72964), all done 2026-11-26.
+`COLO829_<P>_INDEL_joint_ppr8`, chr1, benchmark BED, after the PoN (131 truth), TP / FP, P / R / F1; best = the chr1
+curve's best F1 (upper bound, chosen on chr1):
+
+| set | ppr8 (fiberseq p >= 0.040, ONT 0.018) | pp (fiberseq p >= 0.721, ONT 0.516) | fixed (fiberseq p >= 0.502, ONT 0.5) | best |
+|---|---|---|---|---|
+| fiberseq P100 | 34 / 1,083, 0.030 / 0.260 / 0.054 | 9 / 33, 0.214 / 0.069 / 0.104 | 23 / 119, 0.162 / 0.176 / 0.169 | 0.172 |
+| fiberseq P75 | 32 / 1,447, 0.022 / 0.244 / 0.040 | 10 / 51, 0.164 / 0.076 / 0.104 | 17 / 119, 0.125 / 0.130 / 0.127 | 0.153 |
+| fiberseq P50 | 29 / 1,873, 0.015 / 0.221 / 0.029 | 9 / 79, 0.102 / 0.069 / 0.082 | 19 / 174, 0.098 / 0.145 / 0.117 | 0.124 |
+| fiberseq P25 | 25 / 2,432, 0.010 / 0.191 / 0.019 | 10 / 61, 0.141 / 0.076 / 0.099 | 18 / 183, 0.090 / 0.137 / 0.108 | 0.116 |
+| ONT P100 | 31 / 20,361, 0.002 / 0.237 / 0.003 | 11 / 32, 0.256 / 0.084 / 0.126 | 11 / 35, 0.239 / 0.084 / 0.124 | 0.135 |
+| ONT P75 | 30 / 20,629, 0.002 / 0.229 / 0.003 | 9 / 30, 0.231 / 0.069 / 0.106 | 10 / 33, 0.233 / 0.076 / 0.115 | 0.136 |
+| ONT P50 | 26 / 20,911, 0.001 / 0.199 / 0.003 | 6 / 46, 0.115 / 0.046 / 0.066 | 8 / 49, 0.140 / 0.061 / 0.085 | 0.086 |
+| ONT P25 | 18 / 21,461, 0.001 / 0.137 / 0.002 | 2 / 58, 0.033 / 0.015 / 0.021 | 2 / 64, 0.030 / 0.015 / 0.020 | 0.039 |
+
+fiberseq: p >= 0.502 has the highest F1 of the three thresholds in every purity, within 0.003-0.026 of the curve's
+best. Against the comparators' PASS after the PoN (F1 P100 / P75 / P50 / P25; `E8_comparators/purity_comparators.md`):
+ClairS-TO 0.158 / 0.153 / 0.111 / 0.028, DeepSomatic-TO 0.133 / 0.122 / 0.132 / 0.068. ONT: p >= 0.5 is within
+0.002-0.019 of pp.
