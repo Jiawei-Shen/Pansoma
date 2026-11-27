@@ -23,6 +23,17 @@ the same treatment, so the three references differ in the graph only.
 Files: `submit.sh` (login node; submits every model whose sets are on storage2, skips the others and the ones that
 exist), `train_predict.sh` (the GPU job), `to_ris.sh` (old cluster: copies the missing sets), `ready.py` (is a copied
 set complete), `collect.py` -> `results.md` (the 18 SNV call sets and the comparison with the figure's six-tumor models).
+`strata.py` -> `strata.md` (user 2026-11-24): Response Table 2.7 (HG008T chr1 SNV by the number of HG008-N germline
+variants within 50 bp, E19's stratification) with the HPRC rows on these models, so no model of the table takes the
+site features; the GRCh38-only rows are those of `E19_germline_density/strata_latest.md` (call sets on the old cluster).
+`regions.py` -> `regions.md` (user 2026-11-24): the SNV columns of Response Tables 1.5 = 2.5 = 3.15 (ΔF1 by region,
+before and after the filter) with the HPRC side on these models; GRCh38-only counts from
+`ver4_20261123/regions/per_callset_strata.tsv`; point estimates, no bootstrap intervals (they need the GRCh38-only
+records: `to_ris_grch38only.sh`, run on the old cluster, copies them). Strata BEDs downloaded to
+`Dataset/GIAB_stratifications_v3.5` (md5 checked) and `Dataset/SMaHT_Regional_Categorization`.
+`r26p2_nositef.py` -> `r26p2_nositef.md`, `.json` (user 2026-11-24): Reviewer 2 comment 6 point 2 (germline SNV
+candidates the graph does not absorb: rejected by the model / removed by the filter) on these models, next to the
+numbers of the models with the features (`ver4_20261123/r26p2`).
 
 ## Status
 
