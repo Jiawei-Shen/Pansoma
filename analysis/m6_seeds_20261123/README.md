@@ -42,3 +42,6 @@ started with (384 / 256 GB). The two ONT jobs, pending on memory, were lowered t
 epigenome rather than use a general-queue A100). All six run on exec-419, one H100 each. LSF refuses to
 change a running job ("Cannot change job options for a running job"), and killing the four to resubmit would hand
 their GPUs to the other user's queued jobs. submit.sh now asks for 192 GB (Illumina) / 128 GB (PacBio HiFi, ONT).
+
+All six models trained and scored; the last, Illumina seed 1 (best epoch 7), finished 2026-11-24 17:42. `results.md`
+regenerated 2026-11-26 with all three seeds in every cell.
