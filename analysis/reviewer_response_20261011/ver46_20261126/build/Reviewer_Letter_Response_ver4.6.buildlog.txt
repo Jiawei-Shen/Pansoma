@@ -1,0 +1,32 @@
+marked 21 empty elements of ver3
+Response Table 1.2: 9 data rows, 18 cells changed
+text [^Response Table 1\.2\. INDELs without any pop]: /GRCh38-only and HPRC v1\.1, one run; HPRC v2\.1, m/ -> 'one run (seed 0) on each reference;'
+text [^Response Table 1\.2\. INDELs without any pop]: /The HPRC models take population site features as a/ -> 'None of these models takes population site features as an input.'
+Response Table 2.10: 9 data rows, 18 cells changed
+text [^Response Table 2\.10\. INDELs without any po]: /GRCh38-only and HPRC v1\.1, one run; HPRC v2\.1, m/ -> 'one run (seed 0) on each reference;'
+text [^Response Table 2\.10\. INDELs without any po]: /The HPRC models take population site features as a/ -> 'None of these models takes population site features as an input.'
+Response Table 3.4: 9 data rows, 18 cells changed
+text [^Response Table 3\.4\. INDELs without any pop]: /GRCh38-only and HPRC v1\.1, one run; HPRC v2\.1, m/ -> 'one run (seed 0) on each reference;'
+text [^Response Table 3\.4\. INDELs without any pop]: /The HPRC models take population site features as a/ -> 'None of these models takes population site features as an input.'
+text [^Performance without population filtering \(R]: /INDELs show the same pattern before filtering \(Re/ -> 'INDELs show the same pattern before filtering (Response Table 2.10).'
+Response Table 1.5: 18 data rows, 126 cells changed
+text [^Response Table 1\.5\. SNV calling by region]: /the HPRC models take population site features as a/ -> 'none of these models takes population site features as an input.'
+Response Table 2.5: 18 data rows, 126 cells changed
+text [^Response Table 2\.5\. SNV calling by region]: /the HPRC models take population site features as a/ -> 'none of these models takes population site features as an input.'
+Response Table 3.15: 18 data rows, 126 cells changed
+text [^Response Table 3\.15\. SNV calling by region]: /the HPRC models take population site features as a/ -> 'none of these models takes population site features as an input.'
+Response Table 2.8: 9 data rows, 33 cells changed
+text [^Response Table 2\.8\. ]: /Six-tumor INDEL models after population filtering;/ -> 'Six-tumor INDEL models after population filtering, one training seed ('
+text [^Response Table 2\.8\. ]: /The HPRC models take population site features as a/ -> 'None of these models takes population site features as an input.'
+Response Table 3.2: 27 data rows, 67 cells changed
+text [^Response Table 3\.2\. ]: /Per-seed chr1 results of the final INDEL models an/ -> 'Per-seed chr1 results (seeds 0 / 1 / 2, mean ± s.d.; after population '
+text [^Training seeds\. ]: /The final INDEL models \(six-tumor and four-tumor\/ -> 'The final INDEL models (six-tumor and four-tumor) and the six-tumor SN'
+text [^Training seeds\. ]: /was 0\.003–0\.048 \(median 0\.018\) for these SNV / -> 'was 0.002–0.045 (median 0.008) for these SNV models'
+text [^Training seeds\. ]: /the largest spreads were COLO829T Illumina SNV on / -> 'the largest spreads were HCC1395T ONT SNV (F1 0.716 / 0.723 / 0.641),'
+text [^Response Table 1\.8\. ]: /SNV models: one run \(seed 0\) each;/ -> 'SNV models: seed 0 (the six-tumor SNV models on HPRC v2.1 were also tr'
+Response Table 3.9: 9 data rows, 9 cells changed
+text [^Response Table 3\.9\. ]: /Six-tumor INDEL models \(HPRC v2\.1: seed 0\); the/ -> 'Six-tumor INDEL models without population site features as an input on'
+Fig 1.3: [(2, (5943600, 1849120), (5943600, 2413233))]
+text [^Response Figure 1\.3 Effect of the haplotype]: /The evaluation was performed separately using sing/ -> 'The evaluation uses the six-tumor models on HPRC v2.1 (HG008T, COLO829'
+text [^Haplotype-count channel\. We added a new ref]: /we retrained the SNV models with and without this / -> 'we retrained the six-tumor SNV models with and without this channel us'
+cleanup: 5 empty runs and 3 empty insertion wrappers removed; keep-with-next restored; 3742 paraIds unique

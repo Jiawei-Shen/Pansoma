@@ -1,0 +1,25 @@
+germline: loading /scratch/jshen/data/HG008_GIAB/dipcall_HG008N_GRCh38/HG008N_GRCh38_dipcall.dip.vcf.gz
+germline: 379135 records, 387341 allele keys
+HG008T Illumina SNV HG008T_Illumina_linear HG008T_Illumina_d46 GRCh38-only FP raw / pon 28178 517 v2.1 FP raw / pon 1246 409 v2.1 tensors 260400 of them GRCh38-only FP alleles 4398
+HG008T PacBio SNV HG008T_PacBio_linear HG008T_PacBio_d46 GRCh38-only FP raw / pon 84853 680 v2.1 FP raw / pon 1491 492 v2.1 tensors 127978 of them GRCh38-only FP alleles 10294
+HG008T ONT SNV HG008T_ONT_linear HG008T_ONT_d46 GRCh38-only FP raw / pon 50403 429 v2.1 FP raw / pon 785 264 v2.1 tensors 228478 of them GRCh38-only FP alleles 7282
+germline: loading /scratch/qfu/COLO829BL_DSA/dipcall_hg38/dipcall_hg38.dip.vcf.gz
+germline: 374468 records, 382890 allele keys
+COLO829T Illumina SNV COLO829T_Illumina_linear_snvaf05 COLO829T_Illumina_d46_snvaf05 GRCh38-only FP raw / pon 29530 1480 v2.1 FP raw / pon 1281 391 v2.1 tensors 286237 of them GRCh38-only FP alleles 4560
+COLO829T PacBio SNV COLO829T_fiberseq_linear_snvaf05 COLO829T_fiberseq_d46_snvaf05 GRCh38-only FP raw / pon 38677 2637 v2.1 FP raw / pon 1040 330 v2.1 tensors 231408 of them GRCh38-only FP alleles 5231
+COLO829T ONT SNV COLO829T_ONT_linear COLO829T_ONT_d46 GRCh38-only FP raw / pon 30128 602 v2.1 FP raw / pon 1696 628 v2.1 tensors 275472 of them GRCh38-only FP alleles 4364
+germline: loading /scratch/jshen/data/CASTLE/HCC1395/truth/HCC1395BL_germline_DeepVariant_hybrid_QUAL10.vcf.gz
+germline: 377806 records, 385200 allele keys
+HCC1395T Illumina SNV HCC1395T_Illumina_linear_snvaf05 HCC1395T_Illumina_d46_snvaf05 GRCh38-only FP raw / pon 77905 663 v2.1 FP raw / pon 1783 640 v2.1 tensors 523295 of them GRCh38-only FP alleles 9661
+HCC1395T PacBio SNV HCC1395T_PacBio_linear_snvaf05 HCC1395T_PacBio_d46_snvaf05 GRCh38-only FP raw / pon 86347 627 v2.1 FP raw / pon 1778 607 v2.1 tensors 102201 of them GRCh38-only FP alleles 10198
+HCC1395T ONT SNV HCC1395T_ONT_linear HCC1395T_ONT_d46 GRCh38-only FP raw / pon 115580 610 v2.1 FP raw / pon 2906 1239 v2.1 tensors 251264 of them GRCh38-only FP alleles 12925
+HG008T Illumina INDEL HG008T_Illumina_linear HG008T_Illumina_d46 GRCh38-only FP raw / pon 16016 190 v2.1 FP raw / pon 659 121 v2.1 tensors 9534 of them GRCh38-only FP alleles 1469
+HG008T PacBio INDEL HG008T_PacBio_linear HG008T_PacBio_d46 GRCh38-only FP raw / pon 18590 541 v2.1 FP raw / pon 868 140 v2.1 tensors 153480 of them GRCh38-only FP alleles 4259
+HG008T ONT INDEL HG008T_ONT_linear HG008T_ONT_d46 GRCh38-only FP raw / pon 3642 234 v2.1 FP raw / pon 357 109 v2.1 tensors 206101 of them GRCh38-only FP alleles 1313
+COLO829T Illumina INDEL COLO829T_Illumina_linear COLO829T_Illumina_d46 GRCh38-only FP raw / pon 5977 79 v2.1 FP raw / pon 308 60 v2.1 tensors 7100 of them GRCh38-only FP alleles 436
+COLO829T PacBio INDEL COLO829T_fiberseq_linear COLO829T_fiberseq_d46 GRCh38-only FP raw / pon 1764 274 v2.1 FP raw / pon 267 72 v2.1 tensors 146936 of them GRCh38-only FP alleles 444
+COLO829T ONT INDEL COLO829T_ONT_linear COLO829T_ONT_d46 GRCh38-only FP raw / pon 180 55 v2.1 FP raw / pon 188 116 v2.1 tensors 363254 of them GRCh38-only FP alleles 95
+HCC1395T Illumina INDEL HCC1395T_Illumina_linear HCC1395T_Illumina_d46 GRCh38-only FP raw / pon 6594 92 v2.1 FP raw / pon 451 75 v2.1 tensors 8578 of them GRCh38-only FP alleles 701
+HCC1395T PacBio INDEL HCC1395T_PacBio_linear HCC1395T_PacBio_d46 GRCh38-only FP raw / pon 10207 198 v2.1 FP raw / pon 354 88 v2.1 tensors 139755 of them GRCh38-only FP alleles 1299
+HCC1395T ONT INDEL HCC1395T_ONT_linear HCC1395T_ONT_d46 GRCh38-only FP raw / pon 3713 168 v2.1 FP raw / pon 302 121 v2.1 tensors 323613 of them GRCh38-only FP alleles 602
+v2.1 carrier keys found 241920 of 258851

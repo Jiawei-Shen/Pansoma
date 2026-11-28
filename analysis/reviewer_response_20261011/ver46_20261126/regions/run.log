@@ -1,0 +1,9 @@
+strata + block geometry 11s
+SNV scored 17s
+INDEL scored 21s
+total 21s
+checks passed: 108 rtg directories = report.json (counts, P / R / F1); truth counts equal across references in every stratum; no record outside the blocks
+
+real	0m21.251s
+user	0m18.570s
+sys	0m1.048s

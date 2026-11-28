@@ -1,0 +1,111 @@
+#!/usr/bin/env python
+"""Response Figure 1.3 (letter ver4.6): with / without the haplotype-count channel on the six-tumor SNV models.
+
+Nine rows (HG008T, COLO829T, HCC1395T x Illumina, PacBio HiFi or Fiber-seq, ONT), HPRC v2.1, chr1, benchmark regions.
+  with     snv_newpipe_20261109/multicancer6_<P>_SNV_newpipe          (seed 0, the six-tumor model of the letter)
+  without  m6_nopathcount_20261124/multicancer6_<P>_SNV_newpipe_nopc  (seed 0, --drop-planes path_count; trained on RIS,
+           call sets pulled 2026-11-26)
+The two models of a row differ only in the channel (same sets, recipe, seed, held-out chromosomes, PASS rule 2).
+Layout, fonts and colours of the letter's ver3 figure: ../../ver4_20261123/pathcount/pathcount_fig.draw() (no seed rug:
+user 2026-11-24). Values are read from each call set's eval_bed/report.json with pathcount_data.load(); the truth count
+of the two call sets of a row is asserted equal. Writes fig_R1.3_six_tumor.png / .pdf, values.json, table.md.
+
+Run: /wanglab/jshen/anaconda3/envs/sambcfenv/bin/python fig13_six_tumor.py
+"""
+import json
+import sys
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+sys.path.insert(0, str(HERE.parents[1] / "ver4_20261123/pathcount"))
+import pathcount_data as D  # noqa: E402
+import pathcount_fig as F  # noqa: E402
+
+R = D.R
+TUMORS = ("HG008T", "COLO829T", "HCC1395T")
+PLATFORMS = ("Illumina", "PacBio", "ONT")
+
+
+def label(t, p):
+    return f"{t} " + {"Illumina": "Illumina", "ONT": "ONT", "PacBio": "Fiber-seq" if t == "COLO829T" else "PacBio HiFi"}[p]
+
+
+def one(run, t, p):
+    """The single vcf_chr1_<SET> directory of tumor t under run (directory names differ between the clusters; the set is checked below)."""
+    stem = "COLO829T_fiberseq" if (t, p) == ("COLO829T", "PacBio") else f"{t}_{p}"
+    hits = sorted(x for x in run.glob(f"vcf_chr1_{stem}_d46*") if (x / "eval_bed/report.json").exists())
+    assert len(hits) == 1, (run, stem, hits)
+    return hits[0]
+
+
+def set_and_predictions(d):
+    f = sorted(d.glob("*.SNV.graph.stats.json"))
+    assert len(f) == 1, d
+    g = json.load(open(d / "eval_bed/report.json"))["steps"]["graph_vcf"]
+    return f[0].name.replace(".tensors", "").replace(".SNV.graph.stats.json", ""), g["predictions"]
+
+
+rows, out_rows = [], []
+for t in TUMORS:
+    for p in PLATFORMS:
+        dw = one(R / f"snv_newpipe_20261109/multicancer6_{p}_SNV_newpipe", t, p)
+        dn = one(R / f"m6_nopathcount_20261124/multicancer6_{p}_SNV_newpipe_nopc", t, p)
+        w, n = D.load(dw / "eval_bed/report.json"), D.load(dn / "eval_bed/report.json")
+        # same test set on both sides: set name (AF build) of the graph VCF and number of chr1 predictions
+        sw, sn = (set_and_predictions(x) for x in (dw, dn))
+        assert sw == sn, (t, p, sw, sn)
+        assert w["meta"]["truth_in_bed"] == n["meta"]["truth_in_bed"], (t, p)
+        assert w["meta"]["truth"] == n["meta"]["truth"] and w["meta"]["bed"] == n["meta"]["bed"], (t, p)
+        a = [w[st][k] for k, st, _ in D.METRICS]
+        b = [n[st][k] for k, st, _ in D.METRICS]
+        d = [x - y for x, y in zip(a, b)]
+        rows.append({"label": label(t, p), "group": t, "with": a, "without": b, "seeds": None, "delta": d})
+        out_rows.append({"tumor": t, "platform": label(t, p).split(" ", 1)[1], "truth": w["meta"]["truth_in_bed"],
+                         "with": dict(zip(("P", "R", "F1", "F1_before"), a)), "without": dict(zip(("P", "R", "F1", "F1_before"), b)),
+                         "delta": dict(zip(("P", "R", "F1", "F1_before"), d)),
+                         "test_set": sw[0], "chr1_predictions": sw[1],
+                         "fp_with": w["pon"].get("fp"), "fp_without": n["pon"].get("fp"),
+                         "with_report": str(dw / "eval_bed/report.json"), "without_report": str(dn / "eval_bed/report.json")})
+
+lo = [min(min(r["with"][j], r["without"][j]) for r in rows) for j in range(4)]
+hi = [max(max(r["with"][j], r["without"][j]) for r in rows) for j in range(4)]
+XLIM = (0.47, 0.93)                  # one range for the four panels: equal distances are equal differences
+XTICKS = [0.5, 0.6, 0.7, 0.8, 0.9]
+assert XLIM[0] + 0.02 < min(lo) and max(hi) < XLIM[1] - 0.02, (lo, hi)
+VMAX = 0.15
+big = max(abs(d) for r in rows for d in r["delta"])
+assert big <= VMAX, big
+outs, size, geo = F.draw(
+    rows, HERE / "fig_R1.3_six_tumor", [XLIM] * 4, [XTICKS] * 4, VMAX, f"{VMAX:g}",
+    legend=[("circle", "With haplotype-count channel"), ("diamond", "Without haplotype-count channel")],
+    delta_title=("Δ (with − without", "haplotype-count channel)"))
+print("written", [str(o) for o in outs], size)
+
+json.dump({"rows": out_rows, "xlim": XLIM, "colour_scale": [-VMAX, VMAX], "size_px": size}, open(HERE / "values.json", "w"), indent=1)
+
+
+def f3(x):
+    return f"{x:.3f}"
+
+
+def d3(x):
+    return f"{x:+.3f}".replace("-", "−")
+
+
+L = ["# Response Figure 1.3 (ver4.6): six-tumor SNV models on HPRC v2.1 with / without the haplotype-count channel, chr1",
+     "", "Generated by `fig13_six_tumor.py`. chr1, benchmark regions, PASS (rule 2); P / R / F1 after the population filter, "
+     "F1 before it; seed 0 on both sides. Δ = with − without.", "",
+     "| tumor, chr1 | platform | with: P / R / F1 / F1 before | without: P / R / F1 / F1 before | ΔP | ΔR | ΔF1 | ΔF1 before | FP after the filter, with → without |",
+     "|---|---|---|---|---|---|---|---|---|"]
+for r in out_rows:
+    L.append(f"| {r['tumor']} | {r['platform']} | " + " / ".join(f3(r['with'][k]) for k in ("P", "R", "F1", "F1_before")) + " | "
+             + " / ".join(f3(r['without'][k]) for k in ("P", "R", "F1", "F1_before")) + " | "
+             + " | ".join(d3(r['delta'][k]) for k in ("P", "R", "F1", "F1_before")) + f" | {r['fp_with']:,} → {r['fp_without']:,} |")
+n = len(out_rows)
+for k, name in (("P", "precision"), ("R", "recall"), ("F1", "F1 after the filter"), ("F1_before", "F1 before the filter")):
+    v = [r["delta"][k] for r in out_rows]
+    L.append("")
+    L.append(f"- Δ {name}: {d3(min(v))} to {d3(max(v))}; with > without in {sum(x > 0 for x in v)} of {n} "
+             f"(rounded to 3 decimals: {sum(round(x, 3) > 0 for x in v)} of {n})")
+(HERE / "table.md").write_text("\n".join(L) + "\n")
+print("\n".join(L))

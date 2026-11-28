@@ -1,0 +1,8 @@
+OK   SNV: columns 1-5 (dataset, GRCh38-graph FP, two germline columns, non-germline) equal to the ver4 table in 9 of 9 rows
+     SNV: last column, with site features -> without: HG008T Illumina 468 -> 1,246; HG008T PacBio HiFi 481 -> 1,491; HG008T ONT 273 -> 785; COLO829T Illumina 550 -> 1,281; COLO829T Fiber-seq 291 -> 1,040; COLO829T ONT 477 -> 1,696; HCC1395T Illumina 502 -> 1,783; HCC1395T PacBio HiFi 416 -> 1,778; HCC1395T ONT 780 -> 2,906
+OK   INDEL: columns 1-5 (dataset, GRCh38-graph FP, two germline columns, non-germline) equal to the ver4 table in 9 of 9 rows
+     INDEL: last column, with site features -> without: HG008T Illumina 109 -> 659; HG008T PacBio HiFi 115 -> 868; HG008T ONT 43 -> 357; COLO829T Illumina 49 -> 308; COLO829T Fiber-seq 27 -> 267; COLO829T ONT 46 -> 188; HCC1395T Illumina 92 -> 451; HCC1395T PacBio HiFi 126 -> 354; HCC1395T ONT 86 -> 302
+OK   SNV: all six columns equal to the letter ver4.5's Response Table 2.6 = 3.8 in 9 of 9 rows
+OK   HPRC v2.1 FP records == report.json fp of the no-site-feature call set, FP allele keys == FP records in both arms: 36 of 36 cell x stage
+OK   INDEL HPRC v2.1 TP / FP after the filter == analysis/m6_nositef_graphs_20261118/results_indel.md section 1: 9 of 9 rows
+ALL CHECKS PASSED

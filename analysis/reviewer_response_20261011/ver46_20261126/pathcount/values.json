@@ -1,0 +1,277 @@
+{
+ "rows": [
+  {
+   "tumor": "HG008T",
+   "platform": "Illumina",
+   "truth": 697,
+   "with": {
+    "P": 0.5404595404595405,
+    "R": 0.776183644189383,
+    "F1": 0.6372202591283863,
+    "F1_before": 0.6350322202694786
+   },
+   "without": {
+    "P": 0.5009398496240601,
+    "R": 0.7647058823529411,
+    "F1": 0.6053378762067007,
+    "F1_before": 0.6034968979131415
+   },
+   "delta": {
+    "P": 0.03951969083548035,
+    "R": 0.011477761836441891,
+    "F1": 0.03188238292168566,
+    "F1_before": 0.03153532235633705
+   },
+   "test_set": "HG008T_Illumina_d46",
+   "chr1_predictions": 273992,
+   "fp_with": 460,
+   "fp_without": 531,
+   "with_report": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_Illumina_SNV_newpipe/vcf_chr1_HG008T_Illumina_d46/eval_bed/report.json",
+   "without_report": "/scratch/jshen/data/pansoma_net_v2_runs/m6_nopathcount_20261124/multicancer6_Illumina_SNV_newpipe_nopc/vcf_chr1_HG008T_Illumina_d46/eval_bed/report.json"
+  },
+  {
+   "tumor": "HG008T",
+   "platform": "PacBio HiFi",
+   "truth": 697,
+   "with": {
+    "P": 0.5420650095602294,
+    "R": 0.8134863701578192,
+    "F1": 0.6506024096385541,
+    "F1_before": 0.6514024041213509
+   },
+   "without": {
+    "P": 0.5306893295561851,
+    "R": 0.806312769010043,
+    "F1": 0.6400911161731208,
+    "F1_before": 0.6405451448040885
+   },
+   "delta": {
+    "P": 0.01137568000404432,
+    "R": 0.00717360114777621,
+    "F1": 0.010511293465433336,
+    "F1_before": 0.010857259317262336
+   },
+   "test_set": "HG008T_PacBio_d46",
+   "chr1_predictions": 140610,
+   "fp_with": 479,
+   "fp_without": 497,
+   "with_report": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_PacBio_SNV_newpipe/vcf_chr1_HG008T_PacBio_d46/eval_bed/report.json",
+   "without_report": "/scratch/jshen/data/pansoma_net_v2_runs/m6_nopathcount_20261124/multicancer6_PacBio_SNV_newpipe_nopc/vcf_chr1_HG008T_PacBio_d46/eval_bed/report.json"
+  },
+  {
+   "tumor": "HG008T",
+   "platform": "ONT",
+   "truth": 697,
+   "with": {
+    "P": 0.626027397260274,
+    "R": 0.6556671449067432,
+    "F1": 0.6405045550105116,
+    "F1_before": 0.6405045550105116
+   },
+   "without": {
+    "P": 0.57375,
+    "R": 0.6585365853658537,
+    "F1": 0.6132264529058116,
+    "F1_before": 0.6124082721814543
+   },
+   "delta": {
+    "P": 0.05227739726027403,
+    "R": -0.0028694404591105283,
+    "F1": 0.027278102104700053,
+    "F1_before": 0.028096282829057295
+   },
+   "test_set": "HG008T_ONT_d46",
+   "chr1_predictions": 255143,
+   "fp_with": 273,
+   "fp_without": 341,
+   "with_report": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_ONT_SNV_newpipe/vcf_chr1_HG008T_ONT_d46/eval_bed/report.json",
+   "without_report": "/scratch/jshen/data/pansoma_net_v2_runs/m6_nopathcount_20261124/multicancer6_ONT_SNV_newpipe_nopc/vcf_chr1_HG008T_ONT_d46/eval_bed/report.json"
+  },
+  {
+   "tumor": "COLO829T",
+   "platform": "Illumina",
+   "truth": 2443,
+   "with": {
+    "P": 0.7751677852348994,
+    "R": 0.7564469914040115,
+    "F1": 0.7656929770043507,
+    "F1_before": 0.7655186636419881
+   },
+   "without": {
+    "P": 0.6731707317073171,
+    "R": 0.7343430208759721,
+    "F1": 0.7024275646045419,
+    "F1_before": 0.7015767957952111
+   },
+   "delta": {
+    "P": 0.10199705352758226,
+    "R": 0.022103970528039363,
+    "F1": 0.06326541239980876,
+    "F1_before": 0.06394186784677691
+   },
+   "test_set": "COLO829T_Illumina_d46_snvaf05",
+   "chr1_predictions": 295325,
+   "fp_with": 536,
+   "fp_without": 871,
+   "with_report": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_Illumina_SNV_newpipe/vcf_chr1_COLO829T_Illumina_d46/eval_bed/report.json",
+   "without_report": "/scratch/jshen/data/pansoma_net_v2_runs/m6_nopathcount_20261124/multicancer6_Illumina_SNV_newpipe_nopc/vcf_chr1_COLO829T_Illumina_d46_snvaf05/eval_bed/report.json"
+  },
+  {
+   "tumor": "COLO829T",
+   "platform": "Fiber-seq",
+   "truth": 2443,
+   "with": {
+    "P": 0.8644307982994804,
+    "R": 0.7490790012279983,
+    "F1": 0.8026315789473685,
+    "F1_before": 0.8024529128339903
+   },
+   "without": {
+    "P": 0.8309859154929577,
+    "R": 0.748669668440442,
+    "F1": 0.7876830318690784,
+    "F1_before": 0.7883870967741936
+   },
+   "delta": {
+    "P": 0.03344488280652269,
+    "R": 0.00040933278755628244,
+    "F1": 0.014948547078290075,
+    "F1_before": 0.014065816059796732
+   },
+   "test_set": "COLO829T_fiberseq_d46_snvaf05",
+   "chr1_predictions": 253561,
+   "fp_with": 287,
+   "fp_without": 372,
+   "with_report": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_PacBio_SNV_newpipe/vcf_chr1_COLO829T_fiberseq_d46/eval_bed/report.json",
+   "without_report": "/scratch/jshen/data/pansoma_net_v2_runs/m6_nopathcount_20261124/multicancer6_PacBio_SNV_newpipe_nopc/vcf_chr1_COLO829T_fiberseq_d46_snvaf05/eval_bed/report.json"
+  },
+  {
+   "tumor": "COLO829T",
+   "platform": "ONT",
+   "truth": 2443,
+   "with": {
+    "P": 0.7873406193078324,
+    "R": 0.7077363896848138,
+    "F1": 0.7454192713946971,
+    "F1_before": 0.7443560524618362
+   },
+   "without": {
+    "P": 0.7679824561403509,
+    "R": 0.716741711011052,
+    "F1": 0.7414778742324794,
+    "F1_before": 0.7404435058078142
+   },
+   "delta": {
+    "P": 0.019358163167481512,
+    "R": -0.009005321326238214,
+    "F1": 0.003941397162217752,
+    "F1_before": 0.0039125466540220755
+   },
+   "test_set": "COLO829T_ONT_d46",
+   "chr1_predictions": 307193,
+   "fp_with": 467,
+   "fp_without": 529,
+   "with_report": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_ONT_SNV_newpipe/vcf_chr1_COLO829T_ONT_d46/eval_bed/report.json",
+   "without_report": "/scratch/jshen/data/pansoma_net_v2_runs/m6_nopathcount_20261124/multicancer6_ONT_SNV_newpipe_nopc/vcf_chr1_COLO829T_ONT_d46/eval_bed/report.json"
+  },
+  {
+   "tumor": "HCC1395T",
+   "platform": "Illumina",
+   "truth": 3440,
+   "with": {
+    "P": 0.8628048780487805,
+    "R": 0.9049418604651163,
+    "F1": 0.8833711691259931,
+    "F1_before": 0.8842343617322388
+   },
+   "without": {
+    "P": 0.853672004417449,
+    "R": 0.8988372093023256,
+    "F1": 0.8756726139903709,
+    "F1_before": 0.8754940711462451
+   },
+   "delta": {
+    "P": 0.009132873631331528,
+    "R": 0.006104651162790686,
+    "F1": 0.0076985551356222315,
+    "F1_before": 0.008740290585993682
+   },
+   "test_set": "HCC1395T_Illumina_d46_snvaf05",
+   "chr1_predictions": 552550,
+   "fp_with": 495,
+   "fp_without": 530,
+   "with_report": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_Illumina_SNV_newpipe/vcf_chr1_HCC1395T_Illumina_d46/eval_bed/report.json",
+   "without_report": "/scratch/jshen/data/pansoma_net_v2_runs/m6_nopathcount_20261124/multicancer6_Illumina_SNV_newpipe_nopc/vcf_chr1_HCC1395T_Illumina_d46_snvaf05/eval_bed/report.json"
+  },
+  {
+   "tumor": "HCC1395T",
+   "platform": "PacBio HiFi",
+   "truth": 3440,
+   "with": {
+    "P": 0.8771929824561403,
+    "R": 0.8575581395348837,
+    "F1": 0.8672644421578715,
+    "F1_before": 0.8683785766691122
+   },
+   "without": {
+    "P": 0.8764213046080191,
+    "R": 0.851453488372093,
+    "F1": 0.8637570038336774,
+    "F1_before": 0.8644192551155601
+   },
+   "delta": {
+    "P": 0.000771677848121155,
+    "R": 0.006104651162790686,
+    "F1": 0.00350743832419409,
+    "F1_before": 0.003959321553552164
+   },
+   "test_set": "HCC1395T_PacBio_d46_snvaf05",
+   "chr1_predictions": 112600,
+   "fp_with": 413,
+   "fp_without": 413,
+   "with_report": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_PacBio_SNV_newpipe/vcf_chr1_HCC1395T_PacBio_d46/eval_bed/report.json",
+   "without_report": "/scratch/jshen/data/pansoma_net_v2_runs/m6_nopathcount_20261124/multicancer6_PacBio_SNV_newpipe_nopc/vcf_chr1_HCC1395T_PacBio_d46_snvaf05/eval_bed/report.json"
+  },
+  {
+   "tumor": "HCC1395T",
+   "platform": "ONT",
+   "truth": 3440,
+   "with": {
+    "P": 0.7603792088917947,
+    "R": 0.6761627906976744,
+    "F1": 0.7158024311432527,
+    "F1_before": 0.7116470767821707
+   },
+   "without": {
+    "P": 0.6346205779098029,
+    "R": 0.6831395348837209,
+    "F1": 0.6579868402631949,
+    "F1_before": 0.6437064370643707
+   },
+   "delta": {
+    "P": 0.1257586309819918,
+    "R": -0.006976744186046546,
+    "F1": 0.05781559088005783,
+    "F1_before": 0.06794063971779996
+   },
+   "test_set": "HCC1395T_ONT_d46",
+   "chr1_predictions": 276601,
+   "fp_with": 733,
+   "fp_without": 1353,
+   "with_report": "/scratch/jshen/data/pansoma_net_v2_runs/snv_newpipe_20261109/multicancer6_ONT_SNV_newpipe/vcf_chr1_HCC1395T_ONT_d46/eval_bed/report.json",
+   "without_report": "/scratch/jshen/data/pansoma_net_v2_runs/m6_nopathcount_20261124/multicancer6_ONT_SNV_newpipe_nopc/vcf_chr1_HCC1395T_ONT_d46/eval_bed/report.json"
+  }
+ ],
+ "xlim": [
+  0.47,
+  0.93
+ ],
+ "colour_scale": [
+  -0.15,
+  0.15
+ ],
+ "size_px": [
+  4251,
+  1726
+ ]
+}

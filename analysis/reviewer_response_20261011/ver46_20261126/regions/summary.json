@@ -1,0 +1,2468 @@
+{
+ "snv_strata": {
+  "before|18 pairs|extreme": {
+   "n": 18,
+   "positive": 18,
+   "not_positive": [],
+   "interval_above_zero": 18,
+   "interval_below_zero": 0,
+   "below_zero_pairs": [],
+   "includes_zero_pairs": [],
+   "min": 0.10399323467230445,
+   "max": 0.5941642097718096,
+   "min_pair": "HG008T Illumina v1.1",
+   "max_pair": "HCC1395T PacBio HiFi v2.1"
+  },
+  "before|18 pairs|alldifficultregions": {
+   "n": 18,
+   "positive": 18,
+   "not_positive": [],
+   "interval_above_zero": 18,
+   "interval_below_zero": 0,
+   "below_zero_pairs": [],
+   "includes_zero_pairs": [],
+   "min": 0.18116058618618158,
+   "max": 0.6277304298470432,
+   "min_pair": "HG008T Illumina v1.1",
+   "max_pair": "HCC1395T Illumina v2.1"
+  },
+  "before|18 pairs|alllowmapandsegdupregions": {
+   "n": 18,
+   "positive": 18,
+   "not_positive": [],
+   "interval_above_zero": 18,
+   "interval_below_zero": 0,
+   "below_zero_pairs": [],
+   "includes_zero_pairs": [],
+   "min": 0.10268783937577733,
+   "max": 0.5959758638339593,
+   "min_pair": "HCC1395T ONT v2.1",
+   "max_pair": "HCC1395T Illumina v2.1"
+  },
+  "before|18 pairs|AllTandemRepeatsandHomopolymers_slop5": {
+   "n": 18,
+   "positive": 18,
+   "not_positive": [],
+   "interval_above_zero": 18,
+   "interval_below_zero": 0,
+   "below_zero_pairs": [],
+   "includes_zero_pairs": [],
+   "min": 0.15027066041140383,
+   "max": 0.5885162374953465,
+   "min_pair": "HG008T ONT v1.1",
+   "max_pair": "HCC1395T Illumina v2.1"
+  },
+  "before|18 pairs|notinalldifficultregions": {
+   "n": 18,
+   "positive": 18,
+   "not_positive": [],
+   "interval_above_zero": 18,
+   "interval_below_zero": 0,
+   "below_zero_pairs": [],
+   "includes_zero_pairs": [],
+   "min": 0.22409093717971348,
+   "max": 0.6787900144686899,
+   "min_pair": "HG008T Illumina v1.1",
+   "max_pair": "HCC1395T Illumina v2.1"
+  },
+  "before|18 pairs|all": {
+   "n": 18,
+   "positive": 18,
+   "not_positive": [],
+   "interval_above_zero": 18,
+   "interval_below_zero": 0,
+   "below_zero_pairs": [],
+   "includes_zero_pairs": [],
+   "min": 0.21487184273226495,
+   "max": 0.6711888581450092,
+   "min_pair": "HG008T Illumina v1.1",
+   "max_pair": "HCC1395T Illumina v2.1"
+  },
+  "before|v1.1 (9)|extreme": {
+   "n": 9,
+   "positive": 9,
+   "not_positive": [],
+   "interval_above_zero": 9,
+   "interval_below_zero": 0,
+   "below_zero_pairs": [],
+   "includes_zero_pairs": [],
+   "min": 0.10399323467230445,
+   "max": 0.4453432260789299,
+   "min_pair": "HG008T Illumina v1.1",
+   "max_pair": "HCC1395T PacBio HiFi v1.1"
+  },
+  "before|v1.1 (9)|alldifficultregions": {
+   "n": 9,
+   "positive": 9,
+   "not_positive": [],
+   "interval_above_zero": 9,
+   "interval_below_zero": 0,
+   "below_zero_pairs": [],
+   "includes_zero_pairs": [],
+   "min": 0.18116058618618158,
+   "max": 0.4861268660943568,
+   "min_pair": "HG008T Illumina v1.1",
+   "max_pair": "HCC1395T Illumina v1.1"
+  },
+  "before|v1.1 (9)|alllowmapandsegdupregions": {
+   "n": 9,
+   "positive": 9,
+   "not_positive": [],
+   "interval_above_zero": 9,
+   "interval_below_zero": 0,
+   "below_zero_pairs": [],
+   "includes_zero_pairs": [],
+   "min": 0.14642172720314223,
+   "max": 0.4216227873532232,
+   "min_pair": "HG008T Illumina v1.1",
+   "max_pair": "HCC1395T Illumina v1.1"
+  },
+  "before|v1.1 (9)|AllTandemRepeatsandHomopolymers_slop5": {
+   "n": 9,
+   "positive": 9,
+   "not_positive": [],
+   "interval_above_zero": 9,
+   "interval_below_zero": 0,
+   "below_zero_pairs": [],
+   "includes_zero_pairs": [],
+   "min": 0.15027066041140383,
+   "max": 0.4613156814899871,
+   "min_pair": "HG008T ONT v1.1",
+   "max_pair": "HCC1395T Illumina v1.1"
+  },
+  "before|v1.1 (9)|notinalldifficultregions": {
+   "n": 9,
+   "positive": 9,
+   "not_positive": [],
+   "interval_above_zero": 9,
+   "interval_below_zero": 0,
+   "below_zero_pairs": [],
+   "includes_zero_pairs": [],
+   "min": 0.22409093717971348,
+   "max": 0.5622347980140375,
+   "min_pair": "HG008T Illumina v1.1",
+   "max_pair": "HCC1395T Illumina v1.1"
+  },
+  "before|v1.1 (9)|all": {
+   "n": 9,
+   "positive": 9,
+   "not_positive": [],
+   "interval_above_zero": 9,
+   "interval_below_zero": 0,
+   "below_zero_pairs": [],
+   "includes_zero_pairs": [],
+   "min": 0.21487184273226495,
+   "max": 0.5504345057276856,
+   "min_pair": "HG008T Illumina v1.1",
+   "max_pair": "HCC1395T Illumina v1.1"
+  },
+  "before|v2.1 (9)|extreme": {
+   "n": 9,
+   "positive": 9,
+   "not_positive": [],
+   "interval_above_zero": 9,
+   "interval_below_zero": 0,
+   "below_zero_pairs": [],
+   "includes_zero_pairs": [],
+   "min": 0.12239344782034346,
+   "max": 0.5941642097718096,
+   "min_pair": "HCC1395T ONT v2.1",
+   "max_pair": "HCC1395T PacBio HiFi v2.1"
+  },
+  "before|v2.1 (9)|alldifficultregions": {
+   "n": 9,
+   "positive": 9,
+   "not_positive": [],
+   "interval_above_zero": 9,
+   "interval_below_zero": 0,
+   "below_zero_pairs": [],
+   "includes_zero_pairs": [],
+   "min": 0.25041063690827237,
+   "max": 0.6277304298470432,
+   "min_pair": "HCC1395T ONT v2.1",
+   "max_pair": "HCC1395T Illumina v2.1"
+  },
+  "before|v2.1 (9)|alllowmapandsegdupregions": {
+   "n": 9,
+   "positive": 9,
+   "not_positive": [],
+   "interval_above_zero": 9,
+   "interval_below_zero": 0,
+   "below_zero_pairs": [],
+   "includes_zero_pairs": [],
+   "min": 0.10268783937577733,
+   "max": 0.5959758638339593,
+   "min_pair": "HCC1395T ONT v2.1",
+   "max_pair": "HCC1395T Illumina v2.1"
+  },
+  "before|v2.1 (9)|AllTandemRepeatsandHomopolymers_slop5": {
+   "n": 9,
+   "positive": 9,
+   "not_positive": [],
+   "interval_above_zero": 9,
+   "interval_below_zero": 0,
+   "below_zero_pairs": [],
+   "includes_zero_pairs": [],
+   "min": 0.28659993281827345,
+   "max": 0.5885162374953465,
+   "min_pair": "HG008T Illumina v2.1",
+   "max_pair": "HCC1395T Illumina v2.1"
+  },
+  "before|v2.1 (9)|notinalldifficultregions": {
+   "n": 9,
+   "positive": 9,
+   "not_positive": [],
+   "interval_above_zero": 9,
+   "interval_below_zero": 0,
+   "below_zero_pairs": [],
+   "includes_zero_pairs": [],
+   "min": 0.40131109681322946,
+   "max": 0.6787900144686899,
+   "min_pair": "HG008T PacBio HiFi v2.1",
+   "max_pair": "HCC1395T Illumina v2.1"
+  },
+  "before|v2.1 (9)|all": {
+   "n": 9,
+   "positive": 9,
+   "not_positive": [],
+   "interval_above_zero": 9,
+   "interval_below_zero": 0,
+   "below_zero_pairs": [],
+   "includes_zero_pairs": [],
+   "min": 0.3872703198680573,
+   "max": 0.6711888581450092,
+   "min_pair": "HG008T PacBio HiFi v2.1",
+   "max_pair": "HCC1395T Illumina v2.1"
+  },
+  "after|18 pairs|extreme": {
+   "n": 18,
+   "positive": 17,
+   "not_positive": [
+    "HCC1395T ONT v2.1"
+   ],
+   "interval_above_zero": 9,
+   "interval_below_zero": 1,
+   "below_zero_pairs": [
+    "HCC1395T ONT v2.1"
+   ],
+   "includes_zero_pairs": [
+    "HG008T ONT v1.1",
+    "HG008T ONT v2.1",
+    "COLO829T ONT v2.1",
+    "HCC1395T Illumina v1.1",
+    "HCC1395T Illumina v2.1",
+    "HCC1395T PacBio HiFi v1.1",
+    "HCC1395T PacBio HiFi v2.1",
+    "HCC1395T ONT v1.1"
+   ],
+   "min": -0.3901685910417926,
+   "max": 0.5579827949932801,
+   "min_pair": "HCC1395T ONT v2.1",
+   "max_pair": "COLO829T Fiber-seq v2.1"
+  },
+  "after|18 pairs|alldifficultregions": {
+   "n": 18,
+   "positive": 16,
+   "not_positive": [
+    "HCC1395T Illumina v1.1",
+    "HCC1395T ONT v2.1"
+   ],
+   "interval_above_zero": 11,
+   "interval_below_zero": 1,
+   "below_zero_pairs": [
+    "HCC1395T ONT v2.1"
+   ],
+   "includes_zero_pairs": [
+    "COLO829T ONT v2.1",
+    "HCC1395T Illumina v1.1",
+    "HCC1395T Illumina v2.1",
+    "HCC1395T PacBio HiFi v1.1",
+    "HCC1395T PacBio HiFi v2.1",
+    "HCC1395T ONT v1.1"
+   ],
+   "min": -0.28097471925378076,
+   "max": 0.5135059456871751,
+   "min_pair": "HCC1395T ONT v2.1",
+   "max_pair": "COLO829T Fiber-seq v2.1"
+  },
+  "after|18 pairs|alllowmapandsegdupregions": {
+   "n": 18,
+   "positive": 17,
+   "not_positive": [
+    "HCC1395T ONT v2.1"
+   ],
+   "interval_above_zero": 13,
+   "interval_below_zero": 1,
+   "below_zero_pairs": [
+    "HCC1395T ONT v2.1"
+   ],
+   "includes_zero_pairs": [
+    "COLO829T ONT v2.1",
+    "HCC1395T Illumina v1.1",
+    "HCC1395T PacBio HiFi v1.1",
+    "HCC1395T PacBio HiFi v2.1"
+   ],
+   "min": -0.4076994434137291,
+   "max": 0.5243934977024556,
+   "min_pair": "HCC1395T ONT v2.1",
+   "max_pair": "COLO829T Fiber-seq v2.1"
+  },
+  "after|18 pairs|AllTandemRepeatsandHomopolymers_slop5": {
+   "n": 18,
+   "positive": 14,
+   "not_positive": [
+    "HCC1395T Illumina v1.1",
+    "HCC1395T PacBio HiFi v1.1",
+    "HCC1395T PacBio HiFi v2.1",
+    "HCC1395T ONT v2.1"
+   ],
+   "interval_above_zero": 9,
+   "interval_below_zero": 0,
+   "below_zero_pairs": [],
+   "includes_zero_pairs": [
+    "HG008T PacBio HiFi v1.1",
+    "HG008T ONT v1.1",
+    "HG008T ONT v2.1",
+    "HCC1395T Illumina v1.1",
+    "HCC1395T Illumina v2.1",
+    "HCC1395T PacBio HiFi v1.1",
+    "HCC1395T PacBio HiFi v2.1",
+    "HCC1395T ONT v1.1",
+    "HCC1395T ONT v2.1"
+   ],
+   "min": -0.05495717880132378,
+   "max": 0.5833853569933559,
+   "min_pair": "HCC1395T ONT v2.1",
+   "max_pair": "COLO829T Fiber-seq v2.1"
+  },
+  "after|18 pairs|notinalldifficultregions": {
+   "n": 18,
+   "positive": 12,
+   "not_positive": [
+    "HG008T PacBio HiFi v1.1",
+    "HG008T PacBio HiFi v2.1",
+    "HCC1395T PacBio HiFi v1.1",
+    "HCC1395T PacBio HiFi v2.1",
+    "HCC1395T ONT v1.1",
+    "HCC1395T ONT v2.1"
+   ],
+   "interval_above_zero": 8,
+   "interval_below_zero": 3,
+   "below_zero_pairs": [
+    "HCC1395T PacBio HiFi v2.1",
+    "HCC1395T ONT v1.1",
+    "HCC1395T ONT v2.1"
+   ],
+   "includes_zero_pairs": [
+    "HG008T Illumina v1.1",
+    "HG008T PacBio HiFi v1.1",
+    "HG008T PacBio HiFi v2.1",
+    "HG008T ONT v1.1",
+    "HG008T ONT v2.1",
+    "HCC1395T Illumina v2.1",
+    "HCC1395T PacBio HiFi v1.1"
+   ],
+   "min": -0.01222379386803274,
+   "max": 0.10779767940899199,
+   "min_pair": "HG008T PacBio HiFi v2.1",
+   "max_pair": "COLO829T ONT v2.1"
+  },
+  "after|18 pairs|all": {
+   "n": 18,
+   "positive": 15,
+   "not_positive": [
+    "HCC1395T PacBio HiFi v2.1",
+    "HCC1395T ONT v1.1",
+    "HCC1395T ONT v2.1"
+   ],
+   "interval_above_zero": 13,
+   "interval_below_zero": 1,
+   "below_zero_pairs": [
+    "HCC1395T ONT v2.1"
+   ],
+   "includes_zero_pairs": [
+    "HCC1395T Illumina v2.1",
+    "HCC1395T PacBio HiFi v1.1",
+    "HCC1395T PacBio HiFi v2.1",
+    "HCC1395T ONT v1.1"
+   ],
+   "min": -0.07860035154643419,
+   "max": 0.29527218849393033,
+   "min_pair": "HCC1395T ONT v2.1",
+   "max_pair": "COLO829T Fiber-seq v1.1"
+  },
+  "after|v1.1 (9)|extreme": {
+   "n": 9,
+   "positive": 9,
+   "not_positive": [],
+   "interval_above_zero": 5,
+   "interval_below_zero": 0,
+   "below_zero_pairs": [],
+   "includes_zero_pairs": [
+    "HG008T ONT v1.1",
+    "HCC1395T Illumina v1.1",
+    "HCC1395T PacBio HiFi v1.1",
+    "HCC1395T ONT v1.1"
+   ],
+   "min": 0.01408573167550653,
+   "max": 0.5407473915209923,
+   "min_pair": "HCC1395T Illumina v1.1",
+   "max_pair": "COLO829T Fiber-seq v1.1"
+  },
+  "after|v1.1 (9)|alldifficultregions": {
+   "n": 9,
+   "positive": 8,
+   "not_positive": [
+    "HCC1395T Illumina v1.1"
+   ],
+   "interval_above_zero": 6,
+   "interval_below_zero": 0,
+   "below_zero_pairs": [],
+   "includes_zero_pairs": [
+    "HCC1395T Illumina v1.1",
+    "HCC1395T PacBio HiFi v1.1",
+    "HCC1395T ONT v1.1"
+   ],
+   "min": -0.0022896845762110374,
+   "max": 0.5005873754563519,
+   "min_pair": "HCC1395T Illumina v1.1",
+   "max_pair": "COLO829T Fiber-seq v1.1"
+  },
+  "after|v1.1 (9)|alllowmapandsegdupregions": {
+   "n": 9,
+   "positive": 9,
+   "not_positive": [],
+   "interval_above_zero": 7,
+   "interval_below_zero": 0,
+   "below_zero_pairs": [],
+   "includes_zero_pairs": [
+    "HCC1395T Illumina v1.1",
+    "HCC1395T PacBio HiFi v1.1"
+   ],
+   "min": 0.013274690123950328,
+   "max": 0.5069417602507181,
+   "min_pair": "HCC1395T Illumina v1.1",
+   "max_pair": "COLO829T Fiber-seq v1.1"
+  },
+  "after|v1.1 (9)|AllTandemRepeatsandHomopolymers_slop5": {
+   "n": 9,
+   "positive": 7,
+   "not_positive": [
+    "HCC1395T Illumina v1.1",
+    "HCC1395T PacBio HiFi v1.1"
+   ],
+   "interval_above_zero": 4,
+   "interval_below_zero": 0,
+   "below_zero_pairs": [],
+   "includes_zero_pairs": [
+    "HG008T PacBio HiFi v1.1",
+    "HG008T ONT v1.1",
+    "HCC1395T Illumina v1.1",
+    "HCC1395T PacBio HiFi v1.1",
+    "HCC1395T ONT v1.1"
+   ],
+   "min": -0.020143374263609903,
+   "max": 0.5248365357191901,
+   "min_pair": "HCC1395T PacBio HiFi v1.1",
+   "max_pair": "COLO829T Fiber-seq v1.1"
+  },
+  "after|v1.1 (9)|notinalldifficultregions": {
+   "n": 9,
+   "positive": 6,
+   "not_positive": [
+    "HG008T PacBio HiFi v1.1",
+    "HCC1395T PacBio HiFi v1.1",
+    "HCC1395T ONT v1.1"
+   ],
+   "interval_above_zero": 4,
+   "interval_below_zero": 1,
+   "below_zero_pairs": [
+    "HCC1395T ONT v1.1"
+   ],
+   "includes_zero_pairs": [
+    "HG008T Illumina v1.1",
+    "HG008T PacBio HiFi v1.1",
+    "HG008T ONT v1.1",
+    "HCC1395T PacBio HiFi v1.1"
+   ],
+   "min": -0.009118960018605793,
+   "max": 0.09727577556693934,
+   "min_pair": "HCC1395T ONT v1.1",
+   "max_pair": "COLO829T ONT v1.1"
+  },
+  "after|v1.1 (9)|all": {
+   "n": 9,
+   "positive": 8,
+   "not_positive": [
+    "HCC1395T ONT v1.1"
+   ],
+   "interval_above_zero": 7,
+   "interval_below_zero": 0,
+   "below_zero_pairs": [],
+   "includes_zero_pairs": [
+    "HCC1395T PacBio HiFi v1.1",
+    "HCC1395T ONT v1.1"
+   ],
+   "min": -0.003813878333275844,
+   "max": 0.29527218849393033,
+   "min_pair": "HCC1395T ONT v1.1",
+   "max_pair": "COLO829T Fiber-seq v1.1"
+  },
+  "after|v2.1 (9)|extreme": {
+   "n": 9,
+   "positive": 8,
+   "not_positive": [
+    "HCC1395T ONT v2.1"
+   ],
+   "interval_above_zero": 4,
+   "interval_below_zero": 1,
+   "below_zero_pairs": [
+    "HCC1395T ONT v2.1"
+   ],
+   "includes_zero_pairs": [
+    "HG008T ONT v2.1",
+    "COLO829T ONT v2.1",
+    "HCC1395T Illumina v2.1",
+    "HCC1395T PacBio HiFi v2.1"
+   ],
+   "min": -0.3901685910417926,
+   "max": 0.5579827949932801,
+   "min_pair": "HCC1395T ONT v2.1",
+   "max_pair": "COLO829T Fiber-seq v2.1"
+  },
+  "after|v2.1 (9)|alldifficultregions": {
+   "n": 9,
+   "positive": 8,
+   "not_positive": [
+    "HCC1395T ONT v2.1"
+   ],
+   "interval_above_zero": 5,
+   "interval_below_zero": 1,
+   "below_zero_pairs": [
+    "HCC1395T ONT v2.1"
+   ],
+   "includes_zero_pairs": [
+    "COLO829T ONT v2.1",
+    "HCC1395T Illumina v2.1",
+    "HCC1395T PacBio HiFi v2.1"
+   ],
+   "min": -0.28097471925378076,
+   "max": 0.5135059456871751,
+   "min_pair": "HCC1395T ONT v2.1",
+   "max_pair": "COLO829T Fiber-seq v2.1"
+  },
+  "after|v2.1 (9)|alllowmapandsegdupregions": {
+   "n": 9,
+   "positive": 8,
+   "not_positive": [
+    "HCC1395T ONT v2.1"
+   ],
+   "interval_above_zero": 6,
+   "interval_below_zero": 1,
+   "below_zero_pairs": [
+    "HCC1395T ONT v2.1"
+   ],
+   "includes_zero_pairs": [
+    "COLO829T ONT v2.1",
+    "HCC1395T PacBio HiFi v2.1"
+   ],
+   "min": -0.4076994434137291,
+   "max": 0.5243934977024556,
+   "min_pair": "HCC1395T ONT v2.1",
+   "max_pair": "COLO829T Fiber-seq v2.1"
+  },
+  "after|v2.1 (9)|AllTandemRepeatsandHomopolymers_slop5": {
+   "n": 9,
+   "positive": 7,
+   "not_positive": [
+    "HCC1395T PacBio HiFi v2.1",
+    "HCC1395T ONT v2.1"
+   ],
+   "interval_above_zero": 5,
+   "interval_below_zero": 0,
+   "below_zero_pairs": [],
+   "includes_zero_pairs": [
+    "HG008T ONT v2.1",
+    "HCC1395T Illumina v2.1",
+    "HCC1395T PacBio HiFi v2.1",
+    "HCC1395T ONT v2.1"
+   ],
+   "min": -0.05495717880132378,
+   "max": 0.5833853569933559,
+   "min_pair": "HCC1395T ONT v2.1",
+   "max_pair": "COLO829T Fiber-seq v2.1"
+  },
+  "after|v2.1 (9)|notinalldifficultregions": {
+   "n": 9,
+   "positive": 6,
+   "not_positive": [
+    "HG008T PacBio HiFi v2.1",
+    "HCC1395T PacBio HiFi v2.1",
+    "HCC1395T ONT v2.1"
+   ],
+   "interval_above_zero": 4,
+   "interval_below_zero": 2,
+   "below_zero_pairs": [
+    "HCC1395T PacBio HiFi v2.1",
+    "HCC1395T ONT v2.1"
+   ],
+   "includes_zero_pairs": [
+    "HG008T PacBio HiFi v2.1",
+    "HG008T ONT v2.1",
+    "HCC1395T Illumina v2.1"
+   ],
+   "min": -0.01222379386803274,
+   "max": 0.10779767940899199,
+   "min_pair": "HG008T PacBio HiFi v2.1",
+   "max_pair": "COLO829T ONT v2.1"
+  },
+  "after|v2.1 (9)|all": {
+   "n": 9,
+   "positive": 7,
+   "not_positive": [
+    "HCC1395T PacBio HiFi v2.1",
+    "HCC1395T ONT v2.1"
+   ],
+   "interval_above_zero": 6,
+   "interval_below_zero": 1,
+   "below_zero_pairs": [
+    "HCC1395T ONT v2.1"
+   ],
+   "includes_zero_pairs": [
+    "HCC1395T Illumina v2.1",
+    "HCC1395T PacBio HiFi v2.1"
+   ],
+   "min": -0.07860035154643419,
+   "max": 0.2926096949027417,
+   "min_pair": "HCC1395T ONT v2.1",
+   "max_pair": "COLO829T Fiber-seq v2.1"
+  }
+ },
+ "whole_chr1": {
+  "SNV|before|18 pairs": {
+   "n": 18,
+   "positive": 18,
+   "not_positive": [],
+   "interval_above_zero": 18,
+   "interval_below_zero": 0,
+   "below_zero_pairs": [],
+   "includes_zero_pairs": [],
+   "min": 0.21487184273226495,
+   "max": 0.6711888581450092,
+   "min_pair": "HG008T Illumina v1.1",
+   "max_pair": "HCC1395T Illumina v2.1"
+  },
+  "SNV|before|v1.1 (9)": {
+   "n": 9,
+   "positive": 9,
+   "not_positive": [],
+   "interval_above_zero": 9,
+   "interval_below_zero": 0,
+   "below_zero_pairs": [],
+   "includes_zero_pairs": [],
+   "min": 0.21487184273226495,
+   "max": 0.5504345057276856,
+   "min_pair": "HG008T Illumina v1.1",
+   "max_pair": "HCC1395T Illumina v1.1"
+  },
+  "SNV|before|v2.1 (9)": {
+   "n": 9,
+   "positive": 9,
+   "not_positive": [],
+   "interval_above_zero": 9,
+   "interval_below_zero": 0,
+   "below_zero_pairs": [],
+   "includes_zero_pairs": [],
+   "min": 0.3872703198680573,
+   "max": 0.6711888581450092,
+   "min_pair": "HG008T PacBio HiFi v2.1",
+   "max_pair": "HCC1395T Illumina v2.1"
+  },
+  "SNV|after|18 pairs": {
+   "n": 18,
+   "positive": 15,
+   "not_positive": [
+    "HCC1395T PacBio HiFi v2.1",
+    "HCC1395T ONT v1.1",
+    "HCC1395T ONT v2.1"
+   ],
+   "interval_above_zero": 13,
+   "interval_below_zero": 1,
+   "below_zero_pairs": [
+    "HCC1395T ONT v2.1"
+   ],
+   "includes_zero_pairs": [
+    "HCC1395T Illumina v2.1",
+    "HCC1395T PacBio HiFi v1.1",
+    "HCC1395T PacBio HiFi v2.1",
+    "HCC1395T ONT v1.1"
+   ],
+   "min": -0.07860035154643419,
+   "max": 0.29527218849393033,
+   "min_pair": "HCC1395T ONT v2.1",
+   "max_pair": "COLO829T Fiber-seq v1.1"
+  },
+  "SNV|after|v1.1 (9)": {
+   "n": 9,
+   "positive": 8,
+   "not_positive": [
+    "HCC1395T ONT v1.1"
+   ],
+   "interval_above_zero": 7,
+   "interval_below_zero": 0,
+   "below_zero_pairs": [],
+   "includes_zero_pairs": [
+    "HCC1395T PacBio HiFi v1.1",
+    "HCC1395T ONT v1.1"
+   ],
+   "min": -0.003813878333275844,
+   "max": 0.29527218849393033,
+   "min_pair": "HCC1395T ONT v1.1",
+   "max_pair": "COLO829T Fiber-seq v1.1"
+  },
+  "SNV|after|v2.1 (9)": {
+   "n": 9,
+   "positive": 7,
+   "not_positive": [
+    "HCC1395T PacBio HiFi v2.1",
+    "HCC1395T ONT v2.1"
+   ],
+   "interval_above_zero": 6,
+   "interval_below_zero": 1,
+   "below_zero_pairs": [
+    "HCC1395T ONT v2.1"
+   ],
+   "includes_zero_pairs": [
+    "HCC1395T Illumina v2.1",
+    "HCC1395T PacBio HiFi v2.1"
+   ],
+   "min": -0.07860035154643419,
+   "max": 0.2926096949027417,
+   "min_pair": "HCC1395T ONT v2.1",
+   "max_pair": "COLO829T Fiber-seq v2.1"
+  },
+  "INDEL|before|18 pairs": {
+   "n": 18,
+   "positive": 18,
+   "not_positive": [],
+   "interval_above_zero": 18,
+   "interval_below_zero": 0,
+   "below_zero_pairs": [],
+   "includes_zero_pairs": [],
+   "min": 0.02445394112060778,
+   "max": 0.30616563139642067,
+   "min_pair": "COLO829T ONT v2.1",
+   "max_pair": "HCC1395T PacBio HiFi v2.1"
+  },
+  "INDEL|before|v1.1 (9)": {
+   "n": 9,
+   "positive": 9,
+   "not_positive": [],
+   "interval_above_zero": 9,
+   "interval_below_zero": 0,
+   "below_zero_pairs": [],
+   "includes_zero_pairs": [],
+   "min": 0.03599257044486726,
+   "max": 0.23947592148736774,
+   "min_pair": "COLO829T ONT v1.1",
+   "max_pair": "HCC1395T ONT v1.1"
+  },
+  "INDEL|before|v2.1 (9)": {
+   "n": 9,
+   "positive": 9,
+   "not_positive": [],
+   "interval_above_zero": 9,
+   "interval_below_zero": 0,
+   "below_zero_pairs": [],
+   "includes_zero_pairs": [],
+   "min": 0.02445394112060778,
+   "max": 0.30616563139642067,
+   "min_pair": "COLO829T ONT v2.1",
+   "max_pair": "HCC1395T PacBio HiFi v2.1"
+  },
+  "INDEL|after|18 pairs": {
+   "n": 18,
+   "positive": 16,
+   "not_positive": [
+    "HG008T Illumina v1.1",
+    "HG008T Illumina v2.1"
+   ],
+   "interval_above_zero": 12,
+   "interval_below_zero": 0,
+   "below_zero_pairs": [],
+   "includes_zero_pairs": [
+    "HG008T Illumina v1.1",
+    "HG008T Illumina v2.1",
+    "COLO829T Illumina v1.1",
+    "COLO829T Illumina v2.1",
+    "COLO829T Fiber-seq v1.1",
+    "HCC1395T Illumina v1.1"
+   ],
+   "min": -0.018503886835733424,
+   "max": 0.14465408805031438,
+   "min_pair": "HG008T Illumina v2.1",
+   "max_pair": "HCC1395T PacBio HiFi v2.1"
+  },
+  "INDEL|after|v1.1 (9)": {
+   "n": 9,
+   "positive": 8,
+   "not_positive": [
+    "HG008T Illumina v1.1"
+   ],
+   "interval_above_zero": 5,
+   "interval_below_zero": 0,
+   "below_zero_pairs": [],
+   "includes_zero_pairs": [
+    "HG008T Illumina v1.1",
+    "COLO829T Illumina v1.1",
+    "COLO829T Fiber-seq v1.1",
+    "HCC1395T Illumina v1.1"
+   ],
+   "min": -0.012825484187045266,
+   "max": 0.11386957960940086,
+   "min_pair": "HG008T Illumina v1.1",
+   "max_pair": "HCC1395T ONT v1.1"
+  },
+  "INDEL|after|v2.1 (9)": {
+   "n": 9,
+   "positive": 8,
+   "not_positive": [
+    "HG008T Illumina v2.1"
+   ],
+   "interval_above_zero": 7,
+   "interval_below_zero": 0,
+   "below_zero_pairs": [],
+   "includes_zero_pairs": [
+    "HG008T Illumina v2.1",
+    "COLO829T Illumina v2.1"
+   ],
+   "min": -0.018503886835733424,
+   "max": 0.14465408805031438,
+   "min_pair": "HG008T Illumina v2.1",
+   "max_pair": "HCC1395T PacBio HiFi v2.1"
+  }
+ },
+ "indel_hp7": {
+  "before|HG008T_Illumina": {
+   "GRCh38-only": {
+    "tp_baseline": 232,
+    "fn": 233,
+    "tp_call": 232,
+    "fp": 12215,
+    "truth": 465,
+    "calls": 12447,
+    "precision": 0.01863902948501647,
+    "recall": 0.4989247311827957,
+    "f1": 0.035935563816604704
+   },
+   "HPRC v1.1": {
+    "tp_baseline": 92,
+    "fn": 373,
+    "tp_call": 92,
+    "fp": 538,
+    "truth": 465,
+    "calls": 630,
+    "precision": 0.14603174603174604,
+    "recall": 0.1978494623655914,
+    "f1": 0.1680365296803653
+   },
+   "HPRC v2.1": {
+    "tp_baseline": 70,
+    "fn": 395,
+    "tp_call": 70,
+    "fp": 345,
+    "truth": 465,
+    "calls": 415,
+    "precision": 0.1686746987951807,
+    "recall": 0.15053763440860216,
+    "f1": 0.1590909090909091
+   }
+  },
+  "before|HG008T_PacBio": {
+   "GRCh38-only": {
+    "tp_baseline": 236,
+    "fn": 229,
+    "tp_call": 236,
+    "fp": 12134,
+    "truth": 465,
+    "calls": 12370,
+    "precision": 0.0190784155214228,
+    "recall": 0.5075268817204301,
+    "f1": 0.03677444487728867
+   },
+   "HPRC v1.1": {
+    "tp_baseline": 127,
+    "fn": 338,
+    "tp_call": 127,
+    "fp": 909,
+    "truth": 465,
+    "calls": 1036,
+    "precision": 0.12258687258687259,
+    "recall": 0.2731182795698925,
+    "f1": 0.16922051965356433
+   },
+   "HPRC v2.1": {
+    "tp_baseline": 102,
+    "fn": 363,
+    "tp_call": 102,
+    "fp": 582,
+    "truth": 465,
+    "calls": 684,
+    "precision": 0.14912280701754385,
+    "recall": 0.21935483870967742,
+    "f1": 0.1775456919060052
+   }
+  },
+  "before|HG008T_ONT": {
+   "GRCh38-only": {
+    "tp_baseline": 39,
+    "fn": 426,
+    "tp_call": 39,
+    "fp": 2661,
+    "truth": 465,
+    "calls": 2700,
+    "precision": 0.014444444444444444,
+    "recall": 0.08387096774193549,
+    "f1": 0.024644549763033177
+   },
+   "HPRC v1.1": {
+    "tp_baseline": 32,
+    "fn": 433,
+    "tp_call": 32,
+    "fp": 243,
+    "truth": 465,
+    "calls": 275,
+    "precision": 0.11636363636363636,
+    "recall": 0.06881720430107527,
+    "f1": 0.08648648648648648
+   },
+   "HPRC v2.1": {
+    "tp_baseline": 30,
+    "fn": 435,
+    "tp_call": 30,
+    "fp": 229,
+    "truth": 465,
+    "calls": 259,
+    "precision": 0.11583011583011583,
+    "recall": 0.06451612903225806,
+    "f1": 0.08287292817679559
+   }
+  },
+  "before|COLO829T_Illumina": {
+   "GRCh38-only": {
+    "tp_baseline": 26,
+    "fn": 49,
+    "tp_call": 26,
+    "fp": 4246,
+    "truth": 75,
+    "calls": 4272,
+    "precision": 0.006086142322097378,
+    "recall": 0.3466666666666667,
+    "f1": 0.01196227283183805
+   },
+   "HPRC v1.1": {
+    "tp_baseline": 10,
+    "fn": 65,
+    "tp_call": 10,
+    "fp": 136,
+    "truth": 75,
+    "calls": 146,
+    "precision": 0.0684931506849315,
+    "recall": 0.13333333333333333,
+    "f1": 0.09049773755656108
+   },
+   "HPRC v2.1": {
+    "tp_baseline": 11,
+    "fn": 64,
+    "tp_call": 11,
+    "fp": 120,
+    "truth": 75,
+    "calls": 131,
+    "precision": 0.08396946564885496,
+    "recall": 0.14666666666666667,
+    "f1": 0.10679611650485438
+   }
+  },
+  "before|COLO829T_fiberseq": {
+   "GRCh38-only": {
+    "tp_baseline": 17,
+    "fn": 58,
+    "tp_call": 17,
+    "fp": 1255,
+    "truth": 75,
+    "calls": 1272,
+    "precision": 0.013364779874213837,
+    "recall": 0.22666666666666666,
+    "f1": 0.025241276911655532
+   },
+   "HPRC v1.1": {
+    "tp_baseline": 7,
+    "fn": 68,
+    "tp_call": 7,
+    "fp": 202,
+    "truth": 75,
+    "calls": 209,
+    "precision": 0.03349282296650718,
+    "recall": 0.09333333333333334,
+    "f1": 0.04929577464788733
+   },
+   "HPRC v2.1": {
+    "tp_baseline": 10,
+    "fn": 65,
+    "tp_call": 10,
+    "fp": 156,
+    "truth": 75,
+    "calls": 166,
+    "precision": 0.060240963855421686,
+    "recall": 0.13333333333333333,
+    "f1": 0.08298755186721991
+   }
+  },
+  "before|COLO829T_ONT": {
+   "GRCh38-only": {
+    "tp_baseline": 0,
+    "fn": 75,
+    "tp_call": 0,
+    "fp": 70,
+    "truth": 75,
+    "calls": 70,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0
+   },
+   "HPRC v1.1": {
+    "tp_baseline": 1,
+    "fn": 74,
+    "tp_call": 1,
+    "fp": 51,
+    "truth": 75,
+    "calls": 52,
+    "precision": 0.019230769230769232,
+    "recall": 0.013333333333333334,
+    "f1": 0.015748031496062995
+   },
+   "HPRC v2.1": {
+    "tp_baseline": 0,
+    "fn": 75,
+    "tp_call": 0,
+    "fp": 41,
+    "truth": 75,
+    "calls": 41,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0
+   }
+  },
+  "before|HCC1395T_Illumina": {
+   "GRCh38-only": {
+    "tp_baseline": 13,
+    "fn": 13,
+    "tp_call": 13,
+    "fp": 2263,
+    "truth": 26,
+    "calls": 2276,
+    "precision": 0.0057117750439367315,
+    "recall": 0.5,
+    "f1": 0.011294526498696786
+   },
+   "HPRC v1.1": {
+    "tp_baseline": 14,
+    "fn": 12,
+    "tp_call": 14,
+    "fp": 211,
+    "truth": 26,
+    "calls": 225,
+    "precision": 0.06222222222222222,
+    "recall": 0.5384615384615384,
+    "f1": 0.11155378486055777
+   },
+   "HPRC v2.1": {
+    "tp_baseline": 12,
+    "fn": 14,
+    "tp_call": 12,
+    "fp": 137,
+    "truth": 26,
+    "calls": 149,
+    "precision": 0.08053691275167785,
+    "recall": 0.46153846153846156,
+    "f1": 0.13714285714285712
+   }
+  },
+  "before|HCC1395T_PacBio": {
+   "GRCh38-only": {
+    "tp_baseline": 19,
+    "fn": 7,
+    "tp_call": 19,
+    "fp": 4314,
+    "truth": 26,
+    "calls": 4333,
+    "precision": 0.0043849526886683594,
+    "recall": 0.7307692307692307,
+    "f1": 0.00871759577884836
+   },
+   "HPRC v1.1": {
+    "tp_baseline": 11,
+    "fn": 15,
+    "tp_call": 11,
+    "fp": 361,
+    "truth": 26,
+    "calls": 372,
+    "precision": 0.02956989247311828,
+    "recall": 0.4230769230769231,
+    "f1": 0.055276381909547735
+   },
+   "HPRC v2.1": {
+    "tp_baseline": 10,
+    "fn": 16,
+    "tp_call": 10,
+    "fp": 108,
+    "truth": 26,
+    "calls": 118,
+    "precision": 0.0847457627118644,
+    "recall": 0.38461538461538464,
+    "f1": 0.1388888888888889
+   }
+  },
+  "before|HCC1395T_ONT": {
+   "GRCh38-only": {
+    "tp_baseline": 5,
+    "fn": 21,
+    "tp_call": 5,
+    "fp": 919,
+    "truth": 26,
+    "calls": 924,
+    "precision": 0.005411255411255411,
+    "recall": 0.19230769230769232,
+    "f1": 0.010526315789473684
+   },
+   "HPRC v1.1": {
+    "tp_baseline": 5,
+    "fn": 21,
+    "tp_call": 5,
+    "fp": 95,
+    "truth": 26,
+    "calls": 100,
+    "precision": 0.05,
+    "recall": 0.19230769230769232,
+    "f1": 0.07936507936507936
+   },
+   "HPRC v2.1": {
+    "tp_baseline": 6,
+    "fn": 20,
+    "tp_call": 6,
+    "fp": 76,
+    "truth": 26,
+    "calls": 82,
+    "precision": 0.07317073170731707,
+    "recall": 0.23076923076923078,
+    "f1": 0.1111111111111111
+   }
+  },
+  "before|counts": {
+   "f1_higher_on_hprc": 17,
+   "of": 18,
+   "v1.1": 9,
+   "v2.1": 8,
+   "not_higher": [
+    "COLO829T ONT v2.1"
+   ],
+   "precision_higher_on_hprc": 17,
+   "precision_higher_v1.1": 9,
+   "precision_higher_v2.1": 8
+  },
+  "after|HG008T_Illumina": {
+   "GRCh38-only": {
+    "tp_baseline": 85,
+    "fn": 380,
+    "tp_call": 85,
+    "fp": 139,
+    "truth": 465,
+    "calls": 224,
+    "precision": 0.3794642857142857,
+    "recall": 0.1827956989247312,
+    "f1": 0.24673439767779395
+   },
+   "HPRC v1.1": {
+    "tp_baseline": 65,
+    "fn": 400,
+    "tp_call": 65,
+    "fp": 89,
+    "truth": 465,
+    "calls": 154,
+    "precision": 0.42207792207792205,
+    "recall": 0.13978494623655913,
+    "f1": 0.21001615508885296
+   },
+   "HPRC v2.1": {
+    "tp_baseline": 55,
+    "fn": 410,
+    "tp_call": 55,
+    "fp": 71,
+    "truth": 465,
+    "calls": 126,
+    "precision": 0.4365079365079365,
+    "recall": 0.11827956989247312,
+    "f1": 0.18612521150592218
+   }
+  },
+  "after|HG008T_PacBio": {
+   "GRCh38-only": {
+    "tp_baseline": 89,
+    "fn": 376,
+    "tp_call": 89,
+    "fp": 389,
+    "truth": 465,
+    "calls": 478,
+    "precision": 0.18619246861924685,
+    "recall": 0.1913978494623656,
+    "f1": 0.18875927889713678
+   },
+   "HPRC v1.1": {
+    "tp_baseline": 88,
+    "fn": 377,
+    "tp_call": 88,
+    "fp": 134,
+    "truth": 465,
+    "calls": 222,
+    "precision": 0.3963963963963964,
+    "recall": 0.18924731182795698,
+    "f1": 0.25618631732168845
+   },
+   "HPRC v2.1": {
+    "tp_baseline": 69,
+    "fn": 396,
+    "tp_call": 69,
+    "fp": 97,
+    "truth": 465,
+    "calls": 166,
+    "precision": 0.41566265060240964,
+    "recall": 0.14838709677419354,
+    "f1": 0.21870047543581617
+   }
+  },
+  "after|HG008T_ONT": {
+   "GRCh38-only": {
+    "tp_baseline": 23,
+    "fn": 442,
+    "tp_call": 23,
+    "fp": 207,
+    "truth": 465,
+    "calls": 230,
+    "precision": 0.1,
+    "recall": 0.04946236559139785,
+    "f1": 0.06618705035971223
+   },
+   "HPRC v1.1": {
+    "tp_baseline": 30,
+    "fn": 435,
+    "tp_call": 30,
+    "fp": 66,
+    "truth": 465,
+    "calls": 96,
+    "precision": 0.3125,
+    "recall": 0.06451612903225806,
+    "f1": 0.10695187165775401
+   },
+   "HPRC v2.1": {
+    "tp_baseline": 22,
+    "fn": 443,
+    "tp_call": 22,
+    "fp": 86,
+    "truth": 465,
+    "calls": 108,
+    "precision": 0.2037037037037037,
+    "recall": 0.047311827956989246,
+    "f1": 0.07678883071553227
+   }
+  },
+  "after|COLO829T_Illumina": {
+   "GRCh38-only": {
+    "tp_baseline": 7,
+    "fn": 68,
+    "tp_call": 7,
+    "fp": 53,
+    "truth": 75,
+    "calls": 60,
+    "precision": 0.11666666666666667,
+    "recall": 0.09333333333333334,
+    "f1": 0.1037037037037037
+   },
+   "HPRC v1.1": {
+    "tp_baseline": 7,
+    "fn": 68,
+    "tp_call": 7,
+    "fp": 21,
+    "truth": 75,
+    "calls": 28,
+    "precision": 0.25,
+    "recall": 0.09333333333333334,
+    "f1": 0.1359223300970874
+   },
+   "HPRC v2.1": {
+    "tp_baseline": 9,
+    "fn": 66,
+    "tp_call": 9,
+    "fp": 28,
+    "truth": 75,
+    "calls": 37,
+    "precision": 0.24324324324324326,
+    "recall": 0.12,
+    "f1": 0.1607142857142857
+   }
+  },
+  "after|COLO829T_fiberseq": {
+   "GRCh38-only": {
+    "tp_baseline": 8,
+    "fn": 67,
+    "tp_call": 8,
+    "fp": 227,
+    "truth": 75,
+    "calls": 235,
+    "precision": 0.03404255319148936,
+    "recall": 0.10666666666666667,
+    "f1": 0.05161290322580645
+   },
+   "HPRC v1.1": {
+    "tp_baseline": 2,
+    "fn": 73,
+    "tp_call": 2,
+    "fp": 47,
+    "truth": 75,
+    "calls": 49,
+    "precision": 0.04081632653061224,
+    "recall": 0.02666666666666667,
+    "f1": 0.03225806451612903
+   },
+   "HPRC v2.1": {
+    "tp_baseline": 5,
+    "fn": 70,
+    "tp_call": 5,
+    "fp": 47,
+    "truth": 75,
+    "calls": 52,
+    "precision": 0.09615384615384616,
+    "recall": 0.06666666666666667,
+    "f1": 0.07874015748031496
+   }
+  },
+  "after|COLO829T_ONT": {
+   "GRCh38-only": {
+    "tp_baseline": 0,
+    "fn": 75,
+    "tp_call": 0,
+    "fp": 25,
+    "truth": 75,
+    "calls": 25,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0
+   },
+   "HPRC v1.1": {
+    "tp_baseline": 1,
+    "fn": 74,
+    "tp_call": 1,
+    "fp": 25,
+    "truth": 75,
+    "calls": 26,
+    "precision": 0.038461538461538464,
+    "recall": 0.013333333333333334,
+    "f1": 0.019801980198019806
+   },
+   "HPRC v2.1": {
+    "tp_baseline": 0,
+    "fn": 75,
+    "tp_call": 0,
+    "fp": 27,
+    "truth": 75,
+    "calls": 27,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0
+   }
+  },
+  "after|HCC1395T_Illumina": {
+   "GRCh38-only": {
+    "tp_baseline": 8,
+    "fn": 18,
+    "tp_call": 8,
+    "fp": 25,
+    "truth": 26,
+    "calls": 33,
+    "precision": 0.24242424242424243,
+    "recall": 0.3076923076923077,
+    "f1": 0.2711864406779661
+   },
+   "HPRC v1.1": {
+    "tp_baseline": 9,
+    "fn": 17,
+    "tp_call": 9,
+    "fp": 37,
+    "truth": 26,
+    "calls": 46,
+    "precision": 0.1956521739130435,
+    "recall": 0.34615384615384615,
+    "f1": 0.25
+   },
+   "HPRC v2.1": {
+    "tp_baseline": 9,
+    "fn": 17,
+    "tp_call": 9,
+    "fp": 24,
+    "truth": 26,
+    "calls": 33,
+    "precision": 0.2727272727272727,
+    "recall": 0.34615384615384615,
+    "f1": 0.3050847457627119
+   }
+  },
+  "after|HCC1395T_PacBio": {
+   "GRCh38-only": {
+    "tp_baseline": 9,
+    "fn": 17,
+    "tp_call": 9,
+    "fp": 82,
+    "truth": 26,
+    "calls": 91,
+    "precision": 0.0989010989010989,
+    "recall": 0.34615384615384615,
+    "f1": 0.15384615384615385
+   },
+   "HPRC v1.1": {
+    "tp_baseline": 8,
+    "fn": 18,
+    "tp_call": 8,
+    "fp": 61,
+    "truth": 26,
+    "calls": 69,
+    "precision": 0.11594202898550725,
+    "recall": 0.3076923076923077,
+    "f1": 0.16842105263157894
+   },
+   "HPRC v2.1": {
+    "tp_baseline": 7,
+    "fn": 19,
+    "tp_call": 7,
+    "fp": 29,
+    "truth": 26,
+    "calls": 36,
+    "precision": 0.19444444444444445,
+    "recall": 0.2692307692307692,
+    "f1": 0.22580645161290322
+   }
+  },
+  "after|HCC1395T_ONT": {
+   "GRCh38-only": {
+    "tp_baseline": 4,
+    "fn": 22,
+    "tp_call": 4,
+    "fp": 84,
+    "truth": 26,
+    "calls": 88,
+    "precision": 0.045454545454545456,
+    "recall": 0.15384615384615385,
+    "f1": 0.07017543859649122
+   },
+   "HPRC v1.1": {
+    "tp_baseline": 4,
+    "fn": 22,
+    "tp_call": 4,
+    "fp": 30,
+    "truth": 26,
+    "calls": 34,
+    "precision": 0.11764705882352941,
+    "recall": 0.15384615384615385,
+    "f1": 0.13333333333333333
+   },
+   "HPRC v2.1": {
+    "tp_baseline": 5,
+    "fn": 21,
+    "tp_call": 5,
+    "fp": 31,
+    "truth": 26,
+    "calls": 36,
+    "precision": 0.1388888888888889,
+    "recall": 0.19230769230769232,
+    "f1": 0.16129032258064516
+   }
+  },
+  "after|counts": {
+   "f1_higher_on_hprc": 13,
+   "of": 18,
+   "v1.1": 6,
+   "v2.1": 7,
+   "not_higher": [
+    "HG008T Illumina v1.1",
+    "HG008T Illumina v2.1",
+    "COLO829T Fiber-seq v1.1",
+    "COLO829T ONT v2.1",
+    "HCC1395T Illumina v1.1"
+   ],
+   "precision_higher_on_hprc": 16,
+   "precision_higher_v1.1": 8,
+   "precision_higher_v2.1": 8
+  }
+ },
+ "smaht_extreme": {
+  "before|HG008T_Illumina": {
+   "GRCh38-only": {
+    "tp_baseline": 27,
+    "fn": 64,
+    "tp_call": 27,
+    "fp": 3632,
+    "truth": 91,
+    "calls": 3659,
+    "precision": 0.0073790653183930036,
+    "recall": 0.2967032967032967,
+    "f1": 0.0144
+   },
+   "HPRC v1.1": {
+    "tp_baseline": 28,
+    "fn": 63,
+    "tp_call": 28,
+    "fp": 354,
+    "truth": 91,
+    "calls": 382,
+    "precision": 0.07329842931937172,
+    "recall": 0.3076923076923077,
+    "f1": 0.11839323467230445
+   },
+   "HPRC v2.1": {
+    "tp_baseline": 35,
+    "fn": 56,
+    "tp_call": 35,
+    "fp": 221,
+    "truth": 91,
+    "calls": 256,
+    "precision": 0.13671875,
+    "recall": 0.38461538461538464,
+    "f1": 0.2017291066282421
+   }
+  },
+  "before|HG008T_PacBio": {
+   "GRCh38-only": {
+    "tp_baseline": 43,
+    "fn": 48,
+    "tp_call": 43,
+    "fp": 10595,
+    "truth": 91,
+    "calls": 10638,
+    "precision": 0.004042113179169016,
+    "recall": 0.4725274725274725,
+    "f1": 0.008015658495665951
+   },
+   "HPRC v1.1": {
+    "tp_baseline": 35,
+    "fn": 56,
+    "tp_call": 35,
+    "fp": 377,
+    "truth": 91,
+    "calls": 412,
+    "precision": 0.08495145631067962,
+    "recall": 0.38461538461538464,
+    "f1": 0.13916500994035785
+   },
+   "HPRC v2.1": {
+    "tp_baseline": 37,
+    "fn": 54,
+    "tp_call": 37,
+    "fp": 212,
+    "truth": 91,
+    "calls": 249,
+    "precision": 0.14859437751004015,
+    "recall": 0.4065934065934066,
+    "f1": 0.21764705882352942
+   }
+  },
+  "before|HG008T_ONT": {
+   "GRCh38-only": {
+    "tp_baseline": 37,
+    "fn": 54,
+    "tp_call": 37,
+    "fp": 6447,
+    "truth": 91,
+    "calls": 6484,
+    "precision": 0.005706354102405923,
+    "recall": 0.4065934065934066,
+    "f1": 0.011254752851711028
+   },
+   "HPRC v1.1": {
+    "tp_baseline": 29,
+    "fn": 62,
+    "tp_call": 29,
+    "fp": 293,
+    "truth": 91,
+    "calls": 322,
+    "precision": 0.09006211180124224,
+    "recall": 0.31868131868131866,
+    "f1": 0.14043583535108958
+   },
+   "HPRC v2.1": {
+    "tp_baseline": 26,
+    "fn": 65,
+    "tp_call": 26,
+    "fp": 116,
+    "truth": 91,
+    "calls": 142,
+    "precision": 0.18309859154929578,
+    "recall": 0.2857142857142857,
+    "f1": 0.22317596566523606
+   }
+  },
+  "before|COLO829T_Illumina": {
+   "GRCh38-only": {
+    "tp_baseline": 135,
+    "fn": 99,
+    "tp_call": 135,
+    "fp": 5138,
+    "truth": 234,
+    "calls": 5273,
+    "precision": 0.025602124028067514,
+    "recall": 0.5769230769230769,
+    "f1": 0.04902850917014709
+   },
+   "HPRC v1.1": {
+    "tp_baseline": 140,
+    "fn": 94,
+    "tp_call": 140,
+    "fp": 644,
+    "truth": 234,
+    "calls": 784,
+    "precision": 0.17857142857142858,
+    "recall": 0.5982905982905983,
+    "f1": 0.27504911591355596
+   },
+   "HPRC v2.1": {
+    "tp_baseline": 150,
+    "fn": 84,
+    "tp_call": 150,
+    "fp": 234,
+    "truth": 234,
+    "calls": 384,
+    "precision": 0.390625,
+    "recall": 0.6410256410256411,
+    "f1": 0.4854368932038835
+   }
+  },
+  "before|COLO829T_fiberseq": {
+   "GRCh38-only": {
+    "tp_baseline": 142,
+    "fn": 92,
+    "tp_call": 142,
+    "fp": 10161,
+    "truth": 234,
+    "calls": 10303,
+    "precision": 0.013782393477627875,
+    "recall": 0.6068376068376068,
+    "f1": 0.026952643067286702
+   },
+   "HPRC v1.1": {
+    "tp_baseline": 152,
+    "fn": 82,
+    "tp_call": 152,
+    "fp": 393,
+    "truth": 234,
+    "calls": 545,
+    "precision": 0.27889908256880735,
+    "recall": 0.6495726495726496,
+    "f1": 0.3902439024390244
+   },
+   "HPRC v2.1": {
+    "tp_baseline": 148,
+    "fn": 86,
+    "tp_call": 148,
+    "fp": 180,
+    "truth": 234,
+    "calls": 328,
+    "precision": 0.45121951219512196,
+    "recall": 0.6324786324786325,
+    "f1": 0.5266903914590748
+   }
+  },
+  "before|COLO829T_ONT": {
+   "GRCh38-only": {
+    "tp_baseline": 120,
+    "fn": 114,
+    "tp_call": 120,
+    "fp": 5214,
+    "truth": 234,
+    "calls": 5334,
+    "precision": 0.02249718785151856,
+    "recall": 0.5128205128205128,
+    "f1": 0.04310344827586207
+   },
+   "HPRC v1.1": {
+    "tp_baseline": 150,
+    "fn": 84,
+    "tp_call": 150,
+    "fp": 960,
+    "truth": 234,
+    "calls": 1110,
+    "precision": 0.13513513513513514,
+    "recall": 0.6410256410256411,
+    "f1": 0.22321428571428573
+   },
+   "HPRC v2.1": {
+    "tp_baseline": 152,
+    "fn": 82,
+    "tp_call": 152,
+    "fp": 472,
+    "truth": 234,
+    "calls": 624,
+    "precision": 0.24358974358974358,
+    "recall": 0.6495726495726496,
+    "f1": 0.3543123543123543
+   }
+  },
+  "before|HCC1395T_Illumina": {
+   "GRCh38-only": {
+    "tp_baseline": 142,
+    "fn": 27,
+    "tp_call": 142,
+    "fp": 4638,
+    "truth": 169,
+    "calls": 4780,
+    "precision": 0.029707112970711297,
+    "recall": 0.8402366863905325,
+    "f1": 0.05738533036977167
+   },
+   "HPRC v1.1": {
+    "tp_baseline": 133,
+    "fn": 36,
+    "tp_call": 133,
+    "fp": 253,
+    "truth": 169,
+    "calls": 386,
+    "precision": 0.344559585492228,
+    "recall": 0.7869822485207101,
+    "f1": 0.4792792792792792
+   },
+   "HPRC v2.1": {
+    "tp_baseline": 140,
+    "fn": 29,
+    "tp_call": 140,
+    "fp": 131,
+    "truth": 169,
+    "calls": 271,
+    "precision": 0.5166051660516605,
+    "recall": 0.8284023668639053,
+    "f1": 0.6363636363636365
+   }
+  },
+  "before|HCC1395T_PacBio": {
+   "GRCh38-only": {
+    "tp_baseline": 142,
+    "fn": 27,
+    "tp_call": 142,
+    "fp": 7380,
+    "truth": 169,
+    "calls": 7522,
+    "precision": 0.018877957989896305,
+    "recall": 0.8402366863905325,
+    "f1": 0.03692627746716942
+   },
+   "HPRC v1.1": {
+    "tp_baseline": 136,
+    "fn": 33,
+    "tp_call": 136,
+    "fp": 259,
+    "truth": 169,
+    "calls": 395,
+    "precision": 0.34430379746835443,
+    "recall": 0.8047337278106509,
+    "f1": 0.4822695035460993
+   },
+   "HPRC v2.1": {
+    "tp_baseline": 136,
+    "fn": 33,
+    "tp_call": 136,
+    "fp": 126,
+    "truth": 169,
+    "calls": 262,
+    "precision": 0.5190839694656488,
+    "recall": 0.8047337278106509,
+    "f1": 0.6310904872389791
+   }
+  },
+  "before|HCC1395T_ONT": {
+   "GRCh38-only": {
+    "tp_baseline": 126,
+    "fn": 43,
+    "tp_call": 126,
+    "fp": 9080,
+    "truth": 169,
+    "calls": 9206,
+    "precision": 0.013686726048229415,
+    "recall": 0.7455621301775148,
+    "f1": 0.026879999999999998
+   },
+   "HPRC v1.1": {
+    "tp_baseline": 119,
+    "fn": 50,
+    "tp_call": 119,
+    "fp": 438,
+    "truth": 169,
+    "calls": 557,
+    "precision": 0.21364452423698385,
+    "recall": 0.7041420118343196,
+    "f1": 0.32782369146005513
+   },
+   "HPRC v2.1": {
+    "tp_baseline": 113,
+    "fn": 56,
+    "tp_call": 113,
+    "fp": 1232,
+    "truth": 169,
+    "calls": 1345,
+    "precision": 0.08401486988847584,
+    "recall": 0.6686390532544378,
+    "f1": 0.14927344782034346
+   }
+  },
+  "before|counts": {
+   "fewer_fp": {
+    "d9": 9,
+    "d46": 9
+   },
+   "higher_precision": {
+    "d9": 9,
+    "d46": 9
+   },
+   "higher_f1": {
+    "d9": 9,
+    "d46": 9
+   }
+  },
+  "after|HG008T_Illumina": {
+   "GRCh38-only": {
+    "tp_baseline": 21,
+    "fn": 70,
+    "tp_call": 21,
+    "fp": 350,
+    "truth": 91,
+    "calls": 371,
+    "precision": 0.05660377358490566,
+    "recall": 0.23076923076923078,
+    "f1": 0.09090909090909091
+   },
+   "HPRC v1.1": {
+    "tp_baseline": 25,
+    "fn": 66,
+    "tp_call": 25,
+    "fp": 90,
+    "truth": 91,
+    "calls": 115,
+    "precision": 0.21739130434782608,
+    "recall": 0.27472527472527475,
+    "f1": 0.24271844660194178
+   },
+   "HPRC v2.1": {
+    "tp_baseline": 34,
+    "fn": 57,
+    "tp_call": 34,
+    "fp": 80,
+    "truth": 91,
+    "calls": 114,
+    "precision": 0.2982456140350877,
+    "recall": 0.37362637362637363,
+    "f1": 0.3317073170731707
+   }
+  },
+  "after|HG008T_PacBio": {
+   "GRCh38-only": {
+    "tp_baseline": 36,
+    "fn": 55,
+    "tp_call": 36,
+    "fp": 302,
+    "truth": 91,
+    "calls": 338,
+    "precision": 0.10650887573964497,
+    "recall": 0.3956043956043956,
+    "f1": 0.1678321678321678
+   },
+   "HPRC v1.1": {
+    "tp_baseline": 34,
+    "fn": 57,
+    "tp_call": 34,
+    "fp": 75,
+    "truth": 91,
+    "calls": 109,
+    "precision": 0.3119266055045872,
+    "recall": 0.37362637362637363,
+    "f1": 0.34
+   },
+   "HPRC v2.1": {
+    "tp_baseline": 35,
+    "fn": 56,
+    "tp_call": 35,
+    "fp": 79,
+    "truth": 91,
+    "calls": 114,
+    "precision": 0.30701754385964913,
+    "recall": 0.38461538461538464,
+    "f1": 0.3414634146341463
+   }
+  },
+  "after|HG008T_ONT": {
+   "GRCh38-only": {
+    "tp_baseline": 29,
+    "fn": 62,
+    "tp_call": 29,
+    "fp": 154,
+    "truth": 91,
+    "calls": 183,
+    "precision": 0.15846994535519127,
+    "recall": 0.31868131868131866,
+    "f1": 0.2116788321167883
+   },
+   "HPRC v1.1": {
+    "tp_baseline": 28,
+    "fn": 63,
+    "tp_call": 28,
+    "fp": 69,
+    "truth": 91,
+    "calls": 97,
+    "precision": 0.28865979381443296,
+    "recall": 0.3076923076923077,
+    "f1": 0.29787234042553196
+   },
+   "HPRC v2.1": {
+    "tp_baseline": 25,
+    "fn": 66,
+    "tp_call": 25,
+    "fp": 46,
+    "truth": 91,
+    "calls": 71,
+    "precision": 0.352112676056338,
+    "recall": 0.27472527472527475,
+    "f1": 0.30864197530864196
+   }
+  },
+  "after|COLO829T_Illumina": {
+   "GRCh38-only": {
+    "tp_baseline": 129,
+    "fn": 105,
+    "tp_call": 129,
+    "fp": 1269,
+    "truth": 234,
+    "calls": 1398,
+    "precision": 0.09227467811158799,
+    "recall": 0.5512820512820513,
+    "f1": 0.15808823529411767
+   },
+   "HPRC v1.1": {
+    "tp_baseline": 135,
+    "fn": 99,
+    "tp_call": 135,
+    "fp": 249,
+    "truth": 234,
+    "calls": 384,
+    "precision": 0.3515625,
+    "recall": 0.5769230769230769,
+    "f1": 0.4368932038834951
+   },
+   "HPRC v2.1": {
+    "tp_baseline": 143,
+    "fn": 91,
+    "tp_call": 143,
+    "fp": 66,
+    "truth": 234,
+    "calls": 209,
+    "precision": 0.6842105263157895,
+    "recall": 0.6111111111111112,
+    "f1": 0.6455981941309257
+   }
+  },
+  "after|COLO829T_fiberseq": {
+   "GRCh38-only": {
+    "tp_baseline": 134,
+    "fn": 100,
+    "tp_call": 134,
+    "fp": 2465,
+    "truth": 234,
+    "calls": 2599,
+    "precision": 0.05155829165063486,
+    "recall": 0.5726495726495726,
+    "f1": 0.09459936463113308
+   },
+   "HPRC v1.1": {
+    "tp_baseline": 142,
+    "fn": 92,
+    "tp_call": 142,
+    "fp": 71,
+    "truth": 234,
+    "calls": 213,
+    "precision": 0.6666666666666666,
+    "recall": 0.6068376068376068,
+    "f1": 0.6353467561521253
+   },
+   "HPRC v2.1": {
+    "tp_baseline": 139,
+    "fn": 95,
+    "tp_call": 139,
+    "fp": 53,
+    "truth": 234,
+    "calls": 192,
+    "precision": 0.7239583333333334,
+    "recall": 0.594017094017094,
+    "f1": 0.6525821596244131
+   }
+  },
+  "after|COLO829T_ONT": {
+   "GRCh38-only": {
+    "tp_baseline": 112,
+    "fn": 122,
+    "tp_call": 112,
+    "fp": 395,
+    "truth": 234,
+    "calls": 507,
+    "precision": 0.22090729783037474,
+    "recall": 0.47863247863247865,
+    "f1": 0.30229419703103916
+   },
+   "HPRC v1.1": {
+    "tp_baseline": 142,
+    "fn": 92,
+    "tp_call": 142,
+    "fp": 198,
+    "truth": 234,
+    "calls": 340,
+    "precision": 0.4176470588235294,
+    "recall": 0.6068376068376068,
+    "f1": 0.4947735191637631
+   },
+   "HPRC v2.1": {
+    "tp_baseline": 143,
+    "fn": 91,
+    "tp_call": 143,
+    "fp": 231,
+    "truth": 234,
+    "calls": 374,
+    "precision": 0.38235294117647056,
+    "recall": 0.6111111111111112,
+    "f1": 0.47039473684210525
+   }
+  },
+  "after|HCC1395T_Illumina": {
+   "GRCh38-only": {
+    "tp_baseline": 141,
+    "fn": 28,
+    "tp_call": 141,
+    "fp": 61,
+    "truth": 169,
+    "calls": 202,
+    "precision": 0.698019801980198,
+    "recall": 0.834319526627219,
+    "f1": 0.7601078167115903
+   },
+   "HPRC v1.1": {
+    "tp_baseline": 132,
+    "fn": 37,
+    "tp_call": 132,
+    "fp": 40,
+    "truth": 169,
+    "calls": 172,
+    "precision": 0.7674418604651163,
+    "recall": 0.7810650887573964,
+    "f1": 0.7741935483870969
+   },
+   "HPRC v2.1": {
+    "tp_baseline": 139,
+    "fn": 30,
+    "tp_call": 139,
+    "fp": 38,
+    "truth": 169,
+    "calls": 177,
+    "precision": 0.7853107344632768,
+    "recall": 0.8224852071005917,
+    "f1": 0.8034682080924855
+   }
+  },
+  "after|HCC1395T_PacBio": {
+   "GRCh38-only": {
+    "tp_baseline": 141,
+    "fn": 28,
+    "tp_call": 141,
+    "fp": 111,
+    "truth": 169,
+    "calls": 252,
+    "precision": 0.5595238095238095,
+    "recall": 0.834319526627219,
+    "f1": 0.669833729216152
+   },
+   "HPRC v1.1": {
+    "tp_baseline": 135,
+    "fn": 34,
+    "tp_call": 135,
+    "fp": 34,
+    "truth": 169,
+    "calls": 169,
+    "precision": 0.7988165680473372,
+    "recall": 0.7988165680473372,
+    "f1": 0.7988165680473372
+   },
+   "HPRC v2.1": {
+    "tp_baseline": 136,
+    "fn": 33,
+    "tp_call": 136,
+    "fp": 38,
+    "truth": 169,
+    "calls": 174,
+    "precision": 0.7816091954022989,
+    "recall": 0.8047337278106509,
+    "f1": 0.793002915451895
+   }
+  },
+  "after|HCC1395T_ONT": {
+   "GRCh38-only": {
+    "tp_baseline": 123,
+    "fn": 46,
+    "tp_call": 123,
+    "fp": 102,
+    "truth": 169,
+    "calls": 225,
+    "precision": 0.5466666666666666,
+    "recall": 0.727810650887574,
+    "f1": 0.6243654822335024
+   },
+   "HPRC v1.1": {
+    "tp_baseline": 118,
+    "fn": 51,
+    "tp_call": 118,
+    "fp": 56,
+    "truth": 169,
+    "calls": 174,
+    "precision": 0.6781609195402298,
+    "recall": 0.6982248520710059,
+    "f1": 0.6880466472303206
+   },
+   "HPRC v2.1": {
+    "tp_baseline": 113,
+    "fn": 56,
+    "tp_call": 113,
+    "fp": 683,
+    "truth": 169,
+    "calls": 796,
+    "precision": 0.14195979899497488,
+    "recall": 0.6686390532544378,
+    "f1": 0.23419689119170986
+   }
+  },
+  "after|counts": {
+   "fewer_fp": {
+    "d9": 9,
+    "d46": 8
+   },
+   "higher_precision": {
+    "d9": 9,
+    "d46": 8
+   },
+   "higher_f1": {
+    "d9": 9,
+    "d46": 8
+   }
+  }
+ },
+ "fp_share": {
+  "before|HG008T_Illumina": {
+   "fp_extreme": {
+    "GRCh38-only": 3632,
+    "HPRC v1.1": 354,
+    "HPRC v2.1": 221
+   },
+   "fp_all": {
+    "GRCh38-only": 28178,
+    "HPRC v1.1": 2983,
+    "HPRC v2.1": 1246
+   },
+   "excess_extreme": 3411,
+   "excess_all": 26932
+  },
+  "before|HG008T_PacBio": {
+   "fp_extreme": {
+    "GRCh38-only": 10595,
+    "HPRC v1.1": 377,
+    "HPRC v2.1": 212
+   },
+   "fp_all": {
+    "GRCh38-only": 84853,
+    "HPRC v1.1": 3406,
+    "HPRC v2.1": 1491
+   },
+   "excess_extreme": 10383,
+   "excess_all": 83362
+  },
+  "before|HG008T_ONT": {
+   "fp_extreme": {
+    "GRCh38-only": 6447,
+    "HPRC v1.1": 293,
+    "HPRC v2.1": 116
+   },
+   "fp_all": {
+    "GRCh38-only": 50403,
+    "HPRC v1.1": 2188,
+    "HPRC v2.1": 785
+   },
+   "excess_extreme": 6331,
+   "excess_all": 49618
+  },
+  "before|COLO829T_Illumina": {
+   "fp_extreme": {
+    "GRCh38-only": 5138,
+    "HPRC v1.1": 644,
+    "HPRC v2.1": 234
+   },
+   "fp_all": {
+    "GRCh38-only": 29530,
+    "HPRC v1.1": 2714,
+    "HPRC v2.1": 1281
+   },
+   "excess_extreme": 4904,
+   "excess_all": 28249
+  },
+  "before|COLO829T_fiberseq": {
+   "fp_extreme": {
+    "GRCh38-only": 10161,
+    "HPRC v1.1": 393,
+    "HPRC v2.1": 180
+   },
+   "fp_all": {
+    "GRCh38-only": 38677,
+    "HPRC v1.1": 2269,
+    "HPRC v2.1": 1040
+   },
+   "excess_extreme": 9981,
+   "excess_all": 37637
+  },
+  "before|COLO829T_ONT": {
+   "fp_extreme": {
+    "GRCh38-only": 5214,
+    "HPRC v1.1": 960,
+    "HPRC v2.1": 472
+   },
+   "fp_all": {
+    "GRCh38-only": 30128,
+    "HPRC v1.1": 3653,
+    "HPRC v2.1": 1696
+   },
+   "excess_extreme": 4742,
+   "excess_all": 28432
+  },
+  "before|HCC1395T_Illumina": {
+   "fp_extreme": {
+    "GRCh38-only": 4638,
+    "HPRC v1.1": 253,
+    "HPRC v2.1": 131
+   },
+   "fp_all": {
+    "GRCh38-only": 77905,
+    "HPRC v1.1": 3384,
+    "HPRC v2.1": 1783
+   },
+   "excess_extreme": 4507,
+   "excess_all": 76122
+  },
+  "before|HCC1395T_PacBio": {
+   "fp_extreme": {
+    "GRCh38-only": 7380,
+    "HPRC v1.1": 259,
+    "HPRC v2.1": 126
+   },
+   "fp_all": {
+    "GRCh38-only": 86347,
+    "HPRC v1.1": 3571,
+    "HPRC v2.1": 1778
+   },
+   "excess_extreme": 7254,
+   "excess_all": 84569
+  },
+  "before|HCC1395T_ONT": {
+   "fp_extreme": {
+    "GRCh38-only": 9080,
+    "HPRC v1.1": 438,
+    "HPRC v2.1": 1232
+   },
+   "fp_all": {
+    "GRCh38-only": 115580,
+    "HPRC v1.1": 4046,
+    "HPRC v2.1": 2906
+   },
+   "excess_extreme": 7848,
+   "excess_all": 112674
+  },
+  "after|HG008T_Illumina": {
+   "fp_extreme": {
+    "GRCh38-only": 350,
+    "HPRC v1.1": 90,
+    "HPRC v2.1": 80
+   },
+   "fp_all": {
+    "GRCh38-only": 517,
+    "HPRC v1.1": 448,
+    "HPRC v2.1": 409
+   },
+   "excess_extreme": 270,
+   "excess_all": 108
+  },
+  "after|HG008T_PacBio": {
+   "fp_extreme": {
+    "GRCh38-only": 302,
+    "HPRC v1.1": 75,
+    "HPRC v2.1": 79
+   },
+   "fp_all": {
+    "GRCh38-only": 680,
+    "HPRC v1.1": 471,
+    "HPRC v2.1": 492
+   },
+   "excess_extreme": 223,
+   "excess_all": 188
+  },
+  "after|HG008T_ONT": {
+   "fp_extreme": {
+    "GRCh38-only": 154,
+    "HPRC v1.1": 69,
+    "HPRC v2.1": 46
+   },
+   "fp_all": {
+    "GRCh38-only": 429,
+    "HPRC v1.1": 292,
+    "HPRC v2.1": 264
+   },
+   "excess_extreme": 108,
+   "excess_all": 165
+  },
+  "after|COLO829T_Illumina": {
+   "fp_extreme": {
+    "GRCh38-only": 1269,
+    "HPRC v1.1": 249,
+    "HPRC v2.1": 66
+   },
+   "fp_all": {
+    "GRCh38-only": 1480,
+    "HPRC v1.1": 561,
+    "HPRC v2.1": 391
+   },
+   "excess_extreme": 1203,
+   "excess_all": 1089
+  },
+  "after|COLO829T_fiberseq": {
+   "fp_extreme": {
+    "GRCh38-only": 2465,
+    "HPRC v1.1": 71,
+    "HPRC v2.1": 53
+   },
+   "fp_all": {
+    "GRCh38-only": 2637,
+    "HPRC v1.1": 337,
+    "HPRC v2.1": 330
+   },
+   "excess_extreme": 2412,
+   "excess_all": 2307
+  },
+  "after|COLO829T_ONT": {
+   "fp_extreme": {
+    "GRCh38-only": 395,
+    "HPRC v1.1": 198,
+    "HPRC v2.1": 231
+   },
+   "fp_all": {
+    "GRCh38-only": 602,
+    "HPRC v1.1": 576,
+    "HPRC v2.1": 628
+   },
+   "excess_extreme": 164,
+   "excess_all": -26
+  },
+  "after|HCC1395T_Illumina": {
+   "fp_extreme": {
+    "GRCh38-only": 61,
+    "HPRC v1.1": 40,
+    "HPRC v2.1": 38
+   },
+   "fp_all": {
+    "GRCh38-only": 663,
+    "HPRC v1.1": 579,
+    "HPRC v2.1": 640
+   },
+   "excess_extreme": 23,
+   "excess_all": 23
+  },
+  "after|HCC1395T_PacBio": {
+   "fp_extreme": {
+    "GRCh38-only": 111,
+    "HPRC v1.1": 34,
+    "HPRC v2.1": 38
+   },
+   "fp_all": {
+    "GRCh38-only": 627,
+    "HPRC v1.1": 569,
+    "HPRC v2.1": 607
+   },
+   "excess_extreme": 73,
+   "excess_all": 20
+  },
+  "after|HCC1395T_ONT": {
+   "fp_extreme": {
+    "GRCh38-only": 102,
+    "HPRC v1.1": 56,
+    "HPRC v2.1": 683
+   },
+   "fp_all": {
+    "GRCh38-only": 610,
+    "HPRC v1.1": 553,
+    "HPRC v2.1": 1239
+   },
+   "excess_extreme": -581,
+   "excess_all": -629
+  }
+ },
+ "truth_counts": {
+  "HG008T": {
+   "snv": 697,
+   "snv_extreme": 91,
+   "alldifficultregions": 180,
+   "alllowmapandsegdupregions": 67,
+   "AllTandemRepeatsandHomopolymers_slop5": 87,
+   "notinalldifficultregions": 517,
+   "indel": 587,
+   "indel_hp7": 465,
+   "blocks": 231
+  },
+  "COLO829T": {
+   "snv": 2443,
+   "snv_extreme": 234,
+   "alldifficultregions": 443,
+   "alllowmapandsegdupregions": 176,
+   "AllTandemRepeatsandHomopolymers_slop5": 166,
+   "notinalldifficultregions": 2000,
+   "indel": 131,
+   "indel_hp7": 75,
+   "blocks": 249
+  },
+  "HCC1395T": {
+   "snv": 3440,
+   "snv_extreme": 169,
+   "alldifficultregions": 494,
+   "alllowmapandsegdupregions": 143,
+   "AllTandemRepeatsandHomopolymers_slop5": 185,
+   "notinalldifficultregions": 2946,
+   "indel": 133,
+   "indel_hp7": 26,
+   "blocks": 232
+  }
+ },
+ "bootstrap": {
+  "resamples": 2000,
+  "seed": 20261015,
+  "block_bp": 1000000,
+  "max_dropped_table": 0,
+  "max_zero_tp_table": 0,
+  "max_dropped_whole": 0,
+  "max_zero_tp_whole": 720,
+  "blocks": {
+   "/scratch/jshen/data/HG008_GIAB/draft_v02_benchmark/HG008-T_somatic_smvar_benchmark_v0.2_all.bed": 231,
+   "/scratch/jshen/data/pansoma_v2_tensors/COLO829T_truth/SMaHT_v2_easy_difficult_extreme.union.bed": 249,
+   "/scratch/jshen/data/CASTLE/HCC1395/truth/SEQC2_High-Confidence_Regions_v1.2.bed": 232
+  }
+ }
+}
